@@ -8,7 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = src
 
-EXTRA_DIST = COPYING AUTHORS README INSTALL TODO \
+EXTRA_DIST = COPYING AUTHORS README INSTALL TODO ChangeLog\
              share samples data \
              bin/xercesenv.sh
 
