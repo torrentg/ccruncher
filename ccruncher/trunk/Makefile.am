@@ -8,7 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = src
 
-EXTRA_DIST = COPYING AUTHORS README INSTALL \
+EXTRA_DIST = COPYING AUTHORS README INSTALL TODO \
              share samples data
 
 dist-hook:
