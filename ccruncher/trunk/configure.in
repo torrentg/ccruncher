@@ -24,6 +24,11 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 
 dnl -------------------------------------------------------------
+dnl checking for xerces library
+dnl -------------------------------------------------------------
+AC_CHECK_LIB(xerces-c, XMLPlatformUtils::Initialize)
+
+dnl -------------------------------------------------------------
 dnl checkings to perform
 dnl -------------------------------------------------------------
 AC_STDC_HEADERS
@@ -49,10 +54,10 @@ if test x$debug = xtrue ; then
   AC_DEFINE(ENABLE_DEBUG)
 else
   CXXFLAGS="-O2"
-dnl TODO: disable assertions defining NDEBUG (see assert.h)
+  DEFS="NDEBUG"
 fi
-
 AC_SUBST(CXXFLAGS)
+AC_SUBST(DEFS)
 
 dnl -------------------------------------------------------------
 dnl makefile's to be built
