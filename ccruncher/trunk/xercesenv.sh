@@ -4,8 +4,9 @@
 #
 # Set xerces environement variables
 #
-# execute next command (type point + space + scriptname)
-#   . ./xercesenv.sh
+# 1. modify XERCESROOT variable path
+# 2. execute next command (type point + space + scriptname)
+#      . ./xercesenv.sh
 #
 # *************************************************************
 

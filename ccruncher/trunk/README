@@ -34,7 +34,7 @@ Installation from source package
 
 3. execute commands (read INSTALL file):
      cd ccruncher-0.1
-     ./configure
+     ./configure --prefix=$PWD
      make
      make check 
      make install
@@ -77,7 +77,7 @@ Developers tips & tricks
      automake -avc --warnings=all
 
 3. compile project in debug mode
-     ./configure --enable-debug
+     ./configure --prefix=$PWD --enable-debug
      make
      make check
 

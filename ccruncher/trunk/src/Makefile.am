@@ -58,7 +58,44 @@ ccruncher_SOURCES = \
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
-    ./utils/Utils.cpp
+    ./utils/Utils.cpp\
+    \
+    ./kernel/MonteCarlo.hpp\
+    ./kernel/IData.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./params/Params.hpp\
+    ./interests/Interests.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Rate.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./ratings/DateRatings.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/PowMatrix.hpp\
+    ./math/Copula.hpp\
+    ./math/CopulaNormal.hpp\
+    ./math/Normal.hpp\
+    ./finances/Asset.hpp\
+    ./finances/Bond.hpp\
+    ./finances/DateValues.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp\
+    ./aggregators/SegmentAggregator.hpp\
+    ./aggregators/Aggregators.hpp\
+    ./aggregators/Aggregator.hpp\
+    ./utils/Exception.hpp\
+    ./utils/XMLUtils.hpp\
+    ./utils/Parser.hpp\
+    ./utils/File.hpp\
+    ./utils/Date.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Utils.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDFLAGS =
@@ -83,7 +120,15 @@ tabulate_SOURCES = \
     ./utils/Parser.cpp\
     ./utils/Date.cpp\
     ./utils/File.cpp\
-    ./utils/Utils.cpp    
+    ./utils/Utils.cpp\
+    \
+    ./tools/SAX2Handlers.hpp\
+    ./utils/Exception.hpp\
+    ./utils/XMLUtils.hpp\
+    ./utils/Parser.hpp\
+    ./utils/Date.hpp\
+    ./utils/File.hpp\
+    ./utils/Utils.hpp
 
 tabulate_CXXFLAGS = -Wall -W -Wshadow
 tabulate_LDFLAGS =
@@ -126,7 +171,43 @@ generator_SOURCES = \
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
-    ./utils/Utils.cpp
+    ./utils/Utils.cpp\
+    \
+    ./kernel/IData.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./params/Params.hpp\
+    ./interests/Interests.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Rate.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./ratings/DateRatings.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/Copula.hpp\
+    ./math/PowMatrix.hpp\
+    ./math/CopulaNormal.hpp\
+    ./math/Normal.hpp\
+    ./finances/Asset.hpp\
+    ./finances/Bond.hpp\
+    ./finances/DateValues.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp\
+    ./aggregators/SegmentAggregator.hpp\
+    ./aggregators/Aggregators.hpp\
+    ./aggregators/Aggregator.hpp\
+    ./utils/Exception.hpp\
+    ./utils/XMLUtils.hpp\
+    ./utils/Parser.hpp\
+    ./utils/File.hpp\
+    ./utils/Date.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Utils.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDFLAGS =
@@ -197,7 +278,70 @@ tests_SOURCES = \
     ./aggregators/SegmentAggregator.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
-    ./segmentations/Segment.cpp
+    ./segmentations/Segment.cpp\
+    \
+    ./utils/XMLUtilsTest.hpp\
+    ./utils/UtilsTest.hpp\
+    ./utils/TimerTest.hpp\
+    ./utils/DateTest.hpp\
+    ./utils/ParserTest.hpp\
+    ./utils/ExceptionTest.hpp\
+    ./utils/FileTest.hpp\
+    ./math/Copula.hpp\
+    ./math/PowMatrixTest.hpp\
+    ./math/NormalTest.hpp\
+    ./math/CopulaNormalTest.hpp\
+    ./math/MersenneTwisterTest.hpp\
+    ./math/CholeskyDecompositionTest.hpp\
+    ./aggregators/AggregatorsTest.hpp\
+    ./correlations/CorrelationMatrixTest.hpp\
+    ./finances/BondTest.hpp\
+    ./finances/AssetTest.hpp\
+    ./interests/InterestTest.hpp\
+    ./interests/InterestsTest.hpp\
+    ./segmentations/SegmentationTest.hpp\
+    ./segmentations/SegmentationsTest.hpp\
+    ./kernel/IDataTest.hpp\
+    ./params/ParamsTest.hpp\
+    ./portfolio/ClientTest.hpp\
+    ./ratings/RatingsTest.hpp\
+    ./sectors/SectorsTest.hpp\
+    ./transitions/TransitionMatrixTest.hpp\
+    ./finances/Asset.hpp\
+    ./finances/Bond.hpp\
+    ./finances/DateValues.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Parser.hpp\
+    ./utils/Utils.hpp\
+    ./utils/Date.hpp\
+    ./utils/XMLUtils.hpp\
+    ./utils/Exception.hpp\
+    ./utils/File.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/CopulaNormal.hpp\
+    ./math/Normal.hpp\
+    ./math/PowMatrix.hpp\
+    ./kernel/MonteCarlo.hpp\
+    ./kernel/IData.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./ratings/DateRatings.hpp\
+    ./params/Params.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./interests/Rate.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Interests.hpp\
+    ./aggregators/Aggregator.hpp\
+    ./aggregators/Aggregators.hpp\
+    ./aggregators/SegmentAggregator.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDFLAGS = 
