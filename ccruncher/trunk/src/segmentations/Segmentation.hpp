@@ -80,6 +80,7 @@ class Segmentation
     string getSegmentName(int isegment) throw(Exception);
 
     void addSegment(string segname) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

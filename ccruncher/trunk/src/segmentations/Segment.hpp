@@ -61,6 +61,8 @@ class Segment
     Segment(string name_);
     Segment(const DOMNode &) throw(Exception);
 
+    string getXML(int) throw(Exception);
+
 };
 
 //---------------------------------------------------------------------------

@@ -28,6 +28,7 @@
 //===========================================================================
 
 #include "Segment.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -98,4 +99,16 @@ void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
       }
     }
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Segment::getXML(int ilevel) throw(Exception)
+{
+  string ret = "";
+
+  ret += Utils::blanks(ilevel) + "<segment name ='" + name + "' />\n";
+
+  return ret;
 }

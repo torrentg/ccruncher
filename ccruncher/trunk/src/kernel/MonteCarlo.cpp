@@ -303,7 +303,7 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
 void ccruncher::MonteCarlo::initAggregators() throw(Exception)
 {
   int indexdefault = mtrans->getIndexDefault();
-  aggregators->initialize(segmentations, dates, STEPS+1, clients, N, indexdefault, ratings);
+  aggregators->initialize(dates, STEPS+1, clients, N, indexdefault, ratings);
   aggregators->setOutputProperties(fpath, bforce, 0);
 }
 

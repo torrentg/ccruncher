@@ -30,13 +30,9 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-
-//---------------------------------------------------------------------------
-
-#define NUM_RATINGS 5
-#define NUM_SECTORS 2
-#define NUM_CLIENTS 2000
-#define NUM_ASSETS 3
+#include "kernel/IData.hpp"
+#include "utils/File.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -47,18 +43,17 @@ using namespace std;
 void usage();
 void version();
 void copyright();
-void run(int, int);
-
-//---------------------------------------------------------------------------
-
-string rating[NUM_RATINGS] = {"A", "B", "C", "D", "E"};
-string sectors[NUM_SECTORS] = {"S1", "S2"};
+void run(string, int, int);
 
 //===========================================================================
 // main
 //===========================================================================
 int main(int argc, char *argv[])
 {
+  string sfilename = "";
+  long nclients = 0L;
+  long nassets = 0L;
+
   // parsing options
   for (int i=1;i<argc;i++)
   {
@@ -74,52 +69,72 @@ int main(int argc, char *argv[])
       version();
       return 0;
     }
-    if (arg.substr(0,1) == "-")
+    else if (arg.length() >= 10 && arg.substr(0, 10) == "-nclients=")
     {
-      if (arg == "-v")
+      try
       {
-        bverbose = true;
+        nclients = Parser::longValue(arg.substr(10));
       }
-      else
+      catch(Exception &e)
       {
-        cerr << "unknow option " << arg << endl;
-        cerr << "use --help option for more information" << endl;
+        cerr << "invalid nclients value" << endl;
+        return 1;
+      }
+    }
+    else if (arg.length() >= 9 && arg.substr(0, 10) == "-nassets=")
+    {
+      try
+      {
+        nclients = Parser::longValue(arg.substr(9));
+      }
+      catch(Exception &e)
+      {
+        cerr << "invalid nassets value" << endl;
         return 1;
       }
     }
     else
     {
-      filenames.push_back(arg);
+      if (sfilename != "")
+      {
+        cerr << "unexpected argument " << arg << endl;
+        return 1;      
+      }
+      else
+      {
+        sfilename = arg;
+      }
     }
   }
 
   // license info
   copyright();
 
-  // worker loop
-  for (unsigned int i=0;i<filenames.size();i++)
+  try
   {
-    try
-    {
-      trimFile(filenames[i]);
-    }
-    catch(std::exception &e)
-    {
-      cerr << "error trimming " << filenames[i] << " : " << e.what() << endl;
-      errors = true;
-    }
+    run(sfilename, nclients, nassets);
   }
-
-  // exit function
-  if (errors == true) return 1;
-  else return 0;
+  catch(Exception &e)
+  {
+    cerr << e;
+    return 1;
+  }
+  
+  // exit
+  return 0;
 }
 
 //===========================================================================
 // run
 //===========================================================================
-void run(int nclients, int nassets)
+void run(string filename, int nclients, int nassets)
 {
+  // checking input file readeability
+  File::checkFile(filename, "r");
+
+  // parsing input file
+  IData idata = IData(filename);
+
   for (int i=0;i<NUM_CLIENTS;i++)
   {
     cout << "<client ";
@@ -185,7 +200,7 @@ void usage()
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    generator -nclients=20 -nassets=3\n"
+  "    generator -nclients=20 -nassets=3 template.xml\n"
   << endl;
 }
 

@@ -70,10 +70,11 @@ class Aggregators
 
     vector<Aggregator> * getAggregators();
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
-    void initialize(Segmentations *, Date *, int, vector<Client *> *, int, int, Ratings*) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, int, int, Ratings*) throw(Exception);
     void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);
     void flush(bool finalize) throw(Exception);
     void touch() throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

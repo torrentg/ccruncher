@@ -64,11 +64,11 @@ class Aggregator
 
     long numsegments;
     SegmentAggregator *saggregators;
+    Segmentations *segmentations;
 
     void reset();
-    void parseProperty(const DOMNode&, Segmentations *) throw(Exception);
-    void parseDOMNode(const DOMNode&, Segmentations *) throw(Exception);
-    void validate(Segmentations *) throw(Exception);
+    void parseDOMNode(const DOMNode&) throw(Exception);
+    void validate() throw(Exception);
 
 
   public:
@@ -82,11 +82,14 @@ class Aggregator
     bool getBValues() const;
     bool getBFull() const;
 
-    void initialize(Segmentations *, Date *, int, vector<Client *> *, long, int, Ratings *) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *) throw(Exception);
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
     void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);
     void flush(bool finalize) throw(Exception);
     void touch() throw(Exception);
+
+    string getXML(int) throw(Exception);
+
 };
 
 //---------------------------------------------------------------------------

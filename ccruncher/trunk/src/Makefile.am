@@ -16,7 +16,7 @@ AM_CPPFLAGS = \
     -I../share/xercesc-2.6/include/\
     -I../share/MiniCppUnit-2.2/
 
-bin_PROGRAMS = ccruncher
+bin_PROGRAMS = ccruncher generator
 
 check_PROGRAMS = tests
 
@@ -25,6 +25,51 @@ check_PROGRAMS = tests
 ccruncher_SOURCES = \
     ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
+    ./kernel/IData.cpp\
+    ./portfolio/Portfolio.cpp\
+    ./portfolio/Client.cpp\
+    ./params/Params.cpp\
+    ./interests/Interests.cpp\
+    ./interests/Interest.cpp\
+    ./interests/Rate.cpp\
+    ./ratings/Rating.cpp\
+    ./ratings/Ratings.cpp\
+    ./ratings/DateRatings.cpp\
+    ./transitions/TransitionMatrix.cpp\
+    ./sectors/Sector.cpp\
+    ./sectors/Sectors.cpp\
+    ./correlations/CorrelationMatrix.cpp\
+    ./math/CholeskyDecomposition.cpp\
+    ./math/PowMatrix.cpp\
+    ./math/CopulaNormal.cpp\
+    ./math/Normal.cpp\
+    ./finances/Asset.cpp\
+    ./finances/Bond.cpp\
+    ./finances/DateValues.cpp\
+    ./segmentations/Segmentations.cpp\
+    ./segmentations/Segmentation.cpp\
+    ./segmentations/Segment.cpp\
+    ./aggregators/SegmentAggregator.cpp\
+    ./aggregators/Aggregators.cpp\
+    ./aggregators/Aggregator.cpp\
+    ./utils/Exception.cpp\
+    ./utils/XMLUtils.cpp\
+    ./utils/Parser.cpp\
+    ./utils/File.cpp\
+    ./utils/Date.cpp\
+    ./utils/Timer.cpp\
+    ./utils/Utils.cpp
+
+ccruncher_CXXFLAGS = -Wall -W -Wshadow
+
+ccruncher_LDFLAGS = -L../share/xercesc-2.6/lib
+
+ccruncher_LDADD = -lm -ldl -lxerces-c
+
+# -------------------------------------------------------------
+
+generator_SOURCES = \
+    ./tools/generator.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
     ./portfolio/Client.cpp\

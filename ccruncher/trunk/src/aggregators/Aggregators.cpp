@@ -30,6 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Aggregators.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -163,12 +164,12 @@ void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *se
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::Aggregators::initialize(Segmentations *segmentations, Date *dates, int m,
-vector<Client *> *clients, int n, int indexdefault, Ratings *ratings) throw(Exception)
+void ccruncher::Aggregators::initialize(Date *dates, int m, vector<Client *> *clients,
+int n, int indexdefault, Ratings *ratings) throw(Exception)
 {
   for(unsigned int i=0;i<vaggregators.size();i++)
   {
-    vaggregators[i].initialize(segmentations, dates, m, clients, n, indexdefault, ratings);
+    vaggregators[i].initialize(dates, m, clients, n, indexdefault, ratings);
   }
 }
 
@@ -214,4 +215,24 @@ void ccruncher::Aggregators::setOutputProperties(string path, bool force, int bu
   {
     vaggregators[i].setOutputProperties(path, force, buffersize);
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Aggregators::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<aggregators>\n";
+
+  for (unsigned int i=0;i<vaggregators.size();i++)
+  {
+    ret += vaggregators[i].getXML(ilevel+2);
+  }
+
+  ret += spc + "</aggregators>\n";
+
+  return ret;
 }

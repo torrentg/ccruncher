@@ -30,6 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Segmentations.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -246,4 +247,24 @@ string ccruncher::Segmentations::getSegmentName(int isegmentation, int isegment)
   {
     return vsegmentations[isegmentation].getSegmentName(isegment);
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Segmentations::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<segmentations>";
+
+  for (unsigned int i=0;i<vsegmentations.size();i++)
+  {
+    ret += vsegmentations[i].getXML(ilevel+2);
+  }
+
+  ret += spc + "</segmentations>\n";
+
+  return ret;
 }

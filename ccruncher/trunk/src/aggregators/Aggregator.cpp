@@ -30,6 +30,8 @@
 #include <cmath>
 #include <algorithm>
 #include "Aggregator.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -44,6 +46,7 @@ void ccruncher::Aggregator::reset()
   components = asset;
   bvalues = true;
   bfull = false;
+  segmentations = NULL;
 }
 
 //===========================================================================
@@ -62,11 +65,14 @@ ccruncher::Aggregator::Aggregator(const DOMNode& node, Segmentations *segs) thro
   // reseting default values
   reset();
 
+  // setting segmentations
+  segmentations = segs;
+
   // recollim els parametres
-  parseDOMNode(node, segs);
+  parseDOMNode(node);
 
   // validating values
-  validate(segs);
+  validate();
 }
 
 //===========================================================================
@@ -85,7 +91,7 @@ ccruncher::Aggregator::~Aggregator()
 //===========================================================================
 // interpreta un node XML params
 //===========================================================================
-void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
+void ccruncher::Aggregator::parseDOMNode(const DOMNode& node) throw(Exception)
 {
   string stype;
   string sseg;
@@ -112,8 +118,8 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
   }
 
   // setting segmentation
-  isegmentation = segs->getSegmentation(sseg);
-  components = segs->getComponents(sseg);
+  isegmentation = segmentations->getSegmentation(sseg);
+  components = segmentations->getComponents(sseg);
   if (isegmentation < 0 || (components != asset && components != client))
   {
     throw Exception("Aggregator::parseDOMNode(): segmentation " + sseg + " not defined");
@@ -157,10 +163,10 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
 //===========================================================================
 // validacions de la llista de items recollida
 //===========================================================================
-void ccruncher::Aggregator::validate(Segmentations *segs) throw(Exception)
+void ccruncher::Aggregator::validate() throw(Exception)
 {
   // validating type segmentation
-  if (segs->getComponents(isegmentation) == asset && bvalues == false)
+  if (segmentations->getComponents(isegmentation) == asset && bvalues == false)
   {
     throw Exception("Aggregator::validate(): trying to aggregate ratings in a asset segmentation");
   }
@@ -201,8 +207,8 @@ bool ccruncher::Aggregator::getBFull() const
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::Aggregator::initialize(Segmentations *segmentations, Date *dates, int m,
-  vector<Client *> *clients, long n, int indexdefault, Ratings *ratings) throw(Exception)
+void ccruncher::Aggregator::initialize(Date *dates, int m, vector<Client *> *clients,
+     long n, int indexdefault, Ratings *ratings) throw(Exception)
 {
   try
   {
@@ -285,4 +291,22 @@ void ccruncher::Aggregator::setOutputProperties(string path, bool force, int buf
   {
     saggregators[i].setOutputProperties(path, force, buffersize);
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Aggregator::getXML(int ilevel) throw(Exception)
+{
+  string ret = Utils::blanks(ilevel);
+
+  ret += "<aggregator ";
+  ret += "name='" + name + "' ";
+  ret += "segmentation='"+ segmentations->getSegmentationName(isegmentation);
+  ret += "' type='";
+  ret += (bvalues==true?"values":"ratings");
+  ret += "' full='" + Parser::bool2string(bfull) + "' ";
+  ret += "/>\n";
+
+  return ret;
 }

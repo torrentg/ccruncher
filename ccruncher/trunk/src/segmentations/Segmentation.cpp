@@ -32,6 +32,7 @@
 #include "Segmentation.hpp"
 #include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Utils.hpp"
 
 //===========================================================================
 // constructor
@@ -224,4 +225,26 @@ string ccruncher::Segmentation::getSegmentName(int isegment) throw(Exception)
   {
     return vsegments[isegment].name;
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<segmentation name='" + name + "' components='";
+  ret += (components==asset?"asset":"client");
+  ret += "'>\n";
+
+  for (unsigned int i=0;i<vsegments.size();i++)
+  {
+    ret += vsegments[i].getXML(ilevel+2);
+  }
+
+  ret += spc + "</segmentation>\n";
+
+  return ret;
 }

@@ -73,6 +73,7 @@ class Segmentations
     string getSegmentName(int isegmentation, int isegment) throw(Exception);
 
     void addSegment(string segmentation, string segment) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 
