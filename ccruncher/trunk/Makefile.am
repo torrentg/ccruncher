@@ -9,8 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
 
 EXTRA_DIST = COPYING AUTHORS README INSTALL TODO ChangeLog\
-             share samples data \
-             bin/xercesenv.sh
+             share samples data
 
 install-hook:
 	echo "setting executable flag to scripts ..."

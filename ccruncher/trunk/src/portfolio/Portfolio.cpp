@@ -34,7 +34,6 @@
 #include <cassert>
 #include <algorithm>
 #include "Portfolio.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -44,19 +43,6 @@ ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_,
 {
   // initializing class
   reset(ratings_, sectors_, segmentations_, interests_);
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
-                     Interests *interests_, const DOMNode& node) throw(Exception)
-{
-  // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_);
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(ratings_, sectors_, segmentations_, interests_, node);
 }
 
 //===========================================================================
@@ -185,46 +171,6 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-//===========================================================================
-void ccruncher::Portfolio::parseDOMNode(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
-                             Interests *interests_, const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "portfolio"))
-  {
-    string msg = "Portfolio::parseDOMNode(): Invalid tag. Expected: portfolio. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "client"))
-      {
-        Client *aux = new Client(ratings, sectors, segmentations, interests, child);
-        insertClient(aux);
-      }
-      else
-      {
-        throw Exception("Portfolio::parseDOMNode(): invalid data structure at <portfolio>");
-      }
-    }
   }
 }
 

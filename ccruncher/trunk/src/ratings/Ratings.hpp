@@ -38,7 +38,6 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "Rating.hpp"
@@ -46,7 +45,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -60,7 +58,6 @@ class Ratings : public ExpatHandlers
     vector<Rating> vratings;
     Rating auxrating;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertRating(Rating &) throw(Exception);
     void validations() throw(Exception);
 
@@ -68,7 +65,6 @@ class Ratings : public ExpatHandlers
   public:
 
     Ratings();
-    Ratings(const DOMNode &) throw(Exception);
     ~Ratings();
 
     vector<Rating> * getRatings();

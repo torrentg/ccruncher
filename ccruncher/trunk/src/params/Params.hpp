@@ -37,7 +37,6 @@
 
 #include "utils/config.h"
 #include <string>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
@@ -45,7 +44,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -57,8 +55,6 @@ class Params : public ExpatHandlers
   private:
 
     void init();
-    void parseDOMNode(const DOMNode&) throw(Exception);
-    void parseProperty(const DOMNode& node) throw(Exception);
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
     void validate(void) throw(Exception);
 
@@ -75,7 +71,6 @@ class Params : public ExpatHandlers
     bool antithetic;
     bool onlyactive; // only active clients
 
-    Params(const DOMNode &) throw(Exception);
     Params();
     ~Params();
 

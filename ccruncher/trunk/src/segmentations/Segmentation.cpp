@@ -33,7 +33,6 @@
 #include <cmath>
 #include <algorithm>
 #include "Segmentation.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 
@@ -44,19 +43,6 @@ ccruncher::Segmentation::Segmentation()
 {
   // default values
   reset();
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
-{
-  // default values
-  reset();
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
 }
 
 //===========================================================================
@@ -188,71 +174,6 @@ void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  string strcomp;
-
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "segmentation"))
-  {
-    string msg = "Segmentation::parseDOMNode(): Invalid tag. Expected: segmentation. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-  strcomp = XMLUtils::getStringAttribute(attributes, "components", "");
-  if (name == "")
-  {
-    throw Exception("Segmentation::parseDOMNode(): tag <segmentation> with invalid name attribute");
-  }
-
-  // filling components variable
-  if (strcomp == "asset")
-  {
-    components = asset;
-  }
-  else if (strcomp == "client")
-  {
-    components = client;
-  }
-  else
-  {
-    throw Exception("Segmentation::parseDOMNode(): tag <segmentation> with invalid components attribute");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "segment"))
-      {
-        Segment aux = Segment(child);
-        insertSegment(aux);
-      }
-      else
-      {
-        throw Exception("Segmentation::parseDOMNode(): invalid data structure at <segmentation>");
-      }
-    }
   }
 }
 

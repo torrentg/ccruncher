@@ -32,7 +32,6 @@
 
 #include "Segment.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -48,73 +47,4 @@ ccruncher::Segment::Segment()
 ccruncher::Segment::Segment(string name_)
 {
   name = name_;
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Segment::Segment(const DOMNode& node) throw(Exception)
-{
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "segment"))
-  {
-    string msg = "Segment::parseDOMNode(): Invalid tag. Expected: segment. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-
-  if (name == "")
-  {
-    throw Exception("Segment::parseDOMNode(): invalid values at <segment>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else
-      {
-        string msg = "Segment::parseDOMNode(): invalid data structure at <segment>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
-  }
-}
-
-//===========================================================================
-// getXML
-// TODO: this method will be removed
-//===========================================================================
-string ccruncher::Segment::getXML(int ilevel) throw(Exception)
-{
-  string ret = "";
-
-  ret += Utils::blanks(ilevel) + "<segment name ='" + name + "'/>\n";
-
-  return ret;
 }

@@ -30,12 +30,7 @@ dnl -------------------------------------------------------------
 dnl checks for libraries
 dnl -------------------------------------------------------------
 AC_CHECK_LIB([m], [main])
-AC_CHECK_LIB([dl], [main])
-AC_CHECK_LIB([xerces-c], [main],,
-    [AC_MSG_ERROR([cannot find the xerces-c library]) ])
-AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,,
-    [AC_MSG_ERROR([cannot find xerces-c headers]) ])
-AC_CHECK_LIB([expat], [XML_Expat_Version],,
+AC_CHECK_LIB([expat], [XML_ParserCreate],,
     [AC_MSG_ERROR([cannot find the expat library]) ])
 AC_CHECK_HEADERS(expat.h,,
     [AC_MSG_ERROR([cannot find expat headers]) ])
@@ -55,6 +50,8 @@ AC_CHECK_FUNCS([mkdir])
 AC_CHECK_FUNCS([pow])
 AC_CHECK_FUNCS([sqrt])
 AC_CHECK_FUNCS([strtol])
+AC_CHECK_FUNCS([floor])
+AC_CHECK_FUNCS([strchr])
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRTOD

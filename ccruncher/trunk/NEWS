@@ -10,6 +10,7 @@ version 0.2
   * output beautified (Gerard Torrent)
   * asset refactoring (Gerard Torrent)
   * bugfix: 'make distcheck' now works (Gerard Torrent)
+  * migrated from xercesc xml parser to expat xml parser
 
 version 0.1
 -----------

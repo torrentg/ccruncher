@@ -36,7 +36,6 @@
 #include "Aggregator.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // reset
@@ -69,22 +68,6 @@ ccruncher::Aggregator::Aggregator(Segmentations *segs)
 {
   // reseting default values
   reset(segs);
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Aggregator::Aggregator(const DOMNode& node, Segmentations *segs) throw(Exception)
-{
-  // reseting default values
-  reset(segs);
-
-  // recollim els parametres
-  parseDOMNode(node);
-
-  // validating values
-  validate();
 }
 
 //===========================================================================
@@ -158,79 +141,6 @@ void ccruncher::Aggregator::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Aggregator::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  string stype;
-  string sseg;
-
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "aggregator"))
-  {
-    string msg = "Aggregator::parseDOMNode(): Invalid tag. Expected: aggregator. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-  sseg = XMLUtils::getStringAttribute(attributes, "segmentation", "");
-  stype = XMLUtils::getStringAttribute(attributes, "type", "");
-  bfull = XMLUtils::getBooleanAttribute(attributes, "full", false);
-
-  // setting name
-  if (name == "")
-  {
-    throw Exception("Aggregator::parseDOMNode(): invalid name attribute at <aggregator>");
-  }
-
-  // setting segmentation
-  isegmentation = segmentations->getSegmentation(sseg);
-  components = segmentations->getComponents(sseg);
-  if (isegmentation < 0 || (components != asset && components != client))
-  {
-    throw Exception("Aggregator::parseDOMNode(): segmentation " + sseg + " not defined");
-  }
-
-  // setting type
-  if (stype == "values")
-  {
-    bvalues = true;
-  }
-  else if (stype == "ratings")
-  {
-    bvalues = false;
-  }
-  else
-  {
-    throw Exception("Aggregator::parseDOMNode(): type " + stype + " not allowed (try values or ratings)");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else
-      {
-        throw Exception("Aggregator::parseDOMNode(): invalid data structure at <aggregator>");
-      }
-    }
   }
 }
 

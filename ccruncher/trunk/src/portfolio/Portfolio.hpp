@@ -37,7 +37,6 @@
 
 #include "utils/config.h"
 #include <algorithm>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
@@ -50,7 +49,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -69,7 +67,6 @@ class Portfolio : public ExpatHandlers
     Interests *interests;
     Client *auxclient;
 
-    void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertClient(Client *) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
@@ -78,7 +75,6 @@ class Portfolio : public ExpatHandlers
   public:
 
     Portfolio(Ratings *, Sectors *, Segmentations *, Interests *);
-    Portfolio(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode &) throw(Exception);
     ~Portfolio();
 
     vector<Client *> *getClients();

@@ -40,7 +40,6 @@
 
 #include "utils/config.h"
 #include <string>
-#include "xercesc/dom/DOM.hpp"
 #include "params/Params.hpp"
 #include "interests/Interests.hpp"
 #include "ratings/Ratings.hpp"
@@ -56,7 +55,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -69,17 +67,6 @@ class IData : public ExpatHandlers
 
     void init();
     void release();
-    void parseDOMNode(const DOMNode&) throw(Exception);
-    void parseRootNode(const DOMNode &) throw(Exception);
-    void parseParams(const DOMNode &) throw(Exception);
-    void parseInterests(const DOMNode &) throw(Exception);
-    void parseRatings(const DOMNode &) throw(Exception);
-    void parseTransitions(const DOMNode &) throw(Exception);
-    void parseSectors(const DOMNode &) throw(Exception);
-    void parseCorrelations(const DOMNode &) throw(Exception);
-    void parseSegmentations(const DOMNode &) throw(Exception);
-    void parseAggregators(const DOMNode &) throw(Exception);
-    void parsePortfolio(const DOMNode &) throw(Exception);
     void validate() throw(Exception);
 
 
@@ -96,7 +83,6 @@ class IData : public ExpatHandlers
     Portfolio *portfolio;
 
     IData();
-    IData(const DOMNode &) throw(Exception);
     IData(const string &xmlfilename) throw(Exception);
     ~IData();
 

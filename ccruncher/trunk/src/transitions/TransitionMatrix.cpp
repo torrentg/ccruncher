@@ -32,7 +32,6 @@
 
 #include <cfloat>
 #include "TransitionMatrix.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 #include "math/PowMatrix.hpp"
@@ -80,30 +79,6 @@ ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception
 {
   // posem valors per defecte
   init(ratings_);
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_, const DOMNode& node) throw(Exception)
-{
-  try
-  {
-    // posem valors per defecte
-    init(ratings_);
-
-    // recollim els parametres de la simulacio
-    parseDOMNode(node);
-
-    // validem les dades
-    validate();
-  }
-  catch(Exception &e)
-  {
-    Utils::deallocMatrix(matrix, n);
-    throw e;
-  }
 }
 
 //===========================================================================
@@ -226,84 +201,6 @@ void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
 }
 
 //===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "mtransitions"))
-  {
-    string msg = "TransitionMatrix::parseDOMNode(): Invalid tag. Expected: mtransitions. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  period = XMLUtils::getDoubleAttribute(attributes, "period", DBL_MAX);
-  epsilon = XMLUtils::getDoubleAttribute(attributes, "epsilon", DBL_MAX);
-  if (period == DBL_MAX || epsilon == DBL_MAX)
-  {
-    throw Exception("TransitionMatrix::parseDOMNode(): invalid attributes at <mtransitions>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "transition"))
-      {
-        parseTransition(child);
-      }
-      else
-      {
-        string msg = "TransitionMatrix::parseDOMNode(): invalid data structure at <mtransitions>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
-  }
-}
-
-//===========================================================================
-// interpreta un node XML time
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::TransitionMatrix::parseTransition(const DOMNode& node) throw(Exception)
-{
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-
-  // agafem els atributs del rating
-  string from = XMLUtils::getStringAttribute(attributes, "from", "");
-  string to = XMLUtils::getStringAttribute(attributes, "to", "");
-  double value = XMLUtils::getDoubleAttribute(attributes, "value", DBL_MAX);
-
-  if (from == "" || to == "" || value == DBL_MAX)
-  {
-    throw Exception("TransitionMatrix::parseTransition(): invalid values at <transition>");
-  }
-
-  // insertem el valor en la matriu de transicio
-  insertTransition(from, to, value);
-
-  // acabem de comprovar la estructura
-  if (node.getChildNodes()->getLength() != 0)
-  {
-    throw Exception("TransitionMatrix::parseTransition(): invalid data structure at <transition>");
-  }
-}
-
-//===========================================================================
 // validacio del contingut de la classe
 //===========================================================================
 void ccruncher::TransitionMatrix::validate() throw(Exception)
@@ -315,12 +212,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     {
       if (matrix[i][j] == DBL_MAX)
       {
-        string msg = "TransitionMatrix::validate(): undefined element [";
-        msg += (i+1);
-        msg +=  "][";
-        msg += (j+1);
-        msg += "]";
-        throw Exception(msg);
+        throw Exception("TransitionMatrix::validate(): transition matrix have an undefined element");
       }
     }
   }

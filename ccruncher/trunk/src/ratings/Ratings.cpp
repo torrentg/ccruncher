@@ -34,7 +34,6 @@
 #include <algorithm>
 #include "Ratings.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -42,24 +41,7 @@
 //===========================================================================
 ccruncher::Ratings::Ratings()
 {
-  // inicialitzem el vector de ratings
-  vratings = vector<Rating>();
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Ratings::Ratings(const DOMNode& node) throw(Exception)
-{
-  // inicialitzem el vector de rates
-  vratings = vector<Rating>();
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // validem la llista recollida
-  validations();
+  // nothing to do
 }
 
 //===========================================================================
@@ -154,46 +136,6 @@ void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Ratings::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "ratings"))
-  {
-    string msg = "Ratings::parseDOMNode(): Invalid tag. Expected: ratings. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "rating"))
-      {
-        Rating aux = Rating(child);
-        insertRating(aux);
-      }
-      else
-      {
-        throw Exception("Ratings::parseDOMNode(): invalid data structure at <ratings>");
-      }
-    }
   }
 }
 

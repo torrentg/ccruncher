@@ -33,7 +33,6 @@
 #include "Params.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -42,22 +41,6 @@ ccruncher::Params::Params()
 {
   // posem valors per defecte (incorrectes)
   init();
-}
-
-//===========================================================================
-// constructor 
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Params::Params(const DOMNode& node) throw(Exception)
-{
-  // posem valors per defecte (incorrectes)
-  init();
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // validem les dades
-  validate();
 }
 
 //===========================================================================
@@ -134,136 +117,6 @@ Date * ccruncher::Params::getDates() throw(Exception)
   }
 
   return ret;
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Params::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "params"))
-  {
-    string msg = "Params::parseDOMNode(): Invalid tag. Expected: params. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "property"))
-      {
-        parseProperty(child);
-      }
-      else
-      {
-        string msg = "Params::parseDOMNode(): invalid data structure at <params>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
-  }
-}
-
-//===========================================================================
-// interpreta un node XML time
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Params::parseProperty(const DOMNode& node) throw(Exception)
-{
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  string name = XMLUtils::getStringAttribute(attributes, "name", "");
-
-  if (name == "time.begindate")
-  {
-    Date aux = XMLUtils::getDateAttribute(attributes, "value", Date(1,1,1900));
-    if (begindate != Date(1,1,1900) || aux == Date(1,1,1900)) {
-      throw Exception("Params::parseProperty(): found invalid time.begintime");
-    } else {
-      begindate = aux;
-    }
-  }
-  else if (name == "time.steps")
-  {
-    int aux = XMLUtils::getIntAttribute(attributes, "value", 0);
-    if (steps != 0 || aux <= 0) {
-      throw Exception("Params::parseProperty(): found invalid time.steps");
-    } else {
-      steps = aux;
-    }
-  }
-  else if (name == "time.steplength")
-  {
-    int aux = XMLUtils::getIntAttribute(attributes, "value", 0);
-    if (steplength != 0 || aux <= 0) {
-      throw Exception("Params::parseProperty(): found invalid time.steplength");
-    } else {
-      steplength = aux;
-    }
-  }
-  else if (name == "stopcriteria.maxiterations")
-  {
-    long aux = XMLUtils::getLongAttribute(attributes, "value", 0L);
-    if (maxiterations != 0L || aux <= 0L) {
-      throw Exception("Params::parseProperty(): found invalid stopcriteria.maxiterations");
-    } else {
-      maxiterations = aux;
-    }
-  }
-  else if (name == "stopcriteria.maxseconds")
-  {
-    long aux = XMLUtils::getLongAttribute(attributes, "value", 0L);
-    if (maxseconds != 0L || aux <= 0L) {
-      throw Exception("Params::parseProperty(): found invalid stopcriteria.maxseconds");
-    } else {
-      maxseconds = aux;
-    }
-  }
-  else if (name == "copula.type")
-  {
-    string aux = XMLUtils::getStringAttribute(attributes, "value", "");
-    if (copula_type != "" || aux == "") {
-      throw Exception("Params::parseProperty(): found invalid copula.type");
-    } else {
-      copula_type = aux;
-    }
-  }
-  else if (name == "copula.seed")
-  {
-    long aux = XMLUtils::getLongAttribute(attributes, "value", 0L);
-    if (copula_seed != 0L || aux == 0L) {
-      throw Exception("Params::parseProperty(): found invalid copula.seed");
-    } else {
-      copula_seed = aux;
-    }
-  }
-  else if (name == "montecarlo.antithetic")
-  {
-    bool aux = XMLUtils::getBooleanAttribute(attributes, "value", false);
-    antithetic = aux;
-  }
-  else if (name == "portfolio.onlyActiveClients")
-  {
-    bool aux = XMLUtils::getBooleanAttribute(attributes, "value", false);
-    onlyactive = aux;
-  }
-  else
-  {
-    throw Exception("Params::parseProperty(): found unexpected property: " + name);
-  }
 }
 
 //===========================================================================

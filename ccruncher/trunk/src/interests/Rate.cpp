@@ -33,7 +33,6 @@
 #include "Rate.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -41,16 +40,6 @@
 ccruncher::Rate::Rate()
 {
   reset();
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Rate::Rate(const DOMNode& node) throw(Exception)
-{
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
 }
 
 //===========================================================================
@@ -105,53 +94,6 @@ void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Rate::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "rate"))
-  {
-    string msg = "Rate::parseDOMNode(): Invalid tag. Expected: rate. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  t = XMLUtils::getDoubleAttribute(attributes, "t", -1.0);
-  r = XMLUtils::getDoubleAttribute(attributes, "r", -1.0);
-
-  if (t <= -1.0 || r <= -1.0)
-  {
-    throw Exception("Rate::parseDOMNode(): invalid values at <rate>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else
-      {
-        string msg = "Rate::parseDOMNode(): invalid data structure at <rate>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
   }
 }
 

@@ -75,7 +75,6 @@ ccruncher_SOURCES = \
     ./aggregators/Aggregators.cpp\
     ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
-    ./utils/XMLUtils.cpp\
     ./utils/Logger.cpp\
     ./utils/Parser.cpp\
     ./utils/File.cpp\
@@ -115,7 +114,6 @@ ccruncher_SOURCES = \
     ./aggregators/Aggregators.hpp\
     ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
-    ./utils/XMLUtils.hpp\
     ./utils/Logger.hpp\
     ./utils/Parser.hpp\
     ./utils/File.hpp\
@@ -127,8 +125,7 @@ ccruncher_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
-ccruncher_LDFLAGS =
-ccruncher_LDADD = -lm -ldl -lxerces-c -lexpat
+ccruncher_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
 # cc2gpi
@@ -150,7 +147,6 @@ cc2gpi_SOURCES = \
     ./utils/File.hpp
 
 cc2gpi_CXXFLAGS = -Wall -W -Wshadow
-cc2gpi_LDFLAGS =
 cc2gpi_LDADD = 
 
 # -------------------------------------------------------------
@@ -186,7 +182,6 @@ generator_SOURCES = \
     ./aggregators/Aggregators.cpp\
     ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
-    ./utils/XMLUtils.cpp\
     ./utils/Parser.cpp\
     ./utils/Logger.cpp\
     ./utils/File.cpp\
@@ -226,7 +221,6 @@ generator_SOURCES = \
     ./aggregators/Aggregators.hpp\
     ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
-    ./utils/XMLUtils.hpp\
     ./utils/Parser.hpp\
     ./utils/Logger.hpp\
     ./utils/File.hpp\
@@ -238,8 +232,7 @@ generator_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
-generator_LDFLAGS =
-generator_LDADD = -lm -ldl -lxerces-c -lexpat
+generator_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
 # tests
@@ -279,7 +272,6 @@ tests_SOURCES = \
     ./utils/Utils.cpp\
     ./utils/Logger.cpp\
     ./utils/Date.cpp\
-    ./utils/XMLUtils.cpp\
     ./utils/Exception.cpp\
     ./utils/File.cpp\
     ./utils/ExpatParser.cpp\
@@ -344,7 +336,6 @@ tests_SOURCES = \
     ./utils/Utils.hpp\
     ./utils/Logger.hpp\
     ./utils/Date.hpp\
-    ./utils/XMLUtils.hpp\
     ./utils/Exception.hpp\
     ./utils/File.hpp\
     ./utils/ExpatParser.hpp\
@@ -377,5 +368,4 @@ tests_SOURCES = \
     ./segmentations/Segment.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
-tests_LDFLAGS = 
-tests_LDADD = -lm -ldl -lxerces-c -lexpat
+tests_LDADD = -lm -lexpat

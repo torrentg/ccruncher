@@ -33,7 +33,6 @@
 #include "Sector.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // reset
@@ -51,19 +50,6 @@ void ccruncher::Sector::reset()
 ccruncher::Sector::Sector()
 {
   reset();
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Sector::Sector(const DOMNode& node) throw(Exception)
-{
-  // inicialitzem les variables de la classe
-  reset();
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
 }
 
 //===========================================================================
@@ -109,54 +95,6 @@ void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Sector::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "sector"))
-  {
-    string msg = "Sector::parseDOMNode(): Invalid tag. Expected: sector. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  order = XMLUtils::getIntAttribute(attributes, "order", -1);
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-  desc = XMLUtils::getStringAttribute(attributes, "desc", "_UNDEF_");
-
-  if (order <= 0 || name == "" || desc == "_UNDEF_")
-  {
-    throw Exception("Sector::parseDOMNode(): invalid values at <sector>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else
-      {
-        string msg = "Sector::parseDOMNode(): invalid data structure at <sector>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
   }
 }
 

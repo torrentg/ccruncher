@@ -40,7 +40,6 @@
 
 #include "utils/config.h"
 #include <algorithm>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "Interest.hpp"
@@ -48,7 +47,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -63,7 +61,6 @@ class Interests : public ExpatHandlers
     int ispot;
     Interest auxinterest;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertInterest(Interest &) throw(Exception);
     void validate() throw(Exception);
 
@@ -71,7 +68,6 @@ class Interests : public ExpatHandlers
   public:
 
     Interests();
-    Interests(const DOMNode &) throw(Exception);
     ~Interests();
 
     vector<Interest> * getInterests();

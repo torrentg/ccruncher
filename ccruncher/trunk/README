@@ -2,26 +2,14 @@
 CREDITCRUNCHER README
 =====================
 
-Install xerces-c package
+
+Install expat package
 --------------------------------
 
-1. download binary package from http://xml.apache.org/xerces-c/
-   don't be lazy, read docs, installation instructions, etc.
-
-2. uncompress package
-     gunzip xerces-c_2_6.tar.gz
-     tar -xvf xerces-c_2_6.tar
-   we sugest install xercesc at $CCRUNCHER/share/xercesc-2.6
-
-3. modify your .profile file. adding the following lines
-     XERCESROOT=<path_to_xerces_dir>
-     export PATH=$PATH:$XERCESROOT/bin
-     export LD_LIBRARY_PATH=$XERCESROOT/lib:$LD_LIBRARY_PATH
-     export LIBRARY_PATH=$XERCESROOT/lib:$LIBRARY_PATH
-     export C_INCLUDE_PATH=$XERCESROOT/include:$C_INCLUDE_PATH
-     export CPLUS_INCLUDE_PATH=$XERCESROOT/include:$CPLUS_INCLUDE_PATH
-     export XERCESC_NLS_HOME=$XERCESCROOT/msg
-   the bin/xercesenv.sh is a script that can help you (read it).
+1. download package from http://expat.sourceforge.net/
+   and install it. Als you can install from a rpm package.
+   check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory
 
 
 Installation from source package
@@ -31,7 +19,7 @@ Installation from source package
      gunzip ccruncher-0.2.tar.gz
      tar -xvf ccruncher-0.2.tar
 
-2. install xerces-c package (explained before)
+2. install expat package (explained before)
 
 3. execute commands (read INSTALL file):
      cd ccruncher-0.2
@@ -48,7 +36,7 @@ Installation from binary package
      gunzip ccruncher-0.2_bin.tar.gz
      tar -xvf ccruncher-0.2_bin.tar
 
-2. install xerces-c package (explained before)
+2. install expat package (explained before)
 
 
 Using CreditCruncher
@@ -73,7 +61,7 @@ Developers tips & tricks
      svn checkout http://www.generacio.com/svn/repos/ccruncher/
      cd trunk
 
-2. install xerces-c package (explained before)
+2. install expat package (explained before)
 
 3. create auto-files (run only 1 time)
      autoscan (produces configure.in)

@@ -37,7 +37,6 @@
 
 #include "utils/config.h"
 #include <algorithm>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "Segmentation.hpp"
@@ -45,7 +44,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -59,7 +57,6 @@ class Segmentations : public ExpatHandlers
     vector<Segmentation> vsegmentations;
     Segmentation auxsegmentation;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertSegmentation(Segmentation &) throw(Exception);
     void validate() throw(Exception);
 
@@ -67,7 +64,6 @@ class Segmentations : public ExpatHandlers
   public:
 
     Segmentations();
-    Segmentations(const DOMNode &) throw(Exception);
     ~Segmentations();
 
     vector<Segmentation> getSegmentations();

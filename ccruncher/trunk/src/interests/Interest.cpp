@@ -34,7 +34,6 @@
 #include <algorithm>
 #include "Interest.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -67,19 +66,6 @@ void ccruncher::Interest::reset()
 
   // establim la data de la corba
   fecha = Date(1,1,1900);
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Interest::Interest(const DOMNode& node) throw(Exception)
-{
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // ordenem vrates
-  sort(vrates.begin(), vrates.end());
 }
 
 //===========================================================================
@@ -285,55 +271,6 @@ void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Interest::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "interest"))
-  {
-    string msg = "Interest::parseDOMNode(): Invalid tag. Expected: interest. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-  fecha = XMLUtils::getDateAttribute(attributes, "date", Date(1,1,1900));
-  if (name == "" || fecha == Date(1,1,1900))
-  {
-    throw Exception("Interest::parseDOMNode(): tag <interest> without attribute name or date");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "rate"))
-      {
-        Rate aux = Rate(child);
-        insertRate(aux);
-      }
-      else
-      {
-        throw Exception("Interest::parseDOMNode(): invalid data structure at <interest>");
-      }
-    }
   }
 }
 

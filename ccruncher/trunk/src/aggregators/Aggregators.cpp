@@ -34,7 +34,6 @@
 #include <algorithm>
 #include "Aggregators.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -42,21 +41,6 @@
 ccruncher::Aggregators::Aggregators(Segmentations *segs)
 {
   segmentations = segs;
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Aggregators::Aggregators(const DOMNode& node, Segmentations *segs) throw(Exception)
-{
-  segmentations = segs;
-  
-  // recollim els parametres de la simulacio
-  parseDOMNode(node, segs);
-
-  // making validations
-  validate();
 }
 
 //===========================================================================
@@ -184,46 +168,6 @@ void ccruncher::Aggregators::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "aggregators"))
-  {
-    string msg = "Interests::parseDOMNode(): Invalid tag. Expected: aggregators. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "aggregator"))
-      {
-        Aggregator aux = Aggregator(child, segs);
-        insertAggregator(aux);
-      }
-      else
-      {
-        throw Exception("Aggregators::parseDOMNode(): invalid data structure at <aggregators>");
-      }
-    }
   }
 }
 

@@ -39,13 +39,11 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "xercesc/dom/DOM.hpp"
 #include "Sector.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -59,7 +57,6 @@ class Sectors : public ExpatHandlers
     vector<Sector> vsectors;
     Sector auxsector;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertSector(Sector &) throw(Exception);
     void validations() throw(Exception);
 
@@ -67,7 +64,6 @@ class Sectors : public ExpatHandlers
   public:
 
     Sectors();
-    Sectors(const DOMNode &) throw(Exception);
     ~Sectors();
 
     vector<Sector> * getSectors();

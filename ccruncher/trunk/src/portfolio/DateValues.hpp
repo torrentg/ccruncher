@@ -44,12 +44,10 @@
 #include "utils/config.h"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
-#include "xercesc/dom/DOM.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -57,11 +55,6 @@ namespace ccruncher {
 
 class DateValues
 {
-
-  private:
-
-    void parseDOMNode(const DOMNode &) throw(Exception);
-
 
   public:
 
@@ -71,7 +64,6 @@ class DateValues
     double recovery;
 
     DateValues();
-    DateValues(const DOMNode &) throw(Exception);
     DateValues(Date date, double cashflow, double exposure, double recovery);
 
 };

@@ -32,7 +32,6 @@
 
 #include <cfloat>
 #include "CorrelationMatrix.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 #include "math/CholeskyDecomposition.hpp"
@@ -63,28 +62,6 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Excepti
 {
   // posem valors per defecte
   init(sectors_);
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_, const DOMNode& node) throw(Exception)
-{
-  try
-  {
-    // posem valors per defecte
-    init(sectors_);
-    // recollim els parametres de la simulacio
-    parseDOMNode(node);
-    // validem les dades
-    validate();
-  }
-  catch(Exception &e)
-  {
-    Utils::deallocMatrix(matrix, n);
-    throw e;
-  }
 }
 
 //===========================================================================
@@ -205,84 +182,6 @@ void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::CorrelationMatrix::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "mcorrels"))
-  {
-    string msg = "CorrelationMatrix::parseDOMNode(): Invalid tag. Expected: mcorrels. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  epsilon = XMLUtils::getDoubleAttribute(attributes, "epsilon", DBL_MAX);
-  if (epsilon == DBL_MAX || epsilon < 0.0)
-  {
-    throw Exception("CorrelationMatrix::parseDOMNode(): invalid attributes at <mcorrels>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "sigma"))
-      {
-        parseSigma(child);
-      }
-      else
-      {
-        string msg = "CorrelationMatrix::parseDOMNode(): invalid data structure at <mcorrels>: ";
-        msg += XMLUtils::XMLCh2String(child.getNodeName());
-        throw Exception(msg);
-      }
-    }
-  }
-}
-
-
-//===========================================================================
-// interpreta un node XML time
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::CorrelationMatrix::parseSigma(const DOMNode& node) throw(Exception)
-{
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-
-  // agafem els atributs del node
-  string sector1 = XMLUtils::getStringAttribute(attributes, "sector1", "");
-  string sector2 = XMLUtils::getStringAttribute(attributes, "sector2", "");
-  double value = XMLUtils::getDoubleAttribute(attributes, "value", DBL_MAX);
-
-  if (sector1 == "" || sector2 == "" || value == DBL_MAX)
-  {
-    throw Exception("CorrelationMatrix::parseSigma(): invalid values at <sigma>");
-  }
-
-  // insertem el valor en la matriu de transicio
-  insertSigma(sector1, sector2, value);
-
-  // acabem de comprovar la estructura
-  if (node.getChildNodes()->getLength() != 0)
-  {
-    throw Exception("CorrelationMatrix::parseSigma(): invalid data structure at <sigma>");
   }
 }
 

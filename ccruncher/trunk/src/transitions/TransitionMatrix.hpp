@@ -38,7 +38,6 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
@@ -46,7 +45,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -58,10 +56,8 @@ class TransitionMatrix : public ExpatHandlers
   private:
 
     void init(Ratings *) throw(Exception);
-    void parseDOMNode(const DOMNode&) throw(Exception);
-    void parseTransition(const DOMNode&) throw(Exception);
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
-    void validate(void) throw(Exception);
+    void validate() throw(Exception);
 
   public:
 
@@ -74,7 +70,6 @@ class TransitionMatrix : public ExpatHandlers
     int indexdefault;
 
     TransitionMatrix(Ratings *) throw(Exception);
-    TransitionMatrix(Ratings *, const DOMNode &) throw(Exception);
     TransitionMatrix(TransitionMatrix &) throw(Exception);
     ~TransitionMatrix();
 

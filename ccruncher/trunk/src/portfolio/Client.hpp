@@ -43,7 +43,6 @@
 #include <algorithm>
 #include "Asset.hpp"
 #include "DateValues.hpp"
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -57,7 +56,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -77,7 +75,6 @@ class Client : public ExpatHandlers
     Interests *interests;
     Asset auxasset;
 
-    void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertAsset(Asset &) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
 
@@ -89,7 +86,6 @@ class Client : public ExpatHandlers
     string name;
 
     Client(Ratings *, Sectors *, Segmentations *, Interests *);
-    Client(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode &) throw(Exception);
     ~Client();
 
     vector<Asset> * getAssets();

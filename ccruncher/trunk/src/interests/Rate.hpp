@@ -36,14 +36,12 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -52,18 +50,12 @@ namespace ccruncher {
 class Rate : public ExpatHandlers
 {
 
-  private:
-
-    void parseDOMNode(const DOMNode&) throw(Exception);
-
-
   public:
 
     double t;
     double r;
 
     Rate();
-    Rate(const DOMNode &) throw(Exception);
 
     string getXML(int) throw(Exception);
     void reset();

@@ -34,31 +34,13 @@
 #include <algorithm>
 #include "Sectors.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor privat
 //===========================================================================
 ccruncher::Sectors::Sectors()
 {
-  // inicialitzem el vector de sectors
-  vsectors = vector<Sector>();
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Sectors::Sectors(const DOMNode& node) throw(Exception)
-{
-  // inicialitzem el vector de sectors
-  vsectors = vector<Sector>();
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // validem la llista recollida
-  validations();
+  // nothing to do
 }
 
 //===========================================================================
@@ -154,46 +136,6 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Sectors::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "sectors"))
-  {
-    string msg = "Sectors::parseDOMNode(): Invalid tag. Expected: sectors. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "sector"))
-      {
-        Sector aux = Sector(child);
-        insertSector(aux);
-      }
-      else
-      {
-        throw Exception("Sectors::parseDOMNode(): invalid data structure at <sectors>");
-      }
-    }
   }
 }
 

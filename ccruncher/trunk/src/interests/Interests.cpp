@@ -34,7 +34,6 @@
 #include <algorithm>
 #include "Interests.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -42,21 +41,6 @@
 ccruncher::Interests::Interests()
 {
   ispot = -1;
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Interests::Interests(const DOMNode& node) throw(Exception)
-{
-  ispot = -1;
-
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // making validations
-  validate();
 }
 
 //===========================================================================
@@ -169,46 +153,6 @@ void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Interests::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "interests"))
-  {
-    string msg = "Interests::parseDOMNode(): Invalid tag. Expected: interests. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "interest"))
-      {
-        Interest aux = Interest(child);
-        insertInterest(aux);
-      }
-      else
-      {
-        throw Exception("Interests::parseDOMNode(): invalid data structure at <interests>");
-      }
-    }
   }
 }
 

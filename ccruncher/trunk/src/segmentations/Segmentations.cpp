@@ -34,7 +34,6 @@
 #include <algorithm>
 #include "Segmentations.hpp"
 #include "utils/Utils.hpp"
-#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
@@ -42,19 +41,6 @@
 ccruncher::Segmentations::Segmentations()
 {
   // nothing to do
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Segmentations::Segmentations(const DOMNode& node) throw(Exception)
-{
-  // recollim els parametres de la simulacio
-  parseDOMNode(node);
-
-  // making validations
-  validate();
 }
 
 //===========================================================================
@@ -208,46 +194,6 @@ void ccruncher::Segmentations::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Segmentations::parseDOMNode(const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "segmentations"))
-  {
-    string msg = "Segmentations::parseDOMNode(): Invalid tag. Expected: segmentations. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "segmentation"))
-      {
-        Segmentation aux = Segmentation(child);
-        insertSegmentation(aux);
-      }
-      else
-      {
-        throw Exception("Segmentations::parseDOMNode(): invalid data structure at <segmentations>");
-      }
-    }
   }
 }
 

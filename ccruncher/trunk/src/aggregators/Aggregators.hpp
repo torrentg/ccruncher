@@ -37,7 +37,6 @@
 
 #include "utils/config.h"
 #include <algorithm>
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -50,7 +49,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -65,7 +63,6 @@ class Aggregators : public ExpatHandlers
     Segmentations *segmentations;
     Aggregator auxaggregator;
 
-    void parseDOMNode(const DOMNode&, Segmentations *) throw(Exception);
     void insertAggregator(Aggregator &) throw(Exception);
     void validate() throw(Exception);
 
@@ -73,7 +70,6 @@ class Aggregators : public ExpatHandlers
   public:
 
     Aggregators(Segmentations *);
-    Aggregators(const DOMNode &, Segmentations *) throw(Exception);
     ~Aggregators();
 
     vector<Aggregator> * getAggregators();

@@ -37,7 +37,6 @@
 #include <algorithm>
 #include <cassert>
 #include "Client.hpp"
-#include "utils/XMLUtils.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -51,20 +50,6 @@ ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_,
 {
   // initializing class
   reset(ratings_, sectors_, segmentations_, interests_);
-}
-
-//===========================================================================
-// constructor
-// TODO: this method will be removed
-//===========================================================================
-ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
-               Interests *interests_, const DOMNode& node) throw(Exception)
-{
-  // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_);
-
-  // recollim la informacio del node
-  parseDOMNode(ratings, sectors, segmentations, interests, node);
 }
 
 //===========================================================================
@@ -196,96 +181,6 @@ void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// interpreta un node XML params
-// TODO: this method will be removed
-//===========================================================================
-void ccruncher::Client::parseDOMNode(Ratings *ratings_, Sectors *sectors_, Segmentations *segs_,
-                          Interests *interests_, const DOMNode& node) throw(Exception)
-{
-  // validem el node passat com argument
-  if (!XMLUtils::isNodeName(node, "client"))
-  {
-    string msg = "Client::parseDOMNode(): Invalid tag. Expected: client. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
-    throw Exception(msg);
-  }
-
-  // agafem la llista d'atributs
-  DOMNamedNodeMap &attributes = *node.getAttributes();
-  id = XMLUtils::getStringAttribute(attributes, "id", "");
-  name = XMLUtils::getStringAttribute(attributes, "name", "");
-  string strrating = XMLUtils::getStringAttribute(attributes, "rating", "");
-  string strsector= XMLUtils::getStringAttribute(attributes, "sector", "");
-
-  irating = ratings->getIndex(strrating);
-  isector = sectors->getIndex(strsector);
-
-  if (id == "" || name == "" || irating < 0 || isector < 0)
-  {
-    throw Exception("Client::parseDOMNode(): invalid attributes at <client>");
-  }
-
-  // recorrem tots els items
-  DOMNodeList &children = *node.getChildNodes();
-
-  if (&children != NULL)
-  {
-    for(unsigned int i=0;i<children.getLength();i++)
-    {
-      DOMNode &child = *children.item(i);
-
-      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-      {
-        continue;
-      }
-      else if (XMLUtils::isNodeName(child, "belongs-to"))
-      {
-        DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-        string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
-        string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
-
-        int iconcept = segmentations->getSegmentation(sconcept);
-        int isegment = segmentations->getSegment(sconcept, ssegment);
-
-        insertBelongsTo(iconcept, isegment);
-      }
-      else if (XMLUtils::isNodeName(child, "asset"))
-      {
-        Asset aux = Asset(child, segmentations);
-        insertAsset(aux);
-      }
-      else
-      {
-        throw Exception("Client::parseDOMNode(): invalid data structure at <client>");
-      }
-    }
-  }
-
-  // completem segmentacio client si existeix
-  if (segmentations->getSegmentation("client") >= 0)
-  {
-    if (segmentations->getComponents("client") == client)
-    {
-      segmentations->addSegment("client", id);
-      int iconcept = segmentations->getSegmentation("client");
-      int isegment = segmentations->getSegment("client", id);
-      insertBelongsTo(iconcept, isegment);
-    }
-  }
-
-  // completem segmentacio portfolio si existeix
-  if (segmentations->getSegmentation("portfolio") >= 0)
-  {
-    if (segmentations->getComponents("portfolio") == client)
-    {
-      int iconcept = segmentations->getSegmentation("portfolio");
-      int isegment = segmentations->getSegment("portfolio", "rest");
-      insertBelongsTo(iconcept, isegment);
-    }
   }
 }
 

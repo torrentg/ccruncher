@@ -39,14 +39,12 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "sectors/Sectors.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -63,15 +61,12 @@ class CorrelationMatrix : public ExpatHandlers
     double **matrix;
 
     void init(Sectors *) throw(Exception);
-    void parseDOMNode(const DOMNode&) throw(Exception);
-    void parseSigma(const DOMNode&) throw(Exception);
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
     void validate(void) throw(Exception);
 
   public:
 
     CorrelationMatrix(Sectors *) throw(Exception);
-    CorrelationMatrix(Sectors *, const DOMNode &) throw(Exception);
     ~CorrelationMatrix();
 
     int size();

@@ -36,14 +36,12 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -52,11 +50,6 @@ namespace ccruncher {
 class Sector : public ExpatHandlers
 {
 
-  private:
-
-    void parseDOMNode(const DOMNode&) throw(Exception);
-
-
   public:
 
     int order;
@@ -64,7 +57,6 @@ class Sector : public ExpatHandlers
     string desc;
 
     Sector();
-    Sector(const DOMNode &) throw(Exception);
 
     string getXML(int) throw(Exception);
     void reset();

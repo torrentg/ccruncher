@@ -5,12 +5,10 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
-  * change xml parser. migrate from xerces-c to expat
   * working in pdf documentation explaining methodology used in CreditCruncher
   * working in scripts that generates report using LaTeX and gnuplot
   * working in CreditCruncher site content
   * save execution results (CRC file, execution time, etc.) in a output xml file
-  * replace DOM xercesc parser by ala-SAX expat parser
 
 
 Future works

@@ -41,13 +41,11 @@
 #include "utils/config.h"
 #include <map>
 #include <vector>
-#include "xercesc/dom/DOM.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
-#include "utils/XMLUtils.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "DateValues.hpp"
 
@@ -71,8 +69,6 @@ class Asset : public ExpatHandlers
     Segmentations *segmentations;
     bool tilt;
 
-    void parseDOMNode(const DOMNode &, Segmentations *) throw(Exception);
-    void parseData(const DOMNode &) throw(Exception);
     double getVCashFlow(Date date1, Date date2, Interests *);
     double getVExposure(Date date1, Date date2, Interests *);
     double getVRecovery(Date date1, Date date2, Interests *);
@@ -84,7 +80,6 @@ class Asset : public ExpatHandlers
 
     Asset();
     Asset(Segmentations *);
-    Asset(const DOMNode &, Segmentations *) throw(Exception);
     ~Asset();
 
     string getId(void);

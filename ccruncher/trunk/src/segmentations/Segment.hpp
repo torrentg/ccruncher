@@ -36,13 +36,11 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -51,20 +49,12 @@ namespace ccruncher {
 class Segment 
 {
 
-  private:
-
-    void parseDOMNode(const DOMNode&) throw(Exception);
-
-
   public:
 
     string name;
 
     Segment();
     Segment(string name_);
-    Segment(const DOMNode &) throw(Exception);
-
-    string getXML(int) throw(Exception);
 
 };
 
