@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -38,7 +41,7 @@
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Aggregator::reset()
+void ccruncher::Aggregator::reset(Segmentations *segs)
 {
   numsegments = 0L;
   saggregators = NULL;
@@ -47,27 +50,35 @@ void ccruncher::Aggregator::reset()
   components = asset;
   bvalues = true;
   bfull = false;
-  segmentations = NULL;
+  segmentations = segs;
 }
 
 //===========================================================================
-// constructor privat
+// constructor (don't use)
 //===========================================================================
 ccruncher::Aggregator::Aggregator()
 {
-  reset();
+  // reseting default values
+  reset(NULL);
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
+ccruncher::Aggregator::Aggregator(Segmentations *segs)
+{
+  // reseting default values
+  reset(segs);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
+//===========================================================================
 ccruncher::Aggregator::Aggregator(const DOMNode& node, Segmentations *segs) throw(Exception)
 {
   // reseting default values
-  reset();
-
-  // setting segmentations
-  segmentations = segs;
+  reset(segs);
 
   // recollim els parametres
   parseDOMNode(node);
@@ -90,7 +101,69 @@ ccruncher::Aggregator::~Aggregator()
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Aggregator::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"aggregator")) {
+    if (getNumAttributes(attributes) != 4) {
+      throw eperror(eu, "incorrect number of attributes in tag aggregator");
+    }
+    else {
+    
+      string sseg = getStringAttribute(attributes, "segmentation", "");
+      string stype = getStringAttribute(attributes, "type", "");
+      name = getStringAttribute(attributes, "name", "");
+      bfull = getBooleanAttribute(attributes, "full", false);
+
+      // setting name value
+      if (name == "") {
+        throw eperror(eu, "invalid name attribute at <aggregator>");
+      }
+      
+      // setting isegmentation value
+      isegmentation = segmentations->getSegmentation(sseg);
+      
+      // setting components value
+      components = segmentations->getComponents(sseg);
+      if (isegmentation < 0 || (components != asset && components != client))
+      {
+        throw eperror(eu, "segmentation " + sseg + " not defined");
+      }
+      
+      // setting type value
+      if (stype == "values") {
+        bvalues = true;
+      }
+      else if (stype == "ratings") {
+        bvalues = false;
+      }
+      else {
+        throw eperror(eu, "type " + stype + " not allowed (try values or ratings)");
+      }
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Aggregator::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"aggregator")) {
+    validate();
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Aggregator::parseDOMNode(const DOMNode& node) throw(Exception)
 {

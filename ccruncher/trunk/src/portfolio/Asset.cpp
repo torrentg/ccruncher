@@ -28,6 +28,9 @@
 // 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -38,8 +41,21 @@
 //===========================================================================
 // constructor
 //===========================================================================
+ccruncher::Asset::Asset(Segmentations *segs)
+{
+  // setting default values
+  reset(segs);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
+//===========================================================================
 ccruncher::Asset::Asset(const DOMNode &node, Segmentations *segs) throw(Exception)
 {
+  // setting default values
+  reset(segs);
+
   // parsing DOM node
   parseDOMNode(node, segs);
 }
@@ -50,6 +66,19 @@ ccruncher::Asset::Asset(const DOMNode &node, Segmentations *segs) throw(Exceptio
 ccruncher::Asset::~Asset()
 {
   // nothing to do
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Asset::reset(Segmentations *segs)
+{
+  id = "NON_ASSIGNED";
+  name = "NO_NAME";
+  segmentations = segs;
+  data.clear();
+  belongsto.clear();
+  tilt = false;
 }
 
 //===========================================================================
@@ -228,7 +257,108 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValu
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"asset")) {
+    if (getNumAttributes(attributes) != 2) {
+      throw eperror(eu, "incorrect number of attributes in tag asset");
+    }
+    else {
+      id = getStringAttribute(attributes, "id", "");
+      name = getStringAttribute(attributes, "name", "");
+      if (id == "" || name == "")
+      {
+        throw eperror(eu, "invalid attributes at <asset>");
+      }
+    }
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    string sconcept = getStringAttribute(attributes, "concept", "");
+    string ssegment = getStringAttribute(attributes, "segment", "");
+
+    int iconcept = segmentations->getSegmentation(sconcept);
+    int isegment = segmentations->getSegment(sconcept, ssegment);
+
+    insertBelongsTo(iconcept, isegment);
+  }
+  else if (isEqual(name_,"data")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag data");
+    }
+    else {
+      tilt = true;
+    }
+  }
+  else if (isEqual(name_,"values") && tilt == true) {
+    Date date = getDateAttribute(attributes, "at", Date(1,1,1));
+    double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
+    double exposure = getDoubleAttribute(attributes, "exposure", NAN);
+    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
+
+    if (date == Date(1,1,1) || isnan(cashflow) || isnan(exposure) || isnan(recovery)) {
+      throw eperror(eu, "invalid attributes at <values>");
+    }
+    else {
+      DateValues aux(date, cashflow, exposure, recovery);
+      insertDateValues(aux);
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"asset")) {
+    // checking data size
+    if (data.size() == 0) {
+      throw eperror(eu, "asset without data");
+    }
+    else {
+      // sorting data by date
+      sort(data.begin(), data.end());
+    }
+    // filling implicit segment
+    if (segmentations->getSegmentation("asset") >= 0) {
+      if (segmentations->getComponents("asset") == asset) {
+        segmentations->addSegment("asset", id);
+        int iconcept = segmentations->getSegmentation("asset");
+        int isegment = segmentations->getSegment("asset", id);
+        insertBelongsTo(iconcept, isegment);
+      }
+    }
+    // filling implicit segment
+    if (segmentations->getSegmentation("portfolio") >= 0) {
+      if (segmentations->getComponents("portfolio") == asset) {
+        int iconcept = segmentations->getSegmentation("portfolio");
+        int isegment = segmentations->getSegment("portfolio", "rest");
+        insertBelongsTo(iconcept, isegment);
+      }
+    }
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"data")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"values")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML de tipus asset
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
 {
@@ -322,6 +452,7 @@ void ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs) th
 
 //===========================================================================
 // interpreta un node XML de tipus data
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Asset::parseData(const DOMNode& node) throw(Exception)
 {

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Aggregators_
@@ -37,6 +40,7 @@
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "ratings/Ratings.hpp"
 #include "interests/Interests.hpp"
@@ -52,12 +56,14 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Aggregators
+class Aggregators : public ExpatHandlers
 {
 
   private:
 
     vector<Aggregator> vaggregators;
+    Segmentations *segmentations;
+    Aggregator auxaggregator;
 
     void parseDOMNode(const DOMNode&, Segmentations *) throw(Exception);
     void insertAggregator(Aggregator &) throw(Exception);
@@ -66,6 +72,7 @@ class Aggregators
 
   public:
 
+    Aggregators(Segmentations *);
     Aggregators(const DOMNode &, Segmentations *) throw(Exception);
     ~Aggregators();
 
@@ -77,6 +84,10 @@ class Aggregators
     void touch() throw(Exception);
     string getXML(int) throw(Exception);
     long getNumSegments() throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

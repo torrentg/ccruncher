@@ -28,13 +28,16 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Aggregator.hpp"
 #include "Aggregators.hpp"
 #include "AggregatorsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -46,7 +49,7 @@
 //===========================================================================
 void AggregatorsTest::setUp()
 {
-  XMLUtils::initialize();
+  // nothing to do
 }
 
 //===========================================================================
@@ -54,7 +57,7 @@ void AggregatorsTest::setUp()
 //===========================================================================
 void AggregatorsTest::tearDown()
 {
-  XMLUtils::terminate();
+  // nothing to do
 }
 
 //===========================================================================
@@ -91,15 +94,12 @@ Segmentations AggregatorsTest::getSegmentations()
   </segmentations>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentation object creation
   Segmentations ret;
-  ASSERT_NO_THROW(ret = Segmentations(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
 
-  delete parser;
   return ret;
 }
 
@@ -118,28 +118,22 @@ void AggregatorsTest::test1()
   </aggregators>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentations creation object
   Segmentations segs = getSegmentations();
 
   // aggregators creation object
-  Aggregators *isobj = NULL;
-  ASSERT_NO_THROW(isobj = new Aggregators(*(doc->getDocumentElement()), &segs));
+  Aggregators isobj(&segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &isobj));
 
-  if (isobj != NULL)
-  {
-    vector<Aggregator> *v = isobj->getAggregators();
+  vector<Aggregator> *v = isobj.getAggregators();
 
-    ASSERT((*v)[0].getName() == "aggregator1");
-    ASSERT((*v)[1].getName() == "aggregator2");
-    ASSERT((*v)[2].getName() == "aggregator3");
+  ASSERT((*v)[0].getName() == "aggregator1");
+  ASSERT((*v)[1].getName() == "aggregator2");
+  ASSERT((*v)[2].getName() == "aggregator3");
+  ASSERT((*v)[3].getName() == "aggregator4");
+  ASSERT((*v)[4].getName() == "aggregator5");
 
-    ASSERT_EQUALS(isobj->getNumSegments(), 9L);
-  }
-
-  if (isobj != NULL) delete isobj;
-  delete parser;
+  ASSERT_EQUALS(isobj.getNumSegments(), 9L);
 }

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -36,8 +39,19 @@
 //===========================================================================
 // constructor
 //===========================================================================
+ccruncher::Aggregators::Aggregators(Segmentations *segs)
+{
+  segmentations = segs;
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
+//===========================================================================
 ccruncher::Aggregators::Aggregators(const DOMNode& node, Segmentations *segs) throw(Exception)
 {
+  segmentations = segs;
+  
   // recollim els parametres de la simulacio
   parseDOMNode(node, segs);
 
@@ -138,7 +152,44 @@ void ccruncher::Aggregators::insertAggregator(Aggregator &val) throw(Exception)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Aggregators::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"aggregators")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag aggregators");
+    }
+  }
+  else if (isEqual(name_,"aggregator")) {
+    auxaggregator.reset(segmentations);
+    eppush(eu, &auxaggregator, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Aggregators::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"aggregators")) {
+    validate();
+    auxaggregator.reset(NULL);
+  }
+  else if (isEqual(name_,"aggregator")) {
+    insertAggregator(auxaggregator);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
 {

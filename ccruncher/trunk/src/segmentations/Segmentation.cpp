@@ -43,11 +43,7 @@
 ccruncher::Segmentation::Segmentation()
 {
   // default values
-  modificable = false;
-
-  // adding catcher segment
-  Segment catcher = Segment("rest");
-  insertSegment(catcher);
+  reset();
 }
 
 //===========================================================================
@@ -57,11 +53,7 @@ ccruncher::Segmentation::Segmentation()
 ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
 {
   // default values
-  modificable = false;
-
-  // adding catcher segment
-  Segment catcher = Segment("rest");
-  insertSegment(catcher);
+  reset();
 
   // recollim els parametres de la simulacio
   parseDOMNode(node);
@@ -84,6 +76,10 @@ void ccruncher::Segmentation::reset()
   modificable = false;
   name = "";
   components = client;
+  
+  // adding catcher segment
+  Segment catcher = Segment("rest");
+  insertSegment(catcher);
 }
 
 //===========================================================================

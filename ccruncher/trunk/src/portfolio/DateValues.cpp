@@ -28,6 +28,9 @@
 // 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added recovery value
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -60,6 +63,7 @@ ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _exposure
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::DateValues::DateValues(const DOMNode &node) throw(Exception)
 {
@@ -68,6 +72,7 @@ ccruncher::DateValues::DateValues(const DOMNode &node) throw(Exception)
 
 //===========================================================================
 // ParseDOMNode
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::DateValues::parseDOMNode(const DOMNode &node) throw(Exception)
 {

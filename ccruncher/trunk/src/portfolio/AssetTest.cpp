@@ -31,6 +31,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
@@ -38,7 +41,7 @@
 #include "Asset.hpp"
 #include "AssetTest.hpp"
 #include "utils/Date.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -49,7 +52,7 @@
 //===========================================================================
 void AssetTest::setUp()
 {
-  XMLUtils::initialize();
+  // nothing to do
 }
 
 //===========================================================================
@@ -57,7 +60,7 @@ void AssetTest::setUp()
 //===========================================================================
 void AssetTest::tearDown()
 {
-  XMLUtils::terminate();
+  // nothing to do
 }
 
 //===========================================================================
@@ -94,15 +97,12 @@ Segmentations AssetTest::getSegmentations()
   </segmentations>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentation object creation
   Segmentations ret;
-  ASSERT_NO_THROW(ret = Segmentations(*(doc->getDocumentElement())));
-
-  delete parser;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
+  
   return ret;
 }
 
@@ -138,15 +138,12 @@ Interests AssetTest::getInterests()
     </interests>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentation object creation
   Interests ret;
-  ASSERT_NO_THROW(ret = Interests(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
 
-  delete parser;
   return ret;
 }
 
@@ -170,24 +167,16 @@ void AssetTest::test1()
       </asset>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset *asset = NULL;
-  ASSERT_NO_THROW(asset =  new Asset(*(doc->getDocumentElement()), &segs));
+  Asset asset(&segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  if (asset != NULL)
-  {
-    makeAssertions(asset);
-  }
-
-  if (asset != NULL) delete asset;
-  delete parser;
+  makeAssertions(&asset);
 }
 
 //===========================================================================
@@ -210,19 +199,14 @@ void AssetTest::test2()
       </asset>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset *asset = NULL;
-  ASSERT_THROW(asset = new Asset(*(doc->getDocumentElement()), &segs));
-
-  if (asset != NULL) delete asset;
-  delete parser;
+  Asset asset(&segs);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
 //===========================================================================

@@ -28,6 +28,9 @@
 // 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -45,6 +48,7 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/XMLUtils.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "DateValues.hpp"
 
 //---------------------------------------------------------------------------
@@ -55,7 +59,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Asset
+class Asset : public ExpatHandlers
 {
 
   private:
@@ -64,6 +68,8 @@ class Asset
     string name;
     map<int,int> belongsto;
     vector<DateValues> data;
+    Segmentations *segmentations;
+    bool tilt;
 
     void parseDOMNode(const DOMNode &, Segmentations *) throw(Exception);
     void parseData(const DOMNode &) throw(Exception);
@@ -76,6 +82,7 @@ class Asset
 
   public:
 
+    Asset(Segmentations *);
     Asset(const DOMNode &, Segmentations *) throw(Exception);
     ~Asset();
 
@@ -87,6 +94,11 @@ class Asset
     vector<DateValues> *getData();
     bool belongsTo(int iconcept, int isegment);
     int getSegment(int iconcept);
+    void reset(Segmentations *);
+    
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 
