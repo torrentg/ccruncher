@@ -28,6 +28,9 @@
 // 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added POSIX compliance in command line arguments
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #include <sys/resource.h>
@@ -37,6 +40,7 @@
 #include "MonteCarlo.hpp"
 #include "IData.hpp"
 #include "utils/File.hpp"
+#include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 
 //---------------------------------------------------------------------------
@@ -211,8 +215,11 @@ void run(string filename, string path) throw(Exception)
   // checking input file readeability
   File::checkFile(filename, "r");
 
+  // initializing logger
+  Logger::setVerbosity(bverbose?1:0);
+  
   // parsing input file
-  IData idata = IData(filename, bverbose?1:0);
+  IData idata = IData(filename);
 
   // creating simulation object
   MonteCarlo simul;

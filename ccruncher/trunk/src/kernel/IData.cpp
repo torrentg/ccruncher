@@ -29,12 +29,16 @@
 //   . solved bug at XML read that hangs ccruncher when input file isn't 
 //     a true xml file
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #include <cassert>
 #include <fstream>
 #include <iostream>
 #include "IData.hpp"
+#include "utils/Logger.hpp"
 #include "utils/XMLUtils.hpp"
 #include "utils/Timer.hpp"
 
@@ -43,8 +47,6 @@
 //===========================================================================
 void ccruncher::IData::init()
 {
-   verbosity = 0;
-
    params = NULL;
    interests = NULL;
    ratings = NULL;
@@ -79,17 +81,13 @@ void ccruncher::IData::release()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename, int vlevel) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
 {
   DOMBuilder *parser = NULL;
   DOMDocument *doc = NULL;
 
   // inicialitzem el contingut
   init();
-
-  // setting verbosity level
-  assert(vlevel==0 || vlevel==1);
-  verbosity = vlevel;
 
   // parsejem el document
   try
@@ -136,14 +134,10 @@ ccruncher::IData::IData(const string &xmlfilename, int vlevel) throw(Exception)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const DOMNode &node, int vlevel) throw(Exception)
+ccruncher::IData::IData(const DOMNode &node) throw(Exception)
 {
   // inicialitzem el contingut
   init();
-
-  // setting verbosity level
-  assert(vlevel==0 || vlevel==1);
-  verbosity = vlevel;
 
   try
   {
@@ -248,7 +242,7 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing parameters ..." << endl;
+  Logger::trace("parsing parameters ...");
 
   if (params != NULL)
   {
@@ -265,7 +259,7 @@ void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing interests ..." << endl;
+  Logger::trace("parsing interests ...");
 
   if (interests != NULL)
   {
@@ -282,7 +276,7 @@ void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing ratings ..." << endl;
+  Logger::trace("parsing ratings ...");
 
   if (ratings != NULL)
   {
@@ -299,7 +293,7 @@ void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing transition matrix ..." << endl;
+  Logger::trace("parsing transition matrix ...");
 
   if (ratings == NULL)
   {
@@ -320,7 +314,7 @@ void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing sectors ..." << endl;
+  Logger::trace("parsing sectors ...");
 
   if (sectors != NULL)
   {
@@ -337,7 +331,7 @@ void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing correlation matrix ..." << endl;
+  Logger::trace("parsing correlation matrix ...");
 
   if (sectors == NULL)
   {
@@ -358,7 +352,7 @@ void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing segmentations ..." << endl;
+  Logger::trace("parsing segmentations ...");
 
   if (segmentations != NULL)
   {
@@ -375,7 +369,7 @@ void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing aggregators ..." << endl;
+  Logger::trace("parsing aggregators ...");
 
   if (segmentations == NULL)
   {
@@ -396,7 +390,7 @@ void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(const DOMNode &node) throw(Exception)
 {
-  if (verbosity == 1) cout << "parsing portfolio ..." << endl;
+  Logger::trace("parsing portfolio ...");
 
   if (interests == NULL)
   {

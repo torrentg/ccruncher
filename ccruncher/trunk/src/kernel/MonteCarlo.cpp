@@ -325,7 +325,10 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
   bool moreiterations = true;
   Timer sw1, sw2;
 
-  if (verbosity == 1) cout << "running Monte Carlo ..." << endl;
+  if (verbosity == 1) 
+  {
+    cout << "running Monte Carlo ..." << endl;
+  }
 
   try
   {
@@ -370,7 +373,10 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
     aggregators->flush(true);
 
     // sortim
-    showInfo();
+    if (verbosity == 1)
+    {
+      showInfo();
+    }
   }
   catch(Exception &e)
   {

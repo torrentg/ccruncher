@@ -6,10 +6,42 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-AM_CPPFLAGS = \
-    -I../share/jama-1.2.2/\
-    -I../share/Mersenne-1.0/\
-    -I../share/MiniCppUnit-2.2/
+EXTRA_DIST = \
+    ../share/MiniCppUnit-2.2/TestsRunner.cxx\
+    ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
+    ../share/MiniCppUnit-2.2/MiniCppUnit.hxx\
+    ../share/Mersenne-1.0/MersenneTwister.h\
+    ../share/jama-1.2.2/jama_cholesky.h\
+    ../share/jama-1.2.2/jama_eig.h\
+    ../share/jama-1.2.2/jama_lu.h\
+    ../share/jama-1.2.2/jama_qr.h\
+    ../share/jama-1.2.2/jama_svd.h\
+    ../share/jama-1.2.2/tnt_array1d.h\
+    ../share/jama-1.2.2/tnt_array1d_utils.h\
+    ../share/jama-1.2.2/tnt_array2d.h\
+    ../share/jama-1.2.2/tnt_array2d_utils.h\
+    ../share/jama-1.2.2/tnt_array3d.h\
+    ../share/jama-1.2.2/tnt_array3d_utils.h\
+    ../share/jama-1.2.2/tnt_cmat.h\
+    ../share/jama-1.2.2/tnt_fortran_array1d.h\
+    ../share/jama-1.2.2/tnt_fortran_array1d_utils.h\
+    ../share/jama-1.2.2/tnt_fortran_array2d.h\
+    ../share/jama-1.2.2/tnt_fortran_array2d_utils.h\
+    ../share/jama-1.2.2/tnt_fortran_array3d.h\
+    ../share/jama-1.2.2/tnt_fortran_array3d_utils.h\
+    ../share/jama-1.2.2/tnt.h\
+    ../share/jama-1.2.2/tnt_i_refvec.h\
+    ../share/jama-1.2.2/tnt_math_utils.h\
+    ../share/jama-1.2.2/tnt_sparse_matrix_csr.h\
+    ../share/jama-1.2.2/tnt_stopwatch.h\
+    ../share/jama-1.2.2/tnt_subscript.h\
+    ../share/jama-1.2.2/tnt_vec.h\
+    ../share/jama-1.2.2/tnt_version.h
+
+#AM_CPPFLAGS = \
+#    -I../share/jama-1.2.2\
+#    -I../share/Mersenne-1.0\
+#    -I../share/MiniCppUnit-2.2
 
 bin_PROGRAMS = ccruncher cc2gpi generator
 
@@ -49,6 +81,7 @@ ccruncher_SOURCES = \
     ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
     ./utils/XMLUtils.cpp\
+    ./utils/Logger.cpp\
     ./utils/Parser.cpp\
     ./utils/File.cpp\
     ./utils/Date.cpp\
@@ -85,6 +118,7 @@ ccruncher_SOURCES = \
     ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
     ./utils/XMLUtils.hpp\
+    ./utils/Logger.hpp\
     ./utils/Parser.hpp\
     ./utils/File.hpp\
     ./utils/Date.hpp\
@@ -153,6 +187,7 @@ generator_SOURCES = \
     ./utils/Exception.cpp\
     ./utils/XMLUtils.cpp\
     ./utils/Parser.cpp\
+    ./utils/Logger.cpp\
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
@@ -189,6 +224,7 @@ generator_SOURCES = \
     ./utils/Exception.hpp\
     ./utils/XMLUtils.hpp\
     ./utils/Parser.hpp\
+    ./utils/Logger.hpp\
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
@@ -235,6 +271,7 @@ tests_SOURCES = \
     ./utils/Timer.cpp\
     ./utils/Parser.cpp\
     ./utils/Utils.cpp\
+    ./utils/Logger.cpp\
     ./utils/Date.cpp\
     ./utils/XMLUtils.cpp\
     ./utils/Exception.cpp\
@@ -297,6 +334,7 @@ tests_SOURCES = \
     ./utils/Timer.hpp\
     ./utils/Parser.hpp\
     ./utils/Utils.hpp\
+    ./utils/Logger.hpp\
     ./utils/Date.hpp\
     ./utils/XMLUtils.hpp\
     ./utils/Exception.hpp\

@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #include <iostream>
@@ -201,7 +204,7 @@ void IDataTest::test1()
 
   // client creation
   IData *idata = NULL;
-  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement()),0));
+  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement())));
 
   if (idata != NULL)
   {

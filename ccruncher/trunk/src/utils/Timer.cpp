@@ -28,6 +28,9 @@
 //===========================================================================
 
 #include "Timer.hpp"
+#include <cmath>
+#include <stdio.h>
+#include <cassert>
 
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter
@@ -105,4 +108,37 @@ double ccruncher::Timer::read()
     resume();
   }
   return total_;
+}
+
+//===========================================================================
+// returns elapsed time in seconds formated like hh:mm:ss.mmm
+//===========================================================================
+string ccruncher::Timer::format(double val)
+{
+  assert(val >= 0.0);
+
+  char buf[20];
+  double cur = val;
+
+  // computing milliseconds  
+  int ms = int((cur-floor(cur)+1.0E-14)*1000.0);
+  cur = floor(cur) + 1.0E-8;
+
+  // computing hours
+  int hh = int(cur/3600.0);
+  cur = cur - double(hh)*3600.0;
+
+  // computing minutes
+  int min = int(cur/60.0);
+  cur = cur - double(min)*60.0;
+
+  // computing seconds  
+  int sec = floor(cur);
+  cur = cur-sec;
+
+  // formating elapsed time
+  sprintf(buf,"%02d:%02d:%02d.%03d", hh, min, sec, ms);
+  
+  // exit function
+  return string(buf);
 }

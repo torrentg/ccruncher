@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -60,9 +63,6 @@ class IData
 
   private:
 
-    /* verbosity level (0=quiet, 1=verbose) (default=0)*/
-    int verbosity;
-
     void init();
     void release();
     void parseDOMNode(const DOMNode&) throw(Exception);
@@ -90,8 +90,8 @@ class IData
     Aggregators *aggregators;
     Portfolio *portfolio;
 
-    IData(const DOMNode &, int) throw(Exception);
-    IData(const string &xmlfilename, int) throw(Exception);
+    IData(const DOMNode &) throw(Exception);
+    IData(const string &xmlfilename) throw(Exception);
     ~IData();
 
 };

@@ -10,6 +10,8 @@ Finished works
 
 2. replace tabulate by report + sax2 -> text parser
 
+3. asset refactoring
+
 
 Works in progress
 -------------------
@@ -24,9 +26,7 @@ Works in progress
 
 5. save execution results (CRC file, execution time, etc.) in a output xml file
 
-6. save asset simulation in a output xml file
-
-8. add time info at ccruncher execution output
+6. add time info at ccruncher execution output
 
 
 Future works

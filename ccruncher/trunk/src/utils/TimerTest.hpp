@@ -50,6 +50,7 @@ class TimerTest : public TestFixture<TimerTest>
   private:
 
     void test1(void);
+    void test2(void);
 
 
   public:
@@ -60,6 +61,7 @@ class TimerTest : public TestFixture<TimerTest>
     TEST_FIXTURE(TimerTest)
     {
       TEST_CASE(test1);
+      TEST_CASE(test2);
     }
 
 };

@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,23 +19,22 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CopulaNormal.hpp - CopulaNormal header
+// Logger.hpp - Logger header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
 //===========================================================================
 
-#ifndef _CopulaNormal_
-#define _CopulaNormal_
+#ifndef _Logger_
+#define _Logger_
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include "Copula.hpp"
-#include <MersenneTwister.h>
-#include "utils/Exception.hpp"
+#include "config.h"
+#include <string>
+#include "Timer.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -45,34 +44,51 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class CopulaNormal : public Copula
+class Logger
 {
+
   private:
 
-    int n;
-    double **sigmas;
-    double *aux1;
-    double *aux2;
-    bool owner;
+    /** verbosity level (0=none, 1=verbose) */
+    static bool verbose;
 
-    MTRand mtrand;
+    /** current indentation level */
+    static int ilevel;
 
-    void init();
-    void finalize();
-    void correls2sigmas(double **mcorrels) throw(Exception);
-    double transform(double val);
-    void randNm();
+    /** internal status */
+    static bool tracetime;
+
+    /** internal timer */
+    static Timer timer;
+
+    /** internal columns counter */
+    static int curcol;
+
+    /** initialization stuff */
+    static void init(bool verbose_);
+
+    /** flush function */
+    static void flush();
+
 
   public:
 
-    int size();
-    void next();
-    double get(int);
-    void setSeed(long);
+    /** constructor */
+    Logger();
 
-    CopulaNormal(int, double **) throw(Exception);
-    CopulaNormal(const CopulaNormal &) throw(Exception);
-    ~CopulaNormal();
+    /** set verbosity */
+    static void setVerbosity(bool verbose_);
+
+    /** set ilevel = ilevel+1 */
+    static void newIndentLevel();
+
+    /** set ilevel = ilevel-1 */
+    static void previousIndentLevel();
+
+    /** trace a message */
+    static void trace(string msg);
+    static void trace(string msg, bool tracetime_);
+    static void notify();
 
 };
 

@@ -31,6 +31,9 @@
 // 2005/03/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #include <iostream>
@@ -41,9 +44,10 @@
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
 #include "utils/Utils.hpp"
+#include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
-#include "MersenneTwister.h"
+#include <MersenneTwister.h>
 
 //---------------------------------------------------------------------------
 
@@ -207,7 +211,7 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename, 0);
+  IData idata = IData(filename);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
   //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.1.dtd'>\n";
