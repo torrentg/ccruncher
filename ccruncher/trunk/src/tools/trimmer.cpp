@@ -50,6 +50,7 @@ void version();
 void copyright();
 void trimFile(string s);
 string rtrim(string s);
+bool fine(vector<string> lines);
 
 //---------------------------------------------------------------------------
 
@@ -153,35 +154,58 @@ void trimFile(string filename)
   fin.close();
 
   // writing file
-  fout.open(filename.c_str(), ios::out|ios::trunc);
+  if (!fine(lines))
+  {
+    fout.open(filename.c_str(), ios::out|ios::trunc);
+    for (unsigned int i=0;i<lines.size();i++)
+    {
+      string::size_type pos = lines[i].find_last_not_of(" \t\n");
+      string tmp = lines[i].substr( 0, pos+1 );
+      fout << tmp;
+
+      if (tmp.size() != lines[i].size())
+      {
+        nlines_ko ++;
+      }
+
+      if (tmp.find_first_of("\t") != string::npos)
+      {
+        hastabs = true;
+      }
+
+      if (i != lines.size()-1)
+      {
+        fout << endl;
+      }
+    }
+    fout.close();
+    
+    cout << filename << " (lines=" << nlines << ", trimmed=" << nlines_ko << ", tabs=" << (hastabs?"true":"false") << ")" << endl;
+  }
+
+  // tracing
+  if (bverbose == true)
+  {
+    // nothing to do
+  }
+}
+
+//===========================================================================
+// fine
+//===========================================================================
+bool fine(vector<string> lines)
+{
   for (unsigned int i=0;i<lines.size();i++)
   {
     string::size_type pos = lines[i].find_last_not_of(" \t\n");
-    string tmp = lines[i].substr( 0, pos+1 );
-    fout << tmp;
-
-    if (tmp.size() != lines[i].size())
+    
+    if (pos != string::npos && pos != (lines[i].length()-1))
     {
-      nlines_ko ++;
-    }
-
-    if (tmp.find_first_of("\t") != string::npos)
-    {
-      hastabs = true;
-    }
-
-    if (i != lines.size()-1)
-    {
-      fout << endl;
+      return false;
     }
   }
-  fout.close();
 
-  // exit function
-  if (bverbose == true)
-  {
-    cout << filename << " (lines=" << nlines << ", trimmed=" << nlines_ko << ", tabs=" << (hastabs?"true":"false") << ")" << endl;
-  }
+  return true;
 }
 
 //===========================================================================

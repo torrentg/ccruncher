@@ -59,6 +59,9 @@ class IData
 
   private:
 
+    /* verbosity level (0=quiet, 1=verbose) (default=0)*/
+    int verbosity;
+
     void init();
     void release();
     void parseDOMNode(const DOMNode&) throw(Exception);
@@ -86,8 +89,8 @@ class IData
     Aggregators *aggregators;
     Portfolio *portfolio;
 
-    IData(const DOMNode &) throw(Exception);
-    IData(const string &xmlfilename) throw(Exception);
+    IData(const DOMNode &, int) throw(Exception);
+    IData(const string &xmlfilename, int) throw(Exception);
     ~IData();
 
 };

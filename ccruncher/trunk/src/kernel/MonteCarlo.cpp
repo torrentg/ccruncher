@@ -174,6 +174,7 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   dates = idata->params->getDates();
 
   // fixing number of clients
+  if (verbosity == 1) cout << "fixing clients ..." << endl;
   if (idata->params->onlyactive) {
     idata->portfolio->sortClients(dates[0], dates[STEPS]);
     N = idata->portfolio->getNumActiveClients(dates[0], dates[STEPS]);
@@ -196,18 +197,22 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   clients = idata->portfolio->getClients();
 
   // trobem la matriu de transicio usada
+  if (verbosity == 1) cout << "scaling transition matrix ..." << endl;
   mtrans = translate(idata->transitions, (double)(STEPLENGTH)/12.0);
 
   // definim la matrix de correlacions entre clients
+  if (verbosity == 1) cout << "computing client correlation matrix ..." << endl;
   cmatrix = initCorrelationMatrix(idata->correlations->getMatrix(), clients, N);
 
   // definim les copules a emprar
+  if (verbosity == 1) cout << "initializing copulas ..." << endl;
   copulas = initCopulas(cmatrix, N, STEPS, idata->params->copula_seed);
 
   // ratings paths allocation
   rpaths = initRatingsPaths(N, STEPS, clients);
 
   // inicialitzem els aggregators
+  if (verbosity == 1) cout << "initializing aggregators ..." << endl;
   initAggregators();
 }
 
@@ -314,6 +319,8 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 {
   bool moreiterations = true;
   Timer sw1, sw2;
+
+  if (verbosity == 1) cout << "running Monte Carlo ..." << endl;
 
   try
   {

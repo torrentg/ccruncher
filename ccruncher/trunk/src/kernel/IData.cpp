@@ -27,6 +27,7 @@
 //
 //===========================================================================
 
+#include <cassert>
 #include <fstream>
 #include <iostream>
 #include "IData.hpp"
@@ -37,6 +38,8 @@
 //===========================================================================
 void ccruncher::IData::init()
 {
+   verbosity = 0;
+
    params = NULL;
    interests = NULL;
    ratings = NULL;
@@ -71,13 +74,17 @@ void ccruncher::IData::release()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename, int vlevel) throw(Exception)
 {
   DOMBuilder *parser = NULL;
   DOMDocument *doc = NULL;
 
   // inicialitzem el contingut
   init();
+
+  // setting verbosity level
+  assert(vlevel==0 || vlevel==1);
+  verbosity = vlevel;
 
   // parsejem el document
   try
@@ -99,7 +106,8 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     parser = XMLUtils::getParser();
     doc = XMLUtils::getDocument(parser, xmlfilename);
     parseDOMNode(*(doc->getDocumentElement()));
-    delete parser;
+    parser->release();
+    //delete parser;
     XMLUtils::terminate();
   }
   catch(Exception &e)
@@ -123,10 +131,14 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const DOMNode &node) throw(Exception)
+ccruncher::IData::IData(const DOMNode &node, int vlevel) throw(Exception)
 {
   // inicialitzem el contingut
   init();
+
+  // setting verbosity level
+  assert(vlevel==0 || vlevel==1);
+  verbosity = vlevel;
 
   try
   {
@@ -232,6 +244,8 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing parameters ..." << endl;
+
   if (params != NULL)
   {
     throw Exception("IData::parseParams(): tag params repeated");
@@ -247,6 +261,8 @@ void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing interests ..." << endl;
+
   if (interests != NULL)
   {
     throw Exception("IData::parseInterests(): tag interests repeated");
@@ -262,6 +278,8 @@ void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing ratings ..." << endl;
+
   if (ratings != NULL)
   {
     throw Exception("IData::parseRatings(): tag ratings repeated");
@@ -277,6 +295,8 @@ void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing transition matrix ..." << endl;
+
   if (ratings == NULL)
   {
     throw Exception("IDATA::parseTransitions(): tag <mtransition> defined before <ratings> tag");
@@ -296,6 +316,8 @@ void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing sectors ..." << endl;
+
   if (sectors != NULL)
   {
     throw Exception("IData::parseSectors(): tag sectors repeated");
@@ -311,6 +333,8 @@ void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing correlation matrix ..." << endl;
+
   if (sectors == NULL)
   {
     throw Exception("IData::parseCorrelations(): tag <mcorrels> defined before <sectors> tag");
@@ -330,6 +354,8 @@ void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing segmentations ..." << endl;
+
   if (segmentations != NULL)
   {
     throw Exception("IData::parseSegmentations(): tag segmentations repeated");
@@ -345,6 +371,8 @@ void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing aggregators ..." << endl;
+
   if (segmentations == NULL)
   {
     throw Exception("IData::parseAggregators(): tag <aggregators> defined before <segmentations> tag");
@@ -364,6 +392,8 @@ void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(const DOMNode &node) throw(Exception)
 {
+  if (verbosity == 1) cout << "parsing portfolio ..." << endl;
+
   if (interests == NULL)
   {
     throw Exception("IData::parsePortfolio(): tag <portfolio> defined before <interests> tag");

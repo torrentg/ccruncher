@@ -189,7 +189,7 @@ void run(string filename, string path) throw(Exception)
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename);
+  IData idata = IData(filename, bverbose?1:0);
 
   // creating simulation object
   MonteCarlo simul;

@@ -32,8 +32,10 @@
 #include <cstdlib>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
+#include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
+#include "MersenneTwister.h"
 
 //---------------------------------------------------------------------------
 
@@ -41,10 +43,22 @@ using namespace std;
 
 //---------------------------------------------------------------------------
 
+#define NOMINAL_MU     1000.00
+#define NOMINAL_SIGMA2  100.00
+#define NOMINAL_MIN     100.00
+
+//---------------------------------------------------------------------------
+
+MTRand mtw;
+
+//---------------------------------------------------------------------------
+
 void usage();
 void version();
 void copyright();
 void run(string, int, int);
+string getXMLPortfolio(int, IData*, int, int);
+double getNominal();
 
 //===========================================================================
 // main
@@ -148,10 +162,10 @@ void run(string filename, int nclients, int nassets)
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename);
+  IData idata = IData(filename, 0);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
-  cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.1.dtd'>\n";
+  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.1.dtd'>\n";
   cout << "<creditcruncher>\n";
   cout << idata.params->getXML(2);
   cout << idata.interests->getXML(2);
@@ -161,42 +175,67 @@ void run(string filename, int nclients, int nassets)
   cout << idata.correlations->getXML(2);
   cout << idata.segmentations->getXML(2);
   cout << idata.aggregators->getXML(2);
+  cout << getXMLPortfolio(2, &idata, nclients, nassets);
   cout << "</creditcruncher>\n";
-/*
-  for (int i=0;i<NUM_CLIENTS;i++)
+}
+
+//===========================================================================
+// version
+//===========================================================================
+string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets)
+{
+  string ret = "";
+  string spc1 = Utils::blanks(ilevel);
+  string spc2 = Utils::blanks(ilevel+2);
+  string spc3 = Utils::blanks(ilevel+4);
+  string spc4 = Utils::blanks(ilevel+6);
+  int nratings = idata->ratings->getRatings()->size();
+  int nsectors = idata->sectors->getSectors()->size();
+  Date date1 = idata->params->begindate;
+
+  ret += spc1 + "<portfolio>\n";
+
+  for (int i=1;i<=nclients;i++)
   {
-    cout << "<client ";
-    cout << "rating='" << rating[rand()%(NUM_RATINGS-1)] << "' ";
-    cout << "sector='" << sectors[rand()%NUM_SECTORS] << "' ";
-    cout << "name='client" << i << "' ";
-    cout << "id='" << i << "'>\n";
+    ret += spc2 + "<client ";
+    ret += "rating='" + idata->ratings->getName(rand()%(nratings-1)) + "' ";
+    ret += "sector='" + idata->sectors->getName(rand()%(nsectors)) + "' ";
+    ret += "name='client" + Parser::int2string(i) + "' ";
+    ret += "id='" + Parser::int2string(i) + "'>\n";
 
-    for (int j=0;j<NUM_ASSETS;j++)
+    for (int j=1;j<=nassets;j++)
     {
-      cout << "  <asset class='bond' ";
-      cout << "id='" << i << "-" << j << "'>\n";
+      ret += spc3;
+      ret += "<asset class='bond' ";
+      ret += "id='" + Parser::int2string(i) + "-" + Parser::int2string(j) + "'>\n";
 
-      cout << "    ";
-      cout << "<property name='issuedate' value='01/01/2000'/>\n";
-      cout << "    ";
-      cout << "<property name='term' value='120'/>\n";
-      cout << "    ";
-      cout << "<property name='nominal' value='1500'/>\n";
-      cout << "    ";
-      cout << "<property name='rate' value='0.07'/>\n";
-      cout << "    ";
-      cout << "<property name='ncoupons' value='120'/>\n";
-      cout << "    ";
-      cout << "<property name='adquisitiondate' value='1/1/2003'/>\n";
-      cout << "    ";
-      cout << "<property name='adquisitionprice' value='1500'/>\n";
+      ret += spc4 + "<property name='issuedate' value='" + Parser::date2string(date1) + "'/>\n";
+      ret += spc4 + "<property name='term' value='120'/>\n";
+      ret += spc4 + "<property name='nominal' value='" + Parser::double2string(getNominal()) +"'/>\n";
+      ret += spc4 + "<property name='rate' value='0.07'/>\n";
+      ret += spc4 + "<property name='ncoupons' value='120'/>\n";
+      ret += spc4 + "<property name='adquisitiondate' value='" + Parser::date2string(date1) + "'/>\n";
+      ret += spc4 + "<property name='adquisitionprice' value='1500'/>\n";
 
-      cout << "  </asset>\n";
+      ret += spc3 + "</asset>\n";
     }
 
-    cout << "</client>\n";
+    ret += spc2 +  "</client>\n";
+
   }
-*/
+
+  ret += spc1 + "</portfolio>\n";
+
+  return ret;
+}
+
+//===========================================================================
+// getNominal
+//===========================================================================
+double getNominal()
+{
+  double ret = mtw.randNorm(NOMINAL_MU, NOMINAL_SIGMA2);
+  return (ret<=NOMINAL_MIN?NOMINAL_MIN:ret);
 }
 
 //===========================================================================

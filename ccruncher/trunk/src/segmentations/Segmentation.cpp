@@ -239,9 +239,23 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
   ret += (components==asset?"asset":"client");
   ret += "'>\n";
 
-  for (unsigned int i=0;i<vsegments.size();i++)
+  if (name == "portfolio")
   {
-    ret += vsegments[i].getXML(ilevel+2);
+    // nothing to do
+  }
+  else if (name == "client" || name == "asset")
+  {
+    ret += Utils::blanks(ilevel+2) + "<segment name='*'/>\n";
+  }
+  else
+  {
+    for (unsigned int i=0;i<vsegments.size();i++)
+    {
+      if (vsegments[i].name != "rest")
+      {
+        ret += vsegments[i].getXML(ilevel+2);
+      }
+    }
   }
 
   ret += spc + "</segmentation>\n";
