@@ -35,6 +35,7 @@
 #include <vector>
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -74,10 +75,12 @@ class SAX2Handlers : public DefaultHandler
     unsigned int ipos;
     int jpos;
     vector<double> *tranch;
+    vector<Date> dates;
     int currenttag;
     bool fSawErrors;
     string getAttribute(string aname, const Attributes& attrs);
     XMLCh *tokens[NUMTOKENS];
+    bool bfdates;
 
   public:
 
@@ -86,6 +89,7 @@ class SAX2Handlers : public DefaultHandler
 
     int getNumTranches() const;
     vector<double> *getTranches();
+    vector<Date> *getDates();
     bool getSawErrors() const;
 
     // -----------------------------------------------------------------------

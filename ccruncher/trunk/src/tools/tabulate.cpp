@@ -25,14 +25,17 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-//
 // 2005/01/08 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . refactoring
+//   . refactoring + gnuplot support
 //
 //===========================================================================
 
+#include <cmath>
+#include <algorithm>
 #include "SAX2Handlers.hpp"
+#include "utils/Date.hpp"
 #include "utils/File.hpp"
+#include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/XMLReaderFactory.hpp>
@@ -44,10 +47,11 @@ using namespace std;
 
 //---------------------------------------------------------------------------
 
-void run(string) throw(Exception);
+void run(string, bool) throw(Exception);
 void usage();
 void version();
 void copyright();
+void output_gnuplot(vector<Date> *, vector<double> *, int);
 
 //---------------------------------------------------------------------------
 
@@ -59,6 +63,7 @@ bool bverbose = false;
 int main(int argc, char* argv[])
 {
   string sfilename = "";
+  bool bgnuplot = false;
 
   // parsing options
   for (int i=1;i<argc;i++)
@@ -74,6 +79,10 @@ int main(int argc, char* argv[])
     {
       version();
       return 0;
+    }
+    else if (arg == "--gnuplot")
+    {
+      bgnuplot = true;
     }
     else if (arg == "-v")
     {
@@ -107,7 +116,7 @@ int main(int argc, char* argv[])
 
   try
   {
-    run(sfilename);
+    run(sfilename, bgnuplot);
   }
   catch(Exception &e)
   {
@@ -122,7 +131,7 @@ int main(int argc, char* argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename) throw(Exception)
+void run(string filename, bool bgnuplot) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -154,8 +163,22 @@ void run(string filename) throw(Exception)
     throw Exception("Unexpected exception during parsing: " + filename);
   }
 
+  // checking xml parser status
+  if (handler.getSawErrors())
+  {
+    throw Exception("error: errors procesing xml");
+  }
+  
   // printing file content
-  if (!handler.getSawErrors())
+  if (bgnuplot == true)
+  {
+    vector<double> *tranches = handler.getTranches();
+    int ntranches = handler.getNumTranches();
+    vector<Date> *dates = handler.getDates();
+
+    output_gnuplot(dates, tranches, ntranches);
+  }
+  else
   {
     vector<double> *ret = handler.getTranches();
     int numtranches = handler.getNumTranches();
@@ -171,10 +194,9 @@ void run(string filename) throw(Exception)
     }
   }
 
-  // exit function
+  // droping xml stuf
   delete parser;
   XMLUtils::terminate();
-  
 }
 
 //===========================================================================
@@ -201,6 +223,7 @@ void usage()
   "    -v         be more verbose\n"
   "    --help     show this message and exit\n"
   "    --version  show version and exit\n"
+  "    --gnuplot  generate gnuplot command file\n"
   "  return codes:\n"
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
@@ -221,3 +244,106 @@ void copyright()
   << endl;
 }
 
+//===========================================================================
+// gnuplot output
+//===========================================================================
+void output_gnuplot(vector<Date> *dates, vector<double> *tranches, int ntranches)
+{
+  double sum1 = 0.0;
+  double sum2 = 0.0;
+  double cont;
+  int itranch = 6;
+  
+  // histogram
+  cout << "reset" << endl;
+  cout << "set title 'Portfolio Value Histogram at " << (*dates)[itranch].toString() << "'" << endl;
+  cout << "set xlabel 'portfolio value'" << endl;
+  cout << "set ylabel 'number of ocurrences'" << endl;
+  cout << "set grid" << endl;
+  cout << "binsize=100" << endl;
+  cout << "plot '-' using (floor($1/binsize)*binsize):(1) smooth frequency with histeps notitle" << endl;
+  
+  cont = 0.0;
+  sum1 = 0.0;
+  sum2 = 0.0;
+  for(unsigned int i=0;i<tranches[itranch].size();i++)
+  {
+    cont = (double)(i+1);
+    sum1 += tranches[itranch][i];
+    cout << tranches[itranch][i] << endl;
+  }
+  cout << "e" << endl;
+  cout << "pause -1 'press return to continue'" << endl;
+  
+  // error function
+  cout << "set title 'Error function at " << (*dates)[itranch].toString() << "'" << endl;
+  cout << "set xlabel 'iteration'" << endl;
+  cout << "set ylabel 'mean'" << endl;
+  cout << "set grid" << endl;
+  cout << "clevel=0.05" << endl;
+  cout << "cfactor=invnorm(1.0-clevel/2.0)" << endl;
+  cout << "errYScale=5000" << endl;
+  cout << "set yrange [" << sum1/cont << "-errYScale:" << sum1/cont << "+errYScale]" << endl;
+  cout << "plot "; 
+  cout << " '-' using ($1):($2) with lines notitle, ";
+  cout << " '-' using ($1):($2 + cfactor*$3) with lines notitle, ";
+  cout << " '-' using ($1):($2 - cfactor*$3) with lines notitle  " << endl;
+
+  cont = 0.0;
+  sum1 = 0.0;
+  sum2 = 0.0;
+  for(unsigned int i=0;i<tranches[itranch].size();i++)
+  {
+    cont = (double)(i+1);
+    sum1 += tranches[itranch][i];
+    sum2 += tranches[itranch][i]*tranches[itranch][i];
+
+    cout << (i+1) << "\t" << sum1/cont << "\t" << sqrt(((sum2-sum1*sum1/cont)/(cont-1.0))/cont) << endl;
+  }  
+  cout << "e" << endl;
+  
+  cont = 0.0;
+  sum1 = 0.0;
+  sum2 = 0.0;
+  for(unsigned int i=0;i<tranches[itranch].size();i++)
+  {
+    cont = (double)(i+1);
+    sum1 += tranches[itranch][i];
+    sum2 += tranches[itranch][i]*tranches[itranch][i];
+
+    cout << (i+1) << "\t" << sum1/cont << "\t" << sqrt(((sum2-sum1*sum1/cont)/(cont-1.0))/cont) << endl;
+  } 
+  cout << "e" << endl;
+
+  cont = 0.0;
+  sum1 = 0.0;
+  sum2 = 0.0;
+  for(unsigned int i=0;i<tranches[itranch].size();i++)
+  {
+    cont = (double)(i+1);
+    sum1 += tranches[itranch][i];
+    sum2 += tranches[itranch][i]*tranches[itranch][i];
+
+    cout << (i+1) << "\t" << sum1/cont << "\t" << sqrt(((sum2-sum1*sum1/cont)/(cont-1.0))/cont) << endl;
+  }  
+  cout << "e" << endl;
+  cout << "pause -1 'press return to continue'" << endl;
+    
+  // cdf
+  sort(tranches[itranch].begin(), tranches[itranch].end());
+
+  cout << "reset" << endl;
+  cout << "set title 'Portfolio Value CDF at " << (*dates)[itranch].toString() << "'" << endl;
+  cout << "set xlabel 'portfolio value'" << endl;
+  cout << "set ylabel 'P(X < x)'" << endl;
+  cout << "set grid" << endl;
+  cout << "plot '-' using ($2):($3/100.0) with lines notitle" << endl;
+
+  double total = tranches[itranch].size();
+
+  for(unsigned int i=0;i<tranches[itranch].size();i++)
+  {
+    cout << (i+1) << "\t" << tranches[itranch][i] << "\t" << 100.0*(double)(i+1)/total << endl;
+  }
+  cout << "e" << endl;
+}

@@ -91,6 +91,14 @@ int SAX2Handlers::getNumTranches() const
 //===========================================================================
 // Getter method
 //===========================================================================
+vector<Date>* SAX2Handlers::getDates()
+{
+  return &dates;
+}
+
+//===========================================================================
+// Getter method
+//===========================================================================
 bool SAX2Handlers::getSawErrors() const
 {
   return fSawErrors;
@@ -150,6 +158,13 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
     {
       throw Exception("invalid tranch num");
     }
+
+    if (bfdates == false)
+    {
+      Date aux = ccruncher::Parser::dateValue(getAttribute("date", attrs));
+      // attention, we supose that tranch's are ordered
+      dates.push_back(aux);
+    }
   }
   else if (*localname == *tokens[TOKEN_ITEM])
   {
@@ -162,6 +177,11 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
     {
       if (ipos == UINT_MAX) ipos = 0;
       else ipos++;
+      
+      if (dates.size() > 0)
+      {
+        bfdates = true;
+      }
     }
   }
   else if (*localname == *tokens[TOKEN_SEGMENTAGGREGATOR])
@@ -232,6 +252,7 @@ void SAX2Handlers::resetDocument()
   currenttag = TAG_NONE;
   if (tranch != NULL) delete [] tranch;
   fSawErrors = false;
+  bfdates = false;
 }
 
 //===========================================================================
