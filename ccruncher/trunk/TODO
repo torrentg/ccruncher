@@ -3,39 +3,16 @@ CREDITCRUNCHER TODO
 ===================
 
 
-Finished works
--------------------
-
-1. convert command line arguments to POSIX compliant command line argument
-
-2. replace tabulate by report + sax2 -> text parser
-
-3. asset refactoring
-
-
 Works in progress
 -------------------
-
-1. working in pdf documentation explaining methodology used in CreditCruncher
-
-2. working in scripts that generates report using LaTeX and gnuplot
-
-3. working in CreditCruncher site content
-
-4. add utils/Tracer.cpp class
-
-5. save execution results (CRC file, execution time, etc.) in a output xml file
-
-6. add time info at ccruncher execution output
+  * change xml parser. migrate from xerces-c to expat
+  * working in pdf documentation explaining methodology used in CreditCruncher
+  * working in scripts that generates report using LaTeX and gnuplot
+  * working in CreditCruncher site content
+  * save execution results (CRC file, execution time, etc.) in a output xml file
 
 
 Future works
 -------------------
-
-1. add optional LAM/MPI support 
-
-2. add covenant support
-
-3. add new copula types
-
-4. add new asset types
+  * add optional LAM/MPI support 
+  * add new copula types

@@ -1,0 +1,16 @@
+
+CREDITCRUNCHER NEWS
+===================
+
+
+version 0.2
+-----------
+  * added POSIX compliance in command line arguments (Gerard Torrent)
+  * output file changed from xml to tabulated text (Gerard Torrent)
+  * output beautified (Gerard Torrent)
+  * asset refactoring (Gerard Torrent)
+  * bugfix: 'make distcheck' now works (Gerard Torrent)
+
+version 0.1
+-----------
+  * initial release (Gerard Torrent)
