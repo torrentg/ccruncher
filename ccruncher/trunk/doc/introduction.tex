@@ -256,9 +256,14 @@ en el intervalo $[0,1]$.
 
 \paragraph{Definici\'on.}
 Una copula es la funci\'on de distribuci\'on de un vector aleatorio sobre 
-$\Re^n$ donde las funciones de distribuci\'on marginales son $U[0,1]$. Se 
-puede demostrar que esta definici\'on es equivalente a definir una copula
-como una funci\'on $C:[0,1]^n \to [0,1]$ cumpliendo las siguientes propiedades:
+$\Re^n$ donde las funciones de distribuci\'on marginales son $U[0,1]$. 
+\begin{displaymath}
+C(u_1, \cdots, u_n) = P\{U_1 \leq u_1, \cdots, U_n \leq u_n\}
+\end{displaymath}
+
+\paragraph{Proposici\'on.}
+$C$ es una c\'opula $\iff C:[0,1]^n \to [0,1]$ y cumple las siguientes 
+propiedades:
 \begin{itemize}
 \item $C(x_1, \cdots, x_n)$ es creciente en cada componente $x_i$
 \item $C(1, \cdots, 1, x_i, 1, \cdots, 1) = x_i \quad \forall i \in \{1, \cdots, n\}, x_i \in [0,1]$
@@ -267,12 +272,38 @@ $a_i \leq b_i$ se cumple:
 \begin{displaymath}
 \sum_{i_1=1}^{2} \cdots \sum_{i_n=1}^{2} (-1)^{i_1+\cdots+x_n} C(x_{1i_1},\cdots,x_{ni_n}) \geq 0
 \end{displaymath}
+\noindent siendo $x_{j1}=a_j$ y $x_{j2}=b_j$ $\quad \forall j \in \{1, \cdots, n\}$
 \end{itemize}
-\noindent siendo $x_{j1}=a_j$ y $x_j2=b_j$ $\quad \forall j \in \{1, \cdots, n\}$
 
+\paragraph{C\'opulas normales o arquimedianas.}
 
+Sea $(Z_1,\cdots, Z_n)$ un vector aleatorio con marginales $Z_i \sim N(0,1)$ con
+\begin{displaymath}
+\Sigma = \left( 
+\begin{array}{cccc}
+1          & \rho_{12} & \ldots & \rho_{1n} \cr
+\rho_{21} & 1          & \ldots & \rho_{2n} \cr
+\vdots    & \vdots    & \ddots & \vdots   \cr
+\rho_{n1} & \rho_{n2} & \ldots & 1
+\end{array}
+\right)
+\end{displaymath}
 
+\noindent siendo $\rho_{ij} = \rho_{ji}$ el coeficiente de correlaci\'on entre 
+$Z_i$ y $Z_j$.
 
+\noindent Calculamos la raiz de $\Sigma$ usando el algoritmo de Cholesky. 
+De esta forma obtenemos la matriz triengular inferior
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\end{displaymath}
 
-
-
+\noindent que cumple $B \cdot B' = \Sigma$
