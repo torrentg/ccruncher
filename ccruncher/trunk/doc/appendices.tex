@@ -1,0 +1,98 @@
+
+%***************************************************************************
+%
+% CreditCruncher - A portfolio credit risk valorator
+% Copyright (C) 2004 Gerard Torrent
+%
+% This program is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License
+% as published by the Free Software Foundation; either version 2
+% of the License.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+%
+%
+% appendices.tex - TeX documentation file
+% --------------------------------------------------------------------------
+%
+% 2005/01/22 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . initial release
+%
+%***************************************************************************
+
+\chapter{Ap\'endices}
+\label{sec:apendixes}
+
+%---------------------------------------------------------------------------
+
+\section{C\'alculo de la raiz de una matriz}
+
+\paragraph{Definici\'on.}
+Diremos que 2 matrices $A$ y $B$ de orden $n$ son semejantes si existe una 
+matriz, $P$, de orden $n$ con $det(P) \neq 0$ tal que 
+$B = P^{-1} \cdot A \cdot P$.
+
+
+\paragraph{Proposici\'on.} Si dos matrices $A$ y $B$ son semejantes 
+($B = P^{-1} \cdot A \cdot P$) entonces:
+\begin{displaymath}
+det(A) = det(B)
+\end{displaymath}
+\begin{displaymath}
+B^n = P^{-1} \cdot A^{n} \cdot P
+\end{displaymath}
+
+\paragraph{Definici\'on.} 
+Diremos que Una matriz $A$ de orden $n$ es diagonalizable si es semejante a una 
+matriz diagonal $D$, o sea, $A = P^{-1} \cdot D \cdot P$ siendo $det(D) \neq 0$.
+
+\paragraph{Proposici\'on.} 
+Para que una matriz $A$ sea diagonalizable es necesario y suficiente que:
+\begin{itemize}
+\item Los valores propios de $A$ sean todos reales
+\item Los $n$ vectores propios de $A$ sean independientes
+\end{itemize}
+
+\paragraph{Proposici\'on.}
+Si una matriz $A$ es diagonalizable ($A = P^{-1} \cdot D \cdot P$) entonces: 
+\begin{itemize}
+\item $D$ es una matriz diagonal compuesta por los valores propios de la matriz $A$
+\item $P$ es la matriz formada por los vectores propios de la matriz $A$
+\end{itemize}
+
+\paragraph{Resultado.}
+Sea $A$ la ra\'iz $n$-esima de una matriz diagonalizable $B$. Entonces:
+\begin{displaymath}
+A^n = B = P^{-1} \cdot D \cdot P 
+\Longrightarrow  
+A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
+\end{displaymath} 
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria normal}
+
+\subsection{Definici\'on y propiedades}
+
+\begin{displaymath}
+P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
+\end{displaymath}
+
+\subsection{Simulaci\'on}
+
+Para la generaci\'on de una realizaci\'on, $z$, de una variable aleatoria normal  
+$Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
+
+\begin{displaymath}
+z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u[0,1])} \cdot cos(2 \cdot \pi \cdot u[0,1])
+\end{displaymath}
+
+\noindent donde $u[0,1]$ son realizaciones de una variable aleatoria uniforme 
+en el intervalo $[0,1]$.
