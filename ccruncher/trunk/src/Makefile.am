@@ -38,11 +38,6 @@ EXTRA_DIST = \
     ../share/jama-1.2.2/tnt_vec.h\
     ../share/jama-1.2.2/tnt_version.h
 
-#AM_CPPFLAGS = \
-#    -I../share/jama-1.2.2\
-#    -I../share/Mersenne-1.0\
-#    -I../share/MiniCppUnit-2.2
-
 bin_PROGRAMS = ccruncher cc2gpi generator
 
 check_PROGRAMS = tests
@@ -71,8 +66,8 @@ ccruncher_SOURCES = \
     ./math/PowMatrix.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
-    ./finances/Asset.cpp\
-    ./finances/DateValues.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
@@ -108,8 +103,8 @@ ccruncher_SOURCES = \
     ./math/Copula.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
-    ./finances/Asset.hpp\
-    ./finances/DateValues.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
@@ -176,8 +171,8 @@ generator_SOURCES = \
     ./math/PowMatrix.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
-    ./finances/Asset.cpp\
-    ./finances/DateValues.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
@@ -213,8 +208,8 @@ generator_SOURCES = \
     ./math/PowMatrix.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
-    ./finances/Asset.hpp\
-    ./finances/DateValues.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
@@ -254,8 +249,8 @@ tests_SOURCES = \
     ./math/CholeskyDecompositionTest.cpp\
     ./aggregators/AggregatorsTest.cpp\
     ./correlations/CorrelationMatrixTest.cpp\
-    ./finances/AssetTest.cpp\
-    ./finances/DateValuesTest.cpp\
+    ./portfolio/AssetTest.cpp\
+    ./portfolio/DateValuesTest.cpp\
     ./interests/InterestTest.cpp\
     ./interests/InterestsTest.cpp\
     ./segmentations/SegmentationTest.cpp\
@@ -266,8 +261,8 @@ tests_SOURCES = \
     ./ratings/RatingsTest.cpp\
     ./sectors/SectorsTest.cpp\
     ./transitions/TransitionMatrixTest.cpp\
-    ./finances/Asset.cpp\
-    ./finances/DateValues.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
     ./utils/Timer.cpp\
     ./utils/Parser.cpp\
     ./utils/Utils.cpp\
@@ -317,8 +312,8 @@ tests_SOURCES = \
     ./math/CholeskyDecompositionTest.hpp\
     ./aggregators/AggregatorsTest.hpp\
     ./correlations/CorrelationMatrixTest.hpp\
-    ./finances/AssetTest.hpp\
-    ./finances/DateValuesTest.hpp\
+    ./portfolio/AssetTest.hpp\
+    ./portfolio/DateValuesTest.hpp\
     ./interests/InterestTest.hpp\
     ./interests/InterestsTest.hpp\
     ./segmentations/SegmentationTest.hpp\
@@ -329,8 +324,8 @@ tests_SOURCES = \
     ./ratings/RatingsTest.hpp\
     ./sectors/SectorsTest.hpp\
     ./transitions/TransitionMatrixTest.hpp\
-    ./finances/Asset.hpp\
-    ./finances/DateValues.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
     ./utils/Timer.hpp\
     ./utils/Parser.hpp\
     ./utils/Utils.hpp\

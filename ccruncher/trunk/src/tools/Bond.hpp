@@ -34,7 +34,7 @@
 
 #include "utils/config.h"
 #include <vector>
-#include "finances/DateValues.hpp"
+#include "portfolio/DateValues.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 

@@ -40,10 +40,10 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/File.hpp"
-#include "finances/DateValues.hpp"
 #include "ratings/DateRatings.hpp"
 #include "ratings/Ratings.hpp"
 #include "portfolio/Client.hpp"
+#include "portfolio/DateValues.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------

@@ -38,6 +38,8 @@
 #include "utils/config.h"
 #include <map>
 #include <algorithm>
+#include "Asset.hpp"
+#include "DateValues.hpp"
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
@@ -45,8 +47,6 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
 #include "interests/Interest.hpp"
-#include "finances/Asset.hpp"
-#include "finances/DateValues.hpp"
 #include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 
