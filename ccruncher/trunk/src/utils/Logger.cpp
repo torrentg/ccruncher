@@ -38,7 +38,7 @@
 
 //---------------------------------------------------------------------------
 
-int ccruncher::Logger::ilevel = 0;
+int ccruncher::Logger::ilevel = 1;
 int ccruncher::Logger::curcol = 0;
 bool ccruncher::Logger::verbose = false;
 bool ccruncher::Logger::tracetime = false;
@@ -59,7 +59,7 @@ void ccruncher::Logger::init(bool verbose_)
 {
   verbose = verbose_;
   
-  ilevel = 0;
+  ilevel = 1;
   curcol = 0;
   tracetime = false;
 }
@@ -113,6 +113,32 @@ void ccruncher::Logger::trace(string msg, char c)
 void ccruncher::Logger::trace(string msg, bool tracetime_)
 {
   trace(msg, ' ', tracetime_);
+}
+
+//===========================================================================
+// trace
+//===========================================================================
+void ccruncher::Logger::trace(string msg, string value)
+{
+  // none if non-verbose mode enabled
+  if (verbose == false) return;
+  
+  // flushing previous message
+  flush();
+
+  // defining indentator
+  string indentator = Utils::blanks(ilevel*INDENTSIZE);
+
+  // creating intermediate filler
+  int fsize = ilevel*INDENTSIZE + msg.size() + 1 + value.size();
+  string sfill = Utils::blanks(max(0,MAXCOLS-fsize));
+
+  // showing output  
+  cout << indentator << msg << " " << sfill << value << std::endl << std::flush;
+
+  // setting status values
+  tracetime = false;
+  curcol = 0;
 }
 
 //===========================================================================

@@ -114,9 +114,14 @@ class MonteCarlo
     void release();
     double ** allocMatrix(int n) throw(Exception);
     void init(const IData *) throw(Exception);
+    void initParams(const IData *) throw(Exception);
+    void initClients(const IData *, Date *, int) throw(Exception);
+    void initRatings(const IData *) throw(Exception);
+    void initSectors(const IData *) throw(Exception);
+    void initMTrans(const IData *) throw(Exception);
     double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
-    CopulaNormal** initCopulas(double **, int, int, long) throw(Exception);
-    int** initRatingsPaths(int, int, vector<Client *> *);
+    CopulaNormal** initCopulas(double **, long, int, long) throw(Exception);
+    int** initRatingsPaths(int, int, vector<Client *> *) throw(Exception);
     void initAggregators() throw(Exception);
     void evalueAggregators() throw(Exception);
     void generateRatingsPaths();

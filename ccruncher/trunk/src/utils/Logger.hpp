@@ -87,6 +87,7 @@ class Logger
 
     /** trace a message */
     static void trace(string msg);
+    static void trace(string msg, string value);
     static void trace(string msg, bool tracetime_);
     static void trace(string msg, char c);
     static void trace(string msg, char c, bool tracetime_);
