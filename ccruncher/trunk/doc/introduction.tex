@@ -1,0 +1,252 @@
+
+%***************************************************************************
+%
+% CreditCruncher - A portfolio credit risk valorator
+% Copyright (C) 2004 Gerard Torrent
+%
+% This program is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License
+% as published by the Free Software Foundation; either version 2
+% of the License.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+%
+%
+% introduction.tex - TeX documentation file
+% --------------------------------------------------------------------------
+%
+% 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . initial release
+%
+%***************************************************************************
+
+\chapter{Introduction to CreditCruncher}
+\label{sec:introduction}
+
+\section{About CreditCruncher}
+
+CreditCruncher valora el riesgo de impago de una cartera de cr\'editos usando la 
+t\'ecnica de simulaci\'on Monte Carlo. Es una implementaci\'on libre de la metodologia
+CreditMetrics\footnote{http://www.riskmetrics.com/}. 
+
+Se dispone de una cartera de N clientes donde cada cliente tiene contratado uno o 
+varios productos con riesgo de crédito. Cada cliente tiene asignado un rating de 
+calidad crediticia y existe una matriz de transición que permite determinar la 
+probabilidad de fallido a un horizonte de tiempo fijado. Los clientes pertenecen 
+a diversos sectores de los que disponemos de una matriz de correlación que 
+indica el grado de dependencia intersectorial en caso de fallido. A partir de 
+la matriz de correlación intersectorial se construye la matriz de correlación 
+entre clientes. Finalmente se genera un conjunto de N variables aleatorias 
+uniformes correlacionadas según esta matriz (cópula). Se usa la matriz de 
+transición para determinar la evolución del rating inicial de cada cliente y se 
+evalua el valor de sus productos. Si se repite este proceso un número elevado de 
+veces disponemos de un conjunto de valores posibles de la cartera que permiten 
+determinar la distribución del valor de la cartera y calcular el VAR (Value At Risk). 
+Para mas información consúltese el manual de CreditCruncher donde se describe 
+con detalle todos los pasos realizados.
+
+
+\chapter{Formulaci\'on del problema}
+\label{sec:formulation}
+
+\section{Hipotesis}
+
+\paragraph{La \'unica fuente de riesgo es el riesgo de impago.}
+No se contemplan los riesgos de variación de tipos de interés, etc.
+
+\paragraph{El tiempo est\'a repartido uniformemente.}
+blablabla.
+
+\paragraph{Un fallido no se recupera.}
+blablabla.
+
+\paragraph{Las probabilidades de fallido no dependen del tiempo.}
+blablabla.
+
+\paragraph{El rating y la recuperación de un cliente no depende de otro cliente.}
+blablabla.
+
+
+%===========================================================================
+
+\section{La matriz de transición}
+
+\subsection{Definici\'on.} La matriz de transición nos proporciona la probabilidad 
+que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
+rating $r_j$. La denotamos de la forma siguiente:
+
+\begin{displaymath}
+M_T = \left(
+\begin{array}{ccc}
+m_{1,1} & \dots  & m_{1,n} \cr
+\vdots & \ddots & \vdots \cr
+m_{n,1} & \dots  & m_{n,n} 
+\end{array}
+\right)
+\end{displaymath}
+
+\noindent donde cada elemento de la matrix, $m_{i,j}$ corresponde a la 
+probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
+tiempo, rating $r_j$.
+
+\subsection{Ejemplo.} Matriz de transición anual ($T=1$ año) extraida del 
+documento \emph{CreditMetrics. Technical Document}. Las probabilidades están
+expresadas en tanto por ciento.
+\\
+\begin{center}
+\begin{tabular}[]{l|rrrrrrrr}
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
+\hline
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.20$ \cr
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.79$ \cr
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
+\end{tabular}
+\end{center}
+\noindent en particular, la probabilidad que un cliente con rating $AA$ pase a 
+tener rating $B$ al cabo de un año es del $0.14\%$.
+
+\subsection{Propiedades}
+
+\paragraph{Propiedad 1.}
+El valor de los elementos de la matriz de transici\'on se encuentran entre $0$ 
+y $1$ debido a que son probabilidades.
+
+\begin{displaymath}
+0 \leq m_{i,j} \leq 1 \quad \forall i,j
+\end{displaymath}
+
+\paragraph{Propiedad 2.}
+La suma de los elementos de cualquier fila de la matriz de transición suman $1$.
+De esta forma se  está imponiendo que el conjunto de ratings finales solo puede 
+ser el de los ratings contemplados en la matriz.
+
+\begin{displaymath}
+\sum_{j=1}^{n} m_{i,j} = 1 \quad \forall i
+\end{displaymath}
+
+\paragraph{Propiedad 3.}
+Los elementos de la fila correspondiente al rating $default$, son todos $0$,
+excepto el elemento de la columna que corresponde al rating $default$ que vale 
+$1$. Esta condición indica que cuando se llega al estado de fallido no es 
+posible salir de este estado.
+
+\begin{displaymath}
+\begin{array}{ll}
+m_{default,j} = 0        & \quad \forall j \neq default \cr
+m_{default,default} = 1
+\end{array}
+\end{displaymath}
+
+
+\subsection{Cambio de periodo}
+
+Deseamos obtener la matriz de transición para periodos distintos (múltiplos o 
+fraccionarios) del periodo proporcionado, $T$. Esto nos permitirá determinar la 
+probabilidad que un cliente con rating inicial $r_i$ tenga rating $r_j$ al cabo 
+de $x \cdot T$ tiempo.
+
+\paragraph{Ejemplo.} Calculemos la probabilidad de pasar de rating $AA$ a
+rating $B$ en un plazo de dos años disponiendo de la matriz de transición anual.
+
+\begin{displaymath}
+\begin{array}{llll}
+P(AA \to B;2) = & P(AA \to AAA;1)    & \cdot P(AAA \to B;1)      & + \cr
+                & P(AA \to AA;1)      & \cdot P(AA \to B;1)      & + \cr
+                & P(AA \to A;1)       & \cdot P(A \to B;1)       & + \cr
+                & P(AA \to BBB;1)     & \cdot P(BBB \to B;1)     & + \cr
+                & P(AA \to BB;1)      & \cdot P(BB \to B;1)      & + \cr
+                & P(AA \to B;1)       & \cdot P(B \to B;1)       & + \cr
+                & P(AA \to CCC;1)     & \cdot P(CCC \to B;1)     & + \cr
+                & P(AA \to default;1) & \cdot P(default \to B;1) &
+\end{array}
+\end{displaymath}
+
+\paragraph{Proposici\'on} Sean $M_{T_1}$ y $M_{T_2}$ las matrices de transici\'on
+para los periodos $T_1$ y $T_2$. Entonces, la matriz de transici\'on para el
+periodo $T_1+T_2$ es:
+\begin{displaymath}
+M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}
+\end{displaymath}
+
+\paragraph{Corolario} Sean $M_{T}$ la matriz de transici\'on para el periodo 
+$T$ y $k \in \mathrm{N}$. Entonces:
+\begin{displaymath}
+M_{k \cdot T} = M_{T}^k
+\end{displaymath}
+\begin{displaymath}
+M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
+\end{displaymath}
+
+
+%===========================================================================
+
+\section{C\'alculo de la raiz de una matriz}
+
+\paragraph{Definici\'on.}
+Diremos que 2 matrices $A$ y $B$ de orden $n$ son semejantes si existe una 
+matriz, $P$, de orden $n$ con $det(P) \neq 0$ tal que 
+$B = P^{-1} \cdot A \cdot P$.
+
+
+\paragraph{Proposici\'on.} Si dos matrices $A$ y $B$ son semejantes 
+($B = P^{-1} \cdot A \cdot P$) entonces:
+\begin{displaymath}
+det(A) = det(B)
+\end{displaymath}
+\begin{displaymath}
+B^n = P^{-1} \cdot A^{n} \cdot P
+\end{displaymath}
+
+\paragraph{Definici\'on.} 
+Diremos que Una matriz $A$ de orden $n$ es diagonalizable si es semejante a una 
+matriz diagonal $D$, o sea, $A = P^{-1} \cdot D \cdot P$ siendo $det(D) \neq 0$.
+
+\paragraph{Proposici\'on.} 
+Para que una matriz $A$ sea diagonalizable es necesario y suficiente que:
+\begin{itemize}
+\item Los valores propios de $A$ sean todos reales
+\item Los $n$ vectores propios de $A$ sean independientes
+\end{itemize}
+
+\paragraph{Proposici\'on.}
+Si una matriz $A$ es diagonalizable ($A = P^{-1} \cdot D \cdot P$) entonces: 
+\begin{itemize}
+\item $D$ es una matriz diagonal compuesta por los valores propios de la matriz $A$
+\item $P$ es la matriz formada por los vectores propios de la matriz $A$
+\end{itemize}
+
+\paragraph{Resultado.}
+Sea $A$ la raíz $n$-esima de una matriz diagonalizable $B$. Entonces:
+\begin{displaymath}
+A^n = B = P^{-1} \cdot D \cdot P 
+\Longrightarrow  
+A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
+\end{displaymath} 
+
+
+%===========================================================================
+
+\section{Simulaci\'on de una variable aleatoria normal}
+
+Para la generación de una realización, $z$, de una variable aleatoria normal  
+$Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
+
+\begin{displaymath}
+z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u[0,1])} \cdot cos(2 \cdot \pi \cdot u[0,1])
+\end{displaymath}
+
+\noindent donde $u[0,1]$ son realizaciones de una variable aleatoria uniforme 
+en el intervalo $[0,1]$.
+

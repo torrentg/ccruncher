@@ -1,0 +1,1624 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.1.dtd">
+
+<creditcruncher>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <params>
+    <property name="time.begindate" value="18/02/2003"/>
+    <property name="time.steps" value="12"/>
+    <property name="time.steplength" value="2"/>
+    <property name="stopcriteria.maxiterations" value="5000"/>
+    <property name="stopcriteria.maxseconds" value="30000000"/>
+    <property name="copula.type" value="normal"/>
+    <property name="copula.seed" value="387650932"/>
+    <property name="montecarlo.antithetic" value="false"/>
+    <property name="portfolio.onlyActiveClients" value="true"/>
+  </params>
+
+  <!-- ============================================================== -->
+  <!--                       INTERESTS                                -->
+  <!-- ============================================================== -->
+  <interests>
+    <interest name="spot" date="18/11/2004">
+      <rate t="0" r="0.0"/>
+      <rate t="1" r="0.04"/>
+      <rate t="2" r="0.041"/>
+      <rate t="3" r="0.045"/>
+      <rate t="6" r="0.0455"/>
+      <rate t="12" r="0.048"/>
+      <rate t="24" r="0.049"/>
+      <rate t="60" r="0.05"/>
+      <rate t="120" r="0.052"/>
+    </interest>
+  </interests>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="A" order="1" desc="excelent"/>
+    <rating name="B" order="2" desc="good"/>
+    <rating name="C" order="3" desc="medium"/>
+    <rating name="D" order="4" desc="bad"/>
+    <rating name="E" order="5" desc="default"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <mtransitions period="1" epsilon="1e-12">
+    <transition from="A" to="A" value="0.80"/>
+    <transition from="A" to="B" value="0.10"/>
+    <transition from="A" to="C" value="0.07"/>
+    <transition from="A" to="D" value="0.02"/>
+    <transition from="A" to="E" value="0.01"/>
+    <transition from="B" to="A" value="0.05"/>
+    <transition from="B" to="B" value="0.75"/>
+    <transition from="B" to="C" value="0.10"/>
+    <transition from="B" to="D" value="0.07"/>
+    <transition from="B" to="E" value="0.03"/>
+    <transition from="C" to="A" value="0.03"/>
+    <transition from="C" to="B" value="0.07"/>
+    <transition from="C" to="C" value="0.70"/>
+    <transition from="C" to="D" value="0.14"/>
+    <transition from="C" to="E" value="0.06"/>
+    <transition from="D" to="A" value="0.05"/>
+    <transition from="D" to="B" value="0.05"/>
+    <transition from="D" to="C" value="0.15"/>
+    <transition from="D" to="D" value="0.60"/>
+    <transition from="D" to="E" value="0.15"/>
+    <transition from="E" to="A" value="0.00"/>
+    <transition from="E" to="B" value="0.00"/>
+    <transition from="E" to="C" value="0.00"/>
+    <transition from="E" to="D" value="0.00"/>
+    <transition from="E" to="E" value="1.00"/>
+  </mtransitions>
+
+  <!-- ============================================================== -->
+  <!--                           SECTORS                              -->
+  <!-- ============================================================== -->
+  <sectors>
+    <sector name="S1" order="1" desc="oil and gas"/>
+    <sector name="S2" order="2" desc="other sectors"/>
+  </sectors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <mcorrels epsilon="1e-12">
+    <sigma sector1="S1" sector2="S1" value="0.2"/>
+    <sigma sector1="S1" sector2="S2" value="0.1"/> 
+    <sigma sector1="S2" sector2="S2" value="0.25"/> 
+  </mcorrels>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="client" components="client">
+      <segment name="*"/>
+    </segmentation>
+    <segmentation name="asset" components="asset">
+      <segment name="*"/>
+    </segmentation>
+    <segmentation name="sector" components="client">
+      <segment name="S1"/>
+      <segment name="S2"/>
+    </segmentation>
+    <segmentation name="size" components="client">
+      <segment name="big"/>
+      <segment name="medium"/>
+    </segmentation>
+    <segmentation name="product" components="asset">
+      <segment name="bond"/>
+    </segmentation>
+    <segmentation name="office" components="asset">
+      <segment name="0001"/>
+      <segment name="0002"/>
+      <segment name="0003"/>
+      <segment name="0004"/>
+    </segmentation>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         AGGREGATORS                            -->
+  <!-- ============================================================== -->
+  <aggregators>
+    <aggregator name="aggregator1" segmentation="portfolio" 
+                type="values" full="true"/>
+  </aggregators>
+  
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <client rating="A" sector="S1" name="Repsol" id="000001">
+    </client>
+    <client rating="B" sector="S2" name="ATT" id="000002">
+      <belongs-to concept="sector" segment="S2"/>
+      <belongs-to concept="size" segment="big"/>
+      <!-- implicit: belongs-to concept="client" segment="cif2" -->
+      <asset class="bond" id="op3"> 
+        <belongs-to concept="office" segment="0003"/>
+        <belongs-to concept="product" segment="bond"/>
+        <!-- implicit: belongs-to concept="asset" segment="op3" -->
+        <property name="issuedate" value="1/1/2000"/>
+        <property name="term" value="120"/>
+        <property name="nominal" value="1500.0"/>
+        <property name="rate" value="0.07"/>
+        <property name="ncoupons" value="5"/>
+        <property name="adquisitiondate" value="1/1/2003"/>
+        <property name="adquisitionprice" value="1500.0"/>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="pepe" id="000003">
+      <asset class="bond" id="op4"> 
+        <belongs-to concept="office" segment="0003"/>
+        <belongs-to concept="product" segment="bond"/>
+        <!-- implicit: belongs-to concept="asset" segment="op3" -->
+        <property name="issuedate" value="1/1/2000"/>
+        <property name="term" value="120"/>
+        <property name="nominal" value="1500.0"/>
+        <property name="rate" value="0.07"/>
+        <property name="ncoupons" value="5"/>
+        <property name="adquisitiondate" value="1/1/2003"/>
+        <property name="adquisitionprice" value="1500.0"/>
+      </asset>
+    </client>    
+<client rating='D' sector='S1' name='client0' id='0'>
+  <asset class='bond' id='0-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='0-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='0-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client1' id='1'>
+  <asset class='bond' id='1-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='1-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='1-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client2' id='2'>
+  <asset class='bond' id='2-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='2-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='2-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client3' id='3'>
+  <asset class='bond' id='3-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='3-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='3-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client4' id='4'>
+  <asset class='bond' id='4-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='4-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='4-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client5' id='5'>
+  <asset class='bond' id='5-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='5-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='5-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client6' id='6'>
+  <asset class='bond' id='6-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='6-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='6-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client7' id='7'>
+  <asset class='bond' id='7-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='7-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='7-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client8' id='8'>
+  <asset class='bond' id='8-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='8-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='8-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client9' id='9'>
+  <asset class='bond' id='9-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='9-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='9-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client10' id='10'>
+  <asset class='bond' id='10-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='10-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='10-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S2' name='client11' id='11'>
+  <asset class='bond' id='11-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='11-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='11-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client12' id='12'>
+  <asset class='bond' id='12-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='12-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='12-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client13' id='13'>
+  <asset class='bond' id='13-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='13-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='13-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S2' name='client14' id='14'>
+  <asset class='bond' id='14-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='14-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='14-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S1' name='client15' id='15'>
+  <asset class='bond' id='15-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='15-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='15-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client16' id='16'>
+  <asset class='bond' id='16-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='16-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='16-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client17' id='17'>
+  <asset class='bond' id='17-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='17-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='17-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S1' name='client18' id='18'>
+  <asset class='bond' id='18-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='18-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='18-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client19' id='19'>
+  <asset class='bond' id='19-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='19-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='19-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client20' id='20'>
+  <asset class='bond' id='20-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='20-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='20-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client21' id='21'>
+  <asset class='bond' id='21-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='21-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='21-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client22' id='22'>
+  <asset class='bond' id='22-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='22-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='22-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client23' id='23'>
+  <asset class='bond' id='23-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='23-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='23-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client24' id='24'>
+  <asset class='bond' id='24-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='24-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='24-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S1' name='client25' id='25'>
+  <asset class='bond' id='25-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='25-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='25-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client26' id='26'>
+  <asset class='bond' id='26-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='26-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='26-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client27' id='27'>
+  <asset class='bond' id='27-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='27-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='27-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client28' id='28'>
+  <asset class='bond' id='28-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='28-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='28-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client29' id='29'>
+  <asset class='bond' id='29-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='29-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='29-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client30' id='30'>
+  <asset class='bond' id='30-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='30-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='30-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client31' id='31'>
+  <asset class='bond' id='31-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='31-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='31-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client32' id='32'>
+  <asset class='bond' id='32-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='32-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='32-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client33' id='33'>
+  <asset class='bond' id='33-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='33-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='33-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='B' sector='S2' name='client34' id='34'>
+  <asset class='bond' id='34-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='34-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='34-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S2' name='client35' id='35'>
+  <asset class='bond' id='35-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='35-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='35-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client36' id='36'>
+  <asset class='bond' id='36-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='36-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='36-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client37' id='37'>
+  <asset class='bond' id='37-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='37-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='37-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client38' id='38'>
+  <asset class='bond' id='38-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='38-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='38-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client39' id='39'>
+  <asset class='bond' id='39-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='39-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='39-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client40' id='40'>
+  <asset class='bond' id='40-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='40-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='40-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client41' id='41'>
+  <asset class='bond' id='41-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='41-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='41-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client42' id='42'>
+  <asset class='bond' id='42-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='42-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='42-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S2' name='client43' id='43'>
+  <asset class='bond' id='43-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='43-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='43-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client44' id='44'>
+  <asset class='bond' id='44-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='44-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='44-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client45' id='45'>
+  <asset class='bond' id='45-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='45-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='45-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='A' sector='S1' name='client46' id='46'>
+  <asset class='bond' id='46-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='46-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='46-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='D' sector='S1' name='client47' id='47'>
+  <asset class='bond' id='47-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='47-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='47-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S1' name='client48' id='48'>
+  <asset class='bond' id='48-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='48-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='48-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+<client rating='C' sector='S2' name='client49' id='49'>
+  <asset class='bond' id='49-0'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='49-1'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+  <asset class='bond' id='49-2'>
+    <property name='issuedate' value='01/01/2000'/>
+    <property name='term' value='120'/>
+    <property name='nominal' value='1500'/>
+    <property name='rate' value='0.07'/>
+    <property name='ncoupons' value='120'/>
+    <property name='adquisitiondate' value='1/1/2003'/>
+    <property name='adquisitionprice' value='1500'/>
+  </asset>
+</client>
+</portfolio>
+</creditcruncher>
