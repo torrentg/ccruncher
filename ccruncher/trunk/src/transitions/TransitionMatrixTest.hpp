@@ -35,6 +35,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include <MiniCppUnit.hxx>
 #include "ratings/Ratings.hpp"
 

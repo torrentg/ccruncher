@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include "IData.hpp"
 #include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"

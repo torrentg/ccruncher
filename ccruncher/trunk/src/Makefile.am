@@ -4,14 +4,9 @@
 #
 # *************************************************************
 
-#SUBDIRS =	utils math ratings transitions sectors correlations \
-#		finances interests params portfolio segmentations \
-#		aggregators kernel tools
-
 AUTOMAKE_OPTIONS = foreign
 
 AM_CPPFLAGS = \
-    -I./\
     -I../share/jama-1.2.2/\
     -I../share/Mersenne-1.0/\
     -I../share/MiniCppUnit-2.2/
@@ -21,7 +16,8 @@ bin_PROGRAMS = ccruncher tabulate generator trimmer
 check_PROGRAMS = tests
 
 # -------------------------------------------------------------
-
+# ccruncher
+# -------------------------------------------------------------
 ccruncher_SOURCES = \
     ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
@@ -102,7 +98,8 @@ ccruncher_LDFLAGS =
 ccruncher_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
-
+# trimmer
+# -------------------------------------------------------------
 trimmer_SOURCES = \
     ./tools/trimmer.cpp
 
@@ -111,7 +108,8 @@ trimmer_LDFLAGS =
 trimmer_LDADD = 
 
 # -------------------------------------------------------------
-
+# tabulate
+# -------------------------------------------------------------
 tabulate_SOURCES = \
     ./tools/tabulate.cpp\
     ./tools/SAX2Handlers.cpp\
@@ -135,7 +133,8 @@ tabulate_LDFLAGS =
 tabulate_LDADD = -ldl -lxerces-c
 
 # -------------------------------------------------------------
-
+# generator
+# -------------------------------------------------------------
 generator_SOURCES = \
     ./tools/generator.cpp\
     ./kernel/IData.cpp\
@@ -214,7 +213,8 @@ generator_LDFLAGS =
 generator_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
-
+# tests
+# -------------------------------------------------------------
 tests_SOURCES = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/TestsRunner.cxx\

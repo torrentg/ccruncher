@@ -32,7 +32,7 @@
 
 //---------------------------------------------------------------------------
 
-
+#include "utils/config.h"
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 

@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include "tnt_array2d.h"
 #include "utils/Exception.hpp"
 

@@ -45,8 +45,8 @@ Installation from binary package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-0.1.tar.gz
-     tar -xvf ccruncher-0.1.tar
+     gunzip ccruncher-0.1_bin.tar.gz
+     tar -xvf ccruncher-0.1_bin.tar
 
 2. install xerces-c package (explained before)
 

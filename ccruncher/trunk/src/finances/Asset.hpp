@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include <map>
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentation.hpp"

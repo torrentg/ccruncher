@@ -7,9 +7,11 @@ dnl *************************************************************
 dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
-AC_PREREQ(2.52)
-AC_INIT(ccruncher, 0.1)
+AC_PREREQ(2.59)
+AC_INIT(ccruncher, 0.1, gerard@mail.generacio.com)
 AM_INIT_AUTOMAKE(1.6.1)
+AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
+AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 
 dnl -------------------------------------------------------------
 dnl rebuild makefile prevention 
@@ -21,13 +23,15 @@ dnl -------------------------------------------------------------
 dnl check for tools
 dnl -------------------------------------------------------------
 AC_PROG_CXX
+AC_PROG_CPP
 AC_PROG_INSTALL
 
 dnl -------------------------------------------------------------
 dnl checks for libraries
 dnl -------------------------------------------------------------
-AC_CHECK_LIB(dl, main)
-AC_CHECK_LIB(xerces-c,main,,
+AC_CHECK_LIB([m], [main])
+AC_CHECK_LIB([dl], [main])
+AC_CHECK_LIB([xerces-c], [main],,
     [AC_MSG_ERROR([cannot find the xerces-c library]) ])
 AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,,
     [AC_MSG_ERROR([cannot find xerces-c headers]) ])
@@ -35,13 +39,31 @@ AC_CHECK_HEADERS(xercesc/util/XercesVersion.hpp,,
 dnl -------------------------------------------------------------
 dnl checks for header
 dnl -------------------------------------------------------------
-dnl AC_STDC_HEADERS
-dnl AC_HAVE_HEADERS(sys/resource.h time.h sys/stat.h sys/types.h unistd.h dirent.h)
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
 dnl -------------------------------------------------------------
-dnl dnl AC_CHECK_FUNCS(clock)
+AC_CHECK_FUNCS([getcwd])
+AC_CHECK_FUNCS([mkdir])
+AC_CHECK_FUNCS([pow])
+AC_CHECK_FUNCS([sqrt])
+AC_CHECK_FUNCS([strtol])
+AC_FUNC_CLOSEDIR_VOID
+AC_FUNC_ERROR_AT_LINE
+AC_FUNC_STRTOD
+
+dnl -------------------------------------------------------------
+dnl other checks (consts, structs, types)
+dnl -------------------------------------------------------------
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_C_RESTRICT
+AC_STRUCT_TM
+AC_TYPE_SIZE_T
 
 dnl -------------------------------------------------------------
 dnl setting debug/optimization options
@@ -61,11 +83,12 @@ if test x$debug = xtrue ; then
   CXXFLAGS="-g -pg"
 else
   CXXFLAGS="-O2"
-  AC_DEFINE(NDEBUG)
+  AC_DEFINE([NDEBUG], 1, [Assertions are disabled when this is defined.])
 fi
 AC_SUBST(CXXFLAGS)
 
 dnl -------------------------------------------------------------
 dnl makefile's to be built
 dnl -------------------------------------------------------------
-AC_OUTPUT([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT

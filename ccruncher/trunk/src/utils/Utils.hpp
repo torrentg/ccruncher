@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "config.h"
 #include <cmath>
 #include <string>
 #include <vector>

@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include "Asset.hpp"
 #include "DateValues.hpp"
 #include "segmentations/Segmentations.hpp"

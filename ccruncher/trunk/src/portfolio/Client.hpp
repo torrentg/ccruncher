@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
 #include <map>
 #include <algorithm>
 #include "xercesc/dom/DOM.hpp"

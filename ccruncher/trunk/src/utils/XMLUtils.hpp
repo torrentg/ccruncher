@@ -32,6 +32,7 @@
 
 //---------------------------------------------------------------------------
 
+#include "config.h"
 #include <string>
 #include "xercesc/dom/DOM.hpp"
 #include <xercesc/framework/Wrapper4InputSource.hpp>
