@@ -25,6 +25,12 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added recovery value
+//
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added constructor based on DOMNode
+//
 //===========================================================================
 
 #ifndef _DateValues_
@@ -33,11 +39,14 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include "xercesc/dom/DOM.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -46,14 +55,21 @@ namespace ccruncher {
 class DateValues
 {
 
+  private:
+
+    void parseDOMNode(const DOMNode &) throw(Exception);
+
+
   public:
 
     Date date;
     double cashflow;
     double exposure;
+    double recovery;
 
     DateValues();
-    DateValues(Date date, double cashflow, double exposure);
+    DateValues(const DOMNode &) throw(Exception);
+    DateValues(Date date, double cashflow, double exposure, double recovery);
 
 };
 

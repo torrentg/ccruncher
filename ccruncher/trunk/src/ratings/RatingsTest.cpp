@@ -102,7 +102,6 @@ void RatingsTest::test1()
   ASSERT(list[2] < list[3]);
   ASSERT(list[3] < list[4]);
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -132,7 +131,6 @@ void RatingsTest::test2()
   Ratings ratings;
   ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -162,7 +160,6 @@ void RatingsTest::test3()
   Ratings ratings;
   ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -192,7 +189,6 @@ void RatingsTest::test4()
   Ratings ratings;
   ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -222,7 +218,6 @@ void RatingsTest::test5()
   Ratings ratings;
   ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

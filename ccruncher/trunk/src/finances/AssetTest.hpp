@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #ifndef _AssetTest_
@@ -51,6 +54,7 @@ class AssetTest : public TestFixture<AssetTest>
   private:
 
     Segmentations getSegmentations();
+    Interests getInterests();
     void makeAssertions(Asset *asset);
 
     void test1(void);

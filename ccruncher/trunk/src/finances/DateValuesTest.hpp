@@ -19,76 +19,49 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Bond.hpp - Bond header
+// DateValuesTest.hpp - DateValuesTest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
 //===========================================================================
 
-#ifndef _Bond_
-#define _Bond_
+#ifndef _DateValuesTest_
+#define _DateValuesTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "Asset.hpp"
-#include "DateValues.hpp"
-#include "segmentations/Segmentations.hpp"
-#include "utils/Exception.hpp"
-#include "utils/Date.hpp"
+#include <MiniCppUnit.hxx>
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
-namespace ccruncher {
-
-//---------------------------------------------------------------------------
-
-class Bond : public Asset
+class DateValuesTest : public TestFixture<DateValuesTest>
 {
 
   private:
 
-    /** fecha de emision del bono */
-    Date issuedate;
-    /** plazo (en meses) del bono */
-    int term;
-    /** importe nominal del bono */
-    double nominal;
-    /** tipo interes anual de cada cupon (en tanto por 1) */
-    double rate;
-    /** numeros de cupones */
-    int ncoupons;
-    /** fecha de adquisicion */
-    Date adquisitiondate;
-    /** precio de compra */
-    double adquisitionprice;
-
-    bool filled;
-    DateValues *simulate();
-    int length;
-
-  protected:
-
-    DateValues* getIEvents() throw(Exception);
-    int getISize() throw(Exception);
+    void test1(void);
+    void test2(void);
+    void test3(void);
 
 
   public:
 
-    Bond();
-    ~Bond();
+    TEST_FIXTURE(DateValuesTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+    }
 
-    void setProperty(string name, string value) throw(Exception);
-    bool validate();
+    void setUp();
+    void tearDown();
+
 };
 
-//---------------------------------------------------------------------------
-
-}
+REGISTER_FIXTURE(DateValuesTest);
 
 //---------------------------------------------------------------------------
 

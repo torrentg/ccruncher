@@ -182,6 +182,11 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
     N = idata->portfolio->getClients()->size();
   }
 
+  // checking that exist clients to simulate
+  if (N == 0) {
+    throw Exception("MonteCarlo::init(): 0 clients to simulate");
+  }
+
   // fixing variance reduction method
   antithetic = idata->params->antithetic;
 
@@ -217,7 +222,7 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 }
 
 //===========================================================================
-// construeix la matriu de correlacio entre clients
+// client correlation matrix construction
 //===========================================================================
 double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
                                vector<Client *> *vclients, int n) throw(Exception)
@@ -248,7 +253,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
 }
 
 //===========================================================================
-// construeix les copules per cada tall temporal
+// copula construction at every time tranch
 //===========================================================================
 CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, int n, int k, long seed) throw(Exception)
 {
@@ -308,7 +313,7 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
 void ccruncher::MonteCarlo::initAggregators() throw(Exception)
 {
   int indexdefault = mtrans->getIndexDefault();
-  aggregators->initialize(dates, STEPS+1, clients, N, indexdefault, ratings);
+  aggregators->initialize(dates, STEPS+1, clients, N, indexdefault, ratings, interests);
   aggregators->setOutputProperties(fpath, bforce, 0);
 }
 
@@ -374,12 +379,12 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 }
 
 //===========================================================================
-// genera les copules (una per cada tall temporal)
+// copula generation (one for each time tranch)
 // @exception en cas d'error
 //===========================================================================
 void ccruncher::MonteCarlo::generateRatingsPaths()
 {
-  // sense contemplar tecnologia antithetic
+  // without antithetic method
   if (!antithetic)
   {
     for(int i=1;i<=STEPS;i++)
@@ -387,7 +392,7 @@ void ccruncher::MonteCarlo::generateRatingsPaths()
       copulas[i]->next();
     }
   }
-  // amb tecnologia antithetic (antithetic == true)
+  // with antithetic method (antithetic == true)
   else
   {
     if (!reversed)
@@ -412,8 +417,8 @@ void ccruncher::MonteCarlo::generateRatingsPaths()
 }
 
 //===========================================================================
-// determina l'evolucio del rating del client per cada pas temporal
-// deixa el resultat en el vector work0
+// fix rating evolution of client for each time tranch. 
+// put result in rpaths[iclient]
 //===========================================================================
 void ccruncher::MonteCarlo::generateRatingsPath(int iclient)
 {
@@ -438,8 +443,8 @@ void ccruncher::MonteCarlo::generateRatingsPath(int iclient)
 }
 
 //===========================================================================
-// valora el portfolio emprant copula en curs
-// @exception en cas d'error
+// portfolio evaluation using current copula
+// @exception if error
 //===========================================================================
 void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
 {

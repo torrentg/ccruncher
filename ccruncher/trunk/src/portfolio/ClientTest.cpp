@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -75,7 +78,6 @@ Ratings ClientTest::getRatings()
   Ratings ratings;
   ASSERT_NO_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   return ratings;
 }
@@ -100,7 +102,6 @@ Sectors ClientTest::getSectors()
   Sectors sectors;
   ASSERT_NO_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   return sectors;
 }
@@ -147,7 +148,6 @@ Segmentations ClientTest::getSegmentations()
   Segmentations segmentations;
   ASSERT_NO_THROW(segmentations = Segmentations(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   return segmentations;
 }
@@ -162,25 +162,29 @@ void ClientTest::test1()
     <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
       <belongs-to concept='sector' segment='S2'/>\n\
       <belongs-to concept='size' segment='big'/>\n\
-      <asset class='bond' id='op1'>\n\
+      <asset name='generic' id='op1'>\n\
         <belongs-to concept='product' segment='bond'/>\n\
-        <belongs-to concept='office' segment='0002'/>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='120'/>\n\
-        <property name='nominal' value='1000.0'/>\n\
-        <property name='rate' value='0.06'/>\n\
-        <property name='ncoupons' value='10'/>\n\
-        <property name='adquisitiondate' value='1/1/2002'/>\n\
-        <property name='adquisitionprice' value='1000.0'/>\n\
+        <belongs-to concept='office' segment='0001'/>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+        </data>\n\
       </asset>\n\
-      <asset class='bond' id='op2'>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='120'/>\n\
-        <property name='nominal' value='1500.0'/>\n\
-        <property name='rate' value='0.07'/>\n\
-        <property name='ncoupons' value='20'/>\n\
-        <property name='adquisitiondate' value='1/1/2003'/>\n\
-        <property name='adquisitionprice' value='1500.0'/>\n\
+      <asset name='generic' id='op2'>\n\
+        <belongs-to concept='product' segment='bond'/>\n\
+        <belongs-to concept='office' segment='0001'/>\n\
+        <data>\n\
+          <values at='01/01/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' exposure='500.0' recovery='400.0' />\n\
+        </data>\n\
       </asset>\n\
     </client>";
 
@@ -197,26 +201,28 @@ void ClientTest::test1()
   Segmentations segmentations = getSegmentations();
   ASSERT_NO_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
 
-  // assertions
-  ASSERT(client->id == "cif1");
-  ASSERT(client->name == "cliente1");
-  ASSERT(client->irating == 0);
-  ASSERT(client->isector == 1);
+  if (client != NULL)
+  {
+    // assertions
+    ASSERT(client->id == "cif1");
+    ASSERT(client->name == "cliente1");
+    ASSERT(client->irating == 0);
+    ASSERT(client->isector == 1);
 
-  ASSERT(client->belongsTo(1, 1));
-  ASSERT(client->belongsTo(3, 2));
-  ASSERT(client->belongsTo(4, 1));
+    ASSERT(client->belongsTo(1, 1));
+    ASSERT(client->belongsTo(3, 2));
+    ASSERT(client->belongsTo(4, 1));
 
-  vector<Asset*> *assets = NULL;
-  ASSERT_NO_THROW(assets = client->getAssets());
+    vector<Asset> *assets = NULL;
+    ASSERT_NO_THROW(assets = client->getAssets());
 
-  ASSERT(2 == assets->size());
-  ASSERT((*assets)[0]->getId() == "op1");
-  ASSERT((*assets)[1]->getId() == "op2");
+    ASSERT(2 == assets->size());
+    ASSERT((*assets)[0].getId() == "op1");
+    ASSERT((*assets)[1].getId() == "op2");
+  }
 
   // exit test
   if (client != NULL) delete client;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -229,23 +235,25 @@ void ClientTest::test2()
   // client definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <client rating='K' sector='S2' name='cliente1' id='cif1'>\n\
-      <asset class='bond' id='op1'>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='120'/>\n\
-        <property name='nominal' value='1000.0'/>\n\
-        <property name='rate' value='0.06'/>\n\
-        <property name='ncoupons' value='10'/>\n\
-        <property name='adquisitiondate' value='1/1/2002'/>\n\
-        <property name='adquisitionprice' value='1000.0'/>\n\
+      <asset name='generic' id='op1'>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+        </data>\n\
       </asset>\n\
-      <asset class='bond' id='op2'>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='120'/>\n\
-        <property name='nominal' value='1500.0'/>\n\
-        <property name='rate' value='0.07'/>\n\
-        <property name='ncoupons' value='20'/>\n\
-        <property name='adquisitiondate' value='1/1/2003'/>\n\
-        <property name='adquisitionprice' value='1500.0'/>\n\
+      <asset name='generic' id='op2'>\n\
+        <data>\n\
+          <values at='01/01/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' exposure='500.0' recovery='400.0' />\n\
+        </data>\n\
       </asset>\n\
     </client>";
 
@@ -264,7 +272,6 @@ void ClientTest::test2()
 
   // exit test
   if (client != NULL) delete client;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -274,26 +281,28 @@ void ClientTest::test2()
 //===========================================================================
 void ClientTest::test3()
 {
-  // client definition with invalid asset
+  // client definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
-      <asset class='bond' id='op1'>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='-3'/>\n\
-        <property name='nominal' value='1000.0'/>\n\
-        <property name='rate' value='0.06'/>\n\
-        <property name='ncoupons' value='10'/>\n\
-        <property name='adquisitiondate' value='1/1/2002'/>\n\
-        <property name='adquisitionprice' value='1000.0'/>\n\
+      <asset name='generic' id='op1'>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+        </data>\n\
       </asset>\n\
-      <asset class='bond' id='op2'>\n\
-        <property name='issuedate' value='1/1/2000'/>\n\
-        <property name='term' value='120'/>\n\
-        <property name='nominal' value='1500.0'/>\n\
-        <property name='rate' value='0.07'/>\n\
-        <property name='ncoupons' value='20'/>\n\
-        <property name='adquisitiondate' value='1/1/2003'/>\n\
-        <property name='adquisitionprice' value='1500.0'/>\n\
+      <asset name='generic' id='op2'>\n\
+        <data>\n\
+          <values at='01/01/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' exposure='500.0' recovery='400.0' />\n\
+        </data>\n\
       </asset>\n\
     </client>";
 
@@ -312,7 +321,6 @@ void ClientTest::test3()
 
   // exit test
   if (client != NULL) delete client;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

@@ -165,24 +165,29 @@ void IDataTest::test1()
     </aggregators>\n\
     <portfolio>\n\
       <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
-        <asset class='bond' id='op1'>\n\
+        <asset name='generic' id='op1'>\n\
           <belongs-to concept='product' segment='bond'/>\n\
-          <property name='issuedate' value='1/1/2000'/>\n\
-          <property name='term' value='120'/>\n\
-          <property name='nominal' value='1000.0'/>\n\
-          <property name='rate' value='0.06'/>\n\
-          <property name='ncoupons' value='10'/>\n\
-          <property name='adquisitiondate' value='1/1/2002'/>\n\
-          <property name='adquisitionprice' value='1000.0'/>\n\
+          <belongs-to concept='office' segment='0001'/>\n\
+          <data>\n\
+            <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+            <values at='01/07/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+            <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+            <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+            <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+            <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+          </data>\n\
         </asset>\n\
-        <asset class='bond' id='op2'>\n\
-          <property name='issuedate' value='1/1/2000'/>\n\
-          <property name='term' value='120'/>\n\
-          <property name='nominal' value='1500.0'/>\n\
-          <property name='rate' value='0.07'/>\n\
-          <property name='ncoupons' value='20'/>\n\
-          <property name='adquisitiondate' value='1/1/2003'/>\n\
-          <property name='adquisitionprice' value='1500.0'/>\n\
+        <asset name='generic' id='op2'>\n\
+          <belongs-to concept='product' segment='bond'/>\n\
+          <belongs-to concept='office' segment='0001'/>\n\
+          <data>\n\
+            <values at='01/01/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+            <values at='01/07/2001' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+            <values at='01/01/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+            <values at='01/07/2002' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+            <values at='01/01/2003' cashflow='15.0' exposure='500.0' recovery='400.0' />\n\
+            <values at='01/07/2003' cashflow='515.0' exposure='500.0' recovery='400.0' />\n\
+          </data>\n\
         </asset>\n\
       </client>\n\
     </portfolio>\n\
@@ -198,18 +203,20 @@ void IDataTest::test1()
   IData *idata = NULL;
   ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement()),0));
 
-  // assertions
-  ASSERT(idata->params != NULL);
-  ASSERT(idata->interests != NULL);
-  ASSERT(idata->ratings != NULL);
-  ASSERT(idata->transitions != NULL);
-  ASSERT(idata->sectors != NULL);
-  ASSERT(idata->correlations != NULL);
-  ASSERT(idata->portfolio != NULL);
+  if (idata != NULL)
+  {
+    // assertions
+    ASSERT(idata->params != NULL);
+    ASSERT(idata->interests != NULL);
+    ASSERT(idata->ratings != NULL);
+    ASSERT(idata->transitions != NULL);
+    ASSERT(idata->sectors != NULL);
+    ASSERT(idata->correlations != NULL);
+    ASSERT(idata->portfolio != NULL);
+  }
 
   // exit test
   if (idata != NULL) delete idata;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

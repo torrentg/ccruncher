@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/19 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added dummy constructor
+//
 //===========================================================================
 
 #ifndef _Interests_
@@ -62,6 +65,7 @@ class Interests
 
   public:
 
+    Interests() {};
     Interests(const DOMNode &) throw(Exception);
     ~Interests();
 

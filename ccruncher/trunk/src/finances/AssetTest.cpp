@@ -28,9 +28,13 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <iostream>
+#include <algorithm>
 #include "Asset.hpp"
 #include "AssetTest.hpp"
 #include "utils/Date.hpp"
@@ -98,7 +102,50 @@ Segmentations AssetTest::getSegmentations()
   Segmentations ret;
   ASSERT_NO_THROW(ret = Segmentations(*(doc->getDocumentElement())));
 
-  delete wis;
+  delete parser;
+  return ret;
+}
+
+//===========================================================================
+// getInterests
+//===========================================================================
+Interests AssetTest::getInterests()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+    <interests>\n\
+      <interest name='spot' date='18/02/2003'>\n\
+        <rate t='0' r='0.0'/>\n\
+        <rate t='1' r='0.04'/>\n\
+        <rate t='2' r='0.041'/>\n\
+        <rate t='3' r='0.045'/>\n\
+        <rate t='6' r='0.0455'/>\n\
+        <rate t='12' r='0.048'/>\n\
+        <rate t='24' r='0.049'/>\n\
+        <rate t='60' r='0.05'/>\n\
+        <rate t='120' r='0.052'/>\n\
+      </interest>\n\
+      <interest name='discount' date='18/02/2003'>\n\
+        <rate t='0' r='0.0'/>\n\
+        <rate t='1' r='0.04'/>\n\
+        <rate t='2' r='0.041'/>\n\
+        <rate t='3' r='0.045'/>\n\
+        <rate t='6' r='0.0455'/>\n\
+        <rate t='12' r='0.048'/>\n\
+        <rate t='24' r='0.049'/>\n\
+        <rate t='60' r='0.05'/>\n\
+        <rate t='120' r='0.052'/>\n\
+      </interest>\n\
+    </interests>";
+
+  // creating xml
+  DOMBuilder *parser = XMLUtils::getParser();
+  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
+  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+
+  // segmentation object creation
+  Interests ret;
+  ASSERT_NO_THROW(ret = Interests(*(doc->getDocumentElement())));
+
   delete parser;
   return ret;
 }
@@ -108,44 +155,18 @@ Segmentations AssetTest::getSegmentations()
 //===========================================================================
 void AssetTest::test1()
 {
-  Asset *asset = NULL;
-
-  ASSERT_NO_THROW(asset = Asset::getInstanceByClassName("bond"));
-  ASSERT_NO_THROW(asset->setId("idop1"));
-  ASSERT_NO_THROW(asset->addBelongsTo(2, 1));
-  ASSERT_NO_THROW(asset->addBelongsTo(5, 1));
-  ASSERT_NO_THROW(asset->addBelongsTo(6, 2));
-  ASSERT_NO_THROW(asset->setProperty("issuedate", "1/1/2005"));
-  ASSERT_NO_THROW(asset->setProperty("term", "24"));
-  ASSERT_NO_THROW(asset->setProperty("nominal", "1000.0"));
-  ASSERT_NO_THROW(asset->setProperty("rate", "0.04"));
-  ASSERT_NO_THROW(asset->setProperty("ncoupons", "4"));
-  ASSERT_NO_THROW(asset->setProperty("adquisitiondate", "1/6/2004"));
-  ASSERT_NO_THROW(asset->setProperty("adquisitionprice", "995.0"));
-
-  ASSERT_NO_THROW(asset->initialize());
-
-  makeAssertions(asset);
-
-  delete asset;
-}
-
-//===========================================================================
-// test1
-//===========================================================================
-void AssetTest::test2()
-{
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-      <asset class='bond' id='idop1'>\n\
+      <asset name='generic' id='op1'>\n\
         <belongs-to concept='product' segment='bond'/>\n\
-        <belongs-to concept='office' segment='0002'/>\n\
-        <property name='issuedate' value='1/1/2005'/>\n\
-        <property name='term' value='24'/>\n\
-        <property name='nominal' value='1000.0'/>\n\
-        <property name='rate' value='0.04'/>\n\
-        <property name='ncoupons' value='4'/>\n\
-        <property name='adquisitiondate' value='1/6/2004'/>\n\
-        <property name='adquisitionprice' value='995.0'/>\n\
+        <belongs-to concept='office' segment='0001'/>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+        </data>\n\
       </asset>";
 
   // creating xml
@@ -158,12 +179,49 @@ void AssetTest::test2()
 
   // asset object creation
   Asset *asset = NULL;
-  ASSERT_NO_THROW(asset = Asset::parseDOMNode(*(doc->getDocumentElement()), &segs, NULL));
+  ASSERT_NO_THROW(asset =  new Asset(*(doc->getDocumentElement()), &segs));
 
-  makeAssertions(asset);
+  if (asset != NULL)
+  {
+    makeAssertions(asset);
+  }
 
   if (asset != NULL) delete asset;
-  delete wis;
+  delete parser;
+}
+
+//===========================================================================
+// test2. crash test (xml with errors, data 01/01/2000 repeated)
+//===========================================================================
+void AssetTest::test2()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+      <asset name='generic' id='op1'>\n\
+        <belongs-to concept='product' segment='bond'/>\n\
+        <belongs-to concept='office' segment='0001'/>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' exposure='500.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' exposure='500.0' recovery='450.0' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  DOMBuilder *parser = XMLUtils::getParser();
+  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
+  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+
+  // asset object creation
+  Asset *asset = NULL;
+  ASSERT_THROW(asset = new Asset(*(doc->getDocumentElement()), &segs));
+
+  if (asset != NULL) delete asset;
   delete parser;
 }
 
@@ -172,62 +230,70 @@ void AssetTest::test2()
 //===========================================================================
 void AssetTest::makeAssertions(Asset *asset)
 {
-  ASSERT(asset->validate() == true);
+  Interests interests = getInterests();
+  vector <DateValues> *data = NULL;
 
-  DateValues *events = NULL;
-  int size;
+  ASSERT(asset->belongsTo(0, 0)); // portfolio-rest
+  ASSERT(asset->belongsTo(2, 1)); // asset-op1
+  ASSERT(asset->belongsTo(5, 1)); // product-bond
+  ASSERT(asset->belongsTo(6, 1)); // office-0001
 
-  ASSERT(asset->belongsTo(2, 1));
-  ASSERT(asset->belongsTo(5, 1));
-  ASSERT(asset->belongsTo(6, 2));
+  ASSERT_NO_THROW(data = asset->getData());
+  ASSERT_EQUALS(6, data->size());
 
-  ASSERT_NO_THROW(events = asset->getEvents());
-  ASSERT_NO_THROW(size = asset->getSize());
-  ASSERT_EQUALS(6, size);
+  ASSERT(Date("01/01/2000") == (*data)[0].date);
+  ASSERT_DOUBLES_EQUAL(+10.0, (*data)[0].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[0].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[0].recovery, EPSILON);
 
-  ASSERT(Date("01/06/2004") == events[0].date);
-  ASSERT_DOUBLES_EQUAL(-995.0, events[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[0].exposure, EPSILON);
+  ASSERT(Date("01/07/2000") == (*data)[1].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[1].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[1].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[1].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2005") == events[1].date);
-  ASSERT_DOUBLES_EQUAL(0.0, events[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[1].exposure, EPSILON);
+  ASSERT(Date("01/01/2001") == (*data)[2].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[2].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[2].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[2].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2005") == events[2].date);
-  ASSERT_DOUBLES_EQUAL(20.0, events[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[2].exposure, EPSILON);
+  ASSERT(Date("01/07/2001") == (*data)[3].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[3].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[3].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[3].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2006") == events[3].date);
-  ASSERT_DOUBLES_EQUAL(20.0, events[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[3].exposure, EPSILON);
+  ASSERT(Date("01/01/2002") == (*data)[4].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[4].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[4].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[4].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2006") == events[4].date);
-  ASSERT_DOUBLES_EQUAL(20.0, events[4].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[4].exposure, EPSILON);
+  ASSERT(Date("01/07/2002") == (*data)[5].date);
+  ASSERT_DOUBLES_EQUAL(+510.0, (*data)[5].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+500.0, (*data)[5].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[5].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2007") == events[5].date);
-  ASSERT_DOUBLES_EQUAL(1020.0, events[5].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, events[5].exposure, EPSILON);
+  DateValues *vertexes = new DateValues[4];
+  Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
+  ASSERT_NO_THROW(asset->getVertexes(dates, 4, &interests, vertexes));
 
-  DateValues *vertexes = new DateValues[asset->getSize()];
-  Date dates[] = { Date("1/1/2004"), Date("1/1/2006"), Date("1/8/2006"), Date("1/1/2010") };
-  ASSERT_NO_THROW(asset->getVertexes(dates, 4, vertexes));
+  ASSERT(Date("01/01/1999") == vertexes[0].date);
+  ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].recovery, EPSILON);
+  
+  ASSERT(Date("01/01/2000") == vertexes[1].date);
+  ASSERT_DOUBLES_EQUAL(10.0  , vertexes[1].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(500.0 , vertexes[1].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(450.0 , vertexes[1].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2004") == vertexes[0].date);
-  ASSERT_DOUBLES_EQUAL(0.0, vertexes[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(0.0, vertexes[0].exposure, EPSILON);
-
-  ASSERT(Date("01/01/2006") == vertexes[1].date);
-  ASSERT_DOUBLES_EQUAL(-955.0, vertexes[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, vertexes[1].exposure, EPSILON);
-
-  ASSERT(Date("01/08/2006") == vertexes[2].date);
-  ASSERT_DOUBLES_EQUAL(20.0, vertexes[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(995.0, vertexes[2].exposure, EPSILON);
+  ASSERT(Date("01/06/2002") == vertexes[2].date);
+  ASSERT_DOUBLES_EQUAL(40.0  , vertexes[2].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(500.0 , vertexes[2].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(450.0 , vertexes[2].recovery, EPSILON);
 
   ASSERT(Date("01/01/2010") == vertexes[3].date);
-  ASSERT_DOUBLES_EQUAL(1020.0, vertexes[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(121.886, vertexes[3].exposure, EPSILON);
-
+  ASSERT_DOUBLES_EQUAL(510.0 , vertexes[3].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(5.413 , vertexes[3].exposure, EPSILON);
+  ASSERT_DOUBLES_EQUAL(4.871 , vertexes[3].recovery, EPSILON);
+  
   delete [] vertexes;
 }

@@ -79,20 +79,22 @@ void SegmentationTest::test1()
   Segmentation *sobj = NULL;
   ASSERT_NO_THROW(sobj = new Segmentation(*(doc->getDocumentElement())));
 
-  ASSERT("office" == sobj->name);
-  ASSERT(asset == sobj->components);
+  if (sobj != NULL)
+  {
+    ASSERT("office" == sobj->name);
+    ASSERT(asset == sobj->components);
 
-  vector<Segment> vsegments = sobj->getSegments();
-  ASSERT(5 == vsegments.size());
+    vector<Segment> vsegments = sobj->getSegments();
+    ASSERT(5 == vsegments.size());
 
-  ASSERT(0 == sobj->getSegment("rest"));
-  ASSERT(1 == sobj->getSegment("0001"));
-  ASSERT(2 == sobj->getSegment("0002"));
-  ASSERT(3 == sobj->getSegment("0003"));
-  ASSERT(4 == sobj->getSegment("0004"));
+    ASSERT(0 == sobj->getSegment("rest"));
+    ASSERT(1 == sobj->getSegment("0001"));
+    ASSERT(2 == sobj->getSegment("0002"));
+    ASSERT(3 == sobj->getSegment("0003"));
+    ASSERT(4 == sobj->getSegment("0004"));
+  }
 
   if (sobj != NULL) delete sobj;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

@@ -25,10 +25,14 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
+#include <cassert>
 #include "Client.hpp"
 #include "utils/XMLUtils.hpp"
 
@@ -43,7 +47,7 @@ ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *seg
                Interests *interests, const DOMNode& node) throw(Exception)
 {
   // inicialitzem el vector de rates
-  vassets = vector<Asset*>();
+  vassets = vector<Asset>();
 
   // recollim la informacio del node
   parseDOMNode(ratings, sectors, segmentations, interests, node);
@@ -54,17 +58,22 @@ ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *seg
 //===========================================================================
 ccruncher::Client::~Client()
 {
+  // nothing to do 
+  
+  //TODO: remove unused and comented code
+  /*
   // dropping assets
   for(unsigned int i=0;i<vassets.size();i++)
   {
     delete vassets[i];
   }
+  */
 }
 
 //===========================================================================
 // getAssets
 //===========================================================================
-vector<Asset*> * ccruncher::Client::getAssets()
+vector<Asset> * ccruncher::Client::getAssets()
 {
   return &vassets;
 }
@@ -72,7 +81,7 @@ vector<Asset*> * ccruncher::Client::getAssets()
 //===========================================================================
 // insercio nova operacio en la llista
 //===========================================================================
-void ccruncher::Client::insertAsset(Asset *val) throw(Exception)
+void ccruncher::Client::insertAsset(Asset &val) throw(Exception)
 {
   try
   {
@@ -139,7 +148,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
       }
       else if (XMLUtils::isNodeName(child, "asset"))
       {
-        Asset *aux = Asset::parseDOMNode(child, segs, interests);
+        Asset aux = Asset(child, segs);
         insertAsset(aux);
       }
       else
@@ -185,12 +194,12 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
 
   for(unsigned int i=0;i<vassets.size();i++)
   {
-    DateValues *events = vassets[i]->getEvents();
+    vector<DateValues> *data = vassets[i].getData();
 
-    if (vassets[i]->getSize() > 0)
+    if ((*data).size() > 0)
     {
-      Date date1 = events[0].date;
-      Date date2 = events[vassets[i]->getSize()-1].date;
+      Date date1 = (*data)[0].date;
+      Date date2 = (*data)[(*data).size()-1].date;
 
       if (from <= date1 && date1 <= to)
       {

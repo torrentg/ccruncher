@@ -165,11 +165,11 @@ void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *se
 // initialize
 //===========================================================================
 void ccruncher::Aggregators::initialize(Date *dates, int m, vector<Client *> *clients,
-int n, int indexdefault, Ratings *ratings) throw(Exception)
+int n, int indexdefault, Ratings *ratings, Interests *interests) throw(Exception)
 {
   for(unsigned int i=0;i<vaggregators.size();i++)
   {
-    vaggregators[i].initialize(dates, m, clients, n, indexdefault, ratings);
+    vaggregators[i].initialize(dates, m, clients, n, indexdefault, ratings, interests);
   }
 }
 

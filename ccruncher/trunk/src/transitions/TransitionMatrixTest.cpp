@@ -76,7 +76,6 @@ Ratings TransitionMatrixTest::getRatings()
 
   Ratings ret = Ratings(*(doc->getDocumentElement()));
 
-  delete wis;
   delete parser;
   return ret;
 }
@@ -133,36 +132,40 @@ void TransitionMatrixTest::test1()
   // transition matrix creation
   TransitionMatrix *trm=NULL;
   ASSERT_NO_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-  double **matrix = trm->getMatrix();
-
-  ASSERT(5 == trm->size());
-
-  for(int i=0;i<5;i++)
+  
+  if (trm != NULL)
   {
-    for(int j=0;j<5;j++)
+    double **matrix = trm->getMatrix();
+
+    ASSERT(5 == trm->size());
+
+    for(int i=0;i<5;i++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      for(int j=0;j<5;j++)
+      {
+        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      }
     }
-  }
 
-  // testing index default (internal indexation, begins with 0)
-  ASSERT(4 == trm->getIndexDefault());
+    // testing index default (internal indexation, begins with 0)
+    ASSERT(4 == trm->getIndexDefault());
 
-  // testing function translate()
-  TransitionMatrix *aux = translate(trm, 1.0);
-  matrix = aux->getMatrix();
+    // testing function translate()
+    TransitionMatrix *aux = translate(trm, 1.0);
+    matrix = aux->getMatrix();
 
-  for(int i=0;i<5;i++)
-  {
-    for(int j=0;j<5;j++)
+    for(int i=0;i<5;i++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      for(int j=0;j<5;j++)
+      {
+        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      }
     }
+    
+    delete aux;
   }
 
   if (trm != NULL) delete trm;
-  delete aux;
-  delete wis;
   delete parser;
 }
 
@@ -210,10 +213,10 @@ void TransitionMatrixTest::test2()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm;
+  TransitionMatrix *trm=NULL;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
 
-  delete wis;
+  if (trm != NULL) delete trm;
   delete parser;
 }
 
@@ -261,10 +264,10 @@ void TransitionMatrixTest::test3()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm;
+  TransitionMatrix *trm=NULL;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
 
-  delete wis;
+  if (trm != NULL) delete trm;
   delete parser;
 }
 
@@ -312,9 +315,9 @@ void TransitionMatrixTest::test4()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm;
+  TransitionMatrix *trm=NULL;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
 
-  delete wis;
+  if (trm != NULL) delete trm;
   delete parser;
 }

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -162,7 +165,7 @@ void ccruncher::SegmentAggregator::release()
 // initialize
 //===========================================================================
 void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> *clients,
-  long n, int indexdefault, Ratings *ratings_) throw(Exception)
+  long n, int indexdefault, Ratings *ratings_, Interests *interests_) throw(Exception)
 {
   bool *clientflag = NULL;
 
@@ -219,7 +222,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
     if (bvalues == true)
     {
       // allocating & filling vertexes
-      vertexes = allocVertexes(dates, M, clients, N);
+      vertexes = allocVertexes(dates, M, clients, N, interests_);
 
       // allocating cvalues
       cvalues = allocCValues(dates, M, K);
@@ -267,7 +270,7 @@ long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> *clients, lon
 //===========================================================================
 long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, long n, bool *flags)
 {
-  vector<Asset *> *assets;
+  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
@@ -278,7 +281,7 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, lon
 
     for(unsigned int j=0;j<assets->size();j++)
     {
-      if ((*assets)[j]->belongsTo(isegmentation, isegment))
+      if ((*assets)[j].belongsTo(isegmentation, isegment))
       {
         flags[i] = true;
         ret++;
@@ -295,7 +298,7 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, lon
 //===========================================================================
 long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> *clients, long n, bool *flags)
 {
-  vector<Asset*> *assets;
+  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
@@ -304,7 +307,7 @@ long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> *clients, long
 
     for(unsigned int j=0;j<assets->size();j++)
     {
-      if ((*assets)[j]->belongsTo(isegmentation, isegment))
+      if ((*assets)[j].belongsTo(isegmentation, isegment))
       {
         ret++;
       }
@@ -319,7 +322,7 @@ long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> *clients, long
 //===========================================================================
 long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> *clients, long n, bool *flags)
 {
-  vector<Asset*> *assets;
+  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
@@ -618,11 +621,12 @@ void ccruncher::SegmentAggregator::next()
 //===========================================================================
 // allocVertexes
 //===========================================================================
-DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> *clients, long n) throw(Exception)
+DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> *clients, 
+                long n, Interests *interests_) throw(Exception)
 {
   DateValues **ret = NULL;
   DateValues *aux = NULL;
-  vector<Asset*> *assets;
+  vector<Asset> *assets;
 
   try
   {
@@ -661,9 +665,9 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
       // filling row
       for(unsigned int j=0;j<assets->size();j++)
       {
-        if (components==client || (components==asset && (*assets)[j]->belongsTo(isegmentation, isegment)))
+        if (components==client || (components==asset && (*assets)[j].belongsTo(isegmentation, isegment)))
         {
-          (*assets)[j]->getVertexes(dates, m, aux);
+          (*assets)[j].getVertexes(dates, m, interests_, aux);
 
           for(int k=0;k<m;k++)
           {

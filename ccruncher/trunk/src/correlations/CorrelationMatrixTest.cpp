@@ -74,7 +74,6 @@ Sectors CorrelationMatrixTest::getSectors()
   // sectors list creation
   Sectors ret = Sectors(*(doc->getDocumentElement()));
 
-  delete wis;
   delete parser;
   return ret;
 }
@@ -106,20 +105,23 @@ void CorrelationMatrixTest::test1()
   // correlation matrix creation
   CorrelationMatrix *crm = NULL;
   ASSERT_NO_THROW(crm = new CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
-  double **matrix = crm->getMatrix();
-
-  ASSERT(2 == crm->size());
-
-  for(int i=0;i<2;i++)
+  
+  if (crm != NULL)
   {
-    for(int j=0;j<2;j++)
+    double **matrix = crm->getMatrix();
+
+    ASSERT(2 == crm->size());
+
+    for(int i=0;i<2;i++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
+      for(int j=0;j<2;j++)
+      {
+        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
+      }
     }
   }
 
   if (crm != NULL) delete crm;
-  delete wis;
   delete parser;
 }
 
@@ -147,7 +149,6 @@ void CorrelationMatrixTest::test2()
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
 }
 
@@ -174,7 +175,6 @@ void CorrelationMatrixTest::test3()
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
 }
 
@@ -202,6 +202,5 @@ void CorrelationMatrixTest::test4()
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
 }

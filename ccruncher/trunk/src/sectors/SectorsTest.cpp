@@ -89,7 +89,6 @@ void SectorsTest::test1()
   ASSERT(sectors.getName(0) == "S1");
   ASSERT(sectors.getName(1) == "S2");
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -116,7 +115,6 @@ void SectorsTest::test2()
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -143,7 +141,6 @@ void SectorsTest::test3()
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -170,7 +167,6 @@ void SectorsTest::test4()
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }
@@ -197,7 +193,6 @@ void SectorsTest::test5()
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

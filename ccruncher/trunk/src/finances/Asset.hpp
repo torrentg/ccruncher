@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -34,6 +37,8 @@
 
 #include "utils/config.h"
 #include <map>
+#include <vector>
+#include "xercesc/dom/DOM.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -50,49 +55,36 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-
 class Asset
 {
 
   private:
 
-    map<int,int> belongsto;
     string id;
-    DateValues *vevents;
-    int nevents;
-    Interests *interests;
+    string name;
+    map<int,int> belongsto;
+    vector<DateValues> data;
 
-    double getVCashFlow(Date date1, Date date2, DateValues *events, int n);
-    double getVExposure(Date date1, Date date2, DateValues *events, int n);
+    void parseDOMNode(const DOMNode &, Segmentations *) throw(Exception);
+    void parseData(const DOMNode &) throw(Exception);
+    double getVCashFlow(Date date1, Date date2, Interests *);
+    double getVExposure(Date date1, Date date2, Interests *);
+    double getVRecovery(Date date1, Date date2, Interests *);
+    void insertDateValues(DateValues &) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
-
-
-  protected:
-
-    virtual DateValues* getIEvents() throw(Exception) = 0;
-    virtual int getISize() throw(Exception) = 0;
-
+    
 
   public:
 
-    Asset();
-    virtual ~Asset();
+    Asset(const DOMNode &, Segmentations *) throw(Exception);
+    ~Asset();
 
-    static Asset* getInstanceByClassName(string) throw(Exception);
-    static Asset* parseDOMNode(const DOMNode &, Segmentations *, Interests *)
-                  throw(Exception);
-
-    virtual void setProperty(string name, string value) throw(Exception) = 0;
-    void setInterests(Interests *);
-    void setId(string id_);
-    void addBelongsTo(int iconcept, int isegment) throw(Exception);
-
-    virtual bool validate() = 0;
-    void initialize() throw(Exception);
-    void getVertexes(Date *dates, int n, DateValues *ret);
     string getId(void);
-    int getSize();
-    DateValues *getEvents();
+    string getName(void);
+
+    void addBelongsTo(int iconcept, int isegment) throw(Exception);
+    void getVertexes(Date *dates, int n, Interests *ints, DateValues *ret);
+    vector<DateValues> *getData();
     bool belongsTo(int iconcept, int isegment);
     int getSegment(int iconcept);
 

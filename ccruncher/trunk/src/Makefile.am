@@ -40,7 +40,6 @@ ccruncher_SOURCES = \
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
     ./finances/Asset.cpp\
-    ./finances/Bond.cpp\
     ./finances/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
@@ -77,7 +76,6 @@ ccruncher_SOURCES = \
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
     ./finances/Asset.hpp\
-    ./finances/Bond.hpp\
     ./finances/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
@@ -125,6 +123,7 @@ cc2gpi_LDADD =
 # -------------------------------------------------------------
 generator_SOURCES = \
     ./tools/generator.cpp\
+    ./tools/Bond.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
     ./portfolio/Client.cpp\
@@ -144,7 +143,6 @@ generator_SOURCES = \
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
     ./finances/Asset.cpp\
-    ./finances/Bond.cpp\
     ./finances/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
@@ -160,6 +158,7 @@ generator_SOURCES = \
     ./utils/Timer.cpp\
     ./utils/Utils.cpp\
     \
+    ./tools/Bond.hpp\
     ./kernel/IData.hpp\
     ./portfolio/Portfolio.hpp\
     ./portfolio/Client.hpp\
@@ -180,7 +179,6 @@ generator_SOURCES = \
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
     ./finances/Asset.hpp\
-    ./finances/Bond.hpp\
     ./finances/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
@@ -220,8 +218,8 @@ tests_SOURCES = \
     ./math/CholeskyDecompositionTest.cpp\
     ./aggregators/AggregatorsTest.cpp\
     ./correlations/CorrelationMatrixTest.cpp\
-    ./finances/BondTest.cpp\
     ./finances/AssetTest.cpp\
+    ./finances/DateValuesTest.cpp\
     ./interests/InterestTest.cpp\
     ./interests/InterestsTest.cpp\
     ./segmentations/SegmentationTest.cpp\
@@ -233,7 +231,6 @@ tests_SOURCES = \
     ./sectors/SectorsTest.cpp\
     ./transitions/TransitionMatrixTest.cpp\
     ./finances/Asset.cpp\
-    ./finances/Bond.cpp\
     ./finances/DateValues.cpp\
     ./utils/Timer.cpp\
     ./utils/Parser.cpp\
@@ -283,8 +280,8 @@ tests_SOURCES = \
     ./math/CholeskyDecompositionTest.hpp\
     ./aggregators/AggregatorsTest.hpp\
     ./correlations/CorrelationMatrixTest.hpp\
-    ./finances/BondTest.hpp\
     ./finances/AssetTest.hpp\
+    ./finances/DateValuesTest.hpp\
     ./interests/InterestTest.hpp\
     ./interests/InterestsTest.hpp\
     ./segmentations/SegmentationTest.hpp\
@@ -296,7 +293,6 @@ tests_SOURCES = \
     ./sectors/SectorsTest.hpp\
     ./transitions/TransitionMatrixTest.hpp\
     ./finances/Asset.hpp\
-    ./finances/Bond.hpp\
     ./finances/DateValues.hpp\
     ./utils/Timer.hpp\
     ./utils/Parser.hpp\

@@ -25,20 +25,23 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 #include "Asset.hpp"
-#include "Bond.hpp"
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset()
+ccruncher::Asset::Asset(const DOMNode &node, Segmentations *segs) throw(Exception)
 {
-  vevents = NULL;
-  nevents=0;
+  // parsing DOM node
+  parseDOMNode(node, segs);
 }
 
 //===========================================================================
@@ -46,15 +49,7 @@ ccruncher::Asset::Asset()
 //===========================================================================
 ccruncher::Asset::~Asset()
 {
-  if (vevents != NULL) delete [] vevents;
-}
-
-//===========================================================================
-// setId
-//===========================================================================
-void ccruncher::Asset::setId(string id_)
-{
-  id = id_;
+  // nothing to do
 }
 
 //===========================================================================
@@ -66,29 +61,38 @@ string ccruncher::Asset::getId(void)
 }
 
 //===========================================================================
+// getName
+//===========================================================================
+string ccruncher::Asset::getName(void)
+{
+  return name;
+}
+
+//===========================================================================
 // getVCashFlow between date1 and date2
 //===========================================================================
-double ccruncher::Asset::getVCashFlow(Date date1, Date date2, DateValues *events, int n)
+double ccruncher::Asset::getVCashFlow(Date date1, Date date2, Interests *ints)
 {
+  int n = (int) data.size();
   double ret = 0.0;
 
-  if (date2 < events[0].date)
+  if (date2 < data[0].date)
   {
     return 0.0;
   }
 
   for(int i=0;i<n;i++)
   {
-    if (date1 == date2 && date1 == events[i].date)
+    if (date1 == date2 && date1 == data[i].date)
     {
-      ret += events[i].cashflow;
+      ret += data[i].cashflow;
       break;
     }
-    if (date1 < events[i].date && events[i].date <= date2)
+    if (date1 < data[i].date && data[i].date <= date2)
     {
-      ret += events[i].cashflow;
+      ret += data[i].cashflow;
     }
-    if (date2 < events[i].date)
+    if (date2 < data[i].date)
     {
       break;
     }
@@ -102,31 +106,96 @@ double ccruncher::Asset::getVCashFlow(Date date1, Date date2, DateValues *events
 //===========================================================================
 // getVExposure at date2
 //===========================================================================
-double ccruncher::Asset::getVExposure(Date date1, Date date2, DateValues *events, int n)
+double ccruncher::Asset::getVExposure(Date date1, Date date2, Interests *ints)
 {
+  int n = (int) data.size();
   double ret = 0.0;
 
-  if (date2 < events[0].date)
+  if (n == 0)
   {
     return 0.0;
   }
 
-  if (date1 < events[n-1].date && events[n-1].date < date2)
+  if (date2 < data[0].date)
   {
-    double val1 = events[n-1].date - date1;
+    return 0.0;
+  }
+
+  if (date1 > data[n-1].date)
+  {
+    return 0.0;
+  }
+  
+  if (date1 < data[n-1].date && data[n-1].date < date2)
+  {
+    double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return events[n-1].exposure * val1/val2;
+    return data[n-1].exposure * val1/val2;
   }
 
   for(int i=1;i<n;i++)
   {
-    if (date2 <= events[i].date)
+    if (date2 <= data[i].date)
     {
-      Date datex = events[i-1].date;
-      double ex = events[i-1].exposure;
-      Date datey = events[i].date;
-      double ey = events[i].exposure;
+      Date datex = data[i-1].date;
+      double ex = data[i-1].exposure;
+      Date datey = data[i].date;
+      double ey = data[i].exposure;
+
+      ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
+
+      return ret;
+    }
+  }
+  
+  // assertion
+  assert(true);
+
+  //TODO: pendent actualitzar els fluxes respecte el tipus de interes
+
+  throw Exception("Asset::getVExposure(): panic!!!");
+}
+
+//===========================================================================
+// getVRecovery at date2
+//===========================================================================
+double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
+{
+  int n = (int) data.size();
+  double ret = 0.0;
+
+  if (n == 0)
+  {
+    return 0.0;
+  }
+
+  if (date2 < data[0].date)
+  {
+    return 0.0;
+  }
+
+  if (date1 > data[n-1].date)
+  {
+    return 0.0;
+  }
+
+  if (date1 < data[n-1].date && data[n-1].date < date2)
+  {
+    double val1 = data[n-1].date - date1;
+    double val2 = date2 - date1;
+
+    return data[n-1].recovery * val1/val2;
+  }
+
+  for(int i=1;i<n;i++)
+  {
+    if (date2 <= data[i].date)
+    {
+      Date datex = data[i-1].date;
+      double ex = data[i-1].recovery;
+      Date datey = data[i].date;
+      double ey = data[i].recovery;
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
@@ -134,53 +203,35 @@ double ccruncher::Asset::getVExposure(Date date1, Date date2, DateValues *events
     }
   }
 
+  // assertion
+  assert(true);
+
   //TODO: pendent actualitzar els fluxes respecte el tipus de interes
 
-  throw Exception("Asset::interpole(): panic!!!");
+  throw Exception("Asset::getVRecovery(): panic!!!");
 }
 
 //===========================================================================
 // getVertexes
 //===========================================================================
-void ccruncher::Asset::getVertexes(Date *dates, int n, DateValues *ret)
+void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValues *ret)
 {
   sort(dates, dates+n);
 
   for (int i=0;i<n;i++)
   {
     ret[i].date = dates[i];
-    ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], vevents, nevents);
-    ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], vevents, nevents);
+    ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], ints);
+    ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], ints);
+    ret[i].recovery = getVRecovery(dates[max(i-1,0)], dates[i], ints);
   }
-}
-
-//===========================================================================
-// getInstanceByClassName
-//===========================================================================
-Asset* ccruncher::Asset::getInstanceByClassName(string classname) throw(Exception)
-{
-  Asset *ret = NULL;
-
-  if (classname == "bond")
-  {
-    ret = new Bond();
-  }
-  else
-  {
-    throw Exception("Asset::getInstanceByClassName(): " + classname + " not registered");
-  }
-
-  // return object
-  return ret;
 }
 
 //===========================================================================
 // interpreta un node XML de tipus asset
 //===========================================================================
-Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, Interests *ints) throw(Exception)
+void ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
 {
-  Asset *ret = NULL;
-
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "asset"))
   {
@@ -191,101 +242,139 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
 
   // agafem la llista d'atributs
   DOMNamedNodeMap &attributes = *node.getAttributes();
-  string strid = XMLUtils::getStringAttribute(attributes, "id", "");
-  string strclass = XMLUtils::getStringAttribute(attributes, "class", "");
+  id = XMLUtils::getStringAttribute(attributes, "id", "");
+  name = XMLUtils::getStringAttribute(attributes, "name", "");
 
-  if (strid == "" || strclass == "")
+  if (id == "" || name == "")
   {
     throw Exception("Asset::parseDOMNode(): invalid attributes at <asset>");
   }
 
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else if (XMLUtils::isNodeName(child, "belongs-to"))
+      {
+        DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
+        string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
+        string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
+
+        int iconcept = segs->getSegmentation(sconcept);
+        int isegment = segs->getSegment(sconcept, ssegment);
+
+        insertBelongsTo(iconcept, isegment);
+      }
+      else if (XMLUtils::isNodeName(child, "data"))
+      {
+        parseData(child);
+      }
+      else
+      {
+        throw Exception("Asset::parseDOMNode(): invalid data structure at <asset>");
+      }
+    }
+  }
+
+  // error if data tag not exist
+  if (data.size() == 0)
+  {
+    throw Exception("Asset::parseDOMNode(): asset without data");
+  }
+  else
+  {
+    // sorting data by date
+    sort(data.begin(), data.end());
+  }
+
+  // filling implicit segment
+  if (segs->getSegmentation("asset") >= 0)
+  {
+    if (segs->getComponents("asset") == asset)
+    {
+      segs->addSegment("asset", id);
+      int iconcept = segs->getSegmentation("asset");
+      int isegment = segs->getSegment("asset", id);
+      insertBelongsTo(iconcept, isegment);
+    }
+  }
+
+  // filling implicit segment
+  if (segs->getSegmentation("portfolio") >= 0)
+  {
+    if (segs->getComponents("portfolio") == asset)
+    {
+      int iconcept = segs->getSegmentation("portfolio");
+      int isegment = segs->getSegment("portfolio", "rest");
+      insertBelongsTo(iconcept, isegment);
+    }
+  }
+}
+
+//===========================================================================
+// interpreta un node XML de tipus data
+//===========================================================================
+void ccruncher::Asset::parseData(const DOMNode& node) throw(Exception)
+{
+  assert(XMLUtils::isNodeName(node, "data"));
+
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else if (XMLUtils::isNodeName(child, "values"))
+      {
+        DateValues aux = DateValues(child);
+        insertDateValues(aux);
+      }
+      else
+      {
+        throw Exception("Asset::parseData(): invalid data structure at <data>");
+      }
+    }
+  }  
+}
+
+//===========================================================================
+// insertDateValues
+//===========================================================================
+void ccruncher::Asset::insertDateValues(DateValues &val) throw(Exception)
+{
+  // checking if date exist
+  for(unsigned int i=0;i<data.size();i++)
+  {
+    if (data[i].date == val.date)
+    {
+      throw Exception("Asset::insertDateValues(): trying to insert an existent date");
+    }
+  }
+
+  // inserting date-values
   try
   {
-    // creating instance by name
-    ret = Asset::getInstanceByClassName(strclass);
-
-    // setting asset id and interests
-    ret->setId(strid);
-    ret->setInterests(ints);
-
-    // recorrem tots els items
-    DOMNodeList &children = *node.getChildNodes();
-
-    if (&children != NULL)
-    {
-      for(unsigned int i=0;i<children.getLength();i++)
-      {
-        DOMNode &child = *children.item(i);
-
-        if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
-        {
-          continue;
-        }
-        else if (XMLUtils::isNodeName(child, "belongs-to"))
-        {
-          DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-          string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
-          string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
-
-          int iconcept = segs->getSegmentation(sconcept);
-          int isegment = segs->getSegment(sconcept, ssegment);
-
-          ret->insertBelongsTo(iconcept, isegment);
-        }
-        else if (XMLUtils::isNodeName(child, "property"))
-        {
-          DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-          string name = XMLUtils::getStringAttribute(tmpnodemap, "name", "");
-          string value = XMLUtils::getStringAttribute(tmpnodemap, "value", "");
-
-          ret->setProperty(name, value);
-        }
-        else
-        {
-          throw Exception("Asset::parseDOMNode(): invalid data structure at <asset>");
-        }
-      }
-    }
-
-    if (ret->validate() == false)
-    {
-      throw Exception("Asset::parseDOMNode(): asset with conflictive properties");
-    }
-    else
-    {
-      // computing events
-      ret->initialize();
-
-      // filling implicit segment
-      if (segs->getSegmentation("asset") >= 0)
-      {
-        if (segs->getComponents("asset") == asset)
-        {
-          segs->addSegment("asset", strid);
-          int iconcept = segs->getSegmentation("asset");
-          int isegment = segs->getSegment("asset", strid);
-          ret->insertBelongsTo(iconcept, isegment);
-        }
-      }
-
-      // filling implicit segment
-      if (segs->getSegmentation("portfolio") >= 0)
-      {
-        if (segs->getComponents("portfolio") == asset)
-        {
-          int iconcept = segs->getSegmentation("portfolio");
-          int isegment = segs->getSegment("portfolio", "rest");
-          ret->insertBelongsTo(iconcept, isegment);
-        }
-      }
-    }
-
-    return ret;
+    data.push_back(val);
   }
-  catch(Exception &e)
+  catch(std::exception &e)
   {
-    if (ret != NULL) delete ret;
-    throw e;
+    throw Exception(e);
   }
 }
 
@@ -342,36 +431,9 @@ int ccruncher::Asset::getSegment(int iconcept)
 }
 
 //===========================================================================
-// initialize
+// getData
 //===========================================================================
-void ccruncher::Asset::initialize() throw(Exception)
+vector<DateValues>* ccruncher::Asset::getData()
 {
-  if (vevents != NULL) delete [] vevents;
-
-  vevents = getIEvents();
-  nevents = getISize();
-}
-
-//===========================================================================
-// compute
-//===========================================================================
-void ccruncher::Asset::setInterests(Interests *ints)
-{
-  interests = ints;
-}
-
-//===========================================================================
-// getSize
-//===========================================================================
-int ccruncher::Asset::getSize()
-{
-  return nevents;
-}
-
-//===========================================================================
-// getEvents
-//===========================================================================
-DateValues* ccruncher::Asset::getEvents()
-{
-  return vevents;
+  return &data;
 }

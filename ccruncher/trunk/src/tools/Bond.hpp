@@ -19,65 +19,69 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// BondTest.hpp - BondTest header
+// Bond.hpp - Bond header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release
-//
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
+// 2005/03/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release (inherited from finances/Bond.hpp)
 //
 //===========================================================================
 
-#ifndef _BondTest_
-#define _BondTest_
+#ifndef _Bond_
+#define _Bond_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
-#include "Bond.hpp"
+#include <vector>
+#include "finances/DateValues.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class BondTest : public TestFixture<BondTest>
+class Bond
 {
 
   private:
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
-    void test6(void);
-    void test7(void);
+    /** fecha de emision del bono */
+    Date issuedate;
+    /** plazo (en meses) del bono */
+    int term;
+    /** importe nominal del bono */
+    double nominal;
+    /** tipo interes anual de cada cupon (en tanto por 1) */
+    double rate;
+    /** numeros de cupones */
+    int ncoupons;
+    /** fecha de adquisicion */
+    Date adquisitiondate;
+    /** precio de compra */
+    double adquisitionprice;
 
+    /** internal function */
+    bool validate();
 
   public:
 
-    TEST_FIXTURE(BondTest)
-    {
-      TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-      TEST_CASE(test6);
-      TEST_CASE(test7);
-    }
+    Bond();
+    ~Bond();
 
-    void setUp();
-    void tearDown();
+    void setProperty(string name, string value) throw(Exception);
+    vector<DateValues> simulate() throw(Exception);
 
 };
 
-REGISTER_FIXTURE(BondTest);
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

@@ -83,7 +83,7 @@ class Aggregator
     bool getBValues() const;
     bool getBFull() const;
 
-    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *, Interests *) throw(Exception);
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
     void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);
     void flush(bool finalize) throw(Exception);

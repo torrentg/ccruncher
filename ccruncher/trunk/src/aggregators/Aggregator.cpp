@@ -208,7 +208,7 @@ bool ccruncher::Aggregator::getBFull() const
 // initialize
 //===========================================================================
 void ccruncher::Aggregator::initialize(Date *dates, int m, vector<Client *> *clients,
-     long n, int indexdefault, Ratings *ratings) throw(Exception)
+     long n, int indexdefault, Ratings *ratings, Interests *interests) throw(Exception)
 {
   try
   {
@@ -222,7 +222,7 @@ void ccruncher::Aggregator::initialize(Date *dates, int m, vector<Client *> *cli
       saggregators[i].define(isegmentation, i, components, bvalues, bfull);
       saggregators[i].setNames(name, segmentations->getSegmentationName(isegmentation),
                                 segmentations->getSegmentName(isegmentation, i));
-      saggregators[i].initialize(dates, m, clients, n, indexdefault, ratings);
+      saggregators[i].initialize(dates, m, clients, n, indexdefault, ratings, interests);
     }
   }
   catch(std::exception &e)

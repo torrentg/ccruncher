@@ -57,6 +57,7 @@ class Params
     void parseProperty(const DOMNode& node) throw(Exception);
     void validate(void) throw(Exception);
 
+
   public:
 
     Date begindate;

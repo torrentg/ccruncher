@@ -40,10 +40,10 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/File.hpp"
-#include "ratings/DateRatings.hpp"
 #include "finances/DateValues.hpp"
-#include "portfolio/Client.hpp"
+#include "ratings/DateRatings.hpp"
 #include "ratings/Ratings.hpp"
+#include "portfolio/Client.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
@@ -55,9 +55,6 @@ namespace ccruncher {
 //---------------------------------------------------------------------------
 
 #define MAXSIZE 500
-#define INDENTER1 "  "
-#define INDENTER2 "    "
-#define INDENTER3 "      "
 
 //---------------------------------------------------------------------------
 
@@ -137,7 +134,7 @@ class SegmentAggregator
     long* allocIClients(bool *, long) throw(Exception);
     DateValues** allocCValues(Date *, int, long) throw(Exception);
     DateRatings** allocCRatings(Date *, int, long, int) throw(Exception);
-    DateValues** allocVertexes(Date *, int, vector<Client *> *, long) throw(Exception);
+    DateValues** allocVertexes(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
     void appendA(int **rpaths);
     void appendR(int **rpaths);
     void resetCValue(int);
@@ -161,7 +158,7 @@ class SegmentAggregator
     void define(int, int, components_t, bool , bool);
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
     void setNames(string, string, string) throw(Exception);
-    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *, Interests *) throw(Exception);
     void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);
     void next();
     void flush(bool finalize) throw(Exception);

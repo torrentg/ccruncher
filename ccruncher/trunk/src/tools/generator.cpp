@@ -28,12 +28,16 @@
 // 2005/03/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added POSIX compliance in command line arguments
 //
+// 2005/03/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <getopt.h>
+#include "Bond.hpp"
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
 #include "utils/Utils.hpp"
@@ -60,8 +64,9 @@ MTRand mtw;
 void usage();
 void version();
 void copyright();
-void run(string, int, int);
-string getXMLPortfolio(int, IData*, int, int);
+void run(string, int, int) throw(Exception);
+string getXMLPortfolio(int, IData*, int, int) throw(Exception);
+string getXMLData(int, Date, int, double, double, int) throw(Exception);
 double getNominal();
 
 //===========================================================================
@@ -196,7 +201,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, int nclients, int nassets)
+void run(string filename, int nclients, int nassets) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -220,9 +225,9 @@ void run(string filename, int nclients, int nassets)
 }
 
 //===========================================================================
-// version
+// getXMLPortfolio
 //===========================================================================
-string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets)
+string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) throw(Exception)
 {
   string ret = "";
   string spc1 = Utils::blanks(ilevel);
@@ -246,22 +251,15 @@ string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets)
     for (int j=1;j<=nassets;j++)
     {
       ret += spc3;
-      ret += "<asset class='bond' ";
+      ret += "<asset name='bond' ";
       ret += "id='" + Parser::int2string(i) + "-" + Parser::int2string(j) + "'>\n";
 
-      ret += spc4 + "<property name='issuedate' value='" + Parser::date2string(date1) + "'/>\n";
-      ret += spc4 + "<property name='term' value='120'/>\n";
-      ret += spc4 + "<property name='nominal' value='" + Parser::double2string(getNominal()) +"'/>\n";
-      ret += spc4 + "<property name='rate' value='0.07'/>\n";
-      ret += spc4 + "<property name='ncoupons' value='120'/>\n";
-      ret += spc4 + "<property name='adquisitiondate' value='" + Parser::date2string(date1) + "'/>\n";
-      ret += spc4 + "<property name='adquisitionprice' value='1500'/>\n";
+      ret += getXMLData(ilevel+6, date1, 120, getNominal(), 0.07, 120);
 
       ret += spc3 + "</asset>\n";
     }
 
     ret += spc2 +  "</client>\n";
-
   }
 
   ret += spc1 + "</portfolio>\n";
@@ -276,6 +274,41 @@ double getNominal()
 {
   double ret = mtw.randNorm(NOMINAL_MU, NOMINAL_SIGMA2);
   return (ret<=NOMINAL_MIN?NOMINAL_MIN:ret);
+}
+
+//===========================================================================
+// getXMLData
+//===========================================================================
+string getXMLData(int ilevel, Date issuedate, int term, double nominal, double rate, int ncoupons) throw(Exception)
+{
+  string spc1 = Utils::blanks(ilevel);
+  string spc2 = Utils::blanks(ilevel+2);
+  string ret = "";
+  Bond bond;
+  
+  bond.setProperty("issuedate", Parser::date2string(issuedate));
+  bond.setProperty("term"     , Parser::int2string(term));
+  bond.setProperty("nominal"  , Parser::double2string(nominal));
+  bond.setProperty("rate"     , Parser::double2string(rate));
+  bond.setProperty("ncoupons" , Parser::int2string(ncoupons));
+
+  vector<DateValues> events = bond.simulate();
+  
+  ret += spc1 + "<data>\n";
+  
+  for(unsigned int i=0;i<events.size();i++)
+  {
+    ret += spc2;
+    ret += "<values at='" + Parser::date2string(events[i].date) + "' ";
+    ret += "cashflow='" + Parser::double2string(max(0.0, events[i].cashflow)) + "' ";
+    ret += "exposure='" + Parser::double2string(events[i].exposure) + "' ";
+    ret += "recovery='" + Parser::double2string(events[i].recovery) + "' ";
+    ret += "/>\n";
+  }
+  
+  ret += spc1 + "</data>\n";
+
+  return ret;
 }
 
 //===========================================================================

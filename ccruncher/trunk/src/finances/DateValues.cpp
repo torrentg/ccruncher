@@ -25,10 +25,15 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added recovery value
+//
 //===========================================================================
 
 #include <cmath>
+#include <cfloat>
 #include <algorithm>
+#include "utils/XMLUtils.hpp"
 #include "DateValues.hpp"
 
 //===========================================================================
@@ -39,20 +44,76 @@ ccruncher::DateValues::DateValues()
   date = Date(1,1,1);
   cashflow = NAN;
   exposure = NAN;
+  recovery = NAN;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _exposure)
+ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _exposure, double _recovery)
 {
   date = _date;
   cashflow = _cashflow;
   exposure = _exposure;
+  recovery = _recovery;
 }
 
 //===========================================================================
-// operador de comparacio (per permetre ordenacio)
+// constructor
+//===========================================================================
+ccruncher::DateValues::DateValues(const DOMNode &node) throw(Exception)
+{
+  parseDOMNode(node);
+}
+
+//===========================================================================
+// ParseDOMNode
+//===========================================================================
+void ccruncher::DateValues::parseDOMNode(const DOMNode &node) throw(Exception)
+{
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "values"))
+  {
+    string msg = "DateValues::parseDOMNode(): Invalid tag. Expected: values. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
+  }
+
+  // agafem la llista d'atributs
+  DOMNamedNodeMap &attributes = *node.getAttributes();
+  date = XMLUtils::getDateAttribute(attributes, "at", Date(1,1,1));
+  cashflow = XMLUtils::getDoubleAttribute(attributes, "cashflow", NAN);
+  exposure = XMLUtils::getDoubleAttribute(attributes, "exposure", NAN);
+  recovery = XMLUtils::getDoubleAttribute(attributes, "recovery", NAN);
+
+  if (date == Date(1,1,1) || isnan(cashflow) || isnan(exposure) || isnan(recovery))
+  {
+    throw Exception("DateValues::parseDOMNode(): invalid attributes at <values>");
+  }
+
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else
+      {
+        throw Exception("DateValues::parseDOMNode(): invalid data structure at <values>");
+      }
+    }
+  }
+}
+
+//===========================================================================
+// comparation operador (for sort function)
 //===========================================================================
 bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
 {

@@ -100,12 +100,14 @@ void SegmentationsTest::test1()
   Segmentations *sobj = NULL;
   ASSERT_NO_THROW(sobj = new Segmentations(*(doc->getDocumentElement())));
 
-  vector<Segmentation> v = sobj->getSegmentations();
-  ASSERT(7 == v.size());
-  ASSERT(0 == sobj->getSegmentation("portfolio"));
+  if (sobj != NULL)
+  {
+    vector<Segmentation> v = sobj->getSegmentations();
+    ASSERT(7 == v.size());
+    ASSERT(0 == sobj->getSegmentation("portfolio"));
+  }
 
   if (sobj != NULL) delete sobj;
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

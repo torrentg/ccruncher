@@ -99,7 +99,6 @@ Segmentations AggregatorsTest::getSegmentations()
   Segmentations ret;
   ASSERT_NO_THROW(ret = Segmentations(*(doc->getDocumentElement())));
 
-  delete wis;
   delete parser;
   return ret;
 }
@@ -130,13 +129,15 @@ void AggregatorsTest::test1()
   Aggregators *isobj = NULL;
   ASSERT_NO_THROW(isobj = new Aggregators(*(doc->getDocumentElement()), &segs));
 
-  vector<Aggregator> *v = isobj->getAggregators();
+  if (isobj != NULL)
+  {
+    vector<Aggregator> *v = isobj->getAggregators();
 
-  ASSERT((*v)[0].getName() == "aggregator1");
-  ASSERT((*v)[1].getName() == "aggregator2");
-  ASSERT((*v)[2].getName() == "aggregator3");
+    ASSERT((*v)[0].getName() == "aggregator1");
+    ASSERT((*v)[1].getName() == "aggregator2");
+    ASSERT((*v)[2].getName() == "aggregator3");
+  }
 
   if (isobj != NULL) delete isobj;
-  delete wis;
   delete parser;
 }

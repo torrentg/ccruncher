@@ -162,7 +162,7 @@ void run(string filename) throw(Exception)
     vector<double> *data = fr.getColumns();
     int nrows = data[0].size();
         
-    for(int i=0;i<data[0].size();i++)
+    for(unsigned int i=0;i<data[0].size();i++)
     {
       for(int j=0;j<ncolumns;j++)
       {
@@ -202,7 +202,7 @@ void run(string filename) throw(Exception)
     }    
 
     nrows = data[0].size();
-    for(int i=0;i<data[0].size();i++)
+    for(unsigned int i=0;i<data[0].size();i++)
     {
       fout << 100.0*(double)(i+1)/nrows << "\t";
       for(int j=1;j<ncolumns;j++)

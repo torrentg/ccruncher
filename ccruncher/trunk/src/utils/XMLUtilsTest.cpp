@@ -64,24 +64,25 @@ void XMLUtilsTest::test1()
   DOMNodeList *children = NULL;
   const DOMNamedNodeMap *attributes = NULL;
   string nodename;
-  string xmlcontent = "\
-<?xml version='1.0' encoding='ISO-8859-1'?>\
-<root>\
-  <!-- i am a comment -->\
-  <child1 attrib1='i am a string'/>\
-  <child2 attrib2='3'/>\
-  <child3 attrib3='5'/>\
-  <child4 attrib4='6.5'/>\
-  <child5 attrib5='15/9/2004'/>\
-  <child6 attrib6='true'/>\
-</root>\
-  ";
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\
+    <root>\
+      <!-- i am a comment -->\
+      <child1 attrib1='i am a string'/>\
+      <child2 attrib2='3'/>\
+      <child3 attrib3='5'/>\
+      <child4 attrib4='6.5'/>\
+      <child5 attrib5='15/9/2004'/>\
+      <child6 attrib6='true'/>\
+    </root>";
 
   // creating parser and doc
   ASSERT_NO_THROW(XMLUtils::initialize());
   ASSERT_NO_THROW(parser = XMLUtils::getParser());
+  if (parser == NULL) return;
   ASSERT_NO_THROW(wis = XMLUtils::getInputSource(xmlcontent));
+  if (wis == NULL) return;
   ASSERT_NO_THROW(doc = XMLUtils::getDocument(parser, wis));
+  if (doc == NULL) return;
 
   // retrieving root node
   node = doc->getDocumentElement();
@@ -90,7 +91,7 @@ void XMLUtilsTest::test1()
 
   // retrieving childs
   children = node->getChildNodes();
-  ASSERT_EQUALS(14, (int) children->getLength());
+  ASSERT_EQUALS(15, (int) children->getLength());
 
   // testing comment node
   child = children->item(0);
@@ -153,7 +154,6 @@ void XMLUtilsTest::test1()
   ASSERT(true == XMLUtils::getBooleanAttribute(*attributes, "attrib6", false));
 
   // closing document
-  delete wis;
   delete parser;
   XMLUtils::terminate();
 }

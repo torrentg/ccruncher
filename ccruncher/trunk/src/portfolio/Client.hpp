@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . asset refactoring
+//
 //===========================================================================
 
 #ifndef _Client_
@@ -62,10 +65,10 @@ class Client
   private:
 
     map<int,int> belongsto;
-    vector<Asset*> vassets;
+    vector<Asset> vassets;
 
     void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
-    void insertAsset(Asset *) throw(Exception);
+    void insertAsset(Asset &) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
 
   public:
@@ -78,7 +81,7 @@ class Client
     Client(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode &) throw(Exception);
     ~Client();
 
-    vector<Asset*> * getAssets();
+    vector<Asset> * getAssets();
     bool isActive(Date, Date) throw(Exception);
 
     void addBelongsTo(int iconcept, int isegment) throw(Exception);
