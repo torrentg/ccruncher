@@ -11,6 +11,11 @@ Works in progress
 
 3. working in CreditCruncher site content
 
+4. add utils/Tracer.cpp class
+
+5. save execution results (CRC file, execution time, etc.) in a output xml file
+
+6. save asset simulation in a output xml file
 
 Future works
 -------------------
