@@ -133,8 +133,8 @@ string ccruncher::Timer::format(double val)
   cur = cur - double(min)*60.0;
 
   // computing seconds  
-  int sec = floor(cur);
-  cur = cur-sec;
+  int sec = int(floor(cur));
+  //cur = cur-double(sec);
 
   // formating elapsed time
   sprintf(buf,"%02d:%02d:%02d.%03d", hh, min, sec, ms);

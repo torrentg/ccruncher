@@ -25,9 +25,13 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added support for char * type
+//
 //===========================================================================
 
 #include <cstdlib>
+#include <cstring>
 #include <cerrno>
 #include <climits>
 #include <iostream>
@@ -41,12 +45,20 @@ using namespace ccruncher;
 //===========================================================================
 int ccruncher::Parser::intValue(const string &str) throw(Exception)
 {
+  return intValue(str.c_str());
+}
+
+//===========================================================================
+// interpreta un int
+//===========================================================================
+int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
+{
   long aux = 0L;
 
   // parsejem el numero
   try
   {
-    aux = Parser::longValue(str);
+    aux = Parser::longValue(pnum);
   }
   catch(Exception &e)
   {
@@ -69,8 +81,15 @@ int ccruncher::Parser::intValue(const string &str) throw(Exception)
 //===========================================================================
 long ccruncher::Parser::longValue(const string &str) throw(Exception)
 {
+  return longValue(str.c_str());
+}
+
+//===========================================================================
+// interpreta un long
+//===========================================================================
+long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
+{
   char *pstr = NULL;
-  const char *pnum = str.c_str();
 
   // inicialitzem estat errors numerics
   errno = 0;
@@ -94,8 +113,15 @@ long ccruncher::Parser::longValue(const string &str) throw(Exception)
 //===========================================================================
 double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 {
+  return doubleValue(str.c_str());
+}
+
+//===========================================================================
+// interpreta un double
+//===========================================================================
+double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
+{
   char *pstr = NULL;
-  const char *pnum = str.c_str();
 
   // inicialitzem estat errors numerics
   errno = 0;
@@ -127,6 +153,14 @@ Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
+// interpreta un date
+//===========================================================================
+Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
+{
+  return dateValue(string(cstr));
+}
+
+//===========================================================================
 // interpreta un boolean
 //===========================================================================
 bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
@@ -136,6 +170,25 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
     return true;
   }
   else if (str == "false")
+  {
+    return false;
+  }
+  else
+  {
+    throw Exception("Parser::boolValue(): invalid boolean value");
+  }
+}
+
+//===========================================================================
+// interpreta un boolean
+//===========================================================================
+bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
+{
+  if (strcmp(cstr,"true") == 0)
+  {
+    return true;
+  }
+  else if (strcmp(cstr,"false") == 0)
   {
     return false;
   }

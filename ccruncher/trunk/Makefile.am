@@ -21,3 +21,8 @@ dist-hook:
 	rm -rf `find $(distdir) -name \.svn`
 	echo "setting executable flag to scripts ..."
 	chmod +x `find $(distdir) -name \*\.sh`
+
+check-hook:
+	echo "running tests ..."
+	$(distdir)/tests
+	

@@ -10,6 +10,7 @@ Works in progress
   * working in scripts that generates report using LaTeX and gnuplot
   * working in CreditCruncher site content
   * save execution results (CRC file, execution time, etc.) in a output xml file
+  * replace DOM xercesc parser by ala-SAX expat parser
 
 
 Future works

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added support for char * type
+//
 //===========================================================================
 
 #ifndef _Parser_
@@ -55,6 +58,12 @@ class Parser
     static double doubleValue(const string &) throw(Exception);
     static Date dateValue(const string &) throw(Exception);
     static bool boolValue(const string &) throw(Exception);
+
+    static int intValue(const char *) throw(Exception);
+    static long longValue(const char *) throw(Exception);
+    static double doubleValue(const char *) throw(Exception);
+    static Date dateValue(const char *) throw(Exception);
+    static bool boolValue(const char *) throw(Exception);
 
     static string int2string(const int val);
     static string long2string(const long val);
