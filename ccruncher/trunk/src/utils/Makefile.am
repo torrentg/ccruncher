@@ -33,7 +33,7 @@ tests_SOURCES = \
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 
-tests_LDFLAGS = -L/home/horizon/temp/creditcruncher/share/xercesc-2.6/lib
+tests_LDFLAGS = -L../../share/xercesc-2.6/lib
 
 tests_LDADD = -lm -ldl -lxerces-c
     

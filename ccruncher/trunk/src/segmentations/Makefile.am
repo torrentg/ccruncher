@@ -6,7 +6,7 @@
 
 AM_CPPFLAGS = \
     -I../\
-    -I../../share/cppunit-1.10.2/include/\
+    -I../../share/MiniCppUnit-2.2/\
     -I../../share/xercesc-2.6/include/
 
 check_PROGRAMS = \
@@ -15,7 +15,8 @@ check_PROGRAMS = \
 # -------------------------------------------------------------
 
 tests_SOURCES = \
-    tests.cpp\
+    ../../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
+    ../../share/MiniCppUnit-2.2/TestsRunner.cxx\
     SegmentationsTest.cpp\
     SegmentationTest.cpp\
     Segmentations.cpp\
@@ -27,13 +28,10 @@ tests_SOURCES = \
     ../utils/Date.cpp\
     ../utils/Utils.cpp
 
-tests_CXXFLAGS = $(CPPUNIT_CFLAGS) -Wall -W -Wshadow
+tests_CXXFLAGS = -Wall -W -Wshadow
 
-tests_LDFLAGS = $(CPPUNIT_LIBS)\
-    -L/home/horizon/temp/creditcruncher/share/cppunit-1.10.2/lib\
-    -L/home/horizon/temp/creditcruncher/share/xercesc-2.6/lib
+tests_LDFLAGS = -L../../share/xercesc-2.6/lib
 
-tests_LDADD = \
-         -lm -ldl -lxerces-c -lcppunit
+tests_LDADD = -lm -ldl -lxerces-c
     
 # -------------------------------------------------------------
