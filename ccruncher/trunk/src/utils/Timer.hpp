@@ -34,7 +34,7 @@
 
 #include "config.h"
 #include <string>
-#include <time.h>
+#include <ctime>
 
 //---------------------------------------------------------------------------
 

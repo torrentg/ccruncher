@@ -29,7 +29,7 @@
 
 #include "Timer.hpp"
 #include <cmath>
-#include <stdio.h>
+#include <cstdio>
 #include <cassert>
 
 //===========================================================================

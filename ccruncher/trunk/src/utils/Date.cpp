@@ -28,7 +28,7 @@
 //===========================================================================
 
 #include <vector>
-#include <time.h>
+#include <ctime>
 #include <cstdio>
 #include "Date.hpp"
 #include "Utils.hpp"
