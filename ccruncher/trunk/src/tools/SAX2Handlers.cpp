@@ -25,11 +25,13 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/01/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . refactoring
+//
 //===========================================================================
 
 #include <cfloat>
 #include <limits>
-#include "tabulate.hpp"
 #include "SAX2Handlers.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
@@ -158,9 +160,6 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
     }
     else
     {
-//      double *tmp = new double[m];
-//      for (int i=0;i<m;i++) tmp[i] = NAN;
-//      rows.push_back(tmp);
       if (ipos == UINT_MAX) ipos = 0;
       else ipos++;
     }
@@ -198,12 +197,6 @@ void SAX2Handlers::endElement(const XMLCh* const uri,
                                 const XMLCh* const localname,
                                 const XMLCh* const qname)
 {
-/*
-  if (*localname == *tokens[TOKEN_ITEM])
-  {
-    cout << "\n";
-  }
-*/
   currenttag = TAG_NONE;
 }
 
@@ -215,8 +208,6 @@ void SAX2Handlers::characters(const XMLCh* const chars,
 {
   if (currenttag == TAG_CASHFLOW)
   {
-//rows[ipos][jpos] = ccruncher::Parser::doubleValue(XMLUtils::XMLCh2String(chars));
-//cout << rows[ipos][jpos] << "\t";
     tranch[jpos].push_back(ccruncher::Parser::doubleValue(XMLUtils::XMLCh2String(chars)));
   }
 }
@@ -249,12 +240,11 @@ void SAX2Handlers::resetDocument()
 void SAX2Handlers::error(const SAXParseException& e)
 {
   fSawErrors = true;
-  XERCES_STD_QUALIFIER cerr
-      << "\nError at file " << StrX(e.getSystemId())
-      << ", line " << e.getLineNumber()
-      << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage())
-      << XERCES_STD_QUALIFIER endl;
+  cerr << "\nError at file " << XMLUtils::XMLCh2String(e.getSystemId())
+       << ", line " << e.getLineNumber()
+       << ", char " << e.getColumnNumber()
+       << "\n  Message: " << XMLUtils::XMLCh2String(e.getMessage())
+       << endl;
 }
 
 //===========================================================================
@@ -263,12 +253,11 @@ void SAX2Handlers::error(const SAXParseException& e)
 void SAX2Handlers::fatalError(const SAXParseException& e)
 {
   fSawErrors = true;
-  XERCES_STD_QUALIFIER cerr
-      << "\nFatal Error at file " << StrX(e.getSystemId())
-      << ", line " << e.getLineNumber()
-      << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage())
-      << XERCES_STD_QUALIFIER endl;
+  cerr << "\nFatal Error at file " << XMLUtils::XMLCh2String(e.getSystemId())
+       << ", line " << e.getLineNumber()
+       << ", char " << e.getColumnNumber()
+       << "\n  Message: " << XMLUtils::XMLCh2String(e.getMessage())
+       << endl;
 }
 
 //===========================================================================
@@ -276,12 +265,11 @@ void SAX2Handlers::fatalError(const SAXParseException& e)
 //===========================================================================
 void SAX2Handlers::warning(const SAXParseException& e)
 {
-  XERCES_STD_QUALIFIER cerr
-      << "\nWarning at file " << StrX(e.getSystemId())
-      << ", line " << e.getLineNumber()
-      << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage())
-      << XERCES_STD_QUALIFIER endl;
+  cerr << "\nWarning at file " << XMLUtils::XMLCh2String(e.getSystemId())
+       << ", line " << e.getLineNumber()
+       << ", char " << e.getColumnNumber()
+       << "\n  Message: " << XMLUtils::XMLCh2String(e.getMessage())
+       << endl;
 }
 
 //===========================================================================

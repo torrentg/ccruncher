@@ -25,10 +25,13 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// plot "borrame.txt" u (floor($13/500)):(13) smooth frequency with histeps
+//
+// 2005/01/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . refactoring
+//
 //===========================================================================
 
-#include "tabulate.hpp"
+#include "SAX2Handlers.hpp"
 #include "utils/File.hpp"
 #include "utils/XMLUtils.hpp"
 #include <xercesc/sax2/SAX2XMLReader.hpp>
