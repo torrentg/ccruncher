@@ -13,12 +13,13 @@ descrip: MiniCppUnit is a C++ unit testing framework.
 
 ------------------------------------------------------------------------
 
-project: xercesc
-version: 2.6
-licence: Apache Software License, Version 2.0
-homeurl: http://xml.apache.org/xerces-c/
-descrip: Xerces-C++ is a validating XML parser written in a portable 
-         subset of C++.
+project: expat
+version: 1.95.8
+licence: MIT License
+homeurl: http://expat.sourceforge.net/
+descrip: Expat is an XML parser library written in C. It is a stream-oriented 
+         parser in which an application registers handlers for things the 
+         parser might find in the XML document (like start tags).
          In CreditCruncher is used to implements XML management.
 
 ------------------------------------------------------------------------
