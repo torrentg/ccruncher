@@ -768,26 +768,26 @@ void ccruncher::SegmentAggregator::printHeader() throw(Exception)
   fout << "#   column separator is tab char (\\t)\n";
   fout << "# -----------------------------------------------------------\n";
   fout << "# PARAMETERS:\n";
-  fout << "#   aggregator = " << name0 << "\n";
-  fout << "#   segmentation = " << name1 << "\n";
-  fout << "#   segment = " << name2 << "\n";
-  fout << "#   components = " << (components==asset?"asset":"client") << "\n";
-  fout << "#   type = " << (bvalues?"values":"ratings") << "\n";
-  fout << "#   full = " << (bfull?"true":"false") << "\n";
-  fout << "#   nclients = " << nclients << "\n";
-  fout << "#   nassets = " << nassets << "\n";
-  fout << "#   numratings = " << ratings->getRatings()->size() << "\n";
-  fout << "#   ntranches = " << M << "\n";
+  fout << "#   param.aggregator = " << name0 << "\n";
+  fout << "#   param.segmentation = " << name1 << "\n";
+  fout << "#   param.segment = " << name2 << "\n";
+  fout << "#   param.components = " << (components==asset?"asset":"client") << "\n";
+  fout << "#   param.type = " << (bvalues?"values":"ratings") << "\n";
+  fout << "#   param.full = " << (bfull?"true":"false") << "\n";
+  fout << "#   param.nclients = " << nclients << "\n";
+  fout << "#   param.nassets = " << nassets << "\n";
+  fout << "#   param.numratings = " << ratings->getRatings()->size() << "\n";
+  fout << "#   param.ntranches = " << M << "\n";
   fout << "# -----------------------------------------------------------\n";
   fout << "# COLUMNS DESCRIPTIONS:\n";
-  fout << "#   col1 = " << (bfull?"simulation counter":"number of simulations") << "\n";
+  fout << "#   column.1 = " << (bfull?"simulation counter":"number of simulations") << "\n";
   
   for(int numcol=2,i=0;i<M;i++)
   {
     if (bvalues == true)
     {
       Date tmp = cvalues[0][i].date;
-      fout << "#   col" << numcol << " = value at " << tmp << "\n";
+      fout << "#   column." << numcol << " = value at " << tmp << "\n";
       numcol++;
     }
     else
@@ -796,7 +796,7 @@ void ccruncher::SegmentAggregator::printHeader() throw(Exception)
       int numratings = ratings->getRatings()->size();
       for (int j=0;j<numratings;j++)
       {
-        fout << "#   col" << numcol << " = number of ocurrences rating " << ratings->getName(j) << " at " << tmp << "\n";
+        fout << "#   column." << numcol << " = number of ocurrences rating " << ratings->getName(j) << " at " << tmp << "\n";
         numcol++;
       }
     }

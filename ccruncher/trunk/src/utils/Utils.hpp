@@ -25,6 +25,10 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . optimized? prodMatrixVector() function. This functions takes
+//     aprox. 50% of execution time.
+//
 //===========================================================================
 
 #ifndef _Utils_
@@ -93,14 +97,16 @@ inline char ltoupper (char ch) { return toupper(ch); }
 inline void Utils::prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret)
 {
   double aux;
+  double *currentrow;
 
   for(register int i=0;i<n;i++)
   {
     aux = 0.0;
+    currentrow = matriu[i];
 
     for(register int j=0;j<m;j++)
     {
-      aux += matriu[i][j]*vector[j];
+      aux += currentrow[j]*vector[j];
     }
 
     ret[i] = aux;
