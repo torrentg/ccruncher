@@ -250,3 +250,29 @@ z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u[0,1])} \cdot cos(2 \cdot \pi \cdot u[0
 \noindent donde $u[0,1]$ son realizaciones de una variable aleatoria uniforme 
 en el intervalo $[0,1]$.
 
+%===========================================================================
+
+\section{Copulas. Variables aleatorias correlacionadas}
+
+\paragraph{Definici\'on.}
+Una copula es la funci\'on de distribuci\'on de un vector aleatorio sobre 
+$\Re^n$ donde las funciones de distribuci\'on marginales son $U[0,1]$. Se 
+puede demostrar que esta definici\'on es equivalente a definir una copula
+como una funci\'on $C:[0,1]^n \to [0,1]$ cumpliendo las siguientes propiedades:
+\begin{itemize}
+\item $C(x_1, \cdots, x_n)$ es creciente en cada componente $x_i$
+\item $C(1, \cdots, 1, x_i, 1, \cdots, 1) = x_i \quad \forall i \in \{1, \cdots, n\}, x_i \in [0,1]$
+\item $\forall (a_1, \cdots, a_n) \in [0,1]^n$ y $\forall (b_1, \cdots, b_n) \in [0,1]^n$ con
+$a_i \leq b_i$ se cumple:
+\begin{displaymath}
+\sum_{i_1=1}^{2} \cdots \sum_{i_n=1}^{2} (-1)^{i_1+\cdots+x_n} C(x_{1i_1},\cdots,x_{ni_n}) \geq 0
+\end{displaymath}
+\end{itemize}
+\noindent siendo $x_{j1}=a_j$ y $x_j2=b_j$ $\quad \forall j \in \{1, \cdots, n\}$
+
+
+
+
+
+
+
