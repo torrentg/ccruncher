@@ -25,9 +25,13 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 #include "Portfolio.hpp"
 #include "utils/XMLUtils.hpp"
@@ -35,11 +39,24 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
-                     Interests *interests, const DOMNode& node) throw(Exception)
+ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_, 
+             Segmentations *segmentations_, Interests *interests_)
 {
+  // initializing class
+  reset(ratings_, sectors_, segmentations_, interests_);
+}
+
+//===========================================================================
+// constructor
+//===========================================================================
+ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
+                     Interests *interests_, const DOMNode& node) throw(Exception)
+{
+  // initializing class
+  reset(ratings_, sectors_, segmentations_, interests_);
+
   // recollim els parametres de la simulacio
-  parseDOMNode(ratings, sectors, segmentations, interests, node);
+  parseDOMNode(ratings_, sectors_, segmentations_, interests_, node);
 }
 
 //===========================================================================
@@ -52,6 +69,29 @@ ccruncher::Portfolio::~Portfolio()
   {
     delete vclients[i];
   }
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_, 
+             Segmentations *segmentations_, Interests *interests_)
+{
+  auxclient = NULL;
+  
+  // setting external objects
+  ratings = ratings_;
+  sectors = sectors_;
+  segmentations = segmentations_;
+  interests = interests_;
+
+  // dropping clients
+  for(unsigned int i=0;i<vclients.size();i++) {
+    delete vclients[i];
+  }
+  
+  // flushing clients
+  vclients.clear();
 }
 
 //===========================================================================
@@ -72,6 +112,7 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
   {
     if (vclients[i]->id == val->id)
     {
+      delete val;
       string msg = "Portfolio::insertClient(): client id ";
       msg += val->id;
       msg += " repeated";
@@ -79,6 +120,7 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
     }
     else if (vclients[i]->name == val->name)
     {
+      delete val;
       string msg = "Portfolio::insertClient(): client name ";
       msg += val->name;
       msg += " repeated";
@@ -92,16 +134,65 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
   }
   catch(std::exception &e)
   {
-     throw Exception(e);
+    delete val;
+    throw Exception(e);
   }
 }
 
+//===========================================================================
+// validations
+//===========================================================================
+void ccruncher::Portfolio::validations() throw(Exception)
+{
+  if (vclients.size() == 0)
+  {
+    throw Exception("portfolio without clients");
+  }
+}
+
+//===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"portfolio")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag portfolio");
+    }
+  }
+  else if (isEqual(name_,"client")) {
+    auxclient = new Client(ratings, sectors, segmentations, interests);
+    eppush(eu, auxclient, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"portfolio")) {
+    auxclient = NULL;
+    validations();
+  }
+  else if (isEqual(name_,"client")) {
+    assert(auxclient != NULL);
+    insertClient(auxclient);
+    auxclient = NULL;
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
 
 //===========================================================================
 // interpreta un node XML params
 //===========================================================================
-void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
-                             Interests *interests, const DOMNode& node) throw(Exception)
+void ccruncher::Portfolio::parseDOMNode(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
+                             Interests *interests_, const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "portfolio"))

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Portfolio_
@@ -36,6 +39,7 @@
 #include <algorithm>
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
@@ -52,26 +56,39 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Portfolio
+class Portfolio : public ExpatHandlers
 {
 
   private:
 
     vector<Client *> vclients;
+    
+    Ratings *ratings;
+    Sectors *sectors;
+    Segmentations *segmentations;
+    Interests *interests;
+    Client *auxclient;
 
     void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertClient(Client *) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
+    void reset(Ratings *, Sectors *, Segmentations *, Interests *);
 
   public:
 
+    Portfolio(Ratings *, Sectors *, Segmentations *, Interests *);
     Portfolio(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode &) throw(Exception);
     ~Portfolio();
 
     vector<Client *> *getClients();
     int getNumActiveClients(Date, Date) throw(Exception);
     void sortClients(Date from, Date to) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
+    
 };
 
 //---------------------------------------------------------------------------

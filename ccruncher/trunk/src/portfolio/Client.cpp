@@ -28,6 +28,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -43,11 +46,22 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
-               Interests *interests, const DOMNode& node) throw(Exception)
+ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_, 
+               Segmentations *segmentations_, Interests *interests_)
 {
-  // inicialitzem el vector de rates
-  vassets = vector<Asset>();
+  // initializing class
+  reset(ratings_, sectors_, segmentations_, interests_);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
+//===========================================================================
+ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_, Segmentations *segmentations_,
+               Interests *interests_, const DOMNode& node) throw(Exception)
+{
+  // initializing class
+  reset(ratings_, sectors_, segmentations_, interests_);
 
   // recollim la informacio del node
   parseDOMNode(ratings, sectors, segmentations, interests, node);
@@ -59,15 +73,29 @@ ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *seg
 ccruncher::Client::~Client()
 {
   // nothing to do 
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_, 
+               Segmentations *segmentations_, Interests *interests_)
+{
+  // setting external objects references
+  ratings = ratings_;
+  sectors = sectors_;
+  segmentations = segmentations_;
+  interests = interests_;
   
-  //TODO: remove unused and comented code
-  /*
-  // dropping assets
-  for(unsigned int i=0;i<vassets.size();i++)
-  {
-    delete vassets[i];
-  }
-  */
+  // cleaning containers
+  vassets.clear();
+  belongsto.clear();
+  
+  // setting default values
+  irating = -1;
+  isector = -1;
+  id = "NON_ID";
+  name = "NO_NAME";
 }
 
 //===========================================================================
@@ -94,10 +122,89 @@ void ccruncher::Client::insertAsset(Asset &val) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML params
+// epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segs,
-                          Interests *interests, const DOMNode& node) throw(Exception)
+void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"client")) {
+    if (getNumAttributes(attributes) != 4) {
+      throw eperror(eu, "incorrect number of attributes in tag client");
+    }
+    else {
+      id = getStringAttribute(attributes, "id", "");
+      name = getStringAttribute(attributes, "name", "");
+      string strrating = getStringAttribute(attributes, "rating", "");
+      string strsector= getStringAttribute(attributes, "sector", "");
+
+      irating = ratings->getIndex(strrating);
+      isector = sectors->getIndex(strsector);
+
+      if (id == "" || name == "" || irating < 0 || isector < 0) {
+        throw eperror(eu, "invalid attributes at <client>");
+      }
+    }
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    string sconcept = getStringAttribute(attributes, "concept", "");
+    string ssegment = getStringAttribute(attributes, "segment", "");
+
+    int iconcept = segmentations->getSegmentation(sconcept);
+    int isegment = segmentations->getSegment(sconcept, ssegment);
+
+    insertBelongsTo(iconcept, isegment);
+  }
+  else if (isEqual(name_,"asset")) {
+    auxasset.reset(segmentations);
+    eppush(eu, &auxasset, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"client")) {
+    // reseting auxiliar variables (flushing data)
+    auxasset.reset(NULL);
+    // filling implicit segment
+    if (segmentations->getSegmentation("client") >= 0) {
+      if (segmentations->getComponents("client") == client) {
+        segmentations->addSegment("client", id);
+        int iconcept = segmentations->getSegmentation("client");
+        int isegment = segmentations->getSegment("client", id);
+        insertBelongsTo(iconcept, isegment);
+      }
+    }
+    // filling implicit segment
+    if (segmentations->getSegmentation("portfolio") >= 0) {
+      if (segmentations->getComponents("portfolio") == client) {
+        int iconcept = segmentations->getSegmentation("portfolio");
+        int isegment = segmentations->getSegment("portfolio", "rest");
+        insertBelongsTo(iconcept, isegment);
+      }
+    }
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"asset")) {
+    insertAsset(auxasset);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// interpreta un node XML params
+// TODO: this method will be removed
+//===========================================================================
+void ccruncher::Client::parseDOMNode(Ratings *ratings_, Sectors *sectors_, Segmentations *segs_,
+                          Interests *interests_, const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "client"))
@@ -141,14 +248,14 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
         string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
         string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
 
-        int iconcept = segs->getSegmentation(sconcept);
-        int isegment = segs->getSegment(sconcept, ssegment);
+        int iconcept = segmentations->getSegmentation(sconcept);
+        int isegment = segmentations->getSegment(sconcept, ssegment);
 
         insertBelongsTo(iconcept, isegment);
       }
       else if (XMLUtils::isNodeName(child, "asset"))
       {
-        Asset aux = Asset(child, segs);
+        Asset aux = Asset(child, segmentations);
         insertAsset(aux);
       }
       else
@@ -159,24 +266,24 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
   }
 
   // completem segmentacio client si existeix
-  if (segs->getSegmentation("client") >= 0)
+  if (segmentations->getSegmentation("client") >= 0)
   {
-    if (segs->getComponents("client") == client)
+    if (segmentations->getComponents("client") == client)
     {
-      segs->addSegment("client", id);
-      int iconcept = segs->getSegmentation("client");
-      int isegment = segs->getSegment("client", id);
+      segmentations->addSegment("client", id);
+      int iconcept = segmentations->getSegmentation("client");
+      int isegment = segmentations->getSegment("client", id);
       insertBelongsTo(iconcept, isegment);
     }
   }
 
   // completem segmentacio portfolio si existeix
-  if (segs->getSegmentation("portfolio") >= 0)
+  if (segmentations->getSegmentation("portfolio") >= 0)
   {
-    if (segs->getComponents("portfolio") == client)
+    if (segmentations->getComponents("portfolio") == client)
     {
-      int iconcept = segs->getSegmentation("portfolio");
-      int isegment = segs->getSegment("portfolio", "rest");
+      int iconcept = segmentations->getSegmentation("portfolio");
+      int isegment = segmentations->getSegment("portfolio", "rest");
       insertBelongsTo(iconcept, isegment);
     }
   }
@@ -221,7 +328,7 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
 
 //===========================================================================
 // comparation operator (used by sort function)
-// group clients by sector, order by rating, always non active clients at last
+// group clients by sector and rating, always non active clients at last
 //===========================================================================
 bool ccruncher::operator < (const Client &x1, const Client &x2)
 {

@@ -31,19 +31,22 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Client.hpp"
 #include "ClientTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
 //===========================================================================
 void ClientTest::setUp()
 {
-  XMLUtils::initialize();
+  // nothing to do
 }
 
 //===========================================================================
@@ -51,7 +54,7 @@ void ClientTest::setUp()
 //===========================================================================
 void ClientTest::tearDown()
 {
-  XMLUtils::terminate();
+  // nothing to do
 }
 
 //===========================================================================
@@ -70,15 +73,12 @@ Ratings ClientTest::getRatings()
     </ratings>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_NO_THROW(ratings = Ratings(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ratings));
 
-  delete parser;
   return ratings;
 }
 
@@ -94,15 +94,12 @@ Sectors ClientTest::getSectors()
     </sectors>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
   Sectors sectors;
-  ASSERT_NO_THROW(sectors = Sectors(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
 
-  delete parser;
   return sectors;
 }
 
@@ -140,15 +137,12 @@ Segmentations ClientTest::getSegmentations()
   </segmentations>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentation object creation
   Segmentations segmentations;
-  ASSERT_NO_THROW(segmentations = Segmentations(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &segmentations));
 
-  delete parser;
   return segmentations;
 }
 
@@ -189,42 +183,31 @@ void ClientTest::test1()
     </client>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // client creation
-  Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  ASSERT_NO_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
+  Client client(&ratings, &sectors, &segmentations, NULL);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &client));
 
-  if (client != NULL)
-  {
-    // assertions
-    ASSERT(client->id == "cif1");
-    ASSERT(client->name == "cliente1");
-    ASSERT(client->irating == 0);
-    ASSERT(client->isector == 1);
+  // assertions
+  ASSERT(client.id == "cif1");
+  ASSERT(client.name == "cliente1");
+  ASSERT(client.irating == 0);
+  ASSERT(client.isector == 1);
 
-    ASSERT(client->belongsTo(1, 1));
-    ASSERT(client->belongsTo(3, 2));
-    ASSERT(client->belongsTo(4, 1));
+  ASSERT(client.belongsTo(1, 1));
+  ASSERT(client.belongsTo(3, 2));
+  ASSERT(client.belongsTo(4, 1));
 
-    vector<Asset> *assets = NULL;
-    ASSERT_NO_THROW(assets = client->getAssets());
+  vector<Asset> *assets = NULL;
+  ASSERT_NO_THROW(assets = client.getAssets());
 
-    ASSERT(2 == assets->size());
-    ASSERT((*assets)[0].getId() == "op1");
-    ASSERT((*assets)[1].getId() == "op2");
-  }
-
-  // exit test
-  if (client != NULL) delete client;
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT(2 == assets->size());
+  ASSERT((*assets)[0].getId() == "op1");
+  ASSERT((*assets)[1].getId() == "op2");
 }
 
 //===========================================================================
@@ -258,22 +241,14 @@ void ClientTest::test2()
     </client>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // client creation
-  Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  ASSERT_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
-
-  // exit test
-  if (client != NULL) delete client;
-  delete parser;
-  XMLUtils::terminate();
+  Client client(&ratings, &sectors, &segmentations, NULL);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
 }
 
 //===========================================================================
@@ -307,20 +282,12 @@ void ClientTest::test3()
     </client>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // client creation
-  Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  ASSERT_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
-
-  // exit test
-  if (client != NULL) delete client;
-  delete parser;
-  XMLUtils::terminate();
+  Client client(&ratings, &sectors, &segmentations, NULL);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
 }

@@ -28,6 +28,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Client_
@@ -43,6 +46,7 @@
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
@@ -59,13 +63,19 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Client
+class Client : public ExpatHandlers
 {
 
   private:
 
     map<int,int> belongsto;
     vector<Asset> vassets;
+
+    Ratings *ratings;
+    Sectors *sectors;
+    Segmentations *segmentations;
+    Interests *interests;
+    Asset auxasset;
 
     void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertAsset(Asset &) throw(Exception);
@@ -78,6 +88,7 @@ class Client
     string id;
     string name;
 
+    Client(Ratings *, Sectors *, Segmentations *, Interests *);
     Client(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode &) throw(Exception);
     ~Client();
 
@@ -89,6 +100,12 @@ class Client
     int getSegment(int iconcept);
 
     static bool less(const Client *left, const Client *right);
+    void reset(Ratings *, Sectors *, Segmentations *, Interests *);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
+    
 };
 
 //---------------------------------------------------------------------------

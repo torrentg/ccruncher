@@ -31,12 +31,15 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+
 //===========================================================================
 
 #include <iostream>
 #include "IData.hpp"
 #include "IDataTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
@@ -197,29 +200,18 @@ void IDataTest::test1()
   </creditcruncher>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // client creation
-  IData *idata = NULL;
-  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement())));
+  IData idata;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
 
-  if (idata != NULL)
-  {
-    // assertions
-    ASSERT(idata->params != NULL);
-    ASSERT(idata->interests != NULL);
-    ASSERT(idata->ratings != NULL);
-    ASSERT(idata->transitions != NULL);
-    ASSERT(idata->sectors != NULL);
-    ASSERT(idata->correlations != NULL);
-    ASSERT(idata->portfolio != NULL);
-  }
-
-  // exit test
-  if (idata != NULL) delete idata;
-  delete parser;
-  XMLUtils::terminate();
+  // assertions
+  ASSERT(idata.params != NULL);
+  ASSERT(idata.interests != NULL);
+  ASSERT(idata.ratings != NULL);
+  ASSERT(idata.transitions != NULL);
+  ASSERT(idata.sectors != NULL);
+  ASSERT(idata.correlations != NULL);
+  ASSERT(idata.portfolio != NULL);
 }

@@ -28,6 +28,9 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -47,6 +50,7 @@
 #include "correlations/CorrelationMatrix.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "aggregators/Aggregators.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -58,7 +62,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class IData
+class IData : public ExpatHandlers
 {
 
   private:
@@ -76,6 +80,7 @@ class IData
     void parseSegmentations(const DOMNode &) throw(Exception);
     void parseAggregators(const DOMNode &) throw(Exception);
     void parsePortfolio(const DOMNode &) throw(Exception);
+    void validate() throw(Exception);
 
 
   public:
@@ -90,9 +95,14 @@ class IData
     Aggregators *aggregators;
     Portfolio *portfolio;
 
+    IData();
     IData(const DOMNode &) throw(Exception);
     IData(const string &xmlfilename) throw(Exception);
     ~IData();
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

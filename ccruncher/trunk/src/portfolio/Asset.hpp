@@ -82,6 +82,7 @@ class Asset : public ExpatHandlers
 
   public:
 
+    Asset();
     Asset(Segmentations *);
     Asset(const DOMNode &, Segmentations *) throw(Exception);
     ~Asset();
