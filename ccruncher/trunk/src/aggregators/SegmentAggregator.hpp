@@ -143,11 +143,11 @@ class SegmentAggregator
     void resetCValue(int);
     void resetCRating(int);
 
-    void printXMLHeader() throw(Exception);
-    void printXMLFooter() throw(Exception);
-    void printXMLItems(bool finalize) throw(Exception);
-    void printXMLItem(int) throw(Exception);
-    void printXMLTranch(int, int) throw(Exception);
+    void printHeader() throw(Exception);
+    void printFooter() throw(Exception);
+    void printItems(bool finalize) throw(Exception);
+    void printItem(int) throw(Exception);
+//    void printTranch(int, int) throw(Exception);
 
     string getFilePath() throw(Exception);
     void ofsopen() throw(Exception);

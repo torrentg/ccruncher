@@ -30,8 +30,9 @@
 \chapter{Formulaci\'on del problema}
 \label{sec:formulation}
 
-Deseamos valorar las p\'erdidas que puede ocasionar una cartera de cr\'editos
-considerando que la \'unica fuente de p\'erdidas es el impago.
+Dada una cartera de cr\'editos a empresas de tama\~no mediano, deseamos 
+valorar las posibles p\'erdidas debido a los impagos al cabo de un 
+tiempo $T$.
 
 En este cap\'itulo se introducen los elementos considerados claves para la 
 definici\'on del problema.
@@ -44,11 +45,17 @@ transici\'on (v\'ease bibliograf\'ia).
 
 \section{Cartera de cr\'editos}
 
+La estructura de la cartera de cr\'editos consiste en un conjunto de
+clientes agrupados por sectores de actividad. Cada cliente tiene contratado 
+un conjunto de productos de cr\'edito. Cada contrato puede estar 
+cubierto por un n\'umero variable de garant\'ias o acuerdos.
+Puede verse un esquema de la estructura en la figura \ref{portfolio}.
+
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[angle=-90]{./images/portfolio.epsi}
 \caption{Estructura de la cartera de cr\'editos}
-\label{fig1}
+\label{portfolio}
 \end{center}
 \end{figure}
 
@@ -59,7 +66,7 @@ transici\'on (v\'ease bibliograf\'ia).
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/ratingevol.eps}
 \caption{Evoluci\'on del rating a lo largo del tiempo}
-\label{fig1}
+\label{ratingevol}
 \end{center}
 \end{figure}
 
@@ -79,7 +86,7 @@ transici\'on (v\'ease bibliograf\'ia).
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
 \caption{Distribuci\'on del valor de la cartera y c\'alculo del VAR}
-\label{fig1}
+\label{creditvar}
 \end{center}
 \end{figure}
 

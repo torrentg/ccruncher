@@ -612,7 +612,7 @@ void ccruncher::SegmentAggregator::next()
     icont = 0;
   }
 
-  //TODO: flush if more than x sec. without make it (and full=true)
+  //TODO: flush if more than x sec. without flushing and bfull=true
 }
 
 //===========================================================================
@@ -696,20 +696,20 @@ void ccruncher::SegmentAggregator::flush(bool bfinalize) throw(Exception)
 
   try
   {
-    // printing xml header
+    // printing header
     if (!existheader)
     {
-      printXMLHeader();
+      printHeader();
       existheader = true;
     }
 
-    // printing XML content
-    printXMLItems(bfinalize);
+    // printing content
+    printItems(bfinalize);
 //TODO: pendent actualitzar info si bfull=false (fer trunc al obrir file)
-    // printing XML footer
+    // printing footer
     if (bfinalize == true)
     {
-      printXMLFooter();
+      printFooter();
     }
   }
   catch(Exception e)
@@ -723,9 +723,9 @@ void ccruncher::SegmentAggregator::flush(bool bfinalize) throw(Exception)
 }
 
 //===========================================================================
-// printXMLDoc
+// printItems
 //===========================================================================
-void ccruncher::SegmentAggregator::printXMLItems(bool bfinalize) throw(Exception)
+void ccruncher::SegmentAggregator::printItems(bool bfinalize) throw(Exception)
 {
   // setting items tags
   if (nclients != 0 || nassets != 0)
@@ -734,7 +734,7 @@ void ccruncher::SegmentAggregator::printXMLItems(bool bfinalize) throw(Exception
     {
       for(long i=0;i<icont;i++)
       {
-        printXMLItem(i);
+        printItem(i);
       }
 
       // reseting icont
@@ -744,102 +744,104 @@ void ccruncher::SegmentAggregator::printXMLItems(bool bfinalize) throw(Exception
     {
       if (bfinalize == true)
       {
-        printXMLItem(0);
+        printItem(0);
       }
     }
   }
 }
 
 //===========================================================================
-// printXMLHeader
+// printHeader
 //===========================================================================
-void ccruncher::SegmentAggregator::printXMLHeader() throw(Exception)
+void ccruncher::SegmentAggregator::printHeader() throw(Exception)
 {
-  // setting xml header
-  fout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
-
-  // oppening segmentaggregator tag
-  fout << "<segmentaggregator ";
-  fout << "name='" << name0 << "' ";
-  fout << "segmentation='" << name1 << "' ";
-  fout << "segment='" << name2 << "' ";
-  fout << "components='" << (components==asset?"asset":"client") << "' ";
-  fout << "type='" << (bvalues?"values":"ratings") << "' ";
-  fout << "full='" << (bfull?"true":"false") << "' ";
-  fout << "nclients='" << nclients << "' ";
-  fout << "nassets='" << nassets << "' ";
-  fout << "numratings='" << ratings->getRatings()->size() << "' ";
-  fout << "ntranches='" << M << "' >\n";
+  // setting header
+  fout << "# ===========================================================\n";
+  fout << "# FILE CONTENT:\n";
+  fout << "#   CreditCruncher output file\n";
+  fout << "#   version = " << VERSION << "\n";
+  fout << "#   creation date = " << Date() << "\n";
+  fout << "# -----------------------------------------------------------\n";  
+  fout << "# FILE FORMAT:\n";
+  fout << "#   tabulated data\n";
+  fout << "#   comments begins with #\n";
+  fout << "#   column separator is tab char (\\t)\n";
+  fout << "# -----------------------------------------------------------\n";
+  fout << "# PARAMETERS:\n";
+  fout << "#   aggregator = " << name0 << "\n";
+  fout << "#   segmentation = " << name1 << "\n";
+  fout << "#   segment = " << name2 << "\n";
+  fout << "#   components = " << (components==asset?"asset":"client") << "\n";
+  fout << "#   type = " << (bvalues?"values":"ratings") << "\n";
+  fout << "#   full = " << (bfull?"true":"false") << "\n";
+  fout << "#   nclients = " << nclients << "\n";
+  fout << "#   nassets = " << nassets << "\n";
+  fout << "#   numratings = " << ratings->getRatings()->size() << "\n";
+  fout << "#   ntranches = " << M << "\n";
+  fout << "# -----------------------------------------------------------\n";
+  fout << "# COLUMNS DESCRIPTIONS:\n";
+  fout << "#   col1 = " << (bfull?"simulation counter":"number of simulations") << "\n";
+  
+  for(int numcol=2,i=0;i<M;i++)
+  {
+    if (bvalues == true)
+    {
+      Date tmp = cvalues[0][i].date;
+      fout << "#   col" << numcol << " = value at " << tmp << "\n";
+      numcol++;
+    }
+    else
+    {
+      Date tmp = cratings[0][i].date;
+      int numratings = ratings->getRatings()->size();
+      for (int j=0;j<numratings;j++)
+      {
+        fout << "#   col" << numcol << " = number of ocurrences rating " << ratings->getName(j) << " at " << tmp << "\n";
+        numcol++;
+      }
+    }
+  }
+  
+  fout << "# ===========================================================\n";
 }
 
 //===========================================================================
-// printXMLFooter
+// printFooter
 //===========================================================================
-void ccruncher::SegmentAggregator::printXMLFooter() throw(Exception)
+void ccruncher::SegmentAggregator::printFooter() throw(Exception)
 {
-  // closing segmentaggregator tag
-  fout << "</segmentaggregator>\n";
+  // nothing to do
 }
 
 //===========================================================================
-// printXMLItem
+// printItem
 //===========================================================================
-void ccruncher::SegmentAggregator::printXMLItem(int index) throw(Exception)
+void ccruncher::SegmentAggregator::printItem(int index) throw(Exception)
 {
-  // setting item tag
-  fout << INDENTER1;
-  fout << "<item num='" << (cont-icont+index+1) << "' numsims='" << (bfull?1:cont) << "'>\n";
+  // setting simulation counter
+  fout << (cont-(bfull?icont:1)+index+1) << "\t";
 
-  // setting tranch tags
+  // each time tranch in a column
   for (int i=0;i<M;i++)
   {
-    printXMLTranch(index, i);
-  }
-
-  // closing item tag
-  fout << INDENTER1;
-  fout << "</item>\n";
-}
-
-//===========================================================================
-// printXMLTranch
-//===========================================================================
-void ccruncher::SegmentAggregator::printXMLTranch(int index, int itranch) throw(Exception)
-{
-  // setting tranch tag
-  Date tmp = (bvalues?cvalues[0][itranch].date:cratings[0][itranch].date);
-  fout << INDENTER2;
-  fout << "<tranch num='" << itranch <<"' date='" << tmp << "'>\n";
-
-  // setting tranch info
-  if (bvalues == true)
-  {
-    fout << INDENTER3;
-    fout << "<value name='cashflow'>";
-    fout << cvalues[index][itranch].cashflow;
-    fout << "</value>\n";
-
-    fout << INDENTER3;
-    fout << "<value name='exposure'>";
-    fout << cvalues[index][itranch].exposure;
-    fout << "</value>\n";
-  }
-  else
-  {
-    int k = ratings->getRatings()->size();
-
-    for (int i=0;i<k;i++)
+    if (bvalues == true)
     {
-      fout << INDENTER3;
-      fout << "<value name='" << ratings->getName(i) << "'>";
-      fout << cratings[index][itranch].ocurrences[i];
-      fout << "</value>\n";
+      fout << cvalues[index][i].cashflow << "\t";
+      //fout << cvalues[index][i].exposure;
+    }
+    else
+    {
+      int k = ratings->getRatings()->size();
+
+      for (int j=0;j<k;j++)
+      {
+        fout << cratings[index][i].ocurrences[j] << "\t";
+      }
     }
   }
 
-  // closing tranch tag
-  fout << INDENTER2;
-  fout << "</tranch>\n";
+  // new simulation -> new line
+  fout << "\n";
 }
 
 //===========================================================================
@@ -938,5 +940,5 @@ string ccruncher::SegmentAggregator::getFilePath() throw(Exception)
     throw Exception("SegmentAggregator::getFilePath(): panic, setNames() not called");
   }
 
-  return path + name0 + "-" + name1 + "-" + name2 + ".xml";
+  return path + name0 + "-" + name1 + "-" + name2 + ".txt";
 }

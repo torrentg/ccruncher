@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
 "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    version="1.0"
    x="0.0000000"
    y="0.0000000"
    width="1027.5591"
    height="814.96063"
    viewBox="-16 0 29 23"
-   id="svg1135">
+   id="svg1135"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:version="0.32"
+   inkscape:version="0.40"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   sodipodi:docname="portfolio.svg"
+   sodipodi:docbase="/home/horizon/temp/ccruncher/doc/images">
+  <metadata
+     id="metadata240">
+    <rdf:RDF
+       id="RDF241">
+      <cc:Work
+         rdf:about=""
+         id="Work242">
+        <dc:format
+           id="format243">image/svg+xml</dc:format>
+        <dc:type
+           id="type245"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.7366334"
+     inkscape:cx="385.90768"
+     inkscape:cy="381.14010"
+     inkscape:window-width="1204"
+     inkscape:window-height="915"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:current-layer="svg1135" />
   <defs
      id="defs1203" />
   <rect
@@ -30,7 +70,7 @@
      ry="0.50000000"
      x="-3.6593101"
      y="6.5492792"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1137" />
   <text
      x="3.9251001"
@@ -54,7 +94,7 @@
      ry="0.30000001"
      x="-9.0997620"
      y="10.486071"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1141" />
   <polygon
      points="-14.351800,17.306400 -12.723400,17.306400 -12.180600,17.849200 -12.180600,20.020400 -14.351800,20.020400 -14.351800,17.306400 "
@@ -87,7 +127,7 @@
      ry="0.50000000"
      x="-7.3510456"
      y="8.4891748"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1146" />
   <polyline
      style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.10000000"
@@ -172,7 +212,7 @@
      ry="0.30000001"
      x="-4.9872956"
      y="10.501677"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1169" />
   <polygon
      points="-2.9192800,17.226500 -1.2845900,17.226500 -0.73969500,17.771400 -0.73969500,19.950900 -2.9192800,19.950900 -2.9192800,17.226500 "
@@ -609,7 +649,7 @@
      ry="0.30000001"
      x="-0.16390540"
      y="10.486412"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1909" />
   <polygon
      points="-14.351800,17.306400 -12.723400,17.306400 -12.180600,17.849200 -12.180600,20.020400 -14.351800,20.020400 -14.351800,17.306400 "
@@ -642,7 +682,7 @@
      ry="0.50000000"
      x="1.5848118"
      y="8.4895144"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1914" />
   <polyline
      style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.10000000"
@@ -722,7 +762,7 @@
      ry="0.30000001"
      x="3.9485619"
      y="10.502017"
-     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.053215548"
+     style="fill:none;fill-opacity:0.0000000;stroke:#000000;stroke-width:0.039158333;stroke-miterlimit:4.0000000;stroke-dasharray:none;"
      id="rect1930" />
   <polygon
      points="-2.9192800,17.226500 -1.2845900,17.226500 -0.73969500,17.771400 -0.73969500,19.950900 -2.9192800,19.950900 -2.9192800,17.226500 "

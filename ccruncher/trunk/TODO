@@ -17,6 +17,10 @@ Works in progress
 
 6. save asset simulation in a output xml file
 
+7. replace tabulate by report + sax2 -> text parser
+
+8. add time info at ccruncher execution output
+
 Future works
 -------------------
 
