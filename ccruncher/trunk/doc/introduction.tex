@@ -238,7 +238,15 @@ A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
 
 %===========================================================================
 
-\section{Simulaci\'on de una variable aleatoria normal}
+\section{La variable aleatoria normal}
+
+\subsection{Definici\'on y propiedades}
+
+\begin{displaymath}
+P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
+\end{displaymath}
+
+\subsection{Simulaci\'on}
 
 Para la generación de una realización, $z$, de una variable aleatoria normal  
 $Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
@@ -275,7 +283,7 @@ $a_i \leq b_i$ se cumple:
 \noindent siendo $x_{j1}=a_j$ y $x_{j2}=b_j$ $\quad \forall j \in \{1, \cdots, n\}$
 \end{itemize}
 
-\paragraph{C\'opulas normales o arquimedianas.}
+\paragraph{Generaci\'on de c\'opulas normales o arquimedianas.}
 
 Sea $(Z_1,\cdots, Z_n)$ un vector aleatorio con marginales $Z_i \sim N(0,1)$ con
 \begin{displaymath}
@@ -307,3 +315,18 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \end{displaymath}
 
 \noindent que cumple $B \cdot B' = \Sigma$
+
+\noindent Generamos una simulaci\'on del vector aleatorio $Y=(Y_1, \cdots, Y_n)'$ 
+donde $Y_k \sim N(0,1)$ son variables aleatorias independientes.
+
+\noindent Calculamos $Z = B \cdot Y$. El vector aleatorio resultante, $Z$ tiene
+marginales $Z_k \sim N(0,1)$ y se encuentran correlacionadas seg\'un la matriz 
+$\Sigma$.
+
+\noindent Calculamos $X = (X_1, \cdots, X_n)'$ de la forma:
+\begin{displaymath}
+x_i = \Phi^{-1}(y_i)
+\end{displaymath}
+
+\noindent donde $\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-t^2} dt$
+
