@@ -136,6 +136,8 @@ void AggregatorsTest::test1()
     ASSERT((*v)[0].getName() == "aggregator1");
     ASSERT((*v)[1].getName() == "aggregator2");
     ASSERT((*v)[2].getName() == "aggregator3");
+
+    ASSERT_EQUALS(isobj->getNumSegments(), 9L);
   }
 
   if (isobj != NULL) delete isobj;

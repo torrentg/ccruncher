@@ -33,13 +33,14 @@
 
 // --------------------------------------------------------------------------
 
+#define DEFAULT_INDENTATION_LEVEL 1
 #define INDENTSIZE 2
 #define MAXCOLS 69
 
 //---------------------------------------------------------------------------
 
-int ccruncher::Logger::ilevel = 1;
-int ccruncher::Logger::curcol = 0;
+int ccruncher::Logger::ilevel = DEFAULT_INDENTATION_LEVEL;
+int ccruncher::Logger::curcol = -1;
 bool ccruncher::Logger::verbose = false;
 bool ccruncher::Logger::tracetime = false;
 Timer ccruncher::Logger::timer = Timer();
@@ -59,8 +60,8 @@ void ccruncher::Logger::init(bool verbose_)
 {
   verbose = verbose_;
   
-  ilevel = 1;
-  curcol = 0;
+  ilevel = DEFAULT_INDENTATION_LEVEL;
+  curcol = -1;
   tracetime = false;
 }
 
@@ -89,6 +90,18 @@ void ccruncher::Logger::previousIndentLevel()
   assert(ilevel > 0);
   flush();
   if (ilevel > 0) ilevel--;
+}
+
+//===========================================================================
+// addBlankLine
+//===========================================================================
+void ccruncher::Logger::addBlankLine()
+{
+  // none if non-verbose mode enabled
+  if (verbose == false) return;
+
+  flush();
+  cout << std::endl << std::flush;
 }
 
 //===========================================================================
@@ -138,7 +151,7 @@ void ccruncher::Logger::trace(string msg, string value)
 
   // setting status values
   tracetime = false;
-  curcol = 0;
+  curcol = -1;
 }
 
 //===========================================================================
@@ -166,11 +179,40 @@ void ccruncher::Logger::trace(string msg, char c, bool tracetime_)
   if (tracetime == false)
   {
     cout << " " << Utils::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
-    curcol = 0;
+    curcol = -1;
   }
   else
   {
     timer.start();
+  }
+}
+
+//===========================================================================
+// append
+//===========================================================================
+void ccruncher::Logger::append(string msg)
+{
+  // none if non-verbose mode enabled
+  if (verbose == false) return;
+
+  // checking if we need indentator
+  if (curcol < 0)
+  {
+    tracetime = false;
+    cout << Utils::blanks(ilevel*INDENTSIZE) << std::flush;
+    curcol = ilevel*INDENTSIZE;
+  }
+  
+  // appending msg
+  cout << msg << std::flush;
+  curcol += msg.size();
+  
+  // checking bounds
+  if (curcol >= MAXCOLS)
+  {
+    cout << std::endl << std::flush;
+    tracetime = false;
+    curcol = -1;
   }
 }
 
@@ -202,7 +244,12 @@ void ccruncher::Logger::flush()
     cout << filler << etime << std::endl << std::flush;
 
     // setting class values
-    curcol = 0;
+    curcol = -1;
     tracetime = false;
+  }
+  
+  if (curcol >= 0)
+  {
+    cout << std::endl << std::flush;
   }
 }

@@ -62,6 +62,21 @@ vector<Aggregator> * ccruncher::Aggregators::getAggregators()
 }
 
 //===========================================================================
+// getNumSegments
+//===========================================================================
+long ccruncher::Aggregators::getNumSegments() throw(Exception)
+{
+  long ret = 0L;
+  
+  for(unsigned int i=0;i<vaggregators.size();i++)
+  {
+    ret += vaggregators[i].getNumSegments();
+  }
+  
+  return ret;
+}
+
+//===========================================================================
 // validate
 //===========================================================================
 void ccruncher::Aggregators::validate() throw(Exception)

@@ -26,6 +26,7 @@
  * miniCppUnit 
  * (C) 2003-2004 Pau Arumi & David Garcia
  * 
+ * @version 2.4 2005-03-26 modified macro ASSERT_EQUALS
  * @version 2.3 2004-12-25 minor bug correction 
  *                         avoid usage param name. using pname
  *                         added macro ASSERT_THROW
@@ -316,13 +317,13 @@ public:
 
 	static void assertTrueMissatge(char* strExpression, bool expression, 
 			const char* missatge, const char* file="", int linia=0);
-
+/*
 	static void assertIguals( const char * expected, const char * result,
-		const char* file="", int linia=0 );
+               const char* file="", int linia=0 );
 	
 	static void assertIguals( const bool& expected, const bool& result,
 		const char* file="", int linia=0 );
-
+*/
 	static int notEqualIndex( const std::string & one, const std::string & other );
 
 	/**
@@ -330,9 +331,10 @@ public:
 	 *
 	 * MS Visual6 doesn't allow string by reference :-( 
 	 */
+/*
 	static void assertIguals( const std::string expected, const std::string result,
 		const char* file="", int linia=0 );
-	
+*/
 	static void fail(const char* motiu, const char* file="", int linia=0);
 
 
@@ -405,7 +407,8 @@ static Registrador##ConcreteTestFixture estatic##ConcreteTestFixture;
  * we want to check.
  */
 #define ASSERT_EQUALS( expected, result) \
-	Assert::assertIguals( expected, result, __FILE__, __LINE__ );
+	Assert::assertTrue((char*) string(string(#expected)+" = "+string(#result)).c_str(), expected==result, __FILE__, __LINE__ );
+//	Assert::assertIguals( expected, result, __FILE__, __LINE__ );
 
 #define ASSERT( exp ) \
 	Assert::assertTrue(#exp, exp, __FILE__, __LINE__);

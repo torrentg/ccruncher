@@ -115,7 +115,7 @@ void Assert::assertTrueMissatge(char* strExpression, bool expression,
 }
 
 
-
+/*
 void Assert::assertIguals( const char * expected, const char * result,
 	const char* file, int linia )
 {
@@ -130,21 +130,13 @@ void Assert::assertIguals( const bool& expected, const bool& result,
 		(result?"true":"false"),
 		file, linia);
 }
-
-int Assert::notEqualIndex( const std::string & one, const std::string & other )
-{
-	int end = std::min(one.length(), other.length());
-	for ( int index = 0; index < end; index++ )
-		if (one[index] != other[index] )
-			return index;
-	return end;
-}
-
+*/
 /**
  * we overload the assert with string doing colored diffs
  *
  * MS Visual6 doesn't allow string by reference :-( 
  */
+ /*
 void Assert::assertIguals( const std::string expected, const std::string result,
 	const char* file, int linia )
 {
@@ -162,6 +154,16 @@ void Assert::assertIguals( const std::string expected, const std::string result,
 
 	TestsListener::theInstance().testHasFailed();
 }
+*/
+int Assert::notEqualIndex( const std::string & one, const std::string & other )
+{
+	int end = std::min(one.length(), other.length());
+	for ( int index = 0; index < end; index++ )
+		if (one[index] != other[index] )
+			return index;
+	return end;
+}
+
 void Assert::fail(const char* motiu, const char* file, int linia)
 {
 	TestsListener::theInstance().errorsLog() <<

@@ -122,7 +122,7 @@ class MonteCarlo
     double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
     CopulaNormal** initCopulas(double **, long, int, long) throw(Exception);
     int** initRatingsPaths(int, int, vector<Client *> *) throw(Exception);
-    void initAggregators() throw(Exception);
+    void initDataOutput(const IData *) throw(Exception);
     void evalueAggregators() throw(Exception);
     void generateRatingsPaths();
     void generateRatingsPath(int i);
@@ -137,7 +137,7 @@ class MonteCarlo
     void setHash(int num);
     void initialize(const IData *) throw(Exception);
     void execute() throw(Exception);
-    void showInfo();
+
 };
 
 //---------------------------------------------------------------------------

@@ -76,6 +76,7 @@ class Aggregators
     void flush(bool finalize) throw(Exception);
     void touch() throw(Exception);
     string getXML(int) throw(Exception);
+    long getNumSegments() throw(Exception);
 
 };
 

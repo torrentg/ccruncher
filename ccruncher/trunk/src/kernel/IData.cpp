@@ -105,7 +105,8 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     }
 
     // parsing file
-    Logger::trace("reading input file", '-');
+    Logger::addBlankLine();
+    Logger::trace("reading input file", '*');
     Logger::newIndentLevel();
     XMLUtils::initialize();
     parser = XMLUtils::getParser();

@@ -28,6 +28,7 @@
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 #include "Aggregator.hpp"
 #include "utils/Utils.hpp"
@@ -205,6 +206,24 @@ bool ccruncher::Aggregator::getBFull() const
 }
 
 //===========================================================================
+// getNumSegments
+//===========================================================================
+long ccruncher::Aggregator::getNumSegments() throw(Exception)
+{
+  assert(segmentations != NULL);
+  assert(isegmentation >= 0);
+
+  try
+  {
+    return (segmentations->getSegmentations())[isegmentation].getSegments().size();
+  }
+  catch(std::exception &e)
+  {
+    throw Exception(e, "Aggregator::getNumSegments()");
+  }
+}
+
+//===========================================================================
 // initialize
 //===========================================================================
 void ccruncher::Aggregator::initialize(Date *dates, int m, vector<Client *> *clients,
@@ -213,7 +232,7 @@ void ccruncher::Aggregator::initialize(Date *dates, int m, vector<Client *> *cli
   try
   {
     // allocating SegmentAggregator's
-    numsegments = (segmentations->getSegmentations())[isegmentation].getSegments().size();
+    numsegments = getNumSegments();
     saggregators = new SegmentAggregator[numsegments];
 
     // initializing SegmentAggregator's

@@ -85,7 +85,11 @@ class Logger
     /** set ilevel = ilevel-1 */
     static void previousIndentLevel();
 
+    /** add a blank line */
+    static void addBlankLine();
+
     /** trace a message */
+    static void append(string msg);
     static void trace(string msg);
     static void trace(string msg, string value);
     static void trace(string msg, bool tracetime_);

@@ -82,7 +82,8 @@ class Aggregator
     int getISegmentation() const;
     bool getBValues() const;
     bool getBFull() const;
-
+    long getNumSegments() throw(Exception);
+    
     void initialize(Date *, int, vector<Client *> *, long, int, Ratings *, Interests *) throw(Exception);
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
     void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);

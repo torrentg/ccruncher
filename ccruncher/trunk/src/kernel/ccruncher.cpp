@@ -322,8 +322,8 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "  ccruncher is Copyright (C) 2003-2005 Gerard Torrent\n"
-  "  and licensed under the GNU General Public License, version 2.\n"
-  "  more info at http://www.generacio.com/ccruncher\n"
+  "   ccruncher is Copyright (C) 2003-2005 Gerard Torrent and licensed\n"
+  "     under the GNU General Public License, version 2. more info at\n"
+  "               http://www.generacio.com/ccruncher\n"
   << endl;
 }

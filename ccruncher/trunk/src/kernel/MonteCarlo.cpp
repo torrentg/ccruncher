@@ -160,7 +160,8 @@ void ccruncher::MonteCarlo::initialize(const IData *idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 {
-  Logger::trace("initialing procedure", '-');
+  Logger::addBlankLine();
+  Logger::trace("initialing procedure", '*');
   Logger::newIndentLevel();
   
   // initializing parameters
@@ -187,14 +188,8 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   // ratings paths allocation
   rpaths = initRatingsPaths(N, STEPS, clients);
 
-  Logger::trace("setting segmentations", true);
-  segmentations = idata->segmentations;
-
-  // inicialitzem els aggregators
-  Logger::trace("initializing aggregators", true);
-  Logger::trace("setting aggregators", true);
-  aggregators = idata->aggregators;
-  initAggregators();
+  // initializing data output (segmentations + aggregators)
+  initDataOutput(idata);
   
   // exit function
   Logger::previousIndentLevel();
@@ -206,9 +201,13 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting parameters", '.');
+  Logger::trace("setting parameters", '-');
   Logger::newIndentLevel();
-  
+
+  // fixing variance reduction method
+  antithetic = idata->params->antithetic;
+  Logger::trace("antithetic mode", Parser::bool2string(antithetic));
+
   // max number of seconds
   MAXSECONDS = idata->params->maxseconds;
   Logger::trace("maximum execution time (in seconds)", Parser::long2string(MAXSECONDS));
@@ -233,10 +232,6 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   for (int i=0;i<=STEPS;i++)
   Logger::trace("date[" + Parser::int2string(i)+"]", Parser::date2string(dates[i]));
   
-  // fixing variance reduction method
-  antithetic = idata->params->antithetic;
-  Logger::trace("antithetic variance reduction technique", Parser::bool2string(antithetic));
-
   // initializing internal variables
   CONT = 0L;
   reversed = false;
@@ -251,7 +246,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int isteps) throw(Exception)
 {
   // setting logger header
-  Logger::trace("fixing clients to simulate", '.');
+  Logger::trace("fixing clients to simulate", '-');
   Logger::newIndentLevel();
   
   // setting logger info
@@ -290,7 +285,7 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
 void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting ratings", '.');
+  Logger::trace("setting ratings", '-');
   Logger::newIndentLevel();
 
   // setting logger info
@@ -309,7 +304,7 @@ void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
 void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting sectors", '.');
+  Logger::trace("setting sectors", '-');
   Logger::newIndentLevel();
 
   // setting logger info
@@ -328,7 +323,7 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 void ccruncher::MonteCarlo::initMTrans(const IData *idata) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting transition matrix", '.');
+  Logger::trace("setting transition matrix", '-');
   Logger::newIndentLevel();
 
   // setting logger info
@@ -351,7 +346,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
                                vector<Client *> *vclients, int n) throw(Exception)
 {
   // setting logger header
-  Logger::trace("computing client correlation matrix", '.');
+  Logger::trace("computing client correlation matrix", '-');
   Logger::newIndentLevel();
   
   // setting logger info
@@ -394,7 +389,7 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
   CopulaNormal **ret = NULL;
   
   // setting logger header
-  Logger::trace("initializing copulas", '.');
+  Logger::trace("initializing copulas", '-');
   Logger::newIndentLevel();
 
   // setting logger info
@@ -454,12 +449,13 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
   int **ret = NULL;
 
   // setting logger header
-  Logger::trace("initializing rating paths buffer", '.');
+  Logger::trace("initializing rating paths buffer", '-');
   Logger::newIndentLevel();
 
   // setting logger info
   Logger::trace("buffer dimension", Parser::long2string(n)+"x"+Parser::int2string(k+1));
 
+  // allocating space
   try
   {
     ret = new int*[n];
@@ -500,13 +496,32 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
 }
 
 //===========================================================================
-// initAggregators
+// initDataOutput
 //===========================================================================
-void ccruncher::MonteCarlo::initAggregators() throw(Exception)
+void ccruncher::MonteCarlo::initDataOutput(const IData *idata) throw(Exception)
 {
+  // setting logger header
+  Logger::trace("initializing data output", '-');
+  Logger::newIndentLevel();
+
+  // setting logger info
+  Logger::trace("output data directory", File::normalizePath(fpath));
+  Logger::trace("number of segmentations defined", Parser::int2string(idata->segmentations->getSegmentations().size()));
+  Logger::trace("number of aggregators defined", Parser::int2string(idata->aggregators->getAggregators()->size()));
+  Logger::trace("number of segments to aggregate", Parser::int2string(idata->aggregators->getNumSegments()));
+
+  // setting objects  
+  segmentations = idata->segmentations;
+  aggregators = idata->aggregators;
+
+  // initializing aggregators
+  Logger::trace("initializing aggregators (elapsed time)", true);
   int indexdefault = mtrans->getIndexDefault();
   aggregators->initialize(dates, STEPS+1, clients, N, indexdefault, ratings, interests);
   aggregators->setOutputProperties(fpath, bforce, 0);
+
+  // exit function
+  Logger::previousIndentLevel();
 }
 
 //===========================================================================
@@ -517,7 +532,10 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
   bool moreiterations = true;
   Timer sw1, sw2;
 
-  Logger::trace("running Monte Carlo", '-');
+  // setting logger header
+  Logger::addBlankLine();
+  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Parser::int2string(hash) + " simulations per hash]"), '*');
+  Logger::newIndentLevel();
 
   try
   {
@@ -542,7 +560,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
       // printing hashes
       if (hash > 0 && CONT%hash == 0)
       {
-        cout << "#" << flush;
+        Logger::append(".");
       }
 
       // checking stop criteria
@@ -562,12 +580,18 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
     aggregators->flush(true);
 
     // sortim
-    showInfo();
+    Logger::trace("elapsed time generatings ratings paths", Timer::format(sw1.read()));
+    Logger::trace("elapsed time aggregating data", Timer::format(sw2.read()));
+    Logger::trace("total simulation time", Timer::format(sw1.read()+sw2.read()));
+    Logger::addBlankLine();
   }
   catch(Exception &e)
   {
     throw Exception(e, "MonteCarlo::execute()");
   }
+
+  // exit function
+  Logger::previousIndentLevel();
 }
 
 //===========================================================================
@@ -642,23 +666,6 @@ void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
 {
   // adding one simulation
   aggregators->append(rpaths, STEPS+1, N, clients);
-}
-
-//===========================================================================
-// showInfo
-//===========================================================================
-void ccruncher::MonteCarlo::showInfo()
-{
-  cout << endl;
-  cout << "begindate   = " << begindate << endl;
-  cout << "steplength  = " << STEPLENGTH << endl;
-  cout << "steps       = " << STEPS << endl;
-  cout << "clients     = " << N << endl;
-  cout << "simulations = " << MAXITERATIONS << endl;
-  cout << endl;
-
-//  cerr << "generacio copules = " << sw1.read() << endl;
-//  cerr << "evaluacio cartera = " << sw2.read() << endl;
 }
 
 //===========================================================================
