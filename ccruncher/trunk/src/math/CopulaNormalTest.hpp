@@ -50,11 +50,13 @@ class CopulaNormalTest : public TestFixture<CopulaNormalTest>
 
     double pearsn(double *x, double *y, int n);
     void testCopula(CopulaNormal &, double *, int n);
+    void computeDensity(CopulaNormal &copula);
 
     void test1();
     void test2();
     void test3();
     void test4();
+    void test5();
 
 
   public:
@@ -65,6 +67,7 @@ class CopulaNormalTest : public TestFixture<CopulaNormalTest>
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
+      TEST_CASE(test5);
     }
 
     void setUp();

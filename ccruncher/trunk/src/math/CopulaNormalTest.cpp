@@ -40,8 +40,9 @@
 
 //---------------------------------------------------------------------------
 
-#define NITERS 10000
-#define EPSILON 0.1
+#define NITERS 100000
+#define EPSILON  0.1
+#define NTALLS   100
 
 //===========================================================================
 // setUp
@@ -147,6 +148,78 @@ void CopulaNormalTest::test4()
   // correls deallocated by copula destructor
 }
 
+
+//===========================================================================
+// generate a 2-D histogram
+//===========================================================================
+void computeDensity(CopulaNormal &copula)
+{
+  double x, y;
+  int a, b;
+  int hits[NTALLS+1][NTALLS+1];
+
+  // initializing counters
+  for(int i=0;i<(NTALLS+1);i++)
+  {
+    for(int j=0;j<(NTALLS+1);j++)
+    {
+      hits[i][j] = 0;
+    }
+  }
+
+  // generating copulas
+  for(int k=0;k<NITERS;k++)
+  {
+    copula.next();
+
+    x = copula.get(0);
+    y = copula.get(1);
+    
+    a = (int)(x*NTALLS);
+    b = (int)(y*NTALLS);
+    
+    hits[a][b]++;
+  }
+
+  // plotting histogram
+  for(int i=0;i<NTALLS;i++)
+  {
+    x = (double)(i)/(double)(NTALLS);
+    
+    for(int j=0;j<NTALLS;j++)
+    {
+      y = (double)(j)/(double)(NTALLS);
+
+      cout << x << "\t" << y << "\t" << hits[i][j] << endl;
+    }
+  }
+}
+
+//===========================================================================
+// test5. generates NITERS realization of a copula and test that expected
+// correlations are true
+//===========================================================================
+void CopulaNormalTest::test5()
+{
+  // valid correlation matrix
+  double sigmas[] = {
+    +1.0 , +0.4,
+    +0.4 , +1.0
+  };
+  double **correls = Utils::allocMatrix(2,2,sigmas);
+
+  // copula construction
+  CopulaNormal copula = CopulaNormal(2, correls);
+
+  // testing copula
+  ASSERT_NO_THROW(testCopula(copula, sigmas, 2));
+  
+  // making 2-D density plot
+  //computeDensity(copula);
+
+  // correls deallocated by copula destructor
+}
+
 //===========================================================================
 // computes the correlation factor of 2 series
 // extracted from 'Numerical Recipes in C'
@@ -201,6 +274,7 @@ void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
 
     for (int j=0;j<n;j++)
     {
+
       values[j][i] = copula.get(j);
     }
   }
