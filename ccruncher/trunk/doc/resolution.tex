@@ -30,6 +30,9 @@
 \chapter{Resoluci\'on del problema}
 \label{sec:resolution}
 
+TODO: que es lo que esperamos: flexibilidad, resultados finos, paralelismo 
+con la valoracion del riesgo de mercado (pe. valoracion de opciones)
+
 %---------------------------------------------------------------------------
 
 \section{Hipotesis}
@@ -52,6 +55,11 @@ blablabla.
 
 %---------------------------------------------------------------------------
 
+\section{Reparto del tiempo}
+
+
+%---------------------------------------------------------------------------
+
 \section{El m\'etodo de Monte Carlo}
 
 
@@ -59,6 +67,8 @@ blablabla.
 %---------------------------------------------------------------------------
 
 \section{Copulas. Variables aleatorias correlacionadas}
+
+\subsection{Errores comunes sobre la correlaci\'on}
 
 \paragraph{Definici\'on.}
 Una copula es la funci\'on de distribuci\'on de un vector aleatorio sobre 
@@ -127,4 +137,17 @@ x_i = \Phi^{-1}(y_i)
 \end{displaymath}
 
 \noindent donde $\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-t^2} dt$
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=5cm, angle=0]{./images/copula.eps}
+\includegraphics[height=5cm, angle=0]{./images/uniform.eps}
+\caption{Bivariate distribution plot with correlation and independent}
+\label{fig1}
+\end{center}
+\end{figure}
+
+%---------------------------------------------------------------------------
+
+\section{Algoritmo de resoluci\'on}
 
