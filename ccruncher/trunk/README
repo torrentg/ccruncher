@@ -11,23 +11,26 @@ Install xerces-c package
 2. uncompress package
      gunzip xerces-c_2_6.tar.gz
      tar -xvf xerces-c_2_6.tar
+   we sugest install xercesc at $CCRUNCHER/share/xercesc-2.6
 
 3. modify your .profile file. adding the following lines
      XERCESROOT=<path_to_xerces_dir>
      export PATH=$PATH:$XERCESROOT/bin
      export LD_LIBRARY_PATH=$XERCESROOT/lib:$LD_LIBRARY_PATH
      export LIBRARY_PATH=$XERCESROOT/lib:$LIBRARY_PATH
+     export C_INCLUDE_PATH=$XERCESROOT/include:$C_INCLUDE_PATH
+     export CPLUS_INCLUDE_PATH=$XERCESROOT/include:$CPLUS_INCLUDE_PATH
      export XERCESC_NLS_HOME=$XERCESCROOT/msg
 
 
 Installation from source package
 --------------------------------
 
-1. install xerces-c package (explained before)
-
-2. uncompress package
+1. uncompress package
      gunzip ccruncher-0.1.tar.gz
      tar -xvf ccruncher-0.1.tar
+
+2. install xerces-c package (explained before)
 
 3. execute commands (read INSTALL file):
      cd ccruncher-0.1
@@ -40,11 +43,11 @@ Installation from source package
 Installation from binary package
 --------------------------------
 
-1. install xerces-c package (explained before)
-
-2. uncompress package
+1. uncompress package
      gunzip ccruncher-0.1.tar.gz
      tar -xvf ccruncher-0.1.tar
+
+2. install xerces-c package (explained before)
 
 
 Using CreditCruncher

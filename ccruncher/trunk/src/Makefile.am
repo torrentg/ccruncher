@@ -14,7 +14,6 @@ AM_CPPFLAGS = \
     -I./\
     -I../share/jama-1.2.2/\
     -I../share/Mersenne-1.0/\
-    -I../share/xercesc-2.6/include/\
     -I../share/MiniCppUnit-2.2/
 
 bin_PROGRAMS = ccruncher tabulate generator trimmer
@@ -62,9 +61,7 @@ ccruncher_SOURCES = \
     ./utils/Utils.cpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
-
-ccruncher_LDFLAGS = -L../share/xercesc-2.6/lib
-
+ccruncher_LDFLAGS =
 ccruncher_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
@@ -73,9 +70,7 @@ trimmer_SOURCES = \
     ./tools/trimmer.cpp
 
 trimmer_CXXFLAGS = -Wall -W -Wshadow
-
 trimmer_LDFLAGS = 
-
 trimmer_LDADD = 
 
 # -------------------------------------------------------------
@@ -91,9 +86,7 @@ tabulate_SOURCES = \
     ./utils/Utils.cpp    
 
 tabulate_CXXFLAGS = -Wall -W -Wshadow
-
-tabulate_LDFLAGS = -L../share/xercesc-2.6/lib
-
+tabulate_LDFLAGS =
 tabulate_LDADD = -ldl -lxerces-c
 
 # -------------------------------------------------------------
@@ -136,9 +129,7 @@ generator_SOURCES = \
     ./utils/Utils.cpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
-
-generator_LDFLAGS = -L../share/xercesc-2.6/lib
-
+generator_LDFLAGS =
 generator_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
@@ -209,7 +200,5 @@ tests_SOURCES = \
     ./segmentations/Segment.cpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
-
-tests_LDFLAGS = -L../share/xercesc-2.6/lib
-
+tests_LDFLAGS = 
 tests_LDADD = -lm -ldl -lxerces-c
