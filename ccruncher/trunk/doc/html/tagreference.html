@@ -51,15 +51,14 @@
     <div class="contentBox">
       <div class="section">
         <a name="tagreference" id="tagreference"></a>
-        <h2>CreditCruncher XML tag reference</h2>
+        <h2>CreditCruncher XML input tag reference</h2>
 
         <p style="text-align:justify;">
-          La versión en curso del documento xml descrito en esta sección es la 
-          0.1. La distribución de CreditCruncher contiene la versión de la 
-          <a href="creditcruncher-0.1.dtd.txt">DTD</a> y un fichero 
-          <a href="creditcruncher-0.1.xml.txt">XML</a> de ejemplo. La DTD 
-          es el conjunto de instrucciones que indican como se espera que esté
-          creado el fichero XML.
+          This document describe the xml input file for CreditCruncher-0.2. 
+          In the distribution package you can find the 
+          <a href="creditcruncher-0.2.dtd">DTD</a> and some 
+          <a href="sample1-0.2.xml">XML</a> samples into the directory 
+          $CCRUNCHER/samples.
         </p>
       </div>
 
@@ -68,9 +67,8 @@
         <h2>params</h2>
 
         <p style="text-align:justify;">
-          Este elemento contiene las propiedades básicas del problema a resolver.
-          Deben especificarse todas y cada una de ellas. No es necesario mantener
-          el orden de las propiedades.
+          This sections contains the basic properties of the problem to be solved.
+          Properties can be unordered.
         </p>
 
         <div class="subsection">
@@ -108,84 +106,76 @@
             <tr class="b">
               <td>time.begindate</td>
               <td style="text-align:justify;">
-                indica el primer día de la simulación. Los ratings iniciales de
-                los clientes son a este día. El formato de este campo debe ser
-                de la forma DD/MM/YYYY.
+                first day of the simulation. Initial ratings are refered to this date. 
+                The format of this field is: DD/MM/YYYY.
               </td>
               <td><code>date</code></td>
             </tr>
             <tr class="a">
               <td>time.steps</td>
               <td style="text-align:justify;">
-                número de pasos en el tiempo. Fije este parámetro con cuidado ya
-                que tiene un impacto importante en el número de operaciones a
-                realizar.
+                number of time steps. Fix this number with caution since has a
+                big impact in the number of calculations to be performed.
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="b">
               <td>time.steplength</td>
               <td style="text-align:justify;">
-                longitud de cada paso temporal en meses naturales. Se recomienda 
-                poner valores bajos (pe. 1, 3 o 6) dependiendo del periodo de
-                simulación abarcado (periodos pequeños, pasos pequeños).
+                length of each time step in natural months. We suggest to put
+                low values (pe. 1, 3 o 6).
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>stopcriteria.maxiterations</td>
               <td style="text-align:justify;">
-                número máximo de iteraciones del método de Monte Carlo a realizar.
-                Se dará el problema por resuelto cuando sea satisfecho alguno de
-                los criterios de parada.
+                maximum number of iterations in Monte Carlo algorithm. <br />
+                ccruncher stops when one of stop criteria is achieved. 
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="b">
               <td>stopcriteria.maxseconds</td>
               <td style="text-align:justify;">
-                número máximo de segundos en tiempo absoluto (no tiempo de cpu).
-                Se dará el problema por resuelto cuando sea satisfecho alguno de
-                los criterios de parada.
+                maximum number of seconds in current execution. <br />
+                ccruncher stops when one of stop criteria is achieved. 
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="a">
               <td>copula.type</td>
               <td style="text-align:justify;">
-                tipo de cópula utilizado para generar las variables aleatorias
-                correlacionadas. En este momento solamente existe una implementación,
-                la cópula archimediana o normal ('normal').
+                type of copula used to generate correlated variables. At this moment
+                exist only one implementation, the normal copula. <br />
+                accepted values: 'normal'.
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>copula.seed</td>
               <td style="text-align:justify;">
-                semilla utilizada para la generación de números aleatorios
-                utilizados en la cópula. En caso de no especificarse esta
-                propiedad se inicializará con un valor que depende de la hora
-                en el momento de ejecutarse.
+                seed used for initialize random number generator. If this 
+                property is not set, the used seed will depend of cpu clock.
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="a">
               <td>montecarlo.antithetic</td>
               <td style="text-align:justify;">
-                indica si debe utilizarse la técnica de reducción de varianza 
-                 antithetic en el método de Monte Carlo. Si tiene dudas sobre
-                 el significado o utilidad de esta técnica, indique false.
+                tell to use variance reduction technique named antithetic in
+                Monte Carlo. If you doubt, type 'false', otherwise 'true'.
               </td>
               <td><code>boolean</code></td>
             </tr>
             <tr class="b">
               <td>portfolio.onlyActiveClients</td>
               <td style="text-align:justify;">
-                indica si deben simularse todos los clientes (a pesar de no tener
-                riesgo contratado) o pro el contrario, simular solamente aquellos
-                clientes que tienen riesgo contratado. Recomendamos poner siempre
-                true ya que supone un ahorro importante de tiempo de cómputo en
-                caso de tener clientes inactivos.
+                if you desire simulate all clients, even though clients without 
+                risk in analized period, type 'false'. If you desire simulate 
+                only active clients in the simulation period type 'true'. 
+                We suggest to write always 'true' due to the reduction in 
+                the number of calculations.
               </td>
               <td><code>boolean</code></td>
             </tr>
@@ -198,10 +188,8 @@
         <h2>Interests</h2>
 
         <p style="text-align:justify;">
-          Este apartado contiene los tipos de interés usados por los productos
-          financieros (en caso de depender de estos). Es obligatorio la 
-          definición del tipo de interés 'spot' que se usará para transportar
-          los flujos de efectivo a lo largo del tiempo.
+          This section contain the interest curves used to transport money-values along
+          the time. The definition of curve 'spot' is required.
         </p>
 
         <div class="subsection">
@@ -240,18 +228,15 @@
             <tr class="b">
               <td>name</td>
               <td style="text-align:justify;">
-                nombre del tipo de interés. Todas las referencias al tipo de 
-                interés definido deberán realizarse indicando este nombre.
-                Siempre debe existir el tipo de interés 'spot'.
+                name of the interest type
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>date</td>
               <td style="text-align:justify;">
-                fecha en la que se ha determinado el tipo de interés. Generalmente
-                coincide con la fecha de inicio de la simulación. El formato de 
-                este campo debe ser DD/MM/YYYY.
+                date of the interest curve. Generally match the begin simulation 
+                date (but is not required). The format of this field is: DD/MM/YYYY.
               </td>
               <td><code>date</code></td>
             </tr>
@@ -271,17 +256,17 @@
             <tr class="b">
               <td>t</td>
               <td style="text-align:justify;">
-                tiempo en días respecto de la fecha inicial del tipo de interés.
-                En caso de ser necesario un valor de tiempo no indicado se 
-                realizará una interpolación lineal usando los valores disponibles.
+                time (in days) from date of the interest curve. If is needed
+                a value between two given dates, the value will be interpolated
+                (linear).
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>r</td>
               <td style="text-align:justify;">
-                tipo de interés en tanto por uno en la fecha indicada por t. Debe
-                ser un valor entre -0.5 y 1.0.
+                interest rate at time t. Is a value between -0.5 and 1.0. (per 
+                example, a rate of 2.5% will be writed as 0.025).
               </td>
               <td><code>double</code></td>
             </tr>
@@ -296,7 +281,7 @@
         <h2>Ratings</h2>
 
         <p style="text-align:justify;">
-          Este apartado contiene la definición de los ratings usados.
+          This section contains the defined ratings.
         </p>
 
         <div class="subsection">
@@ -330,28 +315,24 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                identificador del rating. Todas las referencias al rating
-                definido deberán realizarse mediante este identificador.
+                rating indentification. All references to rating (pe. client rating) 
+                are made using this field.
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>order</td>
               <td style="text-align:justify;">
-                orden de prioridad del rating. El mejor debe tener el valor 1,
-                el siguiente el valor 2, etc. El rating 'fallido' siempre debe
-                ser el último. Debe tratarse de una ordenación completa y siempre
-                empezar por el valor 1.
+                priority of this rating. the best rating have value 1, next 2, etc.
+                (sequencially). The default rating always have the highest value.
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>desc</td>
               <td style="text-align:justify;">
-                descripción del rating. Este valor solamente se usa para 
-                finalidades de presentación de la información. Solamente tiene
-                valor descriptivo. A pesar de esto, debe rellenarse y no puede 
-                repetirse la descripción.
+                rating description. This value only is used in reports. this
+                description would be unique.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -364,12 +345,11 @@
         <h2>Transition Matrix</h2>
 
         <p style="text-align:justify;">
-          Esta sección contiene la definición de la matriz de transición 
-          utilizada. Se comprobará que se cumple que al suma de los elementos
-          de cada fila suma 1.0. También se comprueba que existe una única 
-          fila en la que toda la probabilidad se concentrada en un elemento
-          (corresponde al fallido). El número de elementos a definir es el 
-          número de ratings al cuadrado.
+          This section contains the used transition matrix. ccrucnher 
+          checks that sum of elements of each row is 1.0. Too is checked
+          that only exist a row with all probability concentred in a unique
+          element. The number of elements to define is NxN, where N is the 
+          number of ratings.
         </p>
 
 
@@ -425,16 +405,16 @@
             <tr class="a">
               <td>period</td>
               <td style="text-align:justify;">
-                número de años que abarca la matriz de transición.
+                number of years that transition matrix cover.
               </td>
               <td><code>double</code></td>
             </tr>
             <tr class="b">
               <td>epsilon</td>
               <td style="text-align:justify;">
-                valor usado para determinar si un valor se puede considerar
-                0.0 o no. Debe ser un valor positivo cercano a cero. Se 
-                recomienda poner un valor muy cercano a 0.0 (pe. 1E-12).
+                value used to determine if a value is 0.0 or not in performed 
+                checks. must be a value near to 0. We sugest a value very near
+                to 0.0, pe. 1E-12.
               </td>
               <td><code>double</code></td>
             </tr>
@@ -454,23 +434,23 @@
             <tr class="a">
               <td>from</td>
               <td style="text-align:justify;">
-                rating de partida. Debe ser un identificador de rating definido
-                en el apartado de ratings.
+                initial rating. would be a rating identifier (see name
+                attribute in rating tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>to</td>
               <td style="text-align:justify;">
-                rating destino. Debe ser un identificador de rating definido
-                en el apartado de ratings.
+                final rating. would be a rating identifier (see name 
+                attribute in rating tag).
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>value</td>
               <td style="text-align:justify;">
-                probabilidad del evento (en tanto por uno).
+                probability of rating migration (a value between 0 and 1)
               </td>
               <td><code>double</code></td>
             </tr>
@@ -485,7 +465,7 @@
         <h2>Sectors</h2>
 
         <p style="text-align:justify;">
-           Este apartado contiene la definición de los sectores usados.
+           This section contains the defined sectors.
         </p>
 
         <div class="subsection">
@@ -516,25 +496,23 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                identificador del sector. Todas las referencias al sector
-                definido deberán realizarse mediante este identificador.
+                sector identification. All references to sector (pe. client 
+                sector) are made using this field.
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>order</td>
               <td style="text-align:justify;">
-                orden de prioridad del sector. Debe tratarse de una ordenación 
-                completa y siempre empezar por el valor 1.
+                priority of this sector. This number is a sequence that begins at 1.
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>desc</td>
               <td style="text-align:justify;">
-                descripción del sector. Este valor se usa para finalidades de 
-                presentación de la información. Solamente tiene valor descriptivo. 
-                A pesar de esto, debe rellenarse y no puede repetirse la descripción.
+                sector description. This value only is used in reports. 
+                this description would be unique.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -547,12 +525,12 @@
         <h2>Correlations</h2>
 
         <p style="text-align:justify;">
-          Esta sección contiene la definición de la matriz de correlación entre
-          los sectores definidos. Se trata de una matriz simétrica definida
-          positiva. Solamente debe indicarse la diagonal superior o inferior.
-          Se comprobará que cada elemento de la matriz se encuentra entre -1.0 y 
-          1.0 y que esta es definida positiva. El número de elementos a definir 
-          es: (nsectors+1) x nsectors / 2.
+          This section contains the correlation matrix between sectors.
+          Correlation matrix is a simetric and definite positive matrix.
+          You only need to enter the upper triangular elements.
+          ccruncher checks that every element is between -1.0 and 1.0 and that
+          is definite positive. The number of elements to define is 
+          (nsectors+1) x nsectors / 2.
         </p>
 
         <div class="subsection">
@@ -584,9 +562,9 @@
             <tr class="a">
               <td>epsilon</td>
               <td style="text-align:justify;">
-                valor usado para determinar si un valor se puede considerar
-                1.0 o no. Debe ser un valor positivo cercano a cero. Se 
-                recomienda poner un valor muy cercano a 0.0 (pe. 1E-12).
+                value used to determine if a value is 0.0 or not in performed 
+                checks. must be a value near to 0. We sugest a value very 
+                near to 0.0, pe. 1E-12.
               </td>
               <td><code>double</code></td>
             </tr>
@@ -606,23 +584,22 @@
             <tr class="a">
               <td>sector1</td>
               <td style="text-align:justify;">
-                sector implicado en la correlación. Debe tratarse de un sector 
-                definido en el apartado de sectores.
+                would be a sector identifier (see name attribute in sector tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>sector2</td>
               <td style="text-align:justify;">
-                sector implicado en la correlación. Debe tratarse de un sector 
-                definido en el apartado de sectores.
+                would be a sector identifier (see name attribute in sector tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>value</td>
               <td style="text-align:justify;">
-                correlación del fallido entre sector1 y sector2 en tanto por 1.
+                correlation of defaults between sector1 and sector2. <br />
+                Correlation(defaults(S1), defaults(S2))
               </td>
               <td><code>double</code></td>
             </tr>
@@ -635,24 +612,20 @@
         <h2>Segmentations</h2>
 
         <p style="text-align:justify;">
-          Esta sección contiene las segmentaciones definidas. La finalidad de
-          las segmentaciones es permitir analizar el riesgo de la cartera según
-          el nivel de detalle u organización jerarquica del usuario sin que esta se 
-          encuentre prefijada. Existen dos tipos de segmentaciones (en función del 
-          tipo de elementos que contengan); segmentaciones de clientes (pe. por 
-          sector, tamaño del cliente, rating inicial, etc.) y segmentaciones de 
-          activos (pe. por tipo de activo, por oficina de contratación, etc.). 
-          Todas las segmentaciones deben ser completas (un elemento solamente 
-          puede pertenecer a un segmento y la unión de todos los elementos de 
-          los segmentos debe ser el total). Todas las segmentaciones tienen 
-          definido de forma implícita el elemento 'resto' que garantiza que si 
-          un elemento no tiene definida su pertenencia a la segmentación 
-          analizada, entonces pertenece al segmento 'resto'. 
-          Finalmente, existen 2 segmentaciones definidas por defecto que son 
-          'client' (donde los segmentos definidos son los clientes existentes) y 
-          'asset' (donde los segmentos definidos son los activos existentes).
-          En estas segmentaciones no es necesario definir de forma explícita los
-          segmentos definidos.
+          This sections contains the defined segmentations. Segmentations
+          allow analyze risk portfolio according to jerarquical organization
+          or other type of segmentation. A segmentation is composed by segments.
+          Exist 2 types of segmentations in function the class of elements 
+          contained; client segmentations (pe. sector, client size, initial 
+          rating, etc.) and asset segmentations (pe. products, branch where the 
+          contract is made, etc.). All segmentations will be completes (one 
+          element only belongs to one segment and the union of all segments 
+          give the total portfolio). Every segmentation have defined (in 
+          impliced form) a segment named 'rest'. If a client (or a asset)
+          belongs nowhere, then belongs to 'rest' segment. Finally, exist 2
+          special segmentations, 'client' (one segment per client) and 'asset'
+          (one segment per asset) where you don't need to specify all segment,
+          these are defined in implicit form. 
         </p>
 
         <div class="subsection">
@@ -705,17 +678,16 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                nombre de la segmentación. Todas las referencias a la segmentación
-                definida deberán realizarse mediante este identificador.
+                segmentation identification. All references to segmentation (pe. belongs-to tag) 
+                are made using this field.
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>components</td>
               <td style="text-align:justify;">
-                tipo de componentes de los segmentos definidos. Solamente se
-                aceptan los valores 'client' (para clientes) y 'asset' para
-                activos.
+                class of components for the segments. Accepted values are 'client'
+                and 'asset'
               </td>
               <td><code>string</code></td>
             </tr>
@@ -735,15 +707,13 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                nombre de la segmento. Diferentes segmentaciones pueden tener
-                segmentos definidos con el mismo nombre. Todas las referencias 
-                al segmento definido deberán realizarse mediante este 
-                identificador (siempre junto con el de segmentación). En caso 
-                no definir ningún segmento todos los elementos pertencen al
-                segmento 'resto' (es el tipo de segmentación que utilizaremos 
-                si se desea obtener el valor de la cartera). Las segmentaciones
-                'client' y 'asset' admiten el segmento '*' para indicar que 
-                contienen tantos segmentos como elementos de tipo client o asset.
+                segment name. Different segmentations can have segments with
+                the same name. All references to segment (pe. belongs-to tag) 
+                are made using this field (always in conjuntion with segmentation). 
+                If a segmentation haven't segments, all elements belongs to
+                segment 'rest'. 'client' and 'asset' segmentations allow
+                the segment '*' to indicate that they have many segments as
+                clients (or assets) exist.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -756,13 +726,13 @@
         <h2>Aggregators</h2>
 
         <p style="text-align:justify;">
-          Esta sección contiene las agregaciones que deben realizarse en el
-          momento de realizar la simulación. Una agregación siempre se 
-          realiza sobre una segmentación definida y debe detallarse el 
-          nivel de información recopilada por cada segmento. Debe seleccionarse
-          cuidadosamente el nivel de información a recopilar ya que puede tener
-          un impacto importante en memoria utilizada y espacio de disco 
-          necesario.
+          This section contains defined aggregations. An aggregation is a
+          simulation values recopilation over a segmentation. Be cautious about the 
+          information level to compile (have a important impact in memory and 
+          disk usage). Each aggregator-segment have its own output file, if
+          you have 50.000 clients and you define the segmentation 'client'
+          or 'asset' and an aggregator over these, you obtain more than 
+          50.000 files in the disk.
         </p>
 
         <div class="subsection">
@@ -788,12 +758,11 @@
           </div>
           
           <p style="text-align:justify;">
-            El aggregador aggregator1 se define para listar los valores simulados
-            de la cartera; Se le indica el atributo full para poder determinar la
-            distribución de los valores de la cartera. Aggregator2 y aggregator3 
-            proprociona información resumida de cada cliente (valor medio y desviación 
-            estándar de los activos y ratings obtenidos). Aggregator4 y aggregator5 
-            proprocionan la misma información a nivel de sector.
+            aggregator1 list portfolio values (one per simulation). In this case, 
+            full attribute says that we want all the values, not only the average 
+            and stddev. aggregator2 and aggregator3 gives summarized information  
+            for each client (average and stddev for values and ratings). 
+            aggregator4 and aggregator5 gives the same info for sectors.
           </p>
         </div>
 
@@ -810,44 +779,37 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                nombre de la agregación. Todas las referencias a la agregación
-                definida se realizarán mediante este identificador.
+                unique aggregator name
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>segmentation</td>
               <td style="text-align:justify;">
-                nombre de la segmentación sobre la que opera el agregador. Debe
-                ser un identificador de segmentación definido en el apartado de
-                segmentaciones.
+                segmentation name connected to this aggregator
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>type</td>
               <td style="text-align:justify;">
-                tipo de agregación a realizar. Debe ser uno de los valores 
-                siguientes: <br />
-                <b>values</b>. los valores agregados son el valor de los activos
-                de los componentes de la segmentación. Si los componentes son
-                de tipo cliente, se consideraran los activos de cada cliente.<br />
-                <b>ratings</b>. los valores agregados son los ratings de los 
-                clientes de la segmentación. Este valor solamente puede 
-                ponerse cuando los componentes de la segmentación sean de tipo 
-                client.<br />
+                type of aggregation performed. Accepted values are: <br />
+                <b>values</b>. if segmentation components are assets, results 
+                are values from assets belonging to segmentation , if segmentation
+                components are clients, results are values from clients (sum
+                of client assets) belonging to segmentation. <br />
+                <b>ratings</b>. results are ratings from clients. This type
+                only can be used when segmentation components is 'client'.<br />
               </td>
               <td><code>string</code></td>
             <tr class="b">
               <td>full</td>
               <td style="text-align:justify;">
-                indicador del detalle de los resultados a generar. En caso de
-                seleccionar <b>true</b> se listarán todos los valores por cada
-                segmento, en caso contrario se proprociona información resumida
-                (media y desviación estándar en el caso de valores y número de
-                casos en el caso de los ratings). Use esta propiedad con cuidado
-                ya que puede generar una salida masiva de resultados y ralentizar
-                la ejecución del proceso.
+                detail level. If <b>true</b>, all values will be listed. 
+                Otherwise, average and stddev is listed for values and 
+                number of ocuerrences per defined rating for ratings. Use 
+                this porperty with caution (have a important impact in memory 
+                and disk usage).
               </td>
               <td><code>boolean</code></td>
             </tr>
@@ -860,9 +822,7 @@
         <h2>Portfolio</h2>
 
         <p style="text-align:justify;">
-          Esta sección contiene la definición de la cartera que se pretende 
-          evaluar. Una cartera está compuesta de un conjunto de clientes
-          cada uno de los cuales puede disponer de un conjunto de activos.
+          This section contains the defined portfolio.
         </p>
 
         <div class="subsection">
@@ -879,24 +839,24 @@
       &lt;asset class="bond" id="op1"&gt;
         &lt;belongs-to concept="product" segment="bond"/&gt;
         &lt;belongs-to concept="office" segment="0001"/&gt;
-        &lt;property name="issuedate" value="1/1/2000"/&gt;
-        &lt;property name="term" value="120"/&gt;
-        &lt;property name="nominal" value="1000.0"/&gt;
-        &lt;property name="rate" value="0.06"/&gt;
-        &lt;property name="ncoupons" value="10"/&gt;
-        &lt;property name="adquisitiondate" value="1/1/2002"/&gt;
-        &lt;property name="adquisitionprice" value="1000.0"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/06/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset class="bond" id="op2">&gt;
         &lt;belongs-to concept="office" segment="0004"/&gt;
         &lt;belongs-to concept="product" segment="bond"/&gt;
-        &lt;property name="issuedate" value="1/1/2000"/&gt;
-        &lt;property name="term" value="120"/&gt;
-        &lt;property name="nominal" value="1500.0"/&gt;
-        &lt;property name="rate" value="0.07"/&gt;
-        &lt;property name="ncoupons" value="20"/&gt;
-        &lt;property name="adquisitiondate" value="1/1/2003"/&gt;
-        &lt;property name="adquisitionprice" value="1500.0"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
     &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
@@ -905,13 +865,13 @@
       &lt;asset class="bond" id="op3"&gt;
         &lt;belongs-to concept="office" segment="0003"/&gt;
         &lt;belongs-to concept="product" segment="bond"/&gt;
-        &lt;property name="issuedate" value="1/1/2000"/&gt;
-        &lt;property name="term" value="120"/&gt;
-        &lt;property name="nominal" value="1500.0"/&gt;
-        &lt;property name="rate" value="0.07"/&gt;
-        &lt;property name="ncoupons" value="5"/&gt;
-        &lt;property name="adquisitiondate" value="1/1/2003"/&gt;
-        &lt;property name="adquisitionprice" value="1500.0"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
   &lt;/portfolio&gt;
@@ -920,11 +880,10 @@
           </div>
           
           <p style="text-align:justify;">
-            Observese como no se define la pertenencia del cliente al segmento 
-            client ya que se realiza de forma implícita (lo mismo con la pertenencia
-            de los activos). En el caso de intentar asignar un cliente a una 
-            segmentación de tipo activo (o viceversa) el fichero de configuración
-            será rechazado.
+            Observe how client haven't defined a 'belong-to' to 'client' segmentation.
+            This is performed implicitly (the same occurs with 'asset'). 
+            If you try to asign a client to a segmentation of asset components 
+            (or viceversa), the input file will be rejected.
           </p>
         </div>
 
@@ -941,31 +900,28 @@
             <tr class="a">
               <td>rating</td>
               <td style="text-align:justify;">
-                rating inicial del cliente a fecha de inicio de la simulación. 
-                Debe ser un identificador de rating definido en el apartado de
-                ratings.
+                initial client rating at begin simulation date 
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>sector</td>
               <td style="text-align:justify;">
-                sector al que pertenece el cliente. Debe ser un identificador de 
-                sector definido en el apartado de sectores.
+                sector where this client is included
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                nombre del cliente. Usaado solamente a título descriptivo.
+                client name. only used for report
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>id</td>
               <td style="text-align:justify;">
-                identificador del cliente. Debe ser un identificador único.
+                unique client identificator
               </td>
               <td><code>string</code></td>
             </tr>
@@ -985,20 +941,14 @@
             <tr class="a">
               <td>concept</td>
               <td style="text-align:justify;">
-                identificador de segmentación al que pertenece el cliente o 
-                activo. Si se pretende indicar la pertenencia a un segmento de
-                un cliente el segmento deberá ser de tipo 'client', si se está 
-                indicando la pertenencia de un segmento de un activo, el segmento
-                deberá ser de tipo 'asset'.
+                segmentation identifier (see segmentations)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>segment</td>
               <td style="text-align:justify;">
-                identificador del segmento. El identificador debe constar como
-                segmento en la segmentación indicada en el atributo concept.
-                Véase apartado segmentations.
+                segment identifier (see segmentations)
               </td>
               <td><code>string</code></td>
             </tr>
@@ -1016,18 +966,16 @@
               <th>Type</th>
             </tr>
             <tr class="a">
-              <td>class</td>
+              <td>name</td>
               <td style="text-align:justify;">
-                classe usada para simular el comportamiento del activo. Actualmente
-                las classes existentes son: <br />
-                <b>bond</b>. Bono.
+                a descriptive name of the asset. Don't need to be unique
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>id</td>
               <td style="text-align:justify;">
-                identificador de activo. Debe ser un identificador único.
+                unique asset identifier
               </td>
               <td><code>string</code></td>
             </tr>
@@ -1036,7 +984,7 @@
 
         <div class="subsection">
           <a name="Attributes" id="Attributes"></a>
-          <h3>Property Attributes</h3>
+          <h3>Values Attributes</h3>
 
           <table class="bodyTable">
             <tr class="b">
@@ -1045,21 +993,33 @@
               <th>Type</th>
             </tr>
             <tr class="a">
-              <td>name</td>
+              <td>at</td>
               <td style="text-align:justify;">
-                nombre de la propiedad. Véase la documentación del activo para
-                determinar que propiedades deben espeficarse.
+                date (in format DD/MM/YYYY) where take place the values
               </td>
-              <td><code>string</code></td>
+              <td><code>date</code></td>
             </tr>
             <tr class="b">
-              <td>value</td>
+              <td>cashflow</td>
               <td style="text-align:justify;">
-                valor de la propiedad. Véase la documentación del activo para
-                determinar que propiedades deben espeficarse.
+                cashflow at date
               </td>
-              <td><code>string</code></td>
+              <td><code>double</code></td>
             </tr>
+            <tr class="a">
+              <td>exposure</td>
+              <td style="text-align:justify;">
+                exposure at date
+              </td>
+              <td><code>double</code></td>
+            </tr>
+            <tr class="b">
+              <td>recovery</td>
+              <td style="text-align:justify;">
+                recovery at date
+              </td>
+              <td><code>double</code></td>
+            </tr>            
           </table>
         </div>
         
