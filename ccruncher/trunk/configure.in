@@ -9,9 +9,9 @@ dnl                 run gprof executable gmon.out
 dnl
 dnl execute next commands to create Makefiles and compile (-O2 )
 dnl
-dnl   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/horizon/temp/creditcruncher/share/cppunit-1.10.2/lib:/home/horizon/temp/creditcruncher/share/xercesc-2.6/lib
+dnl   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/horizon/temp/ccruncher/share/xercesc-2.6/lib
 dnl
-dnl   aclocal -I share/cppunit-1.10.2/
+dnl   aclocal
 dnl   autoconf
 dnl   automake -avc --warnings=all
 dnl   ./configure
@@ -42,25 +42,7 @@ AC_SUBST(CXXFLAGS)
 
 AC_CHECK_FUNCS(clock)
 
-AM_PATH_CPPUNIT(1.9.6)
-
-
 AC_OUTPUT([
   Makefile
   src/Makefile
 ])
-
-dnl  src/math/Makefile
-dnl  src/utils/Makefile
-dnl  src/ratings/Makefile
-dnl  src/transitions/Makefile
-dnl  src/sectors/Makefile
-dnl  src/correlations/Makefile
-dnl  src/finances/Makefile
-dnl  src/interests/Makefile
-dnl  src/params/Makefile
-dnl  src/portfolio/Makefile
-dnl  src/segmentations/Makefile
-dnl  src/aggregators/Makefile
-dnl  src/kernel/Makefile
-dnl  src/tools/Makefile

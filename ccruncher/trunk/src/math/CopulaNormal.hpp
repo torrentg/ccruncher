@@ -67,7 +67,8 @@ class CopulaNormal : public Copula
     int size();
     void next();
     double get(int);
-    
+    void setSeed(long);
+
     CopulaNormal(int, double **) throw(Exception);
     CopulaNormal(const CopulaNormal &) throw(Exception);
     ~CopulaNormal();

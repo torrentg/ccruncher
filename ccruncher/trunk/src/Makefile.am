@@ -62,7 +62,7 @@ ccruncher_SOURCES = \
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 
-ccruncher_LDFLAGS = -L/home/horizon/temp/creditcruncher/share/xercesc-2.6/lib
+ccruncher_LDFLAGS = -L../share/xercesc-2.6/lib
 
 ccruncher_LDADD = -lm -ldl -lxerces-c
 
@@ -135,6 +135,6 @@ tests_SOURCES = \
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 
-tests_LDFLAGS = -L/home/horizon/temp/creditcruncher/share/xercesc-2.6/lib
+tests_LDFLAGS = -L../share/xercesc-2.6/lib
 
 tests_LDADD = -lm -ldl -lxerces-c

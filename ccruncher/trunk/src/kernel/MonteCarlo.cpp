@@ -54,6 +54,7 @@ ccruncher::MonteCarlo::~MonteCarlo()
 //***************************************************************************
 void ccruncher::MonteCarlo::reset()
 {
+  MAXSECONDS = 0L;
   MAXITERATIONS = 0L;
   STEPS = 0;
   STEPLENGTH = 0;
@@ -154,6 +155,9 @@ void ccruncher::MonteCarlo::initialize(const IData *idata) throw(Exception)
 //***************************************************************************
 void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 {
+  // max number of seconds
+  MAXSECONDS = idata->params->maxseconds;
+
   // max number of iterations
   MAXITERATIONS = idata->params->maxiterations;
 
@@ -198,7 +202,7 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   cmatrix = initCorrelationMatrix(idata->correlations->getMatrix(), clients, N);
 
   // definim les copules a emprar
-  copulas = initCopulas(cmatrix, N, STEPS);
+  copulas = initCopulas(cmatrix, N, STEPS, idata->params->copula_seed);
 
   // ratings paths allocation
   rpaths = initRatingsPaths(N, STEPS, clients);
@@ -241,12 +245,10 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
 //***************************************************************************
 // construeix les copules per cada tall temporal
 //***************************************************************************
-CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, int n, int k) throw(Exception)
+CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, int n, int k, long seed) throw(Exception)
 {
   CopulaNormal **ret = new CopulaNormal*[k+1];
   for (int i=0;i<=k;i++) ret[i] = NULL;
-
-  //TODO: pendent utilitzar copula.seed
 
   // creem l'objecte per la generacio de copules normals
   ret[0] = new CopulaNormal(n, ccm);
@@ -255,6 +257,16 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, int n, int k) th
   for(int i=1;i<=k;i++)
   {
     ret[i] = new CopulaNormal(*(ret[0]));
+  }
+
+  // seeding random number generators
+  // if no seed is given /dev/urandom or time() will be used
+  if (seed != 0L)
+  {
+    for(int i=0;i<=k;i++)
+    {
+      ret[i]->setSeed(seed+(long)i);
+    }
   }
 
   return ret;
@@ -329,8 +341,14 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
         cout << "#" << flush;
       }
       
-      // comprovem condicio aturada
+      // checking stop criteria
       if (CONT >= MAXITERATIONS)
+      {
+        moreiterations = false;
+      }
+
+      // checking stop criteria
+      if (MAXSECONDS > 0L && (sw1.read()+sw2.read())> MAXSECONDS)
       {
         moreiterations = false;
       }

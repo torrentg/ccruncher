@@ -68,6 +68,8 @@ class MonteCarlo
 
     /** numero maxim de iteracions */
     long MAXITERATIONS;
+    /** numero maxim de segons */
+    long MAXSECONDS;
     /** numero de talls temporals */
     int STEPS;
     /** amplada de cada pas temporal */
@@ -111,7 +113,7 @@ class MonteCarlo
     double ** allocMatrix(int n) throw(Exception);
     void init(const IData *) throw(Exception);
     double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
-    CopulaNormal** initCopulas(double **, int, int) throw(Exception);
+    CopulaNormal** initCopulas(double **, int, int, long) throw(Exception);
     int** initRatingsPaths(int, int, vector<Client *> *);
     void initAggregators() throw(Exception);
     void evalueAggregators() throw(Exception);

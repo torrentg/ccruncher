@@ -224,3 +224,12 @@ double ccruncher::CopulaNormal::get(int i)
     return aux1[i];
   }
 }
+
+//***************************************************************************
+// Set new seed in the number generator
+// @param x seed to be set
+//***************************************************************************
+void ccruncher::CopulaNormal::setSeed(long k)
+{
+  mtrand.seed((const unsigned long) k);
+}
