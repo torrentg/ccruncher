@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added logger
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -97,8 +100,6 @@ class MonteCarlo
 
     /* flag per gestionar antithetic (default=false) */
     bool reversed;
-    /* verbosity level (0=quiet, 1=verbose) (default=0)*/
-    int verbosity;
     /* mpi usage flag (default=false) */
     bool usempi;
     /* hash (0=non show hashes) (default=0) */
@@ -127,7 +128,6 @@ class MonteCarlo
     ~MonteCarlo();
 
     void setFilePath(string path, bool force);
-    void setVerbosity(int level);
     void useMPI(bool);
     void setHash(int num);
     void initialize(const IData *) throw(Exception);

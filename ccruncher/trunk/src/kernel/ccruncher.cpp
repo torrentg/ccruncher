@@ -225,7 +225,6 @@ void run(string filename, string path) throw(Exception)
   MonteCarlo simul;
   simul.setFilePath(path, bforce);
   simul.useMPI(bmpi);
-  simul.setVerbosity(bverbose?1:0);
   simul.setHash(ihash);
 
   // initializing simulation
