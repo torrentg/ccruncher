@@ -73,30 +73,36 @@ Developers tips & tricks
 
 1. download CreditCruncher sources from subversion repositori
      svn checkout http://www.generacio.com/svn/repos/ccruncher/
+     cd trunk
 
 2. install xerces-c package (explained before)
 
-3. create ./configure script
+3. create auto-files (run only 1 time)
+     autoscan (produces configure.in)
+     autoheader (produces config.h.in)
+     mv config.h.in src/utils/
+     
+4. create ./configure script
      aclocal
      autoconf
      automake -avc --warnings=all
 
-4. compile project in debug mode
+5. compile project in debug mode
      ./configure --prefix=$PWD --enable-debug
      make
      make check
 
-5. executing test suite
+6. executing test suite
      src/tests
 
-6. checking memory leaks
+7. checking memory leaks
      valgrind --tool=memcheck --leak-check=yes <progname>
 
-7. profiling executable
+8. profiling executable
      ./path/progname (-> writes gmon.out because we compiled with -pg flag)
      gprof ./path/progname gmon.out
 
-8. debuging executable
+9. debuging executable
      gdb ./path/progname
        > help
        > set args arg1 arg2 arg3 ... argn
@@ -104,7 +110,8 @@ Developers tips & tricks
        > backtrace
        > quit
 
-8. making source distribution package
+10. making source distribution package
+     make distcheck
      make dist
 
 
