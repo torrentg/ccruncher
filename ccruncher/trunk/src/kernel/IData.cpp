@@ -105,13 +105,15 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     }
 
     // parsing file
+    Logger::trace("reading input file", '-');
+    Logger::newIndentLevel();
     XMLUtils::initialize();
     parser = XMLUtils::getParser();
     doc = XMLUtils::getDocument(parser, xmlfilename);
     parseDOMNode(*(doc->getDocumentElement()));
     parser->release();
-    //delete parser;
     XMLUtils::terminate();
+    Logger::previousIndentLevel();
   }
   catch(Exception &e)
   {
@@ -242,7 +244,7 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing parameters ...");
+  Logger::trace("parsing parameters", true);
 
   if (params != NULL)
   {
@@ -259,7 +261,7 @@ void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing interests ...");
+  Logger::trace("parsing interests", true);
 
   if (interests != NULL)
   {
@@ -276,7 +278,7 @@ void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing ratings ...");
+  Logger::trace("parsing ratings", true);
 
   if (ratings != NULL)
   {
@@ -293,7 +295,7 @@ void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing transition matrix ...");
+  Logger::trace("parsing transition matrix", true);
 
   if (ratings == NULL)
   {
@@ -314,7 +316,7 @@ void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing sectors ...");
+  Logger::trace("parsing sectors", true);
 
   if (sectors != NULL)
   {
@@ -331,7 +333,7 @@ void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing correlation matrix ...");
+  Logger::trace("parsing correlation matrix", true);
 
   if (sectors == NULL)
   {
@@ -352,7 +354,7 @@ void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing segmentations ...");
+  Logger::trace("parsing segmentations", true);
 
   if (segmentations != NULL)
   {
@@ -369,7 +371,7 @@ void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing aggregators ...");
+  Logger::trace("parsing aggregators", true);
 
   if (segmentations == NULL)
   {
@@ -390,7 +392,7 @@ void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(const DOMNode &node) throw(Exception)
 {
-  Logger::trace("parsing portfolio ...");
+  Logger::trace("parsing portfolio", true);
 
   if (interests == NULL)
   {

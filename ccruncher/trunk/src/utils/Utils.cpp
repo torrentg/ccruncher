@@ -255,18 +255,17 @@ string ccruncher::Utils::lowercase(string str)
 }
 
 //===========================================================================
+// filler
+//===========================================================================
+string ccruncher::Utils::filler(int n, char c)
+{
+  return string(n, c);
+}
+
+//===========================================================================
 // blanks
 //===========================================================================
 string ccruncher::Utils::blanks(int n)
 {
-  string ret = "";
-
-  assert(n >= 0);
-
-  for (int i=0;i<n;i++)
-  {
-    ret += " ";
-  }
-
-  return ret;
+  return filler(n, ' ');
 }

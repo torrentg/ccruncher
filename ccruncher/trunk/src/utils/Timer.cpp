@@ -121,8 +121,8 @@ string ccruncher::Timer::format(double val)
   double cur = val;
 
   // computing milliseconds  
-  int ms = int((cur-floor(cur)+1.0E-14)*1000.0);
-  cur = floor(cur) + 1.0E-8;
+  int ms = int((cur-floor(cur+1.0E-14)+1.0E-14)*1000.0);
+  cur = floor(cur+1.0E-14) + 1.0E-8;
 
   // computing hours
   int hh = int(cur/3600.0);

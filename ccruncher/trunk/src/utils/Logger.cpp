@@ -102,7 +102,23 @@ void ccruncher::Logger::trace(string msg)
 //===========================================================================
 // trace
 //===========================================================================
+void ccruncher::Logger::trace(string msg, char c)
+{
+  trace(msg, c, false);
+}
+
+//===========================================================================
+// trace
+//===========================================================================
 void ccruncher::Logger::trace(string msg, bool tracetime_)
+{
+  trace(msg, ' ', tracetime_);
+}
+
+//===========================================================================
+// trace
+//===========================================================================
+void ccruncher::Logger::trace(string msg, char c, bool tracetime_)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
@@ -119,11 +135,11 @@ void ccruncher::Logger::trace(string msg, bool tracetime_)
 
   // tracing msg  
   cout << indentator + msg << std::flush;
-  
+
   // post trace actions
   if (tracetime == false)
   {
-    cout << std::endl << std::flush;
+    cout << " " << Utils::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
     curcol = 0;
   }
   else
