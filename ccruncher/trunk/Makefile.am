@@ -9,7 +9,8 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
 
 EXTRA_DIST = COPYING AUTHORS README INSTALL \
-             share/ samples/ data/
+             share samples data
 
 dist-hook:
+	echo "dropping subversion stuff ..."
 	rm -rf `find $(distdir) -name \.svn`
