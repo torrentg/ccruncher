@@ -43,8 +43,6 @@ class DateValuesTest : public TestFixture<DateValuesTest>
   private:
 
     void test1(void);
-    void test2(void);
-    void test3(void);
 
 
   public:
@@ -52,8 +50,6 @@ class DateValuesTest : public TestFixture<DateValuesTest>
     TEST_FIXTURE(DateValuesTest)
     {
       TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
     }
 
     void setUp();

@@ -337,12 +337,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-epsilon) || sum > (1.0+epsilon))
     {
-      string msg = "TransitionMatrix::validate(): invalid row [";
-      msg +=  (i+1);
-      msg += "]. Sum = ";
-      msg += Parser::double2string(sum);
-      msg += " distinct 1.";
-      throw Exception(msg);
+      throw Exception("TransitionMatrix::validate(): exist a transition matrix row that sums != 1");
     }
   }
 

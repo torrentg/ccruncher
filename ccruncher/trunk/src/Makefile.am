@@ -247,7 +247,6 @@ generator_LDADD = -lm -ldl -lxerces-c -lexpat
 tests_SOURCES = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/TestsRunner.cxx\
-    ./utils/XMLUtilsTest.cpp\
     ./utils/UtilsTest.cpp\
     ./utils/TimerTest.cpp\
     ./utils/DateTest.cpp\
@@ -312,7 +311,6 @@ tests_SOURCES = \
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
     \
-    ./utils/XMLUtilsTest.hpp\
     ./utils/UtilsTest.hpp\
     ./utils/TimerTest.hpp\
     ./utils/DateTest.hpp\

@@ -28,13 +28,13 @@ Installation from source package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-0.1.tar.gz
-     tar -xvf ccruncher-0.1.tar
+     gunzip ccruncher-0.2.tar.gz
+     tar -xvf ccruncher-0.2.tar
 
 2. install xerces-c package (explained before)
 
 3. execute commands (read INSTALL file):
-     cd ccruncher-0.1
+     cd ccruncher-0.2
      ./configure --prefix=$PWD
      make
      make check
@@ -45,8 +45,8 @@ Installation from binary package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-0.1_bin.tar.gz
-     tar -xvf ccruncher-0.1_bin.tar
+     gunzip ccruncher-0.2_bin.tar.gz
+     tar -xvf ccruncher-0.2_bin.tar
 
 2. install xerces-c package (explained before)
 
@@ -86,7 +86,7 @@ Developers tips & tricks
      automake -avc --warnings=all
 
 5. compile project in debug mode
-     ./configure --prefix=$PWD --enable-debug
+     ./configure --prefix=$PWD --enable-debug --enable-profiler
      make
      make check
 
@@ -94,6 +94,7 @@ Developers tips & tricks
      src/tests
 
 7. checking memory leaks
+     don't enable profiler because can cause problems to valgrind
      valgrind --tool=memcheck --leak-check=yes <progname>
 
 8. profiling executable

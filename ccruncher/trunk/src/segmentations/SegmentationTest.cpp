@@ -33,7 +33,7 @@
 #include <iostream>
 #include "Segmentation.hpp"
 #include "SegmentationTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -70,31 +70,21 @@ void SegmentationTest::test1()
     </segmentation>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // correlation matrix creation
-  Segmentation *sobj = NULL;
-  ASSERT_NO_THROW(sobj = new Segmentation(*(doc->getDocumentElement())));
+  Segmentation sobj;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  if (sobj != NULL)
-  {
-    ASSERT("office" == sobj->name);
-    ASSERT(asset == sobj->components);
+  ASSERT("office" == sobj.name);
+  ASSERT(asset == sobj.components);
 
-    vector<Segment> vsegments = sobj->getSegments();
-    ASSERT(5 == vsegments.size());
+  vector<Segment> vsegments = sobj.getSegments();
+  ASSERT(5 == vsegments.size());
 
-    ASSERT(0 == sobj->getSegment("rest"));
-    ASSERT(1 == sobj->getSegment("0001"));
-    ASSERT(2 == sobj->getSegment("0002"));
-    ASSERT(3 == sobj->getSegment("0003"));
-    ASSERT(4 == sobj->getSegment("0004"));
-  }
-
-  if (sobj != NULL) delete sobj;
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT(0 == sobj.getSegment("rest"));
+  ASSERT(1 == sobj.getSegment("0001"));
+  ASSERT(2 == sobj.getSegment("0002"));
+  ASSERT(3 == sobj.getSegment("0003"));
+  ASSERT(4 == sobj.getSegment("0004"));
 }
