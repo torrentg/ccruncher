@@ -58,14 +58,12 @@ Using CreditCruncher
 
 2. run CreditCruncher
      $CCRUNCHER/bin/ccruncher --help
-     $CCRUNCHER/bin/ccruncher -hash=100 -f -v -path=./data file.xml
+     $CCRUNCHER/bin/ccruncher --hash=100 -f -v --path=./data file.xml
 
-3. extract data from output files
-     $CCRUNCHER/bin/tabulate --help
-     $CCRUNCHER/bin/tabulate ./data/outputfilex.xml
-
-4. process info using your prefered spreadsheet or use scripts to generate
+3. process info using your prefered spreadsheet or use scripts to generate
    a report file created using TeX and gnuplot
+     $CCRUNCHER/bin/cc2gpi --help
+     $CCRUNCHER/bin/cc2gpi ./data/outputfile.out
 
 
 Developers tips & tricks
