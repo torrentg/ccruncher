@@ -1,7 +1,7 @@
 #!/bin/sh	
 
 # *************************************************************
-#
+# 
 # Set xerces environement variables
 #
 # 1. modify XERCESROOT variable path
