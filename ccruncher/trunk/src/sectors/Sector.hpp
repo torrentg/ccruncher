@@ -62,6 +62,8 @@ class Sector
     Sector();
     Sector(const DOMNode &) throw(Exception);
 
+    string getXML(int) throw(Exception);
+
 };
 
 //---------------------------------------------------------------------------

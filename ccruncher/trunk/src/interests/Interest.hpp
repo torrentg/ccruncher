@@ -80,6 +80,7 @@ class Interest
     double getActualCoef(Date &date1, Date &date2) throw(Exception);
     double getUpdateCoef(Date &date1, Date &date2) throw(Exception);
 
+    string getXML(int) throw(Exception);
 };
 
 //---------------------------------------------------------------------------

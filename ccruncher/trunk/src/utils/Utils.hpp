@@ -71,6 +71,7 @@ class Utils
     static string trim(string s);
     static string uppercase(string str);
     static string lowercase(string str);
+    static string blanks(int);
 };
 
 //---------------------------------------------------------------------------

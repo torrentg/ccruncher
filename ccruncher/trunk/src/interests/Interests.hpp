@@ -66,6 +66,7 @@ class Interests
 
     vector<Interest> * getInterests();
     Interest * getInterest(string name) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

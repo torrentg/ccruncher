@@ -28,6 +28,8 @@
 //===========================================================================
 
 #include "Rate.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -100,4 +102,19 @@ void ccruncher::Rate::parseDOMNode(const DOMNode& node) throw(Exception)
       }
     }
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Rate::getXML(int ilevel) throw(Exception)
+{
+  string ret = Utils::blanks(ilevel);
+
+  ret += "<rate ";
+  ret += "t='" + Parser::double2string(t) + "' ";
+  ret += "r='" + Parser::double2string(r) + "' ";
+  ret += "/>\n";
+
+  return ret;
 }

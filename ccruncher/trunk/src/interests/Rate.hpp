@@ -61,6 +61,8 @@ class Rate
     Rate();
     Rate(const DOMNode &) throw(Exception);
 
+    string getXML(int) throw(Exception);
+
 };
 
 //---------------------------------------------------------------------------

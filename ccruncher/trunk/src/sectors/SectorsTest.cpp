@@ -86,6 +86,9 @@ void SectorsTest::test1()
 
   ASSERT(list[0] < list[1]);
 
+  ASSERT(sectors.getName(0) == "S1");
+  ASSERT(sectors.getName(1) == "S2");
+
   delete wis;
   delete parser;
   XMLUtils::terminate();

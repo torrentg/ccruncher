@@ -30,6 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Sectors.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -197,4 +198,39 @@ int ccruncher::Sectors::getIndex(const string &sector_name)
   }
 
   return -1;
+}
+
+//===========================================================================
+// retorna el nom del rating dins la llista (-1 si no es troba)
+//===========================================================================
+string ccruncher::Sectors::getName(int index) throw(Exception)
+{
+  if (index < 0 || index >= (int) vsectors.size())
+  {
+    throw Exception("Sectors::getName(): index out of range");
+  }
+  else
+  {
+    return vsectors[index].name;
+  }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Sectors::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<sectors>";
+
+  for (unsigned int i=0;i<vsectors.size();i++)
+  {
+    ret += vsectors[i].getXML(ilevel);
+  }
+
+  ret += spc + "</sectors>\n";
+
+  return ret;
 }

@@ -30,6 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Interests.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -159,4 +160,24 @@ void ccruncher::Interests::parseDOMNode(const DOMNode& node) throw(Exception)
       }
     }
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Interests::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<interests>";
+
+  for (unsigned int i=0;i<vinterests.size();i++)
+  {
+    ret += vinterests[i].getXML(ilevel+2);
+  }
+
+  ret += spc + "</interests>\n";
+
+  return ret;
 }

@@ -70,6 +70,7 @@ class CorrelationMatrix
 
     int size();
     double ** getMatrix();
+    string getXML(int) throw(Exception);
 
 };
 

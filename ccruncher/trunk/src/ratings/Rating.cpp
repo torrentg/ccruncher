@@ -28,6 +28,8 @@
 //===========================================================================
 
 #include "Rating.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -113,4 +115,20 @@ void ccruncher::Rating::parseDOMNode(const DOMNode& node) throw(Exception)
       }
     }
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Rating::getXML(int ilevel) throw(Exception)
+{
+  string ret = Utils::blanks(ilevel);
+
+  ret += "<rating ";
+  ret += "name ='" + name + "' ";
+  ret += "order ='" + Parser::int2string(order) + "' ";
+  ret += "desc ='" + desc + "' ";
+  ret += "/>\n";
+
+  return ret;
 }

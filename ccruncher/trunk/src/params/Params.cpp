@@ -28,6 +28,8 @@
 //===========================================================================
 
 #include "Params.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
@@ -249,4 +251,28 @@ void ccruncher::Params::validate(void) throw(Exception)
   {
     throw Exception("Params::validate(): property copula.type not defined");
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Params::getXML(int ilevel) throw(Exception)
+{
+  string spc1 = Utils::blanks(ilevel);
+  string spc2 = Utils::blanks(ilevel+2);
+  string ret = "";
+
+  ret += spc1 + "<params>\n";
+  ret += spc2 + "<property name='time.begindate' value='" + Parser::date2string(begindate) + "'/>";
+  ret += spc2 + "<property name='time.steps' value='" + Parser::int2string(steps) + "'/>";
+  ret += spc2 + "<property name='time.steplength' value='" + Parser::int2string(steplength) + "'/>";
+  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Parser::long2string(maxiterations) + "'/>";
+  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Parser::long2string(maxseconds) + "'/>";
+  ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>";
+  ret += spc2 + "<property name='copula.seed' value='" + Parser::long2string(copula_seed) + "'/>";
+  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Parser::bool2string(copula_seed) + "'/>";
+  ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Parser::bool2string(onlyactive) + "'/>";
+  ret += spc1 + "</params>\n";
+
+  return ret;
 }

@@ -62,6 +62,8 @@ class Rating
     Rating();
     Rating(const DOMNode &) throw(Exception);
 
+    string getXML(int) throw(Exception);
+
 };
 
 //---------------------------------------------------------------------------

@@ -338,6 +338,35 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
 }
 
 //===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
+{
+  string spc1 = Utils::blanks(ilevel);
+  string spc2 = Utils::blanks(ilevel+2);
+  string ret = "";
+
+  ret += spc1 + "<mtransitions period='" + Parser::double2string(period) + "' ";
+  ret += "epsilon='" + Parser::double2string(epsilon) + "'>\n";
+
+  for(int i=0;i<n;i++)
+  {
+    for(int j=0;j<n;j++)
+    {
+      ret += spc2 + "<transition ";
+      ret += "from ='" + ratings->getName(i) + "' ";
+      ret += "to ='" + ratings->getName(j) + "' ";
+      ret += "value ='" + Parser::double2string(matrix[i][j]) + "' ";
+      ret += "/>";
+    }
+  }
+
+  ret += spc1 + "</mtransitions>\n";
+
+  return ret;
+}
+
+//===========================================================================
 // proporciona la matriu de transicio pel periode especificat, t
 // @param t periode de la nova matriu de transicio
 // @return la matriu de transicio pel periode t

@@ -28,6 +28,7 @@
 //===========================================================================
 
 #include <cctype>
+#include <cassert>
 #include <algorithm>
 #include "Utils.hpp"
 
@@ -251,4 +252,21 @@ string ccruncher::Utils::lowercase(string str)
   transform(res.begin(), res.end(), res.begin(), ccruncher::ltolower);
 
   return res;
+}
+
+//===========================================================================
+// blanks
+//===========================================================================
+string ccruncher::Utils::blanks(int n)
+{
+  string ret = "";
+
+  assert(n >= 0);
+
+  for (int i=0;i<n;i++)
+  {
+    ret += " ";
+  }
+
+  return ret;
 }

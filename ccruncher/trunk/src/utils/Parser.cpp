@@ -127,6 +127,25 @@ Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
+// interpreta un boolean
+//===========================================================================
+bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
+{
+  if (str == "true")
+  {
+    return true;
+  }
+  else if (str == "false")
+  {
+    return false;
+  }
+  else
+  {
+    throw Exception("Parser::boolValue(): invalid boolean value");
+  }
+}
+
+//===========================================================================
 // int2string
 //===========================================================================
 string ccruncher::Parser::int2string(const int val)
@@ -163,5 +182,15 @@ string ccruncher::Parser::date2string(const ccruncher::Date &val)
 {
   ostringstream oss;
   oss << val;
+  return oss.str();
+}
+
+//===========================================================================
+// bool2string
+//===========================================================================
+string ccruncher::Parser::bool2string(const bool &val)
+{
+  ostringstream oss;
+  oss << (val?"true":"false");
   return oss.str();
 }

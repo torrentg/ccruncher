@@ -224,7 +224,6 @@ void ccruncher::CorrelationMatrix::parseSigma(const DOMNode& node) throw(Excepti
   }
 }
 
-
 //===========================================================================
 // validacio del contingut de la classe
 //===========================================================================
@@ -257,4 +256,32 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
   {
     throw Exception("CorrelationMatrix::validate(): matrix non definite prositive");
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
+{
+  string spc1 = Utils::blanks(ilevel);
+  string spc2 = Utils::blanks(ilevel+2);
+  string ret = "";
+
+  ret += spc1 + "<mcorrels epsilon='" + Parser::double2string(epsilon) + "'>\n";
+
+  for(int i=0;i<n;i++)
+  {
+    for(int j=i;j<n;j++)
+    {
+      ret += spc2 + "<sigma ";
+      ret += "sector1 ='" + sectors->getName(i) + "' ";
+      ret += "sector2 ='" + sectors->getName(j) + "' ";
+      ret += "value ='" + Parser::double2string(matrix[i][j]) + "' ";
+      ret += "/>";
+    }
+  }
+
+  ret += spc1 + "</mcorrels>\n";
+
+  return ret;
 }

@@ -72,6 +72,7 @@ class Params
     ~Params();
 
     Date* getDates() throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

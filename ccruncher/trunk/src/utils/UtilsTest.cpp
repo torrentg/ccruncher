@@ -180,4 +180,5 @@ void UtilsTest::test2()
   ASSERT("I Am A String Ready For Sacrifice" == Utils::trim(str1));
   ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Utils::uppercase(str1));
   ASSERT("  i am a string ready for sacrifice  " == Utils::lowercase(str1));
+  ASSERT("   " == Utils::blanks(3));
 }

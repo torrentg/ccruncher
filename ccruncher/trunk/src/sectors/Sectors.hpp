@@ -66,6 +66,8 @@ class Sectors
 
     vector<Sector> * getSectors();
     int getIndex(const string &);
+    string getName(int index) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

@@ -128,6 +128,26 @@ void ParserTest::test_date(void)
 }
 
 //===========================================================================
+// date_bool
+//===========================================================================
+void ParserTest::test_bool(void)
+{
+  ASSERT_EQUALS(true, Parser::boolValue("true"));
+  ASSERT_EQUALS(false, Parser::boolValue("false"));
+
+  ASSERT_THROW(Parser::boolValue("true "));
+  ASSERT_THROW(Parser::boolValue(" true"));
+  ASSERT_THROW(Parser::boolValue(" true "));
+  ASSERT_THROW(Parser::boolValue("false "));
+  ASSERT_THROW(Parser::boolValue(" false"));
+  ASSERT_THROW(Parser::boolValue(" false "));
+  ASSERT_THROW(Parser::boolValue("TRUE"));
+  ASSERT_THROW(Parser::boolValue("FALSE"));
+  ASSERT_THROW(Parser::boolValue("True"));
+  ASSERT_THROW(Parser::boolValue("False"));
+}
+
+//===========================================================================
 // toString
 //===========================================================================
 void ParserTest::test_toString(void)
@@ -138,4 +158,6 @@ void ParserTest::test_toString(void)
   ASSERT("50000" == Parser::long2string(50000));
   ASSERT("3.1415" == Parser::double2string(3.1415));
   ASSERT("01/01/2005" == Parser::date2string(date1));
+  ASSERT("true" == Parser::bool2string(true));
+  ASSERT("false" == Parser::bool2string(false));
 }

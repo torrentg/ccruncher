@@ -76,6 +76,7 @@ class TransitionMatrix
     double ** getMatrix();
     int getIndexDefault();
     int evalue(const int irating, const double val);
+    string getXML(int) throw(Exception);
 
 };
 

@@ -30,6 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include "Ratings.hpp"
+#include "utils/Utils.hpp"
 #include "utils/XMLUtils.hpp"
 #include "utils/Parser.hpp"
 
@@ -213,4 +214,24 @@ string ccruncher::Ratings::getName(int index) throw(Exception)
   {
     return vratings[index].name;
   }
+}
+
+//===========================================================================
+// getXML
+//===========================================================================
+string ccruncher::Ratings::getXML(int ilevel) throw(Exception)
+{
+  string spc = Utils::blanks(ilevel);
+  string ret = "";
+
+  ret += spc + "<ratings>\n";
+
+  for (unsigned int i=0;i<vratings.size();i++)
+  {
+    ret += vratings[i].getXML(ilevel+2);
+  }
+
+  ret += spc + "</ratings>\n";
+
+  return ret;
 }
