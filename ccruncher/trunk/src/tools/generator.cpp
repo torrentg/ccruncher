@@ -25,11 +25,15 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added POSIX compliance in command line arguments
+//
 //===========================================================================
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <getopt.h>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
 #include "utils/Utils.hpp"
@@ -65,71 +69,106 @@ double getNominal();
 //===========================================================================
 int main(int argc, char *argv[])
 {
+  // short options
+  const char* const options1 = "" ;
+
+  // long options (name + has_arg + flag + val)
+  const struct option options2[] =
+  {
+      { "help",         0,  NULL,  300 },
+      { "version",      0,  NULL,  301 },
+      { "nclients",     1,  NULL,  302 },
+      { "nassets",      1,  NULL,  303 },
+      { "copyright",    0,  NULL,  304 },
+      { NULL,           0,  NULL,   0  }
+  };
+
   string sfilename = "";
   long nclients = 0L;
   long nassets = 0L;
 
   // parsing options
-  for (int i=1;i<argc;i++)
+  while (1)
   {
-    string arg = string(argv[i]);
+    int curropt = getopt_long (argc, argv, options1, options2, NULL);
+  
+    if (curropt == -1)
+    {
+      // no more options. exit while
+      break;
+    }
+  
+    switch(curropt)
+    {
+      case '?': // invalid option
+          cerr << "error parsing arguments" << endl;
+          cerr << "use --help option for more information" << endl;
+          return 1;
 
-    if (arg == "--help")
-    {
-      usage();
-      return 0;
-    }
-    else if (arg == "--version")
-    {
-      version();
-      return 0;
-    }
-    else if (arg.length() >= 10 && arg.substr(0, 10) == "-nclients=")
-    {
-      try
-      {
-        nclients = Parser::longValue(arg.substr(10));
-      }
-      catch(Exception &e)
-      {
-        cerr << "invalid nclients value" << endl;
-        return 1;
-      }
-    }
-    else if (arg.length() >= 9 && arg.substr(0, 9) == "-nassets=")
-    {
-      try
-      {
-        nassets = Parser::longValue(arg.substr(9));
-      }
-      catch(Exception &e)
-      {
-        cerr << "invalid nassets value" << endl;
-        return 1;
-      }
-    }
-    else
-    {
-      if (sfilename != "" || arg.substr(0, 1) == "-")
-      {
-        cerr << "unexpected argument: " << arg << endl;
-        cerr << "use --help option for more information" << endl;
-        return 1;
-      }
-      else
-      {
-        sfilename = arg;
-      }
+      case 300: // --help (show help and exit)
+          usage();
+          return 0;
+
+      case 301: // --version (show version and exit)
+          version();
+          return 0;
+
+      case 302: // --nclients (set number clients)
+          try
+          {
+            string sclients = string(optarg); 
+            nclients = Parser::longValue(sclients);
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid nclients value" << endl;
+            return 1;
+          }
+          break;
+      
+      case 303: // --nassets (set number clients)
+          try
+          {
+            string sassets = string(optarg); 
+            nassets = Parser::longValue(sassets);
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid nassets value" << endl;
+            return 1;
+          }
+          break;
+
+      case 304: // --copyright (show copyright and exit)
+          copyright();
+          return 0;
+
+      default: // unexpected error
+          cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
+                  "generator version and arguments at gerard@fobos.generacio.com\n";
+          return 1;
     }
   }
-
-  // arguments validations
-  if (sfilename == "")
+  
+  // retrieving input filename  
+  if (argc == optind)
   {
     cerr << "xml input file not specified" << endl;
     cerr << "use --help option for more information" << endl;
     return 1;
   }
+  else if (argc - optind > 1)
+  {
+    cerr << "last argument will be the xml input file" << endl;
+    cerr << "use --help option for more information" << endl;
+    return 1;
+  }
+  else
+  {
+    sfilename = string(argv[argc-1]);
+  }
+  
+  // checking basic arguments existence
   if (nclients == 0L || nassets == 0L)
   {
     cerr << "required arguments not especified" << endl;
@@ -253,23 +292,24 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: generator -nclients=num -nassets=num file.xml\n"
+  "  usage: generator [options] --nclients=num1 --nassets=num2 file.xml\n"
   "\n"
   "  description:\n"
   "    generator is a creditcruncher tool for generating input test files\n"
   "    ratings and sectors are extracted from template file\n"
   "  arguments:\n"
-  "    file.xml   file used as template\n"
-  "    -nclients  number of clients in portfolio\n"
-  "    -nassets   number of assets per client\n"
+  "    file.xml        file used as template\n"
+  "    --nclients=val  number of clients in portfolio\n"
+  "    --nassets=val   number of assets per client\n"
   "  options:\n"
-  "    --help     show this message and exit\n"
-  "    --version  show version and exit\n"
+  "    --help          show this message and exit\n"
+  "    --version       show version and exit\n"
+  "    --copyright     show copyright and exit\n"
   "  return codes:\n"
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    generator -nclients=20 -nassets=3 template.xml\n"
+  "    generator --nclients=20 --nassets=3 template.xml\n"
   << endl;
 }
 

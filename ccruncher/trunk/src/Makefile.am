@@ -11,7 +11,7 @@ AM_CPPFLAGS = \
     -I../share/Mersenne-1.0/\
     -I../share/MiniCppUnit-2.2/
 
-bin_PROGRAMS = ccruncher tabulate generator trimmer
+bin_PROGRAMS = ccruncher cc2gpi generator
 
 check_PROGRAMS = tests
 
@@ -98,39 +98,27 @@ ccruncher_LDFLAGS =
 ccruncher_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
-# trimmer
+# cc2gpi
 # -------------------------------------------------------------
-trimmer_SOURCES = \
-    ./tools/trimmer.cpp
-
-trimmer_CXXFLAGS = -Wall -W -Wshadow
-trimmer_LDFLAGS = 
-trimmer_LDADD = 
-
-# -------------------------------------------------------------
-# tabulate
-# -------------------------------------------------------------
-tabulate_SOURCES = \
-    ./tools/tabulate.cpp\
-    ./tools/SAX2Handlers.cpp\
+cc2gpi_SOURCES = \
+    ./tools/cc2gpi.cpp\
+    ./tools/FileResults.cpp\
     ./utils/Exception.cpp\
-    ./utils/XMLUtils.cpp\
     ./utils/Parser.cpp\
     ./utils/Date.cpp\
-    ./utils/File.cpp\
     ./utils/Utils.cpp\
+    ./utils/File.cpp\
     \
-    ./tools/SAX2Handlers.hpp\
+    ./tools/FileResults.hpp\
     ./utils/Exception.hpp\
-    ./utils/XMLUtils.hpp\
     ./utils/Parser.hpp\
     ./utils/Date.hpp\
-    ./utils/File.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/File.hpp
 
-tabulate_CXXFLAGS = -Wall -W -Wshadow
-tabulate_LDFLAGS =
-tabulate_LDADD = -ldl -lxerces-c
+cc2gpi_CXXFLAGS = -Wall -W -Wshadow
+cc2gpi_LDFLAGS =
+cc2gpi_LDADD = 
 
 # -------------------------------------------------------------
 # generator

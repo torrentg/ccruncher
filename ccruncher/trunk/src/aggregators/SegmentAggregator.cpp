@@ -944,5 +944,5 @@ string ccruncher::SegmentAggregator::getFilePath() throw(Exception)
     throw Exception("SegmentAggregator::getFilePath(): panic, setNames() not called");
   }
 
-  return path + name0 + "-" + name1 + "-" + name2 + ".txt";
+  return path + name0 + "-" + name1 + "-" + name2 + ".out";
 }
