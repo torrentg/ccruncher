@@ -99,7 +99,7 @@
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="portfolio" components="client"/>
     <segmentation name="client" components="client">
       <segment name="*"/>
     </segmentation>
@@ -131,6 +131,8 @@
   <aggregators>
     <aggregator name="aggregator1" segmentation="portfolio" 
                 type="values" full="true"/>
+    <aggregator name="aggregator2" segmentation="portfolio" 
+                type="ratings" full="false"/>
   </aggregators>
   
   <!-- ============================================================== -->

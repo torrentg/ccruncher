@@ -161,7 +161,7 @@ ccruncher::IData::IData(const DOMNode &node, int vlevel) throw(Exception)
 }
 
 //===========================================================================
-// constructor
+// destructor
 //===========================================================================
 ccruncher::IData::~IData()
 {

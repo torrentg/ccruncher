@@ -759,8 +759,8 @@ void ccruncher::SegmentAggregator::printHeader() throw(Exception)
   fout << "# ===========================================================\n";
   fout << "# FILE CONTENT:\n";
   fout << "#   CreditCruncher output file\n";
-  fout << "#   version = " << VERSION << "\n";
-  fout << "#   creation date = " << Date() << "\n";
+  fout << "#   content.version = " << VERSION << "\n";
+  fout << "#   content.date = " << Date() << "\n";
   fout << "# -----------------------------------------------------------\n";  
   fout << "# FILE FORMAT:\n";
   fout << "#   tabulated data\n";
@@ -780,14 +780,16 @@ void ccruncher::SegmentAggregator::printHeader() throw(Exception)
   fout << "#   param.ntranches = " << M << "\n";
   fout << "# -----------------------------------------------------------\n";
   fout << "# COLUMNS DESCRIPTIONS:\n";
-  fout << "#   column.1 = " << (bfull?"simulation counter":"number of simulations") << "\n";
+  fout << "#   column.1.content = " << (bfull?"simulation counter":"number of simulations") << "\n";
+  fout << "#   column.1.date = N/A\n";
   
   for(int numcol=2,i=0;i<M;i++)
   {
     if (bvalues == true)
     {
       Date tmp = cvalues[0][i].date;
-      fout << "#   column." << numcol << " = value at " << tmp << "\n";
+      fout << "#   column." << numcol << ".content = value\n";
+      fout << "#   column." << numcol << ".date = " << tmp << "\n";
       numcol++;
     }
     else
@@ -796,7 +798,9 @@ void ccruncher::SegmentAggregator::printHeader() throw(Exception)
       int numratings = ratings->getRatings()->size();
       for (int j=0;j<numratings;j++)
       {
-        fout << "#   column." << numcol << " = number of ocurrences rating " << ratings->getName(j) << " at " << tmp << "\n";
+        fout << "#   column." << numcol << ".content = number of ocurrences\n";
+        fout << "#   column." << numcol << ".date = " << tmp << "\n";
+        fout << "#   column." << numcol << ".rating = " << ratings->getName(j) << "\n";
         numcol++;
       }
     }

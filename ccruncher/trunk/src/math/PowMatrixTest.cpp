@@ -153,7 +153,6 @@ void PowMatrixTest::test2()
   {
     for (int j=0;j<3;j++)
     {
-cout << "i=" << i << " j=" << j << " solB[j+3*i]=" << solB[j+3*i] << " M[i][j]=" << M[i][j] << " diff=" << std::abs(solB[j+3*i]-M[i][j]) << endl;
       ASSERT_DOUBLES_EQUAL(solB[j+3*i], M[i][j], EPSILON);
     }
   }
