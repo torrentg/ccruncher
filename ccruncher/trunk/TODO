@@ -21,6 +21,8 @@ Works in progress
 
 8. add time info at ccruncher execution output
 
+9. convert command line arguments to POSIX compliant command line argument
+
 Future works
 -------------------
 

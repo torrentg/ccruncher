@@ -25,11 +25,15 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added POSIX compliance in command line arguments
+//
 //===========================================================================
 
 #include <sys/resource.h>
 #include <cerrno>
 #include <iostream>
+#include <getopt.h>
 #include "MonteCarlo.hpp"
 #include "IData.hpp"
 #include "utils/File.hpp"
@@ -59,98 +63,117 @@ int ihash = 0;
 //===========================================================================
 int main(int argc, char *argv[])
 {
-  // parsing options
-  for (int i=1;i<argc;i++)
-  {
-    string arg = string(argv[i]);
+  // short options
+  const char* const options1 = "hvf" ;
 
-    if (arg == "--help")
+  // long options (name + has_arg + flag + val)
+  const struct option options2[] =
+  {
+      { "help",         0,  NULL,  'h' },
+      { "version",      0,  NULL,  301 },
+      { "path",         1,  NULL,  302 },
+      { "nice",         1,  NULL,  303 },
+      { "hash",         1,  NULL,  304 },
+      { "validate",     0,  NULL,  305 },
+      { "mpi",          0,  NULL,  306 },
+      { NULL,           0,  NULL,   0  }
+  };
+    
+  // parsing options
+  while (1)
+  {
+    int curropt = getopt_long (argc, argv, options1, options2, NULL);
+  
+    if (curropt == -1)
     {
-      usage();
-      return 0;
+      // no more options. exit while
+      break;
     }
-    else if (arg == "--version")
+  
+    switch(curropt)
     {
-      version();
-      return 0;
-    }
-    else if (arg.length() >= 6 && arg.substr(0, 6) == "-path=")
-    {
-      spath = arg.substr(6);
-    }
-    else if (arg.length() >= 6 && arg.substr(0, 6) == "-nice=")
-    {
-      try
-      {
-        inice = Parser::intValue(arg.substr(6));
-      }
-      catch(Exception &e)
-      {
-        cerr << "invalid nice value" << endl;
-        return 1;
-      }
-    }
-    else if (arg.length() >= 6 && arg.substr(0, 6) == "-hash=")
-    {
-      try
-      {
-        ihash = Parser::intValue(arg.substr(6));
-      }
-      catch(Exception &e)
-      {
-        cerr << "invalid hash value" << endl;
-        return 1;
-      }
-    }
-    else if (arg == "-validate")
-    {
-      bsimulate = false;
-    }
-    else if (arg == "-mpi")
-    {
-      bmpi = true;
-    }
-    else if (arg == "-v")
-    {
-      bverbose = true;
-    }
-    else if (arg == "-f")
-    {
-      bforce = true;
-    }
-    else if (i == argc-1)
-    {
-      if (arg.substr(0,1) == "-")
-      {
-        cerr << "last argument will be the xml input file" << endl;
-        cerr << "use --help option for more information" << endl;
-        return 1;
-      }
-      else
-      {
-        sfilename = arg;
-      }
-    }
-    else
-    {
-      cerr << "found invalid option: " << arg << endl;
-      cerr << "use --help option for more information" << endl;
-      return 1;
+      case '?': // invalid option
+          cerr << "error parsing arguments" << endl;
+          cerr << "use --help option for more information" << endl;
+          return 1;
+          
+      case 'h': // -h or --help (show help and exit)
+          usage();
+          return 0;
+          
+      case 'v': // -v (be verbose)
+          bverbose = true;
+          break;
+          
+      case 'f': // -f (force overwriting)
+          bforce = true;
+          break;
+          
+      case 301: // --version (show version and exit)
+          version();
+          return 0;
+          
+      case 302: // --path=dir (set output files path)
+          spath = string(optarg);
+          break;
+          
+      case 303: // --nice=val (set nice value)
+          try
+          {
+            string snice = string(optarg);
+            inice = Parser::intValue(snice);
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid nice value" << endl;
+            return 1;
+          }
+          break;
+          
+      case 304: // --hash=val (set hash value)
+          try
+          {
+            string shash = string(optarg);
+            ihash = Parser::intValue(shash);
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid hash value" << endl;
+            return 1;
+          }
+          break;
+          
+      case 305: // --validate (validate input file)
+          bsimulate = false;
+          break;
+          
+      case 306: // --mpi (use mpi environement)
+          bmpi = true;          
+          break;
+          
+      default: // unexpected error
+          cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
+                  "ccruncher version and arguments at gerard@fobos.generacio.com\n";
+          return 1;
     }
   }
 
-  // arguments validations
-  if (sfilename == "")
+  // retrieving input filename  
+  if (argc == optind)
   {
     cerr << "xml input file not specified" << endl;
     cerr << "use --help option for more information" << endl;
     return 1;
   }
-  if (spath == "" && bsimulate == true)
+  else if (argc - optind > 1)
   {
-    cerr << "required option -path not especified" << endl;
+    cerr << "last argument will be the xml input file" << endl;
     cerr << "use --help option for more information" << endl;
     return 1;
+  }
+  else
+  {
+    sfilename = string(argv[argc-1]);
   }
 
   // license info
@@ -266,24 +289,24 @@ void usage()
   "    of a pure credit portfolio using monte carlo techniques.\n"
   "    more info at http://www.generacio.com/ccruncher\n"
   "  arguments:\n"
-  "    file       xml file containing the problem to be solved\n"
+  "    file        xml file containing the problem to be solved\n"
   "  options:\n"
-  "    -path=dir  directory where output files will be placed (required)\n"
-  "    -nice=num  set nice priority to num (default 10)\n"
-  "    -hash=num  print '#' for each num simulations (default=0)\n"
-  "    -validate  perform input file validations and exit\n"
-  "    -mpi       enable lam/mpi work mode\n"
-  "    -f         force output files overwriting\n"
-  "    -v         be more verbose\n"
-  "    --help     show this message and exit\n"
-  "    --version  show version and exit\n"
+  "    -f          force output files overwriting\n"
+  "    -v          be more verbose\n"
+  "    --path=dir  directory where output files will be placed (required)\n"
+  "    --nice=num  set nice priority to num (default 10)\n"
+  "    --hash=num  print '#' for each num simulations (default=0)\n"
+  "    --validate  perform input file validations and exit\n"
+  "    --mpi       enable lam/mpi work mode\n"
+  "    --help -h   show this message and exit\n"
+  "    --version   show version and exit\n"
   "  return codes:\n"
-  "    0          OK. finished without errors\n"
-  "    1          KO. finished with errors\n"
+  "    0           OK. finished without errors\n"
+  "    1           KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher -validate input.xml\n"
-  "    ccruncher -path=20050601 input.xml\n"
-  "    ccruncher -nice=19 -f -path=./E20050601 input.xml\n"
+  "    ccruncher --validate input.xml\n"
+  "    ccruncher --path=20050601 input.xml\n"
+  "    ccruncher --nice=19 -fv --path=./E20050601 input.xml\n"
   << endl;
 }
 

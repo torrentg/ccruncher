@@ -25,6 +25,10 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug at XML read that hangs ccruncher when input file isn't 
+//     a true xml file
+//
 //===========================================================================
 
 #include <cassert>
@@ -176,8 +180,7 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "creditcruncher"))
   {
-    string msg = "IData::parseDOMNode(): Invalid tag. Expected: creditcruncher. Found: ";
-    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    string msg = "IData::parseDOMNode(): Invalid tag. Expected: creditcruncher";
     throw Exception(msg);
   }
 
