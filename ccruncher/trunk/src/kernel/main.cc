@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "creditcruncher version and arguments at gerard@fobos.generacio.com\n";
+            "ccruncher version and arguments at gerard@fobos.generacio.com\n";
     return 1;
   }
 
@@ -250,7 +250,7 @@ void setnice(int niceval) throw(Exception)
 //***************************************************************************
 void version()
 {
-  cout << "creditcruncher-0.1" << endl;
+  cout << "ccruncher-0.1" << endl;
 }
 
 //***************************************************************************
@@ -259,12 +259,12 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: creditcruncher [options] <file>\n"
+  "  usage: ccruncher [options] <file>\n"
   "\n"
   "  description:\n"
   "    creditcruncher is a tool used to evalute VAR (value at risk)\n"
   "    of a pure credit portfolio using monte carlo techniques.\n"
-  "    more info at http://www.generacio.com/creditcruncher\n"
+  "    more info at http://www.generacio.com/ccruncher\n"
   "  arguments:\n"
   "    file       xml file containing the problem to be solved\n"
   "  options:\n"
@@ -281,9 +281,9 @@ void usage()
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    creditcruncher -validate input.xml\n"
-  "    creditcruncher -path=20050601 input.xml\n"
-  "    creditcruncher -nice=19 -path=./E20050601 input.xml\n"
+  "    ccruncher -validate input.xml\n"
+  "    ccruncher -path=20050601 input.xml\n"
+  "    ccruncher -nice=19 -f -path=./E20050601 input.xml\n"
   << endl;
 }
 
@@ -293,8 +293,8 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "  creditcruncher is Copyright (C) 2003-2005 Gerard Torrent\n"
+  "  ccruncher is Copyright (C) 2003-2005 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
-  "  more info at http://www.generacio.com/creditcruncher\n"
+  "  more info at http://www.generacio.com/ccruncher\n"
   << endl;
 }
