@@ -3,11 +3,11 @@ This directory contains third part projects used by CreditCruncher:
 
 ------------------------------------------------------------------------
 
-project: cppunit
-version: 1.10.2
-licence: GNU Lesser General Public License
-homeurl: http://cppunit.sourceforge.net/ 
-descrip: CppUnit is a C++ unit testing framework. 
+project: minicppunit
+version: 2.2
+licence: GNU GPL
+homeurl: http://minicppunit.sourceforge.net/ 
+descrip: MiniCppUnit is a C++ unit testing framework. 
          In CreeditCruncher is used to test all basic classes.
          All classes that match pattern *Test.?pp are unit test.
 
