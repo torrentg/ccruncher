@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,16 +25,16 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-//***************************************************************************
+//===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "Segmentations.hpp"
 #include "utils/XMLUtils.hpp"
 
-//***************************************************************************
+//===========================================================================
 // constructor
-//***************************************************************************
+//===========================================================================
 ccruncher::Segmentations::Segmentations(const DOMNode& node) throw(Exception)
 {
   // recollim els parametres de la simulacio
@@ -44,25 +44,25 @@ ccruncher::Segmentations::Segmentations(const DOMNode& node) throw(Exception)
   validate();
 }
 
-//***************************************************************************
+//===========================================================================
 // destructor
-//***************************************************************************
+//===========================================================================
 ccruncher::Segmentations::~Segmentations()
 {
   // nothing to do
 }
 
-//***************************************************************************
+//===========================================================================
 // return segmentations list
-//***************************************************************************
+//===========================================================================
 vector<Segmentation> ccruncher::Segmentations::getSegmentations() 
 {
   return vsegmentations;
 }
 
-//***************************************************************************
+//===========================================================================
 // return segmentation by name
-//***************************************************************************
+//===========================================================================
 int ccruncher::Segmentations::getSegmentation(string name)
 {
   for (unsigned int i=0;i<vsegmentations.size();i++)
@@ -76,9 +76,9 @@ int ccruncher::Segmentations::getSegmentation(string name)
   return -1;
 }
 
-//***************************************************************************
+//===========================================================================
 // return components of a segmentation by name
-//***************************************************************************
+//===========================================================================
 char ccruncher::Segmentations::getComponents(string name)
 {
   for (unsigned int i=0;i<vsegmentations.size();i++)
@@ -92,9 +92,9 @@ char ccruncher::Segmentations::getComponents(string name)
   return -1;
 }
 
-//***************************************************************************
+//===========================================================================
 // return components of a segmentation by name
-//***************************************************************************
+//===========================================================================
 char ccruncher::Segmentations::getComponents(int iseg)
 {
   if (iseg < 0 || (unsigned int) iseg >= vsegmentations.size())
@@ -107,9 +107,9 @@ char ccruncher::Segmentations::getComponents(int iseg)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // return segment by name
-//***************************************************************************
+//===========================================================================
 int ccruncher::Segmentations::getSegment(string segmentation, string segment)
 {
   int iconcept = getSegmentation(segmentation);
@@ -124,9 +124,9 @@ int ccruncher::Segmentations::getSegment(string segmentation, string segment)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // validate
-//***************************************************************************
+//===========================================================================
 void ccruncher::Segmentations::validate() throw(Exception)
 {
   if (vsegmentations.size() == 0)
@@ -135,9 +135,9 @@ void ccruncher::Segmentations::validate() throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // insert a new segmentation in list
-//***************************************************************************
+//===========================================================================
 void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception) 
 {
   // validem coherencia
@@ -162,9 +162,9 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // interpreta un node XML 
-//***************************************************************************
+//===========================================================================
 void ccruncher::Segmentations::parseDOMNode(const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
@@ -201,9 +201,9 @@ void ccruncher::Segmentations::parseDOMNode(const DOMNode& node) throw(Exception
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // addSegment
-//***************************************************************************
+//===========================================================================
 void ccruncher::Segmentations::addSegment(string segmentation, string segment) throw(Exception)
 {
   int isegmentation = getSegmentation(segmentation);
@@ -218,9 +218,9 @@ void ccruncher::Segmentations::addSegment(string segmentation, string segment) t
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // getSegmentationName
-//***************************************************************************
+//===========================================================================
 string ccruncher::Segmentations::getSegmentationName(int isegmentation) throw(Exception)
 {
   if (isegmentation < 0 || isegmentation >= (int) vsegmentations.size())
@@ -233,9 +233,9 @@ string ccruncher::Segmentations::getSegmentationName(int isegmentation) throw(Ex
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // getSegmentName
-//***************************************************************************
+//===========================================================================
 string ccruncher::Segmentations::getSegmentName(int isegmentation, int isegment) throw(Exception)
 {
   if (isegmentation < 0 || isegmentation >= (int) vsegmentations.size())

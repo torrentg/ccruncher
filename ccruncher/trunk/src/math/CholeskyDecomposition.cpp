@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,20 +25,20 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (Extracted from 'Numerical Recipes in C')
 //
-//***************************************************************************
+//===========================================================================
 
 #include <cmath>
 #include <iostream>
 #include "CholeskyDecomposition.hpp"
 
-//***************************************************************************
+//===========================================================================
 // implements cholesky decomposition matrix
 // A = L.L' (where L lower triangular matrix)
 // @return false=KO (not definite positiva), true=OK
 // Cholesky factor (L) is returned as upper triangle of given matrix
 // except for this diagonal elements which are returned in p
 // extracted from 'Numerical Recipes in C'
-//***************************************************************************
+//===========================================================================
 bool ccruncher::CholeskyDecomposition::choldc(double **a, double *p, int n)
 {
   int i, j, k;

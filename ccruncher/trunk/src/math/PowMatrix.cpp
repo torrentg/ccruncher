@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,7 +25,7 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-//***************************************************************************
+//===========================================================================
 
 #include <cmath>
 #include "jama_eig.h"
@@ -41,11 +41,11 @@
 using namespace TNT;
 using namespace JAMA;
 
-//***************************************************************************
+//===========================================================================
 // return x^y
 // the difference with std::pow is that allow negatives x
 // example: std::pow(-8.0, 1/3)=nan, PowMatrixx::pow(-8.0, 1/3)=-2
-//***************************************************************************
+//===========================================================================
 double PowMatrix::pow(double x, double y) throw(Exception)
 {
   if (x >= 0.0)
@@ -75,11 +75,11 @@ double PowMatrix::pow(double x, double y) throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
 // atencio: nomes dimensions petites (pe. n < 100)
 // atencio: Exception si VAPS imaginaris
-//***************************************************************************
+//===========================================================================
 Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exception)
 {
   try
@@ -106,11 +106,11 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
 // atencio: nomes dimensions petites (pe. n < 100)
 // atencio: Exception si VAPS imaginaris
-//***************************************************************************
+//===========================================================================
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {
   try

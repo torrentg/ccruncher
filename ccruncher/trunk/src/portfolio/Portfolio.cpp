@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,16 +25,16 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-//***************************************************************************
+//===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "Portfolio.hpp"
 #include "utils/XMLUtils.hpp"
 
-//***************************************************************************
+//===========================================================================
 // constructor
-//***************************************************************************
+//===========================================================================
 ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentations *segmentations, 
                      Interests *interests, const DOMNode& node) throw(Exception)
 {
@@ -42,9 +42,9 @@ ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentation
   parseDOMNode(ratings, sectors, segmentations, interests, node);
 }
 
-//***************************************************************************
+//===========================================================================
 // destructor
-//***************************************************************************
+//===========================================================================
 ccruncher::Portfolio::~Portfolio()
 {
   // dropping clients
@@ -54,17 +54,17 @@ ccruncher::Portfolio::~Portfolio()
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // retorna la llista de clients
-//***************************************************************************
+//===========================================================================
 vector<Client *> * ccruncher::Portfolio::getClients() 
 {
   return &vclients;
 }
 
-//***************************************************************************
+//===========================================================================
 // insercio nou client en la llista
-//***************************************************************************
+//===========================================================================
 void ccruncher::Portfolio::insertClient(Client *val) throw(Exception) 
 {
   // validem coherencia
@@ -97,9 +97,9 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 }
 
 
-//***************************************************************************
+//===========================================================================
 // interpreta un node XML params
-//***************************************************************************
+//===========================================================================
 void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segmentations, 
                              Interests *interests, const DOMNode& node) throw(Exception)
 {
@@ -137,9 +137,9 @@ void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segm
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // getNumActiveClients
-//***************************************************************************
+//===========================================================================
 int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exception)
 {
   int ret = 0;
@@ -155,9 +155,9 @@ int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exceptio
   return ret;
 }
 
-//***************************************************************************
+//===========================================================================
 // sortClients
-//***************************************************************************
+//===========================================================================
 void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
 {
   // sorting clients by sector and rating
@@ -176,9 +176,9 @@ void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // mtlp. move to last position
-//***************************************************************************
+//===========================================================================
 void ccruncher::Portfolio::mtlp(int pos)
 {
   Client *p = vclients[pos];

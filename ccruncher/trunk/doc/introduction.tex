@@ -37,19 +37,19 @@ t\'ecnica de simulaci\'on Monte Carlo. Es una implementaci\'on libre de la metod
 CreditMetrics\footnote{http://www.riskmetrics.com/}. 
 
 Se dispone de una cartera de N clientes donde cada cliente tiene contratado uno o 
-varios productos con riesgo de crédito. Cada cliente tiene asignado un rating de 
-calidad crediticia y existe una matriz de transición que permite determinar la 
+varios productos con riesgo de cr\'edito. Cada cliente tiene asignado un rating de 
+calidad crediticia y existe una matriz de transici\'on que permite determinar la 
 probabilidad de fallido a un horizonte de tiempo fijado. Los clientes pertenecen 
-a diversos sectores de los que disponemos de una matriz de correlación que 
+a diversos sectores de los que disponemos de una matriz de correlaci\'on que 
 indica el grado de dependencia intersectorial en caso de fallido. A partir de 
-la matriz de correlación intersectorial se construye la matriz de correlación 
+la matriz de correlaci\'on intersectorial se construye la matriz de correlaci\'on 
 entre clientes. Finalmente se genera un conjunto de N variables aleatorias 
-uniformes correlacionadas según esta matriz (cópula). Se usa la matriz de 
-transición para determinar la evolución del rating inicial de cada cliente y se 
-evalua el valor de sus productos. Si se repite este proceso un número elevado de 
+uniformes correlacionadas seg\'un esta matriz (c\'opula). Se usa la matriz de 
+transici\'on para determinar la evoluci\'on del rating inicial de cada cliente y se 
+evalua el valor de sus productos. Si se repite este proceso un n\'umero elevado de 
 veces disponemos de un conjunto de valores posibles de la cartera que permiten 
-determinar la distribución del valor de la cartera y calcular el VAR (Value At Risk). 
-Para mas información consúltese el manual de CreditCruncher donde se describe 
+determinar la distribuci\'on del valor de la cartera y calcular el VAR (Value At Risk). 
+Para mas informaci\'on cons\'ultese el manual de CreditCruncher donde se describe 
 con detalle todos los pasos realizados.
 
 
@@ -59,7 +59,7 @@ con detalle todos los pasos realizados.
 \section{Hipotesis}
 
 \paragraph{La \'unica fuente de riesgo es el riesgo de impago.}
-No se contemplan los riesgos de variación de tipos de interés, etc.
+No se contemplan los riesgos de variaci\'on de tipos de inter\'es, etc.
 
 \paragraph{El tiempo est\'a repartido uniformemente.}
 blablabla.
@@ -70,15 +70,15 @@ blablabla.
 \paragraph{Las probabilidades de fallido no dependen del tiempo.}
 blablabla.
 
-\paragraph{El rating y la recuperación de un cliente no depende de otro cliente.}
+\paragraph{El rating y la recuperaci\'on de un cliente no depende de otro cliente.}
 blablabla.
 
 
 %===========================================================================
 
-\section{La matriz de transición}
+\section{La matriz de transici\'on}
 
-\subsection{Definici\'on.} La matriz de transición nos proporciona la probabilidad 
+\subsection{Definici\'on.} La matriz de transici\'on nos proporciona la probabilidad 
 que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
 rating $r_j$. La denotamos de la forma siguiente:
 
@@ -96,8 +96,8 @@ m_{n,1} & \dots  & m_{n,n}
 probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
 tiempo, rating $r_j$.
 
-\subsection{Ejemplo.} Matriz de transición anual ($T=1$ año) extraida del 
-documento \emph{CreditMetrics. Technical Document}. Las probabilidades están
+\subsection{Ejemplo.} Matriz de transici\'on anual ($T=1$ año) extraida del 
+documento \emph{CreditMetrics. Technical Document}. Las probabilidades est\'an
 expresadas en tanto por ciento.
 \\
 \begin{center}
@@ -128,8 +128,8 @@ y $1$ debido a que son probabilidades.
 \end{displaymath}
 
 \paragraph{Propiedad 2.}
-La suma de los elementos de cualquier fila de la matriz de transición suman $1$.
-De esta forma se  está imponiendo que el conjunto de ratings finales solo puede 
+La suma de los elementos de cualquier fila de la matriz de transici\'on suman $1$.
+De esta forma se  est\'a imponiendo que el conjunto de ratings finales solo puede 
 ser el de los ratings contemplados en la matriz.
 
 \begin{displaymath}
@@ -139,7 +139,7 @@ ser el de los ratings contemplados en la matriz.
 \paragraph{Propiedad 3.}
 Los elementos de la fila correspondiente al rating $default$, son todos $0$,
 excepto el elemento de la columna que corresponde al rating $default$ que vale 
-$1$. Esta condición indica que cuando se llega al estado de fallido no es 
+$1$. Esta condici\'on indica que cuando se llega al estado de fallido no es 
 posible salir de este estado.
 
 \begin{displaymath}
@@ -152,13 +152,13 @@ m_{default,default} = 1
 
 \subsection{Cambio de periodo}
 
-Deseamos obtener la matriz de transición para periodos distintos (múltiplos o 
-fraccionarios) del periodo proporcionado, $T$. Esto nos permitirá determinar la 
+Deseamos obtener la matriz de transici\'on para periodos distintos (m\'ultiplos o 
+fraccionarios) del periodo proporcionado, $T$. Esto nos permitir\'a determinar la 
 probabilidad que un cliente con rating inicial $r_i$ tenga rating $r_j$ al cabo 
 de $x \cdot T$ tiempo.
 
 \paragraph{Ejemplo.} Calculemos la probabilidad de pasar de rating $AA$ a
-rating $B$ en un plazo de dos años disponiendo de la matriz de transición anual.
+rating $B$ en un plazo de dos años disponiendo de la matriz de transici\'on anual.
 
 \begin{displaymath}
 \begin{array}{llll}
@@ -228,7 +228,7 @@ Si una matriz $A$ es diagonalizable ($A = P^{-1} \cdot D \cdot P$) entonces:
 \end{itemize}
 
 \paragraph{Resultado.}
-Sea $A$ la raíz $n$-esima de una matriz diagonalizable $B$. Entonces:
+Sea $A$ la ra\'iz $n$-esima de una matriz diagonalizable $B$. Entonces:
 \begin{displaymath}
 A^n = B = P^{-1} \cdot D \cdot P 
 \Longrightarrow  
@@ -248,7 +248,7 @@ P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
 
 \subsection{Simulaci\'on}
 
-Para la generación de una realización, $z$, de una variable aleatoria normal  
+Para la generaci\'on de una realizaci\'on, $z$, de una variable aleatoria normal  
 $Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
 
 \begin{displaymath}
@@ -329,4 +329,3 @@ x_i = \Phi^{-1}(y_i)
 \end{displaymath}
 
 \noindent donde $\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-t^2} dt$
-

@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,7 +25,7 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-//***************************************************************************
+//===========================================================================
 
 #include <cfloat>
 #include "TransitionMatrix.hpp"
@@ -34,9 +34,9 @@
 #include "utils/Utils.hpp"
 #include "math/PowMatrix.hpp"
 
-//***************************************************************************
+//===========================================================================
 // inicialitzador privat
-//***************************************************************************
+//===========================================================================
 void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 {
   period = 0.0;
@@ -54,9 +54,9 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
   matrix = Utils::allocMatrix(n, n, NAN);  
 }
 
-//***************************************************************************
+//===========================================================================
 // constructor de copia
-//***************************************************************************
+//===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception)
 {
   period = otm.period;
@@ -70,9 +70,9 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
   Utils::copyMatrix(otm.getMatrix(), n, n, matrix);	
 }
 
-//***************************************************************************
+//===========================================================================
 // constructor
-//***************************************************************************
+//===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_, const DOMNode& node) throw(Exception)
 {
   try
@@ -93,33 +93,33 @@ ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_, const DOMNode& 
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // destructor
-//***************************************************************************
+//===========================================================================
 ccruncher::TransitionMatrix::~TransitionMatrix()
 {
   Utils::deallocMatrix(matrix, n);
 }
 
-//***************************************************************************
+//===========================================================================
 // metodes acces variable begindate
-//***************************************************************************
+//===========================================================================
 int ccruncher::TransitionMatrix::size()
 {
   return n;
 }
 
-//***************************************************************************
+//===========================================================================
 // metodes acces variable begindate
-//***************************************************************************
+//===========================================================================
 double ** ccruncher::TransitionMatrix::getMatrix()
 {
   return matrix;
 }
 
-//***************************************************************************
+//===========================================================================
 // inserta un element en la matriu de transicio
-//***************************************************************************
+//===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
   int row = ratings->getIndex(rating1); 
@@ -162,9 +162,9 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   matrix[row][col] = value;
 }
 
-//***************************************************************************
+//===========================================================================
 // interpreta un node XML params
-//***************************************************************************
+//===========================================================================
 void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
@@ -210,9 +210,9 @@ void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Except
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // interpreta un node XML time
-//***************************************************************************
+//===========================================================================
 void ccruncher::TransitionMatrix::parseTransition(const DOMNode& node) throw(Exception)
 {
   // agafem la llista d'atributs
@@ -238,9 +238,9 @@ void ccruncher::TransitionMatrix::parseTransition(const DOMNode& node) throw(Exc
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // validacio del contingut de la classe
-//***************************************************************************
+//===========================================================================
 void ccruncher::TransitionMatrix::validate() throw(Exception)
 {
   // comprovem que tots els elements es troben definits
@@ -306,20 +306,20 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // retorna el index del rating default
-//***************************************************************************  
+//===========================================================================  
 int ccruncher::TransitionMatrix::getIndexDefault()
 {
   return indexdefault;
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un rating inicial i un valor aleatori en [0,1] proporciona rating final
 // @param x valor aleatori entre [0,1]
 // @param rating rating inicial
 // @return rating al final
-//***************************************************************************
+//===========================================================================
 int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
 {
   double sum = 0.0;
@@ -337,11 +337,11 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
   return n-1;
 }
 
-//***************************************************************************
+//===========================================================================
 // proporciona la matriu de transicio pel periode especificat, t
 // @param t periode de la nova matriu de transicio
 // @return la matriu de transicio pel periode t
-//***************************************************************************
+//===========================================================================
 TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, double t) throw(Exception)
 {
   TransitionMatrix *ret = new TransitionMatrix(*otm);

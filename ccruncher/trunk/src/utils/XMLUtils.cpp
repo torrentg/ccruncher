@@ -1,5 +1,5 @@
 
-//***************************************************************************
+//===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004 Gerard Torrent
@@ -25,7 +25,7 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
-//***************************************************************************
+//===========================================================================
 
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
@@ -35,9 +35,9 @@
 #include "Utils.hpp"
 #include "Date.hpp"
 
-//***************************************************************************
+//===========================================================================
 // initialize XML stuff
-//***************************************************************************
+//===========================================================================
 void ccruncher::XMLUtils::initialize() throw(Exception)
 {
   try
@@ -50,9 +50,9 @@ void ccruncher::XMLUtils::initialize() throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // terminate XML stuff
-//***************************************************************************
+//===========================================================================
 void ccruncher::XMLUtils::terminate() throw()
 {
   try
@@ -65,9 +65,9 @@ void ccruncher::XMLUtils::terminate() throw()
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // determina si es tracta d'un node texte buit 
-//***************************************************************************
+//===========================================================================
 bool ccruncher::XMLUtils::isVoidTextNode(const DOMNode &node)
 {
   bool ret = false;
@@ -98,9 +98,9 @@ bool ccruncher::XMLUtils::isVoidTextNode(const DOMNode &node)
   return ret;
 }
     
-//***************************************************************************
+//===========================================================================
 // determina si es tracta d'un node de comentari
-//***************************************************************************
+//===========================================================================
 bool ccruncher::XMLUtils::isCommentNode(const DOMNode &node)
 {
   // validem el node passat com argument
@@ -114,9 +114,9 @@ bool ccruncher::XMLUtils::isCommentNode(const DOMNode &node)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // determina si el nom del node es el indicat
-//***************************************************************************
+//===========================================================================
 bool ccruncher::XMLUtils::isNodeName(const DOMNode &node, const string &name)
 {
   bool ret = false;
@@ -150,9 +150,9 @@ bool ccruncher::XMLUtils::isNodeName(const DOMNode &node, const string &name)
   return ret;
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un XMLCh* retorna un string
-//***************************************************************************
+//===========================================================================
 string ccruncher::XMLUtils::XMLCh2String(const XMLCh *str)
 {
   char *aux = XMLString::transcode(str);
@@ -164,19 +164,19 @@ string ccruncher::XMLUtils::XMLCh2String(const XMLCh *str)
   return ret;
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un string retorna un XMLCh*
 // la funcio que invoca String2XMLCh es responsable de realitzar el
 // XMLString::release(&ret) per alliberar el valor retornat
-//***************************************************************************
+//===========================================================================
 XMLCh * ccruncher::XMLUtils::String2XMLCh(const string &val)
 {
   return XMLString::transcode(val.c_str());
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un string. default en cas d'error
-//***************************************************************************
+//===========================================================================
 string ccruncher::XMLUtils::getStringAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const string &defvalue)
 {
   string ret;
@@ -205,9 +205,9 @@ string ccruncher::XMLUtils::getStringAttribute(const DOMNamedNodeMap &attrs, con
   return ret;
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un int. default en cas d'error
-//***************************************************************************
+//===========================================================================
 int ccruncher::XMLUtils::getIntAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const int defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
@@ -229,9 +229,9 @@ int ccruncher::XMLUtils::getIntAttribute(const DOMNamedNodeMap &attrs, const str
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un long. default en cas d'error
-//***************************************************************************
+//===========================================================================
 long ccruncher::XMLUtils::getLongAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const long defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
@@ -253,9 +253,9 @@ long ccruncher::XMLUtils::getLongAttribute(const DOMNamedNodeMap &attrs, const s
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un long. default en cas d'error
-//***************************************************************************
+//===========================================================================
 double ccruncher::XMLUtils::getDoubleAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const double defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
@@ -277,9 +277,9 @@ double ccruncher::XMLUtils::getDoubleAttribute(const DOMNamedNodeMap &attrs, con
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un long. default en cas d'error
-//***************************************************************************
+//===========================================================================
 Date ccruncher::XMLUtils::getDateAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const Date &defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
@@ -301,9 +301,9 @@ Date ccruncher::XMLUtils::getDateAttribute(const DOMNamedNodeMap &attrs, const s
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat retorna el valor del atribut com un long. default en cas d'error
-//***************************************************************************
+//===========================================================================
 bool ccruncher::XMLUtils::getBooleanAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const bool &defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
@@ -326,9 +326,9 @@ bool ccruncher::XMLUtils::getBooleanAttribute(const DOMNamedNodeMap &attrs, cons
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // retorna un parser per poder parsejar un doc DOM
-//***************************************************************************
+//===========================================================================
 DOMBuilder * ccruncher::XMLUtils::getParser() throw(Exception)
 {
   // inicialitzem el parser
@@ -341,9 +341,9 @@ DOMBuilder * ccruncher::XMLUtils::getParser() throw(Exception)
   return parser;
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un filename retorna un DOMDocument
-//***************************************************************************
+//===========================================================================
 DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, const string &filename) throw(Exception)
 {
   try
@@ -364,9 +364,9 @@ DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, const string 
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un string retorna un InputSource
-//***************************************************************************
+//===========================================================================
 Wrapper4InputSource * ccruncher::XMLUtils::getInputSource(const string &xmlcontent) 
 throw(Exception)
 {
@@ -399,9 +399,9 @@ throw(Exception)
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // donat un string retorna un DOMDocument
-//***************************************************************************
+//===========================================================================
 DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, Wrapper4InputSource *wis) throw(Exception)
 {
   try
@@ -422,9 +422,9 @@ DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, Wrapper4Input
   }
 }
 
-//***************************************************************************
+//===========================================================================
 // XMLException -> Exception
-//***************************************************************************
+//===========================================================================
 Exception ccruncher::XMLUtils::XMLException2Exception(const XMLException &e)
 {
    string msg = XMLCh2String(e.getMessage());
@@ -436,9 +436,9 @@ Exception ccruncher::XMLUtils::XMLException2Exception(const XMLException &e)
    return Exception(msg);
 }
 
-//***************************************************************************
+//===========================================================================
 // DOMException -> Exception
-//***************************************************************************
+//===========================================================================
 Exception ccruncher::XMLUtils::DOMException2Exception(const DOMException &e)
 {
    return Exception(XMLCh2String(e.msg));
