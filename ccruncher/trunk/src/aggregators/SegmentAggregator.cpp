@@ -28,6 +28,7 @@
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include <unistd.h>
 #include <algorithm>
 #include "SegmentAggregator.hpp"
@@ -43,8 +44,11 @@ ccruncher::SegmentAggregator::SegmentAggregator()
 //===========================================================================
 // define
 //===========================================================================
-void ccruncher::SegmentAggregator::define(int isegs, int iseg, char comps, bool bv, bool bf)
+void ccruncher::SegmentAggregator::define(int isegs, int iseg, components_t comps, bool bv, bool bf)
 {
+  assert(isegs >= 0);
+  assert(iseg >= 0);
+  
   isegmentation = isegs;
   isegment = iseg;
   components = comps;
@@ -64,7 +68,7 @@ void ccruncher::SegmentAggregator::reset()
 
   isegmentation = -1;
   isegment = -1;
-  components = COMPONENTS_ASSET;
+  components = asset;
   bvalues = true;
   bfull = false;
 
@@ -162,6 +166,13 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
 {
   bool *clientflag = NULL;
 
+  assert(dates != NULL);
+  assert(m >= 0);
+  assert(clients != NULL);
+  assert(n >= 0);
+  assert(indexdefault >= 0);
+  assert(ratings_ != NULL);
+
   // initial validations
   if (isegmentation == -1)
   {
@@ -183,7 +194,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   try
   {
     // counting clients + filling clientflag
-    if (components == COMPONENTS_ASSET)
+    if (components == asset)
     {
       nclients = getANumClients(clients, N, clientflag);
     }
@@ -193,7 +204,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
     }
 
     // counting assets
-    if (components == COMPONENTS_ASSET)
+    if (components == asset)
     {
       nassets = getANumAssets(clients, N, clientflag);
     }
@@ -376,10 +387,7 @@ long* ccruncher::SegmentAggregator::allocIClients(bool *flags, long n) throw(Exc
   }
 
   // assertion
-  if (aux != num)
-  {
-    throw Exception("SegmentAggregator::allocIClients(): assertion failed");
-  }
+  assert(aux == num);
   
   return ret;
 }
@@ -498,23 +506,28 @@ void ccruncher::SegmentAggregator::resetCRating(int pos)
 //===========================================================================
 void ccruncher::SegmentAggregator::append(int **rpaths, int m, long n, vector<Client *> *clients) throw(Exception)
 {
+  assert(rpaths != NULL);
+  assert(m >= 0);
+  assert(n >= 0);
+  assert(clients != NULL);
+  
   if (m != M || n != N)
   {
     throw Exception("SegmentAggregator::append(): diferents dimensions");
   }
-  if (components == COMPONENTS_ASSET && bvalues == true)
+  if (components == asset && bvalues == true)
   {
     appendA(rpaths);
   }
-  else if (components == COMPONENTS_ASSET && bvalues == false)
+  else if (components == asset && bvalues == false)
   {
     throw Exception("SegmentAggregator::append(): panic1");
   }
-  else if (components == COMPONENTS_CLIENT && bvalues == true)
+  else if (components == client && bvalues == true)
   {
     appendA(rpaths);
   }
-  else if (components == COMPONENTS_CLIENT && bvalues == false)
+  else if (components == client && bvalues == false)
   {
     appendR(rpaths);
   }
@@ -648,7 +661,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
       // filling row
       for(unsigned int j=0;j<assets->size();j++)
       {
-        if (components==COMPONENTS_CLIENT || (components==COMPONENTS_ASSET && (*assets)[j]->belongsTo(isegmentation, isegment)))
+        if (components==client || (components==asset && (*assets)[j]->belongsTo(isegmentation, isegment)))
         {
           (*assets)[j]->getVertexes(dates, m, aux);
           
@@ -750,7 +763,7 @@ void ccruncher::SegmentAggregator::printXMLHeader() throw(Exception)
   fout << "name='" << name0 << "' ";
   fout << "segmentation='" << name1 << "' ";
   fout << "segment='" << name2 << "' ";
-  fout << "components='" << (components==COMPONENTS_ASSET?"asset":"client") << "' ";
+  fout << "components='" << (components==asset?"asset":"client") << "' ";
   fout << "type='" << (bvalues?"values":"ratings") << "' ";
   fout << "full='" << (bfull?"true":"false") << "' ";
   fout << "nclients='" << nclients << "' ";
@@ -815,7 +828,7 @@ void ccruncher::SegmentAggregator::printXMLTranch(int index, int itranch) throw(
   {
     int k = ratings->getRatings()->size();
     
-    for (unsigned int i=0;i<k;i++)
+    for (int i=0;i<k;i++)
     {
       fout << INDENTER3;
       fout << "<value name='" << ratings->getName(i) << "'>";
@@ -904,6 +917,9 @@ void ccruncher::SegmentAggregator::touch() throw(Exception)
 
 //===========================================================================
 // setNames
+//   n0 = aggregator name
+//   n1 = segmentation name
+//   n2 = segment name
 //===========================================================================
 void ccruncher::SegmentAggregator::setNames(string n0, string n1, string n2) throw(Exception)
 {

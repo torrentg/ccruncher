@@ -79,7 +79,7 @@ int ccruncher::Segmentations::getSegmentation(string name)
 //===========================================================================
 // return components of a segmentation by name
 //===========================================================================
-char ccruncher::Segmentations::getComponents(string name)
+components_t ccruncher::Segmentations::getComponents(string name)
 {
   for (unsigned int i=0;i<vsegmentations.size();i++)
   {
@@ -89,17 +89,17 @@ char ccruncher::Segmentations::getComponents(string name)
     }
   }
   
-  return -1;
+  return undefined;
 }
 
 //===========================================================================
 // return components of a segmentation by name
 //===========================================================================
-char ccruncher::Segmentations::getComponents(int iseg)
+components_t ccruncher::Segmentations::getComponents(int iseg)
 {
   if (iseg < 0 || (unsigned int) iseg >= vsegmentations.size())
   {
-    return -1;
+    return undefined;
   }
   else
   {

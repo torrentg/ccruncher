@@ -58,7 +58,7 @@ class Aggregator
 
     string name;
     int isegmentation;
-    char components;
+    components_t components;
     bool bvalues; // true=values, false=ratings
     bool bfull;
 

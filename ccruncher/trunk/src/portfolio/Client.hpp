@@ -43,6 +43,7 @@
 #include "interests/Interest.hpp"
 #include "finances/Asset.hpp"
 #include "finances/DateValues.hpp"
+#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------

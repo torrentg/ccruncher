@@ -66,8 +66,8 @@ class Segmentations
 
     vector<Segmentation> getSegmentations();
     int getSegmentation(string name);
-    char getComponents(string name);
-    char getComponents(int iseg);
+    components_t getComponents(string name);
+    components_t getComponents(int iseg);
     int getSegment(string segmentation, string segment);
     string getSegmentationName(int isegmentation) throw(Exception);
     string getSegmentName(int isegmentation, int isegment) throw(Exception);

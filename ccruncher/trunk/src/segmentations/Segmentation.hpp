@@ -47,8 +47,11 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-#define COMPONENTS_ASSET    0
-#define COMPONENTS_CLIENT   1
+enum components_t {
+  asset,
+  client,
+  undefined
+};
 
 //---------------------------------------------------------------------------
 
@@ -67,7 +70,7 @@ class Segmentation
   public:
 
     string name;
-    char components;
+    components_t components;
 
     Segmentation(const DOMNode &) throw(Exception);
     ~Segmentation();
@@ -75,7 +78,7 @@ class Segmentation
     vector<Segment> getSegments() const;
     int getSegment(string segname) const;
     string getSegmentName(int isegment) throw(Exception);
-    
+
     void addSegment(string segname) throw(Exception);
 
 };

@@ -259,7 +259,7 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
       // filling implicit segment
       if (segs->getSegmentation("asset") >= 0)
       {
-        if (segs->getComponents("asset") == COMPONENTS_ASSET)
+        if (segs->getComponents("asset") == asset)
         {
           segs->addSegment("asset", strid);
           int iconcept = segs->getSegmentation("asset");
@@ -271,7 +271,7 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
       // filling implicit segment
       if (segs->getSegmentation("portfolio") >= 0)
       {
-        if (segs->getComponents("portfolio") == COMPONENTS_ASSET)
+        if (segs->getComponents("portfolio") == asset)
         {
           int iconcept = segs->getSegmentation("portfolio");
           int isegment = segs->getSegment("portfolio", "rest");

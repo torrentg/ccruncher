@@ -164,7 +164,7 @@ void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
   sort(vclients.begin(), vclients.end(), Client::less);
 
   // we move non-active clients to last position of array
-  for(int cont=0,i=0;cont<vclients.size();cont++)
+  for(unsigned int cont=0,i=0;cont<vclients.size();cont++)
   {
     if (!(*vclients[i]).isActive(from,to))
     {
@@ -179,7 +179,7 @@ void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
 //===========================================================================
 // mtlp. move to last position
 //===========================================================================
-void ccruncher::Portfolio::mtlp(int pos)
+void ccruncher::Portfolio::mtlp(unsigned int pos)
 {
   Client *p = vclients[pos];
 

@@ -152,7 +152,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
   // completem segmentacio client si existeix  
   if (segs->getSegmentation("client") >= 0)
   {
-    if (segs->getComponents("client") == COMPONENTS_CLIENT)
+    if (segs->getComponents("client") == client)
     {
       segs->addSegment("client", id);
       int iconcept = segs->getSegmentation("client");
@@ -164,7 +164,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
   // completem segmentacio portfolio si existeix  
   if (segs->getSegmentation("portfolio") >= 0)
   {
-    if (segs->getComponents("portfolio") == COMPONENTS_CLIENT)
+    if (segs->getComponents("portfolio") == client)
     {
       int iconcept = segs->getSegmentation("portfolio");
       int isegment = segs->getSegment("portfolio", "rest");

@@ -61,7 +61,7 @@ class Portfolio
     void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertClient(Client *) throw(Exception);
     void validations() throw(Exception);
-    void mtlp(int);
+    void mtlp(unsigned int);
 
   public:
 

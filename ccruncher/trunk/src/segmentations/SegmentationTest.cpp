@@ -80,7 +80,7 @@ void SegmentationTest::test1()
   ASSERT_NO_THROW(sobj = new Segmentation(*(doc->getDocumentElement())));
 
   ASSERT("office" == sobj->name);
-  ASSERT(COMPONENTS_ASSET == sobj->components);
+  ASSERT(asset == sobj->components);
   
   vector<Segment> vsegments = sobj->getSegments();
   ASSERT(5 == vsegments.size());

@@ -41,7 +41,7 @@ void ccruncher::Aggregator::reset()
   saggregators = NULL;
   name = "";
   isegmentation = -1;
-  components = COMPONENTS_ASSET;
+  components = asset;
   bvalues = true;
   bfull = false;
 }  
@@ -114,7 +114,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
   // setting segmentation
   isegmentation = segs->getSegmentation(sseg);
   components = segs->getComponents(sseg);
-  if (isegmentation < 0 || (components != COMPONENTS_ASSET && components != COMPONENTS_CLIENT))
+  if (isegmentation < 0 || (components != asset && components != client))
   {
     throw Exception("Aggregator::parseDOMNode(): segmentation " + sseg + " not defined");
   }
@@ -160,7 +160,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
 void ccruncher::Aggregator::validate(Segmentations *segs) throw(Exception)
 {
   // validating type segmentation
-  if (segs->getComponents(isegmentation) == COMPONENTS_ASSET && bvalues == false)
+  if (segs->getComponents(isegmentation) == asset && bvalues == false)
   {
     throw Exception("Aggregator::validate(): trying to aggregate ratings in a asset segmentation");
   }

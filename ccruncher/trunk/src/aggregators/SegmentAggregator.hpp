@@ -53,8 +53,6 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-#define COMPONENTS_ASSET    0
-#define COMPONENTS_CLIENT   1
 #define MAXSIZE 500
 #define INDENTER1 "  "
 #define INDENTER2 "    "
@@ -81,7 +79,7 @@ class SegmentAggregator
 
     int isegmentation;
     int isegment;
-    char components;
+    components_t components;
     bool bvalues;
     bool bfull;
 
@@ -159,7 +157,7 @@ class SegmentAggregator
     SegmentAggregator();
     ~SegmentAggregator();
 
-    void define(int, int, char, bool , bool);
+    void define(int, int, components_t, bool , bool);
     void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
     void setNames(string, string, string) throw(Exception);
     void initialize(Date *, int, vector<Client *> *, long, int, Ratings *) throw(Exception);

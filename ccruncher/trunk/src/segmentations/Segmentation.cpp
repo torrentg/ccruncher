@@ -134,11 +134,11 @@ void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
   // filling components variable
   if (strcomp == "asset")
   {
-    components = COMPONENTS_ASSET;
+    components = asset;
   }
   else if (strcomp == "client")
   {
-    components = COMPONENTS_CLIENT;
+    components = client;
   }
   else
   {

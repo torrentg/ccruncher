@@ -7,6 +7,9 @@ dnl
 dnl profiler tests: compile with -pg flag + execute code (-> write gmon.out)
 dnl                 run gprof executable gmon.out
 dnl
+dnl disable assertions defining NDEBUG (see assert.h)
+dnl
+dnl
 dnl execute next commands to create Makefiles and compile (-O2 )
 dnl
 dnl   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/horizon/temp/ccruncher/share/xercesc-2.6/lib
