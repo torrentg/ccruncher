@@ -9,7 +9,8 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
 
 EXTRA_DIST = COPYING AUTHORS README INSTALL TODO \
-             share samples data
+             share samples data \
+             bin/xercesenv.sh
 
 dist-hook:
 	echo "dropping subversion stuff ..."
