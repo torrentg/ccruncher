@@ -13,7 +13,7 @@ dnl   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/horizon/temp/ccruncher/share
 dnl
 dnl   aclocal
 dnl   autoconf
-dnl   automake -avc --warnings=all
+dnl   automake -avc --warnings=all --foreign
 dnl   ./configure
 dnl   make
 dnl   make check
@@ -21,8 +21,8 @@ dnl   make install
 dnl
 dnl *************************************************************
 
-AC_PREREQ(2.52)
-AC_INIT(creditcruncher, 0.1.1)
+dnl AC_PREREQ(2.52)
+AC_INIT(creditcruncher, 0.1)
 
 AM_INIT_AUTOMAKE
 
@@ -33,16 +33,13 @@ dnl fi
 
 AC_PROG_CXX
 AC_PROG_CC
-AC_PROG_INSTALL
+dnl AC_PROG_INSTALL
 
 dnl optimize executable code using -O2 option (important!)
 dnl CXXFLAGS="-g -pg"
 CXXFLAGS="-O2"
 AC_SUBST(CXXFLAGS)
 
-AC_CHECK_FUNCS(clock)
+dnl AC_CHECK_FUNCS(clock)
 
-AC_OUTPUT([
-  Makefile
-  src/Makefile
-])
+AC_OUTPUT([Makefile src/Makefile])
