@@ -426,6 +426,7 @@ DateValues** ccruncher::SegmentAggregator::allocCValues(Date *dates, int m, long
         ret[i][j].date = dates[j];
         ret[i][j].cashflow = 0.0;
         ret[i][j].exposure = 0.0;
+        ret[i][j].recovery = 0.0;
       }
     }
   }
@@ -490,6 +491,7 @@ void ccruncher::SegmentAggregator::resetCValue(int pos)
   {
     cvalues[pos][i].cashflow = 0.0;
     cvalues[pos][i].exposure = 0.0;
+    cvalues[pos][i].recovery = 0.0;
   }
 }
 
@@ -569,6 +571,7 @@ void ccruncher::SegmentAggregator::appendA(int **rpaths)
       {
         cvalues[icont][k].cashflow += 0.0;
         cvalues[icont][k].exposure += vertexes[i][k].exposure;
+        // TODO: add recovery value
       }
     }
   }
@@ -656,6 +659,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
         ret[i][k].date = dates[k];
         ret[i][k].cashflow = 0.0;
         ret[i][k].exposure = 0.0;
+        ret[i][k].recovery = 0.0;
       }
 
       // finding client info
@@ -673,6 +677,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
           {
             ret[i][k].cashflow += aux[k].cashflow;
             ret[i][k].exposure += aux[k].exposure;
+            ret[i][k].recovery += aux[k].recovery;
           }
         }
       }
