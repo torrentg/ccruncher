@@ -8,6 +8,7 @@
 #		finances interests params portfolio segmentations \
 #		aggregators kernel tools
 
+AUTOMAKE_OPTIONS = foreign
 
 AM_CPPFLAGS = \
     -I./\

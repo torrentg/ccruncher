@@ -1,0 +1,83 @@
+
+CREDITCRUNCHER README
+=====================
+
+Installation from source package
+--------------------------------
+
+1. install xerces-c
+     docs, sources, binaries, installation instructions, etc. can be found at
+     http://xml.apache.org/xerces-c/.
+
+2. uncompress package
+     gunzip ccruncher-0.1.tar.gz
+     tar -xvf ccruncher-0.1.tar
+
+3. execute commands (read INSTALL file):
+     cd ccruncher-0.1
+     ./configure
+     make
+     make check 
+     make install
+
+
+Installation from binary package
+--------------------------------
+
+1. install xerces-c
+     docs, sources, binaries, installation instructions, etc. can be found at
+     http://xml.apache.org/xerces-c/.
+
+2. uncompress package
+     gunzip ccruncher-0.1.tar.gz
+     tar -xvf ccruncher-0.1.tar
+
+
+Using CreditCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step
+
+2. run CreditCruncher
+     ${ccruncher_home}/bin/ccruncher --help
+     ${ccruncher_home}/bin/ccruncher -hash=100 -f -v -path=./data <file.xml>
+
+3. extract data from output files
+     ${ccruncher_home}/bin/tabulate --help
+     ${ccruncher_home}/bin/tabulate <./data/filex.xml>
+
+4. process info using your prefered spreadsheet or 
+
+
+Developers tips & tricks
+--------------------------------
+
+1. install xerces-c
+     docs, sources, binaries, installation instructions, etc. can be found at
+     http://xml.apache.org/xerces-c/.
+     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/horizon/temp/ccruncher/share/xercesc-2.6/lib
+
+2. create ./configure script
+     aclocal
+     autoconf
+     automake -avc --warnings=all
+
+3. compile project in debug mode
+     ./configure --enable-debug
+     make
+     make check
+
+4. executing test suite
+     src/tests
+
+5. checking memory leaks
+     valgrind --tool=memcheck --leak-check=yes <progname>
+
+6. profiling executable
+     ./path/progname (-> writes gmon.out because we compiled with -pg flag)
+     gprof ./path/progname gmon.out
+
+
+
+CreditCruncher Team
+http://www.generacio.com/ccruncher/

@@ -152,7 +152,7 @@ void CopulaNormalTest::test4()
 //===========================================================================
 // generate a 2-D histogram
 //===========================================================================
-void computeDensity(CopulaNormal &copula)
+void CopulaNormalTest::computeDensity(CopulaNormal &copula)
 {
   double x, y;
   int a, b;
@@ -203,8 +203,8 @@ void CopulaNormalTest::test5()
 {
   // valid correlation matrix
   double sigmas[] = {
-    +1.0 , +0.4,
-    +0.4 , +1.0
+    +1.0 , +0.0,
+    +0.0 , +1.0
   };
   double **correls = Utils::allocMatrix(2,2,sigmas);
 
