@@ -1,0 +1,1072 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>CreditCruncher - Tag reference</title>
+  <link rel="stylesheet" href="project.css" type="text/css"/>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /
+</head>
+
+<body class="composite">
+  <div id="banner" style="font-size:18pt; font-weight: bold; color: #003399; text-align: right;">
+    CREDITCRUNCHER
+  </div>
+
+  <div id="leftColumn">
+    <div id="navcolumn">
+      <div id="menuGeneral">
+        <h5>General</h5>
+        <ul>
+          <li class="none"><a href="index.html">Overview</a></li>
+        </ul>
+      </div>
+      <div id="menuInstallation">
+        <h5>Installation</h5>
+        <ul>
+          <li class="none"><a href="requeriments.html">Requirements</a></li>
+          <li class="none"><a href="download.html">Download</a></li>
+          <li class="none"><a href="install.html">Install</a></li>
+          <li class="none"><a href="usage.html">Basic usage</a></li>
+        </ul>
+      </div>
+      <div id="menuTutorial">
+        <h5>Documentation</h5>
+        <ul>
+          <li class="none"><a href="manual.html">Risk manual</a></li>
+          <li class="none"><a href="tagreference.html">Tag reference</a></li>
+          <li class="none"><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div id="menuOther">
+        <h5>Other</h5>
+        <ul>
+          <li class="none"><a href="relproj.html">Related projects</a></li>
+          <li class="none"><a href="license.html">General</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="bodyColumn">
+    <div class="contentBox">
+      <div class="section">
+        <a name="tagreference" id="tagreference"></a>
+        <h2>CreditCruncher XML tag reference</h2>
+
+        <p style="text-align:justify;">
+          La versión en curso del documento xml descrito en esta sección es la 
+          0.1. La distribución de CreditCruncher contiene la versión de la 
+          <a href="creditcruncher-0.1.dtd.txt">DTD</a> y un fichero 
+          <a href="creditcruncher-0.1.xml.txt">XML</a> de ejemplo. La DTD 
+          es el conjunto de instrucciones que indican como se espera que esté
+          creado el fichero XML.
+        </p>
+      </div>
+
+      <div class="section">
+        <a name="table" id="table"></a>
+        <h2>params</h2>
+
+        <p style="text-align:justify;">
+          Este elemento contiene las propiedades básicas del problema a resolver.
+          Deben especificarse todas y cada una de ellas. No es necesario mantener
+          el orden de las propiedades.
+        </p>
+
+        <div class="subsection">
+          <a name="example1" id="example1"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+            
+  &lt;params&gt;
+    &lt;property name="time.begindate" value="18/02/2003"/&gt;
+    &lt;property name="time.steps" value="12"/&gt;
+    &lt;property name="time.steplength" value="2"/&gt;
+    &lt;property name="stopcriteria.maxiterations" value="3000"/&gt;
+    &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
+    &lt;property name="copula.type" value="normal"/&gt;
+    &lt;property name="copula.seed" value="387650932874"/&gt;
+    &lt;property name="montecarlo.antithetic" value="false"/&gt;
+    &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
+  &lt;/params&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>property Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="a">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="b">
+              <td>time.begindate</td>
+              <td style="text-align:justify;">
+                indica el primer día de la simulación. Los ratings iniciales de
+                los clientes son a este día. El formato de este campo debe ser
+                de la forma DD/MM/YYYY.
+              </td>
+              <td><code>date</code></td>
+            </tr>
+            <tr class="a">
+              <td>time.steps</td>
+              <td style="text-align:justify;">
+                número de pasos en el tiempo. Fije este parámetro con cuidado ya
+                que tiene un impacto importante en el número de operaciones a
+                realizar.
+              </td>
+              <td><code>int</code></td>
+            </tr>
+            <tr class="b">
+              <td>time.steplength</td>
+              <td style="text-align:justify;">
+                longitud de cada paso temporal en meses naturales. Se recomienda 
+                poner valores bajos (pe. 1, 3 o 6) dependiendo del periodo de
+                simulación abarcado (periodos pequeños, pasos pequeños).
+              </td>
+              <td><code>int</code></td>
+            </tr>
+            <tr class="a">
+              <td>stopcriteria.maxiterations</td>
+              <td style="text-align:justify;">
+                número máximo de iteraciones del método de Monte Carlo a realizar.
+                Se dará el problema por resuelto cuando sea satisfecho alguno de
+                los criterios de parada.
+              </td>
+              <td><code>long</code></td>
+            </tr>
+            <tr class="b">
+              <td>stopcriteria.maxseconds</td>
+              <td style="text-align:justify;">
+                número máximo de segundos en tiempo absoluto (no tiempo de cpu).
+                Se dará el problema por resuelto cuando sea satisfecho alguno de
+                los criterios de parada.
+              </td>
+              <td><code>long</code></td>
+            </tr>
+            <tr class="a">
+              <td>copula.type</td>
+              <td style="text-align:justify;">
+                tipo de cópula utilizado para generar las variables aleatorias
+                correlacionadas. En este momento solamente existe una implementación,
+                la cópula archimediana o normal ('normal').
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>copula.seed</td>
+              <td style="text-align:justify;">
+                semilla utilizada para la generación de números aleatorios
+                utilizados en la cópula. En caso de no especificarse esta
+                propiedad se inicializará con un valor que depende de la hora
+                en el momento de ejecutarse.
+              </td>
+              <td><code>long</code></td>
+            </tr>
+            <tr class="a">
+              <td>montecarlo.antithetic</td>
+              <td style="text-align:justify;">
+                indica si debe utilizarse la técnica de reducción de varianza 
+                 antithetic en el método de Monte Carlo. Si tiene dudas sobre
+                 el significado o utilidad de esta técnica, indique false.
+              </td>
+              <td><code>boolean</code></td>
+            </tr>
+            <tr class="b">
+              <td>portfolio.onlyActiveClients</td>
+              <td style="text-align:justify;">
+                indica si deben simularse todos los clientes (a pesar de no tener
+                riesgo contratado) o pro el contrario, simular solamente aquellos
+                clientes que tienen riesgo contratado. Recomendamos poner siempre
+                true ya que supone un ahorro importante de tiempo de cómputo en
+                caso de tener clientes inactivos.
+              </td>
+              <td><code>boolean</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <a name="interests" id="interests"></a>
+        <h2>Interests</h2>
+
+        <p style="text-align:justify;">
+          Este apartado contiene los tipos de interés usados por los productos
+          financieros (en caso de depender de estos). Es obligatorio la 
+          definición del tipo de interés 'spot' que se usará para transportar
+          los flujos de efectivo a lo largo del tiempo.
+        </p>
+
+        <div class="subsection">
+          <a name="example2" id="example2"></a>
+          <h3>Example</h3>
+          <div class="source">
+            <pre>
+  
+  &lt;interests&gt;
+    &lt;interest name="spot" date="18/11/2004"&gt;
+      &lt;rate t="0" r="0.0"/&gt;
+      &lt;rate t="1" r="0.04"/&gt;
+      &lt;rate t="2" r="0.041"/&gt;
+      &lt;rate t="3" r="0.045"/&gt;
+      &lt;rate t="6" r="0.0455"/&gt;
+      &lt;rate t="12" r="0.048"/&gt;
+      &lt;rate t="24" r="0.049"/&gt;
+      &lt;rate t="60" r="0.05"/&gt;
+      &lt;rate t="120" r="0.052"/&gt;
+    &lt;/interest&gt;
+  &lt;/interests&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Interest attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="a">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="b">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre del tipo de interés. Todas las referencias al tipo de 
+                interés definido deberán realizarse indicando este nombre.
+                Siempre debe existir el tipo de interés 'spot'.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="a">
+              <td>date</td>
+              <td style="text-align:justify;">
+                fecha en la que se ha determinado el tipo de interés. Generalmente
+                coincide con la fecha de inicio de la simulación. El formato de 
+                este campo debe ser DD/MM/YYYY.
+              </td>
+              <td><code>date</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Rate attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="a">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="b">
+              <td>t</td>
+              <td style="text-align:justify;">
+                tiempo en días respecto de la fecha inicial del tipo de interés.
+                En caso de ser necesario un valor de tiempo no indicado se 
+                realizará una interpolación lineal usando los valores disponibles.
+              </td>
+              <td><code>int</code></td>
+            </tr>
+            <tr class="a">
+              <td>r</td>
+              <td style="text-align:justify;">
+                tipo de interés en tanto por uno en la fecha indicada por t. Debe
+                ser un valor entre -0.5 y 1.0.
+              </td>
+              <td><code>double</code></td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+
+
+      <div class="section">
+        <a name="ratings" id="ratings"></a>
+        <h2>Ratings</h2>
+
+        <p style="text-align:justify;">
+          Este apartado contiene la definición de los ratings usados.
+        </p>
+
+        <div class="subsection">
+          <a name="example3" id="example3"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+            
+  &lt;ratings&gt;
+    &lt;rating name="A" order="1" desc="excelent"/&gt;
+    &lt;rating name="B" order="2" desc="good"/&gt;
+    &lt;rating name="C" order="3" desc="medium"/&gt;
+    &lt;rating name="D" order="4" desc="bad"/&gt;
+    &lt;rating name="E" order="5" desc="default"/&gt;
+  &lt;/ratings&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Rating Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                identificador del rating. Todas las referencias al rating
+                definido deberán realizarse mediante este identificador.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>order</td>
+              <td style="text-align:justify;">
+                orden de prioridad del rating. El mejor debe tener el valor 1,
+                el siguiente el valor 2, etc. El rating 'fallido' siempre debe
+                ser el último. Debe tratarse de una ordenación completa y siempre
+                empezar por el valor 1.
+              </td>
+              <td><code>int</code></td>
+            </tr>
+            <tr class="a">
+              <td>desc</td>
+              <td style="text-align:justify;">
+                descripción del rating. Este valor solamente se usa para 
+                finalidades de presentación de la información. Solamente tiene
+                valor descriptivo. A pesar de esto, debe rellenarse y no puede 
+                repetirse la descripción.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <a name="footer" id="footer"></a>
+        <h2>Transition Matrix</h2>
+
+        <p style="text-align:justify;">
+          Esta sección contiene la definición de la matriz de transición 
+          utilizada. Se comprobará que se cumple que al suma de los elementos
+          de cada fila suma 1.0. También se comprueba que existe una única 
+          fila en la que toda la probabilidad se concentrada en un elemento
+          (corresponde al fallido). El número de elementos a definir es el 
+          número de ratings al cuadrado.
+        </p>
+
+
+        <div class="subsection">
+          <a name="example4" id="example4"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+
+  &lt;mtransitions period="1" epsilon="1e-12"&gt;
+    &lt;transition from="A" to="A" value="0.80"/&gt;
+    &lt;transition from="A" to="B" value="0.10"/&gt;
+    &lt;transition from="A" to="C" value="0.07"/&gt;
+    &lt;transition from="A" to="D" value="0.02"/&gt;
+    &lt;transition from="A" to="E" value="0.01"/&gt;
+    &lt;transition from="B" to="A" value="0.05"/&gt;
+    &lt;transition from="B" to="B" value="0.75"/&gt;
+    &lt;transition from="B" to="C" value="0.10"/&gt;
+    &lt;transition from="B" to="D" value="0.07"/&gt;
+    &lt;transition from="B" to="E" value="0.03"/&gt;
+    &lt;transition from="C" to="A" value="0.03"/&gt;
+    &lt;transition from="C" to="B" value="0.07"/&gt;
+    &lt;transition from="C" to="C" value="0.70"/&gt;
+    &lt;transition from="C" to="D" value="0.14"/&gt;
+    &lt;transition from="C" to="E" value="0.06"/&gt;
+    &lt;transition from="D" to="A" value="0.05"/&gt;
+    &lt;transition from="D" to="B" value="0.05"/&gt;
+    &lt;transition from="D" to="C" value="0.15"/&gt;
+    &lt;transition from="D" to="D" value="0.60"/&gt;
+    &lt;transition from="D" to="E" value="0.15"/&gt;
+    &lt;transition from="E" to="A" value="0.00"/&gt;
+    &lt;transition from="E" to="B" value="0.00"/&gt;
+    &lt;transition from="E" to="C" value="0.00"/&gt;
+    &lt;transition from="E" to="D" value="0.00"/&gt;
+    &lt;transition from="E" to="E" value="1.00"/&gt;
+  &lt;/mtransitions&gt;
+  
+</pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>MTransitions Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>period</td>
+              <td style="text-align:justify;">
+                número de años que abarca la matriz de transición.
+              </td>
+              <td><code>double</code></td>
+            </tr>
+            <tr class="b">
+              <td>epsilon</td>
+              <td style="text-align:justify;">
+                valor usado para determinar si un valor se puede considerar
+                0.0 o no. Debe ser un valor positivo cercano a cero. Se 
+                recomienda poner un valor muy cercano a 0.0 (pe. 1E-12).
+              </td>
+              <td><code>double</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Transition Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>from</td>
+              <td style="text-align:justify;">
+                rating de partida. Debe ser un identificador de rating definido
+                en el apartado de ratings.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>to</td>
+              <td style="text-align:justify;">
+                rating destino. Debe ser un identificador de rating definido
+                en el apartado de ratings.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="a">
+              <td>value</td>
+              <td style="text-align:justify;">
+                probabilidad del evento (en tanto por uno).
+              </td>
+              <td><code>double</code></td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+
+
+      <div class="section">
+        <a name="caption" id="caption"></a>
+        <h2>Sectors</h2>
+
+        <p style="text-align:justify;">
+           Este apartado contiene la definición de los sectores usados.
+        </p>
+
+        <div class="subsection">
+          <a name="example5" id="example5"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+            
+  &lt;sectors&gt;
+    &lt;sector name="S1" order="1" desc="oil and gas"/&gt;
+    &lt;sector name="S2" order="2" desc="other sectors"/&gt;
+  &lt;/sectors&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Sector Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                identificador del sector. Todas las referencias al sector
+                definido deberán realizarse mediante este identificador.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>order</td>
+              <td style="text-align:justify;">
+                orden de prioridad del sector. Debe tratarse de una ordenación 
+                completa y siempre empezar por el valor 1.
+              </td>
+              <td><code>int</code></td>
+            </tr>
+            <tr class="a">
+              <td>desc</td>
+              <td style="text-align:justify;">
+                descripción del sector. Este valor se usa para finalidades de 
+                presentación de la información. Solamente tiene valor descriptivo. 
+                A pesar de esto, debe rellenarse y no puede repetirse la descripción.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <div class="section">
+        <a name="caption" id="caption"></a>
+        <h2>Correlations</h2>
+
+        <p style="text-align:justify;">
+          Esta sección contiene la definición de la matriz de correlación entre
+          los sectores definidos. Se trata de una matriz simétrica definida
+          positiva. Solamente debe indicarse la diagonal superior o inferior.
+          Se comprobará que cada elemento de la matriz se encuentra entre -1.0 y 
+          1.0 y que esta es definida positiva. El número de elementos a definir 
+          es: (nsectors+1) x nsectors / 2.
+        </p>
+
+        <div class="subsection">
+          <a name="example6" id="example6"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+  
+  &lt;mcorrels epsilon="1e-12"&gt;
+    &lt;sigma sector1="S1" sector2="S1" value="0.2"/&gt;
+    &lt;sigma sector1="S1" sector2="S2" value="0.1"/&gt;
+    &lt;sigma sector1="S2" sector2="S2" value="0.25"/&gt;
+  &lt;/mcorrels&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>MCorrels Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>epsilon</td>
+              <td style="text-align:justify;">
+                valor usado para determinar si un valor se puede considerar
+                1.0 o no. Debe ser un valor positivo cercano a cero. Se 
+                recomienda poner un valor muy cercano a 0.0 (pe. 1E-12).
+              </td>
+              <td><code>double</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Sigma Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>sector1</td>
+              <td style="text-align:justify;">
+                sector implicado en la correlación. Debe tratarse de un sector 
+                definido en el apartado de sectores.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>sector2</td>
+              <td style="text-align:justify;">
+                sector implicado en la correlación. Debe tratarse de un sector 
+                definido en el apartado de sectores.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>value</td>
+              <td style="text-align:justify;">
+                correlación del fallido entre sector1 y sector2 en tanto por 1.
+              </td>
+              <td><code>double</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      
+      <div class="section">
+        <a name="caption" id="caption"></a>
+        <h2>Segmentations</h2>
+
+        <p style="text-align:justify;">
+          Esta sección contiene las segmentaciones definidas. La finalidad de
+          las segmentaciones es permitir analizar el riesgo de la cartera según
+          el nivel de detalle u organización jerarquica del usuario sin que esta se 
+          encuentre prefijada. Existen dos tipos de segmentaciones (en función del 
+          tipo de elementos que contengan); segmentaciones de clientes (pe. por 
+          sector, tamaño del cliente, rating inicial, etc.) y segmentaciones de 
+          activos (pe. por tipo de activo, por oficina de contratación, etc.). 
+          Todas las segmentaciones deben ser completas (un elemento solamente 
+          puede pertenecer a un segmento y la unión de todos los elementos de 
+          los segmentos debe ser el total). Todas las segmentaciones tienen 
+          definido de forma implícita el elemento 'resto' que garantiza que si 
+          un elemento no tiene definida su pertenencia a la segmentación 
+          analizada, entonces pertenece al segmento 'resto'. 
+          Finalmente, existen 2 segmentaciones definidas por defecto que son 
+          'client' (donde los segmentos definidos son los clientes existentes) y 
+          'asset' (donde los segmentos definidos son los activos existentes).
+          En estas segmentaciones no es necesario definir de forma explícita los
+          segmentos definidos.
+        </p>
+
+        <div class="subsection">
+          <a name="example7" id="example7"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+  
+  &lt;segmentations&gt;
+    &lt;segmentation name="portfolio" components="asset"/&gt;
+    &lt;segmentation name="client" components="client"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="asset" components="asset"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="sector" components="client"&gt;
+      &lt;segment name="S1"/&gt;
+      &lt;segment name="S2"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="size" components="client"&gt;
+      &lt;segment name="big"/&gt;
+      &lt;segment name="medium"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="product" components="asset"&gt;
+      &lt;segment name="bond"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="office" components="asset"&gt;
+      &lt;segment name="0001"/&gt;
+      &lt;segment name="0002"/&gt;
+      &lt;segment name="0003"/&gt;
+      &lt;segment name="0004"/&gt;
+    &lt;/segmentation&gt;
+  &lt;/segmentations&gt;
+            </pre>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Segmentation Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre de la segmentación. Todas las referencias a la segmentación
+                definida deberán realizarse mediante este identificador.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>components</td>
+              <td style="text-align:justify;">
+                tipo de componentes de los segmentos definidos. Solamente se
+                aceptan los valores 'client' (para clientes) y 'asset' para
+                activos.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Segment Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre de la segmento. Diferentes segmentaciones pueden tener
+                segmentos definidos con el mismo nombre. Todas las referencias 
+                al segmento definido deberán realizarse mediante este 
+                identificador (siempre junto con el de segmentación). En caso 
+                no definir ningún segmento todos los elementos pertencen al
+                segmento 'resto' (es el tipo de segmentación que utilizaremos 
+                si se desea obtener el valor de la cartera). Las segmentaciones
+                'client' y 'asset' admiten el segmento '*' para indicar que 
+                contienen tantos segmentos como elementos de tipo client o asset.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <a name="caption" id="caption"></a>
+        <h2>Aggregators</h2>
+
+        <p style="text-align:justify;">
+          Esta sección contiene las agregaciones que deben realizarse en el
+          momento de realizar la simulación. Una agregación siempre se 
+          realiza sobre una segmentación definida y debe detallarse el 
+          nivel de información recopilada por cada segmento. Debe seleccionarse
+          cuidadosamente el nivel de información a recopilar ya que puede tener
+          un impacto importante en memoria utilizada y espacio de disco 
+          necesario.
+        </p>
+
+        <div class="subsection">
+          <a name="example8" id="example8"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+
+  &lt;aggregators&gt;
+    &lt;aggregator name="aggregator1" segmentation="portfolio" 
+                type="values" full="true"/&gt;
+    &lt;aggregator name="aggregator2" segmentation="client" 
+                type="values" full="false"/&gt;
+    &lt;aggregator name="aggregator3" segmentation="client" 
+                type="ratings" full="false"/&gt;
+    &lt;aggregator name="aggregator4" segmentation="sector" 
+                type="values" full="false"/&gt;
+    &lt;aggregator name="aggregator5" segmentation="sector" 
+                type="ratings" full="false"/&gt;
+  &lt;/aggregators&gt;
+            </pre>
+          </div>
+          
+          <p style="text-align:justify;">
+            El aggregador aggregator1 se define para listar los valores simulados
+            de la cartera; Se le indica el atributo full para poder determinar la
+            distribución de los valores de la cartera. Aggregator2 y aggregator3 
+            proprociona información resumida de cada cliente (valor medio y desviación 
+            estándar de los activos y ratings obtenidos). Aggregator4 y aggregator5 
+            proprocionan la misma información a nivel de sector.
+          </p>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Aggregator Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre de la agregación. Todas las referencias a la agregación
+                definida se realizarán mediante este identificador.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>segmentation</td>
+              <td style="text-align:justify;">
+                nombre de la segmentación sobre la que opera el agregador. Debe
+                ser un identificador de segmentación definido en el apartado de
+                segmentaciones.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="a">
+              <td>type</td>
+              <td style="text-align:justify;">
+                tipo de agregación a realizar. Debe ser uno de los valores 
+                siguientes: <br />
+                <b>values</b>. los valores agregados son el valor de los activos
+                de los componentes de la segmentación. Si los componentes son
+                de tipo cliente, se consideraran los activos de cada cliente.<br />
+                <b>ratings</b>. los valores agregados son los ratings de los 
+                clientes de la segmentación. Este valor solamente puede 
+                ponerse cuando los componentes de la segmentación sean de tipo 
+                client.<br />
+              </td>
+              <td><code>string</code></td>
+            <tr class="b">
+              <td>full</td>
+              <td style="text-align:justify;">
+                indicador del detalle de los resultados a generar. En caso de
+                seleccionar <b>true</b> se listarán todos los valores por cada
+                segmento, en caso contrario se proprociona información resumida
+                (media y desviación estándar en el caso de valores y número de
+                casos en el caso de los ratings). Use esta propiedad con cuidado
+                ya que puede generar una salida masiva de resultados y ralentizar
+                la ejecución del proceso.
+              </td>
+              <td><code>boolean</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <a name="caption" id="caption"></a>
+        <h2>Portfolio</h2>
+
+        <p style="text-align:justify;">
+          Esta sección contiene la definición de la cartera que se pretende 
+          evaluar. Una cartera está compuesta de un conjunto de clientes
+          cada uno de los cuales puede disponer de un conjunto de activos.
+        </p>
+
+        <div class="subsection">
+          <a name="example9" id="example9"></a>
+          <h3>Example</h3>
+
+          <div class="source">
+            <pre>
+  
+  &lt;portfolio&gt;
+    &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
+      &lt;belongs-to concept="sector" segment="S1"/&gt;
+      &lt;belongs-to concept="size" segment="medium"/&gt;
+      &lt;asset class="bond" id="op1"&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;belongs-to concept="office" segment="0001"/&gt;
+        &lt;property name="issuedate" value="1/1/2000"/&gt;
+        &lt;property name="term" value="120"/&gt;
+        &lt;property name="nominal" value="1000.0"/&gt;
+        &lt;property name="rate" value="0.06"/&gt;
+        &lt;property name="ncoupons" value="10"/&gt;
+        &lt;property name="adquisitiondate" value="1/1/2002"/&gt;
+        &lt;property name="adquisitionprice" value="1000.0"/&gt;
+      &lt;/asset&gt;
+      &lt;asset class="bond" id="op2">&gt;
+        &lt;belongs-to concept="office" segment="0004"/&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;property name="issuedate" value="1/1/2000"/&gt;
+        &lt;property name="term" value="120"/&gt;
+        &lt;property name="nominal" value="1500.0"/&gt;
+        &lt;property name="rate" value="0.07"/&gt;
+        &lt;property name="ncoupons" value="20"/&gt;
+        &lt;property name="adquisitiondate" value="1/1/2003"/&gt;
+        &lt;property name="adquisitionprice" value="1500.0"/&gt;
+      &lt;/asset&gt;
+    &lt;/client&gt;
+    &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
+      &lt;belongs-to concept="sector" segment="S2"/&gt;
+      &lt;belongs-to concept="size" segment="big"/&gt;
+      &lt;asset class="bond" id="op3"&gt;
+        &lt;belongs-to concept="office" segment="0003"/&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;property name="issuedate" value="1/1/2000"/&gt;
+        &lt;property name="term" value="120"/&gt;
+        &lt;property name="nominal" value="1500.0"/&gt;
+        &lt;property name="rate" value="0.07"/&gt;
+        &lt;property name="ncoupons" value="5"/&gt;
+        &lt;property name="adquisitiondate" value="1/1/2003"/&gt;
+        &lt;property name="adquisitionprice" value="1500.0"/&gt;
+      &lt;/asset&gt;
+    &lt;/client&gt;
+  &lt;/portfolio&gt;
+
+            </pre>
+          </div>
+          
+          <p style="text-align:justify;">
+            Observese como no se define la pertenencia del cliente al segmento 
+            client ya que se realiza de forma implícita (lo mismo con la pertenencia
+            de los activos). En el caso de intentar asignar un cliente a una 
+            segmentación de tipo activo (o viceversa) el fichero de configuración
+            será rechazado.
+          </p>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Client Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>rating</td>
+              <td style="text-align:justify;">
+                rating inicial del cliente a fecha de inicio de la simulación. 
+                Debe ser un identificador de rating definido en el apartado de
+                ratings.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>sector</td>
+              <td style="text-align:justify;">
+                sector al que pertenece el cliente. Debe ser un identificador de 
+                sector definido en el apartado de sectores.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre del cliente. Usaado solamente a título descriptivo.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>id</td>
+              <td style="text-align:justify;">
+                identificador del cliente. Debe ser un identificador único.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Belongs-To Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>concept</td>
+              <td style="text-align:justify;">
+                identificador de segmentación al que pertenece el cliente o 
+                activo. Si se pretende indicar la pertenencia a un segmento de
+                un cliente el segmento deberá ser de tipo 'client', si se está 
+                indicando la pertenencia de un segmento de un activo, el segmento
+                deberá ser de tipo 'asset'.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>segment</td>
+              <td style="text-align:justify;">
+                identificador del segmento. El identificador debe constar como
+                segmento en la segmentación indicada en el atributo concept.
+                Véase apartado segmentations.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+        
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Asset Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>class</td>
+              <td style="text-align:justify;">
+                classe usada para simular el comportamiento del activo. Actualmente
+                las classes existentes son: <br />
+                <b>bond</b>. Bono.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>id</td>
+              <td style="text-align:justify;">
+                identificador de activo. Debe ser un identificador único.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="subsection">
+          <a name="Attributes" id="Attributes"></a>
+          <h3>Property Attributes</h3>
+
+          <table class="bodyTable">
+            <tr class="b">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+            <tr class="a">
+              <td>name</td>
+              <td style="text-align:justify;">
+                nombre de la propiedad. Véase la documentación del activo para
+                determinar que propiedades deben espeficarse.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
+              <td>value</td>
+              <td style="text-align:justify;">
+                valor de la propiedad. Véase la documentación del activo para
+                determinar que propiedades deben espeficarse.
+              </td>
+              <td><code>string</code></td>
+            </tr>
+          </table>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+
+</body>
+</html>
