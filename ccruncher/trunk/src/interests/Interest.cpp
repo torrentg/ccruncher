@@ -293,7 +293,7 @@ string ccruncher::Interest::getXML(int ilevel) throw(Exception)
   string spc = Utils::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interest name='" + name + "' date='" + Parser::date2string(fecha) + "'>";
+  ret += spc + "<interest name='" + name + "' date='" + Parser::date2string(fecha) + "'>\n";
 
   for (unsigned int i=0;i<vrates.size();i++)
   {

@@ -127,7 +127,7 @@ string ccruncher::Rating::getXML(int ilevel) throw(Exception)
   ret += "<rating ";
   ret += "name='" + name + "' ";
   ret += "order='" + Parser::int2string(order) + "' ";
-  ret += "desc='" + desc + "' ";
+  ret += "desc='" + desc + "'";
   ret += "/>\n";
 
   return ret;

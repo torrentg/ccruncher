@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
+#include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -81,11 +82,11 @@ int main(int argc, char *argv[])
         return 1;
       }
     }
-    else if (arg.length() >= 9 && arg.substr(0, 10) == "-nassets=")
+    else if (arg.length() >= 9 && arg.substr(0, 9) == "-nassets=")
     {
       try
       {
-        nclients = Parser::longValue(arg.substr(9));
+        nassets = Parser::longValue(arg.substr(9));
       }
       catch(Exception &e)
       {
@@ -95,10 +96,10 @@ int main(int argc, char *argv[])
     }
     else
     {
-      if (sfilename != "")
+      if (sfilename != "" || arg.substr(0, 1) == "-")
       {
-        cerr << "unexpected argument " << arg << endl;
-        return 1;      
+        cerr << "unexpected argument: " << arg << endl;
+        return 1;
       }
       else
       {
@@ -107,8 +108,22 @@ int main(int argc, char *argv[])
     }
   }
 
+  // arguments validations
+  if (sfilename == "")
+  {
+    cerr << "xml input file not specified" << endl;
+    cerr << "use --help option for more information" << endl;
+    return 1;
+  }
+  if (nclients == 0L || nassets == 0L)
+  {
+    cerr << "required arguments not especified" << endl;
+    cerr << "use --help option for more information" << endl;
+    return 1;
+  }
+
   // license info
-  copyright();
+  // copyright();
 
   try
   {
@@ -119,7 +134,7 @@ int main(int argc, char *argv[])
     cerr << e;
     return 1;
   }
-  
+
   // exit
   return 0;
 }
@@ -135,6 +150,19 @@ void run(string filename, int nclients, int nassets)
   // parsing input file
   IData idata = IData(filename);
 
+  cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
+  cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.1.dtd'>\n";
+  cout << "<creditcruncher>\n";
+  cout << idata.params->getXML(2);
+  cout << idata.interests->getXML(2);
+  cout << idata.ratings->getXML(2);
+  cout << idata.transitions->getXML(2);
+  cout << idata.sectors->getXML(2);
+  cout << idata.correlations->getXML(2);
+  cout << idata.segmentations->getXML(2);
+  cout << idata.aggregators->getXML(2);
+  cout << "</creditcruncher>\n";
+/*
   for (int i=0;i<NUM_CLIENTS;i++)
   {
     cout << "<client ";
@@ -168,6 +196,7 @@ void run(string filename, int nclients, int nassets)
 
     cout << "</client>\n";
   }
+*/
 }
 
 //===========================================================================

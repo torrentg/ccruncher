@@ -108,7 +108,7 @@ string ccruncher::Segment::getXML(int ilevel) throw(Exception)
 {
   string ret = "";
 
-  ret += Utils::blanks(ilevel) + "<segment name ='" + name + "' />\n";
+  ret += Utils::blanks(ilevel) + "<segment name ='" + name + "'/>\n";
 
   return ret;
 }

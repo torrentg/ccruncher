@@ -170,7 +170,7 @@ string ccruncher::Interests::getXML(int ilevel) throw(Exception)
   string spc = Utils::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interests>";
+  ret += spc + "<interests>\n";
 
   for (unsigned int i=0;i<vinterests.size();i++)
   {

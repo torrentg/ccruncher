@@ -257,7 +257,7 @@ string ccruncher::Segmentations::getXML(int ilevel) throw(Exception)
   string spc = Utils::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<segmentations>";
+  ret += spc + "<segmentations>\n";
 
   for (unsigned int i=0;i<vsegmentations.size();i++)
   {

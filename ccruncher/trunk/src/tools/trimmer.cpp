@@ -56,9 +56,6 @@ string rtrim(string s);
 bool bverbose = false;
 bool bwarnings = false;
 bool errors = false;
-long nlines = 0L;
-long nspcaces = 0L;
-long ntabs = 0L;
 vector<string> filenames;
 
 //===========================================================================

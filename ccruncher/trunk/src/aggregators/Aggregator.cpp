@@ -305,7 +305,7 @@ string ccruncher::Aggregator::getXML(int ilevel) throw(Exception)
   ret += "segmentation='"+ segmentations->getSegmentationName(isegmentation);
   ret += "' type='";
   ret += (bvalues==true?"values":"ratings");
-  ret += "' full='" + Parser::bool2string(bfull) + "' ";
+  ret += "' full='" + Parser::bool2string(bfull) + "'";
   ret += "/>\n";
 
   return ret;

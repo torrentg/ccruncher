@@ -127,7 +127,7 @@ string ccruncher::Sector::getXML(int ilevel) throw(Exception)
   ret += "<sector ";
   ret += "name ='" + name + "' ";
   ret += "order ='" + Parser::int2string(order) + "' ";
-  ret += "desc ='" + desc + "' ";
+  ret += "desc ='" + desc + "'";
   ret += "/>\n";
 
   return ret;

@@ -113,7 +113,7 @@ string ccruncher::Rate::getXML(int ilevel) throw(Exception)
 
   ret += "<rate ";
   ret += "t='" + Parser::double2string(t) + "' ";
-  ret += "r='" + Parser::double2string(r) + "' ";
+  ret += "r='" + Parser::double2string(r) + "'";
   ret += "/>\n";
 
   return ret;

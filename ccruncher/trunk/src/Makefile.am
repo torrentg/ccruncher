@@ -16,7 +16,7 @@ AM_CPPFLAGS = \
     -I../share/xercesc-2.6/include/\
     -I../share/MiniCppUnit-2.2/
 
-bin_PROGRAMS = ccruncher generator
+bin_PROGRAMS = ccruncher generator trimmer
 
 check_PROGRAMS = tests
 
@@ -68,6 +68,17 @@ ccruncher_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
 
+trimmer_SOURCES = \
+    ./tools/trimmer.cpp
+
+trimmer_CXXFLAGS = -Wall -W -Wshadow
+
+trimmer_LDFLAGS = 
+
+trimmer_LDADD = 
+
+# -------------------------------------------------------------
+
 generator_SOURCES = \
     ./tools/generator.cpp\
     ./kernel/IData.cpp\
@@ -105,11 +116,11 @@ generator_SOURCES = \
     ./utils/Timer.cpp\
     ./utils/Utils.cpp
 
-ccruncher_CXXFLAGS = -Wall -W -Wshadow
+generator_CXXFLAGS = -Wall -W -Wshadow
 
-ccruncher_LDFLAGS = -L../share/xercesc-2.6/lib
+generator_LDFLAGS = -L../share/xercesc-2.6/lib
 
-ccruncher_LDADD = -lm -ldl -lxerces-c
+generator_LDADD = -lm -ldl -lxerces-c
 
 # -------------------------------------------------------------
 

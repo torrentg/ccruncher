@@ -223,11 +223,11 @@ string ccruncher::Sectors::getXML(int ilevel) throw(Exception)
   string spc = Utils::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<sectors>";
+  ret += spc + "<sectors>\n";
 
   for (unsigned int i=0;i<vsectors.size();i++)
   {
-    ret += vsectors[i].getXML(ilevel);
+    ret += vsectors[i].getXML(ilevel+2);
   }
 
   ret += spc + "</sectors>\n";
