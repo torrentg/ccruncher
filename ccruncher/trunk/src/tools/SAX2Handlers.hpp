@@ -23,7 +23,7 @@
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release based on a Bernt A Oedegaard class
+//   . initial release
 //
 //===========================================================================
 

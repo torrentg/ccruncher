@@ -16,7 +16,7 @@ AM_CPPFLAGS = \
     -I../share/xercesc-2.6/include/\
     -I../share/MiniCppUnit-2.2/
 
-bin_PROGRAMS = ccruncher generator trimmer
+bin_PROGRAMS = ccruncher tabulate generator trimmer
 
 check_PROGRAMS = tests
 
@@ -76,6 +76,24 @@ trimmer_CXXFLAGS = -Wall -W -Wshadow
 trimmer_LDFLAGS = 
 
 trimmer_LDADD = 
+
+# -------------------------------------------------------------
+
+tabulate_SOURCES = \
+    ./tools/tabulate.cpp\
+    ./tools/SAX2Handlers.cpp\
+    ./utils/Exception.cpp\
+    ./utils/XMLUtils.cpp\
+    ./utils/Parser.cpp\
+    ./utils/Date.cpp\
+    ./utils/File.cpp\
+    ./utils/Utils.cpp    
+
+tabulate_CXXFLAGS = -Wall -W -Wshadow
+
+tabulate_LDFLAGS = -L../share/xercesc-2.6/lib
+
+tabulate_LDADD = -ldl -lxerces-c
 
 # -------------------------------------------------------------
 

@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
       if (sfilename != "" || arg.substr(0, 1) == "-")
       {
         cerr << "unexpected argument: " << arg << endl;
+        cerr << "use --help option for more information" << endl;
         return 1;
       }
       else

@@ -29,7 +29,8 @@
 
 #include <cfloat>
 #include <limits>
-#include "SAX2Count.hpp"
+#include "tabulate.hpp"
+#include "SAX2Handlers.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/XMLUtils.hpp"

@@ -196,7 +196,7 @@ void IDataTest::test1()
 
   // client creation
   IData *idata = NULL;
-  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement()),0));
 
   // assertions
   ASSERT(idata->params != NULL);

@@ -19,25 +19,21 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// trimmer.cpp - trimmer tool code
+// tabulate.cpp - tabulate tool code
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// plot "borrame.txt" u (floor($13/500)):(13) smooth frequency with histeps
 //===========================================================================
 
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <stdexcept>
-#include <cctype>
-
-//---------------------------------------------------------------------------
-
-#define MAX_LINE_SIZE 2048
+#include "tabulate.hpp"
+#include "utils/File.hpp"
+#include "utils/XMLUtils.hpp"
+#include <xercesc/sax2/SAX2XMLReader.hpp>
+#include <xercesc/sax2/XMLReaderFactory.hpp>
+#include <xercesc/util/OutOfMemoryException.hpp>
 
 //---------------------------------------------------------------------------
 
@@ -45,24 +41,22 @@ using namespace std;
 
 //---------------------------------------------------------------------------
 
+void run(string) throw(Exception);
 void usage();
 void version();
 void copyright();
-void trimFile(string s);
-string rtrim(string s);
-bool fine(vector<string> lines);
 
 //---------------------------------------------------------------------------
 
 bool bverbose = false;
-bool errors = false;
-vector<string> filenames;
 
 //===========================================================================
 // main
 //===========================================================================
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
+  string sfilename = "";
+
   // parsing options
   for (int i=1;i<argc;i++)
   {
@@ -78,133 +72,106 @@ int main(int argc, char *argv[])
       version();
       return 0;
     }
-    if (arg.substr(0,1) == "-")
+    else if (arg == "-v")
     {
-      if (arg == "-v")
-      {
-        bverbose = true;
-      }
-      else
-      {
-        cerr << "unknow option " << arg << endl;
-        cerr << "use --help option for more information" << endl;
-        return 1;
-      }
+      bverbose = true;
     }
     else
     {
-      filenames.push_back(arg);
+      if (sfilename != "" || arg.substr(0, 1) == "-")
+      {
+        cerr << "unexpected argument: " << arg << endl;
+        cerr << "use --help option for more information" << endl;
+        return 1;
+      }
+      else
+      {
+        sfilename = arg;
+      }
     }
+  }
+
+  // arguments validations
+  if (sfilename == "")
+  {
+    cerr << "xml input file not specified" << endl;
+    cerr << "use --help option for more information" << endl;
+    return 1;
   }
 
   // license info
   copyright();
 
-  // worker loop
-  for (unsigned int i=0;i<filenames.size();i++)
+  try
   {
-    try
+    run(sfilename);
+  }
+  catch(Exception &e)
+  {
+    cerr << e;
+    return 1;
+  }
+
+  // exit
+  return 0;
+}
+
+//===========================================================================
+// run
+//===========================================================================
+void run(string filename) throw(Exception)
+{
+  // checking input file readeability
+  File::checkFile(filename, "r");
+
+  // initializing XML stuf
+  XMLUtils::initialize();
+  
+  // creating XML objects
+  SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
+  SAX2Handlers handler;
+  parser->setContentHandler(&handler);
+  parser->setErrorHandler(&handler);
+
+  // parsing file content
+  try
+  {
+    parser->parse(filename.c_str());
+  }
+  catch (const OutOfMemoryException& e)
+  {
+    throw Exception("OutOfMemoryException");
+  }
+  catch (const XMLException& e)
+  {
+    throw XMLUtils::XMLException2Exception(e);
+  }
+  catch (...)
+  {
+    throw Exception("Unexpected exception during parsing: " + filename);
+  }
+
+  // printing file content
+  if (!handler.getSawErrors())
+  {
+    vector<double> *ret = handler.getTranches();
+    int numtranches = handler.getNumTranches();
+    int n = ret[0].size();
+
+    for(int i=0;i<n;i++)
     {
-      trimFile(filenames[i]);
-    }
-    catch(std::exception &e)
-    {
-      cerr << "error trimming " << filenames[i] << " : " << e.what() << endl;
-      errors = true;
+      for (int j=0;j<numtranches;j++)
+      {
+        cout <<  ret[j][i] << "\t";
+      }
+      cout << "\n";
     }
   }
 
   // exit function
-  if (errors == true) return 1;
-  else return 0;
-}
-
-//===========================================================================
-// trimFile
-//===========================================================================
-void trimFile(string filename)
-{
-  char buf[MAX_LINE_SIZE];
-  string curline = "";
-  vector<string> lines;
-  ifstream fin;
-  ofstream fout;
-  unsigned int nlines = 0;
-  unsigned int nlines_ko = 0;
-  bool hastabs = false;
-
-  // reading file
-  fin.open(filename.c_str());
-  while (!fin.eof())
-  {
-    fin.getline(buf, MAX_LINE_SIZE);
-    curline += string(buf);
-    if (strlen(buf) < MAX_LINE_SIZE)
-    {
-      lines.push_back(curline);
-      curline = "";
-      nlines++;
-    }
-    else
-    {
-      // nothing to do
-    }
-  }
-  fin.close();
-
-  // writing file
-  if (!fine(lines))
-  {
-    fout.open(filename.c_str(), ios::out|ios::trunc);
-    for (unsigned int i=0;i<lines.size();i++)
-    {
-      string::size_type pos = lines[i].find_last_not_of(" \t\n");
-      string tmp = lines[i].substr( 0, pos+1 );
-      fout << tmp;
-
-      if (tmp.size() != lines[i].size())
-      {
-        nlines_ko ++;
-      }
-
-      if (tmp.find_first_of("\t") != string::npos)
-      {
-        hastabs = true;
-      }
-
-      if (i != lines.size()-1)
-      {
-        fout << endl;
-      }
-    }
-    fout.close();
-    
-    cout << filename << " (lines=" << nlines << ", trimmed=" << nlines_ko << ", tabs=" << (hastabs?"true":"false") << ")" << endl;
-  }
-
-  // tracing
-  if (bverbose == true)
-  {
-    // nothing to do
-  }
-}
-
-//===========================================================================
-// fine
-//===========================================================================
-bool fine(vector<string> lines)
-{
-  for (unsigned int i=0;i<lines.size();i++)
-  {
-    string::size_type pos = lines[i].find_last_not_of(" \t\n");
-    
-    if (pos != string::npos && pos != (lines[i].length()-1))
-    {
-      return false;
-    }
-  }
-
-  return true;
+  delete parser;
+  XMLUtils::terminate();
+  
 }
 
 //===========================================================================
@@ -212,7 +179,7 @@ bool fine(vector<string> lines)
 //===========================================================================
 void version()
 {
-  cout << "trimmer-0.1" << endl;
+  cout << "tabulate-0.1" << endl;
 }
 
 //===========================================================================
@@ -221,12 +188,12 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: trimmer [options] <file_1 ... file_n>\n"
+  "  usage: tabulate [options] <file.xml>\n"
   "\n"
   "  description:\n"
   "    trimmer purge spaces and tabs found at end of lines\n"
   "  arguments:\n"
-  "    files      text files to be trimmed\n"
+  "    file       xml output creditcruncher file\n"
   "  options:\n"
   "    -v         be more verbose\n"
   "    --help     show this message and exit\n"
@@ -235,8 +202,7 @@ void usage()
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    trimmer file1.cpp\n"
-  "    trimmer -v *.cpp\n"
+  "    tabulate data/aggregator1-portfolio-rest.xml\n"
   << endl;
 }
 
@@ -245,8 +211,8 @@ void usage()
 //===========================================================================
 void copyright()
 {
-  cout << "\n"
-  "  trimmer is Copyright (C) 2003-2005 Gerard Torrent\n"
+  cerr << "\n"
+  "  tabulate is Copyright (C) 2003-2005 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
   "  more info at http://www.generacio.com/ccruncher\n"
   << endl;
