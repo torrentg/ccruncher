@@ -21,7 +21,8 @@ Install xerces-c package
      export C_INCLUDE_PATH=$XERCESROOT/include:$C_INCLUDE_PATH
      export CPLUS_INCLUDE_PATH=$XERCESROOT/include:$CPLUS_INCLUDE_PATH
      export XERCESC_NLS_HOME=$XERCESCROOT/msg
-   the xercesenv.sh is a script that can help you (read it).
+   the bin/xercesenv.sh is a script that can help you (read it).
+
 
 Installation from source package
 --------------------------------
@@ -56,12 +57,12 @@ Using CreditCruncher
 1. create your input file. Read documentation to perform this step
 
 2. run CreditCruncher
-     ${ccruncher_home}/bin/ccruncher --help
-     ${ccruncher_home}/bin/ccruncher -hash=100 -f -v -path=./data file.xml
+     $CCRUNCHER/bin/ccruncher --help
+     $CCRUNCHER/bin/ccruncher -hash=100 -f -v -path=./data file.xml
 
 3. extract data from output files
-     ${ccruncher_home}/bin/tabulate --help
-     ${ccruncher_home}/bin/tabulate ./data/outputfilex.xml
+     $CCRUNCHER/bin/tabulate --help
+     $CCRUNCHER/bin/tabulate ./data/outputfilex.xml
 
 4. process info using your prefered spreadsheet or use scripts to generate
    a report file created using TeX and gnuplot
@@ -94,6 +95,14 @@ Developers tips & tricks
 7. profiling executable
      ./path/progname (-> writes gmon.out because we compiled with -pg flag)
      gprof ./path/progname gmon.out
+
+8. debuging executable
+     gdb ./path/progname
+       > help
+       > set args arg1 arg2 arg3 ... argn
+       > run
+       > backtrace
+       > quit
 
 8. making source distribution package
      make dist
