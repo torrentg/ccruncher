@@ -23,7 +23,7 @@ check_PROGRAMS = tests
 # -------------------------------------------------------------
 
 ccruncher_SOURCES = \
-    ./kernel/main.cc\
+    ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
