@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cfloat>
@@ -57,7 +60,7 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 //===========================================================================
 // constructor de copia
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception)
+ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception) : ExpatHandlers() 
 {
   period = otm.period;
   ratings = otm.ratings;
@@ -72,6 +75,16 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
 
 //===========================================================================
 // constructor
+//===========================================================================
+ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception)
+{
+  // posem valors per defecte
+  init(ratings_);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_, const DOMNode& node) throw(Exception)
 {
@@ -163,7 +176,58 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+{
+  if (isEqual(name,"mtransitions")) {
+    if (getNumAttributes(attributes) < 1 || 2 < getNumAttributes(attributes)) {
+      throw eperror(eu, "invalid number of attributes in tag mtransitions");
+    }
+    else {
+      period = getDoubleAttribute(attributes, "period", DBL_MAX);
+      epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
+      if (period == DBL_MAX || epsilon < 0.0 || epsilon > 1.0) {
+        throw eperror(eu, "invalid attributes at <mtransitions>");
+      }      
+    }
+  }
+  else if (isEqual(name,"transition")) {
+    string from = getStringAttribute(attributes, "from", "");
+    string to = getStringAttribute(attributes, "to", "");
+    double value = getDoubleAttribute(attributes, "value", DBL_MAX);
+
+    if (from == "" || to == "" || value == DBL_MAX) {
+      throw eperror(eu, "invalid values at <transition>");
+    }
+    else {
+      insertTransition(from, to, value);
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
+{
+  if (isEqual(name,"mtransitions")) {
+    validate();
+  }
+  else if (isEqual(name,"transition")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -212,6 +276,7 @@ void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Except
 
 //===========================================================================
 // interpreta un node XML time
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::TransitionMatrix::parseTransition(const DOMNode& node) throw(Exception)
 {

@@ -25,8 +25,10 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
-
 
 #include <cfloat>
 #include "CorrelationMatrix.hpp"
@@ -34,7 +36,6 @@
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 #include "math/CholeskyDecomposition.hpp"
-
 
 //===========================================================================
 // inicialitzador privat
@@ -57,6 +58,16 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 
 //===========================================================================
 // constructor
+//===========================================================================
+ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Exception)
+{
+  // posem valors per defecte
+  init(sectors_);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_, const DOMNode& node) throw(Exception)
 {
@@ -147,9 +158,59 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   matrix[col][row] = value;
 }
 
+//===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+{
+  if (isEqual(name,"mcorrels")) {
+    if (1 < getNumAttributes(attributes)) {
+      throw eperror(eu, "invalid number of attributes in tag mcorrels");
+    }
+    else {
+      epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
+      if (epsilon < 0.0 || epsilon > 1.0) {
+        throw eperror(eu, "invalid attribute at <mcorrels>");
+      }      
+    }
+  }
+  else if (isEqual(name,"sigma")) {
+    string sector1 = getStringAttribute(attributes, "sector1", "");
+    string sector2 = getStringAttribute(attributes, "sector2", "");
+    double value = getDoubleAttribute(attributes, "value", DBL_MAX);
+
+    if (sector1 == "" || sector2 == "" || value == DBL_MAX)
+    {
+      throw eperror(eu, "invalid values at <sigma>");
+    }
+    else {
+      insertSigma(sector1, sector2, value);
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
+{
+  if (isEqual(name,"mcorrels")) {
+    validate();
+  }
+  else if (isEqual(name,"sigma")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name));
+  }
+}
 
 //===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::CorrelationMatrix::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -198,6 +259,7 @@ void ccruncher::CorrelationMatrix::parseDOMNode(const DOMNode& node) throw(Excep
 
 //===========================================================================
 // interpreta un node XML time
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::CorrelationMatrix::parseSigma(const DOMNode& node) throw(Exception)
 {

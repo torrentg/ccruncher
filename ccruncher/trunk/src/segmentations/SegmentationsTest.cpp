@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
@@ -35,7 +38,7 @@
 #include "Segmentation.hpp"
 #include "Segmentations.hpp"
 #include "SegmentationsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -91,23 +94,13 @@ void SegmentationsTest::test1()
   </segmentations>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // segmentation object creation
-  Segmentations *sobj = NULL;
-  ASSERT_NO_THROW(sobj = new Segmentations(*(doc->getDocumentElement())));
+  Segmentations sobj;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  if (sobj != NULL)
-  {
-    vector<Segmentation> v = sobj->getSegmentations();
-    ASSERT(7 == v.size());
-    ASSERT(0 == sobj->getSegmentation("portfolio"));
-  }
-
-  if (sobj != NULL) delete sobj;
-  delete parser;
-  XMLUtils::terminate();
+  vector<Segmentation> v = sobj.getSegmentations();
+  ASSERT(7 == v.size());
+  ASSERT(0 == sobj.getSegmentation("portfolio"));
 }

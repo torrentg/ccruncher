@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Segmentation_
@@ -36,6 +39,7 @@
 #include <string>
 #include <vector>
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "Segment.hpp"
 
@@ -56,7 +60,7 @@ enum components_t {
 
 //---------------------------------------------------------------------------
 
-class Segmentation
+class Segmentation : public ExpatHandlers
 {
 
   private:
@@ -73,6 +77,7 @@ class Segmentation
     string name;
     components_t components;
 
+    Segmentation();
     Segmentation(const DOMNode &) throw(Exception);
     ~Segmentation();
 
@@ -82,6 +87,11 @@ class Segmentation
 
     void addSegment(string segname) throw(Exception);
     string getXML(int) throw(Exception);
+    void reset();
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

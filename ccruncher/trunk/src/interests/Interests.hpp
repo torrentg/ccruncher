@@ -28,6 +28,9 @@
 // 2005/03/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added dummy constructor
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Interests_
@@ -38,6 +41,7 @@
 #include "utils/config.h"
 #include <algorithm>
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "Interest.hpp"
 
@@ -50,13 +54,14 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Interests
+class Interests : public ExpatHandlers
 {
 
   private:
 
     vector<Interest> vinterests;
     int ispot;
+    Interest auxinterest;
 
     void parseDOMNode(const DOMNode&) throw(Exception);
     void insertInterest(Interest &) throw(Exception);
@@ -65,13 +70,17 @@ class Interests
 
   public:
 
-    Interests() {};
+    Interests();
     Interests(const DOMNode &) throw(Exception);
     ~Interests();
 
     vector<Interest> * getInterests();
     Interest * getInterest(string name) throw(Exception);
     string getXML(int) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -39,8 +42,25 @@
 //===========================================================================
 ccruncher::Interest::Interest()
 {
-  // inicialitzem el vector de rates
-  vrates = vector<Rate>();
+  reset();
+}
+
+//===========================================================================
+// constructor privat
+//===========================================================================
+ccruncher::Interest::Interest(const string &str)
+{
+  // nom del Interest
+  name = str;
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Interest::reset()
+{
+  // flushing vector
+  vrates.clear();
 
   // nom del Interest
   name = "UNDEFINED_INTEREST";
@@ -49,27 +69,12 @@ ccruncher::Interest::Interest()
   fecha = Date(1,1,1900);
 }
 
-
-//===========================================================================
-// constructor privat
-//===========================================================================
-ccruncher::Interest::Interest(const string &str)
-{
-  // inicialitzem el vector de rates
-  vrates = vector<Rate>();
-
-  // nom del Interest
-  name = str;
-}
-
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Interest::Interest(const DOMNode& node) throw(Exception)
 {
-  // inicialitzem el vector de rates
-  vrates = vector<Rate>();
-
   // recollim els parametres de la simulacio
   parseDOMNode(node);
 
@@ -82,7 +87,7 @@ ccruncher::Interest::Interest(const DOMNode& node) throw(Exception)
 //===========================================================================
 ccruncher::Interest::~Interest()
 {
-  // cal assegurar que es destrueix vrates;
+  // atention at vrates allocation
 }
 
 //===========================================================================
@@ -238,7 +243,54 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"interest")) {
+    if (getNumAttributes(attributes) != 2) {
+      throw eperror(eu, "incorrect number of attributes");
+    }
+    else
+    {
+      // getting attributes
+      name = getStringAttribute(attributes, "name", "");
+      fecha = getDateAttribute(attributes, "date", Date(1,1,1900));
+      if (name == "" || fecha == Date(1,1,1900))
+      {
+        throw eperror(eu, "invalid attributes values at <interest>");
+      }
+    }
+  }
+  else if (isEqual(name_,"rate")) {
+    // setting new handlers
+    auxrate.reset();
+    eppush(eu, &auxrate, name_, attributes);  
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"interest")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"rate")) {
+    insertRate(auxrate);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Interest::parseDOMNode(const DOMNode& node) throw(Exception)
 {

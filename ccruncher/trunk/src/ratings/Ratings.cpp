@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -45,6 +48,7 @@ ccruncher::Ratings::Ratings()
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Ratings::Ratings(const DOMNode& node) throw(Exception)
 {
@@ -118,7 +122,44 @@ void ccruncher::Ratings::insertRating(Rating &val) throw(Exception)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"ratings")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag ratings");
+    }
+  }
+  else if (isEqual(name_,"rating")) {
+    auxrating.reset();
+    eppush(eu, &auxrating, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"ratings")) {
+    validations();
+    auxrating.reset();
+  }
+  else if (isEqual(name_,"rating")) {
+    insertRating(auxrating);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Ratings::parseDOMNode(const DOMNode& node) throw(Exception)
 {

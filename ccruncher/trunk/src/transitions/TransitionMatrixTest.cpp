@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "TransitionMatrix.hpp"
 #include "TransitionMatrixTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -44,7 +47,7 @@
 //===========================================================================
 void TransitionMatrixTest::setUp()
 {
-  XMLUtils::initialize();
+  // nothing to do
 }
 
 //===========================================================================
@@ -52,7 +55,7 @@ void TransitionMatrixTest::setUp()
 //===========================================================================
 void TransitionMatrixTest::tearDown()
 {
-  XMLUtils::terminate();
+  // nothing to do
 }
 
 //===========================================================================
@@ -70,13 +73,10 @@ Ratings TransitionMatrixTest::getRatings()
     </ratings>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
+  Ratings ret;
+  xmlparser.parse(xmlcontent, &ret);
 
-  Ratings ret = Ratings(*(doc->getDocumentElement()));
-
-  delete parser;
   return ret;
 }
 
@@ -122,51 +122,43 @@ void TransitionMatrixTest::test1()
   };
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm=NULL;
-  ASSERT_NO_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
+  TransitionMatrix trm(&ratings);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &trm));
   
-  if (trm != NULL)
+  double **matrix = trm.getMatrix();
+
+  ASSERT(5 == trm.size());
+
+  for(int i=0;i<5;i++)
   {
-    double **matrix = trm->getMatrix();
-
-    ASSERT(5 == trm->size());
-
-    for(int i=0;i<5;i++)
+    for(int j=0;j<5;j++)
     {
-      for(int j=0;j<5;j++)
-      {
-        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
-      }
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
-
-    // testing index default (internal indexation, begins with 0)
-    ASSERT(4 == trm->getIndexDefault());
-
-    // testing function translate()
-    TransitionMatrix *aux = translate(trm, 1.0);
-    matrix = aux->getMatrix();
-
-    for(int i=0;i<5;i++)
-    {
-      for(int j=0;j<5;j++)
-      {
-        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
-      }
-    }
-    
-    delete aux;
   }
 
-  if (trm != NULL) delete trm;
-  delete parser;
+  // testing index default (internal indexation, begins with 0)
+  ASSERT(4 == trm.getIndexDefault());
+
+  // testing function translate()
+  TransitionMatrix *aux = translate(&trm, 1.0);
+  matrix = aux->getMatrix();
+
+  for(int i=0;i<5;i++)
+  {
+    for(int j=0;j<5;j++)
+    {
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+    }
+  }
+    
+  delete aux;
 }
 
 //===========================================================================
@@ -205,19 +197,14 @@ void TransitionMatrixTest::test2()
     </mtransitions>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm=NULL;
-  ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-
-  if (trm != NULL) delete trm;
-  delete parser;
+  TransitionMatrix trm(&ratings);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
 //===========================================================================
@@ -256,19 +243,14 @@ void TransitionMatrixTest::test3()
     </mtransitions>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm=NULL;
-  ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-
-  if (trm != NULL) delete trm;
-  delete parser;
+  TransitionMatrix trm(&ratings);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
 //===========================================================================
@@ -307,17 +289,12 @@ void TransitionMatrixTest::test4()
     </mtransitions>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix *trm=NULL;
-  ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-
-  if (trm != NULL) delete trm;
-  delete parser;
+  TransitionMatrix trm(&ratings);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }

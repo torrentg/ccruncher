@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include "Params.hpp"
@@ -34,6 +37,16 @@
 
 //===========================================================================
 // constructor
+//===========================================================================
+ccruncher::Params::Params()
+{
+  // posem valors per defecte (incorrectes)
+  init();
+}
+
+//===========================================================================
+// constructor 
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Params::Params(const DOMNode& node) throw(Exception)
 {
@@ -72,6 +85,41 @@ ccruncher::Params::~Params()
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char **atrs)
+{
+  if (isEqual(name,"params")) {
+    // checking that don't have attributes
+    if (getNumAttributes(atrs) > 0) {
+      throw eperror(eu, "attributes are not allowed in tag params");
+    }
+  }
+  else if (isEqual(name,"property")) {
+    parseProperty(eu, atrs);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
+{
+  if (isEqual(name,"params")) {
+    validate();
+  }
+  else if (isEqual(name,"property")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name));
+  }
+}
+
+//===========================================================================
 // return Date array = begindate, begindate+steplength, bengindate+2*steplength
 //===========================================================================
 Date * ccruncher::Params::getDates() throw(Exception)
@@ -90,6 +138,7 @@ Date * ccruncher::Params::getDates() throw(Exception)
 
 //===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Params::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -130,6 +179,7 @@ void ccruncher::Params::parseDOMNode(const DOMNode& node) throw(Exception)
 
 //===========================================================================
 // interpreta un node XML time
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Params::parseProperty(const DOMNode& node) throw(Exception)
 {
@@ -213,6 +263,93 @@ void ccruncher::Params::parseProperty(const DOMNode& node) throw(Exception)
   else
   {
     throw Exception("Params::parseProperty(): found unexpected property: " + name);
+  }
+}
+
+//===========================================================================
+// interpreta un node XML time
+//===========================================================================
+void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes) throw(Exception)
+{
+  // reading attribute name
+  string name = getStringAttribute(attributes,"name", "");
+
+  if (name == "time.begindate")
+  {
+    Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
+    if (begindate != Date(1,1,1900) || aux == Date(1,1,1900)) {
+      throw eperror(eu, "found invalid time.begintime");
+    } else {
+      begindate = aux;
+    }
+  }
+  else if (name == "time.steps")
+  {
+    int aux = getIntAttribute(attributes, "value", 0);
+    if (steps != 0 || aux <= 0) {
+      throw eperror(eu, "found invalid time.steps");
+    } else {
+      steps = aux;
+    }
+  }
+  else if (name == "time.steplength")
+  {
+    int aux = getIntAttribute(attributes, "value", 0);
+    if (steplength != 0 || aux <= 0) {
+      throw eperror(eu, "found invalid time.steplength");
+    } else {
+      steplength = aux;
+    }
+  }
+  else if (name == "stopcriteria.maxiterations")
+  {
+    long aux = getLongAttribute(attributes, "value", 0L);
+    if (maxiterations != 0L || aux <= 0L) {
+      throw eperror(eu, "found invalid stopcriteria.maxiterations");
+    } else {
+      maxiterations = aux;
+    }
+  }
+  else if (name == "stopcriteria.maxseconds")
+  {
+    long aux = getLongAttribute(attributes, "value", 0L);
+    if (maxseconds != 0L || aux <= 0L) {
+      throw eperror(eu, "found invalid stopcriteria.maxseconds");
+    } else {
+      maxseconds = aux;
+    }
+  }
+  else if (name == "copula.type")
+  {
+    string aux = getStringAttribute(attributes, "value", "");
+    if (copula_type != "" || aux == "") {
+      throw eperror(eu, "found invalid copula.type");
+    } else {
+      copula_type = aux;
+    }
+  }
+  else if (name == "copula.seed")
+  {
+    long aux = getLongAttribute(attributes, "value", 0L);
+    if (copula_seed != 0L || aux == 0L) {
+      throw eperror(eu, "found invalid copula.seed");
+    } else {
+      copula_seed = aux;
+    }
+  }
+  else if (name == "montecarlo.antithetic")
+  {
+    bool aux = getBooleanAttribute(attributes, "value", false);
+    antithetic = aux;
+  }
+  else if (name == "portfolio.onlyActiveClients")
+  {
+    bool aux = getBooleanAttribute(attributes, "value", false);
+    onlyactive = aux;
+  }
+  else
+  {
+    throw eperror(eu, "found unexpected property: " + name);
   }
 }
 

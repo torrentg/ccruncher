@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "CorrelationMatrix.hpp"
 #include "CorrelationMatrixTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -44,7 +47,7 @@
 //===========================================================================
 void CorrelationMatrixTest::setUp()
 {
-  XMLUtils::initialize();
+  // nothing to do
 }
 
 //===========================================================================
@@ -52,7 +55,7 @@ void CorrelationMatrixTest::setUp()
 //===========================================================================
 void CorrelationMatrixTest::tearDown()
 {
-  XMLUtils::terminate();
+  // nothing to do
 }
 
 //===========================================================================
@@ -67,14 +70,12 @@ Sectors CorrelationMatrixTest::getSectors()
     </sectors>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
-  Sectors ret = Sectors(*(doc->getDocumentElement()));
+  Sectors ret;
+  xmlparser.parse(xmlcontent, &ret);
 
-  delete parser;
   return ret;
 }
 
@@ -95,34 +96,26 @@ void CorrelationMatrixTest::test1()
   };
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix *crm = NULL;
-  ASSERT_NO_THROW(crm = new CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
+  CorrelationMatrix crm(&sectors);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
   
-  if (crm != NULL)
+  double **matrix = crm.getMatrix();
+
+  ASSERT(2 == crm.size());
+
+  for(int i=0;i<2;i++)
   {
-    double **matrix = crm->getMatrix();
-
-    ASSERT(2 == crm->size());
-
-    for(int i=0;i<2;i++)
+    for(int j=0;j<2;j++)
     {
-      for(int j=0;j<2;j++)
-      {
-        ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
-      }
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
     }
   }
-
-  if (crm != NULL) delete crm;
-  delete parser;
 }
 
 //===========================================================================
@@ -139,17 +132,14 @@ void CorrelationMatrixTest::test2()
     </mcorrels>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
-
-  delete parser;
+  CorrelationMatrix crm(&sectors);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
 //===========================================================================
@@ -165,17 +155,14 @@ void CorrelationMatrixTest::test3()
     </mcorrels>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
-
-  delete parser;
+  CorrelationMatrix crm(&sectors);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
 //===========================================================================
@@ -192,15 +179,12 @@ void CorrelationMatrixTest::test4()
     </mcorrels>";
 
   // creating xml
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // sectors list creation
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
-
-  delete parser;
+  CorrelationMatrix crm(&sectors);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }

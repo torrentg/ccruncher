@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Ratings.hpp"
 #include "RatingsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
@@ -67,15 +70,12 @@ void RatingsTest::test1()
     </ratings>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_NO_THROW(ratings = Ratings(*(doc->getDocumentElement())));
-  vector<Rating> &list = *ratings.getRatings();
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ratings));
+  vector<Rating> &list = *(ratings.getRatings());
 
   ASSERT(5 == list.size());
 
@@ -101,9 +101,6 @@ void RatingsTest::test1()
   ASSERT(list[1] < list[2]);
   ASSERT(list[2] < list[3]);
   ASSERT(list[3] < list[4]);
-
-  delete parser;
-  XMLUtils::terminate();
 }
 
 //===========================================================================
@@ -122,17 +119,11 @@ void RatingsTest::test2()
     </ratings>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
 }
 
 //===========================================================================
@@ -151,17 +142,11 @@ void RatingsTest::test3()
     </ratings>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
 }
 
 //===========================================================================
@@ -180,17 +165,11 @@ void RatingsTest::test4()
     </ratings>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
 }
 
 //===========================================================================
@@ -209,15 +188,9 @@ void RatingsTest::test5()
     </ratings>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // ratings list creation
   Ratings ratings;
-  ASSERT_THROW(ratings = Ratings(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
 }

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -44,6 +47,7 @@ ccruncher::Sectors::Sectors()
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Sectors::Sectors(const DOMNode& node) throw(Exception)
 {
@@ -116,8 +120,46 @@ void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
   }
 }
 
+
+//===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"sectors")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag sectors");
+    }
+  }
+  else if (isEqual(name_,"sector")) {
+    auxsector.reset();
+    eppush(eu, &auxsector, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"sectors")) {
+    validations();
+    auxsector.reset();
+  }
+  else if (isEqual(name_,"sector")) {
+    insertSector(auxsector);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
 //===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Sectors::parseDOMNode(const DOMNode& node) throw(Exception)
 {

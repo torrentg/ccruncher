@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Params.hpp"
 #include "ParamsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
@@ -69,52 +72,41 @@ void ParamsTest::test1()
     </params>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
-
+  ExpatParser xmlparser;
+  
   // ratings list creation
-  Params *params = NULL;
-  ASSERT_NO_THROW(params = new Params(*(doc->getDocumentElement())));
+  Params params;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
-  if (params != NULL)
+  ASSERT(Date("18/02/2003") == params.begindate);
+  ASSERT(12 == params.steps);
+  ASSERT(2 == params.steplength);
+  ASSERT(3000 == params.maxiterations);
+  ASSERT(30000000 == params.maxseconds);
+  ASSERT("normal" == params.copula_type);
+  ASSERT(38765874L == params.copula_seed);
+  ASSERT(true == params.antithetic);
+
+  Date *dates = NULL;
+  ASSERT_NO_THROW(dates = params.getDates());
+
+  if (dates != NULL)
   {
-    ASSERT(Date("18/02/2003") == params->begindate);
-    ASSERT(12 == params->steps);
-    ASSERT(2 == params->steplength);
-    ASSERT(3000 == params->maxiterations);
-    ASSERT(30000000 == params->maxseconds);
-    ASSERT("normal" == params->copula_type);
-    ASSERT(38765874L == params->copula_seed);
-    ASSERT(true == params->antithetic);
-
-    Date *dates = NULL;
-    ASSERT_NO_THROW(dates = params->getDates());
-
-    if (dates != NULL)
-    {
-      ASSERT(Date("18/02/2003") == dates[0]);
-      ASSERT(Date("18/04/2003") == dates[1]);
-      ASSERT(Date("18/06/2003") == dates[2]);
-      ASSERT(Date("18/08/2003") == dates[3]);
-      ASSERT(Date("18/10/2003") == dates[4]);
-      ASSERT(Date("18/12/2003") == dates[5]);
-      ASSERT(Date("18/02/2004") == dates[6]);
-      ASSERT(Date("18/04/2004") == dates[7]);
-      ASSERT(Date("18/06/2004") == dates[8]);
-      ASSERT(Date("18/08/2004") == dates[9]);
-      ASSERT(Date("18/10/2004") == dates[10]);
-      ASSERT(Date("18/12/2004") == dates[11]);
-      ASSERT(Date("18/02/2005") == dates[12]);
-    }
-    
-    if (dates != NULL) delete [] dates;
+    ASSERT(Date("18/02/2003") == dates[0]);
+    ASSERT(Date("18/04/2003") == dates[1]);
+    ASSERT(Date("18/06/2003") == dates[2]);
+    ASSERT(Date("18/08/2003") == dates[3]);
+    ASSERT(Date("18/10/2003") == dates[4]);
+    ASSERT(Date("18/12/2003") == dates[5]);
+    ASSERT(Date("18/02/2004") == dates[6]);
+    ASSERT(Date("18/04/2004") == dates[7]);
+    ASSERT(Date("18/06/2004") == dates[8]);
+    ASSERT(Date("18/08/2004") == dates[9]);
+    ASSERT(Date("18/10/2004") == dates[10]);
+    ASSERT(Date("18/12/2004") == dates[11]);
+    ASSERT(Date("18/02/2005") == dates[12]);
+    delete [] dates;
   }
-
-  if (params != NULL) delete params;
-  delete parser;
-  XMLUtils::terminate();
 }
 
 //===========================================================================
@@ -135,16 +127,9 @@ void ParamsTest::test2()
     </params>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
-
+  ExpatParser xmlparser;
+  
   // ratings list creation
-  Params *params = NULL;
-  ASSERT_THROW(params = new Params(*(doc->getDocumentElement())));
-
-  if (params != NULL) delete params;
-  delete parser;
-  XMLUtils::terminate();
+  Params params;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
 }

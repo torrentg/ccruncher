@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -37,13 +40,24 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
+ccruncher::Segmentation::Segmentation()
 {
   // default values
   modificable = false;
 
-  // inicialitzem el vector de segments
-  vsegments = vector<Segment>();
+  // adding catcher segment
+  Segment catcher = Segment("rest");
+  insertSegment(catcher);
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
+//===========================================================================
+ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
+{
+  // default values
+  modificable = false;
 
   // adding catcher segment
   Segment catcher = Segment("rest");
@@ -59,6 +73,17 @@ ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
 ccruncher::Segmentation::~Segmentation()
 {
   // cal assegurar que es destrueix vsegments
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Segmentation::reset()
+{
+  vsegments.clear();
+  modificable = false;
+  name = "";
+  components = client;
 }
 
 //===========================================================================
@@ -109,7 +134,70 @@ void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"segmentation")) {
+    if (getNumAttributes(attributes) != 2) {
+      throw eperror(eu, "incorrect number of attributes in tag segmentation");
+    }
+    else {
+      name = getStringAttribute(attributes, "name", "");
+      string strcomp = getStringAttribute(attributes, "components", "");
+      
+      // checking name
+      if (name == "") {
+        throw eperror(eu, "tag <segmentation> with invalid name attribute");
+      }
+ 
+      // filling components variable
+      if (strcomp == "asset") {
+        components = asset;
+      }
+      else if (strcomp == "client") {
+        components = client;
+      }
+      else {
+        throw eperror(eu, "tag <segmentation> with invalid components attribute");
+      }
+    }
+  }
+  else if (isEqual(name_,"segment")) {
+    string sname = getStringAttribute(attributes, "name", "");
+    // checking segment name
+    if (sname == "") {
+      throw eperror(eu, "tag <segment> with invalid name attribute");
+    }
+    else {
+      Segment aux(sname);
+      insertSegment(aux);
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"segmentation")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"segment")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -253,7 +341,7 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
     {
       if (vsegments[i].name != "rest")
       {
-        ret += vsegments[i].getXML(ilevel+2);
+        ret += Utils::blanks(ilevel+2) + "<segment name='" + vsegments[i].name + "'/>\n";
       }
     }
   }

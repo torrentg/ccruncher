@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,52 +19,67 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.hpp - Segment header
+// ExpatParser.hpp - ExpatParser header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from xerces to expat
 //
 //===========================================================================
 
-#ifndef _Segment_
-#define _Segment_
+#ifndef _ExpatParser_
+#define _ExpatParser_
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
-#include "utils/Exception.hpp"
+#include "config.h"
+#include "expat.h"
+#include <iostream>
+#include "ExpatHandlers.hpp"
+#include "Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segment 
+class ExpatParser
 {
 
   private:
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
+    /** parser expat object */
+    XML_Parser xmlparser;
+
+    /** user data */
+    ExpatUserData userdata;
+    
+    /** startElement function catcher */
+    static void XMLCALL startElement(void *ud, const char *name, const char **atts);
+
+    /** endElement function catcher */
+    static void XMLCALL endElement(void *ud, const char *name);
 
 
   public:
 
-    string name;
+    /** constructor (xml=string) */
+    ExpatParser();
 
-    Segment();
-    Segment(string name_);
-    Segment(const DOMNode &) throw(Exception);
+    /** destructor */
+    ~ExpatParser();
 
-    string getXML(int) throw(Exception);
+    /** parse xml */
+    void parse(string xmlcontent, ExpatHandlers *eh) throw(Exception);
+
+    /** parse xml */
+    void parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception);
+
+    /** returns main object */
+    void * getObject();
 
 };
 

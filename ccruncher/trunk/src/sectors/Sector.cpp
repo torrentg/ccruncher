@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include "Sector.hpp"
@@ -33,9 +36,9 @@
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
-// inicialitzador
+// reset
 //===========================================================================
-void ccruncher::Sector::init()
+void ccruncher::Sector::reset()
 {
   order = -1;
   name = "";
@@ -47,16 +50,17 @@ void ccruncher::Sector::init()
 //===========================================================================
 ccruncher::Sector::Sector()
 {
-  init();
+  reset();
 }
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Sector::Sector(const DOMNode& node) throw(Exception)
 {
   // inicialitzem les variables de la classe
-  init();
+  reset();
 
   // recollim els parametres de la simulacio
   parseDOMNode(node);
@@ -71,7 +75,46 @@ bool ccruncher::operator <  (const Sector &x, const Sector &y)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"sector")) {
+    if (getNumAttributes(attributes) != 3) {
+      throw eperror(eu, "invalid number of attributes at sector");
+    }
+    else {
+      order = getIntAttribute(attributes, "order", -1);
+      name = getStringAttribute(attributes, "name", "");
+      desc = getStringAttribute(attributes, "desc", "_UNDEF_");
+
+      if (order <= 0 || name == "" || desc == "_UNDEF_")
+      {
+        throw eperror(eu, "invalid values at <sector>");
+      }
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"sector")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Sector::parseDOMNode(const DOMNode& node) throw(Exception)
 {

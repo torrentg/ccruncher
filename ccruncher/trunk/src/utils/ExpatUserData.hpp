@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,52 +19,95 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.hpp - Segment header
+// ExpatUserData.hpp - ExpatUserData header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from xerces to expat
 //
 //===========================================================================
 
-#ifndef _Segment_
-#define _Segment_
+#ifndef _ExpatUserData_
+#define _ExpatUserData_
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
-#include "utils/Exception.hpp"
+#include <stack>
+#include <vector>
+#include "expat.h"
+#include "Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segment 
+// forward declaration
+class ExpatHandlers;
+
+//---------------------------------------------------------------------------
+
+class ExpatUserData
 {
+
+  public:
+
+    /** internal class */
+    class ExpatUserDataToken 
+    {
+      public:
+        /** constructor */
+        ExpatUserDataToken(string &n, ExpatHandlers *h) 
+        { 
+          name = n; 
+          handlers = h; 
+        }
+        
+        /** token name related to handler */
+        string name;
+        
+        /** pointer to class handlers container */
+        ExpatHandlers *handlers;
+    };
+
 
   private:
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
+    /** expat xml parser */
+    XML_Parser xmlparser;
+
+    /** stack of handlers */
+    stack<ExpatUserDataToken> pila;
 
 
   public:
 
-    string name;
+    /** void constructor */
+    ExpatUserData();
 
-    Segment();
-    Segment(string name_);
-    Segment(const DOMNode &) throw(Exception);
+    /** contructor */
+    ExpatUserData(XML_Parser xmlparser_);
 
-    string getXML(int) throw(Exception);
+    /** destructor */
+    ~ExpatUserData();
+
+    /** returns parser */
+    XML_Parser getParser();
+
+    /** returns current handlers */
+    ExpatHandlers* getCurrentHandlers();
+
+    /** returns current name */
+    string & getCurrentName();
+
+    /** removeCurrentHandlers */
+    void removeCurrentHandlers();
+
+    /** setCurrentHandlers */
+    void setCurrentHandlers(string name, ExpatHandlers *eh);
 
 };
 

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include "Rate.hpp"
@@ -37,17 +40,26 @@
 //===========================================================================
 ccruncher::Rate::Rate()
 {
-  t = 0.0;
-  r = 0.0;
+  reset();
 }
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Rate::Rate(const DOMNode& node) throw(Exception)
 {
   // recollim els parametres de la simulacio
   parseDOMNode(node);
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Rate::reset()
+{
+  t = 0.0;
+  r = 0.0;
 }
 
 //===========================================================================
@@ -59,7 +71,46 @@ bool ccruncher::operator <  (const Rate &x, const Rate &y)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+{
+  if (isEqual(name,"rate")) {
+    if (getNumAttributes(attributes) != 2) {
+      throw eperror(eu, "incorrect number of attributes");
+    }
+    else
+    {
+      t = getDoubleAttribute(attributes, "t", -1.0);
+      r = getDoubleAttribute(attributes, "r", -1.0);
+      
+      if (t <= -1.0+1E-14 || r <= -1.0+1E-14)
+      {
+        throw eperror(eu, "invalid attributes values at <rate>");
+      }
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
+{
+  if (isEqual(name,"rate")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Rate::parseDOMNode(const DOMNode& node) throw(Exception)
 {

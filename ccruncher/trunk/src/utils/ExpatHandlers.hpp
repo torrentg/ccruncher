@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,52 +19,59 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.hpp - Segment header
+// ExpatHandlers.hpp - ExpatHandlers header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from xerces to expat
 //
 //===========================================================================
 
-#ifndef _Segment_
-#define _Segment_
+#ifndef _ExpatHandlers_
+#define _ExpatHandlers_
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include "xercesc/dom/DOM.hpp"
-#include "utils/Exception.hpp"
+#include "ExpatUserData.hpp"
+#include "Exception.hpp"
+#include "Date.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segment 
+class ExpatHandlers
 {
-
   private:
 
-    void parseDOMNode(const DOMNode&) throw(Exception);
+    char * getAttributeValue(const char **atts, const string &attname) const;
+
+
+  protected:
+
+    Exception eperror(ExpatUserData &eud, const string &msg);
+    void epback(ExpatUserData &eud);
+    void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
+
+    bool isEqual(const char *, const string &);
+    int getNumAttributes(const char **atts);
+    string getStringAttribute(const char **atts, const string &attname, const string &defval);
+    int getIntAttribute(const char **atts, const string &attname, const int &defval);
+    long getLongAttribute(const char **atts, const string &attname, const long &defval);
+    double getDoubleAttribute(const char **atts, const string &attname, const double &defval);
+    Date getDateAttribute(const char **atts, const string &attname, const Date &defval);
+    bool getBooleanAttribute(const char **atts, const string &attname, const bool &defval);
 
 
   public:
 
-    string name;
-
-    Segment();
-    Segment(string name_);
-    Segment(const DOMNode &) throw(Exception);
-
-    string getXML(int) throw(Exception);
+    virtual ~ExpatHandlers();
+    virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
+    virtual void epend(ExpatUserData &eud, const char *name) = 0;
 
 };
 

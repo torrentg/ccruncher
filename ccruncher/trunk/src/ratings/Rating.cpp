@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include "Rating.hpp"
@@ -33,33 +36,34 @@
 #include "utils/XMLUtils.hpp"
 
 //===========================================================================
-// inicialitzador
-//===========================================================================
-void ccruncher::Rating::init()
-{
-  order = -1;
-  name = "";
-  desc = "";
-}
-
-//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Rating::Rating()
 {
-  init();
+  reset();
 }
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Rating::Rating(const DOMNode& node) throw(Exception)
 {
   // inicialitzem les variables de la classe
-  init();
+  reset();
 
   // recollim els parametres de la simulacio
   parseDOMNode(node);
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::Rating::reset()
+{
+  order = -1;
+  name = "";
+  desc = "";
 }
 
 //===========================================================================
@@ -71,7 +75,46 @@ bool ccruncher::operator <  (const Rating &x, const Rating &y)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"rating")) {
+    if (getNumAttributes(attributes) != 3) {
+      throw eperror(eu, "invalid number of attributes at rating");
+    }
+    else {
+      order = getIntAttribute(attributes, "order", -1);
+      name = getStringAttribute(attributes, "name", "");
+      desc = getStringAttribute(attributes, "desc", "_UNDEF_");
+
+      if (order <= 0 || name == "" || desc == "_UNDEF_")
+      {
+        throw eperror(eu, "invalid values at <rating>");
+      }
+    }
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"rating")) {
+    // nothing to do
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Rating::parseDOMNode(const DOMNode& node) throw(Exception)
 {

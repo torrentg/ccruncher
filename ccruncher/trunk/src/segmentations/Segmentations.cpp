@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -35,6 +38,15 @@
 
 //===========================================================================
 // constructor
+//===========================================================================
+ccruncher::Segmentations::Segmentations()
+{
+  // nothing to do
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Segmentations::Segmentations(const DOMNode& node) throw(Exception)
 {
@@ -164,7 +176,44 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"segmentations")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "attributes are not allowed in tag segmentations");
+    }
+  }
+  else if (isEqual(name_,"segmentation")) {
+    auxsegmentation.reset();
+    eppush(eu, &auxsegmentation, name_, attributes);
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Segmentations::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"segmentations")) {
+    validate();
+    auxsegmentation.reset();
+  }
+  else if (isEqual(name_,"segmentation")) {
+    insertSegmentation(auxsegmentation);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Segmentations::parseDOMNode(const DOMNode& node) throw(Exception)
 {

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Interest_
@@ -36,6 +39,7 @@
 #include <string>
 #include <vector>
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "Rate.hpp"
 
@@ -48,7 +52,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Interest
+class Interest : public ExpatHandlers
 {
 
   private:
@@ -58,6 +62,7 @@ class Interest
     string name;
     Date fecha;
     vector<Rate> vrates;
+    Rate auxrate;
 
     void parseDOMNode(const DOMNode&) throw(Exception);
     void insertRate(Rate &) throw(Exception);
@@ -82,7 +87,12 @@ class Interest
     double getUpdateCoef(Date &date1, Date &date2) throw(Exception);
 
     string getXML(int) throw(Exception);
+    void reset();
 
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
+    
 };
 
 //---------------------------------------------------------------------------

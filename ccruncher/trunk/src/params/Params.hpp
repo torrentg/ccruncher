@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -35,6 +38,7 @@
 #include "utils/config.h"
 #include <string>
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
@@ -47,7 +51,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Params
+class Params : public ExpatHandlers
 {
 
   private:
@@ -55,6 +59,7 @@ class Params
     void init();
     void parseDOMNode(const DOMNode&) throw(Exception);
     void parseProperty(const DOMNode& node) throw(Exception);
+    void parseProperty(ExpatUserData &, const char **) throw(Exception);
     void validate(void) throw(Exception);
 
 
@@ -71,10 +76,15 @@ class Params
     bool onlyactive; // only active clients
 
     Params(const DOMNode &) throw(Exception);
+    Params();
     ~Params();
 
     Date* getDates() throw(Exception);
     string getXML(int) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

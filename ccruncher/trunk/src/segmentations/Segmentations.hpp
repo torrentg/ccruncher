@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Segmentations_
@@ -36,6 +39,7 @@
 #include <algorithm>
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "Segmentation.hpp"
 
 //---------------------------------------------------------------------------
@@ -47,12 +51,13 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segmentations
+class Segmentations : public ExpatHandlers
 {
 
   private:
 
     vector<Segmentation> vsegmentations;
+    Segmentation auxsegmentation;
 
     void parseDOMNode(const DOMNode&) throw(Exception);
     void insertSegmentation(Segmentation &) throw(Exception);
@@ -61,7 +66,7 @@ class Segmentations
 
   public:
 
-    Segmentations() {};
+    Segmentations();
     Segmentations(const DOMNode &) throw(Exception);
     ~Segmentations();
 
@@ -75,6 +80,10 @@ class Segmentations
 
     void addSegment(string segmentation, string segment) throw(Exception);
     string getXML(int) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

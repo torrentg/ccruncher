@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include "Segment.hpp"
@@ -49,6 +52,7 @@ ccruncher::Segment::Segment(string name_)
 
 //===========================================================================
 // constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Segment::Segment(const DOMNode& node) throw(Exception)
 {
@@ -58,6 +62,7 @@ ccruncher::Segment::Segment(const DOMNode& node) throw(Exception)
 
 //===========================================================================
 // interpreta un node XML params
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -103,6 +108,7 @@ void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
 
 //===========================================================================
 // getXML
+// TODO: this method will be removed
 //===========================================================================
 string ccruncher::Segment::getXML(int ilevel) throw(Exception)
 {

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Rating_
@@ -35,6 +38,7 @@
 #include "utils/config.h"
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
+#include "utils/ExpatHandlers.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -45,12 +49,11 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Rating
+class Rating : public ExpatHandlers
 {
 
   private:
 
-    void init();
     void parseDOMNode(const DOMNode&) throw(Exception);
 
 
@@ -64,6 +67,11 @@ class Rating
     Rating(const DOMNode &) throw(Exception);
 
     string getXML(int) throw(Exception);
+    void reset();
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

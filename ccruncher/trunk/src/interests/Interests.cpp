@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <cmath>
@@ -35,6 +38,15 @@
 
 //===========================================================================
 // constructor
+//===========================================================================
+ccruncher::Interests::Interests()
+{
+  ispot = -1;
+}
+
+//===========================================================================
+// constructor
+// TODO: this method will be removed
 //===========================================================================
 ccruncher::Interests::Interests(const DOMNode& node) throw(Exception)
 {
@@ -124,7 +136,45 @@ void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
 }
 
 //===========================================================================
+// epstart - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+{
+  if (isEqual(name_,"interests")) {
+    if (getNumAttributes(attributes) != 0) {
+      throw eperror(eu, "found attributes in interests");
+    }
+  }
+  else if (isEqual(name_,"interest")) {
+    // setting new handlers
+    auxinterest.reset();
+    eppush(eu, &auxinterest, name_, attributes);  
+  }
+  else {
+    throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
+{
+  if (isEqual(name_,"interests")) {
+    auxinterest.reset();
+    validate();
+  }
+  else if (isEqual(name_,"interest")) {
+    insertInterest(auxinterest);
+  }
+  else {
+    throw eperror(eu, "unexpected end tag " + string(name_));
+  }
+}
+
+//===========================================================================
 // interpreta un node XML
+// TODO: this method will be removed
 //===========================================================================
 void ccruncher::Interests::parseDOMNode(const DOMNode& node) throw(Exception)
 {

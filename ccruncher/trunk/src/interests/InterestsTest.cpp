@@ -28,13 +28,16 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Interest.hpp"
 #include "Interests.hpp"
 #include "InterestsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -103,36 +106,26 @@ void InterestsTest::test1()
     </interests>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // correlation matrix creation
-  Interests *isobj = NULL;
-  ASSERT_NO_THROW(isobj = new Interests(*(doc->getDocumentElement())));
+  Interests isobj;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &isobj));
 
-  if (isobj != NULL)
+  Interest iobj;
+  ASSERT_NO_THROW(iobj = *(isobj.getInterest("discount")));
+
+  ASSERT("discount" == iobj.getName());
+  ASSERT(Date("18/02/2003") == iobj.getFecha());
+
+  Date date0 = Date("18/02/2003");
+
+  for (int i=0;i<25;i++)
   {
-    Interest iobj;
-    ASSERT_NO_THROW(iobj = *(isobj->getInterest("discount")));
-
-    ASSERT("discount" == iobj.getName());
-    ASSERT(Date("18/02/2003") == iobj.getFecha());
-
-    Date date0 = Date("18/02/2003");
-
-    for (int i=0;i<25;i++)
-    {
-      Date aux = addMonths(date0, i);
-      double val1 = iobj.getUpdateCoef(date0, aux);
-      double val2 = iobj.getActualCoef(date0, aux);
-      ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
-      ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
-    }
+    Date aux = addMonths(date0, i);
+    double val1 = iobj.getUpdateCoef(date0, aux);
+    double val2 = iobj.getActualCoef(date0, aux);
+    ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
+    ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
   }
-
-  if (isobj != NULL) delete isobj;
-  delete parser;
-  XMLUtils::terminate();
 }

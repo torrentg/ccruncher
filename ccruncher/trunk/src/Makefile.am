@@ -82,6 +82,9 @@ ccruncher_SOURCES = \
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
     ./utils/Utils.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
     \
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
@@ -118,11 +121,14 @@ ccruncher_SOURCES = \
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDFLAGS =
-ccruncher_LDADD = -lm -ldl -lxerces-c
+ccruncher_LDADD = -lm -ldl -lxerces-c -lexpat
 
 # -------------------------------------------------------------
 # cc2gpi
@@ -187,6 +193,9 @@ generator_SOURCES = \
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
     ./utils/Utils.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
     \
     ./tools/Bond.hpp\
     ./kernel/IData.hpp\
@@ -223,11 +232,14 @@ generator_SOURCES = \
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDFLAGS =
-generator_LDADD = -lm -ldl -lxerces-c
+generator_LDADD = -lm -ldl -lxerces-c -lexpat
 
 # -------------------------------------------------------------
 # tests
@@ -271,6 +283,9 @@ tests_SOURCES = \
     ./utils/XMLUtils.cpp\
     ./utils/Exception.cpp\
     ./utils/File.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
     ./math/CholeskyDecomposition.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
@@ -334,6 +349,9 @@ tests_SOURCES = \
     ./utils/XMLUtils.hpp\
     ./utils/Exception.hpp\
     ./utils/File.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp\
     ./math/CholeskyDecomposition.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
@@ -362,4 +380,4 @@ tests_SOURCES = \
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDFLAGS = 
-tests_LDADD = -lm -ldl -lxerces-c
+tests_LDADD = -lm -ldl -lxerces-c -lexpat

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _CorrelationMatrix_
@@ -35,6 +38,7 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
+#include "utils/ExpatHandlers.hpp"
 #include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 #include "sectors/Sectors.hpp"
@@ -48,7 +52,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class CorrelationMatrix
+class CorrelationMatrix : public ExpatHandlers
 {
 
   private:
@@ -66,12 +70,18 @@ class CorrelationMatrix
 
   public:
 
+    CorrelationMatrix(Sectors *) throw(Exception);
     CorrelationMatrix(Sectors *, const DOMNode &) throw(Exception);
     ~CorrelationMatrix();
 
     int size();
     double ** getMatrix();
     string getXML(int) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
+
 
 };
 

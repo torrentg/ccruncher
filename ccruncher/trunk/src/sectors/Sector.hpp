@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _Sector_
@@ -34,6 +37,7 @@
 
 #include "utils/config.h"
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -45,12 +49,11 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Sector
+class Sector : public ExpatHandlers
 {
 
   private:
 
-    void init();
     void parseDOMNode(const DOMNode&) throw(Exception);
 
 
@@ -64,6 +67,11 @@ class Sector
     Sector(const DOMNode &) throw(Exception);
 
     string getXML(int) throw(Exception);
+    void reset();
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

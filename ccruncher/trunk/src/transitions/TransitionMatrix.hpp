@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #ifndef _TransitionMatrix_
@@ -36,6 +39,7 @@
 #include <string>
 #include <vector>
 #include "xercesc/dom/DOM.hpp"
+#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
 
@@ -48,7 +52,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class TransitionMatrix
+class TransitionMatrix : public ExpatHandlers
 {
 
   private:
@@ -69,6 +73,7 @@ class TransitionMatrix
 
     int indexdefault;
 
+    TransitionMatrix(Ratings *) throw(Exception);
     TransitionMatrix(Ratings *, const DOMNode &) throw(Exception);
     TransitionMatrix(TransitionMatrix &) throw(Exception);
     ~TransitionMatrix();
@@ -78,6 +83,10 @@ class TransitionMatrix
     int getIndexDefault();
     int evalue(const int irating, const double val);
     string getXML(int) throw(Exception);
+
+    /** ExpatHandlers methods declaration */
+    void epstart(ExpatUserData &, const char *, const char **);
+    void epend(ExpatUserData &, const char *);
 
 };
 

@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Interest.hpp"
 #include "InterestTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -89,14 +92,11 @@ void InterestTest::test1()
       </interest>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
   // correlation matrix creation
   Interest iobj;
-  ASSERT_NO_THROW(iobj = Interest(*(doc->getDocumentElement())));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
   ASSERT("discount" == iobj.getName());
   ASSERT(Date("18/02/2003") == iobj.getFecha());
@@ -111,7 +111,4 @@ void InterestTest::test1()
     ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
     ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
   }
-
-  delete parser;
-  XMLUtils::terminate();
 }

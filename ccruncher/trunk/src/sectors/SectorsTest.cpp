@@ -28,12 +28,15 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from xerces to expat
+//
 //===========================================================================
 
 #include <iostream>
 #include "Sectors.hpp"
 #include "SectorsTest.hpp"
-#include "utils/XMLUtils.hpp"
+#include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
@@ -63,15 +66,12 @@ void SectorsTest::test1()
     </sectors>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
-  // sectors list creation
+  // sectors creation
   Sectors sectors;
-  ASSERT_NO_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-  vector<Sector> &list = *sectors.getSectors();
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
+  vector<Sector> &list = *(sectors.getSectors());
 
   ASSERT(2 == list.size());
 
@@ -88,9 +88,6 @@ void SectorsTest::test1()
 
   ASSERT(sectors.getName(0) == "S1");
   ASSERT(sectors.getName(1) == "S2");
-
-  delete parser;
-  XMLUtils::terminate();
 }
 
 //===========================================================================
@@ -106,17 +103,11 @@ void SectorsTest::test2()
     </sectors>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
-  // sectors list creation
+  // sectors creation
   Sectors sectors;
-  ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
 }
 
 //===========================================================================
@@ -132,17 +123,11 @@ void SectorsTest::test3()
     </sectors>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
-  // sectors list creation
+  // sectors creation
   Sectors sectors;
-  ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
 }
 
 //===========================================================================
@@ -158,17 +143,11 @@ void SectorsTest::test4()
     </sectors>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
-  // sectors list creation
+  // sectors creation
   Sectors sectors;
-  ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
 }
 
 //===========================================================================
@@ -184,15 +163,9 @@ void SectorsTest::test5()
     </sectors>";
 
   // creating xml
-  XMLUtils::initialize();
-  DOMBuilder *parser = XMLUtils::getParser();
-  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
-  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+  ExpatParser xmlparser;
 
-  // sectors list creation
+  // sectors creation
   Sectors sectors;
-  ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-
-  delete parser;
-  XMLUtils::terminate();
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
 }
