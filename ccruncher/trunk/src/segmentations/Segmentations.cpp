@@ -39,7 +39,7 @@ ccruncher::Segmentations::Segmentations(const DOMNode& node) throw(Exception)
 {
   // recollim els parametres de la simulacio
   parseDOMNode(node);
-  
+
   // making validations
   validate();
 }
@@ -55,7 +55,7 @@ ccruncher::Segmentations::~Segmentations()
 //===========================================================================
 // return segmentations list
 //===========================================================================
-vector<Segmentation> ccruncher::Segmentations::getSegmentations() 
+vector<Segmentation> ccruncher::Segmentations::getSegmentations()
 {
   return vsegmentations;
 }
@@ -72,7 +72,7 @@ int ccruncher::Segmentations::getSegmentation(string name)
       return i;
     }
   }
-  
+
   return -1;
 }
 
@@ -88,7 +88,7 @@ components_t ccruncher::Segmentations::getComponents(string name)
       return vsegmentations[i].components;
     }
   }
-  
+
   return undefined;
 }
 
@@ -113,7 +113,7 @@ components_t ccruncher::Segmentations::getComponents(int iseg)
 int ccruncher::Segmentations::getSegment(string segmentation, string segment)
 {
   int iconcept = getSegmentation(segmentation);
-  
+
   if (iconcept >= 0)
   {
     return vsegmentations[iconcept].getSegment(segment);
@@ -138,7 +138,7 @@ void ccruncher::Segmentations::validate() throw(Exception)
 //===========================================================================
 // insert a new segmentation in list
 //===========================================================================
-void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception) 
+void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vsegmentations.size();i++)
@@ -147,7 +147,7 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
     {
       string msg = "Segmentations::insertSegmentation(): segmentation name ";
       msg += val.name;
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
   }
@@ -163,7 +163,7 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::Segmentations::parseDOMNode(const DOMNode& node) throw(Exception)
 {

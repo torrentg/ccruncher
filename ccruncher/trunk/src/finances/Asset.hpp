@@ -67,7 +67,7 @@ class Asset
 
 
   protected:
-  
+
     virtual DateValues* getIEvents() throw(Exception) = 0;
     virtual int getISize() throw(Exception) = 0;
 
@@ -78,7 +78,7 @@ class Asset
     virtual ~Asset();
 
     static Asset* getInstanceByClassName(string) throw(Exception);
-    static Asset* parseDOMNode(const DOMNode &, Segmentations *, Interests *) 
+    static Asset* parseDOMNode(const DOMNode &, Segmentations *, Interests *)
                   throw(Exception);
 
     virtual void setProperty(string name, string value) throw(Exception) = 0;

@@ -39,7 +39,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *segmentations, 
+ccruncher::Client::Client(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
                Interests *interests, const DOMNode& node) throw(Exception)
 {
   // inicialitzem el vector de rates
@@ -64,7 +64,7 @@ ccruncher::Client::~Client()
 //===========================================================================
 // getAssets
 //===========================================================================
-vector<Asset*> * ccruncher::Client::getAssets() 
+vector<Asset*> * ccruncher::Client::getAssets()
 {
   return &vassets;
 }
@@ -72,7 +72,7 @@ vector<Asset*> * ccruncher::Client::getAssets()
 //===========================================================================
 // insercio nova operacio en la llista
 //===========================================================================
-void ccruncher::Client::insertAsset(Asset *val) throw(Exception) 
+void ccruncher::Client::insertAsset(Asset *val) throw(Exception)
 {
   try
   {
@@ -87,7 +87,7 @@ void ccruncher::Client::insertAsset(Asset *val) throw(Exception)
 //===========================================================================
 // interpreta un node XML params
 //===========================================================================
-void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segs, 
+void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segs,
                           Interests *interests, const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
@@ -100,7 +100,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
 
   // agafem la llista d'atributs
   DOMNamedNodeMap &attributes = *node.getAttributes();
-  id = XMLUtils::getStringAttribute(attributes, "id", "");  
+  id = XMLUtils::getStringAttribute(attributes, "id", "");
   name = XMLUtils::getStringAttribute(attributes, "name", "");
   string strrating = XMLUtils::getStringAttribute(attributes, "rating", "");
   string strsector= XMLUtils::getStringAttribute(attributes, "sector", "");
@@ -129,12 +129,12 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
       else if (XMLUtils::isNodeName(child, "belongs-to"))
       {
         DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-        string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");  
+        string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
         string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
 
         int iconcept = segs->getSegmentation(sconcept);
         int isegment = segs->getSegment(sconcept, ssegment);
-          
+
         insertBelongsTo(iconcept, isegment);
       }
       else if (XMLUtils::isNodeName(child, "asset"))
@@ -149,7 +149,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
     }
   }
 
-  // completem segmentacio client si existeix  
+  // completem segmentacio client si existeix
   if (segs->getSegmentation("client") >= 0)
   {
     if (segs->getComponents("client") == client)
@@ -161,7 +161,7 @@ void ccruncher::Client::parseDOMNode(Ratings *ratings, Sectors *sectors, Segment
     }
   }
 
-  // completem segmentacio portfolio si existeix  
+  // completem segmentacio portfolio si existeix
   if (segs->getSegmentation("portfolio") >= 0)
   {
     if (segs->getComponents("portfolio") == client)
@@ -191,7 +191,7 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
     {
       Date date1 = events[0].date;
       Date date2 = events[vassets[i]->getSize()-1].date;
-      
+
       if (from <= date1 && date1 <= to)
       {
         return true;
@@ -206,7 +206,7 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
       }
     }
   }
-  
+
   return false;
 }
 
@@ -258,7 +258,7 @@ void ccruncher::Client::insertBelongsTo(int iconcept, int isegment) throw(Except
   {
     throw Exception("Client::insertBelongsTo(): trying to reinsert a concept defined");
   }
-  else if (iconcept >= 0 || isegment >= 0)  
+  else if (iconcept >= 0 || isegment >= 0)
   {
     belongsto[iconcept] = isegment;
   }

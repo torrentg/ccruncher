@@ -72,13 +72,13 @@ void CopulaNormalTest::test1()
     +0.3 , -0.25, +1.0
   };
   double **correls = Utils::allocMatrix(3,3,sigmas);
-  
+
   // copula construction
   CopulaNormal copula = CopulaNormal(3, correls);
-  
+
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
-  
+
   // correls deallocated by copula destructor
 }
 
@@ -96,7 +96,7 @@ void CopulaNormalTest::test2()
   double **correls = Utils::allocMatrix(3,3,sigmas);
 
   ASSERT_THROW(CopulaNormal(3, correls));
-  
+
   // correls deallocated by copula destructor
 }
 
@@ -112,15 +112,15 @@ void CopulaNormalTest::test3()
     +0.3 , -0.25, +1.0
   };
   double **correls = Utils::allocMatrix(3,3,sigmas);
-  
+
   CopulaNormal copula = CopulaNormal(3, correls);
-  
+
   ASSERT(isnan(copula.get(-1)));
   ASSERT(!isnan(copula.get(0)));
   ASSERT(!isnan(copula.get(1)));
   ASSERT(!isnan(copula.get(2)));
   ASSERT(isnan(copula.get(3)));
-  
+
   // correls deallocated by copula destructor
 }
 
@@ -140,10 +140,10 @@ void CopulaNormalTest::test4()
   // copula construction
   CopulaNormal orig = CopulaNormal(3, correls);
   CopulaNormal copula = CopulaNormal(orig);
-  
+
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
-  
+
   // correls deallocated by copula destructor
 }
 
@@ -190,7 +190,7 @@ void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
 
   // testing size method
   ASSERT(copula.size() == n);
-  
+
   // allocating space
   values = Utils::allocMatrix(n, NITERS);
 
@@ -216,4 +216,4 @@ void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
 
   // exit
   Utils::deallocMatrix(values, n);
-}    
+}

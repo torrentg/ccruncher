@@ -39,7 +39,7 @@ namespace ccruncher {
 
 class Normal
 {
-     
+
   public:
 
     static double pdf(double x);
@@ -47,7 +47,7 @@ class Normal
     static double cdf(double x);
     static double cdfinv(double p);
     static double cdf(double x, double mu, double sigma);
-    
+
 };
 
 //---------------------------------------------------------------------------

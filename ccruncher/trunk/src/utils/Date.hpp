@@ -82,10 +82,10 @@ class Date
 
     static bool isLeapYear(int);
     bool isLeapYear();
-    static int numDaysInYear(int); 
-    int numDaysInYear(); 
-    static int numDaysInMonth(int m, int y); 
-    int numDaysInMonth(); 
+    static int numDaysInYear(int);
+    int numDaysInYear();
+    static int numDaysInMonth(int m, int y);
+    int numDaysInMonth();
 
   private:
 

@@ -71,7 +71,7 @@ Ratings ClientTest::getRatings()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Ratings ratings;
   ASSERT_NO_THROW(ratings = Ratings(*(doc->getDocumentElement())));
 
@@ -96,7 +96,7 @@ Sectors ClientTest::getSectors()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_NO_THROW(sectors = Sectors(*(doc->getDocumentElement())));
 
@@ -190,7 +190,7 @@ void ClientTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // client creation 
+  // client creation
   Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
@@ -214,7 +214,7 @@ void ClientTest::test1()
   ASSERT((*assets)[0]->getId() == "op1");
   ASSERT((*assets)[1]->getId() == "op2");
 
-  // exit test  
+  // exit test
   if (client != NULL) delete client;
   delete wis;
   delete parser;
@@ -255,14 +255,14 @@ void ClientTest::test2()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // client creation 
+  // client creation
   Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   ASSERT_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
 
-  // exit test  
+  // exit test
   if (client != NULL) delete client;
   delete wis;
   delete parser;
@@ -303,14 +303,14 @@ void ClientTest::test3()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // client creation 
+  // client creation
   Client *client = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   ASSERT_THROW(client = new Client(&ratings, &sectors, &segmentations, NULL, *(doc->getDocumentElement())));
 
-  // exit test  
+  // exit test
   if (client != NULL) delete client;
   delete wis;
   delete parser;

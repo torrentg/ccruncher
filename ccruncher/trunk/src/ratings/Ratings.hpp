@@ -54,7 +54,7 @@ class Ratings
 
     vector<Rating> vratings;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);  
+    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertRating(Rating &) throw(Exception);
     void validations() throw(Exception);
 

@@ -55,7 +55,7 @@ class PowMatrix
 
     static double pow(double, double) throw(Exception);
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
-    
+
 };
 
 //---------------------------------------------------------------------------

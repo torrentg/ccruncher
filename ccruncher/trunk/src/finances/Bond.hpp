@@ -59,7 +59,7 @@ class Bond : public Asset
     double nominal;
     /** tipo interes anual de cada cupon (en tanto por 1) */
     double rate;
-    /** numeros de cupones */  
+    /** numeros de cupones */
     int ncoupons;
     /** fecha de adquisicion */
     Date adquisitiondate;
@@ -71,9 +71,9 @@ class Bond : public Asset
     int length;
 
   protected:
-  
+
     DateValues* getIEvents() throw(Exception);
-    int getISize() throw(Exception);    
+    int getISize() throw(Exception);
 
 
   public:

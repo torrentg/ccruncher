@@ -47,9 +47,9 @@ namespace ccruncher {
 
 class Rate
 {
-	
+
   private:
-  
+
     void parseDOMNode(const DOMNode&) throw(Exception);
 
 
@@ -57,10 +57,10 @@ class Rate
 
     double t;
     double r;
-      
+
     Rate();
     Rate(const DOMNode &) throw(Exception);
-    
+
 };
 
 //---------------------------------------------------------------------------

@@ -42,16 +42,16 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
   period = 0.0;
   epsilon = -1.0;
   ratings = ratings_;
-  
+
   n = ratings->getRatings()->size();
-  
+
   if (n <= 0)
   {
     throw Exception("TransitionMatrix::init(): invalid matrix range");
   }
 
-  // inicialitzem la matriu  
-  matrix = Utils::allocMatrix(n, n, NAN);  
+  // inicialitzem la matriu
+  matrix = Utils::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================
@@ -64,10 +64,10 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
   indexdefault = otm.indexdefault;
   epsilon = otm.epsilon;
   n = otm.n;
-	
-  // inicialitzem la matriu  
+
+  // inicialitzem la matriu
   matrix = Utils::allocMatrix(n, n);
-  Utils::copyMatrix(otm.getMatrix(), n, n, matrix);	
+  Utils::copyMatrix(otm.getMatrix(), n, n, matrix);
 }
 
 //===========================================================================
@@ -79,7 +79,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_, const DOMNode& 
   {
     // posem valors per defecte
     init(ratings_);
-  
+
     // recollim els parametres de la simulacio
     parseDOMNode(node);
 
@@ -122,7 +122,7 @@ double ** ccruncher::TransitionMatrix::getMatrix()
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
-  int row = ratings->getIndex(rating1); 
+  int row = ratings->getIndex(rating1);
   int col = ratings->getIndex(rating2);
 
   // validem ratings entrats
@@ -132,7 +132,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     msg += rating1;
     msg += " -> ";
     msg += rating2;
-    throw Exception(msg);    
+    throw Exception(msg);
   }
 
   // validem valor entrat
@@ -202,8 +202,8 @@ void ccruncher::TransitionMatrix::parseDOMNode(const DOMNode& node) throw(Except
       }
       else
       {
-      	string msg = "TransitionMatrix::parseDOMNode(): invalid data structure at <mtransitions>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "TransitionMatrix::parseDOMNode(): invalid data structure at <mtransitions>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }
@@ -250,11 +250,11 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     {
       if (matrix[i][j] == DBL_MAX)
       {
-      	string msg = "TransitionMatrix::validate(): undefined element [";
-      	msg += (i+1);
-      	msg +=  "][";
-      	msg += (j+1);
-      	msg += "]";
+        string msg = "TransitionMatrix::validate(): undefined element [";
+        msg += (i+1);
+        msg +=  "][";
+        msg += (j+1);
+        msg += "]";
         throw Exception(msg);
       }
     }
@@ -308,7 +308,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
 //===========================================================================
 // retorna el index del rating default
-//===========================================================================  
+//===========================================================================
 int ccruncher::TransitionMatrix::getIndexDefault()
 {
   return indexdefault;
@@ -327,7 +327,7 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
   for (int i=0;i<n;i++)
   {
     sum += matrix[irating][i];
-    
+
     if (val < sum)
     {
       return i;

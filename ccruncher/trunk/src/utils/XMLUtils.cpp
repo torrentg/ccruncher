@@ -66,21 +66,21 @@ void ccruncher::XMLUtils::terminate() throw()
 }
 
 //===========================================================================
-// determina si es tracta d'un node texte buit 
+// determina si es tracta d'un node texte buit
 //===========================================================================
 bool ccruncher::XMLUtils::isVoidTextNode(const DOMNode &node)
 {
   bool ret = false;
-  
+
   // validem el node passat com argument
   if (&node == NULL || node.getNodeType() != DOMNode::TEXT_NODE)
   {
     return false;
   }
 
-  // recollim el valor del texte  
+  // recollim el valor del texte
   XMLCh *val = XMLString::replicate(node.getNodeValue());
-  
+
   // eliminem blancs i salts de linia
   XMLString::trim(val);
 
@@ -93,11 +93,11 @@ bool ccruncher::XMLUtils::isVoidTextNode(const DOMNode &node)
   {
     ret = false;
   }
-  
+
   XMLString::release(&val);
   return ret;
 }
-    
+
 //===========================================================================
 // determina si es tracta d'un node de comentari
 //===========================================================================
@@ -120,21 +120,21 @@ bool ccruncher::XMLUtils::isCommentNode(const DOMNode &node)
 bool ccruncher::XMLUtils::isNodeName(const DOMNode &node, const string &name)
 {
   bool ret = false;
-  
+
   // validem el node passat com argument
   if (&node == NULL)
   {
     return false;
   }
-  
+
   // recollim el nom del node
   XMLCh *nom1 = XMLString::replicate(node.getNodeName());
-  
+
   // eliminem blancs i salts de linia
   XMLString::trim(nom1);
 
   XMLCh *nom2 = XMLString::transcode(name.c_str());
-  
+
   // comprovem si son iguals
   if (XMLString::equals(nom1, nom2))
   {
@@ -156,11 +156,11 @@ bool ccruncher::XMLUtils::isNodeName(const DOMNode &node, const string &name)
 string ccruncher::XMLUtils::XMLCh2String(const XMLCh *str)
 {
   char *aux = XMLString::transcode(str);
-  
+
   string ret = string(aux);
-  
-  XMLString::release(&aux); 
-  
+
+  XMLString::release(&aux);
+
   return ret;
 }
 
@@ -184,23 +184,23 @@ string ccruncher::XMLUtils::getStringAttribute(const DOMNamedNodeMap &attrs, con
   try
   {
     DOMNode *attr = attrs.getNamedItem(aux);
-    
+
     if (attr == NULL)
     {
       throw Exception("XMLUtils::getStringAttribute(): attribute not exist");
     }
     else
-    {    
+    {
       const XMLCh *tmp = attr->getNodeValue();
       ret = XMLUtils::XMLCh2String(tmp);
     }
   }
   catch(...)
   {
-    XMLString::release(&aux);  	
+    XMLString::release(&aux);
     ret = *(new string(defvalue));
   }
-  
+
   XMLString::release(&aux);
   return ret;
 }
@@ -212,7 +212,7 @@ int ccruncher::XMLUtils::getIntAttribute(const DOMNamedNodeMap &attrs, const str
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
 
-  if (val == "") 
+  if (val == "")
   {
     return defvalue;
   }
@@ -235,8 +235,8 @@ int ccruncher::XMLUtils::getIntAttribute(const DOMNamedNodeMap &attrs, const str
 long ccruncher::XMLUtils::getLongAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const long defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
- 
-  if (val == "") 
+
+  if (val == "")
   {
     return defvalue;
   }
@@ -259,8 +259,8 @@ long ccruncher::XMLUtils::getLongAttribute(const DOMNamedNodeMap &attrs, const s
 double ccruncher::XMLUtils::getDoubleAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const double defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
- 
-  if (val == "") 
+
+  if (val == "")
   {
     return defvalue;
   }
@@ -283,8 +283,8 @@ double ccruncher::XMLUtils::getDoubleAttribute(const DOMNamedNodeMap &attrs, con
 Date ccruncher::XMLUtils::getDateAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const Date &defvalue)
 {
   string val = XMLUtils::getStringAttribute(attrs, attrname, "");
- 
-  if (val == "") 
+
+  if (val == "")
   {
     return defvalue;
   }
@@ -337,7 +337,7 @@ DOMBuilder * ccruncher::XMLUtils::getParser() throw(Exception)
   DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(tempStr);
   DOMBuilder *parser = impl->createDOMBuilder(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
 
-  // sortim 
+  // sortim
   return parser;
 }
 
@@ -354,7 +354,7 @@ DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, const string 
   {
     throw XMLUtils::XMLException2Exception(e);
   }
-  catch(const DOMException &e)  
+  catch(const DOMException &e)
   {
     throw XMLUtils::DOMException2Exception(e);
   }
@@ -367,7 +367,7 @@ DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, const string 
 //===========================================================================
 // donat un string retorna un InputSource
 //===========================================================================
-Wrapper4InputSource * ccruncher::XMLUtils::getInputSource(const string &xmlcontent) 
+Wrapper4InputSource * ccruncher::XMLUtils::getInputSource(const string &xmlcontent)
 throw(Exception)
 {
   MemBufInputSource* memBufIS=NULL;
@@ -376,7 +376,7 @@ throw(Exception)
 
   try
   {
-    memBufIS = new MemBufInputSource((const XMLByte*)xmlcontent.c_str(), 
+    memBufIS = new MemBufInputSource((const XMLByte*)xmlcontent.c_str(),
          xmlcontent.length(), gMemBufId, false);
     wis = new Wrapper4InputSource(memBufIS);
 //    delete memBufIS;
@@ -387,7 +387,7 @@ throw(Exception)
     if (memBufIS != NULL) delete memBufIS;
     throw XMLUtils::XMLException2Exception(e);
   }
-  catch(const DOMException &e)  
+  catch(const DOMException &e)
   {
     if (memBufIS != NULL) delete memBufIS;
     throw XMLUtils::DOMException2Exception(e);
@@ -412,7 +412,7 @@ DOMDocument * ccruncher::XMLUtils::getDocument(DOMBuilder *parser, Wrapper4Input
   {
     throw XMLUtils::XMLException2Exception(e);
   }
-  catch(const DOMException &e)  
+  catch(const DOMException &e)
   {
     throw XMLUtils::DOMException2Exception(e);
   }
@@ -430,9 +430,9 @@ Exception ccruncher::XMLUtils::XMLException2Exception(const XMLException &e)
    string msg = XMLCh2String(e.getMessage());
    msg += " at file ";
    msg += e.getSrcFile();
-   msg += " at line "; 
+   msg += " at line ";
    msg += e.getSrcLine();
-   
+
    return Exception(msg);
 }
 

@@ -62,15 +62,15 @@ class CorrelationMatrix
     void parseSigma(const DOMNode&) throw(Exception);
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
     void validate(void) throw(Exception);
-    
+
   public:
-  
+
     CorrelationMatrix(Sectors *, const DOMNode &) throw(Exception);
     ~CorrelationMatrix();
 
     int size();
     double ** getMatrix();
-    
+
 };
 
 //---------------------------------------------------------------------------

@@ -66,18 +66,18 @@ void MersenneTwisterTest::test1(void)
 {
   MTRand mtw;
   long ybins[NUMBINS];
-  
+
   for (int i=0;i<NUMBINS;i++)
   {
     ybins[i] = 0L;
   }
-  
+
 //  CPPUNIT_ASSERT_NO_THROW(mtw.setSeed(4357));
-  
-  for(int i=0; i<NUMITERS; i++) 
+
+  for(int i=0; i<NUMITERS; i++)
   {
     double val = mtw.rand();
-    
+
     if (val >= (double)(NUMBINS-1)/(double)NUMBINS)
     {
       ybins[NUMBINS-1]++;
@@ -92,9 +92,9 @@ void MersenneTwisterTest::test1(void)
           break;
         }
       }
-    }    
+    }
   }
-  
+
   for (int i=0;i<NUMBINS;i++)
   {
     double prob1 = 1.0/(double)NUMBINS;
@@ -117,18 +117,18 @@ void MersenneTwisterTest::test2(void)
   double prob1, prob2;
 
   //ASSERT_NO_THROW(mtw.setSeed(4357));
-  
-  for (int i=0;i<NUMBINS;i++) 
+
+  for (int i=0;i<NUMBINS;i++)
   {
     xbin[i] = -4.0 + (8.0/NUMBINS)*i;
     ybin[i] = 0L;
     zbin[i] = 0.0;
   }
-  
+
   for (int i=0;i<NUMITERS;i++)
   {
     val = mtw.randNorm();
-    if (val < xbin[0]) 
+    if (val < xbin[0])
     {
       ybin[0]++;
     }
@@ -141,10 +141,10 @@ void MersenneTwisterTest::test2(void)
       for (int j=1;j<NUMBINS-1;j++)
       {
         if (val < xbin[j])
-	{
-	  ybin[j]++;
-	  break;
-	}
+        {
+          ybin[j]++;
+          break;
+        }
       }
     }
   }
@@ -152,7 +152,7 @@ void MersenneTwisterTest::test2(void)
   prob1 = Normal::cdf(xbin[0]);
   prob2 = (double) ybin[0] / (double) NUMITERS;
   ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
-  
+
   for (int i=1;i<NUMBINS-1;i++)
   {
     prob1 = Normal::cdf(xbin[i]) - Normal::cdf(xbin[i-1]);

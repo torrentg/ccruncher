@@ -56,9 +56,9 @@ namespace ccruncher {
 
 class IData
 {
-	
+
   private:
- 
+
     void init();
     void release();
     void parseDOMNode(const DOMNode&) throw(Exception);
@@ -85,11 +85,11 @@ class IData
     Segmentations *segmentations;
     Aggregators *aggregators;
     Portfolio *portfolio;
-     
+
     IData(const DOMNode &) throw(Exception);
     IData(const string &xmlfilename) throw(Exception);
     ~IData();
-  
+
 };
 
 //---------------------------------------------------------------------------

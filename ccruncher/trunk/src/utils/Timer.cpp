@@ -49,9 +49,9 @@ double ccruncher::Timer::seconds()
 }
 
 //===========================================================================
-// Start timing from 0.00.  
+// Start timing from 0.00.
 //===========================================================================
-void ccruncher::Timer::start() 
+void ccruncher::Timer::start()
 {
   running_ = 1;
   total_ = 0.0;
@@ -61,7 +61,7 @@ void ccruncher::Timer::start()
 //===========================================================================
 // Estableix el contador a 0
 //===========================================================================
-void ccruncher::Timer::reset() 
+void ccruncher::Timer::reset()
 {
   running_ = 0;
   start_time_ = 0.0;
@@ -71,14 +71,14 @@ void ccruncher::Timer::reset()
 //===========================================================================
 // Stop timing and return elapsed time (in seconds).
 //===========================================================================
-double ccruncher::Timer::stop()  
+double ccruncher::Timer::stop()
 {
-  if (running_) 
+  if (running_)
   {
-    total_ += (seconds() - start_time_); 
+    total_ += (seconds() - start_time_);
     running_ = 0;
   }
-  return total_; 
+  return total_;
 }
 
 //===========================================================================
@@ -97,7 +97,7 @@ void ccruncher::Timer::resume()
 //===========================================================================
 // Read current time (in seconds).
 //===========================================================================
-double ccruncher::Timer::read()   
+double ccruncher::Timer::read()
 {
   if (running_)
   {

@@ -74,7 +74,7 @@ void ParamsTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Params *params = NULL;
   ASSERT_NO_THROW(params = new Params(*(doc->getDocumentElement())));
 
@@ -89,7 +89,7 @@ void ParamsTest::test1()
 
   Date *dates = NULL;
   ASSERT_NO_THROW(dates = params->getDates());
-  
+
   ASSERT(Date("18/02/2003") == dates[0]);
   ASSERT(Date("18/04/2003") == dates[1]);
   ASSERT(Date("18/06/2003") == dates[2]);
@@ -103,9 +103,9 @@ void ParamsTest::test1()
   ASSERT(Date("18/10/2004") == dates[10]);
   ASSERT(Date("18/12/2004") == dates[11]);
   ASSERT(Date("18/02/2005") == dates[12]);
-  
-  if (dates != NULL) delete [] dates;  
-  if (params != NULL) delete params;  
+
+  if (dates != NULL) delete [] dates;
+  if (params != NULL) delete params;
   delete wis;
   delete parser;
   XMLUtils::terminate();
@@ -134,11 +134,11 @@ void ParamsTest::test2()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Params *params = NULL;
   ASSERT_THROW(params = new Params(*(doc->getDocumentElement())));
 
-  if (params != NULL) delete params;  
+  if (params != NULL) delete params;
   delete wis;
   delete parser;
   XMLUtils::terminate();

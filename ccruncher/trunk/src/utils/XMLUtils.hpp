@@ -64,14 +64,14 @@ class XMLUtils
 
     static Exception XMLException2Exception(const XMLException &e);
     static Exception DOMException2Exception(const DOMException &e);
-  
+
     static bool isVoidTextNode(const DOMNode &);
     static bool isCommentNode(const DOMNode &);
-    static bool isNodeName(const DOMNode &, const string &);    
-    
+    static bool isNodeName(const DOMNode &, const string &);
+
     static string getStringAttribute(const DOMNamedNodeMap &, const string &attrname, const string &defvalue);
     static int getIntAttribute(const DOMNamedNodeMap &, const string &attrname, const int defvalue);
-    static long getLongAttribute(const DOMNamedNodeMap &, const string &attrname, const long defvalue);    
+    static long getLongAttribute(const DOMNamedNodeMap &, const string &attrname, const long defvalue);
     static double getDoubleAttribute(const DOMNamedNodeMap &, const string &attrname, const double defvalue);
     static Date getDateAttribute(const DOMNamedNodeMap &, const string &attrname, const Date &defvalue);
     static bool getBooleanAttribute(const DOMNamedNodeMap &attrs, const string &attrname, const bool &defvalue);

@@ -83,7 +83,7 @@ class TransitionMatrix
 
 TransitionMatrix * translate(TransitionMatrix *tm, double t) throw(Exception);
 
-//---------------------------------------------------------------------------  
+//---------------------------------------------------------------------------
 
 }
 

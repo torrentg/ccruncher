@@ -90,16 +90,16 @@ void ccruncher::MonteCarlo::release()
 {
   // deallocating transition matrix object
   if (mtrans != NULL) { delete mtrans; mtrans = NULL; }
-  
+
   // client correlation matrix deallocated by copulas[0] object
 
   // deallocating copula vector
-  if (copulas != NULL) 
+  if (copulas != NULL)
   {
     for (int i=0;i<=STEPS;i++)
     {
-      delete copulas[i]; 
-      copulas[i] = NULL; 
+      delete copulas[i];
+      copulas[i] = NULL;
     }
     delete [] copulas;
     copulas = NULL;
@@ -107,14 +107,14 @@ void ccruncher::MonteCarlo::release()
 
   // deallocating dates vector
   if (dates != NULL) { delete [] dates; dates = NULL; }
-  
+
   // deallocating rpaths matrix
   if (rpaths != NULL)
   {
     for (int i=0;i<N;i++)
     {
-      delete [] rpaths[i]; 
-      rpaths[i] = NULL; 
+      delete [] rpaths[i];
+      rpaths[i] = NULL;
     }
     delete [] rpaths;
     rpaths = NULL;
@@ -184,7 +184,7 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   // fixing variance reduction method
   antithetic = idata->params->antithetic;
 
-  // initializing internal variables  
+  // initializing internal variables
   CONT = 0L;
   reversed = false;
 
@@ -214,7 +214,7 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 //===========================================================================
 // construeix la matriu de correlacio entre clients
 //===========================================================================
-double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels, 
+double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
                                vector<Client *> *vclients, int n) throw(Exception)
 {
   double **ret = Utils::allocMatrix(n, n);
@@ -238,7 +238,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
       }
     }
   }
-  
+
   return ret;
 }
 
@@ -278,12 +278,12 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, int n, int k, lo
 int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vclients)
 {
   int **ret = new int*[n];
-  
+
   for (int i=0;i<n;i++)
   {
     // allocating memory
     ret[i] = new int[k+1];
-    
+
     // setting initial client rating
     ret[i][0] = (*vclients)[i]->irating;
 
@@ -340,7 +340,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
       {
         cout << "#" << flush;
       }
-      
+
       // checking stop criteria
       if (CONT >= MAXITERATIONS)
       {
@@ -356,7 +356,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 
     // closing aggregators
     aggregators->flush(true);
-    
+
     // sortim
     showInfo();
   }
@@ -390,13 +390,13 @@ void ccruncher::MonteCarlo::generateRatingsPaths()
         copulas[i]->next();
       }
       reversed = true;
-    } 
+    }
     else
     {
       reversed = false;
     }
   }
-  
+
   // for each client we compute ratings path
   for (int i=0;i<N;i++)
   {
@@ -450,7 +450,7 @@ void ccruncher::MonteCarlo::showInfo()
   cout << "steplength  = " << STEPLENGTH << endl;
   cout << "steps       = " << STEPS << endl;
   cout << "clients     = " << N << endl;
-  cout << "simulations = " << MAXITERATIONS << endl;    
+  cout << "simulations = " << MAXITERATIONS << endl;
   cout << endl;
 
 //  cerr << "generacio copules = " << sw1.read() << endl;

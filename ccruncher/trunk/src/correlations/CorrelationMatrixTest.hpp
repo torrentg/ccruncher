@@ -64,7 +64,7 @@ class CorrelationMatrixTest : public TestFixture<CorrelationMatrixTest>
       TEST_CASE(test1);
       TEST_CASE(test2);
       TEST_CASE(test3);
-      TEST_CASE(test4);  
+      TEST_CASE(test4);
     }
 
     void setUp();

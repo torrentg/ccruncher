@@ -69,7 +69,7 @@ void TimerTest::test1()
   timer.start();
 
   // making some stuff
-  for(long i=0;i<NUMOPS;i++) 
+  for(long i=0;i<NUMOPS;i++)
   {
     x = cos(x);
   }
@@ -86,7 +86,7 @@ void TimerTest::test1()
     x = cos(x);
   }
 
-  // stopping the timer 
+  // stopping the timer
   timer.stop();
   ASSERT(t1 < timer.read());
 

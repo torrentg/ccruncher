@@ -45,7 +45,7 @@ void ccruncher::IData::init()
    correlations = NULL;
    segmentations = NULL;
    aggregators = NULL;
-   portfolio = NULL;	
+   portfolio = NULL;
 }
 
 //===========================================================================
@@ -85,11 +85,11 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     // checking file readability
     ifstream ifile((const char *) xmlfilename.c_str());
 
-    if (!ifile.is_open()) 
+    if (!ifile.is_open())
     {
       throw Exception("IData::IData(): can't open file " + xmlfilename);
     }
-    else 
+    else
     {
       ifile.close();
     }
@@ -114,10 +114,10 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     string msg = "IData::IData(): ";
     msg += e.what();
     if (parser != NULL) delete parser;
-    XMLUtils::terminate();    
+    XMLUtils::terminate();
     release();
     throw Exception(e, msg);
-  } 
+  }
 }
 
 //===========================================================================
@@ -130,8 +130,8 @@ ccruncher::IData::IData(const DOMNode &node) throw(Exception)
 
   try
   {
-    // parsejem el document  
-    parseDOMNode(node); 
+    // parsejem el document
+    parseDOMNode(node);
   }
   catch(Exception &e)
   {
@@ -144,7 +144,7 @@ ccruncher::IData::IData(const DOMNode &node) throw(Exception)
     string msg = "IData::IData(): generic error";
     msg += e.what();
     throw Exception(e, msg);
-  } 
+  }
 }
 
 //===========================================================================
@@ -156,7 +156,7 @@ ccruncher::IData::~IData()
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
 {
@@ -219,8 +219,8 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
       }
       else
       {
-      	string msg = "IData::parseXML(): invalid data structure at <creditcruncher>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "IData::parseXML(): invalid data structure at <creditcruncher>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }
@@ -228,7 +228,7 @@ void ccruncher::IData::parseDOMNode(const DOMNode& node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 {
@@ -243,7 +243,7 @@ void ccruncher::IData::parseParams(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 {
@@ -258,7 +258,7 @@ void ccruncher::IData::parseInterests(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 {
@@ -273,7 +273,7 @@ void ccruncher::IData::parseRatings(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 {
@@ -292,7 +292,7 @@ void ccruncher::IData::parseTransitions(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 {
@@ -307,7 +307,7 @@ void ccruncher::IData::parseSectors(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 {
@@ -326,7 +326,7 @@ void ccruncher::IData::parseCorrelations(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 {
@@ -341,7 +341,7 @@ void ccruncher::IData::parseSegmentations(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 {
@@ -360,7 +360,7 @@ void ccruncher::IData::parseAggregators(const DOMNode &node) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::IData::parsePortfolio(const DOMNode &node) throw(Exception)
 {

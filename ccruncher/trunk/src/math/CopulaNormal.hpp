@@ -47,7 +47,7 @@ namespace ccruncher {
 class CopulaNormal : public Copula
 {
   private:
-  
+
     int n;
     double **sigmas;
     double *aux1;
@@ -57,11 +57,11 @@ class CopulaNormal : public Copula
     MTRand mtrand;
 
     void init();
-    void finalize();        
+    void finalize();
     void correls2sigmas(double **mcorrels) throw(Exception);
     double transform(double val);
     void randNm();
-    
+
   public:
 
     int size();
@@ -72,7 +72,7 @@ class CopulaNormal : public Copula
     CopulaNormal(int, double **) throw(Exception);
     CopulaNormal(const CopulaNormal &) throw(Exception);
     ~CopulaNormal();
-    
+
 };
 
 //---------------------------------------------------------------------------

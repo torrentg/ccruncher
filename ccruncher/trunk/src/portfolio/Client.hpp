@@ -66,7 +66,7 @@ class Client
     void parseDOMNode(Ratings *, Sectors *, Segmentations *, Interests *, const DOMNode&) throw(Exception);
     void insertAsset(Asset *) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
-    
+
   public:
 
     int irating;

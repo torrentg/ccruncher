@@ -136,7 +136,7 @@ int main(int argC, char* argV[])
         {
              // Get out the end of line
              strcpy(localeStr, &(argV[argInd][8]));
-        }			
+        }
         else
         {
             XERCES_STD_QUALIFIER cerr << "Unknown option '" << argV[argInd]
@@ -295,7 +295,7 @@ int main(int argC, char* argV[])
 //                << handler.getElementCount() << " elems, "
 //                << handler.getAttrCount() << " attrs, "
 //                << handler.getSpaceCount() << " spaces, "
-//                << handler.getCharacterCount() << " chars)" 
+//                << handler.getCharacterCount() << " chars)"
 //                << XERCES_STD_QUALIFIER endl;
           vector<double> *ret = handler.getTranches();
           int numtranches = handler.getNumTranches();

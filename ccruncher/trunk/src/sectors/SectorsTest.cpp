@@ -68,7 +68,7 @@ void SectorsTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_NO_THROW(sectors = Sectors(*(doc->getDocumentElement())));
   vector<Sector> &list = *sectors.getSectors();
@@ -85,7 +85,7 @@ void SectorsTest::test1()
   ASSERT("otros sectores" == list[1].desc);
 
   ASSERT(list[0] < list[1]);
-  
+
   delete wis;
   delete parser;
   XMLUtils::terminate();
@@ -109,10 +109,10 @@ void SectorsTest::test2()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
   XMLUtils::terminate();
@@ -136,10 +136,10 @@ void SectorsTest::test3()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
   XMLUtils::terminate();
@@ -163,10 +163,10 @@ void SectorsTest::test4()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
   XMLUtils::terminate();
@@ -190,10 +190,10 @@ void SectorsTest::test5()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors;
   ASSERT_THROW(sectors = Sectors(*(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
   XMLUtils::terminate();

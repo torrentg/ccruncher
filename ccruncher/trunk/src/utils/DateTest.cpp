@@ -126,7 +126,7 @@ void DateTest::test_rollers(void)
   ASSERT(Date("27/12/2004") == date1--);
   ASSERT(Date("26/12/2004") == date1);
   ASSERT(Date("25/12/2004") == --date1);
-  
+
   date1 += 3;
   ASSERT(Date("28/12/2004") == date1);
 
@@ -175,10 +175,10 @@ void DateTest::test_misc(void)
 //===========================================================================
 void DateTest::test_comparators(void)
 {
-  Date date1 = Date(23,11,2003);  
+  Date date1 = Date(23,11,2003);
   Date date2 = Date(25,12,2004);
-  Date datex = Date(23,11,2003);  
-  
+  Date datex = Date(23,11,2003);
+
   ASSERT(date1 < date2);
   ASSERT(!(date1 < datex));
 

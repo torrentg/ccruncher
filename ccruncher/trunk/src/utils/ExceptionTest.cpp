@@ -101,7 +101,7 @@ void ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
 void ExceptionTest::function3(void) throw(ccruncher::Exception)
 {
   function4();
-  
+
   throw ccruncher::Exception("exception throwed by function3()");
 }
 

@@ -35,7 +35,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentations *segmentations, 
+ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
                      Interests *interests, const DOMNode& node) throw(Exception)
 {
   // recollim els parametres de la simulacio
@@ -57,7 +57,7 @@ ccruncher::Portfolio::~Portfolio()
 //===========================================================================
 // retorna la llista de clients
 //===========================================================================
-vector<Client *> * ccruncher::Portfolio::getClients() 
+vector<Client *> * ccruncher::Portfolio::getClients()
 {
   return &vclients;
 }
@@ -65,7 +65,7 @@ vector<Client *> * ccruncher::Portfolio::getClients()
 //===========================================================================
 // insercio nou client en la llista
 //===========================================================================
-void ccruncher::Portfolio::insertClient(Client *val) throw(Exception) 
+void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vclients.size();i++)
@@ -74,7 +74,7 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
     {
       string msg = "Portfolio::insertClient(): client id ";
       msg += val->id;
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
     else if (vclients[i]->name == val->name)
@@ -100,7 +100,7 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 //===========================================================================
 // interpreta un node XML params
 //===========================================================================
-void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segmentations, 
+void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
                              Interests *interests, const DOMNode& node) throw(Exception)
 {
   // validem el node passat com argument
@@ -143,7 +143,7 @@ void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segm
 int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exception)
 {
   int ret = 0;
-  
+
   for (int i=vclients.size()-1;i>=0;i--)
   {
     if (vclients[i]->isActive(from, to))
@@ -151,7 +151,7 @@ int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exceptio
       ret++;
     }
   }
-  
+
   return ret;
 }
 
@@ -187,6 +187,6 @@ void ccruncher::Portfolio::mtlp(unsigned int pos)
   {
     vclients[i] = vclients[i+1];
   }
-  
+
   vclients[vclients.size()-1] = p;
 }

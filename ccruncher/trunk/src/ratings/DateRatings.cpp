@@ -51,7 +51,7 @@ ccruncher::DateRatings::DateRatings(Date date_, int numratings)
 //===========================================================================
 ccruncher::DateRatings::~DateRatings()
 {
-  if (ocurrences != NULL) 
+  if (ocurrences != NULL)
   {
     delete [] ocurrences;
     ocurrences = NULL;

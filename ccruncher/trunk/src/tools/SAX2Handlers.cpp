@@ -57,7 +57,7 @@ SAX2Handlers::SAX2Handlers()
   tokens[TOKEN_TYPE]              = XMLUtils::String2XMLCh("type");
   tokens[TOKEN_NAME]              = XMLUtils::String2XMLCh("name");
 
-  tranch = NULL;  
+  tranch = NULL;
   resetDocument();
 }
 
@@ -114,7 +114,7 @@ string SAX2Handlers::getAttribute(string aname, const Attributes& attrs)
 }
 
 //===========================================================================
-// startElement handler 
+// startElement handler
 //===========================================================================
 void SAX2Handlers::startElement(const XMLCh* const uri,
                                 const XMLCh* const localname,
@@ -123,7 +123,7 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
 {
   if (*localname == *tokens[TOKEN_VALUE])
   {
-    XMLCh *aux = (XMLCh*) attrs.getValue(tokens[TOKEN_NAME]);    
+    XMLCh *aux = (XMLCh*) attrs.getValue(tokens[TOKEN_NAME]);
 
     if (*aux == *tokens[TOKEN_CASHFLOW])
     {
@@ -156,7 +156,7 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
       throw new Exception("ntranches not set");
     }
     else
-    {  
+    {
 //      double *tmp = new double[m];
 //      for (int i=0;i<m;i++) tmp[i] = NAN;
 //      rows.push_back(tmp);
@@ -175,7 +175,7 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
     }
 
     m = ccruncher::Parser::intValue(getAttribute("ntranches", attrs));
-    if (m <= 0) 
+    if (m <= 0)
     {
       throw Exception("ntranches can't be inf or equal to 0");
     }
@@ -191,7 +191,7 @@ void SAX2Handlers::startElement(const XMLCh* const uri,
 }
 
 //===========================================================================
-// endElement handler 
+// endElement handler
 //===========================================================================
 void SAX2Handlers::endElement(const XMLCh* const uri,
                                 const XMLCh* const localname,
@@ -223,7 +223,7 @@ void SAX2Handlers::characters(const XMLCh* const chars,
 //===========================================================================
 // ignorableWhitespace handler
 //===========================================================================
-void SAX2Handlers::ignorableWhitespace(const XMLCh* const chars, 
+void SAX2Handlers::ignorableWhitespace(const XMLCh* const chars,
                                        const unsigned int length)
 {
   // nothing to do
@@ -248,11 +248,11 @@ void SAX2Handlers::resetDocument()
 void SAX2Handlers::error(const SAXParseException& e)
 {
   fSawErrors = true;
-  XERCES_STD_QUALIFIER cerr 
+  XERCES_STD_QUALIFIER cerr
       << "\nError at file " << StrX(e.getSystemId())
       << ", line " << e.getLineNumber()
       << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage()) 
+      << "\n  Message: " << StrX(e.getMessage())
       << XERCES_STD_QUALIFIER endl;
 }
 
@@ -262,11 +262,11 @@ void SAX2Handlers::error(const SAXParseException& e)
 void SAX2Handlers::fatalError(const SAXParseException& e)
 {
   fSawErrors = true;
-  XERCES_STD_QUALIFIER cerr 
+  XERCES_STD_QUALIFIER cerr
       << "\nFatal Error at file " << StrX(e.getSystemId())
       << ", line " << e.getLineNumber()
       << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage()) 
+      << "\n  Message: " << StrX(e.getMessage())
       << XERCES_STD_QUALIFIER endl;
 }
 
@@ -275,11 +275,11 @@ void SAX2Handlers::fatalError(const SAXParseException& e)
 //===========================================================================
 void SAX2Handlers::warning(const SAXParseException& e)
 {
-  XERCES_STD_QUALIFIER cerr 
+  XERCES_STD_QUALIFIER cerr
       << "\nWarning at file " << StrX(e.getSystemId())
       << ", line " << e.getLineNumber()
       << ", char " << e.getColumnNumber()
-      << "\n  Message: " << StrX(e.getMessage()) 
+      << "\n  Message: " << StrX(e.getMessage())
       << XERCES_STD_QUALIFIER endl;
 }
 

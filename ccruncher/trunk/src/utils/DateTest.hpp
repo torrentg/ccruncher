@@ -47,7 +47,7 @@ class DateTest : public TestFixture<DateTest>
 {
 
   private:
-  
+
     void test_constructors(void);
     void test_valid(void);
     void test_gets(void);
@@ -55,7 +55,7 @@ class DateTest : public TestFixture<DateTest>
     void test_rollers(void);
     void test_misc(void);
     void test_comparators(void);
-  
+
   public:
 
     TEST_FIXTURE(DateTest)

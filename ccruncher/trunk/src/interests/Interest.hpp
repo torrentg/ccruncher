@@ -58,12 +58,12 @@ class Interest
     Date fecha;
     vector<Rate> vrates;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);  
+    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertRate(Rate &) throw(Exception);
 
     double getValue(const double);
     double date2idx(Date &date1);
-    Date idx2date(int t);  
+    Date idx2date(int t);
     double actualCoef(const double r, const double t);
     double updateCoef(const double r, const double t);
 

@@ -104,7 +104,7 @@ void SegmentationsTest::test1()
   ASSERT(7 == v.size());
   ASSERT(0 == sobj->getSegmentation("portfolio"));
 
-  if (sobj != NULL) delete sobj;  
+  if (sobj != NULL) delete sobj;
   delete wis;
   delete parser;
   XMLUtils::terminate();

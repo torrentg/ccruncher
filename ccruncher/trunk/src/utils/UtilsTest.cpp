@@ -72,7 +72,7 @@ void UtilsTest::test1()
     4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 1.0,
     5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 2.0
   };
-  
+
   vector1 = Utils::allocVector(XLENGTH);
   vector2 = Utils::allocVector(XLENGTH, vvals);
   vector3 = Utils::allocVector(YLENGTH, 1.0);
@@ -81,7 +81,7 @@ void UtilsTest::test1()
   {
     ASSERT(isnan(vector1[i]));
     ASSERT_DOUBLES_EQUAL(vvals[i], vector2[i], EPSILON);
-  }  
+  }
 
   for (int i=0;i<YLENGTH;i++)
   {
@@ -94,7 +94,7 @@ void UtilsTest::test1()
   {
     ASSERT_DOUBLES_EQUAL(1.0, vector1[i], EPSILON);
   }
-  
+
   Utils::copyVector(vector1, XLENGTH, vector2);
 
   for (int i=0;i<XLENGTH;i++)
@@ -116,8 +116,8 @@ void UtilsTest::test1()
       ASSERT_DOUBLES_EQUAL(mvals[j+i*YLENGTH], matrix3[i][j], EPSILON);
       ASSERT_DOUBLES_EQUAL(matrix3[i][j], matrix4[i][j], EPSILON);
     }
-  }  
-  
+  }
+
   Utils::initMatrix(matrix1, XLENGTH, YLENGTH, 1.0);
 
   for (int i=0;i<XLENGTH;i++)
@@ -126,8 +126,8 @@ void UtilsTest::test1()
     {
       ASSERT_DOUBLES_EQUAL(1.0, matrix1[i][j], EPSILON);
     }
-  }  
-  
+  }
+
   Utils::copyMatrix(matrix1, XLENGTH, YLENGTH, matrix3);
 
   for (int i=0;i<XLENGTH;i++)
@@ -136,8 +136,8 @@ void UtilsTest::test1()
     {
       ASSERT_DOUBLES_EQUAL(1.0, matrix3[i][j], EPSILON);
     }
-  }  
-  
+  }
+
   Utils::prodMatrixVector(matrix1, vector3, XLENGTH, YLENGTH, vector1);
 
   for (int j=0;j<XLENGTH;j++)

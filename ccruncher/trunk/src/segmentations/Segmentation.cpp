@@ -63,7 +63,7 @@ ccruncher::Segmentation::~Segmentation()
 //===========================================================================
 // insertSegment
 //===========================================================================
-void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception) 
+void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
 {
   if (val.name == "")
   {
@@ -113,7 +113,7 @@ void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
 void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
 {
   string strcomp;
-  
+
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "segmentation"))
   {
@@ -144,7 +144,7 @@ void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
   {
     throw Exception("Segmentation::parseDOMNode(): tag <segmentation> with invalid components attribute");
   }
-  
+
   // recorrem tots els items
   DOMNodeList &children = *node.getChildNodes();
 
@@ -183,7 +183,7 @@ int ccruncher::Segmentation::getSegment(string segname) const
       return i;
     }
   }
-  
+
   return -1;
 }
 

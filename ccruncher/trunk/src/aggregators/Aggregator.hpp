@@ -67,7 +67,7 @@ class Aggregator
 
     void reset();
     void parseProperty(const DOMNode&, Segmentations *) throw(Exception);
-    void parseDOMNode(const DOMNode&, Segmentations *) throw(Exception);  
+    void parseDOMNode(const DOMNode&, Segmentations *) throw(Exception);
     void validate(Segmentations *) throw(Exception);
 
 

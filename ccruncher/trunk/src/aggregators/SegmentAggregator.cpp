@@ -48,13 +48,13 @@ void ccruncher::SegmentAggregator::define(int isegs, int iseg, components_t comp
 {
   assert(isegs >= 0);
   assert(iseg >= 0);
-  
+
   isegmentation = isegs;
   isegment = iseg;
   components = comps;
   bvalues = bv;
   bfull = bf;
-}  
+}
 
 //===========================================================================
 // reset
@@ -106,7 +106,7 @@ ccruncher::SegmentAggregator::~SegmentAggregator()
 void ccruncher::SegmentAggregator::release()
 {
   // deleting clients array
-  if (iclients != NULL) 
+  if (iclients != NULL)
   {
     delete [] iclients;
     iclients = NULL;
@@ -126,7 +126,7 @@ void ccruncher::SegmentAggregator::release()
     delete [] vertexes;
     vertexes = NULL;
   }
-  
+
   // deleting cvalues
   if (cvalues != NULL)
   {
@@ -161,7 +161,7 @@ void ccruncher::SegmentAggregator::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> *clients, 
+void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> *clients,
   long n, int indexdefault, Ratings *ratings_) throw(Exception)
 {
   bool *clientflag = NULL;
@@ -224,7 +224,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
       // allocating cvalues
       cvalues = allocCValues(dates, M, K);
     }
-    else 
+    else
     {
       // allocating cratings
       cratings = allocCRatings(dates, M, K, ratings->getRatings()->size());
@@ -237,7 +237,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
     if (clientflag != NULL) { delete [] clientflag; clientflag = NULL;}
     throw Exception(e, "SegmentAggregator::initialize()");
   }
-  
+
   delete [] clientflag;
 }
 
@@ -273,7 +273,7 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, lon
   for(long i=0;i<n;i++)
   {
     flags[i] = false;
-    
+
     assets = (*clients)[i]->getAssets();
 
     for(unsigned int j=0;j<assets->size();j++)
@@ -340,7 +340,7 @@ long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> *clients, long
 bool* ccruncher::SegmentAggregator::allocClientFlag(long n) throw(Exception)
 {
   bool *ret = NULL;
-  
+
   try
   {
     ret = new bool[n];
@@ -353,7 +353,7 @@ bool* ccruncher::SegmentAggregator::allocClientFlag(long n) throw(Exception)
   {
     throw Exception(e, "SegmentAggregator::allocClientFlag(): not enougth space");
   }
-  
+
   return ret;
 }
 
@@ -388,10 +388,10 @@ long* ccruncher::SegmentAggregator::allocIClients(bool *flags, long n) throw(Exc
 
   // assertion
   assert(aux == num);
-  
+
   return ret;
 }
-    
+
 //===========================================================================
 // allocCValues
 //===========================================================================
@@ -405,13 +405,13 @@ DateValues** ccruncher::SegmentAggregator::allocCValues(Date *dates, int m, long
     for(long i=0;i<n;i++)
     {
       ret[i] = NULL;
-    }    
+    }
   }
   catch(std::exception &e)
   {
     throw Exception(e, "SegmentAggregator::allocCValues(): not enougth space");
   }
-  
+
   try
   {
     for(long i=0;i<n;i++)
@@ -432,7 +432,7 @@ DateValues** ccruncher::SegmentAggregator::allocCValues(Date *dates, int m, long
     delete [] ret;
     throw Exception(e, "SegmentAggregator::allocCValues(): not enougth space");
   }
-  
+
   return ret;
 }
 
@@ -449,7 +449,7 @@ DateRatings** ccruncher::SegmentAggregator::allocCRatings(Date *dates, int m, lo
     for(long i=0;i<n;i++)
     {
       ret[i] = NULL;
-    }    
+    }
   }
   catch(std::exception &e)
   {
@@ -510,7 +510,7 @@ void ccruncher::SegmentAggregator::append(int **rpaths, int m, long n, vector<Cl
   assert(m >= 0);
   assert(n >= 0);
   assert(clients != NULL);
-  
+
   if (m != M || n != N)
   {
     throw Exception("SegmentAggregator::append(): diferents dimensions");
@@ -577,7 +577,7 @@ void ccruncher::SegmentAggregator::appendA(int **rpaths)
 void ccruncher::SegmentAggregator::appendR(int **rpaths)
 {
   long cpos;
-  
+
   // setting values to 0
   if (bfull == true)
   {
@@ -588,7 +588,7 @@ void ccruncher::SegmentAggregator::appendR(int **rpaths)
   for(long i=0;i<nclients;i++)
   {
     cpos = iclients[i];
-    
+
     for(int j=0;j<M;j++)
     {
       cratings[icont][j].append(rpaths[cpos][j]);
@@ -631,14 +631,14 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
     for(long i=0;i<nclients;i++)
     {
       ret[i] = NULL;
-    }    
+    }
   }
   catch(std::exception &e)
   {
     if (aux != NULL) { delete [] aux; aux = NULL; }
     throw Exception(e, "SegmentAggregator::allocVertexes(): not enougth space");
   }
-  
+
   try
   {
     for(long i=0;i<nclients;i++)
@@ -664,7 +664,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
         if (components==client || (components==asset && (*assets)[j]->belongsTo(isegmentation, isegment)))
         {
           (*assets)[j]->getVertexes(dates, m, aux);
-          
+
           for(int k=0;k<m;k++)
           {
             ret[i][k].cashflow += aux[k].cashflow;
@@ -705,7 +705,7 @@ void ccruncher::SegmentAggregator::flush(bool bfinalize) throw(Exception)
 
     // printing XML content
     printXMLItems(bfinalize);
-//TODO: pendent actualitzar info si bfull=false (fer trunc al obrir file)    
+//TODO: pendent actualitzar info si bfull=false (fer trunc al obrir file)
     // printing XML footer
     if (bfinalize == true)
     {
@@ -827,7 +827,7 @@ void ccruncher::SegmentAggregator::printXMLTranch(int index, int itranch) throw(
   else
   {
     int k = ratings->getRatings()->size();
-    
+
     for (int i=0;i<k;i++)
     {
       fout << INDENTER3;
@@ -937,6 +937,6 @@ string ccruncher::SegmentAggregator::getFilePath() throw(Exception)
   {
     throw Exception("SegmentAggregator::getFilePath(): panic, setNames() not called");
   }
-  
+
   return path + name0 + "-" + name1 + "-" + name2 + ".xml";
 }

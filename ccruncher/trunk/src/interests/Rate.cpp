@@ -70,7 +70,7 @@ void ccruncher::Rate::parseDOMNode(const DOMNode& node) throw(Exception)
   }
 
   // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();  
+  DOMNamedNodeMap &attributes = *node.getAttributes();
   t = XMLUtils::getDoubleAttribute(attributes, "t", -1.0);
   r = XMLUtils::getDoubleAttribute(attributes, "r", -1.0);
 
@@ -94,8 +94,8 @@ void ccruncher::Rate::parseDOMNode(const DOMNode& node) throw(Exception)
       }
       else
       {
-      	string msg = "Rate::parseDOMNode(): invalid data structure at <rate>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "Rate::parseDOMNode(): invalid data structure at <rate>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }

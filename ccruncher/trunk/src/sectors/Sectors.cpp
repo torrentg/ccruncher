@@ -36,10 +36,10 @@
 // constructor privat
 //===========================================================================
 ccruncher::Sectors::Sectors()
-{  
+{
   // inicialitzem el vector de sectors
   vsectors = vector<Sector>();
-}  
+}
 
 //===========================================================================
 // constructor
@@ -48,10 +48,10 @@ ccruncher::Sectors::Sectors(const DOMNode& node) throw(Exception)
 {
   // inicialitzem el vector de sectors
   vsectors = vector<Sector>();
-  
+
   // recollim els parametres de la simulacio
   parseDOMNode(node);
-  
+
   // validem la llista recollida
   validations();
 }
@@ -67,7 +67,7 @@ ccruncher::Sectors::~Sectors()
 //===========================================================================
 // destructor
 //===========================================================================
-vector<Sector> * ccruncher::Sectors::getSectors() 
+vector<Sector> * ccruncher::Sectors::getSectors()
 {
   return &vsectors;
 }
@@ -75,7 +75,7 @@ vector<Sector> * ccruncher::Sectors::getSectors()
 //===========================================================================
 // insercio nou sector en la llista
 //===========================================================================
-void ccruncher::Sectors::insertSector(Sector &val) throw(Exception) 
+void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vsectors.size();i++)
@@ -86,7 +86,7 @@ void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
     {
       string msg = "Sectors::insertSector(): sector name ";
       msg += val.name;
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
     else if (aux.order == val.order)
@@ -195,6 +195,6 @@ int ccruncher::Sectors::getIndex(const string &sector_name)
       return (int) i;
     }
   }
-  
+
   return -1;
 }

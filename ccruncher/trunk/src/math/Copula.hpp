@@ -44,11 +44,11 @@ class Copula
 {
 
   public:
-  
+
     virtual int size() = 0;
     virtual void next() = 0;
     virtual double get(int) = 0;
-    
+
     virtual ~Copula() {};
 };
 

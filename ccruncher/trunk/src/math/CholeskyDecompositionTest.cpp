@@ -85,24 +85,24 @@ void CholeskyDecompositionTest::test1()
   };
   double **A = Utils::allocMatrix(3,3,valA);
   double *aux = Utils::allocVector(3);
-    
+
   ASSERT(CholeskyDecomposition::choldc(A, aux, 3));
 
   // moving diagonal elements to A
-  for(int i=0;i<3;i++) 
+  for(int i=0;i<3;i++)
   {
     A[i][i] = aux[i];
   }
-  
+
   // attention, octave & mathematica make L'·L and choldc make L·L'
-  for (int i=0;i<3;i++) 
+  for (int i=0;i<3;i++)
   {
-    for (int j=i;j<3;j++) 
+    for (int j=i;j<3;j++)
     {
       ASSERT_DOUBLES_EQUAL(solA[j+3*i], A[j][i], EPSILON);
     }
   }
-  
+
   Utils::deallocMatrix(A, 3);
   Utils::deallocVector(aux);
 }
@@ -128,9 +128,9 @@ void CholeskyDecompositionTest::test2()
   };
   double **B = Utils::allocMatrix(3,3, valB);
   double *aux = Utils::allocVector(3);
-    
+
   ASSERT(!CholeskyDecomposition::choldc(B, aux, 3));
-  
+
   Utils::deallocMatrix(B, 3);
   Utils::deallocVector(aux);
 }

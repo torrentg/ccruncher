@@ -47,10 +47,10 @@ class FileTest : public TestFixture<FileTest>
 {
 
   private:
-  
+
     void test1(void);
 
-    
+
   public:
 
     TEST_FIXTURE(FileTest)

@@ -194,7 +194,7 @@ void IDataTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // client creation 
+  // client creation
   IData *idata = NULL;
   ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement())));
 
@@ -207,7 +207,7 @@ void IDataTest::test1()
   ASSERT(idata->correlations != NULL);
   ASSERT(idata->portfolio != NULL);
 
-  // exit test  
+  // exit test
   if (idata != NULL) delete idata;
   delete wis;
   delete parser;

@@ -81,10 +81,10 @@ void SegmentationTest::test1()
 
   ASSERT("office" == sobj->name);
   ASSERT(asset == sobj->components);
-  
+
   vector<Segment> vsegments = sobj->getSegments();
   ASSERT(5 == vsegments.size());
-  
+
   ASSERT(0 == sobj->getSegment("rest"));
   ASSERT(1 == sobj->getSegment("0001"));
   ASSERT(2 == sobj->getSegment("0002"));

@@ -54,10 +54,10 @@ class Parser
     static double doubleValue(const string &) throw(Exception);
     static Date dateValue(const string &) throw(Exception);
 
-    static string int2string(const int val);            
-    static string long2string(const long val);    
+    static string int2string(const int val);
+    static string long2string(const long val);
     static string double2string(const double val);
-    static string date2string(const ccruncher::Date &val);    
+    static string date2string(const ccruncher::Date &val);
 
 };
 

@@ -72,7 +72,7 @@ void BondTest::test1()
 
   ASSERT(bond.validate());
   ASSERT_NO_THROW(bond.initialize());
-  
+
   DateValues *array = NULL;
   int size;
 
@@ -83,7 +83,7 @@ void BondTest::test1()
   ASSERT(Date("01/06/2004") == array[0].date);
   ASSERT_DOUBLES_EQUAL(-995.0, array[0].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, array[0].exposure, EPSILON);
-  
+
   ASSERT(Date("01/01/2005") == array[1].date);
   ASSERT_DOUBLES_EQUAL(0.0, array[1].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, array[1].exposure, EPSILON);
@@ -125,7 +125,7 @@ void BondTest::test2()
 
   ASSERT(bond.validate());
   ASSERT_NO_THROW(bond.initialize());
-  
+
   DateValues *array = NULL;
   int size;
 
@@ -174,7 +174,7 @@ void BondTest::test3()
 
   ASSERT(bond.validate());
   ASSERT_NO_THROW(bond.initialize());
-  
+
   DateValues *array = NULL;
   int size;
 
@@ -223,7 +223,7 @@ void BondTest::test4()
 
   ASSERT(bond.validate());
   ASSERT_NO_THROW(bond.initialize());
-  
+
   DateValues *array = NULL;
   int size;
 
@@ -306,7 +306,7 @@ void BondTest::test7()
 
   ASSERT(bond.validate());
   ASSERT_NO_THROW(bond.initialize());
-  
+
   DateValues *array = NULL;
   int size;
 

@@ -37,10 +37,10 @@
 // constructor privat
 //===========================================================================
 ccruncher::Ratings::Ratings()
-{  
+{
   // inicialitzem el vector de ratings
   vratings = vector<Rating>();
-}  
+}
 
 //===========================================================================
 // constructor
@@ -49,10 +49,10 @@ ccruncher::Ratings::Ratings(const DOMNode& node) throw(Exception)
 {
   // inicialitzem el vector de rates
   vratings = vector<Rating>();
-  
+
   // recollim els parametres de la simulacio
   parseDOMNode(node);
-  
+
   // validem la llista recollida
   validations();
 }
@@ -68,7 +68,7 @@ ccruncher::Ratings::~Ratings()
 //===========================================================================
 // destructor
 //===========================================================================
-vector<Rating> * ccruncher::Ratings::getRatings() 
+vector<Rating> * ccruncher::Ratings::getRatings()
 {
   return &vratings;
 }
@@ -76,7 +76,7 @@ vector<Rating> * ccruncher::Ratings::getRatings()
 //===========================================================================
 // insercio nou rating en la llista
 //===========================================================================
-void ccruncher::Ratings::insertRating(Rating &val) throw(Exception) 
+void ccruncher::Ratings::insertRating(Rating &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vratings.size();i++)
@@ -87,7 +87,7 @@ void ccruncher::Ratings::insertRating(Rating &val) throw(Exception)
     {
       string msg = "Ratings::insertRating(): rating name ";
       msg += val.name;
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
     else if (aux.order == val.order)
@@ -124,8 +124,8 @@ void ccruncher::Ratings::parseDOMNode(const DOMNode& node) throw(Exception)
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "ratings"))
   {
-  	string msg = "Ratings::parseDOMNode(): Invalid tag. Expected: ratings. Found: ";
-  	msg += XMLUtils::XMLCh2String(node.getNodeName());
+    string msg = "Ratings::parseDOMNode(): Invalid tag. Expected: ratings. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
     throw Exception(msg);
   }
 
@@ -196,7 +196,7 @@ int ccruncher::Ratings::getIndex(const string &rating_name)
       return (int) i;
     }
   }
-  
+
   return -1;
 }
 

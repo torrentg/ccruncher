@@ -47,11 +47,11 @@ class UtilsTest : public TestFixture<UtilsTest>
 {
 
   private:
-  
+
     void test1(void);
     void test2(void);
 
-    
+
   public:
 
     TEST_FIXTURE(UtilsTest)

@@ -1,7 +1,7 @@
 
 /=================================================================***
 
-compiled using: 
+compiled using:
   g++ bugcpp.cpp
 
 result obtained (in a CA_ES system):
@@ -29,7 +29,7 @@ class MyClass
 {
   public:
     MyClass(string _name) {name = _name;}
-    
+
     string name;
 };
 

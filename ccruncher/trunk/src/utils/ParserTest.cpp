@@ -134,8 +134,8 @@ void ParserTest::test_toString(void)
 {
   Date date1 = Date("1/1/2005");
 
-  ASSERT("35" == Parser::int2string(35));  
-  ASSERT("50000" == Parser::long2string(50000));  
-  ASSERT("3.1415" == Parser::double2string(3.1415));  
-  ASSERT("01/01/2005" == Parser::date2string(date1));  
+  ASSERT("35" == Parser::int2string(35));
+  ASSERT("50000" == Parser::long2string(50000));
+  ASSERT("3.1415" == Parser::double2string(3.1415));
+  ASSERT("01/01/2005" == Parser::date2string(date1));
 }

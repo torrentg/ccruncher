@@ -38,10 +38,10 @@
 ccruncher::Interests::Interests(const DOMNode& node) throw(Exception)
 {
   ispot = -1;
-  
+
   // recollim els parametres de la simulacio
   parseDOMNode(node);
-  
+
   // making validations
   validate();
 }
@@ -57,7 +57,7 @@ ccruncher::Interests::~Interests()
 //===========================================================================
 // return interests list
 //===========================================================================
-vector<Interest> * ccruncher::Interests::getInterests() 
+vector<Interest> * ccruncher::Interests::getInterests()
 {
   return &vinterests;
 }
@@ -74,7 +74,7 @@ Interest * ccruncher::Interests::getInterest(string name) throw(Exception)
       return &(vinterests[i]);
     }
   }
-  
+
   throw Exception("Interests::getInterest(): interest " + name + " not found");
 }
 
@@ -91,14 +91,14 @@ void ccruncher::Interests::validate() throw(Exception)
       return;
     }
   }
-  
+
   throw Exception("Interests::validate(): interest spot not found");
 }
 
 //===========================================================================
 // insert a new interest in list
 //===========================================================================
-void ccruncher::Interests::insertInterest(Interest &val) throw(Exception) 
+void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vinterests.size();i++)
@@ -107,7 +107,7 @@ void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
     {
       string msg = "Interests::insertInterest(): interest name ";
       msg += val.getName();
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
   }
@@ -123,7 +123,7 @@ void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::Interests::parseDOMNode(const DOMNode& node) throw(Exception)
 {

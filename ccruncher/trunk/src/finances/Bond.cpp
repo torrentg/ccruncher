@@ -64,7 +64,7 @@ void ccruncher::Bond::setProperty(string name, string value) throw(Exception)
   if (filled == true)
   {
     throw Exception("Bond::setProperty(): all Bond properties filled");
-  } 
+  }
   else if (name == "issuedate")
   {
     issuedate = Parser::dateValue(value);
@@ -72,7 +72,7 @@ void ccruncher::Bond::setProperty(string name, string value) throw(Exception)
   else if (name == "term")
   {
     term = Parser::intValue(value);
-  } 
+  }
   else if (name == "nominal")
   {
     nominal = Parser::doubleValue(value);
@@ -107,8 +107,8 @@ bool ccruncher::Bond::validate()
   if (filled == true)
   {
     return true;
-  } 
-  else if (issuedate == Date(1,1,1) || term == -1 || isnan(nominal) || isnan(rate) || 
+  }
+  else if (issuedate == Date(1,1,1) || term == -1 || isnan(nominal) || isnan(rate) ||
            ncoupons == -1 || adquisitiondate == Date(1,1,1) || isnan(adquisitionprice))
   {
     return false;
@@ -151,7 +151,7 @@ DateValues* ccruncher::Bond::simulate()
     ret[i].date = addMonths(issuedate, i*m);
     ret[i].cashflow = nominal*r;
     ret[i].exposure = nominal;
-  }  
+  }
 
   ret[n-1].date = addMonths(issuedate, term);
   ret[n-1].cashflow = nominal*(1.0+r);
@@ -169,11 +169,11 @@ int ccruncher::Bond::getISize() throw(Exception)
   {
     throw Exception("Bond::getSize(): invalid properties");
   }
-  
+
   if (length < 0)
   {
     throw Exception("Bond::getSize(): run getEvents() first");
-  }  
+  }
 
   return length;
 }
@@ -185,7 +185,7 @@ DateValues* ccruncher::Bond::getIEvents() throw(Exception)
 {
   if (!validate()) {
     throw Exception("Bond::getEvents(): invalid properties");
-  } 
+  }
 
   int n = ncoupons+1;
   DateValues *aux = simulate();
@@ -195,11 +195,11 @@ DateValues* ccruncher::Bond::getIEvents() throw(Exception)
       length = n;
     }
   }
-  
+
   if (length == -1) {
     length = n+1;
   }
-  
+
   for (int i=0;i<n;i++) {
     if (aux[i].date < adquisitiondate ) {
       length--;
@@ -207,42 +207,42 @@ DateValues* ccruncher::Bond::getIEvents() throw(Exception)
       break;
     }
   }
-  
+
   DateValues *events = new DateValues[length];
   int cont = 0;
-  
+
   if (adquisitiondate < aux[0].date) {
     events[cont].date = adquisitiondate;
     events[cont].cashflow = -adquisitionprice;
     events[cont].exposure = +adquisitionprice;
     cont++;
   }
-  
+
   for(int i=0;i<n-1;i++)
   {
     if (aux[i].date > adquisitiondate) {
       events[cont].date = aux[i].date;
       events[cont].cashflow = (i==0?0.0:aux[i].cashflow);
       events[cont].exposure = +adquisitionprice;
-      cont++;      
+      cont++;
     } else if (aux[i].date == adquisitiondate) {
       events[cont].date = aux[i].date;
       events[cont].cashflow = -adquisitionprice;
       events[cont].exposure = +adquisitionprice;
-      cont++;          
+      cont++;
     } else if (adquisitiondate < aux[i+1].date) {
       events[cont].date = adquisitiondate;
       events[cont].cashflow = -adquisitionprice;
       events[cont].exposure = +adquisitionprice;
-      cont++;      
+      cont++;
     }
-  }  
+  }
 
   events[cont].date = aux[n-1].date;
   events[cont].cashflow = aux[n-1].cashflow;
   events[cont].exposure = +adquisitionprice;
   cont++;
-  
+
   delete [] aux;
   return events;
 }

@@ -117,7 +117,7 @@ void TransitionMatrixTest::test1()
   double vmatrix[] = {
     0.80, 0.10, 0.07, 0.02, 0.01,
     0.05, 0.75, 0.10, 0.07, 0.03,
-    0.03, 0.07, 0.70, 0.14, 0.06, 
+    0.03, 0.07, 0.70, 0.14, 0.06,
     0.05, 0.05, 0.15, 0.60, 0.15,
     0.00, 0.00, 0.00, 0.00, 1.00
   };
@@ -127,10 +127,10 @@ void TransitionMatrixTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Ratings ratings = getRatings();
-  
-  // transition matrix creation 
+
+  // transition matrix creation
   TransitionMatrix *trm=NULL;
   ASSERT_NO_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
   double **matrix = trm->getMatrix();
@@ -151,7 +151,7 @@ void TransitionMatrixTest::test1()
   // testing function translate()
   TransitionMatrix *aux = translate(trm, 1.0);
   matrix = aux->getMatrix();
-  
+
   for(int i=0;i<5;i++)
   {
     for(int j=0;j<5;j++)
@@ -159,7 +159,7 @@ void TransitionMatrixTest::test1()
       ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
-  
+
   if (trm != NULL) delete trm;
   delete aux;
   delete wis;
@@ -206,13 +206,13 @@ void TransitionMatrixTest::test2()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Ratings ratings = getRatings();
-  
-  // transition matrix creation 
+
+  // transition matrix creation
   TransitionMatrix *trm;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
 }
@@ -257,13 +257,13 @@ void TransitionMatrixTest::test3()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Ratings ratings = getRatings();
-  
-  // transition matrix creation 
+
+  // transition matrix creation
   TransitionMatrix *trm;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
 }
@@ -308,13 +308,13 @@ void TransitionMatrixTest::test4()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // ratings list creation 
+  // ratings list creation
   Ratings ratings = getRatings();
-  
-  // transition matrix creation 
+
+  // transition matrix creation
   TransitionMatrix *trm;
   ASSERT_THROW(trm = new TransitionMatrix(&ratings, *(doc->getDocumentElement())));
-  
+
   delete wis;
   delete parser;
 }

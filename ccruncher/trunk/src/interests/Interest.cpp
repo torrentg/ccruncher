@@ -37,16 +37,16 @@
 // constructor privat
 //===========================================================================
 ccruncher::Interest::Interest()
-{  
+{
   // inicialitzem el vector de rates
   vrates = vector<Rate>();
-  
+
   // nom del Interest
   name = "UNDEFINED_INTEREST";
-    
+
   // establim la data de la corba
   fecha = Date(1,1,1900);
-}  
+}
 
 
 //===========================================================================
@@ -56,10 +56,10 @@ ccruncher::Interest::Interest(const string &str)
 {
   // inicialitzem el vector de rates
   vrates = vector<Rate>();
-  
+
   // nom del Interest
   name = str;
-}  
+}
 
 //===========================================================================
 // constructor
@@ -68,10 +68,10 @@ ccruncher::Interest::Interest(const DOMNode& node) throw(Exception)
 {
   // inicialitzem el vector de rates
   vrates = vector<Rate>();
-  
+
   // recollim els parametres de la simulacio
   parseDOMNode(node);
-  
+
   // ordenem vrates
   sort(vrates.begin(), vrates.end());
 }
@@ -164,7 +164,7 @@ double ccruncher::Interest::getUpdateCoef(Date &date1, Date &date2) throw(Except
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
-    
+
   double r1 = getValue(t1);
   double r2 = getValue(t2);
 
@@ -191,20 +191,20 @@ double ccruncher::Interest::getActualCoef(Date &date1, Date &date2) throw(Except
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
-    
+
   double r1 = getValue(t1);
   double r2 = getValue(t2);
 
   double x1 = actualCoef(r1,t1);
   double x2 = actualCoef(r2,t2);
-  
+
   return x2/x1;
 }
 
 //===========================================================================
 // insertRate
 //===========================================================================
-void ccruncher::Interest::insertRate(Rate &val) throw(Exception) 
+void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 {
   if (val.t < 0)
   {

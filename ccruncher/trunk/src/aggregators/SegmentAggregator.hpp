@@ -99,7 +99,7 @@ class SegmentAggregator
     // buffer size
     long K;
 
-    // num clients belonging this segment (components=client) or having an asset 
+    // num clients belonging this segment (components=client) or having an asset
     // belonging this segment (components=asset)
     long nclients;
     // num asset belonging this segment

@@ -64,7 +64,7 @@ void PowMatrixTest::tearDown()
 // test1. test standar pow matrix
 //
 // validated with Mathematica (Wolfram Research) using:
-//    A = {{1.0, 0.1, 0.3},{0.1, 1.0, 0.0},{0.3, 0.0, 1.0}} 
+//    A = {{1.0, 0.1, 0.3},{0.1, 1.0, 0.0},{0.3, 0.0, 1.0}}
 //    A // MatrixForm
 //        1.0, 0.1, 0.3,
 //        0.1, 1.0, 0.0,
@@ -91,17 +91,17 @@ void PowMatrixTest::test1()
 
   double **A = Utils::allocMatrix(3,3, valA);
   double **M = Utils::allocMatrix(3,3);
-  
+
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, 3, M));
 
-  for (int i=0;i<3;i++) 
+  for (int i=0;i<3;i++)
   {
-    for (int j=0;j<3;j++) 
+    for (int j=0;j<3;j++)
     {
       ASSERT_DOUBLES_EQUAL(solA[j+3*i], M[i][j], EPSILON);
     }
   }
-  
+
   Utils::deallocMatrix(A, 3);
   Utils::deallocMatrix(M, 3);
 }
@@ -112,12 +112,12 @@ void PowMatrixTest::test1()
 // validated with Mathematica (Wolfram Research) using:
 //    A = {{1.0, 0.1, 0.3},{0.1, 1.0, 0.0},{2.0, 0.2, 0.6}}
 //    A // MatrixForm
-//      A = 
+//      A =
 //        1.0, 0.1, 0.3,
 //        0.1, 1.0, 0.0,
 //        2.0, 0.2, 0.6
 //    MatrixPower[A, 0.2] // MatrixForm
-//      A^0.2 = 
+//      A^0.2 =
 //        +0.684587  +0.0164512 +0.206761
 //        +0.0479328 +0.999403  -0.0157408
 //        +1.36792   +0.0329025 +0.414152
@@ -142,14 +142,14 @@ void PowMatrixTest::test2()
 
   ASSERT_NO_THROW(PowMatrix::pow(B, 0.2, 3, M));
 
-  for (int i=0;i<3;i++) 
+  for (int i=0;i<3;i++)
   {
-    for (int j=0;j<3;j++) 
+    for (int j=0;j<3;j++)
     {
       ASSERT_DOUBLES_EQUAL(solB[j+3*i], M[i][j], EPSILON);
     }
-  }      
-  
+  }
+
   Utils::deallocMatrix(B, 3);
   Utils::deallocMatrix(M, 3);
 }
@@ -185,12 +185,12 @@ void PowMatrixTest::test4()
 {
   double x = 2.0;
   double y = 1.0/3.0;
-  
+
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, +3.0), +8.0, 1E-6);
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, +3.0), -8.0, 1E-6);
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, -3.0), +1.0/8.0, 1E-6);
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, -3.0), -1.0/8.0, 1E-6);
-  
+
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, +y), +1.25992115, 1E-6);
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, -y), +0.79370115, 1E-6);
   ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-x, +y), -1.25992115, 1E-6);

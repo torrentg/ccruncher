@@ -43,16 +43,16 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 {
   epsilon = -1.0;
   sectors = sectors_;
-  
+
   n = sectors->getSectors()->size();
-  
+
   if (n <= 0)
   {
     throw Exception("CorrelationMatrix::init(): invalid matrix range");
   }
 
   // inicialitzem la matriu
-  matrix = Utils::allocMatrix(n, n, NAN);  
+  matrix = Utils::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================
@@ -106,7 +106,7 @@ double ** ccruncher::CorrelationMatrix::getMatrix()
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = sectors->getIndex(sector1); 
+  int row = sectors->getIndex(sector1);
   int col = sectors->getIndex(sector2);
 
   // validem sectors entrats
@@ -116,7 +116,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
     msg += sector1;
     msg += " -> ";
     msg += sector2;
-    throw Exception(msg);    
+    throw Exception(msg);
   }
 
   // validem valor entrat
@@ -144,7 +144,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
 
   // inserim en la matriu de correlacions
   matrix[row][col] = value;
-  matrix[col][row] = value;  
+  matrix[col][row] = value;
 }
 
 
@@ -246,14 +246,14 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
       }
     }
   }
-  
+
   // comprovem que es tracta de una matriu definida positiva
   double **maux = Utils::allocMatrix(n, n, getMatrix());
   double *vaux = Utils::allocVector(n);
   bool ret = CholeskyDecomposition::choldc(maux, vaux, n);
   Utils::deallocVector(vaux);
   Utils::deallocMatrix(maux, n);
-  if (ret == false) 
+  if (ret == false)
   {
     throw Exception("CorrelationMatrix::validate(): matrix non definite prositive");
   }

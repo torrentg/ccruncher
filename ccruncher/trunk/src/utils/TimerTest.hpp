@@ -48,7 +48,7 @@ class TimerTest : public TestFixture<TimerTest>
 
   private:
 
-    void test1(void);  
+    void test1(void);
 
 
   public:

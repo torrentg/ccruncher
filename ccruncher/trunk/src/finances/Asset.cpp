@@ -37,7 +37,7 @@
 //===========================================================================
 ccruncher::Asset::Asset()
 {
-  vevents = NULL; 
+  vevents = NULL;
   nevents=0;
 }
 
@@ -46,7 +46,7 @@ ccruncher::Asset::Asset()
 //===========================================================================
 ccruncher::Asset::~Asset()
 {
-  if (vevents != NULL) delete [] vevents; 
+  if (vevents != NULL) delete [] vevents;
 }
 
 //===========================================================================
@@ -71,7 +71,7 @@ string ccruncher::Asset::getId(void)
 double ccruncher::Asset::getVCashFlow(Date date1, Date date2, DateValues *events, int n)
 {
   double ret = 0.0;
-  
+
   if (date2 < events[0].date)
   {
     return 0.0;
@@ -115,7 +115,7 @@ double ccruncher::Asset::getVExposure(Date date1, Date date2, DateValues *events
   {
     double val1 = events[n-1].date - date1;
     double val2 = date2 - date1;
-    
+
     return events[n-1].exposure * val1/val2;
   }
 
@@ -129,7 +129,7 @@ double ccruncher::Asset::getVExposure(Date date1, Date date2, DateValues *events
       double ey = events[i].exposure;
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
-      
+
       return ret;
     }
   }
@@ -160,15 +160,15 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, DateValues *ret)
 Asset* ccruncher::Asset::getInstanceByClassName(string classname) throw(Exception)
 {
   Asset *ret = NULL;
-  
-  if (classname == "bond") 
+
+  if (classname == "bond")
   {
     ret = new Bond();
   }
-  else 
+  else
   {
     throw Exception("Asset::getInstanceByClassName(): " + classname + " not registered");
-  }  
+  }
 
   // return object
   return ret;
@@ -191,7 +191,7 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
 
   // agafem la llista d'atributs
   DOMNamedNodeMap &attributes = *node.getAttributes();
-  string strid = XMLUtils::getStringAttribute(attributes, "id", "");  
+  string strid = XMLUtils::getStringAttribute(attributes, "id", "");
   string strclass = XMLUtils::getStringAttribute(attributes, "class", "");
 
   if (strid == "" || strclass == "")
@@ -200,7 +200,7 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
   }
 
   try
-  {  
+  {
     // creating instance by name
     ret = Asset::getInstanceByClassName(strclass);
 
@@ -224,18 +224,18 @@ Asset* ccruncher::Asset::parseDOMNode(const DOMNode& node, Segmentations *segs, 
         else if (XMLUtils::isNodeName(child, "belongs-to"))
         {
           DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-          string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");  
+          string sconcept = XMLUtils::getStringAttribute(tmpnodemap, "concept", "");
           string ssegment = XMLUtils::getStringAttribute(tmpnodemap, "segment", "");
 
           int iconcept = segs->getSegmentation(sconcept);
           int isegment = segs->getSegment(sconcept, ssegment);
-          
+
           ret->insertBelongsTo(iconcept, isegment);
         }
         else if (XMLUtils::isNodeName(child, "property"))
         {
           DOMNamedNodeMap &tmpnodemap = *child.getAttributes();
-          string name = XMLUtils::getStringAttribute(tmpnodemap, "name", "");  
+          string name = XMLUtils::getStringAttribute(tmpnodemap, "name", "");
           string value = XMLUtils::getStringAttribute(tmpnodemap, "value", "");
 
           ret->setProperty(name, value);
@@ -306,7 +306,7 @@ void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Excepti
   {
     throw Exception("Asset::insertBelongsTo(): trying to reinsert a concept defined");
   }
-  else if (iconcept >= 0 || isegment >= 0)  
+  else if (iconcept >= 0 || isegment >= 0)
   {
     belongsto[iconcept] = isegment;
   }

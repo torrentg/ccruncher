@@ -49,7 +49,7 @@ class CopulaNormalTest : public TestFixture<CopulaNormalTest>
   private:
 
     double pearsn(double *x, double *y, int n);
-    void testCopula(CopulaNormal &, double *, int n);    
+    void testCopula(CopulaNormal &, double *, int n);
 
     void test1();
     void test2();

@@ -124,7 +124,7 @@ void AssetTest::test1()
   ASSERT_NO_THROW(asset->setProperty("adquisitionprice", "995.0"));
 
   ASSERT_NO_THROW(asset->initialize());
-  
+
   makeAssertions(asset);
 
   delete asset;
@@ -147,7 +147,7 @@ void AssetTest::test2()
         <property name='adquisitiondate' value='1/6/2004'/>\n\
         <property name='adquisitionprice' value='995.0'/>\n\
       </asset>";
-      
+
   // creating xml
   DOMBuilder *parser = XMLUtils::getParser();
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
@@ -155,13 +155,13 @@ void AssetTest::test2()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  
+
   // asset object creation
   Asset *asset = NULL;
   ASSERT_NO_THROW(asset = Asset::parseDOMNode(*(doc->getDocumentElement()), &segs, NULL));
 
   makeAssertions(asset);
-  
+
   if (asset != NULL) delete asset;
   delete wis;
   delete parser;
@@ -171,24 +171,24 @@ void AssetTest::test2()
 // makeAssertions
 //===========================================================================
 void AssetTest::makeAssertions(Asset *asset)
-{  
+{
   ASSERT(asset->validate() == true);
-  
+
   DateValues *events = NULL;
   int size;
 
   ASSERT(asset->belongsTo(2, 1));
   ASSERT(asset->belongsTo(5, 1));
   ASSERT(asset->belongsTo(6, 2));
-  
+
   ASSERT_NO_THROW(events = asset->getEvents());
   ASSERT_NO_THROW(size = asset->getSize());
   ASSERT_EQUALS(6, size);
-  
+
   ASSERT(Date("01/06/2004") == events[0].date);
   ASSERT_DOUBLES_EQUAL(-995.0, events[0].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, events[0].exposure, EPSILON);
-  
+
   ASSERT(Date("01/01/2005") == events[1].date);
   ASSERT_DOUBLES_EQUAL(0.0, events[1].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, events[1].exposure, EPSILON);
@@ -208,7 +208,7 @@ void AssetTest::makeAssertions(Asset *asset)
   ASSERT(Date("01/01/2007") == events[5].date);
   ASSERT_DOUBLES_EQUAL(1020.0, events[5].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, events[5].exposure, EPSILON);
-  
+
   DateValues *vertexes = new DateValues[asset->getSize()];
   Date dates[] = { Date("1/1/2004"), Date("1/1/2006"), Date("1/8/2006"), Date("1/1/2010") };
   ASSERT_NO_THROW(asset->getVertexes(dates, 4, vertexes));
@@ -216,7 +216,7 @@ void AssetTest::makeAssertions(Asset *asset)
   ASSERT(Date("01/01/2004") == vertexes[0].date);
   ASSERT_DOUBLES_EQUAL(0.0, vertexes[0].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(0.0, vertexes[0].exposure, EPSILON);
-  
+
   ASSERT(Date("01/01/2006") == vertexes[1].date);
   ASSERT_DOUBLES_EQUAL(-955.0, vertexes[1].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(995.0, vertexes[1].exposure, EPSILON);

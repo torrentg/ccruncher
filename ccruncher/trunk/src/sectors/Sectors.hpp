@@ -52,21 +52,21 @@ class Sectors
   private:
 
     vector<Sector> vsectors;
-    
-    void parseDOMNode(const DOMNode&) throw(Exception);  
+
+    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertSector(Sector &) throw(Exception);
     void validations() throw(Exception);
 
 
   public:
-  
+
     Sectors();
     Sectors(const DOMNode &) throw(Exception);
     ~Sectors();
 
     vector<Sector> * getSectors();
     int getIndex(const string &);
-    
+
 };
 
 //---------------------------------------------------------------------------

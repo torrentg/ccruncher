@@ -106,7 +106,7 @@ class MonteCarlo
     string fpath;
     /* force file overwriting flag */
     bool bforce;
-    
+
     void reset();
     void alloc(int) throw(Exception);
     void release();

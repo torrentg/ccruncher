@@ -36,7 +36,7 @@
 // reset
 //===========================================================================
 void ccruncher::Aggregator::reset()
-{  
+{
   numsegments = 0L;
   saggregators = NULL;
   name = "";
@@ -44,7 +44,7 @@ void ccruncher::Aggregator::reset()
   components = asset;
   bvalues = true;
   bfull = false;
-}  
+}
 
 //===========================================================================
 // constructor privat
@@ -52,7 +52,7 @@ void ccruncher::Aggregator::reset()
 ccruncher::Aggregator::Aggregator()
 {
   reset();
-}  
+}
 
 //===========================================================================
 // constructor
@@ -89,7 +89,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
 {
   string stype;
   string sseg;
-  
+
   // validem el node passat com argument
   if (!XMLUtils::isNodeName(node, "aggregator"))
   {
@@ -99,7 +99,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
   }
 
   // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();  
+  DOMNamedNodeMap &attributes = *node.getAttributes();
   name = XMLUtils::getStringAttribute(attributes, "name", "");
   sseg = XMLUtils::getStringAttribute(attributes, "segmentation", "");
   stype = XMLUtils::getStringAttribute(attributes, "type", "");
@@ -109,7 +109,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
   if (name == "")
   {
     throw Exception("Aggregator::parseDOMNode(): invalid name attribute at <aggregator>");
-  } 
+  }
 
   // setting segmentation
   isegmentation = segs->getSegmentation(sseg);
@@ -132,7 +132,7 @@ void ccruncher::Aggregator::parseDOMNode(const DOMNode& node, Segmentations *seg
   {
     throw Exception("Aggregator::parseDOMNode(): type " + stype + " not allowed (try values or ratings)");
   }
-  
+
   // recorrem tots els items
   DOMNodeList &children = *node.getChildNodes();
 
@@ -201,7 +201,7 @@ bool ccruncher::Aggregator::getBFull() const
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::Aggregator::initialize(Segmentations *segmentations, Date *dates, int m, 
+void ccruncher::Aggregator::initialize(Segmentations *segmentations, Date *dates, int m,
   vector<Client *> *clients, long n, int indexdefault, Ratings *ratings) throw(Exception)
 {
   try
@@ -210,11 +210,11 @@ void ccruncher::Aggregator::initialize(Segmentations *segmentations, Date *dates
     numsegments = (segmentations->getSegmentations())[isegmentation].getSegments().size();
     saggregators = new SegmentAggregator[numsegments];
 
-    // initializing SegmentAggregator's  
+    // initializing SegmentAggregator's
     for(long i=0;i<numsegments;i++)
     {
       saggregators[i].define(isegmentation, i, components, bvalues, bfull);
-      saggregators[i].setNames(name, segmentations->getSegmentationName(isegmentation), 
+      saggregators[i].setNames(name, segmentations->getSegmentationName(isegmentation),
                                 segmentations->getSegmentName(isegmentation, i));
       saggregators[i].initialize(dates, m, clients, n, indexdefault, ratings);
     }
@@ -230,8 +230,8 @@ void ccruncher::Aggregator::initialize(Segmentations *segmentations, Date *dates
 //===========================================================================
 bool ccruncher::operator == (const Aggregator& a1, const Aggregator& a2)
 {
-  if ((a1.getISegmentation()==a2.getISegmentation()) && 
-      (a1.getBValues()==a2.getBValues()) && 
+  if ((a1.getISegmentation()==a2.getISegmentation()) &&
+      (a1.getBValues()==a2.getBValues()) &&
       (a1.getBFull()==a2.getBFull()))
   {
     return true;

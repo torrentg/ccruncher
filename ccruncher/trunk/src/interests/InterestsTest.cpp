@@ -100,15 +100,15 @@ void InterestsTest::test1()
 
   Interest iobj;
   ASSERT_NO_THROW(iobj = *(isobj->getInterest("discount")));
-  
+
   ASSERT("discount" == iobj.getName());
   ASSERT(Date("18/02/2003") == iobj.getFecha());
 
   Date date0 = Date("18/02/2003");
-  
+
   double vupdate[] = {
-    1.00000, 1.00278, 1.00651, 1.01073, 1.01464, 1.01840, 
-    1.02232, 1.02643, 1.03050, 1.03478, 1.03902, 1.04348, 
+    1.00000, 1.00278, 1.00651, 1.01073, 1.01464, 1.01840,
+    1.02232, 1.02643, 1.03050, 1.03478, 1.03902, 1.04348,
     1.04803, 1.05203, 1.05634, 1.06054, 1.06491, 1.06917,
     1.07361, 1.07808, 1.08243, 1.08697, 1.09139, 1.09599,
     1.10062};
@@ -119,7 +119,7 @@ void InterestsTest::test1()
     0.954167, 0.950539, 0.946663, 0.942916, 0.939046, 0.935303,
     0.931439, 0.927579, 0.923845, 0.919991, 0.916265, 0.912417,
     0.908578};
-    
+
   for (int i=0;i<25;i++)
   {
     Date aux = addMonths(date0, i);
@@ -127,9 +127,9 @@ void InterestsTest::test1()
     double val2 = iobj.getActualCoef(date0, aux);
     ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
     ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
-  }  
+  }
 
-  if (isobj != NULL) delete isobj;  
+  if (isobj != NULL) delete isobj;
   delete wis;
   delete parser;
   XMLUtils::terminate();

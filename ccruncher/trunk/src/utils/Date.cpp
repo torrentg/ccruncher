@@ -69,12 +69,12 @@ ccruncher::Date::Date(const string &str) throw(Exception)
 {
   vector<string> tokens;
   Utils::tokenize(str, tokens, "/");
-  
+
   if (tokens.size() != 3)
   {
     throw Exception("data::Date(str): num tokens distinct 3");
   }
- 
+
   try
   {
     day_ = (char) Parser::intValue(tokens[0]);
@@ -128,7 +128,7 @@ int ccruncher::Date::getYear() const
 void ccruncher::Date::setDay (const int day) throw(Exception)
 {
   Date::day_ = (char) day;
-  
+
   if (!valid())
   {
     throw Exception("Date::setDay(): invalid Date");
@@ -161,19 +161,19 @@ void ccruncher::Date::setYear (const int year) throw(Exception)
 int ccruncher::Date::getDayOfYear() const
 {
   int ret = 0;
-    
+
   for (int i=1;i<month_;i++)
   {
     ret += numDaysInMonth(i, getYear());
   }
-  
+
   return ret + (int) day_;
 }
 
 //===========================================================================
 // determina si l'any proporcionat es de traspas
 //===========================================================================
-bool ccruncher::Date::isLeapYear(int y) 
+bool ccruncher::Date::isLeapYear(int y)
 {
   if (y%4!=0 || y%100==0)
   {
@@ -188,7 +188,7 @@ bool ccruncher::Date::isLeapYear(int y)
 //===========================================================================
 // determina si l'any es de traspas
 //===========================================================================
-bool ccruncher::Date::isLeapYear() 
+bool ccruncher::Date::isLeapYear()
 {
   return isLeapYear(getYear());
 }
@@ -196,7 +196,7 @@ bool ccruncher::Date::isLeapYear()
 //===========================================================================
 // retorna el numero de dies de un any
 //===========================================================================
-int ccruncher::Date::numDaysInYear(int y) 
+int ccruncher::Date::numDaysInYear(int y)
 {
   if (isLeapYear(y))
   {
@@ -211,7 +211,7 @@ int ccruncher::Date::numDaysInYear(int y)
 //===========================================================================
 // retorna el numero de dies del any de la data
 //===========================================================================
-int ccruncher::Date::numDaysInYear() 
+int ccruncher::Date::numDaysInYear()
 {
   return numDaysInYear(getYear());
 }
@@ -219,7 +219,7 @@ int ccruncher::Date::numDaysInYear()
 //===========================================================================
 // retorna el numero de dies de un mes
 //===========================================================================
-int ccruncher::Date::numDaysInMonth(int m, int y) 
+int ccruncher::Date::numDaysInMonth(int m, int y)
 {
   if (m==4 || m==6 || m==9 || m==11)
   {
@@ -245,7 +245,7 @@ int ccruncher::Date::numDaysInMonth(int m, int y)
 //===========================================================================
 // retorna el numero de dies del mes de la data
 //===========================================================================
-int ccruncher::Date::numDaysInMonth() 
+int ccruncher::Date::numDaysInMonth()
 {
   return numDaysInMonth(getMonth(), getYear());
 }
@@ -253,7 +253,7 @@ int ccruncher::Date::numDaysInMonth()
 //===========================================================================
 // comprova si la data es valida
 //===========================================================================
-bool ccruncher::Date::valid(int d, int m, int y) 
+bool ccruncher::Date::valid(int d, int m, int y)
 {
   if (y<0)
   {
@@ -443,7 +443,7 @@ Date ccruncher::nextDate(const Date& d)
   }
   else
   {
-    return Date(1, 1, d.getYear()+1); 
+    return Date(1, 1, d.getYear()+1);
   }
 }
 
@@ -463,7 +463,7 @@ Date ccruncher::previousDate(const Date& d)
   }
   else
   {
-    return Date(31, 12, d.getYear()-1); 
+    return Date(31, 12, d.getYear()-1);
   }
 }
 
@@ -560,7 +560,7 @@ Date ccruncher::addMonths(const Date& inDate, const int& no_months)
   }
 
   int no_years = no_months/12;
-    
+
   if (no_years != 0)
   {
     d.setYear(inDate.getYear()+no_years);
@@ -631,7 +631,7 @@ string ccruncher::Date::toString() const
 int ccruncher::operator -(const Date &d1, const Date &d2)
 {
   int ret = 0;
-    
+
   if (d1 == d2)
   {
     return 0;
@@ -644,16 +644,16 @@ int ccruncher::operator -(const Date &d1, const Date &d2)
   if (d1.getYear() != d2.getYear())
   {
     ret += Date::numDaysInYear(d2.getYear()) - d2.getDayOfYear();
-    
+
     for (int i=d2.getYear()+1;i<d1.getYear();i++)
     {
       ret += Date::numDaysInYear(i);
     }
-    
+
     return ret + d1.getDayOfYear();
   }
   else
   {
     return d1.getDayOfYear() - d2.getDayOfYear();
-  }  
+  }
 }

@@ -48,7 +48,7 @@ class AssetTest : public TestFixture<AssetTest>
 {
 
   private:
-  
+
     Segmentations getSegmentations();
     void makeAssertions(Asset *asset);
 
@@ -66,7 +66,7 @@ class AssetTest : public TestFixture<AssetTest>
 
     void setUp();
     void tearDown();
-    
+
 };
 
 REGISTER_FIXTURE(AssetTest);

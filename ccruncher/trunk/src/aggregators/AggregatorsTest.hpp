@@ -47,12 +47,12 @@ class AggregatorsTest : public TestFixture<AggregatorsTest>
 {
 
   private:
-  
+
     Segmentations getSegmentations();
 
     void test1(void);
-  
-  
+
+
   public:
 
     TEST_FIXTURE(AggregatorsTest)

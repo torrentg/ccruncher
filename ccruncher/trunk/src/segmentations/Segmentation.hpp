@@ -63,7 +63,7 @@ class Segmentation
     vector<Segment> vsegments;
     bool modificable;
 
-    void parseDOMNode(const DOMNode&) throw(Exception);  
+    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertSegment(Segment &) throw(Exception);
 
 

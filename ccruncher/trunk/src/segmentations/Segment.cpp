@@ -69,7 +69,7 @@ void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
   }
 
   // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();  
+  DOMNamedNodeMap &attributes = *node.getAttributes();
   name = XMLUtils::getStringAttribute(attributes, "name", "");
 
   if (name == "")
@@ -92,8 +92,8 @@ void ccruncher::Segment::parseDOMNode(const DOMNode& node) throw(Exception)
       }
       else
       {
-      	string msg = "Segment::parseDOMNode(): invalid data structure at <segment>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "Segment::parseDOMNode(): invalid data structure at <segment>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }

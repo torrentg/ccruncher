@@ -58,11 +58,11 @@ void ccruncher::CopulaNormal::init()
 //===========================================================================
 void ccruncher::CopulaNormal::finalize()
 {
-  if (owner) 
+  if (owner)
   {
     Utils::deallocMatrix(sigmas, n);
   }
-  
+
   Utils::deallocVector(aux1);
   Utils::deallocVector(aux2);
 }
@@ -76,10 +76,10 @@ ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception)
   n = x.n;
   aux1 = Utils::allocVector(n);
   aux2 = Utils::allocVector(n);
-  
+
   // definim sigmas
   owner = false;
-  sigmas = x.sigmas;  
+  sigmas = x.sigmas;
   next();
 }
 
@@ -96,7 +96,7 @@ ccruncher::CopulaNormal::CopulaNormal(int n_, double **mcorrels) throw(Exception
     n = n_;
     aux1 = Utils::allocVector(n);
     aux2 = Utils::allocVector(n);
-    
+
     // omplim sigmas
     owner = true;
     sigmas = mcorrels;
@@ -157,7 +157,7 @@ void ccruncher::CopulaNormal::correls2sigmas(double **correlations) throw(Except
   {
     throw Exception("CopulaNormal::correls2sigmas(): correlation matrix not definite positive");
   }
-  else  
+  else
   {
     for(int i=0;i<n;i++)
     {

@@ -71,7 +71,7 @@ Sectors CorrelationMatrixTest::getSectors()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors ret = Sectors(*(doc->getDocumentElement()));
 
   delete wis;
@@ -100,9 +100,9 @@ void CorrelationMatrixTest::test1()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors = getSectors();
-  
+
   // correlation matrix creation
   CorrelationMatrix *crm = NULL;
   ASSERT_NO_THROW(crm = new CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
@@ -117,7 +117,7 @@ void CorrelationMatrixTest::test1()
       ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
     }
   }
-  
+
   if (crm != NULL) delete crm;
   delete wis;
   delete parser;
@@ -141,9 +141,9 @@ void CorrelationMatrixTest::test2()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors = getSectors();
-  
+
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 
@@ -168,9 +168,9 @@ void CorrelationMatrixTest::test3()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors = getSectors();
-  
+
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 
@@ -196,9 +196,9 @@ void CorrelationMatrixTest::test4()
   Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
   DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // sectors list creation 
+  // sectors list creation
   Sectors sectors = getSectors();
-  
+
   // correlation matrix creation
   ASSERT_THROW(CorrelationMatrix(&sectors, *(doc->getDocumentElement())));
 

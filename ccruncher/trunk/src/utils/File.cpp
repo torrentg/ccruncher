@@ -45,7 +45,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
   try
   {
     char *ret = getcwd(tempname, 1024);
-    
+
     if (ret != tempname)
     {
       throw Exception("File::getWorkDirectory(): unable to get work directory");
@@ -112,7 +112,7 @@ bool ccruncher::File::existDir(string dirname)
   // inicialitzem estat errors
   errno = 0;
 
-  // inicialitzem estat errors numerics 
+  // inicialitzem estat errors numerics
   tmp = opendir(dirname.c_str());
 
   if (tmp == NULL)
@@ -139,13 +139,13 @@ bool ccruncher::File::existDir(string dirname)
 void ccruncher::File::makeDir(string dirname) throw(Exception)
 {
   int aux;
-  
+
   // setting errno default
   errno = 0;
-  
+
   // creating directory
   aux = mkdir(dirname.c_str(), S_IRWXU|S_IRWXG|S_IRWXO);
-  
+
   // checking creation
   if (aux != 0)
   {

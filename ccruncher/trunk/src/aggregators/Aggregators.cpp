@@ -39,7 +39,7 @@ ccruncher::Aggregators::Aggregators(const DOMNode& node, Segmentations *segs) th
 {
   // recollim els parametres de la simulacio
   parseDOMNode(node, segs);
-  
+
   // making validations
   validate();
 }
@@ -55,7 +55,7 @@ ccruncher::Aggregators::~Aggregators()
 //===========================================================================
 // return interests list
 //===========================================================================
-vector<Aggregator> * ccruncher::Aggregators::getAggregators() 
+vector<Aggregator> * ccruncher::Aggregators::getAggregators()
 {
   return &vaggregators;
 }
@@ -69,7 +69,7 @@ void ccruncher::Aggregators::validate() throw(Exception)
   {
     throw Exception("Aggregators::validate(): non exist any aggregator");
   }
-  
+
   // checking for repetitions
   for(unsigned int i=0;i<vaggregators.size();i++)
   {
@@ -77,12 +77,12 @@ void ccruncher::Aggregators::validate() throw(Exception)
     {
       if (vaggregators[i].getName() == vaggregators[j].getName())
       {
-        throw Exception("Aggregators::validate(): aggregator name " + 
+        throw Exception("Aggregators::validate(): aggregator name " +
                          vaggregators[i].getName() + " repeated");
       }
       else if (vaggregators[i] == vaggregators[j])
       {
-        throw Exception("Aggregators::validate(): aggregators " + 
+        throw Exception("Aggregators::validate(): aggregators " +
                          vaggregators[i].getName() + " and " +
                          vaggregators[j].getName() + " are equals");
       }
@@ -90,14 +90,14 @@ void ccruncher::Aggregators::validate() throw(Exception)
       {
         // nothing to do
       }
-    }    
+    }
   }
 }
 
 //===========================================================================
 // insert a new interest in list
 //===========================================================================
-void ccruncher::Aggregators::insertAggregator(Aggregator &val) throw(Exception) 
+void ccruncher::Aggregators::insertAggregator(Aggregator &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vaggregators.size();i++)
@@ -106,7 +106,7 @@ void ccruncher::Aggregators::insertAggregator(Aggregator &val) throw(Exception)
     {
       string msg = "Aggregators::insertAggregator(): aggregator name ";
       msg += val.getName();
-      msg += " repeated";    	
+      msg += " repeated";
       throw Exception(msg);
     }
   }
@@ -122,7 +122,7 @@ void ccruncher::Aggregators::insertAggregator(Aggregator &val) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML 
+// interpreta un node XML
 //===========================================================================
 void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *segs) throw(Exception)
 {
@@ -163,7 +163,7 @@ void ccruncher::Aggregators::parseDOMNode(const DOMNode& node, Segmentations *se
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::Aggregators::initialize(Segmentations *segmentations, Date *dates, int m, 
+void ccruncher::Aggregators::initialize(Segmentations *segmentations, Date *dates, int m,
 vector<Client *> *clients, int n, int indexdefault, Ratings *ratings) throw(Exception)
 {
   for(unsigned int i=0;i<vaggregators.size();i++)

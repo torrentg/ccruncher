@@ -42,8 +42,8 @@ using namespace ccruncher;
 int ccruncher::Parser::intValue(const string &str) throw(Exception)
 {
   long aux = 0L;
-  
-  // parsejem el numero 
+
+  // parsejem el numero
   try
   {
     aux = Parser::longValue(str);
@@ -52,7 +52,7 @@ int ccruncher::Parser::intValue(const string &str) throw(Exception)
   {
     throw Exception("Parser::intValue(): invalid number");
   }
-  
+
   // comprovem si es tracta de un enter
   if (aux < INT_MIN || INT_MAX < aux)
   {
@@ -63,7 +63,7 @@ int ccruncher::Parser::intValue(const string &str) throw(Exception)
     return int(aux);
   }
 }
-    
+
 //===========================================================================
 // interpreta un long
 //===========================================================================
@@ -72,10 +72,10 @@ long ccruncher::Parser::longValue(const string &str) throw(Exception)
   char *pstr = NULL;
   const char *pnum = str.c_str();
 
-  // inicialitzem estat errors numerics 
+  // inicialitzem estat errors numerics
   errno = 0;
 
-  // parsejem el numero 
+  // parsejem el numero
   long ret = strtol(pnum, &pstr, 10); //atol(str.c_str());
 
   // comprovem si es tracta de un enter
@@ -96,13 +96,13 @@ double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 {
   char *pstr = NULL;
   const char *pnum = str.c_str();
-  
-  // inicialitzem estat errors numerics 
+
+  // inicialitzem estat errors numerics
   errno = 0;
-  
-  // parsejem el numero 
+
+  // parsejem el numero
   double ret = strtod(pnum, &pstr); //atof(str.c_str());
-  
+
   // comprovem si es tracta de un double
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
@@ -121,7 +121,7 @@ Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
 {
   // parsejem la data
   Date ret = Date(str);
-  
+
   // sortim
   return ret;
 }
@@ -145,7 +145,7 @@ string ccruncher::Parser::long2string(const long val)
   oss << val;
   return oss.str();
 }
-    
+
 //===========================================================================
 // double2string
 //===========================================================================

@@ -86,15 +86,15 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
   {
     int n = x.dim1();
     Array2D<double> Id = Array2D<double>(n, n, 0.0);
-    
-    for(int i=0;i<n;i++) 
+
+    for(int i=0;i<n;i++)
     {
       Id[i][i] = 1.0;
     }
 
     LU<double> lu = LU<double>(x);
 
-    return lu.solve(Id);  
+    return lu.solve(Id);
   }
   catch(std::exception &e)
   {
@@ -116,7 +116,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   try
   {
     // vector auxiliar
-    TNT::Array1D<double> V = TNT::Array1D<double>(n);    
+    TNT::Array1D<double> V = TNT::Array1D<double>(n);
     // declarem la matriu
     TNT::Array2D<double> M = TNT::Array2D<double>(n, n);
     // VAPS
@@ -133,27 +133,27 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
       }
     }
 
-    // diagonalitzacio de la matriu (obtencio de VAPS i VEPS)  
+    // diagonalitzacio de la matriu (obtencio de VAPS i VEPS)
     JAMA::Eigenvalue<double> eigen = JAMA::Eigenvalue<double>(M);
 
     // comprovem que no existeix part imaginaria
     eigen.getImagEigenvalues(V);
     double sum = 0.0;
-    for(int i=0;i<n;i++) 
+    for(int i=0;i<n;i++)
     {
       sum += fabs(V[i]);
     }
-    if (sum >= EPSILON) 
+    if (sum >= EPSILON)
     {
       throw Exception("PowMatrix::pow(): imag eigenvalues");
     }
 
     // recollim els VAPS i VEPS
-    eigen.getD(VAPS);    
+    eigen.getD(VAPS);
     eigen.getV(VEPS);
 
     // elevem la diagonal a x
-    for(int i=0;i<n;i++) 
+    for(int i=0;i<n;i++)
     {
        if (VAPS[i][i] < EPSILON)
        {
@@ -173,23 +173,23 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
 
     // recollim i sortim
     for(int i=0;i<n;i++)
-    { 
+    {
       for(int j=0;j<n;j++)
       {
         ret[i][j] = K[i][j];
       }
-    }          
+    }
   }
   catch(Exception &e)
   {
     throw e;
-  }    
+  }
   catch(std::exception &e)
   {
     throw Exception(e, "PowMatrix::pow(): unable to pow matrix");
-  }    
+  }
   catch(...)
   {
     throw Exception("PowMatrix::pow(): unable to pow matrix");
-  }    
+  }
 }

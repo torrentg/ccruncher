@@ -46,9 +46,9 @@ namespace ccruncher {
 
 class Sector
 {
-	
+
   private:
- 
+
     void init();
     void parseDOMNode(const DOMNode&) throw(Exception);
 
@@ -58,10 +58,10 @@ class Sector
     int order;
     string name;
     string desc;
-      
+
     Sector();
     Sector(const DOMNode &) throw(Exception);
-    
+
 };
 
 //---------------------------------------------------------------------------

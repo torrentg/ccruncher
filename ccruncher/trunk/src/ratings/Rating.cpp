@@ -55,7 +55,7 @@ ccruncher::Rating::Rating(const DOMNode& node) throw(Exception)
 {
   // inicialitzem les variables de la classe
   init();
-  
+
   // recollim els parametres de la simulacio
   parseDOMNode(node);
 }
@@ -82,7 +82,7 @@ void ccruncher::Rating::parseDOMNode(const DOMNode& node) throw(Exception)
   }
 
   // agafem els atributs del node
-  DOMNamedNodeMap &attributes = *node.getAttributes();  
+  DOMNamedNodeMap &attributes = *node.getAttributes();
   order = XMLUtils::getIntAttribute(attributes, "order", -1);
   name = XMLUtils::getStringAttribute(attributes, "name", "");
   desc = XMLUtils::getStringAttribute(attributes, "desc", "_UNDEF_");
@@ -107,8 +107,8 @@ void ccruncher::Rating::parseDOMNode(const DOMNode& node) throw(Exception)
       }
       else
       {
-      	string msg = "Rating::parseDOMNode(): invalid data structure at <rating>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "Rating::parseDOMNode(): invalid data structure at <rating>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }

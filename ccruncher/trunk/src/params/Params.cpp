@@ -75,14 +75,14 @@ ccruncher::Params::~Params()
 Date * ccruncher::Params::getDates() throw(Exception)
 {
   validate();
-  
+
   Date *ret = new Date[steps+1];
-  
+
   for (int i=0;i<=steps;i++)
   {
     ret[i] = addMonths(begindate, i*steplength);
   }
-  
+
   return ret;
 }
 
@@ -118,8 +118,8 @@ void ccruncher::Params::parseDOMNode(const DOMNode& node) throw(Exception)
       }
       else
       {
-      	string msg = "Params::parseDOMNode(): invalid data structure at <params>: ";
-      	msg += XMLUtils::XMLCh2String(child.getNodeName());
+        string msg = "Params::parseDOMNode(): invalid data structure at <params>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
         throw Exception(msg);
       }
     }
@@ -134,7 +134,7 @@ void ccruncher::Params::parseProperty(const DOMNode& node) throw(Exception)
   // agafem la llista d'atributs
   DOMNamedNodeMap &attributes = *node.getAttributes();
   string name = XMLUtils::getStringAttribute(attributes, "name", "");
-  
+
   if (name == "time.begindate")
   {
     Date aux = XMLUtils::getDateAttribute(attributes, "value", Date(1,1,1900));

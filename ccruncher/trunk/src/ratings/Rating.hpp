@@ -46,9 +46,9 @@ namespace ccruncher {
 
 class Rating
 {
-	
+
   private:
- 
+
     void init();
     void parseDOMNode(const DOMNode&) throw(Exception);
 

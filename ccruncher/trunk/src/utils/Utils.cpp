@@ -37,16 +37,16 @@
 double * ccruncher::Utils::allocVector(int n, double val) throw(Exception)
 {
   double *ret = NULL;
- 
+
   try
   {
     ret = new double[n];
-    
+
     for (int i=0;i<n;i++)
     {
       ret[i] = val;
     }
-    
+
     return ret;
   }
   catch(std::exception &e)
@@ -61,12 +61,12 @@ double * ccruncher::Utils::allocVector(int n, double val) throw(Exception)
 double * ccruncher::Utils::allocVector(int n, double *x) throw(Exception)
 {
   double *ret = allocVector(n);
- 
+
   for (int i=0;i<n;i++)
   {
     ret[i] = x[i];
   }
-  
+
   return ret;
 }
 
@@ -79,8 +79,8 @@ double ** ccruncher::Utils::allocMatrix(int n, int m, double val) throw(Exceptio
 
   try
   {
-    ret = new double *[n];  
-  
+    ret = new double *[n];
+
     for(int i=0;i<n;i++)
     {
       ret[i] = NULL;
@@ -90,7 +90,7 @@ double ** ccruncher::Utils::allocMatrix(int n, int m, double val) throw(Exceptio
   {
     throw Exception(e, "Utils::allocMatrix(): not enougth space");
   }
-  
+
   try
   {
     for(int i=0;i<n;i++)
@@ -131,7 +131,7 @@ double ** ccruncher::Utils::allocMatrix(int n, int m, double *x) throw(Exception
 }
 
 //===========================================================================
-// allocMatrix and initializes with x content 
+// allocMatrix and initializes with x content
 //===========================================================================
 double ** ccruncher::Utils::allocMatrix(int n, int m, double **x) throw(Exception)
 {
@@ -204,7 +204,7 @@ void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const
 //===========================================================================
 // trim
 //===========================================================================
-string ccruncher::Utils::rtrim(string s) 
+string ccruncher::Utils::rtrim(string s)
 {
   string::size_type pos = s.find_last_not_of(" \t\n");
   return s.substr( 0, pos+1 );
@@ -213,7 +213,7 @@ string ccruncher::Utils::rtrim(string s)
 //===========================================================================
 // trim
 //===========================================================================
-string ccruncher::Utils::ltrim(string s) 
+string ccruncher::Utils::ltrim(string s)
 {
   string::size_type pos = s.find_first_not_of(" \t\n");
   return s.substr( pos, s.size()-pos );
@@ -222,7 +222,7 @@ string ccruncher::Utils::ltrim(string s)
 //===========================================================================
 // trim
 //===========================================================================
-string ccruncher::Utils::trim(string s) 
+string ccruncher::Utils::trim(string s)
 {
   string::size_type lpos = s.find_first_not_of(" \t\n");
   string::size_type rpos = s.find_last_not_of(" \t\n");

@@ -49,20 +49,20 @@ class Utils
 {
 
   public:
-  
+
     static double * allocVector(int n, double x = NAN) throw(Exception);
     static double * allocVector(int n, double *x) throw(Exception);
     static void deallocVector(double *x);
-  
+
     static double ** allocMatrix(int n, int m, double x = NAN) throw(Exception);
     static double ** allocMatrix(int n, int m, double *x) throw(Exception);
     static double ** allocMatrix(int n, int m, double **x) throw(Exception);
     static void deallocMatrix(double **x, int n);
 
     static void prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret);
-    static void copyVector(double *x, int n, double *ret);  
+    static void copyVector(double *x, int n, double *ret);
     static void copyMatrix(double **x, int n, int m, double **ret);
-    static void initVector(double *x, int n, double val);  
+    static void initVector(double *x, int n, double val);
     static void initMatrix(double **x, int n, int m, double val);
 
     static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
