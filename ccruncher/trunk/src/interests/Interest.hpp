@@ -55,8 +55,6 @@ class Interest : public ExpatHandlers
 
   private:
 
-    static const double EPSILON=1e-7;
-
     string name;
     Date fecha;
     vector<Rate> vrates;

@@ -36,6 +36,10 @@
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 
+// --------------------------------------------------------------------------
+
+#define EPSILON 1e-7
+
 //===========================================================================
 // constructor privat
 //===========================================================================
@@ -208,7 +212,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
   {
     Rate aux = vrates[i];
 
-    if (fabs(aux.t-val.t) < Interest::EPSILON)
+    if (fabs(aux.t-val.t) < EPSILON)
     {
       string msg = "Interest::insertRate(): time ";
       msg += Parser::double2string(val.t);
