@@ -97,13 +97,13 @@ class Date
 //---------------------------------------------------------------------------
 
 // calculations
-Date ccruncher::nextDate(const Date&);
+Date nextDate(const Date&);
 // calculations
-Date ccruncher::previousDate(const Date&);
+Date previousDate(const Date&);
 // increment n number of months
-Date ccruncher::addMonths(const Date& d, const int& no_months);
+Date addMonths(const Date& d, const int& no_months);
 // increment 1 month
-Date ccruncher::nextMonth(const Date& d);
+Date nextMonth(const Date& d);
 // increment n number of days
 Date operator +=(Date&, const int&);
 // decrement n number of days
