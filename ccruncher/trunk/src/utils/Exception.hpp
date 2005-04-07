@@ -53,9 +53,9 @@ class Exception : public std::exception
 
   public:
 
-    Exception(const std::string);
+    Exception(const std::string&);
     Exception(const std::exception &);
-    Exception(const std::exception &, const std::string);
+    Exception(const std::exception &, const std::string&);
 
     ~Exception() throw ();
 

@@ -32,7 +32,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const string str)
+ccruncher::Exception::Exception(const string &str)
 {
    msg = str;
 }
@@ -48,7 +48,7 @@ ccruncher::Exception::Exception(const std::exception &e)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const std::exception &e, const string str)
+ccruncher::Exception::Exception(const std::exception &e, const string &str)
 {
    msg = e.what();
    msg += "\n";
