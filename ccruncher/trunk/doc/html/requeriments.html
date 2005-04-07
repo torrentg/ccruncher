@@ -46,50 +46,22 @@
         </ul>
       </div>
     </div>
+    <div style="text-align:center;">
+      <a href="http://sourceforge.net/projects/ccruncher/">
+        <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+          width="88" height="31" border="0" alt="SourceForge.net Logo" />
+      </a>
+    </div>
   </div>
 
   <div id="bodyColumn">
     <div class="contentBox">
       <div class="section">
         <a name="Overview" id="Overview"></a>
-        <h2>Hardware Recomendations</h2>
-        <p style="text-align:justify;">
-          En función del problema a resolver, CreditCruncher puede llegar a 
-          realizar muchas operaciones en coma flotante, usar una cantidad 
-          importante de memoria y crear ficheros de resultados de tamaño 
-          elevado. Por este motivo recomendamos la siguiente configuración
-          mínima:
-        </p>
-        <table>
-          <tr>
-            <td width="75px"><b>CPU</b></td>
-            <td>Pentium IV 2400</td>
-          </tr>
-          <tr>
-            <td><b>RAM</b></td>
-            <td>512 Mb</td>
-          </tr>
-          <tr>
-            <td><b>Hard disk</b></td>
-            <td>
-              10 Gb free
-            </td>
-          </tr>
-        </table>
-        <p style="text-align:justify;">
-          Esto no significa que la aplicación no funcione en máquinas que no 
-          cumplan los requerimientos de hardware mínimo recomendados. Estos
-          pueden ser relajados si se pretende resolver problemas de tamaño
-          pequeño o para máquinas que formen parte de un cluster (el tamaño
-          de disco de los nodos esclavos puede ser reducido a algunos megas).
-        </p>        
-      </div>
-
-      <div class="section">
-        <a name="Overview" id="Overview"></a>
         <h2>System Requeriments</h2>
         <p style="text-align:justify;">
-          En este apartado se listan los sistemas de referencia:
+          List of environements where is expected that a CreditCruncher 
+          installation works without problems:
         </p>
         <table>
           <tr>
@@ -122,7 +94,7 @@
             <td>-</td>
             <td>-</td>
             <td>NO</td>
-            <td>xercesc supported</td>
+            <td>expat supported</td>
           </tr>
           <tr>
             <td>AIX</td>
@@ -130,7 +102,7 @@
             <td>-</td>
             <td>-</td>
             <td>NO</td>
-            <td>xercesc supported</td>
+            <td>expat supported</td>
           </tr>
           <tr>
             <td>solaris</td>
@@ -138,7 +110,7 @@
             <td>-</td>
             <td>-</td>
             <td>NO</td>
-            <td>xercesc supported</td>
+            <td>expat supported</td>
           </tr>
           <tr>
             <td>hp ux</td>
@@ -146,22 +118,25 @@
             <td>-</td>
             <td>-</td>
             <td>NO</td>
-            <td>xercesc supported</td>
+            <td>expat supported</td>
           </tr>
         </table>
         <p style="text-align:justify;">
-          Si realiza una instalación en un sistema no testeado
-          por favor, no dude en informar para actualizar este apartado.
+          If you make a instalation in a system not tested or listed, please, 
+          report it, explaining problems found, modifications realized, etc.
         </p>
       </div>
 
       <div class="section">
         <a name="Overview" id="Overview"></a>
-        <h2>Xercesc libraries</h2>
+        <h2>Expat library</h2>
         <p style="text-align:justify;">
-          CreditCruncher usa xercesc para realizar la interpretación del fichero
-          de definición del problema. Instale las librerias dinámicas de xercesc
-          según lo indicado en el site.
+          CreditCruncher use expat for xml input file parsing. Expat is linked
+          statically. If you take binary installation you don't need install 
+          expat library. Otherwhise, you need install the expat package from 
+          <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>, 
+          that include the libexpat.a and expat.h files. These elements are needed
+          at compilation time.
         </p>
       </div>
 
@@ -169,9 +144,9 @@
         <a name="Overview" id="Overview"></a>
         <h2>lam-mpi environement</h2>
         <p style="text-align:justify;">
-          Lea detenidamente este apartado si desea ejecutar la aplicación en 
-          un cluster. En caso contrario o si no sabe de que se le está hablando
-          ignore este apartado.
+          If you plan to deploy CreditCruncher in a cluster (to take advantage 
+          of parallelization capabilities) you need an LAM/MPI installation. 
+          Otherwise, forget this section and LAM/MPI.
         </p>
       </div>
 
