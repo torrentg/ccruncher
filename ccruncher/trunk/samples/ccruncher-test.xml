@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- <!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.2.dtd"> -->
+<!-- 
+<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.2.dtd"> 
+<!DOCTYPE creditcruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
+          "http://www.generacio.com/ccruncher/creditcruncher-0.2.dtd">
+-->
 
 <creditcruncher>
 
@@ -165,39 +169,8 @@
           <values at="01/01/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" />
           <values at="01/06/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" />
         </data>
-        <!--covenant/-->
-      </asset>
-<!--
-      <asset class="bond" id="op2"> 
-        <belongs-to concept="office" segment="0004"/>
-        <belongs-to concept="product" segment="bond"/>
-        <property name="issuedate" value="1/1/2000"/>
-        <property name="term" value="120"/>
-        <property name="nominal" value="1500.0"/>
-        <property name="rate" value="0.07"/>
-        <property name="ncoupons" value="20"/>
-        <property name="adquisitiondate" value="1/1/2003"/>
-        <property name="adquisitionprice" value="1500.0"/>
-      </asset>
--->
-    </client>
-<!--
-    <client rating="B" sector="S2" name="ATT" id="000002">
-      <belongs-to concept="sector" segment="S2"/>
-      <belongs-to concept="size" segment="big"/>
-      <asset class="bond" id="op3"> 
-        <belongs-to concept="office" segment="0003"/>
-        <belongs-to concept="product" segment="bond"/>
-        <property name="issuedate" value="1/1/2000"/>
-        <property name="term" value="120"/>
-        <property name="nominal" value="1500.0"/>
-        <property name="rate" value="0.07"/>
-        <property name="ncoupons" value="5"/>
-        <property name="adquisitiondate" value="1/1/2003"/>
-        <property name="adquisitionprice" value="1500.0"/>
       </asset>
     </client>
--->
   </portfolio>
 
 </creditcruncher>
