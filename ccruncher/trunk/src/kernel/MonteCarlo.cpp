@@ -500,6 +500,12 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
 //===========================================================================
 void ccruncher::MonteCarlo::initDataOutput(const IData *idata) throw(Exception)
 {
+  // init only if spath is set
+  if (fpath == "") 
+  {
+    return;
+  }
+
   // setting logger header
   Logger::trace("initializing data output", '-');
   Logger::newIndentLevel();
@@ -531,6 +537,9 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 {
   bool moreiterations = true;
   Timer sw1, sw2;
+
+  // assertions
+  assert(fpath != "");
 
   // setting logger header
   Logger::addBlankLine();

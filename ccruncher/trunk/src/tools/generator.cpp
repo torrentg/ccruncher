@@ -36,6 +36,7 @@
 //
 //===========================================================================
 
+#include "utils/config.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -214,7 +215,7 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   IData idata = IData(filename);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
-  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.1.dtd'>\n";
+  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.2.dtd'>\n";
   cout << "<creditcruncher>\n";
   cout << idata.params->getXML(2);
   cout << idata.interests->getXML(2);
@@ -320,7 +321,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
 //===========================================================================
 void version()
 {
-  cout << "generator-0.1" << endl;
+  cout << "generator-" << VERSION << endl;
 }
 
 //===========================================================================

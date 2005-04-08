@@ -27,6 +27,7 @@
 //
 //===========================================================================
 
+#include "utils/config.h"
 #include <cstdlib>
 #include <cerrno>
 #include <string>
@@ -239,7 +240,7 @@ void run(string filename) throw(Exception)
 //===========================================================================
 void version()
 {
-  cout << "cc2gpi-0.1" << endl;
+  cout << "cc2gpi-" << VERSION << endl;
 }
 
 //===========================================================================

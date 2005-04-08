@@ -33,6 +33,7 @@
 //
 //===========================================================================
 
+#include "utils/config.h"
 #include <sys/resource.h>
 #include <cerrno>
 #include <iostream>
@@ -180,6 +181,14 @@ int main(int argc, char *argv[])
     sfilename = string(argv[argc-1]);
   }
 
+  // checking arguments consistency
+  if (spath == "" && bsimulate == true)
+  {
+    cerr << "--path is a required argument" << endl;
+    cerr << "use --help option for more information" << endl;
+    return 1;  
+  }
+
   // license info
   copyright();
 
@@ -279,7 +288,7 @@ void setnice(int niceval) throw(Exception)
 //===========================================================================
 void version()
 {
-  cout << "ccruncher-0.1" << endl;
+  cout << "ccruncher-" << VERSION << endl;
 }
 
 //===========================================================================
