@@ -32,7 +32,7 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
+#include "utils/config.h"
 #include <string>
 #include <ctime>
 

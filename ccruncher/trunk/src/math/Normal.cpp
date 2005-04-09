@@ -30,7 +30,7 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
-#include "Normal.hpp"
+#include "math/Normal.hpp"
 
 //---------------------------------------------------------------------------
 

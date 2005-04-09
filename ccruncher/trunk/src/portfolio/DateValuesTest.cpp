@@ -28,8 +28,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "DateValuesTest.hpp"
-#include "DateValues.hpp"
+#include "portfolio/DateValuesTest.hpp"
+#include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------

@@ -31,7 +31,7 @@
 //===========================================================================
 
 #include <cfloat>
-#include "TransitionMatrix.hpp"
+#include "transitions/TransitionMatrix.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 #include "math/PowMatrix.hpp"

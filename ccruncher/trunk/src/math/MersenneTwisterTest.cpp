@@ -32,9 +32,9 @@
 
 #include <iostream>
 #include <string>
-#include "Normal.hpp"
-#include "MersenneTwister.h"
-#include "MersenneTwisterTest.hpp"
+#include "math/Normal.hpp"
+#include <MersenneTwister.h>
+#include "math/MersenneTwisterTest.hpp"
 
 //---------------------------------------------------------------------------
 

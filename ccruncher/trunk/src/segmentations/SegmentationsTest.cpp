@@ -34,10 +34,10 @@
 //===========================================================================
 
 #include <iostream>
-#include "Segment.hpp"
-#include "Segmentation.hpp"
-#include "Segmentations.hpp"
-#include "SegmentationsTest.hpp"
+#include "segmentations/Segment.hpp"
+#include "segmentations/Segmentation.hpp"
+#include "segmentations/Segmentations.hpp"
+#include "segmentations/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------

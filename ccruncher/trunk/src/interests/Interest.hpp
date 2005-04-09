@@ -40,7 +40,7 @@
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
-#include "Rate.hpp"
+#include "interests/Rate.hpp"
 
 //---------------------------------------------------------------------------
 

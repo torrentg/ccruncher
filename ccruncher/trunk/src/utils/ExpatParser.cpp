@@ -31,8 +31,8 @@
 #include <cstring>
 #include <map>
 #include <cstdio>
-#include "ExpatParser.hpp"
-#include "ExpatUserData.hpp"
+#include "utils/ExpatParser.hpp"
+#include "utils/ExpatUserData.hpp"
 
 // --------------------------------------------------------------------------
 

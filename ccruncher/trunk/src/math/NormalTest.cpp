@@ -33,8 +33,8 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "Normal.hpp"
-#include "NormalTest.hpp"
+#include "math/Normal.hpp"
+#include "math/NormalTest.hpp"
 
 //---------------------------------------------------------------------------
 

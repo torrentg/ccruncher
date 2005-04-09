@@ -41,8 +41,8 @@
 #include "utils/config.h"
 #include <map>
 #include <algorithm>
-#include "Asset.hpp"
-#include "DateValues.hpp"
+#include "portfolio/Asset.hpp"
+#include "portfolio/DateValues.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"

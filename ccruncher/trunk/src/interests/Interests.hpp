@@ -42,7 +42,7 @@
 #include <algorithm>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "Interest.hpp"
+#include "interests/Interest.hpp"
 
 //---------------------------------------------------------------------------
 

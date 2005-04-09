@@ -30,7 +30,7 @@
 //
 //===========================================================================
 
-#include "Rating.hpp"
+#include "ratings/Rating.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

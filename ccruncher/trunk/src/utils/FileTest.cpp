@@ -32,9 +32,9 @@
 
 #include <iostream>
 #include <string>
-#include "File.hpp"
-#include "FileTest.hpp"
-#include "Exception.hpp"
+#include "utils/File.hpp"
+#include "utils/FileTest.hpp"
+#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp

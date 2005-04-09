@@ -32,11 +32,11 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
+#include "utils/config.h"
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Exception.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 

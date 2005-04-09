@@ -44,7 +44,7 @@
 #include "segmentations/Segmentations.hpp"
 #include "ratings/Ratings.hpp"
 #include "portfolio/Client.hpp"
-#include "SegmentAggregator.hpp"
+#include "aggregators/SegmentAggregator.hpp"
 
 //---------------------------------------------------------------------------
 

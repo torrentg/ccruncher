@@ -32,8 +32,8 @@
 
 #include <iostream>
 #include <cmath>
-#include "Timer.hpp"
-#include "TimerTest.hpp"
+#include "utils/Timer.hpp"
+#include "utils/TimerTest.hpp"
 
 //---------------------------------------------------------------------------
 

@@ -35,9 +35,9 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
+#include "utils/config.h"
 #include <MiniCppUnit.hxx>
-#include "Exception.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 

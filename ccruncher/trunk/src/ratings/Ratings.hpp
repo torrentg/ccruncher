@@ -40,7 +40,7 @@
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "Rating.hpp"
+#include "ratings/Rating.hpp"
 
 //---------------------------------------------------------------------------
 

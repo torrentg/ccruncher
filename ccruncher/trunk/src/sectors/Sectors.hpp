@@ -39,7 +39,7 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "Sector.hpp"
+#include "sectors/Sector.hpp"
 
 //---------------------------------------------------------------------------
 

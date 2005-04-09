@@ -38,8 +38,8 @@
 
 #include <iostream>
 #include <algorithm>
-#include "Asset.hpp"
-#include "AssetTest.hpp"
+#include "portfolio/Asset.hpp"
+#include "portfolio/AssetTest.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatParser.hpp"
 

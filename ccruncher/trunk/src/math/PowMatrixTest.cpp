@@ -38,8 +38,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "PowMatrix.hpp"
-#include "PowMatrixTest.hpp"
+#include "math/PowMatrix.hpp"
+#include "math/PowMatrixTest.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Exception.hpp"
 

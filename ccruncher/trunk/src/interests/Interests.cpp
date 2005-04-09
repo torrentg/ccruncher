@@ -32,7 +32,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "Interests.hpp"
+#include "interests/Interests.hpp"
 #include "utils/Utils.hpp"
 
 //===========================================================================

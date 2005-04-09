@@ -33,7 +33,7 @@
 #include <cmath>
 #include <cassert>
 #include <algorithm>
-#include "Portfolio.hpp"
+#include "portfolio/Portfolio.hpp"
 
 //===========================================================================
 // constructor

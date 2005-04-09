@@ -32,9 +32,10 @@
 
 //---------------------------------------------------------------------------
 
-#include "ExpatUserData.hpp"
-#include "Exception.hpp"
-#include "Date.hpp"
+#include "utils/config.h"
+#include "utils/ExpatUserData.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 

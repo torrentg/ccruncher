@@ -38,8 +38,8 @@
 #include <cerrno>
 #include <iostream>
 #include <getopt.h>
-#include "MonteCarlo.hpp"
-#include "IData.hpp"
+#include "kernel/MonteCarlo.hpp"
+#include "kernel/IData.hpp"
 #include "utils/File.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"

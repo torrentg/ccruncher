@@ -36,7 +36,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "IData.hpp"
+#include "kernel/IData.hpp"
 #include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"
 #include "transitions/TransitionMatrix.hpp"

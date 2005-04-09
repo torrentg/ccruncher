@@ -34,9 +34,9 @@
 //===========================================================================
 
 #include <iostream>
-#include "Aggregator.hpp"
-#include "Aggregators.hpp"
-#include "AggregatorsTest.hpp"
+#include "aggregators/Aggregator.hpp"
+#include "aggregators/Aggregators.hpp"
+#include "aggregators/AggregatorsTest.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 

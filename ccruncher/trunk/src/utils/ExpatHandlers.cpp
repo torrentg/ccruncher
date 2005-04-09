@@ -30,9 +30,9 @@
 #include <cstdio>
 #include <cassert>
 #include <cstring>
-#include "expat.h"
-#include "ExpatHandlers.hpp"
-#include "Parser.hpp"
+#include <expat.h>
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Parser.hpp"
 
 //===========================================================================
 // destructor

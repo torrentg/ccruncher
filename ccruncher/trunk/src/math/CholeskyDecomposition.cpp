@@ -29,7 +29,7 @@
 
 #include <cmath>
 #include <iostream>
-#include "CholeskyDecomposition.hpp"
+#include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
 // implements cholesky decomposition matrix

@@ -32,9 +32,9 @@
 
 #include <iostream>
 #include <string>
-#include "Date.hpp"
-#include "DateTest.hpp"
-#include "Exception.hpp"
+#include "utils/Date.hpp"
+#include "utils/DateTest.hpp"
+#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp

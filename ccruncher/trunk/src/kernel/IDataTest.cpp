@@ -37,8 +37,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "IData.hpp"
-#include "IDataTest.hpp"
+#include "kernel/IData.hpp"
+#include "kernel/IDataTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================

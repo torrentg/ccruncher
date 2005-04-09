@@ -34,8 +34,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "TransitionMatrix.hpp"
-#include "TransitionMatrixTest.hpp"
+#include "transitions/TransitionMatrix.hpp"
+#include "transitions/TransitionMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------

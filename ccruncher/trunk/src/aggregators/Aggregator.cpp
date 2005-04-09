@@ -33,7 +33,7 @@
 #include <cmath>
 #include <cassert>
 #include <algorithm>
-#include "Aggregator.hpp"
+#include "aggregators/Aggregator.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

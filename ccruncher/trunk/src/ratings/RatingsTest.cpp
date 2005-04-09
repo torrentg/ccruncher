@@ -34,8 +34,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "Ratings.hpp"
-#include "RatingsTest.hpp"
+#include "ratings/Ratings.hpp"
+#include "ratings/RatingsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================

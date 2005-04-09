@@ -36,7 +36,7 @@
 #include <climits>
 #include <iostream>
 #include <sstream>
-#include "Parser.hpp"
+#include "utils/Parser.hpp"
 
 using namespace ccruncher;
 

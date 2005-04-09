@@ -47,7 +47,7 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "DateValues.hpp"
+#include "portfolio/DateValues.hpp"
 
 //---------------------------------------------------------------------------
 

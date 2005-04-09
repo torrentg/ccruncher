@@ -44,7 +44,7 @@
 #include "ratings/Ratings.hpp"
 #include "interests/Interests.hpp"
 #include "portfolio/Client.hpp"
-#include "Aggregator.hpp"
+#include "aggregators/Aggregator.hpp"
 
 //---------------------------------------------------------------------------
 

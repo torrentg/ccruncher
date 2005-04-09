@@ -32,8 +32,8 @@
 
 #include <iostream>
 #include <cmath>
-#include "CholeskyDecomposition.hpp"
-#include "CholeskyDecompositionTest.hpp"
+#include "math/CholeskyDecomposition.hpp"
+#include "math/CholeskyDecompositionTest.hpp"
 #include "utils/Utils.hpp"
 
 //---------------------------------------------------------------------------

@@ -36,7 +36,7 @@
 #include <cmath>
 #include <cassert>
 #include <algorithm>
-#include "Asset.hpp"
+#include "portfolio/Asset.hpp"
 
 //===========================================================================
 // constructor (don't use it)

@@ -32,7 +32,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "Segmentation.hpp"
+#include "segmentations/Segmentation.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 

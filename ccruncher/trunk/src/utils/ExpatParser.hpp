@@ -32,11 +32,11 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
-#include "expat.h"
+#include "utils/config.h"
+#include <expat.h>
 #include <iostream>
-#include "ExpatHandlers.hpp"
-#include "Exception.hpp"
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 

@@ -35,10 +35,10 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
+#include "utils/config.h"
 #include <string>
-#include "Exception.hpp"
-#include "Date.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 

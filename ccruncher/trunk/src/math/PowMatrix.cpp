@@ -28,9 +28,9 @@
 //===========================================================================
 
 #include <cmath>
-#include "jama_eig.h"
-#include "jama_lu.h"
-#include "PowMatrix.hpp"
+#include <jama_eig.h>
+#include <jama_lu.h>
+#include "math/PowMatrix.hpp"
 
 //---------------------------------------------------------------------------
 

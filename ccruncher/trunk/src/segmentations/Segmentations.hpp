@@ -39,7 +39,7 @@
 #include <algorithm>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "Segmentation.hpp"
+#include "segmentations/Segmentation.hpp"
 
 //---------------------------------------------------------------------------
 

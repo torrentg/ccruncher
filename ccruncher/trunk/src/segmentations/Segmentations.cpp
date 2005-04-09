@@ -32,7 +32,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "Segmentations.hpp"
+#include "segmentations/Segmentations.hpp"
 #include "utils/Utils.hpp"
 
 //===========================================================================

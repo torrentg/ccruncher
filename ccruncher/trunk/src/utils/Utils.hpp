@@ -36,11 +36,11 @@
 
 //---------------------------------------------------------------------------
 
-#include "config.h"
+#include "utils/config.h"
 #include <cmath>
 #include <string>
 #include <vector>
-#include "Exception.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 

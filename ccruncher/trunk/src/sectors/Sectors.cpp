@@ -32,7 +32,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "Sectors.hpp"
+#include "sectors/Sectors.hpp"
 #include "utils/Utils.hpp"
 
 //===========================================================================

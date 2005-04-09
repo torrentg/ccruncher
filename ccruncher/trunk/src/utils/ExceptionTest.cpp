@@ -31,8 +31,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "Exception.hpp"
-#include "ExceptionTest.hpp"
+#include "utils/Exception.hpp"
+#include "utils/ExceptionTest.hpp"
 
 //===========================================================================
 // setUp

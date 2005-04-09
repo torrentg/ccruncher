@@ -28,7 +28,7 @@
 //===========================================================================
 
 #include <cassert>
-#include "ExpatUserData.hpp"
+#include "utils/ExpatUserData.hpp"
 
 //===========================================================================
 // void constructor (don't use)

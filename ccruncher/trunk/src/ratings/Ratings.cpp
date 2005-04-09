@@ -32,7 +32,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "Ratings.hpp"
+#include "ratings/Ratings.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

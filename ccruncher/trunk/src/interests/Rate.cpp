@@ -30,7 +30,7 @@
 //
 //===========================================================================
 
-#include "Rate.hpp"
+#include "interests/Rate.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

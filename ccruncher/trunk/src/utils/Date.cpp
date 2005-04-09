@@ -30,9 +30,9 @@
 #include <vector>
 #include <ctime>
 #include <cstdio>
-#include "Date.hpp"
-#include "Utils.hpp"
-#include "Parser.hpp"
+#include "utils/Date.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 
 //===========================================================================
 // constructor

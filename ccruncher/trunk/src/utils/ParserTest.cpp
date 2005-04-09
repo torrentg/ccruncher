@@ -33,8 +33,8 @@
 #include <iostream>
 #include <string>
 #include <climits>
-#include "Parser.hpp"
-#include "ParserTest.hpp"
+#include "utils/Parser.hpp"
+#include "utils/ParserTest.hpp"
 
 //---------------------------------------------------------------------------
 

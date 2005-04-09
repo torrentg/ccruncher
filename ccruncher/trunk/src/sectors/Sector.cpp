@@ -30,7 +30,7 @@
 //
 //===========================================================================
 
-#include "Sector.hpp"
+#include "sectors/Sector.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

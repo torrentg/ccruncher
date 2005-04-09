@@ -28,8 +28,8 @@
 //===========================================================================
 
 #include <cassert>
-#include "Logger.hpp"
-#include "Utils.hpp"
+#include "utils/Logger.hpp"
+#include "utils/Utils.hpp"
 
 // --------------------------------------------------------------------------
 

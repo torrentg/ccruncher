@@ -40,7 +40,7 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
-#include "IData.hpp"
+#include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Timer.hpp"

@@ -32,7 +32,7 @@
 
 #include <cfloat>
 #include <cassert>
-#include "MonteCarlo.hpp"
+#include "kernel/MonteCarlo.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"

@@ -34,7 +34,7 @@
 #include <cassert>
 #include <unistd.h>
 #include <algorithm>
-#include "SegmentAggregator.hpp"
+#include "aggregators/SegmentAggregator.hpp"
 
 //===========================================================================
 // void constructor

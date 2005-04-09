@@ -30,7 +30,7 @@
 //
 //===========================================================================
 
-#include "Params.hpp"
+#include "params/Params.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 

@@ -36,7 +36,7 @@
 #include <cmath>
 #include <algorithm>
 #include <cassert>
-#include "Client.hpp"
+#include "portfolio/Client.hpp"
 
 //---------------------------------------------------------------------------
 

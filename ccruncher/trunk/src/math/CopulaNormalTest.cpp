@@ -32,9 +32,9 @@
 
 #include <iostream>
 #include <cmath>
-#include "CopulaNormal.hpp"
-#include "CopulaNormalTest.hpp"
-#include "Normal.hpp"
+#include "math/CopulaNormal.hpp"
+#include "math/CopulaNormalTest.hpp"
+#include "math/Normal.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Exception.hpp"
 

@@ -31,8 +31,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "Segmentation.hpp"
-#include "SegmentationTest.hpp"
+#include "segmentations/Segmentation.hpp"
+#include "segmentations/SegmentationTest.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 

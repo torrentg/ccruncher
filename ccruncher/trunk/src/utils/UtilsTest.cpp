@@ -32,8 +32,8 @@
 
 #include <iostream>
 #include <string>
-#include "Utils.hpp"
-#include "UtilsTest.hpp"
+#include "utils/Utils.hpp"
+#include "utils/UtilsTest.hpp"
 
 //---------------------------------------------------------------------------
 

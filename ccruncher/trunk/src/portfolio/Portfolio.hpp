@@ -44,7 +44,7 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "Client.hpp"
+#include "portfolio/Client.hpp"
 
 //---------------------------------------------------------------------------
 

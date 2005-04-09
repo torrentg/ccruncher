@@ -33,7 +33,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "Copula.hpp"
+#include "math/Copula.hpp"
 #include <MersenneTwister.h>
 #include "utils/Exception.hpp"
 

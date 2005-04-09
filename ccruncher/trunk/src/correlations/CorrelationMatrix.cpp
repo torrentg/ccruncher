@@ -31,7 +31,7 @@
 //===========================================================================
 
 #include <cfloat>
-#include "CorrelationMatrix.hpp"
+#include "correlations/CorrelationMatrix.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
 #include "math/CholeskyDecomposition.hpp"

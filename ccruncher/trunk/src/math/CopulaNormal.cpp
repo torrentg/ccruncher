@@ -31,9 +31,9 @@
 #include <ctime>
 #include <cfloat>
 #include <cstdlib>
-#include "Normal.hpp"
-#include "CopulaNormal.hpp"
-#include "CholeskyDecomposition.hpp"
+#include "math/Normal.hpp"
+#include "math/CopulaNormal.hpp"
+#include "math/CholeskyDecomposition.hpp"
 #include "utils/Utils.hpp"
 
 //---------------------------------------------------------------------------

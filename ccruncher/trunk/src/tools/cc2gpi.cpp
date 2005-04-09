@@ -36,7 +36,7 @@
 #include <iostream>
 #include <algorithm>
 #include <getopt.h>
-#include "FileResults.hpp"
+#include "tools/FileResults.hpp"
 #include "utils/File.hpp"
 
 //---------------------------------------------------------------------------

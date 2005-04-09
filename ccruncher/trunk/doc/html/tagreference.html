@@ -64,7 +64,24 @@
           In the distribution package you can find the 
           <a href="creditcruncher-0.2.dtd">DTD</a> and some 
           <a href="sample1-0.2.xml">XML</a> samples into the directory 
-          $CCRUNCHER/samples.
+          $CCRUNCHER/samples. The main XML file structure is like this:
+        </p>
+
+        <div class="source">
+          <pre>
+
+  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+  &lt;creditcruncher&gt;
+
+    <i>&lt;!-- put sections (see below) here --&gt;</i>
+
+  &lt;/creditcruncher&gt;
+          </pre>
+        </div>
+          
+        <p style="text-align:justify;">
+          where encoding attribute can be one of these 
+          values: UTF-8, UTF-16, ISO-8859-1, US-ASCII
         </p>
       </div>
 
