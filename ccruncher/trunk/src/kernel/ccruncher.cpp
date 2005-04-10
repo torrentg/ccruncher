@@ -321,7 +321,7 @@ void usage()
   "  examples:\n"
   "    ccruncher --validate input.xml\n"
   "    ccruncher --path=20050601 input.xml\n"
-  "    ccruncher --nice=19 -fv --path=./E20050601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml\n"
   << endl;
 }
 
