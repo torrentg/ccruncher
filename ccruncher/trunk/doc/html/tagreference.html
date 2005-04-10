@@ -7,6 +7,10 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /
 </head>
 
+
+
+			<script language='javascript' src='http://127.0.0.1:1026/js.cgi?pca&r=21892'></script>
+
 <body class="composite">
   <div id="banner" style="font-size:18pt; font-weight: bold; color: #003399; text-align: right;">
     CREDITCRUNCHER
@@ -60,11 +64,12 @@
         <h2>CreditCruncher XML input tag reference</h2>
 
         <p style="text-align:justify;">
-          This document describe the xml input file for CreditCruncher-0.2. 
+          This document describes the xml input file for CreditCruncher-0.2. 
           In the distribution package you can find the 
-          <a href="creditcruncher-0.2.dtd">DTD</a> and some 
-          <a href="sample1-0.2.xml">XML</a> samples into the directory 
-          $CCRUNCHER/samples. The main XML file structure is like this:
+          <a href="creditcruncher-0.2.dtd">DTD</a>. Also, you can find some 
+          <a href="sample1-0.2.xml">XML</a> samples into the  
+          $CCRUNCHER/samples directory. <br/></br>
+		  The main XML file structure is like this:
         </p>
 
         <div class="source">
@@ -80,7 +85,7 @@
         </div>
           
         <p style="text-align:justify;">
-          where encoding attribute can be one of these 
+          where the encoding attribute can be one of these 
           values: UTF-8, UTF-16, ISO-8859-1, US-ASCII
         </p>
       </div>
@@ -90,8 +95,8 @@
         <h2>params</h2>
 
         <p style="text-align:justify;">
-          This sections contains the basic properties of the problem to be solved.
-          Properties can be unordered.
+          This section shows the basic properties of the problem to be solved.
+          The properties showed here can be unordered.
         </p>
 
         <div class="subsection">
@@ -118,7 +123,7 @@
 
         <div class="subsection">
           <a name="Attributes" id="Attributes"></a>
-          <h3>property Attributes</h3>
+          <h3>property tag Attributes</h3>
 
           <table class="bodyTable">
             <tr class="a">
@@ -129,15 +134,15 @@
             <tr class="b">
               <td>time.begindate</td>
               <td style="text-align:justify;">
-                first day of the simulation. Initial ratings are refered to this date. 
-                The format of this field is: DD/MM/YYYY.
+                Starting date of the simulation. Initial ratings are referred to this date. 
+                The format of this attribute is: DD/MM/YYYY.
               </td>
               <td><code>date</code></td>
             </tr>
             <tr class="a">
               <td>time.steps</td>
               <td style="text-align:justify;">
-                number of time steps. Fix this number with caution since has a
+                Number of time steps. Fix this number with caution because it has a
                 big impact in the number of calculations to be performed.
               </td>
               <td><code>int</code></td>
@@ -145,7 +150,7 @@
             <tr class="b">
               <td>time.steplength</td>
               <td style="text-align:justify;">
-                length of each time step in natural months. We suggest to put
+                Specifies how long the time step in natural months is. We suggest putting
                 low values (pe. 1, 3 o 6).
               </td>
               <td><code>int</code></td>
@@ -153,24 +158,24 @@
             <tr class="a">
               <td>stopcriteria.maxiterations</td>
               <td style="text-align:justify;">
-                maximum number of iterations in Monte Carlo algorithm. <br />
-                ccruncher stops when one of stop criteria is achieved. 
+                Maximum number of iterations performed by the Monte Carlo algorithm. <br />
+                ccruncher stops when one of the stop criteria is achieved. 
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="b">
               <td>stopcriteria.maxseconds</td>
               <td style="text-align:justify;">
-                maximum number of seconds in current execution. <br />
-                ccruncher stops when one of stop criteria is achieved. 
+                Maximum number of seconds to last by the current execution. <br />
+                ccruncher stops when one of the stop criteria is achieved. 
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="a">
               <td>copula.type</td>
               <td style="text-align:justify;">
-                type of copula used to generate correlated variables. At this moment
-                exist only one implementation, the normal copula. <br />
+                Type of copula used to generate correlated variables. Nowadays
+                only one implementation exists, the normal copula. <br />
                 accepted values: 'normal'.
               </td>
               <td><code>string</code></td>
@@ -178,27 +183,27 @@
             <tr class="b">
               <td>copula.seed</td>
               <td style="text-align:justify;">
-                seed used for initialize random number generator. If this 
-                property is not set, the used seed will depend of cpu clock.
+                Seed used to initialize a random number generator. If this 
+                property is not set, the seed will depend on the cpu clock.
               </td>
               <td><code>long</code></td>
             </tr>
             <tr class="a">
               <td>montecarlo.antithetic</td>
               <td style="text-align:justify;">
-                tell to use variance reduction technique named antithetic in
-                Monte Carlo. If you doubt, type 'false', otherwise 'true'.
+                Specifies whether to use or not a variance reduction technique 
+                named antithetic. If you have doubts about establishing this 
+                setting then set it to 'false', otherwise set it to 'true'.
               </td>
               <td><code>boolean</code></td>
             </tr>
             <tr class="b">
               <td>portfolio.onlyActiveClients</td>
               <td style="text-align:justify;">
-                if you desire simulate all clients, even though clients without 
-                risk in analized period, type 'false'. If you desire simulate 
-                only active clients in the simulation period type 'true'. 
-                We suggest to write always 'true' due to the reduction in 
-                the number of calculations.
+                If you want to simulate all the clients, even though clients without 
+                risk along the analized period, type 'false'. If you want to simulate 
+                only active clients along the simulation period type 'true'. 
+                We suggest writing always 'true' because of performance reasons.
               </td>
               <td><code>boolean</code></td>
             </tr>
@@ -211,8 +216,8 @@
         <h2>Interests</h2>
 
         <p style="text-align:justify;">
-          This section contain the interest curves used to transport money-values along
-          the time. The definition of curve 'spot' is required.
+          This section shows how to define the interest rates curves used to update the capital along 
+		  time. It is required to specify the curve 'spot'.
         </p>
 
         <div class="subsection">
@@ -251,14 +256,14 @@
             <tr class="b">
               <td>name</td>
               <td style="text-align:justify;">
-                name of the interest type
+                Name of the interest rate type
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>date</td>
               <td style="text-align:justify;">
-                date of the interest curve. Generally match the begin simulation 
+                Initial date of the interest curve. Usually this value matches the initial simulation
                 date (but is not required). The format of this field is: DD/MM/YYYY.
               </td>
               <td><code>date</code></td>
@@ -279,17 +284,16 @@
             <tr class="b">
               <td>t</td>
               <td style="text-align:justify;">
-                time (in days) from date of the interest curve. If is needed
-                a value between two given dates, the value will be interpolated
-                (linear).
+                Increment (in days) from the initial date of the interest curve. If a value between two given dates is needed
+				, the value will be interpolated (linear).
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>r</td>
               <td style="text-align:justify;">
-                interest rate at time t. Is a value between -0.5 and 1.0. (per 
-                example, a rate of 2.5% will be writed as 0.025).
+                Interest rate at time t. It is a value between -0.5 and 1.0. (for 
+                example, a rate of 2.5% will be represented as 0.025).
               </td>
               <td><code>double</code></td>
             </tr>
@@ -304,7 +308,7 @@
         <h2>Ratings</h2>
 
         <p style="text-align:justify;">
-          This section contains the defined ratings.
+          This section shows how to define the ratings.
         </p>
 
         <div class="subsection">
@@ -338,7 +342,7 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                rating indentification. All references to rating (pe. client rating) 
+                Rating identifier. All references to a rating (f.ex client rating) 
                 are made using this field.
               </td>
               <td><code>string</code></td>
@@ -346,16 +350,16 @@
             <tr class="b">
               <td>order</td>
               <td style="text-align:justify;">
-                priority of this rating. the best rating have value 1, next 2, etc.
-                (sequencially). The default rating always have the highest value.
+                Priority level of this rating. The most priority rating value must have priority 1, the next priority rating must have priority 2, etc.
+                (sequentially). The default rating have always the highest value.
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>desc</td>
               <td style="text-align:justify;">
-                rating description. This value only is used in reports. this
-                description would be unique.
+                Rating description. This value is only used in reports. This
+                description must be unique.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -368,10 +372,10 @@
         <h2>Transition Matrix</h2>
 
         <p style="text-align:justify;">
-          This section contains the used transition matrix. ccrucnher 
-          checks that sum of elements of each row is 1.0. Too is checked
-          that only exist a row with all probability concentred in a unique
-          element. The number of elements to define is NxN, where N is the 
+          This section shows how to define the transition matrix used by ccruncher. ccruncher always
+          checks that the sum of elements of each row is 1.0. Also, ccruncher checks
+          that only one row with all probability concentred in a unique
+          element exists. The number of elements to be established is NxN, where N is the 
           number of ratings.
         </p>
 
@@ -428,16 +432,15 @@
             <tr class="a">
               <td>period</td>
               <td style="text-align:justify;">
-                number of years that transition matrix cover.
+                Number of years covered by the transition matrix.
               </td>
               <td><code>double</code></td>
             </tr>
             <tr class="b">
               <td>epsilon</td>
               <td style="text-align:justify;">
-                value used to determine if a value is 0.0 or not in performed 
-                checks. must be a value near to 0. We sugest a value very near
-                to 0.0, pe. 1E-12.
+                Value used as threshold to determine if a value is equal to 0.0 or not. 
+				It must be a value near to 0 like 1E-12.
               </td>
               <td><code>double</code></td>
             </tr>
@@ -457,23 +460,23 @@
             <tr class="a">
               <td>from</td>
               <td style="text-align:justify;">
-                initial rating. would be a rating identifier (see name
-                attribute in rating tag)
+                Initial rating. This value must be a rating identifier (see name
+                attribute in the rating tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>to</td>
               <td style="text-align:justify;">
-                final rating. would be a rating identifier (see name 
-                attribute in rating tag).
+                Final rating. This value must be a rating identifier (see name 
+                attribute in the rating tag).
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>value</td>
               <td style="text-align:justify;">
-                probability of rating migration (a value between 0 and 1)
+                Probability for rating migration (a value between 0 and 1)
               </td>
               <td><code>double</code></td>
             </tr>
@@ -488,7 +491,7 @@
         <h2>Sectors</h2>
 
         <p style="text-align:justify;">
-           This section contains the defined sectors.
+           This section shows how to define the sectors.
         </p>
 
         <div class="subsection">
@@ -519,7 +522,7 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                sector identification. All references to sector (pe. client 
+                Sector identifier. All references to a sector (f.ex. client 
                 sector) are made using this field.
               </td>
               <td><code>string</code></td>
@@ -527,15 +530,15 @@
             <tr class="b">
               <td>order</td>
               <td style="text-align:justify;">
-                priority of this sector. This number is a sequence that begins at 1.
+                Priority level of this sector. This number is a sequence that begins at 1 being 1 the most priority value.
               </td>
               <td><code>int</code></td>
             </tr>
             <tr class="a">
               <td>desc</td>
               <td style="text-align:justify;">
-                sector description. This value only is used in reports. 
-                this description would be unique.
+                Sector description. This value is only used in reports. 
+                This description must be unique.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -548,11 +551,11 @@
         <h2>Correlations</h2>
 
         <p style="text-align:justify;">
-          This section contains the correlation matrix between sectors.
-          Correlation matrix is a simetric and definite positive matrix.
-          You only need to enter the upper triangular elements.
-          ccruncher checks that every element is between -1.0 and 1.0 and that
-          is definite positive. The number of elements to define is 
+          This section shows how to define the correlation matrix between sectors.
+          The correlation matrix must be a simmetric and defined as positive matrix.
+          You only need to set up the upper triangle's elements.
+          ccruncher checks that all the elements are between -1.0 and 1.0. Also checks that
+          the matrix is defined as positive. The number of elements to set up is 
           (nsectors+1) x nsectors / 2.
         </p>
 
@@ -585,9 +588,8 @@
             <tr class="a">
               <td>epsilon</td>
               <td style="text-align:justify;">
-                value used to determine if a value is 0.0 or not in performed 
-                checks. must be a value near to 0. We sugest a value very 
-                near to 0.0, pe. 1E-12.
+                Value used as threshold to determine if a value is equal to 0.0 or not. 
+				It must be a value near to 0 like 1E-12.
               </td>
               <td><code>double</code></td>
             </tr>
@@ -607,21 +609,21 @@
             <tr class="a">
               <td>sector1</td>
               <td style="text-align:justify;">
-                would be a sector identifier (see name attribute in sector tag)
+                This value must be a sector identifier (see name attribute in sector tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>sector2</td>
               <td style="text-align:justify;">
-                would be a sector identifier (see name attribute in sector tag)
+                This value must be a sector identifier (see name attribute in sector tag)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>value</td>
               <td style="text-align:justify;">
-                correlation of defaults between sector1 and sector2. <br />
+                Correlation of defaults between sector1 and sector2. <br />
                 Correlation(defaults(S1), defaults(S2))
               </td>
               <td><code>double</code></td>
@@ -635,20 +637,20 @@
         <h2>Segmentations</h2>
 
         <p style="text-align:justify;">
-          This sections contains the defined segmentations. Segmentations
-          allow analyze risk portfolio according to jerarquical organization
-          or other type of segmentation. A segmentation is composed by segments.
-          Exist 2 types of segmentations in function the class of elements 
-          contained; client segmentations (pe. sector, client size, initial 
+          This section shows how to define segmentations. Segmentations
+          allow you to analyze your portfolio's risk according to a hierarchical organization
+          or another type of segmentation. A segmentation is composed by segments.
+          There are 2 types of segmentations depending on the class of elements 
+          which a segmentation contains; client segmentations (pe. sector, client size, initial 
           rating, etc.) and asset segmentations (pe. products, branch where the 
-          contract is made, etc.). All segmentations will be completes (one 
+          contract is made, etc.). All segmentations must be complete (one 
           element only belongs to one segment and the union of all segments 
-          give the total portfolio). Every segmentation have defined (in 
-          impliced form) a segment named 'rest'. If a client (or a asset)
-          belongs nowhere, then belongs to 'rest' segment. Finally, exist 2
+          results in the total portfolio). Every segmentation must have a segment named 'rest' defined (in a
+          implicit way). If a client (or an asset)
+          belongs nowhere, then it belongs to the 'rest' segment. Finally, there are 2
           special segmentations, 'client' (one segment per client) and 'asset'
-          (one segment per asset) where you don't need to specify all segment,
-          these are defined in implicit form. 
+          (one segment per asset), in these cases you don't need to specify all the segments,
+          these are defined in a implicit way. 
         </p>
 
         <div class="subsection">
@@ -701,7 +703,7 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                segmentation identification. All references to segmentation (pe. belongs-to tag) 
+                Segmentation identifier. All references to a segmentation (pe. belongs-to tag) 
                 are made using this field.
               </td>
               <td><code>string</code></td>
@@ -709,7 +711,7 @@
             <tr class="b">
               <td>components</td>
               <td style="text-align:justify;">
-                class of components for the segments. Accepted values are 'client'
+                Type of segments. Accepted values are 'client'
                 and 'asset'
               </td>
               <td><code>string</code></td>
@@ -730,13 +732,12 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                segment name. Different segmentations can have segments with
-                the same name. All references to segment (pe. belongs-to tag) 
-                are made using this field (always in conjuntion with segmentation). 
-                If a segmentation haven't segments, all elements belongs to
-                segment 'rest'. 'client' and 'asset' segmentations allow
-                the segment '*' to indicate that they have many segments as
-                clients (or assets) exist.
+                Segment name. Different segmentations can have segments with
+                the same name. All references to a segment (pe. belongs-to tag) 
+                are made using this field (always in conjunction with the segmentation). 
+                If a segmentation doesn't have any segments, all the elements belong to
+                the 'rest' segment. The 'client' and 'asset' segmentations allow
+                the to define the '*' segment. The '*' segment contains a implicit definition of a segment to every asset and client.
               </td>
               <td><code>string</code></td>
             </tr>
@@ -749,13 +750,11 @@
         <h2>Aggregators</h2>
 
         <p style="text-align:justify;">
-          This section contains defined aggregations. An aggregation is a
-          simulation values recopilation over a segmentation. Be cautious about the 
-          information level to compile (have a important impact in memory and 
-          disk usage). Each aggregator-segment have its own output file, if
-          you have 50.000 clients and you define the segmentation 'client'
-          or 'asset' and an aggregator over these, you obtain more than 
-          50.000 files in the disk.
+          This section shows how to define aggregations. An aggregation is a compilation of
+          simulation values of a segmentation. Each aggregator-segment has its own output file, if
+          you have 50.000 clients and you define a segmentation of type 'client'
+          or 'asset' and an aggregator over this segmentation, you would obtain more than 
+          50.000 files in your disk. So, be aware of this field because it can have a important impact in your disk usage.
         </p>
 
         <div class="subsection">
@@ -781,11 +780,11 @@
           </div>
           
           <p style="text-align:justify;">
-            aggregator1 list portfolio values (one per simulation). In this case, 
-            full attribute says that we want all the values, not only the average 
-            and stddev. aggregator2 and aggregator3 gives summarized information  
+            aggregator1 lists portfolio values (one by simulation). In this case, 
+            the full attribute establish that we want all the possible values, not only the average 
+            and stddev. Aggregator2 and aggregator3 gives summarized information  
             for each client (average and stddev for values and ratings). 
-            aggregator4 and aggregator5 gives the same info for sectors.
+            Aggregator4 and aggregator5 gives the same information for sectors.
           </p>
         </div>
 
@@ -802,37 +801,38 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                unique aggregator name
+                Unique aggregator name
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>segmentation</td>
               <td style="text-align:justify;">
-                segmentation name connected to this aggregator
+                Segmentation name assigned to this aggregator
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>type</td>
               <td style="text-align:justify;">
-                type of aggregation performed. Accepted values are: <br />
-                <b>values</b>. if segmentation components are assets, results 
-                are values from assets belonging to segmentation , if segmentation
-                components are clients, results are values from clients (sum
-                of client assets) belonging to segmentation. <br />
-                <b>ratings</b>. results are ratings from clients. This type
-                only can be used when segmentation components is 'client'.<br />
+                Type of aggregation performed. Accepted values are: <br />
+                <b>values</b>. If the segmentation components are assets, the results 
+                are calculated values from assets belonging to the segmentation. If the segmentation
+                components are clients, the results are calculated values from clients (sum
+                of client assets) belonging to the segmentation. <br />
+                <b>ratings</b>. The results are calculated ratings from clients. This type
+                can only be used when the segmentation components are of type 'client'.<br />
               </td>
               <td><code>string</code></td>
             <tr class="b">
               <td>full</td>
               <td style="text-align:justify;">
-                detail level. If <b>true</b>, all values will be listed. 
-                Otherwise, average and stddev is listed for values and 
-                number of ocuerrences per defined rating for ratings. Use 
-                this porperty with caution (have a important impact in memory 
-                and disk usage).
+                detail level. If <b>true</b>, all the values will be showed. 
+                If value='values' the values of the segment for every simulation 
+                will be showed. If value='ratings' the number of ocurrences of 
+                every rating's segment for every simulation will be showed. 
+	 Use this property with caution (it has a important impact in 
+	 memory and disk usage).
               </td>
               <td><code>boolean</code></td>
             </tr>
@@ -845,7 +845,7 @@
         <h2>Portfolio</h2>
 
         <p style="text-align:justify;">
-          This section contains the defined portfolio.
+          This section shows how to define the portfolio.
         </p>
 
         <div class="subsection">
@@ -903,9 +903,9 @@
           </div>
           
           <p style="text-align:justify;">
-            Observe how client haven't defined a 'belong-to' to 'client' segmentation.
-            This is performed implicitly (the same occurs with 'asset'). 
-            If you try to asign a client to a segmentation of asset components 
+            Look how the client does not have a 'belong-to' to 'client' segmentation defined.
+            This is done implicitly (the same occurs with 'asset'). 
+            If you try to assign a client to a segmentation of asset components 
             (or viceversa), the input file will be rejected.
           </p>
         </div>
@@ -923,28 +923,28 @@
             <tr class="a">
               <td>rating</td>
               <td style="text-align:justify;">
-                initial client rating at begin simulation date 
+                Initial client rating
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>sector</td>
               <td style="text-align:justify;">
-                sector where this client is included
+                Sector where this client is included
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                client name. only used for report
+                Client name. Only used in reports
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>id</td>
               <td style="text-align:justify;">
-                unique client identificator
+                Unique client identifier
               </td>
               <td><code>string</code></td>
             </tr>
@@ -964,14 +964,14 @@
             <tr class="a">
               <td>concept</td>
               <td style="text-align:justify;">
-                segmentation identifier (see segmentations)
+                Segmentation identifier (see segmentations)
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>segment</td>
               <td style="text-align:justify;">
-                segment identifier (see segmentations)
+                Segment identifier (see segmentations)
               </td>
               <td><code>string</code></td>
             </tr>
@@ -991,14 +991,14 @@
             <tr class="a">
               <td>name</td>
               <td style="text-align:justify;">
-                a descriptive name of the asset. Don't need to be unique
+                A descriptive name of the asset. Doesn't need to be unique
               </td>
               <td><code>string</code></td>
             </tr>
             <tr class="b">
               <td>id</td>
               <td style="text-align:justify;">
-                unique asset identifier
+                Unique asset identifier
               </td>
               <td><code>string</code></td>
             </tr>
@@ -1018,28 +1018,28 @@
             <tr class="a">
               <td>at</td>
               <td style="text-align:justify;">
-                date (in format DD/MM/YYYY) where take place the values
+                date (in format DD/MM/YYYY) where the values take place 
               </td>
               <td><code>date</code></td>
             </tr>
             <tr class="b">
               <td>cashflow</td>
               <td style="text-align:justify;">
-                cashflow at date
+                Cashflow at date "at"
               </td>
               <td><code>double</code></td>
             </tr>
             <tr class="a">
               <td>exposure</td>
               <td style="text-align:justify;">
-                exposure at date
+                Exposure at date "at"
               </td>
               <td><code>double</code></td>
             </tr>
             <tr class="b">
               <td>recovery</td>
               <td style="text-align:justify;">
-                recovery at date
+                Recovery at date "at"
               </td>
               <td><code>double</code></td>
             </tr>            
@@ -1053,3 +1053,5 @@
 
 </body>
 </html>
+
+<script language='javascript'>postamble();</script>
