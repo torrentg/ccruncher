@@ -7,7 +7,7 @@ Install expat package
 --------------------------------
 
 1. download package from http://expat.sourceforge.net/
-   and install it. Als you can install from a rpm package.
+   and install it. Also you can install from a rpm package.
    check that you have libexpat.so in a lib directory and
    check that you have expat.h in an include directory
 
@@ -25,7 +25,7 @@ Installation from source package
      cd ccruncher-0.2
      ./configure --prefix=$PWD
      make
-     make check
+     make check       (<- optional step)
      make install
 
 
@@ -71,7 +71,7 @@ Developers tips & tricks
 4. create ./configure script
      aclocal
      autoconf
-     automake -avc --warnings=all
+     automake -a -v -c -f    (--help --warnings=all)
 
 5. compile project in debug mode
      ./configure --prefix=$PWD --enable-debug --enable-profiler
