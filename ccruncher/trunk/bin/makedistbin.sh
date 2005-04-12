@@ -42,9 +42,10 @@ rm bin/makedistbin.sh
 rm -rvf src
 rm -rvf share
 rm -rvf `find . -name \.svn\*`
-cd doc
-rm -rvf `find . ! -name \*.pdf`
-cd ..
+rm -rvf doc
+#cd doc
+#rm -rvf `find . ! -name \*.pdf`
+#cd ..
 
 # -------------------------------------------------------------
 # making package
