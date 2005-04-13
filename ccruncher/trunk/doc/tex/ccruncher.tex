@@ -24,23 +24,54 @@
 %
 % 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 %   . initial release
+% 
+% 2005/04/13 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . some format enhancements
 %
 %***************************************************************************
 
 \documentclass[a4paper,11pt,final]{book}
-
 %\usepackage{times}
 \usepackage{latexsym}
 \usepackage[dvips]{graphicx}
 \usepackage[spanish]{babel}
 %\usepackage{fullpage}
 \usepackage[final]{listings}
+\usepackage{fancyhdr}
 
+%-----------------------------------------------------
+% european spacing correction 
+%-----------------------------------------------------
 \frenchspacing
 \sloppy
-\pagestyle{headings}
+
+%-----------------------------------------------------
+% set fancy header (see lshort.pdf)
+%-----------------------------------------------------
+%\pagestyle{headings}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{}
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\addtolength{\headheight}{0.5pt}
+\fancypagestyle{plain}{
+  \fancyhead{}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+%-----------------------------------------------------
+% removes initial indentation from paragraphs
+%-----------------------------------------------------
 \setlength\parindent{0ex}
 
+%-----------------------------------------------------
+% finally, the doc begins here
+%-----------------------------------------------------
 \begin{document}
 
 \input{titlepage}
