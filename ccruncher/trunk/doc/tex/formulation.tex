@@ -64,17 +64,46 @@ Puede verse un esquema de la estructura en la figura \ref{portfolio}.
 
 \subsection{Ratings}
 
+Un sistema de ratings es una medida de calidad crediticia usada para
+valorar creditores. A cada creditor se le asigna una nota discreta (pe. AAA,
+AA, A, BBB, BB, B, CCC, Default) en funci\'on de su calidad
+crediticia. Los \'unicos ratings contemplados en este documento 
+son los que tienen una relaci\'on estad\'istica directa y cuantificable 
+con la probabilidad de impago del creditor. Ejemplos de este tipo de ratings 
+son los publicados por Moody's Investor Service\footnote{http://www.moodys.com} 
+o Standard \& Poors\footnote{http://www.standardandpoors.com}. 
+\newline
+\newline
+La metodolog\'ia para la generaci\'on de un sistema de ratings queda fuera del
+\'ambito de este documento. CreditCruncher presupone que cada empresa de la 
+cartera tiene un rating inicial asignado.
+\newline
+\newline
+El rating de cada empresa var\'ia a lo largo del tiempo en funci\'on de la 
+calidad crediticia de cada instante (v\'ease figura \ref{ratingevol}). 
+La evoluci\'on a lo largo del tiempo del rating de una empresa se 
+formula a trav\'es de la matriz de transici\'on (v\'ease la secci\'on 
+\ref{sec:mtransition}).
 \begin{figure}[!hb]
 \begin{center}
-\includegraphics[height=7cm, angle=0]{./images/ratingevol.eps}
+\includegraphics[height=6cm, angle=0]{./images/ratingevol.eps}
 \caption{Evoluci\'on del rating a lo largo del tiempo}
 \label{ratingevol}
 \end{center}
 \end{figure}
+\paragraph{Notaci\'on.} El sistema de ratings usado en este documento se 
+compone de $n$ notas, $r_1$, $r_2$, $\cdots$, $r_n$, donde $r_1$ es la
+mejor nota (probabilidad de fallido mas baja), $r_2$ es la segunda mejor nota, 
+etc. $r_n$ corresponde al rating $default$.
 
-\subsection{Productos}
+\paragraph{Notaci\'on.} $P(r_i \to r_j;t) =$ probabilidad de pasar de un 
+rating inicial $r_i$ a un rating $r_j$ en un tiempo $t$.
+
 
 \subsection{Sectores}
+
+\paragraph{Notaci\'on.} En este documento se considera que existen $m$ 
+sectores, y nos referiremos a ellos como $s_1$, $s_2$, $\cdots$, $s_m$.
 
 \subsection{Exposici\'on}
 
@@ -95,6 +124,7 @@ Puede verse un esquema de la estructura en la figura \ref{portfolio}.
 %---------------------------------------------------------------------------
 
 \section{Matriz de transici\'on}
+\label{sec:mtransition}
 
 \subsection{Definici\'on.} La matriz de transici\'on nos proporciona la probabilidad 
 que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
@@ -191,14 +221,14 @@ P(AA \to B;2) = & P(AA \to AAA;1)    & \cdot P(AAA \to B;1)      & + \cr
 \end{array}
 \end{displaymath}
 
-\paragraph{Proposici\'on} Sean $M_{T_1}$ y $M_{T_2}$ las matrices de transici\'on
+\paragraph{Proposici\'on.} Sean $M_{T_1}$ y $M_{T_2}$ las matrices de transici\'on
 para los periodos $T_1$ y $T_2$. Entonces, la matriz de transici\'on para el
 periodo $T_1+T_2$ es:
 \begin{displaymath}
 M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}
 \end{displaymath}
 
-\paragraph{Corolario} Sean $M_{T}$ la matriz de transici\'on para el periodo 
+\paragraph{Corolario.} Sean $M_{T}$ la matriz de transici\'on para el periodo 
 $T$ y $k \in \mathrm{N}$. Entonces:
 \begin{displaymath}
 M_{k \cdot T} = M_{T}^k
