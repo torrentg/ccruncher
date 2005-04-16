@@ -40,8 +40,8 @@ tiempo $T$.
 }
 \end{center}
 
-A continuaci\'on se introducen los elementos considerados claves para la 
-definici\'on del problema.
+A continuaci\'on se introducen los elementos y propiedades b\'asicas que 
+constituyen el marco de trabajo.
 
 %---------------------------------------------------------------------------
 
@@ -102,31 +102,47 @@ rating inicial $r_i$ a un rating $r_j$ en un tiempo $t$.
 
 \subsection{Sectores}
 
-\paragraph{Notaci\'on.} En este documento se considera que existen $m$ 
-sectores, y nos referiremos a ellos como $s_1$, $s_2$, $\cdots$, $s_m$.
-
-\subsection{Exposici\'on}
-
-\subsection{Severidad}
-
-%---------------------------------------------------------------------------
-
-\section{Value At Risk (VAR)}
+La correlaci\'on de fallidos entre clientes es uno de los conceptos que
+a\~naden complejidad de la valoraci\'on del riesgo de cr\'edito. No es lo
+mismo tener una cartera de cr\'editos donde los clientes puedan hacer fallido 
+de forma independiente que una cartera donde los fallidos se encuentran 
+correlacionados. En el primer caso, al cabo de un a\~no tendremos un 
+conjunto limitado de fallidos, en el segundo caso, al cabo de un a\~no la 
+mayoria de clientes habr\'an hecho fallido o casi ningún cliente habr\'a
+hecho fallido.
+\newline
+\newline
+Al no poder asignar una correlaci\'on de fallido cliente a cliente, se recurre
+a la agrupaci\'on de estos en sectores. Se considera que la cartera de 
+cr\'editos dispone de un conjunto de sectores donde los componentes de cada 
+sector muestran una evoluci\'on crediticia similar (v\'ease figura \ref{sectors}). 
+O sea, que la mejora o empeoramiento de la calidad crediticia (rating) afecta 
+de forma com\'un a los componentes del sector. En general se identifican 
+estos sectores con los sectores industriales. 
 
 \begin{figure}[!hb]
 \begin{center}
-\includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
-\caption{Distribuci\'on del valor de la cartera y c\'alculo del VAR}
-\label{creditvar}
+\includegraphics[height=6cm, angle=0]{./images/sectors.eps}
+\caption{Sectores de actividad}
+\label{sectors}
 \end{center}
 \end{figure}
+Se considera que cada cliente pertenece a un \'unico sector y permanece en 
+el a lo largo del tiempo. La relaci\'on entre sectores se formula a trav\'es 
+de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
+\paragraph{Notaci\'on.} En este documento se considera que existen $m$ 
+sectores, y nos referiremos a ellos como $s_1$, $s_2$, $\cdots$, $s_m$.
+
+\subsection{Productos}
+
+Exposici\'on, Severidad
 
 %---------------------------------------------------------------------------
 
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
-\subsection{Definici\'on.} La matriz de transici\'on nos proporciona la probabilidad 
+\subsection{Definici\'on} La matriz de transici\'on nos proporciona la probabilidad 
 que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
 rating $r_j$. La denotamos de la forma siguiente:
 
@@ -144,7 +160,7 @@ m_{n,1} & \dots  & m_{n,n}
 probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
 tiempo, rating $r_j$.
 
-\subsection{Ejemplo.} Matriz de transici\'on anual ($T=1$ a\~no) extraida del 
+\subsection{Ejemplo} Matriz de transici\'on anual ($T=1$ a\~no) extraida del 
 documento \emph{CreditMetrics. Technical Document}. Las probabilidades est\'an
 expresadas en tanto por ciento.
 \\
@@ -244,5 +260,21 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 %---------------------------------------------------------------------------
 
 \section{Matriz de correlaci\'on sectorial}
+\label{sec:mcorrel}
 
+\subsection{Definici\'on} blablabla
 
+\subsection{Ejemplo} blablabla
+
+\subsection{Propiedades} blablabla
+%---------------------------------------------------------------------------
+
+\section{Value At Risk (VAR)}
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
+\caption{Distribuci\'on del valor de la cartera y c\'alculo del VAR}
+\label{creditvar}
+\end{center}
+\end{figure}
