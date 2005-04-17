@@ -28,6 +28,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/04/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug when correlation = 0 and exist only 1 sector
+//
 //===========================================================================
 
 #include <cfloat>
@@ -207,7 +210,13 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     }
   }
 
-  // comprovem que es tracta de una matriu definida positiva
+  // exceptional case: 1 sector + uncorrelated (matrix = 0)
+  if (n == 1 && fabs(matrix[0][0]) < epsilon)
+  {
+    return;
+  }
+
+  // checking definite positive required property
   double **maux = Utils::allocMatrix(n, n, getMatrix());
   double *vaux = Utils::allocVector(n);
   bool ret = CholeskyDecomposition::choldc(maux, vaux, n);
@@ -215,7 +224,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
   Utils::deallocMatrix(maux, n);
   if (ret == false)
   {
-    throw Exception("CorrelationMatrix::validate(): matrix non definite prositive");
+    throw Exception("CorrelationMatrix::validate(): matrix non definite positive");
   }
 }
 

@@ -1,0 +1,11 @@
+reset
+set terminal postscript
+set output 'sectorcorrel.ps'
+set xrange [0.00:101.00]
+set xlabel 'portfolio value'
+set ylabel 'number of ocurrences'
+set grid
+binsize=1
+set title 'Portfolio Value Histogram at 01/01/2006'
+plot 'sample01.out' using (floor($3/binsize)*binsize):(1) smooth frequency with histeps title 'correlation = 0.0', \
+'sample02.out' using (floor($3/binsize)*binsize):(1) smooth frequency with histeps title 'correlation = 0.2'

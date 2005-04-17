@@ -3,6 +3,10 @@ CREDITCRUNCHER NEWS
 ===================
 
 
+version 0.3 (??? 2005)
+--------------------------
+  * bugfix: solved bug in correlation matrix check when correl = 0
+
 version 0.2 (April 2005)
 --------------------------
   * added POSIX compliance in command line arguments (Gerard Torrent)
