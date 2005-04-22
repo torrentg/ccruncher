@@ -38,7 +38,7 @@ EXTRA_DIST = \
     ../share/jama-1.2.2/tnt_vec.h\
     ../share/jama-1.2.2/tnt_version.h
 
-bin_PROGRAMS = ccruncher cc2gpi generator
+bin_PROGRAMS = ccruncher cc2gpi generator tma
 
 check_PROGRAMS = tests
 
@@ -233,6 +233,89 @@ generator_SOURCES = \
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDADD = -lm -lexpat
+
+# -------------------------------------------------------------
+# tma
+# -------------------------------------------------------------
+tma_SOURCES = \
+    ./tools/tma.cpp\
+    ./kernel/IData.cpp\
+    ./portfolio/Portfolio.cpp\
+    ./portfolio/Client.cpp\
+    ./params/Params.cpp\
+    ./interests/Interests.cpp\
+    ./interests/Interest.cpp\
+    ./interests/Rate.cpp\
+    ./ratings/Rating.cpp\
+    ./ratings/Ratings.cpp\
+    ./ratings/DateRatings.cpp\
+    ./transitions/TransitionMatrix.cpp\
+    ./sectors/Sector.cpp\
+    ./sectors/Sectors.cpp\
+    ./correlations/CorrelationMatrix.cpp\
+    ./math/CholeskyDecomposition.cpp\
+    ./math/PowMatrix.cpp\
+    ./math/CopulaNormal.cpp\
+    ./math/Normal.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
+    ./segmentations/Segmentations.cpp\
+    ./segmentations/Segmentation.cpp\
+    ./segmentations/Segment.cpp\
+    ./aggregators/SegmentAggregator.cpp\
+    ./aggregators/Aggregators.cpp\
+    ./aggregators/Aggregator.cpp\
+    ./utils/Exception.cpp\
+    ./utils/Parser.cpp\
+    ./utils/Logger.cpp\
+    ./utils/File.cpp\
+    ./utils/Date.cpp\
+    ./utils/Timer.cpp\
+    ./utils/Utils.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
+    \
+    ./kernel/IData.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./params/Params.hpp\
+    ./interests/Interests.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Rate.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./ratings/DateRatings.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/Copula.hpp\
+    ./math/PowMatrix.hpp\
+    ./math/CopulaNormal.hpp\
+    ./math/Normal.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp\
+    ./aggregators/SegmentAggregator.hpp\
+    ./aggregators/Aggregators.hpp\
+    ./aggregators/Aggregator.hpp\
+    ./utils/Exception.hpp\
+    ./utils/Parser.hpp\
+    ./utils/Logger.hpp\
+    ./utils/File.hpp\
+    ./utils/Date.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Utils.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp
+
+tma_CXXFLAGS = -Wall -W -Wshadow
+tma_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
 # tests

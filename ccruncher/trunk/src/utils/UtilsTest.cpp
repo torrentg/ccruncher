@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added function prodMatrixMatrix
+//
 //===========================================================================
 
 #include <iostream>
@@ -181,4 +184,31 @@ void UtilsTest::test2()
   ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Utils::uppercase(str1));
   ASSERT("  i am a string ready for sacrifice  " == Utils::lowercase(str1));
   ASSERT("   " == Utils::blanks(3));
+}
+
+//===========================================================================
+// test3
+//===========================================================================
+void UtilsTest::test3()
+{
+  double Avals[] = {1,2,3,4,5,6};
+  double **A = Utils::allocMatrix(2, 3, Avals);
+  double Bvals[] = {1,2,3};
+  double **B = Utils::allocMatrix(3, 1, Bvals);
+  double Cvals[] = {14,32};
+  double **C = Utils::allocMatrix(2, 1);
+
+  Utils::prodMatrixMatrix(A, B, 2, 3, 1, C);
+
+  for (int i=0;i<2;i++)
+  {
+    for(int j=0;j<1;j++)
+    {
+      ASSERT_DOUBLES_EQUAL(C[i][j], Cvals[i], EPSILON);
+    }
+  }
+
+  Utils::deallocMatrix(A, 2);
+  Utils::deallocMatrix(B, 3);
+  Utils::deallocMatrix(C, 2);
 }

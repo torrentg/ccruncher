@@ -28,6 +28,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
+//
 //===========================================================================
 
 #ifndef _TransitionMatrix_
@@ -88,6 +91,8 @@ class TransitionMatrix : public ExpatHandlers
 //---------------------------------------------------------------------------
 
 TransitionMatrix * translate(TransitionMatrix *tm, double t) throw(Exception);
+void tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
+void tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

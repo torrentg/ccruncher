@@ -28,9 +28,13 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
+//
 //===========================================================================
 
 #include <cfloat>
+#include <cassert>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Utils.hpp"
@@ -319,9 +323,11 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
 }
 
 //===========================================================================
-// proporciona la matriu de transicio pel periode especificat, t
-// @param t periode de la nova matriu de transicio
-// @return la matriu de transicio pel periode t
+// given the transition matrix for time T1, compute the transition
+// matrix for a new time, t
+// @param otm transition matrix
+// @param t period of the new transition matrix
+// @return transition matrix for period t
 //===========================================================================
 TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, double t) throw(Exception)
 {
@@ -332,4 +338,84 @@ TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, double t) throw(E
   ret->period = t;
 
   return ret;
+}
+
+//===========================================================================
+// Given a transition matrix and the maximum number of years, return the 
+// Forward Default Rate in the ret matrix
+// @param tm transition matrix
+// @param numyears number of years (min=0, max=999)
+// @param ret allocated space of size numratings x (numyears+1)
+// ret[i][j] = probability initial rating r_i default between year 0 and year j
+//===========================================================================
+void ccruncher::tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+{
+  // making assertions
+  assert(numyears >= 0);
+  assert(numyears < 1000);
+
+  int n = tm->n;
+  
+  // building 1-year transition matrix
+  TransitionMatrix *tmone = translate(tm, 1.0);
+  double **one = tmone->getMatrix();
+
+  // building Id-matrix of size nxn
+  double **aux = Utils::allocMatrix(n, n, 0.0);
+  for(int i=0;i<n;i++)
+  {
+    aux[i][i] = 1.0;
+  }
+
+  // auxiliary matrix
+  double **tmp = Utils::allocMatrix(n, n, 0.0);
+      
+  // filling TMAA(.,0)
+  for(int i=0;i<n;i++)
+  {
+    ret[i][0] = aux[i][n-1];
+  }
+  
+  for(int t=1;t<=numyears;t++)
+  {
+    Utils::prodMatrixMatrix(aux, one, n, n, n, tmp);
+
+    // filling TMA(.,t)
+    for(int i=0;i<n;i++)
+    {
+      ret[i][t] = tmp[i][n-1] - aux[i][n-1];
+    }
+
+    for(int i=0;i<n;i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
+  }
+  
+  // exit function
+  delete one;
+  Utils::deallocMatrix(aux, n);
+  Utils::deallocMatrix(tmp, n);
+}
+
+//===========================================================================
+// Given a transition matrix and the maximum number of years, return the 
+// Cumulated Forward Default Rate in the ret matrix
+// @param tm transition matrix
+// @param numyears number of years (min=0, max=999)
+// @param ret allocated space of size numratings x (numyears+1)
+// ret[i][j] = probability initial rating r_i default between year 0 and year j
+//===========================================================================
+void ccruncher::tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+{
+  int n = tm->n;
+  
+  // computing TMA
+  tma(tm, numyears, ret);
+  
+  // building acumulateds
+  for(int i=0;i<n;i++)
+  {
+    for(int j=1;j<=numyears;j++)
+    {
+      ret[i][j] = ret[i][j] + ret[i][j-1];
+    }
+  }
 }

@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added function prodMatrixMatrix
+//
 //===========================================================================
 
 #ifndef _UtilsTest_
@@ -51,6 +54,7 @@ class UtilsTest : public TestFixture<UtilsTest>
 
     void test1(void);
     void test2(void);
+    void test3(void);
 
 
   public:
@@ -59,6 +63,7 @@ class UtilsTest : public TestFixture<UtilsTest>
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
+      TEST_CASE(test3);
     }
 
     void setUp();

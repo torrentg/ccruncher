@@ -29,6 +29,9 @@
 //   . optimized? prodMatrixVector() function. This functions takes
 //     aprox. 50% of execution time.
 //
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added function prodMatrixMatrix
+//
 //===========================================================================
 
 #ifndef _Utils_
@@ -37,6 +40,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <cassert>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -64,7 +68,8 @@ class Utils
     static double ** allocMatrix(int n, int m, double **x) throw(Exception);
     static void deallocMatrix(double **x, int n);
 
-    static void prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret);
+    static void prodMatrixVector(double **A, double *x, int n1, int n2, double *ret);
+    static void prodMatrixMatrix(double **A, double **B, int n1, int n2, int n3, double **ret);
     static void copyVector(double *x, int n, double *ret);
     static void copyMatrix(double **x, int n, int m, double **ret);
     static void initVector(double *x, int n, double val);
@@ -93,25 +98,60 @@ inline char ltolower (char ch) { return tolower(ch); }
 inline char ltoupper (char ch) { return toupper(ch); }
 
 //===========================================================================
-// Producte de matriu per vector = A.x
+// Product matriu per vector: ret = A.x (A is n1xn2, x is n2x1, ret is n1x1)
 //===========================================================================
-inline void Utils::prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret)
+inline void Utils::prodMatrixVector(double **A, double *x, int n1, int n2, double *ret)
 {
+  // making assertions
+  assert(n1 > 0); assert(n2 > 0);
+  assert(A != NULL); assert(x != NULL); assert(ret != NULL);
+
   double aux;
   double *currentrow;
 
-  for(register int i=0;i<n;i++)
+  for(register int i=0;i<n1;i++)
   {
     aux = 0.0;
-    currentrow = matriu[i];
+    currentrow = A[i];
 
-    for(register int j=0;j<m;j++)
+    for(register int j=0;j<n2;j++)
     {
-      aux += currentrow[j]*vector[j];
+      aux += currentrow[j]*x[j];
     }
 
     ret[i] = aux;
   }
+}
+
+//===========================================================================
+// Matrix product: ret = A.B (A is a n1xn2, B is n2xn3 and ret is n1xn3)
+//===========================================================================
+inline void Utils::prodMatrixMatrix(double **A, double **B, int n1, int n2, int n3, double **ret)
+{
+  // making assertions
+  assert(n1 > 0); assert(n2 > 0); assert(n3 > 0);
+  assert(A != NULL); assert(B != NULL); assert(ret != NULL);
+  
+  double *aux1 = allocVector(n1);
+  double *aux2 = allocVector(n2);
+
+  for(register int i=0;i<n3;i++)
+  {
+    for(register int j=0;j<n2;j++)
+    {
+      aux2[j] = B[j][i];
+    }
+    
+    prodMatrixVector(A, aux2, n1, n2, aux1);
+    
+    for(register int j=0;j<n1;j++)
+    {
+      ret[j][i] = aux1[j];
+    }
+  }
+  
+  deallocVector(aux1);
+  deallocVector(aux2);
 }
 
 //===========================================================================
