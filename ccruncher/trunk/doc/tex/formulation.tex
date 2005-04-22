@@ -94,7 +94,7 @@ formula a trav\'es de la matriz de transici\'on (v\'ease la secci\'on
 \paragraph{Notaci\'on.} El sistema de ratings usado en este documento se 
 compone de $n$ notas, $r_1$, $r_2$, $\cdots$, $r_n$, donde $r_1$ es la
 mejor nota (probabilidad de fallido mas baja), $r_2$ es la segunda mejor nota, 
-etc. $r_n$ corresponde al rating $default$.
+etc. $r_n$ corresponde al rating $Default$.
 
 \paragraph{Notaci\'on.} $P(r_i \to r_j;t) =$ probabilidad de pasar de un 
 rating inicial $r_i$ a un rating $r_j$ en un tiempo $t$.
@@ -104,12 +104,12 @@ rating inicial $r_i$ a un rating $r_j$ en un tiempo $t$.
 
 La correlaci\'on de fallidos entre clientes es uno de los conceptos que
 a\~naden complejidad de la valoraci\'on del riesgo de cr\'edito. No es lo
-mismo tener una cartera de cr\'editos donde los clientes puedan hacer fallido 
+mismo tener una cartera de cr\'editos donde los clientes hacen fallido 
 de forma independiente que una cartera donde los fallidos se encuentran 
 correlacionados. En el primer caso, al cabo de un a\~no tendremos un 
-conjunto limitado de fallidos, en el segundo caso, al cabo de un a\~no la 
-mayoria de clientes habr\'an hecho fallido o casi ningún cliente habr\'a
-hecho fallido.
+conjunto limitado de fallidos. En el segundo caso, al cabo de un a\~no la 
+mayoria de clientes habr\'an hecho fallido o casi ning\'un cliente habr\'a
+hecho fallido. V\'ease el ejemplo \emph{Impacto de la correlaci\'on intrasectorial}.
 \newline
 \newline
 Al no poder asignar una correlaci\'on de fallido cliente a cliente, se recurre
@@ -133,7 +133,47 @@ de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel})
 \paragraph{Notaci\'on.} En este documento se considera que existen $m$ 
 sectores, y nos referiremos a ellos como $s_1$, $s_2$, $\cdots$, $s_m$.
 
-\subsection{Productos}
+\subsection{Activos}
+
+Cada cliente tiene contratado un conjunto de activos con riesgo de cr\'edito.
+Un activo se caracteriza por los siguientes elementos:
+
+\paragraph{Cashflow.} Entregas y devoluciones de dinero a lo largo del tiempo. 
+Incluye las posibles amortizaciones, primas, cupones, comisiones, costes, etc. 
+Usaremos el cashflow para calcular el valor, o precio, de un activo en el 
+instante $t$.
+
+\paragraph{Exposici\'on.} Importe de la p\'erdida en caso de fallido. Cada 
+producto tiene un perfil de exposici\'on caracter\'istico.
+
+\paragraph{Recuperaci\'on.} Importe que se estima que ser\'a recuperado en 
+caso de fallido. Normalmente es una parte de la exposici\'on.
+
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/mortgage.ps}
+\caption{Perfil de un Pr\'estamo Hipotecario}
+\label{mortgage}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/endorsement.ps}
+\caption{Perfil de un Aval financiero}
+\label{endorsement}
+\end{center}
+\end{figure}
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/bond.ps}
+\caption{Perfil de un Bono}
+\label{bond}
+\end{center}
+\end{figure}
 
 Exposici\'on, Severidad
 
@@ -154,6 +194,8 @@ m_{1,1} & \dots  & m_{1,n} \cr
 m_{n,1} & \dots  & m_{n,n} 
 \end{array}
 \right)
+\qquad
+m_{i,j} = P(r_i \to r_j;T)
 \end{displaymath}
 
 \noindent donde cada elemento de la matrix, $m_{i,j}$ corresponde a la 
@@ -161,8 +203,8 @@ probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$
 tiempo, rating $r_j$.
 
 \subsection{Ejemplo} Matriz de transici\'on anual ($T=1$ a\~no) extraida del 
-documento \emph{CreditMetrics. Technical Document}. Las probabilidades est\'an
-expresadas en tanto por ciento.
+documento \emph{CreditMetrics - Technical Document} \cite{CreditMetrics:Tech_Doc}. 
+Las probabilidades est\'an expresadas en tanto por ciento.
 \\
 \begin{center}
 \begin{tabular}[]{l|rrrrrrrr}
@@ -178,14 +220,14 @@ CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64
 Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
 \end{tabular}
 \end{center}
-\noindent en particular, la probabilidad que un cliente con rating $AA$ pase a 
-tener rating $B$ al cabo de un a\~no es del $0.14\%$.
+En particular, la probabilidad que un cliente con rating $AA$ pase a tener 
+rating $B$ al cabo de un a\~no es del $0.14\%$.
 
 \subsection{Propiedades}
 
 \paragraph{Propiedad 1.}
 El valor de los elementos de la matriz de transici\'on se encuentran entre $0$ 
-y $1$ debido a que son probabilidades.
+y $1$ debido a que los elementos de la matriz son probabilidades.
 
 \begin{displaymath}
 0 \leq m_{i,j} \leq 1 \quad \forall i,j
@@ -201,15 +243,15 @@ ser el de los ratings contemplados en la matriz.
 \end{displaymath}
 
 \paragraph{Propiedad 3.}
-Los elementos de la fila correspondiente al rating $default$, son todos $0$,
-excepto el elemento de la columna que corresponde al rating $default$ que vale 
-$1$. Esta condici\'on indica que cuando se llega al estado de fallido no es 
-posible salir de este estado.
+Los elementos de la fila correspondiente al rating $Default$ ($r_n$), son todos 
+$0$, excepto el elemento de la columna que corresponde al rating $Default$, 
+$m_{n,n}$, que vale $1$. Esta condici\'on indica que cuando se llega al estado 
+de fallido no es posible salir de este estado.
 
 \begin{displaymath}
 \begin{array}{ll}
-m_{default,j} = 0        & \quad \forall j \neq default \cr
-m_{default,default} = 1
+m_{n,j} = 0        & \quad \forall j \neq n \cr
+m_{n,n} = 1
 \end{array}
 \end{displaymath}
 
@@ -219,7 +261,7 @@ m_{default,default} = 1
 Deseamos obtener la matriz de transici\'on para periodos distintos (m\'ultiplos o 
 fraccionarios) del periodo proporcionado, $T$. Esto nos permitir\'a determinar la 
 probabilidad que un cliente con rating inicial $r_i$ tenga rating $r_j$ al cabo 
-de $x \cdot T$ tiempo.
+de $k \cdot T$ tiempo o al cabo de $K/t$ tiempo.
 
 \paragraph{Ejemplo.} Calculemos la probabilidad de pasar de rating $AA$ a
 rating $B$ en un plazo de dos a\~nos disponiendo de la matriz de transici\'on anual.
@@ -233,7 +275,7 @@ P(AA \to B;2) = & P(AA \to AAA;1)    & \cdot P(AAA \to B;1)      & + \cr
                 & P(AA \to BB;1)      & \cdot P(BB \to B;1)      & + \cr
                 & P(AA \to B;1)       & \cdot P(B \to B;1)       & + \cr
                 & P(AA \to CCC;1)     & \cdot P(CCC \to B;1)     & + \cr
-                & P(AA \to default;1) & \cdot P(default \to B;1) &
+                & P(AA \to Default;1) & \cdot P(Default \to B;1) &
 \end{array}
 \end{displaymath}
 

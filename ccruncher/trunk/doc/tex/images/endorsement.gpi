@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #
-# sample01.gpi - gnuplot instructions
+# endorsement.gpi - gnuplot instructions
 # --------------------------------------------------------------------------
 #
 # 2005/04/21 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -27,13 +27,26 @@
 #===========================================================================
 
 reset
-set terminal postscript
-set output 'sectorcorrel.ps'
-set xrange [0.00:101.00]
-set xlabel 'portfolio value'
-set ylabel 'number of ocurrences'
+set style line 1 lt 1 lw 1.5
+set style arrow 1 head filled size screen 0.015,15,15 ls 1
+show style arrow
+
+#set zeroaxis
+set xzeroaxis linetype 1 linewidth 1
+#set yzeroaxis linetype 1 linewidth 1
+
 set grid
-binsize=1
-set title 'Portfolio Value Histogram at 01/01/2006'
-plot 'sample01.out' using (floor($3/binsize)*binsize):(1) smooth frequency with histeps title 'correlation = 0.0', \
-'sample02.out' using (floor($3/binsize)*binsize):(1) smooth frequency with histeps title 'correlation = 0.2'
+set xrange [-1.00:61.00]
+set yrange [-255:255]
+#set yrange [0:255]
+
+set terminal postscript
+set output 'endorsement.ps'
+
+set title 'Endorsement Profile'
+set xlabel "time (in months)"
+set ylabel "amount"
+
+plot "endorsement.dat" using ($1):(250) with linespoints title 'exposition', \
+     "endorsement.dat" using ($1):(0):(0):($3/1000+$6/1000) with vectors arrowstyle 1 title 'cashflow', \
+     "endorsement.dat" using ($1):(80) with linespoints title 'recovery'
