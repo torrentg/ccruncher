@@ -40,8 +40,8 @@ tiempo $T$.
 }
 \end{center}
 
-A continuaci\'on se introducen los elementos y propiedades b\'asicas que 
-constituyen el marco de trabajo.
+A continuaci\'on se introduce los elementos, notaci\'on y propiedades 
+b\'asicas que constituyen el marco de trabajo.
 
 %---------------------------------------------------------------------------
 
@@ -175,14 +175,12 @@ caso de fallido. Normalmente es una parte de la exposici\'on.
 \end{center}
 \end{figure}
 
-Exposici\'on, Severidad
-
 %---------------------------------------------------------------------------
 
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
-\subsection{Definici\'on} La matriz de transici\'on nos proporciona la probabilidad 
+\paragraph{Definici\'on.} La matriz de transici\'on proporciona la probabilidad 
 que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
 rating $r_j$. La denotamos de la forma siguiente:
 
@@ -198,11 +196,11 @@ m_{n,1} & \dots  & m_{n,n}
 m_{i,j} = P(r_i \to r_j;T)
 \end{displaymath}
 
-\noindent donde cada elemento de la matrix, $m_{i,j}$ corresponde a la 
+donde cada elemento de la matrix, $m_{i,j}$ corresponde a la 
 probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
 tiempo, rating $r_j$.
 
-\subsection{Ejemplo} Matriz de transici\'on anual ($T=1$ a\~no). 
+\paragraph{Ejemplo.} Matriz de transici\'on anual ($T=1$ a\~no). 
 Las probabilidades est\'an expresadas en tanto por ciento.
 \\
 \begin{center}
@@ -267,7 +265,7 @@ rating $B$ en un plazo de dos a\~nos disponiendo de la matriz de transici\'on an
 
 \begin{displaymath}
 \begin{array}{llll}
-P(AA \to B;2) = & P(AA \to AAA;1)    & \cdot P(AAA \to B;1)      & + \cr
+P(AA \to B;2) = & P(AA \to AAA;1)     & \cdot P(AAA \to B;1)     & + \cr
                 & P(AA \to AA;1)      & \cdot P(AA \to B;1)      & + \cr
                 & P(AA \to A;1)       & \cdot P(A \to B;1)       & + \cr
                 & P(AA \to BBB;1)     & \cdot P(BBB \to B;1)     & + \cr
@@ -295,7 +293,7 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 \end{displaymath}
 
 
-\subsection{Tasa de morosidad anticipada acumulada}
+\subsection{Funci\'on de supervivencia}
 
 \paragraph{Definici\'on.} La Tasa de Morosidad Anticipada (TMA) 
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
@@ -366,14 +364,107 @@ este documento.
 
 %---------------------------------------------------------------------------
 
-\section{Matriz de correlaci\'on sectorial}
+\section{Matriz de correlaci\'on}
 \label{sec:mcorrel}
 
-\subsection{Definici\'on} blablabla
+\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial proporciona
+la correlaci\'on de los fallidos entre los sectores. La denotamos de la forma 
+siguiente:
+\begin{displaymath}
+\Gamma = \left(
+\begin{array}{ccc}
+\gamma_{1,1} & \dots  & \gamma_{1,m} \cr
+\vdots & \ddots & \vdots \cr
+\gamma_{1,m} & \dots  & \gamma_{m,m} 
+\end{array}
+\right)
+\end{displaymath}
+donde $m$ es el n\'umero de sectores, $\gamma_{i,j}$ es la correlaci\'on entre 
+los fallidos de los sectores $s_i$ y $s_j$ y $\gamma_{i,i}$ es la correlaci\'on del 
+fallido entre las empresas del sector $s_i$. Por construcci\'on, la matriz de 
+correlaci\'on sectorial es sim\'etrica debido a que la correlaci\'on entre $s_i$
+y $s_j$ es la misma que entre $s_j$ y $s_i$.
 
-\subsection{Ejemplo} blablabla
+\paragraph{Definici\'on.} La matriz de correlaci\'on entre clientes proporciona
+la correlaci\'on de los fallidos entre clientes. La construimos a partir de la
+matriz de correlaci\'on sectorial de la forma siguiente:
+\begin{displaymath}
+\Theta = \left(
+\begin{array}{ccccc}
+1              & \theta_{1,2}   & \dots      & \theta_{1,p-1} & \theta_{1,p}   \cr
+\theta_{1,2}   & 1              & \dots      & \theta_{2,p-1} & \theta_{2,p}   \cr
+\vdots         & \vdots         & \ddots     & \vdots         & \vdots         \cr
+\theta_{1,p-1} & \theta_{2,p-1} & \dots      & 1              & \theta_{p-1,p} \cr
+\theta_{1,p}   & \theta_{2,p}   & \dots      & \theta_{p-1,p} & 1
+\end{array}
+\right)
+\end{displaymath}
+donde $p$ es el n\'umero de clientes y $\theta_{i,j}$ es la correlaci\'on entre
+los sectores del cliente $i$ y $j$.
 
-\subsection{Propiedades} blablabla
+\paragraph{Observaci\'on.} Los clientes se acostumbran a ordenar por sectores. En este
+caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
+\begin{displaymath}
+\Theta = \left(
+\begin{array}{ccccccccccc}
+1                & \dots    & \gamma_{p_1,p_1}  &          & \gamma_{1,p_i}   & \dots   & \gamma_{1,p_i}    &         & \gamma_{1,p_m}   & \dots      & \gamma_{1,p_m}   \cr
+\vdots           & \ddots   & \vdots            &          & \vdots           &         & \vdots            &         & \vdots           &            & \vdots           \cr
+\gamma_{p_1,p_1} & \dots    & 1                 &          & \gamma_{1,p_i}   & \dots   & \gamma_{1,p_i}    &         & \gamma_{1,p_m}   & \dots      & \gamma_{1,p_m}   \cr
+                 
+                 &          &                   & \ddots   &                  &         &                   &         &                  &            &                  \cr
+
+\gamma_{1,p_i}   & \dots    & \gamma_{1,p_i}    &          & 1                & \dots   & \gamma_{p_i,p_i}  &         & \gamma_{p_i,p_m} & \dots      & \gamma_{p_i,p_m} \cr
+\vdots           & \ddots   & \vdots            &          & \vdots           & \ddots  & \vdots            &         & \vdots           &            & \vdots           \cr
+\gamma_{1,p_i}   & \dots    & \gamma_{1,p_i}    &          & \gamma_{p_i,p_i} & \dots   & 1                 &         & \gamma_{p_i,p_m} & \dots      & \gamma_{p_i,p_m} \cr
+
+                 &          &                   &          &                  &         &                   & \ddots  &                  &            &                  \cr
+
+\gamma_{1,p_m}   & \dots    & \gamma_{1,p_m}    &          & \gamma_{p_i,p_m} & \dots   & \gamma_{p_i,p_m}  &         & 1                & \dots      & \gamma_{p_m,p_m} \cr
+\vdots           & \ddots   & \vdots            &          & \vdots           & \ddots  & \vdots            &         & \vdots           & \ddots     & \vdots           \cr
+\gamma_{1,p_m}   & \dots    & \gamma_{1,p_m}    &          & \gamma_{p_i,p_m} & \dots   & \gamma_{p_i,p_m}  &         & \gamma_{p_m,p_m} & \dots      & 1               
+\end{array}
+\right)
+\end{displaymath}
+donde $p_1, \dots, p_m$ corresponde al n\'umero de clientes que pertenecen a los sectores $s_1, \dots, s_m$.
+Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre clientes es una matriz
+con bloques con $1$'s en la diagonal.
+
+
+\paragraph{Observaci\'on.} La matriz de correlaci\'on sectorial puede no ser 
+definida positiva. Supongamos que tenemos dos sectores, entonces la siguiente 
+matriz es v\'alida y no es definida positiva:
+\begin{displaymath}
+\left(
+\begin{array}{cc}
+0 & 0.1 \cr
+0.1 & 0
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Ejemplo.} Ejemplo de matriz de correlaci\'on sectorial, suponiendo 
+que el n\'umero de sectores, $m$, es 3.
+\begin{displaymath}
+\left(
+\begin{array}{ccc}
+ 0.10 &  0.05 & -0.03 \cr
+ 0.05 &  0.15 &  0.00 \cr
+-0.03 &  0.00 &  0.17
+\end{array}
+\right)
+\end{displaymath}
+
+\subsection{Propiedades} 
+
+\paragraph{Propiedad 1.} Si la matriz de correlaci\'on sectorial tiene 
+todos los elementos comprendidos entre -1 y 1, entonces la matrix de correlaci\'on 
+entre clientes es definida positiva\footnote{propiedad pendiente de demostrar}.
+\begin{displaymath}
+\gamma_{i,j} \in (-1,1) \quad \forall i, j 
+\Longrightarrow
+\Theta \textrm{ is definite positive}
+\end{displaymath}
+
 %---------------------------------------------------------------------------
 
 \section{Value At Risk (VAR)}

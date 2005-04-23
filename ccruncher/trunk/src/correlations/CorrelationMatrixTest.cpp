@@ -170,11 +170,11 @@ void CorrelationMatrixTest::test3()
 //===========================================================================
 void CorrelationMatrixTest::test4()
 {
-  // non valid correlation matrix (non definite positive)
+  // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
-      <sigma sector1='S1' sector2='S2' value='0.95'/>\n\
+      <sigma sector1='S1' sector2='S2' value='1.1'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
     </mcorrels>";
 
