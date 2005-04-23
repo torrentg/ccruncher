@@ -202,8 +202,7 @@ m_{i,j} = P(r_i \to r_j;T)
 probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
 tiempo, rating $r_j$.
 
-\subsection{Ejemplo} Matriz de transici\'on anual ($T=1$ a\~no) extraida del 
-documento \emph{CreditMetrics - Technical Document} \cite{CreditMetrics:Tech_Doc}. 
+\subsection{Ejemplo} Matriz de transici\'on anual ($T=1$ a\~no). 
 Las probabilidades est\'an expresadas en tanto por ciento.
 \\
 \begin{center}
@@ -215,8 +214,8 @@ AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0
   A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
 BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
  BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
-  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.20$ \cr
-CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.79$ \cr
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
 Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
 \end{tabular}
 \end{center}
@@ -298,19 +297,49 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 
 \subsection{Tasa de morosidad anticipada acumulada}
 
+\paragraph{Definici\'on.} La Tasa de Morosidad Anticipada (TMA) 
+del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
+inicial $r_i$ haga fallido a lo largo del a\~no $t$.
 
 \paragraph{Definici\'on.} La Tasa de Morosidad Anticipada Acumulada (TMAA) 
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
 inicial $r_i$ haga fallido en el intervalo de tiempo $(0,t)$.
 
+\paragraph{Definici\'on.} La Supervivencia en el tiempo $t$ del rating $r_i$ 
+es la probabilidad que una empresa con rating inicial $r_i$ no haya hecho 
+fallido en el intervalo de tiempo $(0,t)$.
 
 \paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada Acumulada se 
 puede expresar en funci\'on de la matriz de transici\'on a trav\'es de la
-relaci\'on siguiente:
+relaci\'on siguiente ($n$ es el \'indice del rating Default):
 \begin{displaymath}
 TMAA(r_i,k \cdot T) = (M^k)_{i,n}
 \end{displaymath}
 
+\paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada se puede expresar 
+en funci\'on de la Tasa de Morosidad Anticipada Acumulada a trav\'es de la
+relaci\'on siguiente:
+\begin{displaymath}
+TMA(r_i, t) =  TMAA(r_i, t) - TMAA(r_i, t-1)
+\end{displaymath}
+
+\paragraph{Proposici\'on.} La Supervivencia puede expresarse en funci\'on de
+la Tasa de Morosidad Anticipada Acumulada a trav\'es de la relaci\'on siguiente:
+\begin{displaymath}
+Supervivencia(r_i, t) =  1 - TMAA(r_i, t)
+\end{displaymath}
+
+\paragraph{Ejemplo.} El las figuras \ref{tmaa} se puede observar las Tasas
+de Morosidad Anticipada Acumulada de la matriz de transici\'on usada en 
+este documento.
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/tmaa.ps}
+\caption{Tasa de Morosidad Anticipada Acumulada}
+\label{tmaa}
+\end{center}
+\end{figure}
 
 %---------------------------------------------------------------------------
 

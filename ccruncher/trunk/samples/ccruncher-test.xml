@@ -44,42 +44,93 @@
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="A" order="1" desc="excelent"/>
-    <rating name="B" order="2" desc="good"/>
-    <rating name="C" order="3" desc="medium"/>
-    <rating name="D" order="4" desc="bad"/>
-    <rating name="E" order="5" desc="default"/>
+    <rating name="AAA" order="1" desc="AAA desc"/>
+    <rating name="AA" order="2" desc="AA desc"/>
+    <rating name="A" order="3" desc="A desc"/>
+    <rating name="BBB" order="4" desc="BBB desc"/>
+    <rating name="BB" order="5" desc="BB desc"/>
+    <rating name="B" order="6" desc="B desc"/>
+    <rating name="CCC" order="7" desc="CCC desc"/>
+    <rating name="Default" order="8" desc="Default desc"/>
   </ratings>
 
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
   <mtransitions period="1" epsilon="1e-12">
-    <transition from="A" to="A" value="0.80"/>
-    <transition from="A" to="B" value="0.10"/>
-    <transition from="A" to="C" value="0.07"/>
-    <transition from="A" to="D" value="0.02"/>
-    <transition from="A" to="E" value="0.01"/>
-    <transition from="B" to="A" value="0.05"/>
-    <transition from="B" to="B" value="0.75"/>
-    <transition from="B" to="C" value="0.10"/>
-    <transition from="B" to="D" value="0.07"/>
-    <transition from="B" to="E" value="0.03"/>
-    <transition from="C" to="A" value="0.03"/>
-    <transition from="C" to="B" value="0.07"/>
-    <transition from="C" to="C" value="0.70"/>
-    <transition from="C" to="D" value="0.14"/>
-    <transition from="C" to="E" value="0.06"/>
-    <transition from="D" to="A" value="0.05"/>
-    <transition from="D" to="B" value="0.05"/>
-    <transition from="D" to="C" value="0.15"/>
-    <transition from="D" to="D" value="0.60"/>
-    <transition from="D" to="E" value="0.15"/>
-    <transition from="E" to="A" value="0.00"/>
-    <transition from="E" to="B" value="0.00"/>
-    <transition from="E" to="C" value="0.00"/>
-    <transition from="E" to="D" value="0.00"/>
-    <transition from="E" to="E" value="1.00"/>
+
+    <transition from="AAA"     to="AAA"     value="0.9081"/>
+    <transition from="AAA"     to="AA"      value="0.0833"/>
+    <transition from="AAA"     to="A"       value="0.0068"/>
+    <transition from="AAA"     to="BBB"     value="0.0006"/>
+    <transition from="AAA"     to="BB"      value="0.0012"/>
+    <transition from="AAA"     to="B"       value="0.0000"/>
+    <transition from="AAA"     to="CCC"     value="0.0000"/>
+    <transition from="AAA"     to="Default" value="0.0000"/>
+        
+    <transition from="AA"      to="AAA"     value="0.0070"/>
+    <transition from="AA"      to="AA"      value="0.9065"/>
+    <transition from="AA"      to="A"       value="0.0779"/>
+    <transition from="AA"      to="BBB"     value="0.0064"/>
+    <transition from="AA"      to="BB"      value="0.0006"/>
+    <transition from="AA"      to="B"       value="0.0014"/>
+    <transition from="AA"      to="CCC"     value="0.0002"/>
+    <transition from="AA"      to="Default" value="0.0000"/>
+    
+    <transition from="A"       to="AAA"     value="0.0009"/>
+    <transition from="A"       to="AA"      value="0.0227"/>
+    <transition from="A"       to="A"       value="0.9105"/>
+    <transition from="A"       to="BBB"     value="0.0552"/>
+    <transition from="A"       to="BB"      value="0.0074"/>
+    <transition from="A"       to="B"       value="0.0026"/>
+    <transition from="A"       to="CCC"     value="0.0001"/>
+    <transition from="A"       to="Default" value="0.0006"/>
+
+    <transition from="BBB"     to="AAA"     value="0.0002"/>
+    <transition from="BBB"     to="AA"      value="0.0033"/>
+    <transition from="BBB"     to="A"       value="0.0595"/>
+    <transition from="BBB"     to="BBB"     value="0.8693"/>
+    <transition from="BBB"     to="BB"      value="0.0530"/>
+    <transition from="BBB"     to="B"       value="0.0117"/>
+    <transition from="BBB"     to="CCC"     value="0.0012"/>
+    <transition from="BBB"     to="Default" value="0.0018"/>
+
+    <transition from="BB"      to="AAA"     value="0.0003"/>
+    <transition from="BB"      to="AA"      value="0.0014"/>
+    <transition from="BB"      to="A"       value="0.0067"/>
+    <transition from="BB"      to="BBB"     value="0.0773"/>
+    <transition from="BB"      to="BB"      value="0.8053"/>
+    <transition from="BB"      to="B"       value="0.0884"/>
+    <transition from="BB"      to="CCC"     value="0.0100"/>
+    <transition from="BB"      to="Default" value="0.0106"/>
+
+    <transition from="B"       to="AAA"     value="0.0000"/>
+    <transition from="B"       to="AA"      value="0.0011"/>
+    <transition from="B"       to="A"       value="0.0024"/>
+    <transition from="B"       to="BBB"     value="0.0043"/>
+    <transition from="B"       to="BB"      value="0.0648"/>
+    <transition from="B"       to="B"       value="0.8346"/>
+    <transition from="B"       to="CCC"     value="0.0407"/>
+    <transition from="B"       to="Default" value="0.0521"/>
+
+    <transition from="CCC"     to="AAA"     value="0.0022"/>
+    <transition from="CCC"     to="AA"      value="0.0000"/>
+    <transition from="CCC"     to="A"       value="0.0022"/>
+    <transition from="CCC"     to="BBB"     value="0.0130"/>
+    <transition from="CCC"     to="BB"      value="0.0238"/>
+    <transition from="CCC"     to="B"       value="0.1124"/>
+    <transition from="CCC"     to="CCC"     value="0.6486"/>
+    <transition from="CCC"     to="Default" value="0.1978"/>
+
+    <transition from="Default" to="AAA"     value="0.0000"/>
+    <transition from="Default" to="AA"      value="0.0000"/>
+    <transition from="Default" to="A"       value="0.0000"/>
+    <transition from="Default" to="BBB"     value="0.0000"/>
+    <transition from="Default" to="BB"      value="0.0000"/>
+    <transition from="Default" to="B"       value="0.0000"/>
+    <transition from="Default" to="CCC"     value="0.0000"/>
+    <transition from="Default" to="Default" value="1.0000"/>
+
   </mtransitions>
 
   <!-- ============================================================== -->
@@ -149,7 +200,7 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <client rating="A" sector="S1" name="Repsol" id="000001">
+    <client rating="BB" sector="S1" name="Repsol" id="000001">
       <belongs-to concept="sector" segment="S1"/>
       <belongs-to concept="size" segment="medium"/>
       <!-- implicit: belongs-to concept="client" value="cif1" -->
