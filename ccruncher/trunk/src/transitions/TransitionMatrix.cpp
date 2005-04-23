@@ -390,7 +390,7 @@ void ccruncher::tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exce
   }
   
   // exit function
-  delete one;
+  delete [] one;
   Utils::deallocMatrix(aux, n);
   Utils::deallocMatrix(tmp, n);
 }

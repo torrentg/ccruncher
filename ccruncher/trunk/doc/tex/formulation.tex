@@ -301,13 +301,37 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
 inicial $r_i$ haga fallido a lo largo del a\~no $t$.
 
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/tma.ps}
+\caption{Tasa de Morosidad Anticipada}
+\label{tma}
+\end{center}
+\end{figure}
+
 \paragraph{Definici\'on.} La Tasa de Morosidad Anticipada Acumulada (TMAA) 
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
 inicial $r_i$ haga fallido en el intervalo de tiempo $(0,t)$.
 
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/tmaa.ps}
+\caption{Tasa de Morosidad Anticipada Acumulada}
+\label{tmaa}
+\end{center}
+\end{figure}
+
 \paragraph{Definici\'on.} La Supervivencia en el tiempo $t$ del rating $r_i$ 
 es la probabilidad que una empresa con rating inicial $r_i$ no haya hecho 
 fallido en el intervalo de tiempo $(0,t)$.
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/survival.ps}
+\caption{Funci\'on de Supervivencia}
+\label{survival}
+\end{center}
+\end{figure}
 
 \paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada Acumulada se 
 puede expresar en funci\'on de la matriz de transici\'on a trav\'es de la
@@ -329,17 +353,16 @@ la Tasa de Morosidad Anticipada Acumulada a trav\'es de la relaci\'on siguiente:
 Supervivencia(r_i, t) =  1 - TMAA(r_i, t)
 \end{displaymath}
 
-\paragraph{Ejemplo.} El las figuras \ref{tmaa} se puede observar las Tasas
-de Morosidad Anticipada Acumulada de la matriz de transici\'on usada en 
-este documento.
+\paragraph{Proposici\'on.} Si la matriz de transici\'on es v\'alida, cualquier 
+rating inicial acaba haciendo fallido casi seguramente.
+\begin{displaymath}
+lim_{t \to \infty} TMAA(r_i, t) =  1 \quad \forall i
+\end{displaymath}
 
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[height=10cm, angle=-90]{./images/tmaa.ps}
-\caption{Tasa de Morosidad Anticipada Acumulada}
-\label{tmaa}
-\end{center}
-\end{figure}
+\paragraph{Ejemplo.} En las figuras \ref{tmaa}, \ref{tma} y \ref{survival} 
+se puede observar la Tasa de Morosidad anticipada, Tasa de Morosidad Anticipada 
+Acumulada y la Funci\'on de Supervivencia de la matriz de transici\'on usada en 
+este documento.
 
 %---------------------------------------------------------------------------
 
