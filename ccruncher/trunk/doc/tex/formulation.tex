@@ -469,10 +469,34 @@ entre clientes es definida positiva\footnote{propiedad pendiente de demostrar}.
 
 \section{Value At Risk (VAR)}
 
+Value-At-Risk es una medida del riesgo que describe en forma de probabilidades
+el riesgo de una cartera de productos financieros. Se trata del est\'andar de
+facto para la valoraci\'on del riesgo de mercado. Se recomienda la lectura del
+libro \emph{Value at Risk} \cite{var:jorion}.
+
+\paragraph{Definici\'on.} El VAR es la p\'erdida m\'axima esperada a lo largo
+de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
+\newline
+\newline
+Fijado un horizonte de tiempo $T$, el valor de la cartera es una variable 
+aleatoria. 
+\newline
+\newline
+En la figura \ref{creditvar} se ilustra el concepta de VAR aplicado al riesgo 
+de cr\'edito. Fijado un tiempo $T$
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/pdistrib.ps}
+\caption{Distribuci\'on del valor de la cartera a lo largo del tiempo}
+\label{pdistrib}
+\end{center}
+\end{figure}
+
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
-\caption{Distribuci\'on del valor de la cartera y c\'alculo del VAR}
+\caption{C\'alculo del VAR}
 \label{creditvar}
 \end{center}
 \end{figure}
