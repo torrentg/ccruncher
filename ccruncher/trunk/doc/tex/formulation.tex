@@ -96,8 +96,8 @@ compone de $n$ notas, $r_1$, $r_2$, $\cdots$, $r_n$, donde $r_1$ es la
 mejor nota (probabilidad de fallido mas baja), $r_2$ es la segunda mejor nota, 
 etc. $r_n$ corresponde al rating $Default$.
 
-\paragraph{Notaci\'on.} $P(r_i \to r_j;t) =$ probabilidad de pasar de un 
-rating inicial $r_i$ a un rating $r_j$ en un tiempo $t$.
+\paragraph{Notaci\'on.} $P(r_i \to r_j;t_0;t_1) =$ probabilidad de pasar de un 
+rating inicial $r_i$ en tiempo $t_0$ a un rating $r_j$ en tiempo $t_1$.
 
 
 \subsection{Sectores}
@@ -115,18 +115,12 @@ hecho fallido. V\'ease el ejemplo \emph{Impacto de la correlaci\'on intrasectori
 Al no poder asignar una correlaci\'on de fallido cliente a cliente, se recurre
 a la agrupaci\'on de estos en sectores. Se considera que la cartera de 
 cr\'editos dispone de un conjunto de sectores donde los componentes de cada 
-sector muestran una evoluci\'on crediticia similar (v\'ease figura \ref{sectors}). 
-O sea, que la mejora o empeoramiento de la calidad crediticia (rating) afecta 
-de forma com\'un a los componentes del sector. En general se identifican 
-estos sectores con los sectores industriales. 
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[height=6cm, angle=0]{./images/sectors.eps}
-\caption{Sectores de actividad}
-\label{sectors}
-\end{center}
-\end{figure}
+sector muestran una evoluci\'on crediticia similar. O sea, que la mejora o 
+empeoramiento de la calidad crediticia (rating) afecta de forma com\'un a los 
+componentes del sector. En general se identifican estos sectores con los 
+sectores industriales. 
+\newline
+\newline
 Se considera que cada cliente pertenece a un \'unico sector y permanece en 
 el a lo largo del tiempo. La relaci\'on entre sectores se formula a trav\'es 
 de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
@@ -180,10 +174,11 @@ caso de fallido. Normalmente es una parte de la exposici\'on.
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
-\paragraph{Definici\'on.} La matriz de transici\'on proporciona la probabilidad 
-que un cliente con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, 
-rating $r_j$. La denotamos de la forma siguiente:
-
+\paragraph{Definici\'on.} La matriz de transici\'on es una matriz cuadrada
+de dimensi\'on $n \times n$, donde $n$ es el n\'umero de ratings, que 
+proporciona la probabilidad que un cliente con rating inicial $r_i$ pase a 
+tener, al cabo de un tiempo $T$, rating $r_j$. La denotamos de la forma 
+siguiente:
 \begin{displaymath}
 M_T = \left(
 \begin{array}{ccc}
@@ -193,12 +188,11 @@ m_{n,1} & \dots  & m_{n,n}
 \end{array}
 \right)
 \qquad
-m_{i,j} = P(r_i \to r_j;T)
+m_{i,j} = P(r_i \to r_j;0;T)
 \end{displaymath}
 
-donde cada elemento de la matrix, $m_{i,j}$ corresponde a la 
-probabilidad de que un cliente con rating $r_i$ pase a tener, al cabo de $T$ 
-tiempo, rating $r_j$.
+donde $m_{i,j}$ corresponde a la probabilidad de que un cliente con rating 
+$r_i$ pase a tener, al cabo de $T$ tiempo, rating $r_j$.
 
 \paragraph{Ejemplo.} Matriz de transici\'on anual ($T=1$ a\~no). 
 Las probabilidades est\'an expresadas en tanto por ciento.
@@ -265,14 +259,14 @@ rating $B$ en un plazo de dos a\~nos disponiendo de la matriz de transici\'on an
 
 \begin{displaymath}
 \begin{array}{llll}
-P(AA \to B;2) = & P(AA \to AAA;1)     & \cdot P(AAA \to B;1)     & + \cr
-                & P(AA \to AA;1)      & \cdot P(AA \to B;1)      & + \cr
-                & P(AA \to A;1)       & \cdot P(A \to B;1)       & + \cr
-                & P(AA \to BBB;1)     & \cdot P(BBB \to B;1)     & + \cr
-                & P(AA \to BB;1)      & \cdot P(BB \to B;1)      & + \cr
-                & P(AA \to B;1)       & \cdot P(B \to B;1)       & + \cr
-                & P(AA \to CCC;1)     & \cdot P(CCC \to B;1)     & + \cr
-                & P(AA \to Default;1) & \cdot P(Default \to B;1) &
+P(AA \to B;0;2) = & P(AA \to AAA;0;1)     & \cdot P(AAA \to B;1;2)     & + \cr
+                  & P(AA \to AA;0;1)      & \cdot P(AA \to B;1;2)      & + \cr
+                  & P(AA \to A;0;1)       & \cdot P(A \to B;1;2)       & + \cr
+                  & P(AA \to BBB;0;1)     & \cdot P(BBB \to B;1;2)     & + \cr
+                  & P(AA \to BB;0;1)      & \cdot P(BB \to B;1;2)      & + \cr
+                  & P(AA \to B;0;1)       & \cdot P(B \to B;1;2)       & + \cr
+                  & P(AA \to CCC;0;1)     & \cdot P(CCC \to B;1;2)     & + \cr
+                  & P(AA \to Default;0;1) & \cdot P(Default \to B;1;2) &
 \end{array}
 \end{displaymath}
 
@@ -310,6 +304,9 @@ inicial $r_i$ haga fallido a lo largo del a\~no $t$.
 \paragraph{Definici\'on.} La Tasa de Morosidad Anticipada Acumulada (TMAA) 
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
 inicial $r_i$ haga fallido en el intervalo de tiempo $(0,t)$.
+\begin{displaymath}
+TMAA(r_i,t)=P(r_i \to Default;0;t)
+\end{displaymath}
 
 \begin{figure}[!hb]
 \begin{center}
@@ -367,9 +364,10 @@ este documento.
 \section{Matriz de correlaci\'on}
 \label{sec:mcorrel}
 
-\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial proporciona
-la correlaci\'on de los fallidos entre los sectores. La denotamos de la forma 
-siguiente:
+\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial es una matriz
+cuadrada de dimensi\'on $m \times m$, donde $m$ es el n\'umero de sectores, 
+que proporciona la correlaci\'on de los fallidos entre los sectores. 
+La denotamos de la forma siguiente:
 \begin{displaymath}
 \Gamma = \left(
 \begin{array}{ccc}
@@ -405,7 +403,9 @@ los sectores del cliente $i$ y $j$.
 \paragraph{Observaci\'on.} Los clientes se acostumbran a ordenar por sectores. En este
 caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 \begin{displaymath}
-\Theta = \left(
+\begin{array}{c}
+\Theta = \\
+\left(
 \begin{array}{ccccccccccc}
 1                & \dots    & \gamma_{p_1,p_1}  &          & \gamma_{1,p_i}   & \dots   & \gamma_{1,p_i}    &         & \gamma_{1,p_m}   & \dots      & \gamma_{1,p_m}   \cr
 \vdots           & \ddots   & \vdots            &          & \vdots           &         & \vdots            &         & \vdots           &            & \vdots           \cr
@@ -424,22 +424,23 @@ caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 \gamma_{1,p_m}   & \dots    & \gamma_{1,p_m}    &          & \gamma_{p_i,p_m} & \dots   & \gamma_{p_i,p_m}  &         & \gamma_{p_m,p_m} & \dots      & 1               
 \end{array}
 \right)
+\end{array}
 \end{displaymath}
 donde $p_1, \dots, p_m$ corresponde al n\'umero de clientes que pertenecen a los sectores $s_1, \dots, s_m$.
 Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre clientes es una matriz
 con bloques con $1$'s en la diagonal.
 
 
-\paragraph{Observaci\'on.} La matriz de correlaci\'on sectorial puede no ser 
-definida positiva. Supongamos que tenemos dos sectores, entonces la siguiente 
-matriz es v\'alida y no es definida positiva:
+\paragraph{Observaci\'on.} La matriz de correlaci\'on sectorial no tiene que 
+ser necesariamente definida positiva. Supongamos que tenemos dos sectores, 
+entonces la siguiente matriz es v\'alida y no es definida positiva:
 \begin{displaymath}
-\left(
+A=\left(
 \begin{array}{cc}
 0 & 0.1 \cr
 0.1 & 0
 \end{array}
-\right)
+\right) \Longrightarrow det(A)=-0.01 < 0 \Longrightarrow A \textrm{ not definite positive}
 \end{displaymath}
 
 \paragraph{Ejemplo.} Ejemplo de matriz de correlaci\'on sectorial, suponiendo 
@@ -470,20 +471,16 @@ entre clientes es definida positiva\footnote{propiedad pendiente de demostrar}.
 \section{Value At Risk (VAR)}
 
 Value-At-Risk es una medida del riesgo que describe en forma de probabilidades
-el riesgo de una cartera de productos financieros. Se trata del est\'andar de
-facto para la valoraci\'on del riesgo de mercado. Se recomienda la lectura del
+el riesgo de una cartera de productos financieros. Se recomienda la lectura del
 libro \emph{Value at Risk} \cite{var:jorion}.
 
 \paragraph{Definici\'on.} El VAR es la p\'erdida m\'axima esperada a lo largo
 de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
 \newline
 \newline
-Fijado un horizonte de tiempo $T$, el valor de la cartera es una variable 
-aleatoria. 
-\newline
-\newline
-En la figura \ref{creditvar} se ilustra el concepta de VAR aplicado al riesgo 
-de cr\'edito. Fijado un tiempo $T$
+El concepto clave es suponer que el valor de la cartera a tiempo $T$ es una 
+variable aleatoria. En la figura \ref{creditvar} se ilustra el concepta de VAR 
+aplicado al riesgo de cr\'edito. Fijado un tiempo $T$
 
 \begin{figure}[!hb]
 \begin{center}
@@ -500,3 +497,22 @@ de cr\'edito. Fijado un tiempo $T$
 \label{creditvar}
 \end{center}
 \end{figure}
+
+\paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
+sencilla, de la que se conoce la distribuci\'on en forma expl\'icita. Sea una
+cartera de $1$ solo sector con $100$ clientes, cada uno de ellos con un activo 
+que consiste en devolver $1$\$ al cabo de $T$ tiempo. Supongamos que el sistema 
+de ratings solamente contempla $2$ categor\'ias crediticias, no-Default y 
+Default. La probabilidad de hacer fallido al cabo de $T$ tiempo $0.1$.
+
+En este caso, se puede modelar cada cliente como una variable tipo Bernouilli. 
+La suma de Bernoullis es una binomial, que se puede aproximar por una Normal.
+El VAR a tiempo $T$ al $95\%$ es del $X$, la media es $Y$, expresado en tanto por 
+ciento respecto a ? es $Z$.
+\newline
+\newline
+Este ejemplo no es significativo debido a que la distribuci\'on es sim\'etrica
+respecto el valor esperado. La distribuci\'on de las carteras de cr\'editos
+se caracterizan por ser fuertemente asim\'etricas respecto el valor esperado.
+
+
