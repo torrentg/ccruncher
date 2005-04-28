@@ -130,3 +130,8 @@
 
 /* Define to `unsigned' if <sys/types.h> does not define. */
 /* #undef size_t */
+
+
+#ifdef _MSC_VER
+#include "../win32/winconfig.h"
+#endif

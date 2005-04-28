@@ -32,7 +32,9 @@
 
 #include <cmath>
 #include <cassert>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 #include <algorithm>
 #include "aggregators/SegmentAggregator.hpp"
 

@@ -34,10 +34,12 @@
 //===========================================================================
 
 #include "utils/config.h"
+#ifndef _MSC_VER
 #include <sys/resource.h>
+#include <getopt.h>
+#endif
 #include <cerrno>
 #include <iostream>
-#include <getopt.h>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
@@ -88,7 +90,7 @@ int main(int argc, char *argv[])
   while (1)
   {
     int curropt = getopt_long (argc, argv, options1, options2, NULL);
-  
+
     if (curropt == -1)
     {
       // no more options. exit while
@@ -264,6 +266,7 @@ void run(string filename, string path) throw(Exception)
 //===========================================================================
 void setnice(int niceval) throw(Exception)
 {
+#ifndef _MSC_VER
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
     throw Exception("nice value out of range [" + Parser::int2string(PRIO_MIN) +
@@ -281,6 +284,7 @@ void setnice(int niceval) throw(Exception)
       throw Exception("error changing process priority [" + msg + "]");
     }
   }
+#endif
 }
 
 //===========================================================================

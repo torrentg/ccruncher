@@ -29,11 +29,22 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <unistd.h>
 #include <dirent.h>
+#endif
+#include <cstdio>
 #include <cerrno>
 #include "utils/Parser.hpp"
 #include "utils/File.hpp"
+
+// --------------------------------------------------------------------------
+
+#ifdef _MSC_VER
+  #define PATHSEPARATOR string("\\")
+#else
+  #define PATHSEPARATOR string("/")
+#endif
 
 //===========================================================================
 // getWorkDirectory
@@ -74,9 +85,9 @@ string ccruncher::File::normalizePath(string path) throw(Exception)
     throw Exception("File::normalizePath(): non valid path (void)");
   }
 
-  if (ret.substr(0,1) != "." && ret.substr(0,1) != "/")
+  if (ret.substr(0,1) != "." && ret.substr(0,1) != PATHSEPARATOR)
   {
-    ret = "./" + ret;
+    ret = "." + PATHSEPARATOR + ret;
   }
 
   if (ret == ".")
@@ -84,19 +95,19 @@ string ccruncher::File::normalizePath(string path) throw(Exception)
     ret = getWorkDir();
   }
 
-  if (ret.substr(0,2) == "./")
+  if (ret.substr(0,2) == "." + PATHSEPARATOR)
   {
     ret = getWorkDir() + ret.substr(2);
   }
 
-  if (ret.substr(0,3) == "../")
+  if (ret.substr(0,3) == ".." + PATHSEPARATOR)
   {
     ret = getWorkDir() + ret;
   }
 
-  if (ret.substr(ret.length()-1, 1) != "/")
+  if (ret.substr(ret.length()-1, 1) != PATHSEPARATOR)
   {
-    ret = ret + "/";
+    ret = ret + PATHSEPARATOR;
   }
 
   return ret;
@@ -144,7 +155,11 @@ void ccruncher::File::makeDir(string dirname) throw(Exception)
   errno = 0;
 
   // creating directory
+#ifdef _MSC_VER
+  aux = mkdir(dirname.c_str());
+#else
   aux = mkdir(dirname.c_str(), S_IRWXU|S_IRWXG|S_IRWXO);
+#endif
 
   // checking creation
   if (aux != 0)
