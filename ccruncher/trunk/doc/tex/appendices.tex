@@ -34,6 +34,132 @@
 
 \section{Conceptos b\'asicos de estad\'istica}
 
+\paragraph{Esperanza.} Definimos la esperanza de una variable aleatoria 
+discreta de la forma siguiente:
+\begin{displaymath}
+E(X) = \sum_{i} i \cdot P(X=i)
+\end{displaymath}
+En el caso de una variable aleatoria continua con funci\'on de distribuci\'on 
+$f(x)$ la esperanza se expresa como:
+\begin{displaymath}
+E(X) = \int_{-\infty}^{\infty} x \cdot f(x) dx
+\end{displaymath}
+
+\paragraph{Varianza.} Definimos la varianza de una variable aleatoria discreta 
+de la forma siguiente:
+\begin{displaymath}
+Var(X) = \sum_{i} (i-E(X))^2 \cdot P(X=i)
+\end{displaymath}
+En el caso de una variable aleatoria continua con funci\'on de distribuci\'on 
+$f(x)$ la varianza se expresa como:
+\begin{displaymath}
+Var(X) = \int_{-\infty}^{\infty} (x-E(X))^2 \cdot f(x) dx
+\end{displaymath}
+
+\paragraph{Covarianza.} Definimos la covarianza entre dos variables 
+aleatorias $X$ e $Y$ de la forma siguiente:
+\begin{displaymath}
+Cov(X,Y) = E(X \cdot Y) - E(X) \cdot E(Y)
+\end{displaymath}
+
+\paragraph{Correlaci\'on.} Definimos la correlaci\'on, $\rho$, entre dos 
+variables aleatorias $X$ e $Y$ de la forma siguiente:
+\begin{displaymath}
+\rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{Var(x)+Var(Y)}}
+\end{displaymath}
+
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria de Bernoulli}
+
+\paragraph{Definici\'on.} La variable aleatoria discreta Bernouilli, $X$, se 
+utiliza para modelar fen\'omenos que solamente pueden tomar dos estados, 
+$0$ y $1$, con probabilidades $p$ y $(1-p)$ respectivamente. La notaremos 
+como $X \sim Ber(p)$:
+\begin{displaymath}
+P(X=0) = (1 - p) \qquad   P(X=1) = p \qquad p \in [0,1]
+\end{displaymath}
+ 
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Bernouilli $X \sim Ber(p)$ 
+es $p$. Este resultado es la aplicaci\'on directa de la definici\'on de esperanza 
+para una variable aleatoria discreta:
+\begin{displaymath}
+E(X) = \sum_{i} i \cdot P(X=i) = 1 \cdot p + 0 \cdot (1-p) = p
+\end{displaymath}
+
+\paragraph{Varianza.} La varianza de una variable aleatoria Bernouilli $X \sim Ber(p)$ 
+es $p \cdot (1-p)$. Este resultado es la aplicaci\'on directa de la definici\'on 
+de varianza para una variable aleatoria discreta:
+\begin{displaymath}
+Var(X)= \sum_{i} (i-E(X))^2 \cdot P(X=i) = (1-p)^2 \cdot p + (-p)^2 \cdot (1-p) = p \cdot (1-p)
+\end{displaymath}
+ 
+\paragraph{Simulaci\'on.} La simulaci\'on de una variable Bernouilli 
+$X \sim Ber(p)$ la realizamos de la siguiente forma:
+\begin{displaymath}
+x= \left\{
+\begin{array}{cc}
+0 & u \in [0,1-p) \cr
+1 & u \in [1-p,1]
+\end{array}
+\right.
+\qquad u \sim U[0,1]
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria Binomial}
+
+\paragraph{Definici\'on.} La suma de $n$ variables aleatorias Bernoulli 
+independientes e id\'enticamente distribuidas es una variable aleatoria discreta, 
+$X$ que llamamos Binomial, $X \sim B(n,p)$.
+\begin{displaymath}
+P(X=k) = {n \choose k} \cdot p^k \cdot (1-p)^{n-k} \qquad {n \choose k} = \frac{n!}{k! \cdot (n-k)!}
+\qquad k \in \{0, \cdots, n\}
+\end{displaymath}
+
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Binomial 
+$X \sim B(n,p)$ es:
+\begin{displaymath}
+E(X) = n \cdot p
+\end{displaymath}
+
+\paragraph{Varianza.} La varianza de una variable aleatoria Binomial 
+$X \sim B(n,p)$ es:
+\begin{displaymath}
+Var(X)= n \cdot p \cdot (1-p)
+\end{displaymath}
+
+\paragraph{Proposici\'on.} El Teorema Central del L\'imite nos permite, en el
+caso de $n$ grandes, aproximar la distribuci\'on discreta Binomial por una 
+distribuci\'on continua Normal:
+\begin{displaymath}
+B(n,p) \approx N(n \cdot p, \sqrt{n \cdot p \cdot (1-p)})
+\end{displaymath}
+
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria Normal}
+
+\subsection{Definici\'on y propiedades}
+
+\begin{displaymath}
+P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
+\end{displaymath}
+
+\subsection{Simulaci\'on}
+
+Para la generaci\'on de una realizaci\'on, $z$, de una variable aleatoria normal  
+$Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
+
+\begin{displaymath}
+z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u_1[0,1])} \cdot cos(2 \cdot \pi \cdot u_2[0,1])
+\end{displaymath}
+
+\noindent donde $u_1[0,1]$ y $u_2[0,1]$ son realizaciones de una variable aleatoria uniforme 
+en el intervalo $[0,1]$.
 
 %---------------------------------------------------------------------------
 
@@ -80,34 +206,3 @@ A^n = B = P^{-1} \cdot D \cdot P
 A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
 \end{displaymath} 
 
-%---------------------------------------------------------------------------
-
-\section{La variable aleatoria de Bernoulli}
-
-\subsection{Definici\'on y propiedades}
-
-\subsection{Simulaci\'on}
-
-TODO: ampliarla al caso x1, ..., xn. simulacion usando uniforme [0,1] + etc.
-
-%---------------------------------------------------------------------------
-
-\section{La variable aleatoria normal}
-
-\subsection{Definici\'on y propiedades}
-
-\begin{displaymath}
-P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
-\end{displaymath}
-
-\subsection{Simulaci\'on}
-
-Para la generaci\'on de una realizaci\'on, $z$, de una variable aleatoria normal  
-$Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
-
-\begin{displaymath}
-z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u_1[0,1])} \cdot cos(2 \cdot \pi \cdot u_2[0,1])
-\end{displaymath}
-
-\noindent donde $u_1[0,1]$ y $u_2[0,1]$ son realizaciones de una variable aleatoria uniforme 
-en el intervalo $[0,1]$.
