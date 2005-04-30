@@ -38,6 +38,7 @@
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace TNT;
 using namespace JAMA;
 
@@ -50,22 +51,22 @@ double PowMatrix::pow(double x, double y) throw(Exception)
 {
   if (x >= 0.0)
   {
-    return std::pow(x, y);
+    return ::pow(x, y);
   }
   else
   {
-    if (std::fabs(y) < EPSILON)
+    if (::fabs(y) < EPSILON)
     {
        return 1.0; // x^0 = 0
     }
     else
     {
-      double z = (std::fabs(y)>(1.0-EPSILON) ? y : 1.0/y);
+      double z = (::fabs(y)>(1.0-EPSILON) ? y : 1.0/y);
       int aux = (int) z;
 
       if (((double) aux - z) < EPSILON)
       {
-        return -std::pow(-x, y);
+        return -::pow(-x, y);
       }
       else
       {
@@ -96,7 +97,7 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
 
     return lu.solve(Id);
   }
-  catch(std::exception &e)
+  catch(::exception &e)
   {
     throw Exception(e, "PowMatrix::inverse(): unable to inverse matrix");
   }
@@ -157,7 +158,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
     {
        if (VAPS[i][i] < EPSILON)
        {
-         VAPS[i][i] = -std::pow(std::fabs(VAPS[i][i]), x);
+         VAPS[i][i] = -::pow(::fabs(VAPS[i][i]), x);
        }
        else
        {
@@ -184,7 +185,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   {
     throw e;
   }
-  catch(std::exception &e)
+  catch(::exception &e)
   {
     throw Exception(e, "PowMatrix::pow(): unable to pow matrix");
   }
