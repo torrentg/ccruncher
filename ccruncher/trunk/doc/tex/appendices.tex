@@ -34,6 +34,25 @@
 
 \section{Conceptos b\'asicos de estad\'istica}
 
+\paragraph{Definici\'on.} Llamamos funci\'on de distribuci\'on o cdf de la
+variable aleatoria $X$ a la funci\'on $F$ que cumple:
+\begin{displaymath}
+F(x) = P(X \leq x)
+\end{displaymath}
+
+\paragraph{Definici\'on.} Llamamos funci\'on de probabilidad o densidad o pdf
+ de la variable aleatoria $X$ a la funci\'on $f$ que cumple:
+\begin{displaymath}
+F(x) = \int_{-\infty}^{x} f(t) dt
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Sea $X$ una variable aleatoria continua con
+funci\'on de densidad $f_X(x)$. La funci\'on de densidad de $Y=H(X)$ siendo 
+$H(.)$ mon\'otona (estrictamente creciente o estrictamente decreciente) es:
+\begin{displaymath}
+f_Y(y) = f_X(H^{-1}(y))\cdot \left| \frac{d(H^{-1}(y))}{dy} \right|
+\end{displaymath}
+
 \paragraph{Esperanza.} Definimos la esperanza de una variable aleatoria 
 discreta de la forma siguiente:
 \begin{displaymath}
@@ -65,7 +84,13 @@ Cov(X,Y) = E(X \cdot Y) - E(X) \cdot E(Y)
 \paragraph{Correlaci\'on.} Definimos la correlaci\'on, $\rho$, entre dos 
 variables aleatorias $X$ e $Y$ de la forma siguiente:
 \begin{displaymath}
-\rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{Var(x)+Var(Y)}}
+\rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{Var(x) \cdot Var(Y)}}
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Sea $X$ una variable aleatoria continua con
+funci\'on de densidad $f(x)$ y $H(x)$ una funci\'on diferenciable. Entonces:
+\begin{displaymath}
+E(H(X)) = \int_{-\infty}^{\infty} H(x) \cdot f(x) dx
 \end{displaymath}
 
 
@@ -135,7 +160,7 @@ Var(X)= n \cdot p \cdot (1-p)
 caso de $n$ grandes, aproximar la distribuci\'on discreta Binomial por una 
 distribuci\'on continua Normal:
 \begin{displaymath}
-B(n,p) \approx N(n \cdot p, \sqrt{n \cdot p \cdot (1-p)})
+B(n,p) \approx N\left(n p, \sqrt{n p (1-p)}\right)
 \end{displaymath}
 
 
@@ -143,23 +168,39 @@ B(n,p) \approx N(n \cdot p, \sqrt{n \cdot p \cdot (1-p)})
 
 \section{La variable aleatoria Normal}
 
-\subsection{Definici\'on y propiedades}
-
+\paragraph{Definici\'on.} Decimos que una variable aleatoria continua $Z$ es 
+una Normal con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
+$Z \sim N(\mu, \sigma)$ si tiene la siguiente funci\'on de densidad:
 \begin{displaymath}
-P(X \leq x) = \Phi(x) = \int_{-\infty}^{x} \frac{e^{-t^2}}{\sqrt{2 \pi}} dt
+f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
 \end{displaymath}
 
-\subsection{Simulaci\'on}
-
-Para la generaci\'on de una realizaci\'on, $z$, de una variable aleatoria normal  
-$Z \sim N(\mu, \sigma)$ utilizamos el siguiente algoritmo:
-
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Normal 
+$X \sim N(\mu,\sigma)$ es:
 \begin{displaymath}
-z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u_1[0,1])} \cdot cos(2 \cdot \pi \cdot u_2[0,1])
+E(X) = \mu
 \end{displaymath}
 
-\noindent donde $u_1[0,1]$ y $u_2[0,1]$ son realizaciones de una variable aleatoria uniforme 
-en el intervalo $[0,1]$.
+\paragraph{Varianza.} La varianza de una variable aleatoria Normal 
+$X \sim N(\mu,\sigma)$ es:
+\begin{displaymath}
+Var(X)= \sigma^2
+\end{displaymath}
+
+\paragraph{Simulaci\'on.} Para la generaci\'on de una realizaci\'on, $z$, de 
+una variable aleatoria normal $Z \sim N(\mu, \sigma)$ utilizamos el siguiente 
+algoritmo:
+\begin{displaymath}
+z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
+\qquad u_1, u_2 \sim U[0,1]
+\end{displaymath}
+
+\paragraph{Definici\'on.} Decimos que una variable aleatoria continua 
+multidimensional $Z$ es una Normal con media $\vec{\mu}$ y matriz de covarianza
+$\Sigma$, $Z \sim N(\mu, \sigma)$ si tiene la siguiente funci\'on de densidad:
+\begin{displaymath}
+f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+\end{displaymath}
 
 %---------------------------------------------------------------------------
 
