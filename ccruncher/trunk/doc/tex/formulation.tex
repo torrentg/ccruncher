@@ -500,19 +500,30 @@ aplicado al riesgo de cr\'edito. Fijado un tiempo $T$
 
 \paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
 sencilla, de la que se puede calcular la distribuci\'on de forma expl\'icita. 
-Sea una cartera de $1$ solo sector con $100$ clientes, cada uno de ellos con un 
-activo que consiste en devolver $1$\$ al cabo de $T$ tiempo. Supongamos que el 
-sistema de ratings solamente contempla $2$ categor\'ias crediticias, no-Default 
-y Default. La probabilidad de hacer fallido al cabo de $T$ tiempo $0.1$.
-
-En este caso, se puede modelar cada cliente como una variable tipo Bernouilli. 
-La suma de Bernoullis es una binomial, que se puede aproximar por una Normal.
-El VAR a tiempo $T$ al $95\%$ es del $X$, la media es $Y$, expresado en tanto por 
-ciento respecto a ? es $Z$.
+Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
+entre ellos, cada uno de ellos con un activo que consiste en devolver $1$\$ al 
+cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
+$2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
+fallido al cabo de $T$ tiempo $0.1$.
 \newline
 \newline
-Este ejemplo no es significativo debido a que la distribuci\'on es sim\'etrica
-respecto el valor esperado. La distribuci\'on de las carteras de cr\'editos
-se caracterizan por ser fuertemente asim\'etricas respecto el valor esperado.
-
+En este caso, se puede modelar el importe devuelto por el cliente $i$ al cabo 
+de $T$ tiempo como una variable aleatoria Bernouilli, $X_i \sim Ber(0.9)$. El 
+valor de la cartera al cabo de $T$ tiempo es la suma de los importes devueltos 
+por los clientes, $Y = \sum_{i=1}^{100} x_i$, que por definici\'on es una 
+variable aleatoria Binomial, $Y \sim B(100,0.9)$. El Teorema Central del 
+L\'imite nos permite aproximar $Y \sim B(100,0.9) \approx N(90, 9)$.
+\newline
+\newline
+El valor esperado al cabo de $T$ tiempo es $E(Y) \approx 90$. El VAR al nivel 
+de confianza $99\%$ cumple que $P(Y \leq \textrm{VAR}_{99\%}) = 0.01 = 1\% 
+\longrightarrow \textrm{VAR}_{99\%}=86.16$.
+\newline
+\newline
+Este ejemplo no es significativo debido a que se han realizado dos supuestos 
+que en el mundo real no se cumplen: todos los creditores se modelan de la misma 
+forma y son independientes entre ellos. Se obtiene que la distribuci\'on del 
+valor de la cartera a tiempo $T$ es una variable aleatoria Normal, cosa que no
+concuerda con las observaciones reales, que muestran que la distribuci\'on del 
+valor de las carteras es fuertemente asim\'etrico respecto el valor esperado.
 

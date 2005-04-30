@@ -136,7 +136,7 @@ x= \left\{
 
 \section{La variable aleatoria Binomial}
 
-\paragraph{Definici\'on.} La suma de $n$ variables aleatorias Bernoulli 
+\paragraph{Definici\'on.} La suma de $n$ variables aleatorias Bernoulli, $Ber(p)$,  
 independientes e id\'enticamente distribuidas es una variable aleatoria discreta, 
 $X$ que llamamos Binomial, $X \sim B(n,p)$.
 \begin{displaymath}
@@ -160,7 +160,7 @@ Var(X)= n \cdot p \cdot (1-p)
 caso de $n$ grandes, aproximar la distribuci\'on discreta Binomial por una 
 distribuci\'on continua Normal:
 \begin{displaymath}
-B(n,p) \approx N\left(n p, \sqrt{n p (1-p)}\right)
+B(n,p) \approx N\left(n p, n p (1-p)\right)
 \end{displaymath}
 
 
@@ -170,25 +170,25 @@ B(n,p) \approx N\left(n p, \sqrt{n p (1-p)}\right)
 
 \paragraph{Definici\'on.} Decimos que una variable aleatoria continua $Z$ es 
 una Normal con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
-$Z \sim N(\mu, \sigma)$ si tiene la siguiente funci\'on de densidad:
+$Z \sim N(\mu, \sigma^2)$ si tiene la siguiente funci\'on de densidad:
 \begin{displaymath}
 f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
 \end{displaymath}
 
 \paragraph{Esperanza.} La esperanza de una variable aleatoria Normal 
-$X \sim N(\mu,\sigma)$ es:
+$X \sim N(\mu,\sigma^2)$ es:
 \begin{displaymath}
 E(X) = \mu
 \end{displaymath}
 
 \paragraph{Varianza.} La varianza de una variable aleatoria Normal 
-$X \sim N(\mu,\sigma)$ es:
+$X \sim N(\mu,\sigma^2)$ es:
 \begin{displaymath}
 Var(X)= \sigma^2
 \end{displaymath}
 
 \paragraph{Simulaci\'on.} Para la generaci\'on de una realizaci\'on, $z$, de 
-una variable aleatoria normal $Z \sim N(\mu, \sigma)$ utilizamos el siguiente 
+una variable aleatoria normal $Z \sim N(\mu, \sigma^2)$ utilizamos el siguiente 
 algoritmo:
 \begin{displaymath}
 z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
@@ -196,11 +196,26 @@ z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
 \end{displaymath}
 
 \paragraph{Definici\'on.} Decimos que una variable aleatoria continua 
-multidimensional $Z$ es una Normal con media $\vec{\mu}$ y matriz de covarianza
-$\Sigma$, $Z \sim N(\mu, \sigma)$ si tiene la siguiente funci\'on de densidad:
+multidimensional de $n$ variables $Z$ es una Normal con media $\vec{\mu}$ y 
+matriz de covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$ si tiene la 
+siguiente funci\'on de densidad:
 \begin{displaymath}
-f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}} 
+e^{-\frac{1}{2}\left(\vec{x}-\vec{\mu})^{\top} \Sigma^{-1} (\vec{x}-\vec{\mu}) \right)}
 \end{displaymath}
+donde $\left|\Sigma\right|$ es el determinante de la matriz de covarianzas 
+$\Sigma$, y $\Sigma^{-1}$ es la inversa de la matriz $\Sigma$.
+
+\paragraph{Simulaci\'on.} Para la generaci\'on de una realizaci\'on, $\vec{z}$, 
+de una variable aleatoria normal $Z \sim N(\vec{\mu}, \Sigma)$ utilizamos el 
+siguiente algoritmo:
+\begin{displaymath}
+\vec{z} = \vec{\mu} + \Sigma^{1/2} \vec{x}
+\qquad x_i \sim N[0,1]
+\end{displaymath}
+La matriz $\Sigma^{1/2}$ la calculamos usando el algoritmo de Cholesky. Sabemos 
+que existe soluci\'on debido a que $\Sigma$ es definida positiva por tratarse
+de una matriz de covarianzas.
 
 %---------------------------------------------------------------------------
 
