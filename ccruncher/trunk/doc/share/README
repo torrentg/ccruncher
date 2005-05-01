@@ -32,3 +32,21 @@ locfile: cbs/Prob_Credit.pdf
 descrip: a short and good introduction to CreditMetrics
 
 ------------------------------------------------------------------------
+
+docname: Aggregation of correlated risk portfolios: Models & Algorithms
+authors: Shaun S. Wang
+publish: CAS Committee on Theory of Risk
+homeurl: http://www.casact.org/cotor/wang.pdf 
+locfile: copulas/wang.pdf
+descrip: copula normal algorithm description
+
+------------------------------------------------------------------------
+
+docname: Correlation and dependence in risk management: properties and pitfalls
+authors: Paul Embrechts, Alexander McNeil and Daniel Straumann
+publish: RiskLab
+homeurl: http://www.risklab.ch/ftp/papers/CorrelationPitfalls.pdf
+locfile: pitfalls/wang.pdf
+descrip: pitfalls over correlation + factor rho'=2*sin(pi*rho/6)
+
+------------------------------------------------------------------------
