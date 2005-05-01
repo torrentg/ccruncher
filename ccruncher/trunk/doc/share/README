@@ -46,7 +46,7 @@ docname: Correlation and dependence in risk management: properties and pitfalls
 authors: Paul Embrechts, Alexander McNeil and Daniel Straumann
 publish: RiskLab
 homeurl: http://www.risklab.ch/ftp/papers/CorrelationPitfalls.pdf
-locfile: pitfalls/wang.pdf
+locfile: copulas/pitfalls.pdf
 descrip: pitfalls over correlation + factor rho'=2*sin(pi*rho/6)
 
 ------------------------------------------------------------------------

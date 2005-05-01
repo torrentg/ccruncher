@@ -96,51 +96,6 @@ $a_i \leq b_i$ se cumple:
 
 \paragraph{Generaci\'on de c\'opulas gausianas.}
 
-Sea $(Z_1,\cdots, Z_n)$ un vector aleatorio con marginales $Z_i \sim N(0,1)$ con
-\begin{displaymath}
-\Sigma = \left( 
-\begin{array}{cccc}
-1          & \rho_{12} & \ldots & \rho_{1n} \cr
-\rho_{21} & 1          & \ldots & \rho_{2n} \cr
-\vdots    & \vdots    & \ddots & \vdots   \cr
-\rho_{n1} & \rho_{n2} & \ldots & 1
-\end{array}
-\right)
-\end{displaymath}
-
-\noindent siendo $\rho_{ij} = \rho_{ji}$ el coeficiente de correlaci\'on entre 
-$Z_i$ y $Z_j$.
-
-\noindent Calculamos la raiz de $\Sigma$ usando el algoritmo de Cholesky. 
-De esta forma obtenemos la matriz triengular inferior
-\begin{displaymath}
-B = 
-\left(
-\begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
-\end{array}
-\right)
-\end{displaymath}
-
-\noindent que cumple $B \cdot B' = \Sigma$
-
-\noindent Generamos una simulaci\'on del vector aleatorio $Y=(Y_1, \cdots, Y_n)'$ 
-donde $Y_k \sim N(0,1)$ son variables aleatorias independientes.
-
-\noindent Calculamos $Z = B \cdot Y$. El vector aleatorio resultante, $Z$ tiene
-marginales $Z_k \sim N(0,1)$ y se encuentran correlacionadas seg\'un la matriz 
-$\Sigma$.
-
-\noindent Calculamos $X = (X_1, \cdots, X_n)'$ de la forma:
-\begin{displaymath}
-x_i = \Phi^{-1}(y_i)
-\end{displaymath}
-
-\noindent donde $\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-t^2} dt$
-
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=5cm, angle=0]{./images/copula.eps}

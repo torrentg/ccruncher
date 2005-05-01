@@ -201,7 +201,7 @@ matriz de covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$ si tiene la
 siguiente funci\'on de densidad:
 \begin{displaymath}
 f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}} 
-e^{-\frac{1}{2}\left(\vec{x}-\vec{\mu})^{\top} \Sigma^{-1} (\vec{x}-\vec{\mu}) \right)}
+exp\left\{-\frac{1}{2}\left(\vec{x}-\vec{\mu})^{\top} \Sigma^{-1} (\vec{x}-\vec{\mu}) \right)\right\}
 \end{displaymath}
 donde $\left|\Sigma\right|$ es el determinante de la matriz de covarianzas 
 $\Sigma$, y $\Sigma^{-1}$ es la inversa de la matriz $\Sigma$.
@@ -261,4 +261,94 @@ A^n = B = P^{-1} \cdot D \cdot P
 \Longrightarrow  
 A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
 \end{displaymath} 
+
+%---------------------------------------------------------------------------
+
+\section{Algoritmo de la c\'opula normal}
+
+Sea $\Sigma_1$ la matriz de correlaci\'on a cumplir por la c\'opula. Observemos 
+que se trata tambi\'en de la matriz de covarianzas al valer $1$ los elementos
+de la diagonal.
+\begin{displaymath}
+\Sigma_1 = \left( 
+\begin{array}{cccc}
+1          & \rho_{12} & \ldots & \rho_{1n} \cr
+\rho_{21} & 1          & \ldots & \rho_{2n} \cr
+\vdots    & \vdots    & \ddots & \vdots   \cr
+\rho_{n1} & \rho_{n2} & \ldots & 1
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Paso 1.} Creamos la matrix de covarianzas $\Sigma_2$ transformando 
+la matriz $\Sigma_1$ componente a componente:
+\begin{displaymath}
+\Sigma_2 = \left( 
+\begin{array}{cccc}
+2 sin(\frac{\pi}{6})           & 2 sin(\rho_{12} \frac{\pi}{6}) & \ldots & 2 sin(\rho_{1n} \frac{\pi}{6})\cr
+2 sin(\rho_{21} \frac{\pi}{6}) & 2 sin(\frac{\pi}{6})           & \ldots & 2 sin(\rho_{2n} \frac{\pi}{6})\cr
+\vdots                          & \vdots                          & \ddots  & \vdots   \cr
+2 sin(\rho_{n1} \frac{\pi}{6}) & 2 sin(\rho_{n2} \frac{\pi}{6}) & \ldots & 2 sin(\frac{\pi}{6})
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Paso 2.} A la matriz $\Sigma_2$ le aplicamos el algoritmo de 
+Cholesky para obtener la matrix triangular inferior $B$ cumpliendo 
+$\Sigma_2 = B \cdot B^{\top}$:
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Paso 3.} Simulamos $n$ variables aleatorias $N(0,1)$ independientes:
+\begin{displaymath}
+\vec{Y}^{\top}=(Y_1, \cdots, Y_n)^{\top} \qquad Y_k \sim N(0,1) \textrm{ independientes}
+\end{displaymath}
+
+\paragraph{Paso 4.} Simulamos una variable n-dimensional $Z \sim N(\vec{0}, \Sigma_2)$
+haciendo:
+\begin{displaymath}
+\vec{Z}^{\top} = 
+\left(
+\begin{array}{c}
+Z_1 \cr
+\vdots \cr
+Z_n
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\left(
+\begin{array}{c}
+Y_1 \cr
+\vdots \cr
+Y_n
+\end{array}
+\right) 
+ = B \cdot \vec{Y}^{\top}
+\end{displaymath}
+
+\paragraph{Paso 5.} Finalmente obtenemos la simulaci\'on de la c\'opula, $\vec{X}$.
+\begin{displaymath}
+\vec{X}^{\top} = (X_1, \cdots, X_n)^{\top} = (\Phi(Z_1), \cdots, \Phi(Z_n))^{\top}
+\end{displaymath}
+donde $\Phi(x)$ es la funci\'on de distribuci\'on de la Normal est\'andar
+\begin{displaymath}
+\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}} dt
+\end{displaymath}
 
