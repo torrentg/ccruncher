@@ -171,6 +171,98 @@ caso de fallido. Normalmente es una parte de la exposici\'on.
 
 %---------------------------------------------------------------------------
 
+\section{Tipos de inter\'es}
+\label{sec:interests}
+
+\paragraph{Definici\'on.}
+Sea $C_{t_0}$ el importe inicial de una operaci\'on y $C_{t_1}$ el importe final. 
+Definimos el tipo efectivo como:
+\begin{equation}
+\label{tipus_efectiu}
+\textrm{tipo efectivo} = r = \frac{C_{t_1}-C_{t_0}}{C_{t_0}}
+\end{equation}
+
+\paragraph{Definici\'on.}
+El tipo de inter\'es simple, $r_s$, es un tipo de inter\'es donde para cada 
+periodo de tiempo se incrementa el importe inicial, $C_{t_0}$ por un factor de $r_s$. 
+\begin{equation}
+\label{interes_simple_1}
+r_s = \frac{r}{t_1 - t_0} = \frac{ ( C_{t_1}-C_{t_0} ) / C_{t_0} }{t_1 - t_0}
+\end{equation}
+
+\paragraph{Defici\'on.}
+El tipo de inter\'es compuesto, $r_c$, es un tipo de inter\'es donde para cada 
+periodo de tiempo se incrementa por un factor de $r_c$ el importe acumulado del 
+periodo anterior.
+\begin{equation}
+\label{interes_compuesto_1}
+r_c = (1 + r) ^ \frac{1}{t_1-t_0} - 1 = (1 + r_s \cdot (t_1 - t_0)) ^ \frac{1}{t_1-t_0} - 1
+\end{equation}
+
+\paragraph{Defici\'on.}
+El tipo de inter\'es continuo, $r_e$, es el caso l\'\i mite del inter\'es 
+compuesto.
+\begin{equation}
+\label{interes_continuo_1}
+\lim_{t_1 \rightarrow t_0} r_c = \lim_{t_1 \rightarrow t_0} (1 + \frac{r}{t_1-t_0}) ^ {(t_1 - t_0)} = e^{r_e} - 1
+\end{equation}
+Por tanto,
+\begin{equation}
+\label{interes_continuo_2}
+r_e = \ln(1 + r_c)
+\end{equation}
+
+\paragraph{Proposici\'on.}
+Podemos deducir el importe final, $C_{t_1}$, conociendo el importe inicial, 
+$C_{t_0}$, el intervalo de tiempo transcurrido, $t_1 - t_0$, y el tipo de 
+inter\'es.
+\begin{displaymath}
+\begin{array}{lcl}
+\textrm{inter\'es simple}    & \rightarrow & C_{t_1} = C_{t_0} \cdot (1+ r_s \cdot (t_1-t_0)) \cr
+\textrm{inter\'es compuesto} & \rightarrow & C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)}      \cr
+\textrm{inter\'es continuo}  & \rightarrow & C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)} 
+\end{array}
+\end{displaymath}
+
+\paragraph{Ejemplo.}
+Consideremos una operaci\'on que supone una inversi\'on inicial de 100 MM. y que 
+al cabo de 5 a\~{n}os proporciona unos ingresos de 120 MM. 
+\newline
+\newline
+Calculemos los diferentes tipos de inter\'es:
+\begin{displaymath}
+\begin{array}{l}
+r_s= \frac{r}{5} = \frac{(120-100)/100}{5} = \frac{20\%}{5} = 4\% \cr
+r_c= (1+r) ^ {1/5} - 1 = 1.2^{0.2} - 1 = 1.0371 - 1 = 3.71 \%       \cr
+r_e= \ln(1 + r_c) = \ln(1.0371) = 3.65 \%
+\end{array}
+\end{displaymath}
+\newline
+\newline
+Recuperemos el importe final de la operaci\'on a partir del importe inicial, 
+el intervalo de tiempo y el tipo de inter\'es:
+\begin{displaymath}
+\begin{array}{lcl}
+\textrm{inter\'es simple}    & \rightarrow & C_{t_1} = 100 \cdot (1 + 4\% \cdot 5) = 120 \cr
+\textrm{inter\'es compuesto} & \rightarrow & C_{t_1} = 100 \cdot (1 + 3.71\%)^5 = 120 \cr
+\textrm{inter\'es continuo}  & \rightarrow & C_{t_1} = 100 \cdot e^{3.65 \% \cdot 5} = 120
+\end{array}
+\end{displaymath}
+
+\subsection{Actualizaci\'on}
+BLABLABLA
+\subsection{Curba spot o cup\'on cero}
+
+En el mercado existen productos simples a distintos plazos para los cuales se 
+puede calcular el tipo de inter\'es que proporcionan. El tipo usado normalmente 
+es el tipo de inter\'es compuesto. Si deseamos conocer el tipo simple o continuo 
+los podemos obtener a trav\'es de las transformaciones descritas anteriormente.
+La curba descrita por el tipo que se aplica en distintos periodos se conoce por 
+el nombre de curva spot o curba cup\'on cero de tipos de inter\'es.
+
+
+%---------------------------------------------------------------------------
+
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
@@ -332,7 +424,7 @@ fallido en el intervalo de tiempo $(0,t)$.
 puede expresar en funci\'on de la matriz de transici\'on a trav\'es de la
 relaci\'on siguiente ($n$ es el \'indice del rating Default):
 \begin{displaymath}
-TMAA(r_i,k \cdot T) = (M^k)_{i,n}
+TMAA(r_i,k \cdot T) = (M_{k \cdot T})_{i,n} = (M_{T}^{k})_{i,n}
 \end{displaymath}
 
 \paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada se puede expresar 
@@ -525,5 +617,5 @@ que en el mundo real no se cumplen: todos los creditores se modelan de la misma
 forma y son independientes entre ellos. Se obtiene que la distribuci\'on del 
 valor de la cartera a tiempo $T$ es una variable aleatoria Normal, cosa que no
 concuerda con las observaciones reales, que muestran que la distribuci\'on del 
-valor de las carteras es fuertemente asim\'etrico respecto el valor esperado.
+valor de las carteras es fuertemente asim\'etrica respecto el valor esperado.
 
