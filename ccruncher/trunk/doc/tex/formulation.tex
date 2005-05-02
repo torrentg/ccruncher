@@ -249,17 +249,66 @@ el intervalo de tiempo y el tipo de inter\'es:
 \end{array}
 \end{displaymath}
 
-\subsection{Actualizaci\'on}
-BLABLABLA
-\subsection{Curba spot o cup\'on cero}
+\subsection{Funci\'on de transporte}
+
+\paragraph{Definici\'on.} Fijado un tipo de inter\'es, $r$, y un intervalo de
+tiempo, $\Delta t = t_k-t_0$, la funci\'on de transporte proporciona el factor 
+que debe aplicarse a un importe en $t_0$ para obtener el importe equivalente en
+$t_k$.
+\newline
+\newline
+Caso $C_0 \longrightarrow C_k \quad t_0 < t_k$:
+\begin{displaymath}
+\begin{array}{lcl}
+\textrm{inter\'es simple}    & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot (1+r\cdot(t_k-t_0)) = C_k \cr
+\textrm{inter\'es compuesto} & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot (1+r)^{(t_k-t_0)} = C_k \cr
+\textrm{inter\'es continuo}  & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot e^{r\cdot(t_k-t_0)} = C_k 
+\end{array}
+\end{displaymath}
+Caso $C_k \longleftarrow C_0 \quad t_k < t_0$:
+\begin{displaymath}
+\begin{array}{lcl}
+\textrm{inter\'es simple}    & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot (1+r\cdot(t_0-t_k))^{-1} = C_k \cr
+\textrm{inter\'es compuesto} & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot (1+r)^{-(t_0-t_k)} = C_k \cr
+\textrm{inter\'es continuo}  & \rightarrow & C_0 \cdot \Upsilon(t_0,t_k, r) = C_0 \cdot e^{-r\cdot(t_0-t_k)} = C_k
+\end{array}
+\end{displaymath}
+
+\paragraph{Notaci\'on.} En este documento se considera que el tipo de inter\'es
+aplicado es el tipo de inter\'es compuesto. En este caso, la funci\'on de transporte
+tiene una expresi\'on \'unica, sea cual sea el sentido en el que se aplica:
+\begin{displaymath}
+\Upsilon(t_0,t_k, r) = (1+r)^{(t_k-t_0)}
+\end{displaymath}
+
+
+\subsection{Curva spot o cup\'on cero}
+
+\paragraph{Definici\'on.} La curva spot o curva cup\'on cero es la funci\'on
+$S$ que indica el tipo de inter\'es a aplicar en la funci\'on de transporte
+desde el tiempo $t_0$.
 
 En el mercado existen productos simples a distintos plazos para los cuales se 
-puede calcular el tipo de inter\'es que proporcionan. El tipo usado normalmente 
-es el tipo de inter\'es compuesto. Si deseamos conocer el tipo simple o continuo 
-los podemos obtener a trav\'es de las transformaciones descritas anteriormente.
-La curba descrita por el tipo que se aplica en distintos periodos se conoce por 
-el nombre de curva spot o curba cup\'on cero de tipos de inter\'es.
+puede calcular el tipo de inter\'es que proporcionan. Estos tipos de inter\'es
+solamente se pueden usar en la funci\'on de transporte cuando uno de los
+tiempos sea $t_0$ y el otro sea superior a $t_0$.
 
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[height=10cm, angle=-90]{./images/spot.ps}
+\caption{Curva Spot}
+\label{spot}
+\end{center}
+\end{figure}
+
+\paragraph{Ejemplo.} Proporcionada la curva spot, $S$, transportemos el importe 
+$C$ que se encuentra en $t=3$ a $t=5$. La curva spot nos proporciona los tipos 
+de inter\'es a aplicar desde $t=0$.
+\begin{displaymath}
+\Upsilon(t_3,t_5, r) = 
+\Upsilon(t_3,t_0, S(3)) \cdot \Upsilon(t_0,t_5, S(5)) =
+\frac{\Upsilon(t_0,t_5, S(5))}{\Upsilon(t_0,t_3, S(3))}
+\end{displaymath}
 
 %---------------------------------------------------------------------------
 
