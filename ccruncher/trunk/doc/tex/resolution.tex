@@ -37,24 +37,33 @@ con la valoracion del riesgo de mercado (pe. valoracion de opciones)
 
 \section{Hip\'otesis}
 
-\paragraph{La \'unica fuente de riesgo es el riesgo de impago.}
-No se contemplan los riesgos de variaci\'on de tipos de inter\'es, etc.
+A continuaci\'on se enumeran las hip\'otesis duras. 
+\begin{enumerate}
+\item Los fallidos no se recuperan.
+\item La \'unica fuente de riesgo considerada es el riesgo de impago. No se 
+contemplan otros tipos de riesgos como la variaci\'on de tipos de inter\'es, 
+de mercado, operacional, reputacional, etc.
+\item La descripci\'on de cada activo (cashflow, exposici\'on y recuperaci\'on) 
+se conoce de antemano y no var\'ia a lo largo de la simulaci\'on. En particular,
+el valor del activo solo depende de si el cliente hace fallido, no del rating
+que pueda tener el cliente. Por otra parte, la recuperaci\'on no puede variar en 
+funci\'on de la evoluci\'on del rating de otro cliente.
+\item El rating de un cliente no depende del rating de otro cliente de otra 
+forma forma que no sea la correlaci\'on entre sectores. Esta restricci\'on no 
+permite tratar el rating de las empresas subsidiarias en funci\'on del rating 
+de la empresa matriz.
+\end{enumerate}
 
-\paragraph{El tiempo est\'a repartido uniformemente.}
-blablabla.
-
-\paragraph{Un fallido no se recupera.}
-blablabla.
-
-\paragraph{El valor solamente depende del fallido (no cambia en funci\'on del rating).}
-blablabla.
-
-\paragraph{Las probabilidades de fallido no dependen del tiempo.}
-blablabla.
-
-\paragraph{El rating y la recuperaci\'on de un cliente no depende de otro cliente.}
-blablabla.
-
+A continuaci\'on se enumeran las hip\'otesis blandas. 
+\begin{enumerate}
+\item Los intervalos de tiempo considerado se encuentran equiespaciados. Esto 
+permite simplificar los datos de entrada y el n\'umero de matrices de 
+transici\'on a considerar.
+\item La matriz de transici\'on no var\'ia a lo largo del tiempo. Se aplica 
+la misma matriz de transici\'on anual para pasar de $t_0$ a $t_1$ que para 
+pasar de $t_{19}$ a $t_{20}$. Esto permite simplificar los datos de entrada y 
+el n\'umero de matrices de transici\'on a considerar.
+\end{enumerate}
 
 %---------------------------------------------------------------------------
 

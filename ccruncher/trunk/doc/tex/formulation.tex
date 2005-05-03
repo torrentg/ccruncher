@@ -252,9 +252,9 @@ el intervalo de tiempo y el tipo de inter\'es:
 \subsection{Funci\'on de transporte}
 
 \paragraph{Definici\'on.} Fijado un tipo de inter\'es, $r$, y un intervalo de
-tiempo, $\Delta t = t_k-t_0$, la funci\'on de transporte proporciona el factor 
-que debe aplicarse a un importe en $t_0$ para obtener el importe equivalente en
-$t_k$.
+tiempo, $\Delta t = t_k-t_0$, la funci\'on de transporte, $\Upsilon$, proporciona 
+el factor que debe aplicarse a un importe en $t_0$ para obtener el importe 
+equivalente en $t_k$.
 \newline
 \newline
 Caso $C_0 \longrightarrow C_k \quad t_0 < t_k$:
@@ -301,14 +301,13 @@ tiempos sea $t_0$ y el otro sea superior a $t_0$.
 \end{center}
 \end{figure}
 
-\paragraph{Ejemplo.} Proporcionada la curva spot, $S$, transportemos el importe 
-$C$ que se encuentra en $t=3$ a $t=5$. La curva spot nos proporciona los tipos 
-de inter\'es a aplicar desde $t=0$.
+\paragraph{Proposici\'on.} Dada una curva spot $S$ en $t_0$, podemos calcular
+el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
 \begin{displaymath}
-\Upsilon(t_3,t_5, r) = 
-\Upsilon(t_3,t_0, S(3)) \cdot \Upsilon(t_0,t_5, S(5)) =
-\frac{\Upsilon(t_0,t_5, S(5))}{\Upsilon(t_0,t_3, S(3))}
+\Upsilon(t_i,t_j, r) = 
+\Upsilon(t_i,t_0, S(t_i)) \cdot \Upsilon(t_0,t_j, S(t_j))
 \end{displaymath}
+
 
 %---------------------------------------------------------------------------
 
@@ -621,7 +620,7 @@ de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
 \newline
 El concepto clave es suponer que el valor de la cartera a tiempo $T$ es una 
 variable aleatoria. En la figura \ref{creditvar} se ilustra el concepta de VAR 
-aplicado al riesgo de cr\'edito. Fijado un tiempo $T$
+aplicado al riesgo de cr\'edito.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -642,7 +641,7 @@ aplicado al riesgo de cr\'edito. Fijado un tiempo $T$
 \paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
 sencilla, de la que se puede calcular la distribuci\'on de forma expl\'icita. 
 Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
-entre ellos, cada uno de ellos con un activo que consiste en devolver $1$\$ al 
+entre ellos, cada cliente con un activo que consiste en devolver $1$ \euro al 
 cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
 $2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
 fallido al cabo de $T$ tiempo $0.1$.
