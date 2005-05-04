@@ -50,3 +50,12 @@ locfile: copulas/pitfalls.pdf
 descrip: pitfalls over correlation + factor rho'=2*sin(pi*rho/6)
 
 ------------------------------------------------------------------------
+
+docname: Monte Carlo Methods
+authors: Mervyn Marasinghe
+publish: Iowa State University, Dept of Statistics, 
+homeurl: http://www.public.iastate.edu/~mervyn/stat580/Notes/s04mc.pdf
+locfile: montecarlo/sc04mc.pdf
+descrip: Monte Carlo method description
+
+------------------------------------------------------------------------

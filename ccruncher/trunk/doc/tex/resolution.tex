@@ -30,14 +30,14 @@
 \chapter{Resoluci\'on del problema}
 \label{sec:resolution}
 
-TODO: que es lo que esperamos: flexibilidad, resultados finos, paralelismo 
-con la valoracion del riesgo de mercado (pe. valoracion de opciones)
+En este cap\'itulo se establecen las hip\'otesis de trabajo, se introducen los
+elementos usados para la resoluci\'on y se describe el algoritmo de resoluci\'on.
 
 %---------------------------------------------------------------------------
 
 \section{Hip\'otesis}
 
-A continuaci\'on se enumeran las hip\'otesis duras. 
+\subsection{Hip\'otesis duras}
 \begin{enumerate}
 \item Los fallidos no se recuperan.
 \item La \'unica fuente de riesgo considerada es el riesgo de impago. No se 
@@ -54,7 +54,7 @@ permite tratar el rating de las empresas subsidiarias en funci\'on del rating
 de la empresa matriz.
 \end{enumerate}
 
-A continuaci\'on se enumeran las hip\'otesis blandas. 
+\subsection{Hip\'otesis blandas}
 \begin{enumerate}
 \item Los intervalos de tiempo considerado se encuentran equiespaciados. Esto 
 permite simplificar los datos de entrada y el n\'umero de matrices de 
@@ -67,20 +67,10 @@ el n\'umero de matrices de transici\'on a considerar.
 
 %---------------------------------------------------------------------------
 
-\section{Reparto del tiempo}
+\section{Elementos que intervienen en la resoluci\'on}
 
+\subsection{Variables aleatorias correlacionadas. C\'opulas.}
 
-%---------------------------------------------------------------------------
-
-\section{El m\'etodo de Monte Carlo}
-
-
-
-%---------------------------------------------------------------------------
-
-\section{C\'opulas. Variables aleatorias correlacionadas}
-
-\subsection{Errores comunes sobre la correlaci\'on}
 
 \paragraph{Definici\'on.}
 Una copula es la funci\'on de distribuci\'on de un vector aleatorio sobre 
@@ -114,7 +104,22 @@ $a_i \leq b_i$ se cumple:
 \end{center}
 \end{figure}
 
+\subsection{El m\'etodo de Monte Carlo}
+
 %---------------------------------------------------------------------------
 
-\section{Algoritmo de resoluci\'on}
+\section{M\'etodo de resoluci\'on}
+
+\subsection{Notaci\'on}
+
+\subsection{Reparto del tiempo}
+
+\subsection{Simulaci\'on del rating}
+c\'opula -> asignaci\'on -> matriz transici\'on
+
+\subsection{Valoraci\'on de la cartera}
+valoraci\'on activo -> valoraci\'on cliente -> valoraci\'on cartera
+
+\subsection{Distribuci\'on del valor de la cartera}
+calculo del valor esperado, calculo del VAR, etc.
 
