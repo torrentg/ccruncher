@@ -31,7 +31,8 @@
 \label{sec:resolution}
 
 En este cap\'itulo se establecen las hip\'otesis de trabajo, se introducen los
-elementos usados para la resoluci\'on y se describe el algoritmo de resoluci\'on.
+elementos usados para la resoluci\'on y se describen dos m\'etodos de
+resoluci\'on basados en simulaci\'on: Time-To-Default y Rating-Path.
 
 %---------------------------------------------------------------------------
 
@@ -71,51 +72,47 @@ el n\'umero de matrices de transici\'on a considerar.
 
 \subsection{Variables aleatorias correlacionadas. C\'opulas.}
 
+Se recomienda la lectura de las referencias \cite{copu:wang} y 
+\cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
+c\'opula, sus propiedades, como simularlas, creencias erroneas, etc.
 
-\paragraph{Definici\'on.}
-Una copula es la funci\'on de distribuci\'on de un vector aleatorio sobre 
-$\Re^n$ donde las funciones de distribuci\'on marginales son $U[0,1]$. 
+\paragraph{Definici\'on.} Llamamos c\'opula a la funci\'on de distribuci\'on
+de una variable aleatoria $n$-dimensional tal que sus distribuciones marginales 
+son variables aleatorias $U[0,1]$.
 \begin{displaymath}
-C(u_1, \cdots, u_n) = P\{U_1 \leq u_1, \cdots, U_n \leq u_n\}
+C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 \end{displaymath}
 
-\paragraph{Proposici\'on.}
-$C$ es una c\'opula $\iff C:[0,1]^n \to [0,1]$ y cumple las siguientes 
-propiedades:
-\begin{itemize}
-\item $C(x_1, \cdots, x_n)$ es creciente en cada componente $x_i$
-\item $C(1, \cdots, 1, x_i, 1, \cdots, 1) = x_i \quad \forall i \in \{1, \cdots, n\}, x_i \in [0,1]$
-\item $\forall (a_1, \cdots, a_n) \in [0,1]^n$ y $\forall (b_1, \cdots, b_n) \in [0,1]^n$ con
-$a_i \leq b_i$ se cumple:
+\paragraph{Teorema.} Toda variable aleatoria $n$-dimensional puede separarse 
+en las distribuciones seguidas por sus componentes, las distribuciones marginales,
+y las relaciones existentes entre ellas a trav\'es de una c\'opula. Sea $H$ 
+una funci\'on de distribuci\'on $n$-dimensional y $f_1,\cdots, f_n$ sus marginales. 
+El teorema de Sklar asegura que existe una c\'opula $C$ tq.
 \begin{displaymath}
-\sum_{i_1=1}^{2} \cdots \sum_{i_n=1}^{2} (-1)^{i_1+\cdots+x_n} C(x_{1i_1},\cdots,x_{ni_n}) \geq 0
+H(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
 \end{displaymath}
-\noindent siendo $x_{j1}=a_j$ y $x_{j2}=b_j$ $\quad \forall j \in \{1, \cdots, n\}$
-\end{itemize}
 
-\paragraph{Generaci\'on de c\'opulas gausianas.}
+\paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
+determinada por sus marginales y correlaciones entre estas. Dicho de otra
+forma, existen infinitas formas de combinar las distribuciones marginales
+, c\'opulas, de forma que cumplan las correlaciones. Las distribuciones 
+el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
 
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[height=5cm, angle=0]{./images/copula.eps}
-\includegraphics[height=5cm, angle=0]{./images/uniform.eps}
-\caption{Bivariate distribution plot with correlation and independent}
-\label{copulas}
-\end{center}
-\end{figure}
 
 \subsection{El m\'etodo de Monte Carlo}
 
 %---------------------------------------------------------------------------
 
-\section{M\'etodo de resoluci\'on}
+\section{Notaci\'on}
 
-\subsection{Notaci\'on}
+%---------------------------------------------------------------------------
 
-\subsection{Reparto del tiempo}
+\section{M\'etodo Time-To-Default}
+c\'opula -> funci\'on supervivencia -> valoraci\'on cartera
 
-\subsection{Simulaci\'on del rating}
-c\'opula -> asignaci\'on -> matriz transici\'on
+\section{M\'etodo Rating-Path}
+c\'opula -> matriz transici\'on -> valoraci\'on cartera
+
 
 \subsection{Valoraci\'on de la cartera}
 valoraci\'on activo -> valoraci\'on cliente -> valoraci\'on cartera
