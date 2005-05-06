@@ -101,6 +101,57 @@ el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on.
 
 \subsection{El m\'etodo de Monte Carlo}
 
+Se recomienda la lectura de la referencia \cite{mc:mervyn}. Se trata de los 
+apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo 
+de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
+
+\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x_1, \cdots, x_n$,
+de la variable aleatoria $X$, definimos la funci\'on de distribuci\'on emp\'irica 
+como:
+\begin{displaymath}
+\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x_i) \qquad
+I_{[-\infty,k]}(x) = \left\{
+\begin{array}{ll}
+1 & \textrm{ if } x \in (-\infty,k] \cr
+0 & \textrm{ otherwise}
+\end{array}
+\right.
+\end{displaymath}
+
+\paragraph{Proposici\'on.} La funci\'on de distribuci\'on emp\'irica tiende a 
+la funci\'on de distribuci\'on al incrementar el n\'umero de observaciones.
+\begin{displaymath}
+\qquad \lim_{n\to\infty} \widetilde{F_X} = F_X
+\end{displaymath}
+
+\paragraph{Definici\'on.} Sea $X$ una variable aleatoria con funci\'on de 
+distribuci\'on conocida, $F$. El m\'etodo de Monte Carlo consiste en 
+obtener la funci\'on de distribuci\'on empirica de la variable aleatoria 
+$H(X)$ usando el siguiente m\'etodo:
+\begin{displaymath}
+\begin{array}{ccc}
+F_X                  &     \quad         & \widetilde{F_{H(X)}}   \cr
+\downarrow         &     \quad         & \uparrow                \cr
+\textrm{simulation} &     \quad         & \textrm{empirical } cdf \cr
+\downarrow         &     \quad         & \uparrow                \cr
+x_1,\cdots,x_n      & \longrightarrow & H(x_1),\cdots,H(x_n)  
+\end{array}
+\end{displaymath}
+
+\paragraph{Observaci\'on.} Problemas aparentemente no relacionados con las 
+variables aleatorias pueden reformularse como un problema donde intervenga
+una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. El 
+ejemplo cl\'asico es obtener el valor de la integral de la funci\'on $W$ entre 
+$0$ y $1$. Lo reformulamos de la siguiente forma:
+\begin{displaymath}
+\int_{0}^{1} W(u) du = \int_{0}^{1} W(u) \phi(u) du = E[W(U)]
+\end{displaymath}
+donde $U \sim U[0,1]$ y $\phi(u) = pdf(U) = 1$. La \'ultima igualdad se establece 
+usando la preposici\'on enunciada en el ap\'endice \ref{apendix:stats}. 
+Finalmente la integral se aproxima calculando la media de un conjunto de puntos 
+con distribuci\'on $W(U)$.
+
+
 %---------------------------------------------------------------------------
 
 \section{Notaci\'on}
