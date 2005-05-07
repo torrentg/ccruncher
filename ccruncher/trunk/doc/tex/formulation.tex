@@ -301,11 +301,11 @@ tiempos sea $t_0$ y el otro sea superior a $t_0$.
 \end{center}
 \end{figure}
 
-\paragraph{Proposici\'on.} Dada una curva spot $S$ en $t_0$, podemos calcular
+\paragraph{Proposici\'on.} Dada una curva spot $S_{t_0}$ en $t_0$, podemos calcular
 el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
 \begin{displaymath}
 \Upsilon(t_i,t_j, r) = 
-\Upsilon(t_i,t_0, S(t_i)) \cdot \Upsilon(t_0,t_j, S(t_j))
+\Upsilon(t_i,t_0, S_{t_o}(t_i)) \cdot \Upsilon(t_0,t_j, S_{t_0}(t_j))
 \end{displaymath}
 
 
@@ -644,7 +644,7 @@ Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
 entre ellos, cada cliente con un activo que consiste en devolver $1$ \euro al 
 cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
 $2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
-fallido al cabo de $T$ tiempo $0.1$.
+fallido al cabo de $T$ tiempo es $0.1$.
 \newline
 \newline
 En este caso, se puede modelar el importe devuelto por el cliente $i$ al cabo 
@@ -662,7 +662,7 @@ de confianza $99\%$ cumple que $P(Y \leq \textrm{VAR}_{99\%}) = 0.01 = 1\%
 \newline
 Este ejemplo no es significativo debido a que se han realizado dos supuestos 
 que en el mundo real no se cumplen: todos los creditores se modelan de la misma 
-forma y son independientes entre ellos. Se obtiene que la distribuci\'on del 
+forma y los fallidos son independientes. Se obtiene que la distribuci\'on del 
 valor de la cartera a tiempo $T$ es una variable aleatoria Normal, cosa que no
 concuerda con las observaciones reales, que muestran que la distribuci\'on del 
 valor de las carteras es fuertemente asim\'etrica respecto el valor esperado.

@@ -85,9 +85,9 @@ C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 
 \paragraph{Teorema.} Toda variable aleatoria $n$-dimensional puede separarse 
 en las distribuciones seguidas por sus componentes, las distribuciones marginales,
-y las relaciones existentes entre ellas a trav\'es de una c\'opula. Sea $H$ 
-una funci\'on de distribuci\'on $n$-dimensional y $f_1,\cdots, f_n$ sus marginales. 
-El teorema de Sklar asegura que existe una c\'opula $C$ tq.
+y una c\'opula. Sea $H$ una funci\'on de distribuci\'on $n$-dimensional y 
+$f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
+c\'opula $C$ tq.
 \begin{displaymath}
 H(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
 \end{displaymath}
@@ -95,7 +95,7 @@ H(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n))
 \paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
 determinada por sus marginales y correlaciones entre estas. Dicho de otra
 forma, existen infinitas formas de combinar las distribuciones marginales
-, c\'opulas, de forma que cumplan las correlaciones. Las distribuciones 
+ a través de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
 el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
 
 
@@ -156,6 +156,50 @@ con distribuci\'on $W(U)$.
 
 \section{Notaci\'on}
 
+\begin{tabular}{|p{2.5cm}|p{9cm}|}
+\hline
+Concepto & Descripci\'on \\
+\hline
+\hline
+$n$ & N\'umero de clientes de la cartera \\
+\hline
+$m$ & N\'umero de sectores de la cartera \\
+\hline
+$o$ & N\'umero de ratings del sistema de calificaci\'on \\
+\hline
+$\nu_i$ &  N\'umero de activos del cliente $i$. $i \in \{1,\cdots,n\}$\\
+\hline
+\hline
+$s_i$ & Sector $i$-esimo. $i \in \{1,\cdots,m\}$ \\
+\hline
+$r_i$ & Rating $i$-esimo. $i \in \{1,\cdots,o\}$. $r_o=Default$. \\
+\hline
+\hline
+$S_{t_0}$ & Curva spot de tipos de inter\'es en $t_0$. $S_{t_0}(t_k)$ es el
+tipo de inter\'es de la curva en tiempo $t_k$ siendo $t_0 \leq t_k$\\
+\hline
+$\Upsilon(t_0,t_k, S_{t_0})$ & Funci\'on de transporte de $t_0$ a $t_k$ usando 
+la curva spot $S_{t_0}$ \\
+\hline
+\hline
+$Survival(r_i,t)$ & Funci\'on de supervivencia. Probabilidad que un cliente con 
+rating inicial $r_i$ no haya hecho fallido en tiempo $t$\\
+\hline
+$M_T$ & Matriz de transici\'on a $T$ tiempo. Tiene dimensi\'on $o \times o$\\
+\hline
+$\Gamma$ & Matriz de correlaci\'on entre sectores. Dimensi\'on $m \times m$\\
+\hline
+$\Theta$ & Matriz de correlaci\'on entre clientes. Dimensi\'on $n \times n$\\
+\hline
+\hline
+$X_{i,j}(t)$ & Valor del $j$-esimo activo del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,n\}$, 
+$j \in \{0,\cdots,\nu_i\}$ \\
+\hline
+$Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,n\}$ \\
+\hline
+$Z(t)$ & Valor de la cartera en tiempo $t$\\
+\hline
+\end{tabular}
 %---------------------------------------------------------------------------
 
 \section{M\'etodo Time-To-Default}
