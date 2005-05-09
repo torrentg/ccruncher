@@ -91,10 +91,6 @@ formula a trav\'es de la matriz de transici\'on (v\'ease la secci\'on
 \label{ratingevol}
 \end{center}
 \end{figure}
-\paragraph{Notaci\'on.} El sistema de ratings usado en este documento se 
-compone de $n$ notas, $r_1$, $r_2$, $\cdots$, $r_n$, donde $r_1$ es la
-mejor nota (probabilidad de fallido mas baja), $r_2$ es la segunda mejor nota, 
-etc. $r_n$ corresponde al rating $Default$.
 
 \paragraph{Notaci\'on.} $P(r_i \to r_j;t_0;t_1) =$ probabilidad de pasar de un 
 rating inicial $r_i$ en tiempo $t_0$ a un rating $r_j$ en tiempo $t_1$.
@@ -124,8 +120,6 @@ sectores industriales.
 Se considera que cada cliente pertenece a un \'unico sector y permanece en 
 el a lo largo del tiempo. La relaci\'on entre sectores se formula a trav\'es 
 de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
-\paragraph{Notaci\'on.} En este documento se considera que existen $m$ 
-sectores, y nos referiremos a ellos como $s_1$, $s_2$, $\cdots$, $s_m$.
 
 \subsection{Activos}
 
@@ -492,6 +486,12 @@ Survival(r_i, t) =  1 - TMAA(r_i, t)
 rating inicial acaba haciendo fallido casi seguramente.
 \begin{displaymath}
 lim_{t \to \infty} TMAA(r_i, t) =  1 \quad \forall i
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Fijado un rating, $r_i$, la funci\'on de 
+supervivencia es estrictamente mon\'otona decreciente.
+\begin{displaymath}
+Survival(r_i, t_i) > Survival(r_i, t_j) \quad \forall t_i < t_j
 \end{displaymath}
 
 \paragraph{Ejemplo.} En las figuras \ref{tmaa}, \ref{tma} y \ref{survival} 

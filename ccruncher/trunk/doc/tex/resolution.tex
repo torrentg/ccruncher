@@ -85,17 +85,17 @@ C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 
 \paragraph{Teorema.} Toda variable aleatoria $n$-dimensional puede separarse 
 en las distribuciones seguidas por sus componentes, las distribuciones marginales,
-y una c\'opula. Sea $H$ una funci\'on de distribuci\'on $n$-dimensional y 
+y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y 
 $f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
 c\'opula $C$ tq.
 \begin{displaymath}
-H(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
+F(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
 \end{displaymath}
 
 \paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
 determinada por sus marginales y correlaciones entre estas. Dicho de otra
 forma, existen infinitas formas de combinar las distribuciones marginales
- a través de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
+ a trav\'es de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
 el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
 
 
@@ -105,11 +105,11 @@ Se recomienda la lectura de la referencia \cite{mc:mervyn}. Se trata de los
 apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo 
 de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
 
-\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x_1, \cdots, x_n$,
+\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x^1, \cdots, x^n$,
 de la variable aleatoria $X$, definimos la funci\'on de distribuci\'on emp\'irica 
 como:
 \begin{displaymath}
-\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x_i) \qquad
+\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x^i) \qquad
 I_{[-\infty,k]}(x) = \left\{
 \begin{array}{ll}
 1 & \textrm{ if } x \in (-\infty,k] \cr
@@ -134,7 +134,7 @@ F_X                  &     \quad         & \widetilde{F_{H(X)}}   \cr
 \downarrow         &     \quad         & \uparrow                \cr
 \textrm{simulation} &     \quad         & \textrm{empirical } cdf \cr
 \downarrow         &     \quad         & \uparrow                \cr
-x_1,\cdots,x_n      & \longrightarrow & H(x_1),\cdots,H(x_n)  
+x^1,\cdots,x^n      & \longrightarrow & H(x^1),\cdots,H(x^n)  
 \end{array}
 \end{displaymath}
 
@@ -158,21 +158,28 @@ con distribuci\'on $W(U)$.
 
 \begin{tabular}{|p{2.5cm}|p{9cm}|}
 \hline
-Concepto & Descripci\'on \\
+\textbf{Concepto} & \textbf{Descripci\'on} \\
 \hline
 \hline
-$n$ & N\'umero de clientes de la cartera \\
+$x_i$ & Componente $i$-esimo de $x$ \\
 \hline
-$m$ & N\'umero de sectores de la cartera \\
-\hline
-$o$ & N\'umero de ratings del sistema de calificaci\'on \\
-\hline
-$\nu_i$ &  N\'umero de activos del cliente $i$. $i \in \{1,\cdots,n\}$\\
+$x^i$ & Realizaci\'on $i$-esima de la variable aleatoria $X$ \\
 \hline
 \hline
-$s_i$ & Sector $i$-esimo. $i \in \{1,\cdots,m\}$ \\
+$ns$ & N\'umero de sectores de la cartera \\
 \hline
-$r_i$ & Rating $i$-esimo. $i \in \{1,\cdots,o\}$. $r_o=Default$. \\
+$nr$ & N\'umero de ratings del sistema de calificaci\'on \\
+\hline
+$nc$ & N\'umero de clientes de la cartera \\
+\hline
+$na_i$ &  N\'umero de activos del cliente $i$. $i \in \{1,\cdots,nc\}$\\
+\hline
+\hline
+$s_i$ & Sector $i$-esimo. $i \in \{1,\cdots,ns\}$ \\
+\hline
+$r_i$ & Rating $i$-esimo. $i \in \{1,\cdots,nr\}$. $r_{nr}=Default$. \\
+\hline
+$c_i$ & Cliente $i$-esimo. $i \in \{1,\cdots,nc\}$ \\
 \hline
 \hline
 $S_{t_0}$ & Curva spot de tipos de inter\'es en $t_0$. $S_{t_0}(t_k)$ es el
@@ -185,24 +192,57 @@ la curva spot $S_{t_0}$ \\
 $Survival(r_i,t)$ & Funci\'on de supervivencia. Probabilidad que un cliente con 
 rating inicial $r_i$ no haya hecho fallido en tiempo $t$\\
 \hline
-$M_T$ & Matriz de transici\'on a $T$ tiempo. Tiene dimensi\'on $o \times o$\\
+$M_T$ & Matriz de transici\'on a $T$ tiempo. Tiene dimensi\'on $nr \times nr$\\
 \hline
-$\Gamma$ & Matriz de correlaci\'on entre sectores. Dimensi\'on $m \times m$\\
+$\Gamma$ & Matriz de correlaci\'on entre sectores. Dimensi\'on $ns \times ns$\\
 \hline
-$\Theta$ & Matriz de correlaci\'on entre clientes. Dimensi\'on $n \times n$\\
+$\Theta$ & Matriz de correlaci\'on entre clientes. Dimensi\'on $nc \times nc$\\
 \hline
 \hline
-$X_{i,j}(t)$ & Valor del $j$-esimo activo del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,n\}$, 
-$j \in \{0,\cdots,\nu_i\}$ \\
+$X_{i,j}(t)$ & Valor del $j$-esimo activo del cliente $i$ en tiempo $t$. 
+$i \in \{1,\cdots,nc\}$, $j \in \{0,\cdots,na_i\}$ \\
 \hline
-$Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,n\}$ \\
+$Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,nc\}$ \\
 \hline
 $Z(t)$ & Valor de la cartera en tiempo $t$\\
 \hline
 \end{tabular}
 %---------------------------------------------------------------------------
 
+\section{Valor de un activo}
+
+Consideramos que el valor del activo $j$ del cliente $i$ en tiempo $t$ es:
+\begin{displaymath}
+\begin{array}{rl}
+X_{i,j}(t) = \sum_{t_k=t_0}^{t} & \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot [1-I_{Default}(t_k)] \cr
++ &\textrm{recovery}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot [I_{Default}(t_k)] \cr
+- &\textrm{exposure}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot [I_{Default}(t_k)]  
+\end{array}
+\end{displaymath}
+
+\begin{displaymath}
+I_{Default}(t) = \left\{
+\begin{array}{ll}
+1 & \textrm{ if client has defaulted at } t \cr
+0 & \textrm{ otherwise}
+\end{array}
+\right.
+\end{displaymath}
+
+\section{Elementos comunes}
+
+Deseamos obtener la distribuci\'on del valor de la cartera en tiempo $T$, $Z(T)$.
+\begin{displaymath}
+Z(T) = \sum_{i=0}^{nc} Y_i(T) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(T)
+\end{displaymath}
+
+
 \section{M\'etodo Time-To-Default}
+
+
+El m\'etodo Time-To-Default consiste en simular el valor de la cartera a partir 
+del la simulaci\'on del tiempo de fallido de cada uno de los clientes.
+
 c\'opula -> funci\'on supervivencia -> valoraci\'on cartera
 
 \begin{figure}[!hb]
