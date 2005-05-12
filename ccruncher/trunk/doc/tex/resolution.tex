@@ -233,6 +233,14 @@ J(t) = \left\{
 \right.
 \end{displaymath}
 
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/functionsIJ.eps}
+\caption{Functions $I(t)$ and $J(t)$}
+\label{functionsIJ}
+\end{center}
+\end{figure}
+
 \paragraph{Proposici\'on.} Podemos expresar $J(t)$ en funci\'on de $I(t)$ de la
 forma siguiente:
 \begin{displaymath}
@@ -249,17 +257,20 @@ X_{i,j}(t) = \sum_{t_k=t_0}^{t} & \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,t_0,
 \end{array}
 \end{displaymath}
 
-\paragraph{Observaci\'on.} El valor de un activo en tiempo $t_k$ solamente 
-depende de $I(t_0), \cdots, I(t_k)$.
+\paragraph{Observaci\'on.} Conocidas las características de un activo y 
+la curba spot, el valor de un activo en tiempo $t_k$ solamente depende de 
+la funci\'on $I(t)$. Equivalentemente, solo depende del momento en que el
+cliente hace fallido.
 
-\paragraph{Definici\'on.} Definimos el valor de la cartera en timepo $t$ como:
+\paragraph{Definici\'on.} Definimos el valor de la cartera en tiempo $t$ como:
 \begin{displaymath}
 Z(T) = \sum_{i=0}^{nc} Y_i(T) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(T)
 \end{displaymath}
 
 \paragraph{Observaci\'on.} El valor de la cartera solamente depende de 
-$I_1(t_0), \cdots, I_1(t_k), \cdots, I_{nc}(t_0), \cdots, I_{nc}(t_k)$, donde 
-$I_i(t)$ es el indicador del momento de fallido en tiempo $t$ del cliente $i$.
+$I_1(t), \cdots, I_{nc}(t)$, donde $I_i(t)$ es el indicador del momento 
+de fallido en tiempo $t$ del cliente $i$. Equivalentemente, solo depende 
+de los instantes en los que los clientes de la cartera hacen fallido.
 
 \paragraph{Proposici\'on.} Construimos la funci\'on $H$ del m\'etodo de Monte 
 Carlo de la forma siguiente:
