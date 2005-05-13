@@ -38,7 +38,7 @@ EXTRA_DIST = \
     ../share/jama-1.2.2/tnt_vec.h\
     ../share/jama-1.2.2/tnt_version.h
 
-bin_PROGRAMS = ccruncher cc2gpi generator tma
+bin_PROGRAMS = ccruncher cc2gpi generator mtrans
 
 check_PROGRAMS = tests
 
@@ -235,10 +235,10 @@ generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
-# tma
+# mtrans
 # -------------------------------------------------------------
-tma_SOURCES = \
-    ./tools/tma.cpp\
+mtrans_SOURCES = \
+    ./tools/mtrans.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
     ./portfolio/Client.cpp\
@@ -314,8 +314,8 @@ tma_SOURCES = \
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp
 
-tma_CXXFLAGS = -Wall -W -Wshadow
-tma_LDADD = -lm -lexpat
+mtrans_CXXFLAGS = -Wall -W -Wshadow
+mtrans_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
 # tests
