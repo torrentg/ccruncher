@@ -25,6 +25,10 @@
 // 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added survival function (1-TMAA)
+//   . changed name (tma -> mtrans)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -38,7 +42,6 @@
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
-#include <MersenneTwister.h>
 
 //---------------------------------------------------------------------------
 
@@ -53,7 +56,7 @@ using namespace std;
 void usage();
 void version();
 void copyright();
-void run(string, bool, int) throw(Exception);
+void run(string, int, int) throw(Exception);
 
 //===========================================================================
 // main
@@ -68,15 +71,17 @@ int main(int argc, char *argv[])
   {
       { "help",         0,  NULL,  300 },
       { "version",      0,  NULL,  301 },
-      { "cumulative",   0,  NULL,  302 },
-      { "maxyears",     1,  NULL,  303 },
-      { "copyright",    0,  NULL,  304 },
+      { "tma",          0,  NULL,  302 },      
+      { "tmaa",         0,  NULL,  303 },
+      { "survival",     0,  NULL,  304 },
+      { "maxyears",     1,  NULL,  307 },
+      { "copyright",    0,  NULL,  308 },
       { NULL,           0,  NULL,   0  }
   };
 
   string sfilename = "";
   int maxyears = DEFAULTMAXYEARS;
-  bool cumulative = false;
+  int mode = 0;
 
   // parsing options
   while (1)
@@ -104,11 +109,19 @@ int main(int argc, char *argv[])
           version();
           return 0;
 
-      case 302: // --cumulative (compute TMAA instead of TMA)
-          cumulative = true;
+      case 302: // --tma (compute TMA)
+          mode = 1;
           break;
-      
-      case 303: // --maxyears=num (number of years)
+
+      case 303: // --tmaa (compute TMAA)
+          mode = 2;
+          break;
+
+      case 304: // --survival (compute Survival Function)
+          mode = 3;
+          break;
+            
+      case 307: // --maxyears=num (number of years)
           try
           {
             string smaxyears = string(optarg); 
@@ -121,7 +134,7 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 304: // --copyright (show copyright and exit)
+      case 308: // --copyright (show copyright and exit)
           copyright();
           return 0;
 
@@ -151,6 +164,12 @@ int main(int argc, char *argv[])
   }
   
   // checking basic arguments existence
+  if (mode == 0)
+  {
+    cerr << "indicate one of these options: --tma or tmaa or --survival" << endl;
+    cerr << "please try again" << endl;
+    return 1;
+  }
   if (maxyears < 0 || maxyears > 999)
   {
     cerr << "maxyears out of range [0,999]" << endl;
@@ -163,7 +182,7 @@ int main(int argc, char *argv[])
 
   try
   {
-    run(sfilename, cumulative, maxyears);
+    run(sfilename, mode, maxyears);
   }
   catch(Exception &e)
   {
@@ -178,7 +197,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, bool cumulative, int maxyears) throw(Exception)
+void run(string filename, int mode, int maxyears) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -194,14 +213,22 @@ void run(string filename, bool cumulative, int maxyears) throw(Exception)
   
   // allocating space
   double **buf = Utils::allocMatrix(tm->n, maxyears+1);
-  
-  if (cumulative == false)
+
+  switch(mode)
   {
-    ccruncher::tma(tm, maxyears, buf);
-  }
-  else
-  {
-    ccruncher::tmaa(tm, maxyears, buf);
+      case 1: // TMA
+          ccruncher::tma(tm, maxyears, buf);
+          break;
+      case 2: 
+          ccruncher::tmaa(tm, maxyears, buf);
+          break;
+      case 3: 
+          ccruncher::survival(tm, maxyears, buf);
+          break;
+      default:
+           cerr << "an unexpected error [15] occur" << endl;
+           cerr << "please report it at gerard@fobos.generacio.com" << endl;
+           return;
   }
 
   // printing header
@@ -232,7 +259,7 @@ void run(string filename, bool cumulative, int maxyears) throw(Exception)
 //===========================================================================
 void version()
 {
-  cout << "tma-" << VERSION << endl;
+  cout << "mtrans-" << VERSION << endl;
 }
 
 //===========================================================================
@@ -241,15 +268,17 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: tma [options] file.xml\n"
+  "  usage: mtrans [options] file.xml\n"
   "\n"
   "  description:\n"
-  "    tma is a creditcruncher tool for compute the TMA (Forward Default Rate)\n"
-  "    or TMAA (Cumulative Forward Default Rate) from the transition matrix\n"
-  "    included in a CreditCruncher input file\n"
+  "    mtrans is a ccruncher tool for compute the TMA (Forward Default Rate),\n"
+  "    TMAA (Cumulative Forward Default Rate) and Survival Function from the \n"
+  "    transition matrix included in a CreditCruncher input file\n"
   "  arguments:\n"
   "    file.xml        CreditCruncher input file\n"
-  "    --cumulative    compute TMAA instead of TMA\n"
+  "    --tma           compute TMA (Forward Default Rate)\n"  
+  "    --tmaa          compute TMAA (Cumulated Forward Default Rate)\n"
+  "    --survival      compute Survival Function (1-TMAA)\n"
   "    --maxyears=num  maximum number of years (default 50)\n"
   "  options:\n"
   "    --help          show this message and exit\n"
@@ -259,8 +288,9 @@ void usage()
   "    0          OK. finished without errors\n"
   "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    tma --maxyears=25 file.xml\n"
-  "    tma --cumulative file.xml\n"
+  "    mtrans --tma --maxyears=25 file.xml\n"
+  "    mtrans --tmaa file.xml\n"
+  "    mtrans --survival --maxyears=50 file.xml\n"
   << endl;
 }
 
@@ -270,7 +300,7 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "  tma is Copyright (C) 2003-2005 Gerard Torrent\n"
+  "  mtrans is Copyright (C) 2003-2005 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
   "  more info at http://www.generacio.com/ccruncher\n"
   << endl;

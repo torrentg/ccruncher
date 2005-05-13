@@ -33,7 +33,10 @@
 //
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-
+//
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.method
+//
 //===========================================================================
 
 #include <iostream>
@@ -74,6 +77,7 @@ void IDataTest::test1()
       <property name='copula.type' value='normal'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
+      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>\n\
     <interests>\n\
       <interest name='spot' date='18/02/2003'>\n\

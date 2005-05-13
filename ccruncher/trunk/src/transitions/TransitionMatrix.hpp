@@ -31,6 +31,9 @@
 // 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added survival function (1-TMAA)
+//
 //===========================================================================
 
 #ifndef _TransitionMatrix_
@@ -93,6 +96,7 @@ class TransitionMatrix : public ExpatHandlers
 TransitionMatrix * translate(TransitionMatrix *tm, double t) throw(Exception);
 void tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
 void tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
+void survival(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

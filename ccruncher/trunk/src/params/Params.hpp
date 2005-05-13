@@ -28,6 +28,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.method
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -66,10 +69,11 @@ class Params : public ExpatHandlers
     int steplength;
     long maxiterations;
     long maxseconds;
-    string copula_type;
+    string copula_type; // normal
+    string smethod;     // rating-path, time-to-default
     long copula_seed;
     bool antithetic;
-    bool onlyactive; // only active clients
+    bool onlyactive;   // only active clients
 
     Params();
     ~Params();

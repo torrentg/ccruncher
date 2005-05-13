@@ -28,6 +28,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.method
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -53,6 +56,7 @@ void ccruncher::Params::init()
   steplength = 0;
   maxiterations = 0L;
   maxseconds = 0L;
+  smethod = "";
   copula_type = "";
   copula_seed = 0L;
   antithetic = false;
@@ -177,7 +181,11 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
     string aux = getStringAttribute(attributes, "value", "");
     if (copula_type != "" || aux == "") {
       throw eperror(eu, "found invalid copula.type");
-    } else {
+    } 
+    else if (aux != "normal") {
+      throw eperror(eu, "at this moment, only normal copula is suported");
+    } 
+    else {
       copula_type = aux;
     }
   }
@@ -188,6 +196,19 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
       throw eperror(eu, "found invalid copula.seed");
     } else {
       copula_seed = aux;
+    }
+  }
+  else if (name == "montecarlo.method")
+  {
+    string aux = getStringAttribute(attributes, "value", "");
+    if (smethod != "" || aux == "") {
+      throw eperror(eu, "found invalid copula.type");
+    } 
+    else if(aux != "rating-path" && aux != "time-to-default") {
+      throw eperror(eu, "at this moment, only rating-path and time-to default are suported");
+    }
+    else {
+      smethod = aux;
     }
   }
   else if (name == "montecarlo.antithetic")
@@ -235,6 +256,11 @@ void ccruncher::Params::validate(void) throw(Exception)
   if (maxseconds <= 0L)
   {
     throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
+  }
+
+  if (smethod == "")
+  {
+    throw Exception("Params::validate(): property montecarlo.method not defined");
   }
 
   if (copula_type == "")

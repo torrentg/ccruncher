@@ -31,6 +31,9 @@
 // 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added survival function (1-TMAA)
+//
 //===========================================================================
 
 #include <cfloat>
@@ -416,6 +419,31 @@ void ccruncher::tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exc
     for(int j=1;j<=numyears;j++)
     {
       ret[i][j] = ret[i][j] + ret[i][j-1];
+    }
+  }
+}
+
+//===========================================================================
+// Given a transition matrix and the maximum number of years, return the 
+// Survival Function  in the ret matrix
+// @param tm transition matrix
+// @param numyears number of years (min=0, max=999)
+// @param ret allocated space of size numratings x (numyears+1)
+// ret[i][j] = 1-TMAA[i][j]
+//===========================================================================
+void ccruncher::survival(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+{
+  int n = tm->n;
+  
+  // computing TMA
+  tmaa(tm, numyears, ret);
+  
+  // building survival function
+  for(int i=0;i<n;i++)
+  {
+    for(int j=1;j<=numyears;j++)
+    {
+      ret[i][j] = 1.0 - ret[i][j];
     }
   }
 }
