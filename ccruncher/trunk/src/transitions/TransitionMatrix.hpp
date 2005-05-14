@@ -33,6 +33,7 @@
 //
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
+//   . changed period time resolution (year->month)
 //
 //===========================================================================
 
@@ -68,7 +69,7 @@ class TransitionMatrix : public ExpatHandlers
   public:
 
     int n;
-    double period;
+    int period;
     double **matrix;
     double epsilon;
     Ratings *ratings;
@@ -93,7 +94,7 @@ class TransitionMatrix : public ExpatHandlers
 
 //---------------------------------------------------------------------------
 
-TransitionMatrix * translate(TransitionMatrix *tm, double t) throw(Exception);
+TransitionMatrix * translate(TransitionMatrix *tm, int t) throw(Exception);
 void tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
 void tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
 void survival(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);

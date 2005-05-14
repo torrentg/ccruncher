@@ -25,6 +25,9 @@
 // 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . const + referenced string arguments
+//
 //===========================================================================
 
 #include <cassert>
@@ -107,7 +110,7 @@ void ccruncher::Logger::addBlankLine()
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(string msg)
+void ccruncher::Logger::trace(const string &msg)
 {
   trace(msg, false);
 }
@@ -115,7 +118,7 @@ void ccruncher::Logger::trace(string msg)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(string msg, char c)
+void ccruncher::Logger::trace(const string &msg, char c)
 {
   trace(msg, c, false);
 }
@@ -123,7 +126,7 @@ void ccruncher::Logger::trace(string msg, char c)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(string msg, bool tracetime_)
+void ccruncher::Logger::trace(const string &msg, bool tracetime_)
 {
   trace(msg, ' ', tracetime_);
 }
@@ -131,7 +134,7 @@ void ccruncher::Logger::trace(string msg, bool tracetime_)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(string msg, string value)
+void ccruncher::Logger::trace(const string &msg, const string &value)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
@@ -157,7 +160,7 @@ void ccruncher::Logger::trace(string msg, string value)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(string msg, char c, bool tracetime_)
+void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
@@ -190,7 +193,7 @@ void ccruncher::Logger::trace(string msg, char c, bool tracetime_)
 //===========================================================================
 // append
 //===========================================================================
-void ccruncher::Logger::append(string msg)
+void ccruncher::Logger::append(const string &msg)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;

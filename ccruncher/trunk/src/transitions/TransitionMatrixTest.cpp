@@ -31,6 +31,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed period time resolution (year->month)
+//
 //===========================================================================
 
 #include <iostream>
@@ -86,7 +89,7 @@ Ratings TransitionMatrixTest::getRatings()
 void TransitionMatrixTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <mtransitions period='1' epsilon='1e-12'>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -147,7 +150,7 @@ void TransitionMatrixTest::test1()
   ASSERT(4 == trm.getIndexDefault());
 
   // testing function translate()
-  TransitionMatrix *aux = translate(&trm, 1.0);
+  TransitionMatrix *aux = translate(&trm, 12);
   matrix = aux->getMatrix();
 
   for(int i=0;i<5;i++)
@@ -168,7 +171,7 @@ void TransitionMatrixTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <mtransitions period='1' epsilon='1e-12'>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.90'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -214,7 +217,7 @@ void TransitionMatrixTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <mtransitions period='1' epsilon='1e-12'>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='K' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -260,7 +263,7 @@ void TransitionMatrixTest::test4()
 {
   // non valid transition matrix (default element not defined)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <mtransitions period='1' epsilon='1e-12'>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\

@@ -24,6 +24,7 @@
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="normal"/>
     <property name="copula.seed" value="387650932"/>
+    <property name="montecarlo.method" value="rating-path"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveClients" value="true"/>
   </params>
@@ -58,7 +59,7 @@
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
-  <mtransitions period="1" epsilon="1e-12">
+  <mtransitions period="12" epsilon="1e-12">
     <transition from="A" to="A" value="0.80"/>
     <transition from="A" to="E" value="0.20"/>
     <transition from="E" to="A" value="0.00"/>

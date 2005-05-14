@@ -33,6 +33,7 @@
 //
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
+//   . changed period time resolution (year->month)
 //
 //===========================================================================
 
@@ -48,7 +49,7 @@
 //===========================================================================
 void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 {
-  period = 0.0;
+  period = 0;
   epsilon = -1.0;
   ratings = ratings_;
 
@@ -167,9 +168,9 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
       throw eperror(eu, "invalid number of attributes in tag mtransitions");
     }
     else {
-      period = getDoubleAttribute(attributes, "period", DBL_MAX);
+      period = getIntAttribute(attributes, "period", INT_MAX);
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
-      if (period == DBL_MAX || epsilon < 0.0 || epsilon > 1.0) {
+      if (period == INT_MAX || epsilon < 0.0 || epsilon > 1.0) {
         throw eperror(eu, "invalid attributes at <mtransitions>");
       }      
     }
@@ -305,7 +306,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
   string spc2 = Utils::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mtransitions period='" + Parser::double2string(period) + "' ";
+  ret += spc1 + "<mtransitions period='" + Parser::int2string(period) + "' ";
   ret += "epsilon='" + Parser::double2string(epsilon) + "'>\n";
 
   for(int i=0;i<n;i++)
@@ -329,14 +330,14 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
 // given the transition matrix for time T1, compute the transition
 // matrix for a new time, t
 // @param otm transition matrix
-// @param t period of the new transition matrix
+// @param t period (in months) of the new transition matrix
 // @return transition matrix for period t
 //===========================================================================
-TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, double t) throw(Exception)
+TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, int t) throw(Exception)
 {
   TransitionMatrix *ret = new TransitionMatrix(*otm);
 
-  PowMatrix::pow(otm->matrix, t/otm->period, otm->n, ret->matrix);
+  PowMatrix::pow(otm->matrix, double(t)/double(otm->period), otm->n, ret->matrix);
 
   ret->period = t;
 

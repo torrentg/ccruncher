@@ -7,10 +7,6 @@
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /
 </head>
 
-
-
-			<script language='javascript' src='http://127.0.0.1:1026/js.cgi?pca&r=21892'></script>
-
 <body class="composite">
   <div id="banner" style="font-size:18pt; font-weight: bold; color: #003399; text-align: right;">
     CREDITCRUNCHER
@@ -64,12 +60,12 @@
         <h2>CreditCruncher XML input tag reference</h2>
 
         <p style="text-align:justify;">
-          This document describes the xml input file for CreditCruncher-0.2. 
+          This document describes the xml input file for CreditCruncher-0.3. 
           In the distribution package you can find the 
-          <a href="creditcruncher-0.2.dtd">DTD</a>. Also, you can find some 
-          <a href="sample1-0.2.xml">XML</a> samples into the  
-          $CCRUNCHER/samples directory. <br/></br>
-		  The main XML file structure is like this:
+          <a href="creditcruncher-0.3.dtd">DTD</a>. Also, you can find some 
+          <a href="sample1-0.3.xml">XML</a> samples into the  
+          $CCRUNCHER/samples directory. <br /><br />
+          The main XML file structure is like this:
         </p>
 
         <div class="source">
@@ -86,7 +82,8 @@
           
         <p style="text-align:justify;">
           where the encoding attribute can be one of these 
-          values: UTF-8, UTF-16, ISO-8859-1, US-ASCII
+          values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take in account that 
+          XML is case-sensitive.
         </p>
       </div>
 
@@ -114,6 +111,7 @@
     &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
     &lt;property name="copula.type" value="normal"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
+    &lt;property name="montecarlo.method" value="rating-path"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
     &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
   &lt;/params&gt;
@@ -189,6 +187,16 @@
               <td><code>long</code></td>
             </tr>
             <tr class="a">
+              <td>montecarlo.method</td>
+              <td style="text-align:justify;">
+                Specifies the method used to solve the problem. See the 
+                <i>CreditCruncher - Technical Document</i>. In doubt, put
+                'time-to-default' value.<br />
+                accepted values: 'rating-path', 'time-to-default'
+              </td>
+              <td><code>string</code></td>
+            </tr>
+            <tr class="b">
               <td>montecarlo.antithetic</td>
               <td style="text-align:justify;">
                 Specifies whether to use or not a variance reduction technique 
@@ -197,7 +205,7 @@
               </td>
               <td><code>boolean</code></td>
             </tr>
-            <tr class="b">
+            <tr class="a">
               <td>portfolio.onlyActiveClients</td>
               <td style="text-align:justify;">
                 If you want to simulate all the clients, even though clients without 
@@ -390,7 +398,7 @@
           <div class="source">
             <pre>
 
-  &lt;mtransitions period="1" epsilon="1e-12"&gt;
+  &lt;mtransitions period="12" epsilon="1e-12"&gt;
     &lt;transition from="A" to="A" value="0.80"/&gt;
     &lt;transition from="A" to="B" value="0.10"/&gt;
     &lt;transition from="A" to="C" value="0.07"/&gt;
@@ -435,9 +443,10 @@
             <tr class="a">
               <td>period</td>
               <td style="text-align:justify;">
-                Number of years covered by the transition matrix.
+                Number of months covered by the transition matrix. Usually
+                transition matrix cover 1 year, in this case, set 12. 
               </td>
-              <td><code>double</code></td>
+              <td><code>int</code></td>
             </tr>
             <tr class="b">
               <td>epsilon</td>

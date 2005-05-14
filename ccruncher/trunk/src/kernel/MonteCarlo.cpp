@@ -28,6 +28,9 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed period time resolution (year->month)
+//
 //===========================================================================
 
 #include <cfloat>
@@ -204,6 +207,9 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   Logger::trace("setting parameters", '-');
   Logger::newIndentLevel();
 
+  // information trace
+  Logger::trace("resolution method", string("rating-path"));
+
   // fixing variance reduction method
   antithetic = idata->params->antithetic;
   Logger::trace("antithetic mode", Parser::bool2string(antithetic));
@@ -329,12 +335,12 @@ void ccruncher::MonteCarlo::initMTrans(const IData *idata) throw(Exception)
   // setting logger info
   string sval = Parser::int2string(idata->transitions->size());
   Logger::trace("matrix dimension", sval + "x" + sval);
-  Logger::trace("initial period (in years)", Parser::double2string(idata->transitions->period));
-  Logger::trace("scaling matrix to step length (in years)", Parser::int2string(STEPLENGTH) + "/12");
+  Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
+  Logger::trace("scaling matrix to step length (in months)", Parser::int2string(STEPLENGTH));
   
   // trobem la matriu de transicio usada
-  mtrans = translate(idata->transitions, (double)(STEPLENGTH)/12.0);
-  
+  mtrans = translate(idata->transitions, STEPLENGTH);
+
   // exit function
   Logger::previousIndentLevel();
 }

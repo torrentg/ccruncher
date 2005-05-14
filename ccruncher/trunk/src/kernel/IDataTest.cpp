@@ -36,6 +36,7 @@
 //
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
+//   . changed period time resolution (year->month)
 //
 //===========================================================================
 
@@ -99,7 +100,7 @@ void IDataTest::test1()
       <rating name='C' order='3' desc='regular'/>\n\
       <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>\n\
-    <mtransitions period='1' epsilon='1e-12'>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\

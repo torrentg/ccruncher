@@ -25,6 +25,9 @@
 // 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . const + referenced string arguments
+//
 //===========================================================================
 
 #ifndef _Logger_
@@ -89,12 +92,12 @@ class Logger
     static void addBlankLine();
 
     /** trace a message */
-    static void append(string msg);
-    static void trace(string msg);
-    static void trace(string msg, string value);
-    static void trace(string msg, bool tracetime_);
-    static void trace(string msg, char c);
-    static void trace(string msg, char c, bool tracetime_);
+    static void append(const string &msg);
+    static void trace(const string &msg);
+    static void trace(const string &msg, const string &value);
+    static void trace(const string &msg, bool tracetime_);
+    static void trace(const string &msg, char c);
+    static void trace(const string &msg, char c, bool tracetime_);
     static void notify();
 
 };

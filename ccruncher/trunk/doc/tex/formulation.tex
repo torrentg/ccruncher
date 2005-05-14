@@ -82,8 +82,8 @@ cartera tiene un rating inicial asignado.
 El rating de cada empresa var\'ia a lo largo del tiempo en funci\'on de la 
 calidad crediticia de cada instante (v\'ease figura \ref{ratingevol}). 
 La evoluci\'on a lo largo del tiempo del rating de una empresa se 
-formula a trav\'es de la matriz de transici\'on (v\'ease la secci\'on 
-\ref{sec:mtransition}).
+contempla a trav\'es de la matriz de transici\'on o la funci\'on de 
+supervivencia (v\'ease la secci\'on \ref{sec:mtransition}).
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=6cm, angle=0]{./images/ratingevol.eps}
@@ -118,7 +118,7 @@ sectores industriales.
 \newline
 \newline
 Se considera que cada cliente pertenece a un \'unico sector y permanece en 
-el a lo largo del tiempo. La relaci\'on entre sectores se formula a trav\'es 
+el a lo largo del tiempo. La relaci\'on entre sectores se contempla a trav\'es 
 de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
 
 \subsection{Activos}
@@ -170,7 +170,11 @@ caso de fallido. Normalmente es una parte de la exposici\'on.
 
 \paragraph{Definici\'on.}
 Sea $C_{t_0}$ el importe inicial de una operaci\'on y $C_{t_1}$ el importe final. 
-Definimos el tipo efectivo como:
+Definimos el tipo efectivo, $r$, como:
+\begin{equation}
+C_{t_1} = C_{t_0} \cdot (1+r)
+\end{equation}
+
 \begin{equation}
 \label{tipus_efectiu}
 \textrm{tipo efectivo} = r = \frac{C_{t_1}-C_{t_0}}{C_{t_0}}
@@ -180,43 +184,51 @@ Definimos el tipo efectivo como:
 El tipo de inter\'es simple, $r_s$, es un tipo de inter\'es donde para cada 
 periodo de tiempo se incrementa el importe inicial, $C_{t_0}$ por un factor de $r_s$. 
 \begin{equation}
+C_{t_1} = C_{t_0} \cdot (1+ r_s \cdot (t_1-t_0))
+\end{equation}
+
+\begin{equation}
 \label{interes_simple_1}
-r_s = \frac{r}{t_1 - t_0} = \frac{ ( C_{t_1}-C_{t_0} ) / C_{t_0} }{t_1 - t_0}
+r_s = \frac{r}{t_1 - t_0}
 \end{equation}
 
 \paragraph{Defici\'on.}
-El tipo de inter\'es compuesto, $r_c$, es un tipo de inter\'es donde para cada 
+El tipo de inter\'es compuesto, $r_c$, es un tipo de inter\'es donde en cada 
 periodo de tiempo se incrementa por un factor de $r_c$ el importe acumulado del 
 periodo anterior.
 \begin{equation}
+C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)} 
+\end{equation}
+
+\begin{equation}
 \label{interes_compuesto_1}
-r_c = (1 + r) ^ \frac{1}{t_1-t_0} - 1 = (1 + r_s \cdot (t_1 - t_0)) ^ \frac{1}{t_1-t_0} - 1
+r_c = (1 + r) ^ \frac{1}{t_1-t_0} - 1
 \end{equation}
 
 \paragraph{Defici\'on.}
 El tipo de inter\'es continuo, $r_e$, es el caso l\'\i mite del inter\'es 
-compuesto.
+compuesto. 
 \begin{equation}
-\label{interes_continuo_1}
-\lim_{t_1 \rightarrow t_0} r_c = \lim_{t_1 \rightarrow t_0} (1 + \frac{r}{t_1-t_0}) ^ {(t_1 - t_0)} = e^{r_e} - 1
+C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)}
 \end{equation}
-Por tanto,
+
 \begin{equation}
 \label{interes_continuo_2}
 r_e = \ln(1 + r_c)
 \end{equation}
 
-\paragraph{Proposici\'on.}
-Podemos deducir el importe final, $C_{t_1}$, conociendo el importe inicial, 
-$C_{t_0}$, el intervalo de tiempo transcurrido, $t_1 - t_0$, y el tipo de 
-inter\'es.
-\begin{displaymath}
-\begin{array}{lcl}
-\textrm{inter\'es simple}    & \rightarrow & C_{t_1} = C_{t_0} \cdot (1+ r_s \cdot (t_1-t_0)) \cr
-\textrm{inter\'es compuesto} & \rightarrow & C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)}      \cr
-\textrm{inter\'es continuo}  & \rightarrow & C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)} 
+La f\'ormula exponencial, no el coeficiente, se obteniene considerando el
+l\'\i mite del tipo de inter\'es compuesto.
+\begin{equation}
+\label{interes_continuo_1}
+\begin{array}{c}
+\lim_{t_1 \rightarrow t_0} 1+r_c = 
+\lim_{t_1 \rightarrow t_0} (1 + r)^{\frac{1}{t_1 - t_0}} = \cr
+\lim_{t_1 \rightarrow t_0} (1 + r_s \cdot (t_1-t_0)) ^ {\frac{1}{t_1 - t_0}} =
+\lim_{n \rightarrow \infty} (1 + \frac{r_s}{n}) ^ {n} = 
+e^{r_s}
 \end{array}
-\end{displaymath}
+\end{equation}
 
 \paragraph{Ejemplo.}
 Consideremos una operaci\'on que supone una inversi\'on inicial de 100 MM. y que 
@@ -412,7 +424,8 @@ M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}
 \end{displaymath}
 
 \paragraph{Corolario.} Sean $M_{T}$ la matriz de transici\'on para el periodo 
-$T$ y $k \in \mathrm{N}$. Entonces:
+$T$ y $k \in \mathrm{N}$. Entonces\footnote{v\'ease el ap\'endice \ref{apendix:sqrtmat} 
+para ver como se calcula la ra\'iz de una matriz}:
 \begin{displaymath}
 M_{k \cdot T} = M_{T}^k
 \end{displaymath}
