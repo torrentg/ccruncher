@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
   // checking basic arguments existence
   if (mode == 0)
   {
-    cerr << "indicate one of these options: --tma or tmaa or --survival" << endl;
+    cerr << "indicate one of these options: --tma or --tmaa or --survival" << endl;
     cerr << "please try again" << endl;
     return 1;
   }

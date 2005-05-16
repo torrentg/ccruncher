@@ -101,12 +101,14 @@ void SurvivalTest::test1()
   for(int i=0;i<9;i++)
   {
     ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
   
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
     ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
   }
 }
 
@@ -183,4 +185,37 @@ void SurvivalTest::test4()
   // survival function creation
   Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
+}
+
+//===========================================================================
+// test5 (equals than test1, but with diferent constructor)
+//===========================================================================
+void SurvivalTest::test5()
+{
+  double mvalues1[] = {1.00, 0.75, 0.50, 0.25, 0.175, 0.10};
+  double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
+  double *mvalues[] = {mvalues1, mvalues2};
+  int imonths[] = {0, 1, 2, 3, 4, 5};
+  double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
+  int ivalues[] = { 7, 5, 4, 3, 2, 2, 2, 1, 1, 0, 0};
+
+  // ratings list creation
+  Ratings ratings = getRatings();
+
+  // survival function creation
+  Survival sf(&ratings, 5, (int *) imonths, (double**) mvalues, 7);
+
+  // checking values
+  for(int i=0;i<9;i++)
+  {
+    ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
+  }
+  
+  // checking inverse values
+  for(int i=0;i<=10;i++)
+  {
+    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
+  }
 }
