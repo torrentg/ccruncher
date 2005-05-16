@@ -385,6 +385,7 @@ tests_SOURCES = \
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
+    ./survival/Survival.cpp\
     \
     ./utils/UtilsTest.hpp\
     ./utils/TimerTest.hpp\
@@ -448,7 +449,8 @@ tests_SOURCES = \
     ./aggregators/SegmentAggregator.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
-    ./segmentations/Segment.hpp
+    ./segmentations/Segment.hpp\
+    ./survival/Survival.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDADD = -lm -lexpat

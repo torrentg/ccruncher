@@ -138,7 +138,7 @@
   <!--                    SURVIVAL FUNCTION                           -->
   <!-- ============================================================== -->
 <!--  
-  <survival maxmonths="2500">
+  <survival maxmonths="2500" epsilon="1e-12">
 
     <svalue rating="AAA" t="0" value="1">
     <svalue rating="AAA" t="12" value="1">

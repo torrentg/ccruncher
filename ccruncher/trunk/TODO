@@ -6,10 +6,10 @@ CREDITCRUNCHER TODO
 Works in progress
 -------------------
   * working in pdf documentation explaining methodology used in CreditCruncher
+  * add time-to-default simulation method
+  * modify portfolio value function computation  
   * working in scripts that generates report using LaTeX and gnuplot
   * working in CreditCruncher site content
-  * modify portfolio value function computation
-  * change attribute mtransitions.period from years to months
 
 
 Future works
