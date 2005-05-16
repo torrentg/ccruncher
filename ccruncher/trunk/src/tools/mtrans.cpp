@@ -28,6 +28,7 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed name (tma -> mtrans)
+//   . added steplength parameter
 //
 //===========================================================================
 
@@ -49,14 +50,15 @@ using namespace std;
 
 //---------------------------------------------------------------------------
 
-#define DEFAULTMAXYEARS 50
+#define DEFAULTNUMROWS 50
+#define DEFAULTSTEPLENGTH 12
 
 //---------------------------------------------------------------------------
 
 void usage();
 void version();
 void copyright();
-void run(string, int, int) throw(Exception);
+void run(string, int, int, int) throw(Exception);
 
 //===========================================================================
 // main
@@ -74,13 +76,15 @@ int main(int argc, char *argv[])
       { "tma",          0,  NULL,  302 },      
       { "tmaa",         0,  NULL,  303 },
       { "survival",     0,  NULL,  304 },
-      { "maxyears",     1,  NULL,  307 },
+      { "steplength",   1,  NULL,  306 },
+      { "numrows",      1,  NULL,  307 },
       { "copyright",    0,  NULL,  308 },
       { NULL,           0,  NULL,   0  }
   };
 
   string sfilename = "";
-  int maxyears = DEFAULTMAXYEARS;
+  int numrows = DEFAULTNUMROWS;
+  int steplength = DEFAULTSTEPLENGTH;
   int mode = 0;
 
   // parsing options
@@ -120,16 +124,29 @@ int main(int argc, char *argv[])
       case 304: // --survival (compute Survival Function)
           mode = 3;
           break;
-            
-      case 307: // --maxyears=num (number of years)
+
+      case 306: // --steplength=num (length, in months, between rows)
           try
           {
-            string smaxyears = string(optarg); 
-            maxyears = Parser::intValue(smaxyears);
+            string ssteplength = string(optarg); 
+            steplength = Parser::intValue(ssteplength);
           }
           catch(Exception &e)
           {
-            cerr << "invalid maxyears value" << endl;
+            cerr << "invalid steplength value" << endl;
+            return 1;
+          }
+          break;
+
+      case 307: // --numrows=num (number of rows)
+          try
+          {
+            string snumrows = string(optarg); 
+            numrows = Parser::intValue(snumrows);
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid numrows value" << endl;
             return 1;
           }
           break;
@@ -170,9 +187,15 @@ int main(int argc, char *argv[])
     cerr << "please try again" << endl;
     return 1;
   }
-  if (maxyears < 0 || maxyears > 999)
+  if (numrows < 0 || numrows > 15000)
   {
-    cerr << "maxyears out of range [0,999]" << endl;
+    cerr << "numrows out of range [0,15000]" << endl;
+    cerr << "please try again" << endl;
+    return 1;
+  }
+  if (steplength < 0 || steplength > 15000)
+  {
+    cerr << "steplength out of range [0,15000]" << endl;
     cerr << "please try again" << endl;
     return 1;
   }
@@ -182,7 +205,7 @@ int main(int argc, char *argv[])
 
   try
   {
-    run(sfilename, mode, maxyears);
+    run(sfilename, mode, steplength, numrows);
   }
   catch(Exception &e)
   {
@@ -197,7 +220,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, int mode, int maxyears) throw(Exception)
+void run(string filename, int mode, int steplength, int numrows) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -212,18 +235,18 @@ void run(string filename, int mode, int maxyears) throw(Exception)
   Ratings *ratings = idata.ratings;
   
   // allocating space
-  double **buf = Utils::allocMatrix(tm->n, maxyears+1);
+  double **buf = Utils::allocMatrix(tm->n, numrows+1);
 
   switch(mode)
   {
       case 1: // TMA
-          ccruncher::tma(tm, maxyears, buf);
+          ccruncher::tma(tm, steplength, numrows, buf);
           break;
       case 2: 
-          ccruncher::tmaa(tm, maxyears, buf);
+          ccruncher::tmaa(tm, steplength, numrows, buf);
           break;
       case 3: 
-          ccruncher::survival(tm, maxyears, buf);
+          ccruncher::survival(tm, steplength, numrows, buf);
           break;
       default:
            cerr << "an unexpected error [15] occur" << endl;
@@ -232,7 +255,7 @@ void run(string filename, int mode, int maxyears) throw(Exception)
   }
 
   // printing header
-  cout << "year\t";
+  cout << "month\t";
   for(int i=0;i<tm->n;i++)
   {
     cout << ratings->getName(i) << "\t";
@@ -240,9 +263,9 @@ void run(string filename, int mode, int maxyears) throw(Exception)
   cout << "\n" << std::flush;
 
   // printing content
-  for(int t=0;t<=maxyears;t++)
+  for(int t=0;t<=numrows;t++)
   {
-    cout << t << "\t";
+    cout << t*steplength << "\t";
     for(int i=0;i<tm->n;i++)
     {
       cout << buf[i][t] << "\t";
@@ -275,22 +298,23 @@ void usage()
   "    TMAA (Cumulative Forward Default Rate) and Survival Function from the \n"
   "    transition matrix included in a CreditCruncher input file\n"
   "  arguments:\n"
-  "    file.xml        CreditCruncher input file\n"
-  "    --tma           compute TMA (Forward Default Rate)\n"  
-  "    --tmaa          compute TMAA (Cumulated Forward Default Rate)\n"
-  "    --survival      compute Survival Function (1-TMAA)\n"
-  "    --maxyears=num  maximum number of years (default 50)\n"
+  "    file.xml         CreditCruncher input file\n"
+  "    --tma            compute TMA (Forward Default Rate)\n"  
+  "    --tmaa           compute TMAA (Cumulated Forward Default Rate)\n"
+  "    --survival       compute Survival Function (1-TMAA)\n"
+  "    --steplength=num number of months between rows (default 12)\n"
+  "    --numrows=num    number of rows displayed (default 50)\n"
   "  options:\n"
-  "    --help          show this message and exit\n"
-  "    --version       show version and exit\n"
-  "    --copyright     show copyright and exit\n"
+  "    --help           show this message and exit\n"
+  "    --version        show version and exit\n"
+  "    --copyright      show copyright and exit\n"
   "  return codes:\n"
-  "    0          OK. finished without errors\n"
-  "    1          KO. finished with errors\n"
+  "    0                OK. finished without errors\n"
+  "    1                KO. finished with errors\n"
   "  examples:\n"
-  "    mtrans --tma --maxyears=25 file.xml\n"
+  "    mtrans --tma --numrows=25 file.xml\n"
   "    mtrans --tmaa file.xml\n"
-  "    mtrans --survival --maxyears=50 file.xml\n"
+  "    mtrans --survival --numrows=50 file.xml\n"
   << endl;
 }
 

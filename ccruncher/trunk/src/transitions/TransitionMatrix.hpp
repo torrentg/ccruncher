@@ -34,6 +34,7 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
+//   . added steplength parameter at tma, tmaa and survival methods
 //
 //===========================================================================
 
@@ -95,9 +96,9 @@ class TransitionMatrix : public ExpatHandlers
 //---------------------------------------------------------------------------
 
 TransitionMatrix * translate(TransitionMatrix *tm, int t) throw(Exception);
-void tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
-void tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
-void survival(TransitionMatrix *tm, int numyears, double **ret) throw(Exception);
+void tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
+void tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
+void survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

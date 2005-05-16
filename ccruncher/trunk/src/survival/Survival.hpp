@@ -67,6 +67,7 @@ class Survival : public ExpatHandlers
   public:
 
     Survival(Ratings *) throw(Exception);
+    Survival(Ratings *, ) throw(Exception);
     ~Survival();
 
     double evalue(const int irating, int t);

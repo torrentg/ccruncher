@@ -34,6 +34,7 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
+//   . added steplength parameter at tma, tmaa and survival methods
 //
 //===========================================================================
 
@@ -352,16 +353,18 @@ TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, int t) throw(Exce
 // @param ret allocated space of size numratings x (numyears+1)
 // ret[i][j] = probability initial rating r_i default between year 0 and year j
 //===========================================================================
-void ccruncher::tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   // making assertions
-  assert(numyears >= 0);
-  assert(numyears < 1000);
+  assert(numrows >= 0);
+  assert(numrows < 15000);
+  assert(steplength >= 0);
+  assert(steplength < 15000);
 
   int n = tm->n;
   
   // building 1-year transition matrix
-  TransitionMatrix *tmone = translate(tm, 1.0);
+  TransitionMatrix *tmone = translate(tm, steplength);
   double **one = tmone->getMatrix();
 
   // building Id-matrix of size nxn
@@ -380,7 +383,7 @@ void ccruncher::tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exce
     ret[i][0] = aux[i][n-1];
   }
   
-  for(int t=1;t<=numyears;t++)
+  for(int t=1;t<=numrows;t++)
   {
     Utils::prodMatrixMatrix(aux, one, n, n, n, tmp);
 
@@ -407,17 +410,17 @@ void ccruncher::tma(TransitionMatrix *tm, int numyears, double **ret) throw(Exce
 // @param ret allocated space of size numratings x (numyears+1)
 // ret[i][j] = probability initial rating r_i default between year 0 and year j
 //===========================================================================
-void ccruncher::tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   int n = tm->n;
   
   // computing TMA
-  tma(tm, numyears, ret);
+  tma(tm, steplength, numrows, ret);
   
   // building acumulateds
   for(int i=0;i<n;i++)
   {
-    for(int j=1;j<=numyears;j++)
+    for(int j=1;j<=numrows;j++)
     {
       ret[i][j] = ret[i][j] + ret[i][j-1];
     }
@@ -432,17 +435,17 @@ void ccruncher::tmaa(TransitionMatrix *tm, int numyears, double **ret) throw(Exc
 // @param ret allocated space of size numratings x (numyears+1)
 // ret[i][j] = 1-TMAA[i][j]
 //===========================================================================
-void ccruncher::survival(TransitionMatrix *tm, int numyears, double **ret) throw(Exception)
+void ccruncher::survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   int n = tm->n;
   
   // computing TMA
-  tmaa(tm, numyears, ret);
+  tmaa(tm, steplength, numrows, ret);
   
   // building survival function
   for(int i=0;i<n;i++)
   {
-    for(int j=1;j<=numyears;j++)
+    for(int j=1;j<=numrows;j++)
     {
       ret[i][j] = 1.0 - ret[i][j];
     }
