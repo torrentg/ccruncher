@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -361,8 +361,8 @@ int ccruncher::Survival::inverse(const int irating, double val)
         double y1 = double(j);
         
         double ret = interpole(val, x0, y0, x1, y1);
-        
-        return int(ret);
+
+        return int(round(ret));
       }
     }
     // error if value not found
@@ -377,7 +377,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
     
     double ret = interpole(val, x0, y0, x1, y1);
     
-    return int(ret);
+    return int(round(ret));
   }
 }
 

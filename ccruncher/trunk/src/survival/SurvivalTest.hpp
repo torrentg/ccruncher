@@ -19,70 +19,58 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Survival.hpp - Survival header
+// SurvivalTest.hpp - SurvivalTest header
 // --------------------------------------------------------------------------
 //
-// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
 //===========================================================================
 
-#ifndef _Survival_
-#define _Survival_
+#ifndef _SurvivalTest_
+#define _SurvivalTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include <vector>
-#include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
+#include <MiniCppUnit.hxx>
 #include "ratings/Ratings.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Survival : public ExpatHandlers
+class SurvivalTest : public TestFixture<SurvivalTest>
 {
 
   private:
 
-    void init(Ratings *) throw(Exception);
-    void insertValue(const string &r1, int t, double val) throw(Exception);
-    void validate() throw(Exception);
-    void fillHoles();
-    double interpole(double x, double x0, double y0, double x1, double y1);
+    Ratings getRatings();
 
-    int maxmonths;
-    vector<double> *data;
-    int nratings;
-    Ratings *ratings;
-    double epsilon;
+    void test1(void);
+    void test2(void);
+    void test3(void);
+    void test4(void);
+
 
   public:
 
-    Survival(Ratings *) throw(Exception);
-    ~Survival();
+    TEST_FIXTURE(SurvivalTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+    }
 
-    double evalue(const int irating, int t);
-    int inverse(const int irating, double val);
-
-    string getXML(int) throw(Exception);
-
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    void setUp();
+    void tearDown();
 
 };
 
-//---------------------------------------------------------------------------
-
-}
+REGISTER_FIXTURE(SurvivalTest);
 
 //---------------------------------------------------------------------------
 

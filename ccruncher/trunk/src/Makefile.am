@@ -348,6 +348,7 @@ tests_SOURCES = \
     ./ratings/RatingsTest.cpp\
     ./sectors/SectorsTest.cpp\
     ./transitions/TransitionMatrixTest.cpp\
+    ./survival/SurvivalTest.cpp\
     ./portfolio/Asset.cpp\
     ./portfolio/DateValues.cpp\
     ./utils/Timer.cpp\
@@ -413,6 +414,7 @@ tests_SOURCES = \
     ./ratings/RatingsTest.hpp\
     ./sectors/SectorsTest.hpp\
     ./transitions/TransitionMatrixTest.hpp\
+    ./survival/SurvivalTest.hpp\
     ./portfolio/Asset.hpp\
     ./portfolio/DateValues.hpp\
     ./utils/Timer.hpp\

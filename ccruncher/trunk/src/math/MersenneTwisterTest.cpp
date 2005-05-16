@@ -72,7 +72,7 @@ void MersenneTwisterTest::test1(void)
     ybins[i] = 0L;
   }
 
-//  CPPUNIT_ASSERT_NO_THROW(mtw.setSeed(4357));
+  ASSERT_NO_THROW(mtw.seed(4357));
 
   for(int i=0; i<NUMITERS; i++)
   {
@@ -116,7 +116,7 @@ void MersenneTwisterTest::test2(void)
   double zbin[NUMBINS];
   double prob1, prob2;
 
-  //ASSERT_NO_THROW(mtw.setSeed(4357));
+  ASSERT_NO_THROW(mtw.seed(4357));
 
   for (int i=0;i<NUMBINS;i++)
   {
