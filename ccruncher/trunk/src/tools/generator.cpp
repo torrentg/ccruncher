@@ -34,6 +34,9 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added survival function section 
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -215,12 +218,17 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   IData idata = IData(filename);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
-  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.2.dtd'>\n";
+  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.3.dtd'>\n";
   cout << "<creditcruncher>\n";
   cout << idata.params->getXML(2);
   cout << idata.interests->getXML(2);
   cout << idata.ratings->getXML(2);
-  cout << idata.transitions->getXML(2);
+  if (idata.transitions != NULL) {
+    cout << idata.transitions->getXML(2);
+  }
+  if (idata.survival != NULL) {
+    cout << idata.survival->getXML(2);
+  }
   cout << idata.sectors->getXML(2);
   cout << idata.correlations->getXML(2);
   cout << idata.segmentations->getXML(2);

@@ -322,6 +322,12 @@ void ccruncher::Survival::fillHoles()
       }
     }
   }
+
+  // default rating values (always 0)
+  for(int j=0;j<data[nratings-1].size();j++)
+  {
+    data[nratings-1][j] = 0.0;
+  }
 }
 
 //===========================================================================

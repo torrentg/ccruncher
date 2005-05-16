@@ -229,6 +229,9 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   IData idata = IData(filename);
 
   // retrieving transition matrix
+  if (idata.transitions == NULL) {
+    throw Exception("mtrans::run(): this file haven't mtransitions section defined");
+  }
   TransitionMatrix *tm = idata.transitions;
 
   // retrieving ratings
