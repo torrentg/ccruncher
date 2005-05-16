@@ -31,6 +31,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added survival section
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -46,6 +49,7 @@
 #include "sectors/Sectors.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "transitions/TransitionMatrix.hpp"
+#include "survival/Survival.hpp"
 #include "correlations/CorrelationMatrix.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "aggregators/Aggregators.hpp"
@@ -76,6 +80,7 @@ class IData : public ExpatHandlers
     Interests *interests;
     Ratings *ratings;
     TransitionMatrix *transitions;
+    Survival *survival;
     Sectors *sectors;
     CorrelationMatrix *correlations;
     Segmentations *segmentations;

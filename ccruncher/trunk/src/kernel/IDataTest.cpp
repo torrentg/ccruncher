@@ -37,6 +37,7 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //   . changed period time resolution (year->month)
+//   . added survival section
 //
 //===========================================================================
 
@@ -127,6 +128,13 @@ void IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </mtransitions>\n\
+    <survival maxmonths='2500' epsilon='1e-12'>\n\
+      <svalue rating='A' t='0' value='1.0'/>\n\
+      <svalue rating='B' t='0' value='1.0'/>\n\
+      <svalue rating='C' t='0' value='1.0'/>\n\
+      <svalue rating='D' t='0' value='1.0'/>\n\
+      <svalue rating='E' t='0' value='0.0'/>\n\
+    </survival>\n\
     <sectors>\n\
       <sector name='S1' order='1' desc='calzado'/>\n\
       <sector name='S2' order='2' desc='otros sectores'/>\n\
@@ -216,6 +224,7 @@ void IDataTest::test1()
   ASSERT(idata.interests != NULL);
   ASSERT(idata.ratings != NULL);
   ASSERT(idata.transitions != NULL);
+  ASSERT(idata.survival != NULL);
   ASSERT(idata.sectors != NULL);
   ASSERT(idata.correlations != NULL);
   ASSERT(idata.portfolio != NULL);

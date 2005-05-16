@@ -59,6 +59,7 @@ ccruncher_SOURCES = \
     ./ratings/Ratings.cpp\
     ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
+    ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
     ./sectors/Sectors.cpp\
     ./correlations/CorrelationMatrix.cpp\
@@ -97,6 +98,7 @@ ccruncher_SOURCES = \
     ./ratings/Ratings.hpp\
     ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
+    ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
     ./sectors/Sectors.hpp\
     ./correlations/CorrelationMatrix.hpp\
@@ -166,6 +168,7 @@ generator_SOURCES = \
     ./ratings/Ratings.cpp\
     ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
+    ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
     ./sectors/Sectors.cpp\
     ./correlations/CorrelationMatrix.cpp\
@@ -204,6 +207,7 @@ generator_SOURCES = \
     ./ratings/Ratings.hpp\
     ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
+    ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
     ./sectors/Sectors.hpp\
     ./correlations/CorrelationMatrix.hpp\
@@ -250,6 +254,7 @@ mtrans_SOURCES = \
     ./ratings/Ratings.cpp\
     ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
+    ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
     ./sectors/Sectors.cpp\
     ./correlations/CorrelationMatrix.cpp\
@@ -287,6 +292,7 @@ mtrans_SOURCES = \
     ./ratings/Ratings.hpp\
     ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
+    ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
     ./sectors/Sectors.hpp\
     ./correlations/CorrelationMatrix.hpp\
