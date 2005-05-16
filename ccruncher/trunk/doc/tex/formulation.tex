@@ -416,6 +416,10 @@ P(AA \to B;0;2) = & P(AA \to AAA;0;1)     & \cdot P(AAA \to B;1;2)     & + \cr
 \end{array}
 \end{displaymath}
 
+Notamos que se trata del producto de la fila correspondiente al rating $AA$ 
+(rating de salida) por la columna correspondiente al rating $B$ (rating de 
+llegada).
+
 \paragraph{Proposici\'on.} Sean $M_{T_1}$ y $M_{T_2}$ las matrices de transici\'on
 para los periodos $T_1$ y $T_2$. Entonces, la matriz de transici\'on para el
 periodo $T_1+T_2$ es:
@@ -611,7 +615,7 @@ que el n\'umero de sectores, $m$, es 3.
 \subsection{Propiedades} 
 
 \paragraph{Propiedad 1.} Si la matriz de correlaci\'on sectorial tiene 
-todos los elementos comprendidos entre -1 y 1, entonces la matrix de correlaci\'on 
+todos los elementos comprendidos entre -1 y 1, entonces la matriz de correlaci\'on 
 entre clientes es definida positiva\footnote{propiedad pendiente de demostrar}.
 \begin{displaymath}
 \gamma_{i,j} \in (-1,1) \quad \forall i, j 
@@ -668,9 +672,18 @@ variable aleatoria Binomial, $Y \sim B(100,0.9)$. El Teorema Central del
 L\'imite nos permite aproximar $Y \sim B(100,0.9) \approx N(90, 9)$.
 \newline
 \newline
-El valor esperado al cabo de $T$ tiempo es $E(Y) \approx 90$. El VAR al nivel 
-de confianza $99\%$ cumple que $P(Y \leq \textrm{VAR}_{99\%}) = 0.01 = 1\% 
-\longrightarrow \textrm{VAR}_{99\%}=86.16$.
+El valor esperado al cabo de $T$ tiempo es $E(Y) \approx 90$. Calculemos el VAR 
+al nivel de confianza $99\%$:
+
+\begin{displaymath}
+\begin{array}{c}
+P(Y \leq \textrm{VAR}_{99\%}) = 0.01 = 1\% \cr
+P(90 + 3 \cdot X \leq \textrm{VAR}_{99\%}) = 0.01 \cr
+P(X \leq \frac{\textrm{VAR}_{99\%} - 90}{3}) = 0.01 \longrightarrow \cr
+\frac{\textrm{VAR}_{99\%} - 90}{3} = -2.33 \cr
+\textrm{VAR}_{99\%} = -2.33 \cdot 3 + 90 = 83.01
+\end{array}
+\end{displaymath}
 \newline
 \newline
 Este ejemplo no es significativo debido a que se han realizado dos supuestos 
