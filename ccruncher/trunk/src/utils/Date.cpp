@@ -25,13 +25,16 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release based on a Bernt A Oedegaard class
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <vector>
 #include <ctime>
 #include <cstdio>
 #include "utils/Date.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -68,7 +71,7 @@ ccruncher::Date::Date(int d, int m, int y) throw(Exception)
 ccruncher::Date::Date(const string &str) throw(Exception)
 {
   vector<string> tokens;
-  Utils::tokenize(str, tokens, "/");
+  Strings::tokenize(str, tokens, "/");
 
   if (tokens.size() != 3)
   {

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include <cmath>
@@ -34,7 +37,7 @@
 #include "math/Normal.hpp"
 #include "math/CopulaNormal.hpp"
 #include "math/CholeskyDecomposition.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -60,11 +63,11 @@ void ccruncher::CopulaNormal::finalize()
 {
   if (owner)
   {
-    Utils::deallocMatrix(sigmas, n);
+    Arrays<double>::deallocMatrix(sigmas, n);
   }
 
-  Utils::deallocVector(aux1);
-  Utils::deallocVector(aux2);
+  Arrays<double>::deallocVector(aux1);
+  Arrays<double>::deallocVector(aux2);
 }
 
 //===========================================================================
@@ -74,8 +77,8 @@ ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception)
 {
   init();
   n = x.n;
-  aux1 = Utils::allocVector(n);
-  aux2 = Utils::allocVector(n);
+  aux1 = Arrays<double>::allocVector(n);
+  aux2 = Arrays<double>::allocVector(n);
 
   // definim sigmas
   owner = false;
@@ -94,8 +97,8 @@ ccruncher::CopulaNormal::CopulaNormal(int n_, double **mcorrels) throw(Exception
   {
     init();
     n = n_;
-    aux1 = Utils::allocVector(n);
-    aux2 = Utils::allocVector(n);
+    aux1 = Arrays<double>::allocVector(n);
+    aux2 = Arrays<double>::allocVector(n);
 
     // omplim sigmas
     owner = true;
@@ -186,7 +189,7 @@ void ccruncher::CopulaNormal::randNm()
     aux1[i] = mtrand.randNorm();
   }
 
-  Utils::prodMatrixVector(sigmas, aux1, n, n, aux2);
+  Arrays<double>::prodMatrixVector(sigmas, aux1, n, n, aux2);
 }
 
 //===========================================================================

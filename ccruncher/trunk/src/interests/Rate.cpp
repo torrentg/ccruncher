@@ -28,10 +28,13 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include "interests/Rate.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -102,7 +105,7 @@ void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 string ccruncher::Rate::getXML(int ilevel) throw(Exception)
 {
-  string ret = Utils::blanks(ilevel);
+  string ret = Strings::blanks(ilevel);
 
   ret += "<rate ";
   ret += "t='" + Parser::double2string(t) + "' ";

@@ -28,12 +28,15 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "interests/Interest.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 // --------------------------------------------------------------------------
@@ -283,7 +286,7 @@ void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 string ccruncher::Interest::getXML(int ilevel) throw(Exception)
 {
-  string spc = Utils::blanks(ilevel);
+  string spc = Strings::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<interest name='" + name + "' date='" + Parser::date2string(fecha) + "'>\n";

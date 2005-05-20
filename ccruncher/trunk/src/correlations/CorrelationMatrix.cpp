@@ -34,12 +34,18 @@
 // 2005/04/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to validation
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//   . implemented Strings class
+//
 //===========================================================================
 
+#include <cmath>
 #include <cfloat>
 #include "correlations/CorrelationMatrix.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
+#include "utils/Strings.hpp"
 #include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
@@ -58,7 +64,7 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
   }
 
   // inicialitzem la matriu
-  matrix = Utils::allocMatrix(n, n, NAN);
+  matrix = Arrays<double>::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================
@@ -75,7 +81,7 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Excepti
 //===========================================================================
 ccruncher::CorrelationMatrix::~CorrelationMatrix()
 {
-  Utils::deallocMatrix(matrix, n);
+  Arrays<double>::deallocMatrix(matrix, n);
 }
 
 //===========================================================================
@@ -215,37 +221,6 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 
   // we don't need to check that client correlation matrix is definite positve 
   // condition. This is granted if elements belongs at (-1,1)
-  /*
-  // checking that 2-clients-per-sector matrix is definite positive
-  double **maux = getMatrix();
-  double **mtmp = Utils::allocMatrix(2*n, 2*n);
-  double *vtmp = Utils::allocVector(2*n);
-
-  // filling 2-clients-per-sector correlation matrix
-  for(int i=0;i<n;i++)
-  {
-    for(int j=0;j<n;j++)
-    {
-      mtmp[2*i][2*j] = maux[i][j];
-      mtmp[2*i+1][2*j] = maux[i][j];
-      mtmp[2*i][2*j+1] = maux[i][j];
-      mtmp[2*i+1][2*j+1] = maux[i][j];
-    }
-  }
-  for(int i=0;i<2*n;i++)
-  {
-    mtmp[i][i] = 1.0;
-  }
-
-  // checking if is definite positive
-  bool ret = CholeskyDecomposition::choldc(mtmp, vtmp, n);
-  Utils::deallocVector(vtmp);
-  Utils::deallocMatrix(mtmp, 2*n);
-  if (ret == false)
-  {
-    throw Exception("CorrelationMatrix::validate(): the 2-clients-per-sector correlation matrix is not definite positive");
-  }
-  */
 }
 
 //===========================================================================
@@ -253,8 +228,8 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 //===========================================================================
 string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
 {
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
   ret += spc1 + "<mcorrels epsilon='" + Parser::double2string(epsilon) + "'>\n";

@@ -31,12 +31,15 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed period time resolution (year->month)
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include <cfloat>
 #include <cassert>
 #include "kernel/MonteCarlo.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
@@ -360,7 +363,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
   Logger::trace("matrix dimension", sval+"x"+sval);
   
   // allocating space
-  double **ret = Utils::allocMatrix(n, n);
+  double **ret = Arrays<double>::allocMatrix(n, n);
 
   // definim la matriu de correlacions entre clients
   for (int i=0;i<n;i++)

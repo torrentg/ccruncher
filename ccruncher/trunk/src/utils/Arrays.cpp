@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,31 +19,12 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.cpp - Segment code
+// Arrays.hpp - Arrays code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from xerces to expat
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release (segregated from Utils.hpp)
 //
 //===========================================================================
 
-#include "segmentations/Segment.hpp"
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Segment::Segment()
-{
-  name = "";
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Segment::Segment(string name_)
-{
-  name = name_;
-}
+// all code in hpp file because is a template class

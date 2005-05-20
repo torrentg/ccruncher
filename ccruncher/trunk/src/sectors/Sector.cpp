@@ -28,10 +28,13 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include "sectors/Sector.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -103,7 +106,7 @@ void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 string ccruncher::Sector::getXML(int ilevel) throw(Exception)
 {
-  string ret = Utils::blanks(ilevel);
+  string ret = Strings::blanks(ilevel);
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";

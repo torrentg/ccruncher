@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,22 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// UtilsTest.hpp - UtilsTest header
+// StringsTest.hpp - StringsTest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release
-//
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added function prodMatrixMatrix
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release (segregated from UtilsTest.hpp)
 //
 //===========================================================================
 
-#ifndef _UtilsTest_
-#define _UtilsTest_
+#ifndef _StringsTest_
+#define _StringsTest_
 
 //---------------------------------------------------------------------------
 
@@ -47,23 +41,19 @@ using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 
-class UtilsTest : public TestFixture<UtilsTest>
+class StringsTest : public TestFixture<StringsTest>
 {
 
   private:
 
     void test1(void);
-    void test2(void);
-    void test3(void);
 
 
   public:
 
-    TEST_FIXTURE(UtilsTest)
+    TEST_FIXTURE(StringsTest)
     {
       TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
     }
 
     void setUp();
@@ -71,7 +61,7 @@ class UtilsTest : public TestFixture<UtilsTest>
 
 };
 
-REGISTER_FIXTURE(UtilsTest);
+REGISTER_FIXTURE(StringsTest);
 
 //---------------------------------------------------------------------------
 

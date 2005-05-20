@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,24 +19,19 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// UtilsTest.cpp - UtilsTest code
+// ArraysTest.cpp - ArraysTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release (see jama/tnt_stopwatch && boost/timer)
-//
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added function prodMatrixMatrix
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release (segregated from UtilsTest.cpp)
 //
 //===========================================================================
 
 #include <iostream>
+#include <cmath>
 #include <string>
-#include "utils/Utils.hpp"
-#include "utils/UtilsTest.hpp"
+#include "utils/Arrays.hpp"
+#include "utils/ArraysTest.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -47,7 +42,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void UtilsTest::setUp()
+void ArraysTest::setUp()
 {
   // nothing to do
 }
@@ -55,7 +50,7 @@ void UtilsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void UtilsTest::tearDown()
+void ArraysTest::tearDown()
 {
   // nothing to do
 }
@@ -63,7 +58,7 @@ void UtilsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void UtilsTest::test1()
+void ArraysTest::test1()
 {
   double *vector1, *vector2, *vector3;
   double **matrix1, **matrix2, **matrix3, **matrix4;
@@ -76,9 +71,9 @@ void UtilsTest::test1()
     5.0, 6.0, 7.0, 8.0, 9.0, 1.0, 2.0
   };
 
-  vector1 = Utils::allocVector(XLENGTH);
-  vector2 = Utils::allocVector(XLENGTH, vvals);
-  vector3 = Utils::allocVector(YLENGTH, 1.0);
+  vector1 = Arrays<double>::allocVector(XLENGTH, NAN);
+  vector2 = Arrays<double>::allocVector(XLENGTH, vvals);
+  vector3 = Arrays<double>::allocVector(YLENGTH, 1.0);
 
   for (int i=0;i<XLENGTH;i++)
   {
@@ -91,24 +86,24 @@ void UtilsTest::test1()
     ASSERT_DOUBLES_EQUAL(1.0, vector3[i], EPSILON);
   }
 
-  Utils::initVector(vector1, XLENGTH, 1.0);
+  Arrays<double>::initVector(vector1, XLENGTH, 1.0);
 
   for (int i=0;i<XLENGTH;i++)
   {
     ASSERT_DOUBLES_EQUAL(1.0, vector1[i], EPSILON);
   }
 
-  Utils::copyVector(vector1, XLENGTH, vector2);
+  Arrays<double>::copyVector(vector1, XLENGTH, vector2);
 
   for (int i=0;i<XLENGTH;i++)
   {
     ASSERT_DOUBLES_EQUAL(vector1[i], vector2[i], EPSILON);
   }
 
-  matrix1 = Utils::allocMatrix(XLENGTH, YLENGTH);
-  matrix2 = Utils::allocMatrix(XLENGTH, YLENGTH, 1.0);
-  matrix3 = Utils::allocMatrix(XLENGTH, YLENGTH, mvals);
-  matrix4 = Utils::allocMatrix(XLENGTH, YLENGTH, matrix3);
+  matrix1 = Arrays<double>::allocMatrix(XLENGTH, YLENGTH, NAN);
+  matrix2 = Arrays<double>::allocMatrix(XLENGTH, YLENGTH, 1.0);
+  matrix3 = Arrays<double>::allocMatrix(XLENGTH, YLENGTH, mvals);
+  matrix4 = Arrays<double>::allocMatrix(XLENGTH, YLENGTH, matrix3);
 
   for (int i=0;i<XLENGTH;i++)
   {
@@ -121,7 +116,7 @@ void UtilsTest::test1()
     }
   }
 
-  Utils::initMatrix(matrix1, XLENGTH, YLENGTH, 1.0);
+  Arrays<double>::initMatrix(matrix1, XLENGTH, YLENGTH, 1.0);
 
   for (int i=0;i<XLENGTH;i++)
   {
@@ -131,7 +126,7 @@ void UtilsTest::test1()
     }
   }
 
-  Utils::copyMatrix(matrix1, XLENGTH, YLENGTH, matrix3);
+  Arrays<double>::copyMatrix(matrix1, XLENGTH, YLENGTH, matrix3);
 
   for (int i=0;i<XLENGTH;i++)
   {
@@ -141,64 +136,36 @@ void UtilsTest::test1()
     }
   }
 
-  Utils::prodMatrixVector(matrix1, vector3, XLENGTH, YLENGTH, vector1);
+  Arrays<double>::prodMatrixVector(matrix1, vector3, XLENGTH, YLENGTH, vector1);
 
   for (int j=0;j<XLENGTH;j++)
   {
     ASSERT_DOUBLES_EQUAL(7.0, vector1[j], EPSILON);
   }
 
-  Utils::deallocVector(vector1);
-  Utils::deallocVector(vector2);
-  Utils::deallocVector(vector3);
+  Arrays<double>::deallocVector(vector1);
+  Arrays<double>::deallocVector(vector2);
+  Arrays<double>::deallocVector(vector3);
 
-  Utils::deallocMatrix(matrix1, XLENGTH);
-  Utils::deallocMatrix(matrix2, XLENGTH);
-  Utils::deallocMatrix(matrix3, XLENGTH);
-  Utils::deallocMatrix(matrix4, XLENGTH);
+  Arrays<double>::deallocMatrix(matrix1, XLENGTH);
+  Arrays<double>::deallocMatrix(matrix2, XLENGTH);
+  Arrays<double>::deallocMatrix(matrix3, XLENGTH);
+  Arrays<double>::deallocMatrix(matrix4, XLENGTH);
 }
 
 //===========================================================================
 // test2
 //===========================================================================
-void UtilsTest::test2()
-{
-  vector<string> tokens;
-  string str1 = "  I Am A String Ready For Sacrifice  ";
-
-  Utils::tokenize(str1, tokens, " ");
-
-  ASSERT(7 == tokens.size());
-
-  ASSERT(tokens[0] == "I");
-  ASSERT(tokens[1] == "Am");
-  ASSERT(tokens[2] == "A");
-  ASSERT(tokens[3] == "String");
-  ASSERT(tokens[4] == "Ready");
-  ASSERT(tokens[5] == "For");
-  ASSERT(tokens[6] == "Sacrifice");
-
-  ASSERT("  I Am A String Ready For Sacrifice" == Utils::rtrim(str1));
-  ASSERT("I Am A String Ready For Sacrifice  " == Utils::ltrim(str1));
-  ASSERT("I Am A String Ready For Sacrifice" == Utils::trim(str1));
-  ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Utils::uppercase(str1));
-  ASSERT("  i am a string ready for sacrifice  " == Utils::lowercase(str1));
-  ASSERT("   " == Utils::blanks(3));
-}
-
-//===========================================================================
-// test3
-//===========================================================================
-void UtilsTest::test3()
+void ArraysTest::test2()
 {
   double Avals[] = {1,2,3,4,5,6};
-  double **A = Utils::allocMatrix(2, 3, Avals);
+  double **A = Arrays<double>::allocMatrix(2, 3, Avals);
   double Bvals[] = {1,2,3};
-  double **B = Utils::allocMatrix(3, 1, Bvals);
+  double **B = Arrays<double>::allocMatrix(3, 1, Bvals);
   double Cvals[] = {14,32};
-  double **C = Utils::allocMatrix(2, 1);
+  double **C = Arrays<double>::allocMatrix(2, 1);
 
-  Utils::prodMatrixMatrix(A, B, 2, 3, 1, C);
+  Arrays<double>::prodMatrixMatrix(A, B, 2, 3, 1, C);
 
   for (int i=0;i<2;i++)
   {
@@ -208,7 +175,7 @@ void UtilsTest::test3()
     }
   }
 
-  Utils::deallocMatrix(A, 2);
-  Utils::deallocMatrix(B, 3);
-  Utils::deallocMatrix(C, 2);
+  Arrays<double>::deallocMatrix(A, 2);
+  Arrays<double>::deallocMatrix(B, 3);
+  Arrays<double>::deallocMatrix(C, 2);
 }

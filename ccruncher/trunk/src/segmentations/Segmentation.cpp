@@ -28,13 +28,16 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "segmentations/Segmentation.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 
 //===========================================================================
 // constructor
@@ -237,7 +240,7 @@ string ccruncher::Segmentation::getSegmentName(int isegment) throw(Exception)
 //===========================================================================
 string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
 {
-  string spc = Utils::blanks(ilevel);
+  string spc = Strings::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<segmentation name='" + name + "' components='";
@@ -250,7 +253,7 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
   }
   else if (name == "client" || name == "asset")
   {
-    ret += Utils::blanks(ilevel+2) + "<segment name='*'/>\n";
+    ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
   }
   else
   {
@@ -258,7 +261,7 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
     {
       if (vsegments[i].name != "rest")
       {
-        ret += Utils::blanks(ilevel+2) + "<segment name='" + vsegments[i].name + "'/>\n";
+        ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i].name + "'/>\n";
       }
     }
   }

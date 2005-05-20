@@ -37,6 +37,9 @@
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function section 
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -47,7 +50,7 @@
 #include "tools/Bond.hpp"
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
@@ -243,10 +246,10 @@ void run(string filename, int nclients, int nassets) throw(Exception)
 string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) throw(Exception)
 {
   string ret = "";
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
-  string spc3 = Utils::blanks(ilevel+4);
-  string spc4 = Utils::blanks(ilevel+6);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
+  string spc3 = Strings::blanks(ilevel+4);
+  string spc4 = Strings::blanks(ilevel+6);
   int nratings = idata->ratings->getRatings()->size();
   int nsectors = idata->sectors->getSectors()->size();
   Date date1 = idata->params->begindate;
@@ -294,8 +297,8 @@ double getNominal()
 //===========================================================================
 string getXMLData(int ilevel, Date issuedate, int term, double nominal, double rate, int ncoupons) throw(Exception)
 {
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
   Bond bond;
   

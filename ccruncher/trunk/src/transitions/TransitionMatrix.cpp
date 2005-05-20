@@ -36,13 +36,19 @@
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//   . implemented Strings class
+//
 //===========================================================================
 
+#include <cmath>
 #include <cfloat>
 #include <cassert>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
+#include "utils/Strings.hpp"
 #include "math/PowMatrix.hpp"
 
 //===========================================================================
@@ -62,7 +68,7 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
   }
 
   // inicialitzem la matriu
-  matrix = Utils::allocMatrix(n, n, NAN);
+  matrix = Arrays<double>::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================
@@ -77,8 +83,8 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
   n = otm.n;
 
   // inicialitzem la matriu
-  matrix = Utils::allocMatrix(n, n);
-  Utils::copyMatrix(otm.getMatrix(), n, n, matrix);
+  matrix = Arrays<double>::allocMatrix(n, n);
+  Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
 }
 
 //===========================================================================
@@ -95,7 +101,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception
 //===========================================================================
 ccruncher::TransitionMatrix::~TransitionMatrix()
 {
-  Utils::deallocMatrix(matrix, n);
+  Arrays<double>::deallocMatrix(matrix, n);
 }
 
 //===========================================================================
@@ -303,8 +309,8 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
 //===========================================================================
 string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
 {
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
   ret += spc1 + "<mtransitions period='" + Parser::int2string(period) + "' ";
@@ -368,14 +374,14 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   double **one = tmone->getMatrix();
 
   // building Id-matrix of size nxn
-  double **aux = Utils::allocMatrix(n, n, 0.0);
+  double **aux = Arrays<double>::allocMatrix(n, n, 0.0);
   for(int i=0;i<n;i++)
   {
     aux[i][i] = 1.0;
   }
 
   // auxiliary matrix
-  double **tmp = Utils::allocMatrix(n, n, 0.0);
+  double **tmp = Arrays<double>::allocMatrix(n, n, 0.0);
       
   // filling TMAA(.,0)
   for(int i=0;i<n;i++)
@@ -385,7 +391,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   
   for(int t=1;t<=numrows;t++)
   {
-    Utils::prodMatrixMatrix(aux, one, n, n, n, tmp);
+    Arrays<double>::prodMatrixMatrix(aux, one, n, n, n, tmp);
 
     // filling TMA(.,t)
     for(int i=0;i<n;i++)
@@ -398,8 +404,8 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   
   // exit function
   delete [] one;
-  Utils::deallocMatrix(aux, n);
-  Utils::deallocMatrix(tmp, n);
+  Arrays<double>::deallocMatrix(aux, n);
+  Arrays<double>::deallocMatrix(tmp, n);
 }
 
 //===========================================================================

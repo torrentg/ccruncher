@@ -25,6 +25,9 @@
 // 2005/01/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cstdlib>
@@ -35,7 +38,7 @@
 #include <iostream>
 #include <algorithm>
 #include "tools/FileResults.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -194,7 +197,7 @@ string ccruncher::FileResults::extractKey(char *tira) throw(Exception)
   else
   {
     string ret(tira, epos-tira-1);
-    return Utils::trim(ret);
+    return Strings::trim(ret);
   }
 }
 
@@ -212,7 +215,7 @@ string ccruncher::FileResults::extractValue(char *tira) throw(Exception)
   else
   {
     string ret(epos+1);
-    return Utils::trim(ret);
+    return Strings::trim(ret);
   }
 }
 

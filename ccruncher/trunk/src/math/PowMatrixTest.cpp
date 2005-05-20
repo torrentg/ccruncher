@@ -35,12 +35,15 @@
 //     changes the order of calculations, resulting in slightly 
 //     different results due to the limits of floating-point precision.
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include <iostream>
 #include "math/PowMatrix.hpp"
 #include "math/PowMatrixTest.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -96,8 +99,8 @@ void PowMatrixTest::test1()
      +0.0918803, -0.00327799, +0.990166
   };
 
-  double **A = Utils::allocMatrix(3,3, valA);
-  double **M = Utils::allocMatrix(3,3);
+  double **A = Arrays<double>::allocMatrix(3,3, valA);
+  double **M = Arrays<double>::allocMatrix(3,3);
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, 3, M));
 
@@ -109,8 +112,8 @@ void PowMatrixTest::test1()
     }
   }
 
-  Utils::deallocMatrix(A, 3);
-  Utils::deallocMatrix(M, 3);
+  Arrays<double>::deallocMatrix(A, 3);
+  Arrays<double>::deallocMatrix(M, 3);
 }
 
 //===========================================================================
@@ -144,8 +147,8 @@ void PowMatrixTest::test2()
      +1.36792  , +0.0329025 , +0.414152
   };
 
-  double **B = Utils::allocMatrix(3, 3, valB);
-  double **M = Utils::allocMatrix(3, 3);
+  double **B = Arrays<double>::allocMatrix(3, 3, valB);
+  double **M = Arrays<double>::allocMatrix(3, 3);
 
   ASSERT_NO_THROW(PowMatrix::pow(B, 0.2, 3, M));
 
@@ -157,8 +160,8 @@ void PowMatrixTest::test2()
     }
   }
 
-  Utils::deallocMatrix(B, 3);
-  Utils::deallocMatrix(M, 3);
+  Arrays<double>::deallocMatrix(B, 3);
+  Arrays<double>::deallocMatrix(M, 3);
 }
 
 //===========================================================================
@@ -176,13 +179,13 @@ void PowMatrixTest::test3()
      +4.0, -1.0, -2.0,
      +0.0, +0.0, -1.0
   };
-  double **C = Utils::allocMatrix(3,3, valC);
-  double **M = Utils::allocMatrix(3,3);
+  double **C = Arrays<double>::allocMatrix(3,3, valC);
+  double **M = Arrays<double>::allocMatrix(3,3);
 
   ASSERT_THROW(PowMatrix::pow(C, 0.3, 3, M));
 
-  Utils::deallocMatrix(C, 3);
-  Utils::deallocMatrix(M, 3);
+  Arrays<double>::deallocMatrix(C, 3);
+  Arrays<double>::deallocMatrix(M, 3);
 }
 
 //===========================================================================

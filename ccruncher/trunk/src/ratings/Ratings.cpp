@@ -28,12 +28,15 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "ratings/Ratings.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -204,7 +207,7 @@ string ccruncher::Ratings::getName(int index) throw(Exception)
 //===========================================================================
 string ccruncher::Ratings::getXML(int ilevel) throw(Exception)
 {
-  string spc = Utils::blanks(ilevel);
+  string spc = Strings::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<ratings>\n";

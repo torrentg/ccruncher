@@ -25,13 +25,17 @@
 // 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
+#include <cmath>
 #include <cfloat>
 #include <cassert>
 #include "survival/Survival.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 
 //===========================================================================
 // private initializator
@@ -423,8 +427,8 @@ int ccruncher::Survival::inverse(const int irating, double val)
 //===========================================================================
 string ccruncher::Survival::getXML(int ilevel) throw(Exception)
 {
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
   ret += spc1 + "<survival maxmonths='" + Parser::int2string(maxmonths) + "' ";

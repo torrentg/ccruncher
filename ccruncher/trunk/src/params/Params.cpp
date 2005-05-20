@@ -31,10 +31,13 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include "params/Params.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -274,8 +277,8 @@ void ccruncher::Params::validate(void) throw(Exception)
 //===========================================================================
 string ccruncher::Params::getXML(int ilevel) throw(Exception)
 {
-  string spc1 = Utils::blanks(ilevel);
-  string spc2 = Utils::blanks(ilevel+2);
+  string spc1 = Strings::blanks(ilevel);
+  string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
   ret += spc1 + "<params>\n";

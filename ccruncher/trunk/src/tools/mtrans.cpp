@@ -30,6 +30,9 @@
 //   . changed name (tma -> mtrans)
 //   . added steplength parameter
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -39,7 +42,7 @@
 #include <getopt.h>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
@@ -238,7 +241,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   Ratings *ratings = idata.ratings;
   
   // allocating space
-  double **buf = Utils::allocMatrix(tm->n, numrows+1);
+  double **buf = Arrays<double>::allocMatrix(tm->n, numrows+1);
 
   switch(mode)
   {
@@ -277,7 +280,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   }
 
   // exit function
-  Utils::deallocMatrix(buf, tm->n);
+  Arrays<double>::deallocMatrix(buf, tm->n);
 }
 
 //===========================================================================

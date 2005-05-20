@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include <iostream>
@@ -35,7 +38,7 @@
 #include "math/CopulaNormal.hpp"
 #include "math/CopulaNormalTest.hpp"
 #include "math/Normal.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -72,7 +75,7 @@ void CopulaNormalTest::test1()
     +0.4 , +1.0 , -0.25,
     +0.3 , -0.25, +1.0
   };
-  double **correls = Utils::allocMatrix(3,3,sigmas);
+  double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   // copula construction
   CopulaNormal copula = CopulaNormal(3, correls);
@@ -94,7 +97,7 @@ void CopulaNormalTest::test2()
      +2.0, +2.0, +5.0,
      +2.0, +1.0, +6.0
   };
-  double **correls = Utils::allocMatrix(3,3,sigmas);
+  double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   ASSERT_THROW(CopulaNormal(3, correls));
 
@@ -112,7 +115,7 @@ void CopulaNormalTest::test3()
     +0.4 , +1.0 , -0.25,
     +0.3 , -0.25, +1.0
   };
-  double **correls = Utils::allocMatrix(3,3,sigmas);
+  double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   CopulaNormal copula = CopulaNormal(3, correls);
 
@@ -136,7 +139,7 @@ void CopulaNormalTest::test4()
     +0.4 , +1.0 , -0.25,
     +0.3 , -0.25, +1.0
   };
-  double **correls = Utils::allocMatrix(3,3,sigmas);
+  double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   // copula construction
   CopulaNormal orig = CopulaNormal(3, correls);
@@ -206,7 +209,7 @@ void CopulaNormalTest::test5()
     +1.0 , +0.0,
     +0.0 , +1.0
   };
-  double **correls = Utils::allocMatrix(2,2,sigmas);
+  double **correls = Arrays<double>::allocMatrix(2,2,sigmas);
 
   // copula construction
   CopulaNormal copula = CopulaNormal(2, correls);
@@ -265,7 +268,7 @@ void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
   ASSERT(copula.size() == n);
 
   // allocating space
-  values = Utils::allocMatrix(n, NITERS);
+  values = Arrays<double>::allocMatrix(n, NITERS);
 
   // generating copulas
   for(int i=0;i<NITERS;i++)
@@ -289,5 +292,5 @@ void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
   }
 
   // exit
-  Utils::deallocMatrix(values, n);
+  Arrays<double>::deallocMatrix(values, n);
 }

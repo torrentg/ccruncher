@@ -28,12 +28,15 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "segmentations/Segmentations.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 
 //===========================================================================
 // constructor
@@ -249,7 +252,7 @@ string ccruncher::Segmentations::getSegmentName(int isegmentation, int isegment)
 //===========================================================================
 string ccruncher::Segmentations::getXML(int ilevel) throw(Exception)
 {
-  string spc = Utils::blanks(ilevel);
+  string spc = Strings::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<segmentations>\n";

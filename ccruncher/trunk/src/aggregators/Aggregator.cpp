@@ -28,13 +28,16 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cmath>
 #include <cassert>
 #include <algorithm>
 #include "aggregators/Aggregator.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
 //===========================================================================
@@ -300,7 +303,7 @@ void ccruncher::Aggregator::setOutputProperties(string path, bool force, int buf
 //===========================================================================
 string ccruncher::Aggregator::getXML(int ilevel) throw(Exception)
 {
-  string ret = Utils::blanks(ilevel);
+  string ret = Strings::blanks(ilevel);
 
   ret += "<aggregator ";
   ret += "name='" + name + "' ";

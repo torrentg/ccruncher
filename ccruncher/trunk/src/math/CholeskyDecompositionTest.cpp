@@ -28,13 +28,16 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Arrays class
+//
 //===========================================================================
 
 #include <iostream>
 #include <cmath>
 #include "math/CholeskyDecomposition.hpp"
 #include "math/CholeskyDecompositionTest.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Arrays.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -83,8 +86,8 @@ void CholeskyDecompositionTest::test1()
      +0.00000, +1.22474, +0.40825,
      +0.00000, +0.00000, +1.15470
   };
-  double **A = Utils::allocMatrix(3,3,valA);
-  double *aux = Utils::allocVector(3);
+  double **A = Arrays<double>::allocMatrix(3,3,valA);
+  double *aux = Arrays<double>::allocVector(3);
 
   ASSERT(CholeskyDecomposition::choldc(A, aux, 3));
 
@@ -103,8 +106,8 @@ void CholeskyDecompositionTest::test1()
     }
   }
 
-  Utils::deallocMatrix(A, 3);
-  Utils::deallocVector(aux);
+  Arrays<double>::deallocMatrix(A, 3);
+  Arrays<double>::deallocVector(aux);
 }
 
 //===========================================================================
@@ -126,11 +129,11 @@ void CholeskyDecompositionTest::test2()
      +2.0, +2.0, +5.0,
      +2.0, +1.0, +6.0
   };
-  double **B = Utils::allocMatrix(3,3, valB);
-  double *aux = Utils::allocVector(3);
+  double **B = Arrays<double>::allocMatrix(3,3, valB);
+  double *aux = Arrays<double>::allocVector(3);
 
   ASSERT(!CholeskyDecomposition::choldc(B, aux, 3));
 
-  Utils::deallocMatrix(B, 3);
-  Utils::deallocVector(aux);
+  Arrays<double>::deallocMatrix(B, 3);
+  Arrays<double>::deallocVector(aux);
 }

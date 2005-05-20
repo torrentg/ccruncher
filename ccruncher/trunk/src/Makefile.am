@@ -81,7 +81,8 @@ ccruncher_SOURCES = \
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
-    ./utils/Utils.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
@@ -121,7 +122,8 @@ ccruncher_SOURCES = \
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
-    ./utils/Utils.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp
@@ -138,14 +140,16 @@ cc2gpi_SOURCES = \
     ./utils/Exception.cpp\
     ./utils/Parser.cpp\
     ./utils/Date.cpp\
-    ./utils/Utils.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
     ./utils/File.cpp\
     \
     ./tools/FileResults.hpp\
     ./utils/Exception.hpp\
     ./utils/Parser.hpp\
     ./utils/Date.hpp\
-    ./utils/Utils.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
     ./utils/File.hpp
 
 cc2gpi_CXXFLAGS = -Wall -W -Wshadow
@@ -190,7 +194,8 @@ generator_SOURCES = \
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
-    ./utils/Utils.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
@@ -230,7 +235,8 @@ generator_SOURCES = \
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
-    ./utils/Utils.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp
@@ -276,7 +282,8 @@ mtrans_SOURCES = \
     ./utils/File.cpp\
     ./utils/Date.cpp\
     ./utils/Timer.cpp\
-    ./utils/Utils.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
@@ -315,7 +322,8 @@ mtrans_SOURCES = \
     ./utils/File.hpp\
     ./utils/Date.hpp\
     ./utils/Timer.hpp\
-    ./utils/Utils.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp
@@ -329,7 +337,8 @@ mtrans_LDADD = -lm -lexpat
 tests_SOURCES = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/TestsRunner.cxx\
-    ./utils/UtilsTest.cpp\
+    ./utils/ArraysTest.cpp\
+    ./utils/StringsTest.cpp\
     ./utils/TimerTest.cpp\
     ./utils/DateTest.cpp\
     ./utils/ParserTest.cpp\
@@ -357,9 +366,10 @@ tests_SOURCES = \
     ./survival/SurvivalTest.cpp\
     ./portfolio/Asset.cpp\
     ./portfolio/DateValues.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
     ./utils/Timer.cpp\
     ./utils/Parser.cpp\
-    ./utils/Utils.cpp\
     ./utils/Logger.cpp\
     ./utils/Date.cpp\
     ./utils/Exception.cpp\
@@ -394,7 +404,8 @@ tests_SOURCES = \
     ./segmentations/Segment.cpp\
     ./survival/Survival.cpp\
     \
-    ./utils/UtilsTest.hpp\
+    ./utils/ArraysTest.hpp\
+    ./utils/StringsTest.hpp\
     ./utils/TimerTest.hpp\
     ./utils/DateTest.hpp\
     ./utils/ParserTest.hpp\
@@ -423,9 +434,10 @@ tests_SOURCES = \
     ./survival/SurvivalTest.hpp\
     ./portfolio/Asset.hpp\
     ./portfolio/DateValues.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
     ./utils/Timer.hpp\
     ./utils/Parser.hpp\
-    ./utils/Utils.hpp\
     ./utils/Logger.hpp\
     ./utils/Date.hpp\
     ./utils/Exception.hpp\

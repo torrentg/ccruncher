@@ -28,11 +28,14 @@
 // 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . const + referenced string arguments
 //
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
+//
 //===========================================================================
 
 #include <cassert>
 #include "utils/Logger.hpp"
-#include "utils/Utils.hpp"
+#include "utils/Strings.hpp"
 
 // --------------------------------------------------------------------------
 
@@ -143,11 +146,11 @@ void ccruncher::Logger::trace(const string &msg, const string &value)
   flush();
 
   // defining indentator
-  string indentator = Utils::blanks(ilevel*INDENTSIZE);
+  string indentator = Strings::blanks(ilevel*INDENTSIZE);
 
   // creating intermediate filler
   int fsize = ilevel*INDENTSIZE + msg.size() + 1 + value.size();
-  string sfill = Utils::blanks(max(0,MAXCOLS-fsize));
+  string sfill = Strings::blanks(max(0,MAXCOLS-fsize));
 
   // showing output  
   cout << indentator << msg << " " << sfill << value << std::endl << std::flush;
@@ -169,7 +172,7 @@ void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
   flush();
 
   // defining indentator
-  string indentator = Utils::blanks(ilevel*INDENTSIZE);
+  string indentator = Strings::blanks(ilevel*INDENTSIZE);
 
   // setting status values
   curcol = indentator.size() + msg.size();
@@ -181,7 +184,7 @@ void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
   // post trace actions
   if (tracetime == false)
   {
-    cout << " " << Utils::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
+    cout << " " << Strings::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
     curcol = -1;
   }
   else
@@ -202,7 +205,7 @@ void ccruncher::Logger::append(const string &msg)
   if (curcol < 0)
   {
     tracetime = false;
-    cout << Utils::blanks(ilevel*INDENTSIZE) << std::flush;
+    cout << Strings::blanks(ilevel*INDENTSIZE) << std::flush;
     curcol = ilevel*INDENTSIZE;
   }
   
@@ -241,7 +244,7 @@ void ccruncher::Logger::flush()
     
     string etime = Timer::format(timer.stop());
     int fsize = int(MAXCOLS - (curcol + etime.size()));
-    string filler = Utils::blanks(max(fsize, 0));
+    string filler = Strings::blanks(max(fsize, 0));
 
     // tracing time    
     cout << filler << etime << std::endl << std::flush;
