@@ -33,10 +33,12 @@
 //
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
+//   . implemented Arrays class
 //
 //===========================================================================
 
 #include "params/Params.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 
@@ -116,7 +118,7 @@ Date * ccruncher::Params::getDates() throw(Exception)
 {
   validate();
 
-  Date *ret = new Date[steps+1];
+  Date *ret = Arrays<Date>::allocVector(steps+1);
 
   for (int i=0;i<=steps;i++)
   {

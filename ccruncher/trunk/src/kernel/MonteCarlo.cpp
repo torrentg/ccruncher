@@ -117,19 +117,10 @@ void ccruncher::MonteCarlo::release()
   }
 
   // deallocating dates vector
-  if (dates != NULL) { delete [] dates; dates = NULL; }
+  Arrays<Date>::deallocVector(dates);
 
   // deallocating rpaths matrix
-  if (rpaths != NULL)
-  {
-    for (int i=0;i<N;i++)
-    {
-      if (rpaths[i] != NULL) delete [] rpaths[i];
-      rpaths[i] = NULL;
-    }
-    delete [] rpaths;
-    rpaths = NULL;
-  }
+  Arrays<int>::deallocMatrix(rpaths, N);
 }
 
 //===========================================================================
@@ -465,38 +456,12 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
   Logger::trace("buffer dimension", Parser::long2string(n)+"x"+Parser::int2string(k+1));
 
   // allocating space
-  try
-  {
-    ret = new int*[n];
-    for (int i=0;i<n;i++) ret[i] = NULL;
-    
-    for (int i=0;i<n;i++)
-    {
-      // allocating memory
-      ret[i] = new int[k+1];
+  ret = Arrays<int>::allocMatrix(n, k+1, 0);
 
-      // setting initial client rating
-      ret[i][0] = (*vclients)[i]->irating;
-
-      // setting a default rating
-      for (int j=1;j<=k;j++)
-      {
-        ret[i][j] = 0;
-      }
-    }
-  }
-  catch(std::exception &e)
+  // setting initial client rating at t=0
+  for (int i=0;i<n;i++)
   {
-    if (ret != NULL)
-    {
-      for (int i=0;i<n;i++)
-      {
-        if (ret[i] != NULL) delete [] ret[i];
-        ret[i] = NULL;
-      }
-      delete [] ret;
-    }
-    throw Exception(e, "MonteCarlo::initRatingsPaths()");
+    ret[i][0] = (*vclients)[i]->irating;
   }
 
   // exit function
