@@ -170,18 +170,6 @@ void IDataTest::test1()
         <segment name='0004'/>\n\
       </segmentation>\n\
     </segmentations>\n\
-    <aggregators>\n\
-      <aggregator name='aggregator1' segmentation='portfolio' \n\
-                  type='values' full='true'/>\n\
-      <aggregator name='aggregator2' segmentation='client' \n\
-                  type='values' full='false'/>\n\
-      <aggregator name='aggregator3' segmentation='client' \n\
-                  type='ratings' full='false'/>\n\
-      <aggregator name='aggregator4' segmentation='sector' \n\
-                  type='values' full='false'/>\n\
-      <aggregator name='aggregator5' segmentation='sector' \n\
-                  type='ratings' full='false'/>\n\
-    </aggregators>\n\
     <portfolio>\n\
       <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
         <asset name='generic' id='op1'>\n\

@@ -28,6 +28,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method getNumSegments
+//
 //===========================================================================
 
 #ifndef _Segmentation_
@@ -84,6 +87,8 @@ class Segmentation : public ExpatHandlers
     void addSegment(string segname) throw(Exception);
     string getXML(int) throw(Exception);
     void reset();
+
+    int getNumSegments();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

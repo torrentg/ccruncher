@@ -235,7 +235,6 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   cout << idata.sectors->getXML(2);
   cout << idata.correlations->getXML(2);
   cout << idata.segmentations->getXML(2);
-  cout << idata.aggregators->getXML(2);
   cout << getXMLPortfolio(2, &idata, nclients, nassets);
   cout << "</creditcruncher>\n";
 }

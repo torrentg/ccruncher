@@ -142,7 +142,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   }
 
   // checking that not exist
-  if (data[irating].size() >= t+1 && !isnan(data[irating][t]))
+  if ((int) data[irating].size() >= t+1 && !isnan(data[irating][t]))
   {
     string msg = "Survival::insertValue(): value[";
     msg += srating;
@@ -153,7 +153,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   }
 
   // allocating space in vector (if needed)
-  if (data[irating].size() < t+1)
+  if ((int) data[irating].size() < t+1)
   {
     for(int i=data[irating].size();i<t+1;i++)
     {
@@ -250,7 +250,7 @@ void ccruncher::Survival::validate() throw(Exception)
   }
    
   // checking default rating survival function values (always 0) 
-  for (int j=0;j<data[nratings-1].size();j++)
+  for (unsigned int j=0;j<data[nratings-1].size();j++)
   {
     if (isnan(data[nratings-1][j])) {
       data[nratings-1][0] = 0.0;
@@ -266,7 +266,7 @@ void ccruncher::Survival::validate() throw(Exception)
   {
     double pvalue = 2.0;
     
-    for (int j=0;j<data[i].size();j++)
+    for (unsigned int j=0;j<data[i].size();j++)
     {
       if (!isnan(data[i][j]))
       {
@@ -309,7 +309,7 @@ void ccruncher::Survival::fillHoles()
     x0 = 0.0;
     y0 = 1.0;
     
-    for(int j=1;j<data[i].size();j++)
+    for(unsigned int j=1;j<data[i].size();j++)
     {
       if (!isnan(data[i][j]))
       {
@@ -328,7 +328,7 @@ void ccruncher::Survival::fillHoles()
   }
 
   // default rating values (always 0)
-  for(int j=0;j<data[nratings-1].size();j++)
+  for(unsigned int j=0;j<data[nratings-1].size();j++)
   {
     data[nratings-1][j] = 0.0;
   }
@@ -347,7 +347,7 @@ double ccruncher::Survival::evalue(const int irating, int t)
     return 0.0;
   }
 
-  if (t < data[irating].size())  
+  if (t < (int) data[irating].size())  
   {
     return data[irating][t];
   }
@@ -406,6 +406,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
         return int(round(ret));
       }
     }
+
     // error if value not found
     assert(false);
   }
@@ -436,7 +437,7 @@ string ccruncher::Survival::getXML(int ilevel) throw(Exception)
 
   for(int i=0;i<nratings;i++)
   {
-    for(int j=0;j<data[i].size();j++)
+    for(unsigned int j=0;j<data[i].size();j++)
     {
       ret += spc2 + "<svalue ";
       ret += "rating='" + ratings->getName(i) + "' ";

@@ -25,6 +25,10 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added tolerance at format function. in debug mode can reach a 
+//     negative number (very near to 0).
+//
 //===========================================================================
 
 #include "utils/Timer.hpp"
@@ -115,7 +119,8 @@ double ccruncher::Timer::read()
 //===========================================================================
 string ccruncher::Timer::format(double val)
 {
-  assert(val >= 0.0);
+  assert(val >= -1e-14);
+  val = fabs(val);
 
   char buf[20];
   double cur = val;

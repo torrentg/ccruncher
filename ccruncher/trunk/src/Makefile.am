@@ -49,6 +49,7 @@ ccruncher_SOURCES = \
     ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
+    ./kernel/SegmentAggregator.cpp\
     ./portfolio/Portfolio.cpp\
     ./portfolio/Client.cpp\
     ./params/Params.cpp\
@@ -72,9 +73,6 @@ ccruncher_SOURCES = \
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
-    ./aggregators/SegmentAggregator.cpp\
-    ./aggregators/Aggregators.cpp\
-    ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
     ./utils/Logger.cpp\
     ./utils/Parser.cpp\
@@ -89,6 +87,7 @@ ccruncher_SOURCES = \
     \
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
+    ./kernel/SegmentAggregator.hpp\
     ./portfolio/Portfolio.hpp\
     ./portfolio/Client.hpp\
     ./params/Params.hpp\
@@ -113,9 +112,6 @@ ccruncher_SOURCES = \
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
-    ./aggregators/SegmentAggregator.hpp\
-    ./aggregators/Aggregators.hpp\
-    ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
     ./utils/Logger.hpp\
     ./utils/Parser.hpp\
@@ -185,9 +181,6 @@ generator_SOURCES = \
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
-    ./aggregators/SegmentAggregator.cpp\
-    ./aggregators/Aggregators.cpp\
-    ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
     ./utils/Parser.cpp\
     ./utils/Logger.cpp\
@@ -226,9 +219,6 @@ generator_SOURCES = \
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
-    ./aggregators/SegmentAggregator.hpp\
-    ./aggregators/Aggregators.hpp\
-    ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
     ./utils/Parser.hpp\
     ./utils/Logger.hpp\
@@ -273,9 +263,6 @@ mtrans_SOURCES = \
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
-    ./aggregators/SegmentAggregator.cpp\
-    ./aggregators/Aggregators.cpp\
-    ./aggregators/Aggregator.cpp\
     ./utils/Exception.cpp\
     ./utils/Parser.cpp\
     ./utils/Logger.cpp\
@@ -313,9 +300,6 @@ mtrans_SOURCES = \
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
-    ./aggregators/SegmentAggregator.hpp\
-    ./aggregators/Aggregators.hpp\
-    ./aggregators/Aggregator.hpp\
     ./utils/Exception.hpp\
     ./utils/Parser.hpp\
     ./utils/Logger.hpp\
@@ -349,7 +333,6 @@ tests_SOURCES = \
     ./math/CopulaNormalTest.cpp\
     ./math/MersenneTwisterTest.cpp\
     ./math/CholeskyDecompositionTest.cpp\
-    ./aggregators/AggregatorsTest.cpp\
     ./correlations/CorrelationMatrixTest.cpp\
     ./portfolio/AssetTest.cpp\
     ./portfolio/DateValuesTest.cpp\
@@ -383,6 +366,7 @@ tests_SOURCES = \
     ./math/PowMatrix.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
+    ./kernel/SegmentAggregator.cpp\
     ./sectors/Sector.cpp\
     ./sectors/Sectors.cpp\
     ./ratings/Rating.cpp\
@@ -396,9 +380,6 @@ tests_SOURCES = \
     ./interests/Rate.cpp\
     ./interests/Interest.cpp\
     ./interests/Interests.cpp\
-    ./aggregators/Aggregator.cpp\
-    ./aggregators/Aggregators.cpp\
-    ./aggregators/SegmentAggregator.cpp\
     ./segmentations/Segmentations.cpp\
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
@@ -417,7 +398,6 @@ tests_SOURCES = \
     ./math/CopulaNormalTest.hpp\
     ./math/MersenneTwisterTest.hpp\
     ./math/CholeskyDecompositionTest.hpp\
-    ./aggregators/AggregatorsTest.hpp\
     ./correlations/CorrelationMatrixTest.hpp\
     ./portfolio/AssetTest.hpp\
     ./portfolio/DateValuesTest.hpp\
@@ -451,6 +431,7 @@ tests_SOURCES = \
     ./math/PowMatrix.hpp\
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
+    ./kernel/SegmentAggregator.hpp\
     ./sectors/Sector.hpp\
     ./sectors/Sectors.hpp\
     ./ratings/Rating.hpp\
@@ -464,9 +445,6 @@ tests_SOURCES = \
     ./interests/Rate.hpp\
     ./interests/Interest.hpp\
     ./interests/Interests.hpp\
-    ./aggregators/Aggregator.hpp\
-    ./aggregators/Aggregators.hpp\
-    ./aggregators/SegmentAggregator.hpp\
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\

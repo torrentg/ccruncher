@@ -34,6 +34,9 @@
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival section
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed aggregators class
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -52,7 +55,6 @@
 #include "survival/Survival.hpp"
 #include "correlations/CorrelationMatrix.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "aggregators/Aggregators.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
@@ -84,7 +86,6 @@ class IData : public ExpatHandlers
     Sectors *sectors;
     CorrelationMatrix *correlations;
     Segmentations *segmentations;
-    Aggregators *aggregators;
     Portfolio *portfolio;
 
     IData();

@@ -38,6 +38,9 @@
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival section
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed aggregators class
+//
 //===========================================================================
 
 #include <cassert>
@@ -61,7 +64,6 @@ void ccruncher::IData::init()
    sectors = NULL;
    correlations = NULL;
    segmentations = NULL;
-   aggregators = NULL;
    portfolio = NULL;
 }
 
@@ -79,7 +81,6 @@ void ccruncher::IData::release()
   if (sectors != NULL) delete sectors;
   if (correlations != NULL) delete correlations;
   if (segmentations != NULL) delete segmentations;
-  if (aggregators != NULL) delete aggregators;
   if (portfolio != NULL) delete portfolio;
 
   // establim els punters a NULL
@@ -114,9 +115,6 @@ void ccruncher::IData::validate() throw(Exception)
   }
   else if (segmentations == NULL) {
     throw Exception("segmentations section not defined");
-  }
-  else if (aggregators == NULL) {
-    throw Exception("aggregators section not defined");
   }
   else if (portfolio == NULL) {
     throw Exception("portfolio section not defined");
@@ -285,20 +283,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, segmentations, name_, attributes);
     }
   }
-  // section aggregators
-  else if (isEqual(name_,"aggregators")) {
-    if (segmentations == NULL) {
-      throw eperror(eu, "tag <aggregators> defined before <segmentations> tag");
-    }
-    else if (aggregators != NULL) {
-      throw eperror(eu, "tag aggregators repeated");
-    }
-    else {
-      Logger::trace("parsing aggregators", true);
-      aggregators = new Aggregators(segmentations);
-      eppush(eu, aggregators, name_, attributes);
-    }
-  }
   // section portfolio
   else if (isEqual(name_,"portfolio")) {
     if (interests == NULL) {
@@ -358,9 +342,6 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"segmentations")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"aggregators")) {
     // nothing to do
   }
   else if (isEqual(name_,"portfolio")) {

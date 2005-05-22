@@ -7,6 +7,8 @@ version 0.3 (??? 2005)
 --------------------------
   * bugfix: solved bug in correlation matrix check when correl = 0
   * changed attribute period from mtransitions tag: (year -> month)
+  * removed aggregators
+  * new SegmentAggregator (simplified)
 
 version 0.2 (April 2005)
 --------------------------

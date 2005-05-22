@@ -34,6 +34,10 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed aggregators class
+//   . added new SegmentAggregator class
+//
 //===========================================================================
 
 #include <cfloat>
@@ -84,14 +88,13 @@ void ccruncher::MonteCarlo::reset()
   ratings = NULL;
   sectors = NULL;
   segmentations = NULL;
-  aggregators = NULL;
   clients = NULL;
 
   mtrans = NULL;
   cmatrix = NULL;
   copulas = NULL;
   dates = NULL;
-  rpaths = NULL;
+  ittd = NULL;
 }
 
 //===========================================================================
@@ -117,10 +120,23 @@ void ccruncher::MonteCarlo::release()
   }
 
   // deallocating dates vector
-  Arrays<Date>::deallocVector(dates);
+  if (dates != NULL) {
+    Arrays<Date>::deallocVector(dates);
+  }
 
-  // deallocating rpaths matrix
-  Arrays<int>::deallocMatrix(rpaths, N);
+  // deallocating time-to-default arrays
+  if (ittd != NULL) {
+    Arrays<int>::deallocVector(ittd);
+  }
+  
+  // dropping aggregators elements
+  for(unsigned int i=0;i<aggregators.size();i++) {
+    if (aggregators[i] != NULL) {
+      delete aggregators[i];
+      aggregators[i] = NULL;
+    }
+  }
+  aggregators.clear();
 }
 
 //===========================================================================
@@ -183,11 +199,11 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
   copulas = initCopulas(cmatrix, N, STEPS, idata->params->copula_seed);
 
   // ratings paths allocation
-  rpaths = initRatingsPaths(N, STEPS, clients);
+  ittd = initTimeToDefaultArray(N);
 
-  // initializing data output (segmentations + aggregators)
-  initDataOutput(idata);
-  
+  // initializing aggregators
+  initAggregators(idata);
+
   // exit function
   Logger::previousIndentLevel();
 }
@@ -442,27 +458,21 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
 }
 
 //===========================================================================
-// initRatingsPaths
+// initTimeToDefaultArray
 //===========================================================================
-int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vclients) throw(Exception)
+int* ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 {
-  int **ret = NULL;
+  int *ret = NULL;
 
   // setting logger header
-  Logger::trace("initializing rating paths buffer", '-');
+  Logger::trace("initializing time-to-default workspace", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("buffer dimension", Parser::long2string(n)+"x"+Parser::int2string(k+1));
+  Logger::trace("workspace dimension (= number of clients)", Parser::long2string(n));
 
   // allocating space
-  ret = Arrays<int>::allocMatrix(n, k+1, 0);
-
-  // setting initial client rating at t=0
-  for (int i=0;i<n;i++)
-  {
-    ret[i][0] = (*vclients)[i]->irating;
-  }
+  ret = Arrays<int>::allocVector(n);
 
   // exit function
   Logger::previousIndentLevel();
@@ -470,10 +480,12 @@ int** ccruncher::MonteCarlo::initRatingsPaths(int n, int k, vector<Client *> *vc
 }
 
 //===========================================================================
-// initDataOutput
+// initAggregators
 //===========================================================================
-void ccruncher::MonteCarlo::initDataOutput(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 {
+  long numsegments = 0;
+  
   // init only if spath is set
   if (fpath == "") 
   {
@@ -481,24 +493,50 @@ void ccruncher::MonteCarlo::initDataOutput(const IData *idata) throw(Exception)
   }
 
   // setting logger header
-  Logger::trace("initializing data output", '-');
+  Logger::trace("initializing aggregators", '-');
   Logger::newIndentLevel();
 
   // setting logger info
   Logger::trace("output data directory", File::normalizePath(fpath));
   Logger::trace("number of segmentations defined", Parser::int2string(idata->segmentations->getSegmentations().size()));
-  Logger::trace("number of aggregators defined", Parser::int2string(idata->aggregators->getAggregators()->size()));
-  Logger::trace("number of segments to aggregate", Parser::int2string(idata->aggregators->getNumSegments()));
-
+  Logger::trace("elapsed time initializing aggregators", true);
+  
   // setting objects  
   segmentations = idata->segmentations;
-  aggregators = idata->aggregators;
+  aggregators.clear();
 
-  // initializing aggregators
-  Logger::trace("initializing aggregators (elapsed time)", true);
-  int indexdefault = mtrans->getIndexDefault();
-  aggregators->initialize(dates, STEPS+1, clients, N, indexdefault, ratings, interests);
-  aggregators->setOutputProperties(fpath, bforce, 0);
+  // allocating and initializing aggregators
+  for(int i=0;i<segmentations->getNumSegmentations();i++)
+  {
+    for(int j=0;j<segmentations->getNumSegments(i);j++)
+    {
+      // allocating SegmentAggregator
+      SegmentAggregator *tmp = new SegmentAggregator();
+
+      // asigning a filename
+      string filename = segmentations->getSegmentationName(i) + "-" + segmentations->getSegmentName(i, j) + ".out";
+
+      // initializing SegmentAggregator
+      tmp->define(i, j, segmentations->getComponents(i));
+      tmp->setOutputProperties(fpath, filename, bforce, 0);
+      tmp->initialize(dates, STEPS+1, clients, N, interests);
+    
+      // adding aggregator to list (only if have elements)
+      numsegments++;
+      if (tmp->getNumElements() > 0) {
+        // creating output file
+        if (fpath != "") tmp->touch();
+        // add aggregator to list
+        aggregators.push_back(tmp);
+      } else {
+        delete tmp;
+      }
+    }
+  }
+
+  // setting logger info
+  Logger::trace("number of segments", Parser::long2string(numsegments));
+  Logger::trace("number of segments with elements", Parser::long2string(aggregators.size()));
 
   // exit function
   Logger::previousIndentLevel();
@@ -522,22 +560,19 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 
   try
   {
-    // touching output
-    aggregators->touch();
-
     while(moreiterations)
     {
-      // generem les copules
+      // generating random numbers + simulating time-to-default for each client
       sw1.resume();
-      generateRatingsPaths();
+      simulate();
       sw1.stop();
 
-      // evaluem la cartera
+      // portfolio evaluation
       sw2.resume();
       evalueAggregators();
       sw2.stop();
 
-      // increment contadors
+      // counter increment
       CONT++;
 
       // printing hashes
@@ -559,10 +594,12 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
       }
     }
 
-    // closing aggregators
-    aggregators->flush(true);
+    // flushing aggregators
+    for(unsigned int i=0;i<aggregators.size();i++) {
+      aggregators[i]->flush();
+    }
 
-    // sortim
+    // printing traces
     Logger::trace("elapsed time generatings ratings paths", Timer::format(sw1.read()));
     Logger::trace("elapsed time aggregating data", Timer::format(sw2.read()));
     Logger::trace("total simulation time", Timer::format(sw1.read()+sw2.read()));
@@ -578,12 +615,13 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 }
 
 //===========================================================================
-// copula generation (one for each time tranch)
+// generating random numbers + simulating time-to-default for each client
+// put result in rpaths[iclient]
 // @exception en cas d'error
 //===========================================================================
-void ccruncher::MonteCarlo::generateRatingsPaths()
+void ccruncher::MonteCarlo::simulate()
 {
-  // without antithetic method
+  // generate a new realization for copulas
   if (!antithetic)
   {
     for(int i=1;i<=STEPS;i++)
@@ -591,8 +629,7 @@ void ccruncher::MonteCarlo::generateRatingsPaths()
       copulas[i]->next();
     }
   }
-  // with antithetic method (antithetic == true)
-  else
+  else // antithetic == true
   {
     if (!reversed)
     {
@@ -608,37 +645,61 @@ void ccruncher::MonteCarlo::generateRatingsPaths()
     }
   }
 
-  // for each client we compute ratings path
+  // for each client we compute time-to-default
   for (int i=0;i<N;i++)
   {
-    generateRatingsPath(i);
+    ittd[i] = simulateTTD(i);
   }
 }
 
 //===========================================================================
-// fix rating evolution of client for each time tranch. 
-// put result in rpaths[iclient]
+// given a client, simule the time-to-default
 //===========================================================================
-void ccruncher::MonteCarlo::generateRatingsPath(int iclient)
+int ccruncher::MonteCarlo::simulateTTD(int iclient)
 {
+  int indexdefault = mtrans->getIndexDefault();
+  int r1, r2;
+  double u;
+  
+  // rating at t0 is initial rating
+  r1 = (*clients)[iclient]->irating;
+
+  // simulate rating at each time-tranch  
   for (int t=1;t<=STEPS;t++)
   {
+    // getting random number U[0,1] (correlated with rest of clients...)
     if (antithetic)
     {
       if (reversed)
       {
-        rpaths[iclient][t] = mtrans->evalue(rpaths[iclient][t-1], copulas[t]->get(iclient));
+        u = copulas[t]->get(iclient);
       }
       else
       {
-        rpaths[iclient][t] = mtrans->evalue(rpaths[iclient][t-1], 1.0-copulas[t]->get(iclient));
+        u = 1.0 - copulas[t]->get(iclient);
       }
     }
     else
     {
-      rpaths[iclient][t] = mtrans->evalue(rpaths[iclient][t-1], copulas[t]->get(iclient));
+      u = copulas[t]->get(iclient);
+    }
+    
+    // compute next rating
+    r2 = mtrans->evalue(r1, u);
+
+    // check if client has defaulted
+    if (r2 == indexdefault) 
+    {
+      return t;
+    } 
+    else 
+    {
+      r1 = r2;
     }
   }
+
+  // if non defaults, return a number bigger than STEPS  
+  return STEPS+1;
 }
 
 //===========================================================================
@@ -648,7 +709,10 @@ void ccruncher::MonteCarlo::generateRatingsPath(int iclient)
 void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
 {
   // adding one simulation
-  aggregators->append(rpaths, STEPS+1, N, clients);
+  for(unsigned int i=0;i<aggregators.size();i++) 
+  {
+    aggregators[i]->append(ittd);
+  }
 }
 
 //===========================================================================

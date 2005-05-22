@@ -31,6 +31,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method getNumSegments
+//
 //===========================================================================
 
 #include <cmath>
@@ -269,4 +272,12 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
   ret += spc + "</segmentation>\n";
 
   return ret;
+}
+
+//===========================================================================
+// getNumSegments
+//===========================================================================
+int ccruncher::Segmentation::getNumSegments()
+{
+  return vsegments.size();
 }

@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug related to getSegment method (rest segment = default)
+//
 //===========================================================================
 
 #include <cmath>
@@ -248,6 +251,11 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValu
     ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], ints);
     ret[i].recovery = getVRecovery(dates[max(i-1,0)], dates[i], ints);
   }
+
+  for (int i=1;i<n;i++)
+  {
+    ret[i].cashflow += ret[i-1].cashflow;
+  }  
 }
 
 //===========================================================================
@@ -388,17 +396,21 @@ void ccruncher::Asset::addBelongsTo(int iconcept, int isegment) throw(Exception)
 //===========================================================================
 void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Exception)
 {
-  if (getSegment(iconcept) >= 0)
+  assert(iconcept >= 0);
+  assert(isegment >= 0);
+  
+  if (getSegment(iconcept) > 0)
   {
-    throw Exception("Asset::insertBelongsTo(): trying to reinsert a concept defined");
+    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
   }
-  else if (iconcept >= 0 || isegment >= 0)
+  
+  if (isegment > 0) 
   {
     belongsto[iconcept] = isegment;
   }
   else
   {
-    throw Exception("Asset::insertBelongsTo(): concept or segment not exist");
+    // isegment=0 (rest segment) is the default segment, not inserted
   }
 }
 
@@ -423,7 +435,8 @@ int ccruncher::Asset::getSegment(int iconcept)
   }
   else
   {
-    return -1;
+    // by default belongs to segment 'rest' (0)
+    return 0;
   }
 }
 

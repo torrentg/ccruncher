@@ -71,12 +71,14 @@
   <segmentations>
     <segmentation name='portfolio' components='asset'>
     </segmentation>
+<!--
     <segmentation name='client' components='client'>
       <segment name='*'/>
     </segmentation>
     <segmentation name='asset' components='asset'>
       <segment name='*'/>
     </segmentation>
+-->
     <segmentation name='sector' components='client'>
       <segment name ='S1'/>
       <segment name ='S2'/>
@@ -95,15 +97,6 @@
       <segment name ='0004'/>
     </segmentation>
   </segmentations>
-  <aggregators>
-    <aggregator name='aggregator1' segmentation='portfolio' type='values' full='true'/>
-    <aggregator name='aggregator2' segmentation='client' type='values' full='false'/>
-    <!--
-    <aggregator name='aggregator3' segmentation='client' type='ratings' full='true'/>
-    -->
-    <aggregator name='aggregator4' segmentation='sector' type='values' full='false'/>
-    <aggregator name='aggregator5' segmentation='sector' type='ratings' full='false'/>
-  </aggregators>
   <portfolio>
     <client rating='D' sector='S1' name='client1' id='1'>
       <asset name='bond' id='1-1'>

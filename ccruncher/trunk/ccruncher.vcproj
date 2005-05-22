@@ -126,28 +126,6 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<Filter
-				Name="aggregators"
-				Filter="">
-				<File
-					RelativePath="src\aggregators\Aggregator.cpp">
-				</File>
-				<File
-					RelativePath="src\aggregators\Aggregator.hpp">
-				</File>
-				<File
-					RelativePath="src\aggregators\Aggregators.cpp">
-				</File>
-				<File
-					RelativePath="src\aggregators\Aggregators.hpp">
-				</File>
-				<File
-					RelativePath="src\aggregators\SegmentAggregator.cpp">
-				</File>
-				<File
-					RelativePath="src\aggregators\SegmentAggregator.hpp">
-				</File>
-			</Filter>
-			<Filter
 				Name="correlations"
 				Filter="">
 				<File
@@ -196,6 +174,12 @@
 				</File>
 				<File
 					RelativePath="src\kernel\MonteCarlo.hpp">
+				</File>
+				<File
+					RelativePath="src\kernel\SegmentAggregator.cpp">
+				</File>
+				<File
+					RelativePath="src\kernel\SegmentAggregator.hpp">
 				</File>
 			</Filter>
 			<Filter
@@ -398,10 +382,16 @@
 					RelativePath="src\utils\Timer.hpp">
 				</File>
 				<File
-					RelativePath="src\utils\Utils.cpp">
+					RelativePath="src\utils\Arrays.cpp">
 				</File>
 				<File
-					RelativePath="src\utils\Utils.hpp">
+					RelativePath="src\utils\Arrays.hpp">
+				</File>
+				<File
+					RelativePath="src\utils\Strings.cpp">
+				</File>
+				<File
+					RelativePath="src\utils\Strings.hpp">
 				</File>
 			</Filter>
 			<Filter

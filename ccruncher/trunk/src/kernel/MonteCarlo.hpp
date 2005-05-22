@@ -28,6 +28,10 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed aggregators class
+//   . added new SegmentAggregator class
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -37,6 +41,7 @@
 
 #include "utils/config.h"
 #include "kernel/IData.hpp"
+#include "kernel/SegmentAggregator.hpp"
 #include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"
 #include "transitions/TransitionMatrix.hpp"
@@ -46,7 +51,6 @@
 #include "portfolio/Portfolio.hpp"
 #include "portfolio/Client.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "aggregators/Aggregators.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
@@ -67,7 +71,7 @@ class MonteCarlo
     Ratings *ratings;
     Sectors *sectors;
     Segmentations *segmentations;
-    Aggregators *aggregators;
+    vector<SegmentAggregator *> aggregators;
     vector<Client *> *clients;
 
     /** numero maxim de iteracions */
@@ -87,18 +91,18 @@ class MonteCarlo
     /* antithetic technologie for simetric copulas */
     bool antithetic;
 
-    /** matriu de transicio tall temporal */
+    /** transition matrix (size = 1) */
     TransitionMatrix *mtrans;
-    /** client correlation matrix */
+    /** client correlation matrix (size = N x N) */
     double **cmatrix;
-    /** objecte per a generar les copules */
+    /** arrays of pointers to copulas (size = M) */
     CopulaNormal **copulas;
-    /** dates dels nodes temporals */
+    /** date per time tranch (size = M) */
     Date *dates;
-    /** path ratings per client */
-    int **rpaths;
+    /** simulated time-to-default per client (size = N) */
+    int *ittd;
 
-    /* flag per gestionar antithetic (default=false) */
+    /* management flag for antithetic method (default=false) */
     bool reversed;
     /* mpi usage flag (default=false) */
     bool usempi;
@@ -121,11 +125,11 @@ class MonteCarlo
     void initMTrans(const IData *) throw(Exception);
     double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
     CopulaNormal** initCopulas(double **, long, int, long) throw(Exception);
-    int** initRatingsPaths(int, int, vector<Client *> *) throw(Exception);
-    void initDataOutput(const IData *) throw(Exception);
+    int* initTimeToDefaultArray(int) throw(Exception);
+    void initAggregators(const IData *) throw(Exception);
     void evalueAggregators() throw(Exception);
-    void generateRatingsPaths();
-    void generateRatingsPath(int i);
+    void simulate();
+    int simulateTTD(int iclient);
 
   public:
 

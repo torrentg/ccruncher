@@ -403,7 +403,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   }
   
   // exit function
-  delete [] one;
+  Arrays<double>::deallocMatrix(one, n);
   Arrays<double>::deallocMatrix(aux, n);
   Arrays<double>::deallocMatrix(tmp, n);
 }

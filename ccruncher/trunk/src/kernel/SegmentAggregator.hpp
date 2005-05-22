@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 // SegmentAggregator.hpp - SegmentAggregator header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
 //===========================================================================
@@ -40,8 +40,6 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/File.hpp"
-#include "ratings/DateRatings.hpp"
-#include "ratings/Ratings.hpp"
 #include "portfolio/Client.hpp"
 #include "portfolio/DateValues.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -63,66 +61,48 @@ class SegmentAggregator
 
   private:
 
-    // output file stream
-    ofstream fout;
-
-    // aggregator name
-    string name0;
-    // segmentation name
-    string name1;
+    // segmentation index
+    int isegmentation;
     // segment name
     string name2;
-    // ratings reference (used to print ratings names)
-    Ratings *ratings;
-
-    int isegmentation;
+    // segment index
     int isegment;
+    // type of components (assets/clients) of segmentation
     components_t components;
-    bool bvalues;
-    bool bfull;
 
+    // output file stream
+    ofstream fout;
+    // file name
+    string filename;
     // output file path
     string path;
     // force file overwriting (if exists)
     bool bforce;
     // buffer size
     int buffersize;
-    // header set flag
-    bool existheader;
 
     // number of all clients considered
     long N;
     // number of time tranches
     int M;
-    // buffer size
-    long K;
-
-    // num clients belonging this segment (components=client) or having an asset
-    // belonging this segment (components=asset)
+    // num clients belonging this segment
     long nclients;
     // num asset belonging this segment
     long nassets;
     // number of realizations
     long cont;
-    // internal number of realizations
+    // buffer counter
     long icont;
-    // index of default rating
-    int idefault;
 
     // related clients position index (size = nclients)
     long *iclients;
-
-    // vertexes of afected clients & assets (size = nclients)
+    // vertexes of afected clients (size = nclients x M)
     DateValues **vertexes;
-
-    // vertex values aggregation per tranch (only if bvalues=true)
-    DateValues **cvalues; // size=1 (if bfull=false), size=MAXSIZE (if bfull=true)
-
-    // ratings counter per tranch (only if bvalues=false)
-    DateRatings **cratings; // size=1 (if bfull=false), size=MAXSIZE (if bfull=true)
+    // vertex values aggregation per tranch (size = buffersize)
+    double *cvalues; 
 
     // memory management
-    void reset();
+    void init();
     void release();
 
     // internal functions
@@ -130,22 +110,10 @@ class SegmentAggregator
     long getCNumClients(vector<Client *> *, long, bool *);
     long getANumAssets(vector<Client *> *, long, bool *);
     long getCNumAssets(vector<Client *> *, long, bool *);
-    bool* allocClientFlag(long n) throw(Exception);
-    long* allocIClients(bool *, long) throw(Exception);
-    DateValues** allocCValues(Date *, int, long) throw(Exception);
-    DateRatings** allocCRatings(Date *, int, long, int) throw(Exception);
-    DateValues** allocVertexes(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
-    void appendA(int **rpaths);
-    void appendR(int **rpaths);
-    void resetCValue(int);
-    void resetCRating(int);
+    long* allocIClients(long, bool *, long) throw(Exception);
+    DateValues** allocVertexes(Date *, int, vector<Client *> *, Interests *) throw(Exception);
 
-    void printHeader() throw(Exception);
-    void printFooter() throw(Exception);
-    void printItems(bool finalize) throw(Exception);
-    void printItem(int) throw(Exception);
-//    void printTranch(int, int) throw(Exception);
-
+    // output functions
     string getFilePath() throw(Exception);
     void ofsopen() throw(Exception);
     void ofsclose() throw(Exception);
@@ -155,15 +123,16 @@ class SegmentAggregator
     SegmentAggregator();
     ~SegmentAggregator();
 
-    void define(int, int, components_t, bool , bool);
-    void setOutputProperties(string path, bool force, int buffersize) throw(Exception);
-    void setNames(string, string, string) throw(Exception);
-    void initialize(Date *, int, vector<Client *> *, long, int, Ratings *, Interests *) throw(Exception);
-    void append(int **rpaths, int, long, vector<Client *> *) throw(Exception);
-    void next();
-    void flush(bool finalize) throw(Exception);
+    // initialization methods
+    void define(int, int, components_t);
+    void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
+    
+    // other methods
+    long getNumElements();
+    void append(int *defaulttimes) throw(Exception);
+    void flush() throw(Exception);
     void touch() throw(Exception);
-    void finalize() throw(Exception);
 
 };
 

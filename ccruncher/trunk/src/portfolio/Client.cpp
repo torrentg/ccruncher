@@ -31,6 +31,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug related to default segment (rest segment = default)
+//
 //===========================================================================
 
 #include <cmath>
@@ -265,18 +268,22 @@ void ccruncher::Client::addBelongsTo(int iconcept, int isegment) throw(Exception
 //===========================================================================
 void ccruncher::Client::insertBelongsTo(int iconcept, int isegment) throw(Exception)
 {
-  if (getSegment(iconcept) >= 0)
+  assert(iconcept >= 0);
+  assert(isegment >= 0);
+  
+  if (getSegment(iconcept) > 0)
   {
-    throw Exception("Client::insertBelongsTo(): trying to reinsert a concept defined");
+    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
   }
-  else if (iconcept >= 0 || isegment >= 0)
+  
+  if (isegment > 0) 
   {
     belongsto[iconcept] = isegment;
   }
   else
   {
-    throw Exception("Client::insertBelongsTo(): concept or segment not exist");
-  }
+    // isegment=0 (rest segment) is the default segment, not inserted
+  }  
 }
 
 //===========================================================================
@@ -300,7 +307,8 @@ int ccruncher::Client::getSegment(int iconcept)
   }
   else
   {
-    return -1;
+    // by default belongs to segment 'rest' (0)
+    return 0;
   }
 }
 

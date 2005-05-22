@@ -86,7 +86,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-#define NDEBUG 1
+/* #undef NDEBUG */
 
 /* Name of package */
 #define PACKAGE "ccruncher"

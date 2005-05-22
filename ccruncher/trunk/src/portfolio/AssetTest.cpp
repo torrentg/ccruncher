@@ -270,12 +270,12 @@ void AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(450.0 , vertexes[1].recovery, EPSILON);
 
   ASSERT(Date("01/06/2002") == vertexes[2].date);
-  ASSERT_DOUBLES_EQUAL(40.0  , vertexes[2].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(50.0  , vertexes[2].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(500.0 , vertexes[2].exposure, EPSILON);
   ASSERT_DOUBLES_EQUAL(450.0 , vertexes[2].recovery, EPSILON);
 
   ASSERT(Date("01/01/2010") == vertexes[3].date);
-  ASSERT_DOUBLES_EQUAL(510.0 , vertexes[3].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(560.0 , vertexes[3].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(5.413 , vertexes[3].exposure, EPSILON);
   ASSERT_DOUBLES_EQUAL(4.871 , vertexes[3].recovery, EPSILON);
   
