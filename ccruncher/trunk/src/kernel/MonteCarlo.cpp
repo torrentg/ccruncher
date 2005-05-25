@@ -122,11 +122,13 @@ void ccruncher::MonteCarlo::release()
   // deallocating dates vector
   if (dates != NULL) {
     Arrays<Date>::deallocVector(dates);
+    dates = NULL;
   }
 
   // deallocating time-to-default arrays
   if (ittd != NULL) {
     Arrays<int>::deallocVector(ittd);
+    ittd = NULL;
   }
   
   // dropping aggregators elements

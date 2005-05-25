@@ -9,6 +9,7 @@ version 0.3 (??? 2005)
   * changed attribute period from mtransitions tag: (year -> month)
   * removed aggregators
   * new SegmentAggregator (simplified)
+  * cc2gpi tool replaced by plotdata script
 
 version 0.2 (April 2005)
 --------------------------

@@ -38,7 +38,7 @@ EXTRA_DIST = \
     ../share/jama-1.2.2/tnt_vec.h\
     ../share/jama-1.2.2/tnt_version.h
 
-bin_PROGRAMS = ccruncher cc2gpi generator mtrans
+bin_PROGRAMS = ccruncher generator mtrans
 
 check_PROGRAMS = tests
 
@@ -58,7 +58,6 @@ ccruncher_SOURCES = \
     ./interests/Rate.cpp\
     ./ratings/Rating.cpp\
     ./ratings/Ratings.cpp\
-    ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
     ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
@@ -96,7 +95,6 @@ ccruncher_SOURCES = \
     ./interests/Rate.hpp\
     ./ratings/Rating.hpp\
     ./ratings/Ratings.hpp\
-    ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
     ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
@@ -128,30 +126,6 @@ ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDADD = -lm -lexpat
 
 # -------------------------------------------------------------
-# cc2gpi
-# -------------------------------------------------------------
-cc2gpi_SOURCES = \
-    ./tools/cc2gpi.cpp\
-    ./tools/FileResults.cpp\
-    ./utils/Exception.cpp\
-    ./utils/Parser.cpp\
-    ./utils/Date.cpp\
-    ./utils/Arrays.cpp\
-    ./utils/Strings.cpp\
-    ./utils/File.cpp\
-    \
-    ./tools/FileResults.hpp\
-    ./utils/Exception.hpp\
-    ./utils/Parser.hpp\
-    ./utils/Date.hpp\
-    ./utils/Arrays.hpp\
-    ./utils/Strings.hpp\
-    ./utils/File.hpp
-
-cc2gpi_CXXFLAGS = -Wall -W -Wshadow
-cc2gpi_LDADD = 
-
-# -------------------------------------------------------------
 # generator
 # -------------------------------------------------------------
 generator_SOURCES = \
@@ -166,7 +140,6 @@ generator_SOURCES = \
     ./interests/Rate.cpp\
     ./ratings/Rating.cpp\
     ./ratings/Ratings.cpp\
-    ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
     ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
@@ -203,7 +176,6 @@ generator_SOURCES = \
     ./interests/Rate.hpp\
     ./ratings/Rating.hpp\
     ./ratings/Ratings.hpp\
-    ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
     ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
@@ -248,7 +220,6 @@ mtrans_SOURCES = \
     ./interests/Rate.cpp\
     ./ratings/Rating.cpp\
     ./ratings/Ratings.cpp\
-    ./ratings/DateRatings.cpp\
     ./transitions/TransitionMatrix.cpp\
     ./survival/Survival.cpp\
     ./sectors/Sector.cpp\
@@ -284,7 +255,6 @@ mtrans_SOURCES = \
     ./interests/Rate.hpp\
     ./ratings/Rating.hpp\
     ./ratings/Ratings.hpp\
-    ./ratings/DateRatings.hpp\
     ./transitions/TransitionMatrix.hpp\
     ./survival/Survival.hpp\
     ./sectors/Sector.hpp\
@@ -371,7 +341,6 @@ tests_SOURCES = \
     ./sectors/Sectors.cpp\
     ./ratings/Rating.cpp\
     ./ratings/Ratings.cpp\
-    ./ratings/DateRatings.cpp\
     ./params/Params.cpp\
     ./transitions/TransitionMatrix.cpp\
     ./correlations/CorrelationMatrix.cpp\
@@ -436,7 +405,6 @@ tests_SOURCES = \
     ./sectors/Sectors.hpp\
     ./ratings/Rating.hpp\
     ./ratings/Ratings.hpp\
-    ./ratings/DateRatings.hpp\
     ./params/Params.hpp\
     ./transitions/TransitionMatrix.hpp\
     ./correlations/CorrelationMatrix.hpp\

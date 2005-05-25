@@ -64,10 +64,18 @@ void ccruncher::CopulaNormal::finalize()
   if (owner)
   {
     Arrays<double>::deallocMatrix(sigmas, n);
+    sigmas = NULL;
   }
 
-  Arrays<double>::deallocVector(aux1);
-  Arrays<double>::deallocVector(aux2);
+  if (aux1 != NULL) {
+    Arrays<double>::deallocVector(aux1);
+    aux1 = NULL;
+  }
+
+  if (aux2 != NULL) {
+    Arrays<double>::deallocVector(aux2);
+    aux2 = NULL;
+  }
 }
 
 //===========================================================================

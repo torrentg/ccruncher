@@ -94,16 +94,19 @@ void ccruncher::SegmentAggregator::release()
   // deleting clients array
   if (iclients != NULL) {
     Arrays<long>::deallocVector(iclients);
+    iclients = NULL;
   }
 
   // deleting vertexes
   if (vertexes != NULL) {
     Arrays<DateValues>::deallocMatrix(vertexes, nclients);
+    vertexes = NULL;
   }
 
   // deleting cvalues
   if (cvalues != NULL) {
     Arrays<double>::deallocVector(cvalues);
+    cvalues = NULL;
   }
 }
 

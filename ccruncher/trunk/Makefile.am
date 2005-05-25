@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
 
 EXTRA_DIST = COPYING AUTHORS README INSTALL TODO NEWS\
-             share samples data
+             bin\plotdata share samples data
 
 install-hook:
 	echo "setting executable flag to scripts ..."

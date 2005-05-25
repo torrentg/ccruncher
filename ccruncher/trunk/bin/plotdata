@@ -32,7 +32,7 @@ progname=plotdata
 version=0.3
 tplot=pdf
 binsize=1000
-gterm=x11
+retcode=0
 
 #-------------------------------------------------------------
 # version function
@@ -55,6 +55,7 @@ copyright() {
                http://www.generacio.com/ccruncher
 
 _EOF_
+
 }
 
 #-------------------------------------------------------------
@@ -74,7 +75,6 @@ usage() {
   options
     -p       plot Probability Distribution Function (default)
     -c       plot Cumulative Distribution Function
-    -t term  gnuplot terminal to use (x11 by default)
     -b num   binsize used to construct the pdf histogram
     -h       show this message and exit
     -v       show version and exit
@@ -87,6 +87,7 @@ usage() {
     $progname -p -b 1000 portfolio-rest.out
 
 _EOF_
+
 }
 
 #-------------------------------------------------------------
@@ -96,13 +97,12 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'pchvb:t:' opt
+  while getopts 'pchvb:' opt
   do
     case $opt in
       p) tplot=pdf;;
       c) tplot=cdf;;
       b) binsize=$OPTARG;;
-      t) gterm="$OPTARG";;
       v) version; 
          exit 0;;
       h) usage; 
@@ -135,6 +135,7 @@ readconf() {
     echo "gnuplot can be found at http://www.gnuplot.info/";
     exit 1;
   fi
+
 }
 
 #-------------------------------------------------------------
@@ -144,6 +145,7 @@ plotpdf() {
 
   gnuplot -persist << _EOF_
     reset
+    set terminal x11 title "$1"
     #set xrange [0.00:3484.45]
     set xlabel 'portfolio value'
     set ylabel 'number of ocurrences'
@@ -153,6 +155,31 @@ plotpdf() {
     plot '$1' using (floor(\$2/binsize)*binsize):(1) smooth frequency with histeps notitle
 _EOF_
 
+  retcode=`expr $retcode + $?`;
+
+}
+
+#-------------------------------------------------------------
+# plotcdf function 
+#-------------------------------------------------------------
+plotcdf() {
+
+  numrows=`wc -l < $1`
+
+  gnuplot -persist << _EOF_
+    reset
+    set terminal x11 title "$1"
+    #set xrange [0.00:3484.45]
+    set xlabel 'portfolio value'
+    set ylabel 'P(X < x)'
+    set grid
+    numrows=$numrows
+    set title 'Portfolio Value Cumulative Distribution Function'
+    plot "< sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
+_EOF_
+
+  retcode=`expr $retcode + $?`;
+
 }
 
 #-------------------------------------------------------------
@@ -161,12 +188,21 @@ _EOF_
 
 readconf $@;
 shift `expr $OPTIND - 1`
-  
+
+copyright;
+
 for filename in "$@"
 do
-  if [ $tplot = 'pdf' ]; then
-    plotpdf $filename;
-  fi
+  #echo ext=${filename##*.}
+  #echo path=${filename#*\/}
+
+  case $tplot in
+    'pdf') plotpdf $filename;;
+    'cdf') plotcdf $filename;;
+        *) echo "unexpected error. Please report this bug sending";
+           echo "$progname version and arguments at gerard@fobos.generacio.com";
+           exit 1;;
+  esac
 done
 
-exit 0;
+exit $retcode;

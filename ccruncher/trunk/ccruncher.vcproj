@@ -255,12 +255,6 @@
 				Name="ratings"
 				Filter="">
 				<File
-					RelativePath="src\ratings\DateRatings.cpp">
-				</File>
-				<File
-					RelativePath="src\ratings\DateRatings.hpp">
-				</File>
-				<File
 					RelativePath="src\ratings\Rating.cpp">
 				</File>
 				<File
