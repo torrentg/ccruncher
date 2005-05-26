@@ -12,7 +12,7 @@
 #   ccruncher output data file (*.out)
 #
 # output:
-#   a window or a file with the plot
+#   a window with the plot
 #
 # retcodes:
 #   0    : OK
@@ -31,7 +31,11 @@
 progname=plotdata
 version=0.3
 tplot=pdf
-binsize=1000
+numbins=100
+binsize=0
+minval=0
+maxval=0
+listgpi=false;
 retcode=0
 
 #-------------------------------------------------------------
@@ -75,7 +79,8 @@ usage() {
   options
     -p       plot Probability Distribution Function (default)
     -c       plot Cumulative Distribution Function
-    -b num   binsize used to construct the pdf histogram
+    -n num   number of bins used to construct the pdf (default=100)
+    -l       not graph, only list gnuplot instructions
     -h       show this message and exit
     -v       show version and exit
   return codes:
@@ -83,8 +88,8 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname portfolio-rest.out
-    $progname -b 1000 portfolio-rest.out
-    $progname -p -b 1000 portfolio-rest.out
+    $progname -n 100 portfolio-rest.out
+    $progname -p -n 100 portfolio-rest.out
 
 _EOF_
 
@@ -97,12 +102,13 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'pchvb:' opt
+  while getopts 'plchvn:' opt
   do
     case $opt in
       p) tplot=pdf;;
       c) tplot=cdf;;
-      b) binsize=$OPTARG;;
+      n) numbins=$OPTARG;;
+      l) listgpi=true;;
       v) version; 
          exit 0;;
       h) usage; 
@@ -139,23 +145,45 @@ readconf() {
 }
 
 #-------------------------------------------------------------
+# fminmax function
+#-------------------------------------------------------------
+fvalues() {
+
+  numrows=`wc -l < $1`
+  minval=`sort -n -k 2 $1 | head -1 | awk " { print \\\$2} "`;
+  maxval=`sort -n -k 2 $1 | tail -1 | awk " { print \\\$2} "`;
+  binsize=`echo "scale=2; ($maxval-$minval)/$numbins;" | bc 2> /dev/null`;
+
+}
+
+#-------------------------------------------------------------
 # plotpdf function
 #-------------------------------------------------------------
 plotpdf() {
 
-  gnuplot -persist << _EOF_
+  if [ $listgpi = 'true' ]; then
+    prog="cat"
+  else
+    prog="gnuplot -persist "
+  fi
+  
+  $prog 2>/dev/null << _EOF_
     reset
     set terminal x11 title "$1"
-    #set xrange [0.00:3484.45]
+    set xrange [$minval:$maxval]
     set xlabel 'portfolio value'
     set ylabel 'number of ocurrences'
     set grid
     binsize=$binsize
     set title 'Portfolio Value Histogram'
     plot '$1' using (floor(\$2/binsize)*binsize):(1) smooth frequency with histeps notitle
+
 _EOF_
 
-  retcode=`expr $retcode + $?`;
+  if [ $? != 0 ]; then
+    echo "found problems plotting file $1";
+    retcode=`expr $retcode + 1`;
+  fi
 
 }
 
@@ -164,21 +192,29 @@ _EOF_
 #-------------------------------------------------------------
 plotcdf() {
 
-  numrows=`wc -l < $1`
+  if [ $listgpi = 'true' ]; then
+    prog="cat"
+  else
+    prog="gnuplot -persist "
+  fi
 
-  gnuplot -persist << _EOF_
+  $prog 2>/dev/null << _EOF_
     reset
     set terminal x11 title "$1"
-    #set xrange [0.00:3484.45]
+    set xrange [$minval:$maxval]
     set xlabel 'portfolio value'
     set ylabel 'P(X < x)'
     set grid
     numrows=$numrows
     set title 'Portfolio Value Cumulative Distribution Function'
     plot "< sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
+
 _EOF_
 
-  retcode=`expr $retcode + $?`;
+  if [ $? != 0 ]; then
+    echo "found problems plotting file $1";
+    retcode=`expr $retcode + 1`;
+  fi
 
 }
 
@@ -197,12 +233,23 @@ do
   #echo path=${filename#*\/}
 
   case $tplot in
-    'pdf') plotpdf $filename;;
-    'cdf') plotcdf $filename;;
+
+    'pdf') fvalues $filename;
+           plotpdf $filename;;
+
+    'cdf') fvalues $filename;
+           plotcdf $filename;;
+
         *) echo "unexpected error. Please report this bug sending";
            echo "$progname version and arguments at gerard@fobos.generacio.com";
            exit 1;;
+
   esac
 done
+
+if [ $retcode != 0 ]; then
+  echo "";
+  echo "check that rejected files are valid ccruncher output files";
+fi
 
 exit $retcode;
