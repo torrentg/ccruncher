@@ -40,6 +40,9 @@
 //   . implemented Arrays class
 //   . implemented Strings class
 //
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added property 4 check
+//
 //===========================================================================
 
 #include <cmath>
@@ -52,7 +55,7 @@
 #include "math/PowMatrix.hpp"
 
 //===========================================================================
-// inicialitzador privat
+// private initializator
 //===========================================================================
 void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 {
@@ -67,12 +70,12 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
     throw Exception("TransitionMatrix::init(): invalid matrix range");
   }
 
-  // inicialitzem la matriu
+  // initializing matrix
   matrix = Arrays<double>::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================
-// constructor de copia
+// copy constructor
 //===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception) : ExpatHandlers() 
 {
@@ -82,7 +85,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
   epsilon = otm.epsilon;
   n = otm.n;
 
-  // inicialitzem la matriu
+  // initializing matrix
   matrix = Arrays<double>::allocMatrix(n, n);
   Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
 }
@@ -105,7 +108,7 @@ ccruncher::TransitionMatrix::~TransitionMatrix()
 }
 
 //===========================================================================
-// metodes acces variable begindate
+// size
 //===========================================================================
 int ccruncher::TransitionMatrix::size()
 {
@@ -113,7 +116,7 @@ int ccruncher::TransitionMatrix::size()
 }
 
 //===========================================================================
-// metodes acces variable begindate
+// getMatrix
 //===========================================================================
 double ** ccruncher::TransitionMatrix::getMatrix()
 {
@@ -121,14 +124,14 @@ double ** ccruncher::TransitionMatrix::getMatrix()
 }
 
 //===========================================================================
-// inserta un element en la matriu de transicio
+// inserts an element into transition matrix 
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
   int row = ratings->getIndex(rating1);
   int col = ratings->getIndex(rating2);
 
-  // validem ratings entrats
+  // validating ratings
   if (row < 0 || col < 0)
   {
     string msg = "TransitionMatrix::insertTransition(): undefined rating at <transition> ";
@@ -138,7 +141,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     throw Exception(msg);
   }
 
-  // validem valor entrat
+  // validating value
   if (value < -epsilon || value > (1.0 + epsilon))
   {
     string msg = "TransitionMatrix::insertTransition(): value[";
@@ -150,7 +153,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     throw Exception(msg);
   }
 
-  // comprovem que no es trobi definit
+  // checking that not exist 
   if (!isnan(matrix[row][col]))
   {
     string msg = "TransitionMatrix::insertTransition(): redefined element [";
@@ -161,7 +164,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     throw Exception(msg);
   }
 
-  // inserim en la matriu de transicio
+  // insert value into matrix
   matrix[row][col] = value;
 }
 
@@ -216,23 +219,23 @@ void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
 }
 
 //===========================================================================
-// validacio del contingut de la classe
+// validate class content
 //===========================================================================
 void ccruncher::TransitionMatrix::validate() throw(Exception)
 {
-  // comprovem que tots els elements es troben definits
+  // checking that all elements exists
   for (int i=0;i<n;i++)
   {
     for (int j=0;j<n;j++)
     {
-      if (matrix[i][j] == DBL_MAX)
+      if (matrix[i][j] == NAN)
       {
         throw Exception("TransitionMatrix::validate(): transition matrix have an undefined element");
       }
     }
   }
 
-  // comprovem que totes les files sumen 1
+  // checking that all rows sum 1
   for (int i=0;i<n;i++)
   {
     double sum = 0.0;
@@ -248,7 +251,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     }
   }
 
-  // determinem el rating de default
+  // finding default rating
   indexdefault = -1;
 
   for (int i=0;i<n;i++)
@@ -265,16 +268,34 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
       }
     }
   }
-
-  // comprovem que rating default es troba definit
   if (indexdefault < 0)
   {
     throw Exception("TransitionMatrix::validate(): default rating not found");
   }
+
+  // checking property 4 (all rating can be defaulted)
+  for (int i=0;i<n;i++) 
+  {
+    bool bcon=false;
+
+    for (int j=0;j<n;j++)
+    {
+      if (matrix[i][j] > epsilon && matrix[j][indexdefault] > epsilon)
+      {
+        bcon = true;
+        break;
+      }
+    }
+    
+    if (bcon == false)
+    {
+      throw Exception("TransitionMatrix::validate(): property 4 not satisfied"); 
+    }
+  }
 }
 
 //===========================================================================
-// retorna el index del rating default
+// return default rating index
 //===========================================================================
 int ccruncher::TransitionMatrix::getIndexDefault()
 {
@@ -282,10 +303,10 @@ int ccruncher::TransitionMatrix::getIndexDefault()
 }
 
 //===========================================================================
-// donat un rating inicial i un valor aleatori en [0,1] proporciona rating final
-// @param x valor aleatori entre [0,1]
-// @param rating rating inicial
-// @return rating al final
+// given a rating and a random number in [0,1] return final rating 
+// @param irating initial rating
+// @param val random number in [0,1]
+// @return final rating
 //===========================================================================
 int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
 {

@@ -7,6 +7,7 @@ version 0.3 (??? 2005)
 --------------------------
   * bugfix: solved bug in correlation matrix check when correl = 0
   * changed attribute period from mtransitions tag: (year -> month)
+  * improved checks applied to transition matrix
   * removed aggregators
   * new SegmentAggregator (simplified)
   * cc2gpi tool replaced by plotdata script

@@ -301,3 +301,49 @@ void TransitionMatrixTest::test4()
   TransitionMatrix trm(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
+
+//===========================================================================
+// test5
+//===========================================================================
+void TransitionMatrixTest::test5()
+{
+  // non valid transition matrix (property 4 not acomplished)
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+    <mtransitions period='12' epsilon='1e-12'>\n\
+      <transition from='A' to='A' value='0.80'/>\n\
+      <transition from='A' to='B' value='0.10'/>\n\
+      <transition from='A' to='C' value='0.10'/>\n\
+      <transition from='A' to='D' value='0.00'/>\n\
+      <transition from='A' to='E' value='0.00'/>\n\
+      <transition from='B' to='A' value='0.10'/>\n\
+      <transition from='B' to='B' value='0.80'/>\n\
+      <transition from='B' to='C' value='0.10'/>\n\
+      <transition from='B' to='D' value='0.00'/>\n\
+      <transition from='B' to='E' value='0.00'/>\n\
+      <transition from='C' to='A' value='0.10'/>\n\
+      <transition from='C' to='B' value='0.10'/>\n\
+      <transition from='C' to='C' value='0.80'/>\n\
+      <transition from='C' to='D' value='0.00'/>\n\
+      <transition from='C' to='E' value='0.00'/>\n\
+      <transition from='D' to='A' value='0.00'/>\n\
+      <transition from='D' to='B' value='0.00'/>\n\
+      <transition from='D' to='C' value='0.00'/>\n\
+      <transition from='D' to='D' value='0.80'/>\n\
+      <transition from='D' to='E' value='0.20'/>\n\
+      <transition from='E' to='A' value='0.00'/>\n\
+      <transition from='E' to='B' value='0.00'/>\n\
+      <transition from='E' to='C' value='0.00'/>\n\
+      <transition from='E' to='D' value='0.00'/>\n\
+      <transition from='E' to='E' value='1.00'/>\n\
+    </mtransitions>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // ratings list creation
+  Ratings ratings = getRatings();
+
+  // transition matrix creation
+  TransitionMatrix trm(&ratings);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
+}
