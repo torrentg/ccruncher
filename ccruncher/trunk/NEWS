@@ -11,6 +11,7 @@ version 0.3 (??? 2005)
   * removed aggregators
   * new SegmentAggregator (simplified)
   * cc2gpi tool replaced by plotdata script
+  * added time-to-default simulation method
 
 version 0.2 (April 2005)
 --------------------------
@@ -24,3 +25,4 @@ version 0.2 (April 2005)
 version 0.1 (January 2005)
 --------------------------
   * initial release (Gerard Torrent)
+

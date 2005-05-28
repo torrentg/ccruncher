@@ -2,14 +2,14 @@
 
 #=============================================================
 # description: 
-#   Use this script to generate the Probability Distribution
-#   Function (pdf) plot for a creditcruncher output data file
+#   Use this script to generate the TMA or TMAA or Survival
+#   plot for a creditcruncher output data file
 #
 # dependences:
 #   shell, gnuplot, X11
 #
 # input:
-#   ccruncher output data file (*.out)
+#   ccruncher input data file (*.out)
 #
 # output:
 #   a window with the plot
@@ -20,7 +20,7 @@
 #
 #-------------------------------------------------------------
 #
-# 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/05/28 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
 #=============================================================
@@ -28,14 +28,11 @@
 #-------------------------------------------------------------
 # variables declaration
 #-------------------------------------------------------------
-progname=plotdata
+progname=plotmtrans
 version=0.3
-tplot=pdf
-numrows=0
-numbins=100
-binsize=0
-minval=0
-maxval=0
+tplot=survival
+numrows=50
+steplength=12
 listgpi=false;
 retcode=0
 
@@ -78,9 +75,11 @@ usage() {
   arguments:
     file     ccruncher output data file to plot
   options
-    -p       plot Probability Distribution Function (default)
-    -c       plot Cumulative Distribution Function
-    -n num   number of bins used to construct the pdf (default=100)
+    -f       plot Forward Default Rate
+    -c       plot Cumulative Formad Default Rate
+    -s       plot Survival Function (default)
+    -b num   steplength. numbre of months between rows (default=12)
+    -n num   numrows. number of rows displayed (default=50)
     -l       not graph, only list gnuplot instructions
     -h       show this message and exit
     -v       show version and exit
@@ -88,9 +87,9 @@ usage() {
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname portfolio-rest.out
-    $progname -n 100 portfolio-rest.out
-    $progname -p -n 100 portfolio-rest.out
+    $progname input.xml
+    $progname -c -n 100 input.xml
+    $progname -b 1 -n 100 input.xml
 
 _EOF_
 
@@ -103,12 +102,14 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'plchvn:' opt
+  while getopts 'fcslhvb:n:' opt
   do
     case $opt in
-      p) tplot=pdf;;
-      c) tplot=cdf;;
-      n) numbins=$OPTARG;;
+      f) tplot=tma;;
+      c) tplot=tmaa;;
+      s) tplot=survival;;
+      b) steplength=$OPTARG;;
+      n) numrows=$OPTARG;;
       l) listgpi=true;;
       v) version; 
          exit 0;;
@@ -146,38 +147,59 @@ readconf() {
 }
 
 #-------------------------------------------------------------
-# fvalues function
+# plotmtrans function 
 #-------------------------------------------------------------
-fvalues() {
+plotmtrans() {
 
-  numrows=`wc -l < $1`
-  minval=`sort -n -k 2 $1 | head -1 | awk " { print \\\$2} "`;
-  maxval=`sort -n -k 2 $1 | tail -1 | awk " { print \\\$2} "`;
-  binsize=`echo "scale=2; ($maxval-($minval))/($numbins);" | bc 2> /dev/null`;
+  i=2;
+  mtrans="src/mtrans -x --$tplot --numrows=$numrows --steplength=$steplength $1";
+  gpistr="plot ";
+  line1=$($mtrans | head -1);
 
-}
+  while [ $i != 0 ]
+  do
+    val=$(echo $line1 | awk "{ print \$$i }");
 
-#-------------------------------------------------------------
-# plotpdf function
-#-------------------------------------------------------------
-plotpdf() {
+    if [ ! -n "$val" ]; then
+      i=0;
+    else
+      if [ "$gpistr" != 'plot ' ]; then
+        gpistr="$gpistr, "
+      else
+        gpistr="$gpistr "
+      fi
 
+      gpistr="$gpistr '<$mtrans' using 1:$i with lines title '$val'";
+      i=`expr $i + 1`;
+    fi
+
+  done
+  
   if [ $listgpi = 'true' ]; then
     prog="cat"
   else
     prog="gnuplot -persist "
+  fi
+
+  maxval=`expr $numrows \* $steplength`;
+  if [ $numrows -gt 30 ]; then
+    xtics="#set xtics $steplength"
+  else
+    xtics="set xtics $steplength"
   fi
   
   $prog 2>/dev/null << _EOF_
     reset
     set terminal x11 title "$1"
-    set xrange [$minval:$maxval]
-    set xlabel 'portfolio value'
-    set ylabel 'number of ocurrences'
+    set xlabel 'time (in months)'
+    set ylabel '$tplot'
     set grid
-    binsize=$binsize
-    set title 'Portfolio Value Histogram'
-    plot '$1' using (floor(\$2/binsize)*binsize):(1) smooth frequency with histeps notitle
+    set title '$tplot'
+    set yrange [-0.05:1.05]
+    set xrange [0:$maxval]
+    set ytics 0.1
+    $xtics
+    $gpistr
 
 _EOF_
 
@@ -185,38 +207,6 @@ _EOF_
     echo "found problems plotting file $1";
     retcode=`expr $retcode + 1`;
   fi
-
-}
-
-#-------------------------------------------------------------
-# plotcdf function 
-#-------------------------------------------------------------
-plotcdf() {
-
-  if [ $listgpi = 'true' ]; then
-    prog="cat"
-  else
-    prog="gnuplot -persist "
-  fi
-
-  $prog 2>/dev/null << _EOF_
-    reset
-    set terminal x11 title "$1"
-    set xrange [$minval:$maxval]
-    set xlabel 'portfolio value'
-    set ylabel 'P(X < x)'
-    set grid
-    numrows=$numrows
-    set title 'Portfolio Value Cumulative Distribution Function'
-    plot "< sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
-
-_EOF_
-
-  if [ $? != 0 ]; then
-    echo "found problems plotting file $1";
-    retcode=`expr $retcode + 1`;
-  fi
-
 }
 
 #-------------------------------------------------------------
@@ -232,20 +222,8 @@ for filename in "$@"
 do
   #echo ext=${filename##*.}
   #echo path=${filename#*\/}
+  plotmtrans $filename;
 
-  case $tplot in
-
-    'pdf') fvalues $filename;
-           plotpdf $filename;;
-
-    'cdf') fvalues $filename;
-           plotcdf $filename;;
-
-        *) echo "unexpected error. Please report this bug sending";
-           echo "$progname version and arguments at gerard@fobos.generacio.com";
-           exit 1;;
-
-  esac
 done
 
 if [ $retcode != 0 ]; then

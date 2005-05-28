@@ -82,7 +82,7 @@ ccruncher::Survival::Survival(Ratings *ratings_, int numrows, int *imonths, doub
   {
     string srating = ratings->getName(i);
 
-    for(int j=0;j<=numrows;j++)
+    for(int j=0;j<numrows;j++)
     {
       insertValue(srating, imonths[j], values[i][j]);
     }
@@ -117,7 +117,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
     msg += srating;
     throw Exception(msg);
   }
-  
+
   // validating time 
   if (t < 0)
   {
@@ -390,7 +390,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
   if (val > data[irating].back())
   {
     // TODO: non-optimal method, use bisection or cuasi-Newton 
-    // instead of secuential scan
+    // TODO: instead of secuential scan
     int n = data[irating].size();
     for (int j=1;j<n;j++)
     {
@@ -450,4 +450,18 @@ string ccruncher::Survival::getXML(int ilevel) throw(Exception)
   ret += spc1 + "</survival>\n";
 
   return ret;
+}
+
+//===========================================================================
+// evalue
+//===========================================================================
+void ccruncher::Survival::evalue(int steplength, int numrows, double **ret)
+{
+  for(int i=0;i<nratings;i++)
+  {
+    for(int j=0;j<numrows;j++)
+    {
+      ret[i][j] = evalue(i, steplength*j);
+    }
+  }
 }

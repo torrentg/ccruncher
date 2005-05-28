@@ -104,7 +104,12 @@ ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception
 //===========================================================================
 ccruncher::TransitionMatrix::~TransitionMatrix()
 {
-  Arrays<double>::deallocMatrix(matrix, n);
+  assert(n >= 0);
+
+  if (matrix != NULL) {
+    Arrays<double>::deallocMatrix(matrix, n);
+    matrix = NULL;
+  }
 }
 
 //===========================================================================
@@ -373,12 +378,7 @@ TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, int t) throw(Exce
 }
 
 //===========================================================================
-// Given a transition matrix and the maximum number of years, return the 
-// Forward Default Rate in the ret matrix
-// @param tm transition matrix
-// @param numyears number of years (min=0, max=999)
-// @param ret allocated space of size numratings x (numyears+1)
-// ret[i][j] = probability initial rating r_i default between year 0 and year j
+// Given a transition matrix return the Forward Default Rate in ret
 //===========================================================================
 void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
@@ -389,7 +389,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   assert(steplength < 15000);
 
   int n = tm->n;
-  
+
   // building 1-year transition matrix
   TransitionMatrix *tmone = translate(tm, steplength);
   double **one = tmone->getMatrix();
@@ -410,7 +410,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
     ret[i][0] = aux[i][n-1];
   }
   
-  for(int t=1;t<=numrows;t++)
+  for(int t=1;t<numrows;t++)
   {
     Arrays<double>::prodMatrixMatrix(aux, one, n, n, n, tmp);
 
@@ -424,18 +424,13 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   }
   
   // exit function
-  Arrays<double>::deallocMatrix(one, n);
   Arrays<double>::deallocMatrix(aux, n);
   Arrays<double>::deallocMatrix(tmp, n);
+  delete tmone;    //Arrays<double>::deallocMatrix(one, n);
 }
 
 //===========================================================================
-// Given a transition matrix and the maximum number of years, return the 
-// Cumulated Forward Default Rate in the ret matrix
-// @param tm transition matrix
-// @param numyears number of years (min=0, max=999)
-// @param ret allocated space of size numratings x (numyears+1)
-// ret[i][j] = probability initial rating r_i default between year 0 and year j
+// Given a transition matrix return the Cumulated Forward Default Rate in ret
 //===========================================================================
 void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
@@ -447,7 +442,7 @@ void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double *
   // building acumulateds
   for(int i=0;i<n;i++)
   {
-    for(int j=1;j<=numrows;j++)
+    for(int j=1;j<numrows;j++)
     {
       ret[i][j] = ret[i][j] + ret[i][j-1];
     }
@@ -455,11 +450,7 @@ void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double *
 }
 
 //===========================================================================
-// Given a transition matrix and the maximum number of years, return the 
-// Survival Function  in the ret matrix
-// @param tm transition matrix
-// @param numyears number of years (min=0, max=999)
-// @param ret allocated space of size numratings x (numyears+1)
+// Given a transition matrix return the Survival Function  in ret
 // ret[i][j] = 1-TMAA[i][j]
 //===========================================================================
 void ccruncher::survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
@@ -472,7 +463,7 @@ void ccruncher::survival(TransitionMatrix *tm, int steplength, int numrows, doub
   // building survival function
   for(int i=0;i<n;i++)
   {
-    for(int j=1;j<=numrows;j++)
+    for(int j=0;j<numrows;j++)
     {
       ret[i][j] = 1.0 - ret[i][j];
     }

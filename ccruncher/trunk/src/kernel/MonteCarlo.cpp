@@ -33,10 +33,11 @@
 //
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
-//
-// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //   . added new SegmentAggregator class
+//
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added simulation method time-to-default
 //
 //===========================================================================
 
@@ -78,6 +79,8 @@ void ccruncher::MonteCarlo::reset()
   CONT = 0L;
   antithetic = false;
   reversed = false;
+  ttdmethod = true;
+  numcopulas = 0;
 
   usempi = false;
   hash = 0;
@@ -90,6 +93,7 @@ void ccruncher::MonteCarlo::reset()
   segmentations = NULL;
   clients = NULL;
 
+  survival = NULL;
   mtrans = NULL;
   cmatrix = NULL;
   copulas = NULL;
@@ -105,12 +109,13 @@ void ccruncher::MonteCarlo::release()
   // deallocating transition matrix object
   if (mtrans != NULL) { delete mtrans; mtrans = NULL; }
 
+  // survival fuction object deallocated by IData (his container)
   // client correlation matrix deallocated by copulas[0] object
 
   // deallocating copula vector
   if (copulas != NULL)
   {
-    for (int i=0;i<=STEPS;i++)
+    for (int i=0;i<numcopulas;i++)
     {
       if (copulas[i] != NULL) delete copulas[i];
       copulas[i] = NULL;
@@ -144,7 +149,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::MonteCarlo::initialize(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initialize(IData *idata) throw(Exception)
 {
   if (idata == NULL)
   {
@@ -173,7 +178,7 @@ void ccruncher::MonteCarlo::initialize(const IData *idata) throw(Exception)
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
 {
   Logger::addBlankLine();
   Logger::trace("initialing procedure", '*');
@@ -190,15 +195,21 @@ void ccruncher::MonteCarlo::init(const IData *idata) throw(Exception)
 
   // initializing sectors
   initSectors(idata);
-  
-  // initializing transition matrix
-  initMTrans(idata);
-  
+
+  if (ttdmethod) {
+    // initializing transition matrix (rating-path method)
+    initTimeToDefault(idata);
+  }
+  else {
+    // initialize survival function (time-to-default method)
+    initRatingPath(idata);
+  }
+
   // initializing correlation matrix
   cmatrix = initCorrelationMatrix(idata->correlations->getMatrix(), clients, N);
 
   // initializing copulas
-  copulas = initCopulas(cmatrix, N, STEPS, idata->params->copula_seed);
+  copulas = initCopulas(cmatrix, N, numcopulas, idata->params->copula_seed);
 
   // ratings paths allocation
   ittd = initTimeToDefaultArray(N);
@@ -218,13 +229,6 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   // setting logger header
   Logger::trace("setting parameters", '-');
   Logger::newIndentLevel();
-
-  // information trace
-  Logger::trace("resolution method", string("rating-path"));
-
-  // fixing variance reduction method
-  antithetic = idata->params->antithetic;
-  Logger::trace("antithetic mode", Parser::bool2string(antithetic));
 
   // max number of seconds
   MAXSECONDS = idata->params->maxseconds;
@@ -247,9 +251,29 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   dates = idata->params->getDates();
   
   // tracing dates
-  for (int i=0;i<=STEPS;i++)
-  Logger::trace("date[" + Parser::int2string(i)+"]", Parser::date2string(dates[i]));
-  
+  for (int i=0;i<=STEPS;i++) {
+    Logger::trace("date[" + Parser::int2string(i)+"]", Parser::date2string(dates[i]));
+  }
+
+  // fixing simulation method
+  if (idata->params->smethod == "time-to-default") {
+    ttdmethod = true;
+    numcopulas = 1;
+    Logger::trace("resolution method", string("time-to-default"));
+  }
+  else if (idata->params->smethod == "rating-path") {
+    ttdmethod = false;
+    numcopulas = STEPS+1;
+    Logger::trace("resolution method", string("rating-path"));
+  }
+  else {
+    throw Exception("MonteCarlo::initParams(): unknow smethod");
+  }
+
+  // fixing variance reduction method
+  antithetic = idata->params->antithetic;
+  Logger::trace("antithetic mode", Parser::bool2string(antithetic));
+
   // initializing internal variables
   CONT = 0L;
   reversed = false;
@@ -336,9 +360,9 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 }
 
 //===========================================================================
-// initMTrans
+// initRatingPath
 //===========================================================================
-void ccruncher::MonteCarlo::initMTrans(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting transition matrix", '-');
@@ -350,8 +374,51 @@ void ccruncher::MonteCarlo::initMTrans(const IData *idata) throw(Exception)
   Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
   Logger::trace("scaling matrix to step length (in months)", Parser::int2string(STEPLENGTH));
   
-  // trobem la matriu de transicio usada
+  // finding transition matrix for steplength time
   mtrans = translate(idata->transitions, STEPLENGTH);
+
+  // exit function
+  Logger::previousIndentLevel();
+}
+
+//===========================================================================
+// initTimeToDefault
+//===========================================================================
+void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
+{
+  // setting logger header
+  Logger::trace("setting survival function", '-');
+  Logger::newIndentLevel();
+  
+  if (idata->survival != NULL)
+  {
+    survival = idata->survival;
+    Logger::trace("survival function", string("user defined"));
+  }
+  else 
+  {
+    // setting logger info
+    string sval = Parser::int2string(idata->transitions->size());
+    Logger::trace("transition matrix dimension", sval + "x" + sval);
+    Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
+
+    // computing survival function using transition matrix
+    double **aux = Arrays<double>::allocMatrix(idata->transitions->n, STEPS+1);
+    ccruncher::survival(idata->transitions, STEPLENGTH, STEPS+1, aux);
+    int *itime = Arrays<int>::allocVector(STEPS+1);
+    for (int i=0;i<=STEPS;i++) {
+      itime[i] = i*STEPLENGTH;
+    }
+
+    // creating survival function object
+    survival = new Survival(idata->ratings, STEPS+1, itime, aux, 2*(STEPS+1)*STEPLENGTH);
+    Arrays<double>::deallocMatrix(aux, idata->transitions->n);
+    Arrays<int>::deallocVector(itime);
+    Logger::trace("transition matrix -> survival function", string("computed"));
+    
+    // appending survival object to idata (will dealloc survival object)
+    idata->survival = survival;    
+  }
 
   // exit function
   Logger::previousIndentLevel();
@@ -400,7 +467,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
 }
 
 //===========================================================================
-// copula construction at every time tranch
+// copula construction
 //===========================================================================
 CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, long seed) throw(Exception)
 {
@@ -412,20 +479,20 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
 
   // setting logger info
   Logger::trace("copula dimension", Parser::long2string(n));
-  Logger::trace("number of copulas (one per time-tranch)", Parser::int2string(k+1));
+  Logger::trace("number of copulas", Parser::int2string(k));
   Logger::trace("seed used to initialize randomizer (0=none)", Parser::long2string(seed));
 
   // allocating space
   try
   {
-    ret = new CopulaNormal*[k+1];
-    for (int i=0;i<=k;i++) ret[i] = NULL;
+    ret = new CopulaNormal*[k];
+    for (int i=0;i<k;i++) ret[i] = NULL;
 
     // creem l'objecte per la generacio de copules normals
     ret[0] = new CopulaNormal(n, ccm);
 
     // el repliquem per tots els talls temporals
-    for(int i=1;i<=k;i++)
+    for(int i=1;i<k;i++)
     {
       ret[i] = new CopulaNormal(*(ret[0]));
     }
@@ -434,7 +501,7 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
   {
     if (ret != NULL)
     {
-      for (int i=0;i<=k;i++)
+      for (int i=0;i<k;i++)
       {
         if (ret[i] != NULL) delete ret[i];
         ret[i] = NULL;
@@ -448,7 +515,7 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
   // if no seed is given /dev/urandom or time() will be used
   if (seed != 0L)
   {
-    for(int i=0;i<=k;i++)
+    for(int i=0;i<k;i++)
     {
       ret[i]->setSeed(seed+(long)i);
     }
@@ -626,7 +693,7 @@ void ccruncher::MonteCarlo::simulate()
   // generate a new realization for copulas
   if (!antithetic)
   {
-    for(int i=1;i<=STEPS;i++)
+    for(int i=(ttdmethod?0:1);i<numcopulas;i++)
     {
       copulas[i]->next();
     }
@@ -635,7 +702,7 @@ void ccruncher::MonteCarlo::simulate()
   {
     if (!reversed)
     {
-      for(int i=1;i<=STEPS;i++)
+      for(int i=(ttdmethod?0:1);i<numcopulas;i++)
       {
         copulas[i]->next();
       }
@@ -647,17 +714,48 @@ void ccruncher::MonteCarlo::simulate()
     }
   }
 
-  // for each client we compute time-to-default
-  for (int i=0;i<N;i++)
-  {
-    ittd[i] = simulateTTD(i);
+  // for each client we simule the time where defaults
+  if (ttdmethod) {
+    // using time-to-default algorithm ...
+    for (int i=0;i<N;i++) {
+      ittd[i] = simTimeToDefault(i);
+    }
+  }
+  else {
+    // using rating-path algorithm ...
+    for (int i=0;i<N;i++) {
+      ittd[i] = simRatingPath(i);
+    }
   }
 }
 
 //===========================================================================
-// given a client, simule the time-to-default
+// getRandom. Returns requested copula value
+// encapsules antithetic management
 //===========================================================================
-int ccruncher::MonteCarlo::simulateTTD(int iclient)
+double ccruncher::MonteCarlo::getRandom(int icopula, int iclient)
+{
+  if (antithetic)
+  {
+    if (reversed)
+    {
+      return copulas[icopula]->get(iclient);
+    }
+    else
+    {
+      return 1.0 - copulas[icopula]->get(iclient);
+    }
+  }
+  else
+  {
+    return copulas[icopula]->get(iclient);
+  }
+}
+    
+//===========================================================================
+// given a client, simule using rating-path algorithm
+//===========================================================================
+int ccruncher::MonteCarlo::simRatingPath(int iclient)
 {
   int indexdefault = mtrans->getIndexDefault();
   int r1, r2;
@@ -670,21 +768,7 @@ int ccruncher::MonteCarlo::simulateTTD(int iclient)
   for (int t=1;t<=STEPS;t++)
   {
     // getting random number U[0,1] (correlated with rest of clients...)
-    if (antithetic)
-    {
-      if (reversed)
-      {
-        u = copulas[t]->get(iclient);
-      }
-      else
-      {
-        u = 1.0 - copulas[t]->get(iclient);
-      }
-    }
-    else
-    {
-      u = copulas[t]->get(iclient);
-    }
+    u = getRandom(t, iclient);
     
     // compute next rating
     r2 = mtrans->evalue(r1, u);
@@ -702,6 +786,24 @@ int ccruncher::MonteCarlo::simulateTTD(int iclient)
 
   // if non defaults, return a number bigger than STEPS  
   return STEPS+1;
+}
+
+//===========================================================================
+// given a client, simule using time-to-default algorithm
+//===========================================================================
+int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
+{
+  // rating at t0 is initial rating
+  int r1 = (*clients)[iclient]->irating;
+
+  // getting random number U[0,1] (correlated with rest of clients...)
+  double u = getRandom(0, iclient);
+
+  // simulate month where this client defaults
+  int month = survival->inverse(r1, u);
+
+  // return index time where defaults
+  return int(round(double(month)/double(STEPLENGTH)));
 }
 
 //===========================================================================

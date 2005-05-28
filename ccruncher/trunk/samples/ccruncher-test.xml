@@ -20,6 +20,9 @@
     <property name="copula.type" value="normal"/>
     <property name="copula.seed" value="387650932"/>
     <property name="montecarlo.method" value="rating-path"/>
+<!--    
+    <property name="montecarlo.method" value="time-to-default"/>
+-->
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveClients" value="true"/>
   </params>

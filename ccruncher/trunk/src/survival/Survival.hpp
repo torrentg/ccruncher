@@ -70,6 +70,7 @@ class Survival : public ExpatHandlers
     Survival(Ratings *, int, int *, double**, int) throw(Exception);
     ~Survival();
 
+    void evalue(int steplength, int numrows, double **ret);
     double evalue(const int irating, int t);
     int inverse(const int irating, double val);
 

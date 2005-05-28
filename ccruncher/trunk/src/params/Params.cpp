@@ -140,7 +140,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
     if (begindate != Date(1,1,1900) || aux == Date(1,1,1900)) {
-      throw eperror(eu, "found invalid time.begintime");
+      throw eperror(eu, "invalid time.begintime");
     } else {
       begindate = aux;
     }
@@ -149,7 +149,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     int aux = getIntAttribute(attributes, "value", 0);
     if (steps != 0 || aux <= 0) {
-      throw eperror(eu, "found invalid time.steps");
+      throw eperror(eu, "invalid time.steps");
     } else {
       steps = aux;
     }
@@ -158,7 +158,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     int aux = getIntAttribute(attributes, "value", 0);
     if (steplength != 0 || aux <= 0) {
-      throw eperror(eu, "found invalid time.steplength");
+      throw eperror(eu, "invalid time.steplength");
     } else {
       steplength = aux;
     }
@@ -167,7 +167,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", 0L);
     if (maxiterations != 0L || aux <= 0L) {
-      throw eperror(eu, "found invalid stopcriteria.maxiterations");
+      throw eperror(eu, "invalid stopcriteria.maxiterations");
     } else {
       maxiterations = aux;
     }
@@ -176,7 +176,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", 0L);
     if (maxseconds != 0L || aux <= 0L) {
-      throw eperror(eu, "found invalid stopcriteria.maxseconds");
+      throw eperror(eu, "invalid stopcriteria.maxseconds");
     } else {
       maxseconds = aux;
     }
@@ -184,12 +184,9 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   else if (name == "copula.type")
   {
     string aux = getStringAttribute(attributes, "value", "");
-    if (copula_type != "" || aux == "") {
-      throw eperror(eu, "found invalid copula.type");
-    } 
-    else if (aux != "normal") {
-      throw eperror(eu, "at this moment, only normal copula is suported");
-    } 
+    if (copula_type != "" || aux != "normal") {
+      throw eperror(eu, "invalid copula.type. supported values: normal");
+    }
     else {
       copula_type = aux;
     }
@@ -198,20 +195,18 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", 0L);
     if (copula_seed != 0L || aux == 0L) {
-      throw eperror(eu, "found invalid copula.seed");
-    } else {
+      throw eperror(eu, "invalid copula.seed");
+    } 
+    else {
       copula_seed = aux;
     }
   }
   else if (name == "montecarlo.method")
   {
     string aux = getStringAttribute(attributes, "value", "");
-    if (smethod != "" || aux == "") {
-      throw eperror(eu, "found invalid copula.type");
+    if (smethod != "" || (aux != "rating-path" && aux != "time-to-default")) {
+      throw eperror(eu, "invalid montecarlo.method. supported values: time-to-default, rating-path");
     } 
-    else if(aux != "rating-path" && aux != "time-to-default") {
-      throw eperror(eu, "at this moment, only rating-path and time-to default are suported");
-    }
     else {
       smethod = aux;
     }

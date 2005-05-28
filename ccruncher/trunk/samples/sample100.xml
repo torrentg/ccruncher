@@ -4,12 +4,15 @@
     <property name='time.begindate' value='18/02/2003'/>
     <property name='time.steps' value='12'/>
     <property name='time.steplength' value='2'/>
-    <property name='stopcriteria.maxiterations' value='5000'/>
+    <property name='stopcriteria.maxiterations' value='20000'/>
     <property name='stopcriteria.maxseconds' value='30000000'/>
     <property name='copula.type' value='normal'/>
     <property name='copula.seed' value='387650932'/>
+<!--    
+    <property name='montecarlo.method' value='time-to-default'/>
+-->
     <property name='montecarlo.method' value='rating-path'/>
-    <property name='montecarlo.antithetic' value='true'/>
+    <property name='montecarlo.antithetic' value='false'/>
     <property name='portfolio.onlyActiveClients' value='true'/>
   </params>
   <interests>
@@ -64,9 +67,14 @@
     <sector name ='S2' order ='2' desc ='other sectors'/>
   </sectors>
   <mcorrels epsilon='1e-12'>
+<!--  
     <sigma sector1 ='S1' sector2 ='S1' value ='0.2'/>
     <sigma sector1 ='S1' sector2 ='S2' value ='0.1'/>
     <sigma sector1 ='S2' sector2 ='S2' value ='0.25'/>
+-->
+    <sigma sector1 ='S1' sector2 ='S1' value ='0.0'/>
+    <sigma sector1 ='S1' sector2 ='S2' value ='0.0'/>
+    <sigma sector1 ='S2' sector2 ='S2' value ='0.0'/>
   </mcorrels>
   <segmentations>
     <segmentation name='portfolio' components='asset'>

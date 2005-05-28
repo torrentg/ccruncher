@@ -69,7 +69,7 @@ void run(string, int, int, int) throw(Exception);
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "" ;
+  const char* const options1 = "xf" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
   int numrows = DEFAULTNUMROWS;
   int steplength = DEFAULTSTEPLENGTH;
   int mode = 0;
+  bool showcopyright = true;
 
   // parsing options
   while (1)
@@ -107,6 +108,10 @@ int main(int argc, char *argv[])
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
           return 1;
+
+      case 'x': // -x (don't show copyright)
+          showcopyright = false;
+          break;
 
       case 300: // --help (show help and exit)
           usage();
@@ -204,7 +209,9 @@ int main(int argc, char *argv[])
   }
 
   // license info
-  copyright();
+  if (showcopyright) {
+    copyright();
+  }
 
   try
   {
@@ -242,17 +249,23 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   
   // allocating space
   double **buf = Arrays<double>::allocMatrix(tm->n, numrows+1);
+  string smethod = idata.params->smethod;
 
   switch(mode)
   {
       case 1: // TMA
-          ccruncher::tma(tm, steplength, numrows, buf);
+          ccruncher::tma(tm, steplength, numrows+1, buf);
           break;
-      case 2: 
-          ccruncher::tmaa(tm, steplength, numrows, buf);
+      case 2: // TMAA
+          ccruncher::tmaa(tm, steplength, numrows+1, buf);
           break;
-      case 3: 
-          ccruncher::survival(tm, steplength, numrows, buf);
+      case 3: // Survival
+          if (smethod == "rating-path" || (smethod == "time-to-default" && idata.survival == NULL)) {
+            ccruncher::survival(tm, steplength, numrows+1, buf);
+          }
+          else {
+            idata.survival->evalue(steplength, numrows+1, buf);
+          }
           break;
       default:
            cerr << "an unexpected error [15] occur" << endl;
@@ -261,7 +274,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   }
 
   // printing header
-  cout << "month\t";
+  cout << "#month\t";
   for(int i=0;i<tm->n;i++)
   {
     cout << ratings->getName(i) << "\t";
@@ -307,13 +320,14 @@ void usage()
   "    file.xml         CreditCruncher input file\n"
   "    --tma            compute TMA (Forward Default Rate)\n"  
   "    --tmaa           compute TMAA (Cumulated Forward Default Rate)\n"
-  "    --survival       compute Survival Function (1-TMAA)\n"
+  "    --survival       Survival Function considered by ccruncher\n"
   "    --steplength=num number of months between rows (default 12)\n"
   "    --numrows=num    number of rows displayed (default 50)\n"
   "  options:\n"
   "    --help           show this message and exit\n"
   "    --version        show version and exit\n"
   "    --copyright      show copyright and exit\n"
+  "    -x               don't show copyright info\n"  
   "  return codes:\n"
   "    0                OK. finished without errors\n"
   "    1                KO. finished with errors\n"

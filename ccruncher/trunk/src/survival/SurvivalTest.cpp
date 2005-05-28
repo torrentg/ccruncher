@@ -203,7 +203,7 @@ void SurvivalTest::test5()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings, 5, (int *) imonths, (double**) mvalues, 7);
+  Survival sf(&ratings, 6, (int *) imonths, (double**) mvalues, 7);
 
   // checking values
   for(int i=0;i<9;i++)
