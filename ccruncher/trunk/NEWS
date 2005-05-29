@@ -12,6 +12,9 @@ version 0.3 (??? 2005)
   * new SegmentAggregator (simplified)
   * cc2gpi tool replaced by plotdata script
   * added time-to-default simulation method
+  * create script grapher for mtrans
+  * create script bin/rollversion.sh
+  * add repository version number (RXXXX) to --version options
 
 version 0.2 (April 2005)
 --------------------------

@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 #=============================================================
 # description: 
 #   Use this script to roll creditcruncher versions numbers
@@ -112,14 +111,14 @@ readconf() {
 #-------------------------------------------------------------
 replace() {
 
-  sed -e "$1" $2 > /temp/$progname.aux
+  sed -e "$1" $2 > /tmp/$progname.aux
 
   if [ $? != 0 ]; then
     echo "problems replacing file $2";
     retcode=`expr $retcode + 1`;
   else
-    mv $filetemp $filepath;
-    echo "$filepath updated";
+    cat /tmp/$progname.aux > $2;
+    echo "$2 updated";
   fi
 
 }
@@ -129,7 +128,7 @@ replace() {
 #-------------------------------------------------------------
 getPath() {
 
-  CCRUNCHERPATH=./;
+  CCRUNCHERPATH=.
 
   #TODO; retrieve path from directori script
 }
@@ -140,9 +139,11 @@ getPath() {
 getSvnVersion() {
 
   svnversion=R$(svnversion $CCRUNCHERPATH);
+
   if [ $? != 0 ]; then
-  echo "problems retrieving svnversion";
-  exit 1;
+    echo "problems retrieving svnversion";
+    exit 1;
+  fi
 
   #TODO; check that is a pure version (non exist ':' or 'M' or 'S')
 }
@@ -161,15 +162,16 @@ if [ "$csvn" = "true" ]; then
   getSvnVersion;
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
-  replace "s/SVNVERSION=\".*\"/SVNVERSION=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotdata
-  replace "s/SVNVERSION=\".*\"/SVNVERSION=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotdata
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
 fi
 
 if [ "$cver" = "true" ]; then
   replace "s/AC_INIT(ccruncher,\(.*\),\ *gerard@mail.generacio.com)/AC_INIT(ccruncher, $gloversion, gerard@mail.generacio.com)/g" $CCRUNCHERPATH/configure.in
-  replace "s/version=\"\(.*\)\"/version=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotdata
-  replace "s/version=\"\(.*\)\"/version=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotdata
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
   replace "s/VERSION=\"\(.*\)\"/VERSION=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedistbin.sh
+  echo "you need to run autoconf to take effect some changes";
 fi
 
 if [ $retcode != 0 ]; then

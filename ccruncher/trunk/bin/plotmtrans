@@ -29,8 +29,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=plotmtrans
-version="0.3"
-svnversion="RXXXX"
+numversion="0.3"
+svnversion="R113:152M"
 tplot=survival
 numrows=50
 steplength=12
@@ -42,7 +42,7 @@ retcode=0
 #-------------------------------------------------------------
 version() {
 
-  echo $progname-$version ($svnversion)
+  echo $progname-$numversion \($svnversion\)
 
 }
 

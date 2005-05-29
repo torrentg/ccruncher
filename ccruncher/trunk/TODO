@@ -10,9 +10,7 @@ Works in progress
   * working in scripts that generates report using LaTeX and gnuplot
   * working in CreditCruncher site content
   * upgrade to new tnt/jama version 
-  * add repository version number (RXXXX) to --version options
-  * create script grapher for mtrans
-  * create script bin/rollversion.sh
+
 
 Future works
 -------------------
