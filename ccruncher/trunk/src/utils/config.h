@@ -86,7 +86,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -135,3 +135,5 @@
 #ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif
+
+#define SVNVERSION "RXXXX"

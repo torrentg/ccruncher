@@ -301,7 +301,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
 //===========================================================================
 void version()
 {
-  cout << "mtrans-" << VERSION << endl;
+  cout << "mtrans-" << VERSION << " (" << SVNVERSION << ")"  << endl;
 }
 
 //===========================================================================

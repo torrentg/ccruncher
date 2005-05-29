@@ -29,7 +29,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=plotmtrans
-version=0.3
+version="0.3"
+svnversion="RXXXX"
 tplot=survival
 numrows=50
 steplength=12
@@ -41,7 +42,7 @@ retcode=0
 #-------------------------------------------------------------
 version() {
 
-  echo $progname-$version
+  echo $progname-$version ($svnversion)
 
 }
 
@@ -69,11 +70,11 @@ usage() {
   usage: $progname [options] <file>
 
   description:
-    $progname is a shell script to plot the output data files 
-    generates by ccruncher using gnuplot. more info at 
+    $progname is a shell script to plot the survival function
+    included in creditcurncher input data files. more info at 
     http://www.generacio.com/ccruncher
   arguments:
-    file     ccruncher output data file to plot
+    file     ccruncher xml input data file
   options
     -f       plot Forward Default Rate
     -c       plot Cumulative Formad Default Rate

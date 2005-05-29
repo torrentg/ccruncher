@@ -292,7 +292,7 @@ void setnice(int niceval) throw(Exception)
 //===========================================================================
 void version()
 {
-  cout << "ccruncher-" << VERSION << endl;
+  cout << "ccruncher-" << VERSION << " (" << SVNVERSION << ")" << endl;
 }
 
 //===========================================================================
