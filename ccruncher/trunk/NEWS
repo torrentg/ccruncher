@@ -15,6 +15,7 @@ version 0.3 (??? 2005)
   * create script grapher for mtrans
   * create script bin/rollversion.sh
   * add repository version number (RXXXX) to --version options
+  * upgraded to new tnt/jama version 
 
 version 0.2 (April 2005)
 --------------------------
