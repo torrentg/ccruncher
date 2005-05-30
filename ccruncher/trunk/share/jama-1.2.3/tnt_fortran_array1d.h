@@ -102,7 +102,7 @@ Fortran_Array1D<T>::Fortran_Array1D(const Fortran_Array1D<T> &A) : v_(A.v_),  n_
 template <class T>
 Fortran_Array1D<T>::Fortran_Array1D(int n) : v_(n), n_(n), data_(v_.begin())
 {
-#ifdef DEBUG
+#ifdef TNT_DEBUG
 	std::cout << "Created Fortran_Array1D(int n) \n";
 #endif
 }
@@ -120,7 +120,7 @@ Fortran_Array1D<T>::Fortran_Array1D(int n, const T &val) : v_(n), n_(n), data_(v
 template <class T>
 Fortran_Array1D<T>::Fortran_Array1D(int n, T *a) : v_(a), n_(n) , data_(v_.begin())
 {
-#ifdef DEBUG
+#ifdef TNT_DEBUG
 	std::cout << "Created Fortran_Array1D(int n, T* a) \n";
 #endif
 }

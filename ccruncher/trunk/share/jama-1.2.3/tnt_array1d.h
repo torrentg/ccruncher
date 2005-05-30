@@ -104,7 +104,7 @@ Array1D<T>::Array1D(const Array1D<T> &A) : v_(A.v_),  n_(A.n_),
 template <class T>
 Array1D<T>::Array1D(int n) : v_(n), n_(n), data_(v_.begin())
 {
-#ifdef DEBUG
+#ifdef TNT_DEBUG
 	std::cout << "Created Array1D(int n) \n";
 #endif
 }
@@ -122,7 +122,7 @@ Array1D<T>::Array1D(int n, const T &val) : v_(n), n_(n), data_(v_.begin())
 template <class T>
 Array1D<T>::Array1D(int n, T *a) : v_(a), n_(n) , data_(v_.begin())
 {
-#ifdef DEBUG
+#ifdef TNT_DEBUG
 	std::cout << "Created Array1D(int n, T* a) \n";
 #endif
 }
