@@ -6,26 +6,26 @@ CREDITCRUNCHER README
 Install expat package
 --------------------------------
 
-1. download package from http://expat.sourceforge.net/
-   and install it. Also you can install from a rpm package.
-   check that you have libexpat.so in a lib directory and
-   check that you have expat.h in an include directory
-
+1. check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://expat.sourceforge.net/ and install it. 
+   Also you can install from a rpm package.
+  
 
 Installation from source package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-0.2.tar.gz
-     tar -xvf ccruncher-0.2.tar
+     gunzip ccruncher-X.Y.tar.gz
+     tar -xvf ccruncher-X.Y.tar
 
 2. install expat package (explained before)
 
 3. execute commands (read INSTALL file):
-     cd ccruncher-0.2
+     cd ccruncher-X.Y
      ./configure --prefix=$PWD
      make
-     make check       (<- optional step)
      make install
 
 
@@ -33,8 +33,8 @@ Installation from binary package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-0.2_bin.tar.gz
-     tar -xvf ccruncher-0.2_bin.tar
+     gunzip ccruncher-X.Y_bin.tar.gz
+     tar -xvf ccruncher-X.Y_bin.tar
 
 2. install expat package (explained before)
 
@@ -46,13 +46,17 @@ Using CreditCruncher
 
 2. run CreditCruncher
      $CCRUNCHER/bin/ccruncher --help
-     $CCRUNCHER/bin/ccruncher --hash=100 -f -v --path=./data file.xml
+     $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
 3. process info using your prefered spreadsheet or use scripts to generate
    a report file created using TeX and gnuplot
-     $CCRUNCHER/bin/cc2gpi --help
-     $CCRUNCHER/bin/cc2gpi ./data/outputfile.out
-
+     $CCRUNCHER/bin/plotdata -h
+     $CCRUNCHER/bin/plotdata -p data/segmentation-segment.out
+     $CCRUNCHER/bin/plotdata -c data/segmentation-segment.out
+     $CCRUNCHER/bin/plotmtrans -h
+     $CCRUNCHER/bin/plotmtrans -f file.xml
+     $CCRUNCHER/bin/plotmtrans -c file.xml
+     $CCRUNCHER/bin/plotmtrans -s file.xml 
 
 Developers tips & tricks
 --------------------------------
