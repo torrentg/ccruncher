@@ -52,13 +52,12 @@ class File
 
   public:
 
-    static string normalizePath(string) throw(Exception);
-
+    static string normalizePath(const string &) throw(Exception);
     static string getWorkDir() throw(Exception);
-    static bool existDir(string);
-    static void makeDir(string) throw(Exception);
-
-    static void checkFile(string pathname, string smode) throw(Exception);
+    static bool existDir(const string &);
+    static void makeDir(const string &) throw(Exception);
+    static bool isAbsolutePath(const string &);
+    static void checkFile(const string &pathname, const string &smode) throw(Exception);
 
 };
 

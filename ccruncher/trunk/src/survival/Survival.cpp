@@ -316,7 +316,7 @@ void ccruncher::Survival::fillHoles()
         x1 = double(j);
         y1 = data[i][j];
         
-        for (int k=int(x0)+1;k<j;k++)
+        for (unsigned int k=(unsigned int)(x0)+1;k<j;k++)
         {
           data[i][k] = interpole(double(k), x0, y0, x1, y1);
         }
@@ -409,6 +409,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
 
     // error if value not found
     assert(false);
+	return 0;
   }
   else
   {

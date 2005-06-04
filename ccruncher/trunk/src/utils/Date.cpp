@@ -61,7 +61,7 @@ ccruncher::Date::Date(int d, int m, int y) throw(Exception)
 
   if (!valid())
   {
-    throw Exception("data::Date(int,int,int): invalid Date");
+    throw Exception("Date::Date(int,int,int): invalid Date");
   }
 }
 
@@ -75,7 +75,7 @@ ccruncher::Date::Date(const string &str) throw(Exception)
 
   if (tokens.size() != 3)
   {
-    throw Exception("data::Date(str): num tokens distinct 3");
+    throw Exception("Date::Date(str): num tokens distinct 3");
   }
 
   try
@@ -86,12 +86,12 @@ ccruncher::Date::Date(const string &str) throw(Exception)
   }
   catch(Exception &e)
   {
-    throw Exception(e, "data::Date(str): invalid day or month or year");
+    throw Exception(e, "Date::Date(str): invalid day or month or year");
   }
 
   if (!valid())
   {
-    throw Exception("data::Date(str): invalid Date");
+    throw Exception("Date::Date(str): invalid Date");
   }
 }
 
@@ -106,7 +106,7 @@ ccruncher::Date::Date(const long date) throw(Exception)
 
   if (!valid())
   {
-    throw Exception("data::Date(long): invalid Date");
+	  throw Exception("Date::Date(long): invalid Date (" + Parser::long2string(date) + ")");
   }
 }
 

@@ -11,6 +11,14 @@
 #define isnan _isnan
 
 // ======================================================
+// patch against round() function
+// ======================================================
+inline double round( double d ) 
+{ 
+  return floor( d + 0.5 ); 
+}
+
+// ======================================================
 // patch against getopt problem
 // properties->configuration properties->C/C++->
 // preprocessor->preprocessor definitions (add BUILD_GETOPT)
@@ -46,6 +54,7 @@
 #pragma warning( disable : 4101 ) 
 #pragma warning( disable : 4146 ) 
 #pragma warning( disable : 4267 ) 
+#pragma warning( disable : 4700 ) 
 #pragma warning( disable : 4800 ) 
 
 #endif

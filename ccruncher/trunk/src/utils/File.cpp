@@ -32,6 +32,7 @@
 #ifndef _MSC_VER
 #include <unistd.h>
 #include <dirent.h>
+#include <locale>
 #endif
 #include <cstdio>
 #include <cerrno>
@@ -45,6 +46,40 @@
 #else
   #define PATHSEPARATOR string("/")
 #endif
+
+//===========================================================================
+// getWorkDirectory
+//===========================================================================
+bool ccruncher::File::isAbsolutePath(const string &str)
+{
+  if (str.size() <= 0) {
+    return false;
+  }
+
+#ifdef _MSC_VER
+  // windows style path
+  if (str.substr(0,1) == PATHSEPARATOR) {
+    return true;
+  }
+  else if (str.substr(0,2) == PATHSEPARATOR+PATHSEPARATOR) {
+    return true;
+  }
+  else if (isalpha(str.substr(0,1).c_str()[0]) && str.substr(1,1) == PATHSEPARATOR) {
+    return true;
+  }
+  else {
+    return false;
+  }
+#else
+  // unix style path 
+  if (str.substr(0,1) == PATHSEPARATOR) {
+    return true;
+  }
+  else {
+    return false;
+  }
+#endif
+}
 
 //===========================================================================
 // getWorkDirectory
@@ -63,7 +98,14 @@ string ccruncher::File::getWorkDir() throw(Exception)
     }
     else
     {
-      return normalizePath(string(ret));
+      string aux = string(ret);
+
+      // appending '/' at last position
+      if (aux.substr(aux.length()-1, 1) != PATHSEPARATOR) {
+        aux = aux + PATHSEPARATOR;
+      }
+
+      return aux;
     }
   }
   catch(...)
@@ -76,7 +118,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
 // normalizePath
 // input=./dir1/dir2 -> output=/workdir/dir1/dir2/
 //===========================================================================
-string ccruncher::File::normalizePath(string path) throw(Exception)
+string ccruncher::File::normalizePath(const string &path) throw(Exception)
 {
   string ret = path;
 
@@ -85,7 +127,7 @@ string ccruncher::File::normalizePath(string path) throw(Exception)
     throw Exception("File::normalizePath(): non valid path (void)");
   }
 
-  if (ret.substr(0,1) != "." && ret.substr(0,1) != PATHSEPARATOR)
+  if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
   {
     ret = "." + PATHSEPARATOR + ret;
   }
@@ -116,7 +158,7 @@ string ccruncher::File::normalizePath(string path) throw(Exception)
 //===========================================================================
 // existDir
 //===========================================================================
-bool ccruncher::File::existDir(string dirname)
+bool ccruncher::File::existDir(const string &dirname)
 {
   DIR *tmp;
 
@@ -147,7 +189,7 @@ bool ccruncher::File::existDir(string dirname)
 //===========================================================================
 // makeDir
 //===========================================================================
-void ccruncher::File::makeDir(string dirname) throw(Exception)
+void ccruncher::File::makeDir(const string &dirname) throw(Exception)
 {
   int aux;
 
@@ -178,7 +220,7 @@ void ccruncher::File::makeDir(string dirname) throw(Exception)
 // checkFile
 // allowed modes: r, w, rw
 //===========================================================================
-void ccruncher::File::checkFile(string pathname, string smode) throw(Exception)
+void ccruncher::File::checkFile(const string &pathname, const string &smode) throw(Exception)
 {
   int aux;
   int mode = 0;

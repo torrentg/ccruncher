@@ -20,10 +20,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.2&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;share;src"
+				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.3&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;share;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="1"
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -76,7 +76,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.2&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;share;src"
+				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.3&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;share;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
@@ -319,6 +319,12 @@
 				Name="utils"
 				Filter="">
 				<File
+					RelativePath="src\utils\Arrays.cpp">
+				</File>
+				<File
+					RelativePath="src\utils\Arrays.hpp">
+				</File>
+				<File
 					RelativePath="src\utils\config.h">
 				</File>
 				<File
@@ -370,22 +376,16 @@
 					RelativePath="src\utils\Parser.hpp">
 				</File>
 				<File
-					RelativePath="src\utils\Timer.cpp">
-				</File>
-				<File
-					RelativePath="src\utils\Timer.hpp">
-				</File>
-				<File
-					RelativePath="src\utils\Arrays.cpp">
-				</File>
-				<File
-					RelativePath="src\utils\Arrays.hpp">
-				</File>
-				<File
 					RelativePath="src\utils\Strings.cpp">
 				</File>
 				<File
 					RelativePath="src\utils\Strings.hpp">
+				</File>
+				<File
+					RelativePath="src\utils\Timer.cpp">
+				</File>
+				<File
+					RelativePath="src\utils\Timer.hpp">
 				</File>
 			</Filter>
 			<Filter
@@ -408,6 +408,16 @@
 				</File>
 				<File
 					RelativePath="src\win32\winconfig.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="survival"
+				Filter="">
+				<File
+					RelativePath=".\src\survival\Survival.cpp">
+				</File>
+				<File
+					RelativePath=".\src\survival\Survival.hpp">
 				</File>
 			</Filter>
 		</Filter>
