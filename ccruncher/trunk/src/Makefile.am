@@ -123,7 +123,8 @@ ccruncher_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
-ccruncher_LDADD = -lm -lexpat
+ccruncher_LDADD = -lm -lexpat 
+ccruncher_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # generator
@@ -205,6 +206,7 @@ generator_SOURCES = \
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDADD = -lm -lexpat
+generator_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # mtrans
@@ -284,6 +286,7 @@ mtrans_SOURCES = \
 
 mtrans_CXXFLAGS = -Wall -W -Wshadow
 mtrans_LDADD = -lm -lexpat
+mtrans_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # tests
@@ -420,3 +423,4 @@ tests_SOURCES = \
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDADD = -lm -lexpat
+tests_LDFLAGS = -rdynamic

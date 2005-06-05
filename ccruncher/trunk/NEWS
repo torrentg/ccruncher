@@ -17,6 +17,8 @@ version 0.3 (??? 2005)
   * add repository version number (RXXXX) to --version options
   * upgraded to new tnt/jama version 
   * www site content reviewed & updated
+  * created MSVC7 project (and code companion)
+  * when a error raise, prints stack trace (only in linux)
 
 version 0.2 (April 2005)
 --------------------------

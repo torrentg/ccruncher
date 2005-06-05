@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getStackTrace() method (link with -rdynamic flag)
+//
 //===========================================================================
 
 #ifndef _Exception_
@@ -47,14 +50,21 @@ namespace ccruncher {
 class Exception : public std::exception
 {
 
+  private:
+
+    std::string retrieveStackTrace();
+
   protected:
 
+    std::string stacktrace;
     std::string msg;
 
   public:
 
     Exception(const std::string&);
+    Exception(const ccruncher::Exception &);
     Exception(const std::exception &);
+    Exception(const ccruncher::Exception &, const std::string&);
     Exception(const std::exception &, const std::string&);
     Exception(char *);
 
@@ -62,6 +72,7 @@ class Exception : public std::exception
 
     const char * what() const throw();
     std::string toString() const;
+    std::string getStackTrace() const;
 
 };
 
