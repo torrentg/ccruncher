@@ -19,7 +19,7 @@
 #-------------------------------------------------------------
 # variables declaration
 #-------------------------------------------------------------
-progname=rollversion
+progname=rollversion.sh
 gloversion=X.X
 retcode=0
 cver=false
@@ -34,9 +34,9 @@ usage() {
   usage: $progname [options] <file>
 
   description:
-    $progname is a shell script to plot the output data files 
-    generates by ccruncher using gnuplot. more info at 
-    http://www.generacio.com/ccruncher
+    $progname is a shell script to roll version numbers in
+    CreditCruncher project. This script is only used by 
+    developers.
   options
     -s       update svnversion tag
     -g num   update global version identifier
@@ -178,5 +178,7 @@ if [ $retcode != 0 ]; then
   echo "";
   echo "panic: retrieve version from repository now!";
 fi
+
+#TODO: add version changes in HTML's
 
 exit $retcode;

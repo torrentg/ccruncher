@@ -8,20 +8,14 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = src
 
-EXTRA_DIST = COPYING AUTHORS README INSTALL TODO NEWS\
-             bin\plotdata share samples data
+EXTRA_DIST = COPYING AUTHORS README INSTALL TODO NEWS \
+             bin share samples data doc
 
 install-hook:
 	echo "setting executable flag to scripts ..."
-	chmod +x `find $(distdir) -name \*\.sh`
+	chmod +x $(distdir)/bin/*
 
 dist-hook:
 	echo "dropping subversion stuff ..."
 	rm -rf `find $(distdir) -name \.svn`
-	echo "setting executable flag to scripts ..."
-	chmod +x `find $(distdir) -name \*\.sh`
 
-check-hook:
-	echo "running tests ..."
-	$(distdir)/tests
-	
