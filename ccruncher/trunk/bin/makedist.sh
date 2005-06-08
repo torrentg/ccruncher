@@ -158,16 +158,17 @@ makeSrcDist() {
   workpath=$PACKAGE-$numversion
   
   # obtaining a clean environement
+  chmod -R +w $workpath 2> /dev/null;
   rm -rvf $workpath;
   checkout $workpath;
-  checkVersion $workpath;
-  rmDevFile $workpath;
+  #checkVersion $workpath;
+  rmDevFiles $workpath;
   cd $workpath;
   
   # creating tarball
   aclocal;
   autoconf;
-  automake -a -v -c -f;
+  automake -avcf --include-deps --warnings=all
   ./configure --prefix=$PWD;
   make distcheck;
 
