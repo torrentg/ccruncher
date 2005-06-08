@@ -166,15 +166,18 @@ makeSrcDist() {
   cd $workpath;
   
   # creating tarball
-  aclocal;
-  autoconf;
-  automake -avcf --include-deps --warnings=all
+  cp /usr/share/automake-1.9/depcomp ./
+  aclocal --force --verbose;
+  autoconf -f -v;
+  automake -avcf --include-deps --warnings=all;
   ./configure --prefix=$PWD;
   make distcheck;
 
   # cleaning   
-  mv $PACKAGE-$numversion.tar.gz ../$PACKAGE-$numversion_src.tar.gz;
-  rm -rvf $PACKAGE-$numversion;
+  mv $PACKAGE-$numversion.tar.gz ../$PACKAGE-${numversion}_src.tar.gz;
+  cd ..;
+  chmod -R +w $workpath;
+  rm -rvf $workpath;
 
 }
 
@@ -183,7 +186,19 @@ makeSrcDist() {
 # -------------------------------------------------------------
 makeBinDist() {
 
+  # local variables
+  workpath=$PACKAGE-$numversion
+  
+  # obtaining a clean environement
+  chmod -R +w $workpath 2> /dev/null;
+  rm -rvf $workpath;
+  checkout $workpath;
+  #checkVersion $workpath;
+  rmDevFiles $workpath;
+  cd $workpath;
+
   #creating binaries
+  cp /usr/share/automake-1.9/depcomp ./
   aclocal;
   autoconf;
   automake -a -v -c -f;
@@ -205,10 +220,10 @@ makeBinDist() {
   
   #creating tarball
   cd ..;
-  tar -cvf $PACKAGE-$numversion_bin.tar $PACKAGE-$numversion;
-  gzip $PACKAGE-$numversion_bin.tar;
-  chmod -R +w $PACKAGE-$numversion;
-  rm -rvf $PACKAGE-$numversion;
+  tar -cvf $PACKAGE-${numversion}_bin.tar $workpath;
+  gzip $PACKAGE-${numversion}_bin.tar;
+  chmod -R +w $workpath;
+  rm -rvf $workpath;
   
 }
 
