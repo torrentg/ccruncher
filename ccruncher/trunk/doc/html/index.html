@@ -5,6 +5,23 @@
     <title>CreditCruncher</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <script language="JavaScript">
+      /**
+       * this function is defined due to this page can be viewed
+       * from a site (pe. http://www.generacio.com/ccruncher/ or
+       * as a local file
+       */
+      function getPdfPath()
+      {
+        if (window.location.protocol == "http:") {
+          window.location.replace("ccruncher.pdf");
+        }
+        else {
+          window.location.replace("../ccruncher.pdf");
+        }
+      }
+    </script>
+
   </head>
 
   <body>
@@ -32,8 +49,8 @@
       <tr>
         <td>
           <ul>
-            <li class="none"><a href="ccruncher.pdf">Technical Document</a>
-              <a href="ccruncher.pdf"><img src="pdf.gif" alt="pdf icon" /></a>
+            <li class="none"><a href="javascript:getPdfPath();">Technical Document</a>
+              <a href="javascript:getPdfPath();"><img src="pdf.gif" alt="pdf icon" /></a>
             </li>
             <li class="none"><a href="ifileref.html">Input File Reference</a></li>
             <li class="none"><a href="screenshots.html">Screen Shots</a></li>
