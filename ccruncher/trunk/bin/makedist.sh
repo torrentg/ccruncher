@@ -20,7 +20,7 @@
 #-------------------------------------------------------------
 progname=makedist.sh
 numversion="0.3"
-svnversion="R157:162M"
+svnversion="R163"
 disttype="src"
 PACKAGE="ccruncher"
 pathexes=""
