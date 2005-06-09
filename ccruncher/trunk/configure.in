@@ -11,7 +11,7 @@ AC_PREREQ(2.59)
 AC_INIT(ccruncher, 0.3, gerard@mail.generacio.com)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
-AM_INIT_AUTOMAKE(1.6.1)
+AM_INIT_AUTOMAKE
 
 dnl -------------------------------------------------------------
 dnl rebuild makefile prevention 

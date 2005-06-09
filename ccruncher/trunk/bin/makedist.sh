@@ -24,6 +24,7 @@ svnversion="R163"
 disttype="src"
 PACKAGE="ccruncher"
 pathexes=""
+retcode=0
 
 #-------------------------------------------------------------
 # usage function
@@ -167,17 +168,17 @@ makeSrcDist() {
   
   # creating tarball
   cp /usr/share/automake-1.9/depcomp ./
-  aclocal --force --verbose;
-  autoconf -f -v;
-  automake -avcf --include-deps --warnings=all;
-  ./configure --prefix=$PWD;
+  aclocal;
+  autoconf;
+  automake -avcf;
+  ./configure;
   make distcheck;
 
   # cleaning   
-  mv $PACKAGE-$numversion.tar.gz ../$PACKAGE-${numversion}_src.tar.gz;
-  cd ..;
-  chmod -R +w $workpath;
-  rm -rvf $workpath;
+#  mv $PACKAGE-$numversion.tar.gz ../$PACKAGE-${numversion}_src.tar.gz;
+#  cd ..;
+#  chmod -R +w $workpath;
+#  rm -rvf $workpath;
 
 }
 
@@ -254,14 +255,13 @@ case $disttype in
 
 esac
 
-if [ $retcode != 0 ]; then
-  echo "finished with problems";
-else
+if [ $retcode = 0 ]; then
   echo "done!";
+else
+  echo "finished with problems";
 fi
 
 exit $retcode;
-
 
 # -------------------------------------------------------------
 # creating binaries
