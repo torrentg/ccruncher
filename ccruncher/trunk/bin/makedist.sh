@@ -176,7 +176,7 @@ makeSrcDist() {
   make distcheck;
 
   # cleaning   
-  mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tar.gz;
+  mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
   cd $currpath;
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
@@ -190,7 +190,7 @@ makeBinDist() {
 
   # local variables
   currpath=$(pwd);
-  workpath=/tmp/$PACKAGE-${numversion}_bin
+  workpath=/tmp/$PACKAGE-${numversion}
   
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
@@ -221,9 +221,10 @@ makeBinDist() {
   rm -rvf share;
   
   #creating tarball
+  cd /tmp/;
+  tar -cvzf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
+  mv $PACKAGE-${numversion}_bin.tgz $currpath;
   cd $currpath;
-  tar -cvf $PACKAGE-${numversion}_bin.tar $workpath;
-  gzip $PACKAGE-${numversion}_bin.tar;
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   
@@ -233,7 +234,45 @@ makeBinDist() {
 # make win dist
 # -------------------------------------------------------------
 makeWinDist() {
-   echo "implementation pending";
+
+  # local variables
+  currpath=$(pwd);
+  workpath=/tmp/$PACKAGE-${numversion}
+  
+  # obtaining a clean environement
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
+  checkout $workpath;
+  #checkVersion $workpath;
+  rmDevFiles $workpath;
+  cd $workpath;
+
+  #creating binaries
+  cp $pathexes/ccruncher.exe bin/
+  cp $pathexes/libexpat.dll bin/
+
+  #dropping unused files
+  rm bin/plotdata
+  rm bin/plotmtrans
+  rm ccruncher.sln
+  rm ccruncher.vcproj
+  rm aclocal.m4;
+  rm -rvf autom4te.cache;
+  rm config*;
+  rm Makefile*;
+  rm depcomp install-sh missing;
+  rm INSTALL;
+  rm -rvf src;
+  rm -rvf share;
+
+  #creating tarball
+  cd /tmp/;
+  zip -r  $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
+  mv $PACKAGE-${numversion}_win.zip $currpath;
+  cd $currpath;
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
+
 }
 
 #-------------------------------------------------------------

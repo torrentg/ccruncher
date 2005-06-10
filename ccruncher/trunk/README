@@ -17,8 +17,7 @@ Installation from source package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-X.Y.tar.gz
-     tar -xvf ccruncher-X.Y.tar
+     tar -xvzf ccruncher-X.Y_src.tgz
 
 2. install expat package (explained before)
 
@@ -33,8 +32,7 @@ Installation from binary package
 --------------------------------
 
 1. uncompress package
-     gunzip ccruncher-X.Y_bin.tar.gz
-     tar -xvf ccruncher-X.Y_bin.tar
+     tar -xvzf ccruncher-X.Y_bin.tgz
 
 2. install expat package (explained before)
 
