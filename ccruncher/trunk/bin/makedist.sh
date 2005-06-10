@@ -156,13 +156,15 @@ rmDevFiles() {
 makeSrcDist() {
 
   # local variables
-  workpath=$PACKAGE-$numversion
+  currpath=$(pwd);
+  # automake don't add missing files if a parent dir content them
+  workpath=/tmp/$PACKAGE-aux
   
   # obtaining a clean environement
   chmod -R +w $workpath 2> /dev/null;
   rm -rvf $workpath;
   checkout $workpath;
-  #checkVersion $workpath;
+#  checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
   
@@ -171,14 +173,14 @@ makeSrcDist() {
   aclocal;
   autoconf;
   automake -avcf;
-  ./configure;
+  ./configure --prefix=$PWD;
   make distcheck;
 
   # cleaning   
-#  mv $PACKAGE-$numversion.tar.gz ../$PACKAGE-${numversion}_src.tar.gz;
-#  cd ..;
-#  chmod -R +w $workpath;
-#  rm -rvf $workpath;
+  mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tar.gz;
+  cd $currpath;
+  chmod -R +w $workpath;
+  rm -rvf $workpath;
 
 }
 
@@ -202,8 +204,8 @@ makeBinDist() {
   cp /usr/share/automake-1.9/depcomp ./
   aclocal;
   autoconf;
-  automake -a -v -c -f;
-  ./configure --prefix=$PWD;
+  automake -avcf;
+  ./configure;
   make;
   make install;
 
