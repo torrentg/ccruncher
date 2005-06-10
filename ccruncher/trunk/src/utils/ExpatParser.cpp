@@ -25,6 +25,9 @@
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added characterData method
+//
 //===========================================================================
 
 #include <cassert>
@@ -53,6 +56,9 @@ ccruncher::ExpatParser::ExpatParser()
 
   // setting element handlers
   XML_SetElementHandler(xmlparser, startElement, endElement);
+
+  // setting characterdata handler
+  XML_SetCharacterDataHandler(xmlparser, characterData);
 }
 
 //===========================================================================
@@ -97,6 +103,29 @@ void XMLCALL ccruncher::ExpatParser::endElement(void *ud_, const char *name)
     eh = ud->getCurrentHandlers();
     // notify that children finished
     eh->epend(*ud, name);
+  }
+}
+
+//===========================================================================
+// characterData
+//===========================================================================
+void XMLCALL ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
+{
+  // simple rule: character data is not allowed
+  for(int i=0;i<len;i++) 
+  {
+    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t') 
+    {
+      ExpatUserData *ud = (ExpatUserData *) ud_;
+      XML_Parser xmlparser = ud->getParser();
+      char buf[256];
+
+      sprintf(buf, "unexpected text at line %d and column %d", 
+               XML_GetCurrentLineNumber(xmlparser),
+               XML_GetCurrentColumnNumber(xmlparser));
+
+      throw Exception(string(buf));
+    }
   }
 }
 

@@ -30,7 +30,7 @@
 #-------------------------------------------------------------
 progname=plotdata
 numversion="0.3"
-svnversion="R163"
+svnversion="R168:169M"
 tplot=pdf
 numrows=0
 numbins=100

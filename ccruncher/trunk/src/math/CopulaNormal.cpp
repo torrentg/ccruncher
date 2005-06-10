@@ -81,7 +81,7 @@ void ccruncher::CopulaNormal::finalize()
 //===========================================================================
 // constructor de copia
 //===========================================================================
-ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception)
+ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception) : Copula()
 {
   init();
   n = x.n;

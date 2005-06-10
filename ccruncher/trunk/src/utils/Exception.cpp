@@ -120,7 +120,7 @@ ostream & ccruncher::operator << (ostream& os, Exception const &e)
   return os;
 }
 
-#if defined(__linux__)
+#if defined(__linux__) && ( ! defined(NDEBUG) )
 #include <execinfo.h>    // Needed for backtrace
 #include <cxxabi.h>      // Needed for __cxa_demangle
 #include <unistd.h>

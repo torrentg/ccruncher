@@ -20,7 +20,7 @@
 #-------------------------------------------------------------
 progname=makedist.sh
 numversion="0.3"
-svnversion="R163"
+svnversion="R168:169M"
 disttype="src"
 PACKAGE="ccruncher"
 pathexes=""
@@ -158,18 +158,17 @@ makeSrcDist() {
   # local variables
   currpath=$(pwd);
   # automake don't add missing files if a parent dir content them
-  workpath=/tmp/$PACKAGE-aux
+  workpath=/tmp/$PACKAGE-${numversion}_src
   
   # obtaining a clean environement
-  chmod -R +w $workpath 2> /dev/null;
-  rm -rvf $workpath;
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
 #  checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
   
   # creating tarball
-  cp /usr/share/automake-1.9/depcomp ./
   aclocal;
   autoconf;
   automake -avcf;
@@ -179,8 +178,8 @@ makeSrcDist() {
   # cleaning   
   mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tar.gz;
   cd $currpath;
-  chmod -R +w $workpath;
-  rm -rvf $workpath;
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
 
 }
 
@@ -190,22 +189,22 @@ makeSrcDist() {
 makeBinDist() {
 
   # local variables
-  workpath=$PACKAGE-$numversion
+  currpath=$(pwd);
+  workpath=/tmp/$PACKAGE-${numversion}_bin
   
   # obtaining a clean environement
-  chmod -R +w $workpath 2> /dev/null;
-  rm -rvf $workpath;
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
   #checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
   #creating binaries
-  cp /usr/share/automake-1.9/depcomp ./
   aclocal;
   autoconf;
   automake -avcf;
-  ./configure;
+  ./configure --prefix=$PWD;
   make;
   make install;
 
@@ -222,11 +221,11 @@ makeBinDist() {
   rm -rvf share;
   
   #creating tarball
-  cd ..;
+  cd $currpath;
   tar -cvf $PACKAGE-${numversion}_bin.tar $workpath;
   gzip $PACKAGE-${numversion}_bin.tar;
-  chmod -R +w $workpath;
-  rm -rvf $workpath;
+  chmod -R +w $workpath > /dev/null 2> /dev/null;
+  rm -rvf $workpath > /dev/null 2> /dev/null;
   
 }
 

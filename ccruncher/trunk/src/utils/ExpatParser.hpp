@@ -25,6 +25,9 @@
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added characterData method
+//
 //===========================================================================
 
 #ifndef _ExpatParser_
@@ -63,6 +66,8 @@ class ExpatParser
     /** endElement function catcher */
     static void XMLCALL endElement(void *ud, const char *name);
 
+    /** characterData Handler function */
+    static void XMLCALL characterData(void *ud, const char *s, int len) throw(Exception);
 
   public:
 

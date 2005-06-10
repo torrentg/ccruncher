@@ -30,7 +30,7 @@
 #-------------------------------------------------------------
 progname=plotmtrans
 numversion="0.3"
-svnversion="R163"
+svnversion="R168:169M"
 tplot=survival
 numrows=50
 steplength=12
