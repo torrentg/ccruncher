@@ -265,6 +265,15 @@ makeWinDist() {
   rm -rvf src;
   rm -rvf share;
 
+  #setting windows end-line
+  unix2dos AUTHORS;
+  unix2dos README;
+  unix2dos TODO;
+  unix2dos COPYING;
+  unix2dos NEWS;
+  unix2dos samples/*.xml;
+  unix2dos samples/*.dtd;
+
   #creating tarball
   cd /tmp/;
   zip -r  $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
