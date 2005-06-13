@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . minor changes
+//
 //===========================================================================
 
 #include <cmath>
@@ -47,26 +50,26 @@ using namespace JAMA;
 // the difference with std::pow is that allow negatives x
 // example: std::pow(-8.0, 1/3)=nan, PowMatrixx::pow(-8.0, 1/3)=-2
 //===========================================================================
-double PowMatrix::pow(double x, double y) throw(Exception)
+double ccruncher::PowMatrix::pow(double x, double y) throw(Exception)
 {
   if (x >= 0.0)
   {
-    return ::pow(x, y);
+    return std::pow(x, y);
   }
   else
   {
-    if (::fabs(y) < EPSILON)
+    if (std::fabs(y) < EPSILON)
     {
        return 1.0; // x^0 = 0
     }
     else
     {
-      double z = (::fabs(y)>(1.0-EPSILON) ? y : 1.0/y);
+      double z = (std::fabs(y)>(1.0-EPSILON) ? y : 1.0/y);
       int aux = (int) z;
 
       if (((double) aux - z) < EPSILON)
       {
-        return -::pow(-x, y);
+        return -std::pow(-x, y);
       }
       else
       {
@@ -77,9 +80,7 @@ double PowMatrix::pow(double x, double y) throw(Exception)
 }
 
 //===========================================================================
-// retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
-// atencio: nomes dimensions petites (pe. n < 100)
-// atencio: Exception si VAPS imaginaris
+// given a matrix, returns the inverse
 //===========================================================================
 Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exception)
 {
@@ -97,7 +98,7 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
 
     return lu.solve(Id);
   }
-  catch(::exception &e)
+  catch(std::exception &e)
   {
     throw Exception(e, "PowMatrix::inverse(): unable to inverse matrix");
   }
@@ -108,24 +109,24 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
 }
 
 //===========================================================================
-// retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
-// atencio: nomes dimensions petites (pe. n < 100)
-// atencio: Exception si VAPS imaginaris
+// retorna ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
+// atencio: use with low dimensions (pe. n < 100)
+// atencio: Exception if complex eigenvalues
 //===========================================================================
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {
   try
   {
-    // vector auxiliar
+    // auxiliar vector
     TNT::Array1D<double> V = TNT::Array1D<double>(n);
-    // declarem la matriu
+    // matrix declaration
     TNT::Array2D<double> M = TNT::Array2D<double>(n, n);
-    // VAPS
+    // eigenvalues
     TNT::Array2D<double> VAPS = TNT::Array2D<double>(n, n);
-    // VEPS
+    // eigenvectors
     TNT::Array2D<double> VEPS = TNT::Array2D<double>(n, n);
 
-    // omplim la matriu original
+    // filling matrix
     for(int i=0;i<n;i++)
     {
       for(int j=0;j<n;j++)
@@ -134,10 +135,10 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
       }
     }
 
-    // diagonalitzacio de la matriu (obtencio de VAPS i VEPS)
+    // computing eigenvalues and eigenvectors
     JAMA::Eigenvalue<double> eigen = JAMA::Eigenvalue<double>(M);
 
-    // comprovem que no existeix part imaginaria
+    // checking that eigenvalues aren't complex
     eigen.getImagEigenvalues(V);
     double sum = 0.0;
     for(int i=0;i<n;i++)
@@ -149,30 +150,23 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
       throw Exception("PowMatrix::pow(): imag eigenvalues");
     }
 
-    // recollim els VAPS i VEPS
+    // retrieving eigenvalues and eigenvectors
     eigen.getD(VAPS);
     eigen.getV(VEPS);
 
-    // elevem la diagonal a x
+    // raising diagonal to the power of x
     for(int i=0;i<n;i++)
     {
-       if (VAPS[i][i] < EPSILON)
-       {
-         VAPS[i][i] = -::pow(::fabs(VAPS[i][i]), x);
-       }
-       else
-       {
-         VAPS[i][i] = pow(VAPS[i][i], x);
-       }
+       VAPS[i][i] = ccruncher::PowMatrix::pow(VAPS[i][i], x);
     }
 
-    // trobem la inversa de VEPS
+    // finding eigenvecrtors inverse
     TNT::Array2D<double> SPEV = inverse(VEPS);
 
-    // calculem la matriu^x
+    // computing a^x
     TNT::Array2D<double> K = matmult(matmult(VEPS, VAPS), SPEV);
 
-    // recollim i sortim
+    // taking values and exit 
     for(int i=0;i<n;i++)
     {
       for(int j=0;j<n;j++)
@@ -185,7 +179,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   {
     throw e;
   }
-  catch(::exception &e)
+  catch(std::exception &e)
   {
     throw Exception(e, "PowMatrix::pow(): unable to pow matrix");
   }
