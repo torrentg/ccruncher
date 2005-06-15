@@ -84,7 +84,7 @@ C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 \end{displaymath}
 
 \paragraph{Teorema.} Toda variable aleatoria $n$-dimensional puede separarse 
-en las distribuciones seguidas por sus componentes, las distribuciones marginales,
+en las distribuciones seguidas por sus componentes (las distribuciones marginales)
 y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y 
 $f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
 c\'opula $C$ tq.
@@ -222,12 +222,12 @@ I(t) = \left\{
 \right.
 \end{displaymath}
 
-\paragraph{Definici\'on.} Definimos la funci\'on indicador de fallido en 
-tiempo $t$ de la forma siguiente:
+\paragraph{Definici\'on.} Definimos la funci\'on indicador de actividad de la 
+forma siguiente:
 \begin{displaymath}
 J(t) = \left\{
 \begin{array}{ll}
-0 & \textrm{ if client has defaulted at time } t_k \leq t\cr
+0 & \textrm{ if client is defaulted at time } t\cr
 1 & \textrm{ otherwise}
 \end{array}
 \right.
@@ -257,14 +257,14 @@ X_{i,j}(t) = \sum_{t_k=t_0}^{t} & \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,t_0,
 \end{array}
 \end{displaymath}
 
-\paragraph{Observaci\'on.} Conocidas las características de un activo y 
+\paragraph{Observaci\'on.} Conocidas las caracter\'isticas de un activo y 
 la curba spot, el valor de un activo en tiempo $t_k$ solamente depende de 
 la funci\'on $I(t)$. Equivalentemente, solo depende del momento en que el
 cliente hace fallido.
 
 \paragraph{Definici\'on.} Definimos el valor de la cartera en tiempo $t$ como:
 \begin{displaymath}
-Z(T) = \sum_{i=0}^{nc} Y_i(T) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(T)
+Z(t) = \sum_{i=0}^{nc} Y_i(t) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t)
 \end{displaymath}
 
 \paragraph{Observaci\'on.} El valor de la cartera solamente depende de 

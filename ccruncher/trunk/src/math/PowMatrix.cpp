@@ -60,7 +60,7 @@ double ccruncher::PowMatrix::pow(double x, double y) throw(Exception)
   {
     if (std::fabs(y) < EPSILON)
     {
-       return 1.0; // x^0 = 0
+       return 1.0; // x^0 = 1
     }
     else
     {
@@ -160,7 +160,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
        VAPS[i][i] = ccruncher::PowMatrix::pow(VAPS[i][i], x);
     }
 
-    // finding eigenvecrtors inverse
+    // finding eigenvectors inverse
     TNT::Array2D<double> SPEV = inverse(VEPS);
 
     // computing a^x
