@@ -370,7 +370,7 @@
         <td style="text-align:center;">epsilon</td>
         <td style="text-align:justify;">
           Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near to 0 like 1E-12.
+          It must be a value near to 0 like 1E-12. This attribute is optional.
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
@@ -404,6 +404,102 @@
         <td style="text-align:center;">value</td>
         <td style="text-align:justify;">
           Probability for rating migration (a value between 0 and 1)
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    survival section                                  -->
+<!-- ==================================================== -->
+
+    <h3>Section Survival Function</h3>
+
+    <p>
+      This section contains the survival function for each rating. Survival 
+      function is used when the simulation method (property montecarlo.method)
+      is set to time-to-default. In this case, if this section is non informed,
+      the survival function will be computed using transition matrix.
+      You don't need to fill all time values. Survival function is monotone 
+      decreasing and has a value of 1 when time is 0 for all ratings distincts 
+      than default. The survival function of default rating is always 0.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+
+  &lt;survival maxmonths="2500" epsilon="1e-12"&gt;
+    &lt;svalue rating="A" t="0" value="1.0"/&gt;
+    &lt;svalue rating="B" t="0" value="1.0"/&gt;
+    &lt;svalue rating="C" t="0" value="1.0"/&gt;
+    &lt;svalue rating="D" t="0" value="1.0"/&gt;
+    &lt;svalue rating="E" t="0" value="0.0"/&gt;
+
+    &lt;svalue rating="A" t="6" value="0.999621298"/&gt;
+    &lt;svalue rating="B" t="6" value="0.925452791"/&gt;
+    &lt;svalue rating="C" t="6" value="0.879896024"/&gt;
+    &lt;svalue rating="D" t="6" value="0.789845972"/&gt;
+    &lt;svalue rating="E" t="6" value="0.0"/&gt;
+    ...
+  &lt;/survival&gt;
+    </pre>
+
+    <h4>Survival Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">maxmonths</td>
+        <td style="text-align:justify;">
+          Number of months where is considered that survival function is 0
+          for all ratings. Set a high value (pe. 6000).
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">epsilon</td>
+        <td style="text-align:justify;">
+          Value used as threshold to determine if a value is equal to 0.0 or not. 
+          It must be a value near to 0 like 1E-12. This attribute is optional.
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+    <h4>Svalue Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">rating</td>
+        <td style="text-align:justify;">
+         This value must be a rating identifier (see name attribute in the 
+         rating tag)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">t</td>
+        <td style="text-align:justify;">
+          Time (in months) from begin date.
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">value</td>
+        <td style="text-align:justify;">
+          Probability that a client with initial rating <i>rating</i> 
+          survives (non-defaulted) at time <i>t</i>. It is a value between 
+          0 and 1.
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
@@ -498,7 +594,7 @@
         <td style="text-align:center;">epsilon</td>
         <td style="text-align:justify;">
           Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near to 0 like 1E-12.
+          It must be a value near to 0 like 1E-12. This attribute is optional.
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
