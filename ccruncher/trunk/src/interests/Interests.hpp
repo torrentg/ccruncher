@@ -71,7 +71,7 @@ class Interests : public ExpatHandlers
     ~Interests();
 
     vector<Interest> * getInterests();
-    Interest * getInterest(string name) throw(Exception);
+    Interest * getInterest(const string &name) throw(Exception);
     string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */

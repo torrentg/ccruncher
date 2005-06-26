@@ -28,6 +28,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
+//
 //===========================================================================
 
 #ifndef _Interest_
@@ -65,8 +68,7 @@ class Interest : public ExpatHandlers
     double getValue(const double);
     double date2idx(Date &date1);
     Date idx2date(int t);
-    double actualCoef(const double r, const double t);
-    double updateCoef(const double r, const double t);
+    double getUpsilon(const double r, const double t);
 
   public:
 
@@ -76,9 +78,7 @@ class Interest : public ExpatHandlers
 
     string getName() const;
     Date getFecha() const;
-
-    double getActualCoef(Date &date1, Date &date2) throw(Exception);
-    double getUpdateCoef(Date &date1, Date &date2) throw(Exception);
+    double getUpsilon(Date &date1, Date &date2) throw(Exception);
 
     string getXML(int) throw(Exception);
     void reset();
@@ -86,7 +86,7 @@ class Interest : public ExpatHandlers
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
-    
+
 };
 
 //---------------------------------------------------------------------------

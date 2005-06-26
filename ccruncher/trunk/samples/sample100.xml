@@ -3,7 +3,7 @@
   <params>
     <property name='time.begindate' value='18/02/2003'/>
     <property name='time.steps' value='6'/>
-    <property name='time.steplength' value='2'/>
+    <property name='time.steplength' value='1'/>
     <property name='stopcriteria.maxiterations' value='20000'/>
     <property name='stopcriteria.maxseconds' value='30000000'/>
     <property name='copula.type' value='normal'/>

@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
+//
 //===========================================================================
 
 #include <iostream>
@@ -123,8 +126,8 @@ void InterestsTest::test1()
   for (int i=0;i<25;i++)
   {
     Date aux = addMonths(date0, i);
-    double val1 = iobj.getUpdateCoef(date0, aux);
-    double val2 = iobj.getActualCoef(date0, aux);
+    double val1 = iobj.getUpsilon(date0, aux);
+    double val2 = iobj.getUpsilon(aux, date0);
     ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
     ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
   }

@@ -25,8 +25,12 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . portfolio evaluation modified
+//
 //===========================================================================
 
+#include <cmath>
 #include <cassert>
 #include "utils/Arrays.hpp"
 #include "kernel/SegmentAggregator.hpp"
@@ -307,8 +311,6 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
   DateValues *aux = NULL;
   vector<Asset> *assets;
 
-  //TODO: reconstruct this method
-  
   ret = Arrays<DateValues>::allocMatrix(nclients, m);
   aux = Arrays<DateValues>::allocVector(m);
 
@@ -367,18 +369,21 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
     cpos = iclients[i];
     itime = defaulttimes[cpos];
 
-    // if client non default in [0, M] time range
+    // asserting that at time 0 client is alive
+    assert(itime > 0);
+
+    // if client non default in (0, M] time range
     if (itime >= M) {
       cvalues[icont] += vertexes[i][M-1].cashflow;
     }
-    // if client defaults in [0, M] time range
+    // if client defaults in (0, M] time range
     else {
-      cvalues[icont] += vertexes[i][itime].cashflow;
+      cvalues[icont] += vertexes[i][itime-1].cashflow;
       cvalues[icont] += vertexes[i][itime].recovery;
       cvalues[icont] -= vertexes[i][itime].exposure;
     }
   }
-  
+
   // incrementing counters
   icont++;
   cont++;

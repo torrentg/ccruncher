@@ -41,6 +41,7 @@
 #include "utils/config.h"
 #include <map>
 #include <vector>
+#include "interests/Interest.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -67,14 +68,14 @@ class Asset : public ExpatHandlers
     map<int,int> belongsto;
     vector<DateValues> data;
     Segmentations *segmentations;
-    bool tilt;
+    bool have_data;
 
-    double getVCashFlow(Date date1, Date date2, Interests *);
-    double getVExposure(Date date1, Date date2, Interests *);
-    double getVRecovery(Date date1, Date date2, Interests *);
+    double getVCashFlow(Date &date1, Date &date2, Interest *);
+    double getVExposure(Date &date1, Date &date2, Interest *);
+    double getVRecovery(Date &date1, Date &date2, Interest *);
     void insertDateValues(DateValues &) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
-    
+
 
   public:
 
@@ -91,7 +92,7 @@ class Asset : public ExpatHandlers
     bool belongsTo(int iconcept, int isegment);
     int getSegment(int iconcept);
     void reset(Segmentations *);
-    
+
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);

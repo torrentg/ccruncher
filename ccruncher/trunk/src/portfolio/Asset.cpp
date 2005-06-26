@@ -75,7 +75,7 @@ void ccruncher::Asset::reset(Segmentations *segs)
   segmentations = segs;
   data.clear();
   belongsto.clear();
-  tilt = false;
+  have_data = false;
 }
 
 //===========================================================================
@@ -97,7 +97,7 @@ string ccruncher::Asset::getName(void)
 //===========================================================================
 // getVCashFlow between date1 and date2
 //===========================================================================
-double ccruncher::Asset::getVCashFlow(Date date1, Date date2, Interests *ints)
+double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, Interest *spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -111,12 +111,12 @@ double ccruncher::Asset::getVCashFlow(Date date1, Date date2, Interests *ints)
   {
     if (date1 == date2 && date1 == data[i].date)
     {
-      ret += data[i].cashflow;
+      ret += data[i].cashflow * spot->getUpsilon(data[i].date, date2);
       break;
     }
     if (date1 < data[i].date && data[i].date <= date2)
     {
-      ret += data[i].cashflow;
+      ret += data[i].cashflow * spot->getUpsilon(data[i].date, date2);
     }
     if (date2 < data[i].date)
     {
@@ -124,15 +124,13 @@ double ccruncher::Asset::getVCashFlow(Date date1, Date date2, Interests *ints)
     }
   }
 
-  //TODO: pendent actualitzar els fluxes respecte el tipus de interes
-
   return ret;
 }
 
 //===========================================================================
 // getVExposure at date2
 //===========================================================================
-double ccruncher::Asset::getVExposure(Date date1, Date date2, Interests *ints)
+double ccruncher::Asset::getVExposure(Date &date1, Date &date2, Interest *spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -151,13 +149,13 @@ double ccruncher::Asset::getVExposure(Date date1, Date date2, Interests *ints)
   {
     return 0.0;
   }
-  
+
   if (date1 < data[n-1].date && data[n-1].date < date2)
   {
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return data[n-1].exposure * val1/val2;
+    return data[n-1].exposure * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
   }
 
   for(int i=1;i<n;i++)
@@ -165,28 +163,25 @@ double ccruncher::Asset::getVExposure(Date date1, Date date2, Interests *ints)
     if (date2 <= data[i].date)
     {
       Date datex = data[i-1].date;
-      double ex = data[i-1].exposure;
+      double ex = data[i-1].exposure * spot->getUpsilon(data[i-1].date, date2);
       Date datey = data[i].date;
-      double ey = data[i].exposure;
+      double ey = data[i].exposure * spot->getUpsilon(data[i].date, date2);
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
       return ret;
     }
   }
-  
-  // assertion
-  assert(true);
 
-  //TODO: pendent actualitzar els fluxes respecte el tipus de interes
-
-  throw Exception("Asset::getVExposure(): panic!!!");
+  // assertion, this line is never reached
+  assert(false);
+  return 0.0;
 }
 
 //===========================================================================
 // getVRecovery at date2
 //===========================================================================
-double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
+double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, Interest *spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -211,7 +206,7 @@ double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return data[n-1].recovery * val1/val2;
+    return data[n-1].recovery * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
   }
 
   for(int i=1;i<n;i++)
@@ -219,9 +214,9 @@ double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
     if (date2 <= data[i].date)
     {
       Date datex = data[i-1].date;
-      double ex = data[i-1].recovery;
+      double ex = data[i-1].recovery * spot->getUpsilon(data[i-1].date, date2);
       Date datey = data[i].date;
-      double ey = data[i].recovery;
+      double ey = data[i].recovery * spot->getUpsilon(data[i].date, date2);
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
@@ -229,12 +224,9 @@ double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
     }
   }
 
-  // assertion
-  assert(true);
-
-  //TODO: pendent actualitzar els fluxes respecte el tipus de interes
-
-  throw Exception("Asset::getVRecovery(): panic!!!");
+  // assertion, this line is never reached
+  assert(false);
+  return 0.0;
 }
 
 //===========================================================================
@@ -242,20 +234,24 @@ double ccruncher::Asset::getVRecovery(Date date1, Date date2, Interests *ints)
 //===========================================================================
 void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValues *ret)
 {
+  double ufactor;
+  Interest *spot = ints->getInterest("spot");
+
   sort(dates, dates+n);
 
   for (int i=0;i<n;i++)
   {
+    ufactor =  spot->getUpsilon(dates[i], dates[0]);
     ret[i].date = dates[i];
-    ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], ints);
-    ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], ints);
-    ret[i].recovery = getVRecovery(dates[max(i-1,0)], dates[i], ints);
+    ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], spot) * ufactor;
+    ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], spot) * ufactor;
+    ret[i].recovery = getVRecovery(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 
   for (int i=1;i<n;i++)
   {
     ret[i].cashflow += ret[i-1].cashflow;
-  }  
+  }
 }
 
 //===========================================================================
@@ -290,10 +286,10 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       throw eperror(eu, "attributes are not allowed in tag data");
     }
     else {
-      tilt = true;
+      have_data = true;
     }
   }
-  else if (isEqual(name_,"values") && tilt == true) {
+  else if (isEqual(name_,"values") && have_data == true) {
     Date date = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
     double exposure = getDoubleAttribute(attributes, "exposure", NAN);
@@ -398,12 +394,12 @@ void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Excepti
 {
   assert(iconcept >= 0);
   assert(isegment >= 0);
-  
+
   if (getSegment(iconcept) > 0)
   {
     throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
   }
-  
+
   if (isegment > 0) 
   {
     belongsto[iconcept] = isegment;

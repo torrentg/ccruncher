@@ -39,6 +39,9 @@
 // 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added interests support
+//
 //===========================================================================
 
 #include <cfloat>
@@ -249,7 +252,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   // fixing time-tranches
   begindate = idata->params->begindate;
   dates = idata->params->getDates();
-  
+
   // tracing dates
   for (int i=0;i<=STEPS;i++) {
     Logger::trace("date[" + Parser::int2string(i)+"]", Parser::date2string(dates[i]));
@@ -290,24 +293,24 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
   // setting logger header
   Logger::trace("fixing clients to simulate", '-');
   Logger::newIndentLevel();
-  
+
   // setting logger info
   Logger::trace("simulate only active clients", Parser::bool2string(idata->params->onlyactive));
   Logger::trace("number of initial clients", Parser::long2string(idata->portfolio->getClients()->size()));
-  
+
   // fixing number of clients
   if (idata->params->onlyactive)
   {
     idata->portfolio->sortClients(idates[0], idates[isteps]);
     N = idata->portfolio->getNumActiveClients(idates[0], idates[isteps]);
-  } 
+  }
   else 
   {
     N = idata->portfolio->getClients()->size();
   }
-  
+
   Logger::trace("number of simulated clients", Parser::long2string(N));
-  
+
   // checking that exist clients to simulate
   if (N == 0) 
   {
@@ -354,7 +357,7 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 
   // fixing ratings
   sectors = idata->sectors;
-    
+
   // exit function
   Logger::previousIndentLevel();
 }
@@ -554,7 +557,7 @@ int* ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 {
   long numsegments = 0;
-  
+
   // init only if spath is set
   if (fpath == "") 
   {
@@ -569,8 +572,9 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
   Logger::trace("output data directory", File::normalizePath(fpath));
   Logger::trace("number of segmentations defined", Parser::int2string(idata->segmentations->getSegmentations().size()));
   Logger::trace("elapsed time initializing aggregators", true);
-  
-  // setting objects  
+
+  // setting objects
+  interests = idata->interests;
   segmentations = idata->segmentations;
   aggregators.clear();
 
@@ -589,7 +593,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
       tmp->define(i, j, segmentations->getComponents(i));
       tmp->setOutputProperties(fpath, filename, bforce, 0);
       tmp->initialize(dates, STEPS+1, clients, N, interests);
-    
+
       // adding aggregator to list (only if have elements)
       numsegments++;
       if (tmp->getNumElements() > 0) {
@@ -760,7 +764,7 @@ int ccruncher::MonteCarlo::simRatingPath(int iclient)
   int indexdefault = mtrans->getIndexDefault();
   int r1, r2;
   double u;
-  
+
   // rating at t0 is initial rating
   r1 = (*clients)[iclient]->irating;
 
@@ -769,7 +773,7 @@ int ccruncher::MonteCarlo::simRatingPath(int iclient)
   {
     // getting random number U[0,1] (correlated with rest of clients...)
     u = getRandom(t, iclient);
-    
+
     // compute next rating
     r2 = mtrans->evalue(r1, u);
 
@@ -777,7 +781,7 @@ int ccruncher::MonteCarlo::simRatingPath(int iclient)
     if (r2 == indexdefault) 
     {
       return t;
-    } 
+    }
     else 
     {
       r1 = r2;
@@ -802,8 +806,8 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
   // simulate month where this client defaults
   int month = survival->inverse(r1, u);
 
-  // return index time where defaults
-  return int(round(double(month)/double(STEPLENGTH)));
+  // return index time where defaults (always bigger than 0)
+  return max(1, int(round(double(month)/double(STEPLENGTH))));
 }
 
 //===========================================================================

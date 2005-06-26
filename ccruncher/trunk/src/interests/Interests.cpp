@@ -65,7 +65,7 @@ vector<Interest> * ccruncher::Interests::getInterests()
 //===========================================================================
 // return interest by name
 //===========================================================================
-Interest * ccruncher::Interests::getInterest(string name) throw(Exception)
+Interest * ccruncher::Interests::getInterest(const string &name) throw(Exception)
 {
   for (unsigned int i=0;i<vinterests.size();i++)
   {

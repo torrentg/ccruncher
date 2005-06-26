@@ -31,6 +31,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
+//
 //===========================================================================
 
 #include <cmath>
@@ -44,7 +47,7 @@
 #define EPSILON 1e-7
 
 //===========================================================================
-// constructor privat
+// private constructor
 //===========================================================================
 ccruncher::Interest::Interest()
 {
@@ -52,11 +55,11 @@ ccruncher::Interest::Interest()
 }
 
 //===========================================================================
-// constructor privat
+// private contructor
 //===========================================================================
 ccruncher::Interest::Interest(const string &str)
 {
-  // nom del Interest
+  // interest name
   name = str;
 }
 
@@ -68,10 +71,10 @@ void ccruncher::Interest::reset()
   // flushing vector
   vrates.clear();
 
-  // nom del Interest
+  // interest name
   name = "UNDEFINED_INTEREST";
 
-  // establim la data de la corba
+  // setting an initial date
   fecha = Date(1,1,1900);
 }
 
@@ -84,7 +87,7 @@ ccruncher::Interest::~Interest()
 }
 
 //===========================================================================
-// metodes acces variable name
+// return interest name
 //===========================================================================
 string ccruncher::Interest::getName() const
 {
@@ -92,7 +95,7 @@ string ccruncher::Interest::getName() const
 }
 
 //===========================================================================
-// metodes acces variable name
+// returns initial date of this curve
 //===========================================================================
 Date ccruncher::Interest::getFecha() const
 {
@@ -100,7 +103,7 @@ Date ccruncher::Interest::getFecha() const
 }
 
 //===========================================================================
-// retorna el tipus de interes interpolat en el mes t
+// returns interpolated interest rate at month t
 //===========================================================================
 double ccruncher::Interest::getValue(const double t)
 {
@@ -131,7 +134,7 @@ double ccruncher::Interest::getValue(const double t)
 }
 
 //===========================================================================
-// retorna la data del mes t
+// returns date at month t
 //===========================================================================
 Date ccruncher::Interest::idx2date(int t)
 {
@@ -139,7 +142,7 @@ Date ccruncher::Interest::idx2date(int t)
 }
 
 //===========================================================================
-// retorna el index de la data date1
+// returns index of date date1
 //===========================================================================
 double ccruncher::Interest::date2idx(Date &date1)
 {
@@ -147,19 +150,20 @@ double ccruncher::Interest::date2idx(Date &date1)
 }
 
 //===========================================================================
-// retorna el coeficient de revaloritzacio a temps t
-// @param r tipus de interes anual
-// @param t temps que es vol actualitzar (en mesos)
+// returns factor to aply to transport a money value from date1 to fecha
+// r: interest rate to apply
+// t: time (in months)
 //===========================================================================
-double ccruncher::Interest::updateCoef(const double r, const double t)
+double ccruncher::Interest::getUpsilon(const double r, const double t)
 {
   return pow(1.0 + r, t/12.0);
 }
 
 //===========================================================================
-// retorna el coeficient de transport entre date1 i date2
+// returns factor to aply to transport a money value from date1 to date2
+// satisfying interest curve rate values
 //===========================================================================
-double ccruncher::Interest::getUpdateCoef(Date &date1, Date &date2) throw(Exception)
+double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) throw(Exception)
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
@@ -167,37 +171,7 @@ double ccruncher::Interest::getUpdateCoef(Date &date1, Date &date2) throw(Except
   double r1 = getValue(t1);
   double r2 = getValue(t2);
 
-  double x1 = updateCoef(r1,t1);
-  double x2 = updateCoef(r2,t2);
-
-  return x2/x1;
-}
-
-//===========================================================================
-// retorna el coeficient de actualitzacio a temps t
-// @param r tipus de interes anual
-// @param t temps que es vol actualitzar (en mesos)
-//===========================================================================
-double ccruncher::Interest::actualCoef(const double r, const double t)
-{
-  return 1.0/updateCoef(r,t);
-}
-
-//===========================================================================
-// retorna el coeficient de transport entre date1 i date2
-//===========================================================================
-double ccruncher::Interest::getActualCoef(Date &date1, Date &date2) throw(Exception)
-{
-  double t1 = date2idx(date1);
-  double t2 = date2idx(date2);
-
-  double r1 = getValue(t1);
-  double r2 = getValue(t2);
-
-  double x1 = actualCoef(r1,t1);
-  double x2 = actualCoef(r2,t2);
-
-  return x2/x1;
+  return getUpsilon(r1,-t1) * getUpsilon(r2,+t2);
 }
 
 //===========================================================================
@@ -210,7 +184,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
     throw Exception("Interest::insertRate(): invalid time value");
   }
 
-  // validem coherencia
+  // checking consistency
   for (unsigned int i=0;i<vrates.size();i++)
   {
     Rate aux = vrates[i];
@@ -224,7 +198,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
     }
   }
 
-  // inserim el valor
+  // inserting value
   try
   {
     vrates.push_back(val);
