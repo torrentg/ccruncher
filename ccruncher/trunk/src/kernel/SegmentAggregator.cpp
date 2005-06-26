@@ -297,14 +297,14 @@ long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n)
 
   // assertion
   assert(aux == len);
-  
+
   return ret;
 }
 
 //===========================================================================
 // allocVertexes
 //===========================================================================
-DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> *clients, 
+DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> *clients,
                 Interests *interests_) throw(Exception)
 {
   DateValues **ret = NULL;
@@ -380,7 +380,7 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
     else {
       cvalues[icont] += vertexes[i][itime-1].cashflow;
       cvalues[icont] += vertexes[i][itime].recovery;
-      cvalues[icont] -= vertexes[i][itime].exposure;
+      //cvalues[icont] -= vertexes[i][itime].exposure;
     }
   }
 
@@ -442,7 +442,7 @@ void ccruncher::SegmentAggregator::setOutputProperties(const string &spath, cons
   path = File::normalizePath(spath);
   bforce = force;
 
-  // setting buffersize value  
+  // setting buffersize value
   if (ibs > 0) {
     buffersize = ibs;
   }

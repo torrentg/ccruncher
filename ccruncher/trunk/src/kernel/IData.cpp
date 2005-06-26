@@ -26,7 +26,7 @@
 //   . initial release
 //
 // 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . solved bug at XML read that hangs ccruncher when input file isn't 
+//   . solved bug at XML read that hangs ccruncher when input file isn't
 //     a true xml file
 //
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -151,14 +151,14 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
     }
     else
     {
-      // output trace 
+      // output trace
       Logger::addBlankLine();
       Logger::trace("reading input file", '*');
       Logger::newIndentLevel();
 
       // parsing
       parser.parse(ifile, this);
-      
+
       // exit function
       Logger::previousIndentLevel();
       ifile.close();
@@ -214,7 +214,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw eperror(eu, "tag ratings repeated");
     }
     else {
-      Logger::trace("parsing ratings", true);    
+      Logger::trace("parsing ratings", true);
       ratings = new Ratings();
       eppush(eu, ratings, name_, attributes);
     }
@@ -324,7 +324,7 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"interests")) {
-    // nothing to do  
+    // nothing to do
   }
   else if (isEqual(name_,"ratings")) {
     // nothing to do

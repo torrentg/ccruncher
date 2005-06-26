@@ -232,7 +232,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
   else if (isEqual(name_,"rate")) {
     // setting new handlers
     auxrate.reset();
-    eppush(eu, &auxrate, name_, attributes);  
+    eppush(eu, &auxrate, name_, attributes);
   }
   else {
     throw eperror(eu, "unexpected tag " + string(name_));

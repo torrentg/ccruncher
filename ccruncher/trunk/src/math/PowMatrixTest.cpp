@@ -30,9 +30,9 @@
 //
 // 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed epsilon value because in debug mode test2 fails
-//     it is due that optimized code sometimes gives different 
-//     answers not because of an error but because optimization 
-//     changes the order of calculations, resulting in slightly 
+//     it is due that optimized code sometimes gives different
+//     answers not because of an error but because optimization
+//     changes the order of calculations, resulting in slightly
 //     different results due to the limits of floating-point precision.
 //
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]

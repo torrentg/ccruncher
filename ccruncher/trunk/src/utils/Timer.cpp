@@ -26,7 +26,7 @@
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
 // 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added tolerance at format function. in debug mode can reach a 
+//   . added tolerance at format function. in debug mode can reach a
 //     negative number (very near to 0).
 //
 //===========================================================================
@@ -125,7 +125,7 @@ string ccruncher::Timer::format(double val)
   char buf[20];
   double cur = val;
 
-  // computing milliseconds  
+  // computing milliseconds
   int ms = int((cur-floor(cur+1.0E-14)+1.0E-14)*1000.0);
   cur = floor(cur+1.0E-14) + 1.0E-8;
 
@@ -137,13 +137,13 @@ string ccruncher::Timer::format(double val)
   int min = int(cur/60.0);
   cur = cur - double(min)*60.0;
 
-  // computing seconds  
+  // computing seconds
   int sec = int(floor(cur));
   //cur = cur-double(sec);
 
   // formating elapsed time
   sprintf(buf,"%02d:%02d:%02d.%03d", hh, min, sec, ms);
-  
+
   // exit function
   return string(buf);
 }

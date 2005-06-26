@@ -99,7 +99,7 @@ class SegmentAggregator
     // vertexes of afected clients (size = nclients x M)
     DateValues **vertexes;
     // vertex values aggregation per tranch (size = buffersize)
-    double *cvalues; 
+    double *cvalues;
 
     // memory management
     void init();
@@ -127,7 +127,7 @@ class SegmentAggregator
     void define(int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
     void initialize(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
-    
+
     // other methods
     long getNumElements();
     void append(int *defaulttimes) throw(Exception);

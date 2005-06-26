@@ -100,9 +100,9 @@ void TimerTest::test1()
 //===========================================================================
 void TimerTest::test2()
 {
-  ASSERT(Timer::format(0.510) == string("00:00:00.510"));  
-  ASSERT(Timer::format(50.510) == string("00:00:50.510"));  
-  ASSERT(Timer::format(500.510) == string("00:08:20.510"));  
+  ASSERT(Timer::format(0.510) == string("00:00:00.510"));
+  ASSERT(Timer::format(50.510) == string("00:00:50.510"));
+  ASSERT(Timer::format(500.510) == string("00:08:20.510"));
   ASSERT(Timer::format(5000.510) == string("01:23:20.510"));
   ASSERT(Timer::format(1555000.510) == string("431:56:40.510"));
 }

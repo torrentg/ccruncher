@@ -56,19 +56,19 @@ class ExpatUserData
   public:
 
     /** internal class */
-    class ExpatUserDataToken 
+    class ExpatUserDataToken
     {
       public:
         /** constructor */
-        ExpatUserDataToken(string &n, ExpatHandlers *h) 
-        { 
-          name = n; 
-          handlers = h; 
+        ExpatUserDataToken(string &n, ExpatHandlers *h)
+        {
+          name = n;
+          handlers = h;
         }
-        
+
         /** token name related to handler */
         string name;
-        
+
         /** pointer to class handlers container */
         ExpatHandlers *handlers;
     };

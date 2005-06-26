@@ -135,7 +135,7 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
   else if (isEqual(name_,"interest")) {
     // setting new handlers
     auxinterest.reset();
-    eppush(eu, &auxinterest, name_, attributes);  
+    eppush(eu, &auxinterest, name_, attributes);
   }
   else {
     throw eperror(eu, "unexpected tag " + string(name_));

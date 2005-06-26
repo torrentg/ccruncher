@@ -199,7 +199,7 @@ void ccruncher::CopulaNormal::randNm()
 }
 
 //===========================================================================
-// Compute a copula. Put in aux1 a random vector where each marginal follows 
+// Compute a copula. Put in aux1 a random vector where each marginal follows
 // a U[0,1] related by a normal copula
 //===========================================================================
 void ccruncher::CopulaNormal::next()

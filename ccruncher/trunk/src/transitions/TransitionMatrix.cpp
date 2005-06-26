@@ -77,7 +77,7 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception) : ExpatHandlers() 
+ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
 {
   period = otm.period;
   ratings = otm.ratings;
@@ -129,7 +129,7 @@ double ** ccruncher::TransitionMatrix::getMatrix()
 }
 
 //===========================================================================
-// inserts an element into transition matrix 
+// inserts an element into transition matrix
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
@@ -158,7 +158,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     throw Exception(msg);
   }
 
-  // checking that not exist 
+  // checking that not exist
   if (!isnan(matrix[row][col]))
   {
     string msg = "TransitionMatrix::insertTransition(): redefined element [";
@@ -187,7 +187,7 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       if (period == INT_MAX || epsilon < 0.0 || epsilon > 1.0) {
         throw eperror(eu, "invalid attributes at <mtransitions>");
-      }      
+      }
     }
   }
   else if (isEqual(name,"transition")) {
@@ -279,7 +279,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
   }
 
   // checking property 4 (all rating can be defaulted)
-  for (int i=0;i<n;i++) 
+  for (int i=0;i<n;i++)
   {
     bool bcon=false;
 
@@ -291,10 +291,10 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
         break;
       }
     }
-    
+
     if (bcon == false)
     {
-      throw Exception("TransitionMatrix::validate(): property 4 not satisfied"); 
+      throw Exception("TransitionMatrix::validate(): property 4 not satisfied");
     }
   }
 }
@@ -308,7 +308,7 @@ int ccruncher::TransitionMatrix::getIndexDefault()
 }
 
 //===========================================================================
-// given a rating and a random number in [0,1] return final rating 
+// given a rating and a random number in [0,1] return final rating
 // @param irating initial rating
 // @param val random number in [0,1]
 // @return final rating
@@ -403,13 +403,13 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
 
   // auxiliary matrix
   double **tmp = Arrays<double>::allocMatrix(n, n, 0.0);
-      
+
   // filling TMAA(.,0)
   for(int i=0;i<n;i++)
   {
     ret[i][0] = aux[i][n-1];
   }
-  
+
   for(int t=1;t<numrows;t++)
   {
     Arrays<double>::prodMatrixMatrix(aux, one, n, n, n, tmp);
@@ -422,7 +422,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
 
     for(int i=0;i<n;i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
   }
-  
+
   // exit function
   Arrays<double>::deallocMatrix(aux, n);
   Arrays<double>::deallocMatrix(tmp, n);
@@ -435,10 +435,10 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
 void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   int n = tm->n;
-  
+
   // computing TMA
   tma(tm, steplength, numrows, ret);
-  
+
   // building acumulateds
   for(int i=0;i<n;i++)
   {
@@ -456,10 +456,10 @@ void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double *
 void ccruncher::survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   int n = tm->n;
-  
+
   // computing TMA
   tmaa(tm, steplength, numrows, ret);
-  
+
   // building survival function
   for(int i=0;i<n;i++)
   {

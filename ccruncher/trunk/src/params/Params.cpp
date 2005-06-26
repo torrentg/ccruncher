@@ -35,6 +35,9 @@
 //   . implemented Strings class
 //   . implemented Arrays class
 //
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug related to seed=0 (random seed)
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -63,7 +66,7 @@ void ccruncher::Params::init()
   maxseconds = 0L;
   smethod = "";
   copula_type = "";
-  copula_seed = 0L;
+  copula_seed = -1L;
   antithetic = false;
   onlyactive = false;
 }
@@ -193,10 +196,10 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "copula.seed")
   {
-    long aux = getLongAttribute(attributes, "value", 0L);
-    if (copula_seed != 0L || aux == 0L) {
+    long aux = getLongAttribute(attributes, "value", -1L);
+    if (copula_seed != -1L || aux == -1L) {
       throw eperror(eu, "invalid copula.seed");
-    } 
+    }
     else {
       copula_seed = aux;
     }
@@ -206,7 +209,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
     string aux = getStringAttribute(attributes, "value", "");
     if (smethod != "" || (aux != "rating-path" && aux != "time-to-default")) {
       throw eperror(eu, "invalid montecarlo.method. supported values: time-to-default, rating-path");
-    } 
+    }
     else {
       smethod = aux;
     }
@@ -286,7 +289,7 @@ string ccruncher::Params::getXML(int ilevel) throw(Exception)
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Parser::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Parser::long2string(copula_seed) + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Parser::bool2string(copula_seed) + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Parser::bool2string(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Parser::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";
 

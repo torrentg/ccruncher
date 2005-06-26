@@ -46,7 +46,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segment 
+class Segment
 {
 
   public:

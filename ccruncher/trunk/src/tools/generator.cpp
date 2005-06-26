@@ -35,7 +35,7 @@
 //   . added logger
 //
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added survival function section 
+//   . added survival function section
 //
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
@@ -107,13 +107,13 @@ int main(int argc, char *argv[])
   while (1)
   {
     int curropt = getopt_long (argc, argv, options1, options2, NULL);
-  
+
     if (curropt == -1)
     {
       // no more options. exit while
       break;
     }
-  
+
     switch(curropt)
     {
       case '?': // invalid option
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
       case 302: // --nclients (set number clients)
           try
           {
-            string sclients = string(optarg); 
+            string sclients = string(optarg);
             nclients = Parser::longValue(sclients);
           }
           catch(Exception &e)
@@ -141,11 +141,11 @@ int main(int argc, char *argv[])
             return 1;
           }
           break;
-      
+
       case 303: // --nassets (set number clients)
           try
           {
-            string sassets = string(optarg); 
+            string sassets = string(optarg);
             nassets = Parser::longValue(sassets);
           }
           catch(Exception &e)
@@ -165,8 +165,8 @@ int main(int argc, char *argv[])
           return 1;
     }
   }
-  
-  // retrieving input filename  
+
+  // retrieving input filename
   if (argc == optind)
   {
     cerr << "xml input file not specified" << endl;
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
   {
     sfilename = string(argv[argc-1]);
   }
-  
+
   // checking basic arguments existence
   if (nclients == 0L || nassets == 0L)
   {
@@ -300,7 +300,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
   Bond bond;
-  
+
   bond.setProperty("issuedate", Parser::date2string(issuedate));
   bond.setProperty("term"     , Parser::int2string(term));
   bond.setProperty("nominal"  , Parser::double2string(nominal));
@@ -308,9 +308,9 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
   bond.setProperty("ncoupons" , Parser::int2string(ncoupons));
 
   vector<DateValues> events = bond.simulate();
-  
+
   ret += spc1 + "<data>\n";
-  
+
   for(unsigned int i=0;i<events.size();i++)
   {
     ret += spc2;
@@ -320,7 +320,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
     ret += "recovery='" + Parser::double2string(events[i].recovery) + "' ";
     ret += "/>\n";
   }
-  
+
   ret += spc1 + "</data>\n";
 
   return ret;

@@ -400,7 +400,7 @@ void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Excepti
     throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
   }
 
-  if (isegment > 0) 
+  if (isegment > 0)
   {
     belongsto[iconcept] = isegment;
   }

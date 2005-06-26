@@ -41,7 +41,7 @@ ccruncher::ExpatHandlers::~ExpatHandlers()
 {
   // nothing to do
 }
-    
+
 //===========================================================================
 // throw an error
 //===========================================================================
@@ -50,7 +50,7 @@ Exception ccruncher::ExpatHandlers::eperror(ExpatUserData &eud, const string &ms
   XML_Parser xmlparser = eud.getParser();
   char buf[256];
 
-  sprintf(buf, "%s at line %d and column %d", 
+  sprintf(buf, "%s at line %d and column %d",
                msg.c_str(),
                XML_GetCurrentLineNumber(xmlparser),
                XML_GetCurrentColumnNumber(xmlparser));
@@ -73,7 +73,7 @@ void ccruncher::ExpatHandlers::epback(ExpatUserData &eud)
 //===========================================================================
 // eppush
 //===========================================================================
-void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud, 
+void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
                   ExpatHandlers *eh, const char *name, const char **atts)
 {
   // assertion
@@ -89,9 +89,9 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
 //===========================================================================
 // getAttributeValue
 //===========================================================================
-char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const 
+char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const
 {
-  for (int i=0; atts[i]; i+=2) 
+  for (int i=0; atts[i]; i+=2)
   {
     if (strcmp(attname.c_str(),atts[i]) == 0)
     {
@@ -108,7 +108,7 @@ char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const stri
 string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const string &attname, const string &defval)
 {
   char *val = getAttributeValue(atts, attname);
-  
+
   if (val != NULL)
   {
     return string(val);
@@ -261,7 +261,7 @@ int ccruncher::ExpatHandlers::getNumAttributes(const char **atts)
 {
   int ret = 0;
 
-  for (int i=0; atts[i]; i+=2) 
+  for (int i=0; atts[i]; i+=2)
   {
     ret++;
   }

@@ -38,7 +38,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_, 
+ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_,
              Segmentations *segmentations_, Interests *interests_)
 {
   // initializing class
@@ -60,11 +60,11 @@ ccruncher::Portfolio::~Portfolio()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_, 
+void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_,
              Segmentations *segmentations_, Interests *interests_)
 {
   auxclient = NULL;
-  
+
   // setting external objects
   ratings = ratings_;
   sectors = sectors_;
@@ -75,7 +75,7 @@ void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_,
   for(unsigned int i=0;i<vclients.size();i++) {
     delete vclients[i];
   }
-  
+
   // flushing clients
   vclients.clear();
 }

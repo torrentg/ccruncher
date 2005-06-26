@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   {
       { "help",         0,  NULL,  300 },
       { "version",      0,  NULL,  301 },
-      { "tma",          0,  NULL,  302 },      
+      { "tma",          0,  NULL,  302 },
       { "tmaa",         0,  NULL,  303 },
       { "survival",     0,  NULL,  304 },
       { "steplength",   1,  NULL,  306 },
@@ -95,13 +95,13 @@ int main(int argc, char *argv[])
   while (1)
   {
     int curropt = getopt_long (argc, argv, options1, options2, NULL);
-  
+
     if (curropt == -1)
     {
       // no more options. exit while
       break;
     }
-  
+
     switch(curropt)
     {
       case '?': // invalid option
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
       case 306: // --steplength=num (length, in months, between rows)
           try
           {
-            string ssteplength = string(optarg); 
+            string ssteplength = string(optarg);
             steplength = Parser::intValue(ssteplength);
           }
           catch(Exception &e)
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
       case 307: // --numrows=num (number of rows)
           try
           {
-            string snumrows = string(optarg); 
+            string snumrows = string(optarg);
             numrows = Parser::intValue(snumrows);
           }
           catch(Exception &e)
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
           return 1;
     }
   }
-  
-  // retrieving input filename  
+
+  // retrieving input filename
   if (argc == optind)
   {
     cerr << "xml input file not specified" << endl;
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
   {
     sfilename = string(argv[argc-1]);
   }
-  
+
   // checking basic arguments existence
   if (mode == 0)
   {
@@ -246,7 +246,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
 
   // retrieving ratings
   Ratings *ratings = idata.ratings;
-  
+
   // allocating space
   double **buf = Arrays<double>::allocMatrix(tm->n, numrows+1);
   string smethod = idata.params->smethod;
@@ -318,7 +318,7 @@ void usage()
   "    transition matrix included in a CreditCruncher input file\n"
   "  arguments:\n"
   "    file.xml         CreditCruncher input file\n"
-  "    --tma            compute TMA (Forward Default Rate)\n"  
+  "    --tma            compute TMA (Forward Default Rate)\n"
   "    --tmaa           compute TMAA (Cumulated Forward Default Rate)\n"
   "    --survival       Survival Function considered by ccruncher\n"
   "    --steplength=num number of months between rows (default 12)\n"
@@ -327,7 +327,7 @@ void usage()
   "    --help           show this message and exit\n"
   "    --version        show version and exit\n"
   "    --copyright      show copyright and exit\n"
-  "    -x               don't show copyright info\n"  
+  "    -x               don't show copyright info\n"
   "  return codes:\n"
   "    0                OK. finished without errors\n"
   "    1                KO. finished with errors\n"

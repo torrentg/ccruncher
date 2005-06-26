@@ -44,7 +44,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-template <class T> 
+template <class T>
 class Arrays
 {
 
@@ -75,7 +75,7 @@ class Arrays
 //===========================================================================
 // allocVector
 //===========================================================================
-template <class T> 
+template <class T>
 T * ccruncher::Arrays<T>::allocVector(int n) throw(Exception)
 {
   T aux;
@@ -90,7 +90,7 @@ T * ccruncher::Arrays<T>::allocVector(int n, T val) throw(Exception)
 {
   T *ret = NULL;
 
-  try 
+  try
   {
     ret = new T[n];
 
@@ -284,7 +284,7 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
   // making assertions
   assert(n1 > 0); assert(n2 > 0); assert(n3 > 0);
   assert(A != NULL); assert(B != NULL); assert(ret != NULL);
-  
+
   T *aux1 = allocVector(n1);
   T *aux2 = allocVector(n2);
 
@@ -294,15 +294,15 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
     {
       aux2[j] = B[j][i];
     }
-    
+
     prodMatrixVector(A, aux2, n1, n2, aux1);
-    
+
     for(register int j=0;j<n1;j++)
     {
       ret[j][i] = aux1[j];
     }
   }
-  
+
   deallocVector(aux1);
   deallocVector(aux2);
 }

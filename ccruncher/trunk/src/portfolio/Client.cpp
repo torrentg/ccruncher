@@ -44,7 +44,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_, 
+ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_,
                Segmentations *segmentations_, Interests *interests_)
 {
   // initializing class
@@ -56,13 +56,13 @@ ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_,
 //===========================================================================
 ccruncher::Client::~Client()
 {
-  // nothing to do 
+  // nothing to do
 }
 
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_, 
+void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_,
                Segmentations *segmentations_, Interests *interests_)
 {
   // setting external objects references
@@ -70,11 +70,11 @@ void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_,
   sectors = sectors_;
   segmentations = segmentations_;
   interests = interests_;
-  
+
   // cleaning containers
   vassets.clear();
   belongsto.clear();
-  
+
   // setting default values
   irating = -1;
   isector = -1;
@@ -266,20 +266,20 @@ void ccruncher::Client::insertBelongsTo(int iconcept, int isegment) throw(Except
 {
   assert(iconcept >= 0);
   assert(isegment >= 0);
-  
+
   if (getSegment(iconcept) > 0)
   {
     throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
   }
-  
-  if (isegment > 0) 
+
+  if (isegment > 0)
   {
     belongsto[iconcept] = isegment;
   }
   else
   {
     // isegment=0 (rest segment) is the default segment, not inserted
-  }  
+  }
 }
 
 //===========================================================================

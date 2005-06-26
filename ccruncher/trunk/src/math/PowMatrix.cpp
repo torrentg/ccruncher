@@ -166,7 +166,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
     // computing a^x
     TNT::Array2D<double> K = matmult(matmult(VEPS, VAPS), SPEV);
 
-    // taking values and exit 
+    // taking values and exit
     for(int i=0;i<n;i++)
     {
       for(int j=0;j<n;j++)

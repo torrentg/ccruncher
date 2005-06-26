@@ -65,7 +65,7 @@ ccruncher::Logger::Logger()
 void ccruncher::Logger::init(bool verbose_)
 {
   verbose = verbose_;
-  
+
   ilevel = DEFAULT_INDENTATION_LEVEL;
   curcol = -1;
   tracetime = false;
@@ -141,7 +141,7 @@ void ccruncher::Logger::trace(const string &msg, const string &value)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
-  
+
   // flushing previous message
   flush();
 
@@ -152,7 +152,7 @@ void ccruncher::Logger::trace(const string &msg, const string &value)
   int fsize = ilevel*INDENTSIZE + msg.size() + 1 + value.size();
   string sfill = Strings::blanks(max(0,MAXCOLS-fsize));
 
-  // showing output  
+  // showing output
   cout << indentator << msg << " " << sfill << value << std::endl << std::flush;
 
   // setting status values
@@ -167,7 +167,7 @@ void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
-  
+
   // flushing previous message
   flush();
 
@@ -176,9 +176,9 @@ void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
 
   // setting status values
   curcol = indentator.size() + msg.size();
-  tracetime = tracetime_;  
+  tracetime = tracetime_;
 
-  // tracing msg  
+  // tracing msg
   cout << indentator + msg << std::flush;
 
   // post trace actions
@@ -208,11 +208,11 @@ void ccruncher::Logger::append(const string &msg)
     cout << Strings::blanks(ilevel*INDENTSIZE) << std::flush;
     curcol = ilevel*INDENTSIZE;
   }
-  
+
   // appending msg
   cout << msg << std::flush;
   curcol += msg.size();
-  
+
   // checking bounds
   if (curcol >= MAXCOLS)
   {
@@ -241,19 +241,19 @@ void ccruncher::Logger::flush()
   // printing time + new line
   if (tracetime == true)
   {
-    
+
     string etime = Timer::format(timer.stop());
     int fsize = int(MAXCOLS - (curcol + etime.size()));
     string filler = Strings::blanks(max(fsize, 0));
 
-    // tracing time    
+    // tracing time
     cout << filler << etime << std::endl << std::flush;
 
     // setting class values
     curcol = -1;
     tracetime = false;
   }
-  
+
   if (curcol >= 0)
   {
     cout << std::endl << std::flush;

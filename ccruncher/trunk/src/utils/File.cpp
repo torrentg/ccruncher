@@ -71,7 +71,7 @@ bool ccruncher::File::isAbsolutePath(const string &str)
     return false;
   }
 #else
-  // unix style path 
+  // unix style path
   if (str.substr(0,1) == PATHSEPARATOR) {
     return true;
   }

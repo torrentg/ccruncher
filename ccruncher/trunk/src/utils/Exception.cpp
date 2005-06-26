@@ -127,7 +127,7 @@ ostream & ccruncher::operator << (ostream& os, Exception const &e)
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================
-string ccruncher::Exception::retrieveStackTrace() 
+string ccruncher::Exception::retrieveStackTrace()
 {
   int maxbt=100, numbt;
   void *btbuf[maxbt];
@@ -151,14 +151,14 @@ string ccruncher::Exception::retrieveStackTrace()
   }
 
   // printing backtrace lines (atention: first 2 frames skiped!)
-  for (int i=2; i<numbt; ++i) 
+  for (int i=2; i<numbt; ++i)
   {
     string cur = symbuf[i];
 
     // retrieving mem adress
     pos1 = cur.rfind ('[');
     pos2 = cur.rfind (']');
-    if ((pos1 != string::npos) && (pos2 != string::npos)) 
+    if ((pos1 != string::npos) && (pos2 != string::npos))
     {
       addr = cur.substr(pos1 + 1, pos2 - pos1 - 1);
     }
@@ -166,9 +166,9 @@ string ccruncher::Exception::retrieveStackTrace()
     // retrieving function name (link with -rdynamic flag)
     pos1 = cur.rfind ("(_Z");
     pos2 = cur.rfind ('+');
-    if (pos2 != string::npos) 
+    if (pos2 != string::npos)
     {
-      if (pos1 != string::npos) 
+      if (pos1 != string::npos)
       {
         func = cur.substr(pos1 + 1, pos2 - pos1 - 1);
         demangledname = NULL;
@@ -182,8 +182,8 @@ string ccruncher::Exception::retrieveStackTrace()
         if (demangledname != NULL) {
           free(demangledname);
         }
-      } 
-      else 
+      }
+      else
       {
         pos1 = cur.rfind ('(');
         func = cur.substr (pos1 + 1, pos2 - pos1 - 1);
@@ -202,7 +202,7 @@ string ccruncher::Exception::retrieveStackTrace()
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================
-string ccruncher::Exception::retrieveStackTrace() 
+string ccruncher::Exception::retrieveStackTrace()
 {
   return string("");
 }

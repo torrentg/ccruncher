@@ -160,7 +160,7 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       if (epsilon < 0.0 || epsilon > 1.0) {
         throw eperror(eu, "invalid attribute at <mcorrels>");
-      }      
+      }
     }
   }
   else if (isEqual(name,"sigma")) {
@@ -219,7 +219,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     }
   }
 
-  // we don't need to check that client correlation matrix is definite positve 
+  // we don't need to check that client correlation matrix is definite positve
   // condition. This is granted if elements belongs at (-1,1)
 }
 

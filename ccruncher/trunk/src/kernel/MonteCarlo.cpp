@@ -138,7 +138,7 @@ void ccruncher::MonteCarlo::release()
     Arrays<int>::deallocVector(ittd);
     ittd = NULL;
   }
-  
+
   // dropping aggregators elements
   for(unsigned int i=0;i<aggregators.size();i++) {
     if (aggregators[i] != NULL) {
@@ -186,7 +186,7 @@ void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
   Logger::addBlankLine();
   Logger::trace("initialing procedure", '*');
   Logger::newIndentLevel();
-  
+
   // initializing parameters
   initParams(idata);
 
@@ -236,7 +236,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   // max number of seconds
   MAXSECONDS = idata->params->maxseconds;
   Logger::trace("maximum execution time (in seconds)", Parser::long2string(MAXSECONDS));
-  
+
   // max number of iterations
   MAXITERATIONS = idata->params->maxiterations;
   Logger::trace("maximum number of iterations", Parser::long2string(MAXITERATIONS));
@@ -304,7 +304,7 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
     idata->portfolio->sortClients(idates[0], idates[isteps]);
     N = idata->portfolio->getNumActiveClients(idates[0], idates[isteps]);
   }
-  else 
+  else
   {
     N = idata->portfolio->getClients()->size();
   }
@@ -312,7 +312,7 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
   Logger::trace("number of simulated clients", Parser::long2string(N));
 
   // checking that exist clients to simulate
-  if (N == 0) 
+  if (N == 0)
   {
     throw Exception("MonteCarlo::init(): 0 clients to simulate");
   }
@@ -335,10 +335,10 @@ void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
 
   // setting logger info
   Logger::trace("number of ratings", Parser::int2string(idata->ratings->getRatings()->size()));
-  
+
   // fixing ratings
   ratings = idata->ratings;
-  
+
   // exit function
   Logger::previousIndentLevel();
 }
@@ -376,7 +376,7 @@ void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
   Logger::trace("matrix dimension", sval + "x" + sval);
   Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
   Logger::trace("scaling matrix to step length (in months)", Parser::int2string(STEPLENGTH));
-  
+
   // finding transition matrix for steplength time
   mtrans = translate(idata->transitions, STEPLENGTH);
 
@@ -392,13 +392,13 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
   // setting logger header
   Logger::trace("setting survival function", '-');
   Logger::newIndentLevel();
-  
+
   if (idata->survival != NULL)
   {
     survival = idata->survival;
     Logger::trace("survival function", string("user defined"));
   }
-  else 
+  else
   {
     // setting logger info
     string sval = Parser::int2string(idata->transitions->size());
@@ -418,9 +418,9 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
     Arrays<double>::deallocMatrix(aux, idata->transitions->n);
     Arrays<int>::deallocVector(itime);
     Logger::trace("transition matrix -> survival function", string("computed"));
-    
+
     // appending survival object to idata (will dealloc survival object)
-    idata->survival = survival;    
+    idata->survival = survival;
   }
 
   // exit function
@@ -436,11 +436,11 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
   // setting logger header
   Logger::trace("computing client correlation matrix", '-');
   Logger::newIndentLevel();
-  
+
   // setting logger info
   string sval = Parser::int2string(n);
   Logger::trace("matrix dimension", sval+"x"+sval);
-  
+
   // allocating space
   double **ret = Arrays<double>::allocMatrix(n, n);
 
@@ -475,7 +475,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
 CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, long seed) throw(Exception)
 {
   CopulaNormal **ret = NULL;
-  
+
   // setting logger header
   Logger::trace("initializing copulas", '-');
   Logger::newIndentLevel();
@@ -510,7 +510,7 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
         ret[i] = NULL;
       }
       delete [] ret;
-    }    
+    }
     throw Exception(e, "MonteCarlo::initCopulas()");
   }
 
@@ -559,7 +559,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
   long numsegments = 0;
 
   // init only if spath is set
-  if (fpath == "") 
+  if (fpath == "")
   {
     return;
   }
@@ -755,7 +755,7 @@ double ccruncher::MonteCarlo::getRandom(int icopula, int iclient)
     return copulas[icopula]->get(iclient);
   }
 }
-    
+
 //===========================================================================
 // given a client, simule using rating-path algorithm
 //===========================================================================
@@ -768,7 +768,7 @@ int ccruncher::MonteCarlo::simRatingPath(int iclient)
   // rating at t0 is initial rating
   r1 = (*clients)[iclient]->irating;
 
-  // simulate rating at each time-tranch  
+  // simulate rating at each time-tranch
   for (int t=1;t<=STEPS;t++)
   {
     // getting random number U[0,1] (correlated with rest of clients...)
@@ -778,17 +778,17 @@ int ccruncher::MonteCarlo::simRatingPath(int iclient)
     r2 = mtrans->evalue(r1, u);
 
     // check if client has defaulted
-    if (r2 == indexdefault) 
+    if (r2 == indexdefault)
     {
       return t;
     }
-    else 
+    else
     {
       r1 = r2;
     }
   }
 
-  // if non defaults, return a number bigger than STEPS  
+  // if non defaults, return a number bigger than STEPS
   return STEPS+1;
 }
 
@@ -817,7 +817,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
 void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
 {
   // adding one simulation
-  for(unsigned int i=0;i<aggregators.size();i++) 
+  for(unsigned int i=0;i<aggregators.size();i++)
   {
     aggregators[i]->append(ittd);
   }

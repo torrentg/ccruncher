@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
       { "mpi",          0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
-    
+
   // parsing options
   while (1)
   {
@@ -96,34 +96,34 @@ int main(int argc, char *argv[])
       // no more options. exit while
       break;
     }
-  
+
     switch(curropt)
     {
       case '?': // invalid option
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
           return 1;
-          
+
       case 'h': // -h or --help (show help and exit)
           usage();
           return 0;
-          
+
       case 'v': // -v (be verbose)
           bverbose = true;
           break;
-          
+
       case 'f': // -f (force overwriting)
           bforce = true;
           break;
-          
+
       case 301: // --version (show version and exit)
           version();
           return 0;
-          
+
       case 302: // --path=dir (set output files path)
           spath = string(optarg);
           break;
-          
+
       case 303: // --nice=val (set nice value)
           try
           {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
             return 1;
           }
           break;
-          
+
       case 304: // --hash=val (set hash value)
           try
           {
@@ -149,15 +149,15 @@ int main(int argc, char *argv[])
             return 1;
           }
           break;
-          
+
       case 305: // --validate (validate input file)
           bsimulate = false;
           break;
-          
+
       case 306: // --mpi (use mpi environement)
-          bmpi = true;          
+          bmpi = true;
           break;
-          
+
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
                   "ccruncher version and arguments at gerard@fobos.generacio.com\n";
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  // retrieving input filename  
+  // retrieving input filename
   if (argc == optind)
   {
     cerr << "xml input file not specified" << endl;
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;  
+    return 1;
   }
 
   // license info
@@ -228,7 +228,7 @@ void run(string filename, string path) throw(Exception)
 
   // initializing logger
   Logger::setVerbosity(bverbose?1:0);
-  
+
   // parsing input file
   IData idata = IData(filename);
 
