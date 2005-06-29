@@ -90,7 +90,7 @@ void SurvivalTest::test1()
       <!-- optionally you can add default rating info (value=0 always) -->\n\
     </survival>";
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 2, 2, 2, 1, 1, 0, 0};
+  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
 
   // creating xml
   ExpatParser xmlparser;
@@ -112,8 +112,8 @@ void SurvivalTest::test1()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], int(round(sf.inverse(0,i/10.0))));
-    ASSERT_EQUALS(0, int(round(sf.inverse(1, 0.0))));
+    ASSERT_EQUALS(ivalues[i], int(ceil(sf.inverse(0,i/10.0))));
+    ASSERT_EQUALS(0, int(ceil(sf.inverse(1, 0.0))));
   }
 }
 
@@ -202,7 +202,7 @@ void SurvivalTest::test5()
   double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 1, 2, 3, 4, 5};
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 2, 2, 2, 1, 1, 0, 0};
+  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
 
   // ratings list creation
   Ratings ratings = getRatings();
@@ -220,8 +220,8 @@ void SurvivalTest::test5()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], int(round(sf.inverse(0,i/10.0))));
-    ASSERT_EQUALS(0, int(round(sf.inverse(1, 0.0))));
+    ASSERT_EQUALS(ivalues[i], int(ceil(sf.inverse(0,i/10.0))));
+    ASSERT_EQUALS(0, int(ceil(sf.inverse(1, 0.0))));
   }
 }
 
