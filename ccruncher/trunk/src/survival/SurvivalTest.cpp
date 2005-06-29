@@ -25,11 +25,16 @@
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added test6()
+//
 //===========================================================================
 
 #include <iostream>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
+#include "math/CopulaNormal.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
@@ -107,8 +112,8 @@ void SurvivalTest::test1()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
+    ASSERT_EQUALS(ivalues[i], int(round(sf.inverse(0,i/10.0))));
+    ASSERT_EQUALS(0, int(round(sf.inverse(1, 0.0))));
   }
 }
 
@@ -211,11 +216,56 @@ void SurvivalTest::test5()
     ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
     ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
-  
+
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
+    ASSERT_EQUALS(ivalues[i], int(round(sf.inverse(0,i/10.0))));
+    ASSERT_EQUALS(0, int(round(sf.inverse(1, 0.0))));
   }
+}
+
+//===========================================================================
+// test6 (checks distribution assumptions)
+//===========================================================================
+void SurvivalTest::test6()
+{
+  double mvalues1[] = {1.00, 0.90};
+  double mvalues2[] = {0.00, 0.00};
+  double *mvalues[] = {mvalues1, mvalues2};
+  int imonths[] = {0, 12};
+  int ivalues[] = {0, 0};
+  double **id = Arrays<double>::allocMatrix(2,2,0.0);
+
+  // ratings list creation
+  Ratings ratings = getRatings();
+
+  // survival function creation
+  Survival sf(&ratings, 2, (int *) imonths, (double**) mvalues, 48);
+
+  // creating Id matrix 2x2
+  id[0][0] = 1.0;
+  id[0][1] = 0.0;
+  id[1][0] = 0.0;
+  id[1][1] = 1.0;
+
+  // creating randomizer
+  CopulaNormal randomizer(2, (double**) id);
+
+  // checking values
+  for(int i=0;i<20000;i++)
+  {
+    if (sf.inverse(0,randomizer.get(0)) > 12) {
+      ivalues[0]++;
+    }
+    else {
+      ivalues[1]++;
+    }
+
+    randomizer.next();
+  }
+
+  // showing computed values
+  cout << "[0, 0.9] = " << ivalues[0] << endl;
+  cout << "[0.9, 1] = " << ivalues[1] << endl;
 }

@@ -3,6 +3,10 @@ CREDITCRUNCHER NEWS
 ===================
 
 
+version 0.4 (XXX 2005)
+--------------------------
+  * bugfix: solved bug when seed=0L
+
 version 0.3 (June 2005)
 --------------------------
   * bugfix: solved bug in correlation matrix check when correl = 0

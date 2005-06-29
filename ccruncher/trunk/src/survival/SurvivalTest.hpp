@@ -25,6 +25,9 @@
 // 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added test6()
+//
 //===========================================================================
 
 #ifndef _SurvivalTest_
@@ -54,6 +57,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
     void test3(void);
     void test4(void);
     void test5(void);
+    void test6(void);
 
 
   public:
@@ -65,6 +69,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
       TEST_CASE(test3);
       TEST_CASE(test4);
       TEST_CASE(test5);
+      TEST_CASE(test6);
     }
 
     void setUp();

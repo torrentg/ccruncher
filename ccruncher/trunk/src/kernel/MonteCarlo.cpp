@@ -807,7 +807,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
   int month = survival->inverse(r1, u);
 
   // return index time where defaults (always bigger than 0)
-  return max(1, int(round(double(month)/double(STEPLENGTH))));
+  return max(1, int(ceil(double(month)/double(STEPLENGTH))));
 }
 
 //===========================================================================

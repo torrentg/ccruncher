@@ -28,6 +28,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/06/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . modified inverse function (changed round per ceil)
+//
 //===========================================================================
 
 #include <cmath>
@@ -367,7 +370,7 @@ double ccruncher::Survival::evalue(const int irating, int t)
 }
 
 //===========================================================================
-// evalue inverse irating-survival function at time (in months) t
+// evalue inverse irating-survival function. returns the time in months
 //===========================================================================
 int ccruncher::Survival::inverse(const int irating, double val)
 {
@@ -401,9 +404,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
         double y0 = double(j-1);
         double y1 = double(j);
 
-        double ret = interpole(val, x0, y0, x1, y1);
-
-        return int(round(ret));
+        return int(ceil(interpole(val, x0, y0, x1, y1)));
       }
     }
 
@@ -418,9 +419,7 @@ int ccruncher::Survival::inverse(const int irating, double val)
     double y0 = double(data[irating].size())-1.0;
     double y1 = double(maxmonths);
 
-    double ret = interpole(val, x0, y0, x1, y1);
-
-    return int(round(ret));
+    return int(ceil(interpole(val, x0, y0, x1, y1)));
   }
 }
 
