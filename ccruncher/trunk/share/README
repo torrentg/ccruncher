@@ -25,7 +25,7 @@ descrip: Expat is an XML parser library written in C. It is a stream-oriented
 ------------------------------------------------------------------------
 
 project: jama/tnt
-version: 1.2.3 (jama) + 1.2.5 (tnt)
+version: 1.2.4 (jama) + 1.2.6 (tnt)
 licence: public domain (see declaration at home site)
 homeurl: http://math.nist.gov/tnt/
 descrip: The Template Numerical Toolkit (TNT) is a collection of interfaces 

@@ -113,7 +113,7 @@ dnl -------------------------------------------------------------
 dnl defining include directories
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/share/jama-1.2.3 -I$(top_srcdir)/share/Mersenne-1.0 -I$(top_srcdir)/share/MiniCppUnit-2.2]')
+         ['-I$(top_srcdir)/share/jama-1.2.4 -I$(top_srcdir)/share/Mersenne-1.0 -I$(top_srcdir)/share/MiniCppUnit-2.2]')
     
 dnl -------------------------------------------------------------
 dnl makefile's to be built

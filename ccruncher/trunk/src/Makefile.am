@@ -11,32 +11,32 @@ EXTRA_DIST = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/MiniCppUnit.hxx\
     ../share/Mersenne-1.0/MersenneTwister.h\
-    ../share/jama-1.2.3/jama_cholesky.h\
-    ../share/jama-1.2.3/jama_eig.h\
-    ../share/jama-1.2.3/jama_lu.h\
-    ../share/jama-1.2.3/jama_qr.h\
-    ../share/jama-1.2.3/jama_svd.h\
-    ../share/jama-1.2.3/tnt_array1d.h\
-    ../share/jama-1.2.3/tnt_array1d_utils.h\
-    ../share/jama-1.2.3/tnt_array2d.h\
-    ../share/jama-1.2.3/tnt_array2d_utils.h\
-    ../share/jama-1.2.3/tnt_array3d.h\
-    ../share/jama-1.2.3/tnt_array3d_utils.h\
-    ../share/jama-1.2.3/tnt_cmat.h\
-    ../share/jama-1.2.3/tnt_fortran_array1d.h\
-    ../share/jama-1.2.3/tnt_fortran_array1d_utils.h\
-    ../share/jama-1.2.3/tnt_fortran_array2d.h\
-    ../share/jama-1.2.3/tnt_fortran_array2d_utils.h\
-    ../share/jama-1.2.3/tnt_fortran_array3d.h\
-    ../share/jama-1.2.3/tnt_fortran_array3d_utils.h\
-    ../share/jama-1.2.3/tnt.h\
-    ../share/jama-1.2.3/tnt_i_refvec.h\
-    ../share/jama-1.2.3/tnt_math_utils.h\
-    ../share/jama-1.2.3/tnt_sparse_matrix_csr.h\
-    ../share/jama-1.2.3/tnt_stopwatch.h\
-    ../share/jama-1.2.3/tnt_subscript.h\
-    ../share/jama-1.2.3/tnt_vec.h\
-    ../share/jama-1.2.3/tnt_version.h
+    ../share/jama-1.2.4/jama_cholesky.h\
+    ../share/jama-1.2.4/jama_eig.h\
+    ../share/jama-1.2.4/jama_lu.h\
+    ../share/jama-1.2.4/jama_qr.h\
+    ../share/jama-1.2.4/jama_svd.h\
+    ../share/jama-1.2.4/tnt_array1d.h\
+    ../share/jama-1.2.4/tnt_array1d_utils.h\
+    ../share/jama-1.2.4/tnt_array2d.h\
+    ../share/jama-1.2.4/tnt_array2d_utils.h\
+    ../share/jama-1.2.4/tnt_array3d.h\
+    ../share/jama-1.2.4/tnt_array3d_utils.h\
+    ../share/jama-1.2.4/tnt_cmat.h\
+    ../share/jama-1.2.4/tnt_fortran_array1d.h\
+    ../share/jama-1.2.4/tnt_fortran_array1d_utils.h\
+    ../share/jama-1.2.4/tnt_fortran_array2d.h\
+    ../share/jama-1.2.4/tnt_fortran_array2d_utils.h\
+    ../share/jama-1.2.4/tnt_fortran_array3d.h\
+    ../share/jama-1.2.4/tnt_fortran_array3d_utils.h\
+    ../share/jama-1.2.4/tnt.h\
+    ../share/jama-1.2.4/tnt_i_refvec.h\
+    ../share/jama-1.2.4/tnt_math_utils.h\
+    ../share/jama-1.2.4/tnt_sparse_matrix_csr.h\
+    ../share/jama-1.2.4/tnt_stopwatch.h\
+    ../share/jama-1.2.4/tnt_subscript.h\
+    ../share/jama-1.2.4/tnt_vec.h\
+    ../share/jama-1.2.4/tnt_version.h
 
 bin_PROGRAMS = ccruncher generator mtrans
 

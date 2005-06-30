@@ -6,6 +6,8 @@ CREDITCRUNCHER NEWS
 version 0.4 (XXX 2005)
 --------------------------
   * bugfix: solved bug when seed=0L
+  * bugfix: solved bug in time-to-default algorithm
+  * upgraded to new tnt/jama version
 
 version 0.3 (June 2005)
 --------------------------

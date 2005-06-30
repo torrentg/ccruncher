@@ -73,7 +73,7 @@ public:
          // Compute 2-norm of k-th column without under/overflow.
          Real nrm = 0;
          for (i = k; i < m; i++) {
-            nrm = hypot(nrm,QR_[i][k]);
+            nrm = TNT::hypot(nrm,QR_[i][k]);
          }
 
          if (nrm != 0.0) {

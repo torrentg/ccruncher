@@ -279,7 +279,8 @@ Array2D<T> Array2D<T>::subarray(int i0, int i1, int j0, int j1)
 	T* p = &(data_[0]) + i0 *  n_ + j0;
 	for (int i=0; i<m; i++)
 	{
-		A.v_[i] = p + i*n;
+		A.v_[i] = p + i*n_;
+
 	}	
 	return A;
 }
