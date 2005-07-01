@@ -5,6 +5,7 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
+  * append filename + start and end timestamp at output
   * working in pdf documentation explaining methodology used in CreditCruncher
   * modify portfolio value function computation  
   * working in scripts that generates report using LaTeX and gnuplot

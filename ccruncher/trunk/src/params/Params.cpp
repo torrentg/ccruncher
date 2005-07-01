@@ -37,6 +37,7 @@
 //
 // 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to seed=0 (random seed)
+//   . added montecarlo.method param to getXML() method
 //
 //===========================================================================
 
@@ -289,6 +290,7 @@ string ccruncher::Params::getXML(int ilevel) throw(Exception)
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Parser::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Parser::long2string(copula_seed) + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.method' value='" + smethod + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Parser::bool2string(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Parser::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";

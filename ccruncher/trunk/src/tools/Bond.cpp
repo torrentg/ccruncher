@@ -114,7 +114,7 @@ vector <DateValues> ccruncher::Bond::simulate() throw(Exception)
   {
     throw Exception("Bond::simulate(): non valid properties");
   }
-  
+
   int n = ncoupons+1;
   int m = term/ncoupons;
   double r = rate/(12.0/m);
@@ -131,16 +131,16 @@ vector <DateValues> ccruncher::Bond::simulate() throw(Exception)
   {
     curr.date = addMonths(issuedate, i*m);
     curr.cashflow = nominal*r;
-    curr.exposure = nominal;
-    curr.recovery = 0.8*nominal;
+    curr.exposure = 0.0;
+    curr.recovery = 0.0*nominal;
     ret.push_back(curr);
   }
 
   curr.date = addMonths(issuedate, term);
   curr.cashflow = nominal*(1.0+r);
-  curr.exposure = nominal;
-  curr.recovery = 0.8*nominal;
+  curr.exposure = 0.0;
+  curr.recovery = 0.0*nominal;
   ret.push_back(curr);
-    
+
   return ret;
 }

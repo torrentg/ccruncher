@@ -65,6 +65,7 @@ using namespace std;
 #define NOMINAL_MU     1000.00
 #define NOMINAL_SIGMA2  100.00
 #define NOMINAL_MIN     100.00
+#define NOMINAL_MAX    1900.00
 
 //---------------------------------------------------------------------------
 
@@ -288,7 +289,16 @@ string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) thro
 double getNominal()
 {
   double ret = mtw.randNorm(NOMINAL_MU, NOMINAL_SIGMA2);
-  return (ret<=NOMINAL_MIN?NOMINAL_MIN:ret);
+
+  if (ret <= NOMINAL_MIN) {
+    return NOMINAL_MIN;
+  }
+  else if (ret >= NOMINAL_MAX) {
+    return NOMINAL_MAX;
+  }
+  else {
+    return ret;
+  }
 }
 
 //===========================================================================
