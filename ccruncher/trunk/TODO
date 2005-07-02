@@ -5,6 +5,7 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
+  * improve given samples
   * append filename + start and end timestamp at output
   * append output filenames at output
   * working in pdf documentation explaining methodology used in CreditCruncher
