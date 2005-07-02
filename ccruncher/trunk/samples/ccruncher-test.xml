@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.3.dtd"> 
+<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.4.dtd">
 <!DOCTYPE creditcruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
-          "http://www.generacio.com/ccruncher/creditcruncher-0.3.dtd">
+          "http://www.generacio.com/ccruncher/creditcruncher-0.4.dtd">
 -->
 
 <creditcruncher>
@@ -557,7 +557,7 @@
     <svalue rating="Default" t="576" value="0"/>
     <svalue rating="Default" t="588" value="0"/>
     <svalue rating="Default" t="600" value="0"/>
-            
+
   </survival>
 
   <!-- ============================================================== -->
