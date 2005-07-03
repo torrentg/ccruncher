@@ -23,6 +23,10 @@
 # 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
+# 2005/06/03 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added LC_ALL=C export (needed by sort command)
+#   . modified from scale=2 to scale=6 (in bc command)
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -137,7 +141,7 @@ readconf() {
   fi
 
   which gnuplot > /dev/null 2> /dev/null
-  
+
   if [ $? != 0 ]; then
     echo "gnuplot not found. please report to system administrator";
     echo "gnuplot can be found at http://www.gnuplot.info/";
@@ -154,7 +158,7 @@ fvalues() {
   numrows=`wc -l < $1`
   minval=`sort -n -k 2 $1 | head -1 | awk " { print \\\$2} "`;
   maxval=`sort -n -k 2 $1 | tail -1 | awk " { print \\\$2} "`;
-  binsize=`echo "scale=2; ($maxval-($minval))/($numbins);" | bc 2> /dev/null`;
+  binsize=`echo "scale=6; ($maxval-($minval))/($numbins);" | bc 2> /dev/null`;
 
 }
 
@@ -168,7 +172,7 @@ plotpdf() {
   else
     prog="gnuplot -persist "
   fi
-  
+
   $prog 2>/dev/null << _EOF_
     reset
     set terminal x11 title "$1"
@@ -209,7 +213,7 @@ plotcdf() {
     set grid
     numrows=$numrows
     set title 'Portfolio Value Cumulative Distribution Function'
-    plot "< sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
+    plot "<export LC_ALL=C;sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
 
 _EOF_
 
@@ -228,6 +232,10 @@ readconf $@;
 shift `expr $OPTIND - 1`
 
 copyright;
+
+#required by sort command
+LC_ALL=C
+export LC_ALL
 
 for filename in "$@"
 do

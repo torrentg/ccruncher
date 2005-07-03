@@ -49,7 +49,7 @@ Description:
 
   2 clients
   1 unique sector
-  uncorrelated defaults (due to only exist 1 client)
+  uncorrelated defaults
   2 ratings (dead and alive)
   transition values:
     P(alive->alive) = 0.9
@@ -135,6 +135,30 @@ Expected Results:
   Take simulated portfolio values output file (portfolio-rest.out),
   compute pdf (probability density function) at 75,...,100 an compare
   with binomial values.
+
+
+sample04.xml
+---------------------------------------------------------------------
+
+Description:
+
+  The same that sample03, with these diferences:
+    2 sectors
+    correl(S1,S1) = 0.10
+    correl(S1,S2) = 0.05
+    correl(S2,S2) = 0.15
+    Odds clients (50) belongs to S1 and even clients (50) belongs to S2
+
+Expected Results:
+
+  We don't know explicit solution for this problem (if you know, please
+  report it). We do an artistic description of pdf compared with sample03:
+
+                               sample03  sample04
+    simetric                     very      none
+    maximum probability           93        94
+    minimum                       80        60
+    P(Z=100)                      0.0       0.1
 
 
 
