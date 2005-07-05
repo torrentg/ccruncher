@@ -41,6 +41,15 @@ Expected Results:
      P(Z=0) = 0.1
      P(Z=1) = 0.9
 
+Notes:
+
+  All sugested modifications that follows don't change
+  the expected results:
+    1. You can use this sample to check interest rate impact
+    2. Also you can modify the number of steps (but always
+       steps*steplength=12)
+    3. Try to change the simulation method to rating-path
+
 
 sample02.xml
 ---------------------------------------------------------------------
@@ -71,6 +80,10 @@ Expected Results:
      P(Z=0) = P(X1=0)·P(X2=0) = 0.1 · 0.1 = 0.01
      P(Z=1) = P(X1=1)·P(X2=0) + P(X1=0)·P(X2=1) = 0.9 · 0.1 + 0.1 · 0.9 = 0.18
      P(Z=2) = P(X1=1)·P(X2=1) = 0.9 · 0.9 = 0.81
+
+Notes:
+
+  Same notes that sample01
 
 
 sample03.xml
@@ -136,6 +149,10 @@ Expected Results:
   compute pdf (probability density function) at 75,...,100 an compare
   with binomial values.
 
+Notes:
+
+  Same notes that sample01
+
 
 sample04.xml
 ---------------------------------------------------------------------
@@ -155,11 +172,14 @@ Expected Results:
   report it). We do an artistic description of pdf compared with sample03:
 
                                sample03  sample04
-    simetric                     very      none
-    maximum probability           93        94
+    pdf shape                  simetric  asimetric
+    maximum probability           90        94
     minimum                       80        60
     P(Z=100)                      0.0       0.1
 
+Notes:
+
+  Same notes that sample01
 
 
 

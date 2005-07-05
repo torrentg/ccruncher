@@ -79,9 +79,8 @@ La metodolog\'ia para la generaci\'on de un sistema de ratings queda fuera del
 cartera tiene un rating inicial asignado.
 \newline
 \newline
-El rating de cada empresa var\'ia a lo largo del tiempo en funci\'on de la 
-calidad crediticia de cada instante (v\'ease figura \ref{ratingevol}). 
-La evoluci\'on a lo largo del tiempo del rating de una empresa se 
+El rating de cada empresa puede variar a lo largo del tiempo (v\'ease figura
+\ref{ratingevol}). La evoluci\'on temporal del rating de una empresa se
 contempla a trav\'es de la matriz de transici\'on o la funci\'on de 
 supervivencia (v\'ease la secci\'on \ref{sec:mtransition}).
 \begin{figure}[!hb]
@@ -105,7 +104,7 @@ de forma independiente que una cartera donde los fallidos se encuentran
 correlacionados. En el primer caso, al cabo de un a\~no tendremos un 
 conjunto limitado de fallidos. En el segundo caso, al cabo de un a\~no la 
 mayoria de clientes habr\'an hecho fallido o casi ning\'un cliente habr\'a
-hecho fallido. V\'ease el ejemplo \emph{Impacto de la correlaci\'on intrasectorial}.
+hecho fallido.
 \newline
 \newline
 Al no poder asignar una correlaci\'on de fallido cliente a cliente, se recurre
@@ -131,8 +130,9 @@ Incluye las posibles amortizaciones, primas, cupones, comisiones, costes, etc.
 Usaremos el cashflow para calcular el valor, o precio, de un activo en el 
 instante $t$.
 
-\paragraph{Exposici\'on.} Importe de la p\'erdida en caso de fallido. Cada 
-producto tiene un perfil de exposici\'on caracter\'istico.
+\paragraph{Exposici\'on.} Importe que deberá abonarse en caso de fallido
+debido a motivos contractuales. Cada producto tiene un perfil de exposici\'on
+caracter\'istico.
 
 \paragraph{Recuperaci\'on.} Importe que se estima que ser\'a recuperado en 
 caso de fallido. Normalmente es una parte de la exposici\'on.
@@ -322,11 +322,11 @@ el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
-\paragraph{Definici\'on.} La matriz de transici\'on es una matriz cuadrada
-de dimensi\'on $n \times n$, donde $n$ es el n\'umero de ratings, que 
-proporciona la probabilidad que un cliente con rating inicial $r_i$ pase a 
-tener, al cabo de un tiempo $T$, rating $r_j$. La denotamos de la forma 
-siguiente:
+\paragraph{Definici\'on.} La matriz de transici\'on en el periodo $T$ es
+una matriz cuadrada de dimensi\'on $n \times n$, donde $n$ es el n\'umero
+de ratings, que proporciona la probabilidad que un cliente con rating
+inicial $r_i$ pase a tener, al cabo de un tiempo $T$, rating $r_j$.
+La denotamos de la forma siguiente:
 \begin{displaymath}
 M_T = \left(
 \begin{array}{ccc}
@@ -407,7 +407,7 @@ Sea cual sea el rating inicial, existe la posibilidad que realize fallido.
 Deseamos obtener la matriz de transici\'on para periodos distintos (m\'ultiplos o 
 fraccionarios) del periodo proporcionado, $T$. Esto nos permitir\'a determinar la 
 probabilidad que un cliente con rating inicial $r_i$ tenga rating $r_j$ al cabo 
-de $k \cdot T$ tiempo o al cabo de $K/t$ tiempo.
+de $k \cdot T$ tiempo o al cabo de $T/k$ tiempo.
 
 \paragraph{Ejemplo.} Calculemos la probabilidad de pasar de rating $AA$ a
 rating $B$ en un plazo de dos a\~nos disponiendo de la matriz de transici\'on anual.
@@ -450,8 +450,8 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 \subsection{Funci\'on de supervivencia}
 
 \paragraph{Definici\'on.} La Tasa de Morosidad Anticipada (TMA) 
-del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
-inicial $r_i$ haga fallido a lo largo del a\~no $t$.
+del rating $r_i$ en el a\~no $k$ es la probabilidad que una empresa con rating
+inicial $r_i$ haga fallido a lo largo del a\~no $k$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -490,10 +490,12 @@ fallido en el intervalo de tiempo $(0,t)$.
 
 \paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada Acumulada se 
 puede expresar en funci\'on de la matriz de transici\'on a trav\'es de la
-relaci\'on siguiente ($n$ es el \'indice del rating Default):
+relaci\'on siguiente:
 \begin{displaymath}
 TMAA(r_i,k \cdot T) = (M_{k \cdot T})_{i,n} = (M_{T}^{k})_{i,n}
 \end{displaymath}
+donde $n$ es el \'indice del rating Default y $T$ es el periodo de la matriz
+de transici\'on.
 
 \paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada se puede expresar 
 en funci\'on de la Tasa de Morosidad Anticipada Acumulada a trav\'es de la
@@ -530,10 +532,9 @@ este documento.
 \section{Matriz de correlaci\'on}
 \label{sec:mcorrel}
 
-\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial es una matriz
-cuadrada de dimensi\'on $m \times m$, donde $m$ es el n\'umero de sectores, 
-que proporciona la correlaci\'on de los fallidos entre los sectores. 
-La denotamos de la forma siguiente:
+\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial proporciona
+la correlaci\'on de los fallidos entre los sectores. La denotamos de la forma
+siguiente:
 \begin{displaymath}
 \Gamma = \left(
 \begin{array}{ccc}
@@ -597,18 +598,17 @@ Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre clientes 
 con bloques con $1$'s en la diagonal.
 
 
-\paragraph{Ejemplo.} La matriz de correlaci\'on sectorial no tiene que 
-ser necesariamente definida positiva. Supongamos que tenemos dos sectores, 
-entonces la siguiente matriz sectorial es v\'alida y no es definida positiva:
+\paragraph{Ejemplo.}Supongamos que tenemos dos sectores, siendo la
+matriz sectorial:
 \begin{displaymath}
 \Gamma=\left(
 \begin{array}{cc}
  0  &  0.1 \cr
 0.1 & -0.2
 \end{array}
-\right) \Longrightarrow det(\Gamma)=-0.01 < 0 \Longrightarrow \Gamma \textrm{ not definite positive}
+\right)
 \end{displaymath}
-Supongamos que el sector 1 tiene 3 clientes y el sector 2 tiene 2 clientes. La
+Supongamos que el sector $A$ tiene 3 clientes y el sector $B$ tiene 2 clientes. La
 matriz de correlaci\'on entre clientes es:
 \begin{displaymath}
 \Theta = \left(
@@ -619,19 +619,16 @@ matriz de correlaci\'on entre clientes es:
  0.1 & 0.1 &  0  &  1   & -0.2 \cr
  0.1 & 0.1 &  0  & -0.2 &  1   
 \end{array}
-\right) \Longrightarrow det(\Theta)=0.912 \textrm{ and definite positive}
+\right)
 \end{displaymath}
 
-\subsection{Propiedades} 
 
-\paragraph{Propiedad 1.} Si la matriz de correlaci\'on sectorial tiene 
-todos los elementos comprendidos entre -1 y 1, entonces la matriz de correlaci\'on 
-entre clientes es definida positiva\footnote{propiedad pendiente de demostrar}.
-\begin{displaymath}
-\gamma_{i,j} \in (-1,1) \quad \forall i, j 
-\Longrightarrow
-\Theta \textrm{ is definite positive}
-\end{displaymath}
+\paragraph{Observaci\'on.} En general se impone que la matriz de
+correlaci\'on entre clientes sea definida positiva debido a que es
+una propiedad necesaria para la generaci\'on de c\'opulas normales.
+El hecho que la matriz de correlaci\'on entre clientes deba ser
+definida positiva no significa que la matriz de correlaci\'on sectorial
+deba ser definida positiva. 
 
 %---------------------------------------------------------------------------
 
@@ -668,7 +665,7 @@ aplicado al riesgo de cr\'edito.
 \paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
 sencilla, de la que se puede calcular la distribuci\'on de forma expl\'icita. 
 Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
-entre ellos, cada cliente con un activo que consiste en devolver $1$ \euro al 
+entre ellos, cada cliente tiene un activo que consiste en devolver $1$ \euro al
 cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
 $2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
 fallido al cabo de $T$ tiempo es $0.1$.
@@ -699,7 +696,8 @@ P(X \leq \frac{\textrm{VAR}_{99\%} - 90}{3}) = 0.01 \longrightarrow \cr
 Este ejemplo no es significativo debido a que se han realizado dos supuestos 
 que en el mundo real no se cumplen: todos los creditores se modelan de la misma 
 forma y los fallidos son independientes. Se obtiene que la distribuci\'on del 
-valor de la cartera a tiempo $T$ es una variable aleatoria Normal, cosa que no
-concuerda con las observaciones reales, que muestran que la distribuci\'on del 
-valor de las carteras es fuertemente asim\'etrica respecto el valor esperado.
+valor de la cartera a tiempo $T$ se aproxima a una variable aleatoria Normal,
+cosa que no concuerda con las observaciones reales, que muestran que la
+distribuci\'on del valor de las carteras es fuertemente asim\'etrica respecto
+el valor esperado.
 
