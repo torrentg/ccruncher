@@ -34,13 +34,15 @@
 \section{Conceptos b\'asicos de estad\'istica}
 \label{apendix:stats}
 
-\paragraph{Definici\'on.} Llamamos funci\'on de distribuci\'on o cdf de la
-variable aleatoria $X$ a la funci\'on $F$ que cumple:
+\paragraph{Definici\'on.} Llamamos \emph{funci\'on de distribuci\'on}
+\index{Funci\'on de distribuci\'on} o cdf de la variable aleatoria $X$ a la
+funci\'on $F$ que cumple:
 \begin{displaymath}
 F(x) = P(X \leq x)
 \end{displaymath}
 
-\paragraph{Definici\'on.} Llamamos funci\'on de probabilidad o densidad o pdf
+\paragraph{Definici\'on.} Llamamos \emph{funci\'on de probabilidad}
+\index{Funci\'on de probabilidad} o \emph{densidad}\index{Densidad} o pdf
  de la variable aleatoria $X$ a la funci\'on $f$ que cumple:
 \begin{displaymath}
 F(x) = \int_{-\infty}^{x} f(t) dt
@@ -53,8 +55,8 @@ $H(.)$ mon\'otona (estrictamente creciente o estrictamente decreciente) es:
 f_Y(y) = f_X(H^{-1}(y))\cdot \left| \frac{d(H^{-1}(y))}{dy} \right|
 \end{displaymath}
 
-\paragraph{Esperanza.} Definimos la esperanza de una variable aleatoria 
-discreta de la forma siguiente:
+\paragraph{Esperanza.} Definimos la \emph{esperanza}\index{Esperanza} de una
+variable aleatoria discreta de la forma siguiente:
 \begin{displaymath}
 E(X) = \sum_{i} i \cdot P(X=i)
 \end{displaymath}
@@ -64,8 +66,8 @@ $f(x)$ la esperanza se expresa como:
 E(X) = \int_{-\infty}^{\infty} x \cdot f(x) dx
 \end{displaymath}
 
-\paragraph{Varianza.} Definimos la varianza de una variable aleatoria discreta 
-de la forma siguiente:
+\paragraph{Varianza.} Definimos la \emph{varianza}\index{Varianza} de una variable
+aleatoria discreta de la forma siguiente:
 \begin{displaymath}
 Var(X) = \sum_{i} (i-E(X))^2 \cdot P(X=i)
 \end{displaymath}
@@ -75,14 +77,14 @@ $f(x)$ la varianza se expresa como:
 Var(X) = \int_{-\infty}^{\infty} (x-E(X))^2 \cdot f(x) dx
 \end{displaymath}
 
-\paragraph{Covarianza.} Definimos la covarianza entre dos variables 
-aleatorias $X$ e $Y$ de la forma siguiente:
+\paragraph{Covarianza.} Definimos la \emph{covarianza}\index{Covarianza} entre dos
+variables aleatorias $X$ e $Y$ de la forma siguiente:
 \begin{displaymath}
 Cov(X,Y) = E(X \cdot Y) - E(X) \cdot E(Y)
 \end{displaymath}
 
-\paragraph{Correlaci\'on.} Definimos la correlaci\'on, $\rho$, entre dos 
-variables aleatorias $X$ e $Y$ de la forma siguiente:
+\paragraph{Correlaci\'on.} Definimos la \emph{correlaci\'on}\index{Correlaci\'on},
+$\rho$, entre dos variables aleatorias $X$ e $Y$ de la forma siguiente:
 \begin{displaymath}
 \rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{Var(x) \cdot Var(Y)}}
 \end{displaymath}
@@ -98,10 +100,10 @@ E(H(X)) = \int_{-\infty}^{\infty} H(x) \cdot f(x) dx
 
 \section{La variable aleatoria de Bernoulli}
 
-\paragraph{Definici\'on.} La variable aleatoria discreta Bernouilli, $X$, se 
-utiliza para modelar fen\'omenos que solamente pueden tomar dos estados, 
-$0$ y $1$, con probabilidades $p$ y $(1-p)$ respectivamente. La notaremos 
-como $X \sim Ber(p)$:
+\paragraph{Definici\'on.} La variable aleatoria discreta \emph{Bernouilli}
+\index{Bernouilli}, $X$, se utiliza para modelar fen\'omenos que solamente pueden
+tomar dos estados, $0$ y $1$, con probabilidades $p$ y $(1-p)$ respectivamente.
+La notaremos como $X \sim Ber(p)$:
 \begin{displaymath}
 P(X=0) = (1 - p) \qquad   P(X=1) = p \qquad p \in [0,1]
 \end{displaymath}
@@ -138,7 +140,7 @@ x= \left\{
 
 \paragraph{Definici\'on.} La suma de $n$ variables aleatorias Bernoulli, $Ber(p)$,  
 independientes e id\'enticamente distribuidas es una variable aleatoria discreta, 
-$X$ que llamamos Binomial, $X \sim B(n,p)$.
+$X$ que llamamos \emph{Binomial}\index{Binomial}, $X \sim B(n,p)$.
 \begin{displaymath}
 P(X=k) = {n \choose k} \cdot p^k \cdot (1-p)^{n-k} \qquad {n \choose k} = \frac{n!}{k! \cdot (n-k)!}
 \qquad k \in \{0, \cdots, n\}
@@ -169,7 +171,7 @@ B(n,p) \approx N\left(n p, n p (1-p)\right)
 \section{La variable aleatoria Normal}
 
 \paragraph{Definici\'on.} Decimos que una variable aleatoria continua $Z$ es 
-una Normal con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
+una \emph{Normal}\index{Normal} con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
 $Z \sim N(\mu, \sigma^2)$ si tiene la siguiente funci\'on de densidad:
 \begin{displaymath}
 f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
@@ -196,8 +198,8 @@ z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
 \end{displaymath}
 
 \paragraph{Definici\'on.} Decimos que una variable aleatoria continua 
-$n$-dimensional, $Z$, es una Normal con media $\vec{\mu}$ y matriz de 
-covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$, si tiene la 
+$n$-dimensional, $Z$, es una \emph{Normal}\index{Normal} con media $\vec{\mu}$
+y matriz de covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$, si tiene la
 siguiente funci\'on de densidad:
 \begin{displaymath}
 f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}} 
@@ -223,9 +225,9 @@ de una matriz de covarianzas.
 \label{apendix:sqrtmat}
 
 \paragraph{Definici\'on.}
-Diremos que 2 matrices $A$ y $B$ de orden $n$ son semejantes si existe una 
-matriz, $P$, de orden $n$ con $det(P) \neq 0$ tal que 
-$B = P^{-1} \cdot A \cdot P$.
+Diremos que 2 matrices $A$ y $B$ de orden $n$ son \emph{semejantes}
+\index{Matrices semejantes} si existe una matriz, $P$, de orden $n$ con
+$det(P) \neq 0$ tal que $B = P^{-1} \cdot A \cdot P$.
 
 
 \paragraph{Proposici\'on.} Si dos matrices $A$ y $B$ son semejantes 
@@ -238,8 +240,9 @@ B^n = P^{-1} \cdot A^{n} \cdot P
 \end{displaymath}
 
 \paragraph{Definici\'on.} 
-Diremos que una matriz $A$ de orden $n$ es diagonalizable si es semejante a una 
-matriz diagonal $D$, o sea, $A = P^{-1} \cdot D \cdot P$ siendo $det(D) \neq 0$.
+Diremos que una matriz $A$ de orden $n$ es \emph{diagonalizable}
+\index{Matriz diagonalizable} si es semejante a una matriz diagonal $D$, o sea,
+$A = P^{-1} \cdot D \cdot P$ siendo $det(D) \neq 0$.
 
 \paragraph{Proposici\'on.} 
 Para que una matriz $A$ sea diagonalizable es necesario y suficiente que:
@@ -293,7 +296,8 @@ la matriz $\Sigma_1$ componente a componente:
 \end{array}
 \right)
 \end{displaymath}
-Observamos que la matriz $\Sigma_2$ vuelve a tener los elementos de la diagonal igual a $1 = 2 sin(\frac{\pi}{6})$.
+Observamos que la matriz $\Sigma_2$ vuelve a tener los elementos de la
+diagonal iguales a $1$ debido a que $2 sin(\frac{\pi}{6}) = 1$.
 
 \paragraph{Paso 2.} A la matriz $\Sigma_2$ le aplicamos el algoritmo de 
 Cholesky para obtener la matrix triangular inferior $B$ cumpliendo 

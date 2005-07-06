@@ -76,16 +76,16 @@ Se recomienda la lectura de las referencias \cite{copu:wang} y
 \cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
 c\'opula, sus propiedades, como simularlas, creencias erroneas, etc.
 
-\paragraph{Definici\'on.} Llamamos c\'opula a la funci\'on de distribuci\'on
-de una variable aleatoria $n$-dimensional tal que sus distribuciones marginales 
-son variables aleatorias $U[0,1]$.
+\paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
+de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
+marginales \index{Distribuciones marginales} son variables aleatorias $U[0,1]$.
 \begin{displaymath}
 C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 \end{displaymath}
 
-\paragraph{Teorema.} Toda variable aleatoria $n$-dimensional puede separarse 
-en las distribuciones seguidas por sus componentes (las distribuciones marginales)
-y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y 
+\paragraph{Teorema.} \index{Teorema de Sklar} Toda variable aleatoria $n$-dimensional
+puede separarse en las distribuciones seguidas por sus componentes (las distribuciones
+marginales) y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y
 $f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
 c\'opula $C$ tq.
 \begin{displaymath}
@@ -106,8 +106,8 @@ apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo
 de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
 
 \paragraph{Definici\'on.} Dado un conjunto de observaciones, $x^1, \cdots, x^n$,
-de la variable aleatoria $X$, definimos la funci\'on de distribuci\'on emp\'irica 
-como:
+de la variable aleatoria $X$, definimos la \emph{funci\'on de distribuci\'on emp\'irica}
+\index{Funci\'on de distribuci\'on emp\'irica} como:
 \begin{displaymath}
 \widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x^i) \qquad
 I_{[-\infty,k]}(x) = \left\{
@@ -125,9 +125,9 @@ la funci\'on de distribuci\'on al incrementar el n\'umero de observaciones.
 \end{displaymath}
 
 \paragraph{Definici\'on.} Sea $X$ una variable aleatoria con funci\'on de 
-distribuci\'on conocida, $F$. El m\'etodo de Monte Carlo consiste en 
-obtener la funci\'on de distribuci\'on empirica de la variable aleatoria 
-$H(X)$ usando el siguiente m\'etodo:
+distribuci\'on conocida, $F$. El \emph{m\'etodo de Monte Carlo}\index{M\'etodo
+de Monte Carlo} consiste en obtener la funci\'on de distribuci\'on empirica de
+la variable aleatoria $H(X)$ usando el siguiente m\'etodo:
 \begin{displaymath}
 \begin{array}{ccc}
 F_X                  &     \quad         & \widetilde{F_{H(X)}}   \cr
@@ -211,8 +211,8 @@ $Z(t)$ & Valor de la cartera en tiempo $t$\\
 
 \section{Valor de un activo}
 
-\paragraph{Definici\'on.} Definimos la funci\'on indicador del momento de 
-fallido de la forma siguiente:
+\paragraph{Definici\'on.} Definimos la funci\'on \emph{indicador del momento de 
+fallido}\index{Indicador del momento de fallido} de la forma siguiente:
 \begin{displaymath}
 I(t) = \left\{
 \begin{array}{ll}
@@ -222,8 +222,8 @@ I(t) = \left\{
 \right.
 \end{displaymath}
 
-\paragraph{Definici\'on.} Definimos la funci\'on indicador de actividad de la 
-forma siguiente:
+\paragraph{Definici\'on.} Definimos la funci\'on \emph{indicador de actividad}
+\index{Indicador de actividad} de la forma siguiente:
 \begin{displaymath}
 J(t) = \left\{
 \begin{array}{ll}

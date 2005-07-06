@@ -64,9 +64,9 @@ Puede verse un esquema de la estructura en la figura \ref{portfolio}.
 
 \subsection{Ratings}
 
-Un sistema de ratings es una medida de calidad crediticia usada para
-valorar creditores. A cada creditor se le asigna una nota discreta (pe. AAA,
-AA, A, BBB, BB, B, CCC, Default) en funci\'on de su calidad
+Un \emph{sistema de ratings}\index{Sistema de ratings} es una medida de calidad
+crediticia usada para valorar creditores. A cada creditor se le asigna una nota
+discreta (pe. AAA, AA, A, BBB, BB, B, CCC, Default) en funci\'on de su calidad
 crediticia. Los \'unicos ratings contemplados en este documento 
 son los que tienen una relaci\'on estad\'istica directa y cuantificable 
 con la probabilidad de impago del creditor. Ejemplos de este tipo de ratings 
@@ -108,10 +108,10 @@ hecho fallido.
 \newline
 \newline
 Al no poder asignar una correlaci\'on de fallido cliente a cliente, se recurre
-a la agrupaci\'on de estos en sectores. Se considera que la cartera de 
-cr\'editos dispone de un conjunto de sectores donde los componentes de cada 
-sector muestran una evoluci\'on crediticia similar. O sea, que la mejora o 
-empeoramiento de la calidad crediticia (rating) afecta de forma com\'un a los 
+a la agrupaci\'on de estos en \emph{sectores}\index{Sectores}. Se considera que
+la cartera de cr\'editos dispone de un conjunto de sectores donde los componentes
+de cada sector muestran una evoluci\'on crediticia similar. O sea, que la mejora
+o empeoramiento de la calidad crediticia (rating) afecta de forma com\'un a los
 componentes del sector. En general se identifican estos sectores con los 
 sectores industriales. 
 \newline
@@ -170,7 +170,8 @@ caso de fallido. Normalmente es una parte de la exposici\'on.
 
 \paragraph{Definici\'on.}
 Sea $C_{t_0}$ el importe inicial de una operaci\'on y $C_{t_1}$ el importe final. 
-Definimos el tipo efectivo, $r$, como:
+Definimos el \emph{tipo de inter\'es efectivo}\index{Tipo de inter\'es efectivo},$r$,
+como:
 \begin{equation}
 C_{t_1} = C_{t_0} \cdot (1+r)
 \end{equation}
@@ -181,8 +182,9 @@ r = \frac{C_{t_1}-C_{t_0}}{C_{t_0}}
 \end{equation}
 
 \paragraph{Definici\'on.}
-El tipo de inter\'es simple, $r_s$, es un tipo de inter\'es donde para cada 
-periodo de tiempo se incrementa el importe inicial, $C_{t_0}$ por un factor de $r_s$. 
+El \emph{tipo de inter\'es simple}\index{Tipo de inter\'es simple}, $r_s$, es un tipo
+de inter\'es donde para cada periodo de tiempo se incrementa el importe inicial, $C_{t_0}$
+por un factor de $r_s$.
 \begin{equation}
 C_{t_1} = C_{t_0} \cdot (1+ r_s \cdot (t_1-t_0))
 \end{equation}
@@ -193,9 +195,9 @@ r_s = \frac{r}{t_1 - t_0}
 \end{equation}
 
 \paragraph{Defici\'on.}
-El tipo de inter\'es compuesto, $r_c$, es un tipo de inter\'es donde en cada 
-periodo de tiempo se incrementa por un factor de $r_c$ el importe acumulado del 
-periodo anterior.
+El \emph{tipo de inter\'es compuesto}\index{Tipo de inter\'es compuesto}, $r_c$, es un tipo
+de inter\'es donde en cada periodo de tiempo se incrementa por un factor de $r_c$ el importe
+acumulado del periodo anterior.
 \begin{equation}
 C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)} 
 \end{equation}
@@ -206,8 +208,8 @@ r_c = (1 + r) ^ \frac{1}{t_1-t_0} - 1
 \end{equation}
 
 \paragraph{Defici\'on.}
-El tipo de inter\'es continuo, $r_e$, es el caso l\'\i mite del inter\'es 
-compuesto. 
+El \emph{tipo de inter\'es continuo}\index{Tipo de inter\'es continuo}, $r_e$, es el caso
+l\'\i mite del inter\'es compuesto.
 \begin{equation}
 C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)}
 \end{equation}
@@ -260,9 +262,9 @@ el intervalo de tiempo y el tipo de inter\'es:
 \subsection{Funci\'on de transporte}
 
 \paragraph{Definici\'on.} Fijado un tipo de inter\'es, $r$, y un intervalo de
-tiempo, $\Delta t = t_k-t_0$, la funci\'on de transporte, $\Upsilon$, proporciona 
-el factor que debe aplicarse a un importe en $t_0$ para obtener el importe 
-equivalente en $t_k$.
+tiempo, $\Delta t = t_k-t_0$, \emph{la funci\'on de transporte}\index{Funci\'on de transporte},
+$\Upsilon$, proporciona el factor que debe aplicarse a un importe en $t_0$ para obtener el
+importe equivalente en $t_k$.
 \newline
 \newline
 Caso $C_0 \longrightarrow C_k \quad t_0 < t_k$:
@@ -292,7 +294,8 @@ tiene una expresi\'on \'unica, sea cual sea el sentido en el que se aplica:
 
 \subsection{Curva spot o cup\'on cero}
 
-\paragraph{Definici\'on.} La curva spot o curva cup\'on cero es la funci\'on
+\paragraph{Definici\'on.} La \emph{curva spot}\index{Curva spot} o
+\emph{curva cup\'on cero}\index{Curva cup\'on cero} es la funci\'on
 $S$ que indica el tipo de inter\'es a aplicar en la funci\'on de transporte
 desde el tiempo $t_0$.
 
@@ -322,10 +325,9 @@ el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
 \section{Matriz de transici\'on}
 \label{sec:mtransition}
 
-\paragraph{Definici\'on.} La matriz de transici\'on en el periodo $T$ es
-una matriz cuadrada de dimensi\'on $n \times n$, donde $n$ es el n\'umero
-de ratings, que proporciona la probabilidad que un cliente con rating
-inicial $r_i$ pase a tener, al cabo de un tiempo $T$, rating $r_j$.
+\paragraph{Definici\'on.} La \emph{matriz de transici\'on}\index{Matriz de transici\'on}
+en el periodo $T$ es una matriz cuadrada que proporciona la probabilidad que un cliente
+con rating inicial $r_i$ pase a tener, al cabo de un tiempo $T$, rating $r_j$.
 La denotamos de la forma siguiente:
 \begin{displaymath}
 M_T = \left(
@@ -339,10 +341,10 @@ m_{n,1} & \dots  & m_{n,n}
 m_{i,j} = P(r_i \to r_j;0;T)
 \end{displaymath}
 
-donde $m_{i,j}$ corresponde a la probabilidad de que un cliente con rating 
-$r_i$ pase a tener, al cabo de $T$ tiempo, rating $r_j$.
+donde $n$ es el n\'umero de ratings y $m_{i,j}$ corresponde a la probabilidad de que un
+cliente con rating $r_i$ pase a tener, al cabo de $T$ tiempo, rating $r_j$.
 
-\paragraph{Ejemplo.} Matriz de transici\'on anual ($T=1$ a\~no). 
+\paragraph{Ejemplo.} Matriz de transici\'on anual ($T=1$ a\~no).
 Las probabilidades est\'an expresadas en tanto por ciento.
 \\
 \begin{center}
@@ -360,7 +362,7 @@ Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0
 \end{tabular}
 \end{center}
 En particular, la probabilidad que un cliente con rating $AA$ pase a tener 
-rating $B$ al cabo de un a\~no es del $0.14\%$.
+rating $B$ al cabo de $1$ a\~no es del $0.14\%$.
 
 \subsection{Propiedades}
 
@@ -449,9 +451,10 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 
 \subsection{Funci\'on de supervivencia}
 
-\paragraph{Definici\'on.} La Tasa de Morosidad Anticipada (TMA) 
-del rating $r_i$ en el a\~no $k$ es la probabilidad que una empresa con rating
-inicial $r_i$ haga fallido a lo largo del a\~no $k$.
+\paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada}
+\index{Tasa de Morosidad Anticipada} (TMA) del rating $r_i$ en el a\~no $k$ es
+la probabilidad que una empresa con rating inicial $r_i$ haga fallido a lo largo
+del a\~no $k$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -461,9 +464,11 @@ inicial $r_i$ haga fallido a lo largo del a\~no $k$.
 \end{center}
 \end{figure}
 
-\paragraph{Definici\'on.} La Tasa de Morosidad Anticipada Acumulada (TMAA) 
-del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating 
-inicial $r_i$ haga fallido en el intervalo de tiempo $(0,t)$.
+\paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada Acumulada}
+\index{Tasa de Morosidad Anticipada Acumulada} (TMAA) del rating $r_i$ en el
+tiempo $t$ es la probabilidad que una empresa con rating inicial $r_i$ haga
+fallido en el intervalo de tiempo $(0,t)$.
+
 \begin{displaymath}
 TMAA(r_i,t)=P(r_i \to Default;0;t)
 \end{displaymath}
@@ -476,9 +481,9 @@ TMAA(r_i,t)=P(r_i \to Default;0;t)
 \end{center}
 \end{figure}
 
-\paragraph{Definici\'on.} La Supervivencia en el tiempo $t$ del rating $r_i$ 
-es la probabilidad que una empresa con rating inicial $r_i$ no haya hecho 
-fallido en el intervalo de tiempo $(0,t)$.
+\paragraph{Definici\'on.} La \emph{Supervivencia}\index{Supervivencia} en el
+tiempo $t$ del rating $r_i$ es la probabilidad que una empresa con rating inicial
+$r_i$ no haya hecho fallido en el intervalo de tiempo $(0,t)$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -532,9 +537,9 @@ este documento.
 \section{Matriz de correlaci\'on}
 \label{sec:mcorrel}
 
-\paragraph{Definici\'on.} La matriz de correlaci\'on sectorial proporciona
-la correlaci\'on de los fallidos entre los sectores. La denotamos de la forma
-siguiente:
+\paragraph{Definici\'on.} La \emph{matriz de correlaci\'on sectorial}
+\index{Matriz de correlaci\'on sectorial} proporciona la correlaci\'on de los
+fallidos entre los sectores. La denotamos de la forma siguiente:
 \begin{displaymath}
 \Gamma = \left(
 \begin{array}{ccc}
@@ -550,9 +555,10 @@ fallido entre las empresas del sector $s_i$. Por construcci\'on, la matriz de
 correlaci\'on sectorial es sim\'etrica debido a que la correlaci\'on entre $s_i$
 y $s_j$ es la misma que entre $s_j$ y $s_i$.
 
-\paragraph{Definici\'on.} La matriz de correlaci\'on entre clientes proporciona
-la correlaci\'on de los fallidos entre clientes. La construimos a partir de la
-matriz de correlaci\'on sectorial de la forma siguiente:
+\paragraph{Definici\'on.} La \emph{matriz de correlaci\'on entre clientes}
+\index{Matriz de correlaci\'on entre clientes} proporciona la correlaci\'on de los
+fallidos entre clientes. La construimos a partir de la matriz de correlaci\'on sectorial
+de la forma siguiente:
 \begin{displaymath}
 \Theta = \left(
 \begin{array}{ccccc}
@@ -577,7 +583,7 @@ caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 1                & \dots    & \gamma_{p_1,p_1}  &          & \gamma_{1,p_i}   & \dots   & \gamma_{1,p_i}    &         & \gamma_{1,p_m}   & \dots      & \gamma_{1,p_m}   \cr
 \vdots           & \ddots   & \vdots            &          & \vdots           &         & \vdots            &         & \vdots           &            & \vdots           \cr
 \gamma_{p_1,p_1} & \dots    & 1                 &          & \gamma_{1,p_i}   & \dots   & \gamma_{1,p_i}    &         & \gamma_{1,p_m}   & \dots      & \gamma_{1,p_m}   \cr
-                 
+
                  &          &                   & \ddots   &                  &         &                   &         &                  &            &                  \cr
 
 \gamma_{1,p_i}   & \dots    & \gamma_{1,p_i}    &          & 1                & \dots   & \gamma_{p_i,p_i}  &         & \gamma_{p_i,p_m} & \dots      & \gamma_{p_i,p_m} \cr
@@ -613,11 +619,11 @@ matriz de correlaci\'on entre clientes es:
 \begin{displaymath}
 \Theta = \left(
 \begin{array}{ccccc}
-  1  &  0  &  0  &  0.1 &  0.1 \cr
-  0  &  1  &  0  &  0.1 &  0.1 \cr
-  0  &  0  &  1  &  0.1 &  0.1 \cr
- 0.1 & 0.1 &  0  &  1   & -0.2 \cr
- 0.1 & 0.1 &  0  & -0.2 &  1   
+  1  &  0  &  0    &  0.1 &  0.1 \cr
+  0  &  1  &  0    &  0.1 &  0.1 \cr
+  0  &  0  &  1    &  0.1 &  0.1 \cr
+ 0.1 & 0.1 &  0.1  &  1   & -0.2 \cr
+ 0.1 & 0.1 &  0.1  & -0.2 &  1
 \end{array}
 \right)
 \end{displaymath}
@@ -638,11 +644,19 @@ Value-At-Risk es una medida del riesgo que describe en forma de probabilidades
 el riesgo de una cartera de productos financieros. Se recomienda la lectura del
 libro \emph{Value at Risk} \cite{var:jorion}.
 
-\paragraph{Definici\'on.} El VAR es la p\'erdida m\'axima esperada a lo largo
+\paragraph{Definici\'on.} El \emph{Valor en riesgo}\index{Valor en riesgo} o
+\emph{VAR}\index{VAR} es la p\'erdida m\'axima esperada a lo largo
 de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
+
+\paragraph{Definici\'on.} El \emph{valor esperado}\index{Valor esperado} es blablabla
+
+\paragraph{Definici\'on.} La \emph{p\'erdida esperada}\index{P\'erdida esperada} es blablabla
+
+\paragraph{Definici\'on.} Definimos el \emph{capital econ\'omico}\index{Capital econ\'omico}
+como blablabla
 \newline
 \newline
-El concepto clave es suponer que el valor de la cartera a tiempo $T$ es una 
+El concepto clave es suponer que el valor de la cartera a tiempo $T$ es una
 variable aleatoria. En la figura \ref{creditvar} se ilustra el concepta de VAR 
 aplicado al riesgo de cr\'edito.
 
@@ -665,7 +679,7 @@ aplicado al riesgo de cr\'edito.
 \paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
 sencilla, de la que se puede calcular la distribuci\'on de forma expl\'icita. 
 Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
-entre ellos, cada cliente tiene un activo que consiste en devolver $1$ \euro al
+entre ellos. Cada cliente tiene un activo que consiste en devolver $1$ \euro al
 cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
 $2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
 fallido al cabo de $T$ tiempo es $0.1$.

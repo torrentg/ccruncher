@@ -39,6 +39,7 @@
 \usepackage[final]{listings}
 \usepackage{fancyhdr}
 \usepackage{eurosym}
+\usepackage{makeidx}
 
 
 %-----------------------------------------------------
@@ -72,6 +73,11 @@
 \setlength\parindent{0ex}
 
 %-----------------------------------------------------
+% enable indexing commands
+%-----------------------------------------------------
+\makeindex
+
+%-----------------------------------------------------
 % finally, the doc begins here
 %-----------------------------------------------------
 \begin{document}
@@ -91,5 +97,6 @@
 \bibliography{refs}
 \bibliographystyle{plain}
 
+\printindex
 
 \end{document}
