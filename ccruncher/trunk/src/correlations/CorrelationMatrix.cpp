@@ -49,7 +49,7 @@
 #include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
-// inicialitzador privat
+// private initializator
 //===========================================================================
 void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 {
@@ -63,7 +63,7 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
     throw Exception("CorrelationMatrix::init(): invalid matrix range");
   }
 
-  // inicialitzem la matriu
+  // inicializing matrix
   matrix = Arrays<double>::allocMatrix(n, n, NAN);
 }
 
@@ -72,7 +72,7 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Exception)
 {
-  // posem valors per defecte
+  // seting default values
   init(sectors_);
 }
 
@@ -85,7 +85,7 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 }
 
 //===========================================================================
-// metodes acces variable begindate
+// returns size (number of sectors)
 //===========================================================================
 int ccruncher::CorrelationMatrix::size()
 {
@@ -93,7 +93,7 @@ int ccruncher::CorrelationMatrix::size()
 }
 
 //===========================================================================
-// metodes acces variable begindate
+// returns matrix
 //===========================================================================
 double ** ccruncher::CorrelationMatrix::getMatrix()
 {
@@ -102,14 +102,14 @@ double ** ccruncher::CorrelationMatrix::getMatrix()
 
 
 //===========================================================================
-// inserta un element en la matriu de transicio
+// inserts an element into matrix
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
   int row = sectors->getIndex(sector1);
   int col = sectors->getIndex(sector2);
 
-  // validem sectors entrats
+  // checking index sector
   if (row < 0 || col < 0)
   {
     string msg = "CorrelationMatrix::insertSigma(): undefined sector at <sigma> ";
@@ -119,7 +119,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
     throw Exception(msg);
   }
 
-  // validem valor entrat
+  // checking value
   if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
   {
     string msg = "CorrelationMatrix::insertSigma(): value[";
@@ -131,7 +131,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
     throw Exception(msg);
   }
 
-  // comprovem que no es trobi definit
+  // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
     string msg = "CorrelationMatrix::insertSigma(): redefined element [";
@@ -142,7 +142,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
     throw Exception(msg);
   }
 
-  // inserim en la matriu de correlacions
+  // insering value into matrix
   matrix[row][col] = value;
   matrix[col][row] = value;
 }
@@ -198,11 +198,11 @@ void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
 }
 
 //===========================================================================
-// validacio del contingut de la classe
+// validate class content
 //===========================================================================
 void ccruncher::CorrelationMatrix::validate() throw(Exception)
 {
-  // comprovem que tots els elements es troben definits
+  // checking that all matrix elements exists
   for (int i=0;i<n;i++)
   {
     for (int j=0;j<n;j++)
@@ -218,9 +218,6 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
       }
     }
   }
-
-  // we don't need to check that client correlation matrix is definite positve
-  // condition. This is granted if elements belongs at (-1,1)
 }
 
 //===========================================================================
