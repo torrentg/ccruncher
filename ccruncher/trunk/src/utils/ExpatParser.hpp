@@ -59,7 +59,7 @@ class ExpatParser
 
     /** user data */
     ExpatUserData userdata;
-    
+
     /** startElement function catcher */
     static void XMLCALL startElement(void *ud, const char *name, const char **atts);
 

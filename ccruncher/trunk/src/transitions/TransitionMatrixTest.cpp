@@ -133,7 +133,7 @@ void TransitionMatrixTest::test1()
   // transition matrix creation
   TransitionMatrix trm(&ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &trm));
-  
+
   double **matrix = trm.getMatrix();
 
   ASSERT(5 == trm.size());
@@ -160,7 +160,7 @@ void TransitionMatrixTest::test1()
       ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
-    
+
   delete aux;
 }
 

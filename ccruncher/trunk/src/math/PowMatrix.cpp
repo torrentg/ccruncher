@@ -109,9 +109,10 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
 }
 
 //===========================================================================
-// retorna ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
-// atencio: use with low dimensions (pe. n < 100)
-// atencio: Exception if complex eigenvalues
+// returns a matrix powered to an exponent: ret=a^x (where a is a nxn matrix)
+// ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
+// atention: use with low dimensions (pe. n < 100)
+// atention: Exception if complex eigenvalues
 //===========================================================================
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {

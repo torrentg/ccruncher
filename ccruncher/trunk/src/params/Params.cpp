@@ -56,7 +56,7 @@ ccruncher::Params::Params()
 }
 
 //===========================================================================
-// inicialitzador privat
+// init
 //===========================================================================
 void ccruncher::Params::init()
 {
@@ -133,7 +133,7 @@ Date * ccruncher::Params::getDates() throw(Exception)
 }
 
 //===========================================================================
-// interpreta un node XML time
+// parse a XML property
 //===========================================================================
 void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes) throw(Exception)
 {
@@ -232,7 +232,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 }
 
 //===========================================================================
-// validacio del contingut de la classe
+// check class content
 //===========================================================================
 void ccruncher::Params::validate(void) throw(Exception)
 {

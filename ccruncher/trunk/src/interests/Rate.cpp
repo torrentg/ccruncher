@@ -55,7 +55,7 @@ void ccruncher::Rate::reset()
 }
 
 //===========================================================================
-// operador de comparacio (per permetre ordenacio)
+// operator less-than (needed by sort functions)
 //===========================================================================
 bool ccruncher::operator <  (const Rate &x, const Rate &y)
 {
@@ -75,7 +75,7 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
     {
       t = getDoubleAttribute(attributes, "t", -1.0);
       r = getDoubleAttribute(attributes, "r", -1.0);
-      
+
       if (t <= -1.0+1E-14 || r <= -1.0+1E-14)
       {
         throw eperror(eu, "invalid attributes values at <rate>");

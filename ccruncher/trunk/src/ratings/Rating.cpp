@@ -56,7 +56,7 @@ void ccruncher::Rating::reset()
 }
 
 //===========================================================================
-// operador de comparacio (per permetre ordenacio)
+// operator less-than (needed by sort functions)
 //===========================================================================
 bool ccruncher::operator <  (const Rating &x, const Rating &y)
 {

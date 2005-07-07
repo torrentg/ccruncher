@@ -104,7 +104,7 @@ void CorrelationMatrixTest::test1()
   // correlation matrix creation
   CorrelationMatrix crm(&sectors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
-  
+
   double **matrix = crm.getMatrix();
 
   ASSERT(2 == crm.size());

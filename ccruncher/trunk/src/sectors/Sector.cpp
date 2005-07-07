@@ -56,7 +56,7 @@ ccruncher::Sector::Sector()
 }
 
 //===========================================================================
-// operador de comparacio (per permetre ordenacio)
+// operator less-than (needed by sort functions)
 //===========================================================================
 bool ccruncher::operator <  (const Sector &x, const Sector &y)
 {

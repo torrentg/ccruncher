@@ -64,11 +64,11 @@ vector<Rating> * ccruncher::Ratings::getRatings()
 }
 
 //===========================================================================
-// insercio nou rating en la llista
+// insert a raitng into list
 //===========================================================================
 void ccruncher::Ratings::insertRating(Rating &val) throw(Exception)
 {
-  // validem coherencia
+  // checking coherence
   for (unsigned int i=0;i<vratings.size();i++)
   {
     Rating aux = vratings[i];
@@ -143,20 +143,20 @@ void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
 }
 
 //===========================================================================
-// validacions de la llista de ratings recollida
+// global validations
 //===========================================================================
 void ccruncher::Ratings::validations() throw(Exception)
 {
-  // validacio longitud
+  // checking number of ratings
   if (vratings.size() == 0)
   {
     throw Exception("Ratings::validations(): ratings have no elements");
   }
 
-  // ordenem la llista de ratings per camp order
+  // sorting ratings by filed 'order'
   sort(vratings.begin(), vratings.end());
 
-  // comprovem que el camp order comença per 1 i no hi ha buits
+  // checking that first 'order' is 1 and don't exist holes
   for(unsigned int i=0;i<vratings.size();i++)
   {
     Rating aux = vratings[i];
@@ -171,7 +171,7 @@ void ccruncher::Ratings::validations() throw(Exception)
 }
 
 //===========================================================================
-// retorna el index del rating dins la llista (-1 si no es troba)
+// returns rating index (-1 if rating not found)
 //===========================================================================
 int ccruncher::Ratings::getIndex(const string &rating_name)
 {
@@ -188,7 +188,7 @@ int ccruncher::Ratings::getIndex(const string &rating_name)
 }
 
 //===========================================================================
-// retorna el nom del rating dins la llista (-1 si no es troba)
+// returns rating name
 //===========================================================================
 string ccruncher::Ratings::getName(int index) throw(Exception)
 {

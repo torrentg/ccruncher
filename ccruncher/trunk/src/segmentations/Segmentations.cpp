@@ -146,7 +146,7 @@ void ccruncher::Segmentations::validate() throw(Exception)
 //===========================================================================
 void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
-  // validem coherencia
+  // checking coherence
   for (unsigned int i=0;i<vsegmentations.size();i++)
   {
     if (vsegmentations[i].name == val.name)

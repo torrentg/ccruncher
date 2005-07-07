@@ -83,7 +83,7 @@ void ccruncher::IData::release()
   if (segmentations != NULL) delete segmentations;
   if (portfolio != NULL) delete portfolio;
 
-  // establim els punters a NULL
+  // setting pointers to NULL
   init();
 }
 
@@ -136,10 +136,10 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
 {
   ExpatParser parser;
 
-  // inicialitzem el contingut
+  // initializing content
   init();
 
-  // parsejem el document
+  // parsing document
   try
   {
     // checking file readability

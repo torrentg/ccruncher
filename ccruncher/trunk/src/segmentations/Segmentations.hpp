@@ -79,10 +79,10 @@ class Segmentations : public ExpatHandlers
 
     void addSegment(string segmentation, string segment) throw(Exception);
     string getXML(int) throw(Exception);
-    
+
     int getNumSegmentations();
     int getNumSegments(int isegmentation);
-    
+
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);

@@ -113,7 +113,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
 {
   int irating = ratings->getIndex(srating);
 
-  // validem ratings entrats
+  // checking rating index
   if (irating < 0 || irating > nratings)
   {
     string msg = "Survival::insertValue(): undefined rating at <survival>: ";
@@ -144,7 +144,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
     throw Exception(msg);
   }
 
-  // checking that not exist
+  // checking that is not previously defined
   if ((int) data[irating].size() >= t+1 && !isnan(data[irating][t]))
   {
     string msg = "Survival::insertValue(): value[";
@@ -289,7 +289,7 @@ void ccruncher::Survival::validate() throw(Exception)
 }
 
 //===========================================================================
-// interpole non given values
+// interpole
 //===========================================================================
 double ccruncher::Survival::interpole(double x, double x0, double y0, double x1, double y1)
 {

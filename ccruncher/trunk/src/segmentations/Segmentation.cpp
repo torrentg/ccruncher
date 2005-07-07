@@ -68,7 +68,7 @@ void ccruncher::Segmentation::reset()
   modificable = false;
   name = "";
   components = client;
-  
+
   // adding catcher segment
   Segment catcher = Segment("rest");
   insertSegment(catcher);
@@ -84,7 +84,7 @@ void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
     throw Exception("Segmentation::insertSegment(): invalid name value");
   }
 
-  // validem coherencia
+  // checking coherence
   for (unsigned int i=0;i<vsegments.size();i++)
   {
     if (vsegments[i].name == val.name)
@@ -110,7 +110,7 @@ void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
     }
   }
 
-  // inserim el valor
+  // inserting value
   try
   {
     vsegments.push_back(val);
@@ -133,12 +133,12 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
     else {
       name = getStringAttribute(attributes, "name", "");
       string strcomp = getStringAttribute(attributes, "components", "");
-      
+
       // checking name
       if (name == "") {
         throw eperror(eu, "tag <segmentation> with invalid name attribute");
       }
- 
+
       // filling components variable
       if (strcomp == "asset") {
         components = asset;

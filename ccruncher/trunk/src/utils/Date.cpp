@@ -111,7 +111,7 @@ ccruncher::Date::Date(const long date) throw(Exception)
 }
 
 //===========================================================================
-// metodes acces variables internes
+// getXXX() methods
 //===========================================================================
 int ccruncher::Date::getDay() const
 {
@@ -159,7 +159,7 @@ void ccruncher::Date::setYear (const int year) throw(Exception)
 }
 
 //===========================================================================
-// retorna el dia de l'any (1...364/365)
+// returns day of year (1...364/365)
 //===========================================================================
 int ccruncher::Date::getDayOfYear() const
 {
@@ -174,7 +174,7 @@ int ccruncher::Date::getDayOfYear() const
 }
 
 //===========================================================================
-// determina si l'any proporcionat es de traspas
+// check if given year is a leap year
 //===========================================================================
 bool ccruncher::Date::isLeapYear(int y)
 {
@@ -189,7 +189,7 @@ bool ccruncher::Date::isLeapYear(int y)
 }
 
 //===========================================================================
-// determina si l'any es de traspas
+// check if given year is a leap year
 //===========================================================================
 bool ccruncher::Date::isLeapYear()
 {
@@ -197,7 +197,7 @@ bool ccruncher::Date::isLeapYear()
 }
 
 //===========================================================================
-// retorna el numero de dies de un any
+// returns number of days in year
 //===========================================================================
 int ccruncher::Date::numDaysInYear(int y)
 {
@@ -212,7 +212,7 @@ int ccruncher::Date::numDaysInYear(int y)
 }
 
 //===========================================================================
-// retorna el numero de dies del any de la data
+// returns number of days in year
 //===========================================================================
 int ccruncher::Date::numDaysInYear()
 {
@@ -220,7 +220,7 @@ int ccruncher::Date::numDaysInYear()
 }
 
 //===========================================================================
-// retorna el numero de dies de un mes
+// returns number of days in month
 //===========================================================================
 int ccruncher::Date::numDaysInMonth(int m, int y)
 {
@@ -246,7 +246,7 @@ int ccruncher::Date::numDaysInMonth(int m, int y)
 }
 
 //===========================================================================
-// retorna el numero de dies del mes de la data
+// returns number of days in month
 //===========================================================================
 int ccruncher::Date::numDaysInMonth()
 {
@@ -254,7 +254,7 @@ int ccruncher::Date::numDaysInMonth()
 }
 
 //===========================================================================
-// comprova si la data es valida
+// check if is a valid date
 //===========================================================================
 bool ccruncher::Date::valid(int d, int m, int y)
 {
@@ -277,7 +277,7 @@ bool ccruncher::Date::valid(int d, int m, int y)
 }
 
 //===========================================================================
-// comprova si la data es valida
+// check if is a valid date
 //===========================================================================
 bool ccruncher::Date::valid() const
 {

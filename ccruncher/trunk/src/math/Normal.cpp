@@ -308,7 +308,7 @@ double ccruncher::Normal::cdf(double x)
   min = DBL_MIN;
   y = fabs(x);
   if (y <= 0.66291) {
-    // Evaluate pnorm for |z| <= 0.66291 
+    // Evaluate pnorm for |z| <= 0.66291
     xsq = 0.0;
     if (y > eps) {
       xsq = x * x;
@@ -325,7 +325,7 @@ double ccruncher::Normal::cdf(double x)
     ccum = 0.5 - temp;
   }
   else if (y <= 5.656854248) {
-    // Evaluate pnorm for 0.66291 <= |z| <= sqrt(32) 
+    // Evaluate pnorm for 0.66291 <= |z| <= sqrt(32)
     xnum = c[8] * y;
     xden = y;
     for (i = 1; i <= 7; ++i) {

@@ -41,7 +41,7 @@
 using namespace ccruncher;
 
 //===========================================================================
-// interpreta un int
+// parse an integer
 //===========================================================================
 int ccruncher::Parser::intValue(const string &str) throw(Exception)
 {
@@ -49,13 +49,13 @@ int ccruncher::Parser::intValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un int
+// parse an integer
 //===========================================================================
 int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
 {
   long aux = 0L;
 
-  // parsejem el numero
+  // parsing number
   try
   {
     aux = Parser::longValue(pnum);
@@ -65,7 +65,7 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
     throw Exception("Parser::intValue(): invalid number");
   }
 
-  // comprovem si es tracta de un enter
+  // checking that is an integer
   if (aux < INT_MIN || INT_MAX < aux)
   {
     throw Exception("Parser::intValue(): value out of range");
@@ -77,7 +77,7 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un long
+// parse a long
 //===========================================================================
 long ccruncher::Parser::longValue(const string &str) throw(Exception)
 {
@@ -85,19 +85,19 @@ long ccruncher::Parser::longValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un long
+// parse a long
 //===========================================================================
 long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
 {
   char *pstr = NULL;
 
-  // inicialitzem estat errors numerics
+  // initializing numerical error status
   errno = 0;
 
-  // parsejem el numero
+  // parsing number
   long ret = strtol(pnum, &pstr, 10); //atol(str.c_str());
 
-  // comprovem si es tracta de un enter
+  // checking that is a long
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
     throw Exception("Parser::longValue(): invalid long number");
@@ -109,7 +109,7 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un double
+// parse a double
 //===========================================================================
 double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 {
@@ -117,19 +117,19 @@ double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un double
+// parse a double
 //===========================================================================
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
   char *pstr = NULL;
 
-  // inicialitzem estat errors numerics
+  // initializing numerical error status
   errno = 0;
 
-  // parsejem el numero
+  // parsing number
   double ret = strtod(pnum, &pstr); //atof(str.c_str());
 
-  // comprovem si es tracta de un double
+  // checking that is a double
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
     throw Exception("Parser::doubleValue(): invalid double value");
@@ -141,19 +141,19 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un date
+// parse a date
 //===========================================================================
 Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
 {
-  // parsejem la data
+  // parsing date
   Date ret = Date(str);
 
-  // sortim
+  // exit
   return ret;
 }
 
 //===========================================================================
-// interpreta un date
+// parse a date
 //===========================================================================
 Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
 {
@@ -161,7 +161,7 @@ Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un boolean
+// parse a boolean
 //===========================================================================
 bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
 {
@@ -180,7 +180,7 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
 }
 
 //===========================================================================
-// interpreta un boolean
+// parse a boolean
 //===========================================================================
 bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
 {

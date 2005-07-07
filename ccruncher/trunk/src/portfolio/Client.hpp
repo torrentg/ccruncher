@@ -101,7 +101,7 @@ class Client : public ExpatHandlers
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
-    
+
 };
 
 //---------------------------------------------------------------------------

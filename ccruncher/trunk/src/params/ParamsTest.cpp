@@ -77,7 +77,7 @@ void ParamsTest::test1()
 
   // creating xml
   ExpatParser xmlparser;
-  
+
   // ratings list creation
   Params params;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
@@ -133,7 +133,7 @@ void ParamsTest::test2()
 
   // creating xml
   ExpatParser xmlparser;
-  
+
   // ratings list creation
   Params params;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &params));

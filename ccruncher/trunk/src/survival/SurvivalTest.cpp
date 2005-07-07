@@ -108,7 +108,7 @@ void SurvivalTest::test1()
     ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
     ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
-  
+
   // checking inverse values
   for(int i=0;i<=10;i++)
   {

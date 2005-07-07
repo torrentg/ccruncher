@@ -81,7 +81,7 @@ void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_,
 }
 
 //===========================================================================
-// retorna la llista de clients
+// returns client list
 //===========================================================================
 vector<Client *> * ccruncher::Portfolio::getClients()
 {
@@ -89,7 +89,7 @@ vector<Client *> * ccruncher::Portfolio::getClients()
 }
 
 //===========================================================================
-// insercio nou client en la llista
+// inserting a client into list
 //===========================================================================
 void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 {

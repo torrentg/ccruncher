@@ -177,10 +177,10 @@ void CopulaNormalTest::computeDensity(CopulaNormal &copula)
 
     x = copula.get(0);
     y = copula.get(1);
-    
+
     a = (int)(x*NTALLS);
     b = (int)(y*NTALLS);
-    
+
     hits[a][b]++;
   }
 
@@ -188,7 +188,7 @@ void CopulaNormalTest::computeDensity(CopulaNormal &copula)
   for(int i=0;i<NTALLS;i++)
   {
     x = (double)(i)/(double)(NTALLS);
-    
+
     for(int j=0;j<NTALLS;j++)
     {
       y = (double)(j)/(double)(NTALLS);
@@ -216,7 +216,7 @@ void CopulaNormalTest::test5()
 
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 2));
-  
+
   // making 2-D density plot
   //computeDensity(copula);
 

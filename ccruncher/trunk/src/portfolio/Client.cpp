@@ -91,7 +91,7 @@ vector<Asset> * ccruncher::Client::getAssets()
 }
 
 //===========================================================================
-// insercio nova operacio en la llista
+// insert an asset into list
 //===========================================================================
 void ccruncher::Client::insertAsset(Asset &val) throw(Exception)
 {

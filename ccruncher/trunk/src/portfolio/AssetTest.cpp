@@ -102,7 +102,7 @@ Segmentations AssetTest::getSegmentations()
   // segmentation object creation
   Segmentations ret;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
-  
+
   return ret;
 }
 
@@ -263,7 +263,7 @@ void AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].exposure, EPSILON);
   ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].recovery, EPSILON);
-  
+
   ASSERT(Date("01/01/2000") == vertexes[1].date);
   ASSERT_DOUBLES_EQUAL(10.0  , vertexes[1].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(500.0 , vertexes[1].exposure, EPSILON);
@@ -278,6 +278,6 @@ void AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(560.0 , vertexes[3].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(5.413 , vertexes[3].exposure, EPSILON);
   ASSERT_DOUBLES_EQUAL(4.871 , vertexes[3].recovery, EPSILON);
-  
+
   delete [] vertexes;
 }

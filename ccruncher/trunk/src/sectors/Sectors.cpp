@@ -39,7 +39,7 @@
 #include "utils/Strings.hpp"
 
 //===========================================================================
-// constructor privat
+// private constructor
 //===========================================================================
 ccruncher::Sectors::Sectors()
 {
@@ -51,7 +51,7 @@ ccruncher::Sectors::Sectors()
 //===========================================================================
 ccruncher::Sectors::~Sectors()
 {
-  // cal assegurar que es destrueix vsectors;
+  // nothing to do
 }
 
 //===========================================================================
@@ -63,11 +63,11 @@ vector<Sector> * ccruncher::Sectors::getSectors()
 }
 
 //===========================================================================
-// insercio nou sector en la llista
+// inserts a sector in list
 //===========================================================================
 void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
 {
-  // validem coherencia
+  // checking coherence
   for (unsigned int i=0;i<vsectors.size();i++)
   {
     Sector aux = vsectors[i];
@@ -147,16 +147,16 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 void ccruncher::Sectors::validations() throw(Exception)
 {
-  // validacio longitud
+  // checking number of sectors
   if (vsectors.size() == 0)
   {
     throw Exception("Sectors::validations(): sectors have no elements");
   }
 
-  // ordenem la llista de sectors per camp order
+  // sorting sector list by field 'order'
   sort(vsectors.begin(), vsectors.end());
 
-  // comprovem que el camp order comença per 1 i no hi ha buits
+  // checking that first 'order' is 1 and don't exists holes
   for(unsigned int i=0;i<vsectors.size();i++)
   {
     Sector aux = vsectors[i];
@@ -171,7 +171,7 @@ void ccruncher::Sectors::validations() throw(Exception)
 }
 
 //===========================================================================
-// retorna el index del rating dins la llista (-1 si no es troba)
+// returns sector index (-1 if sector not found)
 //===========================================================================
 int ccruncher::Sectors::getIndex(const string &sector_name)
 {
@@ -188,7 +188,7 @@ int ccruncher::Sectors::getIndex(const string &sector_name)
 }
 
 //===========================================================================
-// retorna el nom del rating dins la llista (-1 si no es troba)
+// returns sector name
 //===========================================================================
 string ccruncher::Sectors::getName(int index) throw(Exception)
 {

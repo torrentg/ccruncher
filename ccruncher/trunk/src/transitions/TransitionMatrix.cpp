@@ -95,7 +95,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
 //===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception)
 {
-  // posem valors per defecte
+  // seting default values
   init(ratings_);
 }
 

@@ -63,7 +63,7 @@ void DateValuesTest::test1()
 {
   DateValues val1(Date(10,10,2001), +1.0, +2.0, +3.0);
   DateValues val2(Date(01,01,2006), -1.0, -2.0, -3.0);
-  
+
   // checking that sorts by date
   ASSERT(val1 < val2);
 }

@@ -60,7 +60,7 @@ class Portfolio : public ExpatHandlers
   private:
 
     vector<Client *> vclients;
-    
+
     Ratings *ratings;
     Sectors *sectors;
     Segmentations *segmentations;
@@ -84,7 +84,7 @@ class Portfolio : public ExpatHandlers
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
-    
+
 };
 
 //---------------------------------------------------------------------------
