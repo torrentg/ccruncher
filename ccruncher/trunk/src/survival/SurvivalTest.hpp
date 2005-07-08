@@ -28,6 +28,9 @@
 // 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added test6()
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _SurvivalTest_
@@ -42,6 +45,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -78,6 +82,10 @@ class SurvivalTest : public TestFixture<SurvivalTest>
 };
 
 REGISTER_FIXTURE(SurvivalTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

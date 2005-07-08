@@ -25,6 +25,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -43,7 +46,7 @@ using namespace ccruncher;
 //===========================================================================
 // setUp
 //===========================================================================
-void DateValuesTest::setUp()
+void ccruncher_test::DateValuesTest::setUp()
 {
   // nothing to do
 }
@@ -51,7 +54,7 @@ void DateValuesTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void DateValuesTest::tearDown()
+void ccruncher_test::DateValuesTest::tearDown()
 {
   // nothing to do
 }
@@ -59,7 +62,7 @@ void DateValuesTest::tearDown()
 //===========================================================================
 // comparators tests
 //===========================================================================
-void DateValuesTest::test1()
+void ccruncher_test::DateValuesTest::test1()
 {
   DateValues val1(Date(10,10,2001), +1.0, +2.0, +3.0);
   DateValues val2(Date(01,01,2006), -1.0, -2.0, -3.0);

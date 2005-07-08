@@ -34,6 +34,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -50,7 +53,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void AssetTest::setUp()
+void ccruncher_test::AssetTest::setUp()
 {
   // nothing to do
 }
@@ -58,7 +61,7 @@ void AssetTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void AssetTest::tearDown()
+void ccruncher_test::AssetTest::tearDown()
 {
   // nothing to do
 }
@@ -66,7 +69,7 @@ void AssetTest::tearDown()
 //===========================================================================
 // getSegmentations1
 //===========================================================================
-Segmentations AssetTest::getSegmentations()
+Segmentations ccruncher_test::AssetTest::getSegmentations()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
@@ -109,7 +112,7 @@ Segmentations AssetTest::getSegmentations()
 //===========================================================================
 // getInterests
 //===========================================================================
-Interests AssetTest::getInterests()
+Interests ccruncher_test::AssetTest::getInterests()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <interests>\n\
@@ -150,7 +153,7 @@ Interests AssetTest::getInterests()
 //===========================================================================
 // test1
 //===========================================================================
-void AssetTest::test1()
+void ccruncher_test::AssetTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1'>\n\
@@ -182,7 +185,7 @@ void AssetTest::test1()
 //===========================================================================
 // test2. crash test (xml with errors, data 01/01/2000 repeated)
 //===========================================================================
-void AssetTest::test2()
+void ccruncher_test::AssetTest::test2()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1'>\n\
@@ -212,7 +215,7 @@ void AssetTest::test2()
 //===========================================================================
 // makeAssertions
 //===========================================================================
-void AssetTest::makeAssertions(Asset *asset)
+void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 {
   Interests interests = getInterests();
   vector <DateValues> *data = NULL;

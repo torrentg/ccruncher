@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -45,7 +48,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void NormalTest::setUp()
+void ccruncher_test::NormalTest::setUp()
 {
   // nothing to do
 }
@@ -53,7 +56,7 @@ void NormalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void NormalTest::tearDown()
+void ccruncher_test::NormalTest::tearDown()
 {
   // nothing to do
 }
@@ -62,7 +65,7 @@ void NormalTest::tearDown()
 // test probability distribution function
 // validated using octave command: normal_pdf(x, mu, sigma)
 //===========================================================================
-void NormalTest::test_pdf(void)
+void ccruncher_test::NormalTest::test_pdf(void)
 {
   double x1[13] = {
     -2.00    ,
@@ -104,7 +107,7 @@ void NormalTest::test_pdf(void)
 // test cumulative distribution function
 // validated using octave command: normal_cdf(x, mu, sigma)
 //===========================================================================
-void NormalTest::test_cdf(void)
+void ccruncher_test::NormalTest::test_cdf(void)
 {
   double x1[13] = {
     -2.00    ,
@@ -147,7 +150,7 @@ void NormalTest::test_cdf(void)
 // test cumulative distribution inverse function
 // validated using octave command: normal_inv(x, mu, sigma)
 //===========================================================================
-void NormalTest::test_cdfinv(void)
+void ccruncher_test::NormalTest::test_cdfinv(void)
 {
   double x1[7] = {
     +0.01   ,

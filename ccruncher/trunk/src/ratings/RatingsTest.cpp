@@ -31,6 +31,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -41,7 +44,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void RatingsTest::setUp()
+void ccruncher_test::RatingsTest::setUp()
 {
   // nothing to do
 }
@@ -49,7 +52,7 @@ void RatingsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void RatingsTest::tearDown()
+void ccruncher_test::RatingsTest::tearDown()
 {
   // nothing to do
 }
@@ -57,7 +60,7 @@ void RatingsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void RatingsTest::test1()
+void ccruncher_test::RatingsTest::test1()
 {
   // note that ratings are unordered
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -106,7 +109,7 @@ void RatingsTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void RatingsTest::test2()
+void ccruncher_test::RatingsTest::test2()
 {
   // note that ratings are incompleted (order 1 not exist)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -129,7 +132,7 @@ void RatingsTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void RatingsTest::test3()
+void ccruncher_test::RatingsTest::test3()
 {
   // note that ratings are incorrect (A is a name repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -152,7 +155,7 @@ void RatingsTest::test3()
 //===========================================================================
 // test4
 //===========================================================================
-void RatingsTest::test4()
+void ccruncher_test::RatingsTest::test4()
 {
   // note that ratings are incorrect (descriptions repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -175,7 +178,7 @@ void RatingsTest::test4()
 //===========================================================================
 // test5
 //===========================================================================
-void RatingsTest::test5()
+void ccruncher_test::RatingsTest::test5()
 {
   // note that xml are not valid (ratong tag)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

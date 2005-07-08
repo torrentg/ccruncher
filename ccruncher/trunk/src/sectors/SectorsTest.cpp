@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -41,7 +44,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void SectorsTest::setUp()
+void ccruncher_test::SectorsTest::setUp()
 {
   // nothing to do
 }
@@ -49,7 +52,7 @@ void SectorsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void SectorsTest::tearDown()
+void ccruncher_test::SectorsTest::tearDown()
 {
   // nothing to do
 }
@@ -57,7 +60,7 @@ void SectorsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void SectorsTest::test1()
+void ccruncher_test::SectorsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
@@ -93,7 +96,7 @@ void SectorsTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void SectorsTest::test2()
+void ccruncher_test::SectorsTest::test2()
 {
   // xml with error (order 2 not exist)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -113,7 +116,7 @@ void SectorsTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void SectorsTest::test3()
+void ccruncher_test::SectorsTest::test3()
 {
   // xml with error (repeated sector)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -133,7 +136,7 @@ void SectorsTest::test3()
 //===========================================================================
 // test4
 //===========================================================================
-void SectorsTest::test4()
+void ccruncher_test::SectorsTest::test4()
 {
   // xml with error (repeated description)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -153,7 +156,7 @@ void SectorsTest::test4()
 //===========================================================================
 // test5
 //===========================================================================
-void SectorsTest::test5()
+void ccruncher_test::SectorsTest::test5()
 {
   // xml with error (tag sectir)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

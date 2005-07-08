@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -47,7 +50,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void SegmentationsTest::setUp()
+void ccruncher_test::SegmentationsTest::setUp()
 {
   // nothing to do
 }
@@ -55,7 +58,7 @@ void SegmentationsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void SegmentationsTest::tearDown()
+void ccruncher_test::SegmentationsTest::tearDown()
 {
   // nothing to do
 }
@@ -63,7 +66,7 @@ void SegmentationsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void SegmentationsTest::test1()
+void ccruncher_test::SegmentationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\

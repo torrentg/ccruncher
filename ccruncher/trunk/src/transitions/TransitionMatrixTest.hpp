@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _TransitionMatrixTest_
@@ -42,6 +45,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -76,6 +80,10 @@ class TransitionMatrixTest : public TestFixture<TransitionMatrixTest>
 };
 
 REGISTER_FIXTURE(TransitionMatrixTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

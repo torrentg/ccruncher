@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -39,7 +42,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void DateTest::setUp()
+void ccruncher_test::DateTest::setUp()
 {
   // nothing to do
 }
@@ -47,7 +50,7 @@ void DateTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void DateTest::tearDown()
+void ccruncher_test::DateTest::tearDown()
 {
   // nothing to do
 }
@@ -55,7 +58,7 @@ void DateTest::tearDown()
 //===========================================================================
 // test_constructors
 //===========================================================================
-void DateTest::test_constructors(void)
+void ccruncher_test::DateTest::test_constructors(void)
 {
   Date now = Date();
   Date date1 = Date(25,7,2001);
@@ -70,7 +73,7 @@ void DateTest::test_constructors(void)
 //===========================================================================
 // test_valid
 //===========================================================================
-void DateTest::test_valid(void)
+void ccruncher_test::DateTest::test_valid(void)
 {
   ASSERT(Date::valid(25,12,2004));
   ASSERT(!Date::valid(25,13,2004));
@@ -81,7 +84,7 @@ void DateTest::test_valid(void)
 //===========================================================================
 // test_gets
 //===========================================================================
-void DateTest::test_gets(void)
+void ccruncher_test::DateTest::test_gets(void)
 {
   Date date1 = Date(25,12,2005);
 
@@ -94,7 +97,7 @@ void DateTest::test_gets(void)
 //===========================================================================
 // test_gets
 //===========================================================================
-void DateTest::test_sets(void)
+void ccruncher_test::DateTest::test_sets(void)
 {
   Date date1;
 
@@ -114,7 +117,7 @@ void DateTest::test_sets(void)
 //===========================================================================
 // test_rollers
 //===========================================================================
-void DateTest::test_rollers(void)
+void ccruncher_test::DateTest::test_rollers(void)
 {
   Date date1 = Date("25/12/2004");
   Date date2;
@@ -150,7 +153,7 @@ void DateTest::test_rollers(void)
 //===========================================================================
 // test_misc
 //===========================================================================
-void DateTest::test_misc(void)
+void ccruncher_test::DateTest::test_misc(void)
 {
   Date date1 = Date(1,2,2005);
 
@@ -173,7 +176,7 @@ void DateTest::test_misc(void)
 //===========================================================================
 // test_misc
 //===========================================================================
-void DateTest::test_comparators(void)
+void ccruncher_test::DateTest::test_comparators(void)
 {
   Date date1 = Date(23,11,2003);
   Date date2 = Date(25,12,2004);

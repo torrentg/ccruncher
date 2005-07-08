@@ -31,6 +31,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -50,7 +53,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void CopulaNormalTest::setUp()
+void ccruncher_test::CopulaNormalTest::setUp()
 {
   // nothing to do
 }
@@ -58,7 +61,7 @@ void CopulaNormalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void CopulaNormalTest::tearDown()
+void ccruncher_test::CopulaNormalTest::tearDown()
 {
   // nothing to do
 }
@@ -67,7 +70,7 @@ void CopulaNormalTest::tearDown()
 // test1. generates NITERS realization of a copula and test that expected
 // correlations are true
 //===========================================================================
-void CopulaNormalTest::test1()
+void ccruncher_test::CopulaNormalTest::test1()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -89,7 +92,7 @@ void CopulaNormalTest::test1()
 //===========================================================================
 // test2. try to create a copula with non valid correlation matrix
 //===========================================================================
-void CopulaNormalTest::test2()
+void ccruncher_test::CopulaNormalTest::test2()
 {
   // non valid correlation matrix (non definite positive)
   double sigmas[] = {
@@ -107,7 +110,7 @@ void CopulaNormalTest::test2()
 //===========================================================================
 // test3. try to acces components
 //===========================================================================
-void CopulaNormalTest::test3()
+void ccruncher_test::CopulaNormalTest::test3()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -131,7 +134,7 @@ void CopulaNormalTest::test3()
 //===========================================================================
 // test4. testing constructor based on other copula
 //===========================================================================
-void CopulaNormalTest::test4()
+void ccruncher_test::CopulaNormalTest::test4()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -155,7 +158,7 @@ void CopulaNormalTest::test4()
 //===========================================================================
 // generate a 2-D histogram
 //===========================================================================
-void CopulaNormalTest::computeDensity(CopulaNormal &copula)
+void ccruncher_test::CopulaNormalTest::computeDensity(CopulaNormal &copula)
 {
   double x, y;
   int a, b;
@@ -202,7 +205,7 @@ void CopulaNormalTest::computeDensity(CopulaNormal &copula)
 // test5. generates NITERS realization of a copula and test that expected
 // correlations are true
 //===========================================================================
-void CopulaNormalTest::test5()
+void ccruncher_test::CopulaNormalTest::test5()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -227,7 +230,7 @@ void CopulaNormalTest::test5()
 // computes the correlation factor of 2 series
 // extracted from 'Numerical Recipes in C'
 //===========================================================================
-double CopulaNormalTest::pearsn(double *x, double *y, int n)
+double ccruncher_test::CopulaNormalTest::pearsn(double *x, double *y, int n)
 {
   double ax=0.0, ay=0.0, sxx=0.0, syy=0.0, sxy=0.0;
 
@@ -260,7 +263,7 @@ double CopulaNormalTest::pearsn(double *x, double *y, int n)
 // correlations are true
 // correls is a vector of size nxn
 //===========================================================================
-void CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
+void ccruncher_test::CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
 {
   double **values;
 

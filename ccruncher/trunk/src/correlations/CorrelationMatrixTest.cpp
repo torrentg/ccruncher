@@ -31,6 +31,9 @@
 // 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -45,7 +48,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void CorrelationMatrixTest::setUp()
+void ccruncher_test::CorrelationMatrixTest::setUp()
 {
   // nothing to do
 }
@@ -53,7 +56,7 @@ void CorrelationMatrixTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void CorrelationMatrixTest::tearDown()
+void ccruncher_test::CorrelationMatrixTest::tearDown()
 {
   // nothing to do
 }
@@ -61,7 +64,7 @@ void CorrelationMatrixTest::tearDown()
 //===========================================================================
 // getSectors
 //===========================================================================
-Sectors CorrelationMatrixTest::getSectors()
+Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
@@ -82,7 +85,7 @@ Sectors CorrelationMatrixTest::getSectors()
 //===========================================================================
 // test1
 //===========================================================================
-void CorrelationMatrixTest::test1()
+void ccruncher_test::CorrelationMatrixTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
@@ -121,7 +124,7 @@ void CorrelationMatrixTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void CorrelationMatrixTest::test2()
+void ccruncher_test::CorrelationMatrixTest::test2()
 {
   // non valid xml (undefined sector S4)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -145,7 +148,7 @@ void CorrelationMatrixTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void CorrelationMatrixTest::test3()
+void ccruncher_test::CorrelationMatrixTest::test3()
 {
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -168,7 +171,7 @@ void CorrelationMatrixTest::test3()
 //===========================================================================
 // test4
 //===========================================================================
-void CorrelationMatrixTest::test4()
+void ccruncher_test::CorrelationMatrixTest::test4()
 {
   // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

@@ -34,6 +34,9 @@
 // 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -50,7 +53,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void InterestsTest::setUp()
+void ccruncher_test::InterestsTest::setUp()
 {
   // nothing to do
 }
@@ -58,7 +61,7 @@ void InterestsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void InterestsTest::tearDown()
+void ccruncher_test::InterestsTest::tearDown()
 {
   // nothing to do
 }
@@ -66,7 +69,7 @@ void InterestsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void InterestsTest::test1()
+void ccruncher_test::InterestsTest::test1()
 {
   double vupdate[] = {
     1.00000, 1.00278, 1.00651, 1.01073, 1.01464, 1.01840,

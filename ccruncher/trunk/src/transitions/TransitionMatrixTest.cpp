@@ -34,6 +34,9 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed period time resolution (year->month)
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -48,7 +51,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void TransitionMatrixTest::setUp()
+void ccruncher_test::TransitionMatrixTest::setUp()
 {
   // nothing to do
 }
@@ -56,7 +59,7 @@ void TransitionMatrixTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void TransitionMatrixTest::tearDown()
+void ccruncher_test::TransitionMatrixTest::tearDown()
 {
   // nothing to do
 }
@@ -64,7 +67,7 @@ void TransitionMatrixTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings TransitionMatrixTest::getRatings()
+Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
@@ -86,7 +89,7 @@ Ratings TransitionMatrixTest::getRatings()
 //===========================================================================
 // test1
 //===========================================================================
-void TransitionMatrixTest::test1()
+void ccruncher_test::TransitionMatrixTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
@@ -167,7 +170,7 @@ void TransitionMatrixTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void TransitionMatrixTest::test2()
+void ccruncher_test::TransitionMatrixTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -213,7 +216,7 @@ void TransitionMatrixTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void TransitionMatrixTest::test3()
+void ccruncher_test::TransitionMatrixTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -259,7 +262,7 @@ void TransitionMatrixTest::test3()
 //===========================================================================
 // test4
 //===========================================================================
-void TransitionMatrixTest::test4()
+void ccruncher_test::TransitionMatrixTest::test4()
 {
   // non valid transition matrix (default element not defined)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -305,7 +308,7 @@ void TransitionMatrixTest::test4()
 //===========================================================================
 // test5
 //===========================================================================
-void TransitionMatrixTest::test5()
+void ccruncher_test::TransitionMatrixTest::test5()
 {
   // non valid transition matrix (property 4 not acomplished)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

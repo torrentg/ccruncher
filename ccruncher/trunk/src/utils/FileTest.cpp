@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -39,7 +42,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void FileTest::setUp()
+void ccruncher_test::FileTest::setUp()
 {
   // nothing to do
 }
@@ -47,7 +50,7 @@ void FileTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void FileTest::tearDown()
+void ccruncher_test::FileTest::tearDown()
 {
   // nothing to do
 }
@@ -55,7 +58,7 @@ void FileTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void FileTest::test1(void)
+void ccruncher_test::FileTest::test1(void)
 {
   // testing normalizePath function
   string str1;

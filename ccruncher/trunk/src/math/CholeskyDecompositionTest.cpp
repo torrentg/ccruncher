@@ -31,6 +31,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -46,7 +49,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void CholeskyDecompositionTest::setUp()
+void ccruncher_test::CholeskyDecompositionTest::setUp()
 {
   // nothing to do
 }
@@ -54,7 +57,7 @@ void CholeskyDecompositionTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void CholeskyDecompositionTest::tearDown()
+void ccruncher_test::CholeskyDecompositionTest::tearDown()
 {
   // nothing to do
 }
@@ -72,7 +75,7 @@ void CholeskyDecompositionTest::tearDown()
 //      0.00000  1.22474  0.40825
 //      0.00000  0.00000  1.15470
 //===========================================================================
-void CholeskyDecompositionTest::test1()
+void ccruncher_test::CholeskyDecompositionTest::test1()
 {
   // cholesky decomposition feasible
   double valA[] = {
@@ -121,7 +124,7 @@ void CholeskyDecompositionTest::test1()
 //    B = chol(A)
 //      error: chol: matrix not positive definite
 //===========================================================================
-void CholeskyDecompositionTest::test2()
+void ccruncher_test::CholeskyDecompositionTest::test2()
 {
   // cholesky decomposition non feasible
   double valB[] = {

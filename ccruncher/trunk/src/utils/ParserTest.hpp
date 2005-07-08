@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _ParserTest_
@@ -41,6 +44,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -75,6 +79,10 @@ class ParserTest : public TestFixture<ParserTest>
 };
 
 REGISTER_FIXTURE(ParserTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

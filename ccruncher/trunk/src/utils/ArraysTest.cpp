@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.cpp)
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -42,7 +45,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ArraysTest::setUp()
+void ccruncher_test::ArraysTest::setUp()
 {
   // nothing to do
 }
@@ -50,7 +53,7 @@ void ArraysTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ArraysTest::tearDown()
+void ccruncher_test::ArraysTest::tearDown()
 {
   // nothing to do
 }
@@ -58,7 +61,7 @@ void ArraysTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ArraysTest::test1()
+void ccruncher_test::ArraysTest::test1()
 {
   double *vector1, *vector2, *vector3;
   double **matrix1, **matrix2, **matrix3, **matrix4;
@@ -156,7 +159,7 @@ void ArraysTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ArraysTest::test2()
+void ccruncher_test::ArraysTest::test2()
 {
   double Avals[] = {1,2,3,4,5,6};
   double **A = Arrays<double>::allocMatrix(2, 3, Avals);

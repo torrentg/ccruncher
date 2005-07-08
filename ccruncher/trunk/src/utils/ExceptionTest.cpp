@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -37,7 +40,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ExceptionTest::setUp()
+void ccruncher_test::ExceptionTest::setUp()
 {
   // nothing to do
 }
@@ -45,7 +48,7 @@ void ExceptionTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ExceptionTest::tearDown()
+void ccruncher_test::ExceptionTest::tearDown()
 {
   // nothing to do
 }
@@ -53,7 +56,7 @@ void ExceptionTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ExceptionTest::test1()
+void ccruncher_test::ExceptionTest::test1()
 {
   ASSERT_NO_THROW(function4());
   ASSERT_THROW(function3());
@@ -64,7 +67,7 @@ void ExceptionTest::test1()
 //===========================================================================
 // function1. Can throw anything (no throw clause)
 //===========================================================================
-void ExceptionTest::function1(void)
+void ccruncher_test::ExceptionTest::function1(void)
 {
   try
   {
@@ -83,7 +86,7 @@ void ExceptionTest::function1(void)
 //===========================================================================
 // function2. Can throw 2 exceptions types: Exception and exception
 //===========================================================================
-void ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
+void ccruncher_test::ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
 {
   try
   {
@@ -98,7 +101,7 @@ void ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
 //===========================================================================
 // function3. Only can throw exceptions type Exception
 //===========================================================================
-void ExceptionTest::function3(void) throw(ccruncher::Exception)
+void ccruncher_test::ExceptionTest::function3(void) throw(ccruncher::Exception)
 {
   function4();
 
@@ -108,7 +111,7 @@ void ExceptionTest::function3(void) throw(ccruncher::Exception)
 //===========================================================================
 // function4. Can't throw exceptions
 //===========================================================================
-void ExceptionTest::function4(void) throw()
+void ccruncher_test::ExceptionTest::function4(void) throw()
 {
   // nothing to do
 }

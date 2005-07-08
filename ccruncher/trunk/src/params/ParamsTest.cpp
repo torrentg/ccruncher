@@ -34,6 +34,9 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -44,7 +47,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ParamsTest::setUp()
+void ccruncher_test::ParamsTest::setUp()
 {
   // nothing to do
 }
@@ -52,7 +55,7 @@ void ParamsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ParamsTest::tearDown()
+void ccruncher_test::ParamsTest::tearDown()
 {
   // nothing to do
 }
@@ -60,7 +63,7 @@ void ParamsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ParamsTest::test1()
+void ccruncher_test::ParamsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <params>\n\
@@ -116,7 +119,7 @@ void ParamsTest::test1()
 //===========================================================================
 // test1
 //===========================================================================
-void ParamsTest::test2()
+void ccruncher_test::ParamsTest::test2()
 {
   // error: steplength not given
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

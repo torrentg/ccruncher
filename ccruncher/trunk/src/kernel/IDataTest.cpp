@@ -39,6 +39,9 @@
 //   . changed period time resolution (year->month)
 //   . added survival section
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -49,7 +52,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void IDataTest::setUp()
+void ccruncher_test::IDataTest::setUp()
 {
   // nothing to do
 }
@@ -57,7 +60,7 @@ void IDataTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void IDataTest::tearDown()
+void ccruncher_test::IDataTest::tearDown()
 {
   // nothing to do
 }
@@ -65,7 +68,7 @@ void IDataTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void IDataTest::test1()
+void ccruncher_test::IDataTest::test1()
 {
   // simple creditcruncher XML
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\

@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -43,7 +46,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ParserTest::setUp()
+void ccruncher_test::ParserTest::setUp()
 {
   // nothing to do
 }
@@ -51,7 +54,7 @@ void ParserTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ParserTest::tearDown()
+void ccruncher_test::ParserTest::tearDown()
 {
   // nothing to do
 }
@@ -59,7 +62,7 @@ void ParserTest::tearDown()
 //===========================================================================
 // test_int
 //===========================================================================
-void ParserTest::test_int(void)
+void ccruncher_test::ParserTest::test_int(void)
 {
   ASSERT_EQUALS(1, Parser::intValue("1"));
   ASSERT_EQUALS(2, Parser::intValue("+2"));
@@ -75,7 +78,7 @@ void ParserTest::test_int(void)
 //===========================================================================
 // test_long
 //===========================================================================
-void ParserTest::test_long(void)
+void ccruncher_test::ParserTest::test_long(void)
 {
   ASSERT_EQUALS(1L, Parser::longValue("1"));
   ASSERT_EQUALS(2L, Parser::longValue("+2"));
@@ -91,7 +94,7 @@ void ParserTest::test_long(void)
 //===========================================================================
 // test_double
 //===========================================================================
-void ParserTest::test_double(void)
+void ccruncher_test::ParserTest::test_double(void)
 {
   ASSERT_DOUBLES_EQUAL(1.0, Parser::doubleValue("1"), EPSILON);
   ASSERT_DOUBLES_EQUAL(2.0, Parser::doubleValue("+2"), EPSILON);
@@ -109,7 +112,7 @@ void ParserTest::test_double(void)
 //===========================================================================
 // date_test
 //===========================================================================
-void ParserTest::test_date(void)
+void ccruncher_test::ParserTest::test_date(void)
 {
   Date date1 = Parser::dateValue("5/1/2001");
 
@@ -130,7 +133,7 @@ void ParserTest::test_date(void)
 //===========================================================================
 // date_bool
 //===========================================================================
-void ParserTest::test_bool(void)
+void ccruncher_test::ParserTest::test_bool(void)
 {
   ASSERT_EQUALS(true, Parser::boolValue("true"));
   ASSERT_EQUALS(false, Parser::boolValue("false"));
@@ -150,7 +153,7 @@ void ParserTest::test_bool(void)
 //===========================================================================
 // toString
 //===========================================================================
-void ParserTest::test_toString(void)
+void ccruncher_test::ParserTest::test_toString(void)
 {
   Date date1 = Date("1/1/2005");
 

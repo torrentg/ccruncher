@@ -31,6 +31,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _AssetTest_
@@ -45,6 +48,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -75,6 +79,10 @@ class AssetTest : public TestFixture<AssetTest>
 };
 
 REGISTER_FIXTURE(AssetTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

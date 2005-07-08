@@ -38,6 +38,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -50,14 +53,10 @@
 
 #define EPSILON 0.00175
 
-//---------------------------------------------------------------------------
-
-void printMatrix(double **a, int n);
-
 //===========================================================================
 // setUp
 //===========================================================================
-void PowMatrixTest::setUp()
+void ccruncher_test::PowMatrixTest::setUp()
 {
   // nothing to do
 }
@@ -65,7 +64,7 @@ void PowMatrixTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void PowMatrixTest::tearDown()
+void ccruncher_test::PowMatrixTest::tearDown()
 {
   // nothing to do
 }
@@ -84,7 +83,7 @@ void PowMatrixTest::tearDown()
 //        +0.0306268 +0.998907   -0.00327799
 //        +0.0918803 -0.00327799 +0.990166
 //===========================================================================
-void PowMatrixTest::test1()
+void ccruncher_test::PowMatrixTest::test1()
 {
   // matrix powerable
   double valA[] = {
@@ -132,7 +131,7 @@ void PowMatrixTest::test1()
 //        +0.0479328 +0.999403  -0.0157408
 //        +1.36792   +0.0329025 +0.414152
 //===========================================================================
-void PowMatrixTest::test2()
+void ccruncher_test::PowMatrixTest::test2()
 {
   // singular matrix
   double valB[] = {
@@ -171,7 +170,7 @@ void PowMatrixTest::test2()
 //    A = {{3, -2, 0},{4, -1, -2}, {0, 0, -1}}
 //    Eigenvalues[A]
 //===========================================================================
-void PowMatrixTest::test3()
+void ccruncher_test::PowMatrixTest::test3()
 {
   // matrix with complex eigenvalues
   double valC[] = {
@@ -191,7 +190,7 @@ void PowMatrixTest::test3()
 //===========================================================================
 // test4. testing pow function
 //===========================================================================
-void PowMatrixTest::test4()
+void ccruncher_test::PowMatrixTest::test4()
 {
   double x = 2.0;
   double y = 1.0/3.0;
@@ -211,7 +210,7 @@ void PowMatrixTest::test4()
 //===========================================================================
 // printMatrix. local function used for debug
 //===========================================================================
-void printMatrix(double **a, int n)
+void ccruncher_test::PowMatrixTest::printMatrix(double **a, int n)
 {
   for(int i=0;i<n;i++)
   {

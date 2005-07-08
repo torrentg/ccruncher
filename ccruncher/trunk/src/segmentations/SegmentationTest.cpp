@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -43,7 +46,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void SegmentationTest::setUp()
+void ccruncher_test::SegmentationTest::setUp()
 {
   // nothing to do
 }
@@ -51,7 +54,7 @@ void SegmentationTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void SegmentationTest::tearDown()
+void ccruncher_test::SegmentationTest::tearDown()
 {
   // nothing to do
 }
@@ -59,7 +62,7 @@ void SegmentationTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void SegmentationTest::test1()
+void ccruncher_test::SegmentationTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <segmentation name='office' components='asset'>\n\

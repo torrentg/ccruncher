@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.hpp)
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _ArraysTest_
@@ -38,6 +41,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -64,6 +68,10 @@ class ArraysTest : public TestFixture<ArraysTest>
 };
 
 REGISTER_FIXTURE(ArraysTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

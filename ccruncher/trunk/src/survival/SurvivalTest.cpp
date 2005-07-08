@@ -28,6 +28,9 @@
 // 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added test6()
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -44,7 +47,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void SurvivalTest::setUp()
+void ccruncher_test::SurvivalTest::setUp()
 {
   // nothing to do
 }
@@ -52,7 +55,7 @@ void SurvivalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void SurvivalTest::tearDown()
+void ccruncher_test::SurvivalTest::tearDown()
 {
   // nothing to do
 }
@@ -60,7 +63,7 @@ void SurvivalTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings SurvivalTest::getRatings()
+Ratings ccruncher_test::SurvivalTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
@@ -79,7 +82,7 @@ Ratings SurvivalTest::getRatings()
 //===========================================================================
 // test1
 //===========================================================================
-void SurvivalTest::test1()
+void ccruncher_test::SurvivalTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
@@ -120,7 +123,7 @@ void SurvivalTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void SurvivalTest::test2()
+void ccruncher_test::SurvivalTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -145,7 +148,7 @@ void SurvivalTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void SurvivalTest::test3()
+void ccruncher_test::SurvivalTest::test3()
 {
   // non valid survival function, non monotone
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -170,7 +173,7 @@ void SurvivalTest::test3()
 //===========================================================================
 // test4
 //===========================================================================
-void SurvivalTest::test4()
+void ccruncher_test::SurvivalTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -195,7 +198,7 @@ void SurvivalTest::test4()
 //===========================================================================
 // test5 (equals than test1, but with diferent constructor)
 //===========================================================================
-void SurvivalTest::test5()
+void ccruncher_test::SurvivalTest::test5()
 {
   double mvalues1[] = {1.00, 0.75, 0.50, 0.25, 0.175, 0.10};
   double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
@@ -228,7 +231,7 @@ void SurvivalTest::test5()
 //===========================================================================
 // test6 (checks distribution assumptions)
 //===========================================================================
-void SurvivalTest::test6()
+void ccruncher_test::SurvivalTest::test6()
 {
   double mvalues1[] = {1.00, 0.90};
   double mvalues2[] = {0.00, 0.00};

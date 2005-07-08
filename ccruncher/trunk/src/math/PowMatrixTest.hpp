@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _PowMatrixTest_
@@ -41,6 +44,7 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -53,6 +57,7 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
     void test2();
     void test3();
     void test4();
+    void printMatrix(double **a, int n);
 
 
   public:
@@ -71,6 +76,10 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
 };
 
 REGISTER_FIXTURE(PowMatrixTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

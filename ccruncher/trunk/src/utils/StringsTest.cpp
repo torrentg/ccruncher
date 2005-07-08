@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.cpp)
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -41,7 +44,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void StringsTest::setUp()
+void ccruncher_test::StringsTest::setUp()
 {
   // nothing to do
 }
@@ -49,7 +52,7 @@ void StringsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void StringsTest::tearDown()
+void ccruncher_test::StringsTest::tearDown()
 {
   // nothing to do
 }
@@ -57,7 +60,7 @@ void StringsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void StringsTest::test1()
+void ccruncher_test::StringsTest::test1()
 {
   vector<string> tokens;
   string str1 = "  I Am A String Ready For Sacrifice  ";

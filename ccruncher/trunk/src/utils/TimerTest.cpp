@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -43,7 +46,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void TimerTest::setUp()
+void ccruncher_test::TimerTest::setUp()
 {
   // nothing to do
 }
@@ -51,7 +54,7 @@ void TimerTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void TimerTest::tearDown()
+void ccruncher_test::TimerTest::tearDown()
 {
   // nothing to do
 }
@@ -59,7 +62,7 @@ void TimerTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void TimerTest::test1()
+void ccruncher_test::TimerTest::test1()
 {
   double t1;
   double x = 2.1;
@@ -98,7 +101,7 @@ void TimerTest::test1()
 //===========================================================================
 // test2. test format function
 //===========================================================================
-void TimerTest::test2()
+void ccruncher_test::TimerTest::test2()
 {
   ASSERT(Timer::format(0.510) == string("00:00:00.510"));
   ASSERT(Timer::format(50.510) == string("00:00:50.510"));

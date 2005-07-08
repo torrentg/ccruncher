@@ -25,6 +25,9 @@
 // 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #ifndef _DateValuesTest_
@@ -34,6 +37,10 @@
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
+
+//---------------------------------------------------------------------------
+
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -58,6 +65,10 @@ class DateValuesTest : public TestFixture<DateValuesTest>
 };
 
 REGISTER_FIXTURE(DateValuesTest);
+
+//---------------------------------------------------------------------------
+
+}
 
 //---------------------------------------------------------------------------
 

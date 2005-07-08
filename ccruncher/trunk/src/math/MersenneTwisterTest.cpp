@@ -28,6 +28,9 @@
 // 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -45,7 +48,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void MersenneTwisterTest::setUp()
+void ccruncher_test::MersenneTwisterTest::setUp()
 {
   // nothing to do
 }
@@ -53,7 +56,7 @@ void MersenneTwisterTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void MersenneTwisterTest::tearDown()
+void ccruncher_test::MersenneTwisterTest::tearDown()
 {
   // nothing to do
 }
@@ -62,7 +65,7 @@ void MersenneTwisterTest::tearDown()
 // test1
 // it's a statiscal test. probably crunch some times
 //===========================================================================
-void MersenneTwisterTest::test1(void)
+void ccruncher_test::MersenneTwisterTest::test1(void)
 {
   MTRand mtw;
   long ybins[NUMBINS];
@@ -107,7 +110,7 @@ void MersenneTwisterTest::test1(void)
 // test2
 // it's a statiscal test. probably crunch some times
 //===========================================================================
-void MersenneTwisterTest::test2(void)
+void ccruncher_test::MersenneTwisterTest::test2(void)
 {
   MTRand mtw;
   double val;

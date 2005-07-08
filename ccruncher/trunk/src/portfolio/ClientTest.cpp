@@ -34,6 +34,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . created ccruncher_test namespace
+//
 //===========================================================================
 
 #include <iostream>
@@ -44,7 +47,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ClientTest::setUp()
+void ccruncher_test::ClientTest::setUp()
 {
   // nothing to do
 }
@@ -52,7 +55,7 @@ void ClientTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ClientTest::tearDown()
+void ccruncher_test::ClientTest::tearDown()
 {
   // nothing to do
 }
@@ -60,7 +63,7 @@ void ClientTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ClientTest::getRatings()
+Ratings ccruncher_test::ClientTest::getRatings()
 {
   // note that ratings are unordered
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -85,7 +88,7 @@ Ratings ClientTest::getRatings()
 //===========================================================================
 // getSectors
 //===========================================================================
-Sectors ClientTest::getSectors()
+Sectors ccruncher_test::ClientTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
@@ -106,7 +109,7 @@ Sectors ClientTest::getSectors()
 //===========================================================================
 // getSegmentations1
 //===========================================================================
-Segmentations ClientTest::getSegmentations()
+Segmentations ccruncher_test::ClientTest::getSegmentations()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
@@ -149,7 +152,7 @@ Segmentations ClientTest::getSegmentations()
 //===========================================================================
 // test1
 //===========================================================================
-void ClientTest::test1()
+void ccruncher_test::ClientTest::test1()
 {
   // client definition
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -213,7 +216,7 @@ void ClientTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ClientTest::test2()
+void ccruncher_test::ClientTest::test2()
 {
   // client definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
@@ -254,7 +257,7 @@ void ClientTest::test2()
 //===========================================================================
 // test3
 //===========================================================================
-void ClientTest::test3()
+void ccruncher_test::ClientTest::test3()
 {
   // client definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
