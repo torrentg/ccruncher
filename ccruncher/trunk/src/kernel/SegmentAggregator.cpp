@@ -28,12 +28,20 @@
 // 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . portfolio evaluation modified
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added timer to control last flush time
+//
 //===========================================================================
 
 #include <cmath>
 #include <cassert>
 #include "utils/Arrays.hpp"
 #include "kernel/SegmentAggregator.hpp"
+
+//---------------------------------------------------------------------------
+
+#define MAXBUFSIZE 500
+#define MAXSECONDS 30.0
 
 //===========================================================================
 // void constructor
@@ -72,7 +80,7 @@ void ccruncher::SegmentAggregator::init()
   filename = "";
   path = "UNASSIGNED";
   bforce = false;
-  buffersize = MAXSIZE;
+  buffersize = MAXBUFSIZE;
 
   N = 0L;
   M = 0;
@@ -80,6 +88,8 @@ void ccruncher::SegmentAggregator::init()
   nassets = 0L;
   cont = 0L;
   icont = 0L;
+
+  timer.resume();
 }
 
 //===========================================================================
@@ -389,13 +399,13 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   cont++;
 
   // flushing if buffer is full
-  if (icont >= buffersize-1)
+cout << filename << " timer=" << timer.read()  << endl;
+  if (icont >= buffersize-1 || timer.read() > MAXSECONDS)
   {
+cout << filename << " flushing..."  << endl;
     flush();
     icont = 0;
   }
-
-  //TODO: flush if more than x sec. without flushing
 }
 
 //===========================================================================
@@ -431,6 +441,9 @@ void ccruncher::SegmentAggregator::flush() throw(Exception)
 
   // closing output stream
   ofsclose();
+
+  // reseting timer
+  timer.start();
 }
 
 //===========================================================================
@@ -447,7 +460,7 @@ void ccruncher::SegmentAggregator::setOutputProperties(const string &spath, cons
     buffersize = ibs;
   }
   else if (ibs == 0) {
-    buffersize = MAXSIZE;
+    buffersize = MAXBUFSIZE;
   }
   else {
     throw Exception("SegmentAggregator::setOutputProperties(): invalid buffer size");

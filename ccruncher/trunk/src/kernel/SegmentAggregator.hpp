@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added timer to control last flush time
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -40,6 +43,7 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/File.hpp"
+#include "utils/Timer.hpp"
 #include "portfolio/Client.hpp"
 #include "portfolio/DateValues.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -49,10 +53,6 @@
 using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
-
-#define MAXSIZE 500
 
 //---------------------------------------------------------------------------
 
@@ -100,6 +100,9 @@ class SegmentAggregator
     DateValues **vertexes;
     // vertex values aggregation per tranch (size = buffersize)
     double *cvalues;
+
+    // internal timer (control time from last flush)
+    Timer timer;
 
     // memory management
     void init();
