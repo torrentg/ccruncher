@@ -3,15 +3,21 @@ CREDITCRUNCHER README
 =====================
 
 
-Install expat package
+Install required libraries
 --------------------------------
 
 1. check that you have libexpat.so in a lib directory and
    check that you have expat.h in an include directory. If
    you don't found some of these files you can download 
    package from http://expat.sourceforge.net/ and install it. 
-   Also you can install from a rpm package.
-  
+   Also you can install from rpm packages.
+
+2. check that you have libz.so in a lib directory and
+   check that you have zlib.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.zlib.net/ and install it. 
+   Also you can install from rpm packages.
+
 
 Installation from source package
 --------------------------------
@@ -19,7 +25,7 @@ Installation from source package
 1. uncompress package
      tar -xvzf ccruncher-X.Y_src.tgz
 
-2. install expat package (explained before)
+2. install required libraries (explained before)
 
 3. execute commands (read INSTALL file):
      cd ccruncher-X.Y
@@ -34,7 +40,7 @@ Installation from binary package
 1. uncompress package
      tar -xvzf ccruncher-X.Y_bin.tgz
 
-2. install expat package (explained before)
+2. install required libraries (explained before)
 
 
 Using CreditCruncher
@@ -63,13 +69,13 @@ Developers tips & tricks
      svn checkout http://www.generacio.com/svn/repos/ccruncher/
      cd trunk
 
-2. install expat package (explained before)
+2. install required libraries (explained before)
 
 3. create auto-files (run only 1 time)
      autoscan (produces configure.in)
      autoheader (produces config.h.in)
      mv config.h.in src/utils/
-     
+
 4. create ./configure script
      aclocal
      autoconf

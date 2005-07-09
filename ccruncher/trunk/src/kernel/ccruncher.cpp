@@ -31,6 +31,9 @@
 // 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added gziped input files suport
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -308,7 +311,8 @@ void usage()
   "    of a pure credit portfolio using monte carlo techniques.\n"
   "    more info at http://www.generacio.com/ccruncher\n"
   "  arguments:\n"
-  "    file        xml file containing the problem to be solved\n"
+  "    file        xml file containing the problem to be solved. This\n"
+  "                file can be gziped (caution, zip format not suported)\n"
   "  options:\n"
   "    -f          force output files overwriting\n"
   "    -v          be more verbose\n"
@@ -326,6 +330,7 @@ void usage()
   "    ccruncher --validate input.xml\n"
   "    ccruncher --path=20050601 input.xml\n"
   "    ccruncher --hash=100 -fv --path=./E20050601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml.gz\n"
   << endl;
 }
 

@@ -13,7 +13,7 @@
     <h1>CreditCruncher - Input File Reference</h1>
 
     <p>
-      This document describes the xml input file for CreditCruncher-0.3. 
+      This document describes the xml input file for CreditCruncher-0.4. 
       In the distribution package you can find the DTD and some XML samples 
       into the samples directory. 
       <br /><br />
@@ -29,7 +29,7 @@
 
   &lt;/creditcruncher&gt;
     </pre>
-          
+
     <p>
       where the encoding attribute can be one of these 
       values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take in account that 
@@ -39,7 +39,7 @@
 <!-- ==================================================== -->
 <!--    params section                                    -->
 <!-- ==================================================== -->
-    
+
     <h3>Section Params</h3>
 
     <p>
@@ -50,7 +50,7 @@
     <h4>Example</h4>
 
     <pre>
-            
+
   &lt;params&gt;
     &lt;property name="time.begindate" value="18/02/2003"/&gt;
     &lt;property name="time.steps" value="12"/&gt;
@@ -176,7 +176,7 @@
     <h4>Example</h4>
 
     <pre>
-  
+
   &lt;interests&gt;
     &lt;interest name="spot" date="18/11/2004"&gt;
       &lt;rate t="0" r="0.0"/&gt;
@@ -305,7 +305,7 @@
 <!-- ==================================================== -->
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
-    
+
     <h3>Section Transition Matrix</h3>
 
     <p>
@@ -518,7 +518,7 @@
     <h4>Example</h4>
 
     <pre>
-            
+
   &lt;sectors&gt;
     &lt;sector name="S1" order="1" desc="oil and gas"/&gt;
     &lt;sector name="S2" order="2" desc="other sectors"/&gt;
@@ -561,7 +561,7 @@
 <!-- ==================================================== -->
 <!--    correlations section                              -->
 <!-- ==================================================== -->
-        
+
     <h3>Section Correlations</h3>
 
     <p>
@@ -574,7 +574,7 @@
     <h4>Example</h4>
 
     <pre>
-  
+
   &lt;mcorrels epsilon="1e-12"&gt;
     &lt;sigma sector1="S1" sector2="S1" value="0.2"/&gt;
     &lt;sigma sector1="S1" sector2="S2" value="0.1"/&gt;
@@ -635,7 +635,7 @@
 <!-- ==================================================== -->
 <!--    segmentations section                             -->
 <!-- ==================================================== -->
-    
+
     <h3>Segmentations</h3>
 
     <p>
@@ -658,7 +658,7 @@
     <h4>Example</h4>
 
     <pre>
-  
+
   &lt;segmentations&gt;
     &lt;segmentation name="portfolio" components="asset"/&gt;
     &lt;segmentation name="client" components="client"&gt;
@@ -748,7 +748,7 @@
     <h4>Example</h4>
 
     <pre>
-  
+
   &lt;portfolio&gt;
     &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
       &lt;belongs-to concept="sector" segment="S1"/&gt;
@@ -794,7 +794,7 @@
   &lt;/portfolio&gt;
 
     </pre>
-          
+
     <p>
       Look how the client does not have a 'belong-to' to 'client' segmentation defined.
       This is done implicitly (the same occurs with 'asset'). 
@@ -863,7 +863,7 @@
         <td style="text-align:center;"><code>string</code></td>
       </tr>
     </table>
-  
+
     <h4>Asset Attributes</h4>
 
     <table>
@@ -923,11 +923,11 @@
           Recovery at date "at"
         </td>
         <td style="text-align:center;"><code>double</code></td>
-      </tr>            
+      </tr>
     </table>
 
     <div style="height:75px"></div>
-    
+
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
         <td class="footer" align="left">
@@ -945,10 +945,10 @@
           </a>    
         </td>
         <td class="footer" align="right">
-          Last modified: 13-Jun-2005 &nbsp;
+          Last modified: 09-Jul-2005 &nbsp;
         </td>
       </tr>
-    </table>    
+    </table>
 
     <p style="text-align: center; font-size: smaller;">
       Copyright &copy; 2004-2005 <a href="mailto:gerard@fobos.generacio.com">Gerard Torrent</a>

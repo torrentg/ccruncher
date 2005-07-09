@@ -10,6 +10,7 @@ version 0.4 (XXX 2005)
   * upgraded to new tnt/jama version
   * added survival tag at DTD
   * autoflush if more than 30 secs without saving results
+  * added gzip input file suport
 
 version 0.3 (June 2005)
 --------------------------

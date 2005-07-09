@@ -36,7 +36,9 @@ EXTRA_DIST = \
     ../share/jama-1.2.4/tnt_stopwatch.h\
     ../share/jama-1.2.4/tnt_subscript.h\
     ../share/jama-1.2.4/tnt_vec.h\
-    ../share/jama-1.2.4/tnt_version.h
+    ../share/jama-1.2.4/tnt_version.h\
+    ../share/gzstream-1.5/gzstream.h\
+    ../share/gzstream-1.5/gzstream.C
 
 bin_PROGRAMS = ccruncher generator mtrans
 
@@ -46,6 +48,7 @@ check_PROGRAMS = tests
 # ccruncher
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
+    ../share/gzstream-1.5/gzstream.C\
     ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
@@ -123,13 +126,14 @@ ccruncher_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
-ccruncher_LDADD = -lm -lexpat 
+ccruncher_LDADD = -lm -lexpat -lz
 ccruncher_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # generator
 # -------------------------------------------------------------
 generator_SOURCES = \
+    ../share/gzstream-1.5/gzstream.C\
     ./tools/generator.cpp\
     ./tools/Bond.cpp\
     ./kernel/IData.cpp\
@@ -205,13 +209,14 @@ generator_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
-generator_LDADD = -lm -lexpat
+generator_LDADD = -lm -lexpat -lz
 generator_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # mtrans
 # -------------------------------------------------------------
 mtrans_SOURCES = \
+    ../share/gzstream-1.5/gzstream.C\
     ./tools/mtrans.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
@@ -285,7 +290,7 @@ mtrans_SOURCES = \
     ./utils/ExpatHandlers.hpp
 
 mtrans_CXXFLAGS = -Wall -W -Wshadow
-mtrans_LDADD = -lm -lexpat
+mtrans_LDADD = -lm -lexpat -lz
 mtrans_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
@@ -294,6 +299,7 @@ mtrans_LDFLAGS = -rdynamic
 tests_SOURCES = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/TestsRunner.cxx\
+    ../share/gzstream-1.5/gzstream.C\
     ./utils/ArraysTest.cpp\
     ./utils/StringsTest.cpp\
     ./utils/TimerTest.cpp\
@@ -422,5 +428,5 @@ tests_SOURCES = \
     ./survival/Survival.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
-tests_LDADD = -lm -lexpat
+tests_LDADD = -lm -lexpat -lz
 tests_LDFLAGS = -rdynamic

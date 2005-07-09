@@ -399,10 +399,8 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   cont++;
 
   // flushing if buffer is full
-cout << filename << " timer=" << timer.read()  << endl;
   if (icont >= buffersize-1 || timer.read() > MAXSECONDS)
   {
-cout << filename << " flushing..."  << endl;
     flush();
     icont = 0;
   }

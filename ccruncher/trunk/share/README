@@ -24,6 +24,25 @@ descrip: Expat is an XML parser library written in C. It is a stream-oriented
 
 ------------------------------------------------------------------------
 
+project: zlib
+version: 1.2.2
+licence: free license (see declaration at home site)
+homeurl: http://www.zlib.net/
+descrip: zlib is designed to be a free, general-purpose, legally unencumbered
+         , that is, not covered by any patents -- lossless data-compression
+         library for use on virtually any computer hardware and operating system.
+
+------------------------------------------------------------------------
+
+project: gzstream
+version: 1.5
+licence: GNU LGPL
+homeurl: http://www.cs.unc.edu/Research/compgeom/gzstream/
+descrip: Gzstream is a small C++ library, basically just a wrapper, that
+         provides the functionality of the zlib C-library in a C++ iostream.
+
+------------------------------------------------------------------------
+
 project: jama/tnt
 version: 1.2.4 (jama) + 1.2.6 (tnt)
 licence: public domain (see declaration at home site)

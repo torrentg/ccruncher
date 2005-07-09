@@ -41,6 +41,9 @@
 // 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added gziped input files suport
+//
 //===========================================================================
 
 #include <cassert>
@@ -50,6 +53,7 @@
 #include "utils/Logger.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Timer.hpp"
+#include <gzstream.h>
 
 //===========================================================================
 // inicialitzador
@@ -142,10 +146,10 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
   // parsing document
   try
   {
-    // checking file readability
-    ifstream ifile((const char *) xmlfilename.c_str());
+    // gziped file stream, if file isn't a gzip, is like a ifstream
+    igzstream  xmlstream((const char *) xmlfilename.c_str());
 
-    if (!ifile.is_open())
+    if (!xmlstream.good())
     {
       throw Exception("IData::IData(): can't open file " + xmlfilename);
     }
@@ -157,11 +161,10 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
       Logger::newIndentLevel();
 
       // parsing
-      parser.parse(ifile, this);
+      parser.parse(xmlstream, this);
 
       // exit function
       Logger::previousIndentLevel();
-      ifile.close();
     }
   }
   catch(Exception &e)
