@@ -5,6 +5,7 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
+  * add zlib support to windows project
   * improve given samples
   * append filename + start and end timestamp at output
   * append output filenames at output

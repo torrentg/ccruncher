@@ -123,19 +123,18 @@ de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel})
 \subsection{Activos}
 
 Cada cliente tiene contratado un conjunto de activos con riesgo de cr\'edito.
-Un activo se caracteriza por los siguientes elementos:
+Caracterizamos un activos por los siguientes elementos (importes positivos
+significan que el cliente paga, importes negativos significan que el cliente 
+cobra):
 
-\paragraph{Cashflow.} Entregas y devoluciones de dinero a lo largo del tiempo. 
-Incluye las posibles amortizaciones, primas, cupones, comisiones, costes, etc. 
-Usaremos el cashflow para calcular el valor, o precio, de un activo en el 
+\paragraph{Cashflow.} \index{Cashflow} Entregas y devoluciones de dinero a lo largo
+del tiempo. Incluye las posibles amortizaciones, primas, cupones, comisiones, costes,
+etc. Usaremos el cashflow para calcular el valor, o precio, de un activo en el
 instante $t$.
 
-\paragraph{Exposici\'on.} Importe que deberá abonarse en caso de fallido
-debido a motivos contractuales. Cada producto tiene un perfil de exposici\'on
-caracter\'istico.
-
-\paragraph{Recuperaci\'on.} Importe que se estima que ser\'a recuperado en 
-caso de fallido. Normalmente es una parte de la exposici\'on.
+\paragraph{Netting.} \index{Netting} Importe correpondiente a la liquidaci\'on de
+deudas mutuas en caso de fallido por el saldo neto de las mismas. Incluye la posible
+recuperaci\'on, pago de obligaciones contraidas (pe. en el caso de avales, etc.).
 
 
 \begin{figure}[!hb]

@@ -44,12 +44,12 @@ resoluci\'on basados en simulaci\'on: Time-To-Default y Rating-Path.
 \item La \'unica fuente de riesgo considerada es el riesgo de impago. No se 
 contemplan otros tipos de riesgos como la variaci\'on de tipos de inter\'es, 
 de mercado, operacional, reputacional, etc.
-\item La descripci\'on de cada activo (cashflow, exposici\'on y recuperaci\'on) 
-se conoce de antemano y no var\'ia a lo largo de la simulaci\'on. En particular,
-el valor del activo solo depende de si el cliente hace fallido, no del rating
-que pueda tener el cliente. Por otra parte, la recuperaci\'on no puede variar en 
-funci\'on de la evoluci\'on del rating de otro cliente.
-\item El rating de un cliente no depende del rating de otro cliente de otra 
+\item La descripci\'on de cada activo (cashflow y netting) se conoce de antemano
+y no var\'ia a lo largo de la simulaci\'on. En particular, el valor del activo solo
+depende de si el cliente hace fallido, no del rating que pueda tener el cliente.
+Por otra parte, la recuperaci\'on no puede variar en funci\'on de la evoluci\'on
+del rating de otro cliente.
+\item El rating de un cliente no depende del rating de otro cliente de otra
 forma que no sea la correlaci\'on entre sectores. Esta restricci\'on no 
 permite tratar el rating de las empresas subsidiarias en funci\'on del rating 
 de la empresa matriz.
@@ -252,8 +252,7 @@ tiempo $t$ como:
 \begin{displaymath}
 \begin{array}{rl}
 X_{i,j}(t) = \sum_{t_k=t_0}^{t} & \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot J(t_k) \cr
-+ &\textrm{recovery}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot I(t_k) \cr
-- &\textrm{exposure}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot I(t_k)  
+                              + & \textrm{netting}(t_k)  \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot I(t_k)
 \end{array}
 \end{displaymath}
 
