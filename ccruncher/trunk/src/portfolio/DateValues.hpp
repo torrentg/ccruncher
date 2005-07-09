@@ -34,6 +34,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #ifndef _DateValues_
@@ -60,11 +63,10 @@ class DateValues
 
     Date date;
     double cashflow;
-    double exposure;
-    double recovery;
+    double netting;
 
     DateValues();
-    DateValues(Date date, double cashflow, double exposure, double recovery);
+    DateValues(Date date, double cashflow, double netting);
 
 };
 

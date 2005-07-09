@@ -757,22 +757,22 @@
         &lt;belongs-to concept="product" segment="bond"/&gt;
         &lt;belongs-to concept="office" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values at="01/06/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2002" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2003" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2004" cashflow="10.0" netting="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset class="bond" id="op2">&gt;
         &lt;belongs-to concept="office" segment="0004"/&gt;
         &lt;belongs-to concept="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" netting="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
@@ -783,11 +783,11 @@
         &lt;belongs-to concept="office" segment="0003"/&gt;
         &lt;belongs-to concept="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" netting="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
@@ -906,21 +906,16 @@
       <tr class="b">
         <td style="text-align:center;">cashflow</td>
         <td style="text-align:justify;">
-          Cashflow at date "at"
+          Cashflow at date "at". Positive values = client pays, negative
+          values = client earns
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
       <tr class="a">
-        <td style="text-align:center;">exposure</td>
+        <td style="text-align:center;">netting</td>
         <td style="text-align:justify;">
-          Exposure at date "at"
-        </td>
-        <td style="text-align:center;"><code>double</code></td>
-      </tr>
-      <tr class="b">
-        <td style="text-align:center;">recovery</td>
-        <td style="text-align:justify;">
-          Recovery at date "at"
+          Netting at date "at" in case of default. Positive values = client
+          pays, negative values = client earns
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>

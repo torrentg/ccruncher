@@ -31,6 +31,9 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added timer to control last flush time
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include <cmath>
@@ -331,8 +334,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
     {
       ret[i][k].date = dates[k];
       ret[i][k].cashflow = 0.0;
-      ret[i][k].exposure = 0.0;
-      ret[i][k].recovery = 0.0;
+      ret[i][k].netting = 0.0;
     }
 
     // finding client info
@@ -349,8 +351,7 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
         for(int k=0;k<m;k++)
         {
           ret[i][k].cashflow += aux[k].cashflow;
-          ret[i][k].exposure += aux[k].exposure;
-          ret[i][k].recovery += aux[k].recovery;
+          ret[i][k].netting += aux[k].netting;
         }
       }
     }
@@ -389,8 +390,7 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
     // if client defaults in (0, M] time range
     else {
       cvalues[icont] += vertexes[i][itime-1].cashflow;
-      cvalues[icont] += vertexes[i][itime].recovery;
-      //cvalues[icont] -= vertexes[i][itime].exposure;
+      cvalues[icont] += vertexes[i][itime].netting;
     }
   }
 

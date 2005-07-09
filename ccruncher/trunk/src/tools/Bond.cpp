@@ -25,6 +25,9 @@
 // 2005/03/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (inherited from finances/Bond.cpp)
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include <cmath>
@@ -123,23 +126,20 @@ vector <DateValues> ccruncher::Bond::simulate() throw(Exception)
 
   curr.date = issuedate;
   curr.cashflow = -nominal;
-  curr.exposure = nominal;
-  curr.recovery = 0.8*nominal;
+  curr.netting = 0.8*nominal;
   ret.push_back(curr);
 
   for (int i=1;i<n-1;i++)
   {
     curr.date = addMonths(issuedate, i*m);
     curr.cashflow = nominal*r;
-    curr.exposure = 0.0;
-    curr.recovery = 0.0*nominal;
+    curr.netting = 0.0*nominal;
     ret.push_back(curr);
   }
 
   curr.date = addMonths(issuedate, term);
   curr.cashflow = nominal*(1.0+r);
-  curr.exposure = 0.0;
-  curr.recovery = 0.0*nominal;
+  curr.netting = 0.0*nominal;
   ret.push_back(curr);
 
   return ret;

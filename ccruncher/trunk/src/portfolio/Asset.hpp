@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -71,8 +74,7 @@ class Asset : public ExpatHandlers
     bool have_data;
 
     double getVCashFlow(Date &date1, Date &date2, Interest *);
-    double getVExposure(Date &date1, Date &date2, Interest *);
-    double getVRecovery(Date &date1, Date &date2, Interest *);
+    double getVNetting(Date &date1, Date &date2, Interest *);
     void insertDateValues(DateValues &) throw(Exception);
     void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
 

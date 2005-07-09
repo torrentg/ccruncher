@@ -28,6 +28,9 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include <iostream>
@@ -64,8 +67,8 @@ void ccruncher_test::DateValuesTest::tearDown()
 //===========================================================================
 void ccruncher_test::DateValuesTest::test1()
 {
-  DateValues val1(Date(10,10,2001), +1.0, +2.0, +3.0);
-  DateValues val2(Date(01,01,2006), -1.0, -2.0, -3.0);
+  DateValues val1(Date(10,10,2001), +1.0, +2.0);
+  DateValues val2(Date(01,01,2006), -1.0, -2.0);
 
   // checking that sorts by date
   ASSERT(val1 < val2);

@@ -208,6 +208,5 @@
 <!ATTLIST values
     at CDATA #REQUIRED
     cashflow CDATA #REQUIRED
-    exposure CDATA #REQUIRED
-    recovery CDATA #REQUIRED
+    netting CDATA #REQUIRED
 >

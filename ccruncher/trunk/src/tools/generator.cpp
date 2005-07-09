@@ -40,6 +40,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -326,8 +329,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
     ret += spc2;
     ret += "<values at='" + Parser::date2string(events[i].date) + "' ";
     ret += "cashflow='" + Parser::double2string(max(0.0, events[i].cashflow)) + "' ";
-    ret += "exposure='" + Parser::double2string(events[i].exposure) + "' ";
-    ret += "recovery='" + Parser::double2string(events[i].recovery) + "' ";
+    ret += "netting='" + Parser::double2string(events[i].netting) + "' ";
     ret += "/>\n";
   }
 

@@ -34,6 +34,9 @@
 // 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to getSegment method (rest segment = default)
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include <cmath>
@@ -128,9 +131,9 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, Interest *spot)
 }
 
 //===========================================================================
-// getVExposure at date2
+// getVNetting at date2
 //===========================================================================
-double ccruncher::Asset::getVExposure(Date &date1, Date &date2, Interest *spot)
+double ccruncher::Asset::getVNetting(Date &date1, Date &date2, Interest *spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -155,7 +158,7 @@ double ccruncher::Asset::getVExposure(Date &date1, Date &date2, Interest *spot)
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return data[n-1].exposure * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
+    return data[n-1].netting * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
   }
 
   for(int i=1;i<n;i++)
@@ -163,60 +166,9 @@ double ccruncher::Asset::getVExposure(Date &date1, Date &date2, Interest *spot)
     if (date2 <= data[i].date)
     {
       Date datex = data[i-1].date;
-      double ex = data[i-1].exposure * spot->getUpsilon(data[i-1].date, date2);
+      double ex = data[i-1].netting * spot->getUpsilon(data[i-1].date, date2);
       Date datey = data[i].date;
-      double ey = data[i].exposure * spot->getUpsilon(data[i].date, date2);
-
-      ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
-
-      return ret;
-    }
-  }
-
-  // assertion, this line is never reached
-  assert(false);
-  return 0.0;
-}
-
-//===========================================================================
-// getVRecovery at date2
-//===========================================================================
-double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, Interest *spot)
-{
-  int n = (int) data.size();
-  double ret = 0.0;
-
-  if (n == 0)
-  {
-    return 0.0;
-  }
-
-  if (date2 < data[0].date)
-  {
-    return 0.0;
-  }
-
-  if (date1 > data[n-1].date)
-  {
-    return 0.0;
-  }
-
-  if (date1 < data[n-1].date && data[n-1].date < date2)
-  {
-    double val1 = data[n-1].date - date1;
-    double val2 = date2 - date1;
-
-    return data[n-1].recovery * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
-  }
-
-  for(int i=1;i<n;i++)
-  {
-    if (date2 <= data[i].date)
-    {
-      Date datex = data[i-1].date;
-      double ex = data[i-1].recovery * spot->getUpsilon(data[i-1].date, date2);
-      Date datey = data[i].date;
-      double ey = data[i].recovery * spot->getUpsilon(data[i].date, date2);
+      double ey = data[i].netting * spot->getUpsilon(data[i].date, date2);
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
@@ -244,8 +196,7 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValu
     ufactor =  spot->getUpsilon(dates[i], dates[0]);
     ret[i].date = dates[i];
     ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], spot) * ufactor;
-    ret[i].exposure = getVExposure(dates[max(i-1,0)], dates[i], spot) * ufactor;
-    ret[i].recovery = getVRecovery(dates[max(i-1,0)], dates[i], spot) * ufactor;
+    ret[i].netting = getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 
   for (int i=1;i<n;i++)
@@ -292,14 +243,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   else if (isEqual(name_,"values") && have_data == true) {
     Date date = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
-    double exposure = getDoubleAttribute(attributes, "exposure", NAN);
-    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
+    double netting = getDoubleAttribute(attributes, "netting", NAN);
 
-    if (date == Date(1,1,1) || isnan(cashflow) || isnan(exposure) || isnan(recovery)) {
+    if (date == Date(1,1,1) || isnan(cashflow) || isnan(netting)) {
       throw eperror(eu, "invalid attributes at <values>");
     }
     else {
-      DateValues aux(date, cashflow, exposure, recovery);
+      DateValues aux(date, cashflow, netting);
       insertDateValues(aux);
     }
   }

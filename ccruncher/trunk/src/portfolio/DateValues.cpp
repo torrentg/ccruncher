@@ -31,6 +31,9 @@
 // 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed exposure/recovery by netting
+//
 //===========================================================================
 
 #include <cmath>
@@ -45,23 +48,21 @@ ccruncher::DateValues::DateValues()
 {
   date = Date(1,1,1);
   cashflow = NAN;
-  exposure = NAN;
-  recovery = NAN;
+  netting = NAN;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _exposure, double _recovery)
+ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _netting)
 {
   date = _date;
   cashflow = _cashflow;
-  exposure = _exposure;
-  recovery = _recovery;
+  netting = _netting;
 }
 
 //===========================================================================
-// comparation operador (for sort function)
+// comparation operador (needed by sort functions)
 //===========================================================================
 bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
 {
