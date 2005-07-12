@@ -42,6 +42,9 @@
 // 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added interests support
 //
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed useMPI() method
+//
 //===========================================================================
 
 #include <cfloat>
@@ -85,7 +88,6 @@ void ccruncher::MonteCarlo::reset()
   ttdmethod = true;
   numcopulas = 0;
 
-  usempi = false;
   hash = 0;
   fpath = "path not set";
   bforce = false;
@@ -821,14 +823,6 @@ void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
   {
     aggregators[i]->append(ittd);
   }
-}
-
-//===========================================================================
-// useMPI
-//===========================================================================
-void ccruncher::MonteCarlo::useMPI(bool val)
-{
-  usempi = val;
 }
 
 //===========================================================================

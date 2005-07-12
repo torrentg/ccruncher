@@ -35,6 +35,9 @@
 // 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed useMPI() method
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -113,8 +116,6 @@ class MonteCarlo
     int numcopulas;
     /* management flag for antithetic method (default=false) */
     bool reversed;
-    /* mpi usage flag (default=false) */
-    bool usempi;
     /* hash (0=non show hashes) (default=0) */
     int hash;
     /* directory for output files */
@@ -150,7 +151,6 @@ class MonteCarlo
     ~MonteCarlo();
 
     void setFilePath(string path, bool force);
-    void useMPI(bool);
     void setHash(int num);
     void initialize(IData *) throw(Exception);
     void execute() throw(Exception);

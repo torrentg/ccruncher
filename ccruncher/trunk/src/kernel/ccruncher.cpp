@@ -34,6 +34,9 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added gziped input files suport
 //
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed mpi argument
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -64,7 +67,6 @@ string spath = "";
 bool bsimulate = true;
 bool bverbose = false;
 bool bforce = false;
-bool bmpi = false;
 int inice = 10;
 int ihash = 0;
 
@@ -85,7 +87,6 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "validate",     0,  NULL,  305 },
-      { "mpi",          0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -155,10 +156,6 @@ int main(int argc, char *argv[])
 
       case 305: // --validate (validate input file)
           bsimulate = false;
-          break;
-
-      case 306: // --mpi (use mpi environement)
-          bmpi = true;
           break;
 
       default: // unexpected error
@@ -238,7 +235,6 @@ void run(string filename, string path) throw(Exception)
   // creating simulation object
   MonteCarlo simul;
   simul.setFilePath(path, bforce);
-  simul.useMPI(bmpi);
   simul.setHash(ihash);
 
   // initializing simulation
@@ -320,7 +316,6 @@ void usage()
   "    --nice=num  set nice priority to num (default 10)\n"
   "    --hash=num  print '#' for each num simulations (default=0)\n"
   "    --validate  perform input file validations and exit\n"
-  "    --mpi       enable lam/mpi work mode\n"
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"
   "  return codes:\n"
