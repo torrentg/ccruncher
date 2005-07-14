@@ -38,7 +38,7 @@ EXTRA_DIST = \
     ../share/jama-1.2.4/tnt_vec.h\
     ../share/jama-1.2.4/tnt_version.h\
     ../share/gzstream-1.5/gzstream.h\
-    ../share/gzstream-1.5/gzstream.C
+    ../share/gzstream-1.5/gzstream.cpp
 
 bin_PROGRAMS = ccruncher generator mtrans
 
@@ -48,7 +48,7 @@ check_PROGRAMS = tests
 # ccruncher
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
-    ../share/gzstream-1.5/gzstream.C\
+    ../share/gzstream-1.5/gzstream.cpp\
     ./kernel/ccruncher.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
@@ -133,7 +133,7 @@ ccruncher_LDFLAGS = -rdynamic
 # generator
 # -------------------------------------------------------------
 generator_SOURCES = \
-    ../share/gzstream-1.5/gzstream.C\
+    ../share/gzstream-1.5/gzstream.cpp\
     ./tools/generator.cpp\
     ./tools/Bond.cpp\
     ./kernel/IData.cpp\
@@ -216,7 +216,7 @@ generator_LDFLAGS = -rdynamic
 # mtrans
 # -------------------------------------------------------------
 mtrans_SOURCES = \
-    ../share/gzstream-1.5/gzstream.C\
+    ../share/gzstream-1.5/gzstream.cpp\
     ./tools/mtrans.cpp\
     ./kernel/IData.cpp\
     ./portfolio/Portfolio.cpp\
@@ -299,7 +299,7 @@ mtrans_LDFLAGS = -rdynamic
 tests_SOURCES = \
     ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
     ../share/MiniCppUnit-2.2/TestsRunner.cxx\
-    ../share/gzstream-1.5/gzstream.C\
+    ../share/gzstream-1.5/gzstream.cpp\
     ./utils/ArraysTest.cpp\
     ./utils/StringsTest.cpp\
     ./utils/TimerTest.cpp\

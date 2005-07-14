@@ -54,7 +54,9 @@
         <td><b>Notes</b></td>
         <td style="text-align:justify;">
           Due to problems whith <a href="http://sourceforge.net/projects/cppunit">CppUnit</a> 
-          (memory leaks, dinamic link, etc.) we change the test unit framework to MiniCppUnit.
+          (memory leaks, dinamic link, etc.) we change the test unit framework to MiniCppUnit. <br />
+          Some modifications applied to original project because seems that original author
+          don't work more about it (home page down, project files don't exist in sourceforge, etc.).
         </td>
       </tr>
     </table>
@@ -173,6 +175,12 @@
           In CreditCruncher is used a wrapper to zlib library 
         </td>
       </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          File gzstream.C renamed to gzstream.cpp due to MSVC7 confusion about *.C extension
+        </td>
+      </tr>
     </table>
 
     <h3 class="bolded">JAMA/TNT</h3>
@@ -243,6 +251,12 @@
         <td style="text-align:justify;">
           In CreditCruncher is used to generate the random numbers used by
           MonteCarlo.
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Applied minor patch (reported to author) over randNorm() method.
         </td>
       </tr>
     </table>
@@ -347,7 +361,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 09-Jul-2005 &nbsp;
+          Last modified: 14-Jul-2005 &nbsp;
         </td>
       </tr>
     </table>

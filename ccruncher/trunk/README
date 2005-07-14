@@ -62,6 +62,23 @@ Using CreditCruncher
      $CCRUNCHER/bin/plotmtrans -c file.xml
      $CCRUNCHER/bin/plotmtrans -s file.xml 
 
+
+Notes for Windows developers
+--------------------------------
+
+1. download expat package from internet and unpack it
+   at $CCRUNCHER/share/expat-X.Y
+
+2. download zlib package from internet and unpack it
+   at $CCRUNCHER/share/zlib-X.Y
+
+3. copy zlib1.dll and libexpat.dll to $CCRUNCHER/bin
+   (required to execute bin\ccruncher.exe)
+
+4. open MSVC7 project and check that dependences, libraries,
+   etc. are correct
+
+
 Developers tips & tricks
 --------------------------------
 
