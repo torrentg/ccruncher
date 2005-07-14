@@ -43,6 +43,9 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . performing partial parsing (without portfolio)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -222,7 +225,7 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename);
+  IData idata = IData(filename, false);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
   //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.3.dtd'>\n";

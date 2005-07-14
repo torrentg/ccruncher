@@ -28,6 +28,9 @@
 // 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added characterData method
 //
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added stop parsing ability
+//
 //===========================================================================
 
 #include <cassert>
@@ -192,6 +195,17 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
         throw Exception(string(aux));
       }
     } while(!done);
+  }
+  catch(int spe)
+  {
+    // stop parser request
+    if (spe == 999) {
+      // nothing to do
+    }
+    // unknow exception
+    else {
+      throw Exception("ExpatParsers::parse()");
+    }
   }
   catch(Exception &e)
   {

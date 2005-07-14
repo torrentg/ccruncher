@@ -25,6 +25,9 @@
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method epstop(), stops current parsing
+//
 //===========================================================================
 
 #include <cstdio>
@@ -84,6 +87,19 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
 
   // calling new handler
   eh->epstart(eud, name, atts);
+}
+
+//===========================================================================
+// epstop
+//===========================================================================
+void ccruncher::ExpatHandlers::epstop(ExpatUserData &eud)
+{
+  // assertions
+  assert(eud.getCurrentHandlers() == this);
+
+  // throwing an exception to stop parser
+  // retrieved by ExpatParser::parse() method
+  throw int(999);
 }
 
 //===========================================================================

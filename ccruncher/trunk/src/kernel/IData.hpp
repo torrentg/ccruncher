@@ -71,10 +71,12 @@ class IData : public ExpatHandlers
 
   private:
 
+    // portfolio can be huge (memory,time,...)
+    bool parse_portfolio;
+
     void init();
     void release();
     void validate() throw(Exception);
-
 
   public:
 
@@ -89,7 +91,7 @@ class IData : public ExpatHandlers
     Portfolio *portfolio;
 
     IData();
-    IData(const string &xmlfilename) throw(Exception);
+    IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
     ~IData();
 
     /** ExpatHandlers methods declaration */

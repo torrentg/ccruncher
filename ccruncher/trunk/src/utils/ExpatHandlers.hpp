@@ -25,6 +25,9 @@
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method epstop(), stops current parsing
+//
 //===========================================================================
 
 #ifndef _ExpatHandlers_
@@ -57,6 +60,7 @@ class ExpatHandlers
     Exception eperror(ExpatUserData &eud, const string &msg);
     void epback(ExpatUserData &eud);
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
+    void epstop(ExpatUserData &eud);
 
     bool isEqual(const char *, const string &);
     int getNumAttributes(const char **atts);

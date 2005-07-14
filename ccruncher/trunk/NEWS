@@ -13,6 +13,7 @@ version 0.4 (XXX 2005)
   * added gzip input file suport
   * modified portfolio value function computation
   * replaced concept recovery/exposure by netting
+  * fast parsing when portfolio section is not required
 
 version 0.3 (June 2005)
 --------------------------

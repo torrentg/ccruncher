@@ -33,6 +33,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . performing partial parsing (without portfolio)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -236,7 +239,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename);
+  IData idata = IData(filename, false);
 
   // retrieving transition matrix
   if (idata.transitions == NULL) {

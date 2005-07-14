@@ -60,6 +60,8 @@
 //===========================================================================
 void ccruncher::IData::init()
 {
+   parse_portfolio = true;
+
    params = NULL;
    interests = NULL;
    ratings = NULL;
@@ -92,40 +94,6 @@ void ccruncher::IData::release()
 }
 
 //===========================================================================
-// validate
-//===========================================================================
-void ccruncher::IData::validate() throw(Exception)
-{
-  if (params == NULL) {
-    throw Exception("params section not defined");
-  }
-  else if (interests == NULL) {
-    throw Exception("interests section not defined");
-  }
-  else if (ratings == NULL) {
-    throw Exception("ratings section not defined");
-  }
-  else if (transitions == NULL && params->smethod == "rating-path") {
-    throw Exception("transition matrix section not defined");
-  }
-  else if (transitions == NULL && survival == NULL && params->smethod == "time-to-default") {
-    throw Exception("transition matrix or survival section not defined");
-  }
-  else if (sectors == NULL) {
-    throw Exception("sectors section not defined");
-  }
-  else if (correlations == NULL) {
-    throw Exception("correlation matrix section not defined");
-  }
-  else if (segmentations == NULL) {
-    throw Exception("segmentations section not defined");
-  }
-  else if (portfolio == NULL) {
-    throw Exception("portfolio section not defined");
-  }
-}
-
-//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::IData::IData()
@@ -136,12 +104,15 @@ ccruncher::IData::IData()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(Exception)
 {
   ExpatParser parser;
 
   // initializing content
   init();
+
+  // setting parse_portfolio value
+  parse_portfolio = _parse_portfolio;
 
   // parsing document
   try
@@ -303,6 +274,12 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     if (portfolio != NULL) {
       throw eperror(eu, "tag portfolio repeated");
     }
+    if (parse_portfolio == false) {
+      // checking current content
+      validate();
+      // stops parsing
+      epstop(eu);
+    }
     else {
       Logger::trace("parsing portfolio", true);
       portfolio = new Portfolio(ratings, sectors, segmentations, interests);
@@ -352,6 +329,40 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
   }
   else {
     throw eperror(eu, "unexpected tag " + string(name_));
+  }
+}
+
+//===========================================================================
+// validate
+//===========================================================================
+void ccruncher::IData::validate() throw(Exception)
+{
+  if (params == NULL) {
+    throw Exception("params section not defined");
+  }
+  else if (interests == NULL) {
+    throw Exception("interests section not defined");
+  }
+  else if (ratings == NULL) {
+    throw Exception("ratings section not defined");
+  }
+  else if (transitions == NULL && params->smethod == "rating-path") {
+    throw Exception("transition matrix section not defined");
+  }
+  else if (transitions == NULL && survival == NULL && params->smethod == "time-to-default") {
+    throw Exception("transition matrix or survival section not defined");
+  }
+  else if (sectors == NULL) {
+    throw Exception("sectors section not defined");
+  }
+  else if (correlations == NULL) {
+    throw Exception("correlation matrix section not defined");
+  }
+  else if (segmentations == NULL) {
+    throw Exception("segmentations section not defined");
+  }
+  else if (portfolio == NULL && parse_portfolio == true) {
+    throw Exception("portfolio section not defined");
   }
 }
 
