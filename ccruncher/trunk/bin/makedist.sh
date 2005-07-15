@@ -50,7 +50,7 @@ usage() {
   examples:
     $progname -s
     $progname -l
-    $progname -w
+    $progname -w -d /compiled/windows/project/path
 
 _EOF_
 

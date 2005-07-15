@@ -3,7 +3,7 @@ CREDITCRUNCHER NEWS
 ===================
 
 
-version 0.4 (XXX 2005)
+version 0.4 (July 2005)
 --------------------------
   * bugfix: solved bug when seed=0L
   * bugfix: solved bug in time-to-default algorithm

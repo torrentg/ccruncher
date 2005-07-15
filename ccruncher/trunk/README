@@ -52,8 +52,8 @@ Using CreditCruncher
      $CCRUNCHER/bin/ccruncher --help
      $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
-3. process info using your prefered spreadsheet or use scripts to generate
-   a report file created using TeX and gnuplot
+3. process info using your prefered spreadsheet. You can create some
+   graphics on unix environement typing next comands:
      $CCRUNCHER/bin/plotdata -h
      $CCRUNCHER/bin/plotdata -p data/segmentation-segment.out
      $CCRUNCHER/bin/plotdata -c data/segmentation-segment.out
@@ -123,8 +123,12 @@ Developers tips & tricks
        > quit
 
 10. making source distribution package
-     make distcheck
-     make dist
+      make distcheck
+      make dist
+    or (better) use script $CCRUNCHER/bin/makedist.sh
+      $CCRUNCHER/bin/makedist.sh -s
+      $CCRUNCHER/bin/makedist.sh -l
+      $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 
 CreditCruncher Team
