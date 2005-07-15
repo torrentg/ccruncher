@@ -19,8 +19,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=makedist.sh
-numversion="0.3"
-svnversion="R173"
+numversion="0.4"
+svnversion="R203M"
 disttype="src"
 PACKAGE="ccruncher"
 pathexes=""
@@ -250,6 +250,7 @@ makeWinDist() {
   #creating binaries
   cp $pathexes/ccruncher.exe bin/
   cp $pathexes/libexpat.dll bin/
+  cp $pathexes/zlib1.dll bin/
 
   #dropping unused files
   rm bin/plotdata

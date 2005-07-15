@@ -33,8 +33,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=plotdata
-numversion="0.3"
-svnversion="R173"
+numversion="0.4"
+svnversion="R203M"
 tplot=pdf
 numrows=0
 numbins=100

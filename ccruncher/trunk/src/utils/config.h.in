@@ -135,4 +135,4 @@
 #include "../win32/winconfig.h"
 #endif
 
-#define SVNVERSION "R173"
+#define SVNVERSION "R203M"
