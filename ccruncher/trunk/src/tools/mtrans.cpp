@@ -305,6 +305,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
 void version()
 {
   cout << "mtrans-" << VERSION << " (" << SVNVERSION << ")"  << endl;
+  cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
 }
 
 //===========================================================================

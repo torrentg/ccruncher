@@ -292,6 +292,7 @@ void setnice(int niceval) throw(Exception)
 void version()
 {
   cout << "ccruncher-" << VERSION << " (" << SVNVERSION << ")" << endl;
+  cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
 }
 
 //===========================================================================

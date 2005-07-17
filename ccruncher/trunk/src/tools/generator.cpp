@@ -347,6 +347,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
 void version()
 {
   cout << "generator-" << VERSION << " (" << SVNVERSION << ")"  << endl;
+  cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
 }
 
 //===========================================================================
