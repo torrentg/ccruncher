@@ -31,6 +31,9 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed cout's
+//
 //===========================================================================
 
 #include <iostream>
@@ -268,7 +271,8 @@ void ccruncher_test::SurvivalTest::test6()
     randomizer.next();
   }
 
-  // showing computed values
-  cout << "[0, 0.9] = " << ivalues[0] << endl;
-  cout << "[0.9, 1] = " << ivalues[1] << endl;
+  // checking that P(X in [0,0.9]) = 0.9
+  ASSERT(ivalues[0] > 17500);  // exact value is 18000 (margin=500)
+  // checking that P(X in [0.9,1.0]) = 0.1
+  ASSERT(ivalues[1] < 2500);  // exact value is 2000 (margin=500)
 }

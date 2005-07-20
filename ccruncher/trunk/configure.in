@@ -121,6 +121,8 @@ AC_ARG_ENABLE(mpi,
   [mpi=false])
 
 if test x$mpi = xtrue ; then
+  AC_CHECK_HEADERS(mpi.h,,
+    [AC_MSG_ERROR([cannot find mpi headers]) ])
   AC_DEFINE([USE_MPI], 1, [Add parallel instructions to code.])
   AC_SUBST([CXX], [mpic++])
   AC_SUBST([CXXLD], [mpic++])

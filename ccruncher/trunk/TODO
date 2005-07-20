@@ -17,3 +17,69 @@ Future works
   * add optional LAM/MPI support 
   * add new copula types
 
+
+Notes
+-------------------
+
+How solve the copula normal problem for large dimensions:
+
+
+Solved using Octave:
+
+A = [[1.0,0.5,0.5,0.5,0.1,0.1,0.1];
+     [0.5,1.0,0.5,0.5,0.1,0.1,0.1];
+     [0.5,0.5,1.0,0.5,0.1,0.1,0.1];
+     [0.5,0.5,0.5,1.0,0.1,0.1,0.1];
+     [0.2,0.2,0.2,0.2,1.0,0.3,0.3];
+     [0.2,0.2,0.2,0.2,0.3,1.0,0.3];
+     [0.2,0.2,0.2,0.2,0.3,0.3,1.0]]
+
+  1.00000  0.50000  0.50000  0.50000  0.10000  0.10000  0.10000
+  0.50000  1.00000  0.50000  0.50000  0.10000  0.10000  0.10000
+  0.50000  0.50000  1.00000  0.50000  0.10000  0.10000  0.10000
+  0.50000  0.50000  0.50000  1.00000  0.10000  0.10000  0.10000
+  0.20000  0.20000  0.20000  0.20000  1.00000  0.30000  0.30000
+  0.20000  0.20000  0.20000  0.20000  0.30000  1.00000  0.30000
+  0.20000  0.20000  0.20000  0.20000  0.30000  0.30000  1.00000
+
+
+chol(a)
+
+  1.00000  0.50000  0.50000  0.50000  0.10000  0.10000  0.10000
+  0.00000  0.86603  0.28868  0.28868  0.05774  0.05774  0.05774
+  0.00000  0.00000  0.81650  0.20412  0.04082  0.04082  0.04082
+  0.00000  0.00000  0.00000  0.79057  0.03162  0.03162  0.03162
+  0.00000  0.00000  0.00000  0.00000  0.99197  0.28630  0.28630
+  0.00000  0.00000  0.00000  0.00000  0.00000  0.94975  0.21272
+  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.92563
+
+Una block matrix te una descomposicio de Cholesky en bandes.
+Yupi, aixo vol dir que en comptes de mantenir en memoria NxN
+elements, només hem de mantenir en memoria Nx(M+1) elements, on
+N es el número de files y M el numero de sectors.
+
+50.000 x 50.000 => 50.000 x 50.000 x 8 bytes / (1024*1024) = 19.073 Mb = 19 Gb RAM
+50.000 x 10 = 50.000 x (10+1) x 8 bytes / (1024*1024) = 4,20 Mb RAM
+
+chol(A) es pot representar per:
+
+  1.00000 | 0.50000  0.10000
+  0.86603 | 0.28868  0.05774
+  0.81650 | 0.20412  0.04082
+  0.79057 | 0.00000  0.03162
+  0.99197 | 0.00000  0.28630
+  0.94975 | 0.00000  0.21272
+  0.92563 | 0.00000  0.00000
+
+on el primer element es el valor de la diagonal, els següents son els
+representants de cada sector per aquella fila
+
+Atencio: el producte de chol(A)*X=Y tambe es simplifica!!!
+ens podem estalviar productes. pe. en el calcul de Y1 ,
+en comptes de fer:
+Y1 = A11*X1+A12*X2+...+A1n*Xn
+podem fer
+Y1 = X1 + A12*(X2+...+Xk) + A1f*(Xk+1 + ... + Xh)
+En comptes de fer N multiplicacions només en fem M
+
+Obs: Les sumes no ens les estalviem

@@ -45,6 +45,9 @@
 // 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added mpi support
+//
 //===========================================================================
 
 #include <cfloat>
@@ -54,6 +57,10 @@
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
+
+#ifdef USE_MPI
+  #include <mpi.h>
+#endif
 
 //===========================================================================
 // constructor

@@ -86,6 +86,7 @@ ccruncher_SOURCES = \
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
     \
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
@@ -123,7 +124,8 @@ ccruncher_SOURCES = \
     ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
-    ./utils/ExpatHandlers.hpp
+    ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDADD = -lm -lexpat -lz
@@ -170,6 +172,7 @@ generator_SOURCES = \
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
     \
     ./tools/Bond.hpp\
     ./kernel/IData.hpp\
@@ -206,7 +209,8 @@ generator_SOURCES = \
     ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
-    ./utils/ExpatHandlers.hpp
+    ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDADD = -lm -lexpat -lz
@@ -252,6 +256,7 @@ mtrans_SOURCES = \
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
     \
     ./kernel/IData.hpp\
     ./portfolio/Portfolio.hpp\
@@ -287,7 +292,8 @@ mtrans_SOURCES = \
     ./utils/Strings.hpp\
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
-    ./utils/ExpatHandlers.hpp
+    ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp
 
 mtrans_CXXFLAGS = -Wall -W -Wshadow
 mtrans_LDADD = -lm -lexpat -lz
@@ -362,6 +368,7 @@ tests_SOURCES = \
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
     ./survival/Survival.cpp\
+    ./utils/Utils.cpp\
     \
     ./utils/ArraysTest.hpp\
     ./utils/StringsTest.hpp\
@@ -425,7 +432,8 @@ tests_SOURCES = \
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
-    ./survival/Survival.hpp
+    ./survival/Survival.hpp\
+    ./utils/Utils.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDADD = -lm -lexpat -lz

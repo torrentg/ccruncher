@@ -37,23 +37,35 @@
 // 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed mpi argument
 //
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added mpi support
+//
 //===========================================================================
 
 #include "utils/config.h"
+
 #ifndef _MSC_VER
-#include <sys/resource.h>
-#include <getopt.h>
+  #include <sys/resource.h>
+  #include <getopt.h>
 #endif
+
 #include <cerrno>
 #include <iostream>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
+#include "utils/Utils.hpp"
 #include "utils/File.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 
+#ifdef USE_MPI
+  #include <mpi.h>
+#endif
+
 //---------------------------------------------------------------------------
 
+void startup(int argc, char *argv[]) throw(Exception);
+int shutdown(int retcode);
 void usage();
 void version();
 void copyright();
@@ -90,6 +102,22 @@ int main(int argc, char *argv[])
       { NULL,           0,  NULL,   0  }
   };
 
+  // initialization routines
+  try
+  {
+    startup(argc, argv);
+  }
+  catch(Exception &e)
+  {
+    cerr << e;
+    return shutdown(1);
+  }
+  catch(...)
+  {
+    cerr << "unknow error";
+    return shutdown(1);
+  }
+
   // parsing options
   while (1)
   {
@@ -106,11 +134,11 @@ int main(int argc, char *argv[])
       case '?': // invalid option
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
-          return 1;
+          return shutdown(1);
 
       case 'h': // -h or --help (show help and exit)
           usage();
-          return 0;
+          return shutdown(0);
 
       case 'v': // -v (be verbose)
           bverbose = true;
@@ -122,7 +150,7 @@ int main(int argc, char *argv[])
 
       case 301: // --version (show version and exit)
           version();
-          return 0;
+          return shutdown(0);
 
       case 302: // --path=dir (set output files path)
           spath = string(optarg);
@@ -137,7 +165,7 @@ int main(int argc, char *argv[])
           catch(Exception &e)
           {
             cerr << "invalid nice value" << endl;
-            return 1;
+            return shutdown(1);
           }
           break;
 
@@ -150,7 +178,7 @@ int main(int argc, char *argv[])
           catch(Exception &e)
           {
             cerr << "invalid hash value" << endl;
-            return 1;
+            return shutdown(1);
           }
           break;
 
@@ -161,7 +189,7 @@ int main(int argc, char *argv[])
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
                   "ccruncher version and arguments at gerard@fobos.generacio.com\n";
-          return 1;
+          return shutdown(1);
     }
   }
 
@@ -170,13 +198,13 @@ int main(int argc, char *argv[])
   {
     cerr << "xml input file not specified" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
+    return shutdown(1);
   }
   else if (argc - optind > 1)
   {
     cerr << "last argument will be the xml input file" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
+    return shutdown(1);
   }
   else
   {
@@ -188,7 +216,7 @@ int main(int argc, char *argv[])
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
+    return shutdown(1);
   }
 
   // license info
@@ -205,17 +233,58 @@ int main(int argc, char *argv[])
   catch(Exception &e)
   {
     cerr << e;
-    return 1;
+    return shutdown(1);
   }
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
             "ccruncher version and arguments at gerard@fobos.generacio.com\n";
-    return 1;
+    return shutdown(1);
   }
 
   // exit function
-  return 0;
+  return shutdown(0);
+}
+
+//===========================================================================
+// startup
+//===========================================================================
+void startup(int argc, char *argv[]) throw(Exception)
+{
+#ifdef USE_MPI
+  // start up MPI
+  MPI::Init(argc, argv);
+
+  // setting slaves output to /dev/null
+  if (!Utils::isMaster())
+  {
+    Utils::setSilentMode();
+  }
+
+  // checking number of nodes (minimum required = 2 nodes)
+  if (MPI::COMM_WORLD.Get_size() <= 1)
+  {
+    throw Exception("needed more than 1 node to run ccruncher");
+  }
+#else
+  // nothing to do
+#endif
+}
+
+//===========================================================================
+// shutdown
+//===========================================================================
+int shutdown(int retcode)
+{
+#ifdef USE_MPI
+  // shutdown MPI
+  MPI::Finalize();
+#else
+  // nothing to do
+#endif
+
+  // allways returns the same code
+  return retcode;
 }
 
 //===========================================================================
