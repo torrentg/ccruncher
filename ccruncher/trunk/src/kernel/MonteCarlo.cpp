@@ -48,6 +48,9 @@
 // 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cfloat>
@@ -56,7 +59,7 @@
 #include "utils/Arrays.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 #ifdef USE_MPI
   #include <mpi.h>
@@ -244,19 +247,19 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 
   // max number of seconds
   MAXSECONDS = idata->params->maxseconds;
-  Logger::trace("maximum execution time (in seconds)", Parser::long2string(MAXSECONDS));
+  Logger::trace("maximum execution time (in seconds)", Format::long2string(MAXSECONDS));
 
   // max number of iterations
   MAXITERATIONS = idata->params->maxiterations;
-  Logger::trace("maximum number of iterations", Parser::long2string(MAXITERATIONS));
+  Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
   // fixing step number
   STEPS = idata->params->steps;
-  Logger::trace("number of time steps", Parser::int2string(STEPS));
+  Logger::trace("number of time steps", Format::int2string(STEPS));
 
   // fixing steplength
   STEPLENGTH = idata->params->steplength;
-  Logger::trace("length of each time step (in months)", Parser::int2string(STEPLENGTH));
+  Logger::trace("length of each time step (in months)", Format::int2string(STEPLENGTH));
 
   // fixing time-tranches
   begindate = idata->params->begindate;
@@ -264,7 +267,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 
   // tracing dates
   for (int i=0;i<=STEPS;i++) {
-    Logger::trace("date[" + Parser::int2string(i)+"]", Parser::date2string(dates[i]));
+    Logger::trace("date[" + Format::int2string(i)+"]", Format::date2string(dates[i]));
   }
 
   // fixing simulation method
@@ -284,7 +287,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 
   // fixing variance reduction method
   antithetic = idata->params->antithetic;
-  Logger::trace("antithetic mode", Parser::bool2string(antithetic));
+  Logger::trace("antithetic mode", Format::bool2string(antithetic));
 
   // initializing internal variables
   CONT = 0L;
@@ -304,8 +307,8 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active clients", Parser::bool2string(idata->params->onlyactive));
-  Logger::trace("number of initial clients", Parser::long2string(idata->portfolio->getClients()->size()));
+  Logger::trace("simulate only active clients", Format::bool2string(idata->params->onlyactive));
+  Logger::trace("number of initial clients", Format::long2string(idata->portfolio->getClients()->size()));
 
   // fixing number of clients
   if (idata->params->onlyactive)
@@ -318,7 +321,7 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
     N = idata->portfolio->getClients()->size();
   }
 
-  Logger::trace("number of simulated clients", Parser::long2string(N));
+  Logger::trace("number of simulated clients", Format::long2string(N));
 
   // checking that exist clients to simulate
   if (N == 0)
@@ -343,7 +346,7 @@ void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of ratings", Parser::int2string(idata->ratings->getRatings()->size()));
+  Logger::trace("number of ratings", Format::int2string(idata->ratings->getRatings()->size()));
 
   // fixing ratings
   ratings = idata->ratings;
@@ -362,7 +365,7 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of sectors", Parser::int2string(idata->sectors->getSectors()->size()));
+  Logger::trace("number of sectors", Format::int2string(idata->sectors->getSectors()->size()));
 
   // fixing ratings
   sectors = idata->sectors;
@@ -381,10 +384,10 @@ void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  string sval = Parser::int2string(idata->transitions->size());
+  string sval = Format::int2string(idata->transitions->size());
   Logger::trace("matrix dimension", sval + "x" + sval);
-  Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
-  Logger::trace("scaling matrix to step length (in months)", Parser::int2string(STEPLENGTH));
+  Logger::trace("initial period (in months)", Format::int2string(idata->transitions->period));
+  Logger::trace("scaling matrix to step length (in months)", Format::int2string(STEPLENGTH));
 
   // finding transition matrix for steplength time
   mtrans = translate(idata->transitions, STEPLENGTH);
@@ -410,9 +413,9 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
   else
   {
     // setting logger info
-    string sval = Parser::int2string(idata->transitions->size());
+    string sval = Format::int2string(idata->transitions->size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("initial period (in months)", Parser::int2string(idata->transitions->period));
+    Logger::trace("initial period (in months)", Format::int2string(idata->transitions->period));
 
     // computing survival function using transition matrix
     double **aux = Arrays<double>::allocMatrix(idata->transitions->n, STEPS+1);
@@ -447,7 +450,7 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
   Logger::newIndentLevel();
 
   // setting logger info
-  string sval = Parser::int2string(n);
+  string sval = Format::int2string(n);
   Logger::trace("matrix dimension", sval+"x"+sval);
 
   // allocating space
@@ -490,9 +493,9 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("copula dimension", Parser::long2string(n));
-  Logger::trace("number of copulas", Parser::int2string(k));
-  Logger::trace("seed used to initialize randomizer (0=none)", Parser::long2string(seed));
+  Logger::trace("copula dimension", Format::long2string(n));
+  Logger::trace("number of copulas", Format::int2string(k));
+  Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
 
   // allocating space
   try
@@ -550,7 +553,7 @@ int* ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("workspace dimension (= number of clients)", Parser::long2string(n));
+  Logger::trace("workspace dimension (= number of clients)", Format::long2string(n));
 
   // allocating space
   ret = Arrays<int>::allocVector(n);
@@ -579,7 +582,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", File::normalizePath(fpath));
-  Logger::trace("number of segmentations defined", Parser::int2string(idata->segmentations->getSegmentations().size()));
+  Logger::trace("number of segmentations defined", Format::int2string(idata->segmentations->getSegmentations().size()));
   Logger::trace("elapsed time initializing aggregators", true);
 
   // setting objects
@@ -617,8 +620,8 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
   }
 
   // setting logger info
-  Logger::trace("number of segments", Parser::long2string(numsegments));
-  Logger::trace("number of segments with elements", Parser::long2string(aggregators.size()));
+  Logger::trace("number of segments", Format::long2string(numsegments));
+  Logger::trace("number of segments with elements", Format::long2string(aggregators.size()));
 
   // exit function
   Logger::previousIndentLevel();
@@ -637,7 +640,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 
   // setting logger header
   Logger::addBlankLine();
-  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Parser::int2string(hash) + " simulations per hash]"), '*');
+  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::int2string(hash) + " simulations per hash]"), '*');
   Logger::newIndentLevel();
 
   try

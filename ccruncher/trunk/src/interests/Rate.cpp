@@ -31,11 +31,14 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include "interests/Rate.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor
@@ -108,8 +111,8 @@ string ccruncher::Rate::getXML(int ilevel) throw(Exception)
   string ret = Strings::blanks(ilevel);
 
   ret += "<rate ";
-  ret += "t='" + Parser::double2string(t) + "' ";
-  ret += "r='" + Parser::double2string(r) + "'";
+  ret += "t='" + Format::double2string(t) + "' ";
+  ret += "r='" + Format::double2string(r) + "'";
   ret += "/>\n";
 
   return ret;

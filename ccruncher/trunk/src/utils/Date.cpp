@@ -28,6 +28,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <vector>
@@ -36,6 +39,7 @@
 #include "utils/Date.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor
@@ -106,7 +110,7 @@ ccruncher::Date::Date(const long date) throw(Exception)
 
   if (!valid())
   {
-	  throw Exception("Date::Date(long): invalid Date (" + Parser::long2string(date) + ")");
+	  throw Exception("Date::Date(long): invalid Date (" + Format::long2string(date) + ")");
   }
 }
 

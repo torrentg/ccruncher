@@ -31,6 +31,9 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <iostream>
@@ -148,19 +151,4 @@ void ccruncher_test::ParserTest::test_bool(void)
   ASSERT_THROW(Parser::boolValue("FALSE"));
   ASSERT_THROW(Parser::boolValue("True"));
   ASSERT_THROW(Parser::boolValue("False"));
-}
-
-//===========================================================================
-// toString
-//===========================================================================
-void ccruncher_test::ParserTest::test_toString(void)
-{
-  Date date1 = Date("1/1/2005");
-
-  ASSERT("35" == Parser::int2string(35));
-  ASSERT("50000" == Parser::long2string(50000));
-  ASSERT("3.1415" == Parser::double2string(3.1415));
-  ASSERT("01/01/2005" == Parser::date2string(date1));
-  ASSERT("true" == Parser::bool2string(true));
-  ASSERT("false" == Parser::bool2string(false));
 }

@@ -40,6 +40,9 @@
 // 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -57,6 +60,7 @@
 #include "utils/File.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 #ifdef USE_MPI
   #include <mpi.h>
@@ -337,14 +341,14 @@ void setnice(int niceval) throw(Exception)
 #ifndef _MSC_VER
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
-    throw Exception("nice value out of range [" + Parser::int2string(PRIO_MIN) +
-                    ".." + Parser::int2string(PRIO_MAX) + "]");
+    throw Exception("nice value out of range [" + Format::int2string(PRIO_MIN) +
+                    ".." + Format::int2string(PRIO_MAX) + "]");
   }
   else
   {
     if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
     {
-      string msg = Parser::int2string(errno);
+      string msg = Format::int2string(errno);
       msg = (errno==ESRCH?"ESRCH":msg);
       msg = (errno==EINVAL?"EINVAL":msg);
       msg = (errno==EPERM?"EPERM":msg);

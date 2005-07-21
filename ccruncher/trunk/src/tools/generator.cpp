@@ -46,6 +46,9 @@
 // 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . performing partial parsing (without portfolio)
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -59,6 +62,7 @@
 #include "utils/Strings.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 #include "utils/Exception.hpp"
 #include <MersenneTwister.h>
 
@@ -267,14 +271,14 @@ string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) thro
     ret += spc2 + "<client ";
     ret += "rating='" + idata->ratings->getName(rand()%(nratings-1)) + "' ";
     ret += "sector='" + idata->sectors->getName(rand()%(nsectors)) + "' ";
-    ret += "name='client" + Parser::int2string(i) + "' ";
-    ret += "id='" + Parser::int2string(i) + "'>\n";
+    ret += "name='client" + Format::int2string(i) + "' ";
+    ret += "id='" + Format::int2string(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
     {
       ret += spc3;
       ret += "<asset name='bond' ";
-      ret += "id='" + Parser::int2string(i) + "-" + Parser::int2string(j) + "'>\n";
+      ret += "id='" + Format::int2string(i) + "-" + Format::int2string(j) + "'>\n";
 
       ret += getXMLData(ilevel+6, date1, 120, getNominal(), 0.07, 120);
 
@@ -317,11 +321,11 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
   string ret = "";
   Bond bond;
 
-  bond.setProperty("issuedate", Parser::date2string(issuedate));
-  bond.setProperty("term"     , Parser::int2string(term));
-  bond.setProperty("nominal"  , Parser::double2string(nominal));
-  bond.setProperty("rate"     , Parser::double2string(rate));
-  bond.setProperty("ncoupons" , Parser::int2string(ncoupons));
+  bond.setProperty("issuedate", Format::date2string(issuedate));
+  bond.setProperty("term"     , Format::int2string(term));
+  bond.setProperty("nominal"  , Format::double2string(nominal));
+  bond.setProperty("rate"     , Format::double2string(rate));
+  bond.setProperty("ncoupons" , Format::int2string(ncoupons));
 
   vector<DateValues> events = bond.simulate();
 
@@ -330,9 +334,9 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
   for(unsigned int i=0;i<events.size();i++)
   {
     ret += spc2;
-    ret += "<values at='" + Parser::date2string(events[i].date) + "' ";
-    ret += "cashflow='" + Parser::double2string(max(0.0, events[i].cashflow)) + "' ";
-    ret += "netting='" + Parser::double2string(events[i].netting) + "' ";
+    ret += "<values at='" + Format::date2string(events[i].date) + "' ";
+    ret += "cashflow='" + Format::double2string(max(0.0, events[i].cashflow)) + "' ";
+    ret += "netting='" + Format::double2string(events[i].netting) + "' ";
     ret += "/>\n";
   }
 

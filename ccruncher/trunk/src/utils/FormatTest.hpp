@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,25 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ParserTest.hpp - ParserTest header
+// FormatTest.hpp - FormatTest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release
-//
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . created ccruncher_test namespace
-//
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added class Format (previously format function included in Parser)
+//   . initial release
 //
 //===========================================================================
 
-#ifndef _ParserTest_
-#define _ParserTest_
+#ifndef _FormatTest_
+#define _FormatTest_
 
 //---------------------------------------------------------------------------
 
@@ -51,27 +42,19 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class ParserTest : public TestFixture<ParserTest>
+class FormatTest : public TestFixture<FormatTest>
 {
 
   private:
 
-    void test_int(void);
-    void test_long(void);
-    void test_double(void);
-    void test_date(void);
-    void test_bool(void);
+    void test_toString(void);
 
 
   public:
 
-    TEST_FIXTURE(ParserTest)
+    TEST_FIXTURE(FormatTest)
     {
-      TEST_CASE(test_int);
-      TEST_CASE(test_long);
-      TEST_CASE(test_double);
-      TEST_CASE(test_date);
-      TEST_CASE(test_bool);
+      TEST_CASE(test_toString);
     }
 
     void setUp();
@@ -79,7 +62,7 @@ class ParserTest : public TestFixture<ParserTest>
 
 };
 
-REGISTER_FIXTURE(ParserTest);
+REGISTER_FIXTURE(FormatTest);
 
 //---------------------------------------------------------------------------
 

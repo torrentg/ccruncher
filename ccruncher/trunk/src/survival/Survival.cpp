@@ -31,13 +31,16 @@
 // 2005/06/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . modified inverse function (changed round per ceil)
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
 #include <cassert>
 #include "survival/Survival.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 #include "utils/Strings.hpp"
 
 //===========================================================================
@@ -127,7 +130,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
     string msg = "Survival::insertValue(): value[";
     msg += srating;
     msg += "][";
-    msg += Parser::int2string(t);
+    msg += Format::int2string(t);
     msg += "] has time < 0";
     throw Exception(msg);
   }
@@ -138,9 +141,9 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
     string msg = "Survival::insertValue(): value[";
     msg += srating;
     msg += "][";
-    msg += Parser::int2string(t);
+    msg += Format::int2string(t);
     msg += "] out of range: ";
-    msg += Parser::double2string(value);
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
@@ -150,7 +153,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
     string msg = "Survival::insertValue(): value[";
     msg += srating;
     msg += "][";
-    msg += Parser::int2string(t);
+    msg += Format::int2string(t);
     msg += "] redefined";
     throw Exception(msg);
   }
@@ -280,7 +283,7 @@ void ccruncher::Survival::validate() throw(Exception)
         else
         {
           string msg = "Survival::validate(): rating ";
-          msg += ratings->getName(i) + " is not monotone at t=" + Parser::int2string(j);
+          msg += ratings->getName(i) + " is not monotone at t=" + Format::int2string(j);
           throw Exception(msg);
         }
       }
@@ -432,8 +435,8 @@ string ccruncher::Survival::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<survival maxmonths='" + Parser::int2string(maxmonths) + "' ";
-  ret += "epsilon='" + Parser::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<survival maxmonths='" + Format::int2string(maxmonths) + "' ";
+  ret += "epsilon='" + Format::double2string(epsilon) + "'>\n";
 
   for(int i=0;i<nratings;i++)
   {
@@ -441,8 +444,8 @@ string ccruncher::Survival::getXML(int ilevel) throw(Exception)
     {
       ret += spc2 + "<svalue ";
       ret += "rating='" + ratings->getName(i) + "' ";
-      ret += "t='" + Parser::int2string(j) + "' ";
-      ret += "value ='" + Parser::double2string(data[i][j]) + "'";
+      ret += "t='" + Format::int2string(j) + "' ";
+      ret += "value ='" + Format::double2string(data[i][j]) + "'";
       ret += "/>\n";
     }
   }

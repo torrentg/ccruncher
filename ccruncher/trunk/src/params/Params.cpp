@@ -39,12 +39,15 @@
 //   . solved bug related to seed=0 (random seed)
 //   . added montecarlo.method param to getXML() method
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include "params/Params.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor
@@ -283,16 +286,16 @@ string ccruncher::Params::getXML(int ilevel) throw(Exception)
   string ret = "";
 
   ret += spc1 + "<params>\n";
-  ret += spc2 + "<property name='time.begindate' value='" + Parser::date2string(begindate) + "'/>\n";
-  ret += spc2 + "<property name='time.steps' value='" + Parser::int2string(steps) + "'/>\n";
-  ret += spc2 + "<property name='time.steplength' value='" + Parser::int2string(steplength) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Parser::long2string(maxiterations) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Parser::long2string(maxseconds) + "'/>\n";
+  ret += spc2 + "<property name='time.begindate' value='" + Format::date2string(begindate) + "'/>\n";
+  ret += spc2 + "<property name='time.steps' value='" + Format::int2string(steps) + "'/>\n";
+  ret += spc2 + "<property name='time.steplength' value='" + Format::int2string(steplength) + "'/>\n";
+  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::long2string(maxiterations) + "'/>\n";
+  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
-  ret += spc2 + "<property name='copula.seed' value='" + Parser::long2string(copula_seed) + "'/>\n";
+  ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.method' value='" + smethod + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Parser::bool2string(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Parser::bool2string(onlyactive) + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
+  ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Format::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";
 
   return ret;

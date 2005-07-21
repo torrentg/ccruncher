@@ -38,12 +38,15 @@
 //   . implemented Arrays class
 //   . implemented Strings class
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
 #include "correlations/CorrelationMatrix.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "math/CholeskyDecomposition.hpp"
@@ -127,7 +130,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
     msg += "][";
     msg += sector2;
     msg += "] out of range: ";
-    msg += Parser::double2string(value);
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
@@ -210,9 +213,9 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
       if (isnan(matrix[i][j]))
       {
         string msg = "CorrelationMatrix::validate(): undefined element [";
-        msg += Parser::int2string(i+1);
+        msg += Format::int2string(i+1);
         msg +=  "][";
-        msg += Parser::int2string(j+1);
+        msg += Format::int2string(j+1);
         msg += "]";
         throw Exception(msg);
       }
@@ -229,7 +232,7 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mcorrels epsilon='" + Parser::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<mcorrels epsilon='" + Format::double2string(epsilon) + "'>\n";
 
   for(int i=0;i<n;i++)
   {
@@ -238,7 +241,7 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
       ret += spc2 + "<sigma ";
       ret += "sector1 ='" + sectors->getName(i) + "' ";
       ret += "sector2 ='" + sectors->getName(j) + "' ";
-      ret += "value ='" + Parser::double2string(matrix[i][j]) + "'";
+      ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }
   }

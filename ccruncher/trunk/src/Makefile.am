@@ -87,6 +87,7 @@ ccruncher_SOURCES = \
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
     ./utils/Utils.cpp\
+    ./utils/Format.cpp\
     \
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
@@ -125,7 +126,8 @@ ccruncher_SOURCES = \
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDADD = -lm -lexpat -lz
@@ -173,6 +175,7 @@ generator_SOURCES = \
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
     ./utils/Utils.cpp\
+    ./utils/Format.cpp\
     \
     ./tools/Bond.hpp\
     ./kernel/IData.hpp\
@@ -210,7 +213,8 @@ generator_SOURCES = \
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp
 
 generator_CXXFLAGS = -Wall -W -Wshadow
 generator_LDADD = -lm -lexpat -lz
@@ -257,6 +261,7 @@ mtrans_SOURCES = \
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
     ./utils/Utils.cpp\
+    ./utils/Format.cpp\
     \
     ./kernel/IData.hpp\
     ./portfolio/Portfolio.hpp\
@@ -293,7 +298,8 @@ mtrans_SOURCES = \
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp\
-    ./utils/Utils.hpp
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp
 
 mtrans_CXXFLAGS = -Wall -W -Wshadow
 mtrans_LDADD = -lm -lexpat -lz
@@ -313,6 +319,7 @@ tests_SOURCES = \
     ./utils/ParserTest.cpp\
     ./utils/ExceptionTest.cpp\
     ./utils/FileTest.cpp\
+    ./utils/FormatTest.cpp\
     ./math/PowMatrixTest.cpp\
     ./math/NormalTest.cpp\
     ./math/CopulaNormalTest.cpp\
@@ -345,6 +352,8 @@ tests_SOURCES = \
     ./utils/ExpatParser.cpp\
     ./utils/ExpatUserData.cpp\
     ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
+    ./utils/Format.cpp\
     ./math/CholeskyDecomposition.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
@@ -368,7 +377,6 @@ tests_SOURCES = \
     ./segmentations/Segmentation.cpp\
     ./segmentations/Segment.cpp\
     ./survival/Survival.cpp\
-    ./utils/Utils.cpp\
     \
     ./utils/ArraysTest.hpp\
     ./utils/StringsTest.hpp\
@@ -377,6 +385,7 @@ tests_SOURCES = \
     ./utils/ParserTest.hpp\
     ./utils/ExceptionTest.hpp\
     ./utils/FileTest.hpp\
+    ./utils/FormatTest.hpp\
     ./math/Copula.hpp\
     ./math/PowMatrixTest.hpp\
     ./math/NormalTest.hpp\
@@ -410,6 +419,8 @@ tests_SOURCES = \
     ./utils/ExpatParser.hpp\
     ./utils/ExpatUserData.hpp\
     ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp\
     ./math/CholeskyDecomposition.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
@@ -432,8 +443,7 @@ tests_SOURCES = \
     ./segmentations/Segmentations.hpp\
     ./segmentations/Segmentation.hpp\
     ./segmentations/Segment.hpp\
-    ./survival/Survival.hpp\
-    ./utils/Utils.hpp
+    ./survival/Survival.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
 tests_LDADD = -lm -lexpat -lz

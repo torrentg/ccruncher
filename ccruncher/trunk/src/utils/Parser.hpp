@@ -28,6 +28,9 @@
 // 2005/03/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added support for char * type
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . format methods segregated to Format class
+//
 //===========================================================================
 
 #ifndef _Parser_
@@ -64,12 +67,6 @@ class Parser
     static double doubleValue(const char *) throw(Exception);
     static Date dateValue(const char *) throw(Exception);
     static bool boolValue(const char *) throw(Exception);
-
-    static string int2string(const int val);
-    static string long2string(const long val);
-    static string double2string(const double val);
-    static string date2string(const ccruncher::Date &val);
-    static string bool2string(const bool &val);
 
 };
 

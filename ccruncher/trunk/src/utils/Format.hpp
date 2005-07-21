@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2005 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,67 +19,43 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ParserTest.hpp - ParserTest header
+// Format.hpp - Format header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . initial release
-//
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . created ccruncher_test namespace
-//
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added class Format (previously format function included in Parser)
+//   . initial release
 //
 //===========================================================================
 
-#ifndef _ParserTest_
-#define _ParserTest_
+#ifndef _Format_
+#define _Format_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
+#include <string>
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
-namespace ccruncher_test {
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class ParserTest : public TestFixture<ParserTest>
+class Format
 {
-
-  private:
-
-    void test_int(void);
-    void test_long(void);
-    void test_double(void);
-    void test_date(void);
-    void test_bool(void);
-
 
   public:
 
-    TEST_FIXTURE(ParserTest)
-    {
-      TEST_CASE(test_int);
-      TEST_CASE(test_long);
-      TEST_CASE(test_double);
-      TEST_CASE(test_date);
-      TEST_CASE(test_bool);
-    }
-
-    void setUp();
-    void tearDown();
+    static string int2string(const int val);
+    static string long2string(const long val);
+    static string double2string(const double val);
+    static string date2string(const ccruncher::Date &val);
+    static string bool2string(const bool &val);
 
 };
-
-REGISTER_FIXTURE(ParserTest);
 
 //---------------------------------------------------------------------------
 

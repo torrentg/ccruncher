@@ -34,13 +34,16 @@
 // 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "interests/Interest.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 // --------------------------------------------------------------------------
 
@@ -192,7 +195,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
     if (fabs(aux.t-val.t) < EPSILON)
     {
       string msg = "Interest::insertRate(): time ";
-      msg += Parser::double2string(val.t);
+      msg += Format::double2string(val.t);
       msg += " repeated";
       throw Exception(msg);
     }
@@ -263,7 +266,7 @@ string ccruncher::Interest::getXML(int ilevel) throw(Exception)
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interest name='" + name + "' date='" + Parser::date2string(fecha) + "'>\n";
+  ret += spc + "<interest name='" + name + "' date='" + Format::date2string(fecha) + "'>\n";
 
   for (unsigned int i=0;i<vrates.size();i++)
   {

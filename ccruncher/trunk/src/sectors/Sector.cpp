@@ -31,11 +31,14 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include "sectors/Sector.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // reset
@@ -110,7 +113,7 @@ string ccruncher::Sector::getXML(int ilevel) throw(Exception)
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";
-  ret += "order ='" + Parser::int2string(order) + "' ";
+  ret += "order ='" + Format::int2string(order) + "' ";
   ret += "desc ='" + desc + "'";
   ret += "/>\n";
 

@@ -43,13 +43,16 @@
 // 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added property 4 check
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
 #include <cassert>
 #include "transitions/TransitionMatrix.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "math/PowMatrix.hpp"
@@ -154,7 +157,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
     msg += "][";
     msg += rating2;
     msg += "] out of range: ";
-    msg += Parser::double2string(value);
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
@@ -252,7 +255,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-epsilon) || sum > (1.0+epsilon))
     {
-      throw Exception("TransitionMatrix::validate(): transition matrix row " + Parser::int2string(i+1) + " not sums 1");
+      throw Exception("TransitionMatrix::validate(): transition matrix row " + Format::int2string(i+1) + " not sums 1");
     }
   }
 
@@ -339,8 +342,8 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mtransitions period='" + Parser::int2string(period) + "' ";
-  ret += "epsilon='" + Parser::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<mtransitions period='" + Format::int2string(period) + "' ";
+  ret += "epsilon='" + Format::double2string(epsilon) + "'>\n";
 
   for(int i=0;i<n;i++)
   {
@@ -349,7 +352,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
       ret += spc2 + "<transition ";
       ret += "from ='" + ratings->getName(i) + "' ";
       ret += "to ='" + ratings->getName(j) + "' ";
-      ret += "value ='" + Parser::double2string(matrix[i][j]) + "'";
+      ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }
   }

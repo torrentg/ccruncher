@@ -31,13 +31,16 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "ratings/Ratings.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor privat
@@ -164,7 +167,7 @@ void ccruncher::Ratings::validations() throw(Exception)
     if (aux.order != (int)(i+1))
     {
       string msg = "Ratings::validations(): incorrect order rating at or near order = ";
-      msg += Parser::int2string(aux.order);
+      msg += Format::int2string(aux.order);
       throw Exception(msg);
     }
   }

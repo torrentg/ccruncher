@@ -28,6 +28,9 @@
 // 2005/03/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added support for char * type
 //
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . format methods segregated to Format class
+//
 //===========================================================================
 
 #include <cstdlib>
@@ -196,54 +199,4 @@ bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
   {
     throw Exception("Parser::boolValue(): invalid boolean value");
   }
-}
-
-//===========================================================================
-// int2string
-//===========================================================================
-string ccruncher::Parser::int2string(const int val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-//===========================================================================
-// long2string
-//===========================================================================
-string ccruncher::Parser::long2string(const long val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-//===========================================================================
-// double2string
-//===========================================================================
-string ccruncher::Parser::double2string(const double val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-//===========================================================================
-// date2string
-//===========================================================================
-string ccruncher::Parser::date2string(const ccruncher::Date &val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-//===========================================================================
-// bool2string
-//===========================================================================
-string ccruncher::Parser::bool2string(const bool &val)
-{
-  ostringstream oss;
-  oss << (val?"true":"false");
-  return oss.str();
 }
