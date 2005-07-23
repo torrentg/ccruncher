@@ -70,6 +70,7 @@ ccruncher_SOURCES = \
     ./math/PowMatrix.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
+    ./math/BlockMatrixChol.cpp\
     ./portfolio/Asset.cpp\
     ./portfolio/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
@@ -110,6 +111,7 @@ ccruncher_SOURCES = \
     ./math/Copula.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
+    ./math/BlockMatrixChol.hpp\
     ./portfolio/Asset.hpp\
     ./portfolio/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
@@ -158,6 +160,7 @@ generator_SOURCES = \
     ./math/PowMatrix.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
+    ./math/BlockMatrixChol.cpp\
     ./portfolio/Asset.cpp\
     ./portfolio/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
@@ -197,6 +200,7 @@ generator_SOURCES = \
     ./math/PowMatrix.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
+    ./math/BlockMatrixChol.hpp\
     ./portfolio/Asset.hpp\
     ./portfolio/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
@@ -244,6 +248,7 @@ mtrans_SOURCES = \
     ./math/PowMatrix.cpp\
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
+    ./math/BlockMatrixChol.cpp\
     ./portfolio/Asset.cpp\
     ./portfolio/DateValues.cpp\
     ./segmentations/Segmentations.cpp\
@@ -282,6 +287,7 @@ mtrans_SOURCES = \
     ./math/PowMatrix.hpp\
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
+    ./math/BlockMatrixChol.hpp\
     ./portfolio/Asset.hpp\
     ./portfolio/DateValues.hpp\
     ./segmentations/Segmentations.hpp\
@@ -325,6 +331,7 @@ tests_SOURCES = \
     ./math/CopulaNormalTest.cpp\
     ./math/MersenneTwisterTest.cpp\
     ./math/CholeskyDecompositionTest.cpp\
+    ./math/BlockMatrixCholTest.cpp\
     ./correlations/CorrelationMatrixTest.cpp\
     ./portfolio/AssetTest.cpp\
     ./portfolio/DateValuesTest.cpp\
@@ -358,6 +365,7 @@ tests_SOURCES = \
     ./math/CopulaNormal.cpp\
     ./math/Normal.cpp\
     ./math/PowMatrix.cpp\
+    ./math/BlockMatrixChol.cpp\
     ./kernel/MonteCarlo.cpp\
     ./kernel/IData.cpp\
     ./kernel/SegmentAggregator.cpp\
@@ -392,6 +400,7 @@ tests_SOURCES = \
     ./math/CopulaNormalTest.hpp\
     ./math/MersenneTwisterTest.hpp\
     ./math/CholeskyDecompositionTest.hpp\
+    ./math/BlockMatrixCholTest.hpp\
     ./correlations/CorrelationMatrixTest.hpp\
     ./portfolio/AssetTest.hpp\
     ./portfolio/DateValuesTest.hpp\
@@ -425,6 +434,7 @@ tests_SOURCES = \
     ./math/CopulaNormal.hpp\
     ./math/Normal.hpp\
     ./math/PowMatrix.hpp\
+    ./math/BlockMatrixChol.hpp\
     ./kernel/MonteCarlo.hpp\
     ./kernel/IData.hpp\
     ./kernel/SegmentAggregator.hpp\
