@@ -273,18 +273,111 @@ void ccruncher_test::BlockMatrixCholTest::test5()
   };
   int n[] = { 25, 25, 25, 25 };
   double **A = Arrays<double>::allocMatrix(4,4,valA);
+
+  BlockMatrixChol *chol=NULL;
+  ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4));
+
+  // exit function
+  Arrays<double>::deallocMatrix(A, 4);
+}
+
+//===========================================================================
+// test6.
+// show that we can do a 50.000 x 50.000 matrix cholesky decomposition
+// with a low memory footprint and reduced number of multiplications
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test6()
+{
+  // code comented because factorization + debug mode + valgrind
+  // spent too much time
+  // if you want test, uncoment below block and run in non debug
+  // mode. factorization takes less than 1 minute and mult()
+  // takes some fraction of second. Amazing !!!
+  ASSERT(true);
+/*
+  double valA[] = {
+      0.50000, 0.10000, 0.20000, 0.15000,
+      0.10000, 0.75000, 0.12500, 0.05000,
+      0.20000, 0.12500, 0.80000, 0.15000,
+      0.15000, 0.05000, 0.15000, 0.65000
+  };
+  int n[] = { 12500, 12500, 12500, 12500 };
+  double **A = Arrays<double>::allocMatrix(4,4,valA);
+
+  // performing cholesky factorization
+  BlockMatrixChol *chol=NULL;
+  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4));
+
+  // checking optimized L·x
+  double x[50000], y[50000];
+  for(int i=0;i<50000;i++) x[i] = 1.0;
+  chol->mult(x, y);
+
+  // exit function
+  delete chol;
+  Arrays<double>::deallocMatrix(A, 4);
+*/
+}
+
+//===========================================================================
+// test2. test cholesky decomposition (M=4, N=3), sector2 have 0 elements
+//
+// validated with octave using:
+//    A = [1,0.1,0.2;0.1,1,0.3;0.2,0.3,1]
+//      1.00000  0.10000  0.20000
+//      0.10000  1.00000  0.30000
+//      0.20000  0.30000  1.00000
+//    B = chol(A)' (octave & mathematica considerer L'·L instead of L·L')
+//      1.00000  0.00000  0.00000
+//      0.10000  0.99499  0.00000
+//      0.20000  0.28141  0.93851
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test7()
+{
+  // only 1 element per sector (autocorrelation not used => we put 1000)
+  // sector2 (0 elements have values 1000 to force error if exist)
+  double valA[] = {
+      1000.00, 1000.00, 0.10000, 0.20000,
+      1000.00, 1000.00, 1000.00, 1000.00,
+      0.10000, 1000.00, 1000.00, 0.30000,
+      0.20000, 1000.00, 0.30000, 1000.00
+  };
+  int n[] = { 1, 0, 1, 1 };
+  double solA[] = {
+     1.00000, 0.00000, 0.00000,
+     0.10000, 0.99499, 0.00000,
+     0.20000, 0.28141, 0.93851
+  };
+  double **A = Arrays<double>::allocMatrix(4,4,valA);
+
   BlockMatrixChol *chol=NULL;
 
-  try
+  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4));
+  ASSERT_EQUALS(3, chol->getDim());
+
+  // checking cholesky values
+  for (int i=0;i<3;i++)
   {
-    chol = new BlockMatrixChol(A, n, 4);
-    ASSERT(false);
+    for (int j=0;j<3;j++)
+    {
+      ASSERT_DOUBLES_EQUAL(solA[3*i+j], chol->get(i,j), EPSILON);
+    }
   }
-  catch(Exception &e)
+
+  // checking mult method
+  double x[3] = {1.0, 1.0, 1.0};
+  double y[3] = {0.0, 0.0, 0.0};
+  double z[3] = {1.0, 1.09499, 1.41992};
+  chol->mult(x, y);
+  for(int i=0;i<3;i++)
   {
-    if (chol != NULL) delete chol;
-    ASSERT(true);
+    ASSERT_DOUBLES_EQUAL(y[i], z[i], EPSILON);
   }
+
+  // checking that a 0 elements matrix decomposition crash
+  delete chol;
+  n[0] = 0; n[1] = 0; n[2] = 0; n[3] = 0;
+  ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4));
 
   // exit function
   Arrays<double>::deallocMatrix(A, 4);

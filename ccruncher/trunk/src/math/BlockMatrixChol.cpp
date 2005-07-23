@@ -115,6 +115,89 @@
 
 //===========================================================================
 // Constructor
+// first we asure that input arguments are valids and  don't exist sectors
+// without elements. If exist, they are removed
+//===========================================================================
+ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(Exception)
+{
+  // assertions
+  assert(C_ != NULL);
+  assert(n_ != NULL);
+  assert(m_ > 0);
+
+  // new m
+  int nm=0;
+
+  // dealing with n[i]=0's
+  for(int j=0;j<m_;j++)
+  {
+    if (n_[j] < 0) {
+      throw Exception("error: exist a sector with a negative number of elements");
+    }
+    if (n_[j] == 0) {
+      //nm don't increment
+    }
+    else {
+      nm++;
+    }
+  }
+
+  if (nm == m_ && m_ > 0)
+  {
+    // arguments seems correct
+    init(C_, n_, m_);
+  }
+  else if (nm == 0 || m_ <= 0)
+  {
+    throw Exception("input matrix dimension have dimension 0");
+  }
+  else // nm > 0 and exist sector/s with 0 elements
+  {
+    double **nC = NULL;
+    int *nn = NULL;
+
+    try
+    {
+      // alloc temporal memory
+      nC = Arrays<double>::allocMatrix(nm, nm, 0.0);
+      nn = Arrays<int>::allocVector(nm, 0);
+
+      // filling C and n without void sectors
+      for(int i=0,ni=0;i<m_;i++)
+      {
+        if (n_[i] != 0)
+        {
+          for(int j=0,nj=0;j<m_;j++)
+          {
+            if (n_[j] != 0)
+            {
+              nC[ni][nj] = C_[i][j];
+              nj++;
+            }
+          }
+          nn[ni] = n_[i];
+          ni++;
+        }
+      }
+
+      // perform factorization
+      init(nC, nn, nm);
+
+      // release temporal memory
+      Arrays<double>::deallocMatrix(nC, nm);
+      Arrays<int>::deallocVector(nn);
+    }
+    catch(Exception &e)
+    {
+      if (nC != NULL) Arrays<double>::deallocMatrix(nC, nm);
+      if (nn != NULL) Arrays<int>::deallocVector(nn);
+      throw e;
+    }
+  }
+}
+
+//===========================================================================
+// init
 //
 // C: matrix of coeficients
 // m: number of sectors
@@ -143,7 +226,7 @@
 // Note: take care, we check that Cij = Cji
 //
 //===========================================================================
-ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(Exception)
+void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Exception)
 {
   // initializations
   N = 0;
@@ -153,18 +236,13 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
   spe = NULL;
 
   // assigning the number of sectors
-  assert(m_ > 0);
   M = m_;
 
   // assigning the number of elements per sector
-  assert(n_ != NULL);
   n = Arrays<int>::allocVector(M, 0);
 
   for(int i=0;i<M;i++)
   {
-    // number of elements allways positive
-    assert(n_[i] > 0);
-
     // filling internal vector named n
     n[i] = n_[i];
 
@@ -176,12 +254,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
     {
       assert(fabs(C_[i][j]-C_[j][i]) < EPSILON);
     }
-
-    //TODO: considere case where n[i] = 0
   }
-
-  // checking that matrix have dimension > 0
-  assert(N > 0);
 
   // allocating memory for cholesky coeficients
   coefs = Arrays<double>::allocMatrix(N, M, 0.0);

@@ -54,6 +54,8 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
     void test3();
     void test4();
     void test5();
+    void test6();
+    void test7();
     void check(double **C, int *n, int M, BlockMatrixChol *x) throw(Exception);
 
 
@@ -66,6 +68,8 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
       TEST_CASE(test3);
       TEST_CASE(test4);
       TEST_CASE(test5);
+      TEST_CASE(test6);
+      TEST_CASE(test7);
     }
 
     void setUp();

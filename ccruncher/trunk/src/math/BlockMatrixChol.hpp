@@ -59,10 +59,12 @@ class BlockMatrixChol
     // for each element (0...N), gives his sector (array size = N)
     int *spe; // (Sector Per Element)
 
-    // internal function
-    double aprod(int row, int col, int order);
+    // alloc memory, does checks, etc.
+    void init(double **C, int *n, int m) throw(Exception);
     // adapted cholesky algorithm
     void chold(double **C) throw(Exception);
+    // internal function
+    double aprod(int row, int col, int order);
     // dealloc memory
     void reset();
 
