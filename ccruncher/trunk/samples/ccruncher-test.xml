@@ -582,6 +582,7 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
+<!--
     <segmentation name="client" components="client">
       <segment name="*"/>
     </segmentation>
@@ -605,6 +606,7 @@
       <segment name="0003"/>
       <segment name="0004"/>
     </segmentation>
+-->
   </segmentations>
 
   <!-- ============================================================== -->

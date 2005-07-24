@@ -4,9 +4,14 @@ CREDITCRUNCHER NEWS
 
 version 0.5 (??? 2005)
 --------------------------
-  * upgraded to new zlib version
+  * important: implemented specialized Gaussian Copula
+      . adapted to client correlation matrix structure
+      . low memory footprint
+      . fast computations
+      . allows copulas of 50.000 components
   * some classes has been refactorized
   * initiated mpi support
+  * upgraded to new zlib version
 
 version 0.4 (July 2005)
 --------------------------

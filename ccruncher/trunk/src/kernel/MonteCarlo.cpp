@@ -54,6 +54,9 @@
 // 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . CopulaNormal replaced by BlockGaussianCopula
+//
 //===========================================================================
 
 #include <cfloat>
@@ -113,7 +116,6 @@ void ccruncher::MonteCarlo::reset()
 
   survival = NULL;
   mtrans = NULL;
-  cmatrix = NULL;
   copulas = NULL;
   dates = NULL;
   ittd = NULL;
@@ -223,11 +225,8 @@ void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
     initRatingPath(idata);
   }
 
-  // initializing correlation matrix
-  cmatrix = initCorrelationMatrix(idata->correlations->getMatrix(), clients, N);
-
   // initializing copulas
-  copulas = initCopulas(cmatrix, N, numcopulas, idata->params->copula_seed);
+  copulas = initCopulas(idata, N, numcopulas, idata->params->copula_seed);
 
   // ratings paths allocation
   ittd = initTimeToDefaultArray(N);
@@ -443,53 +442,12 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
 }
 
 //===========================================================================
-// client correlation matrix construction
-//===========================================================================
-double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
-                               vector<Client *> *vclients, int n) throw(Exception)
-{
-  // setting logger header
-  Logger::trace("computing client correlation matrix", '-');
-  Logger::newIndentLevel();
-
-  // setting logger info
-  string sval = Format::int2string(n);
-  Logger::trace("matrix dimension", sval+"x"+sval);
-
-  // allocating space
-  double **ret = Arrays<double>::allocMatrix(n, n);
-
-  // definim la matriu de correlacions entre clients
-  for (int i=0;i<n;i++)
-  {
-    int isector1 = (*vclients)[i]->isector;
-
-    for (int j=0;j<n;j++)
-    {
-      int isector2 = (*vclients)[j]->isector;
-
-      if (i == j)
-      {
-        ret[i][j] = 1.0;
-      }
-      else
-      {
-        ret[i][j] = sectorcorrels[isector1][isector2];
-      }
-    }
-  }
-
-  // exit function
-  Logger::previousIndentLevel();
-  return ret;
-}
-
-//===========================================================================
 // copula construction
 //===========================================================================
-GaussianCopula** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, long seed) throw(Exception)
+BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, long n, int k, long seed) throw(Exception)
 {
-  GaussianCopula **ret = NULL;
+  int *tmp = NULL;
+  BlockGaussianCopula **ret = NULL;
 
   // setting logger header
   Logger::trace("initializing copulas", '-');
@@ -500,23 +458,42 @@ GaussianCopula** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k,
   Logger::trace("number of copulas", Format::int2string(k));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
 
-  // allocating space
   try
   {
-    ret = new GaussianCopula*[k];
+    // allocating temporal memory
+    tmp = Arrays<int>::allocVector(idata->correlations->size(),0);
+
+    // computing the number of clients in each sector
+    for(long i=0;i<n;i++)
+    {
+      tmp[(*clients)[i]->isector]++;
+    }
+
+    // allocating return object array
+    ret = new BlockGaussianCopula*[k];
     for (int i=0;i<k;i++) ret[i] = NULL;
 
-    // creem l'objecte per la generacio de copules normals
-    ret[0] = new GaussianCopula(n, ccm);
+    // creating the copula object
+    ret[0] = new BlockGaussianCopula(idata->correlations->getMatrix(), tmp, idata->correlations->size());
 
-    // el repliquem per tots els talls temporals
+    // releasing temporal memory
+    Arrays<int>::deallocVector(tmp);
+    tmp = NULL;
+
+    // creating a replica for each time tranch (only if method = rating-path)
     for(int i=1;i<k;i++)
     {
-      ret[i] = new GaussianCopula(*(ret[0]));
+      ret[i] = new BlockGaussianCopula(*(ret[0]));
     }
   }
   catch(std::exception &e)
   {
+    if (tmp != NULL)
+    {
+      Arrays<int>::deallocVector(tmp);
+      tmp = NULL;
+    }
+
     if (ret != NULL)
     {
       for (int i=0;i<k;i++)

@@ -49,6 +49,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved performance problem when nclients is high
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -87,7 +90,7 @@ void usage();
 void version();
 void copyright();
 void run(string, int, int) throw(Exception);
-string getXMLPortfolio(int, IData*, int, int) throw(Exception);
+void printXMLPortfolio(int, IData*, int, int) throw(Exception);
 string getXMLData(int, Date, int, double, double, int) throw(Exception);
 double getNominal();
 
@@ -246,16 +249,17 @@ void run(string filename, int nclients, int nassets) throw(Exception)
   cout << idata.sectors->getXML(2);
   cout << idata.correlations->getXML(2);
   cout << idata.segmentations->getXML(2);
-  cout << getXMLPortfolio(2, &idata, nclients, nassets);
+  cout << "  <portfolio>\n";
+  printXMLPortfolio(2, &idata, nclients, nassets);
+  cout << "  </portfolio>\n";
   cout << "</creditcruncher>\n";
 }
 
 //===========================================================================
 // getXMLPortfolio
 //===========================================================================
-string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) throw(Exception)
+void printXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) throw(Exception)
 {
-  string ret = "";
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
   string spc3 = Strings::blanks(ilevel+4);
@@ -264,33 +268,27 @@ string getXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) thro
   int nsectors = idata->sectors->getSectors()->size();
   Date date1 = idata->params->begindate;
 
-  ret += spc1 + "<portfolio>\n";
-
   for (int i=1;i<=nclients;i++)
   {
-    ret += spc2 + "<client ";
-    ret += "rating='" + idata->ratings->getName(rand()%(nratings-1)) + "' ";
-    ret += "sector='" + idata->sectors->getName(rand()%(nsectors)) + "' ";
-    ret += "name='client" + Format::int2string(i) + "' ";
-    ret += "id='" + Format::int2string(i) + "'>\n";
+    cout << spc2 + "<client ";
+    cout << "rating='" + idata->ratings->getName(rand()%(nratings-1)) + "' ";
+    cout << "sector='" + idata->sectors->getName(rand()%(nsectors)) + "' ";
+    cout << "name='client" + Format::int2string(i) + "' ";
+    cout << "id='" + Format::int2string(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
     {
-      ret += spc3;
-      ret += "<asset name='bond' ";
-      ret += "id='" + Format::int2string(i) + "-" + Format::int2string(j) + "'>\n";
+      cout << spc3;
+      cout << "<asset name='bond' ";
+      cout << "id='" + Format::int2string(i) + "-" + Format::int2string(j) + "'>\n";
 
-      ret += getXMLData(ilevel+6, date1, 120, getNominal(), 0.07, 120);
+      cout << getXMLData(ilevel+6, date1, 120, getNominal(), 0.07, 120);
 
-      ret += spc3 + "</asset>\n";
+      cout << spc3 + "</asset>\n";
     }
 
-    ret += spc2 +  "</client>\n";
+    cout << spc2 +  "</client>\n" << endl;
   }
-
-  ret += spc1 + "</portfolio>\n";
-
-  return ret;
 }
 
 //===========================================================================

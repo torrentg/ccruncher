@@ -41,6 +41,9 @@
 // 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . CopulaNormal replaced by BlockGaussianCopula
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -56,7 +59,7 @@
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
 #include "correlations/CorrelationMatrix.hpp"
-#include "math/GaussianCopula.hpp"
+#include "math/BlockGaussianCopula.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "portfolio/Client.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -106,10 +109,8 @@ class MonteCarlo
     Survival *survival;
     /** survival function (can be used by time-to-default method) */
     TransitionMatrix *mtrans;
-    /** client correlation matrix (size = N x N) */
-    double **cmatrix;
     /** arrays of pointers to copulas (size = M) */
-    GaussianCopula **copulas;
+    BlockGaussianCopula **copulas;
     /** date per time tranch (size = M) */
     Date *dates;
     /** simulated time-to-default per client (size = N) */
@@ -137,8 +138,7 @@ class MonteCarlo
     void initSectors(const IData *) throw(Exception);
     void initRatingPath(const IData *) throw(Exception);
     void initTimeToDefault(IData *) throw(Exception);
-    double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
-    GaussianCopula** initCopulas(double **, long, int, long) throw(Exception);
+    BlockGaussianCopula** initCopulas(const IData *idata, long, int, long) throw(Exception);
     int* initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData *) throw(Exception);
     void evalueAggregators() throw(Exception);
