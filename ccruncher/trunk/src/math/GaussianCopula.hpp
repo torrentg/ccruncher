@@ -19,68 +19,65 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CopulaNormalTest.hpp - CopulaNormalTest header
+// GaussianCopula.hpp - GaussianCopula header
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . created ccruncher_test namespace
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
 //
 //===========================================================================
 
-#ifndef _CopulaNormalTest_
-#define _CopulaNormalTest_
+#ifndef _GaussianCopula_
+#define _GaussianCopula_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
+#include "math/Copula.hpp"
+#include <MersenneTwister.h>
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
-namespace ccruncher_test {
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class CopulaNormalTest : public TestFixture<CopulaNormalTest>
+class GaussianCopula : public Copula
 {
-
   private:
 
-    double pearsn(double *x, double *y, int n);
-    void testCopula(CopulaNormal &, double *, int n);
-    void computeDensity(CopulaNormal &copula);
+    int n;
+    double **sigmas;
+    double *aux1;
+    double *aux2;
+    bool owner;
 
-    void test1();
-    void test2();
-    void test3();
-    void test4();
-    void test5();
+    MTRand mtrand;
 
+    void init();
+    void finalize();
+    void correls2sigmas(double **mcorrels) throw(Exception);
+    double transform(double val);
+    void randNm();
 
   public:
 
-    TEST_FIXTURE(CopulaNormalTest)
-    {
-      TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-    }
+    int size();
+    void next();
+    double get(int);
+    void setSeed(long);
 
-    void setUp();
-    void tearDown();
+    GaussianCopula(int, double **) throw(Exception);
+    GaussianCopula(const GaussianCopula &) throw(Exception);
+    ~GaussianCopula();
 
 };
-
-REGISTER_FIXTURE(CopulaNormalTest);
 
 //---------------------------------------------------------------------------
 

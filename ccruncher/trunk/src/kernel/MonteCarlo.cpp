@@ -51,6 +51,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
+//
 //===========================================================================
 
 #include <cfloat>
@@ -484,9 +487,9 @@ double ** ccruncher::MonteCarlo::initCorrelationMatrix(double **sectorcorrels,
 //===========================================================================
 // copula construction
 //===========================================================================
-CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, long seed) throw(Exception)
+GaussianCopula** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, long seed) throw(Exception)
 {
-  CopulaNormal **ret = NULL;
+  GaussianCopula **ret = NULL;
 
   // setting logger header
   Logger::trace("initializing copulas", '-');
@@ -500,16 +503,16 @@ CopulaNormal** ccruncher::MonteCarlo::initCopulas(double **ccm, long n, int k, l
   // allocating space
   try
   {
-    ret = new CopulaNormal*[k];
+    ret = new GaussianCopula*[k];
     for (int i=0;i<k;i++) ret[i] = NULL;
 
     // creem l'objecte per la generacio de copules normals
-    ret[0] = new CopulaNormal(n, ccm);
+    ret[0] = new GaussianCopula(n, ccm);
 
     // el repliquem per tots els talls temporals
     for(int i=1;i<k;i++)
     {
-      ret[i] = new CopulaNormal(*(ret[0]));
+      ret[i] = new GaussianCopula(*(ret[0]));
     }
   }
   catch(std::exception &e)

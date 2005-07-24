@@ -38,6 +38,9 @@
 // 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -53,7 +56,7 @@
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
 #include "correlations/CorrelationMatrix.hpp"
-#include "math/CopulaNormal.hpp"
+#include "math/GaussianCopula.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "portfolio/Client.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -106,7 +109,7 @@ class MonteCarlo
     /** client correlation matrix (size = N x N) */
     double **cmatrix;
     /** arrays of pointers to copulas (size = M) */
-    CopulaNormal **copulas;
+    GaussianCopula **copulas;
     /** date per time tranch (size = M) */
     Date *dates;
     /** simulated time-to-default per client (size = N) */
@@ -135,7 +138,7 @@ class MonteCarlo
     void initRatingPath(const IData *) throw(Exception);
     void initTimeToDefault(IData *) throw(Exception);
     double ** initCorrelationMatrix(double **, vector<Client *> *, int) throw(Exception);
-    CopulaNormal** initCopulas(double **, long, int, long) throw(Exception);
+    GaussianCopula** initCopulas(double **, long, int, long) throw(Exception);
     int* initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData *) throw(Exception);
     void evalueAggregators() throw(Exception);

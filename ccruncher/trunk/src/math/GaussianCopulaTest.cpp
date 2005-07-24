@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CopulaNormalTest.cpp - CopulaNormalTest code
+// GaussianCopulaTest.cpp - GaussianCopulaTest code
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -34,12 +34,15 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
+//
 //===========================================================================
 
 #include <iostream>
 #include <cmath>
-#include "math/CopulaNormal.hpp"
-#include "math/CopulaNormalTest.hpp"
+#include "math/GaussianCopula.hpp"
+#include "math/GaussianCopulaTest.hpp"
 #include "math/Normal.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Exception.hpp"
@@ -53,7 +56,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::setUp()
+void ccruncher_test::GaussianCopulaTest::setUp()
 {
   // nothing to do
 }
@@ -61,7 +64,7 @@ void ccruncher_test::CopulaNormalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::tearDown()
+void ccruncher_test::GaussianCopulaTest::tearDown()
 {
   // nothing to do
 }
@@ -70,7 +73,7 @@ void ccruncher_test::CopulaNormalTest::tearDown()
 // test1. generates NITERS realization of a copula and test that expected
 // correlations are true
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::test1()
+void ccruncher_test::GaussianCopulaTest::test1()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -81,7 +84,7 @@ void ccruncher_test::CopulaNormalTest::test1()
   double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   // copula construction
-  CopulaNormal copula = CopulaNormal(3, correls);
+  GaussianCopula copula = GaussianCopula(3, correls);
 
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
@@ -92,7 +95,7 @@ void ccruncher_test::CopulaNormalTest::test1()
 //===========================================================================
 // test2. try to create a copula with non valid correlation matrix
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::test2()
+void ccruncher_test::GaussianCopulaTest::test2()
 {
   // non valid correlation matrix (non definite positive)
   double sigmas[] = {
@@ -102,7 +105,7 @@ void ccruncher_test::CopulaNormalTest::test2()
   };
   double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
-  ASSERT_THROW(CopulaNormal(3, correls));
+  ASSERT_THROW(GaussianCopula(3, correls));
 
   // correls deallocated by copula destructor
 }
@@ -110,7 +113,7 @@ void ccruncher_test::CopulaNormalTest::test2()
 //===========================================================================
 // test3. try to acces components
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::test3()
+void ccruncher_test::GaussianCopulaTest::test3()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -120,7 +123,7 @@ void ccruncher_test::CopulaNormalTest::test3()
   };
   double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
-  CopulaNormal copula = CopulaNormal(3, correls);
+  GaussianCopula copula = GaussianCopula(3, correls);
 
   ASSERT(isnan(copula.get(-1)));
   ASSERT(!isnan(copula.get(0)));
@@ -134,7 +137,7 @@ void ccruncher_test::CopulaNormalTest::test3()
 //===========================================================================
 // test4. testing constructor based on other copula
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::test4()
+void ccruncher_test::GaussianCopulaTest::test4()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -145,8 +148,8 @@ void ccruncher_test::CopulaNormalTest::test4()
   double **correls = Arrays<double>::allocMatrix(3,3,sigmas);
 
   // copula construction
-  CopulaNormal orig = CopulaNormal(3, correls);
-  CopulaNormal copula = CopulaNormal(orig);
+  GaussianCopula orig = GaussianCopula(3, correls);
+  GaussianCopula copula = GaussianCopula(orig);
 
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
@@ -158,7 +161,7 @@ void ccruncher_test::CopulaNormalTest::test4()
 //===========================================================================
 // generate a 2-D histogram
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::computeDensity(CopulaNormal &copula)
+void ccruncher_test::GaussianCopulaTest::computeDensity(GaussianCopula &copula)
 {
   double x, y;
   int a, b;
@@ -205,7 +208,7 @@ void ccruncher_test::CopulaNormalTest::computeDensity(CopulaNormal &copula)
 // test5. generates NITERS realization of a copula and test that expected
 // correlations are true
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::test5()
+void ccruncher_test::GaussianCopulaTest::test5()
 {
   // valid correlation matrix
   double sigmas[] = {
@@ -215,7 +218,7 @@ void ccruncher_test::CopulaNormalTest::test5()
   double **correls = Arrays<double>::allocMatrix(2,2,sigmas);
 
   // copula construction
-  CopulaNormal copula = CopulaNormal(2, correls);
+  GaussianCopula copula = GaussianCopula(2, correls);
 
   // testing copula
   ASSERT_NO_THROW(testCopula(copula, sigmas, 2));
@@ -230,7 +233,7 @@ void ccruncher_test::CopulaNormalTest::test5()
 // computes the correlation factor of 2 series
 // extracted from 'Numerical Recipes in C'
 //===========================================================================
-double ccruncher_test::CopulaNormalTest::pearsn(double *x, double *y, int n)
+double ccruncher_test::GaussianCopulaTest::pearsn(double *x, double *y, int n)
 {
   double ax=0.0, ay=0.0, sxx=0.0, syy=0.0, sxy=0.0;
 
@@ -263,7 +266,7 @@ double ccruncher_test::CopulaNormalTest::pearsn(double *x, double *y, int n)
 // correlations are true
 // correls is a vector of size nxn
 //===========================================================================
-void ccruncher_test::CopulaNormalTest::testCopula(CopulaNormal &copula, double *correls, int n)
+void ccruncher_test::GaussianCopulaTest::testCopula(GaussianCopula &copula, double *correls, int n)
 {
   double **values;
 

@@ -34,12 +34,15 @@
 // 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed cout's
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
+//
 //===========================================================================
 
 #include <iostream>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
-#include "math/CopulaNormal.hpp"
+#include "math/GaussianCopula.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
@@ -256,7 +259,7 @@ void ccruncher_test::SurvivalTest::test6()
   id[1][1] = 1.0;
 
   // creating randomizer
-  CopulaNormal randomizer(2, (double**) id);
+  GaussianCopula randomizer(2, (double**) id);
 
   // checking values
   for(int i=0;i<20000;i++)

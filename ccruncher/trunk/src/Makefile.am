@@ -68,7 +68,7 @@ ccruncher_SOURCES = \
     ./correlations/CorrelationMatrix.cpp\
     ./math/CholeskyDecomposition.cpp\
     ./math/PowMatrix.cpp\
-    ./math/CopulaNormal.cpp\
+    ./math/GaussianCopula.cpp\
     ./math/Normal.cpp\
     ./math/BlockMatrixChol.cpp\
     ./math/BlockGaussianCopula.cpp\
@@ -110,7 +110,7 @@ ccruncher_SOURCES = \
     ./math/CholeskyDecomposition.hpp\
     ./math/PowMatrix.hpp\
     ./math/Copula.hpp\
-    ./math/CopulaNormal.hpp\
+    ./math/GaussianCopula.hpp\
     ./math/Normal.hpp\
     ./math/BlockMatrixChol.hpp\
     ./math/BlockGaussianCopula.hpp\
@@ -160,7 +160,7 @@ generator_SOURCES = \
     ./correlations/CorrelationMatrix.cpp\
     ./math/CholeskyDecomposition.cpp\
     ./math/PowMatrix.cpp\
-    ./math/CopulaNormal.cpp\
+    ./math/GaussianCopula.cpp\
     ./math/Normal.cpp\
     ./math/BlockMatrixChol.cpp\
     ./math/BlockGaussianCopula.cpp\
@@ -201,7 +201,7 @@ generator_SOURCES = \
     ./math/CholeskyDecomposition.hpp\
     ./math/Copula.hpp\
     ./math/PowMatrix.hpp\
-    ./math/CopulaNormal.hpp\
+    ./math/GaussianCopula.hpp\
     ./math/Normal.hpp\
     ./math/BlockMatrixChol.hpp\
     ./math/BlockGaussianCopula.hpp\
@@ -250,7 +250,7 @@ mtrans_SOURCES = \
     ./correlations/CorrelationMatrix.cpp\
     ./math/CholeskyDecomposition.cpp\
     ./math/PowMatrix.cpp\
-    ./math/CopulaNormal.cpp\
+    ./math/GaussianCopula.cpp\
     ./math/Normal.cpp\
     ./math/BlockMatrixChol.cpp\
     ./math/BlockGaussianCopula.cpp\
@@ -290,7 +290,7 @@ mtrans_SOURCES = \
     ./math/CholeskyDecomposition.hpp\
     ./math/Copula.hpp\
     ./math/PowMatrix.hpp\
-    ./math/CopulaNormal.hpp\
+    ./math/GaussianCopula.hpp\
     ./math/Normal.hpp\
     ./math/BlockMatrixChol.hpp\
     ./math/BlockGaussianCopula.hpp\
@@ -334,7 +334,7 @@ tests_SOURCES = \
     ./utils/FormatTest.cpp\
     ./math/PowMatrixTest.cpp\
     ./math/NormalTest.cpp\
-    ./math/CopulaNormalTest.cpp\
+    ./math/GaussianCopulaTest.cpp\
     ./math/MersenneTwisterTest.cpp\
     ./math/CholeskyDecompositionTest.cpp\
     ./math/BlockMatrixCholTest.cpp\
@@ -369,7 +369,7 @@ tests_SOURCES = \
     ./utils/Utils.cpp\
     ./utils/Format.cpp\
     ./math/CholeskyDecomposition.cpp\
-    ./math/CopulaNormal.cpp\
+    ./math/GaussianCopula.cpp\
     ./math/Normal.cpp\
     ./math/PowMatrix.cpp\
     ./math/BlockMatrixChol.cpp\
@@ -405,7 +405,7 @@ tests_SOURCES = \
     ./math/Copula.hpp\
     ./math/PowMatrixTest.hpp\
     ./math/NormalTest.hpp\
-    ./math/CopulaNormalTest.hpp\
+    ./math/GaussianCopulaTest.hpp\
     ./math/MersenneTwisterTest.hpp\
     ./math/CholeskyDecompositionTest.hpp\
     ./math/BlockMatrixCholTest.hpp\
@@ -440,7 +440,7 @@ tests_SOURCES = \
     ./utils/Utils.hpp\
     ./utils/Format.hpp\
     ./math/CholeskyDecomposition.hpp\
-    ./math/CopulaNormal.hpp\
+    ./math/GaussianCopula.hpp\
     ./math/Normal.hpp\
     ./math/PowMatrix.hpp\
     ./math/BlockMatrixChol.hpp\

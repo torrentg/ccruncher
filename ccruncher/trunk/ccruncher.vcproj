@@ -207,10 +207,10 @@
 					RelativePath="src\math\Copula.hpp">
 				</File>
 				<File
-					RelativePath="src\math\CopulaNormal.cpp">
+					RelativePath="src\math\GaussianCopula.cpp">
 				</File>
 				<File
-					RelativePath="src\math\CopulaNormal.hpp">
+					RelativePath="src\math\GaussianCopula.hpp">
 				</File>
 				<File
 					RelativePath="src\math\Normal.cpp">

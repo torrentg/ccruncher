@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CopulaNormal.cpp - CopulaNormal code
+// GaussianCopula.cpp - GaussianCopula code
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -28,6 +28,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class CopulaNormal renamed to GaussianCopula
+//
 //===========================================================================
 
 #include <cmath>
@@ -35,7 +38,7 @@
 #include <cfloat>
 #include <cstdlib>
 #include "math/Normal.hpp"
-#include "math/CopulaNormal.hpp"
+#include "math/GaussianCopula.hpp"
 #include "math/CholeskyDecomposition.hpp"
 #include "utils/Arrays.hpp"
 
@@ -48,7 +51,7 @@
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::CopulaNormal::init()
+void ccruncher::GaussianCopula::init()
 {
   owner = false;
   aux1 = NULL;
@@ -59,7 +62,7 @@ void ccruncher::CopulaNormal::init()
 //===========================================================================
 // finalize
 //===========================================================================
-void ccruncher::CopulaNormal::finalize()
+void ccruncher::GaussianCopula::finalize()
 {
   if (owner)
   {
@@ -81,7 +84,7 @@ void ccruncher::CopulaNormal::finalize()
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception) : Copula()
+ccruncher::GaussianCopula::GaussianCopula(const GaussianCopula &x) throw(Exception) : Copula()
 {
   init();
   n = x.n;
@@ -99,7 +102,7 @@ ccruncher::CopulaNormal::CopulaNormal(const CopulaNormal &x) throw(Exception) : 
 // caution: modify mcorrels content
 // caution: releases mcorrels memory in destructor
 //===========================================================================
-ccruncher::CopulaNormal::CopulaNormal(int n_, double **mcorrels) throw(Exception)
+ccruncher::GaussianCopula::GaussianCopula(int n_, double **mcorrels) throw(Exception)
 {
   try
   {
@@ -124,7 +127,7 @@ ccruncher::CopulaNormal::CopulaNormal(int n_, double **mcorrels) throw(Exception
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::CopulaNormal::~CopulaNormal()
+ccruncher::GaussianCopula::~GaussianCopula()
 {
   finalize();
 }
@@ -132,7 +135,7 @@ ccruncher::CopulaNormal::~CopulaNormal()
 //===========================================================================
 // size. returns number of components
 //===========================================================================
-int ccruncher::CopulaNormal::size()
+int ccruncher::GaussianCopula::size()
 {
   return n;
 }
@@ -141,7 +144,7 @@ int ccruncher::CopulaNormal::size()
 // transform initial correlation to normal correlation
 // observation: 2*sin(1*M_PI/6) = 1 => diagonal values = 1 always
 //===========================================================================
-double ccruncher::CopulaNormal::transform(double val)
+double ccruncher::GaussianCopula::transform(double val)
 {
   return 2.0*sin(val*M_PI/6.0);
 }
@@ -150,7 +153,7 @@ double ccruncher::CopulaNormal::transform(double val)
 // given a initial correlation matrix return taus-k matrix needed by copula normal
 // caution: replace correls matrix content by sigma matrix content
 //===========================================================================
-void ccruncher::CopulaNormal::correls2sigmas(double **correlations) throw(Exception)
+void ccruncher::GaussianCopula::correls2sigmas(double **correlations) throw(Exception)
 {
   for(int i=0;i<n;i++)
   {
@@ -164,7 +167,7 @@ void ccruncher::CopulaNormal::correls2sigmas(double **correlations) throw(Except
 
   if (!def_pos)
   {
-    throw Exception("CopulaNormal::correls2sigmas(): correlation matrix not definite positive");
+    throw Exception("GaussianCopula::correls2sigmas(): correlation matrix not definite positive");
   }
   else
   {
@@ -188,7 +191,7 @@ void ccruncher::CopulaNormal::correls2sigmas(double **correlations) throw(Except
 // fill aux1 with rand N(0,1) (independents)
 // fill aux2 with rand N(0,1) (correlateds per sigmas)
 //===========================================================================
-void ccruncher::CopulaNormal::randNm()
+void ccruncher::GaussianCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
@@ -202,7 +205,7 @@ void ccruncher::CopulaNormal::randNm()
 // Compute a copula. Put in aux1 a random vector where each marginal follows
 // a U[0,1] related by a normal copula
 //===========================================================================
-void ccruncher::CopulaNormal::next()
+void ccruncher::GaussianCopula::next()
 {
   // generate a random vector following N(0,sigmas) into aux2
   randNm();
@@ -218,7 +221,7 @@ void ccruncher::CopulaNormal::next()
 //===========================================================================
 // Return components i-th from current copula
 //===========================================================================
-double ccruncher::CopulaNormal::get(int i)
+double ccruncher::GaussianCopula::get(int i)
 {
   if (i < 0 || i >= n)
   {
@@ -234,7 +237,7 @@ double ccruncher::CopulaNormal::get(int i)
 // Set new seed in the number generator
 // @param x seed to be set
 //===========================================================================
-void ccruncher::CopulaNormal::setSeed(long k)
+void ccruncher::GaussianCopula::setSeed(long k)
 {
   mtrand.seed((const unsigned long) k);
 }
