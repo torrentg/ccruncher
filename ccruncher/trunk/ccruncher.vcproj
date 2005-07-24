@@ -191,6 +191,18 @@
 				<File
 					RelativePath="src\math\CholeskyDecomposition.hpp">
 				</File>
+        <File
+          RelativePath="src\math\BlockMatrixChol.cpp">
+        </File>
+        <File
+          RelativePath="src\math\BlockMatrixChol.hpp">
+        </File>
+        <File
+          RelativePath="src\math\BlockGaussianCopula.cpp">
+        </File>
+        <File
+          RelativePath="src\math\BlockGaussianCopula.hpp">
+        </File>
 				<File
 					RelativePath="src\math\Copula.hpp">
 				</File>

@@ -2,6 +2,11 @@
 CREDITCRUNCHER NEWS
 ===================
 
+version 0.5 (??? 2005)
+--------------------------
+  * upgraded to new zlib version
+  * some classes has been refactorized
+  * initiated mpi support
 
 version 0.4 (July 2005)
 --------------------------
@@ -44,4 +49,3 @@ version 0.2 (April 2005)
 version 0.1 (January 2005)
 --------------------------
   * initial release (Gerard Torrent)
-
