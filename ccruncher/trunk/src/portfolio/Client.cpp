@@ -34,12 +34,16 @@
 // 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to default segment (rest segment = default)
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added hash key (to accelerate comparations)
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include <cassert>
 #include "portfolio/Client.hpp"
+#include "utils/Utils.hpp"
 
 //===========================================================================
 // constructor
@@ -70,6 +74,7 @@ void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_,
   sectors = sectors_;
   segmentations = segmentations_;
   interests = interests_;
+  hkey = 0UL;
 
   // cleaning containers
   vassets.clear();
@@ -115,17 +120,23 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
       throw eperror(eu, "incorrect number of attributes in tag client");
     }
     else {
+      // reading atributes
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
       string strrating = getStringAttribute(attributes, "rating", "");
       string strsector= getStringAttribute(attributes, "sector", "");
 
+      // retrieving indexes
       irating = ratings->getIndex(strrating);
       isector = sectors->getIndex(strsector);
 
+      // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {
         throw eperror(eu, "invalid attributes at <client>");
       }
+
+      // computing hash key
+      hkey = Utils::hash(id);
     }
   }
   else if (isEqual(name_,"belongs-to")) {

@@ -31,6 +31,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . converting to inline some critical methods 
+//
 //===========================================================================
 
 #include <vector>
@@ -110,28 +113,13 @@ ccruncher::Date::Date(const long date) throw(Exception)
 
   if (!valid())
   {
-	  throw Exception("Date::Date(long): invalid Date (" + Format::long2string(date) + ")");
+    throw Exception("Date::Date(long): invalid Date (" + Format::long2string(date) + ")");
   }
 }
 
 //===========================================================================
-// getXXX() methods
+// setXXX() methods
 //===========================================================================
-int ccruncher::Date::getDay() const
-{
-  return (int) day_;
-}
-
-int ccruncher::Date::getMonth() const
-{
-  return (int) month_;
-}
-
-int ccruncher::Date::getYear() const
-{
-  return year_;
-}
-
 void ccruncher::Date::setDay (const int day) throw(Exception)
 {
   Date::day_ = (char) day;

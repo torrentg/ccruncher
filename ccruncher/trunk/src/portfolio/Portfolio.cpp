@@ -28,6 +28,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . some modifications trying to achieve better performance
+//
 //===========================================================================
 
 #include <cmath>
@@ -93,24 +96,34 @@ vector<Client *> * ccruncher::Portfolio::getClients()
 //===========================================================================
 void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 {
+  unsigned int vcs = vclients.size();
+  unsigned long chkey = val->hkey;
+  Client *curr = NULL;
+
   // validem coherencia
-  for (unsigned int i=0;i<vclients.size();i++)
+  for (unsigned int i=0;i<vcs;i++)
   {
-    if (vclients[i]->id == val->id)
+    curr = vclients[i];
+
+    if (curr->hkey == chkey)
     {
-      delete val;
-      string msg = "Portfolio::insertClient(): client id ";
-      msg += val->id;
-      msg += " repeated";
-      throw Exception(msg);
-    }
-    else if (vclients[i]->name == val->name)
-    {
-      delete val;
-      string msg = "Portfolio::insertClient(): client name ";
-      msg += val->name;
-      msg += " repeated";
-      throw Exception(msg);
+cout << "hash key collision !!!" << endl;
+      if (curr->id == val->id)
+      {
+        delete val;
+        string msg = "Portfolio::insertClient(): client id ";
+        msg += val->id;
+        msg += " repeated";
+        throw Exception(msg);
+      }
+      else if (curr->name == val->name)
+      {
+        delete val;
+        string msg = "Portfolio::insertClient(): client name ";
+        msg += val->name;
+        msg += " repeated";
+        throw Exception(msg);
+      }
     }
   }
 

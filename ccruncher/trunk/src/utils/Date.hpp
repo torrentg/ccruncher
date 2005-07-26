@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release based on a Bernt A Oedegaard class
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . converting to inline some critical methods 
+//
 //===========================================================================
 
 #ifndef _Date_
@@ -64,9 +67,9 @@ class Date
 
     static bool valid(const int d, const int m, const int y);
 
-    int getDay() const;
-    int getMonth() const;
-    int getYear() const;
+    inline int getDay() const;
+    inline int getMonth() const;
+    inline int getYear() const;
     int getDayOfYear() const;
 
     void setDay (const int day) throw(Exception);
@@ -131,6 +134,26 @@ int operator -(const Date&, const Date&);
 
 //---------------------------------------------------------------------------
 
+}
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// inline getXXX() methods
+//===========================================================================
+int ccruncher::Date::getDay() const
+{
+  return (int) day_;
+}
+
+int ccruncher::Date::getMonth() const
+{
+  return (int) month_;
+}
+
+int ccruncher::Date::getYear() const
+{
+  return year_;
 }
 
 //---------------------------------------------------------------------------

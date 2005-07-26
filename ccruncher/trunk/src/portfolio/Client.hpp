@@ -31,6 +31,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added hash key (to accelerate comparations)
+//
 //===========================================================================
 
 #ifndef _Client_
@@ -84,6 +87,7 @@ class Client : public ExpatHandlers
     int isector;
     string id;
     string name;
+    unsigned long hkey;
 
     Client(Ratings *, Sectors *, Segmentations *, Interests *);
     ~Client();

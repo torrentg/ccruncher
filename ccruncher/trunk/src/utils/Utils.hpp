@@ -25,6 +25,10 @@
 // 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added hash() method
+//   . added timestamp() method
+//
 //===========================================================================
 
 #ifndef _Utils_
@@ -56,6 +60,8 @@ class Utils
 
     static bool isMaster();
     static void setSilentMode() throw(Exception);
+    static unsigned long hash(const string &str);
+    static string timestamp();
 
 };
 

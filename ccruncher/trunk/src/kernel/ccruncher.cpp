@@ -43,6 +43,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added trace info (input file name + begin/end time)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -61,6 +64,7 @@
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
+#include "utils/Timer.hpp"
 
 #ifdef USE_MPI
   #include <mpi.h>
@@ -296,11 +300,22 @@ int shutdown(int retcode)
 //===========================================================================
 void run(string filename, string path) throw(Exception)
 {
+  Timer timer;
+  timer.start();
+
   // checking input file readeability
   File::checkFile(filename, "r");
 
   // initializing logger
   Logger::setVerbosity(bverbose?1:0);
+
+  // tracing some execution info
+  Logger::trace("general information", '*');
+  Logger::newIndentLevel();
+  Logger::trace("start time", Utils::timestamp());
+  Logger::trace("input file", filename);
+  // TODO: add MPI info (num nodes, etc.)
+  Logger::previousIndentLevel();
 
   // parsing input file
   IData idata = IData(filename);
@@ -331,6 +346,14 @@ void run(string filename, string path) throw(Exception)
 
   // running simulation
   simul.execute();
+
+  // tracing some execution info
+  Logger::trace("general information", '*');
+  Logger::newIndentLevel();
+  Logger::trace("end time", Utils::timestamp());
+  Logger::trace("elapsed time", Timer::format(timer.read()));
+  Logger::previousIndentLevel();
+  Logger::addBlankLine();
 }
 
 //===========================================================================

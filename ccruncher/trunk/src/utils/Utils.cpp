@@ -25,11 +25,16 @@
 // 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added hash() method
+//   . added timestamp() method
+//
 //===========================================================================
 
 #include <cassert>
 #include <iostream>
 #include <cstdio>
+#include <ctime>
 #include "utils/Utils.hpp"
 
 #ifdef USE_MPI
@@ -83,4 +88,39 @@ void ccruncher::Utils::setSilentMode() throw(Exception)
     freopen("/dev/null", "w", stdout);
     freopen("/dev/null", "w", stderr);
   }
+}
+
+//===========================================================================
+// create a hash using ELF hash algorithm
+// extracted from "Hashing Rehashed." Andrew Binstock, Dr. Dobb's Journal, APR96
+//===========================================================================
+unsigned long ccruncher::Utils::hash(const string &str)
+{
+  unsigned long h=0, g;
+  const unsigned char *name = (const unsigned char *)(str.c_str());
+
+  while ( *name )
+  {
+    h = ( h << 4 ) + *name++;
+    if ( g = h & 0xF0000000 )
+      h ^= g >> 24;
+    h &= ~g;
+  }
+  return h;
+}
+
+//===========================================================================
+// return the current timestamp in format dd/mm/yyyy hh:mm:ss
+//===========================================================================
+string ccruncher::Utils::timestamp()
+{
+  time_t now = time(NULL);
+  tm lt = *(localtime(&now));
+
+  char aux[] = "dd/mm/yyyy hh:mm:ss ";
+  aux[19] = 0;
+
+  sprintf(aux, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1, lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
+
+  return string(aux);
 }

@@ -15,7 +15,7 @@
     <property name="time.begindate" value="18/02/2003"/>
     <property name="time.steps" value="12"/>
     <property name="time.steplength" value="2"/>
-    <property name="stopcriteria.maxiterations" value="15000"/>
+    <property name="stopcriteria.maxiterations" value="1"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="normal"/>
     <property name="copula.seed" value="387650932"/>

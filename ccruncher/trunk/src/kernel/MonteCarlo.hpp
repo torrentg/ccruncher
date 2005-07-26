@@ -40,9 +40,7 @@
 //
 // 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
-//
-// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . CopulaNormal replaced by BlockGaussianCopula
+//   . GaussianCopula replaced by BlockGaussianCopula
 //
 //===========================================================================
 
