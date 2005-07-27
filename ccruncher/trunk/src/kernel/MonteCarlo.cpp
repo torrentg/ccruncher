@@ -55,6 +55,9 @@
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . execute() method returns number of realized simulations
+//
 //===========================================================================
 
 #include <cfloat>
@@ -455,6 +458,7 @@ BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, lon
   Logger::trace("copula dimension", Format::long2string(n));
   Logger::trace("number of copulas", Format::int2string(k));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
+  Logger::trace("elapsed time initializing copula", true);
 
   try
   {
@@ -608,7 +612,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 //===========================================================================
 // execute
 //===========================================================================
-void ccruncher::MonteCarlo::execute() throw(Exception)
+long ccruncher::MonteCarlo::execute() throw(Exception)
 {
   bool moreiterations = true;
   Timer sw1, sw2;
@@ -663,7 +667,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
     }
 
     // printing traces
-    Logger::trace("elapsed time generatings ratings paths", Timer::format(sw1.read()));
+    Logger::trace("elapsed time simulating clients", Timer::format(sw1.read()));
     Logger::trace("elapsed time aggregating data", Timer::format(sw2.read()));
     Logger::trace("total simulation time", Timer::format(sw1.read()+sw2.read()));
     Logger::addBlankLine();
@@ -675,6 +679,7 @@ void ccruncher::MonteCarlo::execute() throw(Exception)
 
   // exit function
   Logger::previousIndentLevel();
+  return(CONT);
 }
 
 //===========================================================================

@@ -332,6 +332,7 @@ tests_SOURCES = \
     ./utils/ExceptionTest.cpp\
     ./utils/FileTest.cpp\
     ./utils/FormatTest.cpp\
+    ./utils/UtilsTest.cpp\
     ./math/PowMatrixTest.cpp\
     ./math/NormalTest.cpp\
     ./math/GaussianCopulaTest.cpp\
@@ -402,6 +403,7 @@ tests_SOURCES = \
     ./utils/ExceptionTest.hpp\
     ./utils/FileTest.hpp\
     ./utils/FormatTest.hpp\
+    ./utils/UtilsTest.hpp\
     ./math/Copula.hpp\
     ./math/PowMatrixTest.hpp\
     ./math/NormalTest.hpp\

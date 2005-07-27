@@ -46,6 +46,10 @@
 // 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added trace info (input file name + begin/end time)
 //
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . don't apply nice if user don't put nice number
+//   . added trace info (simulations realized)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -87,7 +91,7 @@ string spath = "";
 bool bsimulate = true;
 bool bverbose = false;
 bool bforce = false;
-int inice = 10;
+int inice = -999;
 int ihash = 0;
 
 //===========================================================================
@@ -233,7 +237,9 @@ int main(int argc, char *argv[])
   try
   {
     // setting nice value
-    setnice(inice);
+    if (inice != -999) {
+      setnice(inice);
+    }
 
     // running simulation
     run(sfilename, spath);
@@ -312,9 +318,11 @@ void run(string filename, string path) throw(Exception)
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
-  Logger::trace("start time", Utils::timestamp());
+  Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("input file", filename);
-  // TODO: add MPI info (num nodes, etc.)
+#ifdef USE_MPI
+  Logger::trace("number of nodes in cluster", Format::int2string(MPI::COMM_WORLD.Get_size()));
+#endif
   Logger::previousIndentLevel();
 
   // parsing input file
@@ -345,13 +353,15 @@ void run(string filename, string path) throw(Exception)
   }
 
   // running simulation
-  simul.execute();
+  long nsims = simul.execute();
+  double nseconds = timer.stop();
 
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
-  Logger::trace("end time", Utils::timestamp());
-  Logger::trace("elapsed time", Timer::format(timer.read()));
+  Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
+  Logger::trace("total elapsed time", Timer::format(nseconds));
+  Logger::trace("simulations realized", Format::long2string(nsims));
   Logger::previousIndentLevel();
   Logger::addBlankLine();
 }
@@ -411,7 +421,7 @@ void usage()
   "    -v          be more verbose\n"
   "    --path=dir  directory where output files will be placed (required)\n"
   "    --nice=num  set nice priority to num (default 10)\n"
-  "    --hash=num  print '#' for each num simulations (default=0)\n"
+  "    --hash=num  print '.' for each num simulations (default=0)\n"
   "    --validate  perform input file validations and exit\n"
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"

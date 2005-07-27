@@ -42,6 +42,9 @@
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . execute() method returns number of realized simulations
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -154,7 +157,7 @@ class MonteCarlo
     void setFilePath(string path, bool force);
     void setHash(int num);
     void initialize(IData *) throw(Exception);
-    void execute() throw(Exception);
+    long execute() throw(Exception);
 
 };
 
