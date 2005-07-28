@@ -12,6 +12,8 @@ version 0.5 (??? 2005)
   * some classes has been refactorized
   * initiated mpi support
   * upgraded to new zlib version
+  * increased verbosity
+  * implemented signal handlers (exits gracefully when Ctrl^C is typed)
 
 version 0.4 (July 2005)
 --------------------------

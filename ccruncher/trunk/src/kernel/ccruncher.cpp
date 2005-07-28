@@ -50,6 +50,9 @@
 //   . don't apply nice if user don't put nice number
 //   . added trace info (simulations realized)
 //
+// 2005/07/28 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . defined signal handlers (to caught Ctrl-C, kill's, etc.)
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -61,6 +64,8 @@
 
 #include <cerrno>
 #include <iostream>
+#include <csignal>
+#include <csetjmp>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
@@ -83,6 +88,7 @@ void version();
 void copyright();
 void setnice(int) throw(Exception);
 void run(string, string) throw(Exception);
+void signalHandler(int signal);
 
 //---------------------------------------------------------------------------
 
@@ -93,6 +99,8 @@ bool bverbose = false;
 bool bforce = false;
 int inice = -999;
 int ihash = 0;
+jmp_buf checkpoint1;
+jmp_buf checkpoint2;
 
 //===========================================================================
 // main
@@ -236,6 +244,26 @@ int main(int argc, char *argv[])
 
   try
   {
+    // setting checkpoint recovery 1 (to exit gracefully with retcode=0)
+    if (setjmp(checkpoint1) != 0) {
+      return shutdown(0);
+    }
+    // setting checkpoint recovery 2 (to exit gracefully with retcode=1)
+    if (setjmp(checkpoint2) != 0) {
+      throw Exception("a external signal (Ctrl^C, kill, etc.) has been raised");
+    }
+
+    // setting signal handlers
+    if(signal(SIGINT, signalHandler) == SIG_ERR) {
+      throw Exception("error setting SIGINT signal handler");
+    }
+    if(signal(SIGTERM, signalHandler) == SIG_ERR) {
+      throw Exception("error setting SIGTERM signal handler");
+    }
+    if(signal(SIGABRT, signalHandler) == SIG_ERR) {
+      throw Exception("error setting SIGABRT signal handler");
+    }
+
     // setting nice value
     if (inice != -999) {
       setnice(inice);
@@ -446,4 +474,24 @@ void copyright()
   "     under the GNU General Public License, version 2. more info at\n"
   "               http://www.generacio.com/ccruncher\n"
   << endl;
+}
+
+//===========================================================================
+// this function is called when a signal (like Ctrl-C, kill, etc.) is raised
+//===========================================================================
+void signalHandler(int signal)
+{
+#ifdef USE_MPI
+  if (MPI::COMM_WORLD.Get_rank() == 0) {
+    // tutankamon rule 1: if master die, all slaves are killed
+    longjmp(checkpoint2, signal);
+  }
+  else {
+    // tutankamon rule 2: if a slave die, nothing happens
+    longjmp(checkpoint1, signal);
+  }
+#else
+  // if only one works and is killed an error is reported
+  longjmp(checkpoint2, signal);
+#endif
 }
