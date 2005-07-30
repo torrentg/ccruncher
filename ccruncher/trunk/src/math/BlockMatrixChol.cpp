@@ -252,7 +252,10 @@ void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Except
     // checking that Cij = Cji
     for(int j=0;j<M;j++)
     {
-      assert(fabs(C_[i][j]-C_[j][i]) < EPSILON);
+      if(fabs(C_[i][j]-C_[j][i]) > EPSILON)
+      {
+        throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
+      }
     }
   }
 

@@ -121,8 +121,8 @@ void ccruncher_test::SurvivalTest::test1()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], int(ceil(sf.inverse(0,i/10.0))));
-    ASSERT_EQUALS(0, int(ceil(sf.inverse(1, 0.0))));
+    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
   }
 }
 
@@ -229,8 +229,8 @@ void ccruncher_test::SurvivalTest::test5()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], int(ceil(sf.inverse(0,i/10.0))));
-    ASSERT_EQUALS(0, int(ceil(sf.inverse(1, 0.0))));
+    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
   }
 }
 

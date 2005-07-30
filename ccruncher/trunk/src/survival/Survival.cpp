@@ -34,14 +34,22 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . improved performance for inverse method
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
 #include <cassert>
 #include "survival/Survival.hpp"
+#include "utils/Arrays.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
+
+// --------------------------------------------------------------------------
+
+#define ISURVFNUMBINS 100
 
 //===========================================================================
 // private initializator
@@ -58,7 +66,8 @@ void ccruncher::Survival::init(Ratings *ratings_) throw(Exception)
     throw Exception("Survival::init(): invalid number of ratings");
   }
   else {
-    data = new vector<double>[nratings];
+    ddata = new vector<double>[nratings];
+    idata = Arrays<int>::allocMatrix(nratings, ISURVFNUMBINS+1, 0);
   }
 }
 
@@ -97,6 +106,7 @@ ccruncher::Survival::Survival(Ratings *ratings_, int numrows, int *imonths, doub
   // final tasks
   validate();
   fillHoles();
+  computeInvTable();
 }
 
 //===========================================================================
@@ -104,8 +114,11 @@ ccruncher::Survival::Survival(Ratings *ratings_, int numrows, int *imonths, doub
 //===========================================================================
 ccruncher::Survival::~Survival()
 {
-  if (data != NULL) {
-    delete [] data;
+  if (ddata != NULL) {
+    delete [] ddata;
+  }
+  if (idata != NULL) {
+    Arrays<int>::deallocMatrix(idata, nratings);
   }
 }
 
@@ -148,7 +161,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   }
 
   // checking that is not previously defined
-  if ((int) data[irating].size() >= t+1 && !isnan(data[irating][t]))
+  if ((int) ddata[irating].size() >= t+1 && !isnan(ddata[irating][t]))
   {
     string msg = "Survival::insertValue(): value[";
     msg += srating;
@@ -159,16 +172,16 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   }
 
   // allocating space in vector (if needed)
-  if ((int) data[irating].size() < t+1)
+  if ((int) ddata[irating].size() < t+1)
   {
-    for(int i=data[irating].size();i<t+1;i++)
+    for(int i=ddata[irating].size();i<t+1;i++)
     {
-      data[irating].push_back(NAN);
+      ddata[irating].push_back(NAN);
     }
   }
 
   // inserting value
-  data[irating][t] = value;
+  ddata[irating][t] = value;
 }
 
 //===========================================================================
@@ -213,6 +226,7 @@ void ccruncher::Survival::epend(ExpatUserData &eu, const char *name)
   if (isEqual(name,"survival")) {
     validate();
     fillHoles();
+    computeInvTable();
   }
   else if (isEqual(name,"svalue")) {
     // nothing to do
@@ -233,7 +247,7 @@ void ccruncher::Survival::validate() throw(Exception)
   // checking that all ratings (except default) have survival function defined
   for (int i=0;i<nratings-1;i++)
   {
-    if (data[i].size() <= 0) {
+    if (ddata[i].size() <= 0) {
       string msg = "Survival::validate(): rating ";
       msg += ratings->getName(i) + " haven't survival function defined";
       throw Exception(msg);
@@ -243,11 +257,11 @@ void ccruncher::Survival::validate() throw(Exception)
   // checking survival function value at t=0 is 1 if rating != default
   for (int i=0;i<nratings-1;i++)
   {
-    if (isnan(data[i][0]))
+    if (isnan(ddata[i][0]))
     {
-      data[i][0] = 1.0;
+      ddata[i][0] = 1.0;
     }
-    if (fabs(data[i][0]-1.0) > epsilon)
+    if (fabs(ddata[i][0]-1.0) > epsilon)
     {
       string msg = "Survival::validate(): rating ";
       msg += ratings->getName(i) + " have a value distinct that 1 at t=0";
@@ -256,12 +270,12 @@ void ccruncher::Survival::validate() throw(Exception)
   }
 
   // checking default rating survival function values (always 0)
-  for (unsigned int j=0;j<data[nratings-1].size();j++)
+  for (unsigned int j=0;j<ddata[nratings-1].size();j++)
   {
-    if (isnan(data[nratings-1][j])) {
-      data[nratings-1][0] = 0.0;
+    if (isnan(ddata[nratings-1][j])) {
+      ddata[nratings-1][0] = 0.0;
     }
-    if (fabs(data[nratings-1][j]) > epsilon)
+    if (fabs(ddata[nratings-1][j]) > epsilon)
     {
       throw Exception("Survival::validate(): default rating have a survival value distinct that 0");
     }
@@ -272,13 +286,13 @@ void ccruncher::Survival::validate() throw(Exception)
   {
     double pvalue = 2.0;
 
-    for (unsigned int j=0;j<data[i].size();j++)
+    for (unsigned int j=0;j<ddata[i].size();j++)
     {
-      if (!isnan(data[i][j]))
+      if (!isnan(ddata[i][j]))
       {
-        if (data[i][j] <= pvalue)
+        if (ddata[i][j] <= pvalue)
         {
-          pvalue = data[i][j];
+          pvalue = ddata[i][j];
         }
         else
         {
@@ -315,28 +329,48 @@ void ccruncher::Survival::fillHoles()
     x0 = 0.0;
     y0 = 1.0;
 
-    for(unsigned int j=1;j<data[i].size();j++)
+    for(unsigned int j=1;j<ddata[i].size();j++)
     {
-      if (!isnan(data[i][j]))
+      if (!isnan(ddata[i][j]))
       {
         x1 = double(j);
-        y1 = data[i][j];
+        y1 = ddata[i][j];
 
         for (unsigned int k=(unsigned int)(x0)+1;k<j;k++)
         {
-          data[i][k] = interpole(double(k), x0, y0, x1, y1);
+          ddata[i][k] = interpole(double(k), x0, y0, x1, y1);
         }
 
         x0 = double(j);
-        y0 = data[i][j];
+        y0 = ddata[i][j];
       }
     }
   }
 
   // default rating values (always 0)
-  for(unsigned int j=0;j<data[nratings-1].size();j++)
+  for(unsigned int j=0;j<ddata[nratings-1].size();j++)
   {
-    data[nratings-1][j] = 0.0;
+    ddata[nratings-1][j] = 0.0;
+  }
+}
+
+//===========================================================================
+// compute the inverse table
+// for each rating, find inverse values for 0.01, 0.02, ..., 0.99 and set
+// into idata. idata is used to speed up inverse() computations
+//===========================================================================
+void ccruncher::Survival::computeInvTable()
+{
+  for (int irating=0;irating<nratings-1;irating++)
+  {
+    for(int j=0;j<ISURVFNUMBINS+1;j++)
+    {
+      idata[irating][j] = inverse1(irating, double(j)/double(ISURVFNUMBINS));
+    }
+  }
+  for(int j=0;j<ISURVFNUMBINS+1;j++)
+  {
+    idata[nratings-1][j] = 0;
   }
 }
 
@@ -347,15 +381,16 @@ double ccruncher::Survival::evalue(const int irating, int t)
 {
   assert(irating < nratings);
   assert(irating >= 0);
+  assert(t >= 0);
 
   // if default rating
   if (irating == nratings-1) {
     return 0.0;
   }
 
-  if (t < (int) data[irating].size())
+  if (t < (int) ddata[irating].size())
   {
-    return data[irating][t];
+    return ddata[irating][t];
   }
   else if (t > maxmonths)
   {
@@ -363,9 +398,9 @@ double ccruncher::Survival::evalue(const int irating, int t)
   }
   else
   {
-    double y0 = data[irating].back();
+    double y0 = ddata[irating].back();
     double y1 = 0.0;
-    double x0 = double(data[irating].size())-1.0;
+    double x0 = double(ddata[irating].size())-1.0;
     double x1 = double(maxmonths);
 
     return interpole(double(t), x0, y0, x1, y1);
@@ -373,9 +408,10 @@ double ccruncher::Survival::evalue(const int irating, int t)
 }
 
 //===========================================================================
-// evalue inverse irating-survival function. returns the time in months
+// internal inverse function [see inverse() method]
+// non optimal method based on secuential scan
 //===========================================================================
-int ccruncher::Survival::inverse(const int irating, double val)
+int ccruncher::Survival::inverse1(const int irating, double val)
 {
   assert(irating < nratings);
   assert(irating >= 0);
@@ -393,21 +429,19 @@ int ccruncher::Survival::inverse(const int irating, double val)
     return 0;
   }
 
-  if (val > data[irating].back())
+  if (val > ddata[irating].back())
   {
-    // TODO: non-optimal method, use bisection or cuasi-Newton
-    // TODO: instead of secuential scan
-    int n = data[irating].size();
+    int n = ddata[irating].size();
     for (int j=1;j<n;j++)
     {
-      if (data[irating][j] < val)
+      if (ddata[irating][j] <= val)
       {
-        double x0 = data[irating][j-1];
-        double x1 = data[irating][j];
-        double y0 = double(j-1);
-        double y1 = double(j);
-
-        return int(ceil(interpole(val, x0, y0, x1, y1)));
+        //double x0 = ddata[irating][j-1];
+        //double x1 = ddata[irating][j];
+        //double y0 = double(j-1);
+        //double y1 = double(j);
+        //return int(ceil(interpole(val, x0, y0, x1, y1)));
+        return j;
       }
     }
 
@@ -417,13 +451,49 @@ int ccruncher::Survival::inverse(const int irating, double val)
   }
   else
   {
-    double x0 = data[irating].back();
+    double x0 = ddata[irating].back();
     double x1 = 0.0;
-    double y0 = double(data[irating].size())-1.0;
+    double y0 = double(ddata[irating].size())-1.0;
     double y1 = double(maxmonths);
 
     return int(ceil(interpole(val, x0, y0, x1, y1)));
   }
+}
+
+//===========================================================================
+// evalue inverse irating-survival function. returns the time in months
+// obs: val is a value in [0,1]
+//===========================================================================
+int ccruncher::Survival::inverse(const int irating, double val)
+{
+  assert(val >= 0.0 && val <= 1.0);
+
+  int n = ddata[irating].size();
+  int i1 = int(ceil(val*ISURVFNUMBINS));
+  //double xt1 = double(i1)/double(ISURVFNUMBINS);
+  int t1 = idata[irating][i1];
+
+  // defaults rating allways default at time 0
+  if (irating == nratings-1) {
+    return 0;
+  };
+
+  // if val=0 => maxmonths
+  if (val == 0.0) {
+    return maxmonths;
+  };
+
+  // iterating over T from t1
+  for (int j=t1;j<n;j++)
+  {
+    if (ddata[irating][j] <= val)
+    {
+      return j;
+    }
+  }
+
+  // is important the '+1'
+  return (t1+1>maxmonths?maxmonths:t1+1);
 }
 
 //===========================================================================
@@ -440,12 +510,12 @@ string ccruncher::Survival::getXML(int ilevel) throw(Exception)
 
   for(int i=0;i<nratings;i++)
   {
-    for(unsigned int j=0;j<data[i].size();j++)
+    for(unsigned int j=0;j<ddata[i].size();j++)
     {
       ret += spc2 + "<svalue ";
       ret += "rating='" + ratings->getName(i) + "' ";
       ret += "t='" + Format::int2string(j) + "' ";
-      ret += "value ='" + Format::double2string(data[i][j]) + "'";
+      ret += "value ='" + Format::double2string(ddata[i][j]) + "'";
       ret += "/>\n";
     }
   }

@@ -25,6 +25,9 @@
 // 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . improved performance for inverse method
+//
 //===========================================================================
 
 #ifndef _Survival_
@@ -52,17 +55,21 @@ class Survival : public ExpatHandlers
 
   private:
 
+    int maxmonths;
+    vector<double> *ddata;
+    int **idata;
+    int nratings;
+    Ratings *ratings;
+    double epsilon;
+
     void init(Ratings *) throw(Exception);
     void insertValue(const string &r1, int t, double val) throw(Exception);
     void validate() throw(Exception);
     void fillHoles();
+    void computeInvTable();
     double interpole(double x, double x0, double y0, double x1, double y1);
+    int inverse1(const int irating, double val);
 
-    int maxmonths;
-    vector<double> *data;
-    int nratings;
-    Ratings *ratings;
-    double epsilon;
 
   public:
 

@@ -6,10 +6,8 @@ CREDITCRUNCHER TODO
 Works in progress
 -------------------
   * improve given samples
-  * append output filenames at output
   * working in pdf documentation explaining methodology used in CreditCruncher
   * working in scripts that generates report using LaTeX and gnuplot
-  * increase performance of inverse survival function (bottleneck)
 
 
 Future works
