@@ -96,7 +96,7 @@
 //
 // observe that each row have repeated elements. The algoritm implemented
 // in this class store only M+1 elements per row (where M is the dimension of
-// matrix of submatrix, 2 inthe example).
+// matrix of submatrix, 2 in the example).
 //
 // With this algorithm a 50.000 x 50.000 block matrix matrix, with 10 sectors have:
 // memory size:
@@ -188,7 +188,9 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
 
       // release temporal memory
       Arrays<double>::deallocMatrix(nC, nm);
+      nC = NULL;
       Arrays<int>::deallocVector(nn);
+      nn = NULL;
     }
     catch(Exception &e)
     {
@@ -257,6 +259,7 @@ void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Except
     {
       if(fabs(C_[i][j]-C_[j][i]) > EPSILON)
       {
+        reset();
         throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
       }
     }
