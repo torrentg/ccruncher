@@ -58,15 +58,18 @@
 // 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cfloat>
-#include <cassert>
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
+#include <cassert>
 
 #ifdef USE_MPI
   #include <mpi.h>

@@ -46,16 +46,19 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
-#include <cassert>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "math/PowMatrix.hpp"
+#include <cassert>
 
 //===========================================================================
 // private initializator

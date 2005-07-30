@@ -33,7 +33,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <cassert>
 #include <vector>
 #include <string>
 #include "utils/Exception.hpp"

@@ -31,11 +31,14 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
-#include <cassert>
 #include "utils/Logger.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 // --------------------------------------------------------------------------
 

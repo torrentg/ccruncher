@@ -19,8 +19,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=makedist.sh
-numversion="0.4"
-svnversion="R207"
+numversion="0.5"
+svnversion="R222M"
 disttype="src"
 PACKAGE="ccruncher"
 pathexes=""

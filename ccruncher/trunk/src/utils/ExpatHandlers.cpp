@@ -28,14 +28,17 @@
 // 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method epstop(), stops current parsing
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cstdio>
-#include <cassert>
 #include <cstring>
 #include <expat.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Parser.hpp"
+#include <cassert>
 
 //===========================================================================
 // destructor

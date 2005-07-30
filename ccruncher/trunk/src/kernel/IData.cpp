@@ -44,9 +44,11 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added gziped input files suport
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
-#include <cassert>
 #include <fstream>
 #include <iostream>
 #include "kernel/IData.hpp"
@@ -54,6 +56,7 @@
 #include "utils/ExpatParser.hpp"
 #include "utils/Timer.hpp"
 #include <gzstream.h>
+#include <cassert>
 
 //===========================================================================
 // inicialitzador

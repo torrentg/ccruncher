@@ -31,12 +31,15 @@
 // 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . some modifications trying to achieve better performance
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
-#include <cassert>
 #include <algorithm>
 #include "portfolio/Portfolio.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor

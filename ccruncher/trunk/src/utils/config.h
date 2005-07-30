@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Jul 30 09:54:25 CEST 2005"
+#define BUILD_DATE "Sat Jul 30 11:04:38 CEST 2005"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -46,6 +46,9 @@
 
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
+
+/* Define to 1 if you have the <mpi.h> header file. */
+/* #undef HAVE_MPI_H */
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
@@ -113,13 +116,13 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 0.4"
+#define PACKAGE_STRING "ccruncher 0.5"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.4"
+#define PACKAGE_VERSION "0.5"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
@@ -131,7 +134,7 @@
 /* #undef USE_MPI */
 
 /* Version number of package */
-#define VERSION "0.4"
+#define VERSION "0.5"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -150,7 +153,7 @@
 /* #undef size_t */
 
 
-#define SVNVERSION "RXXX"
+#define SVNVERSION "R222M"
 #ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif

@@ -25,12 +25,15 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cctype>
-#include <cassert>
 #include <algorithm>
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // tokenize

@@ -37,13 +37,16 @@
 // 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added hash key (to accelerate comparations)
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
-#include <cassert>
 #include "portfolio/Client.hpp"
 #include "utils/Utils.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor
@@ -280,7 +283,7 @@ void ccruncher::Client::insertBelongsTo(int iconcept, int isegment) throw(Except
 
   if (getSegment(iconcept) > 0)
   {
-    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
+    throw Exception("Client::insertBelongsTo(): trying to reinsert a defined concept");
   }
 
   if (isegment > 0)

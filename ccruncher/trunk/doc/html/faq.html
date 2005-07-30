@@ -19,28 +19,22 @@
     </table>
 
     <p>
-      The main goal of CreditCruncher is compute the VAR for a large credit 
-      risk portfolio (about 50.000 clients grouped in some sectors) using 
-      MonteCarlo. At this moment (version 0.4 alpha), the main goal is not yet
-      achieved. The reasons are:
+      CreditCruncher-0.5 have the main framework builded and produce outputs.
+      It is to be about to run out last steps of alpha developement stage.
+      Current open works yet open are:
     </p>
     <ul class="none">
-      <li style="text-align:justify;">
-        The copula generator uses an algorithm based on a matrix NxN. A
-        matrix of 50.000x50.000 elements is not acceptable. Even so, 
-        works well for some hundreds of clients.
-      </li>
       <li style="text-align:justify;">
         Documentation is under construction (this works slow)
       </li>
       <li style="text-align:justify;">
-        The parallel procesing code is not yet implemented
+        The parallel procesing code being implemented
       </li>
     </ul>
     <p>
-      In short, CreditCruncher-0.4 have the main framework builded and
-      produce outputs, but can't be used in a real environement, yet. Is 
-      in alpha developement stage.
+      When these works will be closed we will start beta developement stage where
+      non-developers users will test ccruncher. If you desire to take part in this
+      fase, please send a mail to <a href="mailto:gerard@fobos.generacio.com">ccruncher team</a>
     </p>
 
     <table cellpadding="5" width="100%">
@@ -66,10 +60,8 @@
     <p>
       Yes, but the main stream is in unix environement. Project compile fine 
       using <a href="http://www.cygwin.com/">cygwin</a>. Also, the source 
-      distribution include the project files for MSVC7 compiler. MSVC6 is
-      not suported because embeded projects (MersenneTwister and TNT/Jama) 
-      have problems with this compiler due to the obsolete implementation of 
-      C++ standar made by Microsoft (variable scope is non ISO C++ standar).
+      distribution include the project files for MSVC7 compiler (MSVC6 is
+      not suported).
     </p>
 
     <table cellpadding="5" width="100%">
@@ -120,7 +112,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 11-Jul-2005 &nbsp;
+          Last modified: 30-Jul-2005 &nbsp;
         </td>
       </tr>
     </table>

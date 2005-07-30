@@ -25,12 +25,15 @@
 // 2005/07/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
-#include <cassert>
 #include "math/BlockMatrixChol.hpp"
 #include "utils/Arrays.hpp"
+#include <cassert>
 
 // --------------------------------------------------------------------------
 

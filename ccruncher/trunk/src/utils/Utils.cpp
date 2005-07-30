@@ -29,13 +29,16 @@
 //   . added hash() method
 //   . added timestamp() method
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
-#include <cassert>
 #include <iostream>
 #include <cstdio>
 #include <ctime>
 #include "utils/Utils.hpp"
+#include <cassert>
 
 #ifdef USE_MPI
   #include <mpi.h>

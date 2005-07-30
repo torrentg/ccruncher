@@ -29,8 +29,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=plotmtrans
-numversion="0.4"
-svnversion="R207"
+numversion="0.5"
+svnversion="R222M"
 tplot=survival
 numrows=50
 steplength=12

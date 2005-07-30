@@ -25,10 +25,13 @@
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
-#include <cassert>
 #include "utils/ExpatUserData.hpp"
+#include <cassert>
 
 //===========================================================================
 // void constructor (don't use)

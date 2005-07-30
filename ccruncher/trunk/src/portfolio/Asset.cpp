@@ -37,12 +37,15 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
-#include <cassert>
 #include <algorithm>
 #include "portfolio/Asset.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor (don't use it)

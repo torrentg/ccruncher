@@ -36,16 +36,17 @@
 //
 // 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . improved performance for inverse method
+//   . moved <cassert> include at last position
 //
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
-#include <cassert>
 #include "survival/Survival.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 // --------------------------------------------------------------------------
 

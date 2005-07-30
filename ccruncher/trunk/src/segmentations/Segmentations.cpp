@@ -34,13 +34,16 @@
 // 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added methods getNum*
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
 #include <cmath>
-#include <cassert>
 #include <algorithm>
 #include "segmentations/Segmentations.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor

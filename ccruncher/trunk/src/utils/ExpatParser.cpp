@@ -31,14 +31,17 @@
 // 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added stop parsing ability
 //
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . moved <cassert> include at last position
+//
 //===========================================================================
 
-#include <cassert>
 #include <cstring>
 #include <map>
 #include <cstdio>
 #include "utils/ExpatParser.hpp"
 #include "utils/ExpatUserData.hpp"
+#include <cassert>
 
 // --------------------------------------------------------------------------
 
