@@ -61,6 +61,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added new check check over survival defined user
+//
 //===========================================================================
 
 #include <cfloat>
@@ -413,6 +416,13 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
 
   if (idata->survival != NULL)
   {
+    // checking that survival function is defined for t <= STEPS*STEPLENGTH
+    if (idata->survival->getMinCommonTime() < STEPS*STEPLENGTH)
+    {
+      throw Exception("survival function not defined at t=" + Format::int2string(STEPS*STEPLENGTH));
+    }
+
+    // setting survival function
     survival = idata->survival;
     Logger::trace("survival function", string("user defined"));
   }

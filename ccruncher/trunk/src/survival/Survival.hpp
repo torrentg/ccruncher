@@ -28,6 +28,9 @@
 // 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . improved performance for inverse method
 //
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getMinCommonTime() method
+//
 //===========================================================================
 
 #ifndef _Survival_
@@ -81,6 +84,7 @@ class Survival : public ExpatHandlers
     double evalue(const int irating, int t);
     int inverse(const int irating, double val);
 
+    int getMinCommonTime();
     string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */

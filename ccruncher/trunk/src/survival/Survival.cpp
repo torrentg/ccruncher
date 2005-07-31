@@ -38,6 +38,9 @@
 //   . improved performance for inverse method
 //   . moved <cassert> include at last position
 //
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getMinCommonTime() method
+//
 //===========================================================================
 
 #include <cmath>
@@ -46,6 +49,7 @@
 #include "utils/Arrays.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
+#include <climits>
 #include <cassert>
 
 // --------------------------------------------------------------------------
@@ -538,4 +542,24 @@ void ccruncher::Survival::evalue(int steplength, int numrows, double **ret)
       ret[i][j] = evalue(i, steplength*j);
     }
   }
+}
+
+//===========================================================================
+// getMinCommonTime
+//===========================================================================
+int ccruncher::Survival::getMinCommonTime()
+{
+  int ret=INT_MAX;
+
+  // searching min time
+  for(int i=0;i<nratings;i++)
+  {
+    if (ddata[i].size() < ret)
+    {
+      ret = ddata[i].size();
+    }
+  }
+
+  // exit function
+  return ret;
 }
