@@ -358,3 +358,89 @@ donde $\Phi(x)$ es la funci\'on de distribuci\'on de la Normal est\'andar
 \Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}} dt
 \end{displaymath}
 
+%---------------------------------------------------------------------------
+
+\section{Descomposici\'on de Cholesky de una matriz en bloques}
+
+Dada una matriz cuadrada, sim\'etrica y definida positiva, $A$, el algoritmo
+de Cholesky\index{Algoritmo de Cholesky} realiza la siguiente descomposici\'on:
+\begin{displaymath}
+U^{\top} \cdot U = A
+\end{displaymath}
+donde $U$ es una matriz triangular superior (por tanto, $U^{\top}$ es una matriz
+triangular inferior). Una descripci\'on e implementaci\'on del algoritmo puede
+encontrarse en \emph{Numerical Recipes in C}\footnote{http://www.nr.com}.
+\newline
+\newline
+Si intentamos realizar la descomposici\'on de Cholesky de una matriz de correlaci\'on
+entre clientes de una cartera de $50.000$ clientes nos encontraremos con problemas
+de tama\~no (la matriz ocupar\'a 19 Gb. de memoria) y n\'umero de operaciones al
+multiplicar la matriz por un vector ($2.500.000.000$ multiplicaciones).
+\newline
+\newline
+Modificaremos el algoritmo de Cholesky para aprovechar el hecho que la matriz
+de correlaci\'on entre clientes es una matriz en bloques con unos en la diagonal.
+Veamos un ejemplo de una cartera de $7$ clientes con dos sectores:
+\begin{displaymath}
+A = \left(
+\begin{array}{cccc|ccc}
+1   & 0.5 & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 1   & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 0.5 & 1   & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 0.5 & 0.5 & 1   & 0.1 & 0.1 & 0.1 \cr
+\hline
+0.1 & 0.1 & 0.1 & 0.1 & 1   & 0.3 & 0.3 \cr
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 1   & 0.3 \cr
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 0.3 & 1
+\end{array}
+\right)
+\end{displaymath}
+Realizamos la descomposici\'on de Cholesky:
+\begin{displaymath}
+U = \left(
+\begin{array}{cccc|ccc}
+ 1.00000 & 0.50000 & 0.50000 & 0.50000 & 0.10000 & 0.10000 & 0.10000 \cr
+ 0       & 0.86603 & 0.28868 & 0.28868 & 0.05774 & 0.05774 & 0.05774 \cr
+ 0       & 0       & 0.81650 & 0.20412 & 0.04082 & 0.04082 & 0.04082 \cr
+ 0       & 0       & 0       & 0.79057 & 0.03162 & 0.03162 & 0.03162 \cr
+\hline
+ 0       & 0       & 0       & 0       & 0.99197 & 0.28630 & 0.28630 \cr
+ 0       & 0       & 0       & 0       & 0       & 0.94975 & 0.21272 \cr
+ 0       & 0       & 0       & 0       & 0       & 0       & 0.92563
+\end{array}
+\right)
+\end{displaymath}
+Observamos que $U$ contiene elementos repetidos. Guardaremos la matriz $U$
+en memoria de la forma siguiente:
+\begin{displaymath}
+U = \left|
+\begin{array}{c|cc}
+ 1.00000 & 0.50000 & 0.10000 \cr
+ 0.86603 & 0.28868 & 0.05774 \cr
+ 0.81650 & 0.20412 & 0.04082 \cr
+ 0.79057 & 0       & 0.03162 \cr
+ 0.99197 & 0       & 0.28630 \cr
+ 0.94975 & 0       & 0.21272 \cr
+ 0.92563 & 0       & 0
+\end{array}
+\right|
+\end{displaymath}
+o sea, para cada fila guardamos el valor de la diagonal y el valor de
+cada sector. El tama\~no en memoria ahora pasa a ser $N \times (M+1)$
+donde $N$ es el n\'umero de clientes y $M$ el n\'umero de sectores.
+\newline
+\newline
+Para reducir el n\'umero de operaciones realizadas al multiplicar la
+matriz por un vector aprovechamos que la matriz $U$ tiene elementos
+repetidos. Veamos un ejemplo:
+\begin{displaymath}
+\begin{array}{l}
+(U \cdot x)_2 =  0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 + \cr
+                 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7 \cr
+              = 0.86603 \cdot x_2 + 2\cdot 0.28868 \cdot (x_3 + x_4) + 3 \cdot 0.05774 \cdot (x_5 + x_6 + x_7)
+\end{array}
+\end{displaymath}
+
+Con estas dos consideraciones se obtiene una algoritmo de Cholesky para matrices
+en bloques con uso de memoria y n\'umero de operaciones (al multiplicar por un
+vector) del orden $N \times (M+1)$ en vez de orden $N^2$.
