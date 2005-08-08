@@ -153,7 +153,16 @@ dnl -------------------------------------------------------------
 dnl completing config.h.in
 dnl -------------------------------------------------------------
 AH_BOTTOM([
-#define SVNVERSION "R222M"
+/* SegmentAggregator buffer size */
+#define CCMAXBUFSIZE 500
+
+/* flush results time (to disk or to master) */
+#define CCEFLUSHSECS 30.0
+
+/* subversion identifier */
+#define SVNVERSION "R227M"
+
+/* required by Microsoft project */
 #ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif

@@ -29,6 +29,9 @@
 //   . added tolerance at format function. in debug mode can reach a
 //     negative number (very near to 0).
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . running_ variable changed from int to boolean
+//
 //===========================================================================
 
 #include "utils/Timer.hpp"
@@ -41,7 +44,7 @@
 //===========================================================================
 ccruncher::Timer::Timer()
 {
-  running_ = 0;
+  running_ = false;
   start_time_ = 0.0;
   total_ = 0.0;
   secs_per_tick = 1.0 / CLOCKS_PER_SEC;
@@ -60,7 +63,7 @@ double ccruncher::Timer::seconds()
 //===========================================================================
 void ccruncher::Timer::start()
 {
-  running_ = 1;
+  running_ = true;
   total_ = 0.0;
   start_time_ = seconds();
 }
@@ -70,7 +73,7 @@ void ccruncher::Timer::start()
 //===========================================================================
 void ccruncher::Timer::reset()
 {
-  running_ = 0;
+  running_ = false;
   start_time_ = 0.0;
   total_ = 0.0;
 }
@@ -83,7 +86,7 @@ double ccruncher::Timer::stop()
   if (running_)
   {
     total_ += (seconds() - start_time_);
-    running_ = 0;
+    running_ = false;
   }
   return total_;
 }
@@ -97,7 +100,7 @@ void ccruncher::Timer::resume()
   if (!running_)
   {
     start_time_ = seconds();
-    running_ = 1;
+    running_ = true;
   }
 }
 

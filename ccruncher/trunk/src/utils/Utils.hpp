@@ -34,6 +34,7 @@
 //
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
+//   . added rankid static variable (to avoid rank reorder when exits a proces)
 //
 //===========================================================================
 
@@ -63,6 +64,8 @@ class Utils
 
     // pointer to /dev/null
     static ofstream *nullstream;
+    // mpi rank id
+    static int rankid;
 
 
   public:

@@ -62,7 +62,10 @@
 //   . moved <cassert> include at last position
 //
 // 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . added new check check over survival defined user
+//   . added new check over survival defined user
+//
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented MPI support
 //
 //===========================================================================
 
@@ -78,6 +81,12 @@
 
 #ifdef USE_MPI
   #include <mpi.h>
+  #define MPI_VAL_WORK 1025   // work tag (see task variable)
+  #define MPI_VAL_STOP 1026   // stop tag (see task variable)
+  #define MPI_TAG_DATA 1027   // data tag (used to send results)
+  #define MPI_TAG_INFO 1028   // info tag (used to send results)
+  #define MPI_TAG_TASK 1029   // task tag (used to send results)
+  #define MPI_TAG_EXIT 1030   // task tag (used to send results)
 #endif
 
 //===========================================================================
@@ -615,7 +624,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
       string filename = segmentations->getSegmentationName(i) + "-" + segmentations->getSegmentName(i, j) + ".out";
 
       // initializing SegmentAggregator
-      tmp->define(i, j, segmentations->getComponents(i));
+      tmp->define(aggregators.size(), i, j, segmentations->getComponents(i));
       tmp->setOutputProperties(fpath, filename, bforce, 0);
       tmp->initialize(dates, STEPS+1, clients, N, interests);
 
@@ -645,27 +654,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 //===========================================================================
 long ccruncher::MonteCarlo::execute() throw(Exception)
 {
-#ifdef USE_MPI
-  if (Utils::isMaster())
-  {
-    return executeCollector();
-  }
-  else
-  {
-    return executeWorker();
-  }
-#else
-  return executeWorker();
-#endif
-}
-
-//===========================================================================
-// execute
-//===========================================================================
-long ccruncher::MonteCarlo::executeWorker() throw(Exception)
-{
-  bool aux=false, moreiterations=true;
-  Timer sw1, sw2;
+  long ret;
 
   // assertions
   assert(fpath != "");
@@ -675,19 +664,55 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
   Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::int2string(hash) + " simulations per hash]"), '*');
   Logger::newIndentLevel();
 
+#ifdef USE_MPI
+  if (Utils::isMaster())
+  {
+    ret =executeCollector();
+  }
+  else
+  {
+    ret = executeWorker();
+  }
+#else
+  ret = executeWorker();
+#endif
+
+  // exit function
+  Logger::addBlankLine();
+  Logger::previousIndentLevel();
+  return ret;
+}
+
+//===========================================================================
+// executeWorker
+//===========================================================================
+long ccruncher::MonteCarlo::executeWorker() throw(Exception)
+{
+  bool aux=false, moreiterations=true;
+  Timer timer1, timer2;
+
+#ifdef USE_MPI
+  if (!Utils::isMaster()) {
+    // disabling max time criteria for slaves
+    MAXSECONDS = 0L;
+    // disabling max itaration criteria for slaves
+    MAXITERATIONS = 0L;
+  }
+#endif
+
   try
   {
     while(moreiterations)
     {
       // generating random numbers + simulating time-to-default for each client
-      sw1.resume();
+      timer1.resume();
       simulate();
-      sw1.stop();
+      timer1.stop();
 
       // portfolio evaluation
-      sw2.resume();
+      timer2.resume();
       aux = evalueAggregators();
-      sw2.stop();
+      timer2.stop();
 
       // counter increment
       CONT++;
@@ -705,13 +730,13 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       }
 
       // checking stop criteria
-      if (CONT >= MAXITERATIONS)
+      if (MAXITERATIONS > 0L && CONT >= MAXITERATIONS)
       {
         moreiterations = false;
       }
 
       // checking stop criteria
-      if (MAXSECONDS > 0L && (sw1.read()+sw2.read())> MAXSECONDS)
+      if (MAXSECONDS > 0L && (timer1.read()+timer2.read())> MAXSECONDS)
       {
         moreiterations = false;
       }
@@ -723,36 +748,135 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     }
 
     // printing traces
-    Logger::trace("elapsed time simulating clients", Timer::format(sw1.read()));
-    Logger::trace("elapsed time aggregating data", Timer::format(sw2.read()));
-    Logger::trace("total simulation time", Timer::format(sw1.read()+sw2.read()));
-    Logger::addBlankLine();
+    Logger::trace("elapsed time simulating clients", Timer::format(timer1.read()));
+    Logger::trace("elapsed time aggregating data", Timer::format(timer2.read()));
+    Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()));
   }
   catch(Exception &e)
   {
     throw Exception(e, "MonteCarlo::execute()");
   }
 
+#ifdef USE_MPI
+  // notify exit to master
+  MPI::COMM_WORLD.Send(NULL, 0, MPI::INT, 0, MPI_TAG_EXIT);
+#endif
+
   // exit function
-  Logger::previousIndentLevel();
   return(CONT);
 }
 
 //===========================================================================
-// execute
+// executeCollector
+// mpi message flow (data transfer):
+//   worker send MPI_TAG_INFO msg
+//   worker send MPI_TAG_DATA msg
+//   master send MPI_TAG_TASK msg
+// mpi message flow (exit notification):
+//   worker send MPI_TAG_EXIT
 //===========================================================================
 long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 {
 #ifdef USE_MPI
-  //TODO: pendent implementar
-  // espera cualsevol peticio conexio
-  // recull 3 enters (segmentation,segment,numelems) + rank
-  // recull numelems de rank
-  // indica a rank si continua o no
-  // els inserta en segmentation,segment
-  // comprova criteris aturada
-  // enviem DIE_TAG a tothom que ens escolti
-  return 0L;
+  bool more=true, moreiterations=true;
+  double data[CCMAXBUFSIZE];
+  int nranks=MPI::COMM_WORLD.Get_size();
+  int aggregatorid=0, rankid=0, tagid=0, datalength=0, task=0, nexits=0;
+  MPI::Status status;
+  Timer timer;
+
+  // initializing values
+  timer.start();
+
+  // main master loop
+  while(more)
+  {
+    // awaiting for a slave request
+    MPI::COMM_WORLD.Probe(MPI::ANY_SOURCE, MPI::ANY_TAG, status);
+    // retrieving rank
+    rankid = status.Get_source();
+    // retrieving tag
+    tagid = status.Get_tag();
+
+    switch(tagid)
+    {
+      // message EXIT sequence
+      case MPI_TAG_EXIT:
+        {
+          // receiving exit tag
+          MPI::COMM_WORLD.Recv(NULL, 0, MPI::INT, rankid, MPI_TAG_EXIT);
+
+          // updating counter
+          nexits++;
+
+          // cheking that all ranks have finished
+          if (nexits == nranks-1) {
+            more = false;
+          }
+
+          // finish sequence EXIT
+          break;
+        }
+
+      // message DATA sequence
+      case MPI_TAG_INFO:
+        {
+          // receiving data
+          MPI::COMM_WORLD.Recv(&aggregatorid, 1, MPI::INT, rankid, MPI_TAG_INFO);
+          // awaiting for data
+          MPI::COMM_WORLD.Probe(rankid, MPI_TAG_DATA, status);
+          // retrieving data size
+          datalength = status.Get_count(MPI::DOUBLE);
+          // receiving data
+          MPI::COMM_WORLD.Recv(&data, CCMAXBUFSIZE, MPI::DOUBLE, rankid, MPI_TAG_DATA);
+
+          // updating simulations counter
+          if (aggregatorid == 0)
+          {
+            for(int i=0;i<datalength;i++)
+            {
+              // counter increment
+              CONT++;
+              // printing hashes
+              if (hash > 0 && CONT%hash == 0)
+              {
+                Logger::append(".");
+              }
+            }
+          }
+
+          // aggregating data
+          aggregators[aggregatorid]->appendRawData(data, datalength);
+
+          // checking stop criteria
+          if (MAXITERATIONS > 0L && CONT >= MAXITERATIONS) {
+            moreiterations = false;
+          }
+
+          // checking stop criteria
+          if (MAXSECONDS > 0L && timer.read() >  MAXSECONDS) {
+            moreiterations = false;
+          }
+
+          // sending new task to slave
+          task = (moreiterations?MPI_VAL_WORK:MPI_VAL_STOP);
+          MPI::COMM_WORLD.Send(&task, 1, MPI::INT, rankid, MPI_TAG_TASK);
+
+          // finish sequence DATA
+          break;
+       }
+
+      // other messages cause errors
+      default:
+        throw Exception("executeCollector: unexpected MPI tag");
+    }
+  }
+
+  // printing traces
+  Logger::trace("elapsed time", Timer::format(timer.read()));
+
+  // return the number of simulations
+  return CONT;
 #else
   return 0L;
 #endif

@@ -28,6 +28,10 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added timer to control last flush time
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added segmentaggregator identifier support
+//   . added appendRawData() method (used in MPI mode)
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -61,6 +65,8 @@ class SegmentAggregator
 
   private:
 
+    // segmentaggregator identifier
+    int iaggregator;
     // segmentation index
     int isegmentation;
     // segment name
@@ -123,17 +129,19 @@ class SegmentAggregator
 
   public:
 
+    // constructors & destructors
     SegmentAggregator();
     ~SegmentAggregator();
 
     // initialization methods
-    void define(int, int, components_t);
+    void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
     void initialize(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
 
     // other methods
     long getNumElements();
     bool append(int *defaulttimes) throw(Exception);
+    bool appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);
     void touch() throw(Exception);
 

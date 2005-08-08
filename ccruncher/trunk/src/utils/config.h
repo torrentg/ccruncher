@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Aug  6 07:37:30 CEST 2005"
+#define BUILD_DATE "Mon Aug  8 20:26:38 CEST 2005"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -156,7 +156,16 @@
 /* #undef size_t */
 
 
-#define SVNVERSION "R222M"
+/* SegmentAggregator buffer size */
+#define CCMAXBUFSIZE 500
+
+/* flush results time (to disk or to master) */
+#define CCEFLUSHSECS 30.0
+
+/* subversion identifier */
+#define SVNVERSION "R227M"
+
+/* required by Microsoft project */
 #ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif

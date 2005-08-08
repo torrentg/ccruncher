@@ -76,6 +76,9 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
+    <segmentation name="sector" components="client">
+      <segment name="S1"/>
+    </segmentation>
   </segmentations>
 
   <!-- ============================================================== -->

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . running_ variable changed from int to boolean
+//
 //===========================================================================
 
 #ifndef _Timer_
@@ -47,7 +50,7 @@ class Timer
 {
   private:
 
-     int running_;
+     bool running_;
      double start_time_;
      double total_;
      double seconds();

@@ -37,17 +37,26 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented MPI support
+//
 //===========================================================================
 
 #include <cmath>
 #include "utils/Arrays.hpp"
+#include "utils/Utils.hpp"
 #include "kernel/SegmentAggregator.hpp"
 #include <cassert>
 
-//---------------------------------------------------------------------------
-
-#define MAXBUFSIZE 500
-#define MAXSECONDS 30.0
+#ifdef USE_MPI
+  #include <mpi.h>
+  #define MPI_VAL_WORK 1025   // work tag (see task variable)
+  #define MPI_VAL_STOP 1026   // stop tag (see task variable)
+  #define MPI_TAG_DATA 1027   // data tag (used to send results)
+  #define MPI_TAG_INFO 1028   // info tag (used to send results)
+  #define MPI_TAG_TASK 1029   // task tag (used to send results)
+  #define MPI_TAG_EXIT 1030   // task tag (used to send results)
+#endif
 
 //===========================================================================
 // void constructor
@@ -60,11 +69,13 @@ ccruncher::SegmentAggregator::SegmentAggregator()
 //===========================================================================
 // define
 //===========================================================================
-void ccruncher::SegmentAggregator::define(int isegs, int iseg, components_t comps)
+void ccruncher::SegmentAggregator::define(int iaggre, int isegs, int iseg, components_t comps)
 {
+  assert(iaggre >= 0);
   assert(isegs >= 0);
   assert(iseg >= 0);
 
+  iaggregator = iaggre;
   isegmentation = isegs;
   isegment = iseg;
   components = comps;
@@ -79,6 +90,7 @@ void ccruncher::SegmentAggregator::init()
   cvalues = NULL;
   vertexes = NULL;
 
+  iaggregator = -1;
   isegmentation = -1;
   isegment = -1;
   components = asset;
@@ -86,7 +98,7 @@ void ccruncher::SegmentAggregator::init()
   filename = "";
   path = "UNASSIGNED";
   bforce = false;
-  buffersize = MAXBUFSIZE;
+  buffersize = CCMAXBUFSIZE;
 
   N = 0L;
   M = 0;
@@ -373,7 +385,6 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   assert(defaulttimes != NULL);
   int cpos;
   int itime;
-  bool ret=true;
 
   // initializing segment value
   cvalues[icont] = 0.0;
@@ -403,14 +414,41 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   cont++;
 
   // flushing if buffer is full
-  if (icont >= buffersize-1 || timer.read() > MAXSECONDS)
+  if (icont >= buffersize-1 || timer.read() > CCEFLUSHSECS)
   {
-    ret = flush();
-    icont = 0;
+    return flush();
+  }
+  else
+  {
+    // exit function
+    return true;
+  }
+}
+
+//===========================================================================
+// appendRawData
+//===========================================================================
+bool ccruncher::SegmentAggregator::appendRawData(double *data, int datasize) throw(Exception)
+{
+  assert(data != NULL);
+  assert(datasize >= 0);
+
+  // appending data
+  for(int i=0;i<datasize;i++)
+  {
+    cvalues[icont] = data[i];
+    icont++;
+    cont++;
+
+    // flushing if buffer is full
+    if (icont >= buffersize-1 || timer.read() > CCEFLUSHSECS)
+    {
+      flush();
+    }
   }
 
   // exit function
-  return ret;
+  return true;
 }
 
 //===========================================================================
@@ -418,13 +456,44 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
 //===========================================================================
 bool ccruncher::SegmentAggregator::flush() throw(Exception)
 {
-  // opening output stream
-  ofsopen();
-
-  // printing buffer content (cvalues)
-  try
+  // if haven't elements to aggregate, exits
+  if (nclients == 0 && nassets == 0)
   {
-    if (nclients != 0 || nassets != 0)
+    return true;
+  }
+
+  // if haven't values, exits
+  if (icont <= 0)
+  {
+    return true;
+  }
+
+#ifdef USE_MPI
+  if (!Utils::isMaster())
+  {
+    int task=0;
+
+    // sending info
+    MPI::COMM_WORLD.Send(&iaggregator, 1, MPI::INT, 0, MPI_TAG_INFO);
+    // sending data
+    MPI::COMM_WORLD.Send(cvalues, icont, MPI::DOUBLE, 0, MPI_TAG_DATA);
+    // receiving task
+    MPI::COMM_WORLD.Recv(&task, 1, MPI::INT, 0, MPI_TAG_TASK);
+    // reseting timer
+    timer.start();
+    // reseting buffer counter
+    icont = 0;
+    // return function
+    return (task==MPI_VAL_WORK?true:false);
+  }
+  else
+#endif
+  {
+    // opening output stream
+    ofsopen();
+
+    // printing buffer content (cvalues)
+    try
     {
       for(long i=0;i<icont;i++)
       {
@@ -437,21 +506,21 @@ bool ccruncher::SegmentAggregator::flush() throw(Exception)
       // reseting buffer counter
       icont = 0;
     }
-  }
-  catch(Exception e)
-  {
+    catch(Exception e)
+    {
+      ofsclose();
+      throw Exception(e, "SegmentAggregator::flush()");
+    }
+
+    // closing output stream
     ofsclose();
-    throw Exception(e, "SegmentAggregator::flush()");
+
+    // reseting timer
+    timer.start();
+
+    // exit function
+    return true;
   }
-
-  // closing output stream
-  ofsclose();
-
-  // reseting timer
-  timer.start();
-
-  // exit function
-  return true;
 }
 
 //===========================================================================
@@ -468,7 +537,7 @@ void ccruncher::SegmentAggregator::setOutputProperties(const string &spath, cons
     buffersize = ibs;
   }
   else if (ibs == 0) {
-    buffersize = MAXBUFSIZE;
+    buffersize = CCMAXBUFSIZE;
   }
   else {
     throw Exception("SegmentAggregator::setOutputProperties(): invalid buffer size");

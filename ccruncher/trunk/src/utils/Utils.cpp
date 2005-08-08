@@ -50,6 +50,7 @@
 // --------------------------------------------------------------------------
 
 ofstream *ccruncher::Utils::nullstream = NULL;
+int ccruncher::Utils::rankid = -1;
 
 //===========================================================================
 // isMaster
@@ -57,13 +58,19 @@ ofstream *ccruncher::Utils::nullstream = NULL;
 bool ccruncher::Utils::isMaster()
 {
 #ifdef USE_MPI
-  if (MPI::COMM_WORLD.Get_rank() == 0)
+  // if rankid uninitialized
+  if (rankid < 0)
   {
-    return true;
+    rankid = MPI::COMM_WORLD.Get_rank();
+  }
+
+  if (rankid > 0)
+  {
+    return false;
   }
   else
   {
-    return false;
+    return true;
   }
 #else
   return true;

@@ -42,6 +42,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . allowed maxseconds=0 or maxiterations=0 (0 remove stop criteria)
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -255,12 +258,12 @@ void ccruncher::Params::validate(void) throw(Exception)
     throw Exception("Params::validate(): property time.steplength not defined");
   }
 
-  if (maxiterations <= 0L)
+  if (maxiterations < 0L)
   {
     throw Exception("Params::validate(): property stopcriteria.maxiterations not defined");
   }
 
-  if (maxseconds <= 0L)
+  if (maxseconds < 0L)
   {
     throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
   }
@@ -273,6 +276,11 @@ void ccruncher::Params::validate(void) throw(Exception)
   if (copula_type == "")
   {
     throw Exception("Params::validate(): property copula.type not defined");
+  }
+
+  if (maxiterations == 0 && maxseconds == 0)
+  {
+    throw Exception("Params::validate(): non finite stop criteria");
   }
 }
 
