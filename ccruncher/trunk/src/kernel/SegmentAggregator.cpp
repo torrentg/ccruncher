@@ -368,11 +368,12 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
 // append
 // input vector has length N with the index time (in months) where client defaults
 //===========================================================================
-void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
+bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
 {
   assert(defaulttimes != NULL);
   int cpos;
   int itime;
+  bool ret=true;
 
   // initializing segment value
   cvalues[icont] = 0.0;
@@ -404,15 +405,18 @@ void ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   // flushing if buffer is full
   if (icont >= buffersize-1 || timer.read() > MAXSECONDS)
   {
-    flush();
+    ret = flush();
     icont = 0;
   }
+
+  // exit function
+  return ret;
 }
 
 //===========================================================================
 // print
 //===========================================================================
-void ccruncher::SegmentAggregator::flush() throw(Exception)
+bool ccruncher::SegmentAggregator::flush() throw(Exception)
 {
   // opening output stream
   ofsopen();
@@ -445,6 +449,9 @@ void ccruncher::SegmentAggregator::flush() throw(Exception)
 
   // reseting timer
   timer.start();
+
+  // exit function
+  return true;
 }
 
 //===========================================================================

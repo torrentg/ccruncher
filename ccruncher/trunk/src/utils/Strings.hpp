@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Strings_
@@ -33,9 +36,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "utils/Exception.hpp"
 #include <vector>
 #include <string>
-#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -47,6 +50,12 @@ namespace ccruncher {
 
 class Strings
 {
+
+  private:
+
+    // non-instantiable class
+    Strings() {};
+
 
   public:
 

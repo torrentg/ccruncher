@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see 'Numerical Recipes in C')
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _CholeskyDecomposition_
@@ -43,10 +46,16 @@ namespace ccruncher {
 class CholeskyDecomposition
 {
 
+  private:
+
+    // non-instantiable class
+    CholeskyDecomposition() {};
+
+
   public:
 
     static bool choldc(double **a, double *p, int n);
-    
+
 };
 
 //---------------------------------------------------------------------------

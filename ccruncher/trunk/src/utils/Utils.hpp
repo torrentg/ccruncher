@@ -29,6 +29,12 @@
 //   . added hash() method
 //   . added timestamp() method
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method getCompilationOptions()
+//
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Utils_
@@ -37,8 +43,8 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <fstream>
 #include "utils/Exception.hpp"
+#include <fstream>
 
 //---------------------------------------------------------------------------
 
@@ -52,6 +58,9 @@ class Utils
 {
   private:
 
+    // non-instantiable class
+    Utils() {};
+
     // pointer to /dev/null
     static ofstream *nullstream;
 
@@ -62,6 +71,7 @@ class Utils
     static void setSilentMode() throw(Exception);
     static unsigned long hash(const string &str);
     static string timestamp();
+    static string getCompilationOptions();
 
 };
 

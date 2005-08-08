@@ -31,6 +31,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . format methods segregated to Format class
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Parser_
@@ -53,6 +56,12 @@ namespace ccruncher {
 
 class Parser
 {
+
+  private:
+
+    // non-instantiable class
+    Parser() {};
+
 
   public:
 

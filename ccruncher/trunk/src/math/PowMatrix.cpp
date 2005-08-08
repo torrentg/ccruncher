@@ -28,6 +28,9 @@
 // 2005/06/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . minor changes
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
+//
 //===========================================================================
 
 #include <cmath>
@@ -50,7 +53,7 @@ using namespace JAMA;
 // the difference with std::pow is that allow negatives x
 // example: std::pow(-8.0, 1/3)=nan, PowMatrixx::pow(-8.0, 1/3)=-2
 //===========================================================================
-double ccruncher::PowMatrix::pow(double x, double y) throw(Exception)
+double ccruncher::pow(double x, double y) throw(Exception)
 {
   if (x >= 0.0)
   {
@@ -158,7 +161,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
     // raising diagonal to the power of x
     for(int i=0;i<n;i++)
     {
-       VAPS[i][i] = ccruncher::PowMatrix::pow(VAPS[i][i], x);
+       VAPS[i][i] = ccruncher::pow(VAPS[i][i], x);
     }
 
     // finding eigenvectors inverse

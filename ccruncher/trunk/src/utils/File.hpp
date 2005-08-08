@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _File_
@@ -48,6 +51,9 @@ class File
 {
 
   private:
+
+    // non-instantiable class
+    File() {};
 
 
   public:

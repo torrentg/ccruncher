@@ -25,6 +25,9 @@
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Arrays_
@@ -33,8 +36,8 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <cassert>
 #include "utils/Exception.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -48,19 +51,28 @@ template <class T>
 class Arrays
 {
 
+  private:
+
+    // non-instantiable class
+    Arrays() {};
+
+
   public:
 
+    // alloc/dealloc array methods
     static T * allocVector(int n) throw(Exception);
     static T * allocVector(int n, T x) throw(Exception);
     static T * allocVector(int n, T *x) throw(Exception);
     static void deallocVector(T *x);
 
+    // alloc/dealloc matrix methods
     static T ** allocMatrix(int n, int m) throw(Exception);
     static T ** allocMatrix(int n, int m, T x) throw(Exception);
     static T ** allocMatrix(int n, int m, T *x) throw(Exception);
     static T ** allocMatrix(int n, int m, T **x) throw(Exception);
     static void deallocMatrix(T **x, int n);
 
+    // related methods
     static void prodMatrixVector(T **A, T *x, int n1, int n2, T *ret);
     static void prodMatrixMatrix(T **A, T **B, int n1, int n2, int n3, T **ret);
     static void copyVector(T *x, int n, T *ret);

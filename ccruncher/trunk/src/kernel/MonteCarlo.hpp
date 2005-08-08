@@ -142,11 +142,13 @@ class MonteCarlo
     BlockGaussianCopula** initCopulas(const IData *idata, long, int, long) throw(Exception);
     int* initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData *) throw(Exception);
-    void evalueAggregators() throw(Exception);
+    bool evalueAggregators() throw(Exception);
     void simulate();
     int simRatingPath(int iclient);
     int simTimeToDefault(int iclient);
     double getRandom(int icopula, int iclient);
+    long executeWorker() throw(Exception);
+    long executeCollector() throw(Exception);
 
 
   public:

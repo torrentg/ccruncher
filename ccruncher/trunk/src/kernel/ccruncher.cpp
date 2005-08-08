@@ -53,6 +53,9 @@
 // 2005/07/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . defined signal handlers (to caught Ctrl-C, kill's, etc.)
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getCompilationOptions() to version output
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -254,17 +257,17 @@ int main(int argc, char *argv[])
     }
 
     // setting signal handlers
-    if(signal(SIGINT, signalHandler) == SIG_ERR) {
+    if (signal(SIGINT, signalHandler) == SIG_ERR) {
       throw Exception("error setting SIGINT signal handler");
     }
-    if(signal(SIGTERM, signalHandler) == SIG_ERR) {
+    if (signal(SIGTERM, signalHandler) == SIG_ERR) {
       throw Exception("error setting SIGTERM signal handler");
     }
-    if(signal(SIGABRT, signalHandler) == SIG_ERR) {
+    if (signal(SIGABRT, signalHandler) == SIG_ERR) {
       throw Exception("error setting SIGABRT signal handler");
     }
 
-    // setting nice value
+    // setting new nice value (modify scheduling priority)
     if (inice != -999) {
       setnice(inice);
     }
@@ -427,6 +430,7 @@ void version()
 {
   cout << "ccruncher-" << VERSION << " (" << SVNVERSION << ")" << endl;
   cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
+  cout << "build options: " << Utils::getCompilationOptions() << endl;
 }
 
 //===========================================================================
@@ -448,7 +452,7 @@ void usage()
   "    -f          force output files overwriting\n"
   "    -v          be more verbose\n"
   "    --path=dir  directory where output files will be placed (required)\n"
-  "    --nice=num  set nice priority to num (default 10)\n"
+  "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
   "    --validate  perform input file validations and exit\n"
   "    --help -h   show this message and exit\n"

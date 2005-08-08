@@ -67,7 +67,9 @@
 //===========================================================================
 
 #include <cfloat>
+#include <MersenneTwister.h>
 #include "kernel/MonteCarlo.hpp"
+#include "utils/Utils.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
@@ -521,14 +523,30 @@ BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, lon
     throw Exception(e, "MonteCarlo::initCopulas()");
   }
 
-  // seeding random number generators
   // if no seed is given /dev/urandom or time() will be used
-  if (seed != 0L)
+  if (seed == 0L)
   {
-    for(int i=0;i<k;i++)
+    if (Utils::isMaster())
     {
-      ret[i]->setSeed(seed+(long)i);
+      // use a seed based on clock
+      MTRand mtrand;
+      seed = mtrand.randInt();
     }
+#ifdef USE_MPI
+    // all nodes knows the same seed
+    MPI::COMM_WORLD.Bcast(&seed, 1, MPI::LONG, 0);
+#endif
+  }
+
+  // seeding random number generators
+  for(int i=0;i<k;i++)
+  {
+#ifdef USE_MPI
+    // caution: cluster limited to 30000 nodes ;)
+    ret[i]->setSeed(seed+30001L*MPI::COMM_WORLD.Get_rank()+(long)i);
+#else
+    ret[i]->setSeed(seed+(long)i);
+#endif
   }
 
   // exit function
@@ -627,7 +645,26 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 //===========================================================================
 long ccruncher::MonteCarlo::execute() throw(Exception)
 {
-  bool moreiterations = true;
+#ifdef USE_MPI
+  if (Utils::isMaster())
+  {
+    return executeCollector();
+  }
+  else
+  {
+    return executeWorker();
+  }
+#else
+  return executeWorker();
+#endif
+}
+
+//===========================================================================
+// execute
+//===========================================================================
+long ccruncher::MonteCarlo::executeWorker() throw(Exception)
+{
+  bool aux=false, moreiterations=true;
   Timer sw1, sw2;
 
   // assertions
@@ -649,7 +686,7 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
 
       // portfolio evaluation
       sw2.resume();
-      evalueAggregators();
+      aux = evalueAggregators();
       sw2.stop();
 
       // counter increment
@@ -659,6 +696,12 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
       if (hash > 0 && CONT%hash == 0)
       {
         Logger::append(".");
+      }
+
+      // checking stop criteria
+      if (aux == false)
+      {
+        moreiterations = false;
       }
 
       // checking stop criteria
@@ -693,6 +736,26 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
   // exit function
   Logger::previousIndentLevel();
   return(CONT);
+}
+
+//===========================================================================
+// execute
+//===========================================================================
+long ccruncher::MonteCarlo::executeCollector() throw(Exception)
+{
+#ifdef USE_MPI
+  //TODO: pendent implementar
+  // espera cualsevol peticio conexio
+  // recull 3 enters (segmentation,segment,numelems) + rank
+  // recull numelems de rank
+  // indica a rank si continua o no
+  // els inserta en segmentation,segment
+  // comprova criteris aturada
+  // enviem DIE_TAG a tothom que ens escolti
+  return 0L;
+#else
+  return 0L;
+#endif
 }
 
 //===========================================================================
@@ -821,14 +884,24 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
 //===========================================================================
 // portfolio evaluation using current copula
 // @exception if error
+// return true=all ok, continue
+// return false=stop montecarlo, someone order you (the master)
 //===========================================================================
-void ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
+bool ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
 {
-  // adding one simulation
+  bool ret=true;
+
+  // adding current simulation to each aggregator
   for(unsigned int i=0;i<aggregators.size();i++)
   {
-    aggregators[i]->append(ittd);
+    if (aggregators[i]->append(ittd) == false)
+    {
+      ret = false;
+    }
   }
+
+  // exit function
+  return ret;
 }
 
 //===========================================================================

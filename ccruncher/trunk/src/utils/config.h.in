@@ -123,6 +123,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Profiler instructions are added when this is defined. */
+#undef PROFILER
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

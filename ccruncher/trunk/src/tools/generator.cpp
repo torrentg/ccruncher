@@ -52,6 +52,9 @@
 // 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved performance problem when nclients is high
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getCompilationOptions() to version output
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -67,6 +70,7 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Exception.hpp"
+#include "utils/Utils.hpp"
 #include <MersenneTwister.h>
 
 //---------------------------------------------------------------------------
@@ -350,6 +354,7 @@ void version()
 {
   cout << "generator-" << VERSION << " (" << SVNVERSION << ")"  << endl;
   cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
+  cout << "build options: " << Utils::getCompilationOptions() << endl;
 }
 
 //===========================================================================

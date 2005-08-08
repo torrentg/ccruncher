@@ -41,6 +41,9 @@
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
+//
 //===========================================================================
 
 #include <iostream>
@@ -195,15 +198,15 @@ void ccruncher_test::PowMatrixTest::test4()
   double x = 2.0;
   double y = 1.0/3.0;
 
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, +3.0), +8.0, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, +3.0), -8.0, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, -3.0), +1.0/8.0, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, -3.0), -1.0/8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(+2.0, +3.0), +8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(-2.0, +3.0), -8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(+2.0, -3.0), +1.0/8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(-2.0, -3.0), -1.0/8.0, 1E-6);
 
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, +y), +1.25992115, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, -y), +0.79370115, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-x, +y), -1.25992115, 1E-6);
-  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-x, -y), -0.79370115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(+x, +y), +1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(+x, -y), +0.79370115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(-x, +y), -1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::pow(-x, -y), -0.79370115, 1E-6);
 
 }
 

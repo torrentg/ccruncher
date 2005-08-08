@@ -36,6 +36,9 @@
 // 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . performing partial parsing (without portfolio)
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getCompilationOptions() to version output
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -44,6 +47,7 @@
 #include <cstdlib>
 #include <getopt.h>
 #include "kernel/IData.hpp"
+#include "utils/Utils.hpp"
 #include "utils/File.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Logger.hpp"
@@ -306,6 +310,7 @@ void version()
 {
   cout << "mtrans-" << VERSION << " (" << SVNVERSION << ")"  << endl;
   cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
+  cout << "build options: " << Utils::getCompilationOptions() << endl;
 }
 
 //===========================================================================

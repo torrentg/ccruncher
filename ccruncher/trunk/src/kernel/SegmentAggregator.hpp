@@ -133,8 +133,8 @@ class SegmentAggregator
 
     // other methods
     long getNumElements();
-    void append(int *defaulttimes) throw(Exception);
-    void flush() throw(Exception);
+    bool append(int *defaulttimes) throw(Exception);
+    bool flush() throw(Exception);
     void touch() throw(Exception);
 
 };

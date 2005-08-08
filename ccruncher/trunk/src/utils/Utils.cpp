@@ -32,6 +32,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method getCompilationOptions()
+//
 //===========================================================================
 
 #include <iostream>
@@ -126,4 +129,39 @@ string ccruncher::Utils::timestamp()
   sprintf(aux, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1, lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
 
   return string(aux);
+}
+
+//===========================================================================
+// return a string with compilation options
+//===========================================================================
+string ccruncher::Utils::getCompilationOptions()
+{
+  string ret = "";
+
+  // debug option
+  ret += "debug";
+#ifdef NDEBUG
+  ret += "[disabled] | ";
+#else
+  ret += "[enabled] | ";
+#endif
+
+
+  // profiler option
+  ret += "profiler";
+#ifdef PROFILER
+  ret += "[enabled] | ";
+#else
+  ret += "[disabled] | ";
+#endif
+
+  // MPI option
+  ret += "MPI";
+#ifdef USE_MPI
+  ret += "[enabled]";
+#else
+  ret += "[disabled]";
+#endif
+
+  return ret;
 }

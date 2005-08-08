@@ -106,6 +106,7 @@ AC_ARG_ENABLE(profiler,
 
 if test x$profiler = xtrue ; then
   CXXFLAGS="$CXXFLAGS -pg"
+  AC_DEFINE([PROFILER], 1, [Profiler instructions are added when this is defined.])
 fi
 
 dnl -------------------------------------------------------------

@@ -25,6 +25,9 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Normal_
@@ -43,6 +46,12 @@ namespace ccruncher {
 
 class Normal
 {
+
+  private:
+
+    // non-instantiable class
+    Normal() {};
+
 
   public:
 

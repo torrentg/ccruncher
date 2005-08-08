@@ -25,6 +25,9 @@
 // 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//
 //===========================================================================
 
 #ifndef _Format_
@@ -46,6 +49,12 @@ namespace ccruncher {
 
 class Format
 {
+
+  private:
+
+    // non-instantiable class
+    Format() {};
+
 
   public:
 

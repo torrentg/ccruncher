@@ -25,6 +25,10 @@
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added private constructor (non-instantiable class)
+//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
+//
 //===========================================================================
 
 #ifndef _PowMatrix_
@@ -49,15 +53,24 @@ class PowMatrix
 
   private:
 
+    // non-instantiable class
+    PowMatrix() {};
+
+    // internal function
     static Array2D<double> inverse(Array2D<double> &x) throw(Exception);
 
 
   public:
 
-    static double pow(double, double) throw(Exception);
+    // matrix pow function
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
 
 };
+
+//---------------------------------------------------------------------------
+
+// improved pow() function [belongs to ccruncher namespace]
+double pow(double, double) throw(Exception);
 
 //---------------------------------------------------------------------------
 
