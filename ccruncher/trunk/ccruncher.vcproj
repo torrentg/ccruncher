@@ -186,23 +186,23 @@
 				Name="math"
 				Filter="">
 				<File
+					RelativePath="src\math\BlockGaussianCopula.cpp">
+				</File>
+				<File
+					RelativePath="src\math\BlockGaussianCopula.hpp">
+				</File>
+				<File
+					RelativePath="src\math\BlockMatrixChol.cpp">
+				</File>
+				<File
+					RelativePath="src\math\BlockMatrixChol.hpp">
+				</File>
+				<File
 					RelativePath="src\math\CholeskyDecomposition.cpp">
 				</File>
 				<File
 					RelativePath="src\math\CholeskyDecomposition.hpp">
 				</File>
-        <File
-          RelativePath="src\math\BlockMatrixChol.cpp">
-        </File>
-        <File
-          RelativePath="src\math\BlockMatrixChol.hpp">
-        </File>
-        <File
-          RelativePath="src\math\BlockGaussianCopula.cpp">
-        </File>
-        <File
-          RelativePath="src\math\BlockGaussianCopula.hpp">
-        </File>
 				<File
 					RelativePath="src\math\Copula.hpp">
 				</File>
@@ -376,6 +376,12 @@
 					RelativePath="src\utils\File.hpp">
 				</File>
 				<File
+					RelativePath=".\src\utils\Format.cpp">
+				</File>
+				<File
+					RelativePath=".\src\utils\Format.hpp">
+				</File>
+				<File
 					RelativePath="src\utils\Logger.cpp">
 				</File>
 				<File
@@ -399,6 +405,12 @@
 				<File
 					RelativePath="src\utils\Timer.hpp">
 				</File>
+				<File
+					RelativePath=".\src\utils\Utils.cpp">
+				</File>
+				<File
+					RelativePath=".\src\utils\Utils.hpp">
+				</File>
 			</Filter>
 			<Filter
 				Name="win32"
@@ -414,6 +426,12 @@
 				</File>
 				<File
 					RelativePath="src\win32\getopt.h">
+				</File>
+				<File
+					RelativePath=".\src\win32\gettimeofday.c">
+				</File>
+				<File
+					RelativePath=".\src\win32\gettimeofday.h">
 				</File>
 				<File
 					RelativePath="src\win32\stdafx.h">

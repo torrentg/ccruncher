@@ -554,7 +554,7 @@ int ccruncher::Survival::getMinCommonTime()
   // searching min time
   for(int i=0;i<nratings;i++)
   {
-    if (ddata[i].size() < ret)
+    if (int(ddata[i].size()) < ret)
     {
       ret = ddata[i].size();
     }

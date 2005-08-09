@@ -33,6 +33,11 @@ inline double round( double d )
 #include "dirent.h"
 
 // ======================================================
+// patch against gettimeofday problems
+// ======================================================
+#include "gettimeofday.h"
+
+// ======================================================
 // patch against mkdir & getcwd problems
 // ======================================================
 #include <direct.h>

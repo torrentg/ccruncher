@@ -41,7 +41,13 @@
 #include <cmath>
 #include <cstdio>
 #include <cassert>
-#include <sys/time.h>
+
+// gettimeofday() definition
+#ifndef _MSC_VER
+  #include <sys/time.h>
+#else
+  #include <time.h>
+#endif
 
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter

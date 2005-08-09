@@ -29,6 +29,9 @@
 //   . added private constructor (non-instantiable class)
 //   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
 //
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . pow method renamed: pow(x,y) -> fpow(x,y) 
+//
 //===========================================================================
 
 #ifndef _PowMatrix_
@@ -70,7 +73,7 @@ class PowMatrix
 //---------------------------------------------------------------------------
 
 // improved pow() function [belongs to ccruncher namespace]
-double pow(double, double) throw(Exception);
+double fpow(double, double) throw(Exception);
 
 //---------------------------------------------------------------------------
 

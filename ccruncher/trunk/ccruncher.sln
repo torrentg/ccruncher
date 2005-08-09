@@ -9,8 +9,8 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{F8042CFB-A59F-4D72-8726-E2A544166376}.Debug.ActiveCfg = Debug|Win32
-		{F8042CFB-A59F-4D72-8726-E2A544166376}.Debug.Build.0 = Debug|Win32
+		{F8042CFB-A59F-4D72-8726-E2A544166376}.Debug.ActiveCfg = Release|Win32
+		{F8042CFB-A59F-4D72-8726-E2A544166376}.Debug.Build.0 = Release|Win32
 		{F8042CFB-A59F-4D72-8726-E2A544166376}.Release.ActiveCfg = Release|Win32
 		{F8042CFB-A59F-4D72-8726-E2A544166376}.Release.Build.0 = Release|Win32
 	EndGlobalSection
