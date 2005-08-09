@@ -414,7 +414,7 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   cont++;
 
   // flushing if buffer is full
-  if (icont >= buffersize-1 || timer.read() > CCEFLUSHSECS)
+  if (icont >= buffersize || timer.read() > CCEFLUSHSECS)
   {
     return flush();
   }
@@ -441,7 +441,7 @@ bool ccruncher::SegmentAggregator::appendRawData(double *data, int datasize) thr
     cont++;
 
     // flushing if buffer is full
-    if (icont >= buffersize-1 || timer.read() > CCEFLUSHSECS)
+    if (icont >= buffersize || timer.read() > CCEFLUSHSECS)
     {
       flush();
     }

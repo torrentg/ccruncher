@@ -32,12 +32,16 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . running_ variable changed from int to boolean
 //
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed clock() function by gettimeofday() function
+//
 //===========================================================================
 
 #include "utils/Timer.hpp"
 #include <cmath>
 #include <cstdio>
 #include <cassert>
+#include <sys/time.h>
 
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter
@@ -47,15 +51,20 @@ ccruncher::Timer::Timer()
   running_ = false;
   start_time_ = 0.0;
   total_ = 0.0;
-  secs_per_tick = 1.0 / CLOCKS_PER_SEC;
+  //secs_per_tick = 1.0 / CLOCKS_PER_SEC;
 }
 
 //===========================================================================
 // seconds
+// gettimeofday() return system time
+// clock() return cpu process time
 //===========================================================================
 double ccruncher::Timer::seconds()
 {
-  return ( (double) clock() ) * secs_per_tick;
+  timeval tv;
+  gettimeofday(&tv, NULL);
+  return double(tv.tv_sec) + double(tv.tv_usec)/1000000.0;
+  //return ( (double) clock() ) * secs_per_tick;
 }
 
 //===========================================================================

@@ -28,6 +28,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . running_ variable changed from int to boolean
 //
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed clock() function by gettimeofday() function
+//
 //===========================================================================
 
 #ifndef _Timer_
@@ -54,7 +57,7 @@ class Timer
      double start_time_;
      double total_;
      double seconds();
-     double secs_per_tick;
+     //double secs_per_tick;
 
   public:
      Timer();
