@@ -42,7 +42,7 @@
 #include <cstdio>
 #include <cassert>
 
-#ifndef _MSC_VER
+#ifdef _MSC_VER
 #include "win32/gettimeofday.h"
 #endif
 
