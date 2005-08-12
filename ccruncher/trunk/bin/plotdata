@@ -34,7 +34,7 @@
 #-------------------------------------------------------------
 progname=plotdata
 numversion="0.5"
-svnversion="R233"
+svnversion="R236"
 tplot=pdf
 numrows=0
 numbins=100
