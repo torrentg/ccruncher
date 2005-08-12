@@ -42,11 +42,8 @@
 #include <cstdio>
 #include <cassert>
 
-// gettimeofday() definition
 #ifndef _MSC_VER
-  #include <sys/time.h>
-#else
-  #include <time.h>
+#include "win32/gettimeofday.h"
 #endif
 
 //===========================================================================

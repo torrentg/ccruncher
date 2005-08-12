@@ -34,8 +34,10 @@ inline double round( double d )
 
 // ======================================================
 // patch against gettimeofday problems
+// called directly in Timer.hpp
+// includes <Windows.h> call
 // ======================================================
-#include "gettimeofday.h"
+//#include "gettimeofday.h"
 
 // ======================================================
 // patch against mkdir & getcwd problems
@@ -55,11 +57,11 @@ inline double round( double d )
 // ======================================================
 // disabling warnings
 // ======================================================
-#pragma warning( disable : 4290 ) 
-#pragma warning( disable : 4101 ) 
-#pragma warning( disable : 4146 ) 
-#pragma warning( disable : 4267 ) 
-#pragma warning( disable : 4700 ) 
-#pragma warning( disable : 4800 ) 
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4101 )
+#pragma warning( disable : 4146 )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4700 )
+#pragma warning( disable : 4800 )
 
 #endif
