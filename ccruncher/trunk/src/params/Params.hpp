@@ -69,11 +69,11 @@ class Params : public ExpatHandlers
     int steplength;
     long maxiterations;
     long maxseconds;
-    string copula_type; // normal
+    string copula_type; // gaussian
     string smethod;     // rating-path, time-to-default
     long copula_seed;
     bool antithetic;
-    bool onlyactive;   // only active clients
+    bool onlyactive;    // only active clients
 
     Params();
     ~Params();

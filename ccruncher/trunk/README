@@ -18,6 +18,10 @@ Install required libraries
    package from http://www.zlib.net/ and install it. 
    Also you can install from rpm packages.
 
+3. if you are compiling a ccruncher MPI executable, check
+   that you have a valid MPI installation (you need mpi.h,
+   mpic++ wrapper, mpi link library, etc.)
+
 
 Installation from source package
 --------------------------------
@@ -32,6 +36,11 @@ Installation from source package
      ./configure --prefix=$PWD
      make
      make install
+
+   supported ./configure options:
+     --enable-debug:    add debug instructions
+     --enable-profiler: add profiler instructions
+     --enable-mpi:      add mpi instructions
 
 
 Installation from binary package

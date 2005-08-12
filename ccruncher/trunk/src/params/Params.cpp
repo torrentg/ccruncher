@@ -45,6 +45,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . allowed maxseconds=0 or maxiterations=0 (0 remove stop criteria)
 //
+// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed copula identifier: normal -> gaussian
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -194,8 +197,8 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   else if (name == "copula.type")
   {
     string aux = getStringAttribute(attributes, "value", "");
-    if (copula_type != "" || aux != "normal") {
-      throw eperror(eu, "invalid copula.type. supported values: normal");
+    if (copula_type != "" || aux != "gaussian") {
+      throw eperror(eu, "invalid copula.type. supported values: gaussian");
     }
     else {
       copula_type = aux;

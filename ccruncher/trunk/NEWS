@@ -10,11 +10,10 @@ version 0.5 (??? 2005)
       . fast computations
       . allows copulas of 50.000 components
   * some classes has been refactorized
-  * initiated mpi support
   * upgraded to new zlib version
   * increased verbosity
-  * implemented signal handlers (exits gracefully when Ctrl^C is typed)
   * increased performance in inverse survival computation
+  * added MPI support
 
 version 0.4 (July 2005)
 --------------------------

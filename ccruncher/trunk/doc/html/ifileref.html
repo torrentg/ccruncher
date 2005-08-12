@@ -57,7 +57,7 @@
     &lt;property name="time.steplength" value="2"/&gt;
     &lt;property name="stopcriteria.maxiterations" value="3000"/&gt;
     &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
-    &lt;property name="copula.type" value="normal"/&gt;
+    &lt;property name="copula.type" value="gaussian"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
     &lt;property name="montecarlo.method" value="rating-path"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
@@ -119,8 +119,8 @@
         <td style="text-align:center;">copula.type</td>
         <td style="text-align:justify;">
           Type of copula used to generate correlated variables. Nowadays
-          only one implementation exists, the normal copula. <br />
-          accepted values: 'normal'.
+          only one implementation exists, the gaussian copula. <br />
+          accepted values: 'gaussian'.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -942,7 +942,7 @@
           </a>    
         </td>
         <td class="footer" align="right">
-          Last modified: 08-Aug-2005 &nbsp;
+          Last modified: 12-Aug-2005 &nbsp;
         </td>
       </tr>
     </table>

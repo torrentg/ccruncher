@@ -45,6 +45,9 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
+// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed copula identifier: normal -> gaussian
+//
 //===========================================================================
 
 #include <iostream>
@@ -82,7 +85,7 @@ void ccruncher_test::IDataTest::test1()
       <property name='time.steplength' value='2'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
-      <property name='copula.type' value='normal'/>\n\
+      <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
       <property name='montecarlo.method' value='rating-path'/>\n\

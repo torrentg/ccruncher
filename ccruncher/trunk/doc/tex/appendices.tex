@@ -268,9 +268,9 @@ A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
 
 %---------------------------------------------------------------------------
 
-\section{Algoritmo de la c\'opula normal}
+\section{Algoritmo de la c\'opula gaussiana}
 
-\index{C\'opula normal} Sea $\Sigma_1$ la matriz de correlaci\'on a cumplir
+\index{C\'opula gaussiana} Sea $\Sigma_1$ la matriz de correlaci\'on a cumplir
 por la c\'opula. Observemos que se trata tambi\'en de la matriz de covarianzas
 al valer $1$ los elementos de la diagonal.
 \begin{displaymath}
@@ -300,8 +300,8 @@ Observamos que la matriz $\Sigma_2$ vuelve a tener los elementos de la
 diagonal iguales a $1$ debido a que $2 sin(\frac{\pi}{6}) = 1$.
 
 \paragraph{Paso 2.} A la matriz $\Sigma_2$ le aplicamos el algoritmo de 
-Cholesky para obtener la matrix triangular inferior $B$ cumpliendo 
-$\Sigma_2 = B \cdot B^{\top}$:
+Cholesky\index{Algoritmo de Cholesky} para obtener la matrix triangular
+inferior $B$ cumpliendo $\Sigma_2 = B \cdot B^{\top}$:
 \begin{displaymath}
 B = 
 \left(
