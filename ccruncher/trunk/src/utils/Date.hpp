@@ -26,7 +26,7 @@
 //   . initial release based on a Bernt A Oedegaard class
 //
 // 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . converting to inline some critical methods 
+//   . converting to inline some critical methods
 //
 //===========================================================================
 

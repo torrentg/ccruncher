@@ -45,7 +45,7 @@
 //   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
 //
 // 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . pow method renamed: pow(x,y) -> fpow(x,y) 
+//   . pow method renamed: pow(x,y) -> fpow(x,y)
 //
 //===========================================================================
 

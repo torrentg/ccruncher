@@ -91,7 +91,7 @@ void ccruncher::Utils::setSilentMode() throw(Exception)
   {
     throw Exception("problems removing output on slaves nodes");
   }
-  else 
+  else
   {
     // closing C++ streams
     cout.rdbuf(nullstream->rdbuf());

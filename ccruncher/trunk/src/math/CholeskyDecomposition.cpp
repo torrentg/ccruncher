@@ -55,7 +55,7 @@ bool ccruncher::CholeskyDecomposition::choldc(double **a, double *p, int n)
 
       if(i == j)
       {
-        if(sum <= 0.0) 
+        if(sum <= 0.0)
         {
           return false;
         }
@@ -64,7 +64,7 @@ bool ccruncher::CholeskyDecomposition::choldc(double **a, double *p, int n)
           p[i] = std::sqrt(sum);
         }
       }
-      else 
+      else
       {
         a[j][i] = sum/p[i];
       }
