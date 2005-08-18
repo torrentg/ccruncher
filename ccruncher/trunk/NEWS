@@ -2,7 +2,7 @@
 CREDITCRUNCHER NEWS
 ===================
 
-version 0.5 (??? 2005)
+version 0.5 (August 2005)
 --------------------------
   * important: implemented specialized Gaussian Copula
       . adapted to client correlation matrix structure

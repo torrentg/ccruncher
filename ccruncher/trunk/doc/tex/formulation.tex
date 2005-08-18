@@ -140,34 +140,73 @@ etc. Usaremos el cashflow para calcular el valor, o precio, de un activo en el
 instante $t$.
 
 \paragraph{Netting.} \index{Netting} Importe correpondiente a la liquidaci\'on de
-deudas mutuas en caso de fallido por el saldo neto de las mismas. Incluye la posible
-recuperaci\'on, pago de obligaciones contraidas (pe. en el caso de avales, etc.).
+deudas mutuas en caso de fallido. Incluye la posible recuperaci\'on, pago de
+obligaciones contraidas (pe. en el caso de avales, etc.).
 
+\paragraph{Ejemplo.}
+Caracterizamos un bono (bond) de $100$ \euro de valor nominal, con fecha emisi\'on
+31/12/2006, tipo de inter\'es anual del $4\%$, pago anual de cupones y amortizaci\'on
+al cabo de $5$ a\~nos. En caso de fallido se estima que se recupera un $80\%$ del
+importe pendiente de abonar.\newline
 
-\begin{figure}[!hb]
 \begin{center}
-\includegraphics[height=10cm, angle=-90]{./images/mortgage.ps}
-\caption{Perfil de un Pr\'estamo Hipotecario}
-\label{mortgage}
+\begin{tabular}{c|r|r}
+\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\hline
+31/12/2006 &  -100.00 &    0.00 \\
+31/12/2007 &     4.00 &   96.00 \\
+31/12/2008 &     4.00 &   92.00 \\
+31/12/2009 &     4.00 &   89.60 \\
+31/12/2010 &     4.00 &   86.40 \\
+31/12/2011 &   104.00 &   83.20
+\end{tabular}
 \end{center}
-\end{figure}
 
+\paragraph{Ejemplo.}
+Caracterizamos un pr\'estamo hipotecario (mortgage) de $100$ \euro, con fecha
+de contrataci\'on 15/01/2006, tipo de inter\'es anual del $6.5\%$ y cuota
+(instalment) mensual y un plazo de $25$ a\~nos. La vivienda hipotecada est\'a
+valorada en $80$ \euro. Determinamos la cuota mensual usando la siguiente
+f\'ormula (canon vencido o m\'etodo franc\'es):
+\begin{displaymath}
+I =
+\frac{A \cdot r \cdot (1+r)^t}{(1+r)^t - 1} =
+\frac{100 \cdot (6.5\%/12) \cdot (1+6.5\%/12)^{25\cdot12}}{(1+6.5\%/12)^{25\cdot12} - 1} =
+0.67521
+\end{displaymath}
 
-\begin{figure}[!hb]
 \begin{center}
-\includegraphics[height=10cm, angle=-90]{./images/endorsement.ps}
-\caption{Perfil de un Aval financiero}
-\label{endorsement}
+\begin{tabular}{c|r|r}
+\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\hline
+15/01/2006 &  -100.00 &    0.00 \\
+15/02/2006 &     0.68 &   80.00 \\
+15/03/2006 &     0.68 &   80.00 \\
+15/04/2006 &     0.68 &   80.00 \\
+\dots      &    \dots &   \dots \\
+15/11/2030 &     0.68 &   80.00 \\
+15/12/2030 &     0.68 &   80.00 \\
+15/01/2031 &     0.68 &   80.00
+\end{tabular}
 \end{center}
-\end{figure}
 
-\begin{figure}[!hb]
+\paragraph{Ejemplo.}
+Caracterizamos un aval (endorsement) por un importe avalado de $100$ \euro
+con fecha de contrataci\'on 15/01/2006, durante un periodo de $2$ a\~nos y
+una cuota semestral anticipada de $4.5$ \euro.
+
 \begin{center}
-\includegraphics[height=10cm, angle=-90]{./images/bond.ps}
-\caption{Perfil de un Bono}
-\label{bond}
+\begin{tabular}{c|r|r}
+\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\hline
+15/01/2006 &     4.50 &    0.00 \\
+15/07/2006 &     4.50 & -100.00 \\
+15/01/2007 &     4.50 & -100.00 \\
+15/07/2007 &     4.50 & -100.00 \\
+15/01/2008 &     0.00 & -100.00
+\end{tabular}
 \end{center}
-\end{figure}
+
 
 %---------------------------------------------------------------------------
 
