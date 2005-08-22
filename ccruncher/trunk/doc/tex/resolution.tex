@@ -221,6 +221,7 @@ $Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots
 $Z(t)$ & Valor de la cartera en tiempo $t$\\
 \hline
 \end{tabular}
+
 %---------------------------------------------------------------------------
 
 \section{Valor de un activo}
@@ -329,4 +330,28 @@ valoraci\'on activo -> valoraci\'on cliente -> valoraci\'on cartera
 
 \subsection{Distribuci\'on del valor de la cartera}
 calculo del valor esperado, calculo del VAR, etc.
+
+%---------------------------------------------------------------------------
+
+\section{C\'alculo de los valores}
+
+El m\'etodo de Monte Carlo genera $N$ realizaciones, $\{z_1,z_2,z_3,\cdots,z_N\}$,
+de la variable aleatoria $Z$ (valor de la cartera) que permiten obtener la funci\'on
+de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores usados
+y el $\alpha$-intervalo de confianza:
+
+\paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum}.
+\begin{displaymath}
+\mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
+\end{displaymath}
+
+\paragraph{Desviaci\'on est\'andar.} F\'ormula extraida de \cite{stats:schaum}.
+\begin{displaymath}
+\sigma_Z = \widehat{\sigma_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{2N}}
+\end{displaymath}
+
+\paragraph{Percentil (VAR).} F\'ormula extraida de \cite{???:???}.
+\begin{displaymath}
+??? searching - searching ??? - Confidence intervals - quantile - typical error - order statistics
+\end{displaymath}
 

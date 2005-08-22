@@ -202,7 +202,7 @@ $n$-dimensional, $Z$, es una \emph{Normal}\index{Normal} con media $\vec{\mu}$
 y matriz de covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$, si tiene la
 siguiente funci\'on de densidad:
 \begin{displaymath}
-f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}} 
+f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}}
 exp\left\{-\frac{1}{2}\left(\vec{x}-\vec{\mu})^{\top} \Sigma^{-1} (\vec{x}-\vec{\mu}) \right)\right\}
 \end{displaymath}
 donde $\left|\Sigma\right|$ es el determinante de la matriz de covarianzas 
@@ -218,6 +218,39 @@ siguiente algoritmo:
 La matriz $\Sigma^{1/2}$ la calculamos usando el algoritmo de Cholesky. Sabemos 
 que existe soluci\'on debido a que $\Sigma$ es definida positiva por tratarse
 de una matriz de covarianzas.
+
+%---------------------------------------------------------------------------
+
+\section{Estimadores estad\'isticos}
+
+Sea $\{x_1,x_2,x_3,\cdots,x_n\}$ $n$ realizaciones de la variable aleatoria
+$X$.
+
+\paragraph{Definici\'on.} Estimamos la media de $X$ usando el siguiente
+estimador:
+\begin{displaymath}
+E(X) \approx \widehat{X} = \frac{1}{n} \sum_{i=1}^{n} x_i
+\end{displaymath}
+
+\paragraph{Definici\'on.} Estimamos la varianza de $X$ usando el siguiente
+estimador:
+\begin{displaymath}
+Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
+\frac{1}{n-1} \sum_{i=1}^{n} (x_i - \widehat{X})^2 =
+\frac{1}{n-1} \left( \sum_{i=1}^{n} x_i^2 - \frac{\left(\sum_{i=1}^{n} x_i \right)^2}{n} \right)
+\end{displaymath}
+
+\paragraph{Definici\'on.} Estimamos el VAR de $X$ al nivel de confianza $\alpha$
+usando el siguiente estimador:
+\begin{displaymath}
+VAR_{\alpha}(X) = \textrm{inf}\{x | F(X) \geq 1-\alpha \} \approx x_{k:n}
+\quad \textrm{where} \quad \frac{k}{n} \leq 1-\alpha < \frac{k+1}{n}
+\end{displaymath}
+donde $F$ es la funci\'on de distribuci\'on de $X$ y $x_{k:n}$ es el $k$-\'esimo
+elemento de la serie ordenada de forma creciente.
+
+\paragraph{Observaci\'on.} Los estimadores definidos son no sesgados.
+
 
 %---------------------------------------------------------------------------
 
