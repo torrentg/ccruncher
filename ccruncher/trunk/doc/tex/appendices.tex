@@ -227,13 +227,13 @@ Sea $\{x_1,x_2,x_3,\cdots,x_n\}$ $n$ realizaciones de la variable aleatoria
 $X$.
 
 \paragraph{Definici\'on.} Estimamos la media de $X$ usando el siguiente
-estimador:
+estimador no sesgado:
 \begin{displaymath}
 E(X) \approx \widehat{X} = \frac{1}{n} \sum_{i=1}^{n} x_i
 \end{displaymath}
 
 \paragraph{Definici\'on.} Estimamos la varianza de $X$ usando el siguiente
-estimador:
+estimador no sesgado:
 \begin{displaymath}
 Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
 \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \widehat{X})^2 =
@@ -241,16 +241,44 @@ Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
 \end{displaymath}
 
 \paragraph{Definici\'on.} Estimamos el VAR de $X$ al nivel de confianza $\alpha$
-usando el siguiente estimador:
+usando el siguiente estimador no sesgado:
 \begin{displaymath}
-VAR_{\alpha}(X) = \textrm{inf}\{x | F(X) \geq 1-\alpha \} \approx x_{k:n}
-\quad \textrm{where} \quad \frac{k}{n} \leq 1-\alpha < \frac{k+1}{n}
+VAR_{\alpha}(X) = \textrm{inf}\{x | F(X) \geq 1-\alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:n}
 \end{displaymath}
-donde $F$ es la funci\'on de distribuci\'on de $X$ y $x_{k:n}$ es el $k$-\'esimo
-elemento de la serie ordenada de forma creciente.
+donde,
+\begin{itemize}
+\item $F$ es la funci\'on de distribuci\'on de $X$
+\item $k$ cumple $\frac{k}{n} \leq 1-\alpha < \frac{k+1}{n}$
+\item $x_{k:n}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
+\end{itemize}
 
-\paragraph{Observaci\'on.} Los estimadores definidos son no sesgados.
+%---------------------------------------------------------------------------
 
+\section{Error est\'andar de un quantil}
+
+A continuaci\'on se describe el m\'etodo de Maritz-Jarrett basado en el
+estad\'istico de orden. Sea $N$ el taman\~o muestral y $x$ la probabilidad
+del quantil.
+
+\begin{eqnarray}
+M   & = & [Nx + 0.5] \nonumber \\
+a   & = & M - 1 \nonumber \\
+b   & = & N - M \nonumber \\
+W_i & = & B(a,b,y_{i+1}) - B(a,b,y_i) \nonumber \\
+C_k & = & \sum_{i=1}^{N} W_i E_i^k \nonumber
+\end{eqnarray}
+
+donde $[y]$ es la parte entera de $y$, $y_i=i/N$ y $B(a,b,y)$ es la funci\'on
+beta incompleta:
+
+\begin{displaymath}
+B(a,b,y)=\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\int_0^y t^{a-1} (1-t)^{b-1} dt
+\end{displaymath}
+
+entonces,
+\begin{displaymath}
+\textrm{stderr}(q_x) = \sqrt{C_2 - C_1^2}
+\end{displaymath}
 
 %---------------------------------------------------------------------------
 

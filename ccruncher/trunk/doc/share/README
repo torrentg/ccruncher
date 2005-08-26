@@ -59,3 +59,12 @@ locfile: montecarlo/sc04mc.pdf
 descrip: Monte Carlo method description
 
 ------------------------------------------------------------------------
+
+docname: New spectral classification technique for X-ray sources: quantile analysis
+authors: Jaesub Hong, Eric M. Schlegel, Jonathan E. Grindlay
+publish: Harvard-Smithsonian Center for Astrophysics
+homeurl: http://arxiv.org/pdf/astro-ph/0406463
+locfile: quantiles/quantanal.pdf
+descrip: Quantile standard error algorithm description
+
+------------------------------------------------------------------------

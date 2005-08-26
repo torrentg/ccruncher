@@ -340,18 +340,23 @@ de la variable aleatoria $Z$ (valor de la cartera) que permiten obtener la funci
 de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores usados
 y el $\alpha$-intervalo de confianza:
 
-\paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum}.
+\paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum} basada en el
+teorema del l\'imite central.
 \begin{displaymath}
 \mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
 \end{displaymath}
 
-\paragraph{Desviaci\'on est\'andar.} F\'ormula extraida de \cite{stats:schaum}.
+\paragraph{Desviaci\'on est\'andar.} F\'ormula extraida de \cite{stats:schaum} basada en el
+teorema del l\'imite central.
 \begin{displaymath}
 \sigma_Z = \widehat{\sigma_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{2N}}
 \end{displaymath}
 
-\paragraph{Percentil (VAR).} F\'ormula extraida de \cite{???:???}.
+\paragraph{VAR-Quantile.} Fijado un nivel de $VAR = 1-x$
 \begin{displaymath}
-??? searching - searching ??? - Confidence intervals - quantile - typical error - order statistics
+q_{Z,x} = \widehat{q_{Z,x}} \pm \textrm{stderr}(q_{Z,x})
 \end{displaymath}
+Donde el error est\'andar del quantil, $\textrm{stderr}(q_{Z,x})$, lo calculamos usando
+el m\'etodo de Maritz-Jarrett (basado en el estad\'istico de orden). F\'ormula extraida
+de \cite{quant:algor}.
 
