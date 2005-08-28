@@ -1,0 +1,156 @@
+#!/bin/sh
+
+#=============================================================
+# description:
+#   Use this script to compute the VaR from a ccruncher
+#   output file
+#
+# dependences:
+#   shell, R
+#
+# input:
+#   ccruncher output data file (*.out)
+#
+# output:
+#   mean, stddev, VaR results
+#
+# retcodes:
+#   0    : OK
+#   other: KO
+#
+#-------------------------------------------------------------
+#
+# 2005/08/28 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . initial release
+#
+#=============================================================
+
+#-------------------------------------------------------------
+# variables declaration
+#-------------------------------------------------------------
+CCRUNCHER=/home/horizon/temp/ccruncher
+progname=report
+numversion="0.5"
+svnversion="R236"
+retcode=0
+
+#-------------------------------------------------------------
+# version function
+#-------------------------------------------------------------
+version() {
+
+  echo $progname-$numversion \($svnversion\)
+
+}
+
+#-------------------------------------------------------------
+# copyright function
+#-------------------------------------------------------------
+copyright() {
+
+  cat << _EOF_
+
+   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
+     under the GNU General Public License, version 2. more info at
+               http://www.generacio.com/ccruncher
+
+_EOF_
+
+}
+#-------------------------------------------------------------
+# usage function
+#-------------------------------------------------------------
+usage() {
+
+  cat << _EOF_
+  usage: $progname [options] <file>
+
+  description:
+    $progname is a shell script to compute the VaR using the
+    output data files generates by ccruncher using R.
+    more info at http://www.generacio.com/ccruncher
+  arguments:
+    file     ccruncher output data file to plot
+  options
+    -h       show this message and exit
+    -v       show version and exit
+  return codes:
+    0        OK. finished without errors
+    1        KO. finished with errors
+  examples:
+    $progname portfolio-rest.out
+
+_EOF_
+
+}
+
+#-------------------------------------------------------------
+# readconf function
+#-------------------------------------------------------------
+readconf() {
+
+  OPTIND=0
+
+  while getopts 'hv:' opt
+  do
+    case $opt in
+      v) version;
+         exit 0;;
+      h) usage; 
+         exit 0;;
+     \?) echo "unknow option. use -h for more information"; 
+         exit 1;;
+      *) echo "unexpected error parsing arguments. Please report this bug sending";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         exit 1;;
+    esac
+  done
+
+  shift `expr $OPTIND - 1`
+
+  if [ "$*" != "" ]; then
+    for arg in "$@"
+    do
+      if [ ! -f $arg ]; then
+        echo "file $arg not exist";
+        echo "please, try again";
+        exit 1;
+      fi
+    done
+  fi
+
+  which R > /dev/null 2> /dev/null
+
+  if [ $? != 0 ]; then
+    echo "R not found. please report to system administrator";
+    echo "R can be found at http://www.r-project.org/";
+    exit 1;
+  fi
+
+}
+
+
+#-------------------------------------------------------------
+# main function
+#-------------------------------------------------------------
+
+readconf $@;
+shift `expr $OPTIND - 1`
+
+copyright;
+
+for filename in "$@"
+do
+
+  R --vanilla --silent << _EOF_
+    source("$CCRUNCHER/bin/report.R", echo=FALSE);
+    ccruncher.main("$1", var=0.99, alpha=0.975, show=3);
+_EOF_
+
+  if [ $? != 0 ]; then
+    retcode=`expr $retcode + 1`;
+  fi
+
+done
+
+exit $retcode;
