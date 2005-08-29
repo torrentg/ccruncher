@@ -133,7 +133,7 @@ ccruncher.evalsigma <- function(x)
 # row2: standar error
 # ret3 <- ccruncher.evalquantile(z,0.01)
 #=========================================================
-ccruncher.evalquantile <- function(x,prob,breaks=250)
+ccruncher.evalquantile <- function(x, prob, breaks=250)
 {
   #initializing values
   ret <- matrix(NA,2,length(x));
@@ -204,7 +204,7 @@ ccruncher.plotevol <- function(values, alpha, statname="statistic")
 #=========================================================
 # Compute the main statistics
 #=========================================================
-ccruncher.summary <- function(x,var,alpha)
+ccruncher.summary <- function(x, var, alpha)
 {
   n <- length(x);
   mu <- mean(x);
@@ -212,14 +212,17 @@ ccruncher.summary <- function(x,var,alpha)
   q <- quantile(x, 1-var, names=FALSE);
   qse <- ccruncher.quantstderr(x, 1-var);
   k <- qnorm((1-alpha)/2);
+  ret <- vector();
 
-  print("", quote=FALSE);
-  print("summary at "%&%(alpha)%&%" confidence level", quote=FALSE);
-  print("-------------------------------------------------------------------------", quote=FALSE);
-  print("expected value = " %&% mu %&% " +/- " %&% abs(k*sigma/sqrt(n)), quote=FALSE);
-  print("standard deviation = " %&% sigma %&% " +/- " %&% abs(k*sigma/sqrt(2*n)), quote=FALSE);
-  print("VAR(" %&% var %&% ") = " %&% q %&% " +/- " %&% abs(k*qse), quote=FALSE);
-  print("", quote=FALSE);
+  ret[1] <- "";
+  ret[2] <- "summary at "%&%(alpha)%&%" confidence level";
+  ret[3] <- "-------------------------------------------------------------------------";
+  ret[4] <- "expected value = " %&% mu %&% " +/- " %&% abs(k*sigma/sqrt(n));
+  ret[5] <- "standard deviation = " %&% sigma %&% " +/- " %&% abs(k*sigma/sqrt(2*n));
+  ret[6] <- "VAR(" %&% var %&% ") = " %&% q %&% " +/- " %&% abs(k*qse);
+  ret[7] <- "";
+
+  return(ret);
 }
 
 #=========================================================
@@ -227,17 +230,22 @@ ccruncher.summary <- function(x,var,alpha)
 #=========================================================
 ccruncher.vartable <- function(x)
 {
-  xvar <- c(0.90, 0.95, 0.975, 0.99, 0.995, 0.999, 0.9999);
-  vvar <- vector(length=length(xvar));
-  svar <- vector(length=length(xvar));
+  #VaR values analised
+  xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
+  
+  #allocating return object (col1=var,col2=value,col3=stderr)
+  ret <- matrix(NaN, length(xvar), 3)
 
+  #computing values
   for(i in 1:length(xvar))
   {
-    vvar[i] <- quantile(x, (1-xvar[i]));
-    svar[i] <- ccruncher.quantstderr(x, (1-xvar[i]));
+    ret[i,1] <- xvar[i];
+    ret[i,2] <- quantile(x, (1-xvar[i]));
+    ret[i,3] <- ccruncher.quantstderr(x, (1-xvar[i]));
   }
 
-  return(data.frame(VaR=xvar,value=vvar,stderr=svar))
+  #return function
+  return(ret)
 }
 
 #=========================================================
@@ -255,7 +263,7 @@ ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
   }
 
   #retrieving data file
-  df <- read.table(filename, col.names=c('index','value'));
+  df <- read.table(filename, col.names=c('index', 'value'));
   z <- as.vector(t(df["value"]));
 
   if (show == 1)
@@ -263,14 +271,14 @@ ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
     #computing statistics evolution values
     ret1 <- ccruncher.evalmean(z);
     ret2 <- ccruncher.evalsigma(z);
-    ret3 <- ccruncher.evalquantile(z,prob=(1-var),breaks=250);
+    ret3 <- ccruncher.evalquantile(z, prob=(1-var), breaks=250);
 
     #doing some graphics
     par(mfrow=c(2,2));
     plot(density(z));
-    ccruncher.plotevol(ret1,alpha,"Mean");
-    ccruncher.plotevol(ret2,alpha,"StdDev");
-    ccruncher.plotevol(ret3,alpha,"VaR("%&%(var*100)%&%"%)");
+    ccruncher.plotevol(ret1, alpha, "Mean");
+    ccruncher.plotevol(ret2, alpha, "StdDev");
+    ccruncher.plotevol(ret3, alpha, "VaR("%&%(var*100)%&%"%)");
   }
   else if (show == 2)
   {
@@ -279,10 +287,11 @@ ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
   }
 
   #print results
-  print("", quote=FALSE);
-  ccruncher.summary(z,var=var,alpha=alpha);
-  print("", quote=FALSE);
-  print("VaR table", quote=FALSE);
-  print("-------------------------------------------------------------------------", quote=FALSE);
-  ccruncher.vartable(z);
+  write("", file="");
+  write(ccruncher.summary(z, var=var, alpha=alpha), file="");
+  write("", file="");
+  write("VaR table [row1=VaR-level, row2=VaR-value, row2=VaR-stderr]", file="");
+  write("-------------------------------------------------------------------------", file="");
+  write(format(t(ccruncher.vartable(z))), file="", ncolumns=3);
+  write("", file="");
 }

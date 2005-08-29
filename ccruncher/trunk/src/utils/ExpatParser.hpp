@@ -28,6 +28,9 @@
 // 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added characterData method
 //
+// 2005/08/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed XMLCALL's
+//
 //===========================================================================
 
 #ifndef _ExpatParser_
@@ -61,13 +64,13 @@ class ExpatParser
     ExpatUserData userdata;
 
     /** startElement function catcher */
-    static void XMLCALL startElement(void *ud, const char *name, const char **atts);
+    static void startElement(void *ud, const char *name, const char **atts);
 
     /** endElement function catcher */
-    static void XMLCALL endElement(void *ud, const char *name);
+    static void endElement(void *ud, const char *name);
 
     /** characterData Handler function */
-    static void XMLCALL characterData(void *ud, const char *s, int len) throw(Exception);
+    static void characterData(void *ud, const char *s, int len) throw(Exception);
 
   public:
 

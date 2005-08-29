@@ -34,6 +34,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/08/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed XMLCALL's
+//
 //===========================================================================
 
 #include <cstring>
@@ -78,7 +81,7 @@ ccruncher::ExpatParser::~ExpatParser()
 //===========================================================================
 // startElement
 //===========================================================================
-void XMLCALL ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
+void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
@@ -91,7 +94,7 @@ void XMLCALL ccruncher::ExpatParser::startElement(void *ud_, const char *name, c
 //===========================================================================
 // endElement
 //===========================================================================
-void XMLCALL ccruncher::ExpatParser::endElement(void *ud_, const char *name)
+void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
@@ -115,7 +118,7 @@ void XMLCALL ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 //===========================================================================
 // characterData
 //===========================================================================
-void XMLCALL ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
+void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
 {
   // simple rule: character data is not allowed
   for(int i=0;i<len;i++)

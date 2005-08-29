@@ -137,12 +137,12 @@ readconf() {
 readconf $@;
 shift `expr $OPTIND - 1`
 
-copyright;
+#copyright;
 
 for filename in "$@"
 do
 
-  R --vanilla --silent << _EOF_
+  R --vanilla --slave << _EOF_
     source("$CCRUNCHER/bin/report.R", echo=FALSE);
     ccruncher.main("$1", var=0.99, alpha=0.975, show=3);
 _EOF_
