@@ -56,7 +56,7 @@
         <td>-</td>
         <td>-</td>
         <td>NO</td>
-        <td>expat supported</td>
+        <td></td>
       </tr>
       <tr class="b">
         <td>AIX</td>
@@ -64,7 +64,7 @@
         <td>-</td>
         <td>-</td>
         <td>NO</td>
-        <td>expat supported</td>
+        <td></td>
       </tr>
       <tr class="a">
         <td>solaris</td>
@@ -72,7 +72,7 @@
         <td>-</td>
         <td>-</td>
         <td>NO</td>
-        <td>expat supported</td>
+        <td></td>
       </tr>
       <tr class="b">
         <td>hp ux</td>
@@ -80,7 +80,7 @@
         <td>-</td>
         <td>-</td>
         <td>NO</td>
-        <td>expat supported</td>
+        <td></td>
       </tr>
       <tr class="a">
         <td>Windows</td>
@@ -96,7 +96,7 @@
         <td>MSVC7</td>
         <td>-</td>
         <td>YES</td>
-        <td></td>
+        <td>MPI not supported</td>
       </tr>
     </table>
     <p>
@@ -166,6 +166,12 @@
         &nbsp;&nbsp;make <br />
         &nbsp;&nbsp;make install <br />
       </b></code>
+      If you want create a MPI version (to run ccruncher in a cluster) type: <br />
+      <code><b>
+        &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi<br />
+        &nbsp;&nbsp;make <br />
+        &nbsp;&nbsp;make install <br />
+      </b></code>
     </p>
 
     <h3>Usage</h3>
@@ -197,18 +203,17 @@
     </p>
 
     <p>
-      <b>Step 4.</b> You can compute the VAR opening result files with a 
-      spreadsheet and computing the searched percentil. CreditCruncher have some 
-      tools (only in linux versions) that can help in your report generation. Try
-      to run next commands:<br />
+      <b>Step 4.</b> Compute the Value at Risk<br />
       <code><b>
-        &nbsp;&nbsp;bin/plotdata -h <br />
-        &nbsp;&nbsp;bin/plotdata -p data/segmentation-segment.out <br />
-        &nbsp;&nbsp;bin/plotdata -c data/segmentation-segment.out <br />
-        &nbsp;&nbsp;bin/plotmtrans -h <br />
-        &nbsp;&nbsp;bin/plotmtrans -f file.xml <br />
-        &nbsp;&nbsp;bin/plotmtrans -c file.xml <br />
-        &nbsp;&nbsp;bin/plotmtrans -s file.xml <br />
+        &nbsp;&nbsp;bin/report data/segmentation-segment.out <br />
+      </b></code>
+      or open a <a href="http://www.r-project.org">R</a> console and type: <br />
+      <code><b>
+        &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.99,alpha=0.99,show=1) <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.97,alpha=0.90,show=2) <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.90,alpha=0.66,show=3) <br />
+        &nbsp;&nbsp;>&nbsp;quit(save='no') <br />
       </b></code>
     </p>
 
@@ -231,7 +236,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 09-Jul-2005 &nbsp;
+          Last modified: 30-Aug-2005 &nbsp;
         </td>
       </tr>
     </table> 
