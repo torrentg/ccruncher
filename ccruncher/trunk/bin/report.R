@@ -14,14 +14,14 @@
 #=========================================================
 # Utility function (concatenate 2 strings)
 #=========================================================
-"%&%" <- function(a,b) paste(a,b,sep="")
+"%&%" <- function(a, b) paste(a, b, sep="")
 
 #=========================================================
 # Computes the standar error for prob-quantile using
 # Maritz-Jarrett method
 # example: VAR(99.9) => quantstderr(x,0.01)
 #=========================================================
-ccruncher.quantstderr <- function(x,prob,sorted=FALSE)
+ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
 {
   #sorting x
   if (sorted == FALSE) {
@@ -50,12 +50,12 @@ ccruncher.quantstderr <- function(x,prob,sorted=FALSE)
   for(i in M:N)
   {
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
-    if (W[i] < 1e-20) break;
+    if (W[i] < 1e-20) { break };
   }
   for(i in M:1)
   {
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
-    if (W[i] < 1e-20) break;
+    if (W[i] < 1e-20) { break };
   }
 
   #computing C1 and C2
@@ -136,7 +136,7 @@ ccruncher.evalsigma <- function(x)
 ccruncher.evalquantile <- function(x, prob, breaks=250)
 {
   #initializing values
-  ret <- matrix(NA,2,length(x));
+  ret <- matrix(NA, 2, length(x));
   ret[1,1] <- 0;
   ret[2,1] <- 0;
   aux <- vector();
@@ -146,14 +146,15 @@ ccruncher.evalquantile <- function(x, prob, breaks=250)
   #computing values
   for(i in 2:length(x))
   {
-    aux[i] <- x[i];
+    #aux[i] <- x[i];
 
     if (i%%k == 0 | i >= length(x)-10)
     {
-      aux <- sort(aux,method="sh");
+      aux <- c(aux, x[(length(aux)+1):i]);
+      aux <- sort(aux, method="sh");
 
-      ret[1,i] <- quantile(aux[1:i],prob,names=FALSE);
-      ret[2,i] <- ccruncher.quantstderr(aux[1:i],prob,sorted=TRUE);
+      ret[1,i] <- quantile(aux[1:i], prob, names=FALSE);
+      ret[2,i] <- ccruncher.quantstderr(aux[1:i], prob, sorted=TRUE);
     }
     else
     {
@@ -230,9 +231,9 @@ ccruncher.summary <- function(x, var, alpha)
 #=========================================================
 ccruncher.vartable <- function(x)
 {
-  #VaR values analised
+  #VaR values analized
   xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
-  
+
   #allocating return object (col1=var,col2=value,col3=stderr)
   ret <- matrix(NaN, length(xvar), 3)
 
@@ -254,7 +255,7 @@ ccruncher.vartable <- function(x)
 # show=2 -> results + density graphic
 # show=3 -> results
 #=========================================================
-ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
+ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2, output="plain")
 {
   #checking arguments
   if (show < 1 | 3 < show)
@@ -265,6 +266,7 @@ ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
   #retrieving data file
   df <- read.table(filename, col.names=c('index', 'value'));
   z <- as.vector(t(df["value"]));
+  rm(df);
 
   if (show == 1)
   {
@@ -286,12 +288,22 @@ ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
     plot(density(z));
   }
 
+  #computing values
+  summary <- ccruncher.summary(z, var=var, alpha=alpha);
+  vartable <- ccruncher.vartable(z);
+
   #print results
   write("", file="");
-  write(ccruncher.summary(z, var=var, alpha=alpha), file="");
+  write(summary, file="");
   write("", file="");
   write("VaR table [row1=VaR-level, row2=VaR-value, row2=VaR-stderr]", file="");
   write("-------------------------------------------------------------------------", file="");
-  write(format(t(ccruncher.vartable(z))), file="", ncolumns=3);
+  write(format(t(vartable)), file="", ncolumns=3);
   write("", file="");
 }
+
+# z <- list(mu=0.5,stderr=45)
+# names(z)
+# names(z)[1] <- "cambio mu por pepe"
+# z["stderr"]
+# z[["stderr"]]
