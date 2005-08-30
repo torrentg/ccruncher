@@ -2,6 +2,11 @@
 CREDITCRUNCHER NEWS
 ===================
 
+version 0.6 (Sept. 2005)
+--------------------------
+  * added error analisis in documentation
+  * report generation using R
+
 version 0.5 (August 2005)
 --------------------------
   * important: implemented specialized Gaussian Copula

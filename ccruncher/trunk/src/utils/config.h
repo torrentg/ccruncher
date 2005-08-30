@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Aug 12 17:06:48 CEST 2005"
+#define BUILD_DATE "Tue Aug 30 11:20:18 CEST 2005"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -116,13 +116,13 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 0.5"
+#define PACKAGE_STRING "ccruncher 0.6"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.5"
+#define PACKAGE_VERSION "0.6"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -137,7 +137,7 @@
 /* #undef USE_MPI */
 
 /* Version number of package */
-#define VERSION "0.5"
+#define VERSION "0.6"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -163,7 +163,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R236"
+#define SVNVERSION "R240:243M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

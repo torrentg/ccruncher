@@ -13,7 +13,7 @@
     <h1>CreditCruncher - Input File Reference</h1>
 
     <p>
-      This document describes the xml input file for CreditCruncher-0.5.
+      This document describes the xml input file for CreditCruncher-0.6.
       In the distribution package you can find the DTD and some XML samples 
       into the samples directory. 
       <br /><br />
@@ -44,7 +44,7 @@
 
     <p>
       This section shows the basic properties of the problem to be solved.
-      The properties showed here can be unordered.
+      The properties can be unordered.
     </p>
 
     <h4>Example</h4>
@@ -59,7 +59,7 @@
     &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
     &lt;property name="copula.type" value="gaussian"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
-    &lt;property name="montecarlo.method" value="rating-path"/&gt;
+    &lt;property name="montecarlo.method" value="time-to-default"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
     &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
   &lt;/params&gt;
@@ -84,8 +84,8 @@
       <tr class="a">
         <td style="text-align:center;">time.steps</td>
         <td style="text-align:justify;">
-          Number of time steps. Fix this number with caution because it has a
-          big impact in the number of calculations to be performed.
+          Number of time steps. The simulation date is: <br />
+          time.begindate + time.steps x time.steplength
         </td>
         <td style="text-align:center;"><code>int</code></td>
       </tr>
@@ -942,7 +942,7 @@
           </a>    
         </td>
         <td class="footer" align="right">
-          Last modified: 12-Aug-2005 &nbsp;
+          Last modified: 30-Aug-2005 &nbsp;
         </td>
       </tr>
     </table>

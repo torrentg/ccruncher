@@ -5,9 +5,7 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
-  * improve given samples
-  * working in pdf documentation explaining methodology used in CreditCruncher
-  * working in scripts that generates report using LaTeX and gnuplot
+  * working in pdf documentation
 
 
 Future works
