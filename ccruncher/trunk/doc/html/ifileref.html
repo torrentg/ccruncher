@@ -753,11 +753,11 @@
 
   &lt;portfolio&gt;
     &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
-      &lt;belongs-to concept="sector" segment="S1"/&gt;
-      &lt;belongs-to concept="size" segment="medium"/&gt;
+      &lt;belongs-to segmentation="sector" segment="S1"/&gt;
+      &lt;belongs-to segmentation="size" segment="medium"/&gt;
       &lt;asset class="bond" id="op1"&gt;
-        &lt;belongs-to concept="product" segment="bond"/&gt;
-        &lt;belongs-to concept="office" segment="0001"/&gt;
+        &lt;belongs-to segmentation="product" segment="bond"/&gt;
+        &lt;belongs-to segmentation="office" segment="0001"/&gt;
         &lt;data&gt;
           &lt;values at="01/06/2002" cashflow="10.0" netting="2000.0" /&gt;
           &lt;values at="01/01/2003" cashflow="10.0" netting="2000.0" /&gt;
@@ -767,8 +767,8 @@
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset class="bond" id="op2">&gt;
-        &lt;belongs-to concept="office" segment="0004"/&gt;
-        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;belongs-to segmentation="office" segment="0004"/&gt;
+        &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
           &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
           &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
@@ -779,11 +779,11 @@
       &lt;/asset&gt;
     &lt;/client&gt;
     &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
-      &lt;belongs-to concept="sector" segment="S2"/&gt;
-      &lt;belongs-to concept="size" segment="big"/&gt;
+      &lt;belongs-to segmentation="sector" segment="S2"/&gt;
+      &lt;belongs-to segmentation="size" segment="big"/&gt;
       &lt;asset class="bond" id="op3"&gt;
-        &lt;belongs-to concept="office" segment="0003"/&gt;
-        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;belongs-to segmentation="office" segment="0003"/&gt;
+        &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
           &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
           &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
@@ -798,8 +798,8 @@
     </pre>
 
     <p>
-      Look how the client does not have a 'belong-to' to 'client' segmentation defined.
-      This is done implicitly (the same occurs with 'asset'). 
+      Look how the client haven't a 'belongs-to segmentation=client defined.
+      This is done implicitly (the same occurs with 'asset').
       If you try to assign a client to a segmentation of asset components 
       (or viceversa), the input file will be rejected.
     </p>
@@ -851,7 +851,7 @@
         <th>Type</th>
       </tr>
       <tr class="a">
-        <td style="text-align:center;">concept</td>
+        <td style="text-align:center;">segmentation</td>
         <td style="text-align:justify;">
           Segmentation identifier (see segmentations)
         </td>
@@ -942,7 +942,7 @@
           </a>    
         </td>
         <td class="footer" align="right">
-          Last modified: 30-Aug-2005 &nbsp;
+          Last modified: 31-Aug-2005 &nbsp;
         </td>
       </tr>
     </table>

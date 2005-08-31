@@ -329,7 +329,7 @@ ccruncher.vartable <- function(x)
   #VaR values scaned
   xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
 
-  #allocating return object (col1=var,col2=value,col3=stderr)
+  #allocating return object (col1=VaR,col2=value,col3=stderr)
   ret <- matrix(NaN, length(xvar), 3)
 
   #computing values
@@ -352,7 +352,6 @@ ccruncher.vartable <- function(x)
 #   var: numeric. desired VaR level with value in [0,1]
 #   alpha: numeric. confidence level with value in [0,1]
 #   show: numeric. 1=full_graphics, 2=simple_graphics, 3=without graphics
-#   output: string. plain=plain output, xml=xml formated output
 # returns
 #   some text and graphics in stdout
 # example
@@ -360,7 +359,7 @@ ccruncher.vartable <- function(x)
 #   ccruncher.main("data/portfolio-rest.out", var=0.99, alpha=0.99, show=3)
 #   quit(save='no')
 #===========================================================================
-ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2, output="plain")
+ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
 {
   #checking arguments
   if (show < 1 | 3 < show)
