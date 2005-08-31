@@ -34,6 +34,9 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . tag concept renamed to segmentation
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -76,7 +79,7 @@ class Asset : public ExpatHandlers
     double getVCashFlow(Date &date1, Date &date2, Interest *);
     double getVNetting(Date &date1, Date &date2, Interest *);
     void insertDateValues(DateValues &) throw(Exception);
-    void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
+    void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
 
   public:
@@ -88,11 +91,11 @@ class Asset : public ExpatHandlers
     string getId(void);
     string getName(void);
 
-    void addBelongsTo(int iconcept, int isegment) throw(Exception);
+    void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     void getVertexes(Date *dates, int n, Interests *ints, DateValues *ret);
     vector<DateValues> *getData();
-    bool belongsTo(int iconcept, int isegment);
-    int getSegment(int iconcept);
+    bool belongsTo(int isegmentation, int isegment);
+    int getSegment(int isegmentation);
     void reset(Segmentations *);
 
     /** ExpatHandlers methods declaration */

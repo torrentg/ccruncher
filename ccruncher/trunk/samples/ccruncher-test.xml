@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.5.dtd">
+<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.6.dtd">
 -->
 <!--
 <!DOCTYPE creditcruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
-          "http://www.generacio.com/ccruncher/creditcruncher-0.5.dtd">
+          "http://www.generacio.com/ccruncher/creditcruncher-0.6.dtd">
 -->
 
 <creditcruncher>
@@ -73,7 +73,7 @@
     <transition from="AAA"     to="B"       value="0.0000"/>
     <transition from="AAA"     to="CCC"     value="0.0000"/>
     <transition from="AAA"     to="Default" value="0.0000"/>
-        
+
     <transition from="AA"      to="AAA"     value="0.0070"/>
     <transition from="AA"      to="AA"      value="0.9065"/>
     <transition from="AA"      to="A"       value="0.0779"/>
@@ -82,7 +82,7 @@
     <transition from="AA"      to="B"       value="0.0014"/>
     <transition from="AA"      to="CCC"     value="0.0002"/>
     <transition from="AA"      to="Default" value="0.0000"/>
-    
+
     <transition from="A"       to="AAA"     value="0.0009"/>
     <transition from="A"       to="AA"      value="0.0227"/>
     <transition from="A"       to="A"       value="0.9105"/>
@@ -616,13 +616,13 @@
   <!-- ============================================================== -->
   <portfolio>
     <client rating="BB" sector="S1" name="Repsol" id="000001">
-      <belongs-to concept="sector" segment="S1"/>
-      <belongs-to concept="size" segment="medium"/>
-      <!-- implicit: belongs-to concept="client" value="cif1" -->
+      <belongs-to segmentation="sector" segment="S1"/>
+      <belongs-to segmentation="size" segment="medium"/>
+      <!-- implicit: belongs-to segmentation="client" value="cif1" -->
       <asset name="generic" id="op1">
-        <belongs-to concept="product" segment="bond"/>
-        <belongs-to concept="office" segment="0001"/>
-        <!-- implicit: belongs-to concept="asset" segment="op1" -->
+        <belongs-to segmentation="product" segment="bond"/>
+        <belongs-to segmentation="office" segment="0001"/>
+        <!-- implicit: belongs-to segmentation="asset" segment="op1" -->
         <data>
           <values at="01/01/2000" cashflow="10.0" netting="2.0" />
           <values at="01/06/2000" cashflow="10.0" netting="2.0" />

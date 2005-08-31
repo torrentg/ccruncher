@@ -40,6 +40,9 @@
 // 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . tag concept renamed to segmentation
+//
 //===========================================================================
 
 #include <iostream>
@@ -160,8 +163,8 @@ void ccruncher_test::AssetTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1'>\n\
-        <belongs-to concept='product' segment='bond'/>\n\
-        <belongs-to concept='office' segment='0001'/>\n\
+        <belongs-to segmentation='product' segment='bond'/>\n\
+        <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
           <values at='01/07/2000' cashflow='10.0' netting='450.0' />\n\
@@ -192,8 +195,8 @@ void ccruncher_test::AssetTest::test2()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1'>\n\
-        <belongs-to concept='product' segment='bond'/>\n\
-        <belongs-to concept='office' segment='0001'/>\n\
+        <belongs-to segmentation='product' segment='bond'/>\n\
+        <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
           <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\

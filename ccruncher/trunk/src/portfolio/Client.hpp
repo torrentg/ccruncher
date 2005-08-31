@@ -34,6 +34,9 @@
 // 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added hash key (to accelerate comparations)
 //
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . tag concept renamed to segmentation
+//
 //===========================================================================
 
 #ifndef _Client_
@@ -79,7 +82,7 @@ class Client : public ExpatHandlers
     Asset auxasset;
 
     void insertAsset(Asset &) throw(Exception);
-    void insertBelongsTo(int iconcept, int tsegment) throw(Exception);
+    void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
   public:
 
@@ -95,9 +98,9 @@ class Client : public ExpatHandlers
     vector<Asset> * getAssets();
     bool isActive(Date, Date) throw(Exception);
 
-    void addBelongsTo(int iconcept, int isegment) throw(Exception);
-    bool belongsTo(int iconcept, int isegment);
-    int getSegment(int iconcept);
+    void addBelongsTo(int isegmentation, int isegment) throw(Exception);
+    bool belongsTo(int isegmentation, int isegment);
+    int getSegment(int isegmentation);
 
     static bool less(const Client *left, const Client *right);
     void reset(Ratings *, Sectors *, Segmentations *, Interests *);

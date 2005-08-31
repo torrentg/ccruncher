@@ -40,6 +40,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . tag concept renamed to segmentation
+//
 //===========================================================================
 
 #include <cmath>
@@ -227,13 +230,17 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   else if (isEqual(name_,"belongs-to")) {
-    string sconcept = getStringAttribute(attributes, "concept", "");
+    string ssegmentation = getStringAttribute(attributes, "segmentation", "");
     string ssegment = getStringAttribute(attributes, "segment", "");
 
-    int iconcept = segmentations->getSegmentation(sconcept);
-    int isegment = segmentations->getSegment(sconcept, ssegment);
+    if (ssegmentation == "" || ssegment == "") {
+      throw eperror(eu, "invalid attributes at <belongs-to> tag");
+    }
 
-    insertBelongsTo(iconcept, isegment);
+    int isegmentation = segmentations->getSegmentation(ssegmentation);
+    int isegment = segmentations->getSegment(ssegmentation, ssegment);
+
+    insertBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"data")) {
     if (getNumAttributes(attributes) != 0) {
@@ -279,17 +286,17 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     if (segmentations->getSegmentation("asset") >= 0) {
       if (segmentations->getComponents("asset") == asset) {
         segmentations->addSegment("asset", id);
-        int iconcept = segmentations->getSegmentation("asset");
+        int isegmentation = segmentations->getSegmentation("asset");
         int isegment = segmentations->getSegment("asset", id);
-        insertBelongsTo(iconcept, isegment);
+        insertBelongsTo(isegmentation, isegment);
       }
     }
     // filling implicit segment
     if (segmentations->getSegmentation("portfolio") >= 0) {
       if (segmentations->getComponents("portfolio") == asset) {
-        int iconcept = segmentations->getSegmentation("portfolio");
+        int isegmentation = segmentations->getSegmentation("portfolio");
         int isegment = segmentations->getSegment("portfolio", "rest");
-        insertBelongsTo(iconcept, isegment);
+        insertBelongsTo(isegmentation, isegment);
       }
     }
   }
@@ -335,27 +342,27 @@ void ccruncher::Asset::insertDateValues(DateValues &val) throw(Exception)
 //===========================================================================
 // addBelongsTo
 //===========================================================================
-void ccruncher::Asset::addBelongsTo(int iconcept, int isegment) throw(Exception)
+void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
-  insertBelongsTo(iconcept, isegment);
+  insertBelongsTo(isegmentation, isegment);
 }
 
 //===========================================================================
 // insertBelongsTo
 //===========================================================================
-void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Exception)
+void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
-  assert(iconcept >= 0);
+  assert(isegmentation >= 0);
   assert(isegment >= 0);
 
-  if (getSegment(iconcept) > 0)
+  if (getSegment(isegmentation) > 0)
   {
-    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined concept");
+    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined segmentation");
   }
 
   if (isegment > 0)
   {
-    belongsto[iconcept] = isegment;
+    belongsto[isegmentation] = isegment;
   }
   else
   {
@@ -366,17 +373,17 @@ void ccruncher::Asset::insertBelongsTo(int iconcept, int isegment) throw(Excepti
 //===========================================================================
 // belongsTo
 //===========================================================================
-bool ccruncher::Asset::belongsTo(int iconcept, int isegment)
+bool ccruncher::Asset::belongsTo(int isegmentation, int isegment)
 {
-  return ((getSegment(iconcept)==isegment)?true:false);
+  return ((getSegment(isegmentation)==isegment)?true:false);
 }
 
 //===========================================================================
 // getSegment
 //===========================================================================
-int ccruncher::Asset::getSegment(int iconcept)
+int ccruncher::Asset::getSegment(int isegmentation)
 {
-  map<int,int>::iterator pos = belongsto.find(iconcept);
+  map<int,int>::iterator pos = belongsto.find(isegmentation);
 
   if (pos != belongsto.end())
   {

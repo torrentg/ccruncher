@@ -37,6 +37,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . tag concept renamed to segmentation
+//
 //===========================================================================
 
 #include <cmath>
@@ -121,11 +124,11 @@ components_t ccruncher::Segmentations::getComponents(int iseg)
 //===========================================================================
 int ccruncher::Segmentations::getSegment(string segmentation, string segment)
 {
-  int iconcept = getSegmentation(segmentation);
+  int isegmentation = getSegmentation(segmentation);
 
-  if (iconcept >= 0)
+  if (isegmentation >= 0)
   {
-    return vsegmentations[iconcept].getSegment(segment);
+    return vsegmentations[isegmentation].getSegment(segment);
   }
   else
   {
