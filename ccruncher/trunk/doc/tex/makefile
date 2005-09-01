@@ -43,6 +43,7 @@ clean:
 	rm -f ccruncher.ilg
 	rm -f ccruncher.ind
 	rm -f ccruncher.toc
+	rm -f ccruncher.log
 	rm -f *~
 
 install:

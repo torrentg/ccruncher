@@ -7,6 +7,7 @@ version 0.6 (Sept. 2005)
   * added error analisis in documentation
   * report generation using R
   * replaced concept attribute by segmentation in belongs-to xml tag
+  * bugfix: removed macro XMLCALL (old platforms don't understand)
 
 version 0.5 (August 2005)
 --------------------------

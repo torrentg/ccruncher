@@ -162,7 +162,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R240:243M"
+#define SVNVERSION "R249"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
