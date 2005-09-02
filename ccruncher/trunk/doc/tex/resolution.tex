@@ -338,7 +338,9 @@ calculo del valor esperado, calculo del VAR, etc.
 El m\'etodo de Monte Carlo genera $N$ realizaciones, $\{z_1,z_2,z_3,\cdots,z_N\}$,
 de la variable aleatoria $Z$ (valor de la cartera) que permiten obtener la funci\'on
 de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores usados
-y el $\alpha$-intervalo de confianza:
+y el $\alpha$-intervalo de confianza. CreditCruncher utiliza el entorno \emph{R}
+\footnote{http://www.r-project.org} para realizar los c\'alculos estad'isticos.
+Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
 
 \paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
@@ -359,4 +361,3 @@ q_{Z,x} = \widehat{q_{Z,x}} \pm \textrm{stderr}(q_{Z,x})
 Donde el error est\'andar del quantil, $\textrm{stderr}(q_{Z,x})$, lo calculamos usando
 el m\'etodo de Maritz-Jarrett (basado en el estad\'istico de orden). F\'ormula extraida
 de \cite{quant:algor}.
-

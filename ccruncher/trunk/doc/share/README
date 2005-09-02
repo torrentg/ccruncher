@@ -68,3 +68,21 @@ locfile: quantiles/quantanal.pdf
 descrip: Quantile standard error algorithm description
 
 ------------------------------------------------------------------------
+
+docname: Quantile-VaR is the wrong measure to quantify market risk for regulatory purposes
+authors: Stefan R. Jaschke
+publish: BIS (Bank for International Settlements)
+homeurl: http://www.bis.org/bcbs/ca/sjasc.pdf
+locfile: var/varbad.pdf
+descrip: VaR demonization anf TCE intro
+
+------------------------------------------------------------------------
+
+docname: Expected Shortfall: a natural coherent alternative to Value at Risk
+authors: Carlo Acerbi, Dirk Tasche
+publish: BIS (Bank for International Settlements)
+homeurl: http://www.bis.org/bcbs/ca/acertasc.pdf
+locfile: var/eshortfall.pdf
+descrip: var alternative
+
+------------------------------------------------------------------------

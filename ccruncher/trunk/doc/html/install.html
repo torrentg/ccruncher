@@ -210,9 +210,13 @@
       or open a <a href="http://www.r-project.org">R</a> console and type: <br />
       <code><b>
         &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.99,alpha=0.99,show=1) <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.97,alpha=0.90,show=2) <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.main("$CCRUNCHER/data/file.out",var=0.90,alpha=0.66,show=3) <br />
+        &nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99) <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="density") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") <br />
         &nbsp;&nbsp;>&nbsp;quit(save='no') <br />
       </b></code>
     </p>
@@ -236,7 +240,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 30-Aug-2005 &nbsp;
+          Last modified: 02-Sep-2005 &nbsp;
         </td>
       </tr>
     </table> 

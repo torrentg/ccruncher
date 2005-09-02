@@ -25,6 +25,11 @@
 # 2005/08/30 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
+# 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added TCE support (Tail Conditional Expectation or Expected Shortfall)
+#   . code refactored
+#   . added usage example
+#
 #***************************************************************************
 
 #===========================================================================
@@ -229,6 +234,59 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 
 #===========================================================================
 # description
+#   Compute the requested TCE (Tail Conditional Expectation or Expected 
+#   Shortfall) and standar error for each Monte Carlo iteration
+# arguments
+#   x: vector with values
+#   prob: numeric. quantile related to VaR. probability with value in [0,1]
+#   breaks: numeric. number of evaluated values
+# returns
+#   matrix(1,): prob-tce
+#   matrix(2,): standard error of prob-tce
+# example
+#   x <- rnorm(5000)
+#   ccruncher.ctce(x, 0.01)
+# notes
+#   when length(x) is large, this function is expensive
+#   because involve calls to sort() function. breaks
+#   argument allows you to reduce the number of computations
+#===========================================================================
+ccruncher.ctce <- function(x, prob, breaks=250)
+{
+  #initializing values
+  ret <- matrix(NA, 2, length(x));
+  ret[1,1] <- 0;
+  ret[2,1] <- 0;
+  aux <- vector();
+  aux[1] <- x[1];
+  k <- max(1, as.integer(trunc(length(x)/breaks)));
+
+  #computing values
+  for(i in 2:length(x))
+  {
+    if (i%%k == 0 | i >= length(x)-10)
+    {
+      aux <- c(aux, x[(length(aux)+1):i]);
+      aux <- sort(aux, method="sh");
+      var <- quantile(aux[1:i], prob, names=FALSE);
+      tmp <- aux[aux <= var];
+
+      ret[1,i] <- mean(tmp);
+      ret[2,i] <- sqrt(var(tmp))/sqrt(length(tmp));
+    }
+    else
+    {
+      ret[1,i] <- ret[1,i-1];
+      ret[2,i] <- ret[2,i-1];
+    }
+  }
+
+  #returning values
+  return(ret);
+}
+
+#===========================================================================
+# description
 #   Plot the evolution (convergence) of a statistic
 # arguments
 #   values: matrix(2,n) where matrix(1,)=values and matrix(1,)=stderrs
@@ -274,37 +332,115 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 #   writes a summary
 # arguments
 #   x: vector with values
-#   var: numeric. desired VaR level with value in [0,1]
 #   alpha: numeric. confidence level with value in [0,1]
+#   format: string. plain={plain text}, xml={xml format}
 # returns
 #   vector: each line is a text line of the summary
 # example
-#   x <- rnorm(5000)
-#   lines <- ccruncher.summary(x, 0.99, 0.975)
+#   ccruncher.read("data/portfolio-rest.out")
+#   lines <- ccruncher.summary(x, 0.99, format="xml")
 #   write(lines, file="")
 #===========================================================================
-ccruncher.summary <- function(x, var, alpha)
+ccruncher.summary <- function(x, alpha=0.99, format="plain")
 {
-  #computing summary values
+  #VaR values scaned (add your values here)
+  xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
+  table1 <- matrix(NaN, length(xvar), 3);
+  table2 <- matrix(NaN, length(xvar), 3);
+
+  #size, min, max, mean and stddev
   n <- length(x);
+  minx <- min(x);
+  maxx <- max(x);
   mu <- mean(x);
   stddev <- sqrt(var(x));
-  q <- quantile(x, 1-var, names=FALSE);
-  qse <- ccruncher.quantstderr(x, 1-var);
+
+  #standar error for mean and stddev
+  stderr1 <- stddev/sqrt(n);
+  stderr2 <- stddev/sqrt(2*n);
+
+  #computing VaR (Value at Risk)
+  for(i in 1:length(xvar))
+  {
+    table1[i,1] <- xvar[i];
+    table1[i,2] <- quantile(x, (1-xvar[i]), names=FALSE);
+    table1[i,3] <- ccruncher.quantstderr(x, (1-xvar[i]));
+  }
+
+  #computing TCE (Tail Conditional Expectation or Expected Shortfall)
+  for(i in 1:length(xvar))
+  {
+    #retrieving simulations with value less than VaR
+    aux <- x[x <= table1[i,2]];
+
+    #coputing mean and related stderr
+    table2[i,1] <- xvar[i];
+    table2[i,2] <- mean(aux);
+    table2[i,3] <- sqrt(var(aux))/sqrt(length(aux));
+  }
+
+  #factor used to compute confidence bounds
   k <- qnorm((1-alpha)/2);
 
   #creating return object
   ret <- vector();
 
-  #printing report
-  ret[1] <- "";
-  ret[2] <- "summary at "%&%(alpha*100)%&%"% confidence level";
-  ret[3] <- "-------------------------------------------------------------------------";
-  ret[4] <- "n = " %&% n;
-  ret[5] <- "mean = " %&% mu %&% " +/- " %&% abs(k*stddev/sqrt(n));
-  ret[6] <- "stddev = " %&% stddev %&% " +/- " %&% abs(k*stddev/sqrt(2*n));
-  ret[7] <- "VAR(" %&% var %&% ") = " %&% q %&% " +/- " %&% abs(k*qse);
-  ret[8] <- "";
+  #printing summary
+  if (format == "plain")
+  {
+    ret[length(ret)+1] <- "summary at "%&%(alpha*100)%&%"% confidence level";
+    ret[length(ret)+1] <- "---------------------------------------------------------------";
+    ret[length(ret)+1] <- "n = " %&% n;
+    ret[length(ret)+1] <- "min = " %&% minx;
+    ret[length(ret)+1] <- "max = " %&% maxx;
+    ret[length(ret)+1] <- "mean = " %&% mu %&% " +/- " %&% abs(k*stderr1);
+    ret[length(ret)+1] <- "stddev = " %&% stddev %&% " +/- " %&% abs(k*stderr2);
+
+    for(i in 1:length(table1[,1]))
+    {
+      ret[length(ret)+1] <- "VAR(" %&% (table1[i,1]*100) %&% "%) = " %&% table1[i,2] %&% " +/- " %&% abs(k*table1[i,3]);
+    }
+
+    for(i in 1:length(table2[,1]))
+    {
+      ret[length(ret)+1] <- "TCE(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
+    }
+  }
+  else if (format == "xml")
+  {
+    ret[length(ret)+1]  <- "<ccruncher-report>";
+    ret[length(ret)+1]  <- "  <!-- ====================================================== -->";
+    ret[length(ret)+1]  <- "  <!-- confidence bounds can be computed as follows:          -->";
+    ret[length(ret)+1]  <- "  <!-- X = value +/- qnorm((1-alpha)/2) * stderr              -->";
+    ret[length(ret)+1]  <- "  <!-- where qnorm() is the inverse CDF for Normal(0,1) and   -->";
+    ret[length(ret)+1]  <- "  <!-- alpha is the desired confidence level (pe. alpha=0.99) -->";
+    ret[length(ret)+1]  <- "  <!-- ====================================================== -->";
+    ret[length(ret)+1]  <- "  <size value='" %&% n %&% "' />";
+    ret[length(ret)+1]  <- "  <min value='" %&% minx %&% "' />";
+    ret[length(ret)+1] <- "  <max value='" %&% maxx %&% "' />";
+    ret[length(ret)+1] <- "  <mean value='" %&% mu %&% "' stderr='" %&% stderr1 %&% "' />";
+    ret[length(ret)+1] <- "  <stddev value='" %&% stddev %&% "' stderr='" %&% stderr2 %&% "' />";
+
+    for(i in 1:length(table1[,1]))
+    {
+      ret[length(ret)+1] <- "  <VaR prob='" %&% table1[i,1] %&%
+                  "' value='" %&% table1[i,2] %&% 
+                  "' stderr='" %&% table1[i,3] %&% "' />";
+    }
+
+    for(i in 1:length(table2[,1]))
+    {
+      ret[length(ret)+1] <- "  <TCE prob='" %&% table2[i,1] %&%
+                  "' value='" %&% table2[i,2] %&% 
+                  "' stderr='" %&% table2[i,3] %&% "' />";
+    }
+
+    ret[length(ret)+1] <- "</ccruncher-report>";
+  }
+  else
+  {
+    return("error: incorrect format value. try plain or xml");
+  }
 
   #exit function
   return(ret);
@@ -312,96 +448,91 @@ ccruncher.summary <- function(x, var, alpha)
 
 #===========================================================================
 # description
-#   computes the VaR (and stderr) for a selected group of VaR levels
+#   plot some graphics related to ccruncher. These are:
+#     - density plot
+#     - mean convergence
+#     - stddev convergence
+#     - VaR convergence
+#     - TCE convergence
 # arguments
 #   x: vector with values
+#   alpha: numeric. confidence level with value in [0,1]
+#   var: numeric. VaR level with value in [0,1]
+#   show: string. density|mean|stddev|VaR|TCE|all
 # returns
-#   vector(,1): VaR level with value in [0,1]
-#   vector(,2): VaR value
-#   vector(,3): VaR standard error
+#   the requested graphic
 # example
-#   x <- rnorm(5000)
-#   vt <- ccruncher.vartable(x)
-#   print(vt)
+#   x <- ccruncher.read("data/portfolio-rest.out")
+#   ccruncher.plot(x, alpha=0.95, var=0.99)
+# notes
+#   - confidence level is used to plot the confidence bounds on
+#     convergence graphics. 
+#   - caution with convergence plots, can take some time to plot them
 #===========================================================================
-ccruncher.vartable <- function(x)
+ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="density")
 {
-  #VaR values scaned
-  xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
+  if (show == "all") { par(mfrow=c(3,2)); }
 
-  #allocating return object (col1=VaR,col2=value,col3=stderr)
-  ret <- matrix(NaN, length(xvar), 3)
-
-  #computing values
-  for(i in 1:length(xvar))
-  {
-    ret[i,1] <- xvar[i];
-    ret[i,2] <- quantile(x, (1-xvar[i]));
-    ret[i,3] <- ccruncher.quantstderr(x, (1-xvar[i]));
+  if (show == "density" || show == "all") {
+    aux <- density(x);
+    plot(aux);
   }
-
-  #return function
-  return(ret)
+  if (show == "mean" || show == "all") {
+    aux <- ccruncher.cmean(z);
+    ccruncher.cplot(aux, alpha, "Mean");
+  }
+  if (show == "stddev" || show == "all") {
+    aux <- ccruncher.cstddev(z);
+    ccruncher.cplot(aux, alpha, "StdDev");
+  }
+  if (show == "VaR" || show == "all") {
+    aux <- ccruncher.cquantile(z, prob=(1-var), breaks=250);
+    ccruncher.cplot(aux, alpha, "VaR("%&%(var*100)%&%"%)");
+  }
+  if (show == "TCE" || show == "all") {
+    aux <- ccruncher.ctce(z, prob=(1-var), breaks=250);
+    ccruncher.cplot(aux, alpha, "TCE("%&%(var*100)%&%"%)");
+  }
 }
 
 #===========================================================================
 # description
-#   main function
+#   read a ccruncher output file and put values in a vector
 # arguments
 #   filename: string. ccruncher output filename
-#   var: numeric. desired VaR level with value in [0,1]
-#   alpha: numeric. confidence level with value in [0,1]
-#   show: numeric. 1=full_graphics, 2=simple_graphics, 3=without graphics
 # returns
-#   some text and graphics in stdout
+#   vector with values
 # example
-#   source("bin/report.R")
-#   ccruncher.main("data/portfolio-rest.out", var=0.99, alpha=0.99, show=3)
-#   quit(save='no')
+#   x <- ccruncher.read("data/portfolio-rest.out")
+#   ccruncher.summary(x, alpha=0.95, format="plain")
 #===========================================================================
-ccruncher.main <- function(filename, var=0.99, alpha=0.99, show=2)
+ccruncher.read <- function(filename)
 {
-  #checking arguments
-  if (show < 1 | 3 < show)
-  {
-    return("invalid show value. choose one of 1/2/3");
-  }
-
   #retrieving data from file
   df <- read.table(filename, col.names=c('index', 'value'));
   z <- as.vector(t(df["value"]));
   rm(df);
 
-  if (show == 1)
-  {
-    #computing statistics evolution values
-    ret1 <- ccruncher.cmean(z);
-    ret2 <- ccruncher.cstddev(z);
-    ret3 <- ccruncher.cquantile(z, prob=(1-var), breaks=250);
-
-    #doing some graphics
-    par(mfrow=c(2,2));
-    plot(density(z));
-    ccruncher.cplot(ret1, alpha, "Mean");
-    ccruncher.cplot(ret2, alpha, "StdDev");
-    ccruncher.cplot(ret3, alpha, "VaR("%&%(var*100)%&%"%)");
-  }
-  else if (show == 2)
-  {
-    #plotting density graph
-    plot(density(z));
-  }
-
-  #computing values
-  summary <- ccruncher.summary(z, var=var, alpha=alpha);
-  vartable <- ccruncher.vartable(z);
-
-  #printing results
-  write("", file="");
-  write(summary, file="");
-  write("", file="");
-  write("VaR table [col1=VaR-level, col2=VaR-value, col3=VaR-stderr]", file="");
-  write("-------------------------------------------------------------------------", file="");
-  write(format(t(vartable)), file="", ncolumns=3);
-  write("", file="");
+  #return function
+  return(z);
 }
+
+#===========================================================================
+# usage example
+# --------------------------------------------------------------------------
+# >
+# > source("bin/report.R")                              #load R script
+# > x <- ccruncher.load("file.out")                     #load data
+# > x                                                   #list data
+# > ccruncher.summary(x, alpha=0.95)                    #print summary
+# > lines <- ccruncher.summary(x, format="xml")         #create xml summary
+# > write(lines, file="")                               #print xml summary
+# > ccruncher.plot(x, show="density")                   #plots a graphic
+# > ccruncher.plot(x, show="mean")                      #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
+# > quit(save='no')                                     #quit R environement
+#
+#===========================================================================

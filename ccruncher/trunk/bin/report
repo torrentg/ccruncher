@@ -144,7 +144,9 @@ do
 
   R --vanilla --slave << _EOF_
     source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    ccruncher.main("$1", var=0.99, alpha=0.975, show=3);
+    x <- ccruncher.read("$1");
+    lines <- ccruncher.summary(x, alpha=0.99, format="plain");
+    write(lines, file="");
 _EOF_
 
   if [ $? != 0 ]; then

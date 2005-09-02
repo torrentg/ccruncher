@@ -229,7 +229,7 @@ $X$.
 \paragraph{Definici\'on.} Estimamos la media de $X$ usando el siguiente
 estimador no sesgado:
 \begin{displaymath}
-E(X) \approx \widehat{X} = \frac{1}{n} \sum_{i=1}^{n} x_i
+E(X) = \mu_X  \approx \widehat{\mu_X} = \frac{1}{n} \sum_{i=1}^{n} x_i
 \end{displaymath}
 
 \paragraph{Definici\'on.} Estimamos la varianza de $X$ usando el siguiente
@@ -241,7 +241,7 @@ Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
 \end{displaymath}
 
 \paragraph{Definici\'on.} Estimamos el VAR de $X$ al nivel de confianza $\alpha$
-usando el siguiente estimador no sesgado:
+usando el siguiente estimador:
 \begin{displaymath}
 VAR_{\alpha}(X) = \textrm{inf}\{x | F(X) \geq 1-\alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:n}
 \end{displaymath}
@@ -252,12 +252,25 @@ donde,
 \item $x_{k:n}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
 \end{itemize}
 
+\paragraph{Definici\'on.} Estimamos el TEC (Tail Conditional Expectation o Expected Shortfall)
+de $X$ al nivel de confianza $\alpha$ usando el siguiente estimador:
+\begin{displaymath}
+TCE_{\alpha}(X) = E(X | X < VAR_{\alpha}(X)) \approx \widehat{TCE_{\alpha}(X)} =
+\frac{\sum_{i=1}^{n} x_i \cdot \textrm{1}_{\{x_i \le  x_{k:n}\}}}{\sum_{i=1}^{n} \textrm{1}_{\{x_i \le  x_{k:n}\}}}
+\end{displaymath}
+donde,
+\begin{itemize}
+\item $F$ es la funci\'on de distribuci\'on de $X$
+\item $k$ cumple $\frac{k}{n} \leq 1-\alpha < \frac{k+1}{n}$
+\item $x_{k:n}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
+\end{itemize}
+
 %---------------------------------------------------------------------------
 
-\section{Error est\'andar de un quantil}
+\section{Error est\'andar de un quantil (o VaR)}
 
 A continuaci\'on se describe el m\'etodo de Maritz-Jarrett basado en el
-estad\'istico de orden. Sea $N$ el taman\~o muestral y $x$ la probabilidad
+estad\'istico de orden. Sea $N$ el tama\~no muestral y $x$ la probabilidad
 del quantil.
 
 \begin{eqnarray}
@@ -279,6 +292,33 @@ entonces,
 \begin{displaymath}
 \textrm{stderr}(q_x) = \sqrt{C_2 - C_1^2}
 \end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{Error est\'andar del TCE}
+
+El TCE (Tail Conditional Expectation o Expected Shortfall) es la esperanza
+de una variable aleatoria condicionada a que sea inferior a un cierto quantil.
+Dado un conjunto de observaciones $x_1, x_2, x_3, \cdots, x_N$ de una variable
+aleatoria $X$, calculamos el error est\'andar del TCE siguiendo los siguientes
+pasos:
+
+\paragraph{Paso 1.} Calculamos el estimador de $VAR_{\alpha}(X)$.
+
+\paragraph{Paso 2.} Definimos la variable aleatoria $Y = \{X|X \le VAR_{\alpha}(X)$\}.
+Generamos un conjunto de observaciones de $Y$ seleccionamos las observaciones de $X$
+que son inferiores a $VAR_{\alpha}(X)$:
+\begin{displaymath}
+y_1, y_2, y_3, \cdots, y_M
+\end{displaymath}
+
+\paragraph{Paso 3.} Usamos el teorema central del l\'imite para estimar la media
+de $Y$ y calcular su error est\'andar:
+
+\begin{eqnarray}
+\widehat{TEC_{\alpha}(X)} & = & \widehat{\mu_Y} \nonumber \\
+\textrm{stderr}(TEC_\alpha) & = & \frac{\widehat{\sigma_Y}}{\sqrt{M}} \nonumber
+\end{eqnarray}
 
 %---------------------------------------------------------------------------
 
