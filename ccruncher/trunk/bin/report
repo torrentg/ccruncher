@@ -23,6 +23,10 @@
 # 2005/08/28 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
+# 2005/09/04 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added xml format argument
+#   . added portfolio value|loss argument
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -30,9 +34,10 @@
 #-------------------------------------------------------------
 CCRUNCHER=/home/horizon/temp/ccruncher
 progname=report
-numversion="0.5"
-svnversion="R236"
+numversion="0.6"
+svnversion="R253"
 retcode=0
+options=""
 
 #-------------------------------------------------------------
 # version function
@@ -57,6 +62,7 @@ copyright() {
 _EOF_
 
 }
+
 #-------------------------------------------------------------
 # usage function
 #-------------------------------------------------------------
@@ -72,6 +78,8 @@ usage() {
   arguments:
     file     ccruncher output data file to plot
   options
+    -x       print output in xml format
+    -d       computed values are portfolio values
     -h       show this message and exit
     -v       show version and exit
   return codes:
@@ -91,14 +99,16 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'hv:' opt
+  while getopts 'hvxd' opt
   do
     case $opt in
+      d) options="$options, simule='value'";;
+      x) options="$options, format='xml'";;
       v) version;
          exit 0;;
-      h) usage; 
+      h) usage;
          exit 0;;
-     \?) echo "unknow option. use -h for more information"; 
+     \?) echo "unknow option. use -h for more information";
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
          echo "$progname version and arguments at gerard@fobos.generacio.com";
@@ -129,23 +139,22 @@ readconf() {
 
 }
 
-
 #-------------------------------------------------------------
 # main function
 #-------------------------------------------------------------
 
 readconf $@;
+
 shift `expr $OPTIND - 1`
 
 #copyright;
 
 for filename in "$@"
 do
-
   R --vanilla --slave << _EOF_
     source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$1");
-    lines <- ccruncher.summary(x, alpha=0.99, format="plain");
+    x <- ccruncher.read("$filename");
+    lines <- ccruncher.summary(x, alpha=0.99, $options);
     write(lines, file="");
 _EOF_
 

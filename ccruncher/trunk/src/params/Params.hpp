@@ -31,6 +31,9 @@
 // 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -70,7 +73,8 @@ class Params : public ExpatHandlers
     long maxiterations;
     long maxseconds;
     string copula_type; // gaussian
-    string smethod;     // rating-path, time-to-default
+    string method;      // rating-path, time-to-default
+    string simule;      // loss, value
     long copula_seed;
     bool antithetic;
     bool onlyactive;    // only active clients

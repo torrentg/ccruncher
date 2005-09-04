@@ -349,10 +349,10 @@ void ccruncher::IData::validate() throw(Exception)
   else if (ratings == NULL) {
     throw Exception("ratings section not defined");
   }
-  else if (transitions == NULL && params->smethod == "rating-path") {
+  else if (transitions == NULL && params->method == "rating-path") {
     throw Exception("transition matrix section not defined");
   }
-  else if (transitions == NULL && survival == NULL && params->smethod == "time-to-default") {
+  else if (transitions == NULL && survival == NULL && params->method == "time-to-default") {
     throw Exception("transition matrix or survival section not defined");
   }
   else if (sectors == NULL) {

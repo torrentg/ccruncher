@@ -14,6 +14,9 @@
 # 2005/05/29 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
+# 2005/09/04 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added script report
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -163,6 +166,7 @@ if [ "$csvn" = "true" ]; then
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.in
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/report
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotdata
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
@@ -170,6 +174,7 @@ fi
 
 if [ "$cver" = "true" ]; then
   replace "s/AC_INIT(ccruncher,\(.*\),\ *gerard@mail.generacio.com)/AC_INIT(ccruncher, $gloversion, gerard@mail.generacio.com)/g" $CCRUNCHERPATH/configure.in
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/report
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotdata
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh

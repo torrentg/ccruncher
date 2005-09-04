@@ -48,6 +48,9 @@
 // 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -74,7 +77,8 @@ void ccruncher::Params::init()
   steplength = 0;
   maxiterations = 0L;
   maxseconds = 0L;
-  smethod = "";
+  simule = "";
+  method = "";
   copula_type = "";
   copula_seed = -1L;
   antithetic = false;
@@ -214,14 +218,24 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
       copula_seed = aux;
     }
   }
+  else if (name == "montecarlo.simule")
+  {
+    string aux = getStringAttribute(attributes, "value", "");
+    if (simule != "" || (aux != "loss" && aux != "value")) {
+      throw eperror(eu, "invalid montecarlo.simule. supported values: loss, value");
+    }
+    else {
+      simule = aux;
+    }
+  }
   else if (name == "montecarlo.method")
   {
     string aux = getStringAttribute(attributes, "value", "");
-    if (smethod != "" || (aux != "rating-path" && aux != "time-to-default")) {
+    if (method != "" || (aux != "rating-path" && aux != "time-to-default")) {
       throw eperror(eu, "invalid montecarlo.method. supported values: time-to-default, rating-path");
     }
     else {
-      smethod = aux;
+      method = aux;
     }
   }
   else if (name == "montecarlo.antithetic")
@@ -271,7 +285,12 @@ void ccruncher::Params::validate(void) throw(Exception)
     throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
   }
 
-  if (smethod == "")
+  if (simule == "")
+  {
+    throw Exception("Params::validate(): property montecarlo.simule not defined");
+  }
+
+  if (method == "")
   {
     throw Exception("Params::validate(): property montecarlo.method not defined");
   }
@@ -304,7 +323,8 @@ string ccruncher::Params::getXML(int ilevel) throw(Exception)
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.method' value='" + smethod + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.simule' value='" + simule + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.method' value='" + method + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Format::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";

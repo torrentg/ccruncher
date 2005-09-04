@@ -40,6 +40,9 @@
 // 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #include <iostream>
@@ -77,6 +80,7 @@ void ccruncher_test::ParamsTest::test1()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
       <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";
@@ -93,6 +97,8 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(2 == params.steplength);
   ASSERT(3000 == params.maxiterations);
   ASSERT(30000000 == params.maxseconds);
+  ASSERT("rating-path" == params.method);
+  ASSERT("loss" == params.simule);
   ASSERT("gaussian" == params.copula_type);
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
@@ -120,7 +126,7 @@ void ccruncher_test::ParamsTest::test1()
 }
 
 //===========================================================================
-// test1
+// test2
 //===========================================================================
 void ccruncher_test::ParamsTest::test2()
 {
@@ -133,6 +139,7 @@ void ccruncher_test::ParamsTest::test2()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
       <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";

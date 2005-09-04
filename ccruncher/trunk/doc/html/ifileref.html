@@ -59,6 +59,7 @@
     &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
     &lt;property name="copula.type" value="gaussian"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
+    &lt;property name="montecarlo.simule" value="loss"/&gt;
     &lt;property name="montecarlo.method" value="time-to-default"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
     &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
@@ -133,6 +134,16 @@
         <td style="text-align:center;"><code>long</code></td>
       </tr>
       <tr class="a">
+        <td style="text-align:center;">montecarlo.simule</td>
+        <td style="text-align:justify;">
+          Specifies the desired simulated values. Set <i>value</i> if you
+          want simulate the portfolio value. Set <i>loss</i> if you want
+          simulate the portfolio losses. In doubt, put 'loss' value.<br />
+          accepted values: 'loss', 'value'
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
         <td style="text-align:center;">montecarlo.method</td>
         <td style="text-align:justify;">
           Specifies the method used to solve the problem. See the 
@@ -142,7 +153,7 @@
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td style="text-align:center;">montecarlo.antithetic</td>
         <td style="text-align:justify;">
           Specifies whether to use or not a variance reduction technique 
@@ -151,7 +162,7 @@
         </td>
         <td style="text-align:center;"><code>boolean</code></td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td style="text-align:center;">portfolio.onlyActiveClients</td>
         <td style="text-align:justify;">
           If you want to simulate all the clients, even though clients without 
@@ -942,7 +953,7 @@
           </a>    
         </td>
         <td class="footer" align="right">
-          Last modified: 31-Aug-2005 &nbsp;
+          Last modified: 03-Sep-2005 &nbsp;
         </td>
       </tr>
     </table>

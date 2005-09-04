@@ -155,12 +155,21 @@
       <b>Step 3.</b> CreditCruncher use a library named <a href="http://www.zlib.net/">zlib</a>.
       Check that you have the zlib package installed (find file
       <code>libz.so</code>, usually in folder <code>/usr/lib</code>). If
-      you have a source distribution check that you have the expat-devel package 
+      you have a source distribution check that you have the expat-devel package
       installed (find file <code>zlib.h</code>, usually in folder <code>/usr/include</code>).
     </p>
 
     <p>
-      <b>Step 4.</b> If you have a source distribution, run next commands: <br />
+      <b>Step 4.</b> CreditCruncher use a statistical package named
+      <a href="http://www.r-project.org/">R</a> to compute risk indicators.
+      Install it from <a href="http://www.r-project.org/">http://www.r-project.org/</a>.
+      If you plan to realize the statistical computations with your own tools (pe. Excel)
+      skip this step. Statistical recipes used are described in CreditCruncher
+      documentation.
+    </p>
+
+    <p>
+      <b>Step 5.</b> If you have a source distribution, run next commands: <br />
       <code><b>
         &nbsp;&nbsp;./configure --prefix=$PWD <br />
         &nbsp;&nbsp;make <br />
@@ -212,11 +221,13 @@
         &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R") <br />
         &nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out") <br />
         &nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99) <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="density") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf") <br />
         &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean") <br />
         &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev") <br />
         &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") <br />
         &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") <br />
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all") <br />
         &nbsp;&nbsp;>&nbsp;quit(save='no') <br />
       </b></code>
     </p>
@@ -240,7 +251,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 02-Sep-2005 &nbsp;
+          Last modified: 04-Sep-2005 &nbsp;
         </td>
       </tr>
     </table> 

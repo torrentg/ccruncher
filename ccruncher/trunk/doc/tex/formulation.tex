@@ -615,8 +615,8 @@ de la forma siguiente:
 \end{array}
 \right)
 \end{displaymath}
-donde $p$ es el n\'umero de clientes y $\theta_{i,j}$ es la correlaci\'on entre
-los sectores del cliente $i$ y del cliente $j$.
+donde $p$ es el n\'umero de clientes y $\theta_{i,j}$ es la correlaci\'on sectorial
+entre el sector del cliente $i$ y el sector del cliente $j$.
 
 \paragraph{Observaci\'on.} Los clientes se acostumbran a ordenar por sectores. En este
 caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
@@ -644,12 +644,12 @@ caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 \right)
 \end{array}
 \end{displaymath}
-donde $p_1, \dots, p_m$ corresponde al n\'umero de clientes que pertenecen a los sectores $s_1, \dots, s_m$.
-Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre clientes es una matriz
-con bloques con $1$'s en la diagonal.
+donde $p_1, \dots, p_m$ corresponde al n\'umero de clientes que pertenecen a los sectores
+$s_1, \dots, s_m$. Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre
+clientes es una matriz con bloques con $1$'s en la diagonal.
 
 
-\paragraph{Ejemplo.}Supongamos que tenemos dos sectores, siendo la
+\paragraph{Ejemplo.}Supongamos que tenemos dos sectores, siendo $\Gamma$ la
 matriz sectorial:
 \begin{displaymath}
 \Gamma=\left(
@@ -659,8 +659,8 @@ matriz sectorial:
 \end{array}
 \right)
 \end{displaymath}
-Supongamos que el sector $A$ tiene 3 clientes y el sector $B$ tiene 2 clientes. La
-matriz de correlaci\'on entre clientes es:
+Supongamos que el sector $A$ tiene 3 clientes y el sector $B$ tiene 2 clientes.
+Entonces, la matriz de correlaci\'on entre clientes es:
 \begin{displaymath}
 \Theta = \left(
 \begin{array}{ccccc}
@@ -685,37 +685,48 @@ deba ser definida positiva.
 
 \section{Valoraci\'on del riesgo}
 
-\paragraph{Definici\'on.} El \emph{Valor en riesgo}\index{Valor en riesgo} o
+Sea $Z$ la variable aleatoria que modela el valor de la cartera en el
+tiempo $T$. Sea $F$ la funci\'on de distribuci\'on (cdf) de $Z$.
+En la figura \ref{creditvar} se muestran los conceptos expuestos en
+este apartado.
+
+\paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Valor en riesgo} o
 \emph{VAR}\index{VAR} es la p\'erdida m\'axima esperada a lo largo
 de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
 Responde a la pregunta \emph{Cual es la p\'erdida m\'inima incurrida en el
 $X$\% de los peores casos?}. Se recomienda la lectura del libro
 \emph{Value at Risk} \cite{var:jorion}.
 \begin{displaymath}
-formulation (pending)
+VAR_{\alpha}(Z) = \textrm{inf}\{z | F(Z) \geq 1-\alpha \}
 \end{displaymath}
 
-\paragraph{Definici\'on.} El \emph{Tail Conditional Expectation}
-\index{Tail Conditional Expectation} o \emph{TEC}\index{TEC} es la p\'erdida
-esperada en el caso en que la p\'erdida sea inferior a un quantil fijado.
+\paragraph{Definici\'on.} El \emph{Tail Conditional Expectation} o Expected
+Shortfall\index{Expected Shortfall}\index{Tail Conditional Expectation} o
+\emph{TCE}\index{TCE} es la p\'erdida esperada en el caso en que la p\'erdida
+sea inferior a un quantil fijado.
 Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el $X$\% de
 los peores casos?}. Se recomienda la lectura de los art\'iculos \cite{var:varbad}
 y \cite{var:eshortfall}.
 \begin{displaymath}
-formulation (pending)
+TCE_{\alpha}(Z) = E(Z | Z < VAR_{\alpha}(Z))
 \end{displaymath}
 
-\paragraph{Definici\'on.} El \emph{valor esperado}\index{Valor esperado} es blablabla
+\paragraph{Definici\'on.} El \emph{Valor Esperado}\index{Valor esperado} es:
+\begin{displaymath}
+\textrm{Expected Value} = E(Z)
+\end{displaymath}
 
-\paragraph{Definici\'on.} La \emph{p\'erdida esperada}\index{P\'erdida esperada} es blablabla
+\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada} es:
+\begin{displaymath}
+\textrm{Expected Loss} = K - E(Z)
+\end{displaymath}
+donde $K$ es el valor de la cartera en el caso en que ning\'un creditor haga fallido.
 
-\paragraph{Definici\'on.} Definimos el \emph{capital econ\'omico}\index{Capital econ\'omico}
-como blablabla
-\newline
-\newline
-El concepto clave es suponer que el valor de la cartera a tiempo $T$ es una
-variable aleatoria. En la figura \ref{creditvar} se ilustra el concepta de VAR 
-aplicado al riesgo de cr\'edito.
+\paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}\index{Capital econ\'omico}
+al nivel de confianza $\alpha$ como:
+\begin{displaymath}
+\textrm{Economic Capital} = E(Z) - VAR_{\alpha}(Z)
+\end{displaymath}
 
 \begin{figure}[!hb]
 \begin{center}

@@ -39,6 +39,9 @@
 // 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getCompilationOptions() to version output
 //
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . params->smethod renamed to params->method
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -256,7 +259,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
 
   // allocating space
   double **buf = Arrays<double>::allocMatrix(tm->n, numrows+1);
-  string smethod = idata.params->smethod;
+  string method = idata.params->method;
 
   switch(mode)
   {
@@ -267,7 +270,7 @@ void run(string filename, int mode, int steplength, int numrows) throw(Exception
           ccruncher::tmaa(tm, steplength, numrows+1, buf);
           break;
       case 3: // Survival
-          if (smethod == "rating-path" || (smethod == "time-to-default" && idata.survival == NULL)) {
+          if (method == "rating-path" || (method == "time-to-default" && idata.survival == NULL)) {
             ccruncher::survival(tm, steplength, numrows+1, buf);
           }
           else {

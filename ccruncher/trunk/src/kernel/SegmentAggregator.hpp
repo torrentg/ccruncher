@@ -32,6 +32,9 @@
 //   . added segmentaggregator identifier support
 //   . added appendRawData() method (used in MPI mode)
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -86,6 +89,8 @@ class SegmentAggregator
     bool bforce;
     // buffer size
     int buffersize;
+    // bloss=true -> values are losses, bloss=false -> values are values
+    bool bloss;
 
     // number of all clients considered
     long N;
@@ -136,7 +141,7 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, Interests *, const string &) throw(Exception);
 
     // other methods
     long getNumElements();

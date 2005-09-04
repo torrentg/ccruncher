@@ -67,6 +67,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented MPI support
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #include <cfloat>
@@ -290,19 +293,22 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
     Logger::trace("date[" + Format::int2string(i)+"]", Format::date2string(dates[i]));
   }
 
+  // reporting simulated values
+  Logger::trace("simulated values", idata->params->simule);
+
   // fixing simulation method
-  if (idata->params->smethod == "time-to-default") {
+  if (idata->params->method == "time-to-default") {
     ttdmethod = true;
     numcopulas = 1;
     Logger::trace("resolution method", string("time-to-default"));
   }
-  else if (idata->params->smethod == "rating-path") {
+  else if (idata->params->method == "rating-path") {
     ttdmethod = false;
     numcopulas = STEPS+1;
     Logger::trace("resolution method", string("rating-path"));
   }
   else {
-    throw Exception("MonteCarlo::initParams(): unknow smethod");
+    throw Exception("MonteCarlo::initParams(): unknow method");
   }
 
   // fixing variance reduction method
@@ -626,7 +632,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
       // initializing SegmentAggregator
       tmp->define(aggregators.size(), i, j, segmentations->getComponents(i));
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, STEPS+1, clients, N, interests);
+      tmp->initialize(dates, STEPS+1, clients, N, interests, idata->params->simule);
 
       // adding aggregator to list (only if have elements)
       numsegments++;

@@ -40,6 +40,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented MPI support
 //
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added param montecarlo.simule
+//
 //===========================================================================
 
 #include <cmath>
@@ -99,6 +102,7 @@ void ccruncher::SegmentAggregator::init()
   path = "UNASSIGNED";
   bforce = false;
   buffersize = CCMAXBUFSIZE;
+  bloss = true;
 
   N = 0L;
   M = 0;
@@ -146,7 +150,7 @@ void ccruncher::SegmentAggregator::release()
 // initialize
 //===========================================================================
 void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> *clients,
-  long n, Interests *interests_) throw(Exception)
+  long n, Interests *interests_, const string &simule) throw(Exception)
 {
   bool *clientflag = NULL;
 
@@ -165,6 +169,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   // setting vars values
   N = n;
   M = m;
+  bloss = (simule=="loss"?true:false);
 
   // allocating clientflag
   clientflag = Arrays<bool>::allocVector(N, false);
@@ -385,6 +390,7 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   assert(defaulttimes != NULL);
   int cpos;
   int itime;
+  double val=0.0;
 
   // initializing segment value
   cvalues[icont] = 0.0;
@@ -400,12 +406,22 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
 
     // if client non default in (0, M] time range
     if (itime >= M) {
-      cvalues[icont] += vertexes[i][M-1].cashflow;
+      val = vertexes[i][M-1].cashflow;
     }
     // if client defaults in (0, M] time range
     else {
-      cvalues[icont] += vertexes[i][itime-1].cashflow;
-      cvalues[icont] += vertexes[i][itime].netting;
+      val = vertexes[i][itime-1].cashflow;
+      val += vertexes[i][itime].netting;
+    }
+
+    // adding client value to portfolio value
+    if (bloss == true) {
+      // if we are computing portfolio losses
+      cvalues[icont] += vertexes[i][M-1].cashflow - val;
+    }
+    else {
+      // if we are computing portfolio values
+      cvalues[icont] += val;
     }
   }
 

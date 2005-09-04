@@ -4,11 +4,13 @@ CREDITCRUNCHER NEWS
 
 version 0.6 (Sept. 2005)
 --------------------------
+  * report generation using R (efective risk computation)
   * added error analisis in documentation
-  * report generation using R
   * replaced concept attribute by segmentation in belongs-to xml tag
   * bugfix: removed macro XMLCALL (old platforms don't understand)
   * added TCE (Tail Conditional Expectation or Expected Shortfall) computation
+  * simlated values can be: portfolio value or portfolio losses (new)
+  * added makefile in $CCRUNCHER/doc/tex directory
 
 version 0.5 (August 2005)
 --------------------------
