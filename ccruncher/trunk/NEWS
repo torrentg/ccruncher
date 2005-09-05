@@ -9,7 +9,7 @@ version 0.6 (Sept. 2005)
   * replaced concept attribute by segmentation in belongs-to xml tag
   * bugfix: removed macro XMLCALL (old platforms don't understand)
   * added TCE (Tail Conditional Expectation or Expected Shortfall) computation
-  * simlated values can be: portfolio value or portfolio losses (new)
+  * simulated values can be: portfolio value or portfolio losses (new)
   * added makefile in $CCRUNCHER/doc/tex directory
 
 version 0.5 (August 2005)

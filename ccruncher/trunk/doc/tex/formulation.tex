@@ -685,48 +685,64 @@ deba ser definida positiva.
 
 \section{Valoraci\'on del riesgo}
 
-Sea $Z$ la variable aleatoria que modela el valor de la cartera en el
-tiempo $T$. Sea $F$ la funci\'on de distribuci\'on (cdf) de $Z$.
-En la figura \ref{creditvar} se muestran los conceptos expuestos en
-este apartado.
+Llamamos $X$ a la variable aleatoria que modela el valor de la cartera
+(portfolio value) en el tiempo $T$. Llamamos $Z$ a la variable aleatoria
+que modela las p\'erdidas de la cartera (portfolio loss) en el tiempo $T$.
+Sean $F_X$ y $F_Z$ las correspondientes funciones de distribuci\'on (cdf).
+
+\paragraph{Preposici\'on.} Si los rendimientos de los activos son conocidos
+de antemano (fixed income), entonces:
+\begin{displaymath}
+Z = K - X
+\end{displaymath}
+donde $K$ es el valor de la cartera en tiempo $T$ en el caso en que ning\'un
+cliente haga fallido. $K$ es constante por ser los rendimientos conocidos de
+antemano.
 
 \paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Valor en riesgo} o
-\emph{VAR}\index{VAR} es la p\'erdida m\'axima esperada a lo largo
-de un horizonte de tiempo objetivo dentro de un intervalo de confianza dado.
-Responde a la pregunta \emph{Cual es la p\'erdida m\'inima incurrida en el
-$X$\% de los peores casos?}. Se recomienda la lectura del libro
-\emph{Value at Risk} \cite{var:jorion}.
-\begin{displaymath}
-VAR_{\alpha}(Z) = \textrm{inf}\{z | F(Z) \geq 1-\alpha \}
-\end{displaymath}
+\emph{VAR}\index{VAR} en tiempo $T$ es la p\'erdida m\'axima esperada dentro
+de un intervalo de confianza dado. Responde a la pregunta \emph{Cual es la
+p\'erdida m\'inima incurrida en el $\alpha$\% de los peores casos?}. Se recomienda
+la lectura del libro \emph{Value at Risk} \cite{var:jorion}.
+\begin{eqnarray}
+VAR_{\alpha}(X) & = & K - \textrm{inf}\{x | F_Z(x) \geq 1-\alpha \} \nonumber \\
+VAR_{\alpha}(Z) & = & \textrm{inf}\{z | F_X(z) \leq \alpha \} \nonumber
+\end{eqnarray}
 
 \paragraph{Definici\'on.} El \emph{Tail Conditional Expectation} o Expected
 Shortfall\index{Expected Shortfall}\index{Tail Conditional Expectation} o
 \emph{TCE}\index{TCE} es la p\'erdida esperada en el caso en que la p\'erdida
 sea inferior a un quantil fijado.
-Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el $X$\% de
-los peores casos?}. Se recomienda la lectura de los art\'iculos \cite{var:varbad}
-y \cite{var:eshortfall}.
-\begin{displaymath}
-TCE_{\alpha}(Z) = E(Z | Z < VAR_{\alpha}(Z))
-\end{displaymath}
+Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el
+$\alpha$\% de los peores casos?}. Se recomienda la lectura de los art\'iculos
+\cite{var:varbad} y \cite{var:eshortfall}.
+\begin{eqnarray}
+TCE_{\alpha}(X) & = & E(X | X < VAR_{\alpha}(X)) \nonumber \\
+TCE_{\alpha}(Z) & = & E(Z | Z > VAR_{\alpha}(Z)) \nonumber
+\end{eqnarray}
+donde la notaci\'on $E(X|q)$ debe interpretarse como la esperanza de la variable
+aleatoria $X$ condicionada a $q$.
 
-\paragraph{Definici\'on.} El \emph{Valor Esperado}\index{Valor esperado} es:
-\begin{displaymath}
-\textrm{Expected Value} = E(Z)
-\end{displaymath}
+\paragraph{Definici\'on.} El \emph{Valor Esperado}\index{Valor esperado} de
+la cartera en tiempo $T$ es:
+\begin{eqnarray}
+\textrm{Expected Value} & = & E(X) \nonumber \\
+\textrm{Expected Value} & = & K - E(Z) \nonumber
+\end{eqnarray}
 
-\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada} es:
-\begin{displaymath}
-\textrm{Expected Loss} = K - E(Z)
-\end{displaymath}
-donde $K$ es el valor de la cartera en el caso en que ning\'un creditor haga fallido.
+\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada}
+de la cartera en tiempo $T$ es:
+\begin{eqnarray}
+\textrm{Expected Loss} & = & K - E(X) \nonumber \\
+\textrm{Expected Loss} & = & E(Z) \nonumber
+\end{eqnarray}
 
-\paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}\index{Capital econ\'omico}
-al nivel de confianza $\alpha$ como:
-\begin{displaymath}
-\textrm{Economic Capital} = E(Z) - VAR_{\alpha}(Z)
-\end{displaymath}
+\paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}
+\index{Capital econ\'omico} al nivel de confianza $\alpha$ en tiempo $T$ como:
+\begin{eqnarray}
+\textrm{Economic Capital} & = & E(X) - VAR_{\alpha}(X) \nonumber \\
+\textrm{Economic Capital} & = & E(Z) - VAR_{\alpha}(Z) \nonumber
+\end{eqnarray}
 
 \begin{figure}[!hb]
 \begin{center}
@@ -739,7 +755,7 @@ al nivel de confianza $\alpha$ como:
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
-\caption{C\'alculo del VAR}
+\caption{Portfolio value at time $T$}
 \label{creditvar}
 \end{center}
 \end{figure}

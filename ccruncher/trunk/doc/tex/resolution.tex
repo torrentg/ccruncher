@@ -30,141 +30,9 @@
 \chapter{Resoluci\'on del problema}
 \label{sec:resolution}
 
-En este cap\'itulo se establecen las hip\'otesis de trabajo, se introducen los
-elementos usados para la resoluci\'on y se describen dos m\'etodos de
-resoluci\'on basados en simulaci\'on: Time-To-Default y Rating-Path.
-
-%---------------------------------------------------------------------------
-
-\section{Hip\'otesis}
-
-\subsection{Hip\'otesis duras}
-\begin{enumerate}
-\item Los fallidos no se recuperan.
-\item La \'unica fuente de riesgo considerada es el riesgo de impago. No se 
-contemplan otros tipos de riesgos como la variaci\'on de tipos de inter\'es, 
-de mercado, operacional, reputacional, etc.
-\item La descripci\'on de cada activo (cashflow y netting) se conoce de antemano
-y no var\'ia a lo largo de la simulaci\'on. En particular, el valor del activo solo
-depende de si el cliente hace fallido, no del rating que pueda tener el cliente.
-Por otra parte, la recuperaci\'on no puede variar en funci\'on de la evoluci\'on
-del rating de otro cliente.
-\item El rating de un cliente no depende del rating de otro cliente de otra
-forma que no sea la correlaci\'on entre sectores. Esta restricci\'on no 
-permite tratar el rating de las empresas subsidiarias en funci\'on del rating 
-de la empresa matriz.
-\end{enumerate}
-
-\subsection{Hip\'otesis blandas}
-\begin{enumerate}
-\item Los intervalos de tiempo considerado se encuentran equiespaciados. Esto 
-permite simplificar los datos de entrada y el n\'umero de matrices de 
-transici\'on a considerar.
-\item La matriz de transici\'on no var\'ia a lo largo del tiempo. Se aplica 
-la misma matriz de transici\'on anual para pasar de $t_0$ a $t_1$ que para 
-pasar de $t_{19}$ a $t_{20}$. Esto permite simplificar los datos de entrada y 
-el n\'umero de matrices de transici\'on a considerar.
-\end{enumerate}
-
-%---------------------------------------------------------------------------
-
-\section{Elementos que intervienen en la resoluci\'on}
-
-\subsection{Variables aleatorias correlacionadas. C\'opulas.}
-
-Se recomienda la lectura de las referencias \cite{copu:wang} y 
-\cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
-c\'opula, sus propiedades, como simularlas, creencias erroneas, etc.
-
-\paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
-de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
-marginales \index{Distribuciones marginales} son variables aleatorias $U[0,1]$.
-\begin{displaymath}
-C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
-\end{displaymath}
-
-\begin{figure}[!hb]
-\begin{minipage}[c]{0.5\columnwidth}%
-  \centering
-  \includegraphics[height=5cm, angle=0]{./images/copula.eps}
-\end{minipage}%
-\hfill{}
-\begin{minipage}[c]{0.5\columnwidth}%
-  \centering
-  \includegraphics[height=5cm, angle=0]{./images/uniform.eps}
-\end{minipage}%
-\caption{Bivariate distribution plot with correlated and uncorrelated variables}
-\label{copulas}
-\end{figure}
-
-\paragraph{Teorema.} \index{Teorema de Sklar} Toda variable aleatoria $n$-dimensional
-puede separarse en las distribuciones seguidas por sus componentes (las distribuciones
-marginales) y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y
-$f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
-c\'opula $C$ tq.
-\begin{displaymath}
-F(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
-\end{displaymath}
-
-\paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
-determinada por sus marginales y correlaciones entre estas. Dicho de otra
-forma, existen infinitas formas de combinar las distribuciones marginales
- a trav\'es de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
-el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
-
-
-\subsection{El m\'etodo de Monte Carlo}
-
-Se recomienda la lectura de la referencia \cite{mc:mervyn}. Se trata de los 
-apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo 
-de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
-
-\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x^1, \cdots, x^n$,
-de la variable aleatoria $X$, definimos la \emph{funci\'on de distribuci\'on emp\'irica}
-\index{Funci\'on de distribuci\'on emp\'irica} como:
-\begin{displaymath}
-\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x^i) \qquad
-I_{[-\infty,k]}(x) = \left\{
-\begin{array}{ll}
-1 & \textrm{ if } x \in (-\infty,k] \cr
-0 & \textrm{ otherwise}
-\end{array}
-\right.
-\end{displaymath}
-
-\paragraph{Proposici\'on.} La funci\'on de distribuci\'on emp\'irica tiende a 
-la funci\'on de distribuci\'on al incrementar el n\'umero de observaciones.
-\begin{displaymath}
-\qquad \lim_{n\to\infty} \widetilde{F_X} = F_X
-\end{displaymath}
-
-\paragraph{Definici\'on.} Sea $X$ una variable aleatoria con funci\'on de 
-distribuci\'on conocida, $F$. El \emph{m\'etodo de Monte Carlo}\index{M\'etodo
-de Monte Carlo} consiste en obtener la funci\'on de distribuci\'on empirica de
-la variable aleatoria $H(X)$ usando el siguiente m\'etodo:
-\begin{displaymath}
-\begin{array}{ccc}
-F_X                  &     \quad         & \widetilde{F_{H(X)}}   \cr
-\downarrow         &     \quad         & \uparrow                \cr
-\textrm{simulation} &     \quad         & \textrm{empirical } cdf \cr
-\downarrow         &     \quad         & \uparrow                \cr
-x^1,\cdots,x^n      & \longrightarrow & H(x^1),\cdots,H(x^n)  
-\end{array}
-\end{displaymath}
-
-\paragraph{Observaci\'on.} Problemas aparentemente no relacionados con las 
-variables aleatorias pueden reformularse como un problema donde intervenga
-una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. El 
-ejemplo cl\'asico es obtener el valor de la integral de la funci\'on $W$ entre 
-$0$ y $1$. Lo reformulamos de la siguiente forma:
-\begin{displaymath}
-\int_{0}^{1} W(u) du = \int_{0}^{1} W(u) \phi(u) du = E[W(U)]
-\end{displaymath}
-donde $U \sim U[0,1]$ y $\phi(u) = pdf(U) = 1$. La \'ultima igualdad se establece 
-usando la preposici\'on enunciada en el ap\'endice \ref{apendix:stats}. 
-Finalmente la integral se aproxima calculando la media de un conjunto de puntos 
-con distribuci\'on $W(U)$.
-
+En este cap\'itulo se introducen los elementos usados para la resoluci\'on y
+se describen dos m\'etodos de resoluci\'on basados en simulaci\'on:
+Time-To-Default y Rating-Path.
 
 %---------------------------------------------------------------------------
 
@@ -221,6 +89,104 @@ $Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots
 $Z(t)$ & Valor de la cartera en tiempo $t$\\
 \hline
 \end{tabular}
+
+%---------------------------------------------------------------------------
+
+\section{Variables aleatorias correlacionadas. C\'opulas.}
+
+Se recomienda la lectura de las referencias \cite{copu:wang} y 
+\cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
+c\'opula, sus propiedades, como simularlas, creencias erroneas, etc.
+
+\paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
+de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
+marginales \index{Distribuciones marginales} son variables aleatorias $U[0,1]$.
+\begin{displaymath}
+C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
+\end{displaymath}
+
+\begin{figure}[!hb]
+\begin{minipage}[c]{0.5\columnwidth}%
+  \centering
+  \includegraphics[height=5cm, angle=0]{./images/copula.eps}
+\end{minipage}%
+\hfill{}
+\begin{minipage}[c]{0.5\columnwidth}%
+  \centering
+  \includegraphics[height=5cm, angle=0]{./images/uniform.eps}
+\end{minipage}%
+\caption{Bivariate distribution plot with correlated and uncorrelated variables}
+\label{copulas}
+\end{figure}
+
+\paragraph{Teorema.} \index{Teorema de Sklar} Toda variable aleatoria $n$-dimensional
+puede separarse en las distribuciones seguidas por sus componentes (las distribuciones
+marginales) y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y
+$f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
+c\'opula $C$ tq.
+\begin{displaymath}
+F(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
+\end{displaymath}
+
+\paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
+determinada por sus marginales y correlaciones entre estas. Dicho de otra
+forma, existen infinitas formas de combinar las distribuciones marginales
+ a trav\'es de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
+el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
+
+%---------------------------------------------------------------------------
+
+\section{El m\'etodo de Monte Carlo}
+
+Se recomienda la lectura de la referencia \cite{mc:mervyn}. Se trata de los 
+apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo 
+de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
+
+\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x^1, \cdots, x^n$,
+de la variable aleatoria $X$, definimos la \emph{funci\'on de distribuci\'on emp\'irica}
+\index{Funci\'on de distribuci\'on emp\'irica} como:
+\begin{displaymath}
+\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x^i) \qquad
+I_{[-\infty,k]}(x) = \left\{
+\begin{array}{ll}
+1 & \textrm{ if } x \in (-\infty,k] \cr
+0 & \textrm{ otherwise}
+\end{array}
+\right.
+\end{displaymath}
+
+\paragraph{Proposici\'on.} La funci\'on de distribuci\'on emp\'irica tiende a 
+la funci\'on de distribuci\'on al incrementar el n\'umero de observaciones.
+\begin{displaymath}
+\qquad \lim_{n\to\infty} \widetilde{F_X} = F_X
+\end{displaymath}
+
+\paragraph{Definici\'on.} Sea $X$ una variable aleatoria con funci\'on de 
+distribuci\'on conocida, $F$. El \emph{m\'etodo de Monte Carlo}\index{M\'etodo
+de Monte Carlo} consiste en obtener la funci\'on de distribuci\'on empirica de
+la variable aleatoria $H(X)$ usando el siguiente m\'etodo:
+\begin{displaymath}
+\begin{array}{ccc}
+F_X                 &     \quad       & \widetilde{F_{H(X)}}    \cr
+\downarrow          &     \quad       & \uparrow                \cr
+\textrm{simulation} &     \quad       & \textrm{empirical } cdf \cr
+\downarrow          &     \quad       & \uparrow                \cr
+x^1,\cdots,x^n      & \longrightarrow & H(x^1),\cdots,H(x^n)
+\end{array}
+\end{displaymath}
+
+\paragraph{Observaci\'on.} Problemas aparentemente no relacionados con las 
+variables aleatorias pueden reformularse como un problema donde intervenga
+una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. El 
+ejemplo cl\'asico es obtener el valor de la integral de la funci\'on $W$ entre 
+$0$ y $1$. Lo reformulamos de la siguiente forma:
+\begin{displaymath}
+\int_{0}^{1} W(u) du = \int_{0}^{1} W(u) \phi(u) du = E[W(U)]
+\end{displaymath}
+donde $U \sim U[0,1]$ y $\phi(u) = \textrm{pdf}(U) = 1$. La \'ultima igualdad se
+establece usando la preposici\'on enunciada en el ap\'endice \ref{apendix:stats}.
+Finalmente la integral se aproxima calculando la media de un conjunto de puntos
+con distribuci\'on $W(U)$.
 
 %---------------------------------------------------------------------------
 
@@ -333,7 +299,7 @@ calculo del valor esperado, calculo del VAR, etc.
 
 %---------------------------------------------------------------------------
 
-\section{C\'alculo de los valores}
+\section{Valoraci\'on del riesgo}
 
 El m\'etodo de Monte Carlo genera $N$ realizaciones, $\{z_1,z_2,z_3,\cdots,z_N\}$,
 de la variable aleatoria $Z$ (valor de la cartera) que permiten obtener la funci\'on

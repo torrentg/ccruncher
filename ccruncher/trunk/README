@@ -22,6 +22,9 @@ Install required libraries
    that you have a valid MPI installation (you need mpi.h,
    mpic++ wrapper, mpi link library, etc.)
 
+4. CreditCruncher use a statistical package named R to compute
+   risk indicators. Install it from http://www.r-project.org/.
+
 
 Installation from source package
 --------------------------------
@@ -61,16 +64,20 @@ Using CreditCruncher
      $CCRUNCHER/bin/ccruncher --help
      $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
-3. process info using your prefered spreadsheet. You can create some
-   graphics on unix environement typing next comands:
-     $CCRUNCHER/bin/plotdata -h
-     $CCRUNCHER/bin/plotdata -p data/segmentation-segment.out
-     $CCRUNCHER/bin/plotdata -c data/segmentation-segment.out
-     $CCRUNCHER/bin/plotmtrans -h
-     $CCRUNCHER/bin/plotmtrans -f file.xml
-     $CCRUNCHER/bin/plotmtrans -c file.xml
-     $CCRUNCHER/bin/plotmtrans -s file.xml 
-
+3. compute risk indicators typing:
+     $CCRUNCHER/bin/report data/segmentation-segment.out
+   or open a R console and type:
+     > source("$CCRUNCHER/bin/report.R")
+     > x <- ccruncher.read("$CCRUNCHER/data/file.out")
+     > ccruncher.summary(x, alpha=0.99)
+     > ccruncher.plot(x, show="pdf")
+     > ccruncher.plot(x, show="cdf")
+     > ccruncher.plot(x, alpha=0.95, show="mean")
+     > ccruncher.plot(x, alpha=0.95, show="stddev")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+     > quit(save='no')
 
 Notes for Windows developers
 --------------------------------
@@ -109,6 +116,10 @@ Developers tips & tricks
 
 5. compile project in debug mode
      ./configure --prefix=$PWD --enable-debug --enable-profiler
+     make
+     make check
+   or compile project enabling MPI
+     ./configure --prefix=$PWD --enable-debug --enable-profiler --enable-mpi
      make
      make check
 
