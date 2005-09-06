@@ -244,7 +244,7 @@ El \emph{tipo de inter\'es compuesto}\index{Tipo de inter\'es compuesto}, $r_c$,
 de inter\'es donde en cada periodo de tiempo se incrementa por un factor de $r_c$ el importe
 acumulado del periodo anterior.
 \begin{equation}
-C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)} 
+C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)}
 \end{equation}
 
 \begin{equation}
@@ -260,14 +260,14 @@ C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)}
 \end{equation}
 
 \begin{equation}
-\label{interes_continuo_2}
+\label{interes_continuo_1}
 r_e = \ln(1 + r_c)
 \end{equation}
 
 La f\'ormula exponencial, no el coeficiente, se obteniene considerando el
 l\'\i mite del tipo de inter\'es compuesto.
 \begin{equation}
-\label{interes_continuo_1}
+\label{interes_continuo_2}
 \begin{array}{c}
 \lim_{t_1 \rightarrow t_0} 1+r_c = 
 \lim_{t_1 \rightarrow t_0} (1 + r)^{\frac{1}{t_1 - t_0}} = \cr
@@ -332,9 +332,10 @@ Caso $C_k \longleftarrow C_0 \quad t_k < t_0$:
 \paragraph{Notaci\'on.} En este documento se considera que el tipo de inter\'es
 aplicado es el tipo de inter\'es compuesto. En este caso, la funci\'on de transporte
 tiene una expresi\'on \'unica, sea cual sea el sentido en el que se aplica:
-\begin{displaymath}
+\begin{equation}
+\label{funcion_transporte_1}
 \Upsilon(t_0,t_k, r) = (1+r)^{(t_k-t_0)}
-\end{displaymath}
+\end{equation}
 
 
 \subsection{Curva spot o cup\'on cero}
@@ -359,10 +360,10 @@ tiempos sea $t_0$ y el otro sea superior a $t_0$.
 
 \paragraph{Proposici\'on.} Dada una curva spot $S_{t_0}$ en $t_0$, podemos calcular
 el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
-\begin{displaymath}
+\begin{equation}
 \Upsilon(t_i,t_j, r) = 
 \Upsilon(t_i,t_0, S_{t_o}(t_i)) \cdot \Upsilon(t_0,t_j, S_{t_0}(t_j))
-\end{displaymath}
+\end{equation}
 
 
 %---------------------------------------------------------------------------
@@ -685,29 +686,18 @@ deba ser definida positiva.
 
 \section{Valoraci\'on del riesgo}
 
-Llamamos $X$ a la variable aleatoria que modela el valor de la cartera
-(portfolio value) en el tiempo $T$. Llamamos $Z$ a la variable aleatoria
-que modela las p\'erdidas de la cartera (portfolio loss) en el tiempo $T$.
-Sean $F_X$ y $F_Z$ las correspondientes funciones de distribuci\'on (cdf).
-
-\paragraph{Preposici\'on.} Si los rendimientos de los activos son conocidos
-de antemano (fixed income), entonces:
-\begin{displaymath}
-Z = K - X
-\end{displaymath}
-donde $K$ es el valor de la cartera en tiempo $T$ en el caso en que ning\'un
-cliente haga fallido. $K$ es constante por ser los rendimientos conocidos de
-antemano.
+Llamamos $Z$ a la variable aleatoria que modela las p\'erdidas de la cartera
+(portfolio loss) en el tiempo $T$. Sea $F_Z$ la correspondiente funci\'on de
+distribuci\'on (cdf).
 
 \paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Valor en riesgo} o
 \emph{VAR}\index{VAR} en tiempo $T$ es la p\'erdida m\'axima esperada dentro
 de un intervalo de confianza dado. Responde a la pregunta \emph{Cual es la
 p\'erdida m\'inima incurrida en el $\alpha$\% de los peores casos?}. Se recomienda
 la lectura del libro \emph{Value at Risk} \cite{var:jorion}.
-\begin{eqnarray}
-VAR_{\alpha}(X) & = & K - \textrm{inf}\{x | F_Z(x) \geq 1-\alpha \} \nonumber \\
-VAR_{\alpha}(Z) & = & \textrm{inf}\{z | F_X(z) \leq \alpha \} \nonumber
-\end{eqnarray}
+\begin{equation}
+VAR_{\alpha}(Z) = \textrm{inf}\{z | F_X(z) \leq \alpha \}
+\end{equation}
 
 \paragraph{Definici\'on.} El \emph{Tail Conditional Expectation} o Expected
 Shortfall\index{Expected Shortfall}\index{Tail Conditional Expectation} o
@@ -716,33 +706,23 @@ sea inferior a un quantil fijado.
 Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el
 $\alpha$\% de los peores casos?}. Se recomienda la lectura de los art\'iculos
 \cite{var:varbad} y \cite{var:eshortfall}.
-\begin{eqnarray}
-TCE_{\alpha}(X) & = & E(X | X < VAR_{\alpha}(X)) \nonumber \\
-TCE_{\alpha}(Z) & = & E(Z | Z > VAR_{\alpha}(Z)) \nonumber
-\end{eqnarray}
-donde la notaci\'on $E(X|q)$ debe interpretarse como la esperanza de la variable
-aleatoria $X$ condicionada a $q$.
-
-\paragraph{Definici\'on.} El \emph{Valor Esperado}\index{Valor esperado} de
-la cartera en tiempo $T$ es:
-\begin{eqnarray}
-\textrm{Expected Value} & = & E(X) \nonumber \\
-\textrm{Expected Value} & = & K - E(Z) \nonumber
-\end{eqnarray}
+\begin{equation}
+TCE_{\alpha}(Z) = E(Z | Z > VAR_{\alpha}(Z))
+\end{equation}
+donde la notaci\'on $E(Z|q)$ debe interpretarse como la esperanza de la variable
+aleatoria $Z$ condicionada a $q$.
 
 \paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada}
 de la cartera en tiempo $T$ es:
-\begin{eqnarray}
-\textrm{Expected Loss} & = & K - E(X) \nonumber \\
-\textrm{Expected Loss} & = & E(Z) \nonumber
-\end{eqnarray}
+\begin{equation}
+\textrm{Expected Loss} = E(Z)
+\end{equation}
 
 \paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}
 \index{Capital econ\'omico} al nivel de confianza $\alpha$ en tiempo $T$ como:
-\begin{eqnarray}
-\textrm{Economic Capital} & = & E(X) - VAR_{\alpha}(X) \nonumber \\
-\textrm{Economic Capital} & = & E(Z) - VAR_{\alpha}(Z) \nonumber
-\end{eqnarray}
+\begin{equation}
+\textrm{Economic Capital} = E(Z) - VAR_{\alpha}(Z)
+\end{equation}
 
 \begin{figure}[!hb]
 \begin{center}

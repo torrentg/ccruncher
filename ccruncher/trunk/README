@@ -142,7 +142,11 @@ Developers tips & tricks
        > backtrace
        > quit
 
-10. making source distribution package
+10. creating pdf documentation
+      $CCRUNCHER/doc/tex/make
+      $CCRUNCHER/doc/tex/make install
+
+11. making source distribution package
       make distcheck
       make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
