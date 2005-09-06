@@ -1,5 +1,7 @@
 
-This directory contains third part projects used by CreditCruncher:
+This directory contains third part projects used by CreditCruncher.
+Exist a subdirectory for each related project required at compilation time.
+All related projects used by CreditCruncher are:
 
 ------------------------------------------------------------------------
 
@@ -80,10 +82,21 @@ descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux
 project: lam-mpi
 version: 7.1.1
 licence: Indiana University Software License (see home site)
-homeurl: http://www.lam-mpi.org/ 
+homeurl: http://www.lam-mpi.org/
 descrip: LAM/MPI is a high-quality open-source implementation of the Message 
          Passing Interface specification, including all of MPI-1.2 and much 
          of MPI-2.
          In CreditCruncher is used to implements parallel execution.
+
+------------------------------------------------------------------------
+
+project: R
+version: 2.1.1
+licence: GNU GPL
+homeurl: http://www.r-project.org/
+descrip: R is a system for statistical computation and graphics. It consists
+         of a language plus a run-time environment with graphics, a debugger,
+         access to certain system functions, and the ability to run programs
+         stored in script files.
 
 ------------------------------------------------------------------------

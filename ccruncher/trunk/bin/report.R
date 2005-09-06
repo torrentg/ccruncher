@@ -423,7 +423,6 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
     ret[length(ret)+1] <- "  <!-- where qnorm() is the inverse CDF for Normal(0,1) and   -->";
     ret[length(ret)+1] <- "  <!-- alpha is the desired confidence level (pe. alpha=0.99) -->";
     ret[length(ret)+1] <- "  <!-- ====================================================== -->";
-    ret[length(ret)+1] <- "  <simule value='" %&% simule %&% "' />";
     ret[length(ret)+1] <- "  <size value='" %&% n %&% "' />";
     ret[length(ret)+1] <- "  <min value='" %&% minx %&% "' />";
     ret[length(ret)+1] <- "  <max value='" %&% maxx %&% "' />";

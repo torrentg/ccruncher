@@ -54,13 +54,13 @@
               <a href="javascript:getPdfPath();"><img src="pdf.gif" alt="pdf icon" /></a>
             </li>
             <li class="none"><a href="ifileref.html">Input File Reference</a></li>
-            <li class="none"><a href="screenshots.html">Screen Shots</a></li>
+            <li class="none"><a href="install.html">Installation Instructions</a></li>
             <li class="none"><a href="faq.html">F.A.Q.</a></li>
           </ul>
         </td>
         <td>
           <ul>
-            <li class="none"><a href="install.html">Installation Instructions</a></li>
+            <li class="none"><a href="screenshots.html">Screen Shots</a></li>
             <li class="none"><a href="relproj.html">Related Projects</a></li>
             <li class="none"><a href="http://sourceforge.net/tracker/?atid=713208&amp;group_id=128910&amp;func=browse">Submit a bug</a></li>
             <li class="none"><a href="http://sourceforge.net/tracker/?atid=713211&amp;group_id=128910&amp;func=browse">New Feature Request</a></li>
@@ -72,20 +72,20 @@
     <h3 id="overview">Overview</h3>
 
     <p>
-      CreditCruncher is designed to work in batch mode
+      CreditCruncher is designed to work in batch mode, without graphical support.
+      Computation time can be reduced enabling the MPI instructions when compiling
+      and deploying the application in a cluster.
+      <br />
+      <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
+      <br />
+      The user create a <i>xml</i> file where the portfolio is described. CreditCruncher
+      take this file and simulate <i>N</i> times the portfolio described in the
+      input file. The simulated values are stored in a file with extension <i>.out</i>.
+      Finally, a R script takes the simulated values and do some statistic over
+      there to generate the risk indicators (VaR, TCE, etc.)
     </p>
-    <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
 
-    <h3>Acknowledgements</h3>
-    <p>
-      I would like to thank the people who have written to me with suggestions 
-      for improvements or reporting bugs. Your help has been invaluable.
-    </p>
-    <p style="text-align: center;">
-      Juan Antonio Millan, Yuri Iliutchenko
-    </p>
-
-    <div style="height:75px"></div>
+    <div style="height:55px"></div>
 
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
@@ -100,7 +100,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 05-Sep-2005 &nbsp;
+          Last modified: 06-Sep-2005 &nbsp;
         </td>
       </tr>
     </table>

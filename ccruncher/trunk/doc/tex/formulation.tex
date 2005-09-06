@@ -702,13 +702,13 @@ de un intervalo de confianza dado. Responde a la pregunta \emph{Cual es la
 p\'erdida m\'inima incurrida en el $\alpha$\% de los peores casos?}. Se recomienda
 la lectura del libro \emph{Value at Risk} \cite{var:jorion}.
 \begin{equation}
-VAR_{\alpha}(Z) = \textrm{inf}\{z | F_X(z) \leq \alpha \}
+VAR_{\alpha}(Z) = \textrm{inf}\{z | F_Z(z) \leq \alpha \}
 \end{equation}
 
-\paragraph{Definici\'on.} El \emph{Tail Conditional Expectation} o Expected
-Shortfall\index{Expected Shortfall}\index{Tail Conditional Expectation} o
-\emph{TCE}\index{TCE} es la p\'erdida esperada en el caso en que la p\'erdida
-sea inferior a un quantil fijado.
+\paragraph{Definici\'on.} El \emph{Tail Conditional Expectation}
+\index{Tail Conditional Expectation} o \emph{TCE}\index{TCE} o
+\emph{Expected Shortfall}\index{Expected Shortfall} es la p\'erdida esperada
+en el caso en que la p\'erdida sea inferior a un quantil fijado.
 Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el
 $\alpha$\% de los peores casos?}. Se recomienda la lectura de los art\'iculos
 \cite{var:varbad} y \cite{var:eshortfall}.
@@ -721,7 +721,7 @@ aleatoria $Z$ condicionada a $q$.
 \paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}
 \index{Capital econ\'omico} al nivel de confianza $\alpha$ en tiempo $T$ como:
 \begin{equation}
-\textrm{Economic Capital} = E(Z) - VAR_{\alpha}(Z)
+\textrm{Economic Capital} = VAR_{\alpha}(Z) - E(Z)
 \end{equation}
 
 \begin{figure}[!hb]
@@ -740,42 +740,55 @@ aleatoria $Z$ condicionada a $q$.
 \end{center}
 \end{figure}
 
-\paragraph{Ejemplo.} Intentemos calcular el VAR de una cartera de cr\'editos
-sencilla, de la que se puede calcular la distribuci\'on de forma expl\'icita. 
-Sea una cartera de $1$ solo sector con $100$ clientes sin correlaci\'on alguna
-entre ellos. Cada cliente tiene un activo que consiste en devolver $1$ \euro al
-cabo de $T$ tiempo. Supongamos que el sistema de ratings solamente contempla 
-$2$ categor\'ias crediticias, no-Default y Default. La probabilidad de hacer 
-fallido al cabo de $T$ tiempo es $0.1$.
+\paragraph{Ejemplo.} Calculemos el VAR de una cartera de cr\'editos
+sencilla, de la que se puede obtener la distribuci\'on de las p\'erdidas de
+forma expl\'icita. Sea una cartera de $1$ solo sector con $100$ clientes sin
+correlaci\'on alguna entre ellos. Cada cliente tiene un activo que consiste en
+devolver $1$ \euro al cabo de $T$ tiempo. Supongamos que el sistema de ratings
+solamente contempla $2$ categor\'ias crediticias, no-Default y Default. La
+probabilidad de hacer fallido al cabo de $T$ tiempo es $0.1$.
 \newline
 \newline
-En este caso, se puede modelar el importe devuelto por el cliente $i$ al cabo 
-de $T$ tiempo como una variable aleatoria Bernouilli, $X_i \sim Ber(0.9)$. El 
-valor de la cartera al cabo de $T$ tiempo es la suma de los importes devueltos 
-por los clientes, $Y = \sum_{i=1}^{100} x_i$, que por definici\'on es una 
-variable aleatoria Binomial, $Y \sim B(100,0.9)$. El Teorema Central del 
-L\'imite nos permite aproximar $Y \sim B(100,0.9) \approx N(90, 9)$.
+En este caso, se puede modelar la p\'erdida provocada por el impago del cliente
+$i$ al cabo de $T$ tiempo como una variable aleatoria Bernouilli, $X_i \sim Ber(0.1)$.
+La p\'erdida de la cartera al cabo de $T$ tiempo es la suma de las p\'erdidas de
+cada cliente, $Z = \sum_{i=1}^{100} X_i$, que por definici\'on es una
+variable aleatoria Binomial, $Z \sim B(100,0.1)$. El Teorema Central del
+L\'imite nos permite aproximar $Z \sim B(100,0.1) \approx N(10, 9)$.
 \newline
 \newline
-El valor esperado al cabo de $T$ tiempo es $E(Y) \approx 90$. Calculemos el VAR 
-al nivel de confianza $99\%$:
-
+La p\'erdida esperada al cabo de $T$ tiempo es
 \begin{displaymath}
-\begin{array}{c}
-P(Y \leq \textrm{VAR}_{99\%}) = 0.01 = 1\% \cr
-P(90 + 3 \cdot X \leq \textrm{VAR}_{99\%}) = 0.01 \cr
-P(X \leq \frac{\textrm{VAR}_{99\%} - 90}{3}) = 0.01 \longrightarrow \cr
-\frac{\textrm{VAR}_{99\%} - 90}{3} = -2.33 \cr
-\textrm{VAR}_{99\%} = -2.33 \cdot 3 + 90 = 83.01
-\end{array}
+\textrm{Expected Loss} = E(Z) \approx 10
 \end{displaymath}
-\newline
-\newline
-Este ejemplo no es significativo debido a que se han realizado dos supuestos 
+
+Calculemos el VAR al nivel de confianza $99\%$:
+\begin{displaymath}
+VAR_{99\%} = \textrm{inf}\{z | F_Z(z) \leq 99\%\}
+\end{displaymath}
+Teniendo en cuenta que $Z \approx N(10, 9)$, entonces
+\begin{displaymath}
+P(10 + \sqrt{9} \cdot X \leq VAR_{99\%}) = 99\%
+\end{displaymath}
+donde $X \sim N(0,1)$. Consultamos las tablas cdf de la Normal(0,1)
+\begin{displaymath}
+\frac{\textrm{VAR}_{99\%} - 10}{3} = 2.33
+\end{displaymath}
+Finalmente calculamos el $VAR_{99\%}$
+\begin{displaymath}
+\textrm{VAR}_{99\%} = 2.33 \cdot 3 + 10 = 16.99
+\end{displaymath}
+
+El Capital Econ\'omico al nivel de confianza $99\%$ es:
+\begin{displaymath}
+\textrm{Economic Capital}_{99\%}(Z) = \textrm{VAR}_{99\%}(Z) - E(Z) = 16.99 - 10 = 6.99
+\end{displaymath}
+
+Este ejemplo no es significativo debido a que se han realizado dos supuestos
 que en el mundo real no se cumplen: todos los creditores se modelan de la misma 
-forma y los fallidos son independientes. Se obtiene que la distribuci\'on del 
-valor de la cartera a tiempo $T$ se aproxima a una variable aleatoria Normal,
+forma y los fallidos son independientes. Se obtiene que la distribuci\'on de las 
+p\'erdidas de la cartera a tiempo $T$ se aproxima a una variable aleatoria Normal,
 cosa que no concuerda con las observaciones reales, que muestran que la
-distribuci\'on del valor de las carteras es fuertemente asim\'etrica respecto
-el valor esperado.
+distribuci\'on de las p\'erdidas es fuertemente asim\'etrica respecto a la p\'erdida
+esperada.
 
