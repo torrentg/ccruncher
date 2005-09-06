@@ -690,6 +690,12 @@ Llamamos $Z$ a la variable aleatoria que modela las p\'erdidas de la cartera
 (portfolio loss) en el tiempo $T$. Sea $F_Z$ la correspondiente funci\'on de
 distribuci\'on (cdf).
 
+\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada}
+de la cartera en tiempo $T$ es:
+\begin{equation}
+\textrm{Expected Loss} = E(Z)
+\end{equation}
+
 \paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Valor en riesgo} o
 \emph{VAR}\index{VAR} en tiempo $T$ es la p\'erdida m\'axima esperada dentro
 de un intervalo de confianza dado. Responde a la pregunta \emph{Cual es la
@@ -711,12 +717,6 @@ TCE_{\alpha}(Z) = E(Z | Z > VAR_{\alpha}(Z))
 \end{equation}
 donde la notaci\'on $E(Z|q)$ debe interpretarse como la esperanza de la variable
 aleatoria $Z$ condicionada a $q$.
-
-\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada}
-de la cartera en tiempo $T$ es:
-\begin{equation}
-\textrm{Expected Loss} = E(Z)
-\end{equation}
 
 \paragraph{Definici\'on.} Definimos el \emph{Capital Econ\'omico}
 \index{Capital econ\'omico} al nivel de confianza $\alpha$ en tiempo $T$ como:

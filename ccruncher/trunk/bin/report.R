@@ -30,6 +30,9 @@
 #   . code refactored
 #   . added usage example
 #
+# 2005/09/06 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . removed portfolio value support
+#
 #***************************************************************************
 
 #===========================================================================
@@ -239,7 +242,6 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 # arguments
 #   x: vector with values
 #   prob: numeric. quantile related to VaR. probability with value in [0,1]
-#   simule: string. loss={values are portfolio losses}, value={values are portfolio values}
 #   breaks: numeric. number of evaluated values
 # returns
 #   matrix(1,): prob-tce
@@ -252,9 +254,8 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 #   because involve calls to sort() function. breaks
 #   argument allows you to reduce the number of computations
 #===========================================================================
-ccruncher.ctce <- function(x, prob, simule="loss", breaks=250)
+ccruncher.ctce <- function(x, prob, breaks=250)
 {
-  
   #initializing values
   ret <- matrix(NA, 2, length(x));
   ret[1,1] <- 0;
@@ -271,14 +272,8 @@ ccruncher.ctce <- function(x, prob, simule="loss", breaks=250)
       aux <- c(aux, x[(length(aux)+1):i]);
       aux <- sort(aux, method="sh");
 
-      if (simule == "loss") {
-        var <- quantile(aux[1:i], prob, names=FALSE);
-        tmp <- aux[aux >= var];
-      }
-      else {
-        var <- quantile(aux[1:i], 1-prob, names=FALSE);
-        tmp <- aux[aux <= var];
-      }
+      var <- quantile(aux[1:i], prob, names=FALSE);
+      tmp <- aux[aux >= var];
 
       ret[1,i] <- mean(tmp);
       ret[2,i] <- sqrt(var(tmp))/sqrt(length(tmp));
@@ -342,7 +337,6 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 # arguments
 #   x: vector with values
 #   alpha: numeric. confidence level with value in [0,1]
-#   simule: string. loss={values are portfolio losses}, value={values are portfolio values}
 #   format: string. plain={plain text}, xml={xml format}
 # returns
 #   vector: each line is a text line of the summary
@@ -351,20 +345,12 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 #   lines <- ccruncher.summary(x, 0.99, format="xml")
 #   write(lines, file="")
 #===========================================================================
-ccruncher.summary <- function(x, alpha=0.99, simule="loss", format="plain")
+ccruncher.summary <- function(x, alpha=0.99, format="plain")
 {
   #VaR values scaned (add your values here)
   xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
   table1 <- matrix(NaN, length(xvar), 3);
   table2 <- matrix(NaN, length(xvar), 3);
-
-  #setting label
-  if (simule == "loss") {
-    xlabel <- "portfolio loss";
-  }
-  else {
-    xlabel <- "portfolio value";
-  }
 
   #size, min, max, mean and stddev
   n <- length(x);
@@ -381,28 +367,15 @@ ccruncher.summary <- function(x, alpha=0.99, simule="loss", format="plain")
   for(i in 1:length(xvar))
   {
     table1[i,1] <- xvar[i];
-
-    if (simule == "loss") {
-      table1[i,2] <- quantile(x, xvar[i], names=FALSE);
-      table1[i,3] <- ccruncher.quantstderr(x, xvar[i]);
-    }
-    else {
-      table1[i,2] <- quantile(x, (1-xvar[i]), names=FALSE);
-      table1[i,3] <- ccruncher.quantstderr(x, (1-xvar[i]));
-    }
+    table1[i,2] <- quantile(x, xvar[i], names=FALSE);
+    table1[i,3] <- ccruncher.quantstderr(x, xvar[i]);
   }
 
   #computing TCE (Tail Conditional Expectation or Expected Shortfall)
   for(i in 1:length(xvar))
   {
-    if (simule == "loss") {
-      #retrieving simulations with value great than VaR
-      aux <- x[x >= table1[i,2]];
-    }
-    else {
-      #retrieving simulations with value less than VaR
-      aux <- x[x <= table1[i,2]];
-    }
+    #retrieving simulations with value great than VaR
+    aux <- x[x >= table1[i,2]];
 
     #coputing aux mean (=TCE) and related stderr
     table2[i,1] <- xvar[i];
@@ -420,7 +393,7 @@ ccruncher.summary <- function(x, alpha=0.99, simule="loss", format="plain")
   if (format == "plain")
   {
     ret[length(ret)+1] <- "";
-    ret[length(ret)+1] <- xlabel %&% " summary at "%&%(alpha*100)%&%"% confidence level";
+    ret[length(ret)+1] <- "portfolio loss summary at "%&%(alpha*100)%&%"% confidence level";
     ret[length(ret)+1] <- "---------------------------------------------------------------";
     ret[length(ret)+1] <- "n = " %&% n;
     ret[length(ret)+1] <- "min = " %&% minx;
@@ -495,7 +468,6 @@ ccruncher.summary <- function(x, alpha=0.99, simule="loss", format="plain")
 #   x: vector with values
 #   alpha: numeric. confidence level with value in [0,1]
 #   var: numeric. VaR level with value in [0,1]
-#   simule: string. loss={values are portfolio losses}, value={values are portfolio values}
 #   show: string. pdf|cdf|mean|stddev|VaR|TCE|all
 # returns
 #   the requested graphic
@@ -504,35 +476,23 @@ ccruncher.summary <- function(x, alpha=0.99, simule="loss", format="plain")
 #   ccruncher.plot(x, alpha=0.95, var=0.99)
 # notes
 #   - confidence level is used to plot the confidence bounds on
-#     convergence graphics. 
+#     convergence graphics.
 #   - caution with convergence plots, can take some time to plot them
 #===========================================================================
-ccruncher.plot <- function(x, var=0.99, alpha=0.99, simule="loss", show="pdf")
+ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf")
 {
-  xlabel <- "";
-  xvar <- 0.0;
-
-  if (simule == "loss") {
-    xvar <- var;
-    xlabel <- "portfolio loss";
-  }
-  else {
-    xvar <- 1.0 - var;
-    xlabel <- "portfolio value";
-  }
-
   if (show == "all") { par(mfrow=c(3,2)); }
 
   if (show == "pdf" || show == "all") {
     aux <- density(x);
     plot(aux,
        main="Density Function",
-       xlab=xlabel, ylab="probability");
+       xlab="portfolio loss", ylab="probability");
   }
   if (show == "cdf" || show == "all") {
     plot.ecdf(x, verticals=TRUE, do.p=FALSE,
        main="Cumulative Distribution Function",
-       xlab=xlabel, ylab="probability");
+       xlab="portfolio loss", ylab="probability");
   }
   if (show == "mean" || show == "all") {
     aux <- ccruncher.cmean(x);
@@ -543,11 +503,11 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, simule="loss", show="pdf")
     ccruncher.cplot(aux, alpha, "StdDev");
   }
   if (show == "VaR" || show == "all") {
-    aux <- ccruncher.cquantile(x, prob=xvar, breaks=250);
+    aux <- ccruncher.cquantile(x, prob=var, breaks=250);
     ccruncher.cplot(aux, alpha, "VaR("%&%(var*100)%&%"%)");
   }
   if (show == "TCE" || show == "all") {
-    aux <- ccruncher.ctce(x, prob=var, simule=simule, breaks=250);
+    aux <- ccruncher.ctce(x, prob=var, breaks=250);
     ccruncher.cplot(aux, alpha, "TCE("%&%(var*100)%&%"%)");
   }
 }
