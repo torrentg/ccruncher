@@ -35,7 +35,7 @@
 CCRUNCHER=/home/horizon/temp/ccruncher
 progname=report
 numversion="0.6"
-svnversion="R253"
+svnversion="R255:258M"
 retcode=0
 options=""
 

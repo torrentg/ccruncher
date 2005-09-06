@@ -11,6 +11,7 @@ version 0.6 (Sept. 2005)
   * added TCE (Tail Conditional Expectation or Expected Shortfall) computation
   * simulated values can be: portfolio value or portfolio losses (new)
   * added makefile in $CCRUNCHER/doc/tex directory
+  * added pdf doc to rollversion system
 
 version 0.5 (August 2005)
 --------------------------
