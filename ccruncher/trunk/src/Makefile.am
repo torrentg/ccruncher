@@ -40,7 +40,8 @@ EXTRA_DIST = \
     ../share/gzstream-1.5/gzstream.h\
     ../share/gzstream-1.5/gzstream.cpp
 
-bin_PROGRAMS = ccruncher generator mtrans
+#bin_PROGRAMS = ccruncher generator mtrans
+bin_PROGRAMS = ccruncher
 
 check_PROGRAMS = tests
 

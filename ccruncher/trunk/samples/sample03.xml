@@ -19,7 +19,7 @@
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.simule" value="loss"/>
     <property name="montecarlo.method" value="time-to-default"/>
-    <property name="montecarlo.antithetic" value="false"/>
+    <property name="montecarlo.antithetic" value="true"/>
     <property name="portfolio.onlyActiveClients" value="true"/>
   </params>
 

@@ -302,28 +302,37 @@ calculo del valor esperado, calculo del VAR, etc.
 \section{Valoraci\'on del riesgo}
 
 El m\'etodo de Monte Carlo genera $N$ realizaciones, $\{z_1,z_2,z_3,\cdots,z_N\}$,
-de la variable aleatoria $Z$ (valor de la cartera) que permiten obtener la funci\'on
-de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores usados
-y el $\alpha$-intervalo de confianza. CreditCruncher utiliza el entorno \emph{R}
-\footnote{http://www.r-project.org} para realizar los c\'alculos estad'isticos.
-Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
+de la variable aleatoria $Z$ (p\'erdidas de la cartera) que permiten obtener la
+funci\'on de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores
+usados y el intervalo de confianza al nivel de confianza $\alpha$. CreditCruncher
+utiliza el entorno \emph{R} \footnote{http://www.r-project.org} para realizar los
+c\'alculos estad\'isticos. Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
+Sea $\phi^{-1}(x)$ la inversa de la funci\'on de distribuci\'on de la Normal(0,1).
 
 \paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
 \begin{displaymath}
 \mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
 \end{displaymath}
+Consulte \ref{apendix:estim} para el c\'alculo de $\widehat{\mu_Z}$ y $\widehat{\sigma_Z}$.
 
 \paragraph{Desviaci\'on est\'andar.} F\'ormula extraida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
 \begin{displaymath}
 \sigma_Z = \widehat{\sigma_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{2N}}
 \end{displaymath}
+Consulte \ref{apendix:estim} para el c\'alculo de $\widehat{\sigma_Z}$.
 
-\paragraph{VAR-Quantile.} Fijado un nivel de $VAR = 1-x$
+\paragraph{Value at Risk.} Fijado un nivel de $VAR = x$
 \begin{displaymath}
-q_{Z,x} = \widehat{q_{Z,x}} \pm \textrm{stderr}(q_{Z,x})
+VAR_{x}(Z) = \widehat{q_{x}(Z)} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{x}(Z))
 \end{displaymath}
-Donde el error est\'andar del quantil, $\textrm{stderr}(q_{Z,x})$, lo calculamos usando
-el m\'etodo de Maritz-Jarrett (basado en el estad\'istico de orden). F\'ormula extraida
-de \cite{quant:algor}.
+Consulte \ref{apendix:estim} y \ref{apendix:stderrvar} para el c\'alculo de
+$\widehat{q_{x}(Z)}$ y $\textrm{stderr}(q_{x}(Z))$.
+
+\paragraph{TCE o Expected Shortfall.} Fijado un nivel de $VAR = x$
+\begin{displaymath}
+TCE_{x}(Z) = \widehat{TCE_{x}(Z)} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(TCE_{x}(Z))
+\end{displaymath}
+Consulte \ref{apendix:estim} y \ref{apendix:stderrtce} para el c\'alculo de
+$\widehat{TCE_{x}(Z)}$ y $\textrm{stderr}(TCE_{x}(Z))$.
