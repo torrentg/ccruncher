@@ -267,7 +267,8 @@ TCE_{\alpha}(X) = E(X | X > VAR_{\alpha}(X)) \approx \widehat{TCE_{\alpha}(X)} =
 
 A continuaci\'on se describe el m\'etodo de Maritz-Jarrett basado en el
 estad\'istico de orden. F\'ormula extraida de \cite{quant:algor}. Sea
-$N$ el tama\~no muestral y $x$ la probabilidad del quantil.
+$y_1, y_2, y_3, \cdots, y_N$ la muestra sobre la que se desea calcular 
+el error est\'andar del quantil $x$.
 
 \begin{eqnarray}
 M   & = & [Nx + 0.5] \nonumber \\
@@ -313,8 +314,8 @@ y_1, y_2, y_3, \cdots, y_M
 de $Y$ y calcular su error est\'andar:
 
 \begin{eqnarray}
-\widehat{TEC_{\alpha}(X)} & = & \widehat{\mu_Y} \nonumber \\
-\textrm{stderr}(TEC_\alpha) & = & \frac{\widehat{\sigma_Y}}{\sqrt{M}} \nonumber
+\widehat{TCE_{\alpha}(X)} & = & \widehat{\mu_Y} \nonumber \\
+\textrm{stderr}(TCE_\alpha(X)) & = & \frac{\widehat{\sigma_Y}}{\sqrt{M}} \nonumber
 \end{eqnarray}
 
 %---------------------------------------------------------------------------

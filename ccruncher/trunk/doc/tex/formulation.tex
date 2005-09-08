@@ -738,22 +738,22 @@ forma expl\'icita. Sea una cartera de $1$ solo sector con $100$ clientes sin
 correlaci\'on alguna entre ellos. Cada cliente tiene un activo que consiste en
 devolver $1$ \euro al cabo de $T$ tiempo. Supongamos que el sistema de ratings
 solamente contempla $2$ categor\'ias crediticias, no-Default y Default. La
-probabilidad de hacer fallido al cabo de $T$ tiempo es $0.1$.
+probabilidad de hacer fallido al cabo de 1 a\~no es $0.1$.
 \newline
 \newline
 En este caso, se puede modelar la p\'erdida provocada por el impago del cliente
-$i$ al cabo de $T$ tiempo como una variable aleatoria Bernouilli, $X_i \sim Ber(0.1)$.
-La p\'erdida de la cartera al cabo de $T$ tiempo es la suma de las p\'erdidas de
+$i$ al cabo de 1 a\~no como una variable aleatoria Bernouilli, $X_i \sim Ber(0.1)$.
+La p\'erdida de la cartera al cabo de 1 a\~no es la suma de las p\'erdidas de
 cada cliente, $Z = \sum_{i=1}^{100} X_i$, que por definici\'on es una
 variable aleatoria Binomial, $Z \sim B(100,0.1)$.
 \newline
 \newline
-La p\'erdida esperada al cabo de $T$ tiempo es
+La P\'erdida Esperada al cabo de 1 a\~no es
 \begin{displaymath}
 \textrm{Expected Loss} = E(Z) = 10
 \end{displaymath}
 
-Calculemos el VAR al nivel de confianza $99\%$:
+El VAR al nivel de confianza $99\%$ al cabo de 1 a\~no es:
 \begin{displaymath}
 VAR_{99\%} = \textrm{inf}\{z | F_Z(z) \leq 99\%\}
 \end{displaymath}
@@ -770,7 +770,7 @@ Por tanto, podemos considerar que $VAR_{99\%}$ es
 \textrm{VAR}_{99\%} = 17
 \end{displaymath}
 
-Calculemos el TCE al nivel de confianza $99\%$:
+El TCE al nivel de confianza $99\%$ al cabo de 1 a\~no es:
 \begin{displaymath}
 TCE_{99\%} = E(Z | Z > VAR_{99\%}(Z))
 \end{displaymath}
@@ -779,7 +779,7 @@ Equivalentemente
 TCE_{99\%} = \frac{\sum_{i=18}^{100} i\cdot P(Z=i)}{\sum_{i=18}^{100} P(Z=i)} = 18.78458
 \end{displaymath}
 
-El Capital Econ\'omico al nivel de confianza $99\%$ es:
+El Capital Econ\'omico al nivel de confianza $99\%$ al cabo de 1 a\~no es:
 \begin{displaymath}
 \textrm{Economic Capital}_{99\%}(Z) = \textrm{VAR}_{99\%}(Z) - E(Z) = 17 - 10 = 7
 \end{displaymath}
@@ -787,7 +787,7 @@ El Capital Econ\'omico al nivel de confianza $99\%$ es:
 Este ejemplo no es significativo debido a que se han realizado dos supuestos
 que en el mundo real no se cumplen: todos los creditores se modelan de la misma 
 forma y los fallidos son independientes. Se obtiene que la distribuci\'on de las 
-p\'erdidas de la cartera a tiempo $T$ es una variable aleatoria Binomial(100,0.1),
+p\'erdidas de la cartera al cabo de 1 a\~no es una variable aleatoria Binomial(100,0.1),
 que puede ser aproximada de forma precisa por una Normal(10,9). Esto no concuerda
 con las observaciones reales, que muestran que la distribuci\'on de las p\'erdidas
 es fuertemente asim\'etrica respecto a la p\'erdida esperada.

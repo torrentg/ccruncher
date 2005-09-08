@@ -2,14 +2,16 @@
 CREDITCRUNCHER SAMPLES
 ======================
 
-This directory contains some xml input file samples
-for ccruncher solver. You can run any sample file
-tipying next commands on a console:
+This directory contains some xml input file samples for ccruncher.
+You can run any sample file tipying next commands on a console:
 
   > cd $CCRUNCHER$
   > bin/ccruncher -vf --hash=100 --path=data samples/sampleXX.xml
 
-The ouput will be written in files located at data directory.
+The ouput will be written in files located at data directory
+
+Currently, the checks are weak. Checks can be improved doing 
+some tests (Chi-Square, Kolmogorov-Smirnof).
 
 
 sample01.xml
@@ -34,21 +36,23 @@ Description:
 
 Expected Results:
 
-  This problem has an explicit solution. The asset value
-  at t=12 can be modeled as a Bernouilli(0.9). Then, the
-  portfolio value at t=12 can be modeled as Z~Bernouilli(0.9)
+  This problem has an explicit solution. The asset loss
+  at t=12 can be modeled as a Bernouilli(0.1). Then, the
+  portfolio loss at t=12 can be modeled as Z~Bernouilli(0.1)
 
-     P(Z=0) = 0.1
-     P(Z=1) = 0.9
+     P(Z=0) = 0.9
+     P(Z=1) = 0.1
 
-Notes:
+How I can check results?
 
-  All sugested modifications that follows don't change
-  the expected results:
-    1. You can use this sample to check interest rate impact
-    2. Also you can modify the number of steps (but always
-       steps*steplength=12)
-    3. Try to change the simulation method to rating-path
+  > #loading script
+  > source("bin/report.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio-rest.out")
+  > #exact values
+  > c(0.9, 0.1)*length(x)
+  > #computed values
+  > tabulate(x+1, 2)
 
 
 sample02.xml
@@ -73,17 +77,24 @@ Description:
 
 Expected Results:
 
-  This problem has an explicit solution. Each asset value
-  at t=12 can be modeled as a Bernouilli(0.9). Then, the
-  portfolio value at t=12 can be modeled as:
+  This problem has an explicit solution. Each asset loss
+  at t=12 can be modeled as a Bernouilli(0.1). Then, the
+  portfolio loss at t=12 can be modeled as:
 
-     P(Z=0) = P(X1=0)·P(X2=0) = 0.1 · 0.1 = 0.01
-     P(Z=1) = P(X1=1)·P(X2=0) + P(X1=0)·P(X2=1) = 0.9 · 0.1 + 0.1 · 0.9 = 0.18
-     P(Z=2) = P(X1=1)·P(X2=1) = 0.9 · 0.9 = 0.81
+     P(Z=0) = P(X1=0)·P(X2=0) = 0.9 · 0.9 = 0.81
+     P(Z=1) = P(X1=0)·P(X2=1) + P(X1=1)·P(X2=0) = 0.9 · 0.1 + 0.1 · 0.9 = 0.18
+     P(Z=2) = P(X1=1)·P(X2=1) = 0.1 · 0.1 = 0.01
 
-Notes:
+How I can check results?
 
-  Same notes that sample01
+  > #loading script
+  > source("bin/report.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio-rest.out")
+  > #exact values
+  > c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1)*length(x)
+  > #computed values
+  > tabulate(x+1, 3)
 
 
 sample03.xml
@@ -108,50 +119,21 @@ Description:
 
 Expected Results:
 
-  This problem has an explicit solution. The asset value
-  at t=12 for each clieant can be modeled as a Bernouilli(0.9).
-  The sum of 100 uncorrelated Bernouillis is a Binomial(100,0.9).
-  Then, the portfolio value at t=12 is a Z~Binomial(100,0.9).
+  This problem has an explicit solution. The asset loss
+  at t=12 for each clieant can be modeled as a Bernouilli(0.1).
+  The sum of 100 uncorrelated Bernouillis is a Binomial(100,0.1).
+  Then, the portfolio loss at t=12 is a Z~Binomial(100,0.1).
 
-  We can compute exact results using octave:
-    > x=[75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,95,96,97,98,99,100]'
-    > binomial_pdf(x,100,0.9)
-    > format none
-    > [x,binomial_pdf(x,100,0.9)]
+How I can check results?
 
-         75  8.9729337195651e-06
-         76  2.6564606406607e-05
-         77  7.4518895893858e-05
-         78  0.00019776168525679
-         79  0.00049565586937776
-         80  0.0011709869914049
-         81  0.0026021933142331
-         82  0.0054265250821204
-         83  0.010591530883175
-         84  0.019291716965783
-         85  0.032682438153798
-         86  0.05130382733445
-         87  0.074302094760235
-         88  0.098788012351673
-         89  0.11987758802226
-         90  0.13186534682449
-         91  0.13041627707916
-         92  0.11482302655882
-         93  0.088895246368124
-         95  0.033865803823556
-         96  0.015874595542292
-         97  0.0058916024693042
-         98  0.0016231965986858
-         99  0.00029512665430652
-        100  2.6561398887588e-05
-
-  Take simulated portfolio values output file (portfolio-rest.out),
-  compute pdf (probability density function) at 75,...,100 an compare
-  with binomial values.
-
-Notes:
-
-  Same notes that sample01
+  > #loading script
+  > source("bin/report.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio-rest.out")
+  > #exact values
+  > round(dbinom(0:100, 100, 0.1)*length(x))
+  > #computed values
+  > tabulate(x+1, 101)
 
 
 sample04.xml
@@ -169,18 +151,62 @@ Description:
 Expected Results:
 
   We don't know explicit solution for this problem (if you know, please
-  report it). We do an artistic description of pdf compared with sample03:
+  report it).
 
-                               sample03  sample04
-    pdf shape                  simetric  asimetric
-    maximum probability           90        94
-    minimum                       80        60
-    P(Z=100)                      0.0       0.1
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+   0.00    6.00   10.00   10.78   14.00   49.00
 
-Notes:
+How I can check results?
 
-  Same notes that sample01
+  > #loading script
+  > source("bin/report.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio-rest.out")
+  > #some results
+  > summary(x)
+  > #computed values
+  > tabulate(x+1, 101)
+  > #drawing histogram
+  > hist(x,breaks=101)
 
+
+sample100.xml.gz
+---------------------------------------------------------------------
+
+Description:
+
+  The same that sample03, with these diferences:
+    2 sectors
+    correl(S1,S1) = 0.20
+    correl(S1,S2) = 0.10
+    correl(S2,S2) = 0.25
+    survival function user defined
+    100 clients
+    each client with 3 assets
+    asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
+                    if client defaults, recovery=0.
+    each client belongs to a random sector.
+
+Expected Results:
+
+  We don't know explicit solution for this problem (if you know, please
+  report it).
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+    0.0   501.9   998.3  1213.0  1677.0  8381.0
+
+How I can check results?
+
+  > #loading script
+  > source("bin/report.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio-rest.out")
+  > #some results
+  > summary(x)
+  > #computed values
+  > tabulate(x+1, 101)
+  > #drawing histogram
+  > hist(x)
 
 
 The CreditCruncher Team
