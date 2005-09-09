@@ -244,11 +244,11 @@ Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
 \paragraph{Definici\'on.} Estimamos el VAR de $X$ al nivel de confianza $\alpha$
 usando el siguiente estimador:
 \begin{displaymath}
-VAR_{\alpha}(X) = \textrm{inf}\{x | F(X) \leq \alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:n}
+VAR_{\alpha}(X) = \textrm{inf}\{x | F_X(x) \geq \alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:n}
 \end{displaymath}
 donde,
 \begin{itemize}
-\item $F$ es la funci\'on de distribuci\'on de $X$
+\item $F_X$ es la funci\'on de distribuci\'on de $X$
 \item $k$ cumple $\frac{k}{n} \leq \alpha < \frac{k+1}{n}$
 \item $x_{k:n}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
 \end{itemize}
@@ -364,6 +364,11 @@ A^n = B = P^{-1} \cdot D \cdot P
 \Longrightarrow  
 A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
 \end{displaymath} 
+
+\paragraph{Observaci\'on.}
+Si $D$ es una matriz diagonal con $d_1, d_2, d_3, \cdots, d_n$ en la diagonal,
+entonces la matriz $D^x$ es una matriz diagonal y sus valores son
+$d_1^x, d_2^x, d_3^x, \cdots, d_n^x$.
 
 %---------------------------------------------------------------------------
 
@@ -542,4 +547,6 @@ repetidos. Veamos un ejemplo:
 
 Con estas dos consideraciones se obtiene una algoritmo de Cholesky para matrices
 en bloques con uso de memoria y n\'umero de operaciones (al multiplicar por un
-vector) del orden $N \times (M+1)$ en vez de orden $N^2$.
+vector) del orden $N \times (M+1)$ en vez de orden $N^2$. Con el nuevo algoritmo
+la memoria necesaria para almacenar la matriz de $50.000$ clientes es de $4.2$ Mb.
+y el n\'umero de multiplicaciones se reduce a $500.000$.
