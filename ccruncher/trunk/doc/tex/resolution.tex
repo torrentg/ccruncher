@@ -81,12 +81,14 @@ $\Gamma$ & Matriz de correlaci\'on entre sectores. Dimensi\'on $ns \times ns$\\
 $\Theta$ & Matriz de correlaci\'on entre clientes. Dimensi\'on $nc \times nc$\\
 \hline
 \hline
-$X_{i,j}(t)$ & Valor del $j$-esimo activo del cliente $i$ en tiempo $t$. 
+$X_{i,j}$ & Valor del $j$-esimo activo del cliente $i$.
 $i \in \{1,\cdots,nc\}$, $j \in \{0,\cdots,na_i\}$ \\
 \hline
-$Y_i(t)$ & Valor de los activos del cliente $i$ en tiempo $t$. $i \in \{1,\cdots,nc\}$ \\
+$X_i$ & Valor de los activos del cliente $i$. $i \in \{1,\cdots,nc\}$ \\
 \hline
-$Z(t)$ & Valor de la cartera en tiempo $t$\\
+$X$ & Valor de la cartera\\
+\hline
+$Z$ & P\'erdidas de la cartera\\
 \hline
 \end{tabular}
 
@@ -177,9 +179,14 @@ x^1,\cdots,x^n      & \longrightarrow & H(x^1),\cdots,H(x^n)
 
 \paragraph{Observaci\'on.} Problemas aparentemente no relacionados con las 
 variables aleatorias pueden reformularse como un problema donde intervenga
-una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. El 
-ejemplo cl\'asico es obtener el valor de la integral de la funci\'on $W$ entre 
-$0$ y $1$. Lo reformulamos de la siguiente forma:
+una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. 
+Normalmente se formula el problema original como el c\'alculo de un 
+estad\'istico (pe. la media) sobre la funci\'on de distribuci\'on. Al
+m\'etodo de Monte Carlo se le atribuye una velocidad de convergencia del 
+del orden de $1/\sqrt{N}$.
+
+\paragraph{Ejemplo:} El ejemplo cl\'asico es obtener el valor de la integral 
+de la funci\'on $W$ entre $0$ y $1$. Lo reformulamos de la siguiente forma:
 \begin{displaymath}
 \int_{0}^{1} W(u) du = \int_{0}^{1} W(u) \phi(u) du = E[W(U)]
 \end{displaymath}
@@ -190,97 +197,88 @@ con distribuci\'on $W(U)$.
 
 %---------------------------------------------------------------------------
 
-\section{Valor de un activo}
+\section{Evaluaci\'on de la cartera}
 
-\paragraph{Definici\'on.} Definimos la funci\'on \emph{indicador del momento de 
-fallido}\index{Indicador del momento de fallido} de la forma siguiente:
-\begin{displaymath}
-I(t) = \left\{
-\begin{array}{ll}
-1 & \textrm{ if client has defaulted at time } t \cr
-0 & \textrm{ otherwise}
-\end{array}
-\right.
-\end{displaymath}
-
-\paragraph{Definici\'on.} Definimos la funci\'on \emph{indicador de actividad}
-\index{Indicador de actividad} de la forma siguiente:
-\begin{displaymath}
-J(t) = \left\{
-\begin{array}{ll}
-0 & \textrm{ if client is defaulted at time } t\cr
-1 & \textrm{ otherwise}
-\end{array}
-\right.
-\end{displaymath}
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=10cm,angle=0]{./images/functionsIJ.eps}
-\caption{Functions $I(t)$ and $J(t)$}
-\label{functionsIJ}
-\end{center}
-\end{figure}
-
-\paragraph{Proposici\'on.} Podemos expresar $J(t)$ en funci\'on de $I(t)$ de la
-forma siguiente:
-\begin{displaymath}
-J(t) = \prod_{t_k=t_0}^{t} (1-I(t_k))
-\end{displaymath}
-
-\paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$ en 
-tiempo $t$ como:
-\begin{displaymath}
+\paragraph{Definici\'on.} Definimos el valor de un activo entre el tiempo
+$t_0$ y $T$, habiendo hecho fallido en tiempo $w$ como:
+\begin{equation}
 \begin{array}{rl}
-X_{i,j}(t) = \sum_{t_k=t_0}^{t} & \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot J(t_k) \cr
-                              + & \textrm{netting}(t_k)  \cdot \Upsilon(t_k,t_0, S_{t_0}) \cdot I(t_k)
+X_{i,j}(t_0,T,w) = & \textrm{1}_{[w \leq T]} \cdot \textrm{netting}(w) \cdot \Upsilon(w,T,S_{t_0}) + \cr
+                   & \sum_{t_k=t_0}^{T} \textrm{1}_{[t_k < w]} \cdot \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,T,S_{t_0})
 \end{array}
-\end{displaymath}
+\end{equation}
 
-\paragraph{Observaci\'on.} Conocidas las caracter\'isticas de un activo y 
-la curba spot, el valor de un activo en tiempo $t_k$ solamente depende de 
-la funci\'on $I(t)$. Equivalentemente, solo depende del momento en que el
-cliente hace fallido.
+\paragraph{Definici\'on.} Definimos el valor de los activos del cliente $i$
+entre el tiempo $t_0$ y $T$, habiendo hecho fallido en tiempo $w$ como:
+\begin{equation}
+X_i(t_0,T,w) = \sum_{j=0}^{na_i} X_{i,j}(t_0,T,w)
+\end{equation}
 
+\paragraph{Definici\'on.} Definimos el valor de la cartera entre el tiempo 
+$t_0$ y $T$, siendo $\vec{w}$ los tiempos en los que han hecho fallido 
+los clientes $\vec{c}$ como:
+\begin{equation}
+X(t_0,T,\vec{w}) = \sum_{i=0}^{nc} X_i(t) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_0,T,w_i)
+\end{equation}
 
-\section{Valor de la cartera}
+\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera entre el 
+tiempo $t_0$ y $T$, siendo $\vec{w}$ los tiempos en los que han hecho fallido 
+los clientes $\vec{c}$ como:
+\begin{equation}
+Z(t_0,T,\vec{w}) = X(t_0,T,T+1) - X(t_0,T,\vec{w})
+\end{equation}
 
-\paragraph{Definici\'on.} Definimos el valor de la cartera en tiempo $t$ como:
+%---------------------------------------------------------------------------
+
+\section{Simulaci\'on del tiempo de fallido}
+
+El objetivo de este apartado es proporcionar m\'etodos para simular los
+tiempos de fallido, $\vec{w} = \{w_1,w_2,w_3,\cdots,w_{NC}\}$ de los clientes
+$\vec{c} = \{c_1,c_2,c_3,\cdots,c_{NC}\}$ cumpliendo:
+\begin{itemize}
+\item los fallidos de cada cliente deben satisfacer la matriz de transici\'on $M_T$
+(o la funci\'on de supervivencia, $Survival(r,t)$).
+\item la correlaci\'on entre los fallidos de los clientes debe cumplir la matriz
+de correlaci\'on entre clientes, $\Theta$
+\end{itemize}
+
+\subsection{M\'etodo Rating-Path}
+
+Para este m\'etodo es necesario disponer de la matriz de transici\'on, $M_T$.
+
+\paragraph{Paso 1.} Segmentamos el tiempo en intervalos constantes de forma que
+el intervalo de tiempo entre $t_i$ y $t_{i+1}$ es el cubierto por la matriz de
+transici\'on, $T$.
 \begin{displaymath}
-Z(t) = \sum_{i=0}^{nc} Y_i(t) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t)
+t_0,t_1,t_2,\cdots,t_k, \cdots
 \end{displaymath}
 
-\paragraph{Observaci\'on.} El valor de la cartera solamente depende de 
-$I_1(t), \cdots, I_{nc}(t)$, donde $I_i(t)$ es el indicador del momento 
-de fallido en tiempo $t$ del cliente $i$. Equivalentemente, solo depende 
-de los instantes en los que los clientes de la cartera hacen fallido.
-
-\paragraph{Proposici\'on.} Construimos la funci\'on $H$ del m\'etodo de Monte 
-Carlo de la forma siguiente:
+\paragraph{Paso 2.} Para cada intervalo de tiempo $k$ creamos una c\'opula,
+$Qk$ de dimensi\'on $NC$ que satisfaga la matriz de correlaci\'on entre
+clientes, $\Theta$.
 \begin{displaymath}
-H(I_1(t_0),\cdots,I_1(t_k),\cdots,I_{nc}(t_0),\cdots,I_{nc}(t_k)) = Z(T)
+Q1, Q2, Q3, \cdots, Qk, \cdots
 \end{displaymath}
 
+\paragraph{Paso 3.} Simulamos la c\'opula $Q1$. Simulemos el rating del cliente
+$i$ en $t_1$. Disponemos del rating inicial $rating(t_0,i)$ y un valor $Q1_i \in [0,1]$
+proporcionado por el componente $i$-\'esimo de $Q1$. Entonces
+\begin{displaymath}
+rating(t_1,i) = M_T^{-1}(rating(t_1,i),Q1_i)
+\end{displaymath}
+Este paso se encuentra ilustrado en la figura \ref{simrp}.
 
-\section{M\'etodo Time-To-Default}
-
-
-El m\'etodo Time-To-Default consiste en simular el valor de la cartera a partir 
-del la simulaci\'on del tiempo de fallido de cada uno de los clientes.
-
-c\'opula -> funci\'on supervivencia -> valoraci\'on cartera
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=10cm,angle=0]{./images/simttd.eps}
-\caption{Simulaci\'on del tiempo hasta el fallido del rating $BBB$}
-\label{simttd}
-\end{center}
-\end{figure}
-
-
-\section{M\'etodo Rating-Path}
-c\'opula -> matriz transici\'on -> valoraci\'on cartera
+\paragraph{Paso 4.} Simulamos la c\'opula $Qk$. Simulemos el rating del cliente
+$i$ en $t_k$. Disponemos del rating anterior $rating(t_{k-1},i)$ y un valor
+$Qk_i \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Qk$. Entonces
+\begin{displaymath}
+rating(t_k,i) = M_T^{-1}(rating(t_{k-1},i),Qk_i)
+\end{displaymath}
+Este paso se encuentra ilustrado en la figura \ref{simrp}. Finalmente, aproximamos
+el tiempo de fallido del cliente $i$ de la siguiente forma:
+\begin{displaymath}
+w_i = inf\{t_k | rating(t_k,i) = default\}
+\end{displaymath}
 
 \begin{figure}[!hb]
 \begin{center}
@@ -290,12 +288,34 @@ c\'opula -> matriz transici\'on -> valoraci\'on cartera
 \end{center}
 \end{figure}
 
+\subsection{M\'etodo Time-To-Default}
 
-\subsection{Valoraci\'on de la cartera}
-valoraci\'on activo -> valoraci\'on cliente -> valoraci\'on cartera
+Para este m\'etodo es necesario disponer de la funci\'on de supervivencia. En caso
+de disponer solamente de la matriz de transici\'on puede calcularse la funci\'on
+de supervivencia asociada a la matriz de transici\'on.
 
-\subsection{Distribuci\'on del valor de la cartera}
-calculo del valor esperado, calculo del VAR, etc.
+\paragraph{Paso 1.} Creamos una c\'opula de dimensi\'on $NC$ que satisfaga la
+matriz de correlaci\'on entre clientes, $\Theta$.
+\begin{displaymath}
+Q
+\end{displaymath}
+
+\paragraph{Paso 2.} Simulamos la c\'opula $Q$. Simulemos el tiempo de fallido del
+cliente $i$, $w_i$. Disponemos del rating inicial, $rating(t_0,i)$ y un valor
+$Q_i \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q$. Entonces:
+\begin{displaymath}
+w_i = Survival^{-1}(rating(t_0,i),Q_i)
+\end{displaymath}
+Este paso se encuentra ilustrado en la figura \ref{simttd}.
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/simttd.eps}
+\caption{Simulaci\'on del tiempo hasta el fallido del rating $BBB$}
+\label{simttd}
+\end{center}
+\end{figure}
+
 
 %---------------------------------------------------------------------------
 
