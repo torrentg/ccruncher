@@ -40,6 +40,7 @@ EXTRA_DIST = \
     ../share/gzstream-1.5/gzstream.h\
     ../share/gzstream-1.5/gzstream.cpp
 
+#bin_PROGRAMS = ccruncher generator mtrans
 bin_PROGRAMS = ccruncher
 
 check_PROGRAMS = tests
@@ -136,6 +137,186 @@ ccruncher_SOURCES = \
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
 ccruncher_LDADD = -lm -lexpat -lz
 ccruncher_LDFLAGS = -rdynamic
+
+# -------------------------------------------------------------
+# generator
+# -------------------------------------------------------------
+generator_SOURCES = \
+    ../share/gzstream-1.5/gzstream.cpp\
+    ./tools/generator.cpp\
+    ./tools/Bond.cpp\
+    ./kernel/IData.cpp\
+    ./portfolio/Portfolio.cpp\
+    ./portfolio/Client.cpp\
+    ./params/Params.cpp\
+    ./interests/Interests.cpp\
+    ./interests/Interest.cpp\
+    ./interests/Rate.cpp\
+    ./ratings/Rating.cpp\
+    ./ratings/Ratings.cpp\
+    ./transitions/TransitionMatrix.cpp\
+    ./survival/Survival.cpp\
+    ./sectors/Sector.cpp\
+    ./sectors/Sectors.cpp\
+    ./correlations/CorrelationMatrix.cpp\
+    ./math/CholeskyDecomposition.cpp\
+    ./math/PowMatrix.cpp\
+    ./math/GaussianCopula.cpp\
+    ./math/Normal.cpp\
+    ./math/BlockMatrixChol.cpp\
+    ./math/BlockGaussianCopula.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
+    ./segmentations/Segmentations.cpp\
+    ./segmentations/Segmentation.cpp\
+    ./segmentations/Segment.cpp\
+    ./utils/Exception.cpp\
+    ./utils/Parser.cpp\
+    ./utils/Logger.cpp\
+    ./utils/File.cpp\
+    ./utils/Date.cpp\
+    ./utils/Timer.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
+    ./utils/Format.cpp\
+    \
+    ./tools/Bond.hpp\
+    ./kernel/IData.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./params/Params.hpp\
+    ./interests/Interests.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Rate.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./survival/Survival.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/Copula.hpp\
+    ./math/PowMatrix.hpp\
+    ./math/GaussianCopula.hpp\
+    ./math/Normal.hpp\
+    ./math/BlockMatrixChol.hpp\
+    ./math/BlockGaussianCopula.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp\
+    ./utils/Exception.hpp\
+    ./utils/Parser.hpp\
+    ./utils/Logger.hpp\
+    ./utils/File.hpp\
+    ./utils/Date.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp
+
+generator_CXXFLAGS = -Wall -W -Wshadow
+generator_LDADD = -lm -lexpat -lz
+generator_LDFLAGS = -rdynamic
+
+# -------------------------------------------------------------
+# mtrans
+# -------------------------------------------------------------
+mtrans_SOURCES = \
+    ../share/gzstream-1.5/gzstream.cpp\
+    ./tools/mtrans.cpp\
+    ./kernel/IData.cpp\
+    ./portfolio/Portfolio.cpp\
+    ./portfolio/Client.cpp\
+    ./params/Params.cpp\
+    ./interests/Interests.cpp\
+    ./interests/Interest.cpp\
+    ./interests/Rate.cpp\
+    ./ratings/Rating.cpp\
+    ./ratings/Ratings.cpp\
+    ./transitions/TransitionMatrix.cpp\
+    ./survival/Survival.cpp\
+    ./sectors/Sector.cpp\
+    ./sectors/Sectors.cpp\
+    ./correlations/CorrelationMatrix.cpp\
+    ./math/CholeskyDecomposition.cpp\
+    ./math/PowMatrix.cpp\
+    ./math/GaussianCopula.cpp\
+    ./math/Normal.cpp\
+    ./math/BlockMatrixChol.cpp\
+    ./math/BlockGaussianCopula.cpp\
+    ./portfolio/Asset.cpp\
+    ./portfolio/DateValues.cpp\
+    ./segmentations/Segmentations.cpp\
+    ./segmentations/Segmentation.cpp\
+    ./segmentations/Segment.cpp\
+    ./utils/Exception.cpp\
+    ./utils/Parser.cpp\
+    ./utils/Logger.cpp\
+    ./utils/File.cpp\
+    ./utils/Date.cpp\
+    ./utils/Timer.cpp\
+    ./utils/Arrays.cpp\
+    ./utils/Strings.cpp\
+    ./utils/ExpatParser.cpp\
+    ./utils/ExpatUserData.cpp\
+    ./utils/ExpatHandlers.cpp\
+    ./utils/Utils.cpp\
+    ./utils/Format.cpp\
+    \
+    ./kernel/IData.hpp\
+    ./portfolio/Portfolio.hpp\
+    ./portfolio/Client.hpp\
+    ./params/Params.hpp\
+    ./interests/Interests.hpp\
+    ./interests/Interest.hpp\
+    ./interests/Rate.hpp\
+    ./ratings/Rating.hpp\
+    ./ratings/Ratings.hpp\
+    ./transitions/TransitionMatrix.hpp\
+    ./survival/Survival.hpp\
+    ./sectors/Sector.hpp\
+    ./sectors/Sectors.hpp\
+    ./correlations/CorrelationMatrix.hpp\
+    ./math/CholeskyDecomposition.hpp\
+    ./math/Copula.hpp\
+    ./math/PowMatrix.hpp\
+    ./math/GaussianCopula.hpp\
+    ./math/Normal.hpp\
+    ./math/BlockMatrixChol.hpp\
+    ./math/BlockGaussianCopula.hpp\
+    ./portfolio/Asset.hpp\
+    ./portfolio/DateValues.hpp\
+    ./segmentations/Segmentations.hpp\
+    ./segmentations/Segmentation.hpp\
+    ./segmentations/Segment.hpp\
+    ./utils/Exception.hpp\
+    ./utils/Parser.hpp\
+    ./utils/Logger.hpp\
+    ./utils/File.hpp\
+    ./utils/Date.hpp\
+    ./utils/Timer.hpp\
+    ./utils/Arrays.hpp\
+    ./utils/Strings.hpp\
+    ./utils/ExpatParser.hpp\
+    ./utils/ExpatUserData.hpp\
+    ./utils/ExpatHandlers.hpp\
+    ./utils/Utils.hpp\
+    ./utils/Format.hpp
+
+mtrans_CXXFLAGS = -Wall -W -Wshadow
+mtrans_LDADD = -lm -lexpat -lz
+mtrans_LDFLAGS = -rdynamic
 
 # -------------------------------------------------------------
 # tests

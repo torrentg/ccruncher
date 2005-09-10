@@ -27,12 +27,16 @@
 #   . added xml format argument
 #   . added portfolio value|loss argument
 #
+# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . removed unused options
+#   . CCRUNCHER var filled with dirname
+#
 #=============================================================
 
 #-------------------------------------------------------------
 # variables declaration
 #-------------------------------------------------------------
-CCRUNCHER=/home/horizon/temp/ccruncher
+CCRUNCHER=`dirname $0`/..
 progname=report
 numversion="0.6"
 svnversion="R262M"
@@ -76,10 +80,9 @@ usage() {
     output data files generates by ccruncher using R.
     more info at http://www.generacio.com/ccruncher
   arguments:
-    file     ccruncher output data file to plot
+    file     ccruncher output data file
   options
     -x       print output in xml format
-    -d       computed values are portfolio values
     -h       show this message and exit
     -v       show version and exit
   return codes:
@@ -87,6 +90,7 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname portfolio-rest.out
+    $progname -x portfolio-rest.out
 
 _EOF_
 
@@ -99,10 +103,9 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'hvxd' opt
+  while getopts 'hvx' opt
   do
     case $opt in
-      d) options="$options, simule='value'";;
       x) options="$options, format='xml'";;
       v) version;
          exit 0;;
@@ -154,7 +157,7 @@ do
   R --vanilla --slave << _EOF_
     source("$CCRUNCHER/bin/report.R", echo=FALSE);
     x <- ccruncher.read("$filename");
-    lines <- ccruncher.summary(x, alpha=0.99, $options);
+    lines <- ccruncher.summary(x, alpha=0.99 $options);
     write(lines, file="");
 _EOF_
 

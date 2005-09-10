@@ -12,6 +12,7 @@ version 0.6 (Sept. 2005)
   * simulated values can be: portfolio value or portfolio losses (new)
   * added makefile in $CCRUNCHER/doc/tex directory
   * added pdf doc to rollversion system
+  * corrected some mistakes on pdf doc (still incomplete)
 
 version 0.5 (August 2005)
 --------------------------
