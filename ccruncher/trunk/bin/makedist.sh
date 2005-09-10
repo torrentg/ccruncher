@@ -13,6 +13,10 @@
 # 2005/06/07 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
+# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added oblivion directory management
+#   . 'svn checkout' replaced by 'svn export'
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -115,10 +119,10 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  svn checkout http://www.generacio.com/svn/repos/ccruncher/trunk;
+  svn export http://www.generacio.com/svn/repos/ccruncher/trunk;
   chmod -R +w trunk
   mv trunk $1;
-  
+
 }
 
 # -------------------------------------------------------------
@@ -127,7 +131,7 @@ checkout() {
 checkVersion() {
 
   aux=R$(svnversion $1);
-  
+
   if [ "$aux" != "$svnversion" ]; then
     echo "conflict with version numbers";
     echo "run rollversion.sh + svn commit and try again";
@@ -159,7 +163,7 @@ makeSrcDist() {
   currpath=$(pwd);
   # automake don't add missing files if a parent dir content them
   workpath=/tmp/$PACKAGE-${numversion}_src
-  
+
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
@@ -167,7 +171,7 @@ makeSrcDist() {
 #  checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
-  
+
   # creating tarball
   aclocal;
   autoconf;
@@ -175,7 +179,7 @@ makeSrcDist() {
   ./configure --prefix=$PWD;
   make distcheck;
 
-  # cleaning   
+  # cleaning
   mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
   cd $currpath;
   chmod -R +w $workpath > /dev/null 2> /dev/null;
@@ -191,7 +195,7 @@ makeBinDist() {
   # local variables
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
-  
+
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
@@ -219,7 +223,8 @@ makeBinDist() {
   rm INSTALL;
   rm -rvf src;
   rm -rvf share;
-  
+  rm -rvf oblivion;
+
   #creating tarball
   cd /tmp/;
   tar -cvzf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
@@ -227,7 +232,7 @@ makeBinDist() {
   cd $currpath;
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
-  
+
 }
 
 # -------------------------------------------------------------
@@ -238,7 +243,7 @@ makeWinDist() {
   # local variables
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
-  
+
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
@@ -253,8 +258,7 @@ makeWinDist() {
   cp $pathexes/zlib1.dll bin/
 
   #dropping unused files
-  rm bin/plotdata
-  rm bin/plotmtrans
+  rm bin/report
   rm ccruncher.sln
   rm ccruncher.vcproj
   rm aclocal.m4;
@@ -265,6 +269,7 @@ makeWinDist() {
   rm INSTALL;
   rm -rvf src;
   rm -rvf share;
+  rm -rvf oblivion;
 
   #setting windows end-line
   unix2dos AUTHORS;
@@ -272,6 +277,7 @@ makeWinDist() {
   unix2dos TODO;
   unix2dos COPYING;
   unix2dos NEWS;
+  unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
 
@@ -312,49 +318,3 @@ else
 fi
 
 exit $retcode;
-
-# -------------------------------------------------------------
-# creating binaries
-# -------------------------------------------------------------
-aclocal
-autoconf
-automake -avc --warnings=all
-./configure --prefix=$PWD
-make
-make install
-
-# -------------------------------------------------------------
-# dropping unused files
-# -------------------------------------------------------------
-rm aclocal.m4
-rm -rvf autom4te.cache
-chmod -R +w $NAME-$VERSION
-rm -rvf $NAME-$VERSION
-rm config*
-rm Makefile*
-rm depcomp install-sh missing
-rm INSTALL
-rm bin/clean.sh
-rm bin/makedistbin.sh
-rm -rvf src
-rm -rvf share
-rm -rvf `find . -name \.svn\*`
-rm -rvf doc
-#cd doc
-#rm -rvf `find . ! -name \*.pdf`
-#cd ..
-
-# -------------------------------------------------------------
-# making package
-# -------------------------------------------------------------
-cd ..
-tar -cvf $NAME-${VERSION}_bin.tar $NAME-$VERSION
-gzip $NAME-${VERSION}_bin.tar
-chmod -R +w $NAME-$VERSION
-rm -rvf $NAME-$VERSION
-
-# -------------------------------------------------------------
-# exit
-# -------------------------------------------------------------
-echo 
-echo "done!"
