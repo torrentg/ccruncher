@@ -280,6 +280,9 @@ makeWinDist() {
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
+  unix2dos samples/readme.txt;
+  unix2dos doc/html/*.html;
+  unix2dos doc/html/*.css;
 
   #creating tarball
   cd /tmp/;
