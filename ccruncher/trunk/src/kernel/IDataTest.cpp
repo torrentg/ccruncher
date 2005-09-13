@@ -54,6 +54,9 @@
 // 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
+// 2005/09/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . creditcruncher tag replaced by ccruncher tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -84,7 +87,7 @@ void ccruncher_test::IDataTest::test1()
 {
   // simple creditcruncher XML
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-  <creditcruncher>\n\
+  <ccruncher>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\
       <property name='time.steps' value='12'/>\n\
@@ -214,7 +217,7 @@ void ccruncher_test::IDataTest::test1()
         </asset>\n\
       </client>\n\
     </portfolio>\n\
-  </creditcruncher>";
+  </ccruncher>";
 
   // creating xml
   ExpatParser xmlparser;

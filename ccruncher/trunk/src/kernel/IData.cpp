@@ -47,6 +47,10 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/09/13 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . creditcruncher tag replaced by ccruncher tag
+//   . check that sections are included into ccruncher main tag
+//
 //===========================================================================
 
 #include <fstream>
@@ -158,13 +162,23 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 //===========================================================================
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"creditcruncher")) {
+  static bool hasmaintag=false;
+
+  if (isEqual(name_,"ccruncher")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag creditcruncher");
+      throw eperror(eu, "attributes are not allowed in tag ccruncher");
+    }
+    else {
+      hasmaintag = true;
+      return;
     }
   }
+  else if (hasmaintag == false) {
+    throw eperror(eu, "expected main ccruncher tag not found");
+  }
+
   // section params
-  else if (isEqual(name_,"params")) {
+  if (isEqual(name_,"params")) {
     if (params != NULL) {
       throw eperror(eu, "tag params repeated");
     }
@@ -300,7 +314,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
 //===========================================================================
 void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 {
-  if (isEqual(name_,"creditcruncher")) {
+  if (isEqual(name_,"ccruncher")) {
     validate();
   }
   else if (isEqual(name_,"params")) {

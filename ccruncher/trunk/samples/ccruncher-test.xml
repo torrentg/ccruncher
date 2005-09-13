@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-<!DOCTYPE creditcruncher SYSTEM "creditcruncher-0.6.dtd">
+<!DOCTYPE ccruncher SYSTEM "ccruncher-0.7.dtd">
 -->
 <!--
-<!DOCTYPE creditcruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
-          "http://www.generacio.com/ccruncher/creditcruncher-0.6.dtd">
+<!DOCTYPE ccruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
+          "http://www.generacio.com/ccruncher/ccruncher-0.7.dtd">
 -->
 
-<creditcruncher>
+<ccruncher>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
@@ -640,4 +640,4 @@
     </client>
   </portfolio>
 
-</creditcruncher>
+</ccruncher>

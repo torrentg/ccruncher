@@ -1,5 +1,5 @@
 <!-- ============================================================== -->
-<!--                DTD CREDITCRUNCHER VERSION 0.6                  -->
+<!--                DTD CREDITCRUNCHER VERSION 0.7                  -->
 <!-- ============================================================== -->
 
 
@@ -17,7 +17,7 @@
 <!-- .............................................................. -->
 <!--                        creditcruncher                          -->
 <!-- .............................................................. -->
-<!ELEMENT creditcruncher (
+<!ELEMENT ccruncher (
     (params, interests, ratings, mtransitions, survival?, sectors,
      mcorrels, segmentations, portfolio)
 )>

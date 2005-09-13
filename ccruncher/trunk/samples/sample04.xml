@@ -4,7 +4,7 @@
 <!-- read file $CCRUNCHER$/samples/readme.txt                       -->
 <!-- ************************************************************** -->
 
-<creditcruncher>
+<ccruncher>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
@@ -888,4 +888,4 @@
     </client>
   </portfolio>
 
-</creditcruncher>
+</ccruncher>
