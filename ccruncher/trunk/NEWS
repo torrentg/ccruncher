@@ -2,6 +2,10 @@
 CREDITCRUNCHER NEWS
 ===================
 
+version 0.7 (October 2005)
+--------------------------
+  * creditcruncher tag replaced by ccruncher tag
+
 version 0.6 (Sept. 2005)
 --------------------------
   * report generation using R (efective risk computation)
