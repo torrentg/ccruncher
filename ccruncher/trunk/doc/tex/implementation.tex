@@ -30,9 +30,56 @@
 \chapter{Implementaci\'on de la soluci\'on}
 \label{sec:implementation}
 
-\section{Validaciones}
+\section{Discretizaci\'on del problema}
 
-TODO: describir las validaciones realizadas
+Por motivos de rendimiento se selecciona un conjunto de nodos equiespaciados
+en el eje temporal.
+
+\subsection{Mapeo del cashflow}
+
+\subsection{Mapeo del netting}
+
+\subsection{Ejemplo}
+
+%---------------------------------------------------------------------------
+
+\section{Interpretaci\'on del fichero de entrada}
+
+El contenido esperado del fichero de entrada se encuentra
+descrito en \emph{CreditCruncher - Input File Reference}
+que se adjunta junto al programa.
+
+El fichero de entrada puede tener un tama\~no considerable. Por
+este motivo la lectura del fichero xml debe realizarse usando un
+sistema orientado a eventos (tipo SAX). A continuaci\'on se
+describen algunas de las validaciones que deben tenerse en cuenta:
+
+\paragraph{Formato.} Se verifica que se trata de un fichero XML
+v\'alido que cumple la DTD. V\'ease \footnote{http://www.w3.org/XML/}
+para m\'as informaci\'on relativa al formato XML.
+
+\paragraph{Valores.} Cada valor tiene un tipo (int, long, double,
+date, boolean o string), un rango de valores permitidos y un
+indicador de obligatorio/opcional. Para cada valor se comprueba
+que se cumplen los criterios descritos en
+\emph{CreditCruncher - Input File Reference}.
+
+\paragraph{Matriz de transici\'on.} Se comprueba que la matriz de
+transici\'on definida cumple con las propiedades indicadas en
+\ref{sec:mtransition:properties}.
+
+\paragraph{Funci\'on de supervivencia.} En caso de estar definida
+una funci\'on de supervivencia, se comprueba que se trata de una
+funci\'on positiva mon\'otona decreciente que vale $1$ cuando $t=0$.
+
+\paragraph{Matriz de correlaci\'on.} Se comprueba que se trata de
+una matriz sim\'etrica (por comodidad, puede entrarse solamente
+el triangulo superior, o inferior), con valores comprendidos
+en $[-1,+1]$.
+
+%---------------------------------------------------------------------------
+
+\section{Inicializaci\'on del problema}
 
 
 \begin{figure}[!hb]
