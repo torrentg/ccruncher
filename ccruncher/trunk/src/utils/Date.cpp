@@ -621,7 +621,7 @@ string ccruncher::Date::toString() const
 }
 
 //===========================================================================
-// toString
+// return days between date1 and date2
 //===========================================================================
 int ccruncher::operator -(const Date &d1, const Date &d2)
 {
