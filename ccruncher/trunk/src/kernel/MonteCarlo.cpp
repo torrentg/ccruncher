@@ -70,6 +70,9 @@
 // 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
+// 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed date list output
+//
 //===========================================================================
 
 #include <cfloat>
@@ -276,6 +279,8 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   MAXITERATIONS = idata->params->maxiterations;
   Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
+  // printing initial date
+  Logger::trace("initial date", Format::date2string(idata->params->begindate));
   // fixing step number
   STEPS = idata->params->steps;
   Logger::trace("number of time steps", Format::int2string(STEPS));
@@ -287,11 +292,6 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   // fixing time-tranches
   begindate = idata->params->begindate;
   dates = idata->params->getDates();
-
-  // tracing dates
-  for (int i=0;i<=STEPS;i++) {
-    Logger::trace("date[" + Format::int2string(i)+"]", Format::date2string(dates[i]));
-  }
 
   // reporting simulated values
   Logger::trace("simulated values", idata->params->simule);
