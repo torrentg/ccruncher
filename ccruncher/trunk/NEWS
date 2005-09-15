@@ -5,6 +5,7 @@ CREDITCRUNCHER NEWS
 version 0.7 (October 2005)
 --------------------------
   * creditcruncher tag replaced by ccruncher tag
+  * removed stdout date list
 
 version 0.6 (Sept. 2005)
 --------------------------

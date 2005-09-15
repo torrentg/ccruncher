@@ -32,13 +32,27 @@
 
 \section{Discretizaci\'on del problema}
 
-Por motivos de rendimiento se selecciona un conjunto de nodos equiespaciados
-en el eje temporal.
-
 \subsection{Particionamiento del tiempo}
 
-se anade k meses a t0. Si el dia, no es un dia del mes valido,
-se considera el ultimo dia del mes.
+Para realizar el particionamiento del tiempo se necesita la fecha inicial, $t_0$,
+la longitud (en meses naturales) de cada intervalo, $StepLength$, y el n\'umero
+de pasos a considerar, $NumSteps$. Las fechas de la partici\'on son:
+\begin{displaymath}
+t_i = t_0 + i \cdot StepLength \qquad i \in \{0, 1, 2, \cdots, NumSteps\}
+\end{displaymath}
+
+Entendemos que a\~nadir $n$ meses a una fecha consiste en incrementar el
+mes de la fecha inicial en $n$ meses, realizando un incremento de a\~no si
+es preciso. Si el d\'ia de mes de la fecha inicial no existe en el mes de
+la fecha final, consideramos como d\'ia de la fecha final el m\'aximo d\'ia
+del mes de la fecha final, en caso contrario, el mismo d\'ia de mes de la
+fecha inicial.
+\newline
+\newline
+Supongamos que $t_0=30/10/2004$, $StepLength=2$ y $NumSteps=6$, entonces la
+partici\'on del tiempo es: $30/10/2004$, $30/12/2004$, $28/02/2005$, $30/04/2005$,
+$30/06/2005$, $30/08/2005$ y $30/10/2005$. Obs\'ervese como el d\'ia del mes de
+Febrero es el $28$ por no existir los d\'ias $29$ y $30$ de dicho mes.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -50,16 +64,23 @@ se considera el ultimo dia del mes.
 
 \subsection{Mapeo del cashflow}
 
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/cashflowmapping.eps}
+\caption{CashFlow mapping}
+\label{timetranches}
+\end{center}
+\end{figure}
+
 \subsection{Mapeo del netting}
 
-\subsection{Ejemplo}
 
 %---------------------------------------------------------------------------
 
 \section{Interpretaci\'on del fichero de entrada}
 
 El contenido esperado del fichero de entrada se encuentra
-descrito en \emph{CreditCruncher - Input File Reference}
+descrito en el documento \emph{CreditCruncher - Input File Reference}
 que se adjunta junto al programa.
 
 El fichero de entrada puede tener un tama\~no considerable. Por
@@ -68,7 +89,7 @@ sistema orientado a eventos (tipo SAX). A continuaci\'on se
 describen algunas de las validaciones que deben tenerse en cuenta:
 
 \paragraph{Formato.} Se verifica que se trata de un fichero XML
-v\'alido que cumple la DTD. V\'ease \footnote{http://www.w3.org/XML/}
+v\'alido que cumple la DTD. V\'ease \emph{W3C}\footnote{http://www.w3.org/XML/}
 para m\'as informaci\'on relativa al formato XML.
 
 \paragraph{Valores.} Cada valor tiene un tipo (int, long, double,
@@ -77,8 +98,14 @@ indicador de obligatorio/opcional. Para cada valor se comprueba
 que se cumplen los criterios descritos en
 \emph{CreditCruncher - Input File Reference}.
 
-\paragraph{Matriz de transici\'on.} Se comprueba que la matriz de
-transici\'on definida cumple con las propiedades indicadas en
+\paragraph{Consistencia.} Cuando un valor se refiere a un identificador,
+se comprueba que el objeto referenciado existe. Por ejemplo, cuando se
+lee una transici\'on en la definici\'on de la matriz de transici\'on se
+comprueba que los ratings han sido definidos anteriormente y que los
+ratings referenciados existen.
+
+\paragraph{Matriz de transici\'on.} Al leer la matriz de transici\'on
+se verifica que cumple con las propiedades indicadas en
 \ref{sec:mtransition:properties}.
 
 \paragraph{Funci\'on de supervivencia.} En caso de estar definida
