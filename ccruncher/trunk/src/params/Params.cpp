@@ -51,6 +51,9 @@
 // 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
+// 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed default seed value from -1 to 0
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -80,7 +83,7 @@ void ccruncher::Params::init()
   simule = "";
   method = "";
   copula_type = "";
-  copula_seed = -1L;
+  copula_seed = 0L;
   antithetic = false;
   onlyactive = false;
 }
@@ -211,7 +214,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   else if (name == "copula.seed")
   {
     long aux = getLongAttribute(attributes, "value", -1L);
-    if (copula_seed != -1L || aux == -1L) {
+    if (aux == -1L) {
       throw eperror(eu, "invalid copula.seed");
     }
     else {
