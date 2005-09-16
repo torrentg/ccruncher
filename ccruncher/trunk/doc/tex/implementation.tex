@@ -64,6 +64,18 @@ Febrero es el $28$ por no existir los d\'ias $29$ y $30$ de dicho mes.
 
 \subsection{Mapeo del cashflow}
 
+Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
+Dado un cashflow $(t_v,V)$ lo mapeamos en la estructura
+temporal de la siguiente forma:
+
+\begin{enumerate}
+\item Si $t_v < t_0$, entonces $(t_v,V) \longrightarrow (t_0,0)$
+\item Si $t_{i-1} < t_v \leq t_i$, entonces $(t_v,V) \longrightarrow (t_i,V \cdot \Upsilon(t_v,t_i))$
+\item Si $t_k < t_v$, entonces $(t_v,V) \longrightarrow (t_k,0)$
+\end{enumerate}
+
+donde $\Upsilon(t_v,t_i)$ es el coeficiente de transporte entre $t_v$ y $t_i$.
+
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[width=10cm,angle=0]{./images/cashflowmapping.eps}
@@ -71,6 +83,65 @@ Febrero es el $28$ por no existir los d\'ias $29$ y $30$ de dicho mes.
 \label{timetranches}
 \end{center}
 \end{figure}
+
+Veamos un ejemplo. Consideremos el siguiente cashflow y partici\'on del tiempo:
+\newline
+\newline
+\begin{minipage}[c]{0.5\columnwidth}%
+\centering
+\begin{tabular}{c|r}
+\textbf{Date} & \textbf{Cashflow} \\
+\hline
+17/04/2004 & -10.00 \\
+           &        \\
+           &        \\
+05/01/2005 &   1.00 \\
+20/01/2005 &   2.00 \\
+           &        \\
+15/03/2005 &   3.00 \\
+           &        \\
+           &        \\
+30/08/2005 &   4.00 \\
+           &        \\
+15/12/2005 &   5.00 \\
+\end{tabular}
+\end{minipage}%
+\begin{minipage}[c]{0.5\columnwidth}%
+\centering
+\begin{tabular}{c|c}
+\textbf{$t_i$} & \textbf{Date} \\
+\hline
+      &            \\
+$t_0$ & 30/10/2004 \\
+$t_1$ & 30/12/2004 \\
+      &            \\
+      &            \\
+$t_2$ & 28/02/2005 \\
+      &            \\
+$t_3$ & 30/04/2005 \\
+$t_4$ & 30/06/2005 \\
+$t_5$ & 30/08/2005 \\
+$t_6$ & 30/10/2005 \\
+      &            \\
+\end{tabular}
+\end{minipage}%
+\newline
+\newline
+Si consideramos $\Upsilon(t_i,t_j)=1$ (para no complicar los c\'alculos), el mapeo
+del cashflow en los nodos de tiempo es:
+\begin{center}
+\begin{tabular}{c|c|l}
+\textbf{$t_i$} & \textbf{Date} & \textbf{Cashflow} \\
+\hline
+$t_0$ & 30/10/2004 & 0.00 \\
+$t_1$ & 30/12/2004 & 0.00 \\
+$t_2$ & 28/02/2005 & 1.00 + 2.00 \\
+$t_3$ & 30/04/2005 & 3.00 \\
+$t_4$ & 30/06/2005 & 0.00 \\
+$t_5$ & 30/08/2005 & 4.00 \\
+$t_6$ & 30/10/2005 & 0.00 \\
+\end{tabular}
+\end{center}
 
 \subsection{Mapeo del netting}
 
