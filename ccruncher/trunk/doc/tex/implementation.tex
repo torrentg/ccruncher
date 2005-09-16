@@ -84,7 +84,9 @@ donde $\Upsilon(t_v,t_i)$ es el coeficiente de transporte entre $t_v$ y $t_i$.
 \end{center}
 \end{figure}
 
-Veamos un ejemplo. Consideremos el siguiente cashflow y partici\'on del tiempo:
+Veamos un ejemplo. Consideramos $\Upsilon(t_i,t_j)=1$ para no complicar los c\'alculos.
+A la izquierda se representa el cashflow original (sin estar mapeado a los nodos de
+tiempo). A la derecha se encuentra el mismo cashflow mapeado a los nodos de tiempo.
 \newline
 \newline
 \begin{minipage}[c]{0.5\columnwidth}%
@@ -108,42 +110,33 @@ Veamos un ejemplo. Consideremos el siguiente cashflow y partici\'on del tiempo:
 \end{minipage}%
 \begin{minipage}[c]{0.5\columnwidth}%
 \centering
-\begin{tabular}{c|c}
-\textbf{$t_i$} & \textbf{Date} \\
+\begin{tabular}{c|c|c}
+\textbf{$t_i$} & \textbf{Date}  & \textbf{Cashflow} \\
 \hline
-      &            \\
-$t_0$ & 30/10/2004 \\
-$t_1$ & 30/12/2004 \\
-      &            \\
-      &            \\
-$t_2$ & 28/02/2005 \\
-      &            \\
-$t_3$ & 30/04/2005 \\
-$t_4$ & 30/06/2005 \\
-$t_5$ & 30/08/2005 \\
-$t_6$ & 30/10/2005 \\
-      &            \\
-\end{tabular}
-\end{minipage}%
-\newline
-\newline
-Si consideramos $\Upsilon(t_i,t_j)=1$ (para no complicar los c\'alculos), el mapeo
-del cashflow en los nodos de tiempo es:
-\begin{center}
-\begin{tabular}{c|c|l}
-\textbf{$t_i$} & \textbf{Date} & \textbf{Cashflow} \\
-\hline
+      &            &      \\
 $t_0$ & 30/10/2004 & 0.00 \\
 $t_1$ & 30/12/2004 & 0.00 \\
+      &            &      \\
+      &            &      \\
 $t_2$ & 28/02/2005 & 1.00 + 2.00 \\
+      &            &      \\
 $t_3$ & 30/04/2005 & 3.00 \\
 $t_4$ & 30/06/2005 & 0.00 \\
 $t_5$ & 30/08/2005 & 4.00 \\
 $t_6$ & 30/10/2005 & 0.00 \\
+      &            &      \\
 \end{tabular}
-\end{center}
+\end{minipage}%
 
 \subsection{Mapeo del netting}
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/nettingmapping.eps}
+\caption{Netting mapping}
+\label{timetranches}
+\end{center}
+\end{figure}
 
 
 %---------------------------------------------------------------------------
