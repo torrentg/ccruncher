@@ -103,14 +103,14 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
   unsigned long chkey = val->hkey;
   Client *curr = NULL;
 
-  // validem coherencia
+  // checking coherence
   for (unsigned int i=0;i<vcs;i++)
   {
     curr = vclients[i];
 
     if (curr->hkey == chkey)
     {
-cout << "hash key collision !!!" << endl;
+      // resolving hash key collision
       if (curr->id == val->id)
       {
         delete val;

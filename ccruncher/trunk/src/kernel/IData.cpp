@@ -46,10 +46,10 @@
 //
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
-//
-// 2005/09/13 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . creditcruncher tag replaced by ccruncher tag
 //   . check that sections are included into ccruncher main tag
+//
+// 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . thread-safe modification (variable hasmaintag)
 //
 //===========================================================================
 
@@ -68,6 +68,7 @@
 void ccruncher::IData::init()
 {
    parse_portfolio = true;
+   hasmaintag = false;
 
    params = NULL;
    interests = NULL;
@@ -162,8 +163,6 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 //===========================================================================
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  static bool hasmaintag=false;
-
   if (isEqual(name_,"ccruncher")) {
     if (getNumAttributes(attributes) != 0) {
       throw eperror(eu, "attributes are not allowed in tag ccruncher");

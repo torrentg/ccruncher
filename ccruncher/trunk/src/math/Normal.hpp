@@ -58,8 +58,8 @@ class Normal
     static double pdf(double x);
     static double pdf(double x, double mu, double sigma);
     static double cdf(double x);
-    static double cdfinv(double p);
     static double cdf(double x, double mu, double sigma);
+    static double cdfinv(double p);
 
 };
 

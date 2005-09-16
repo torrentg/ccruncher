@@ -37,6 +37,9 @@
 // 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //
+// 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . thread-safe modification (variable hasmaintag)
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -73,7 +76,8 @@ class IData : public ExpatHandlers
 
     // portfolio can be huge (memory,time,...)
     bool parse_portfolio;
-
+    bool hasmaintag;
+    
     void init();
     void release();
     void validate() throw(Exception);
