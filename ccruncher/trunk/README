@@ -10,20 +10,21 @@ Install required libraries
    check that you have expat.h in an include directory. If
    you don't found some of these files you can download 
    package from http://expat.sourceforge.net/ and install it. 
-   Also you can install from rpm packages.
+   Also you can install from expat and expat-devel rpm packages.
 
 2. check that you have libz.so in a lib directory and
    check that you have zlib.h in an include directory. If
    you don't found some of these files you can download 
    package from http://www.zlib.net/ and install it. 
-   Also you can install from rpm packages.
+   Also you can install from zlib and zlib-devel rpm packages.
 
 3. if you are compiling a ccruncher MPI executable, check
    that you have a valid MPI installation (you need mpi.h,
    mpic++ wrapper, mpi link library, etc.)
 
 4. CreditCruncher use a statistical package named R to compute
-   risk indicators. Install it from http://www.r-project.org/.
+   risk indicators. Install it from http://www.r-project.org/
+   or install from R rpm package.
 
 
 Installation from source package
