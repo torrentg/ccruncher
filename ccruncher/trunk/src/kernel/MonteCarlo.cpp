@@ -73,6 +73,9 @@
 // 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed date list output
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added onlyactive argument to sortClients() method
+//
 //===========================================================================
 
 #include <cfloat>
@@ -336,10 +339,12 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
   Logger::trace("simulate only active clients", Format::bool2string(idata->params->onlyactive));
   Logger::trace("number of initial clients", Format::long2string(idata->portfolio->getClients()->size()));
 
+  // sorting clients by sector and rating
+  idata->portfolio->sortClients(idates[0], idates[isteps], idata->params->onlyactive);
+
   // fixing number of clients
   if (idata->params->onlyactive)
   {
-    idata->portfolio->sortClients(idates[0], idates[isteps]);
     N = idata->portfolio->getNumActiveClients(idates[0], idates[isteps]);
   }
   else

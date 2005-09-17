@@ -88,10 +88,9 @@ t_i = t_0 + i \cdot StepLength \qquad i \in \{0, 1, 2, \cdots, NumSteps\}
 
 Entendemos que a\~nadir $n$ meses a una fecha consiste en incrementar el
 mes de la fecha inicial en $n$ meses, realizando un incremento de a\~no si
-es preciso. Si el d\'ia de mes de la fecha inicial no existe en el mes de
-la fecha final, consideramos como d\'ia de la fecha final el m\'aximo d\'ia
-del mes de la fecha final, en caso contrario, el mismo d\'ia de mes de la
-fecha inicial.
+es preciso. Si el d\'ia de la fecha inicial no existe en el mes de la fecha
+final, consideramos como d\'ia de la fecha final el m\'aximo d\'ia del mes
+de la fecha final, en caso contrario, el mismo d\'ia de la fecha inicial.
 \newline
 \newline
 Supongamos que $t_0=30/10/2004$, $StepLength=2$ y $NumSteps=6$, entonces la
@@ -203,10 +202,53 @@ $\frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon(t_a,t_i)$
 \end{center}
 \end{figure}
 
+Veamos un ejemplo. Consideramos $\Upsilon(t_i,t_j)=1$ para no complicar los c\'alculos.
+A la izquierda se representa el netting original (sin estar mapeado a los nodos de
+tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
+\newline
+\newline
+\begin{minipage}[c]{0.4\columnwidth}%
+\centering
+\begin{tabular}{c|r}
+\textbf{Date} & \textbf{Cashflow} \\
+\hline
+17/04/2004 & -10.00 \\
+           &        \\
+           &        \\
+05/01/2005 &   1.00 \\
+20/01/2005 &   2.00 \\
+           &        \\
+15/03/2005 &   3.00 \\
+           &        \\
+           &        \\
+30/08/2005 &   4.00 \\
+           &        \\
+15/12/2005 &   5.00 \\
+\end{tabular}
+\end{minipage}%
+\begin{minipage}[c]{0.6\columnwidth}%
+\centering
+\begin{tabular}{c|c|c}
+\textbf{$t_i$} & \textbf{Date}  & \textbf{Cashflow} \\
+\hline
+      &            &      \\
+$t_0$ & 30/10/2004 & $-10.00 + (1+10) \cdot \frac{196}{263} =  -1.8$\\
+$t_1$ & 30/12/2004 & $-10.00 + (1+10) \cdot \frac{196}{263} =  0.75$ \\
+      &            &      \\
+      &            &      \\
+$t_2$ & 28/02/2005 & $2 + (3-2) \cdot \frac{39}{54} = 2.72$ \\
+      &            &      \\
+$t_3$ & 30/04/2005 & $3.00 + (4-3) \cdot \frac{46}{168} = 3.27$ \\
+$t_4$ & 30/06/2005 & $3.00 + (4-3) \cdot \frac{107}{168} = 3.64$ \\
+$t_5$ & 30/08/2005 & $4.00$ \\
+$t_6$ & 30/10/2005 & $4.00 + (5-4) \cdot \frac{61}{107} = 4.57$ \\
+      &            &      \\
+\end{tabular}
+\end{minipage}%
+
 %---------------------------------------------------------------------------
 
 \section{Inicializaci\'on del problema}
-
 
 \begin{figure}[!hb]
 \begin{center}
@@ -224,16 +266,6 @@ precalculo de los valores en los nodos
 TODO: descripcion de los agregadores y metodo usado para evitar recalculo 
 de los activos en cada simulacion + Agregaci\'on de productos
 
-
-\section{Dimensiones del problema}
-
-TODO: Estimaciones de uso de memoria, estimaci\'on del numero de operaciones,
-estimacion del tiempo de computo
-
-
-\section{Convergencia de la soluci\'on}
-
-TODO: N\'umero de iteraciones necesarias, aceleraci\'on de la convergencia
-usando metodolog\'ia antithetic
+aceleraci\'on de la convergencia usando metodolog\'ia antithetic
 
 convergencia media, varianza, var (estimadores, graficos, etc.)

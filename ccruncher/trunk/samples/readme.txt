@@ -186,6 +186,7 @@ Description:
     asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
                     if client defaults, recovery=0.
     each client belongs to a random sector.
+    interest spot curve defined
 
 Expected Results:
 
@@ -193,7 +194,7 @@ Expected Results:
   report it).
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-    0.0   501.9   998.3  1213.0  1677.0  8381.0
+    0.0   507.5  1009.0  1227.0  1696.0  8474.0
 
 How I can check results?
 

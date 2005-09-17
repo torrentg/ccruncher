@@ -34,6 +34,9 @@
 // 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added onlyactive argument to sortClients() method
+//
 //===========================================================================
 
 #include <cmath>
@@ -177,7 +180,9 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"portfolio")) {
+    // cleaning temp objects
     auxclient = NULL;
+    // checking coherence
     validations();
   }
   else if (isEqual(name_,"client")) {
@@ -211,21 +216,24 @@ int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exceptio
 //===========================================================================
 // sortClients
 //===========================================================================
-void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
+void ccruncher::Portfolio::sortClients(Date from, Date to, bool onlyactive) throw(Exception)
 {
   // sorting clients by sector and rating
   sort(vclients.begin(), vclients.end(), Client::less);
 
-  // we move non-active clients to last position of array
-  for(unsigned int cont=0,i=0;cont<vclients.size();cont++)
+  if (onlyactive == true)
   {
-    if (!(*vclients[i]).isActive(from,to))
+    // we move non-active clients to last position of array
+    for(unsigned int cont=0,i=0;cont<vclients.size();cont++)
     {
-      mtlp(i);
-      i--;
-    }
+      if (!(*vclients[i]).isActive(from,to))
+      {
+        mtlp(i);
+        i--;
+      }
 
-    i++;
+      i++;
+    }
   }
 }
 

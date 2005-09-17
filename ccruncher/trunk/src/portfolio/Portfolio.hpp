@@ -28,6 +28,9 @@
 // 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added onlyactive argument to sortClients() method
+//
 //===========================================================================
 
 #ifndef _Portfolio_
@@ -79,7 +82,7 @@ class Portfolio : public ExpatHandlers
 
     vector<Client *> *getClients();
     int getNumActiveClients(Date, Date) throw(Exception);
-    void sortClients(Date from, Date to) throw(Exception);
+    void sortClients(Date from, Date to, bool onlyactive) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

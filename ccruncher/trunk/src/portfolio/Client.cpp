@@ -243,7 +243,7 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
 
 //===========================================================================
 // comparation operator (used by sort function)
-// group clients by sector and rating, always non active clients at last
+// used to group clients by sector and rating
 //===========================================================================
 bool ccruncher::operator < (const Client &x1, const Client &x2)
 {
