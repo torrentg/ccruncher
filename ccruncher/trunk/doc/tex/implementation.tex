@@ -108,6 +108,59 @@ Febrero es el $28$ por no existir los d\'ias $29$ y $30$ de dicho mes.
 
 %---------------------------------------------------------------------------
 
+\section{Inicializaci\'on de los clientes}
+
+Los clientes de la cartera se ordenan en funci\'on de su sector
+y rating de forma creciente en ambos casos. La finalidad de esta
+ordenaci\'on es disponer de una matriz de correlaci\'on entre
+clientes en bloques. En el caso que solamente se desee simular
+los clientes activos (aquellos que tienen alg\'un producto activo
+durante el periodo simulado), los clientes inactivos son
+suprimidos.
+\newline
+\newline
+Supongamos que tenemos 3 sectores, S1, S2 y S3 y un sistema de
+ratings compuesto por las clasificaciones A, B, C, D, y E.
+Supongamos que los siguientes clientes en la cartera\footnote{el
+primer componente corresponde al sector del cliente, el segundo al
+rating del cliente y el tercero indica si est\'a activo (1) o inactivo (0)}:
+[S2,D,1], [S3,A,1], [S1,B,1], [S1,B,0], [S3,C,1], [S2,A,1], [S2,B,1], [S3,C,1],
+[S1,A,1], [S2,D,1].
+\newline
+\newline
+Una vez ordenada la cartera queda:
+[S1,A,1], [S1,B,1], [S1,B,0], [S2,A,1], [S2,B,1], [S2,D,1], [S2,D,1],
+[S3,A,1], [S3,C,1], [S3,C,1].
+\newline
+\newline
+Si solamante se desea simular los clientes activos, la cartera ordenada queda:
+[S1,A,1], [S1,B,1], [S2,A,1], [S2,B,1], [S2,D,1], [S2,D,1], [S3,A,1],
+[S3,C,1], [S3,C,1].
+\newline
+\newline
+El n\'umero de clientes considerado es el n\'umero de clientes de la cartera.
+Si solamente se est\'a simulando los clientes activos, entonces el n\'umero
+de clientes considerado es el n\'umero de clientes activos.
+
+%---------------------------------------------------------------------------
+
+\section{Inicializaci\'on del m\'etodo de simulaci\'on}
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/decisiontree1.eps}
+\caption{Decisi\'on en funci\'on del m\'etodo}
+\label{decisiontree1}
+\end{center}
+\end{figure}
+
+\subsection{M\'etodo Rating-Path}
+
+\subsection{M\'etodo Time-To-Default}
+
+
+%---------------------------------------------------------------------------
+
 \section{Mapeo del cashflow}
 
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
@@ -250,13 +303,6 @@ $t_6$ & 30/10/2005 & $4.00 + (5-4) \cdot \frac{61}{107} = 4.57$ \\
 
 \section{Inicializaci\'on del problema}
 
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=10cm,angle=0]{./images/decisiontree1.eps}
-\caption{Decisi\'on en funci\'on del m\'etodo}
-\label{decisiontree1}
-\end{center}
-\end{figure}
 
 precalculo de los valores en los nodos
 
