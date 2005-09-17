@@ -54,6 +54,9 @@
 // 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed default seed value from -1 to 0
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed default maxiteration and maxseconds values 0 to -1
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -78,8 +81,8 @@ void ccruncher::Params::init()
   begindate = Date(1,1,1900);
   steps = 0;
   steplength = 0;
-  maxiterations = 0L;
-  maxseconds = 0L;
+  maxiterations = -1L;
+  maxseconds = -1L;
   simule = "";
   method = "";
   copula_type = "";
@@ -185,8 +188,8 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "stopcriteria.maxiterations")
   {
-    long aux = getLongAttribute(attributes, "value", 0L);
-    if (maxiterations != 0L || aux <= 0L) {
+    long aux = getLongAttribute(attributes, "value", -1L);
+    if (maxiterations >= 0L || aux < 0L) {
       throw eperror(eu, "invalid stopcriteria.maxiterations");
     } else {
       maxiterations = aux;
@@ -194,8 +197,8 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "stopcriteria.maxseconds")
   {
-    long aux = getLongAttribute(attributes, "value", 0L);
-    if (maxseconds != 0L || aux <= 0L) {
+    long aux = getLongAttribute(attributes, "value", -1L);
+    if (maxseconds >= 0L || aux < 0L) {
       throw eperror(eu, "invalid stopcriteria.maxseconds");
     } else {
       maxseconds = aux;
