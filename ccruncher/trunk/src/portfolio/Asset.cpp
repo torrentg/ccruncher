@@ -43,6 +43,9 @@
 // 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . update to t[0] -> update to t[n-1]
+//
 //===========================================================================
 
 #include <cmath>
@@ -195,16 +198,19 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValu
   double ufactor;
   Interest *spot = ints->getInterest("spot");
 
+  // sorting dates
   sort(dates, dates+n);
 
+  // computing mapped cashflow and mapped netting
   for (int i=0;i<n;i++)
   {
-    ufactor =  spot->getUpsilon(dates[i], dates[0]);
+    ufactor =  spot->getUpsilon(dates[i], dates[n-1]);
     ret[i].date = dates[i];
     ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], spot) * ufactor;
     ret[i].netting = getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 
+  // computing cumulated cashflow
   for (int i=1;i<n;i++)
   {
     ret[i].cashflow += ret[i-1].cashflow;

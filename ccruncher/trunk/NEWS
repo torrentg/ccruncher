@@ -6,6 +6,7 @@ version 0.7 (October 2005)
 --------------------------
   * creditcruncher tag replaced by ccruncher tag
   * removed stdout date list
+  * portfolio value at t=T (not t=0 as previous versions)
 
 version 0.6 (Sept. 2005)
 --------------------------

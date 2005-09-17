@@ -43,6 +43,9 @@
 // 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . update to t[0] -> update to t[n-1]
+//
 //===========================================================================
 
 #include <iostream>
@@ -124,14 +127,14 @@ Interests ccruncher_test::AssetTest::getInterests()
     <interests>\n\
       <interest name='spot' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.04'/>\n\
-        <rate t='2' r='0.041'/>\n\
-        <rate t='3' r='0.045'/>\n\
-        <rate t='6' r='0.0455'/>\n\
-        <rate t='12' r='0.048'/>\n\
-        <rate t='24' r='0.049'/>\n\
-        <rate t='60' r='0.05'/>\n\
-        <rate t='120' r='0.052'/>\n\
+        <rate t='1' r='0.0'/>\n\
+        <rate t='2' r='0.0'/>\n\
+        <rate t='3' r='0.0'/>\n\
+        <rate t='6' r='0.0'/>\n\
+        <rate t='12' r='0.0'/>\n\
+        <rate t='24' r='0.0'/>\n\
+        <rate t='60' r='0.0'/>\n\
+        <rate t='120' r='0.0'/>\n\
       </interest>\n\
       <interest name='discount' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
