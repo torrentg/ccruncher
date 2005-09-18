@@ -148,7 +148,7 @@ de clientes considerado es el n\'umero de clientes activos.
 
 \begin{figure}[!hb]
 \begin{center}
-\includegraphics[width=10cm,angle=0]{./images/decisiontree1.eps}
+\includegraphics[width=8cm,angle=0]{./images/decisiontree1.eps}
 \caption{Decisi\'on en funci\'on del m\'etodo}
 \label{decisiontree1}
 \end{center}
@@ -156,8 +156,98 @@ de clientes considerado es el n\'umero de clientes activos.
 
 \subsection{M\'etodo Rating-Path}
 
+El m\'etodo Rating-Path requiere disponer de la matriz de transici\'on
+para el periodo $StepLength$. A partir de la matriz de transici\'on
+definida por el usuario para el periodo T (normalmente 1 a\~no), se
+construye la matriz de transici\'on para el periodo $StepLength$ usando
+las indicaciones de \ref{mtrans:perchange}.
+\begin{displaymath}
+M_{StepLength} = M_{T}^{\frac{StepLength}{T}} = \sqrt[T]{M_{T}^{StepLength}}
+\end{displaymath}
+
+El algoritmo para calcular la ra\'iz de una matriz a partir de la matriz
+de autovectores y sus autovalores est\'a explicado en el ap\'endice
+\ref{apendix:sqrtmat}.
+
 \subsection{M\'etodo Time-To-Default}
 
+El m\'etodo Time-To-Default requiere disponer de la funci\'on de
+supervivencia. Si el usuario ha definido una se considera la
+funci\'on de supervivencia definada por el usuario. En caso
+contrario se construye a partir de la matriz de transici\'on
+usando las indicaciones de \ref{mtrans:survival}.
+
+\begin{displaymath}
+Survival(r_i,t_j) = 1 - (M_{StepLength}^j)_{i,n} \qquad j \in \{0,1,2,\cdots,NumSteps\}
+\end{displaymath}
+donde $(M_{StepLength}^j)_{i,n}$ debe interpretarse como la columna $n$ de
+la fila $i$ de la matriz $M_{StepLength}$ elevada a $j$. La matriz de transici\'on
+para el periodo $StepLength$, $M_{StepLength}$, se determina a partir de la matriz
+de transici\'on proporcionada por el usuario para el periodo T (normalmente 1 a\~no)
+usando las indicaciones de \ref{mtrans:perchange}.
+\begin{displaymath}
+M_{StepLength} = M_{T}^{\frac{StepLength}{T}} = \sqrt[T]{M_{T}^{StepLength}}
+\end{displaymath}
+El algoritmo para calcular la ra\'iz de una matriz a partir de la matriz
+de autovectores y sus autovalores est\'a explicado en el ap\'endice
+\ref{apendix:sqrtmat}.
+
+%---------------------------------------------------------------------------
+
+\section{Inicializaci\'on de las c\'opulas}
+
+Los pasos 1 y 2 de \ref{apendix:gaussiancopula} explican como
+inicializar una c\'opula gaussiana. CreditCruncher aplica el 
+mismo algoritmo, pero teniendo en cuenta que la matriz de
+correlaci\'on entre clientes es una matriz en bloques. Esto
+permite un ahorro de memoria y tiempo de c\'alculo. En vez de
+considerar la matriz de correlaci\'on entre clientes se
+considera la matriz de correlaci\'on entre sectores y el
+n\'umero de clientes en cada sector. Se aplica el paso 1
+de \ref{apendix:gaussiancopula} a la matriz de correlaci\'on
+entre sectores. Se reemplaza el paso 2 de \ref{apendix:gaussiancopula}
+por \ref{apendix:cholblock}.
+
+
+\subsection{M\'etodo Rating-Path}
+
+Si el m\'etodo de simulaci\'on es el Rating-Path se construyen
+$NumSteps$ c\'opulas. La primera c\'opula se usar\'a para simular
+los cambios de rating entre $t_0$ y $t_1$, la segunda c\'opula
+para simular los cambios de rating entre $t_1$ y $t_2$, etc.
+\newline
+\newline
+El generador de n\'umeros aleatorios de cada c\'opula se
+inicializa con la siguiente semilla:
+\begin{displaymath}
+Seed(i,q) = Seed(1,0) + q \cdot 30001 + (i-1)
+\end{displaymath}
+donde $Seed(i,q)$ es la semilla del generador de n\'umeros de la
+c\'opula $i$ de la instancia $q$ (en el caso de ejecutarse en un
+cluster $q>0$, en caso contrario, $q=0$). $Seed(1,0)$ es la semilla
+proporcionada por el usuario (un n\'umero aleatorio si el usuario no
+especifica semilla o especifica una semilla igual a 0). De esta
+forma se garantiza que todas las instancias usan una semilla distinta
+(siempre que el n\'umero de instancias mas $NumSteps$ no supere 30000).
+
+\subsection{M\'etodo Time-To-Default}
+
+Si el m\'etodo de simulaci\'on es el Time-To-Default se construye
+1 c\'opula. Se usar\'a para simular el tiempo de fallido.
+\newline
+\newline
+El generador de n\'umeros aleatorios de cada c\'opula se
+inicializa con la siguiente semilla:
+\begin{displaymath}
+Seed(1,q) = Seed(1,0) + q \cdot 30001 + 0
+\end{displaymath}
+donde $Seed(i,q)$ es la semilla del generador de n\'umeros de la
+c\'opula $i$ de la instancia $q$ (en el caso de ejecutarse en un
+cluster $q>0$, en caso contrario, $q=0$). $Seed(1,0)$ es la semilla
+proporcionada por el usuario (un n\'umero aleatorio si el usuario no
+especifica semilla o especifica una semilla igual a 0). De esta
+forma se garantiza que todas las instancias usan una semilla distinta
+(siempre que el n\'umero de instancias no supere 30000).
 
 %---------------------------------------------------------------------------
 
