@@ -59,6 +59,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed signal handlers
 //
+// 2005/09/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added version info at stdout
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -332,6 +335,7 @@ void run(string filename, string path) throw(Exception)
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
+  Logger::trace("ccruncher version", string(VERSION)+" ("+string(SVNVERSION)+")");
   Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("input file", filename);
 #ifdef USE_MPI
