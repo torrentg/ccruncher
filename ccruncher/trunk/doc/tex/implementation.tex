@@ -65,7 +65,8 @@ se verifica que cumple con las propiedades indicadas en
 
 \paragraph{Funci\'on de supervivencia.} En caso de estar definida
 una funci\'on de supervivencia, se comprueba que se trata de una
-funci\'on positiva mon\'otona decreciente que vale $1$ cuando $t=0$.
+funci\'on positiva mon\'otona decreciente que vale $1$ cuando $t=0$,
+(excepto para el rating $Default$ para la que siempre vale $0$).
 
 \paragraph{Matriz de correlaci\'on.} Se comprueba que se trata de
 una matriz sim\'etrica (por comodidad, puede entrarse solamente
@@ -94,9 +95,10 @@ de la fecha final, en caso contrario, el mismo d\'ia de la fecha inicial.
 \newline
 \newline
 Supongamos que $t_0=30/10/2004$, $StepLength=2$ y $NumSteps=6$, entonces la
-partici\'on del tiempo es: $30/10/2004$, $30/12/2004$, $28/02/2005$, $30/04/2005$,
-$30/06/2005$, $30/08/2005$ y $30/10/2005$. Obs\'ervese como el d\'ia del mes de
-Febrero es el $28$ por no existir los d\'ias $29$ y $30$ de dicho mes.
+partici\'on del tiempo es: $t_0=30/10/2004$, $t_1=30/12/2004$, $t_2=28/02/2005$,
+$t_3=30/04/2005$, $t_4=30/06/2005$, $t_5=30/08/2005$ y $t_6=30/10/2005$.
+Obs\'ervese como el d\'ia del mes de Febrero es el $28$ por no existir los
+d\'ias $29$ y $30$ de dicho mes.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -121,19 +123,19 @@ suprimidos.
 \newline
 Supongamos que tenemos 3 sectores, S1, S2 y S3 y un sistema de
 ratings compuesto por las clasificaciones A, B, C, D, y E.
-Supongamos que los siguientes clientes en la cartera\footnote{el
+Supongamos que la cartera est\'a compuesta por \footnote{el
 primer componente corresponde al sector del cliente, el segundo al
 rating del cliente y el tercero indica si est\'a activo (1) o inactivo (0)}:
 [S2,D,1], [S3,A,1], [S1,B,1], [S1,B,0], [S3,C,1], [S2,A,1], [S2,B,1], [S3,C,1],
 [S1,A,1], [S2,D,1].
 \newline
 \newline
-Una vez ordenada la cartera queda:
+La cartera ordenada es:
 [S1,A,1], [S1,B,1], [S1,B,0], [S2,A,1], [S2,B,1], [S2,D,1], [S2,D,1],
 [S3,A,1], [S3,C,1], [S3,C,1].
 \newline
 \newline
-Si solamante se desea simular los clientes activos, la cartera ordenada queda:
+Si solamente se desea simular los clientes activos, la cartera ordenada es:
 [S1,A,1], [S1,B,1], [S2,A,1], [S2,B,1], [S2,D,1], [S2,D,1], [S3,A,1],
 [S3,C,1], [S3,C,1].
 \newline
