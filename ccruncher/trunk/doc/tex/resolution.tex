@@ -98,7 +98,7 @@ $Z$ & P\'erdidas de la cartera\\
 
 Se recomienda la lectura de las referencias \cite{copu:wang} y 
 \cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
-c\'opula, sus propiedades, como simularlas, creencias erroneas, etc.
+c\'opula, sus propiedades, como simularlas, creencias err\'oneas, etc.
 
 \paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
 de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
@@ -165,8 +165,8 @@ la funci\'on de distribuci\'on al incrementar el n\'umero de observaciones.
 
 \paragraph{Definici\'on.} Sea $X$ una variable aleatoria con funci\'on de 
 distribuci\'on conocida, $F$. El \emph{m\'etodo de Monte Carlo}\index{M\'etodo
-de Monte Carlo} consiste en obtener la funci\'on de distribuci\'on empirica de
-la variable aleatoria $H(X)$ usando el siguiente m\'etodo:
+de Monte Carlo} consiste en obtener la funci\'on de distribuci\'on emp\'irica 
+de la variable aleatoria $H(X)$ usando el siguiente m\'etodo:
 \begin{displaymath}
 \begin{array}{ccc}
 F_X                 &     \quad       & \widetilde{F_{H(X)}}    \cr
@@ -182,7 +182,7 @@ variables aleatorias pueden reformularse como un problema donde intervenga
 una variable aleatoria y ser resueltos por el m\'etodo de Monte Carlo. 
 Normalmente se formula el problema original como el c\'alculo de un 
 estad\'istico (pe. la media) sobre la funci\'on de distribuci\'on. Al
-m\'etodo de Monte Carlo se le atribuye una velocidad de convergencia del 
+m\'etodo de Monte Carlo se le atribuye una velocidad de convergencia  
 del orden de $1/\sqrt{N}$.
 
 \paragraph{Ejemplo:} El ejemplo cl\'asico es obtener el valor de la integral 
@@ -329,14 +329,14 @@ utiliza el entorno \emph{R} \footnote{http://www.r-project.org} para realizar lo
 c\'alculos estad\'isticos. Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
 Sea $\phi^{-1}(x)$ la inversa de la funci\'on de distribuci\'on de la Normal(0,1).
 
-\paragraph{Expected value.} F\'ormula extraida de \cite{stats:schaum} basada en el
+\paragraph{Expected value.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
 \begin{displaymath}
 \mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
 \end{displaymath}
 Consulte \ref{apendix:estim} para el c\'alculo de $\widehat{\mu_Z}$ y $\widehat{\sigma_Z}$.
 
-\paragraph{Desviaci\'on est\'andar.} F\'ormula extraida de \cite{stats:schaum} basada en el
+\paragraph{Desviaci\'on est\'andar.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
 \begin{displaymath}
 \sigma_Z = \widehat{\sigma_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{2N}}

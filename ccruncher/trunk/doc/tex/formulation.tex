@@ -103,7 +103,7 @@ mismo tener una cartera de cr\'editos donde los clientes hacen fallido
 de forma independiente que una cartera donde los fallidos se encuentran 
 correlacionados. En el primer caso, al cabo de un a\~no tendremos un 
 conjunto limitado de fallidos. En el segundo caso, al cabo de un a\~no la 
-mayoria de clientes habr\'an hecho fallido o casi ning\'un cliente habr\'a
+mayor\'ia de clientes habr\'an hecho fallido o casi ning\'un cliente habr\'a
 hecho fallido.
 
 \begin{figure}[!hb]
@@ -130,7 +130,7 @@ de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel})
 \subsection{Activos}
 
 Cada cliente tiene contratado un conjunto de activos con riesgo de cr\'edito.
-Caracterizamos un activos por los siguientes elementos (importes positivos
+Caracterizamos un activo por los siguientes elementos (importes positivos
 significan que el cliente paga, importes negativos significan que el cliente 
 cobra):
 
@@ -139,9 +139,9 @@ del tiempo. Incluye las posibles amortizaciones, primas, cupones, comisiones, co
 etc. Usaremos el cashflow para calcular el valor, o precio, de un activo en el
 instante $t$.
 
-\paragraph{Netting.} \index{Netting} Importe correpondiente a la liquidaci\'on de
+\paragraph{Netting.} \index{Netting} Importe correspondiente a la liquidaci\'on de
 deudas mutuas en caso de fallido. Incluye la posible recuperaci\'on, pago de
-obligaciones contraidas (pe. en el caso de avales), etc.
+obligaciones contra\'idas (pe. en el caso de avales), etc.
 
 \paragraph{Ejemplo.}
 Caracterizamos un bono (bond) de $100$ \euro de valor nominal, con fecha emisi\'on
@@ -239,7 +239,7 @@ C_{t_1} = C_{t_0} \cdot (1+ r_s \cdot (t_1-t_0))
 r_s = \frac{r}{t_1 - t_0}
 \end{equation}
 
-\paragraph{Defici\'on.}
+\paragraph{Definici\'on.}
 El \emph{tipo de inter\'es compuesto}\index{Tipo de inter\'es compuesto}, $r_c$, es un tipo
 de inter\'es donde en cada periodo de tiempo se incrementa por un factor de $r_c$ el importe
 acumulado del periodo anterior.
@@ -252,7 +252,7 @@ C_{t_1} = C_{t_0} \cdot (1+ r_c)^{(t_1-t_0)}
 r_c = (1 + r) ^ \frac{1}{t_1-t_0} - 1
 \end{equation}
 
-\paragraph{Defici\'on.}
+\paragraph{Definici\'on.}
 El \emph{tipo de inter\'es continuo}\index{Tipo de inter\'es continuo}, $r_e$, es el caso
 l\'\i mite del inter\'es compuesto.
 \begin{equation}
@@ -264,7 +264,7 @@ C_{t_1} = C_{t_0} \cdot e^{r_e \cdot (t_1-t_0)}
 r_e = \ln(1 + r_c)
 \end{equation}
 
-La f\'ormula exponencial, no el coeficiente, se obteniene considerando el
+La f\'ormula exponencial, no el coeficiente, se obtiene considerando el
 l\'\i mite del tipo de inter\'es compuesto.
 \begin{equation}
 \label{interes_continuo_2}
@@ -414,7 +414,7 @@ rating $B$ al cabo de $1$ a\~no es del $0.14\%$.
 \label{sec:mtransition:properties}
 
 \paragraph{Propiedad 1.}
-El valor de los elementos de la matriz de transici\'on se encuentran entre $0$ 
+El valor de los elementos de la matriz de transici\'on se encuentra entre $0$ 
 y $1$ debido a que los elementos de la matriz son probabilidades.
 
 \begin{equation}
@@ -422,7 +422,7 @@ y $1$ debido a que los elementos de la matriz son probabilidades.
 \end{equation}
 
 \paragraph{Propiedad 2.}
-La suma de los elementos de cualquier fila de la matriz de transici\'on suman $1$.
+La suma de los elementos de cualquier fila de la matriz de transici\'on vale $1$.
 De esta forma se  est\'a imponiendo que el conjunto de ratings finales solo puede 
 ser el de los ratings contemplados en la matriz.
 
@@ -444,7 +444,7 @@ m_{n,n} = 1
 \end{equation}
 
 \paragraph{Propiedad 4.}
-Sea cual sea el rating inicial, existe la posibilidad que realize fallido.
+Sea cual sea el rating inicial, existe la posibilidad que realice fallido.
 
 \begin{equation}
 \forall i \quad \exists j \quad \textrm{tq.} \quad m_{i,j} > 0 \quad \textrm{and} \quad  m_{j,n} > 0
