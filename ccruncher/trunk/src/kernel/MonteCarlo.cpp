@@ -76,6 +76,9 @@
 // 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added onlyactive argument to sortClients() method
 //
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method randomize()
+//
 //===========================================================================
 
 #include <cfloat>
@@ -715,13 +718,15 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
   {
     while(moreiterations)
     {
-      // generating random numbers + simulating time-to-default for each client
       timer1.resume();
+      // generating random numbers
+      randomize();
+      // simulating default time  for each client
       simulate();
       timer1.stop();
 
-      // portfolio evaluation
       timer2.resume();
+      // portfolio evaluation
       aux = evalueAggregators();
       timer2.stop();
 
@@ -894,11 +899,9 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 }
 
 //===========================================================================
-// generating random numbers + simulating time-to-default for each client
-// put result in rpaths[iclient]
-// @exception en cas d'error
+// generate random numbers
 //===========================================================================
-void ccruncher::MonteCarlo::simulate()
+void ccruncher::MonteCarlo::randomize()
 {
   // generate a new realization for copulas
   if (!antithetic)
@@ -923,7 +926,14 @@ void ccruncher::MonteCarlo::simulate()
       reversed = false;
     }
   }
+}
 
+//===========================================================================
+// simulate time-to-default for each client
+// put result in rpaths[iclient]
+//===========================================================================
+void ccruncher::MonteCarlo::simulate()
+{
   // for each client we simule the time where defaults
   if (ttdmethod) {
     // using time-to-default algorithm ...

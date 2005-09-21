@@ -45,6 +45,9 @@
 // 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added method randomize()
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -143,6 +146,7 @@ class MonteCarlo
     int* initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData *) throw(Exception);
     bool evalueAggregators() throw(Exception);
+    void randomize();
     void simulate();
     int simRatingPath(int iclient);
     int simTimeToDefault(int iclient);
