@@ -150,7 +150,7 @@ class MonteCarlo
     void simulate();
     int simRatingPath(int iclient);
     int simTimeToDefault(int iclient);
-    double getRandom(int icopula, int iclient);
+    double getRandom(int itime, int iclient);
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
 

@@ -78,6 +78,7 @@
 //
 // 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
+//   . reindexed copulas vector
 //
 //===========================================================================
 
@@ -310,7 +311,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   }
   else if (idata->params->method == "rating-path") {
     ttdmethod = false;
-    numcopulas = STEPS+1;
+    numcopulas = STEPS;
     Logger::trace("resolution method", string("rating-path"));
   }
   else {
@@ -906,7 +907,7 @@ void ccruncher::MonteCarlo::randomize()
   // generate a new realization for copulas
   if (!antithetic)
   {
-    for(int i=(ttdmethod?0:1);i<numcopulas;i++)
+    for(int i=0;i<numcopulas;i++)
     {
       copulas[i]->next();
     }
@@ -915,7 +916,7 @@ void ccruncher::MonteCarlo::randomize()
   {
     if (!reversed)
     {
-      for(int i=(ttdmethod?0:1);i<numcopulas;i++)
+      for(int i=0;i<numcopulas;i++)
       {
         copulas[i]->next();
       }
@@ -952,23 +953,24 @@ void ccruncher::MonteCarlo::simulate()
 //===========================================================================
 // getRandom. Returns requested copula value
 // encapsules antithetic management
+// remain: copula i covers jump from t_[i] to t_[i+1] (in rating-path method)
 //===========================================================================
-double ccruncher::MonteCarlo::getRandom(int icopula, int iclient)
+double ccruncher::MonteCarlo::getRandom(int itime, int iclient)
 {
   if (antithetic)
   {
     if (reversed)
     {
-      return copulas[icopula]->get(iclient);
+      return copulas[itime-1]->get(iclient);
     }
     else
     {
-      return 1.0 - copulas[icopula]->get(iclient);
+      return 1.0 - copulas[itime-1]->get(iclient);
     }
   }
   else
   {
-    return copulas[icopula]->get(iclient);
+    return copulas[itime-1]->get(iclient);
   }
 }
 
@@ -1017,7 +1019,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
   int r1 = (*clients)[iclient]->irating;
 
   // getting random number U[0,1] (correlated with rest of clients...)
-  double u = getRandom(0, iclient);
+  double u = getRandom(1, iclient);
 
   // simulate month where this client defaults
   int month = survival->inverse(r1, u);
