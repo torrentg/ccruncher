@@ -1,8 +1,8 @@
   /* http://www.w3.org/People/Raggett/tidy/ */
-  
+
 body { 
-  margin-left: 10%; 
-  margin-right: 10%; 
+  margin-left: 10%;
+  margin-right: 10%;
   font-family:verdana, arial, helvetica, sans-serif;
   line-height:130%;
 }
@@ -83,7 +83,7 @@ td.footer {
   color     : black ;
   background-color  : #E0E0E0 ; 
 }
-    
+
 tr.even, tr.a {
   background-color: #ddd;
 }
@@ -91,7 +91,7 @@ tr.even, tr.a {
 tr.odd, tr.b {
   background-color: #eee ;
 }
-                              
+
 :link { 
   color: rgb(0, 0, 153) ;
 }
