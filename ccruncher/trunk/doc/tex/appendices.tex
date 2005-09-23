@@ -370,6 +370,18 @@ Si $D$ es una matriz diagonal con $d_1, d_2, d_3, \cdots, d_n$ en la diagonal,
 entonces la matriz $D^x$ es una matriz diagonal y sus valores son
 $d_1^x, d_2^x, d_3^x, \cdots, d_n^x$.
 
+\paragraph{Algoritmo.}
+Sea $A$ una matriz diagonalizable. Obtenemos $A^x$ , siendo $x > 0$, calculando
+los autovectores y autovales de $A$:
+\begin{displaymath}
+\textrm{eigenvectors}(A) = P \qquad \textrm{eigenvalues}(A) = D
+\end{displaymath}
+donde $D$ es una matriz con los valores propios en la diagonal y el resto de
+elementos iguales a $0$. Entonces:
+\begin{displaymath}
+A^x = P^{-1} \cdot D^x \cdot P
+\end{displaymath}
+
 %---------------------------------------------------------------------------
 
 \section{Algoritmo de la c\'opula gaussiana}
