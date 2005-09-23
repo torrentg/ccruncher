@@ -134,8 +134,8 @@ ccruncher_SOURCES = \
     ./utils/Format.hpp
 
 ccruncher_CXXFLAGS = -Wall -W -Wshadow
-ccruncher_LDADD = -lm -lexpat -lz
-ccruncher_LDFLAGS = -rdynamic
+ccruncher_LDADD =
+ccruncher_LDFLAGS =
 
 # -------------------------------------------------------------
 # tests
@@ -288,5 +288,5 @@ tests_SOURCES = \
     ./survival/Survival.hpp
 
 tests_CXXFLAGS = -Wall -W -Wshadow
-tests_LDADD = -lm -lexpat -lz
-tests_LDFLAGS = -rdynamic
+tests_LDADD =
+tests_LDFLAGS =

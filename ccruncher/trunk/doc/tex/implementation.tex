@@ -253,6 +253,39 @@ forma se garantiza que todas las instancias usan una semilla distinta
 
 %---------------------------------------------------------------------------
 
+\section{Inicializaci\'on de los agregadores}
+
+CreditCruncher permite agrupar los activos de la cartera por segmentos.
+
+desglosar el riesgo de la cartera de acuerdo
+a la organizaci\'on jer\'arquica de la organizaci\'on u otro tipo de segmentaci\'on.
+Esto se realiza a trav\'es de las segmentaciones y los segmentos. Existen dos
+tipos de segmentaciones:
+
+\paragraph{Segmentaciones de activos.} Son segmentaciones donde el criterio
+de teselaci\'on de la cartera se realiza sobre los activos de la cartera.
+Se componen de un conjunto disjunto de segmentos. Cada segmento comprende un conjunto
+de activos. Los segmentos son 
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=5cm,angle=0]{./images/segments.eps}
+\caption{Portfolio segmented by comercial zones}
+\label{segments}
+\end{center}
+\end{figure}
+
+
+Las segmnetaciones CreditCruncher permite definir varias segmentaciones de la cartera. Cada
+segmentaci\'on est\'a compuesta por un conjunto de segmentos que teselan
+la cartera. De esta forma permite evaluar 
+
+\subsection{Agregadores de segmentaciones de activos}
+
+\subsection{Agregadores de segmentaciones de clientes}
+
+%---------------------------------------------------------------------------
+
 \section{Mapeo del cashflow}
 
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.

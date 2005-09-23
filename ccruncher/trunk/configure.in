@@ -42,8 +42,10 @@ AC_CHECK_HEADERS(zlib.h,,
 dnl -------------------------------------------------------------
 dnl checks for header
 dnl -------------------------------------------------------------
+AC_HEADER_STDBOOL
 AC_HEADER_DIRENT
 AC_HEADER_STDC
+AC_HEADER_TIME
 AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
 
 dnl -------------------------------------------------------------
@@ -56,6 +58,7 @@ AC_CHECK_FUNCS([sqrt])
 AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([floor])
 AC_CHECK_FUNCS([strchr])
+AC_CHECK_FUNCS([gettimeofday])
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRTOD
@@ -63,7 +66,6 @@ AC_FUNC_STRTOD
 dnl -------------------------------------------------------------
 dnl other checks (consts, structs, types)
 dnl -------------------------------------------------------------
-AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_C_RESTRICT
