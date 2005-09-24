@@ -255,17 +255,14 @@ forma se garantiza que todas las instancias usan una semilla distinta
 
 \section{Inicializaci\'on de los agregadores}
 
-CreditCruncher permite agrupar los activos de la cartera por segmentos.
-
-desglosar el riesgo de la cartera de acuerdo
-a la organizaci\'on jer\'arquica de la organizaci\'on u otro tipo de segmentaci\'on.
-Esto se realiza a trav\'es de las segmentaciones y los segmentos. Existen dos
-tipos de segmentaciones:
-
-\paragraph{Segmentaciones de activos.} Son segmentaciones donde el criterio
-de teselaci\'on de la cartera se realiza sobre los activos de la cartera.
-Se componen de un conjunto disjunto de segmentos. Cada segmento comprende un conjunto
-de activos. Los segmentos son 
+\paragraph{Definici\'on.} Llamamos \emph{segmentaci\'on}\index{Segmentaci\'on}
+a una partici\'on de la cartera en grupos de elementos llamados \emph{segmentos}
+\index{Segmento}. Si los elementos son activos, decimos que es una segmentaci\'on
+de activos, si los elementos son clientes, decimos que es una segmentaci\'on de
+clientes. Si los elementos de un segmento o segmentaci\'on son clientes,
+CreditCruncher lo interpreta como los activos de los clientes que componen el
+segmento. Se contempla la opci\'on de los clientes por comodidad en la
+creaci\'on de los segmentos.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -275,10 +272,24 @@ de activos. Los segmentos son
 \end{center}
 \end{figure}
 
+\paragraph{Observaci\'on.} Dada una segmentaci\'on, la intersecci\'on
+de dos segmentos cualquiera es vacia y la uni\'on de todos los
+segmentos es el total (la cartera).
 
-Las segmnetaciones CreditCruncher permite definir varias segmentaciones de la cartera. Cada
-segmentaci\'on est\'a compuesta por un conjunto de segmentos que teselan
-la cartera. De esta forma permite evaluar 
+\paragraph{Observaci\'on.} La cartera entera se puede expresar como una
+segmentaci\'on de activos con un \'unico segmento.
+
+\paragraph{Observaci\'on.} Las segmentaciones de clientes se encuentran
+incluidas dentro de las segmentaciones de activos.
+\newline
+
+CreditCruncher simula segmentos de activos (si son segmentos de clientes lo
+interpreta como los activos de aquellos clientes). Permite la definici\'on
+de varias segmentaciones simult\'aneas. Recordemos que la cartera entera
+puede expresarse como un \'unico segmento. De esta forma se puede valorar
+el riesgo teniendo en cuenta la organizaci\'on jer\'arquica de la empresa
+u otro tipo de segmentaci\'on (zonas comerciales, tipos de activos, tipos de
+clientes, sectores, etc.).
 
 \subsection{Agregadores de segmentaciones de activos}
 
