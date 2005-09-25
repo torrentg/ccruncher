@@ -264,14 +264,6 @@ CreditCruncher lo interpreta como los activos de los clientes que componen el
 segmento. Se contempla la opci\'on de los clientes por comodidad en la
 creaci\'on de los segmentos.
 
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=5cm,angle=0]{./images/segments.eps}
-\caption{Portfolio segmented by comercial zones}
-\label{segments}
-\end{center}
-\end{figure}
-
 \paragraph{Observaci\'on.} Dada una segmentaci\'on, la intersecci\'on
 de dos segmentos cualquiera es vacia y la uni\'on de todos los
 segmentos es el total (la cartera).
@@ -281,7 +273,19 @@ segmentaci\'on de activos con un \'unico segmento.
 
 \paragraph{Observaci\'on.} Las segmentaciones de clientes se encuentran
 incluidas dentro de las segmentaciones de activos.
-\newline
+
+\paragraph{Ejemplo.} La figura \ref{fig:segments} ilustra la segmentaci\'on
+de la cartera en zonas comerciales. Cada segmento es una zona comercial.
+Los componentes pueden ser activos (zona de contrataci\'on del activo), o
+clientes (cliente asignado a una oficina perteneciente a la zona $X$).
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=5cm,angle=0]{./images/segments.eps}
+\caption{Portfolio segmented by comercial zones}
+\label{fig:segments}
+\end{center}
+\end{figure}
 
 CreditCruncher simula segmentos de activos (si son segmentos de clientes lo
 interpreta como los activos de aquellos clientes). Permite la definici\'on
@@ -290,14 +294,16 @@ puede expresarse como un \'unico segmento. De esta forma se puede valorar
 el riesgo teniendo en cuenta la organizaci\'on jer\'arquica de la empresa
 u otro tipo de segmentaci\'on (zonas comerciales, tipos de activos, tipos de
 clientes, sectores, etc.).
+\newline
 
-\subsection{Agregadores de segmentaciones de activos}
-
-\subsection{Agregadores de segmentaciones de clientes}
+Par cada cliente de cada segmento de cada segmentaci\'on realizamos el
+mapeo de cashflow y netting de los activos pertenecientes a aquel
+segmento. El objetivo es disponer de un cashflow y netting evaluados en
+$t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente del segmento.
 
 %---------------------------------------------------------------------------
 
-\section{Mapeo del cashflow}
+\subsection{Mapeo del cashflow}
 
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
 Dado un cashflow $(t_v,V)$ lo mapeamos en la estructura
@@ -365,7 +371,7 @@ $t_6$ & 30/10/2005 & 0.00 \\
 
 %---------------------------------------------------------------------------
 
-\section{Mapeo del netting}
+\subsection{Mapeo del netting}
 
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
 Calculamos el netting en un nodo, $t_i$, de la partici\'on de la

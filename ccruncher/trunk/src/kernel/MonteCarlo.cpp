@@ -80,6 +80,9 @@
 //   . added method randomize()
 //   . reindexed copulas vector
 //
+// 2005/09/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added timer at random number generation step
+//
 //===========================================================================
 
 #include <cfloat>
@@ -704,7 +707,7 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
 long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 {
   bool aux=false, moreiterations=true;
-  Timer timer1, timer2;
+  Timer timer1, timer2, timer3;
 
 #ifdef USE_MPI
   if (!Utils::isMaster()) {
@@ -719,17 +722,20 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
   {
     while(moreiterations)
     {
-      timer1.resume();
       // generating random numbers
+      timer1.resume();
       randomize();
-      // simulating default time  for each client
-      simulate();
       timer1.stop();
 
+      // simulating default time for each client
       timer2.resume();
-      // portfolio evaluation
-      aux = evalueAggregators();
+      simulate();
       timer2.stop();
+
+      // portfolio evaluation
+      timer3.resume();
+      aux = evalueAggregators();
+      timer3.stop();
 
       // counter increment
       CONT++;
@@ -765,8 +771,9 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     }
 
     // printing traces
-    Logger::trace("elapsed time simulating clients", Timer::format(timer1.read()));
-    Logger::trace("elapsed time aggregating data", Timer::format(timer2.read()));
+    Logger::trace("elapsed time creating random numbers", Timer::format(timer1.read()));
+    Logger::trace("elapsed time simulating clients", Timer::format(timer2.read()));
+    Logger::trace("elapsed time aggregating data", Timer::format(timer3.read()));
     Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()));
   }
   catch(Exception &e)
