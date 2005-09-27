@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Sep 23 11:03:59 CEST 2005"
+#define BUILD_DATE "Tue Sep 27 10:14:05 CEST 2005"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -25,6 +25,9 @@
 
 /* Define to 1 if you have the `getcwd' function. */
 #define HAVE_GETCWD 1
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#define HAVE_GETTIMEOFDAY 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -130,6 +133,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
+/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+#define TIME_WITH_SYS_TIME 1
+
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
 
@@ -163,7 +169,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R271"
+#define SVNVERSION "R296:297M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

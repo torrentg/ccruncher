@@ -23,6 +23,9 @@
 # 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . removed plotdata and plotmtrans scripts
 #
+# 2005/09/27 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . changed CCRUNCHERPATH asignation
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -137,9 +140,8 @@ replace() {
 #-------------------------------------------------------------
 getPath() {
 
-  CCRUNCHERPATH=.
+  CCRUNCHERPATH=`dirname $0`/..
 
-  #TODO; retrieve path from directori script
 }
 
 #-------------------------------------------------------------

@@ -162,7 +162,7 @@ AH_BOTTOM([
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R271"
+#define SVNVERSION "R296:297M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
