@@ -774,7 +774,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     Logger::trace("elapsed time creating random numbers", Timer::format(timer1.read()));
     Logger::trace("elapsed time simulating clients", Timer::format(timer2.read()));
     Logger::trace("elapsed time aggregating data", Timer::format(timer3.read()));
-    Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()));
+    Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()+timer3.read()));
   }
   catch(Exception &e)
   {
@@ -792,6 +792,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 
 //===========================================================================
 // executeCollector
+// only used in MPI mode. this method is executed by master node
 // mpi message flow (data transfer):
 //   worker send MPI_TAG_INFO msg
 //   worker send MPI_TAG_DATA msg

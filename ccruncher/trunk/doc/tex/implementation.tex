@@ -305,17 +305,21 @@ $t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente del segmento.
 
 \subsection{Mapeo del cashflow}
 
+\subsubsection{Paso 1}
+
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
-Dado un cashflow $(t_v,V)$ lo mapeamos en la estructura
+Dado un cashflow $(t_j,V)$ lo mapeamos en la estructura
 temporal de la siguiente forma:
 
 \begin{enumerate}
-\item Si $t_v < t_0$, entonces $(t_v,V) \longrightarrow (t_0,0)$
-\item Si $t_{i-1} < t_v \leq t_i$, entonces $(t_v,V) \longrightarrow (t_i,V \cdot \Upsilon(t_v,t_i))$
-\item Si $t_k < t_v$, entonces $(t_v,V) \longrightarrow (t_k,0)$
+\item Si $t_j < t_0$, entonces $(t_j,V) \longrightarrow (t_0,0)$
+\item Si $t_{i-1} < t_j \leq t_i$, entonces $(t_j,V) \longrightarrow (t_i,V \cdot \Upsilon(t_j,t_i))$
+\item Si $t_k < t_j$, entonces $(t_j,V) \longrightarrow (t_k,0)$
 \end{enumerate}
 
-donde $\Upsilon(t_v,t_i)$ es el coeficiente de transporte entre $t_v$ y $t_i$.
+donde $\Upsilon(t_j,t_i)$ es el coeficiente de transporte entre $t_j$ y $t_i$.
+El resultado final es el cashflow evaluado en $t_0, t_1, t_2, \cdots, t_k$.
+Lo denotamos como $V_0, V_1, V_2, \cdots, V_k$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -369,9 +373,23 @@ $t_6$ & 30/10/2005 & 0.00 \\
 \end{tabular}
 \end{minipage}%
 
+\subsubsection{Paso 2}
+
+Lo que interesa conocer no es el cashflow en $t_i$, sin\'o el importe
+percibido en $t_{NumSteps}$ debido al cashflow desde $t_0$ hasta $t_i$.
+Llamamos a este concepto cashflow acumulado y lo calculamos de la
+forma siguiente:
+
+\begin{displaymath}
+C_k = \sum_{i=1}^{k} V_i \cdot \Upsilon(t_i,t_{NumSteps})
+\end{displaymath}
+
+
 %---------------------------------------------------------------------------
 
 \subsection{Mapeo del netting}
+
+\subsubsection{Paso 1}
 
 Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
 Calculamos el netting en un nodo, $t_i$, de la partici\'on de la
@@ -441,19 +459,65 @@ $t_6$ & 30/10/2005 & $4.00 + (5-4) \cdot \frac{61}{107} = 4.57$ \\
 \end{tabular}
 \end{minipage}%
 
+\subsubsection{Paso 2}
+
+Lo que interesa conocer no es el netting en $t_i$, sin\'o el importe
+percibido en $t_{NumSteps}$ debido al netting realizado en $t_i$.
+Llamamos a este concepto netting acumulado y lo calculamos de la
+forma siguiente:
+
+\begin{displaymath}
+N_k =  V_k \cdot \Upsilon(t_k,t_{NumSteps})
+\end{displaymath}
+
 %---------------------------------------------------------------------------
 
-\section{Inicializaci\'on del problema}
+\section{Simulaci\'on}
+
+Cada simulaci\'on consiste en generar n\'umeros aleatorios
+mediante una o varias c\'opulas (dependiendo del m\'etodo de
+simulaci\'on escojido), simular el tiempo de fallido de cada
+cliente (limit\'ando estos a $t_1, t_2, \cdots, t_{NumSteps}$ y
+resto) y evaluar cada segmento de cada segmentaci\'on.
+\newline
+\newline
+Una forma de acelerar la convergencia, implementada en CreditCruncher,
+es la metodolog\'ia \emph{antithetic}\index{Antithetic}. Esta consiste
+usar cada generaci\'on de n\'umeros aleatorios (computacionalmente
+costosa de generar) 2 veces. Sea $(u_1, u_2, \cdots, u_{NunClients})$
+n\'umeros aleatorios entre $0$ y $1$ generados por la realizaci\'on
+de una c\'opula gaussiana. Entonces la realizaci\'on
+$(1-u_1, 1-u_2, \cdots, 1-u_{NumClients})$ es equiprobable a la anterior.
+
+\subsection{Generaci\'on de n\'umeros aleatorios}
+
+\subsubsection{M\'etodo Rating-Path}
+
+Generamos una realizaci\'on de cada c\'opula, $Q_1, Q_2, \cdots, Q_{NumClient}$.
+Para cada c\'opula seguimos los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
+\newline
+\newline
+Si se usa metodolog\'ia antithetic, solamente se realiza se generan los n\'umeros 
+de las simulaciones pares. Los n\'umeros aleatorios usados en las simulaciones
+impares son $\vec{1}$ menos los de la simulaci\'on anterior 
+
+\subsubsection{M\'etodo Time-To-Default}
+
+Generamos una realizaci\'on de la c\'opula, $Q$.
+Seguimos los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
+\newline
+\newline
+Si se usa metodolog\'ia antithetic, solamente se generan los n\'umeros
+de las simulaciones pares. Los n\'umeros aleatorios usados en las simulaciones
+impares son $\vec{1}$ menos los de la simulaci\'on anterior 
+
+\subsection{Simulaci\'on del tiempo de fallido}
+
+\subsection{M\'etodo Rating-Path}
+
+\subsection{M\'etodo Time-To-Default}
+
+\subsection{Valoraci\'on de un segmento}
 
 
-precalculo de los valores en los nodos
 
-
-\section{Proceso de agregaci\'on}
-
-TODO: descripcion de los agregadores y metodo usado para evitar recalculo 
-de los activos en cada simulacion + Agregaci\'on de productos
-
-aceleraci\'on de la convergencia usando metodolog\'ia antithetic
-
-convergencia media, varianza, var (estimadores, graficos, etc.)
