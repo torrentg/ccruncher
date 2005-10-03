@@ -233,8 +233,8 @@ Z(t_0,T,\vec{w}) = X(t_0,T,T+1) - X(t_0,T,\vec{w})
 \section{Simulaci\'on del tiempo de fallido}
 
 El objetivo de este apartado es proporcionar m\'etodos para simular los
-tiempos de fallido, $\vec{w} = \{w_1,w_2,w_3,\cdots,w_{NC}\}$ de los clientes
-$\vec{c} = \{c_1,c_2,c_3,\cdots,c_{NC}\}$ cumpliendo:
+tiempos de fallido, $\vec{w} = \{w_1,w_2,w_3,\cdots,w_{NumClients}\}$ de los
+clientes $\vec{c} = \{c_1,c_2,c_3,\cdots,c_{NumClients}\}$ cumpliendo:
 \begin{itemize}
 \item los fallidos de cada cliente deben satisfacer la matriz de transici\'on $M_T$
 (o la funci\'on de supervivencia, $Survival(r,t)$).
@@ -243,6 +243,7 @@ de correlaci\'on entre clientes, $\Theta$
 \end{itemize}
 
 \subsection{M\'etodo Rating-Path}
+\label{res:mrt}
 
 Para este m\'etodo es necesario disponer de la matriz de transici\'on, $M_T$.
 
@@ -254,25 +255,25 @@ t_0,t_1,t_2,\cdots,t_k, \cdots
 \end{displaymath}
 
 \paragraph{Paso 2.} Para cada intervalo de tiempo $k$ creamos una c\'opula,
-$Qk$ de dimensi\'on $NC$ que satisfaga la matriz de correlaci\'on entre
+$Qk$ de dimensi\'on $NumClients$ que satisfaga la matriz de correlaci\'on entre
 clientes, $\Theta$.
 \begin{displaymath}
-Q1, Q2, Q3, \cdots, Qk, \cdots
+Q_1, Q_2, Q_3, \cdots, Q_k, \cdots
 \end{displaymath}
 
-\paragraph{Paso 3.} Simulamos la c\'opula $Q1$. Simulemos el rating del cliente
-$i$ en $t_1$. Disponemos del rating inicial $rating(t_0,i)$ y un valor $Q1_i \in [0,1]$
-proporcionado por el componente $i$-\'esimo de $Q1$. Entonces
+\paragraph{Paso 3.} Simulamos la c\'opula $Q_1$. Simulemos el rating del cliente
+$i$ en $t_1$. Disponemos del rating inicial $rating(t_0,i)$ y un valor $Q_1(i) \in [0,1]$
+proporcionado por el componente $i$-\'esimo de $Q_1$. Entonces
 \begin{displaymath}
-rating(t_1,i) = M_T^{-1}(rating(t_1,i),Q1_i)
+rating(t_1,i) = M_T^{-1}(rating(t_1,i),Q_1(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simrp}.
 
-\paragraph{Paso 4.} Simulamos la c\'opula $Qk$. Simulemos el rating del cliente
+\paragraph{Paso 4.} Simulamos la c\'opula $Q_k$. Simulemos el rating del cliente
 $i$ en $t_k$. Disponemos del rating anterior $rating(t_{k-1},i)$ y un valor
-$Qk_i \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Qk$. Entonces
+$Q_k(i) \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q_k$. Entonces
 \begin{displaymath}
-rating(t_k,i) = M_T^{-1}(rating(t_{k-1},i),Qk_i)
+rating(t_k,i) = M_T^{-1}(rating(t_{k-1},i),Q_k(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simrp}. Finalmente, aproximamos
 el tiempo de fallido del cliente $i$ de la siguiente forma:
@@ -289,6 +290,7 @@ w_i = inf\{t_k | rating(t_k,i) = default\}
 \end{figure}
 
 \subsection{M\'etodo Time-To-Default}
+\label{res:mttd}
 
 Para este m\'etodo es necesario disponer de la funci\'on de supervivencia. En caso
 de disponer solamente de la matriz de transici\'on puede calcularse la funci\'on
@@ -302,9 +304,9 @@ Q
 
 \paragraph{Paso 2.} Simulamos la c\'opula $Q$. Simulemos el tiempo de fallido del
 cliente $i$, $w_i$. Disponemos del rating inicial, $rating(t_0,i)$ y un valor
-$Q_i \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q$. Entonces:
+$Q(i) \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q$. Entonces:
 \begin{displaymath}
-w_i = Survival^{-1}(rating(t_0,i),Q_i)
+w_i = Survival^{-1}(rating(t_0,i),Q(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simttd}.
 

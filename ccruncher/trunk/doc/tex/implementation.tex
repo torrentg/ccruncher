@@ -31,7 +31,7 @@
 \label{sec:implementation}
 
 
-\section{Interpretaci\'on del fichero de entrada}
+\section{Paso 1. Interpretaci\'on del fichero de entrada}
 
 El contenido esperado del fichero de entrada se encuentra
 descrito en el documento \emph{CreditCruncher - Input File Reference}
@@ -78,7 +78,7 @@ criterio de parada y que este sea realizable.
 
 %---------------------------------------------------------------------------
 
-\section{Particionamiento del tiempo}
+\section{Paso 2. Particionamiento del tiempo}
 
 Para realizar el particionamiento del tiempo se necesita la fecha inicial, $t_0$,
 la longitud (en meses naturales) de cada intervalo, $StepLength$, y el n\'umero
@@ -110,7 +110,7 @@ d\'ias $29$ y $30$ de dicho mes.
 
 %---------------------------------------------------------------------------
 
-\section{Inicializaci\'on de los clientes}
+\section{Paso 3. Inicializaci\'on de los clientes}
 
 Los clientes de la cartera se ordenan en funci\'on de su sector
 y rating de forma creciente en ambos casos. La finalidad de esta
@@ -146,7 +146,7 @@ de clientes considerado es el n\'umero de clientes activos.
 
 %---------------------------------------------------------------------------
 
-\section{Inicializaci\'on del m\'etodo de simulaci\'on}
+\section{Paso 4. Inicializaci\'on del m\'etodo de simulaci\'on}
 
 \begin{figure}[!hb]
 \begin{center}
@@ -196,7 +196,7 @@ de autovectores y sus autovalores est\'a explicado en el ap\'endice
 
 %---------------------------------------------------------------------------
 
-\section{Inicializaci\'on de las c\'opulas}
+\section{Paso 5. Inicializaci\'on de las c\'opulas}
 
 Los pasos 1 y 2 de \ref{apendix:gaussiancopula} explican como
 inicializar una c\'opula gaussiana. CreditCruncher aplica el 
@@ -253,7 +253,7 @@ forma se garantiza que todas las instancias usan una semilla distinta
 
 %---------------------------------------------------------------------------
 
-\section{Inicializaci\'on de los agregadores}
+\section{Paso 6. Inicializaci\'on de los agregadores}
 
 \paragraph{Definici\'on.} Llamamos \emph{segmentaci\'on}\index{Segmentaci\'on}
 a una partici\'on de la cartera en grupos de elementos llamados \emph{segmentos}
@@ -472,12 +472,12 @@ N_k =  V_k \cdot \Upsilon(t_k,t_{NumSteps})
 
 %---------------------------------------------------------------------------
 
-\section{Simulaci\'on}
+\section{Paso 7. Simulaci\'on}
 
 Cada simulaci\'on consiste en generar n\'umeros aleatorios
 mediante una o varias c\'opulas (dependiendo del m\'etodo de
 simulaci\'on escojido), simular el tiempo de fallido de cada
-cliente (limit\'ando estos a $t_1, t_2, \cdots, t_{NumSteps}$ y
+cliente (limitando estos a $t_1, t_2, \cdots, t_{NumSteps}$ y
 resto) y evaluar cada segmento de cada segmentaci\'on.
 \newline
 \newline
@@ -497,7 +497,7 @@ Generamos una realizaci\'on de cada c\'opula, $Q_1, Q_2, \cdots, Q_{NumClient}$.
 Para cada c\'opula seguimos los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
 \newline
 \newline
-Si se usa metodolog\'ia antithetic, solamente se realiza se generan los n\'umeros 
+Si se usa metodolog\'ia antithetic, solamente se generan los n\'umeros
 de las simulaciones pares. Los n\'umeros aleatorios usados en las simulaciones
 impares son $\vec{1}$ menos los de la simulaci\'on anterior 
 
@@ -513,11 +513,29 @@ impares son $\vec{1}$ menos los de la simulaci\'on anterior
 
 \subsection{Simulaci\'on del tiempo de fallido}
 
-\subsection{M\'etodo Rating-Path}
+\subsubsection{M\'etodo Rating-Path}
 
-\subsection{M\'etodo Time-To-Default}
+Sean $Q_1(i), Q_2(i)_2, \cdots, Q_{NumSteps}(i)$ los componentes $i$-esimos
+de las c\'opulas simuladas. El objetivo es simular la evoluci\'on del
+rating del cliente $i$-esimo. Conocemos el rating del cliente $i$
+en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mrt} hasta que
+el rating sea $Default$ o el tiempo sea superior a $t_{NumSteps}$.
 
-\subsection{Valoraci\'on de un segmento}
+\subsubsection{M\'etodo Time-To-Default}
+
+Sean $Q(i)$ el componente $i$-esimo de las c\'opula simulada. El objetivo es
+simular el tiempo de fallido del cliente $i$-esimo. Conocemos el rating del
+cliente $i$ en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mttd} teniendo
+en cuenta que el valor retornado por la inversa de la funci\'on de supervivencia
+es un n\'umero con decimales; mapeamos este valor (tiempo de fallido) al
+nodo de tiempo ($t_1, t_2, \cdots, t_{NumSteps}, t_{NumSteps+1}$) mas cercano
+por la derecha. Por ejemplo, si el valor es $3.2$ y los nodos de tiempo son $0$,
+$2$, $4$ y $6$, el valor se mapear\'a a $4$.
+
+\subsection{Valoraci\'on del segmento}
 
 
+%---------------------------------------------------------------------------
+
+\section{Paso 8. Valoraci\'on del riesgo}
 
