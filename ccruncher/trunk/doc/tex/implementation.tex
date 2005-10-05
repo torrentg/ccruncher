@@ -534,8 +534,38 @@ $2$, $4$ y $6$, el valor se mapear\'a a $4$.
 
 \subsection{Valoraci\'on del segmento}
 
+Los pasos anteriores nos proporcionan el tiempo simulado de fallido
+para cada cliente, $w_1, w_2, \cdots, w_{NumClients}$. Obtenemos el
+valor de cada segmento de la siguiente forma:
+\begin{displaymath}
+X_j = \sum_{i \in \Omega_j} \left\{
+\begin{array}{lll}
+C_{NumSteps}^i            & \qquad & \textrm{if } w_i > t_{NumSteps}    \cr
+C_{w_{i-1}}^i + N_{w_i}^i & \qquad & \textrm{if } w_i \leq t_{NumSteps} \cr
+\end{array}
+\right\}
+\end{displaymath}
+
+\begin{displaymath}
+Z_j = \sum_{i \in \Omega_j} \left\{
+\begin{array}{lll}
+0                                          & \qquad & \textrm{if } w_i > t_{NumSteps}    \cr
+C_{NumSteps}^i - C_{w_{i-1}}^i - N_{w_i}^i & \qquad & \textrm{if } w_i \leq t_{NumSteps} \cr
+\end{array}
+\right\}
+\end{displaymath}
+
+donde $X_j$ y $Z_j$ son el valor y la p\'erdida del segmento $j$ en tiempo $t_{NumSteps}$,
+$\Omega_j$ es el conjunto de clientes del segmento $j$, $C_k^i$ y $N_k^i$ son el cashflow
+y el netting acumulado en tiempo $k$ del cliente $i$ para el segmento $j$.
 
 %---------------------------------------------------------------------------
 
 \section{Paso 8. Valoraci\'on del riesgo}
 
+Despu\'es de realizar $N$ simulaciones se dispone de $N$ valores para cada
+segmento. Solo trataremos el caso en que los valores simulados son p\'erdidas.
+Disponemos de $z_1, z_2, \cdots, z_N$. Fijado un nivel de confianza $\alpha$
+y un nivel de VAR de $x$, usamos las indicaciones de \ref{res:risk} para calcular
+el Expected Loss, la Desviaci\'on Est\'andar, el VAR y el TCE y sus correspondientes
+errores estándares.
