@@ -91,6 +91,8 @@ supervivencia (v\'ease la secci\'on \ref{sec:mtransition}).
 \end{center}
 \end{figure}
 
+\paragraph{Notaci\'on.} $rating(i,t) =$ rating del cliente $i$ en el tiempo $t$.
+
 \paragraph{Notaci\'on.} $P(r_i \to r_j;t_0;t_1) =$ probabilidad de pasar de un 
 rating inicial $r_i$ en tiempo $t_0$ a un rating $r_j$ en tiempo $t_1$.
 
@@ -126,6 +128,8 @@ sectores industriales.
 Se considera que cada cliente pertenece a un \'unico sector y permanece en 
 el a lo largo del tiempo. La relaci\'on entre sectores se contempla a trav\'es 
 de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
+
+\paragraph{Notaci\'on.} $sector(i) =$ sector al que pertenece el cliente $i$.
 
 \subsection{Activos}
 
@@ -215,7 +219,7 @@ una cuota semestral anticipada de $4.5$ \euro.
 
 \paragraph{Definici\'on.}
 Sea $C_{t_0}$ el importe inicial de una operaci\'on y $C_{t_1}$ el importe final. 
-Definimos el \emph{tipo de inter\'es efectivo}\index{Tipo de inter\'es efectivo},$r$,
+Definimos el \emph{tipo de inter\'es efectivo}\index{Tipo de inter\'es efectivo}, $r$,
 como:
 \begin{equation}
 C_{t_1} = C_{t_0} \cdot (1+r)
@@ -359,10 +363,10 @@ tiempos sea $t_0$ y el otro sea superior a $t_0$.
 \end{figure}
 
 \paragraph{Proposici\'on.} Dada una curva spot $S_{t_0}$ en $t_0$, podemos calcular
-el coeficiente de transporte para todo $t_i, t_j \ge t_0$:
+el coeficiente de transporte entre $t_i$ y $t_j$ para todo $t_i, t_j \ge t_0$:
 \begin{equation}
-\Upsilon(t_i,t_j, r) = 
-\Upsilon(t_i,t_0, S_{t_o}(t_i)) \cdot \Upsilon(t_0,t_j, S_{t_0}(t_j))
+\Upsilon_S(t_i,t_j) =
+\Upsilon(t_i,t_0, S_{t_0}(t_i)) \cdot \Upsilon(t_0,t_j, S_{t_0}(t_j))
 \end{equation}
 
 
@@ -501,32 +505,34 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 \label{mtrans:survival}
 
 \paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada}
-\index{Tasa de Morosidad Anticipada} (TMA) del rating $r_i$ en el a\~no $k$ es
+\index{Tasa de Morosidad Anticipada} o \emph{Forward Default Rate}
+\index{Forward Default Rate} (FDR) del rating $r_i$ en el a\~no $k$ es
 la probabilidad que una empresa con rating inicial $r_i$ haga fallido a lo largo
 del a\~no $k$.
 
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=10cm, angle=-90]{./images/tma.ps}
-\caption{Tasa de Morosidad Anticipada}
-\label{tma}
+\caption{Tasa de Morosidad Anticipada (FDR)}
+\label{fdr}
 \end{center}
 \end{figure}
 
 \paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada Acumulada}
-\index{Tasa de Morosidad Anticipada Acumulada} (TMAA) del rating $r_i$ en el
+\index{Tasa de Morosidad Anticipada Acumulada} o \emph{Cumulated Forward Default
+Rate}\index{Cumulated Forward Default Rate} (CFDR) del rating $r_i$ en el
 tiempo $t$ es la probabilidad que una empresa con rating inicial $r_i$ haga
 fallido en el intervalo de tiempo $(0,t)$.
 
 \begin{equation}
-TMAA(r_i,t)=P(r_i \to Default;0;t)
+CFDR(r_i,t)=P(r_i \to Default;0;t)
 \end{equation}
 
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[height=10cm, angle=-90]{./images/tmaa.ps}
-\caption{Tasa de Morosidad Anticipada Acumulada}
-\label{tmaa}
+\caption{Tasa de Morosidad Anticipada Acumulada (CFDR)}
+\label{cfdr}
 \end{center}
 \end{figure}
 
@@ -546,7 +552,8 @@ $r_i$ no haya hecho fallido en el intervalo de tiempo $(0,t)$.
 puede expresar en funci\'on de la matriz de transici\'on a trav\'es de la
 relaci\'on siguiente:
 \begin{equation}
-TMAA(r_i,k \cdot T) = (M_{k \cdot T})_{i,n} = (M_{T}^{k})_{i,n}
+CFDR(r_i,k \cdot T) = (M_{k \cdot T})_{i,n} = (M_{T}^{k})_{i,n}
+\label{eq:cdfr1}
 \end{equation}
 donde $n$ es el \'indice del rating Default y $T$ es el periodo de la matriz
 de transici\'on.
@@ -555,19 +562,20 @@ de transici\'on.
 en funci\'on de la Tasa de Morosidad Anticipada Acumulada a trav\'es de la
 relaci\'on siguiente:
 \begin{equation}
-TMA(r_i, t) =  TMAA(r_i, t) - TMAA(r_i, t-T)
+FDR(r_i, t) =  CFDR(r_i, t) - CFDR(r_i, t-T)
 \end{equation}
 
 \paragraph{Proposici\'on.} La Supervivencia puede expresarse en funci\'on de
 la Tasa de Morosidad Anticipada Acumulada a trav\'es de la relaci\'on siguiente:
 \begin{equation}
-Survival(r_i, t) =  1 - TMAA(r_i, t)
+Survival(r_i, t) =  1 - CFDR(r_i, t)
+\label{eq:survival1}
 \end{equation}
 
 \paragraph{Proposici\'on.} Si la matriz de transici\'on es v\'alida, cualquier 
 rating inicial acaba haciendo fallido casi seguramente.
 \begin{equation}
-lim_{t \to \infty} TMAA(r_i, t) =  1 \quad \forall i
+lim_{t \to \infty} CFDR(r_i, t) =  1 \quad \forall i
 \end{equation}
 
 \paragraph{Proposici\'on.} Fijado un rating, $r_i$, la funci\'on de 
@@ -576,7 +584,7 @@ supervivencia es mon\'otona decreciente.
 Survival(r_i, t_i) \ge Survival(r_i, t_j) \quad \forall t_i < t_j
 \end{equation}
 
-\paragraph{Ejemplo.} En las figuras \ref{tmaa}, \ref{tma} y \ref{survival} 
+\paragraph{Ejemplo.} En las figuras \ref{cfdr}, \ref{fdr} y \ref{survival}
 se puede observar la Tasa de Morosidad anticipada, Tasa de Morosidad Anticipada 
 Acumulada y la Funci\'on de Supervivencia de la matriz de transici\'on usada en 
 este documento.
@@ -597,6 +605,8 @@ fallidos entre los sectores. La denotamos de la forma siguiente:
 \gamma_{1,m} & \dots  & \gamma_{m,m} 
 \end{array}
 \right)
+\qquad
+\gamma_{i,j} = Corr(sector_i, sector_j)
 \end{displaymath}
 donde $m$ es el n\'umero de sectores, $\gamma_{i,j}$ es la correlaci\'on entre 
 los fallidos de los sectores $s_i$ y $s_j$ y $\gamma_{i,i}$ es la correlaci\'on del 
@@ -620,7 +630,10 @@ de la forma siguiente:
 \right)
 \end{displaymath}
 donde $p$ es el n\'umero de clientes y $\theta_{i,j}$ es la correlaci\'on sectorial
-entre el sector del cliente $i$ y el sector del cliente $j$.
+entre el sector del cliente $i$ y el sector del cliente $j$. Por construcci\'on, la
+matriz de correlaci\'on entre clientes es sim\'etrica debido a que la correlaci\'on
+entre del sector del cliente $i$ con el sector del cliente $j$ es la misma que la
+correlaci\'on del sector del cliente $j$ con el sector del cliente $i$.
 
 \paragraph{Observaci\'on.} Los clientes se acostumbran a ordenar por sectores. En este
 caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
@@ -648,8 +661,8 @@ caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 \right)
 \end{array}
 \end{displaymath}
-donde $p_1, \dots, p_m$ corresponde al n\'umero de clientes que pertenecen a los sectores
-$s_1, \dots, s_m$. Con esta ordenaci\'on de los clientes la matriz de correlaci\'on entre
+donde $p_1, \dots, p_m$ son el n\'umero de clientes que pertenecen a los sectores
+$s_1, \dots, s_m$. Con esta ordenaci\'on de clientes, la matriz de correlaci\'on entre
 clientes es una matriz con bloques con $1$'s en la diagonal.
 
 

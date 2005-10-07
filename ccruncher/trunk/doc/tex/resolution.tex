@@ -36,64 +36,6 @@ Time-To-Default y Rating-Path.
 
 %---------------------------------------------------------------------------
 
-\section{Notaci\'on}
-
-\begin{tabular}{|p{2.5cm}|p{9cm}|}
-\hline
-\textbf{Concepto} & \textbf{Descripci\'on} \\
-\hline
-\hline
-$x_i$ & Componente $i$-esimo de $x$ \\
-\hline
-$x^i$ & Realizaci\'on $i$-esima de la variable aleatoria $X$ \\
-\hline
-\hline
-$ns$ & N\'umero de sectores de la cartera \\
-\hline
-$nr$ & N\'umero de ratings del sistema de calificaci\'on \\
-\hline
-$nc$ & N\'umero de clientes de la cartera \\
-\hline
-$na_i$ &  N\'umero de activos del cliente $i$. $i \in \{1,\cdots,nc\}$\\
-\hline
-\hline
-$s_i$ & Sector $i$-esimo. $i \in \{1,\cdots,ns\}$ \\
-\hline
-$r_i$ & Rating $i$-esimo. $i \in \{1,\cdots,nr\}$. $r_{nr}=Default$. \\
-\hline
-$c_i$ & Cliente $i$-esimo. $i \in \{1,\cdots,nc\}$ \\
-\hline
-\hline
-$S_{t_0}$ & Curva spot de tipos de inter\'es en $t_0$. $S_{t_0}(t_k)$ es el
-tipo de inter\'es de la curva en tiempo $t_k$ siendo $t_0 \leq t_k$\\
-\hline
-$\Upsilon(t_0,t_k, S_{t_0})$ & Funci\'on de transporte de $t_0$ a $t_k$ usando 
-la curva spot $S_{t_0}$ \\
-\hline
-\hline
-$Survival(r_i,t)$ & Funci\'on de supervivencia. Probabilidad que un cliente con 
-rating inicial $r_i$ no haya hecho fallido en tiempo $t$\\
-\hline
-$M_T$ & Matriz de transici\'on a $T$ tiempo. Tiene dimensi\'on $nr \times nr$\\
-\hline
-$\Gamma$ & Matriz de correlaci\'on entre sectores. Dimensi\'on $ns \times ns$\\
-\hline
-$\Theta$ & Matriz de correlaci\'on entre clientes. Dimensi\'on $nc \times nc$\\
-\hline
-\hline
-$X_{i,j}$ & Valor del $j$-esimo activo del cliente $i$.
-$i \in \{1,\cdots,nc\}$, $j \in \{0,\cdots,na_i\}$ \\
-\hline
-$X_i$ & Valor de los activos del cliente $i$. $i \in \{1,\cdots,nc\}$ \\
-\hline
-$X$ & Valor de la cartera\\
-\hline
-$Z$ & P\'erdidas de la cartera\\
-\hline
-\end{tabular}
-
-%---------------------------------------------------------------------------
-
 \section{Variables aleatorias correlacionadas. C\'opulas.}
 
 Se recomienda la lectura de las referencias \cite{copu:wang} y 
@@ -144,14 +86,14 @@ Se recomienda la lectura de la referencia \cite{mc:mervyn}. Se trata de los
 apuntes para una clase del profesor Mervyn Marasinghe. Se expone el m\'etodo 
 de Monte Carlo y las t\'ecnicas de reducci\'on de la varianza.
 
-\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x^1, \cdots, x^n$,
+\paragraph{Definici\'on.} Dado un conjunto de observaciones, $x_1, \cdots, x_N$,
 de la variable aleatoria $X$, definimos la \emph{funci\'on de distribuci\'on emp\'irica}
 \index{Funci\'on de distribuci\'on emp\'irica} como:
 \begin{displaymath}
-\widetilde{F_X(k)} = \frac{1}{n} \sum_{i=1}^{n} I_{(-\infty,k]}(x^i) \qquad
-I_{[-\infty,k]}(x) = \left\{
+\widetilde{F_X(y)} = \frac{1}{N} \sum_{i=1}^{N} I_{(-\infty,y]}(x_i) \qquad
+I_{(-\infty,y]}(x) = \left\{
 \begin{array}{ll}
-1 & \textrm{ if } x \in (-\infty,k] \cr
+1 & \textrm{ if } x \in (-\infty,y] \cr
 0 & \textrm{ otherwise}
 \end{array}
 \right.
@@ -173,7 +115,7 @@ F_X                 &     \quad       & \widetilde{F_{H(X)}}    \cr
 \downarrow          &     \quad       & \uparrow                \cr
 \textrm{simulation} &     \quad       & \textrm{empirical } cdf \cr
 \downarrow          &     \quad       & \uparrow                \cr
-x^1,\cdots,x^n      & \longrightarrow & H(x^1),\cdots,H(x^n)
+x_1,\cdots,x_N      & \longrightarrow & H(x_1),\cdots,H(x_N)
 \end{array}
 \end{displaymath}
 
@@ -199,33 +141,42 @@ con distribuci\'on $W(U)$.
 
 \section{Evaluaci\'on de la cartera}
 
-\paragraph{Definici\'on.} Definimos el valor de un activo entre el tiempo
-$t_0$ y $T$, habiendo hecho fallido en tiempo $w$ como:
+En las definiciones siguientes se considera que $S$ es la curva spot en $t_0$,
+$na_i$ es el n\'umero de activos del cliente $i$ y $nc$ el n\'umero de clientes.
+Asimismo se considera que el casflow y netting de cada activo est\'a fijado y
+no depende de la evoluci\'on del cliente.
+
+\paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$
+evaluado en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
+tiempo $t_w$ como:
 \begin{equation}
-\begin{array}{rl}
-X_{i,j}(t_0,T,w) = & \textrm{1}_{[w \leq T]} \cdot \textrm{netting}(w) \cdot \Upsilon(w,T,S_{t_0}) + \cr
-                   & \sum_{t_k=t_0}^{T} \textrm{1}_{[t_k < w]} \cdot \textrm{cashflow}(t_k) \cdot \Upsilon(t_k,T,S_{t_0})
-\end{array}
+X_{i,j}(t_w;t_0,t_K) = 
 \end{equation}
+\begin{displaymath}
+\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{netting}(t_w) \cdot \Upsilon_S(t_w,t_K) + 
+\sum_{t=t_0}^{t_K} \textrm{1}_{[t < t_w]} \cdot \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
+\end{displaymath}
 
 \paragraph{Definici\'on.} Definimos el valor de los activos del cliente $i$
-entre el tiempo $t_0$ y $T$, habiendo hecho fallido en tiempo $w$ como:
+evaluados en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
+tiempo $t_w$ como:
 \begin{equation}
-X_i(t_0,T,w) = \sum_{j=0}^{na_i} X_{i,j}(t_0,T,w)
+X_i(t_w;t_0,t_K) = \sum_{j=0}^{na_i} X_{i,j}(t_w;t_0,t_K)
 \end{equation}
 
-\paragraph{Definici\'on.} Definimos el valor de la cartera entre el tiempo 
-$t_0$ y $T$, siendo $\vec{w}$ los tiempos en los que han hecho fallido 
-los clientes $\vec{c}$ como:
+\paragraph{Definici\'on.} Definimos el valor de la cartera evaluada en $t_K$
+entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
+fallido los clientes como:
 \begin{equation}
-X(t_0,T,\vec{w}) = \sum_{i=0}^{nc} X_i(t) = \sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_0,T,w_i)
+X(\vec{t_w};t_0,t_K) = \sum_{i=0}^{nc} X_i(t_w^i;t_0,t_K) =
+\sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_w^i;t_0,t_K)
 \end{equation}
 
-\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera entre el 
-tiempo $t_0$ y $T$, siendo $\vec{w}$ los tiempos en los que han hecho fallido 
-los clientes $\vec{c}$ como:
+\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera evaluada en $t_K$
+entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
+fallido los clientes como:
 \begin{equation}
-Z(t_0,T,\vec{w}) = X(t_0,T,T+1) - X(t_0,T,\vec{w})
+Z(\vec{t_w};t_0,t_K) = X(\vec{t_\infty};t_0,t_K) - X(\vec{t_w};t_0,t_K)
 \end{equation}
 
 %---------------------------------------------------------------------------
@@ -233,8 +184,8 @@ Z(t_0,T,\vec{w}) = X(t_0,T,T+1) - X(t_0,T,\vec{w})
 \section{Simulaci\'on del tiempo de fallido}
 
 El objetivo de este apartado es proporcionar m\'etodos para simular los
-tiempos de fallido, $\vec{w} = \{w_1,w_2,w_3,\cdots,w_{NumClients}\}$ de los
-clientes $\vec{c} = \{c_1,c_2,c_3,\cdots,c_{NumClients}\}$ cumpliendo:
+tiempos de fallido, $\vec{t_w} = (t_w^1,t_w^2,t_w^3,\cdots,t_w^{nc})$ de los
+clientes cumpliendo:
 \begin{itemize}
 \item los fallidos de cada cliente deben satisfacer la matriz de transici\'on $M_T$
 (o la funci\'on de supervivencia, $Survival(r,t)$).
@@ -245,7 +196,9 @@ de correlaci\'on entre clientes, $\Theta$
 \subsection{M\'etodo Rating-Path}
 \label{res:mrt}
 
-Para este m\'etodo es necesario disponer de la matriz de transici\'on, $M_T$.
+Este m\'etodo simula la evoluci\'on del rating del cliente a lo largo del tiempo.
+El tiempo de fallido se obtiene al alcanzar el rating $Default$. Para este m\'etodo
+es necesario disponer de la matriz de transici\'on, $M_T$.
 
 \paragraph{Paso 1.} Segmentamos el tiempo en intervalos constantes de forma que
 el intervalo de tiempo entre $t_i$ y $t_{i+1}$ es el cubierto por la matriz de
@@ -255,30 +208,34 @@ t_0,t_1,t_2,\cdots,t_k, \cdots
 \end{displaymath}
 
 \paragraph{Paso 2.} Para cada intervalo de tiempo $k$ creamos una c\'opula,
-$Qk$ de dimensi\'on $NumClients$ que satisfaga la matriz de correlaci\'on entre
+$Qk$ de dimensi\'on $nc$ que satisfaga la matriz de correlaci\'on entre
 clientes, $\Theta$.
 \begin{displaymath}
 Q_1, Q_2, Q_3, \cdots, Q_k, \cdots
 \end{displaymath}
 
-\paragraph{Paso 3.} Simulamos la c\'opula $Q_1$. Simulemos el rating del cliente
-$i$ en $t_1$. Disponemos del rating inicial $rating(t_0,i)$ y un valor $Q_1(i) \in [0,1]$
+\paragraph{Paso 3.} Simulamos las c\'opulas $Q_1, Q_2, Q_3, \cdots, Q_k, \cdots$.
+Cada realizaci\'on de $Q_k$ consiste en un vector de componentes
+$(Q_k(1), Q_k(2), \cdots, Q_k(nc))$.
+
+\paragraph{Paso 4.} Simulamos el rating del cliente $i$ en $t_1$ de la forma siguiente:
+disponemos del rating inicial $rating(i,t_0)$ y un valor $Q_1(i) \in [0,1]$
 proporcionado por el componente $i$-\'esimo de $Q_1$. Entonces
 \begin{displaymath}
-rating(t_1,i) = M_T^{-1}(rating(t_1,i),Q_1(i))
+rating(i,t_1) = M_T^{-1}(rating(i,t_1),Q_1(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simrp}.
 
-\paragraph{Paso 4.} Simulamos la c\'opula $Q_k$. Simulemos el rating del cliente
-$i$ en $t_k$. Disponemos del rating anterior $rating(t_{k-1},i)$ y un valor
-$Q_k(i) \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q_k$. Entonces
+\paragraph{Paso 5.} Simulamos el rating del cliente $i$ en $t_k$ de la forma siguiente:
+disponemos del rating anterior $rating(i,t_{k-1})$ y un valor $Q_k(i) \in [0,1]$
+proporcionado por el componente $i$-\'esimo de $Q_k$. Entonces
 \begin{displaymath}
-rating(t_k,i) = M_T^{-1}(rating(t_{k-1},i),Q_k(i))
+rating(i,t_k) = M_T^{-1}(rating(i,t_{k-1}),Q_k(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simrp}. Finalmente, aproximamos
 el tiempo de fallido del cliente $i$ de la siguiente forma:
 \begin{displaymath}
-w_i = inf\{t_k | rating(t_k,i) = default\}
+t_w^i = inf\{t_k | rating(i,t_k) = Default\}
 \end{displaymath}
 
 \begin{figure}[!hb]
@@ -292,21 +249,26 @@ w_i = inf\{t_k | rating(t_k,i) = default\}
 \subsection{M\'etodo Time-To-Default}
 \label{res:mttd}
 
-Para este m\'etodo es necesario disponer de la funci\'on de supervivencia. En caso
+Este m\'etodo consiste en simular directamente el tiempo de fallido de los
+clientes. Requiere disponer de la funci\'on de supervivencia. En caso
 de disponer solamente de la matriz de transici\'on puede calcularse la funci\'on
-de supervivencia asociada a la matriz de transici\'on.
+de supervivencia asociada a la matriz de transici\'on usando las f\'ormulas
+\ref{eq:survival1} y \ref{eq:cdfr1}.
 
-\paragraph{Paso 1.} Creamos una c\'opula de dimensi\'on $NC$ que satisfaga la
+\paragraph{Paso 1.} Creamos una c\'opula de dimensi\'on $nc$ que satisfaga la
 matriz de correlaci\'on entre clientes, $\Theta$.
 \begin{displaymath}
 Q
 \end{displaymath}
 
-\paragraph{Paso 2.} Simulamos la c\'opula $Q$. Simulemos el tiempo de fallido del
-cliente $i$, $w_i$. Disponemos del rating inicial, $rating(t_0,i)$ y un valor
-$Q(i) \in [0,1]$ proporcionado por el componente $i$-\'esimo de $Q$. Entonces:
+\paragraph{Paso 2.} Simulamos la c\'opula $Q$. La realizaci\'on de $Q$ consiste
+en un vector de componentes $(Q(1), Q(2), \cdots, Q(nc))$.
+
+\paragraph{Paso 2.} Simulamos el tiempo de fallido del cliente $i$ de la forma siguiente:
+disponemos del rating inicial, $rating(i,t_0)$ y un valor $Q(i) \in [0,1]$ proporcionado
+por el componente $i$-\'esimo de $Q$. Entonces:
 \begin{displaymath}
-w_i = Survival^{-1}(rating(t_0,i),Q(i))
+t_w^i = Survival^{-1}(rating(i,t_0),Q(i))
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simttd}.
 
@@ -332,7 +294,7 @@ utiliza el entorno \emph{R} \footnote{http://www.r-project.org} para realizar lo
 c\'alculos estad\'isticos. Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
 Sea $\phi^{-1}(x)$ la inversa de la funci\'on de distribuci\'on de la Normal(0,1).
 
-\paragraph{Expected value.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
+\paragraph{Expected Loss.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
 teorema del l\'imite central.
 \begin{displaymath}
 \mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
