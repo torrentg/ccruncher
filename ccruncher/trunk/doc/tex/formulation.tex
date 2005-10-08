@@ -148,7 +148,7 @@ deudas mutuas en caso de fallido. Incluye la posible recuperaci\'on, pago de
 obligaciones contra\'idas (pe. en el caso de avales), etc.
 
 \paragraph{Ejemplo.}
-Caracterizamos un bono (bond) de $100$ \euro de valor nominal, con fecha emisi\'on
+Caracterizamos un bono (bond) de $100$ \euro~ de valor nominal, con fecha emisi\'on
 31/12/2006, tipo de inter\'es anual del $4\%$, pago anual de cupones y amortizaci\'on
 al cabo de $5$ a\~nos. En caso de fallido se estima que se recupera un $80\%$ del
 importe pendiente de abonar.\newline
@@ -195,7 +195,7 @@ I =
 \end{center}
 
 \paragraph{Ejemplo.}
-Caracterizamos un aval (endorsement) por un importe avalado de $100$ \euro
+Caracterizamos un aval (endorsement) por un importe avalado de $100$ \euro~
 con fecha de contrataci\'on 15/01/2006, durante un periodo de $2$ a\~nos y
 una cuota semestral anticipada de $4.5$ \euro.
 
@@ -505,10 +505,9 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 \label{mtrans:survival}
 
 \paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada}
-\index{Tasa de Morosidad Anticipada} o \emph{Forward Default Rate}
-\index{Forward Default Rate} (FDR) del rating $r_i$ en el a\~no $k$ es
-la probabilidad que una empresa con rating inicial $r_i$ haga fallido a lo largo
-del a\~no $k$.
+o \emph{Forward Default Rate} \index{Forward Default Rate} (FDR) del rating $r_i$ en
+el a\~no $k$ es la probabilidad que una empresa con rating inicial $r_i$ haga fallido
+a lo largo del a\~no $k$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -519,10 +518,9 @@ del a\~no $k$.
 \end{figure}
 
 \paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada Acumulada}
-\index{Tasa de Morosidad Anticipada Acumulada} o \emph{Cumulated Forward Default
-Rate}\index{Cumulated Forward Default Rate} (CFDR) del rating $r_i$ en el
-tiempo $t$ es la probabilidad que una empresa con rating inicial $r_i$ haga
-fallido en el intervalo de tiempo $(0,t)$.
+o \emph{Cumulated Forward Default Rate}\index{Cumulated Forward Default Rate} (CFDR)
+del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating inicial
+$r_i$ haga fallido en el intervalo de tiempo $(0,t)$.
 
 \begin{equation}
 CFDR(r_i,t)=P(r_i \to Default;0;t)
@@ -669,7 +667,7 @@ caso la matriz de correlaci\'on entre clientes queda de la forma siguiente:
 \end{displaymath}
 donde $p_1, \dots, p_m$ son el n\'umero de clientes que pertenecen a los sectores
 $s_1, \dots, s_m$. Con esta ordenaci\'on de clientes, la matriz de correlaci\'on entre
-clientes es una matriz con bloques con $1$'s en la diagonal.
+clientes es una matriz con bloques con $1$'s en la diagonal\index{Matriz en bloques}.
 
 
 \paragraph{Ejemplo.}Supongamos que tenemos dos sectores, siendo $\Gamma$ la
@@ -712,14 +710,14 @@ Llamamos $Z$ a la variable aleatoria que modela las p\'erdidas de la cartera
 (portfolio loss) en el tiempo $T$. Sea $F_Z$ la correspondiente funci\'on de
 distribuci\'on (cdf).
 
-\paragraph{Definici\'on.} La \emph{P\'erdida Esperada}\index{P\'erdida esperada}
-de la cartera en tiempo $T$ es:
+\paragraph{Definici\'on.} La \emph{P\'erdida Esperada} o \emph{Expected Loss}
+\index{Expected Loss} de la cartera en tiempo $T$ es:
 \begin{equation}
 \textrm{Expected Loss} = E(Z)
 \end{equation}
 
-\paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Valor en riesgo} o
-\emph{VAR}\index{VAR} en tiempo $T$ es la p\'erdida m\'axima esperada dentro
+\paragraph{Definici\'on.} El \emph{Valor en Riesgo}\index{Value At Risk} o
+\emph{VAR} en tiempo $T$ es la p\'erdida m\'axima esperada dentro
 de un intervalo de confianza dado. Responde a la pregunta \emph{Cual es la
 p\'erdida m\'inima incurrida en el $\alpha$\% de los peores casos?}. Se recomienda
 la lectura del libro \emph{Value at Risk} \cite{var:jorion}.
@@ -728,7 +726,7 @@ VAR_{\alpha}(Z) = \textrm{inf}\{z | F_Z(z) \geq \alpha \}
 \end{equation}
 
 \paragraph{Definici\'on.} El \emph{Tail Conditional Expectation}
-\index{Tail Conditional Expectation} o \emph{TCE}\index{TCE} o
+\index{Tail Conditional Expectation} o \emph{TCE} o
 \emph{Expected Shortfall}\index{Expected Shortfall} es la p\'erdida esperada
 en el caso en que la p\'erdida sea inferior a un quantil fijado.
 Responde a la pregunta \emph{Cual es la p\'erdida media incurrida en el
@@ -758,7 +756,7 @@ aleatoria $Z$ condicionada a $q$.
 sencilla, de la que se puede obtener la distribuci\'on de las p\'erdidas de
 forma expl\'icita. Sea una cartera de $1$ solo sector con $100$ clientes sin
 correlaci\'on alguna entre ellos. Cada cliente tiene un activo que consiste en
-devolver $1$ \euro al cabo de $T$ tiempo. Supongamos que el sistema de ratings
+devolver $1$ \euro~ al cabo de $T$ tiempo. Supongamos que el sistema de ratings
 solamente contempla $2$ categor\'ias crediticias, no-Default y Default. La
 probabilidad de hacer fallido al cabo de 1 a\~no es $0.1$.
 \newline

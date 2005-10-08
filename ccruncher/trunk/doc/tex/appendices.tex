@@ -169,6 +169,7 @@ B(n,p) \approx N\left(n p, n p (1-p)\right)
 %---------------------------------------------------------------------------
 
 \section{La variable aleatoria Normal}
+\label{sec:normal}
 
 \paragraph{Definici\'on.} Decimos que una variable aleatoria continua $Z$ es 
 una \emph{Normal}\index{Normal} con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
@@ -241,8 +242,8 @@ Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
 \frac{1}{N-1} \left( \sum_{i=1}^{N} x_i^2 - \frac{\left(\sum_{i=1}^{N} x_i \right)^2}{N} \right)
 \end{displaymath}
 
-\paragraph{Proposici\'on.} Estimamos el VAR de $X$ al nivel de confianza $\alpha$
-usando el siguiente estimador:
+\paragraph{Proposici\'on.} Estimamos el VAR\index{Value At Risk} de $X$ al nivel de
+confianza $\alpha$ usando el siguiente estimador:
 \begin{displaymath}
 VAR_{\alpha}(X) = \textrm{inf}\{x | F_X(x) \geq \alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:N}
 \end{displaymath}
@@ -253,7 +254,8 @@ donde,
 \item $x_{k:N}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
 \end{itemize}
 
-\paragraph{Proposici\'on.} Estimamos el TCE (Tail Conditional Expectation o Expected Shortfall)
+\paragraph{Proposici\'on.} Estimamos el TCE (Tail Conditional Expectation o Expected
+Shortfall) \index{Tail Conditional Expectation}\index{Expected Shortfall}
 de $X$ al nivel de confianza $\alpha$ usando el siguiente estimador:
 \begin{displaymath}
 TCE_{\alpha}(X) = E(X | X > VAR_{\alpha}(X)) \approx \widehat{TCE_{\alpha}(X)} =
@@ -264,6 +266,8 @@ TCE_{\alpha}(X) = E(X | X > VAR_{\alpha}(X)) \approx \widehat{TCE_{\alpha}(X)} =
 
 \section{Error est\'andar de un quantil (o VaR)}
 \label{apendix:stderrvar}
+\index{Error est\'andar}
+\index{Value At Risk}
 
 A continuaci\'on se describe el m\'etodo de Maritz-Jarrett basado en el
 estad\'istico de orden para calcular el error est\'andar de un quantil.
@@ -294,6 +298,8 @@ entonces,
 
 \section{Error est\'andar del TCE}
 \label{apendix:stderrtce}
+\index{Error est\'andar}
+\index{Tail Conditional Expectation}
 
 El TCE (Tail Conditional Expectation o Expected Shortfall) es la esperanza
 de una variable aleatoria condicionada a que sea superior a un cierto quantil.
@@ -381,11 +387,11 @@ elementos iguales a $0$. Entonces:
 \begin{displaymath}
 A^x = P^{-1} \cdot D^x \cdot P
 \end{displaymath}
-Para calcular la inversa de una matriz se calcula la descomposici\'on $LU$ de
-dicha matriz y se resuelve el sistema $L \cdot U \cdot P^{-1} = Id$ elemento
-a elemento. El m\'etodo $LU$ y la inversa de una matriz usando la descomposici\'on
-$LU$ se encuentra explicada con detalle en el libro \emph{Numerical Recipes in C}
-\footnote{http://www.nr.com}.
+Para calcular la inversa de una matriz se calcula la descomposici\'on
+$LU$\index{Algoritmo LU} de dicha matriz y se resuelve el sistema
+$L \cdot U \cdot P^{-1} = Id$ elemento a elemento. El m\'etodo $LU$ y la inversa de
+una matriz usando la descomposici\'on $LU$ se encuentra explicada con detalle en el
+libro \emph{Numerical Recipes in C}\footnote{http://www.nr.com}.
 
 %---------------------------------------------------------------------------
 
@@ -436,7 +442,9 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \right)
 \end{displaymath}
 
-\paragraph{Paso 3.} Simulamos $n$ variables aleatorias $N(0,1)$ independientes:
+\paragraph{Paso 3.} Simulamos $n$ variables aleatorias $N(0,1)$ independientes
+\footnote{El algoritmo de simulaci\'on de una variable aleatoia Normal(0,1) se
+encuentra explicado en el apartado \ref{sec:normal}}:
 \begin{displaymath}
 \vec{Y} =
 \left(
@@ -507,6 +515,7 @@ donde $\Phi(x)$ es la funci\'on de distribuci\'on de la Normal est\'andar
 
 \section{Descomposici\'on de Cholesky de una matriz en bloques}
 \label{apendix:cholblock}
+\index{Matriz en bloques}
 
 Dada una matriz cuadrada, sim\'etrica y definida positiva, $A$, el algoritmo
 de Cholesky\index{Algoritmo de Cholesky} realiza la siguiente descomposici\'on:

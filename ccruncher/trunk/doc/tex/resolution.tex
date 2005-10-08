@@ -30,53 +30,19 @@
 \chapter{Resoluci\'on}
 \label{sec:resolution}
 
-En este cap\'itulo se introducen los elementos usados para la resoluci\'on y
-se describen dos m\'etodos de resoluci\'on basados en simulaci\'on:
-Time-To-Default y Rating-Path.
+\section{Esquema general}
 
-%---------------------------------------------------------------------------
-
-\section{Variables aleatorias correlacionadas. C\'opulas.}
-
-Se recomienda la lectura de las referencias \cite{copu:wang} y 
-\cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
-c\'opula, sus propiedades, como simularlas, creencias err\'oneas, etc.
-
-\paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
-de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
-marginales \index{Distribuciones marginales} son variables aleatorias $U[0,1]$.
-\begin{displaymath}
-C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
-\end{displaymath}
+El m\'etodo de resoluci\'on implementado por CreditCruncher consiste en
+aplicar el m\'etodo de Monte Carlo. En la figura \ref{fig:esquema1} se
+muestra el esquema de un paso del m\'etodo de Monte Carlo.
 
 \begin{figure}[!hb]
-\begin{minipage}[c]{0.5\columnwidth}%
-  \centering
-  \includegraphics[height=5cm, angle=0]{./images/copula.eps}
-\end{minipage}%
-\hfill{}
-\begin{minipage}[c]{0.5\columnwidth}%
-  \centering
-  \includegraphics[height=5cm, angle=0]{./images/uniform.eps}
-\end{minipage}%
-\caption{Bivariate distribution plot with correlated and uncorrelated variables}
-\label{copulas}
+\begin{center}
+\includegraphics[width=10cm,angle=0]{./images/esquema1.eps}
+\caption{Esquema de la simulaci\'on}
+\label{fig:esquema1}
+\end{center}
 \end{figure}
-
-\paragraph{Teorema.} \index{Teorema de Sklar} Toda variable aleatoria $n$-dimensional
-puede separarse en las distribuciones seguidas por sus componentes (las distribuciones
-marginales) y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y
-$f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
-c\'opula $C$ tq.
-\begin{displaymath}
-F(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
-\end{displaymath}
-
-\paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
-determinada por sus marginales y correlaciones entre estas. Dicho de otra
-forma, existen infinitas formas de combinar las distribuciones marginales
- a trav\'es de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
-el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
 
 %---------------------------------------------------------------------------
 
@@ -139,45 +105,47 @@ con distribuci\'on $W(U)$.
 
 %---------------------------------------------------------------------------
 
-\section{Evaluaci\'on de la cartera}
+\section{Variables aleatorias correlacionadas}
 
-En las definiciones siguientes se considera que $S$ es la curva spot en $t_0$,
-$na_i$ es el n\'umero de activos del cliente $i$ y $nc$ el n\'umero de clientes.
-Asimismo se considera que el casflow y netting de cada activo est\'a fijado y
-no depende de la evoluci\'on del cliente.
+Se recomienda la lectura de las referencias \cite{copu:wang} y 
+\cite{copu:pitfalls}. Se trata de art\'iculos donde se explica que es una 
+c\'opula, sus propiedades, como simularlas, creencias err\'oneas, etc.
 
-\paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$
-evaluado en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
-tiempo $t_w$ como:
-\begin{equation}
-X_{i,j}(t_w;t_0,t_K) = 
-\end{equation}
+\paragraph{Definici\'on.} Llamamos \emph{c\'opula}\index{C\'opula} a la funci\'on
+de distribuci\'on de una variable aleatoria $n$-dimensional tal que sus distribuciones
+marginales \index{Distribuciones marginales} son variables aleatorias $U[0,1]$.
 \begin{displaymath}
-\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{netting}(t_w) \cdot \Upsilon_S(t_w,t_K) + 
-\sum_{t=t_0}^{t_K} \textrm{1}_{[t < t_w]} \cdot \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
+C(u_1, \cdots,u_n)=P(U_1 \leq u_1, \cdots, U_n \leq u_n) \qquad U_k \sim U[0,1]
 \end{displaymath}
 
-\paragraph{Definici\'on.} Definimos el valor de los activos del cliente $i$
-evaluados en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
-tiempo $t_w$ como:
-\begin{equation}
-X_i(t_w;t_0,t_K) = \sum_{j=0}^{na_i} X_{i,j}(t_w;t_0,t_K)
-\end{equation}
+\begin{figure}[!hb]
+\begin{minipage}[c]{0.5\columnwidth}%
+  \centering
+  \includegraphics[height=5cm, angle=0]{./images/copula.eps}
+\end{minipage}%
+\hfill{}
+\begin{minipage}[c]{0.5\columnwidth}%
+  \centering
+  \includegraphics[height=5cm, angle=0]{./images/uniform.eps}
+\end{minipage}%
+\caption{Bivariate distribution plot with correlated and uncorrelated variables}
+\label{copulas}
+\end{figure}
 
-\paragraph{Definici\'on.} Definimos el valor de la cartera evaluada en $t_K$
-entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
-fallido los clientes como:
-\begin{equation}
-X(\vec{t_w};t_0,t_K) = \sum_{i=0}^{nc} X_i(t_w^i;t_0,t_K) =
-\sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_w^i;t_0,t_K)
-\end{equation}
+\paragraph{Teorema.} \index{Teorema de Sklar} Toda variable aleatoria $n$-dimensional
+puede separarse en las distribuciones seguidas por sus componentes (las distribuciones
+marginales) y una c\'opula. Sea $F$ una funci\'on de distribuci\'on $n$-dimensional y
+$f_1,\cdots, f_n$ sus marginales. El teorema de Sklar asegura que existe una 
+c\'opula $C$ tq.
+\begin{displaymath}
+F(x_1, \cdots,x_n) = C(f_1(x_1), \cdots, f_n(x_n)) 
+\end{displaymath}
 
-\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera evaluada en $t_K$
-entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
-fallido los clientes como:
-\begin{equation}
-Z(\vec{t_w};t_0,t_K) = X(\vec{t_\infty};t_0,t_K) - X(\vec{t_w};t_0,t_K)
-\end{equation}
+\paragraph{Observaci\'on.} Una variable aleatoria $n$-dimensional no est\'a 
+determinada por sus marginales y correlaciones entre estas. Dicho de otra
+forma, existen infinitas formas de combinar las distribuciones marginales
+ a trav\'es de c\'opulas de forma que cumplan las correlaciones. Las distribuciones 
+el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on. 
 
 %---------------------------------------------------------------------------
 
@@ -195,6 +163,7 @@ de correlaci\'on entre clientes, $\Theta$
 
 \subsection{M\'etodo Rating-Path}
 \label{res:mrt}
+\index{M\'etodo Rating-Path}
 
 Este m\'etodo simula la evoluci\'on del rating del cliente a lo largo del tiempo.
 El tiempo de fallido se obtiene al alcanzar el rating $Default$. Para este m\'etodo
@@ -248,6 +217,7 @@ t_w^i = inf\{t_k | rating(i,t_k) = Default\}
 
 \subsection{M\'etodo Time-To-Default}
 \label{res:mttd}
+\index{M\'etodo Time-To-Default}
 
 Este m\'etodo consiste en simular directamente el tiempo de fallido de los
 clientes. Requiere disponer de la funci\'on de supervivencia. En caso
@@ -280,6 +250,47 @@ Este paso se encuentra ilustrado en la figura \ref{simttd}.
 \end{center}
 \end{figure}
 
+%---------------------------------------------------------------------------
+
+\section{Evaluaci\'on de la cartera}
+
+En las definiciones siguientes se considera que $S$ es la curva spot en $t_0$,
+$na_i$ es el n\'umero de activos del cliente $i$ y $nc$ el n\'umero de clientes.
+Asimismo se considera que el casflow y netting de cada activo est\'a fijado y
+no depende de la evoluci\'on del cliente.
+
+\paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$
+evaluado en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
+tiempo $t_w$ como:
+\begin{equation}
+X_{i,j}(t_w;t_0,t_K) = 
+\end{equation}
+\begin{displaymath}
+\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{netting}(t_w) \cdot \Upsilon_S(t_w,t_K) + 
+\sum_{t=t_0}^{t_K} \textrm{1}_{[t < t_w]} \cdot \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
+\end{displaymath}
+
+\paragraph{Definici\'on.} Definimos el valor de los activos del cliente $i$
+evaluados en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
+tiempo $t_w$ como:
+\begin{equation}
+X_i(t_w;t_0,t_K) = \sum_{j=0}^{na_i} X_{i,j}(t_w;t_0,t_K)
+\end{equation}
+
+\paragraph{Definici\'on.} Definimos el valor de la cartera evaluada en $t_K$
+entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
+fallido los clientes como:
+\begin{equation}
+X(\vec{t_w};t_0,t_K) = \sum_{i=0}^{nc} X_i(t_w^i;t_0,t_K) =
+\sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_w^i;t_0,t_K)
+\end{equation}
+
+\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera evaluada en $t_K$
+entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
+fallido los clientes como:
+\begin{equation}
+Z(\vec{t_w};t_0,t_K) = X(\vec{t_\infty};t_0,t_K) - X(\vec{t_w};t_0,t_K)
+\end{equation}
 
 %---------------------------------------------------------------------------
 
@@ -288,34 +299,35 @@ Este paso se encuentra ilustrado en la figura \ref{simttd}.
 
 El m\'etodo de Monte Carlo genera $N$ realizaciones, $\{z_1,z_2,z_3,\cdots,z_N\}$,
 de la variable aleatoria $Z$ (p\'erdidas de la cartera) que permiten obtener la
-funci\'on de distribuci\'on emp\'irica. A continuaci\'on se exponen los estimadores
-usados y el intervalo de confianza al nivel de confianza $\alpha$. CreditCruncher
-utiliza el entorno \emph{R} \footnote{http://www.r-project.org} para realizar los
-c\'alculos estad\'isticos. Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
+funci\'on de distribuci\'on emp\'irica. A continuaci\'on se exponen los estad\'isticos
+calculados, sus estimaciones y el intervalo de confianza al nivel de confianza $\alpha$.
+CreditCruncher utiliza el entorno \emph{R} \footnote{http://www.r-project.org} para realizar
+los c\'alculos estad\'isticos. Para mas informaci\'on acerca de \emph{R} v\'ease \cite{stats:R}.
 Sea $\phi^{-1}(x)$ la inversa de la funci\'on de distribuci\'on de la Normal(0,1).
 
-\paragraph{Expected Loss.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
-teorema del l\'imite central.
+\paragraph{Expected Loss.}\index{Expected Loss} F\'ormula extra\'ida de \cite{stats:schaum}
+basada en el teorema del l\'imite central.
 \begin{displaymath}
 \mu_Z = \widehat{\mu_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{N}}
 \end{displaymath}
 Consulte \ref{apendix:estim} para el c\'alculo de $\widehat{\mu_Z}$ y $\widehat{\sigma_Z}$.
 
-\paragraph{Desviaci\'on est\'andar.} F\'ormula extra\'ida de \cite{stats:schaum} basada en el
-teorema del l\'imite central.
+\paragraph{Desviaci\'on est\'andar.}\index{Desviaci\'on Est\'andar} F\'ormula extra\'ida de
+\cite{stats:schaum} basada en el teorema del l\'imite central.
 \begin{displaymath}
 \sigma_Z = \widehat{\sigma_Z} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma_Z}}{\sqrt{2N}}
 \end{displaymath}
 Consulte \ref{apendix:estim} para el c\'alculo de $\widehat{\sigma_Z}$.
 
-\paragraph{Value at Risk.} Fijado un nivel de $VAR = x$
+\paragraph{Value at Risk.}\index{Value At Risk} Fijado un nivel de $VAR = x$
 \begin{displaymath}
 VAR_{x}(Z) = \widehat{q_{x}(Z)} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{x}(Z))
 \end{displaymath}
 Consulte \ref{apendix:estim} y \ref{apendix:stderrvar} para el c\'alculo de
 $\widehat{q_{x}(Z)}$ y $\textrm{stderr}(q_{x}(Z))$.
 
-\paragraph{TCE o Expected Shortfall.} Fijado un nivel de $VAR = x$
+\paragraph{TCE o Expected Shortfall.}\index{Tail Conditional Expectation}\index{Expected Shortfall}
+Fijado un nivel de $VAR = x$
 \begin{displaymath}
 TCE_{x}(Z) = \widehat{TCE_{x}(Z)} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(TCE_{x}(Z))
 \end{displaymath}
