@@ -30,18 +30,23 @@
 \chapter{Implementaci\'on}
 \label{sec:implementation}
 
+El m\'etodo de resoluci\'on expuesto en el cap\'itulo anterior es
+computacionalmente muy costoso. Para reducir el n\'umero de operaciones
+se discretiza el tiempo. Esto fuerza a mapear el netting y el cashflow
+a los nodos de tiempo. El tiempo de fallido de los clientes debe
+simularse mapeado sobre los nodos. La unidad de tiempo es el mes.
+
 
 \section{Paso 1. Interpretaci\'on del fichero de entrada}
 
-El contenido esperado del fichero de entrada se encuentra
-descrito en el documento \emph{CreditCruncher - Input File Reference}
-que se adjunta junto al programa.
+El formato del fichero de entrada se encuentra descrito en el
+documento \emph{CreditCruncher - Input File Reference}.
 \newline
 \newline
-El fichero de entrada puede tener un tama\~no considerable. Por
-este motivo la interpretaci\'on del fichero xml se realiza usando un
-sistema orientado a eventos (tipo SAX). A continuaci\'on se
-describen algunas de las validaciones m\'as importantes:
+El fichero de entrada puede tener un tama\~no considerable (superior
+a los 100 Mb.). Por este motivo la interpretaci\'on del fichero xml se
+realiza usando un sistema orientado a eventos (tipo SAX). A continuaci\'on
+se describen algunas de las validaciones m\'as importantes:
 
 \paragraph{Formato.} Se verifica que se trata de un fichero XML
 v\'alido que cumple la DTD. V\'ease \emph{W3C}\footnote{http://www.w3.org/XML/}
@@ -67,6 +72,7 @@ se verifica que cumple con las propiedades indicadas en
 una funci\'on de supervivencia, se comprueba que se trata de una
 funci\'on positiva mon\'otona decreciente que vale $1$ cuando $t=0$,
 (excepto para el rating $Default$ para la que siempre vale $0$).
+V\'ease las f\'ormulas \ref{prop:survival1} y \ref{prop:survival2}.
 
 \paragraph{Matriz de correlaci\'on.} Se comprueba que se trata de
 una matriz sim\'etrica (por comodidad, puede entrarse solamente
@@ -80,9 +86,9 @@ criterio de parada y que este sea realizable.
 
 \section{Paso 2. Particionamiento del tiempo}
 
-Para realizar el particionamiento del tiempo se necesita la fecha inicial, $t_0$,
+Para realizar la discretizaci\'on del tiempo se necesita la fecha inicial, $t_0$,
 la longitud (en meses naturales) de cada intervalo, $StepLength$, y el n\'umero
-de pasos a considerar, $NumSteps$. Las fechas de la partici\'on son:
+de pasos a considerar, $NumSteps$. Los nodos de tiempo son:
 \begin{displaymath}
 t_i = t_0 + i \cdot StepLength \qquad i \in \{0, 1, 2, \cdots, NumSteps\}
 \end{displaymath}
@@ -113,12 +119,12 @@ d\'ias $29$ y $30$ de dicho mes.
 \section{Paso 3. Inicializaci\'on de los clientes}
 
 Los clientes de la cartera se ordenan en funci\'on de su sector
-y rating de forma creciente en ambos casos. La finalidad de esta
+y rating de forma creciente en ambos casos, La finalidad de esta
 ordenaci\'on es disponer de una matriz de correlaci\'on entre
-clientes en bloques. En el caso que solamente se desee simular
-los clientes activos (aquellos que tienen alg\'un producto activo
-durante el periodo simulado), los clientes inactivos son
-suprimidos.
+clientes en bloques, V\'ease las observaciones del apartado \ref{sec:mcorrel}.
+En el caso que solamente se desee simular los clientes activos (aquellos que
+tienen alg\'un producto activo durante el periodo simulado), los clientes
+inactivos son suprimidos.
 \newline
 \newline
 Supongamos que tenemos 3 sectores, S1, S2 y S3 y un sistema de
@@ -190,8 +196,8 @@ usando las indicaciones de \ref{mtrans:perchange}.
 \begin{displaymath}
 M_{StepLength} = M_{T}^{\frac{StepLength}{T}} = \sqrt[T]{M_{T}^{StepLength}}
 \end{displaymath}
-El algoritmo para calcular la ra\'iz de una matriz a partir de la matriz
-de autovectores y sus autovalores est\'a explicado en el ap\'endice
+El algoritmo para calcular la ra\'iz de una matriz a partir de sus
+autovalores y autovectores est\'a explicado en el ap\'endice
 \ref{apendix:sqrtmat}.
 
 %---------------------------------------------------------------------------
@@ -213,7 +219,7 @@ por \ref{apendix:cholblock}.
 
 \subsection{M\'etodo Rating-Path}
 
-Si el m\'etodo de simulaci\'on es el Rating-Path se construyen
+Si el m\'etodo de simulaci\'on es Rating-Path se construyen
 $NumSteps$ c\'opulas. La primera c\'opula se usar\'a para simular
 los cambios de rating entre $t_0$ y $t_1$, la segunda c\'opula
 para simular los cambios de rating entre $t_1$ y $t_2$, etc.
@@ -234,7 +240,7 @@ forma se garantiza que todas las instancias usan una semilla distinta
 
 \subsection{M\'etodo Time-To-Default}
 
-Si el m\'etodo de simulaci\'on es el Time-To-Default se construye
+Si el m\'etodo de simulaci\'on es Time-To-Default se construye
 1 c\'opula. Se usar\'a para simular el tiempo de fallido.
 \newline
 \newline
@@ -259,10 +265,9 @@ forma se garantiza que todas las instancias usan una semilla distinta
 a una partici\'on de la cartera en grupos de elementos llamados \emph{segmentos}
 \index{Segmento}. Si los elementos son activos, decimos que es una segmentaci\'on
 de activos, si los elementos son clientes, decimos que es una segmentaci\'on de
-clientes. Si los elementos de un segmento o segmentaci\'on son clientes,
-CreditCruncher lo interpreta como los activos de los clientes que componen el
-segmento. Se contempla la opci\'on de los clientes por comodidad en la
-creaci\'on de los segmentos.
+clientes. Si los elementos de una segmentaci\'on son clientes, CreditCruncher lo
+interpreta como los activos de los clientes que componen cada segmento. Se contempla
+la opci\'on de los clientes por comodidad en la creaci\'on de los segmentos.
 
 \paragraph{Observaci\'on.} Dada una segmentaci\'on, la intersecci\'on
 de dos segmentos cualquiera es vacia y la uni\'on de todos los
@@ -296,10 +301,10 @@ u otro tipo de segmentaci\'on (zonas comerciales, tipos de activos, tipos de
 clientes, sectores, etc.).
 \newline
 
-Par cada cliente de cada segmento de cada segmentaci\'on realizamos el
+Para cada cliente de cada segmento de cada segmentaci\'on realizamos el
 mapeo de cashflow y netting de los activos pertenecientes a aquel
 segmento. El objetivo es disponer de un cashflow y netting evaluados en
-$t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente del segmento.
+$t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente de cada segmento.
 
 %---------------------------------------------------------------------------
 
@@ -307,19 +312,20 @@ $t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente del segmento.
 
 \subsubsection{Paso 1}
 
-Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
-Dado un cashflow $(t_j,V)$ lo mapeamos en la estructura
-temporal de la siguiente forma:
+Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
+Dado un cashflow $(t_i,V)$ lo mapeamos en la estructura temporal de la
+siguiente forma:
 
 \begin{enumerate}
-\item Si $t_j < t_0$, entonces $(t_j,V) \longrightarrow (t_0,0)$
-\item Si $t_{i-1} < t_j \leq t_i$, entonces $(t_j,V) \longrightarrow (t_i,V \cdot \Upsilon(t_j,t_i))$
-\item Si $t_k < t_j$, entonces $(t_j,V) \longrightarrow (t_k,0)$
+\item Si $t_i < t_0$, entonces $(t_i,V) \longrightarrow (t_0,0)$
+\item Si $t_{j-1} < t_i \leq t_j$, entonces $(t_i,V) \longrightarrow (t_j,V \cdot \Upsilon_S(t_i,t_j))$
+\item Si $t_{NumSteps} < t_i$, entonces $(t_i,V) \longrightarrow (t_{NumSteps},0)$
 \end{enumerate}
 
-donde $\Upsilon(t_j,t_i)$ es el coeficiente de transporte entre $t_j$ y $t_i$.
-El resultado final es el cashflow evaluado en $t_0, t_1, t_2, \cdots, t_k$.
-Lo denotamos como $V_0, V_1, V_2, \cdots, V_k$.
+donde $\Upsilon_S(t_i,t_j)$ es el coeficiente de transporte entre $t_i$ y $t_j$
+usando la curva spot $S$. El cashflow mapeado a 
+$t_0, t_1, t_2, \cdots, t_{NumSteps}$ lo denotamos como
+$V_0, V_1, V_2, \cdots, V_{NumSteps}$.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -329,7 +335,7 @@ Lo denotamos como $V_0, V_1, V_2, \cdots, V_k$.
 \end{center}
 \end{figure}
 
-Veamos un ejemplo. Consideramos $\Upsilon(t_i,t_j)=1$ para no complicar los c\'alculos.
+Veamos un ejemplo. Consideramos $\Upsilon_S(t_i,t_j)=1$ para no complicar los c\'alculos.
 A la izquierda se representa el cashflow original (sin estar mapeado a los nodos de
 tiempo). A la derecha se encuentra el mismo cashflow mapeado a los nodos de tiempo.
 \newline
@@ -381,9 +387,12 @@ Llamamos a este concepto cashflow acumulado y lo calculamos de la
 forma siguiente:
 
 \begin{displaymath}
-C_k = \sum_{i=1}^{k} V_i \cdot \Upsilon(t_i,t_{NumSteps})
+C_k = \sum_{i=1}^{k} V_i \cdot \Upsilon_S(t_i,t_{NumSteps})
 \end{displaymath}
 
+
+\paragraph{Notaci\'on.} $C_k^i =$ cashflow acumulado del cliente $i$ en el
+nodo de tiempo $k$.
 
 %---------------------------------------------------------------------------
 
@@ -391,20 +400,28 @@ C_k = \sum_{i=1}^{k} V_i \cdot \Upsilon(t_i,t_{NumSteps})
 
 \subsubsection{Paso 1}
 
-Sea $t_0, t_1, t_2, \cdots, t_k$ la partici\'on de tiempo usada.
-Calculamos el netting en un nodo, $t_i$, de la partici\'on de la
+Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
+Calculamos el netting en el nodo, $t_i$, de la partici\'on de la
 siguiente forma:
 
 \begin{enumerate}
 \item Si existe un netting anterior, $(t_a,W_a)$, y otro posterior, $(t_b,W_b)$,
-a $t_i$, entonces el valor del netting en $t_i$ es
-$A + (B-A) \cdot \frac{t_i-t_a}{t_b-t_a}$ donde
-$A=\Upsilon(t_a,t_i) \cdot W_a$ y $B=\Upsilon(t_b,t_i) \cdot W_b$.
+entonces el valor del netting en $t_i$ es:
+\begin{displaymath}
+W_i = A + (B-A) \cdot \frac{t_i-t_a}{t_b-t_a}
+\end{displaymath}
+donde
+$A=\Upsilon_S(t_a,t_i) \cdot W_a$ y $B=\Upsilon_S(t_b,t_i) \cdot W_b$.
 \item Si no existe un netting anterior a $t_i$ entonces el valor del netting
-en $t_i$ es $0$.
+en $t_i$:
+\begin{displaymath}
+W_i = 0
+\end{displaymath}
 \item Si existe un netting entre $t_{i-1}$ y $t_i$, $(t_a,W_a)$, pero no existe un
-netting posterior a $t_i$, entonces el valor del netting en $t_i$ es
-$\frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon(t_a,t_i)$
+netting posterior a $t_i$, entonces el valor del netting en $t_i$ es:
+\begin{displaymath}
+W_i = \frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon_S(t_a,t_i)
+\end{displaymath}
 \end{enumerate}
 
 \begin{figure}[!hb]
@@ -415,7 +432,7 @@ $\frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon(t_a,t_i)$
 \end{center}
 \end{figure}
 
-Veamos un ejemplo. Consideramos $\Upsilon(t_i,t_j)=1$ para no complicar los c\'alculos.
+Veamos un ejemplo. Consideramos $\Upsilon_S(t_i,t_j)=1$ para no complicar los c\'alculos.
 A la izquierda se representa el netting original (sin estar mapeado a los nodos de
 tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
 \newline
@@ -423,7 +440,7 @@ tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
 \begin{minipage}[c]{0.4\columnwidth}%
 \centering
 \begin{tabular}{c|r}
-\textbf{Date} & \textbf{Cashflow} \\
+\textbf{Date} & \textbf{Netting} \\
 \hline
 17/04/2004 & -10.00 \\
            &        \\
@@ -442,7 +459,7 @@ tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
 \begin{minipage}[c]{0.6\columnwidth}%
 \centering
 \begin{tabular}{c|c|c}
-\textbf{$t_i$} & \textbf{Date}  & \textbf{Cashflow} \\
+\textbf{$t_i$} & \textbf{Date}  & \textbf{Netting} \\
 \hline
       &            &      \\
 $t_0$ & 30/10/2004 & $-10.00 + (1+10) \cdot \frac{196}{263} =  -1.8$\\
@@ -467,8 +484,11 @@ Llamamos a este concepto netting acumulado y lo calculamos de la
 forma siguiente:
 
 \begin{displaymath}
-N_k =  V_k \cdot \Upsilon(t_k,t_{NumSteps})
+N_k =  W_k \cdot \Upsilon(t_k,t_{NumSteps})
 \end{displaymath}
+
+\paragraph{Notaci\'on.} $N_k^i =$ netting acumulado del cliente $i$ en el
+nodo de tiempo $k$.
 
 %---------------------------------------------------------------------------
 
@@ -477,14 +497,14 @@ N_k =  V_k \cdot \Upsilon(t_k,t_{NumSteps})
 Cada simulaci\'on consiste en generar n\'umeros aleatorios
 mediante una o varias c\'opulas (dependiendo del m\'etodo de
 simulaci\'on escojido), simular el tiempo de fallido de cada
-cliente (limitando estos a $t_1, t_2, \cdots, t_{NumSteps}$ y
+cliente (mape\'andolos sobre $t_1, t_2, \cdots, t_{NumSteps}$ y
 resto) y evaluar cada segmento de cada segmentaci\'on.
 \newline
 \newline
-Una forma de acelerar la convergencia, implementada en CreditCruncher,
+Una forma de acelerar la convergencia implementada en CreditCruncher,
 es la metodolog\'ia \emph{antithetic}\index{Antithetic}. Esta consiste
 usar cada generaci\'on de n\'umeros aleatorios (computacionalmente
-costosa de generar) 2 veces. Sea $(u_1, u_2, \cdots, u_{NunClients})$
+costosa de generar) 2 veces. Sea $(u_1, u_2, \cdots, u_{NumClients})$
 n\'umeros aleatorios entre $0$ y $1$ generados por la realizaci\'on
 de una c\'opula gaussiana. Entonces la realizaci\'on
 $(1-u_1, 1-u_2, \cdots, 1-u_{NumClients})$ es equiprobable a la anterior.
@@ -493,8 +513,8 @@ $(1-u_1, 1-u_2, \cdots, 1-u_{NumClients})$ es equiprobable a la anterior.
 
 \subsubsection{M\'etodo Rating-Path}
 
-Generamos una realizaci\'on de cada c\'opula, $Q_1, Q_2, \cdots, Q_{NumClient}$.
-Para cada c\'opula seguimos los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
+Generamos una realizaci\'on de cada c\'opula, $Q_1, Q_2, \cdots, Q_{NumClient}$
+usando los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
 \newline
 \newline
 Si se usa metodolog\'ia antithetic, solamente se generan los n\'umeros
@@ -503,8 +523,8 @@ impares son $\vec{1}$ menos los de la simulaci\'on anterior
 
 \subsubsection{M\'etodo Time-To-Default}
 
-Generamos una realizaci\'on de la c\'opula, $Q$.
-Seguimos los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
+Generamos una realizaci\'on de la c\'opula, $Q$ usando los pasos 3-5
+del apartado \ref{apendix:gaussiancopula}.
 \newline
 \newline
 Si se usa metodolog\'ia antithetic, solamente se generan los n\'umeros
@@ -515,7 +535,7 @@ impares son $\vec{1}$ menos los de la simulaci\'on anterior
 
 \subsubsection{M\'etodo Rating-Path}
 
-Sean $Q_1(i), Q_2(i)_2, \cdots, Q_{NumSteps}(i)$ los componentes $i$-esimos
+Sean $Q_1(i), Q_2(i), \cdots, Q_{NumSteps}(i)$ los componentes $i$-esimos
 de las c\'opulas simuladas. El objetivo es simular la evoluci\'on del
 rating del cliente $i$-esimo. Conocemos el rating del cliente $i$
 en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mrt} hasta que
@@ -529,28 +549,28 @@ cliente $i$ en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mttd} teniendo
 en cuenta que el valor retornado por la inversa de la funci\'on de supervivencia
 es un n\'umero con decimales; mapeamos este valor (tiempo de fallido) al
 nodo de tiempo ($t_1, t_2, \cdots, t_{NumSteps}, t_{NumSteps+1}$) mas cercano
-por la derecha. Por ejemplo, si el valor es $3.2$ y los nodos de tiempo son $0$,
-$2$, $4$ y $6$, el valor se mapear\'a a $4$.
+por la derecha. Por ejemplo, si el tiempo de fallido simulado es $3.2$ y los nodos
+de tiempo son $0$, $3$, $6$ y $9$, el valor se mapear\'a a $6$.
 
 \subsection{Valoraci\'on del segmento}
 
 Los pasos anteriores nos proporcionan el tiempo simulado de fallido
-para cada cliente, $w_1, w_2, \cdots, w_{NumClients}$. Obtenemos el
+para cada cliente, $t_w^1, t_w^2, \cdots, t_w^{NumClients}$. Obtenemos el
 valor de cada segmento de la siguiente forma:
 \begin{displaymath}
 X_j = \sum_{i \in \Omega_j} \left\{
-\begin{array}{lll}
-C_{NumSteps}^i            & \qquad & \textrm{if } w_i > t_{NumSteps}    \cr
-C_{w_{i-1}}^i + N_{w_i}^i & \qquad & \textrm{if } w_i \leq t_{NumSteps} \cr
+\begin{array}{ll}
+C_{NumSteps}^i              & \quad \textrm{if } t_w^i > t_{NumSteps}    \cr
+C_{t_w^i-1}^i + N_{t_w^i}^i & \quad \textrm{if } t_w^i \leq t_{NumSteps} \cr
 \end{array}
 \right\}
 \end{displaymath}
 
 \begin{displaymath}
 Z_j = \sum_{i \in \Omega_j} \left\{
-\begin{array}{lll}
-0                                          & \qquad & \textrm{if } w_i > t_{NumSteps}    \cr
-C_{NumSteps}^i - C_{w_{i-1}}^i - N_{w_i}^i & \qquad & \textrm{if } w_i \leq t_{NumSteps} \cr
+\begin{array}{ll}
+0                                          & \quad \textrm{if } w_i > t_{NumSteps}    \cr
+C_{NumSteps}^i - C_{t_w^i-1}^i - N_{w_i}^i & \quad \textrm{if } w_i \leq t_{NumSteps} \cr
 \end{array}
 \right\}
 \end{displaymath}
@@ -564,8 +584,16 @@ y el netting acumulado en tiempo $k$ del cliente $i$ para el segmento $j$.
 \section{Paso 8. Valoraci\'on del riesgo}
 
 Despu\'es de realizar $N$ simulaciones se dispone de $N$ valores para cada
-segmento. Solo trataremos el caso en que los valores simulados son p\'erdidas.
-Disponemos de $z_1, z_2, \cdots, z_N$. Fijado un nivel de confianza $\alpha$
-y un nivel de VAR de $x$, usamos las indicaciones de \ref{res:risk} para calcular
-el Expected Loss, la Desviaci\'on Est\'andar, el VAR y el TCE y sus correspondientes
-errores estándares.
+segmento. Para valorar el riesgo necesitamos que los valores simulados sean
+las p\'erdidas de la cartera (Z). Disponemos de $z_1, z_2, \cdots, z_N$. Fijado un
+nivel de confianza $\alpha$ y un nivel de VAR de $x$, usamos las indicaciones de
+\ref{res:risk} para calcular el Expected Loss, la Desviaci\'on Est\'andar, el VAR y
+el TCE y sus correspondientes errores est\'andares.
+
+\begin{figure}[!hb]
+\begin{center}
+\includegraphics[width=12cm,angle=0]{./images/report.eps}
+\caption{Evoluci\'on de los estad\'isticos de riesgo}
+\label{timetranches}
+\end{center}
+\end{figure}

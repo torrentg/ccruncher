@@ -579,9 +579,15 @@ lim_{t \to \infty} CFDR(r_i, t) =  1 \quad \forall i
 \end{equation}
 
 \paragraph{Proposici\'on.} Fijado un rating, $r_i$, la funci\'on de 
-supervivencia es mon\'otona decreciente.
+supervivencia es mon\'otona decreciente. Si el rating es $Default$,
+el valor de la funci\'on de supervivencia es siempre $0$.
 \begin{equation}
-Survival(r_i, t_i) \ge Survival(r_i, t_j) \quad \forall t_i < t_j
+\label{prop:survival1}
+Survival(r_i, t_j) \ge Survival(r_i, t_k) \quad \forall t_j < t_k
+\end{equation}
+\begin{equation}
+\label{prop:survival2}
+Survival(Default, t) = 0 \quad \forall t
 \end{equation}
 
 \paragraph{Ejemplo.} En las figuras \ref{cfdr}, \ref{fdr} y \ref{survival}
