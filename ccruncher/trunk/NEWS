@@ -4,6 +4,7 @@ CREDITCRUNCHER NEWS
 
 version 0.7 (October 2005)
 --------------------------
+  * technical document completed
   * creditcruncher tag replaced by ccruncher tag
   * removed stdout date list
   * portfolio value at t=T (not t=0 as previous versions)
