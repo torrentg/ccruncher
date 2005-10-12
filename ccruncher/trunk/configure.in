@@ -74,8 +74,8 @@ AC_TYPE_SIZE_T
 
 dnl -------------------------------------------------------------
 dnl setting debug/optimization options
-dnl   optimized mode => -O2 (default)
-dnl   debug mode => -g
+dnl   optimized mode => -O3
+dnl   debug mode => -g -Wall -Wextra -Wshadow
 dnl -------------------------------------------------------------
 AC_ARG_ENABLE(debug, 
   [  --enable-debug    Turn on debugging (default=no)],
@@ -87,9 +87,9 @@ AC_ARG_ENABLE(debug,
   [debug=false])
 
 if test x$debug = xtrue ; then
-  CXXFLAGS="-g"
+  CXXFLAGS="-g -Wall -Wextra -Wshadow"
 else
-  CXXFLAGS="-O2"
+  CXXFLAGS="-O3"
   AC_DEFINE([NDEBUG], 1, [Assertions are disabled when this is defined.])
 fi
 

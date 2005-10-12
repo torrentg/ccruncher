@@ -10,9 +10,12 @@ SUBDIRS = src
 
 EXTRA_DIST = bin share samples data doc
 
-# docdir = $(datadir)/$(distdir)/doc
-# samplesdir = $(datadir)/$(distdir)/samples
-# scriptsdir = $(datadir)/$(distdir)/scripts
+docdir = $(datadir)/$(distdir)/doc
+samplesdir = $(datadir)/$(distdir)/samples
+
+doc_DATA = doc
+samples_DATA = samples
+bin_SCRIPTS = bin/report bin/report.R
 
 install-hook:
 	echo "setting executable flag to scripts ..."

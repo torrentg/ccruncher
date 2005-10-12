@@ -17,6 +17,10 @@
 #   . added oblivion directory management
 #   . 'svn checkout' replaced by 'svn export'
 #
+# 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . moved $CCRUNCHER/ doc files to doc $CCRUNCHER/directory
+#   . changed argument flag -l by -b (binary distribution)
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -44,7 +48,7 @@ usage() {
     used by developers.
   options
     -s       make source package (default)
-    -l       make binary linux package
+    -b       make binary linux package
     -w       make binary windows package
     -d       directory where resides exe files (only win dist)
     -h       show this message and exit
@@ -53,8 +57,8 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname -s
-    $progname -l
-    $progname -w -d /compiled/windows/project/path
+    $progname -b
+    $progname -w -d /c:/temp/ccruncher/bin
 
 _EOF_
 
@@ -82,11 +86,11 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'slwhd:' opt
+  while getopts 'sbwhd:' opt
   do
     case $opt in
       s) disttype="src";;
-      l) disttype="bin";;
+      b) disttype="bin";;
       w) disttype="win";;
       d) pathexes=$OPTARG;;
       h) usage; 
@@ -272,11 +276,11 @@ makeWinDist() {
   rm -rvf oblivion;
 
   #setting windows end-line
-  unix2dos AUTHORS;
-  unix2dos README;
-  unix2dos TODO;
-  unix2dos COPYING;
-  unix2dos NEWS;
+  unix2dos doc/AUTHORS;
+  unix2dos doc/README;
+  unix2dos doc/TODO;
+  unix2dos doc/COPYING;
+  unix2dos doc/NEWS;
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
