@@ -20,6 +20,7 @@
 # 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . moved $CCRUNCHER/ doc files to doc $CCRUNCHER/directory
 #   . changed argument flag -l by -b (binary distribution)
+#   . added file data/readme.txt
 #
 #=============================================================
 
@@ -222,9 +223,9 @@ makeBinDist() {
   rm aclocal.m4;
   rm -rvf autom4te.cache;
   rm config*;
-  rm Makefile*;
   rm depcomp install-sh missing;
   rm INSTALL;
+  rm Makefile*;
   rm -rvf src;
   rm -rvf share;
   rm -rvf oblivion;
@@ -268,9 +269,9 @@ makeWinDist() {
   rm aclocal.m4;
   rm -rvf autom4te.cache;
   rm config*;
-  rm Makefile*;
   rm depcomp install-sh missing;
   rm INSTALL;
+  rm Makefile*;
   rm -rvf src;
   rm -rvf share;
   rm -rvf oblivion;
@@ -287,6 +288,7 @@ makeWinDist() {
   unix2dos samples/readme.txt;
   unix2dos doc/html/*.html;
   unix2dos doc/html/*.css;
+  unix2dos data/readme.txt;
 
   #creating tarball
   cd /tmp/;

@@ -8,14 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = src
 
-EXTRA_DIST = bin share samples data doc
-
-docdir = $(datadir)/$(distdir)/doc
-samplesdir = $(datadir)/$(distdir)/samples
-
-doc_DATA = doc
-samples_DATA = samples
-bin_SCRIPTS = bin/report bin/report.R
+EXTRA_DIST = bin share data doc samples
 
 install-hook:
 	echo "setting executable flag to scripts ..."

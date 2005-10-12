@@ -31,6 +31,9 @@
 #   . removed unused options
 #   . CCRUNCHER var filled with dirname
 #
+# 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . shows a message when no files found (and return KO)
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -130,6 +133,10 @@ readconf() {
         exit 1;
       fi
     done
+  else
+    echo "file not specified";
+    echo "use -h option for more information";
+    exit 1;
   fi
 
   which R > /dev/null 2> /dev/null
