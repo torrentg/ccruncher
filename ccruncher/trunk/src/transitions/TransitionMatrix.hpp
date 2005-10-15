@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// TransitionMatrix.hpp - TransitionMatrix header
+// TransitionMatrix.hpp - TransitionMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -35,6 +35,9 @@
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// TimerTest.cpp - TimerTest code
+// TimerTest.cpp - TimerTest code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -30,6 +30,9 @@
 //
 // 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

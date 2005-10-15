@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatParser.hpp - ExpatParser header
+// ExpatParser.hpp - ExpatParser header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -30,6 +30,9 @@
 //
 // 2005/08/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed XMLCALL's
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

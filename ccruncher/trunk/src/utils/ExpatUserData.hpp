@@ -19,11 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatUserData.hpp - ExpatUserData header
+// ExpatUserData.hpp - ExpatUserData header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

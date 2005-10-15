@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// IDataTest.cpp - IDataTest code
+// IDataTest.cpp - IDataTest code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -56,6 +56,9 @@
 //
 // 2005/09/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . creditcruncher tag replaced by ccruncher tag
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

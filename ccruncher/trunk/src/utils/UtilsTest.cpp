@@ -19,11 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// UtilsTest.cpp - UtilsTest code
+// UtilsTest.cpp - UtilsTest code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

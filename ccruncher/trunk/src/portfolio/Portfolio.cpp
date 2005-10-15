@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Portfolio.cpp - Portfolio code
+// Portfolio.cpp - Portfolio code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -36,6 +36,9 @@
 //
 // 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added onlyactive argument to sortClients() method
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

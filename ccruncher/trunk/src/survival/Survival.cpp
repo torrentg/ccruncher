@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Survival.cpp - Survival code
+// Survival.cpp - Survival code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -40,6 +40,9 @@
 //
 // 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getMinCommonTime() method
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

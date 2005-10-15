@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segmentation.cpp - Segmentation code
+// Segmentation.cpp - Segmentation code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -33,6 +33,9 @@
 //
 // 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method getNumSegments
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

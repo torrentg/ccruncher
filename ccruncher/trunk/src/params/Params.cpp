@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Params.cpp - Params code
+// Params.cpp - Params code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -56,6 +56,9 @@
 //
 // 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed default maxiteration and maxseconds values 0 to -1
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

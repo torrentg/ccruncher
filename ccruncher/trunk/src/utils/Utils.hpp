@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Utils.hpp - Utils header
+// Utils.hpp - Utils header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -35,6 +35,9 @@
 // 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
 //   . added rankid static variable (to avoid rank reorder when exits a proces)
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatHandlers.hpp - ExpatHandlers header
+// ExpatHandlers.hpp - ExpatHandlers header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -27,6 +27,9 @@
 //
 // 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method epstop(), stops current parsing
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Timer.cpp - Timer code
+// Timer.cpp - Timer code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -33,7 +33,10 @@
 //   . running_ variable changed from int to boolean
 //
 // 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
-//   . changed clock() function by gettimeofday() function
+//   . replced clock() function by gettimeofday() function
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

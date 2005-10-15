@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Montecarlo.hpp - MonteCarlo header
+// Montecarlo.hpp - MonteCarlo header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -47,6 +47,9 @@
 //
 // 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

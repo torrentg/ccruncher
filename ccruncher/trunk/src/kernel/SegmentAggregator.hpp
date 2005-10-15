@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// SegmentAggregator.hpp - SegmentAggregator header
+// SegmentAggregator.hpp - SegmentAggregator header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -34,6 +34,9 @@
 //
 // 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

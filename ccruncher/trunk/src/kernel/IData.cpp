@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// IData.cpp - IData code
+// IData.cpp - IData code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -50,6 +50,9 @@
 //
 // 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . thread-safe modification (variable hasmaintag)
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

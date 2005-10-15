@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Exception.cpp - Exception code
+// Exception.cpp - Exception code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -27,6 +27,9 @@
 //
 // 2005/06/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getStackTrace() method (link with -rdynamic flag)
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
