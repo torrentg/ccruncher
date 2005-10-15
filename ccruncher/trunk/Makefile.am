@@ -6,7 +6,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = src
+SUBDIRS = build
 
 EXTRA_DIST = bin share data doc samples
 
