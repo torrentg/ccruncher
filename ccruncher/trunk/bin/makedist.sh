@@ -25,6 +25,7 @@
 # 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added support for build/ directory
 #   . removed unused checkVersion() function
+#   . check that a distribution option is filled (xxx)
 #
 #=============================================================
 
@@ -34,7 +35,7 @@
 progname=makedist.sh
 numversion="0.7"
 svnversion="R308"
-disttype="src"
+disttype="xxx"
 PACKAGE="ccruncher"
 pathexes=""
 retcode=0
@@ -107,8 +108,6 @@ readconf() {
          exit 1;;
     esac
   done
-
-  #TODO: check that if win -> pathexes is full
 
   shift `expr $OPTIND - 1`
 
@@ -295,13 +294,17 @@ makeWinDist() {
 readconf $@;
 shift `expr $OPTIND - 1`
 
-copyright;
-
 case $disttype in
 
-  'src') makeSrcDist;;
-  'bin') makeBinDist;;
-  'win') makeWinDist;;
+  'src') copyright;
+         makeSrcDist;;
+  'bin') copyright;
+         makeBinDist;;
+  'win') copyright;
+         makeWinDist;;
+  'xxx') echo "please, specify the distribution type";
+         echo "use -h option for more information";
+         exit 1;;
       *) echo "unexpected error. Please report this bug sending";
          echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
