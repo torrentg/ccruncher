@@ -133,7 +133,8 @@ ccruncher_SOURCES = \
     ../src/utils/ExpatUserData.hpp\
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
-    ../src/utils/Format.hpp
+    ../src/utils/Format.hpp\
+    ../src/utils/config.h
 
 ccruncher_CXXFLAGS =
 ccruncher_LDADD =
@@ -287,7 +288,8 @@ tests_SOURCES = \
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/segmentations/Segment.hpp\
-    ../src/survival/Survival.hpp
+    ../src/survival/Survival.hpp\
+    ../src/utils/config.h
 
 tests_CXXFLAGS =
 tests_LDADD =
