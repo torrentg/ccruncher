@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #
-# report.R - report script for R (http://www.r-project.org)
+# report.R - report script for R (http://www.r-project.org) - $Rev$
 # --------------------------------------------------------------------------
 #
 # 2005/08/30 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -32,6 +32,9 @@
 #
 # 2005/09/06 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . removed portfolio value support
+#
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added Rev svn:keyword
 #
 #***************************************************************************
 

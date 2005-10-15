@@ -5,6 +5,9 @@
 #   Use this script to compute the VaR from a ccruncher
 #   output file
 #
+# repository version:
+#   $Rev$
+#
 # dependences:
 #   shell, R
 #
@@ -33,6 +36,9 @@
 #
 # 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . shows a message when no files found (and return KO)
+#
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added Rev svn:keyword
 #
 #=============================================================
 

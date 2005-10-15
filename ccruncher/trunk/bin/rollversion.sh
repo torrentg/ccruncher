@@ -5,6 +5,12 @@
 #   Use this script to roll creditcruncher versions numbers
 #   Caution: this is a tool for developers
 #
+# repository version:
+#   $Rev$
+#
+# dependences:
+#   shell, svnversion
+#
 # retcodes:
 #   0    : OK
 #   other: KO
@@ -25,6 +31,10 @@
 #
 # 2005/09/27 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . changed CCRUNCHERPATH asignation
+#
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added Rev svn:keyword
+#   . added dependences paragraph at comments
 #
 #=============================================================
 

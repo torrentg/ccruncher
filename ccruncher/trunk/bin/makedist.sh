@@ -4,6 +4,12 @@
 # description: 
 #   Create a CreditCruncher distribution package
 #
+# repository version:
+#   $Rev$
+#
+# dependences:
+#   shell, tar, gzip, zip, svn, auto-tools, unix2dos
+#
 # retcodes:
 #   0    : OK
 #   other: KO
@@ -26,6 +32,8 @@
 #   . added support for build/ directory
 #   . removed unused checkVersion() function
 #   . check that a distribution option is filled (xxx)
+#   . added Rev svn:keyword
+#   . added dependences paragraph at comments
 #
 #=============================================================
 
