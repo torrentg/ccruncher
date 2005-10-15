@@ -1,4 +1,5 @@
 
+/* LastChangedRevision=$LastChangedRevision$ */
 #include <iostream>
 
 using namespace std;
