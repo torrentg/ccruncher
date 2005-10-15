@@ -1,3 +1,4 @@
+
 #***************************************************************************
 #
 # CreditCruncher - A portfolio credit risk valorator
@@ -18,11 +19,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #
-# makefile - a simple makefile to create pdf doc
+# makefile - a simple makefile to create pdf doc - $Rev$
 # --------------------------------------------------------------------------
 #
 # 2005/09/01 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
+#
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added Rev (aka LastChangedRevision) svn tag
 #
 #***************************************************************************
 
