@@ -1,5 +1,5 @@
 /*-------------------------------------------*/
-/* LastChangedRevision=$LastChangedRevision$ */
+/* LastChangedRevision=$Revision$ */
 /*-------------------------------------------*/
 #include <iostream>
 
