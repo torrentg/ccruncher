@@ -22,6 +22,10 @@
 #   . changed argument flag -l by -b (binary distribution)
 #   . added file data/readme.txt
 #
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . added support for build/ directory
+#   . removed unused checkVersion() function
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -131,21 +135,6 @@ checkout() {
 }
 
 # -------------------------------------------------------------
-# check version numbers
-# -------------------------------------------------------------
-checkVersion() {
-
-  aux=R$(svnversion $1);
-
-  if [ "$aux" != "$svnversion" ]; then
-    echo "conflict with version numbers";
-    echo "run rollversion.sh + svn commit and try again";
-    exit 1;
-  fi
-
-}
-
-# -------------------------------------------------------------
 # remove developers files
 # -------------------------------------------------------------
 rmDevFiles() {
@@ -173,7 +162,6 @@ makeSrcDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-#  checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -205,7 +193,6 @@ makeBinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-  #checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -227,6 +214,7 @@ makeBinDist() {
   rm INSTALL;
   rm Makefile*;
   rm -rvf src;
+  rm -rvf build;
   rm -rvf share;
   rm -rvf oblivion;
 
@@ -253,7 +241,6 @@ makeWinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-  #checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -273,6 +260,7 @@ makeWinDist() {
   rm INSTALL;
   rm Makefile*;
   rm -rvf src;
+  rm -rvf build;
   rm -rvf share;
   rm -rvf oblivion;
 

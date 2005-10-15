@@ -2,6 +2,12 @@
 CREDITCRUNCHER NEWS
 ===================
 
+
+version 0.8 (Nov. 2005)
+--------------------------
+  * root docs moved to docs directory
+  * added build directory in src dist
+
 version 0.7 (October 2005)
 --------------------------
   * technical document completed
