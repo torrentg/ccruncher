@@ -86,6 +86,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed some method signatures
+//
 //===========================================================================
 
 #include <cfloat>
@@ -258,15 +261,15 @@ void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
     initTimeToDefault(idata);
   }
   else {
-    // initialize survival function (time-to-default method)
+    // initializing survival function (time-to-default method)
     initRatingPath(idata);
   }
 
   // initializing copulas
-  copulas = initCopulas(idata, N, numcopulas, idata->params->copula_seed);
+  initCopulas(idata, idata->params->copula_seed);
 
   // ratings paths allocation
-  ittd = initTimeToDefaultArray(N);
+  initTimeToDefaultArray(N);
 
   // initializing aggregators
   initAggregators(idata);
@@ -420,6 +423,9 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
 {
+  // doing assertions
+  assert(mtrans == NULL);
+
   // setting logger header
   Logger::trace("setting transition matrix", '-');
   Logger::newIndentLevel();
@@ -442,6 +448,9 @@ void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
 {
+  // doing assertions
+  assert(survival == NULL);
+
   // setting logger header
   Logger::trace("setting survival function", '-');
   Logger::newIndentLevel();
@@ -490,18 +499,20 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
 //===========================================================================
 // copula construction
 //===========================================================================
-BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, long n, int k, long seed) throw(Exception)
+void ccruncher::MonteCarlo::initCopulas(const IData *idata, long seed) throw(Exception)
 {
   int *tmp = NULL;
-  BlockGaussianCopula **ret = NULL;
+
+  // doing assertions
+  assert(copulas == NULL);
 
   // setting logger header
   Logger::trace("initializing copulas", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("copula dimension", Format::long2string(n));
-  Logger::trace("number of copulas", Format::int2string(k));
+  Logger::trace("copula dimension", Format::long2string(N));
+  Logger::trace("number of copulas", Format::int2string(numcopulas));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
   Logger::trace("elapsed time initializing copula", true);
 
@@ -511,26 +522,26 @@ BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, lon
     tmp = Arrays<int>::allocVector(idata->correlations->size(),0);
 
     // computing the number of clients in each sector
-    for(long i=0;i<n;i++)
+    for(long i=0;i<N;i++)
     {
       tmp[(*clients)[i]->isector]++;
     }
 
     // allocating return object array
-    ret = new BlockGaussianCopula*[k];
-    for (int i=0;i<k;i++) ret[i] = NULL;
+    copulas = new BlockGaussianCopula*[numcopulas];
+    for (int i=0;i<numcopulas;i++) copulas[i] = NULL;
 
     // creating the copula object
-    ret[0] = new BlockGaussianCopula(idata->correlations->getMatrix(), tmp, idata->correlations->size());
+    copulas[0] = new BlockGaussianCopula(idata->correlations->getMatrix(), tmp, idata->correlations->size());
 
     // releasing temporal memory
     Arrays<int>::deallocVector(tmp);
     tmp = NULL;
 
     // creating a replica for each time tranch (only if method = rating-path)
-    for(int i=1;i<k;i++)
+    for(int i=1;i<numcopulas;i++)
     {
-      ret[i] = new BlockGaussianCopula(*(ret[0]));
+      copulas[i] = new BlockGaussianCopula(*(copulas[0]));
     }
   }
   catch(std::exception &e)
@@ -541,15 +552,7 @@ BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, lon
       tmp = NULL;
     }
 
-    if (ret != NULL)
-    {
-      for (int i=0;i<k;i++)
-      {
-        if (ret[i] != NULL) delete ret[i];
-        ret[i] = NULL;
-      }
-      delete [] ret;
-    }
+    // copulas deallocated by release method
     throw Exception(e, "MonteCarlo::initCopulas()");
   }
 
@@ -569,27 +572,27 @@ BlockGaussianCopula** ccruncher::MonteCarlo::initCopulas(const IData *idata, lon
   }
 
   // seeding random number generators
-  for(int i=0;i<k;i++)
+  for(int i=0;i<numcopulas;i++)
   {
 #ifdef USE_MPI
     // caution: cluster limited to 30000 nodes ;)
-    ret[i]->setSeed(seed+30001L*MPI::COMM_WORLD.Get_rank()+(long)i);
+    copulas[i]->setSeed(seed+30001L*MPI::COMM_WORLD.Get_rank()+(long)i);
 #else
-    ret[i]->setSeed(seed+(long)i);
+    copulas[i]->setSeed(seed+(long)i);
 #endif
   }
 
   // exit function
   Logger::previousIndentLevel();
-  return ret;
 }
 
 //===========================================================================
 // initTimeToDefaultArray
 //===========================================================================
-int* ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
+void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 {
-  int *ret = NULL;
+  // doing assertions
+  assert(ittd == NULL);
 
   // setting logger header
   Logger::trace("initializing time-to-default workspace", '-');
@@ -599,11 +602,10 @@ int* ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   Logger::trace("workspace dimension (= number of clients)", Format::long2string(n));
 
   // allocating space
-  ret = Arrays<int>::allocVector(n);
+  ittd = Arrays<int>::allocVector(n);
 
   // exit function
   Logger::previousIndentLevel();
-  return ret;
 }
 
 //===========================================================================
@@ -737,7 +739,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 
       // portfolio evaluation
       timer3.resume();
-      aux = evalueAggregators();
+      aux = evalue();
       timer3.stop();
 
       // counter increment
@@ -1045,7 +1047,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
 // return true=all ok, continue
 // return false=stop montecarlo, someone order you (the master)
 //===========================================================================
-bool ccruncher::MonteCarlo::evalueAggregators() throw(Exception)
+bool ccruncher::MonteCarlo::evalue() throw(Exception)
 {
   bool ret=true;
 

@@ -51,6 +51,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed some method signatures
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -134,10 +137,12 @@ class MonteCarlo
     /* force file overwriting flag */
     bool bforce;
 
+    // internal methods
     void reset();
     void alloc(int) throw(Exception);
     void release();
-    double ** allocMatrix(int n) throw(Exception);
+
+    // init methods
     void init(IData *) throw(Exception);
     void initParams(const IData *) throw(Exception);
     void initClients(const IData *, Date *, int) throw(Exception);
@@ -145,12 +150,14 @@ class MonteCarlo
     void initSectors(const IData *) throw(Exception);
     void initRatingPath(const IData *) throw(Exception);
     void initTimeToDefault(IData *) throw(Exception);
-    BlockGaussianCopula** initCopulas(const IData *idata, long, int, long) throw(Exception);
-    int* initTimeToDefaultArray(int) throw(Exception);
+    void initCopulas(const IData *idata, long) throw(Exception);
+    void initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData *) throw(Exception);
-    bool evalueAggregators() throw(Exception);
+
+    // Monte Carlo methods
     void randomize();
     void simulate();
+    bool evalue() throw(Exception);
     int simRatingPath(int iclient);
     int simTimeToDefault(int iclient);
     double getRandom(int itime, int iclient);

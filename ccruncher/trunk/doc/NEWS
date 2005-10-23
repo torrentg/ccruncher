@@ -5,8 +5,9 @@ CREDITCRUNCHER NEWS
 
 version 0.8 (Nov. 2005)
 --------------------------
-  * root docs moved to docs directory
+  * root docs moved to doc/ directory
   * added build directory in src dist
+  * added LastChangedRevision to code files
 
 version 0.7 (October 2005)
 --------------------------
