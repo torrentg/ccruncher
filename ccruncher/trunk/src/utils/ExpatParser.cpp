@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/10/28 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added expat legacy code support (thanks Stephen Ronderos)
+//
 //===========================================================================
 
 #include <cstring>
@@ -52,6 +55,12 @@
 // --------------------------------------------------------------------------
 
 #define BUFSIZE 32768
+
+// expat versions previous to 1.95.x don't have defined these macros
+#ifndef XML_STATUS_OK
+#define XML_STATUS_OK    1
+#define XML_STATUS_ERROR 0
+#endif
 
 //===========================================================================
 // constructor
