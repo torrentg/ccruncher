@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CreditCruncher - Installation Instructions</title>
+    <title>CreditCruncher - Download</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <!-- repository version = $Rev$ -->
@@ -11,14 +11,14 @@
 
   <body>
 
-    <h1>CreditCruncher - Installation Instructions</h1>
+    <h1>CreditCruncher - Download</h1>
 
-    <h3>System Requeriments</h3>
+    <h2>System Requeriments</h2>
     <p>
-      List of environments where is expected that a CreditCruncher 
-      installation works without problems:
+      Environments where is expected that a CreditCruncher installation works
+      without problems:
     </p>
-    <table>
+    <table cellpadding="3px">
       <tr class="a">
         <td><b>System</b></td>
         <td><b>flavour</b></td>
@@ -113,7 +113,7 @@
       report it, explaining problems found, modifications realized, etc.
     </p>
 
-    <h3>Download</h3>
+    <h2>Download</h2>
 
     <p>
       Select a distribution and download it.
@@ -136,21 +136,21 @@
       <b><a href="http://www.generacio.com/svn/repos/ccruncher/trunk/">Repository</a></b>. 
       You can obtain last version from repository. You need a subversion client
       that you can download from <a href="http://subversion.tigris.org">subversion.tigris.org</a>.
-      This option is risky since current repository version can be unstable.<br />
-      <code style="text-align:left;"><b>
-        &nbsp;&nbsp;svn checkout http://www.generacio.com/svn/repos/ccruncher/trunk/ <br />
-      </b></code>
+      This option is risky since current repository version can be unstable. Type
+      <code>svn checkout http://www.generacio.com/svn/repos/ccruncher/trunk/</code> to
+      download the code from repository.
     </p>
 
-    <h3>Installation</h3>
+    <h2>Installation</h2>
 
     <p>
       <b>Step 1.</b> If you have select a packed distribution, unpack it.<br />
-      <code><b>
-        &nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz <br />
-        &nbsp;&nbsp;cd ccruncher-X.Y
-      </b></code>
     </p>
+    <pre>
+
+        &nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
+        &nbsp;&nbsp;cd ccruncher-X.Y
+    </pre>
 
     <p>
       <b>Step 2.</b> CreditCruncher use a library named <a href="http://expat.sourceforge.net/">expat</a>.
@@ -179,21 +179,26 @@
     </p>
 
     <p>
-      <b>Step 5.</b> If you have a source distribution, run next commands: <br />
-      <code><b>
-        &nbsp;&nbsp;./configure --prefix=$PWD <br />
-        &nbsp;&nbsp;make <br />
-        &nbsp;&nbsp;make install <br />
-      </b></code>
-      If you want create a MPI version (to run ccruncher in a cluster) type: <br />
-      <code><b>
-        &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi<br />
-        &nbsp;&nbsp;make <br />
-        &nbsp;&nbsp;make install <br />
-      </b></code>
+      <b>Step 5.</b> If you have a source distribution, run next commands (pay attention to $PWD):
     </p>
+    <pre>
 
-    <h3>Usage</h3>
+        &nbsp;&nbsp;./configure --prefix=$PWD
+        &nbsp;&nbsp;make
+        &nbsp;&nbsp;make install
+    </pre>
+
+    <p>
+      If you want create a MPI version (to run ccruncher in a cluster) type:
+    </p>
+    <pre>
+
+        &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
+        &nbsp;&nbsp;make
+        &nbsp;&nbsp;make install
+    </pre>
+
+    <h2>Usage</h2>
 
     <p>
       <b>Step 1.</b> Create a XML CreditCruncher input file. First, read 
@@ -205,42 +210,48 @@
     </p>
 
     <p>
-      <b>Step 2.</b> Run ccruncher<br />
-      <code><b>
-        &nbsp;&nbsp;bin/ccruncher --help <br />
-        &nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=./data file.xml <br />
-      </b></code>
+      <b>Step 2.</b> Run ccruncher
     </p>
+    <pre>
+
+        &nbsp;&nbsp;bin/ccruncher --help
+        &nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=./data file.xml
+    </pre>
 
     <p>
       <b>Step 3.</b> Check generated output (plain text files). First field is
-      the simulation counter, second field is the simulated segment value.<br />
-      <code><b>
-        &nbsp;&nbsp;ls -l data/* <br />
-        &nbsp;&nbsp;more data/segmentation-segment.out <br />
-      </b></code>
+      the simulation counter, second field is the simulated segment value.
     </p>
+    <pre>
+
+        &nbsp;&nbsp;ls -l data/*
+        &nbsp;&nbsp;more data/segmentation-segment.out
+    </pre>
 
     <p>
-      <b>Step 4.</b> Compute the Value at Risk<br />
-      <code><b>
-        &nbsp;&nbsp;bin/report data/segmentation-segment.out <br />
-      </b></code>
-      or open a <a href="http://www.r-project.org">R</a> console and type: <br />
-      <code><b>
-        &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R") <br />
-        &nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99) <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") <br />
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all") <br />
-        &nbsp;&nbsp;>&nbsp;quit(save='no') <br />
-      </b></code>
+      <b>Step 4.</b> Compute the Value at Risk
     </p>
+    <pre>
+
+        &nbsp;&nbsp;bin/report data/segmentation-segment.out
+    </pre>
+    <p>
+      or open a <a href="http://www.r-project.org">R</a> console and type:
+    </p>
+    <pre>
+
+        &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R")
+        &nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out")
+        &nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99)
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE")
+        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+        &nbsp;&nbsp;>&nbsp;quit(save='no')
+    </pre>
 
     <div style="height:75px"></div>
 
@@ -261,7 +272,7 @@
           </a>
         </td>
         <td class="footer" align="right">
-          Last modified: 15-Oct-2005 &nbsp;
+          Last modified: 04-Nov-2005 &nbsp;
         </td>
       </tr>
     </table> 

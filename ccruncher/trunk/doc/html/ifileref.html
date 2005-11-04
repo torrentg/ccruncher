@@ -14,7 +14,7 @@
     <h1>CreditCruncher - Input File Reference</h1>
 
     <p>
-      This document describes the xml input file for CreditCruncher-0.7.
+      This document describes the xml input file for CreditCruncher-0.8.
       In the distribution package you can find the DTD and some XML samples 
       into the $CCRUNCHER/samples directory.
       <br /><br />
@@ -41,7 +41,7 @@
 <!--    params section                                    -->
 <!-- ==================================================== -->
 
-    <h3>Section Params</h3>
+    <h2>Section Params</h2>
 
     <p>
       This section shows the basic properties of the problem to be solved.
@@ -181,7 +181,7 @@
 <!--    interests section                                 -->
 <!-- ==================================================== -->
 
-    <h3>Section Interests</h3>
+    <h2>Section Interests</h2>
 
     <p>
       This section shows how to define the interest rates curves used to 
@@ -265,7 +265,7 @@
 <!--    ratings section                                   -->
 <!-- ==================================================== -->
 
-    <h3>Section Ratings</h3>
+    <h2>Section Ratings</h2>
 
     <p>
       This section shows how to define the ratings.
@@ -322,7 +322,7 @@
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
 
-    <h3>Section Transition Matrix</h3>
+    <h2>Section Transition Matrix</h2>
 
     <p>
       This section shows how to define the transition matrix used by ccruncher. ccruncher always
@@ -429,7 +429,7 @@
 <!--    survival section                                  -->
 <!-- ==================================================== -->
 
-    <h3>Section Survival Function</h3>
+    <h2>Section Survival Function</h2>
 
     <p>
       This section contains the survival function for each rating. Survival 
@@ -525,7 +525,7 @@
 <!--    sectors section                                   -->
 <!-- ==================================================== -->
 
-    <h3>Section Sectors</h3>
+    <h2>Section Sectors</h2>
 
     <p>
         This section shows how to define the sectors.
@@ -567,7 +567,7 @@
       <tr class="a">
         <td style="text-align:center;">desc</td>
         <td style="text-align:justify;">
-          Sector description. This value is only used in reports. 
+          Sector description. This value is only used in reports.
           This description must be unique.
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -578,7 +578,7 @@
 <!--    correlations section                              -->
 <!-- ==================================================== -->
 
-    <h3>Section Correlations</h3>
+    <h2>Section Correlations</h2>
 
     <p>
       This section shows how to define the correlation matrix between sectors.
@@ -627,6 +627,7 @@
       <tr class="a">
         <td style="text-align:center;">sector1</td>
         <td style="text-align:justify;">
+          Firt sector involved in correlation value.
           This value must be a sector identifier (see name attribute in sector tag)
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -634,6 +635,7 @@
       <tr class="b">
         <td style="text-align:center;">sector2</td>
         <td style="text-align:justify;">
+          second sector involved in correlation value.
           This value must be a sector identifier (see name attribute in sector tag)
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -641,7 +643,7 @@
       <tr class="a">
         <td style="text-align:center;">value</td>
         <td style="text-align:justify;">
-          Correlation of defaults between sector1 and sector2. <br />
+          Correlation of defaults between sector1 and sector2.
           Correlation(defaults(S1), defaults(S2))
         </td>
         <td style="text-align:center;"><code>double</code></td>
@@ -652,7 +654,7 @@
 <!--    segmentations section                             -->
 <!-- ==================================================== -->
 
-    <h3>Segmentations</h3>
+    <h2>Segmentations</h2>
 
     <p>
       This section shows how to define segmentations. Segmentations
@@ -755,7 +757,7 @@
 <!--    portfolio section                                 -->
 <!-- ==================================================== -->
 
-    <h3>Section Portfolio</h3>
+    <h2>Section Portfolio</h2>
 
     <p>
       This section shows how to define the portfolio.
@@ -769,7 +771,7 @@
     &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
       &lt;belongs-to segmentation="sector" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset class="bond" id="op1"&gt;
+      &lt;asset name="bond" id="op1"&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;belongs-to segmentation="office" segment="0001"/&gt;
         &lt;data&gt;
@@ -780,7 +782,7 @@
           &lt;values at="01/06/2004" cashflow="10.0" netting="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-      &lt;asset class="bond" id="op2">&gt;
+      &lt;asset name="bond" id="op2">&gt;
         &lt;belongs-to segmentation="office" segment="0004"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
@@ -795,7 +797,7 @@
     &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
       &lt;belongs-to segmentation="sector" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="big"/&gt;
-      &lt;asset class="bond" id="op3"&gt;
+      &lt;asset name="bond" id="op3"&gt;
         &lt;belongs-to segmentation="office" segment="0003"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
@@ -829,28 +831,30 @@
       <tr class="a">
         <td style="text-align:center;">rating</td>
         <td style="text-align:justify;">
-          Initial client rating
+          Initial client rating at time t0 (see time.begindate at params section).
+          This value must be a rating identifier (see name attribute in rating tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
         <td style="text-align:center;">sector</td>
         <td style="text-align:justify;">
-          Sector where this client is included
+          Sector where this client is included.
+          This value must be a sector identifier (see name attribute in sector tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Client name. Only used in reports
+          Client name. Currently not used. Can be used in reports.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
         <td style="text-align:center;">id</td>
         <td style="text-align:justify;">
-          Unique client identifier
+          Unique client identifier. Used by implicit client segmentation.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -867,14 +871,16 @@
       <tr class="a">
         <td style="text-align:center;">segmentation</td>
         <td style="text-align:justify;">
-          Segmentation identifier (see segmentations)
+          Segmentation identifier.
+          This value must be a segmentation identifier (see name attribute in segmentation tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
         <td style="text-align:center;">segment</td>
         <td style="text-align:justify;">
-          Segment identifier (see segmentations)
+          Segment identifier.
+          This value must be a segment identifier (see name attribute in segment tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -891,14 +897,15 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          A descriptive name of the asset. Doesn't need to be unique
+          A descriptive name of the asset. Doesn't need to be unique. Currently
+          not used. Can be used in reports.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
         <td style="text-align:center;">id</td>
         <td style="text-align:justify;">
-          Unique asset identifier
+          Unique asset identifier. Used by implicit asset segmentation.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -956,7 +963,7 @@
           </a> 
         </td>
         <td class="footer" align="right">
-          Last modified: 15-Oct-2005 &nbsp;
+          Last modified: 04-Nov-2005 &nbsp;
         </td>
       </tr>
     </table>

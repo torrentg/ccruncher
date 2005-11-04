@@ -9,6 +9,7 @@ version 0.8 (Nov. 2005)
   * added build directory in src dist
   * added LastChangedRevision to code files
   * added expat legacy code support
+  * improved html doc usability
 
 version 0.7 (October 2005)
 --------------------------
