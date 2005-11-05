@@ -10,6 +10,7 @@ version 0.8 (Nov. 2005)
   * added LastChangedRevision to code files
   * added expat legacy code support
   * improved html doc usability
+  * solved bug related to backtrace in debug mode
 
 version 0.7 (October 2005)
 --------------------------
