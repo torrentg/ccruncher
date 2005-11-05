@@ -28,18 +28,19 @@ h2 {
 
 h3.bolded {
   margin-left: -4%;
-  font-weight: bold ; 
-  color: #333333   ;
-  background-color: #E0E0E0 ; 
+  font-weight: bold;
+  color: #333333;
+  background-color: #E0E0E0;
 }
 
 p {
   text-align:justify;
 }
 
-pre { 
+pre {
   font-family: monospace;
   margin: 0;
+  color: black;
   background-color: #ddd;
 }
 
@@ -52,45 +53,49 @@ table {
 }
 
 td.faq_question {
-  font-weight: bold ; 
-  color: #333333   ;
-  background-color: #E0E0E0 ; 
+  font-weight: bold;
+  color: #333333;
+  background-color: #E0E0E0;
 }
 
-td.footer { 
-  font-size   : 11px ;
-  font-weight   : bold ;
-  color     : black ;
-  background-color  : #E0E0E0 ; 
+td.footer {
+  font-size: 11px ;
+  font-weight: bold;
+  color: black;
+  background-color: #E0E0E0;
 }
 
 tr.even, tr.a {
+  color: black;
   background-color: #ddd;
 }
 
 tr.odd, tr.b {
-  background-color: #eee ;
+  color: black;
+  background-color: #eee;
 }
 
-:link { 
-  color: rgb(0, 0, 153) ;
+:link {
+  color: rgb(0, 0, 153);
+  background-color: white;
 }
 
-:visited { 
-  color: rgb(153, 0, 153) ;
+:visited {
+  color: rgb(153, 0, 153);
+  background-color: white;
 }
 
 
-a:hover { 
-  color: rgb(0, 0, 255) ;
-  background-color: #eee ;
+a:hover {
+  color: rgb(0, 0, 255);
+  background-color: #eee;
 }
 
 li {
-  list-style-image: url('item.gif') ;
-  padding: 5px ;
+  list-style-image: url('item.gif');
+  padding: 5px;
 }
 
 img {
-  border: none ;
+  border: none;
 }
