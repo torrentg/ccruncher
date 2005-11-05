@@ -27,7 +27,7 @@ descrip: Expat is an XML parser library written in C. It is a stream-oriented
 ------------------------------------------------------------------------
 
 project: zlib
-version: 1.2.2
+version: 1.2.3
 licence: free license (see declaration at home site)
 homeurl: http://www.zlib.net/
 descrip: zlib is designed to be a free, general-purpose, legally unencumbered
@@ -91,7 +91,7 @@ descrip: LAM/MPI is a high-quality open-source implementation of the Message
 ------------------------------------------------------------------------
 
 project: R
-version: 2.1.1
+version: 2.2.0
 licence: GNU GPL
 homeurl: http://www.r-project.org/
 descrip: R is a system for statistical computation and graphics. It consists
