@@ -376,10 +376,10 @@
 					RelativePath="src\utils\File.hpp">
 				</File>
 				<File
-					RelativePath=".\src\utils\Format.cpp">
+					RelativePath="src\utils\Format.cpp">
 				</File>
 				<File
-					RelativePath=".\src\utils\Format.hpp">
+					RelativePath="src\utils\Format.hpp">
 				</File>
 				<File
 					RelativePath="src\utils\Logger.cpp">
@@ -406,10 +406,10 @@
 					RelativePath="src\utils\Timer.hpp">
 				</File>
 				<File
-					RelativePath=".\src\utils\Utils.cpp">
+					RelativePath="src\utils\Utils.cpp">
 				</File>
 				<File
-					RelativePath=".\src\utils\Utils.hpp">
+					RelativePath="src\utils\Utils.hpp">
 				</File>
 			</Filter>
 			<Filter
@@ -428,13 +428,10 @@
 					RelativePath="src\win32\getopt.h">
 				</File>
 				<File
-					RelativePath=".\src\win32\gettimeofday.c">
+					RelativePath="src\win32\gettimeofday.c">
 				</File>
 				<File
-					RelativePath=".\src\win32\gettimeofday.h">
-				</File>
-				<File
-					RelativePath="src\win32\stdafx.h">
+					RelativePath="src\win32\gettimeofday.h">
 				</File>
 				<File
 					RelativePath="src\win32\winconfig.h">
@@ -444,20 +441,20 @@
 				Name="survival"
 				Filter="">
 				<File
-					RelativePath=".\src\survival\Survival.cpp">
+					RelativePath="src\survival\Survival.cpp">
 				</File>
 				<File
-					RelativePath=".\src\survival\Survival.hpp">
+					RelativePath="src\survival\Survival.hpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="gzstream"
 				Filter="">
 				<File
-					RelativePath=".\share\gzstream-1.5\gzstream.cpp">
+					RelativePath="share\gzstream-1.5\gzstream.cpp">
 				</File>
 				<File
-					RelativePath=".\share\gzstream-1.5\gzstream.h">
+					RelativePath="share\gzstream-1.5\gzstream.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -472,7 +469,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
 		</Filter>
 		<File
-			RelativePath=".\README">
+			RelativePath="README">
 		</File>
 	</Files>
 	<Globals>
