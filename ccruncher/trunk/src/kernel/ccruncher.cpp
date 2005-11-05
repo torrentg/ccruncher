@@ -392,7 +392,7 @@ void run(string filename, string path) throw(Exception)
 //===========================================================================
 void setnice(int niceval) throw(Exception)
 {
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && !defined(__CYGWIN__) 
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
     throw Exception("nice value out of range [" + Format::int2string(PRIO_MIN) +
