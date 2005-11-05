@@ -138,7 +138,7 @@ ccruncher_SOURCES = \
 
 ccruncher_CXXFLAGS =
 ccruncher_LDADD =
-ccruncher_LDFLAGS = -rdynamic
+ccruncher_LDFLAGS =
 
 # -------------------------------------------------------------
 # tests
@@ -293,4 +293,4 @@ tests_SOURCES = \
 
 tests_CXXFLAGS =
 tests_LDADD =
-tests_LDFLAGS = -rdynamic
+tests_LDFLAGS =
