@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!--
-<!DOCTYPE ccruncher SYSTEM "ccruncher-0.7.dtd">
+<!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
 -->
 <!--
 <!DOCTYPE ccruncher PUBLIC "-//SOURCEFORGE//DTD CreditCruncher//EN"
-          "http://www.generacio.com/ccruncher/ccruncher-0.7.dtd">
+          "http://www.generacio.com/ccruncher/ccruncher.dtd">
 -->
 
 <ccruncher>
