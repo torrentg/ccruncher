@@ -33,7 +33,7 @@ $CCRUNCHER/
   |- src/     : ccruncher source code files
 
 
-Install required libraries
+Required libraries installation
 --------------------------------
 
 1. check that you have libexpat.so in a lib directory and
@@ -111,20 +111,50 @@ Using CreditCruncher
      > quit(save='no')
 
 
-Notes for Windows developers
+Notes for Windows developers (MSVC7)
 --------------------------------
 
-1. download expat package from internet and unpack it
-   at $CCRUNCHER/share/expat-X.Y
+1. install a subversion client
+   (eg. http://tortoisesvn.tigris.org/)
 
-2. download zlib package from internet and unpack it
-   at $CCRUNCHER/share/zlib-X.Y
+2. retrieve repository content
+   (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
 
-3. copy zlib1.dll and libexpat.dll to $CCRUNCHER/bin
-   (required to execute bin\ccruncher.exe)
+3. download expat package from http://expat.sourceforge.net/
+   and unpack at $CCRUNCHER\share\expat-X.Y.Z directory
 
-4. open MSVC7 project and check that dependences, libraries,
-   etc. are correct
+4. download zlib package from http://www.zlib.net/
+   and unpack at $CCRUNCHER\share\zlib-X.Y.Z directory
+
+5. copy zlib1.dll and libexpat.dll (installed in steps 3 and 4) to
+   $CCRUNCHER\bin (required to execute bin\ccruncher.exe)
+
+6. double-click ccruncher.vcproj (opens MSVC7)
+
+7. execute compile option
+
+(*) A MSVC7 (Microsoft Visual C++ .NET) is required.
+    Microsoft Visual C++ 6 don't work at all.
+
+
+Notes for Windows developers (cygwin)
+--------------------------------
+
+1. retrieve repository content
+   (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
+
+2. install gcc, aclocal, autoconf, automake, expat and zlib
+   cygwin packages
+
+3. open a cygwin console
+
+4. execute next commands:
+     > aclocal
+     > autoconf
+     > automake -a -v -c -f
+     > .configure --prefix=$PWD
+     > make
+     > make check
 
 
 Developers tips & tricks
