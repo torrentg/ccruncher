@@ -37,8 +37,7 @@
 \framebox{
 \begin{minipage}[c]{12.5cm}
 Dada una cartera de cr\'editos a empresas de tama\~no mediano, deseamos 
-valorar las posibles p\'erdidas debido a los impagos al cabo de un 
-tiempo $T$.
+valorar el riesgo debido a los impagos al cabo de un                                                                                                                                         tiempo $T$.
 \end{minipage}
 }
 \end{center}
@@ -130,7 +129,7 @@ sectores industriales.
 \newline
 Se considera que cada cliente pertenece a un \'unico sector y permanece en 
 el a lo largo del tiempo. La relaci\'on entre sectores se contempla a trav\'es 
-de la matriz de correlaci\'on sectorial (v\'ease la secci\'on \ref{sec:mcorrel}).
+de la tabla de correlaciones sectoriales (v\'ease la secci\'on \ref{sec:mcorrel}).
 
 \paragraph{Notaci\'on.} $sector(i) =$ sector al que pertenece el cliente $i$.
 
@@ -146,9 +145,11 @@ del tiempo. Incluye las posibles amortizaciones, primas, cupones, comisiones, co
 etc. Usaremos el cashflow para calcular el valor, o precio, de un activo en el
 instante $t$.
 
-\paragraph{Netting.} \index{Netting} Importe correspondiente a la liquidaci\'on de
-deudas mutuas en caso de fallido. Incluye la posible recuperaci\'on, pago de
-obligaciones contra\'idas (pe. en el caso de avales), etc.
+\paragraph{Recovery.} \index{Recovery} Importe correspondiente a la
+liquidaci\'on de deudas mutuas en caso de fallido. Incluye la posible recuperaci\'on,
+pago de obligaciones contra\'idas (pe. en el caso de avales), etc. Puede equipararse
+a $EAD \times (1-LGD)$ donde $EAD$ es Exposure At Default \index{EAD} (importe) y
+$LGD$ es Loss Given Default \index{LGD} (porcentaje).
 
 \paragraph{Ejemplo.}
 Caracterizamos un bono (bond) de $100$ \euro~ de valor nominal, con fecha emisi\'on
@@ -158,7 +159,7 @@ importe pendiente de abonar.\newline
 
 \begin{center}
 \begin{tabular}{c|r|r}
-\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\textbf{Date} & \textbf{Cashflow} & \textbf{Recovery} \\
 \hline
 31/12/2006 &  -100.00 &    0.00 \\
 31/12/2007 &     4.00 &   96.00 \\
@@ -184,7 +185,7 @@ I =
 
 \begin{center}
 \begin{tabular}{c|r|r}
-\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\textbf{Date} & \textbf{Cashflow} & \textbf{Recovery} \\
 \hline
 15/01/2006 &  -100.00 &    0.00 \\
 15/02/2006 &     0.68 &   80.00 \\
@@ -204,7 +205,7 @@ una cuota semestral anticipada de $4.5$ \euro.
 
 \begin{center}
 \begin{tabular}{c|r|r}
-\textbf{Date} & \textbf{Cashflow} & \textbf{Netting} \\
+\textbf{Date} & \textbf{Cashflow} & \textbf{Recovery} \\
 \hline
 15/01/2006 &     4.50 &    0.00 \\
 15/07/2006 &     4.50 & -100.00 \\
@@ -457,6 +458,17 @@ Sea cual sea el rating inicial, existe la posibilidad que realice fallido.
 \forall i \quad \exists j \quad \textrm{tq.} \quad m_{i,j} > 0 \quad \textrm{and} \quad  m_{j,n} > 0
 \end{equation}
 
+\paragraph{Propiedad 5.}
+La matriz de transici\'on es diagonalizable. O sea, todos los valores propios son
+reales e independientes.
+
+\begin{equation}
+M_{T} \quad \textrm{is diagonalizable}
+\end{equation}
+
+Esta propiedad es una condici\'on t\'ecnica para garantizar la existencia de las
+raices de la matriz de transici\'on.
+
 
 \subsection{Cambio de periodo}
 \label{mtrans:perchange}
@@ -507,19 +519,6 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}}
 \subsection{Funci\'on de supervivencia}
 \label{mtrans:survival}
 
-\paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada}
-o \emph{Forward Default Rate} \index{Forward Default Rate} (FDR) del rating $r_i$ en
-el a\~no $k$ es la probabilidad que una empresa con rating inicial $r_i$ haga fallido
-a lo largo del a\~no $k$.
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[height=10cm, angle=-90]{./images/tma.ps}
-\caption{Tasa de Morosidad Anticipada (FDR)}
-\label{fdr}
-\end{center}
-\end{figure}
-
 \paragraph{Definici\'on.} La \emph{Tasa de Morosidad Anticipada Acumulada}
 o \emph{Cumulated Forward Default Rate}\index{Cumulated Forward Default Rate} (CFDR)
 del rating $r_i$ en el tiempo $t$ es la probabilidad que una empresa con rating inicial
@@ -559,13 +558,6 @@ CFDR(r_i,k \cdot T) = (M_{k \cdot T})_{i,n} = (M_{T}^{k})_{i,n}
 donde $n$ es el \'indice del rating Default y $T$ es el periodo de la matriz
 de transici\'on.
 
-\paragraph{Proposici\'on.} La Tasa de Morosidad Anticipada se puede expresar 
-en funci\'on de la Tasa de Morosidad Anticipada Acumulada a trav\'es de la
-relaci\'on siguiente:
-\begin{equation}
-FDR(r_i, t) =  CFDR(r_i, t) - CFDR(r_i, t-T)
-\end{equation}
-
 \paragraph{Proposici\'on.} La Supervivencia puede expresarse en funci\'on de
 la Tasa de Morosidad Anticipada Acumulada a trav\'es de la relaci\'on siguiente:
 \begin{equation}
@@ -591,39 +583,37 @@ Survival(r_i, t_j) \ge Survival(r_i, t_k) \quad \forall t_j < t_k
 Survival(Default, t) = 0 \quad \forall t
 \end{equation}
 
-\paragraph{Ejemplo.} En las figuras \ref{cfdr}, \ref{fdr} y \ref{survival}
-se puede observar la Tasa de Morosidad anticipada, Tasa de Morosidad Anticipada 
-Acumulada y la Funci\'on de Supervivencia de la matriz de transici\'on usada en 
-este documento.
+\paragraph{Ejemplo.} En las figuras \ref{cfdr} y \ref{survival} se puede observar
+la Tasa de Morosidad Anticipada Acumulada y la Funci\'on de Supervivencia de la matriz
+de transici\'on usada en este documento.
 
 %---------------------------------------------------------------------------
 
 \section{Matriz de correlaci\'on}
 \label{sec:mcorrel}
 
-\paragraph{Definici\'on.} La \emph{matriz de correlaci\'on sectorial}
-\index{Matriz de correlaci\'on sectorial} proporciona la correlaci\'on de los
+\paragraph{Definici\'on.} La \emph{tabla de correlaciones sectoriales}
+\index{Tabla de correlaciones sectoriales} proporciona la correlaci\'on de los
 fallidos entre los sectores. La denotamos de la forma siguiente:
-\begin{displaymath}
-\Gamma = \left(
-\begin{array}{ccc}
-\gamma_{1,1} & \dots  & \gamma_{1,m} \cr
-\vdots & \ddots & \vdots \cr
-\gamma_{1,m} & \dots  & \gamma_{m,m} 
-\end{array}
-\right)
-\qquad
-\gamma_{i,j} = Corr(sector_i, sector_j)
-\end{displaymath}
-donde $m$ es el n\'umero de sectores, $\gamma_{i,j}$ es la correlaci\'on entre 
-los fallidos de los sectores $s_i$ y $s_j$ y $\gamma_{i,i}$ es la correlaci\'on del 
-fallido entre las empresas del sector $s_i$. Por construcci\'on, la matriz de 
-correlaci\'on sectorial es sim\'etrica debido a que la correlaci\'on entre $s_i$
-y $s_j$ es la misma que entre $s_j$ y $s_i$.
+
+\begin{center}
+\begin{tabular}[]{c|ccc}
+             & $Sector_1$     & $\dots$  & $Sector_{m}$   \cr
+\hline
+$Sector_1$   & $\gamma_{1,1}$ & $\dots$  & $\gamma_{1,m}$ \cr
+$\vdots$     & $\vdots$       & $\ddots$ & $\vdots$       \cr
+$Sector_{m}$ & $\gamma_{1,m}$ & $\dots$  & $\gamma_{m,m}$ \cr
+\end{tabular}
+\end{center}
+
+donde $m$ es el n\'umero de sectores, $\gamma_{i,j} = Corr(Sector_i, Sector_j)$
+es la correlaci\'on entre los fallidos de los sectores $i$ y $j$ y $\gamma_{i,i}$ es
+la correlaci\'on del fallido entre las empresas del sector $i$.No se trata de una verdadera
+matriz de correlaci\'on debido a que la diagonal puede ser distinta de $1$.
 
 \paragraph{Definici\'on.} La \emph{matriz de correlaci\'on entre clientes}
 \index{Matriz de correlaci\'on entre clientes} proporciona la correlaci\'on de los
-fallidos entre clientes. La construimos a partir de la matriz de correlaci\'on sectorial
+fallidos entre clientes. La construimos a partir de la tabla de correlaciones sectoriales
 de la forma siguiente:
 \begin{displaymath}
 \Theta = \left(
@@ -673,18 +663,20 @@ $s_1, \dots, s_m$. Con esta ordenaci\'on de clientes, la matriz de correlaci\'on
 clientes es una matriz con bloques con $1$'s en la diagonal\index{Matriz en bloques}.
 
 
-\paragraph{Ejemplo.}Supongamos que tenemos dos sectores, siendo $\Gamma$ la
-matriz sectorial:
-\begin{displaymath}
-\Gamma=\left(
-\begin{array}{cc}
- 0  &  0.1 \cr
-0.1 & -0.2
-\end{array}
-\right)
-\end{displaymath}
-Supongamos que el sector $A$ tiene 3 clientes y el sector $B$ tiene 2 clientes.
-Entonces, la matriz de correlaci\'on entre clientes es:
+\paragraph{Ejemplo.}Supongamos que tenemos dos sectores ($S_1$ y $S_2$) cumpliendo la
+siguiente tabla de correlaciones sectoriales:
+
+\begin{center}
+\begin{tabular}[]{c|cc}
+       & $S_1$ & $S_2$  \cr
+\hline
+$S_1$  & $0$   & $0.1$  \cr
+$S_2$  & $0.1$ & $-0.2$ \cr
+\end{tabular}
+\end{center}
+
+Supongamos que el sector $S_1$ tiene 3 clientes y el sector $S_2$ tiene 2 clientes.
+Entonces la matriz de correlaci\'on entre clientes es:
 \begin{displaymath}
 \Theta = \left(
 \begin{array}{ccccc}
@@ -702,14 +694,14 @@ Entonces, la matriz de correlaci\'on entre clientes es:
 que la matriz de correlaci\'on entre clientes sea definida positiva
 debido a que es una propiedad necesaria para la generaci\'on de c\'opulas
 gaussianas. El hecho que la matriz de correlaci\'on entre clientes deba ser
-definida positiva no significa que la matriz de correlaci\'on sectorial
+definida positiva no significa que la tabla de correlaciones sectoriales
 deba ser definida positiva.
 
 %---------------------------------------------------------------------------
 
 \section{Valoraci\'on del riesgo}
 
-Llamamos $Z$ a la variable aleatoria que modela las p\'erdidas de la cartera
+Llamamos $Z$ a la variable aleatoria que representa las p\'erdidas de la cartera
 (portfolio loss) en el tiempo $T$. Sea $F_Z$ la correspondiente funci\'on de
 distribuci\'on (cdf).
 

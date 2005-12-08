@@ -259,7 +259,7 @@ Este paso se encuentra ilustrado en la figura \ref{simttd}.
 
 En las definiciones siguientes se considera que $S$ es la curva spot en $t_0$,
 $na_i$ es el n\'umero de activos del cliente $i$ y $nc$ el n\'umero de clientes.
-Asimismo se considera que el casflow y netting de cada activo est\'a fijado y
+Asimismo se considera que el casflow y recovery de cada activo est\'a fijado y
 no depende de la evoluci\'on del cliente.
 
 \paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$
@@ -269,7 +269,7 @@ tiempo $t_w$ como:
 X_{i,j}(t_w;t_0,t_K) = 
 \end{equation}
 \begin{displaymath}
-\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{netting}(t_w) \cdot \Upsilon_S(t_w,t_K) + 
+\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{recovery}(t_w) \cdot \Upsilon_S(t_w,t_K) +
 \sum_{t=t_0}^{t_K} \textrm{1}_{[t < t_w]} \cdot \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
 \end{displaymath}
 

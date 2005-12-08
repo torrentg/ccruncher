@@ -37,15 +37,22 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added assert support
+//   . added getCentury() methods
+//   . added getDayOfWeek() method
+//
 //===========================================================================
 
 #include <vector>
 #include <ctime>
 #include <cstdio>
+#include <cmath>
 #include "utils/Date.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor
@@ -154,6 +161,22 @@ void ccruncher::Date::setYear (const int year) throw(Exception)
 }
 
 //===========================================================================
+// returns century
+//===========================================================================
+int ccruncher::Date::getCentury(const int y)
+{
+  return y - (y % 100);
+}
+
+//===========================================================================
+// returns century
+//===========================================================================
+int ccruncher::Date::getCentury() const
+{
+  return getCentury(getYear());
+}
+
+//===========================================================================
 // returns day of year (1...364/365)
 //===========================================================================
 int ccruncher::Date::getDayOfYear() const
@@ -166,6 +189,96 @@ int ccruncher::Date::getDayOfYear() const
   }
 
   return ret + (int) day_;
+}
+
+//===========================================================================
+// returns day of week
+// 0=sunday, 1=monday, 2=tuesday, 3=wednesday, 4=thursday, 5=friday, 6=saturday
+// implements Doomsday rule
+// http://www.cst.cmich.edu/users/graha1sw/Pub/Doomsday/Doomsday.html
+//===========================================================================
+int ccruncher::Date::getDayOfWeek() const
+{
+  int x, y, aux;
+  int ddm = getDoomsDayMonth(getMonth(), getYear());
+  int ddc = getDoomsDayCentury(getYear());
+
+  if( ddc < 0 ) return -1;
+  if( ddm < 0 ) return -1;
+
+  if( ddm > getDay() )
+  {
+    aux = (7 - ((ddm-getDay()) % 7 ) + ddm);
+  }
+  else
+  {
+    aux = getDay();
+  }
+
+  x = (aux - ddm) % 7;
+  x %= 7;
+  y = ddc + (getYear()-getCentury()) + (floor((getYear()-getCentury())/4));
+  y %= 7;
+
+  return (x+y)%7;
+}
+
+//===========================================================================
+// returns dooms day month (internal function required by getDayOfWeek)
+//===========================================================================
+int ccruncher::Date::getDoomsDayMonth(int m, int y)
+{
+  switch(m)
+  {
+    case 1: //january
+      if( isLeapYear(y) ) return 32;
+      else return 31;
+    case 2: //february
+      if( isLeapYear(y) ) return 29;
+      else return 28;
+    case 3: //march
+      return 7;
+    case 4: //april
+      return 4;
+    case 5: //may
+      return 9;
+    case 6: //june
+      return 6;
+    case 7: //july
+      return 11;
+    case 8: //august
+      return 8;
+    case 9: //september
+      return 5;
+    case 10: //october
+      return 10;
+    case 11: //november
+      return 7;
+    case 12: //december
+      return 12;
+    default:
+      assert(false);
+  }
+}
+
+//===========================================================================
+// returns dooms day century (internal function required by getDayOfWeek)
+//===========================================================================
+int ccruncher::Date::getDoomsDayCentury(int y)
+{
+  switch( getCentury(y) % 400 )
+  {
+    case 0:
+      return 2;
+    case 100:
+      return 0;
+    case 200:
+      return 5;
+    case 300:
+      return 3;
+    default:
+      assert(false);
+  }
 }
 
 //===========================================================================

@@ -35,7 +35,7 @@
 
 El m\'etodo de resoluci\'on expuesto en el cap\'itulo anterior es
 computacionalmente muy costoso. Para reducir el n\'umero de operaciones
-se discretiza el tiempo. Esto fuerza a mapear el netting y el cashflow
+se discretiza el tiempo. Esto fuerza a mapear el recovery y el cashflow
 a los nodos de tiempo. El tiempo de fallido de los clientes debe
 simularse mapeado sobre los nodos. La unidad de tiempo es el mes.
 
@@ -305,8 +305,8 @@ clientes, sectores, etc.).
 \newline
 
 Para cada cliente de cada segmento de cada segmentaci\'on realizamos el
-mapeo de cashflow y netting de los activos pertenecientes a aquel
-segmento. El objetivo es disponer de un cashflow y netting evaluados en
+mapeo de cashflow y recovery de los activos pertenecientes a aquel
+segmento. El objetivo es disponer de un cashflow y recovery evaluados en
 $t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente de cada segmento.
 
 %---------------------------------------------------------------------------
@@ -399,29 +399,29 @@ nodo de tiempo $k$.
 
 %---------------------------------------------------------------------------
 
-\subsection{Mapeo del netting}
+\subsection{Mapeo del recovery}
 
 \subsubsection{Paso 1}
 
 Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
-Calculamos el netting en el nodo, $t_i$, de la partici\'on de la
+Calculamos el recovery en el nodo, $t_i$, de la partici\'on de la
 siguiente forma:
 
 \begin{enumerate}
-\item Si existe un netting anterior, $(t_a,W_a)$, y otro posterior, $(t_b,W_b)$,
-entonces el valor del netting en $t_i$ es:
+\item Si existe un recovery anterior, $(t_a,W_a)$, y otro posterior, $(t_b,W_b)$,
+entonces el valor del recovery en $t_i$ es:
 \begin{displaymath}
 W_i = A + (B-A) \cdot \frac{t_i-t_a}{t_b-t_a}
 \end{displaymath}
 donde
 $A=\Upsilon_S(t_a,t_i) \cdot W_a$ y $B=\Upsilon_S(t_b,t_i) \cdot W_b$.
-\item Si no existe un netting anterior a $t_i$ entonces el valor del netting
+\item Si no existe un recovery anterior a $t_i$ entonces el valor del recovery
 en $t_i$:
 \begin{displaymath}
 W_i = 0
 \end{displaymath}
-\item Si existe un netting entre $t_{i-1}$ y $t_i$, $(t_a,W_a)$, pero no existe un
-netting posterior a $t_i$, entonces el valor del netting en $t_i$ es:
+\item Si existe un recovery entre $t_{i-1}$ y $t_i$, $(t_a,W_a)$, pero no existe un
+recovery posterior a $t_i$, entonces el valor del recovery en $t_i$ es:
 \begin{displaymath}
 W_i = \frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon_S(t_a,t_i)
 \end{displaymath}
@@ -430,20 +430,20 @@ W_i = \frac{t_a-t_{i-1}}{t_i-t_{i-1}} \cdot W_a \cdot \Upsilon_S(t_a,t_i)
 \begin{figure}[!hb]
 \begin{center}
 \includegraphics[width=10cm,angle=0]{./images/nettingmapping.eps}
-\caption{Netting mapping}
+\caption{Recovery mapping}
 \label{timetranches}
 \end{center}
 \end{figure}
 
 Veamos un ejemplo. Consideramos $\Upsilon_S(t_i,t_j)=1$ para no complicar los c\'alculos.
-A la izquierda se representa el netting original (sin estar mapeado a los nodos de
-tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
+A la izquierda se representa el recovery original (sin estar mapeado a los nodos de
+tiempo). A la derecha se encuentra el recovery mapeado a los nodos de tiempo.
 \newline
 \newline
 \begin{minipage}[c]{0.4\columnwidth}%
 \centering
 \begin{tabular}{c|r}
-\textbf{Date} & \textbf{Netting} \\
+\textbf{Date} & \textbf{Recovery} \\
 \hline
 17/04/2004 & -10.00 \\
            &        \\
@@ -462,7 +462,7 @@ tiempo). A la derecha se encuentra el netting mapeado a los nodos de tiempo.
 \begin{minipage}[c]{0.6\columnwidth}%
 \centering
 \begin{tabular}{c|c|c}
-\textbf{$t_i$} & \textbf{Date}  & \textbf{Netting} \\
+\textbf{$t_i$} & \textbf{Date}  & \textbf{Recovery} \\
 \hline
       &            &      \\
 $t_0$ & 30/10/2004 & $-10.00 + (1+10) \cdot \frac{196}{263} =  -1.8$\\
@@ -481,16 +481,16 @@ $t_6$ & 30/10/2005 & $4.00 + (5-4) \cdot \frac{61}{107} = 4.57$ \\
 
 \subsubsection{Paso 2}
 
-Lo que interesa conocer no es el netting en $t_i$, sin\'o el importe
-percibido en $t_{NumSteps}$ debido al netting realizado en $t_i$.
-Llamamos a este concepto netting acumulado y lo calculamos de la
+Lo que interesa conocer no es el recovery en $t_i$, sin\'o el importe
+percibido en $t_{NumSteps}$ debido al recovery realizado en $t_i$.
+Llamamos a este concepto recovery acumulado y lo calculamos de la
 forma siguiente:
 
 \begin{displaymath}
 N_k =  W_k \cdot \Upsilon(t_k,t_{NumSteps})
 \end{displaymath}
 
-\paragraph{Notaci\'on.} $N_k^i =$ netting acumulado del cliente $i$ en el
+\paragraph{Notaci\'on.} $N_k^i =$ recovery acumulado del cliente $i$ en el
 nodo de tiempo $k$.
 
 %---------------------------------------------------------------------------
@@ -580,7 +580,7 @@ C_{NumSteps}^i - C_{t_w^i-1}^i - N_{w_i}^i & \quad \textrm{if } w_i \leq t_{NumS
 
 donde $X_j$ y $Z_j$ son el valor y la p\'erdida del segmento $j$ en tiempo $t_{NumSteps}$,
 $\Omega_j$ es el conjunto de clientes del segmento $j$, $C_k^i$ y $N_k^i$ son el cashflow
-y el netting acumulado en tiempo $k$ del cliente $i$ para el segmento $j$.
+y el recovery acumulado en tiempo $k$ del cliente $i$ para el segmento $j$.
 
 %---------------------------------------------------------------------------
 

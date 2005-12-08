@@ -31,6 +31,11 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added assert support
+//   . added getCentury() methods
+//   . added getDayOfWeek() method
+//
 //===========================================================================
 
 #ifndef _Date_
@@ -55,11 +60,18 @@ namespace ccruncher {
 class Date
 {
 
+  private:
+
+    static int getDoomsDayMonth(int m, int y);
+    static int getDoomsDayCentury(int y);
+
+
   protected:
 
     int year_;
     char month_;
     char day_;
+
 
   public:
 
@@ -74,6 +86,7 @@ class Date
     inline int getMonth() const;
     inline int getYear() const;
     int getDayOfYear() const;
+    int getDayOfWeek() const;
 
     void setDay (const int day) throw(Exception);
     void setMonth (const int month) throw(Exception);
@@ -93,6 +106,8 @@ class Date
     int numDaysInYear();
     static int numDaysInMonth(int m, int y);
     int numDaysInMonth();
+    static int getCentury(const int);
+    int getCentury() const;
 
   private:
 

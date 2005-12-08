@@ -35,6 +35,9 @@
 #   . added Rev svn:keyword
 #   . added dependences paragraph at comments
 #
+# 2005/11/08 - Gerard Torrent [gerardfobos.generacio.com]
+#   . solved minor bugs related to windows installation
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -264,7 +267,7 @@ makeWinDist() {
   rm -rvf autom4te.cache;
   rm config*;
   rm depcomp install-sh missing;
-  rm INSTALL;
+  rm doc/INSTALL;
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
@@ -277,6 +280,7 @@ makeWinDist() {
   unix2dos doc/TODO;
   unix2dos doc/COPYING;
   unix2dos doc/NEWS;
+  unix2dos doc/index.html;
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;

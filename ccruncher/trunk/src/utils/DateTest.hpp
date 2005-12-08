@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added tests related to getDayOfWeek()
+//
 //===========================================================================
 
 #ifndef _DateTest_
@@ -63,6 +66,7 @@ class DateTest : public TestFixture<DateTest>
     void test_rollers(void);
     void test_misc(void);
     void test_comparators(void);
+    void test_dayofweek(void);
 
   public:
 
@@ -75,6 +79,7 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_rollers);
       TEST_CASE(test_misc);
       TEST_CASE(test_comparators);
+      TEST_CASE(test_dayofweek);
     }
 
     void setUp();

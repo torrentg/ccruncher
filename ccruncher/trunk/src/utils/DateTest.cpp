@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added tests related to getDayOfWeek()
+//
 //===========================================================================
 
 #include <iostream>
@@ -202,4 +205,26 @@ void ccruncher_test::DateTest::test_comparators(void)
 
   ASSERT(!(date1 >= date2));
   ASSERT(date1 >= datex);
+}
+
+//===========================================================================
+// test_dayofweek
+//===========================================================================
+void ccruncher_test::DateTest::test_dayofweek(void)
+{
+  Date date0 = Date(15, 5,1994);  //sunday    (0)
+  Date date1 = Date( 7, 4,2008);  //monday    (1)
+  Date date2 = Date(18, 2,2014);  //tuesday   (2)
+  Date date3 = Date(20, 6,1984);  //wednesday (3)
+  Date date4 = Date( 8,12,2005);  //thursday  (4)
+  Date date5 = Date(17, 9,2010);  //friday    (5)
+  Date date6 = Date( 4,12,1971);  //saturday  (6)
+
+  ASSERT(date0.getDayOfWeek() == 0);
+  ASSERT(date1.getDayOfWeek() == 1);
+  ASSERT(date2.getDayOfWeek() == 2);
+  ASSERT(date3.getDayOfWeek() == 3);
+  ASSERT(date4.getDayOfWeek() == 4);
+  ASSERT(date5.getDayOfWeek() == 5);
+  ASSERT(date6.getDayOfWeek() == 6);
 }
