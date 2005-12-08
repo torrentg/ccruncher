@@ -217,7 +217,7 @@ int ccruncher::Date::getDayOfWeek() const
 
   x = (aux - ddm) % 7;
   x %= 7;
-  y = ddc + (getYear()-getCentury()) + (floor((getYear()-getCentury())/4));
+  y = ddc + (getYear()-getCentury()) + int(floor((getYear()-getCentury())/4));
   y %= 7;
 
   return (x+y)%7;
