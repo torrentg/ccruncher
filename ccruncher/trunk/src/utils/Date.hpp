@@ -98,14 +98,14 @@ class Date
     Date operator --(int); // postfix
 
     string toString() const; // dd/mm/yyyy
-    long longDate();         // yyyymmdd
+    long longDate() const;   // yyyymmdd
 
     static bool isLeapYear(int);
-    bool isLeapYear();
+    bool isLeapYear() const;
     static int numDaysInYear(int);
-    int numDaysInYear();
+    int numDaysInYear() const;
     static int numDaysInMonth(int m, int y);
-    int numDaysInMonth();
+    int numDaysInMonth() const;
     static int getCentury(const int);
     int getCentury() const;
 

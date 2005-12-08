@@ -299,7 +299,7 @@ bool ccruncher::Date::isLeapYear(int y)
 //===========================================================================
 // check if given year is a leap year
 //===========================================================================
-bool ccruncher::Date::isLeapYear()
+bool ccruncher::Date::isLeapYear() const
 {
   return isLeapYear(getYear());
 }
@@ -322,7 +322,7 @@ int ccruncher::Date::numDaysInYear(int y)
 //===========================================================================
 // returns number of days in year
 //===========================================================================
-int ccruncher::Date::numDaysInYear()
+int ccruncher::Date::numDaysInYear() const
 {
   return numDaysInYear(getYear());
 }
@@ -356,7 +356,7 @@ int ccruncher::Date::numDaysInMonth(int m, int y)
 //===========================================================================
 // returns number of days in month
 //===========================================================================
-int ccruncher::Date::numDaysInMonth()
+int ccruncher::Date::numDaysInMonth() const
 {
   return numDaysInMonth(getMonth(), getYear());
 }
@@ -581,7 +581,7 @@ Date ccruncher::previousDate(const Date& d)
 //===========================================================================
 // return long with yyyymmdd
 //===========================================================================
-long ccruncher::Date::longDate()
+long ccruncher::Date::longDate() const
 {
   return getYear() * 10000 + getMonth() * 100 + getDay();
 }
