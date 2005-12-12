@@ -66,7 +66,7 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
   {
     aux = Parser::longValue(pnum);
   }
-  catch(Exception &e)
+  catch(Exception)
   {
     throw Exception("Parser::intValue(): invalid number");
   }

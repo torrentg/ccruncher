@@ -258,6 +258,7 @@ int ccruncher::Date::getDoomsDayMonth(int m, int y)
       return 12;
     default:
       assert(false);
+      return -1;
   }
 }
 
@@ -278,6 +279,7 @@ int ccruncher::Date::getDoomsDayCentury(int y)
       return 3;
     default:
       assert(false);
+      return -1;
   }
 }
 
