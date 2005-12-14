@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/14 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug in methods ltrim(), rtrim() and trim()
+//
 //===========================================================================
 
 #include <cctype>
@@ -60,21 +63,33 @@ void ccruncher::Strings::tokenize(const string& str, vector<string>& tokens, con
 }
 
 //===========================================================================
-// trim
+// rtrim
 //===========================================================================
 string ccruncher::Strings::rtrim(string s)
 {
   string::size_type pos = s.find_last_not_of(" \t\n");
-  return s.substr( 0, pos+1 );
+
+  if (pos == string::npos) {
+    return s;
+  }
+  else {
+    return s.substr( 0, pos+1 );
+  }
 }
 
 //===========================================================================
-// trim
+// ltrim
 //===========================================================================
 string ccruncher::Strings::ltrim(string s)
 {
   string::size_type pos = s.find_first_not_of(" \t\n");
-  return s.substr( pos, s.size()-pos );
+
+  if (pos == string::npos) {
+    return s;
+  }
+  else {
+    return s.substr( pos, s.size()-pos );
+  }
 }
 
 //===========================================================================
@@ -82,9 +97,7 @@ string ccruncher::Strings::ltrim(string s)
 //===========================================================================
 string ccruncher::Strings::trim(string s)
 {
-  string::size_type lpos = s.find_first_not_of(" \t\n");
-  string::size_type rpos = s.find_last_not_of(" \t\n");
-  return s.substr( lpos, rpos-lpos+1 );
+  return ltrim(rtrim(s));
 }
 
 //===========================================================================
