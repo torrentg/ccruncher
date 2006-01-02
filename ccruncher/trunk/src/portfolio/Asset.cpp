@@ -140,6 +140,7 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &
     }
     if (date2 < data[i].date)
     {
+      //TODO: if add outdors cashflow option enabled, add cahsflow and remove break
       break;
     }
   }
