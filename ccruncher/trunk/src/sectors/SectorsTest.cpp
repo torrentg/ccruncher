@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Sector class refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -77,23 +80,22 @@ void ccruncher_test::SectorsTest::test1()
   // sectors creation
   Sectors sectors;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
-  vector<Sector> &list = *(sectors.getSectors());
 
-  ASSERT(2 == list.size());
+  ASSERT(2 == sectors.size());
 
-  ASSERT_EQUALS(1, list[0].order);
-  ASSERT_EQUALS(2, list[1].order);
+  ASSERT_EQUALS(0, sectors[0].order);
+  ASSERT_EQUALS(1, sectors[1].order);
 
-  ASSERT("S1" == list[0].name);
-  ASSERT("S2" == list[1].name);
+  ASSERT("S1" == sectors[0].name);
+  ASSERT("S2" == sectors[1].name);
 
-  ASSERT("calzado" == list[0].desc);
-  ASSERT("otros sectores" == list[1].desc);
+  ASSERT("calzado" == sectors[0].desc);
+  ASSERT("otros sectores" == sectors[1].desc);
 
-  ASSERT(list[0] < list[1]);
+  ASSERT(sectors[0] < sectors[1]);
 
-  ASSERT(sectors.getName(0) == "S1");
-  ASSERT(sectors.getName(1) == "S2");
+  ASSERT(sectors[0].name == "S1");
+  ASSERT(sectors[1].name == "S2");
 }
 
 //===========================================================================

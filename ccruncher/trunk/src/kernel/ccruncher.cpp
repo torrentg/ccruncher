@@ -65,6 +65,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . MonteCarlo refactoring
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -355,7 +358,7 @@ void run(string filename, string path) throw(Exception)
   simul.setHash(ihash);
 
   // initializing simulation
-  simul.initialize(&idata);
+  simul.initialize(idata);
 
   // exiting if only validation
   if (bsimulate == false) return;

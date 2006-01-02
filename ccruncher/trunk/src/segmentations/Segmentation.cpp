@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -63,24 +66,61 @@ ccruncher::Segmentation::~Segmentation()
 }
 
 //===========================================================================
+// size
+//===========================================================================
+int ccruncher::Segmentation::size() const
+{
+  return vsegments.size();
+}
+
+//===========================================================================
+// [] operator
+//===========================================================================
+Segment& ccruncher::Segmentation::operator []  (int i)
+{
+  // assertions
+  assert(i >= 0 && i < (int) vsegments.size());
+
+  // return i-th segment
+  return vsegments[i];
+}
+
+//===========================================================================
+// [] operator. returns segment by name
+//===========================================================================
+Segment& ccruncher::Segmentation::operator []  (const string &name) throw(Exception)
+{
+  for (unsigned int i=0;i<vsegments.size();i++)
+  {
+    if (vsegments[i].name == name)
+    {
+      return vsegments[i];
+    }
+  }
+
+  throw Exception("Segmentation::[]: segment " + name + " not found");
+}
+
+//===========================================================================
 // reset
 //===========================================================================
 void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
   modificable = false;
+  order = -1;
   name = "";
   components = client;
 
   // adding catcher segment
-  Segment catcher = Segment("rest");
+  Segment catcher = Segment(0, "rest");
   insertSegment(catcher);
 }
 
 //===========================================================================
 // insertSegment
 //===========================================================================
-void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
+void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
 {
   if (val.name == "")
   {
@@ -161,7 +201,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
       throw eperror(eu, "tag <segment> with invalid name attribute");
     }
     else {
-      Segment aux(sname);
+      Segment aux(vsegments.size(), sname);
       insertSegment(aux);
     }
   }
@@ -187,33 +227,9 @@ void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
 }
 
 //===========================================================================
-// getSegment
-//===========================================================================
-int ccruncher::Segmentation::getSegment(string segname) const
-{
-  for (unsigned int i=0;i<vsegments.size();i++)
-  {
-    if (vsegments[i].name == segname)
-    {
-      return i;
-    }
-  }
-
-  return -1;
-}
-
-//===========================================================================
-// getSegments
-//===========================================================================
-vector<Segment> ccruncher::Segmentation::getSegments() const
-{
-  return vsegments;
-}
-
-//===========================================================================
 // addSegment
 //===========================================================================
-void ccruncher::Segmentation::addSegment(string segname) throw(Exception)
+void ccruncher::Segmentation::addSegment(const string segname) throw(Exception)
 {
   if (modificable == false)
   {
@@ -221,30 +237,15 @@ void ccruncher::Segmentation::addSegment(string segname) throw(Exception)
   }
   else
   {
-    Segment aux = Segment(segname);
+    Segment aux = Segment(vsegments.size(), segname);
     insertSegment(aux);
-  }
-}
-
-//===========================================================================
-// getSegmentName
-//===========================================================================
-string ccruncher::Segmentation::getSegmentName(int isegment) throw(Exception)
-{
-  if (isegment < 0 || isegment >= (int) vsegments.size())
-  {
-    throw Exception("Segmentation::getSegmentName(): index out of range");
-  }
-  else
-  {
-    return vsegments[isegment].name;
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
+string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
@@ -275,12 +276,4 @@ string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
   ret += spc + "</segmentation>\n";
 
   return ret;
-}
-
-//===========================================================================
-// getNumSegments
-//===========================================================================
-int ccruncher::Segmentation::getNumSegments()
-{
-  return vsegments.size();
 }

@@ -40,6 +40,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Interests class refactoring
+//   . Asset refactoring
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -72,33 +76,53 @@ class Asset : public ExpatHandlers
 
   private:
 
+    // asset identifier
     string id;
+    // asset name
     string name;
+    // segmentation-segment relations
     map<int,int> belongsto;
+    // cashflow values
     vector<DateValues> data;
+    // pointer to segmentations list
     Segmentations *segmentations;
+    // auxiliary variable (used by parser)
     bool have_data;
 
-    double getVCashFlow(Date &date1, Date &date2, Interest *);
-    double getVNetting(Date &date1, Date &date2, Interest *);
-    void insertDateValues(DateValues &) throw(Exception);
+    // compute cashflow 
+    double getVCashFlow(Date &date1, Date &date2, const Interest &);
+    // compute netting
+    double getVNetting(Date &date1, Date &date2, const Interest &);
+    // insert a cashflow value
+    void insertDateValues(const DateValues &) throw(Exception);
+    // insert a segmentation-segment relation
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
 
   public:
 
+    // default constructor
     Asset();
-    Asset(Segmentations *);
+    // constructor
+    Asset(const Segmentations &);
+    // destructor
     ~Asset();
 
-    string getId(void);
-    string getName(void);
-
+    // return asset id
+    string getId(void) const;
+    // returns asset name
+    string getName(void) const;
+    // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    void getVertexes(Date *dates, int n, Interests *ints, DateValues *ret);
-    vector<DateValues> *getData();
+    // return computed vertexes
+    void getVertexes(Date *dates, int n, Interests &interests, DateValues *ret);
+    // returns a pointer to cashflow
+    vector<DateValues> &getData();
+    // check if belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment);
+    // given a segmentation returns the segment
     int getSegment(int isegmentation);
+    // reset object content
     void reset(Segmentations *);
 
     /** ExpatHandlers methods declaration */

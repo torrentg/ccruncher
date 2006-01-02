@@ -49,6 +49,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Asset refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -188,7 +191,7 @@ void ccruncher_test::AssetTest::test1()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   makeAssertions(&asset);
@@ -220,7 +223,7 @@ void ccruncher_test::AssetTest::test2()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset(segs);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -230,43 +233,42 @@ void ccruncher_test::AssetTest::test2()
 void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 {
   Interests interests = getInterests();
-  vector <DateValues> *data = NULL;
 
   ASSERT(asset->belongsTo(0, 0)); // portfolio-rest
   ASSERT(asset->belongsTo(2, 1)); // asset-op1
   ASSERT(asset->belongsTo(5, 1)); // product-bond
   ASSERT(asset->belongsTo(6, 1)); // office-0001
 
-  ASSERT_NO_THROW(data = asset->getData());
-  ASSERT_EQUALS(6, data->size());
+  vector <DateValues> &data = asset->getData();
+  ASSERT_EQUALS(6, data.size());
 
-  ASSERT(Date("01/01/2000") == (*data)[0].date);
-  ASSERT_DOUBLES_EQUAL(+10.0, (*data)[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[0].netting, EPSILON);
+  ASSERT(Date("01/01/2000") == data[0].date);
+  ASSERT_DOUBLES_EQUAL(+10.0, data[0].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[0].netting, EPSILON);
 
-  ASSERT(Date("01/07/2000") == (*data)[1].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[1].netting, EPSILON);
+  ASSERT(Date("01/07/2000") == data[1].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , data[1].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[1].netting, EPSILON);
 
-  ASSERT(Date("01/01/2001") == (*data)[2].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[2].netting, EPSILON);
+  ASSERT(Date("01/01/2001") == data[2].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , data[2].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[2].netting, EPSILON);
 
-  ASSERT(Date("01/07/2001") == (*data)[3].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[3].netting, EPSILON);
+  ASSERT(Date("01/07/2001") == data[3].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , data[3].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[3].netting, EPSILON);
 
-  ASSERT(Date("01/01/2002") == (*data)[4].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , (*data)[4].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[4].netting, EPSILON);
+  ASSERT(Date("01/01/2002") == data[4].date);
+  ASSERT_DOUBLES_EQUAL(+10.0 , data[4].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[4].netting, EPSILON);
 
-  ASSERT(Date("01/07/2002") == (*data)[5].date);
-  ASSERT_DOUBLES_EQUAL(+510.0, (*data)[5].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, (*data)[5].netting, EPSILON);
+  ASSERT(Date("01/07/2002") == data[5].date);
+  ASSERT_DOUBLES_EQUAL(+510.0, data[5].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[5].netting, EPSILON);
 
   DateValues *vertexes = new DateValues[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
-  ASSERT_NO_THROW(asset->getVertexes(dates, 4, &interests, vertexes));
+  ASSERT_NO_THROW(asset->getVertexes(dates, 4, interests, vertexes));
 
   ASSERT(Date("01/01/1999") == vertexes[0].date);
   ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].cashflow, EPSILON);

@@ -40,6 +40,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . fecha renamed to date0
+//   . Interests refactorization
+//
 //===========================================================================
 
 #include <iostream>
@@ -122,10 +126,10 @@ void ccruncher_test::InterestsTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &isobj));
 
   Interest iobj;
-  ASSERT_NO_THROW(iobj = *(isobj.getInterest("discount")));
+  ASSERT_NO_THROW(iobj = isobj["discount"]);
 
   ASSERT("discount" == iobj.getName());
-  ASSERT(Date("18/02/2003") == iobj.getFecha());
+  ASSERT(Date("18/02/2003") == iobj.getDate0());
 
   Date date0 = Date("18/02/2003");
 

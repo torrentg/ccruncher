@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . fecha renamed to date0
+//
 //===========================================================================
 
 #include <cmath>
@@ -81,7 +84,7 @@ void ccruncher::Interest::reset()
   name = "UNDEFINED_INTEREST";
 
   // setting an initial date
-  fecha = Date(1,1,1900);
+  date0 = Date(1,1,1900);
 }
 
 //===========================================================================
@@ -103,15 +106,15 @@ string ccruncher::Interest::getName() const
 //===========================================================================
 // returns initial date of this curve
 //===========================================================================
-Date ccruncher::Interest::getFecha() const
+Date ccruncher::Interest::getDate0() const
 {
-  return fecha;
+  return date0;
 }
 
 //===========================================================================
 // returns interpolated interest rate at month t
 //===========================================================================
-double ccruncher::Interest::getValue(const double t)
+double ccruncher::Interest::getValue(const double t) const
 {
   Rate aux = vrates[0];
 
@@ -142,25 +145,25 @@ double ccruncher::Interest::getValue(const double t)
 //===========================================================================
 // returns date at month t
 //===========================================================================
-Date ccruncher::Interest::idx2date(int t)
+Date ccruncher::Interest::idx2date(int t) const
 {
-  return addMonths(fecha, t);
+  return addMonths(date0, t);
 }
 
 //===========================================================================
 // returns index of date date1
 //===========================================================================
-double ccruncher::Interest::date2idx(Date &date1)
+double ccruncher::Interest::date2idx(Date &date1) const
 {
-  return (double)(date1-fecha)/30.3958;
+  return (double)(date1-date0)/30.3958;
 }
 
 //===========================================================================
-// returns factor to aply to transport a money value from date1 to fecha
+// returns factor to aply to transport a money value from date1 to date0
 // r: interest rate to apply
 // t: time (in months)
 //===========================================================================
-double ccruncher::Interest::getUpsilon(const double r, const double t)
+double ccruncher::Interest::getUpsilon(const double r, const double t) const
 {
   return pow(1.0 + r, t/12.0);
 }
@@ -169,7 +172,7 @@ double ccruncher::Interest::getUpsilon(const double r, const double t)
 // returns factor to aply to transport a money value from date1 to date2
 // satisfying interest curve rate values
 //===========================================================================
-double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) throw(Exception)
+double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const throw(Exception)
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
@@ -228,8 +231,8 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
     {
       // getting attributes
       name = getStringAttribute(attributes, "name", "");
-      fecha = getDateAttribute(attributes, "date", Date(1,1,1900));
-      if (name == "" || fecha == Date(1,1,1900))
+      date0 = getDateAttribute(attributes, "date", Date(1,1,1900));
+      if (name == "" || date0 == Date(1,1,1900))
       {
         throw eperror(eu, "invalid attributes values at <interest>");
       }
@@ -264,12 +267,12 @@ void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Interest::getXML(int ilevel) throw(Exception)
+string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interest name='" + name + "' date='" + Format::date2string(fecha) + "'>\n";
+  ret += spc + "<interest name='" + name + "' date='" + Format::date2string(date0) + "'>\n";
 
   for (unsigned int i=0;i<vrates.size();i++)
   {

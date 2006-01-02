@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added const qualifiers
+//
 //===========================================================================
 
 #include "interests/Rate.hpp"
@@ -109,7 +112,7 @@ void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Rate::getXML(int ilevel) throw(Exception)
+string ccruncher::Rate::getXML(int ilevel) const throw(Exception)
 {
   string ret = Strings::blanks(ilevel);
 

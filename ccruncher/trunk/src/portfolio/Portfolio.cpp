@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Portfolio refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -50,8 +53,8 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings *ratings_, Sectors *sectors_,
-             Segmentations *segmentations_, Interests *interests_)
+ccruncher::Portfolio::Portfolio(Ratings &ratings_, Sectors &sectors_,
+             Segmentations &segmentations_, Interests &interests_)
 {
   // initializing class
   reset(ratings_, sectors_, segmentations_, interests_);
@@ -72,16 +75,16 @@ ccruncher::Portfolio::~Portfolio()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_,
-             Segmentations *segmentations_, Interests *interests_)
+void ccruncher::Portfolio::reset(Ratings &ratings_, Sectors &sectors_,
+             Segmentations &segmentations_, Interests &interests_)
 {
   auxclient = NULL;
 
   // setting external objects
-  ratings = ratings_;
-  sectors = sectors_;
-  segmentations = segmentations_;
-  interests = interests_;
+  ratings = &ratings_;
+  sectors = &sectors_;
+  segmentations = &segmentations_;
+  interests = &interests_;
 
   // dropping clients
   for(unsigned int i=0;i<vclients.size();i++) {
@@ -95,18 +98,18 @@ void ccruncher::Portfolio::reset(Ratings *ratings_, Sectors *sectors_,
 //===========================================================================
 // returns client list
 //===========================================================================
-vector<Client *> * ccruncher::Portfolio::getClients()
+vector<Client *> & ccruncher::Portfolio::getClients()
 {
-  return &vclients;
+  return vclients;
 }
 
 //===========================================================================
 // inserting a client into list
 //===========================================================================
-void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
+void ccruncher::Portfolio::insertClient(Client &val) throw(Exception)
 {
   unsigned int vcs = vclients.size();
-  unsigned long chkey = val->hkey;
+  unsigned long chkey = val.hkey;
   Client *curr = NULL;
 
   // checking coherence
@@ -117,19 +120,19 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
     if (curr->hkey == chkey)
     {
       // resolving hash key collision
-      if (curr->id == val->id)
+      if (curr->id == val.id)
       {
-        delete val;
+        delete &val;
         string msg = "Portfolio::insertClient(): client id ";
-        msg += val->id;
+        msg += val.id;
         msg += " repeated";
         throw Exception(msg);
       }
-      else if (curr->name == val->name)
+      else if (curr->name == val.name)
       {
-        delete val;
+        delete &val;
         string msg = "Portfolio::insertClient(): client name ";
-        msg += val->name;
+        msg += val.name;
         msg += " repeated";
         throw Exception(msg);
       }
@@ -138,11 +141,11 @@ void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 
   try
   {
-    vclients.push_back(val);
+    vclients.push_back(&val);
   }
   catch(std::exception &e)
   {
-    delete val;
+    delete &val;
     throw Exception(e);
   }
 }
@@ -169,7 +172,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     }
   }
   else if (isEqual(name_,"client")) {
-    auxclient = new Client(ratings, sectors, segmentations, interests);
+    auxclient = new Client(*ratings, *sectors, *segmentations, *interests);
     eppush(eu, auxclient, name_, attributes);
   }
   else {
@@ -190,7 +193,7 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
   }
   else if (isEqual(name_,"client")) {
     assert(auxclient != NULL);
-    insertClient(auxclient);
+    insertClient(*auxclient);
     auxclient = NULL;
   }
   else {
@@ -201,7 +204,7 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // getNumActiveClients
 //===========================================================================
-int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exception)
+int ccruncher::Portfolio::getNumActiveClients(const Date &from, const Date &to) throw(Exception)
 {
   int ret = 0;
 
@@ -219,7 +222,7 @@ int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exceptio
 //===========================================================================
 // sortClients
 //===========================================================================
-void ccruncher::Portfolio::sortClients(Date from, Date to, bool onlyactive) throw(Exception)
+void ccruncher::Portfolio::sortClients(const Date &from, const Date &to, bool onlyactive) throw(Exception)
 {
   // sorting clients by sector and rating
   sort(vclients.begin(), vclients.end(), Client::less);

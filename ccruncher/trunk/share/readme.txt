@@ -91,7 +91,7 @@ descrip: LAM/MPI is a high-quality open-source implementation of the Message
 ------------------------------------------------------------------------
 
 project: R
-version: 2.2.0
+version: 2.2.1
 licence: GNU GPL
 homeurl: http://www.r-project.org/
 descrip: R is a system for statistical computation and graphics. It consists

@@ -3,6 +3,11 @@ CREDITCRUNCHER NEWS
 ===================
 
 
+version 0.9 (Jan. 2006)
+--------------------------
+  * code refactoring
+  * upgraded to new R and valgrind versions
+
 version 0.8 (Nov. 2005)
 --------------------------
   * root docs moved to doc/ directory

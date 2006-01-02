@@ -54,6 +54,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Portfolio refactoring
+//   . IData refactoring
+//
 //===========================================================================
 
 #include <fstream>
@@ -222,7 +226,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing transition matrix", true);
-      transitions = new TransitionMatrix(ratings);
+      transitions = new TransitionMatrix(*ratings);
       eppush(eu, transitions, name_, attributes);
     }
   }
@@ -236,7 +240,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing survival function", true);
-      survival = new Survival(ratings);
+      survival = new Survival(*ratings);
       eppush(eu, survival, name_, attributes);
     }
   }
@@ -261,7 +265,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing correlation matrix", true);
-      correlations = new CorrelationMatrix(sectors);
+      correlations = new CorrelationMatrix(*sectors);
       eppush(eu, correlations, name_, attributes);
     }
   }
@@ -301,7 +305,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing portfolio", true);
-      portfolio = new Portfolio(ratings, sectors, segmentations, interests);
+      portfolio = new Portfolio(*ratings, *sectors, *segmentations, *interests);
       eppush(eu, portfolio, name_, attributes);
     }
   }
@@ -391,4 +395,93 @@ void ccruncher::IData::validate() throw(Exception)
 ccruncher::IData::~IData()
 {
   release();
+}
+
+//===========================================================================
+// getParams
+//===========================================================================
+Params & ccruncher::IData::getParams() const
+{
+  return *params;
+}
+
+//===========================================================================
+// getInterests
+//===========================================================================
+Interests & ccruncher::IData::getInterests() const
+{
+  return *interests;
+}
+
+//===========================================================================
+// getRatings
+//===========================================================================
+Ratings & ccruncher::IData::getRatings() const
+{
+  return *ratings;
+}
+
+//===========================================================================
+// getTransitionMatrix
+//===========================================================================
+TransitionMatrix & ccruncher::IData::getTransitionMatrix() const
+{
+  return *transitions;
+}
+
+//===========================================================================
+// getSurvival
+//===========================================================================
+Survival & ccruncher::IData::getSurvival() const
+{
+  return *survival;
+}
+
+//===========================================================================
+// getSectors
+//===========================================================================
+Sectors & ccruncher::IData::getSectors() const
+{
+  return *sectors;
+}
+
+//===========================================================================
+// getCorrelationMatrix
+//===========================================================================
+CorrelationMatrix & ccruncher::IData::getCorrelationMatrix() const
+{
+  return *correlations;
+}
+
+//===========================================================================
+// getSegmentations
+//===========================================================================
+Segmentations & ccruncher::IData::getSegmentations() const
+{
+  return *segmentations;
+}
+
+//===========================================================================
+// getPortfolio
+//===========================================================================
+Portfolio & ccruncher::IData::getPortfolio() const
+{
+  return *portfolio;
+}
+
+//===========================================================================
+// setSurvival
+//===========================================================================
+void ccruncher::IData::setSurvival(const Survival &survival_)
+{
+  survival = (Survival *) &(survival_);
+}
+
+//===========================================================================
+// hasSurvival
+//===========================================================================
+bool ccruncher::IData::hasSurvival() const
+{
+  if (survival != NULL) return true;
+  else return false;
 }

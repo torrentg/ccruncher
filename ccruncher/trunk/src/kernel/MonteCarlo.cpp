@@ -1,4 +1,4 @@
-
+// 
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
@@ -89,6 +89,19 @@
 // 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Sectors refactoring
+//   . Ratings refactoring
+//   . Segmentations refactoring
+//   . Survival refactoring
+//   . TransitionMatrix refactoring
+//
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Portfolio refactoring
+//   . IData refactoring
+//   . SegmentAggregator refactoring
+//   . MonteCarlo refactoring
+//
 //===========================================================================
 
 #include <cfloat>
@@ -148,10 +161,8 @@ void ccruncher::MonteCarlo::reset()
   fpath = "path not set";
   bforce = false;
 
-  interests = NULL;
   ratings = NULL;
   sectors = NULL;
-  segmentations = NULL;
   clients = NULL;
 
   survival = NULL;
@@ -169,7 +180,7 @@ void ccruncher::MonteCarlo::release()
   // deallocating transition matrix object
   if (mtrans != NULL) { delete mtrans; mtrans = NULL; }
 
-  // survival fuction object deallocated by IData (his container)
+  // survival fuction object deallocated by IData (its container)
   // client correlation matrix deallocated by copulas[0] object
 
   // deallocating copula vector
@@ -209,13 +220,9 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::MonteCarlo::initialize(IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
-  if (idata == NULL)
-  {
-    throw Exception("MonteCarlo::initialize(): NULL idata");
-  }
-  else if (MAXITERATIONS != 0L)
+  if (MAXITERATIONS != 0L)
   {
     throw Exception("MonteCarlo::initialize(): reinitialization not allowed");
   }
@@ -238,7 +245,7 @@ void ccruncher::MonteCarlo::initialize(IData *idata) throw(Exception)
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
 {
   Logger::addBlankLine();
   Logger::trace("initialing procedure", '*');
@@ -266,7 +273,7 @@ void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
   }
 
   // initializing copulas
-  initCopulas(idata, idata->params->copula_seed);
+  initCopulas(idata, idata.getParams().copula_seed);
 
   // ratings paths allocation
   initTimeToDefaultArray(N);
@@ -281,44 +288,44 @@ void ccruncher::MonteCarlo::init(IData *idata) throw(Exception)
 //===========================================================================
 // initParams
 //===========================================================================
-void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting parameters", '-');
   Logger::newIndentLevel();
 
   // max number of seconds
-  MAXSECONDS = idata->params->maxseconds;
+  MAXSECONDS = idata.getParams().maxseconds;
   Logger::trace("maximum execution time (in seconds)", Format::long2string(MAXSECONDS));
 
   // max number of iterations
-  MAXITERATIONS = idata->params->maxiterations;
+  MAXITERATIONS = idata.getParams().maxiterations;
   Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
   // printing initial date
-  Logger::trace("initial date", Format::date2string(idata->params->begindate));
+  Logger::trace("initial date", Format::date2string(idata.getParams().begindate));
   // fixing step number
-  STEPS = idata->params->steps;
+  STEPS = idata.getParams().steps;
   Logger::trace("number of time steps", Format::int2string(STEPS));
 
   // fixing steplength
-  STEPLENGTH = idata->params->steplength;
+  STEPLENGTH = idata.getParams().steplength;
   Logger::trace("length of each time step (in months)", Format::int2string(STEPLENGTH));
 
   // fixing time-tranches
-  begindate = idata->params->begindate;
-  dates = idata->params->getDates();
+  begindate = idata.getParams().begindate;
+  dates = idata.getParams().getDates();
 
   // reporting simulated values
-  Logger::trace("simulated values", idata->params->simule);
+  Logger::trace("simulated values", idata.getParams().simule);
 
   // fixing simulation method
-  if (idata->params->method == "time-to-default") {
+  if (idata.getParams().method == "time-to-default") {
     ttdmethod = true;
     numcopulas = 1;
     Logger::trace("resolution method", string("time-to-default"));
   }
-  else if (idata->params->method == "rating-path") {
+  else if (idata.getParams().method == "rating-path") {
     ttdmethod = false;
     numcopulas = STEPS;
     Logger::trace("resolution method", string("rating-path"));
@@ -328,7 +335,7 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
   }
 
   // fixing variance reduction method
-  antithetic = idata->params->antithetic;
+  antithetic = idata.getParams().antithetic;
   Logger::trace("antithetic mode", Format::bool2string(antithetic));
 
   // initializing internal variables
@@ -342,27 +349,27 @@ void ccruncher::MonteCarlo::initParams(const IData *idata) throw(Exception)
 //===========================================================================
 // initClients
 //===========================================================================
-void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int isteps) throw(Exception)
+void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int isteps) throw(Exception)
 {
   // setting logger header
   Logger::trace("fixing clients to simulate", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active clients", Format::bool2string(idata->params->onlyactive));
-  Logger::trace("number of initial clients", Format::long2string(idata->portfolio->getClients()->size()));
+  Logger::trace("simulate only active clients", Format::bool2string(idata.getParams().onlyactive));
+  Logger::trace("number of initial clients", Format::long2string(idata.getPortfolio().getClients().size()));
 
   // sorting clients by sector and rating
-  idata->portfolio->sortClients(idates[0], idates[isteps], idata->params->onlyactive);
+  idata.getPortfolio().sortClients(idates[0], idates[isteps], idata.getParams().onlyactive);
 
   // fixing number of clients
-  if (idata->params->onlyactive)
+  if (idata.getParams().onlyactive)
   {
-    N = idata->portfolio->getNumActiveClients(idates[0], idates[isteps]);
+    N = idata.getPortfolio().getNumActiveClients(idates[0], idates[isteps]);
   }
   else
   {
-    N = idata->portfolio->getClients()->size();
+    N = idata.getPortfolio().getClients().size();
   }
 
   Logger::trace("number of simulated clients", Format::long2string(N));
@@ -374,7 +381,7 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
   }
 
   // setting client object
-  clients = idata->portfolio->getClients();
+  clients = &(idata.getPortfolio().getClients());
 
   // exit function
   Logger::previousIndentLevel();
@@ -383,17 +390,17 @@ void ccruncher::MonteCarlo::initClients(const IData *idata, Date *idates, int is
 //===========================================================================
 // initRatings
 //===========================================================================
-void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initRatings(const IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting ratings", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of ratings", Format::int2string(idata->ratings->getRatings()->size()));
+  Logger::trace("number of ratings", Format::int2string(idata.getRatings().size()));
 
   // fixing ratings
-  ratings = idata->ratings;
+  ratings = &(idata.getRatings());
 
   // exit function
   Logger::previousIndentLevel();
@@ -402,17 +409,17 @@ void ccruncher::MonteCarlo::initRatings(const IData *idata) throw(Exception)
 //===========================================================================
 // initSectors
 //===========================================================================
-void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initSectors(const IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting sectors", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of sectors", Format::int2string(idata->sectors->getSectors()->size()));
+  Logger::trace("number of sectors", Format::int2string(idata.getSectors().size()));
 
   // fixing ratings
-  sectors = idata->sectors;
+  sectors = &(idata.getSectors());
 
   // exit function
   Logger::previousIndentLevel();
@@ -421,7 +428,7 @@ void ccruncher::MonteCarlo::initSectors(const IData *idata) throw(Exception)
 //===========================================================================
 // initRatingPath
 //===========================================================================
-void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initRatingPath(const IData &idata) throw(Exception)
 {
   // doing assertions
   assert(mtrans == NULL);
@@ -431,13 +438,13 @@ void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  string sval = Format::int2string(idata->transitions->size());
+  string sval = Format::int2string(idata.getTransitionMatrix().size());
   Logger::trace("matrix dimension", sval + "x" + sval);
-  Logger::trace("initial period (in months)", Format::int2string(idata->transitions->period));
+  Logger::trace("initial period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
   Logger::trace("scaling matrix to step length (in months)", Format::int2string(STEPLENGTH));
 
   // finding transition matrix for steplength time
-  mtrans = translate(idata->transitions, STEPLENGTH);
+  mtrans = translate(idata.getTransitionMatrix(), STEPLENGTH);
 
   // exit function
   Logger::previousIndentLevel();
@@ -446,7 +453,7 @@ void ccruncher::MonteCarlo::initRatingPath(const IData *idata) throw(Exception)
 //===========================================================================
 // initTimeToDefault
 //===========================================================================
-void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
 {
   // doing assertions
   assert(survival == NULL);
@@ -455,41 +462,41 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
   Logger::trace("setting survival function", '-');
   Logger::newIndentLevel();
 
-  if (idata->survival != NULL)
+  if (idata.hasSurvival())
   {
     // checking that survival function is defined for t <= STEPS*STEPLENGTH
-    if (idata->survival->getMinCommonTime() < STEPS*STEPLENGTH)
+    if (idata.getSurvival().getMinCommonTime() < STEPS*STEPLENGTH)
     {
       throw Exception("survival function not defined at t=" + Format::int2string(STEPS*STEPLENGTH));
     }
 
     // setting survival function
-    survival = idata->survival;
+    survival = &(idata.getSurvival());
     Logger::trace("survival function", string("user defined"));
   }
   else
   {
     // setting logger info
-    string sval = Format::int2string(idata->transitions->size());
+    string sval = Format::int2string(idata.getTransitionMatrix().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("initial period (in months)", Format::int2string(idata->transitions->period));
+    Logger::trace("initial period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
-    double **aux = Arrays<double>::allocMatrix(idata->transitions->n, STEPS+1);
-    ccruncher::survival(idata->transitions, STEPLENGTH, STEPS+1, aux);
+    double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), STEPS+1);
+    ccruncher::survival(idata.getTransitionMatrix(), STEPLENGTH, STEPS+1, aux);
     int *itime = Arrays<int>::allocVector(STEPS+1);
     for (int i=0;i<=STEPS;i++) {
       itime[i] = i*STEPLENGTH;
     }
 
     // creating survival function object
-    survival = new Survival(idata->ratings, STEPS+1, itime, aux, 2*(STEPS+1)*STEPLENGTH);
-    Arrays<double>::deallocMatrix(aux, idata->transitions->n);
+    survival = new Survival(idata.getRatings(), STEPS+1, itime, aux, 2*(STEPS+1)*STEPLENGTH);
+    Arrays<double>::deallocMatrix(aux, idata.getTransitionMatrix().size());
     Arrays<int>::deallocVector(itime);
     Logger::trace("transition matrix -> survival function", string("computed"));
 
     // appending survival object to idata (will dealloc survival object)
-    idata->survival = survival;
+    idata.setSurvival(*survival);
   }
 
   // exit function
@@ -499,7 +506,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData *idata) throw(Exception)
 //===========================================================================
 // copula construction
 //===========================================================================
-void ccruncher::MonteCarlo::initCopulas(const IData *idata, long seed) throw(Exception)
+void ccruncher::MonteCarlo::initCopulas(const IData &idata, long seed) throw(Exception)
 {
   int *tmp = NULL;
 
@@ -519,7 +526,7 @@ void ccruncher::MonteCarlo::initCopulas(const IData *idata, long seed) throw(Exc
   try
   {
     // allocating temporal memory
-    tmp = Arrays<int>::allocVector(idata->correlations->size(),0);
+    tmp = Arrays<int>::allocVector(idata.getCorrelationMatrix().size(),0);
 
     // computing the number of clients in each sector
     for(long i=0;i<N;i++)
@@ -532,7 +539,7 @@ void ccruncher::MonteCarlo::initCopulas(const IData *idata, long seed) throw(Exc
     for (int i=0;i<numcopulas;i++) copulas[i] = NULL;
 
     // creating the copula object
-    copulas[0] = new BlockGaussianCopula(idata->correlations->getMatrix(), tmp, idata->correlations->size());
+    copulas[0] = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
 
     // releasing temporal memory
     Arrays<int>::deallocVector(tmp);
@@ -611,9 +618,10 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 //===========================================================================
 // initAggregators
 //===========================================================================
-void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
+void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
 {
   long numsegments = 0;
+  Segmentations &segmentations = idata.getSegmentations();
 
   // init only if spath is set
   if (fpath == "")
@@ -627,29 +635,27 @@ void ccruncher::MonteCarlo::initAggregators(const IData *idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", File::normalizePath(fpath));
-  Logger::trace("number of segmentations defined", Format::int2string(idata->segmentations->getSegmentations().size()));
+  Logger::trace("number of segmentations defined", Format::int2string(segmentations.size()));
   Logger::trace("elapsed time initializing aggregators", true);
 
   // setting objects
-  interests = idata->interests;
-  segmentations = idata->segmentations;
   aggregators.clear();
 
   // allocating and initializing aggregators
-  for(int i=0;i<segmentations->getNumSegmentations();i++)
+  for(int i=0;i<segmentations.size();i++)
   {
-    for(int j=0;j<segmentations->getNumSegments(i);j++)
+    for(int j=0;j<segmentations[i].size();j++)
     {
       // allocating SegmentAggregator
       SegmentAggregator *tmp = new SegmentAggregator();
 
       // asigning a filename
-      string filename = segmentations->getSegmentationName(i) + "-" + segmentations->getSegmentName(i, j) + ".out";
+      string filename = segmentations[i].name + "-" + segmentations[i][j].name + ".out";
 
       // initializing SegmentAggregator
-      tmp->define(aggregators.size(), i, j, segmentations->getComponents(i));
+      tmp->define(aggregators.size(), i, j, segmentations[i].components);
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, STEPS+1, clients, N, interests, idata->params->simule);
+      tmp->initialize(dates, STEPS+1, *clients, N, idata.getInterests(), idata.getParams().simule);
 
       // adding aggregator to list (only if have elements)
       numsegments++;

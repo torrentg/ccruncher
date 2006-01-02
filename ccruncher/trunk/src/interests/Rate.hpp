@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added const qualifiers
+//
 //===========================================================================
 
 #ifndef _Rate_
@@ -55,12 +58,16 @@ class Rate : public ExpatHandlers
 
   public:
 
+    // time (in months)
     double t;
+    // yearly rate value (0.025 -> 2.5% per year)
     double r;
 
+    // default constructor
     Rate();
-
-    string getXML(int) throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
+    // reset object content
     void reset();
 
     /** ExpatHandlers methods declaration */

@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Sectors refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -58,17 +61,45 @@ ccruncher::Sectors::~Sectors()
 }
 
 //===========================================================================
-// destructor
+// size
 //===========================================================================
-vector<Sector> * ccruncher::Sectors::getSectors()
+int ccruncher::Sectors::size() const
 {
-  return &vsectors;
+  return vsectors.size();
+}
+
+//===========================================================================
+// [] operator
+//===========================================================================
+Sector& ccruncher::Sectors::operator []  (int i)
+{
+  // assertions
+  assert(i >= 0 && i < (int) vsectors.size());
+
+  // return i-th sector
+  return vsectors[i];
+}
+
+//===========================================================================
+// [] operator. returns sector by name
+//===========================================================================
+Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
+{
+  for (unsigned int i=0;i<vsectors.size();i++)
+  {
+    if (vsectors[i].name == name)
+    {
+      return vsectors[i];
+    }
+  }
+
+  throw Exception("Sectors::[]: sector " + name + " not found");
 }
 
 //===========================================================================
 // inserts a sector in list
 //===========================================================================
-void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
+void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vsectors.size();i++)
@@ -107,7 +138,6 @@ void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
     throw Exception(e);
   }
 }
-
 
 //===========================================================================
 // epstart - ExpatHandlers method implementation
@@ -164,7 +194,7 @@ void ccruncher::Sectors::validations() throw(Exception)
   {
     Sector aux = vsectors[i];
 
-    if (aux.order != (int)(i+1))
+    if (aux.order != (int)(i))
     {
       string msg = "Sectors::validations(): incorrect order sector at or near order = ";
       msg += aux.order;
@@ -174,41 +204,9 @@ void ccruncher::Sectors::validations() throw(Exception)
 }
 
 //===========================================================================
-// returns sector index (-1 if sector not found)
-//===========================================================================
-int ccruncher::Sectors::getIndex(const string &sector_name)
-{
-
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == sector_name)
-    {
-      return (int) i;
-    }
-  }
-
-  return -1;
-}
-
-//===========================================================================
-// returns sector name
-//===========================================================================
-string ccruncher::Sectors::getName(int index) throw(Exception)
-{
-  if (index < 0 || index >= (int) vsectors.size())
-  {
-    throw Exception("Sectors::getName(): index out of range");
-  }
-  else
-  {
-    return vsectors[index].name;
-  }
-}
-
-//===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sectors::getXML(int ilevel) throw(Exception)
+string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";

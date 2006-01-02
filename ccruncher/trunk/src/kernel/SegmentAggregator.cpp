@@ -46,6 +46,12 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Client refactoring
+//
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . SegmentAggregator refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -152,15 +158,14 @@ void ccruncher::SegmentAggregator::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> *clients,
-  long n, Interests *interests_, const string &simule) throw(Exception)
+void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> &clients,
+  long n, Interests &interests_, const string &simule) throw(Exception)
 {
   bool *clientflag = NULL;
 
   // assertions
   assert(dates != NULL);
   assert(m >= 0);
-  assert(clients != NULL);
   assert(n >= 0);
 
   // initial validations
@@ -217,7 +222,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
 //===========================================================================
 // getCNumClients
 //===========================================================================
-long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> *clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> &clients, long n, bool *flags)
 {
   long ret = 0L;
 
@@ -225,7 +230,7 @@ long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> *clients, lon
   {
     flags[i] = false;
 
-    if ((*clients)[i]->belongsTo(isegmentation, isegment))
+    if (clients[i]->belongsTo(isegmentation, isegment))
     {
       flags[i] = true;
       ret++;
@@ -238,20 +243,19 @@ long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> *clients, lon
 //===========================================================================
 // getANumClients
 //===========================================================================
-long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getANumClients(vector<Client *> &clients, long n, bool *flags)
 {
-  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
   {
     flags[i] = false;
 
-    assets = (*clients)[i]->getAssets();
+    vector<Asset> &assets = clients[i]->getAssets();
 
-    for(unsigned int j=0;j<assets->size();j++)
+    for(unsigned int j=0;j<assets.size();j++)
     {
-      if ((*assets)[j].belongsTo(isegmentation, isegment))
+      if (assets[j].belongsTo(isegmentation, isegment))
       {
         flags[i] = true;
         ret++;
@@ -266,18 +270,17 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> *clients, lon
 //===========================================================================
 // getANumAssets
 //===========================================================================
-long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> *clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> &clients, long n, bool *flags)
 {
-  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
   {
-    assets = (*clients)[i]->getAssets();
+    vector<Asset> &assets = clients[i]->getAssets();
 
-    for(unsigned int j=0;j<assets->size();j++)
+    for(unsigned int j=0;j<assets.size();j++)
     {
-      if ((*assets)[j].belongsTo(isegmentation, isegment))
+      if (assets[j].belongsTo(isegmentation, isegment))
       {
         ret++;
       }
@@ -290,17 +293,16 @@ long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> *clients, long
 //===========================================================================
 // getCNumAssets
 //===========================================================================
-long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> *clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> &clients, long n, bool *flags)
 {
-  vector<Asset> *assets;
   long ret = 0L;
 
   for(long i=0;i<n;i++)
   {
     if (flags[i] == true)
     {
-      assets = (*clients)[i]->getAssets();
-      ret += assets->size();
+      vector<Asset> &assets = clients[i]->getAssets();
+      ret += assets.size();
     }
   }
 
@@ -340,12 +342,11 @@ long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n)
 //===========================================================================
 // allocVertexes
 //===========================================================================
-DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> *clients,
-                Interests *interests_) throw(Exception)
+DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> &clients,
+                Interests &interests_) throw(Exception)
 {
   DateValues **ret = NULL;
   DateValues *aux = NULL;
-  vector<Asset> *assets;
 
   ret = Arrays<DateValues>::allocMatrix(nclients, m);
   aux = Arrays<DateValues>::allocVector(m);
@@ -362,14 +363,14 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
 
     // finding client info
     long cpos = iclients[i];
-    assets = (*clients)[cpos]->getAssets();
+    vector<Asset> &assets = clients[cpos]->getAssets();
 
     // filling row
-    for(unsigned int j=0;j<assets->size();j++)
+    for(unsigned int j=0;j<assets.size();j++)
     {
-      if (components==client || (components==asset && (*assets)[j].belongsTo(isegmentation, isegment)))
+      if (components==client || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
       {
-        (*assets)[j].getVertexes(dates, m, interests_, aux);
+        assets[j].getVertexes(dates, m, interests_, aux);
 
         for(int k=0;k<m;k++)
         {
@@ -628,7 +629,7 @@ string ccruncher::SegmentAggregator::getFilePath() throw(Exception)
 //===========================================================================
 // getNumElements
 //===========================================================================
-long ccruncher::SegmentAggregator::getNumElements()
+long ccruncher::SegmentAggregator::getNumElements() const
 {
   if (components == asset) {
     return nassets;

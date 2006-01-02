@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Segmentation class refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -85,12 +88,11 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT("office" == sobj.name);
   ASSERT(asset == sobj.components);
 
-  vector<Segment> vsegments = sobj.getSegments();
-  ASSERT(5 == vsegments.size());
+  ASSERT(5 == sobj.size());
 
-  ASSERT(0 == sobj.getSegment("rest"));
-  ASSERT(1 == sobj.getSegment("0001"));
-  ASSERT(2 == sobj.getSegment("0002"));
-  ASSERT(3 == sobj.getSegment("0003"));
-  ASSERT(4 == sobj.getSegment("0004"));
+  ASSERT(0 == sobj["rest"].order);
+  ASSERT(1 == sobj["0001"].order);
+  ASSERT(2 == sobj["0002"].order);
+  ASSERT(3 == sobj["0003"].order);
+  ASSERT(4 == sobj["0004"].order);
 }

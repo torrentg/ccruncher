@@ -54,6 +54,9 @@
 // 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . MonteCarlo refactoring
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -89,10 +92,8 @@ class MonteCarlo
 
   private:
 
-    Interests *interests;
     Ratings *ratings;
     Sectors *sectors;
-    Segmentations *segmentations;
     vector<SegmentAggregator *> aggregators;
     vector<Client *> *clients;
 
@@ -143,16 +144,16 @@ class MonteCarlo
     void release();
 
     // init methods
-    void init(IData *) throw(Exception);
-    void initParams(const IData *) throw(Exception);
-    void initClients(const IData *, Date *, int) throw(Exception);
-    void initRatings(const IData *) throw(Exception);
-    void initSectors(const IData *) throw(Exception);
-    void initRatingPath(const IData *) throw(Exception);
-    void initTimeToDefault(IData *) throw(Exception);
-    void initCopulas(const IData *idata, long) throw(Exception);
+    void init(IData &) throw(Exception);
+    void initParams(const IData &) throw(Exception);
+    void initClients(const IData &, Date *, int) throw(Exception);
+    void initRatings(const IData &) throw(Exception);
+    void initSectors(const IData &) throw(Exception);
+    void initRatingPath(const IData &) throw(Exception);
+    void initTimeToDefault(IData &) throw(Exception);
+    void initCopulas(const IData &idata, long) throw(Exception);
     void initTimeToDefaultArray(int) throw(Exception);
-    void initAggregators(const IData *) throw(Exception);
+    void initAggregators(const IData &) throw(Exception);
 
     // Monte Carlo methods
     void randomize();
@@ -172,7 +173,7 @@ class MonteCarlo
 
     void setFilePath(string path, bool force);
     void setHash(int num);
-    void initialize(IData *) throw(Exception);
+    void initialize(IData &) throw(Exception);
     long execute() throw(Exception);
 
 };

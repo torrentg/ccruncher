@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Sectors refactoring
+//
 //===========================================================================
 
 #ifndef _Sectors_
@@ -57,22 +60,32 @@ class Sectors : public ExpatHandlers
 
   private:
 
+    // list of sectors
     vector<Sector> vsectors;
+    // auxiliary variable (used by parser)
     Sector auxsector;
 
-    void insertSector(Sector &) throw(Exception);
+    // add a sector to list
+    void insertSector(const Sector &) throw(Exception);
+    // validate list
     void validations() throw(Exception);
 
 
   public:
 
+    // default constructor
     Sectors();
+    // destructor
     ~Sectors();
 
-    vector<Sector> * getSectors();
-    int getIndex(const string &);
-    string getName(int index) throw(Exception);
-    string getXML(int) throw(Exception);
+    // return the number of sectors
+    int size() const;
+    // [] operator
+    Sector& operator [] (int i);
+    // [] operator
+    Sector& operator [] (const string &name) throw(Exception);
+    // returns object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

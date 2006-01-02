@@ -40,13 +40,15 @@
 //===========================================================================
 ccruncher::Segment::Segment()
 {
+  order = -1;
   name = "";
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Segment::Segment(string name_)
+ccruncher::Segment::Segment(int order_, string name_)
 {
+  order = order_;
   name = name_;
 }

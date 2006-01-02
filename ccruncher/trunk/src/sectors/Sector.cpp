@@ -37,6 +37,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added const qualifiers
+//   . order = tag value - 1
+//
 //===========================================================================
 
 #include "sectors/Sector.hpp"
@@ -79,11 +83,11 @@ void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char
       throw eperror(eu, "invalid number of attributes at sector");
     }
     else {
-      order = getIntAttribute(attributes, "order", -1);
+      order = getIntAttribute(attributes, "order", 0)-1;
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (order <= 0 || name == "" || desc == "_UNDEF_")
+      if (order < 0 || name == "" || desc == "_UNDEF_")
       {
         throw eperror(eu, "invalid values at <sector>");
       }
@@ -110,13 +114,13 @@ void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sector::getXML(int ilevel) throw(Exception)
+string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
 {
   string ret = Strings::blanks(ilevel);
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";
-  ret += "order ='" + Format::int2string(order) + "' ";
+  ret += "order ='" + Format::int2string(order+1) + "' ";
   ret += "desc ='" + desc + "'";
   ret += "/>\n";
 

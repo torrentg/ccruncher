@@ -39,6 +39,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #ifndef _TransitionMatrix_
@@ -66,42 +69,63 @@ class TransitionMatrix : public ExpatHandlers
 
   private:
 
-    void init(Ratings *) throw(Exception);
+    // nxn = matrix size (n=number of ratings)
+    int n;
+    // period (in months) that this transition matrix covers
+    int period;
+    // matrix values
+    double **matrix;
+    // epsilon value used to compare doubles
+    double epsilon;
+    // list of ratings
+    Ratings *ratings;
+    // index of default rating
+    int indexdefault;
+
+    // initialize object
+    void init(const Ratings &) throw(Exception);
+    // insert a transition value into the matrix
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
+    // validate object content
     void validate() throw(Exception);
+
 
   public:
 
-    int n;
-    int period;
-    double **matrix;
-    double epsilon;
-    Ratings *ratings;
-
-    int indexdefault;
-
-    TransitionMatrix(Ratings *) throw(Exception);
-    TransitionMatrix(TransitionMatrix &) throw(Exception);
+    // constructor
+    TransitionMatrix(const Ratings &) throw(Exception);
+    // constructor
+    TransitionMatrix(const TransitionMatrix &) throw(Exception);
+    // destructor
     ~TransitionMatrix();
 
-    int size();
-    double ** getMatrix();
-    int getIndexDefault();
-    int evalue(const int irating, const double val);
-    string getXML(int) throw(Exception);
+    // returns n (number of ratings)
+    int size() const;
+    // returns period that covers this matrix
+    int getPeriod() const;
+    // returns pointer to matrix values
+    double ** getMatrix() const;
+    // returns defaault rating index
+    int getIndexDefault() const;
+    // simulate transition with random value val
+    int evalue(const int irating, const double val) const;
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
 
+    // returns equivalent transition matrix that covers t months
+    friend TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
+    // computes Cumulated Default Forward Rate
+    friend void tmaa(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+    // computes Default Forward Rate
+    friend void tma(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+    // computes survival function related to this transition matrix
+    friend void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+
 };
-
-//---------------------------------------------------------------------------
-
-TransitionMatrix * translate(TransitionMatrix *tm, int t) throw(Exception);
-void tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
-void tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
-void survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

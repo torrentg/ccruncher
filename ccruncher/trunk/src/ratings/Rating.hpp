@@ -55,13 +55,18 @@ class Rating : public ExpatHandlers
 
   public:
 
+    // relative rating order
     int order;
+    // rating name
     string name;
+    // rating description
     string desc;
 
+    // rating constructor
     Rating();
-
-    string getXML(int) throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
+    // reset object content
     void reset();
 
     /** ExpatHandlers methods declaration */

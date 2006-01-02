@@ -63,30 +63,48 @@ class Params : public ExpatHandlers
 
   private:
 
+    // initialize variables
     void init();
+    // parse a property
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
-    void validate(void) throw(Exception);
+    // validate object content
+    void validate(void) const throw(Exception);
 
 
   public:
 
+    // time.begindate param value
     Date begindate;
+    // time.steps param value
     int steps;
+    // time.steplength param value
     int steplength;
+    // stopcriteria.maxiterations param value
     long maxiterations;
+    // stopcriteria.maxseconds param value
     long maxseconds;
+    // copula.type param value
     string copula_type; // gaussian
+    // montecarlo.method param value
     string method;      // rating-path, time-to-default
+    // montecarlo.simule param value
     string simule;      // loss, value
+    // copula.seed param value
     long copula_seed;
+    // montecarlo.antithetic param value
     bool antithetic;
-    bool onlyactive;    // only active clients
+    // portfolio.onlyActiveClients param value
+    bool onlyactive;
 
+    // constructor
     Params();
+    // destructor
     ~Params();
 
-    Date* getDates() throw(Exception);
-    string getXML(int) throw(Exception);
+    // return array with dates (caller will free mem)
+    Date* getDates() const throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

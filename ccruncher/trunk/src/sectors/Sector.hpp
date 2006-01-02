@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added const qualifiers
+//
 //===========================================================================
 
 #ifndef _Sector_
@@ -55,13 +58,18 @@ class Sector : public ExpatHandlers
 
   public:
 
+    // evaluation order
     int order;
+    // sector name
     string name;
+    // sector descriuption
     string desc;
 
+    // default constructor
     Sector();
-
-    string getXML(int) throw(Exception);
+    // serialize object constent as xml
+    string getXML(int) const throw(Exception);
+    // reset content
     void reset();
 
     /** ExpatHandlers methods declaration */

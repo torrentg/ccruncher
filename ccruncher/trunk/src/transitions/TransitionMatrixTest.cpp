@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . TransitionMatrix class refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -137,7 +140,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(&ratings);
+  TransitionMatrix trm(ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &trm));
 
   double **matrix = trm.getMatrix();
@@ -156,7 +159,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   ASSERT(4 == trm.getIndexDefault());
 
   // testing function translate()
-  TransitionMatrix *aux = translate(&trm, 12);
+  TransitionMatrix *aux = translate(trm, 12);
   matrix = aux->getMatrix();
 
   for(int i=0;i<5;i++)
@@ -212,7 +215,7 @@ void ccruncher_test::TransitionMatrixTest::test2()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(&ratings);
+  TransitionMatrix trm(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -258,7 +261,7 @@ void ccruncher_test::TransitionMatrixTest::test3()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(&ratings);
+  TransitionMatrix trm(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -304,7 +307,7 @@ void ccruncher_test::TransitionMatrixTest::test4()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(&ratings);
+  TransitionMatrix trm(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -350,6 +353,6 @@ void ccruncher_test::TransitionMatrixTest::test5()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(&ratings);
+  TransitionMatrix trm(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }

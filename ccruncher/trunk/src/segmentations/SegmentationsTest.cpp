@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Segmentations class refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -106,7 +109,6 @@ void ccruncher_test::SegmentationsTest::test1()
   Segmentations sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  vector<Segmentation> v = sobj.getSegmentations();
-  ASSERT(7 == v.size());
-  ASSERT(0 == sobj.getSegmentation("portfolio"));
+  ASSERT(7 == sobj.size());
+  ASSERT(0 == sobj["portfolio"].order);
 }

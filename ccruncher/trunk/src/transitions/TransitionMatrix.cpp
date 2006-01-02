@@ -52,6 +52,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Ratings refactoring
+//   . class refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -66,13 +70,13 @@
 //===========================================================================
 // private initializator
 //===========================================================================
-void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
+void ccruncher::TransitionMatrix::init(const Ratings &ratings_) throw(Exception)
 {
   period = 0;
   epsilon = -1.0;
-  ratings = ratings_;
+  ratings = (Ratings *) &ratings_;
 
-  n = ratings->getRatings()->size();
+  n = ratings->size();
 
   if (n <= 0)
   {
@@ -86,7 +90,7 @@ void ccruncher::TransitionMatrix::init(Ratings *ratings_) throw(Exception)
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
+ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
 {
   period = otm.period;
   ratings = otm.ratings;
@@ -102,7 +106,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(TransitionMatrix &otm) throw(Excep
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(Ratings *ratings_) throw(Exception)
+ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exception)
 {
   // seting default values
   init(ratings_);
@@ -124,15 +128,23 @@ ccruncher::TransitionMatrix::~TransitionMatrix()
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::TransitionMatrix::size()
+int ccruncher::TransitionMatrix::size() const
 {
   return n;
 }
 
 //===========================================================================
+// getPeriod
+//===========================================================================
+int ccruncher::TransitionMatrix::getPeriod() const
+{
+  return period;
+}
+
+//===========================================================================
 // getMatrix
 //===========================================================================
-double ** ccruncher::TransitionMatrix::getMatrix()
+double ** ccruncher::TransitionMatrix::getMatrix() const
 {
   return matrix;
 }
@@ -142,8 +154,8 @@ double ** ccruncher::TransitionMatrix::getMatrix()
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
-  int row = ratings->getIndex(rating1);
-  int col = ratings->getIndex(rating2);
+  int row = (*ratings)[rating1].order;
+  int col = (*ratings)[rating2].order;
 
   // validating ratings
   if (row < 0 || col < 0)
@@ -311,7 +323,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 //===========================================================================
 // return default rating index
 //===========================================================================
-int ccruncher::TransitionMatrix::getIndexDefault()
+int ccruncher::TransitionMatrix::getIndexDefault() const
 {
   return indexdefault;
 }
@@ -322,7 +334,7 @@ int ccruncher::TransitionMatrix::getIndexDefault()
 // @param val random number in [0,1]
 // @return final rating
 //===========================================================================
-int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
+int ccruncher::TransitionMatrix::evalue(const int irating, const double val) const
 {
   double sum = 0.0;
 
@@ -342,7 +354,7 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
+string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -356,8 +368,8 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
     for(int j=0;j<n;j++)
     {
       ret += spc2 + "<transition ";
-      ret += "from ='" + ratings->getName(i) + "' ";
-      ret += "to ='" + ratings->getName(j) + "' ";
+      ret += "from ='" + (*ratings)[i].name + "' ";
+      ret += "to ='" + (*ratings)[j].name + "' ";
       ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }
@@ -375,11 +387,11 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) throw(Exception)
 // @param t period (in months) of the new transition matrix
 // @return transition matrix for period t
 //===========================================================================
-TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, int t) throw(Exception)
+TransitionMatrix * ccruncher::translate(const TransitionMatrix &otm, int t) throw(Exception)
 {
-  TransitionMatrix *ret = new TransitionMatrix(*otm);
+  TransitionMatrix *ret = new TransitionMatrix(otm);
 
-  PowMatrix::pow(otm->matrix, double(t)/double(otm->period), otm->n, ret->matrix);
+  PowMatrix::pow(otm.getMatrix(), double(t)/double(otm.getPeriod()), otm.size(), ret->matrix);
 
   ret->period = t;
 
@@ -389,7 +401,7 @@ TransitionMatrix * ccruncher::translate(TransitionMatrix *otm, int t) throw(Exce
 //===========================================================================
 // Given a transition matrix return the Forward Default Rate in ret
 //===========================================================================
-void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
+void ccruncher::tma(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   // making assertions
   assert(numrows >= 0);
@@ -397,7 +409,7 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
   assert(steplength >= 0);
   assert(steplength < 15000);
 
-  int n = tm->n;
+  int n = tm.n;
 
   // building 1-year transition matrix
   TransitionMatrix *tmone = translate(tm, steplength);
@@ -441,9 +453,9 @@ void ccruncher::tma(TransitionMatrix *tm, int steplength, int numrows, double **
 //===========================================================================
 // Given a transition matrix return the Cumulated Forward Default Rate in ret
 //===========================================================================
-void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
+void ccruncher::tmaa(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
 {
-  int n = tm->n;
+  int n = tm.n;
 
   // computing TMA
   tma(tm, steplength, numrows, ret);
@@ -462,9 +474,9 @@ void ccruncher::tmaa(TransitionMatrix *tm, int steplength, int numrows, double *
 // Given a transition matrix return the Survival Function  in ret
 // ret[i][j] = 1-TMAA[i][j]
 //===========================================================================
-void ccruncher::survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception)
+void ccruncher::survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
 {
-  int n = tm->n;
+  int n = tm.n;
 
   // computing TMA
   tmaa(tm, steplength, numrows, ret);

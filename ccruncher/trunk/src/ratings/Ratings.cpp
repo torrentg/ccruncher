@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -62,17 +65,45 @@ ccruncher::Ratings::~Ratings()
 }
 
 //===========================================================================
-// destructor
+// size
 //===========================================================================
-vector<Rating> * ccruncher::Ratings::getRatings()
+int ccruncher::Ratings::size() const
 {
-  return &vratings;
+  return vratings.size();
 }
 
 //===========================================================================
-// insert a raitng into list
+// [] operator
 //===========================================================================
-void ccruncher::Ratings::insertRating(Rating &val) throw(Exception)
+Rating& ccruncher::Ratings::operator []  (int i)
+{
+  // assertions
+  assert(i >= 0 && i < (int) vratings.size());
+
+  // return i-th rating
+  return vratings[i];
+}
+
+//===========================================================================
+// [] operator. returns rating by name
+//===========================================================================
+Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
+{
+  for (unsigned int i=0;i<vratings.size();i++)
+  {
+    if (vratings[i].name == name)
+    {
+      return vratings[i];
+    }
+  }
+
+  throw Exception("Ratings::[]: rating " + name + " not found");
+}
+
+//===========================================================================
+// insert a rating into list
+//===========================================================================
+void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vratings.size();i++)
@@ -167,7 +198,7 @@ void ccruncher::Ratings::validations() throw(Exception)
   {
     Rating aux = vratings[i];
 
-    if (aux.order != (int)(i+1))
+    if (aux.order != (int)(i))
     {
       string msg = "Ratings::validations(): incorrect order rating at or near order = ";
       msg += Format::int2string(aux.order);
@@ -177,41 +208,9 @@ void ccruncher::Ratings::validations() throw(Exception)
 }
 
 //===========================================================================
-// returns rating index (-1 if rating not found)
-//===========================================================================
-int ccruncher::Ratings::getIndex(const string &rating_name)
-{
-
-  for (unsigned int i=0;i<vratings.size();i++)
-  {
-    if (vratings[i].name == rating_name)
-    {
-      return (int) i;
-    }
-  }
-
-  return -1;
-}
-
-//===========================================================================
-// returns rating name
-//===========================================================================
-string ccruncher::Ratings::getName(int index) throw(Exception)
-{
-  if (index < 0 || index >= (int) vratings.size())
-  {
-    throw Exception("Ratings::getName(): index out of range");
-  }
-  else
-  {
-    return vratings[index].name;
-  }
-}
-
-//===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Ratings::getXML(int ilevel) throw(Exception)
+string ccruncher::Ratings::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";

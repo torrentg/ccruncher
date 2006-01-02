@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #ifndef _Interests_
@@ -60,22 +63,34 @@ class Interests : public ExpatHandlers
 
   private:
 
+    // list of interest curves
     vector<Interest> vinterests;
+    // index for spot curve
     int ispot;
+    // uaxiliary variable (used by parser)
     Interest auxinterest;
 
-    void insertInterest(Interest &) throw(Exception);
+    // insert an interest curve to list
+    void insertInterest(const Interest &) throw(Exception);
+    // validate list
     void validate() throw(Exception);
 
 
   public:
 
+    // default constructor
     Interests();
+    // destructor
     ~Interests();
 
-    vector<Interest> * getInterests();
-    Interest * getInterest(const string &name) throw(Exception);
-    string getXML(int) throw(Exception);
+    // returns the number of interests
+    int size() const;
+    // [] operator
+    Interest& operator [] (int i);
+    // [] operator
+    Interest& operator [] (const string &name) throw(Exception);
+    // return xml string with object content
+    string getXML(int ilevel) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

@@ -43,6 +43,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . IData refactoring
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -77,16 +80,6 @@ class IData : public ExpatHandlers
 
   private:
 
-    // portfolio can be huge (memory,time,...)
-    bool parse_portfolio;
-    bool hasmaintag;
-    
-    void init();
-    void release();
-    void validate() throw(Exception);
-
-  public:
-
     Params *params;
     Interests *interests;
     Ratings *ratings;
@@ -97,10 +90,34 @@ class IData : public ExpatHandlers
     Segmentations *segmentations;
     Portfolio *portfolio;
 
+    // portfolio can be huge (memory,time,...)
+    bool parse_portfolio;
+    bool hasmaintag;
+
+    void init();
+    void release();
+    void validate() throw(Exception);
+
+  public:
+
     IData();
     IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
     ~IData();
 
+    /** gets methods */
+    Params & getParams() const;
+    Interests & getInterests() const;
+    Ratings & getRatings() const;
+    TransitionMatrix & getTransitionMatrix() const;
+    Survival & getSurvival() const;
+    Sectors & getSectors() const;
+    CorrelationMatrix & getCorrelationMatrix() const;
+    Segmentations & getSegmentations() const;
+    Portfolio & getPortfolio() const;
+    /** gets methods */
+    void setSurvival(const Survival &);
+    /** has methods */
+    bool hasSurvival() const;
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);

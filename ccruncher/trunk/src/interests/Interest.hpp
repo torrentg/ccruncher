@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . fecha renamed to date0
+//
 //===========================================================================
 
 #ifndef _Interest_
@@ -61,29 +64,45 @@ class Interest : public ExpatHandlers
 
   private:
 
+    // interest name
     string name;
-    Date fecha;
+    // date where interest curve is defined
+    Date date0;
+    // rate values
     vector<Rate> vrates;
+    // auxiliary variable (used by parser)
     Rate auxrate;
 
+    // insert a rate to list
     void insertRate(Rate &) throw(Exception);
+    // given a time, returns the rate (interpolated)
+    double getValue(const double) const;
+    // transforms from date to index
+    double date2idx(Date &date1) const;
+    // transforms from index to date
+    Date idx2date(int t) const;
+    // returns upsilon function value
+    double getUpsilon(const double r, const double t) const;
 
-    double getValue(const double);
-    double date2idx(Date &date1);
-    Date idx2date(int t);
-    double getUpsilon(const double r, const double t);
 
   public:
 
+    // default constructor
     Interest();
+    // constructor
     Interest(const string &);
+    // destructor
     ~Interest();
 
+    // returns curve name
     string getName() const;
-    Date getFecha() const;
-    double getUpsilon(Date &date1, Date &date2) throw(Exception);
-
-    string getXML(int) throw(Exception);
+    // returns initial date
+    Date getDate0() const;
+    // returns upsilon value
+    double getUpsilon(Date &date1, Date &date2) const throw(Exception);
+    // seriealize object content as xml
+    string getXML(int) const throw(Exception);
+    // reset object content
     void reset();
 
     /** ExpatHandlers methods declaration */

@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #ifndef _Segmentation_
@@ -69,29 +72,41 @@ class Segmentation : public ExpatHandlers
 
   private:
 
+    // list of segments
     vector<Segment> vsegments;
+    // if generic pattern (eg: *) -> modificable=true, false otherwise
     bool modificable;
 
-    void insertSegment(Segment &) throw(Exception);
+    // inserts a segment into the list
+    void insertSegment(const Segment &) throw(Exception);
 
 
   public:
 
+    // segmentation order
+    int order;
+    // segmentation name
     string name;
+    // type of components (clients/assets)
     components_t components;
 
+    // constructor
     Segmentation();
+    // destructor
     ~Segmentation();
 
-    vector<Segment> getSegments() const;
-    int getSegment(string segname) const;
-    string getSegmentName(int isegment) throw(Exception);
-
-    void addSegment(string segname) throw(Exception);
-    string getXML(int) throw(Exception);
+    // return the number of segments
+    int size() const;
+    // [] operator
+    Segment& operator [] (int i);
+    // [] operator
+    Segment& operator [] (const string &name) throw(Exception);
+    // add a segment to list
+    void addSegment(const string segname) throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
+    // reset object content
     void reset();
-
-    int getNumSegments();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

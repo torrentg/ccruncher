@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Portfolio refactoring
+//
 //===========================================================================
 
 #ifndef _Portfolio_
@@ -73,19 +76,19 @@ class Portfolio : public ExpatHandlers
     Interests *interests;
     Client *auxclient;
 
-    void insertClient(Client *) throw(Exception);
+    void insertClient(Client &) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
-    void reset(Ratings *, Sectors *, Segmentations *, Interests *);
+    void reset(Ratings &, Sectors &, Segmentations &, Interests &);
 
   public:
 
-    Portfolio(Ratings *, Sectors *, Segmentations *, Interests *);
+    Portfolio(Ratings &, Sectors &, Segmentations &, Interests &);
     ~Portfolio();
 
-    vector<Client *> *getClients();
-    int getNumActiveClients(Date, Date) throw(Exception);
-    void sortClients(Date from, Date to, bool onlyactive) throw(Exception);
+    vector<Client *> &getClients();
+    int getNumActiveClients(const Date &, const Date &) throw(Exception);
+    void sortClients(const Date &from, const Date &to, bool onlyactive) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

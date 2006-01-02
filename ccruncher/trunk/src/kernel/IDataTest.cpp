@@ -60,6 +60,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/02/01 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . IData refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -228,14 +231,4 @@ void ccruncher_test::IDataTest::test1()
   // client creation
   IData idata;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
-
-  // assertions
-  ASSERT(idata.params != NULL);
-  ASSERT(idata.interests != NULL);
-  ASSERT(idata.ratings != NULL);
-  ASSERT(idata.transitions != NULL);
-  ASSERT(idata.survival != NULL);
-  ASSERT(idata.sectors != NULL);
-  ASSERT(idata.correlations != NULL);
-  ASSERT(idata.portfolio != NULL);
 }

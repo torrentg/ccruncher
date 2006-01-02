@@ -61,34 +61,52 @@ class Survival : public ExpatHandlers
 
   private:
 
+    // maximum number of months where survival function > 0
     int maxmonths;
+    // survival function for each rating
     vector<double> *ddata;
+    // inverse survival function values
     int **idata;
+    // number of ratings
     int nratings;
+    // pointer to ratings table
     Ratings *ratings;
+    // epsilon used to compare doubles
     double epsilon;
 
-    void init(Ratings *) throw(Exception);
+    // initialize object
+    void init(const Ratings &) throw(Exception);
+    // insert a survival value
     void insertValue(const string &r1, int t, double val) throw(Exception);
+    // validate object content
     void validate() throw(Exception);
+    // fill holes in survival functions
     void fillHoles();
+    // compute inverse for each survival function
     void computeInvTable();
-    double interpole(double x, double x0, double y0, double x1, double y1);
-    int inverse1(const int irating, double val);
+    // linear interpolation algorithm
+    double interpole(double x, double x0, double y0, double x1, double y1) const;
+    // inverse function
+    int inverse1(const int irating, double val) const;
 
 
   public:
 
-    Survival(Ratings *) throw(Exception);
-    Survival(Ratings *, int, int *, double**, int) throw(Exception);
+    // constructor
+    Survival(const Ratings &) throw(Exception);
+    // constructor
+    Survival(const Ratings &, int, int *, double**, int) throw(Exception);
+    // destructor
     ~Survival();
 
-    void evalue(int steplength, int numrows, double **ret);
-    double evalue(const int irating, int t);
-    int inverse(const int irating, double val);
-
-    int getMinCommonTime();
-    string getXML(int) throw(Exception);
+    // evalue survival for irating at t
+    double evalue(const int irating, int t) const;
+    // evalue inverse survival for irating at t
+    int inverse(const int irating, double val) const;
+    // return minimal defined time
+    int getMinCommonTime() const;
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

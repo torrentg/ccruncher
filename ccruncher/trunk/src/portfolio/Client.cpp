@@ -46,6 +46,15 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Sectors refactoring
+//   . Ratings refactoring
+//   . Segmentations refactoring
+//   . Asset refactoring
+//
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Client refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -57,8 +66,8 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Client::Client(Ratings *ratings_, Sectors *sectors_,
-               Segmentations *segmentations_, Interests *interests_)
+ccruncher::Client::Client(Ratings &ratings_, Sectors &sectors_,
+               Segmentations &segmentations_, Interests &interests_)
 {
   // initializing class
   reset(ratings_, sectors_, segmentations_, interests_);
@@ -75,14 +84,14 @@ ccruncher::Client::~Client()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_,
-               Segmentations *segmentations_, Interests *interests_)
+void ccruncher::Client::reset(Ratings &ratings_, Sectors &sectors_,
+               Segmentations &segmentations_, Interests &interests_)
 {
   // setting external objects references
-  ratings = ratings_;
-  sectors = sectors_;
-  segmentations = segmentations_;
-  interests = interests_;
+  ratings = &(ratings_);
+  sectors = &(sectors_);
+  segmentations = &(segmentations_);
+  interests = &(interests_);
   hkey = 0UL;
 
   // cleaning containers
@@ -99,15 +108,15 @@ void ccruncher::Client::reset(Ratings *ratings_, Sectors *sectors_,
 //===========================================================================
 // getAssets
 //===========================================================================
-vector<Asset> * ccruncher::Client::getAssets()
+vector<Asset> & ccruncher::Client::getAssets()
 {
-  return &vassets;
+  return vassets;
 }
 
 //===========================================================================
 // insert an asset into list
 //===========================================================================
-void ccruncher::Client::insertAsset(Asset &val) throw(Exception)
+void ccruncher::Client::insertAsset(const Asset &val) throw(Exception)
 {
   try
   {
@@ -136,8 +145,8 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
       string strsector= getStringAttribute(attributes, "sector", "");
 
       // retrieving indexes
-      irating = ratings->getIndex(strrating);
-      isector = sectors->getIndex(strsector);
+      irating = (*ratings)[strrating].order;
+      isector = (*sectors)[strsector].order;
 
       // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {
@@ -156,8 +165,8 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
       throw eperror(eu, "invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = segmentations->getSegmentation(ssegmentation);
-    int isegment = segmentations->getSegment(ssegmentation, ssegment);
+    int isegmentation = (*segmentations)[ssegmentation].order;
+    int isegment = (*segmentations)[ssegmentation][ssegment].order;
 
     insertBelongsTo(isegmentation, isegment);
   }
@@ -176,25 +185,39 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
 void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"client")) {
+
     // reseting auxiliar variables (flushing data)
     auxasset.reset(NULL);
+
     // filling implicit segment
-    if (segmentations->getSegmentation("client") >= 0) {
-      if (segmentations->getComponents("client") == client) {
+    try
+    {
+      if ((*segmentations)["client"].components == client) {
         segmentations->addSegment("client", id);
-        int isegmentation = segmentations->getSegmentation("client");
-        int isegment = segmentations->getSegment("client", id);
+        int isegmentation = (*segmentations)["client"].order;
+        int isegment = (*segmentations)["client"][id].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
+    catch(...)
+    {
+      // segmentation 'client' not found
+    }
+
     // filling implicit segment
-    if (segmentations->getSegmentation("portfolio") >= 0) {
-      if (segmentations->getComponents("portfolio") == client) {
-        int isegmentation = segmentations->getSegmentation("portfolio");
-        int isegment = segmentations->getSegment("portfolio", "rest");
+    try
+    {
+      if ((*segmentations)["portfolio"].components == client) {
+        int isegmentation = (*segmentations)["portfolio"].order;
+        int isegment = (*segmentations)["portfolio"]["rest"].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
+    catch(...)
+    {
+      // segmentation 'portfolio' not found
+    }
+
   }
   else if (isEqual(name_,"belongs-to")) {
     // nothing to do
@@ -210,7 +233,7 @@ void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // isActive
 //===========================================================================
-bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
+bool ccruncher::Client::isActive(const Date &from, const Date &to) throw(Exception)
 {
   if (vassets.size() == 0)
   {
@@ -219,12 +242,12 @@ bool ccruncher::Client::isActive(Date from, Date to) throw(Exception)
 
   for(unsigned int i=0;i<vassets.size();i++)
   {
-    vector<DateValues> *data = vassets[i].getData();
+    vector<DateValues> &data = vassets[i].getData();
 
-    if ((*data).size() > 0)
+    if (data.size() > 0)
     {
-      Date date1 = (*data)[0].date;
-      Date date2 = (*data)[(*data).size()-1].date;
+      Date date1 = data[0].date;
+      Date date2 = data[data.size()-1].date;
 
       if (from <= date1 && date1 <= to)
       {

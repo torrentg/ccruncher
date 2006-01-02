@@ -140,7 +140,7 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 // return Date array = begindate, begindate+steplength, bengindate+2*steplength
 //===========================================================================
-Date * ccruncher::Params::getDates() throw(Exception)
+Date * ccruncher::Params::getDates() const throw(Exception)
 {
   validate();
 
@@ -266,7 +266,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 //===========================================================================
 // check class content
 //===========================================================================
-void ccruncher::Params::validate(void) throw(Exception)
+void ccruncher::Params::validate(void) const throw(Exception)
 {
 
   if (begindate == Date(1,1,1900))
@@ -318,7 +318,7 @@ void ccruncher::Params::validate(void) throw(Exception)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Params::getXML(int ilevel) throw(Exception)
+string ccruncher::Params::getXML(int ilevel) const throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);

@@ -49,6 +49,11 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Interests class refactoring
+//   . Segmentations class refactoring
+//   . Asset refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -66,10 +71,10 @@ ccruncher::Asset::Asset()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs)
+ccruncher::Asset::Asset(const Segmentations &segs)
 {
   // setting default values
-  reset(segs);
+  reset((Segmentations *) &segs);
 }
 
 //===========================================================================
@@ -96,7 +101,7 @@ void ccruncher::Asset::reset(Segmentations *segs)
 //===========================================================================
 // getId
 //===========================================================================
-string ccruncher::Asset::getId(void)
+string ccruncher::Asset::getId(void) const
 {
   return id;
 }
@@ -104,7 +109,7 @@ string ccruncher::Asset::getId(void)
 //===========================================================================
 // getName
 //===========================================================================
-string ccruncher::Asset::getName(void)
+string ccruncher::Asset::getName(void) const
 {
   return name;
 }
@@ -112,7 +117,7 @@ string ccruncher::Asset::getName(void)
 //===========================================================================
 // getVCashFlow between date1 and date2
 //===========================================================================
-double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, Interest *spot)
+double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -126,12 +131,12 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, Interest *spot)
   {
     if (date1 == date2 && date1 == data[i].date)
     {
-      ret += data[i].cashflow * spot->getUpsilon(data[i].date, date2);
+      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
       break;
     }
     if (date1 < data[i].date && data[i].date <= date2)
     {
-      ret += data[i].cashflow * spot->getUpsilon(data[i].date, date2);
+      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
     }
     if (date2 < data[i].date)
     {
@@ -145,7 +150,7 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, Interest *spot)
 //===========================================================================
 // getVNetting at date2
 //===========================================================================
-double ccruncher::Asset::getVNetting(Date &date1, Date &date2, Interest *spot)
+double ccruncher::Asset::getVNetting(Date &date1, Date &date2, const Interest &spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -170,7 +175,7 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, Interest *spot)
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return data[n-1].netting * val1/val2 * spot->getUpsilon(data[n-1].date, date2);
+    return data[n-1].netting * val1/val2 * spot.getUpsilon(data[n-1].date, date2);
   }
 
   for(int i=1;i<n;i++)
@@ -178,9 +183,9 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, Interest *spot)
     if (date2 <= data[i].date)
     {
       Date datex = data[i-1].date;
-      double ex = data[i-1].netting * spot->getUpsilon(data[i-1].date, date2);
+      double ex = data[i-1].netting * spot.getUpsilon(data[i-1].date, date2);
       Date datey = data[i].date;
-      double ey = data[i].netting * spot->getUpsilon(data[i].date, date2);
+      double ey = data[i].netting * spot.getUpsilon(data[i].date, date2);
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
@@ -196,10 +201,10 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, Interest *spot)
 //===========================================================================
 // getVertexes
 //===========================================================================
-void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValues *ret)
+void ccruncher::Asset::getVertexes(Date *dates, int n, Interests &interests, DateValues *ret)
 {
   double ufactor;
-  Interest *spot = ints->getInterest("spot");
+  Interest &spot = interests["spot"];
 
   // sorting dates
   sort(dates, dates+n);
@@ -207,7 +212,7 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests *ints, DateValu
   // computing mapped cashflow and mapped netting
   for (int i=0;i<n;i++)
   {
-    ufactor =  spot->getUpsilon(dates[i], dates[n-1]);
+    ufactor =  spot.getUpsilon(dates[i], dates[n-1]);
     ret[i].date = dates[i];
     ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], spot) * ufactor;
     ret[i].netting = getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
@@ -246,8 +251,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       throw eperror(eu, "invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = segmentations->getSegmentation(ssegmentation);
-    int isegment = segmentations->getSegment(ssegmentation, ssegment);
+    int isegmentation = (*segmentations)[ssegmentation].order;
+    int isegment = (*segmentations)[ssegmentation][ssegment].order;
 
     insertBelongsTo(isegmentation, isegment);
   }
@@ -283,6 +288,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"asset")) {
+
     // checking data size
     if (data.size() == 0) {
       throw eperror(eu, "asset without data");
@@ -291,22 +297,36 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
       // sorting data by date
       sort(data.begin(), data.end());
     }
+
     // filling implicit segment
-    if (segmentations->getSegmentation("asset") >= 0) {
-      if (segmentations->getComponents("asset") == asset) {
+    try
+    {
+      if ((*segmentations)["asset"].components == asset)
+      {
         segmentations->addSegment("asset", id);
-        int isegmentation = segmentations->getSegmentation("asset");
-        int isegment = segmentations->getSegment("asset", id);
+        int isegmentation = (*segmentations)["asset"].order;
+        int isegment = (*segmentations)["asset"][id].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
+    catch(...)
+    {
+      // segmentation 'asset' not defined
+    }
+
     // filling implicit segment
-    if (segmentations->getSegmentation("portfolio") >= 0) {
-      if (segmentations->getComponents("portfolio") == asset) {
-        int isegmentation = segmentations->getSegmentation("portfolio");
-        int isegment = segmentations->getSegment("portfolio", "rest");
+    try
+    {
+      if ((*segmentations)["portfolio"].components == asset)
+      {
+        int isegmentation = (*segmentations)["portfolio"].order;
+        int isegment = (*segmentations)["portfolio"]["rest"].order;
         insertBelongsTo(isegmentation, isegment);
       }
+    }
+    catch(...)
+    {
+      // segmentation 'portfolio' not found
     }
   }
   else if (isEqual(name_,"belongs-to")) {
@@ -326,7 +346,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // insertDateValues
 //===========================================================================
-void ccruncher::Asset::insertDateValues(DateValues &val) throw(Exception)
+void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 {
   // checking if date exist
   for(unsigned int i=0;i<data.size();i++)
@@ -408,7 +428,7 @@ int ccruncher::Asset::getSegment(int isegmentation)
 //===========================================================================
 // getData
 //===========================================================================
-vector<DateValues>* ccruncher::Asset::getData()
+vector<DateValues>& ccruncher::Asset::getData()
 {
-  return &data;
+  return data;
 }

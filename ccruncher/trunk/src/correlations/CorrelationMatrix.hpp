@@ -31,6 +31,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed pointers by references
+//   . Sectors class refactoring
+//
 //===========================================================================
 
 #ifndef _CorrelationMatrix_
@@ -58,28 +62,39 @@ class CorrelationMatrix : public ExpatHandlers
 
   private:
 
+    // nxn = matrix size (n = number of sectors)
     int n;
+    // epsilon used to compare doubles
     double epsilon;
+    // list of sectors
     Sectors *sectors;
+    // matrix of values
     double **matrix;
 
-    void init(Sectors *) throw(Exception);
+    // initialize object
+    void init(Sectors &) throw(Exception);
+    // insert a new matrix value
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
+    // validate object content
     void validate(void) throw(Exception);
+
 
   public:
 
-    CorrelationMatrix(Sectors *) throw(Exception);
+    // constructor
+    CorrelationMatrix(Sectors &) throw(Exception);
+    // destructor
     ~CorrelationMatrix();
-
-    int size();
-    double ** getMatrix();
-    string getXML(int) throw(Exception);
+    // matrix size (= number of sector)
+    int size() const;
+    // returns a pointer to matrix values
+    double ** getMatrix() const;
+    // serializes object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
-
 
 };
 

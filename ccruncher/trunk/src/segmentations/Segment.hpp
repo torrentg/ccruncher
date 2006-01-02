@@ -54,10 +54,15 @@ class Segment
 
   public:
 
+    // segment order
+    int order;
+    // segment name
     string name;
 
+    // constructor
     Segment();
-    Segment(string name_);
+    // destructor
+    Segment(int order, string name_);
 
 };
 

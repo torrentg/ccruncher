@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #ifndef _Ratings_
@@ -58,22 +61,32 @@ class Ratings : public ExpatHandlers
 
   private:
 
+    // ratings list
     vector<Rating> vratings;
+    // auxiliary variable (used by parser)
     Rating auxrating;
 
-    void insertRating(Rating &) throw(Exception);
+    // insert a rating in the list
+    void insertRating(const Rating &) throw(Exception);
+    // validate object content
     void validations() throw(Exception);
 
 
   public:
 
+    // constructor
     Ratings();
+    // destructor
     ~Ratings();
 
-    vector<Rating> * getRatings();
-    int getIndex(const string &);
-    string getName(int index) throw(Exception);
-    string getXML(int) throw(Exception);
+    // return the number of ratings
+    int size() const;
+    // [] operator
+    Rating& operator [] (int i);
+    // [] operator
+    Rating& operator [] (const string &name) throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

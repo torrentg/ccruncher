@@ -44,6 +44,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed pointers by references
+//   . Sectors class refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -57,12 +61,12 @@
 //===========================================================================
 // private initializator
 //===========================================================================
-void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
+void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 {
   epsilon = -1.0;
-  sectors = sectors_;
+  sectors = &sectors_;
 
-  n = sectors->getSectors()->size();
+  n = (*sectors).size();
 
   if (n <= 0)
   {
@@ -76,7 +80,7 @@ void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Exception)
+ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Exception)
 {
   // seting default values
   init(sectors_);
@@ -93,7 +97,7 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 //===========================================================================
 // returns size (number of sectors)
 //===========================================================================
-int ccruncher::CorrelationMatrix::size()
+int ccruncher::CorrelationMatrix::size() const
 {
   return n;
 }
@@ -101,7 +105,7 @@ int ccruncher::CorrelationMatrix::size()
 //===========================================================================
 // returns matrix
 //===========================================================================
-double ** ccruncher::CorrelationMatrix::getMatrix()
+double ** ccruncher::CorrelationMatrix::getMatrix() const
 {
   return matrix;
 }
@@ -112,8 +116,8 @@ double ** ccruncher::CorrelationMatrix::getMatrix()
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = sectors->getIndex(sector1);
-  int col = sectors->getIndex(sector2);
+  int row = (*sectors)[sector1].order;
+  int col = (*sectors)[sector2].order;
 
   // checking index sector
   if (row < 0 || col < 0)
@@ -229,7 +233,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
+string ccruncher::CorrelationMatrix::getXML(int ilevel) const throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -242,8 +246,8 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
     for(int j=i;j<n;j++)
     {
       ret += spc2 + "<sigma ";
-      ret += "sector1 ='" + sectors->getName(i) + "' ";
-      ret += "sector2 ='" + sectors->getName(j) + "' ";
+      ret += "sector1 ='" + (*sectors)[i].name + "' ";
+      ret += "sector2 ='" + (*sectors)[j].name + "' ";
       ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }

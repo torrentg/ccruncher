@@ -79,11 +79,11 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
       throw eperror(eu, "invalid number of attributes at rating");
     }
     else {
-      order = getIntAttribute(attributes, "order", -1);
+      order = getIntAttribute(attributes, "order", 0) - 1;
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (order <= 0 || name == "" || desc == "_UNDEF_")
+      if (order < 0 || name == "" || desc == "_UNDEF_")
       {
         throw eperror(eu, "invalid values at <rating>");
       }
@@ -110,13 +110,13 @@ void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Rating::getXML(int ilevel) throw(Exception)
+string ccruncher::Rating::getXML(int ilevel) const throw(Exception)
 {
   string ret = Strings::blanks(ilevel);
 
   ret += "<rating ";
   ret += "name='" + name + "' ";
-  ret += "order='" + Format::int2string(order) + "' ";
+  ret += "order='" + Format::int2string(order+1) + "' ";
   ret += "desc='" + desc + "'";
   ret += "/>\n";
 

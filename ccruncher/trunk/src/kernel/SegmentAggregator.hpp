@@ -38,6 +38,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . SegmentAggregator refactoring
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -123,12 +126,12 @@ class SegmentAggregator
     void release();
 
     // internal functions
-    long getANumClients(vector<Client *> *, long, bool *);
-    long getCNumClients(vector<Client *> *, long, bool *);
-    long getANumAssets(vector<Client *> *, long, bool *);
-    long getCNumAssets(vector<Client *> *, long, bool *);
+    long getANumClients(vector<Client *> &, long, bool *);
+    long getCNumClients(vector<Client *> &, long, bool *);
+    long getANumAssets(vector<Client *> &, long, bool *);
+    long getCNumAssets(vector<Client *> &, long, bool *);
     long* allocIClients(long, bool *, long) throw(Exception);
-    DateValues** allocVertexes(Date *, int, vector<Client *> *, Interests *) throw(Exception);
+    DateValues** allocVertexes(Date *, int, vector<Client *> &, Interests &) throw(Exception);
 
     // output functions
     string getFilePath() throw(Exception);
@@ -144,10 +147,10 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(Date *, int, vector<Client *> *, long, Interests *, const string &) throw(Exception);
+    void initialize(Date *, int, vector<Client *> &, long, Interests &, const string &) throw(Exception);
 
     // other methods
-    long getNumElements();
+    long getNumElements() const;
     bool append(int *defaulttimes) throw(Exception);
     bool appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);

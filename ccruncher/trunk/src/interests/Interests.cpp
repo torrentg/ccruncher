@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . class refactoring
+//
 //===========================================================================
 
 #include <cmath>
@@ -58,27 +61,40 @@ ccruncher::Interests::~Interests()
 }
 
 //===========================================================================
-// return interests list
+// size
 //===========================================================================
-vector<Interest> * ccruncher::Interests::getInterests()
+int ccruncher::Interests::size() const
 {
-  return &vinterests;
+  // return size
+  return vinterests.size();
 }
 
 //===========================================================================
-// return interest by name
+// [] operator
 //===========================================================================
-Interest * ccruncher::Interests::getInterest(const string &name) throw(Exception)
+Interest& ccruncher::Interests::operator []  (int i)
+{
+  // assertions
+  assert(i >= 0 && i < (int) vinterests.size());
+
+  // return i-th symbol
+  return vinterests[i];
+}
+
+//===========================================================================
+// [] operator
+//===========================================================================
+Interest& ccruncher::Interests::operator []  (const string &name) throw(Exception)
 {
   for (unsigned int i=0;i<vinterests.size();i++)
   {
     if (vinterests[i].getName() == name)
     {
-      return &(vinterests[i]);
+      return vinterests[i];
     }
   }
 
-  throw Exception("Interests::getInterest(): interest " + name + " not found");
+  throw Exception("Interests::[]: interest " + name + " not found");
 }
 
 //===========================================================================
@@ -101,7 +117,7 @@ void ccruncher::Interests::validate() throw(Exception)
 //===========================================================================
 // insert a new interest in list
 //===========================================================================
-void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
+void ccruncher::Interests::insertInterest(const Interest &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vinterests.size();i++)
@@ -165,7 +181,7 @@ void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Interests::getXML(int ilevel) throw(Exception)
+string ccruncher::Interests::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";

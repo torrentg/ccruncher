@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . fecha renamed to date0
+//
 //===========================================================================
 
 #include <iostream>
@@ -108,7 +111,7 @@ void ccruncher_test::InterestTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
   ASSERT("discount" == iobj.getName());
-  ASSERT(Date("18/02/2003") == iobj.getFecha());
+  ASSERT(Date("18/02/2003") == iobj.getDate0());
 
   Date date0 = Date("18/02/2003");
 

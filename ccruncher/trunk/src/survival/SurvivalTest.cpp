@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Survival class refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -111,7 +114,7 @@ void ccruncher_test::SurvivalTest::test1()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings);
+  Survival sf(ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values
@@ -150,7 +153,7 @@ void ccruncher_test::SurvivalTest::test2()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings);
+  Survival sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -175,7 +178,7 @@ void ccruncher_test::SurvivalTest::test3()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings);
+  Survival sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -200,7 +203,7 @@ void ccruncher_test::SurvivalTest::test4()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings);
+  Survival sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -220,7 +223,7 @@ void ccruncher_test::SurvivalTest::test5()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings, 6, (int *) imonths, (double**) mvalues, 7);
+  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues, 7);
 
   // checking values
   for(int i=0;i<9;i++)
@@ -253,7 +256,7 @@ void ccruncher_test::SurvivalTest::test6()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(&ratings, 2, (int *) imonths, (double**) mvalues, 48);
+  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues, 48);
 
   // creating Id matrix 2x2
   id[0][0] = 1.0;

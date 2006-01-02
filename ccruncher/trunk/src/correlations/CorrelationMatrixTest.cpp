@@ -108,7 +108,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(&sectors);
+  CorrelationMatrix crm(sectors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   double **matrix = crm.getMatrix();
@@ -144,7 +144,7 @@ void ccruncher_test::CorrelationMatrixTest::test2()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(&sectors);
+  CorrelationMatrix crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -167,7 +167,7 @@ void ccruncher_test::CorrelationMatrixTest::test3()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(&sectors);
+  CorrelationMatrix crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -191,6 +191,6 @@ void ccruncher_test::CorrelationMatrixTest::test4()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(&sectors);
+  CorrelationMatrix crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }

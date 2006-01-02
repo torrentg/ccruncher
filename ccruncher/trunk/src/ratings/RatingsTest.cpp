@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Ratings refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -81,32 +84,31 @@ void ccruncher_test::RatingsTest::test1()
   // ratings list creation
   Ratings ratings;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ratings));
-  vector<Rating> &list = *(ratings.getRatings());
 
-  ASSERT(5 == list.size());
+  ASSERT(5 == ratings.size());
 
-  ASSERT_EQUALS(1, list[0].order);
-  ASSERT_EQUALS(2, list[1].order);
-  ASSERT_EQUALS(3, list[2].order);
-  ASSERT_EQUALS(4, list[3].order);
-  ASSERT_EQUALS(5, list[4].order);
+  ASSERT_EQUALS(0, ratings[0].order);
+  ASSERT_EQUALS(1, ratings[1].order);
+  ASSERT_EQUALS(2, ratings[2].order);
+  ASSERT_EQUALS(3, ratings[3].order);
+  ASSERT_EQUALS(4, ratings[4].order);
 
-  ASSERT("A" == list[0].name);
-  ASSERT("B" == list[1].name);
-  ASSERT("C" == list[2].name);
-  ASSERT("D" == list[3].name);
-  ASSERT("E" == list[4].name);
+  ASSERT("A" == ratings[0].name);
+  ASSERT("B" == ratings[1].name);
+  ASSERT("C" == ratings[2].name);
+  ASSERT("D" == ratings[3].name);
+  ASSERT("E" == ratings[4].name);
 
-  ASSERT("muy bueno" == list[0].desc);
-  ASSERT("bueno" == list[1].desc);
-  ASSERT("regular" == list[2].desc);
-  ASSERT("malo" == list[3].desc);
-  ASSERT("fallido" == list[4].desc);
+  ASSERT("muy bueno" == ratings[0].desc);
+  ASSERT("bueno" == ratings[1].desc);
+  ASSERT("regular" == ratings[2].desc);
+  ASSERT("malo" == ratings[3].desc);
+  ASSERT("fallido" == ratings[4].desc);
 
-  ASSERT(list[0] < list[1]);
-  ASSERT(list[1] < list[2]);
-  ASSERT(list[2] < list[3]);
-  ASSERT(list[3] < list[4]);
+  ASSERT(ratings[0] < ratings[1]);
+  ASSERT(ratings[1] < ratings[2]);
+  ASSERT(ratings[2] < ratings[3]);
+  ASSERT(ratings[3] < ratings[4]);
 }
 
 //===========================================================================

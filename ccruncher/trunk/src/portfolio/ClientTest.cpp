@@ -46,6 +46,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Client refactoring
+//
 //===========================================================================
 
 #include <iostream>
@@ -201,7 +204,8 @@ void ccruncher_test::ClientTest::test1()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Client client(&ratings, &sectors, &segmentations, NULL);
+  Interests interests;
+  Client client(ratings, sectors, segmentations, interests);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &client));
 
   // assertions
@@ -214,12 +218,11 @@ void ccruncher_test::ClientTest::test1()
   ASSERT(client.belongsTo(3, 2));
   ASSERT(client.belongsTo(4, 1));
 
-  vector<Asset> *assets = NULL;
-  ASSERT_NO_THROW(assets = client.getAssets());
+  vector<Asset> &assets = client.getAssets();
 
-  ASSERT(2 == assets->size());
-  ASSERT((*assets)[0].getId() == "op1");
-  ASSERT((*assets)[1].getId() == "op2");
+  ASSERT(2 == assets.size());
+  ASSERT(assets[0].getId() == "op1");
+  ASSERT(assets[1].getId() == "op2");
 }
 
 //===========================================================================
@@ -259,7 +262,8 @@ void ccruncher_test::ClientTest::test2()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Client client(&ratings, &sectors, &segmentations, NULL);
+  Interests interests;
+  Client client(ratings, sectors, segmentations, interests);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
 }
 
@@ -300,6 +304,7 @@ void ccruncher_test::ClientTest::test3()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Client client(&ratings, &sectors, &segmentations, NULL);
+  Interests interests;
+  Client client(ratings, sectors, segmentations, interests);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
 }
