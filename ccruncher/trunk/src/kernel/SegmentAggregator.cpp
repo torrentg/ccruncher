@@ -52,6 +52,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . SegmentAggregator refactoring
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
+//
 //===========================================================================
 
 #include <cmath>
@@ -100,7 +103,7 @@ void ccruncher::SegmentAggregator::init()
 {
   iclients = NULL;
   cvalues = NULL;
-  vertexes = NULL;
+  losses = NULL;
 
   iaggregator = -1;
   isegmentation = -1;
@@ -111,7 +114,6 @@ void ccruncher::SegmentAggregator::init()
   path = "UNASSIGNED";
   bforce = false;
   buffersize = CCMAXBUFSIZE;
-  bloss = true;
 
   N = 0L;
   M = 0;
@@ -142,10 +144,10 @@ void ccruncher::SegmentAggregator::release()
     iclients = NULL;
   }
 
-  // deleting vertexes
-  if (vertexes != NULL) {
-    Arrays<DateValues>::deallocMatrix(vertexes, nclients);
-    vertexes = NULL;
+  // deleting losses arrays
+  if (losses != NULL) {
+    Arrays<double>::deallocMatrix(losses, nclients);
+    losses = NULL;
   }
 
   // deleting cvalues
@@ -159,7 +161,7 @@ void ccruncher::SegmentAggregator::release()
 // initialize
 //===========================================================================
 void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> &clients,
-  long n, Interests &interests_, const string &simule) throw(Exception)
+  long n, Interests &interests_) throw(Exception)
 {
   bool *clientflag = NULL;
 
@@ -177,7 +179,6 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   // setting vars values
   N = n;
   M = m;
-  bloss = (simule=="loss"?true:false);
 
   // allocating clientflag
   clientflag = Arrays<bool>::allocVector(N, false);
@@ -202,8 +203,8 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
     // allocating & fixing clients
     iclients = allocIClients(nclients, clientflag, N);
 
-    // allocating & filling vertexes
-    vertexes = allocVertexes(dates, M, clients, interests_);
+    // allocating & filling losses
+    losses = allocLosses(dates, M, clients, interests_);
 
     // allocating cvalues
     cvalues = Arrays<double>::allocVector(buffersize);
@@ -340,27 +341,17 @@ long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n)
 }
 
 //===========================================================================
-// allocVertexes
+// allocLosses
 //===========================================================================
-DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vector<Client *> &clients,
+double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Client *> &clients,
                 Interests &interests_) throw(Exception)
 {
-  DateValues **ret = NULL;
-  DateValues *aux = NULL;
+  double **ret = NULL;
 
-  ret = Arrays<DateValues>::allocMatrix(nclients, m);
-  aux = Arrays<DateValues>::allocVector(m);
+  ret = Arrays<double>::allocMatrix(nclients, m, 0.0);
 
   for(long i=0;i<nclients;i++)
   {
-    // initializing row
-    for(int k=0;k<m;k++)
-    {
-      ret[i][k].date = dates[k];
-      ret[i][k].cashflow = 0.0;
-      ret[i][k].netting = 0.0;
-    }
-
     // finding client info
     long cpos = iclients[i];
     vector<Asset> &assets = clients[cpos]->getAssets();
@@ -370,18 +361,11 @@ DateValues** ccruncher::SegmentAggregator::allocVertexes(Date *dates, int m, vec
     {
       if (components==client || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
       {
-        assets[j].getVertexes(dates, m, interests_, aux);
-
-        for(int k=0;k<m;k++)
-        {
-          ret[i][k].cashflow += aux[k].cashflow;
-          ret[i][k].netting += aux[k].netting;
-        }
+        assets[j].getLosses(dates, m, interests_, ret[i]);
       }
     }
   }
 
-  Arrays<DateValues>::deallocVector(aux);
   return ret;
 }
 
@@ -408,24 +392,8 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
     // asserting that at time 0 client is alive
     assert(itime > 0);
 
-    // if client non default in (0, M] time range
-    if (itime >= M) {
-      val = vertexes[i][M-1].cashflow;
-    }
-    // if client defaults in (0, M] time range
-    else {
-      val = vertexes[i][itime-1].cashflow;
-      val += vertexes[i][itime].netting;
-    }
-
-    // adding client value to portfolio value
-    if (bloss == true) {
-      // if we are computing portfolio losses
-      cvalues[icont] += vertexes[i][M-1].cashflow - val;
-    }
-    else {
-      // if we are computing portfolio values
-      cvalues[icont] += val;
+    if (itime < M) {
+      cvalues[icont] += losses[i][itime];
     }
   }
 

@@ -69,8 +69,8 @@
 #define P_LOW   0.02425
 #define P_HIGH  0.97575
 
-#define POSITIU +1
-#define NEGATIU -1
+#define POSITIVE +1
+#define NEGATIVE -1
 #define NCOEFS   6
 
 #ifndef M_PI
@@ -119,12 +119,12 @@ double ccruncher::Normal::cdf(double x)
 
   if(x < 0.0)
   {
-    sign = NEGATIU;
+    sign = NEGATIVE;
     x = -x;
   }
   else
   {
-    sign = POSITIU;
+    sign = POSITIVE;
   }
 
   k = 1.0/(1.0 + x*0.2316419);
@@ -138,7 +138,7 @@ double ccruncher::Normal::cdf(double x)
 
   ret = 1.0 - pdf(x)*ret;
 
-  if(sign == NEGATIU)
+  if(sign == NEGATIVE)
   {
     ret = 1.0 - ret;
   }

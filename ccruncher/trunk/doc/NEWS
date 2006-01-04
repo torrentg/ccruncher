@@ -6,7 +6,11 @@ CREDITCRUNCHER NEWS
 version 0.9 (Jan. 2006)
 --------------------------
   * code refactoring
+  * removed rating-path method
+  * removed simule values option
+  * modified asset value algorithm (thanks GG)
   * upgraded to new R and valgrind versions
+  * technical doc updated
 
 version 0.8 (Nov. 2005)
 --------------------------

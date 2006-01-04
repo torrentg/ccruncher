@@ -80,7 +80,7 @@ using namespace std;
 //---------------------------------------------------------------------------
 
 #define NOMINAL_MU     1000.00
-#define NOMINAL_SIGMA2  100.00
+#define NOMINAL_SIGMA2  400.00
 #define NOMINAL_MIN     100.00
 #define NOMINAL_MAX    1900.00
 
@@ -94,7 +94,7 @@ void usage();
 void version();
 void copyright();
 void run(string, int, int) throw(Exception);
-void printXMLPortfolio(int, IData*, int, int) throw(Exception);
+void printXMLPortfolio(int, IData&, int, int) throw(Exception);
 string getXMLData(int, Date, int, double, double, int) throw(Exception);
 double getNominal();
 
@@ -240,43 +240,41 @@ void run(string filename, int nclients, int nassets) throw(Exception)
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
   //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.3.dtd'>\n";
-  cout << "<creditcruncher>\n";
-  cout << idata.params->getXML(2);
-  cout << idata.interests->getXML(2);
-  cout << idata.ratings->getXML(2);
-  if (idata.transitions != NULL) {
-    cout << idata.transitions->getXML(2);
+  cout << "<ccruncher>\n";
+  cout << idata.getParams().getXML(2);
+  cout << idata.getInterests().getXML(2);
+  cout << idata.getRatings().getXML(2);
+  cout << idata.getTransitionMatrix().getXML(2);
+  if (idata.hasSurvival()) {
+    cout << idata.getSurvival().getXML(2);
   }
-  if (idata.survival != NULL) {
-    cout << idata.survival->getXML(2);
-  }
-  cout << idata.sectors->getXML(2);
-  cout << idata.correlations->getXML(2);
-  cout << idata.segmentations->getXML(2);
+  cout << idata.getSectors().getXML(2);
+  cout << idata.getCorrelationMatrix().getXML(2);
+  cout << idata.getSegmentations().getXML(2);
   cout << "  <portfolio>\n";
-  printXMLPortfolio(2, &idata, nclients, nassets);
+  printXMLPortfolio(2, idata, nclients, nassets);
   cout << "  </portfolio>\n";
-  cout << "</creditcruncher>\n";
+  cout << "</ccruncher>\n";
 }
 
 //===========================================================================
 // getXMLPortfolio
 //===========================================================================
-void printXMLPortfolio(int ilevel, IData *idata, int nclients, int nassets) throw(Exception)
+void printXMLPortfolio(int ilevel, IData &idata, int nclients, int nassets) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
   string spc3 = Strings::blanks(ilevel+4);
   string spc4 = Strings::blanks(ilevel+6);
-  int nratings = idata->ratings->getRatings()->size();
-  int nsectors = idata->sectors->getSectors()->size();
-  Date date1 = idata->params->begindate;
+  int nratings = idata.getRatings().size();
+  int nsectors = idata.getSectors().size();
+  Date date1 = idata.getParams().begindate;
 
   for (int i=1;i<=nclients;i++)
   {
     cout << spc2 + "<client ";
-    cout << "rating='" + idata->ratings->getName(rand()%(nratings-1)) + "' ";
-    cout << "sector='" + idata->sectors->getName(rand()%(nsectors)) + "' ";
+    cout << "rating='" + idata.getRatings()[rand()%(nratings-1)].name + "' ";
+    cout << "sector='" + idata.getSectors()[rand()%(nsectors)].name + "' ";
     cout << "name='client" + Format::int2string(i) + "' ";
     cout << "id='" + Format::int2string(i) + "'>\n";
 

@@ -51,6 +51,7 @@
 //
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Asset refactoring
+//   . modified asset value algorithm
 //
 //===========================================================================
 
@@ -181,6 +182,7 @@ void ccruncher_test::AssetTest::test1()
           <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
           <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
           <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
+          <values at='01/07/2020' cashflow='10.0' netting='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -213,6 +215,7 @@ void ccruncher_test::AssetTest::test2()
           <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
           <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
           <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
+          <values at='01/07/2020' cashflow='10.0' netting='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -240,7 +243,7 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT(asset->belongsTo(6, 1)); // office-0001
 
   vector <DateValues> &data = asset->getData();
-  ASSERT_EQUALS(6, data.size());
+  ASSERT_EQUALS(7, data.size());
 
   ASSERT(Date("01/01/2000") == data[0].date);
   ASSERT_DOUBLES_EQUAL(+10.0, data[0].cashflow, EPSILON);
@@ -266,6 +269,10 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(+510.0, data[5].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(+450.0, data[5].netting, EPSILON);
 
+  ASSERT(Date("01/07/2020") == data[6].date);
+  ASSERT_DOUBLES_EQUAL(+10.0, data[6].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+10.0, data[6].netting, EPSILON);
+
   DateValues *vertexes = new DateValues[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
   ASSERT_NO_THROW(asset->getVertexes(dates, 4, interests, vertexes));
@@ -283,8 +290,8 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(450.0 , vertexes[2].netting, EPSILON);
 
   ASSERT(Date("01/01/2010") == vertexes[3].date);
-  ASSERT_DOUBLES_EQUAL(560.0 , vertexes[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(4.871 , vertexes[3].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(570.0 , vertexes[3].cashflow, EPSILON);
+  ASSERT_DOUBLES_EQUAL(266.572 , vertexes[3].netting, EPSILON);
 
   delete [] vertexes;
 }

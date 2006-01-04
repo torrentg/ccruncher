@@ -41,6 +41,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . SegmentAggregator refactoring
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -95,8 +98,6 @@ class SegmentAggregator
     bool bforce;
     // buffer size
     int buffersize;
-    // bloss=true -> values are losses, bloss=false -> values are values
-    bool bloss;
 
     // number of all clients considered
     long N;
@@ -114,7 +115,7 @@ class SegmentAggregator
     // related clients position index (size = nclients)
     long *iclients;
     // vertexes of afected clients (size = nclients x M)
-    DateValues **vertexes;
+    double **losses;
     // vertex values aggregation per tranch (size = buffersize)
     double *cvalues;
 
@@ -131,7 +132,7 @@ class SegmentAggregator
     long getANumAssets(vector<Client *> &, long, bool *);
     long getCNumAssets(vector<Client *> &, long, bool *);
     long* allocIClients(long, bool *, long) throw(Exception);
-    DateValues** allocVertexes(Date *, int, vector<Client *> &, Interests &) throw(Exception);
+    double** allocLosses(Date *, int, vector<Client *> &, Interests &) throw(Exception);
 
     // output functions
     string getFilePath() throw(Exception);
@@ -147,7 +148,7 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(Date *, int, vector<Client *> &, long, Interests &, const string &) throw(Exception);
+    void initialize(Date *, int, vector<Client *> &, long, Interests &) throw(Exception);
 
     // other methods
     long getNumElements() const;

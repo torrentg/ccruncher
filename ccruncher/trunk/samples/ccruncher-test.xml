@@ -17,15 +17,10 @@
     <property name="time.begindate" value="18/02/2003"/>
     <property name="time.steps" value="12"/>
     <property name="time.steplength" value="2"/>
-    <property name="stopcriteria.maxiterations" value="1"/>
+    <property name="stopcriteria.maxiterations" value="20000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="gaussian"/>
-    <property name="copula.seed" value="387650932"/>
-    <property name="montecarlo.simule" value="loss"/>
-    <property name="montecarlo.method" value="time-to-default"/>
-<!--
-    <property name="montecarlo.method" value="rating-path"/>
--->
+    <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveClients" value="true"/>
   </params>
@@ -143,6 +138,7 @@
   <!-- ============================================================== -->
   <!--                    SURVIVAL FUNCTION                           -->
   <!-- ============================================================== -->
+<!--
   <survival maxmonths="2500" epsilon="1e-12">
 
     <svalue rating="AAA" t="0" value="1"/>
@@ -562,7 +558,7 @@
     <svalue rating="Default" t="600" value="0"/>
 
   </survival>
-
+-->
   <!-- ============================================================== -->
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->

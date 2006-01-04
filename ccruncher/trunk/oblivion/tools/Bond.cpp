@@ -133,13 +133,13 @@ vector <DateValues> ccruncher::Bond::simulate() throw(Exception)
   {
     curr.date = addMonths(issuedate, i*m);
     curr.cashflow = nominal*r;
-    curr.netting = 0.0*nominal;
+    curr.netting = 0.8*nominal;
     ret.push_back(curr);
   }
 
   curr.date = addMonths(issuedate, term);
   curr.cashflow = nominal*(1.0+r);
-  curr.netting = 0.0*nominal;
+  curr.netting = 0.8*nominal;
   ret.push_back(curr);
 
   return ret;

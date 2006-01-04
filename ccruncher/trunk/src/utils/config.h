@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Mon Jan  2 17:19:20 CET 2006"
+#define BUILD_DATE "Mon Jan  2 18:24:06 CET 2006"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -119,13 +119,13 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 0.8"
+#define PACKAGE_STRING "ccruncher 0.9"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.8"
+#define PACKAGE_VERSION "0.9"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -143,7 +143,7 @@
 /* #undef USE_MPI */
 
 /* Version number of package */
-#define VERSION "0.8"
+#define VERSION "0.9"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -175,4 +175,10 @@
 #ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif
+
+/* cygwin patch */
+#if defined (__CYGWIN__)
+#define NAN sqrt(-1.0)
+#endif
+
 

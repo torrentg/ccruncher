@@ -175,3 +175,9 @@
 #include "../win32/winconfig.h"
 #endif
 
+/* cygwin patch */
+#if defined (__CYGWIN__) 
+#define NAN sqrt(-1.0)
+#endif
+
+

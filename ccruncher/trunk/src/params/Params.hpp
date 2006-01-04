@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -85,10 +88,6 @@ class Params : public ExpatHandlers
     long maxseconds;
     // copula.type param value
     string copula_type; // gaussian
-    // montecarlo.method param value
-    string method;      // rating-path, time-to-default
-    // montecarlo.simule param value
-    string simule;      // loss, value
     // copula.seed param value
     long copula_seed;
     // montecarlo.antithetic param value

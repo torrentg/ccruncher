@@ -58,6 +58,9 @@
 //   . Portfolio refactoring
 //   . IData refactoring
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
+//
 //===========================================================================
 
 #include <fstream>
@@ -369,10 +372,7 @@ void ccruncher::IData::validate() throw(Exception)
   else if (ratings == NULL) {
     throw Exception("ratings section not defined");
   }
-  else if (transitions == NULL && params->method == "rating-path") {
-    throw Exception("transition matrix section not defined");
-  }
-  else if (transitions == NULL && survival == NULL && params->method == "time-to-default") {
+  else if (transitions == NULL && survival == NULL) {
     throw Exception("transition matrix or survival section not defined");
   }
   else if (sectors == NULL) {

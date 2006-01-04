@@ -28,6 +28,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added setSeed abstract method
+//
 //===========================================================================
 
 #ifndef _Copula_
@@ -52,6 +55,7 @@ class Copula
     virtual int size() = 0;
     virtual void next() = 0;
     virtual double get(int) = 0;
+    virtual void setSeed(long) = 0;
 
     virtual ~Copula() {};
 };

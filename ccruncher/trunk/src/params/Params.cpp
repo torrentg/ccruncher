@@ -60,6 +60,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -86,8 +89,6 @@ void ccruncher::Params::init()
   steplength = 0;
   maxiterations = -1L;
   maxseconds = -1L;
-  simule = "";
-  method = "";
   copula_type = "";
   copula_seed = 0L;
   antithetic = false;
@@ -227,26 +228,6 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
       copula_seed = aux;
     }
   }
-  else if (name == "montecarlo.simule")
-  {
-    string aux = getStringAttribute(attributes, "value", "");
-    if (simule != "" || (aux != "loss" && aux != "value")) {
-      throw eperror(eu, "invalid montecarlo.simule. supported values: loss, value");
-    }
-    else {
-      simule = aux;
-    }
-  }
-  else if (name == "montecarlo.method")
-  {
-    string aux = getStringAttribute(attributes, "value", "");
-    if (method != "" || (aux != "rating-path" && aux != "time-to-default")) {
-      throw eperror(eu, "invalid montecarlo.method. supported values: time-to-default, rating-path");
-    }
-    else {
-      method = aux;
-    }
-  }
   else if (name == "montecarlo.antithetic")
   {
     bool aux = getBooleanAttribute(attributes, "value", false);
@@ -294,16 +275,6 @@ void ccruncher::Params::validate(void) const throw(Exception)
     throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
   }
 
-  if (simule == "")
-  {
-    throw Exception("Params::validate(): property montecarlo.simule not defined");
-  }
-
-  if (method == "")
-  {
-    throw Exception("Params::validate(): property montecarlo.method not defined");
-  }
-
   if (copula_type == "")
   {
     throw Exception("Params::validate(): property copula.type not defined");
@@ -332,8 +303,6 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.simule' value='" + simule + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.method' value='" + method + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Format::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";

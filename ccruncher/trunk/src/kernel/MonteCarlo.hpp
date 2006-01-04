@@ -56,6 +56,10 @@
 //
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
+//   . generic copula array
+//
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simule and method params
 //
 //===========================================================================
 
@@ -72,7 +76,7 @@
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
 #include "correlations/CorrelationMatrix.hpp"
-#include "math/BlockGaussianCopula.hpp"
+#include "math/Copula.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "portfolio/Client.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -113,22 +117,18 @@ class MonteCarlo
     Date begindate;
     /* antithetic technologie for simetric copulas */
     bool antithetic;
-    /* simulation method flag (true=time-to-default, false=rating-path) */
-    bool ttdmethod;
 
     /** transition matrix (size = 1) (used by rating-path method, canbe used by time-to-default method) */
     Survival *survival;
     /** survival function (can be used by time-to-default method) */
     TransitionMatrix *mtrans;
-    /** arrays of pointers to copulas (size = M) */
-    BlockGaussianCopula **copulas;
+    /** copula used to simulate correlations */
+    Copula *copula;
     /** date per time tranch (size = M) */
     Date *dates;
     /** simulated time-to-default per client (size = N) */
     int *ittd;
 
-    /* number of copulas used (time-to-default->1, rating-path->STEPS+1) */
-    int numcopulas;
     /* management flag for antithetic method (default=false) */
     bool reversed;
     /* hash (0=non show hashes) (default=0) */
@@ -149,9 +149,8 @@ class MonteCarlo
     void initClients(const IData &, Date *, int) throw(Exception);
     void initRatings(const IData &) throw(Exception);
     void initSectors(const IData &) throw(Exception);
-    void initRatingPath(const IData &) throw(Exception);
     void initTimeToDefault(IData &) throw(Exception);
-    void initCopulas(const IData &idata, long) throw(Exception);
+    void initCopula(const IData &idata, long) throw(Exception);
     void initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData &) throw(Exception);
 
@@ -159,11 +158,13 @@ class MonteCarlo
     void randomize();
     void simulate();
     bool evalue() throw(Exception);
-    int simRatingPath(int iclient);
     int simTimeToDefault(int iclient);
-    double getRandom(int itime, int iclient);
+    double getRandom(int iclient);
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
+
+    // auxiliary methods
+    double** getClientCorrelationMatrix(const IData &);
 
 
   public:

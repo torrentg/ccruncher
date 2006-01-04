@@ -44,8 +44,8 @@
     <h2>Section Params</h2>
 
     <p>
-      This section shows the basic properties of the problem to be solved.
-      The properties can be unordered.
+      This section shows the properties of the problem to be solved.
+      The list can be unordered.
     </p>
 
     <h3>Example</h3>
@@ -60,8 +60,6 @@
     &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
     &lt;property name="copula.type" value="gaussian"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
-    &lt;property name="montecarlo.simule" value="loss"/&gt;
-    &lt;property name="montecarlo.method" value="time-to-default"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
     &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
   &lt;/params&gt;
@@ -78,8 +76,8 @@
       <tr class="b">
         <td style="text-align:center;">time.begindate</td>
         <td style="text-align:justify;">
-          Starting date of the simulation. Initial ratings are referred to this date. 
-          The format of this attribute is: DD/MM/YYYY.
+          Starting date of the simulation. Initial client ratings are referred to this 
+          date. The format of this attribute is: DD/MM/YYYY.
         </td>
         <td style="text-align:center;"><code>date</code></td>
       </tr>
@@ -94,7 +92,7 @@
       <tr class="b">
         <td style="text-align:center;">time.steplength</td>
         <td style="text-align:justify;">
-          Specifies how long the time step in natural months is. We suggest putting
+          Specifies how long the time step in natural months is. We suggest to set
           low values (eg. 1, 3 o 6).
         </td>
         <td style="text-align:center;"><code>int</code></td>
@@ -136,27 +134,6 @@
         <td style="text-align:center;"><code>long</code></td>
       </tr>
       <tr class="a">
-        <td style="text-align:center;">montecarlo.simule</td>
-        <td style="text-align:justify;">
-          Specifies the desired simulated values. Set <i>value</i> if you
-          want simulate the portfolio value. Set <i>loss</i> if you want
-          simulate the portfolio losses. Formulas implemented to compute
-          the VaR expect loss values. In doubt, put 'loss' value.<br />
-          accepted values: 'loss', 'value'
-        </td>
-        <td style="text-align:center;"><code>string</code></td>
-      </tr>
-      <tr class="b">
-        <td style="text-align:center;">montecarlo.method</td>
-        <td style="text-align:justify;">
-          Specifies the method used to solve the problem. See the 
-          <i>CreditCruncher - Technical Document</i>. In doubt, put
-          'time-to-default' value.<br />
-          accepted values: 'rating-path', 'time-to-default'
-        </td>
-        <td style="text-align:center;"><code>string</code></td>
-      </tr>
-      <tr class="a">
         <td style="text-align:center;">montecarlo.antithetic</td>
         <td style="text-align:justify;">
           Specifies whether to use or not a variance reduction technique 
@@ -170,8 +147,8 @@
         <td style="text-align:justify;">
           If you want to simulate all the clients, even though clients without 
           risk along the analized period, type 'false'. If you want to simulate 
-          only active clients along the simulation period type 'true'. 
-          We suggest writing always 'true' because of performance reasons.
+          only active clients along the simulation period type 'true'. We 
+          suggest writing always 'true'.
         </td>
         <td style="text-align:center;"><code>boolean</code></td>
       </tr>
@@ -185,8 +162,7 @@
 
     <p>
       This section shows how to define the interest rates curves used to 
-      update the capital along time. It is required to specify the curve 
-      'spot'.
+      compute the Current Net Value. The curve named 'spot' is required.
     </p>
 
     <h3>Example</h3>
@@ -432,13 +408,12 @@
     <h2>Section Survival Function</h2>
 
     <p>
-      This section contains the survival function for each rating. Survival 
-      function is used when the simulation method (property montecarlo.method)
-      is set to time-to-default. In this case, if this section is non informed,
-      the survival function will be computed using transition matrix.
-      You don't need to fill all time values. Survival function is monotone 
-      decreasing and has a value of 1 when time is 0 for all ratings distincts 
-      than default. The survival function of default rating is always 0.
+      This section contains the survival function for each rating. If this 
+      section is non informed, the survival function will be computed using 
+      transition matrix. You don't need to fill all time values. Survival 
+      function is monotone decreasing and has a value of 1 when time is 0 
+      for all ratings distincts than default. The survival function of default 
+      rating is always 0.
     </p>
 
     <h3>Example</h3>
@@ -963,7 +938,7 @@
             </a> 
           </td>
           <td class="footer" align="right">
-            Last modified: 02-Jan-2006 &nbsp;
+            Last modified: 04-Jan-2006 &nbsp;
           </td>
         </tr>
       </table>

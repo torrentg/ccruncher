@@ -90,7 +90,7 @@ class Asset : public ExpatHandlers
     bool have_data;
 
     // compute cashflow 
-    double getVCashFlow(Date &date1, Date &date2, const Interest &);
+    double getVCashFlow(Date &date1, Date &date2, const Interest &, bool);
     // compute netting
     double getVNetting(Date &date1, Date &date2, const Interest &);
     // insert a cashflow value
@@ -114,8 +114,8 @@ class Asset : public ExpatHandlers
     string getName(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // return computed vertexes
-    void getVertexes(Date *dates, int n, Interests &interests, DateValues *ret);
+    // return losses at given dates
+    void getLosses(Date *dates, int n, Interests &interests, double *ret);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment

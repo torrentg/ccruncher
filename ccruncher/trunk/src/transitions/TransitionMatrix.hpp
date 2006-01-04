@@ -42,6 +42,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2006/01/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed Forward Default Rate references//
+//
 //===========================================================================
 
 #ifndef _TransitionMatrix_
@@ -119,9 +122,7 @@ class TransitionMatrix : public ExpatHandlers
     // returns equivalent transition matrix that covers t months
     friend TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
     // computes Cumulated Default Forward Rate
-    friend void tmaa(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-    // computes Default Forward Rate
-    friend void tma(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+    friend void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
     // computes survival function related to this transition matrix
     friend void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
 

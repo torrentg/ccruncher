@@ -56,6 +56,10 @@
 //   . Ratings refactoring
 //   . class refactoring
 //
+// 2006/01/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added bound checking at survival function
+//   . removed Forward Default Rate references
+//
 //===========================================================================
 
 #include <cmath>
@@ -399,9 +403,9 @@ TransitionMatrix * ccruncher::translate(const TransitionMatrix &otm, int t) thro
 }
 
 //===========================================================================
-// Given a transition matrix return the Forward Default Rate in ret
+// Given a transition matrix return the Cumulated Forward Default Rate in ret
 //===========================================================================
-void ccruncher::tma(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
+void ccruncher::cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   // making assertions
   assert(numrows >= 0);
@@ -425,20 +429,20 @@ void ccruncher::tma(const TransitionMatrix &tm, int steplength, int numrows, dou
   // auxiliary matrix
   double **tmp = Arrays<double>::allocMatrix(n, n, 0.0);
 
-  // filling TMAA(.,0)
+  // filling CDFR(.,0)
   for(int i=0;i<n;i++)
   {
     ret[i][0] = aux[i][n-1];
   }
 
+  // filling CDFR(.,t)
   for(int t=1;t<numrows;t++)
   {
     Arrays<double>::prodMatrixMatrix(aux, one, n, n, n, tmp);
 
-    // filling TMA(.,t)
     for(int i=0;i<n;i++)
     {
-      ret[i][t] = tmp[i][n-1] - aux[i][n-1];
+      ret[i][t] = tmp[i][n-1];
     }
 
     for(int i=0;i<n;i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
@@ -451,35 +455,15 @@ void ccruncher::tma(const TransitionMatrix &tm, int steplength, int numrows, dou
 }
 
 //===========================================================================
-// Given a transition matrix return the Cumulated Forward Default Rate in ret
-//===========================================================================
-void ccruncher::tmaa(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
-{
-  int n = tm.n;
-
-  // computing TMA
-  tma(tm, steplength, numrows, ret);
-
-  // building acumulateds
-  for(int i=0;i<n;i++)
-  {
-    for(int j=1;j<numrows;j++)
-    {
-      ret[i][j] = ret[i][j] + ret[i][j-1];
-    }
-  }
-}
-
-//===========================================================================
 // Given a transition matrix return the Survival Function  in ret
-// ret[i][j] = 1-TMAA[i][j]
+// ret[i][j] = 1-CDFR[i][j]
 //===========================================================================
 void ccruncher::survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
 {
   int n = tm.n;
 
-  // computing TMA
-  tmaa(tm, steplength, numrows, ret);
+  // computing CDFR
+  cdfr(tm, steplength, numrows, ret);
 
   // building survival function
   for(int i=0;i<n;i++)
@@ -487,6 +471,8 @@ void ccruncher::survival(const TransitionMatrix &tm, int steplength, int numrows
     for(int j=0;j<numrows;j++)
     {
       ret[i][j] = 1.0 - ret[i][j];
+      if (ret[i][j] < 0.0) ret[i][j] = 0.0;
+      if (ret[i][j] > 1.0) ret[i][j] = 1.0;
     }
   }
 }

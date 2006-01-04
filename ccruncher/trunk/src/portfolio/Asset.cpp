@@ -54,6 +54,11 @@
 //   . Segmentations class refactoring
 //   . Asset refactoring
 //
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . Changed Net Current Value computation (now all cashflows are
+//     taked in account. Previously, only chasflows between initial
+//     and end simulation date was taked in account). Thanks GG.
+//
 //===========================================================================
 
 #include <cmath>
@@ -117,7 +122,7 @@ string ccruncher::Asset::getName(void) const
 //===========================================================================
 // getVCashFlow between date1 and date2
 //===========================================================================
-double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &spot)
+double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &spot, bool last)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -140,8 +145,14 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &
     }
     if (date2 < data[i].date)
     {
-      //TODO: if add outdors cashflow option enabled, add cahsflow and remove break
-      break;
+      if (last == false)
+      {
+        break;
+      }
+      else
+      {
+        ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
+      }
     }
   }
 
@@ -200,9 +211,9 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, const Interest &s
 }
 
 //===========================================================================
-// getVertexes
+// getLosses
 //===========================================================================
-void ccruncher::Asset::getVertexes(Date *dates, int n, Interests &interests, DateValues *ret)
+void ccruncher::Asset::getLosses(Date *dates, int n, Interests &interests, double *ret)
 {
   double ufactor;
   Interest &spot = interests["spot"];
@@ -210,19 +221,20 @@ void ccruncher::Asset::getVertexes(Date *dates, int n, Interests &interests, Dat
   // sorting dates
   sort(dates, dates+n);
 
-  // computing mapped cashflow and mapped netting
+  // computing losses (=unreceived cashflow-recovery)
   for (int i=0;i<n;i++)
   {
+    ret[i] = 0.0;
+    for(unsigned int j=0;j<data.size();j++)
+    {
+      if (dates[i] <= data[j].date)
+      {
+        ufactor =  spot.getUpsilon(data[j].date, dates[n-1]);
+        ret[i] += ufactor * data[j].cashflow;
+      }
+    }
     ufactor =  spot.getUpsilon(dates[i], dates[n-1]);
-    ret[i].date = dates[i];
-    ret[i].cashflow = getVCashFlow(dates[max(i-1,0)], dates[i], spot) * ufactor;
-    ret[i].netting = getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
-  }
-
-  // computing cumulated cashflow
-  for (int i=1;i<n;i++)
-  {
-    ret[i].cashflow += ret[i-1].cashflow;
+    ret[i] -= getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 }
 
