@@ -125,9 +125,9 @@ Los clientes de la cartera se ordenan en funci\'on de su sector
 y rating de forma creciente en ambos casos, La finalidad de esta
 ordenaci\'on es disponer de una matriz de correlaci\'on entre
 clientes en bloques\index{Matriz en bloques}. V\'ease las observaciones del
-apartado \ref{sec:mcorrel}. En el caso que solamente se desee simular los
-clientes activos (aquellos que tienen alg\'un producto activo durante el periodo
-simulado), los clientes inactivos son suprimidos.
+apartado \ref{sec:mcorrel}. Si solamente se simulan los clientes activos 
+(aquellos que tienen alg\'un producto activo durante el periodo simulado)
+entonces los clientes inactivos son suprimidos.
 \newline
 \newline
 Supongamos que tenemos 3 sectores, S1, S2 y S3 y un sistema de
@@ -155,43 +155,17 @@ de clientes considerado es el n\'umero de clientes activos.
 
 %---------------------------------------------------------------------------
 
-\section{Paso 4. Inicializaci\'on del m\'etodo de simulaci\'on}
+\section{Paso 4. Obtenci\'on de la funci\'on de supervivencia}
 
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=8cm,angle=0]{./images/decisiontree1.eps}
-\caption{Decisi\'on en funci\'on del m\'etodo}
-\label{decisiontree1}
-\end{center}
-\end{figure}
-
-\subsection{M\'etodo Rating-Path}
-
-El m\'etodo Rating-Path requiere disponer de la matriz de transici\'on
-para el periodo $StepLength$. A partir de la matriz de transici\'on
-definida por el usuario para el periodo T (normalmente 1 a\~no), se
-construye la matriz de transici\'on para el periodo $StepLength$ usando
-las indicaciones de \ref{mtrans:perchange}.
-\begin{displaymath}
-M_{StepLength} = M_{T}^{\frac{StepLength}{T}} = \sqrt[T]{M_{T}^{StepLength}}
-\end{displaymath}
-
-El algoritmo para calcular la ra\'iz de una matriz a partir de la matriz
-de autovectores y sus autovalores est\'a explicado en el ap\'endice
-\ref{apendix:sqrtmat}.
-
-\subsection{M\'etodo Time-To-Default}
-
-El m\'etodo Time-To-Default requiere disponer de la funci\'on de
-supervivencia. Si el usuario ha definido una se considera la
-funci\'on de supervivencia definida por el usuario. En caso
+Si el usuario ha definido una funci\'on de superviviencia se considera 
+la funci\'on de supervivencia definida por el usuario. En caso
 contrario se construye a partir de la matriz de transici\'on
 usando las indicaciones de \ref{mtrans:survival}.
 
 \begin{displaymath}
-Survival(r_i,t_j) = 1 - (M_{StepLength}^j)_{i,n} \qquad j \in \{0,1,2,\cdots,NumSteps\}
+Survival(r_i,t_j) = 1 - \left(M_{StepLength}^j\right)_{i,n} \qquad j \in \{0,1,2,\cdots,NumSteps\}
 \end{displaymath}
-donde $(M_{StepLength}^j)_{i,n}$ debe interpretarse como la columna $n$ de
+donde $\left(M_{StepLength}^j\right)_{i,n}$ debe interpretarse como la columna $n$ de
 la fila $i$ de la matriz $M_{StepLength}$ elevada a $j$. La matriz de transici\'on
 para el periodo $StepLength$, $M_{StepLength}$, se determina a partir de la matriz
 de transici\'on proporcionada por el usuario para el periodo T (normalmente 1 a\~no)
@@ -205,7 +179,7 @@ autovalores y autovectores est\'a explicado en el ap\'endice
 
 %---------------------------------------------------------------------------
 
-\section{Paso 5. Inicializaci\'on de las c\'opulas}
+\section{Paso 5. Creaci\'on de la c\'opula}
 
 Los pasos 1 y 2 de \ref{apendix:gaussiancopula} explican como
 inicializar una c\'opula gaussiana. CreditCruncher aplica el 
@@ -218,47 +192,17 @@ n\'umero de clientes en cada sector. Se aplica el paso 1
 de \ref{apendix:gaussiancopula} a la matriz de correlaci\'on
 entre sectores. Se reemplaza el paso 2 de \ref{apendix:gaussiancopula}
 por \ref{apendix:cholblock}.
-
-
-\subsection{M\'etodo Rating-Path}
-
-Si el m\'etodo de simulaci\'on es Rating-Path se construyen
-$NumSteps$ c\'opulas. La primera c\'opula se usar\'a para simular
-los cambios de rating entre $t_0$ y $t_1$, la segunda c\'opula
-para simular los cambios de rating entre $t_1$ y $t_2$, etc.
 \newline
 \newline
-El generador de n\'umeros aleatorios de cada c\'opula se
-inicializa con la siguiente semilla:
+Se pueden ejecutar varias instancias en paralelo. Debemos garantizar
+que cada instancia usa una semilla diferente para inicializar su 
+generador de n\'umeros aletorios. La semilla usada por cada instancia
+, $Seed_q$, se asigna de la forma siguiente:
 \begin{displaymath}
-Seed(i,q) = Seed(1,0) + q \cdot 30001 + (i-1)
+Seed_q = Seed_0 + q \cdot 30001
 \end{displaymath}
-donde $Seed(i,q)$ es la semilla del generador de n\'umeros de la
-c\'opula $i$ de la instancia $q$ (en el caso de ejecutarse en un
-cluster $q>0$, en caso contrario, $q=0$). $Seed(1,0)$ es la semilla
-proporcionada por el usuario (un n\'umero aleatorio si el usuario no
-especifica semilla o especifica una semilla igual a 0). De esta
-forma se garantiza que todas las instancias usan una semilla distinta
-(siempre que el n\'umero de instancias m\'as $NumSteps$ no supere 30000).
-
-\subsection{M\'etodo Time-To-Default}
-
-Si el m\'etodo de simulaci\'on es Time-To-Default se construye
-1 c\'opula. Se usar\'a para simular el tiempo de fallido.
-\newline
-\newline
-El generador de n\'umeros aleatorios de cada c\'opula se
-inicializa con la siguiente semilla:
-\begin{displaymath}
-Seed(1,q) = Seed(1,0) + q \cdot 30001 + 0
-\end{displaymath}
-donde $Seed(i,q)$ es la semilla del generador de n\'umeros de la
-c\'opula $i$ de la instancia $q$ (en el caso de ejecutarse en un
-cluster $q>0$, en caso contrario, $q=0$). $Seed(1,0)$ es la semilla
-proporcionada por el usuario (un n\'umero aleatorio si el usuario no
-especifica semilla o especifica una semilla igual a 0). De esta
-forma se garantiza que todas las instancias usan una semilla distinta
-(siempre que el n\'umero de instancias no supere 30000).
+$Seed_0$ es la semilla proporcionada por el usuario (un n\'umero aleatorio 
+si el usuario no especifica semilla o especifica una semilla igual a 0).
 
 %---------------------------------------------------------------------------
 
@@ -304,106 +248,13 @@ u otro tipo de segmentaci\'on (zonas comerciales, tipos de activos, tipos de
 clientes, sectores, etc.).
 \newline
 
-Para cada cliente de cada segmento de cada segmentaci\'on realizamos el
-mapeo de cashflow y recovery de los activos pertenecientes a aquel
-segmento. El objetivo es disponer de un cashflow y recovery evaluados en
-$t_0, t_1, t_2, \cdots, t_{NumSteps}$ para cada cliente de cada segmento.
-
-%---------------------------------------------------------------------------
-
-\subsection{Mapeo del cashflow}
-
-\subsubsection{Paso 1}
-
-Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
-Dado un cashflow $(t_i,V)$ lo mapeamos en la estructura temporal de la
-siguiente forma:
-
-\begin{enumerate}
-\item Si $t_i < t_0$, entonces $(t_i,V) \longrightarrow (t_0,0)$
-\item Si $t_{j-1} < t_i \leq t_j$, entonces $(t_i,V) \longrightarrow (t_j,V \cdot \Upsilon_S(t_i,t_j))$
-\item Si $t_{NumSteps} < t_i$, entonces $(t_i,V) \longrightarrow (t_{NumSteps},V \cdot \Upsilon_S(t_i,t_{NumSteps}))$
-\end{enumerate}
-
-donde $\Upsilon_S(t_i,t_j)$ es el coeficiente de transporte entre $t_i$ y $t_j$
-usando la curva spot $S$. El cashflow mapeado a 
-$t_0, t_1, t_2, \cdots, t_{NumSteps}$ lo denotamos como
-$V_0, V_1, V_2, \cdots, V_{NumSteps}$.
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=10cm,angle=0]{./images/cashflowmapping.eps}
-\caption{CashFlow mapping}
-\label{timetranches}
-\end{center}
-\end{figure}
-
-Veamos un ejemplo. Consideramos $\Upsilon_S(t_i,t_j)=1$ para no complicar los c\'alculos.
-A la izquierda se representa el cashflow original (sin estar mapeado a los nodos de
-tiempo). A la derecha se encuentra el mismo cashflow mapeado a los nodos de tiempo.
-\newline
-\newline
-\begin{minipage}[c]{0.5\columnwidth}%
-\centering
-\begin{tabular}{c|r}
-\textbf{Date} & \textbf{Cashflow} \\
-\hline
-17/04/2004 & -10.00 \\
-           &        \\
-           &        \\
-05/01/2005 &   1.00 \\
-20/01/2005 &   2.00 \\
-           &        \\
-15/03/2005 &   3.00 \\
-           &        \\
-           &        \\
-30/08/2005 &   4.00 \\
-           &        \\
-15/12/2005 &   5.00 \\
-25/12/2005 &   5.00 \\
-\end{tabular}
-\end{minipage}%
-\begin{minipage}[c]{0.5\columnwidth}%
-\centering
-\begin{tabular}{c|c|c}
-\textbf{$t_i$} & \textbf{Date}  & \textbf{Cashflow} \\
-\hline
-      &            &       \\
-$t_0$ & 30/10/2004 &  0.00 \\
-$t_1$ & 30/12/2004 &  0.00 \\
-      &            &       \\
-      &            &       \\
-$t_2$ & 28/02/2005 &  1.00 + 2.00 \\
-      &            &       \\
-$t_3$ & 30/04/2005 &  3.00 \\
-$t_4$ & 30/06/2005 &  0.00 \\
-$t_5$ & 30/08/2005 &  4.00 \\
-$t_6$ & 30/10/2005 & 10.00 \\
-      &            &       \\
-      &            &       \\
-\end{tabular}
-\end{minipage}%
-
-\subsubsection{Paso 2}
-
-Lo que interesa conocer no es el cashflow en $t_i$, sin\'o el importe
-percibido en $t_{NumSteps}$ debido al cashflow desde $t_0$ hasta $t_i$.
-Llamamos a este concepto cashflow acumulado y lo calculamos de la
-forma siguiente:
-
-\begin{displaymath}
-C_k = \sum_{i=1}^{k} V_i \cdot \Upsilon_S(t_i,t_{NumSteps})
-\end{displaymath}
-
-
-\paragraph{Notaci\'on.} $C_k^i =$ cashflow acumulado del cliente $i$ en el
-nodo de tiempo $k$.
+Para cada cliente de cada segmento de cada segmentaci\'on precalculamos las
+p\'erdidas provocadas por los activos pertenecientes al segmento en los
+tiempos $t_0, t_1, t_2, \cdots, t_{NumSteps}$.
 
 %---------------------------------------------------------------------------
 
 \subsection{Mapeo del recovery}
-
-\subsubsection{Paso 1}
 
 Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
 Calculamos el recovery en el nodo, $t_i$, de la partici\'on de la
@@ -483,27 +334,77 @@ $t_6$ & 30/10/2005 & $4.00 + (5-4) \cdot \frac{61}{107} = 4.57$ \\
 \end{tabular}
 \end{minipage}%
 
-\subsubsection{Paso 2}
+%---------------------------------------------------------------------------
 
-Lo que interesa conocer no es el recovery en $t_i$, sin\'o el importe
-percibido en $t_{NumSteps}$ debido al recovery realizado en $t_i$.
-Llamamos a este concepto recovery acumulado y lo calculamos de la
-forma siguiente:
+\subsection{Prec\'alculo de las p\'erdidas}
+
+Sea $t_0, t_1, t_2, \cdots, t_{NumSteps}$ la partici\'on de tiempo usada.
+Precalculamos las p\'erdidas en $t_0, t_1, t_2, \cdots, t_{NumSteps}$, o sea,
+suponiendo que los tiempos de fallido se dan en $t_0, t_1, t_2, \cdots, t_{NumSteps}$.
 
 \begin{displaymath}
-N_k =  W_k \cdot \Upsilon(t_k,t_{NumSteps})
+Losses_i =
+\left(
+  \sum_{t=t_i}^{\infty} \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_{NumSteps}) 
+\right) - W_i
 \end{displaymath}
 
-\paragraph{Notaci\'on.} $N_k^i =$ recovery acumulado del cliente $i$ en el
-nodo de tiempo $k$.
+donde $\Upsilon_S(t_i,t_j)$ es el coeficiente de transporte entre $t_i$ y $t_j$
+usando la curva spot $S$.
+
+Veamos un ejemplo. Consideramos $\Upsilon_S(t_i,t_j)=1$ para no complicar los c\'alculos.
+A la izquierda se representa el cashflow original (sin estar mapeado a los nodos de
+tiempo). A la derecha se encuentra el mismo cashflow mapeado a los nodos de tiempo.
+Se supone que $W_i=3$ en cualquier instante de tiempo.
+\newline
+\newline
+\begin{minipage}[c]{0.4\columnwidth}%
+\centering
+\begin{tabular}{c|r}
+\textbf{Date} & \textbf{Cashflow} \\
+\hline
+17/04/2004 & -10.00 \\
+           &        \\
+           &        \\
+05/01/2005 &   1.00 \\
+20/01/2005 &   2.00 \\
+           &        \\
+15/03/2005 &   3.00 \\
+           &        \\
+           &        \\
+30/08/2005 &   4.00 \\
+           &        \\
+15/12/2005 &   5.00 \\
+25/12/2005 &   5.00 \\
+\end{tabular}
+\end{minipage}%
+\begin{minipage}[c]{0.6\columnwidth}%
+\centering
+\begin{tabular}{c|c|c}
+\textbf{$t_i$} & \textbf{Date}  & \textbf{Cashflow} \\
+\hline
+      &            &           \\
+$t_0$ & 30/10/2004 & 20.00 - 3.00 = 17.00 \\
+$t_1$ & 30/12/2004 & 20.00 - 3.00 = 17.00 \\
+      &            &       \\
+      &            &       \\
+$t_2$ & 28/02/2005 & 17.00 - 3.00 = 14.00 \\
+      &            &       \\
+$t_3$ & 30/04/2005 & 14.00 - 3.00 = 11.00 \\
+$t_4$ & 30/06/2005 & 14.00 - 3.00 = 11.00 \\
+$t_5$ & 30/08/2005 & 14.00 - 3.00 = 11.00 \\
+$t_6$ & 30/10/2005 & 10.00 - 3.00 = 7.00 \\
+      &            &       \\
+      &            &       \\
+\end{tabular}
+\end{minipage}%
 
 %---------------------------------------------------------------------------
 
 \section{Paso 7. Simulaci\'on}
 
 Cada simulaci\'on consiste en generar n\'umeros aleatorios
-mediante una o varias c\'opulas (dependiendo del m\'etodo de
-simulaci\'on escojido), simular el tiempo de fallido de cada
+mediante la c\'opula, simular el tiempo de fallido de cada
 cliente (mape\'andolos sobre $t_1, t_2, \cdots, t_{NumSteps}$ y
 resto) y evaluar cada segmento de cada segmentaci\'on.
 \newline
@@ -514,23 +415,12 @@ usar cada generaci\'on de n\'umeros aleatorios (computacionalmente
 costosa de generar) 2 veces. Sea $(u_1, u_2, \cdots, u_{NumClients})$
 n\'umeros aleatorios entre $0$ y $1$ generados por la realizaci\'on
 de una c\'opula gaussiana. Entonces la realizaci\'on
-$(1-u_1, 1-u_2, \cdots, 1-u_{NumClients})$ es equiprobable a la anterior.
+$\left(1-u_1, 1-u_2, \cdots, 1-u_{NumClients}\right)$ es equiprobable 
+a la anterior.
 
 \subsection{Generaci\'on de n\'umeros aleatorios}
 
-\subsubsection{M\'etodo Rating-Path}
-
-Generamos una realizaci\'on de cada c\'opula, $Q_1, Q_2, \cdots, Q_{NumClient}$
-usando los pasos 3-5 del apartado \ref{apendix:gaussiancopula}.
-\newline
-\newline
-Si se usa metodolog\'ia antithetic, solamente se generan los n\'umeros
-de las simulaciones pares. Los n\'umeros aleatorios usados en las simulaciones
-impares son $\vec{1}$ menos los de la simulaci\'on anterior 
-
-\subsubsection{M\'etodo Time-To-Default}
-
-Generamos una realizaci\'on de la c\'opula, $Q$ usando los pasos 3-5
+Generamos una realizaci\'on de la c\'opula $Q$ usando los pasos 3-5
 del apartado \ref{apendix:gaussiancopula}.
 \newline
 \newline
@@ -540,62 +430,40 @@ impares son $\vec{1}$ menos los de la simulaci\'on anterior
 
 \subsection{Simulaci\'on del tiempo de fallido}
 
-\subsubsection{M\'etodo Rating-Path}
-
-Sean $Q_1(i), Q_2(i), \cdots, Q_{NumSteps}(i)$ los componentes $i$-esimos
-de las c\'opulas simuladas. El objetivo es simular la evoluci\'on del
-rating del cliente $i$-esimo. Conocemos el rating del cliente $i$
-en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mrt} hasta que
-el rating sea $Default$ o el tiempo sea superior a $t_{NumSteps}$.
-
-\subsubsection{M\'etodo Time-To-Default}
-
-Sean $Q(i)$ el componente $i$-esimo de las c\'opula simulada. El objetivo es
+Sean $Q_i$ el componente $i$-esimo de las c\'opula simulada. El objetivo es
 simular el tiempo de fallido del cliente $i$-esimo. Conocemos el rating del
 cliente $i$ en $t_0$. Realizamos el m\'etodo expuesto en \ref{res:mttd} teniendo
-en cuenta que el valor retornado por la inversa de la funci\'on de supervivencia
-es un n\'umero con decimales; mapeamos este valor (tiempo de fallido) al
-nodo de tiempo ($t_1, t_2, \cdots, t_{NumSteps}, t_{NumSteps+1}$) mas cercano
-por la derecha. Por ejemplo, si el tiempo de fallido simulado es $3.2$ y los nodos
-de tiempo son $0$, $3$, $6$ y $9$, el valor se mapear\'a a $6$.
+en cuenta que el tiempo retornado por la inversa de la funci\'on de supervivencia
+es un n\'umero con decimales que debe ser mapeado a un nodo de tiempo; mapeamos 
+este valor (tiempo de fallido) al nodo de tiempo 
+($t_1, t_2, \cdots, t_{NumSteps}, t_{NumSteps+1}$) mas cercano por la derecha. 
+Por ejemplo, si el tiempo de fallido simulado es $3.2$ y los nodos de tiempo son 
+$0$, $3$, $6$ y $9$, el valor se mapear\'a a $6$.
 
 \subsection{Valoraci\'on del segmento}
 
 Los pasos anteriores nos proporcionan el tiempo simulado de fallido
-para cada cliente, $t_w^1, t_w^2, \cdots, t_w^{NumClients}$. Obtenemos el
-valor de cada segmento de la siguiente forma:
+para cada cliente, $t_w^1, t_w^2, \cdots, t_w^{NumClients}$. Obtenemos 
+las p\'erdidas de los elementos del segmento $j$ de la siguiente forma:
 \begin{displaymath}
-X_j = \sum_{i \in \Omega_j} \left\{
+Z_j = \sum_{i \in \Omega_j}
+\left\{
 \begin{array}{ll}
-C_{NumSteps}^i              & \quad \textrm{if } t_w^i > t_{NumSteps}    \cr
-C_{t_w^i-1}^i + N_{t_w^i}^i & \quad \textrm{if } t_w^i \leq t_{NumSteps} \cr
+0                & \quad \textrm{if } t_w^i > t_{NumSteps}    \cr
+Losses_{t_w^i}^i & \quad \textrm{if } t_w^i \leq t_{NumSteps} \cr
 \end{array}
 \right\}
 \end{displaymath}
-
-\begin{displaymath}
-Z_j = \sum_{i \in \Omega_j} \left\{
-\begin{array}{ll}
-0                                          & \quad \textrm{if } w_i > t_{NumSteps}    \cr
-C_{NumSteps}^i - C_{t_w^i-1}^i - N_{w_i}^i & \quad \textrm{if } w_i \leq t_{NumSteps} \cr
-\end{array}
-\right\}
-\end{displaymath}
-
-donde $X_j$ y $Z_j$ son el valor y la p\'erdida del segmento $j$ en tiempo $t_{NumSteps}$,
-$\Omega_j$ es el conjunto de clientes del segmento $j$, $C_k^i$ y $N_k^i$ son el cashflow
-y el recovery acumulado en tiempo $k$ del cliente $i$ para el segmento $j$.
 
 %---------------------------------------------------------------------------
 
 \section{Paso 8. Valoraci\'on del riesgo}
 
 Despu\'es de realizar $N$ simulaciones se dispone de $N$ valores para cada
-segmento. Para valorar el riesgo necesitamos que los valores simulados sean
-las p\'erdidas de la cartera (Z). Disponemos de $z_1, z_2, \cdots, z_N$. Fijado un
-nivel de confianza $\alpha$ y un nivel de VAR de $x$, usamos las indicaciones de
-\ref{res:risk} para calcular el Expected Loss, la Desviaci\'on Est\'andar, el VAR y
-el TCE y sus correspondientes errores est\'andares.
+segmento. Disponemos de $z_1, z_2, \cdots, z_N$. Fijado un nivel de confianza 
+$\alpha$ y un nivel de VAR de $x$, usamos las indicaciones de \ref{res:risk} 
+para calcular el Expected Loss, la Desviaci\'on Est\'andar, el VAR y el TCE y sus 
+correspondientes errores est\'andares.
 
 \begin{figure}[!hb]
 \begin{center}

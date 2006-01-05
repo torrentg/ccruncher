@@ -153,77 +153,19 @@ el\'ipticas (que incluyen la distribuci\'on multinomial) son una excepci\'on.
 %---------------------------------------------------------------------------
 
 \section{Simulaci\'on del tiempo de fallido}
+\label{res:mttd}
 
-El objetivo de este apartado es proporcionar m\'etodos para simular los
+El objetivo de este apartado es proporcionar un m\'etodo para simular los
 tiempos de fallido, $\vec{t_w} = (t_w^1,t_w^2,t_w^3,\cdots,t_w^{nc})$ de los
 clientes cumpliendo:
 \begin{itemize}
-\item los fallidos de cada cliente deben satisfacer la matriz de transici\'on $M_T$
+\item los fallidos de cada cliente satisfacen la matriz de transici\'on $M_T$
 (o la funci\'on de supervivencia, $Survival(r,t)$).
-\item la correlaci\'on entre los fallidos de los clientes debe cumplir la matriz
+\item la correlaci\'on entre los fallidos de los clientes cumplen la matriz
 de correlaci\'on entre clientes, $\Theta$
 \end{itemize}
 
-\subsection{M\'etodo Rating-Path}
-\label{res:mrt}
-\index{M\'etodo Rating-Path}
-
-Este m\'etodo simula la evoluci\'on del rating del cliente a lo largo del tiempo.
-El tiempo de fallido se obtiene al alcanzar el rating $Default$. Para este m\'etodo
-es necesario disponer de la matriz de transici\'on, $M_T$.
-
-\paragraph{Paso 1.} Segmentamos el tiempo en intervalos constantes de forma que
-el intervalo de tiempo entre $t_i$ y $t_{i+1}$ es el cubierto por la matriz de
-transici\'on, $T$.
-\begin{displaymath}
-t_0,t_1,t_2,\cdots,t_k, \cdots
-\end{displaymath}
-
-\paragraph{Paso 2.} Para cada intervalo de tiempo $k$ creamos una c\'opula,
-$Qk$ de dimensi\'on $nc$ que satisfaga la matriz de correlaci\'on entre
-clientes, $\Theta$.
-\begin{displaymath}
-Q_1, Q_2, Q_3, \cdots, Q_k, \cdots
-\end{displaymath}
-
-\paragraph{Paso 3.} Simulamos las c\'opulas $Q_1, Q_2, Q_3, \cdots, Q_k, \cdots$.
-Cada realizaci\'on de $Q_k$ consiste en un vector de componentes
-$(Q_k(1), Q_k(2), \cdots, Q_k(nc))$.
-
-\paragraph{Paso 4.} Simulamos el rating del cliente $i$ en $t_1$ de la forma siguiente:
-disponemos del rating inicial $rating(i,t_0)$ y un valor $Q_1(i) \in [0,1]$
-proporcionado por el componente $i$-\'esimo de $Q_1$. Entonces
-\begin{displaymath}
-rating(i,t_1) = M_T^{-1}(rating(i,t_1),Q_1(i))
-\end{displaymath}
-Este paso se encuentra ilustrado en la figura \ref{simrp}.
-
-\paragraph{Paso 5.} Simulamos el rating del cliente $i$ en $t_k$ de la forma siguiente:
-disponemos del rating anterior $rating(i,t_{k-1})$ y un valor $Q_k(i) \in [0,1]$
-proporcionado por el componente $i$-\'esimo de $Q_k$. Entonces
-\begin{displaymath}
-rating(i,t_k) = M_T^{-1}(rating(i,t_{k-1}),Q_k(i))
-\end{displaymath}
-Este paso se encuentra ilustrado en la figura \ref{simrp}. Finalmente, aproximamos
-el tiempo de fallido del cliente $i$ de la siguiente forma:
-\begin{displaymath}
-t_w^i = inf\{t_k | rating(i,t_k) = Default\}
-\end{displaymath}
-
-\begin{figure}[!hb]
-\begin{center}
-\includegraphics[width=7cm,angle=0]{./images/simrp.eps}
-\caption{Simulaci\'on de la evoluci\'on del rating $BBB$ a $T$ tiempo}
-\label{simrp}
-\end{center}
-\end{figure}
-
-\subsection{M\'etodo Time-To-Default}
-\label{res:mttd}
-\index{M\'etodo Time-To-Default}
-
-Este m\'etodo consiste en simular directamente el tiempo de fallido de los
-clientes. Requiere disponer de la funci\'on de supervivencia. En caso
+El m\'etodo requiere disponer de la funci\'on de supervivencia. En caso
 de disponer solamente de la matriz de transici\'on puede calcularse la funci\'on
 de supervivencia asociada a la matriz de transici\'on usando las f\'ormulas
 \ref{eq:survival1} y \ref{eq:cdfr1}.
@@ -235,13 +177,13 @@ Q
 \end{displaymath}
 
 \paragraph{Paso 2.} Simulamos la c\'opula $Q$. La realizaci\'on de $Q$ consiste
-en un vector de componentes $(Q(1), Q(2), \cdots, Q(nc))$.
+en un vector de componentes $(Q_1, Q_2, \cdots, Q_{nc})$.
 
 \paragraph{Paso 2.} Simulamos el tiempo de fallido del cliente $i$ de la forma siguiente:
-disponemos del rating inicial, $rating(i,t_0)$ y un valor $Q(i) \in [0,1]$ proporcionado
+disponemos del rating inicial, $rating(i,t_0)$ y un valor $Q_i \in [0,1]$ proporcionado
 por el componente $i$-\'esimo de $Q$. Entonces:
 \begin{displaymath}
-t_w^i = Survival^{-1}(rating(i,t_0),Q(i))
+t_w^i = Survival^{-1}(rating(i,t_0),Q_i)
 \end{displaymath}
 Este paso se encuentra ilustrado en la figura \ref{simttd}.
 
@@ -262,37 +204,27 @@ $na_i$ es el n\'umero de activos del cliente $i$ y $nc$ el n\'umero de clientes.
 Asimismo se considera que el casflow y recovery de cada activo est\'a fijado y
 no depende de la evoluci\'on del cliente.
 
-\paragraph{Definici\'on.} Definimos el valor del activo $j$ del cliente $i$
-evaluado en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
-tiempo $t_w$ como:
-\begin{equation}
-X_{i,j}(t_w;t_0,t_K) = 
-\end{equation}
+\paragraph{Definici\'on.} Definimos la p\'erdida provocada por el activo $j$ del 
+cliente $i$ habiendo hecho fallido en tiempo $t_w$ y evaluada en $t_K$ como:
 \begin{displaymath}
-\textrm{1}_{[t_w \leq t_K]} \cdot \textrm{recovery}(t_w) \cdot \Upsilon_S(t_w,t_K) +
-\sum_{t=t_0}^{t_K} \textrm{1}_{[t < t_w]} \cdot \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
+Z_{i,j}(t_w; t_K) =
+\left(
+\sum_{t=t_w}^{\infty} \textrm{cashflow}(t) \cdot \Upsilon_S(t,t_K)
+\right)
+- \textrm{recovery}(t_w) \cdot \Upsilon_S(t_w,t_K)
 \end{displaymath}
 
-\paragraph{Definici\'on.} Definimos el valor de los activos del cliente $i$
-evaluados en $t_K$ entre el tiempo $t_0$ y $t_K$, habiendo hecho fallido en
-tiempo $t_w$ como:
+\paragraph{Definici\'on.} Definimos la p\'erdida provocada por los activos del 
+cliente $i$ habiendo hecho fallido en tiempo $t_w$ y evaluada en $t_K$ como:
 \begin{equation}
-X_i(t_w;t_0,t_K) = \sum_{j=0}^{na_i} X_{i,j}(t_w;t_0,t_K)
+Z_i(t_w;t_K) = \sum_{j=1}^{na_i} Z_{i,j}(t_w;t_K)
 \end{equation}
 
-\paragraph{Definici\'on.} Definimos el valor de la cartera evaluada en $t_K$
-entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
-fallido los clientes como:
+\paragraph{Definici\'on.} Definimos la p\'erdida de la cartera siendo $\vec{t_w}$ 
+los tiempos en los que han hecho fallido los clientes y evaluada en $t_K$ como:
 \begin{equation}
-X(\vec{t_w};t_0,t_K) = \sum_{i=0}^{nc} X_i(t_w^i;t_0,t_K) =
-\sum_{i=0}^{nc} \sum_{j=0}^{na_i} X_{i,j}(t_w^i;t_0,t_K)
-\end{equation}
-
-\paragraph{Definici\'on.} Definimos las p\'erdidas de la cartera evaluada en $t_K$
-entre el tiempo $t_0$ y $t_K$, siendo $\vec{t_w}$ los tiempos en los que han hecho
-fallido los clientes como:
-\begin{equation}
-Z(\vec{t_w};t_0,t_K) = X(\vec{t_\infty};t_0,t_K) - X(\vec{t_w};t_0,t_K)
+Z(\vec{t_w};t_K) = \sum_{i=1}^{nc} Z_i(t_w^i;t_K) =
+\sum_{i=1}^{nc} \sum_{j=1}^{na_i} Z_{i,j}(t_w^i;t_K)
 \end{equation}
 
 %---------------------------------------------------------------------------

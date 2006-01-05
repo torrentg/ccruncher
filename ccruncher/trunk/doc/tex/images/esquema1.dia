@@ -135,7 +135,7 @@ U[0,1]#</dia:string>
         <dia:composite type="text">
           <dia:attribute name="string">
             <dia:string>#Correlated Random Numbers
-Copulas#</dia:string>
+[ Copula ]#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -180,8 +180,7 @@ Copulas#</dia:string>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#Simulated Default Times
-Rating-Path / Time-To-Default#</dia:string>
+            <dia:string>#Simulated Default Times#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -190,7 +189,7 @@ Rating-Path / Time-To-Default#</dia:string>
             <dia:real val="1.2"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="16.39,18.8"/>
+            <dia:point val="16.39,19.4"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -226,8 +225,7 @@ Rating-Path / Time-To-Default#</dia:string>
       <dia:attribute name="text">
         <dia:composite type="text">
           <dia:attribute name="string">
-            <dia:string>#Simulated Portfolio Loss
-#</dia:string>
+            <dia:string>#Simulated Portfolio Loss#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -236,7 +234,7 @@ Rating-Path / Time-To-Default#</dia:string>
             <dia:real val="1.2"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="16.345,25.75"/>
+            <dia:point val="16.345,26.35"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -341,16 +339,16 @@ Survival Function#</dia:string>
     </dia:object>
     <dia:object type="Flowchart - Box" version="0" id="O6">
       <dia:attribute name="obj_pos">
-        <dia:point val="-2.8499,24.225"/>
+        <dia:point val="-2.9499,24.225"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="-2.8999,24.175;6.93,28.025"/>
+        <dia:rectangle val="-2.9999,24.175;7.0001,28.025"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="-2.8499,24.225"/>
+        <dia:point val="-2.9499,24.225"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="9.7299000000000007"/>
+        <dia:real val="9.9000000000000004"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="3.7500000000000009"/>
@@ -365,7 +363,7 @@ Survival Function#</dia:string>
         <dia:composite type="text">
           <dia:attribute name="string">
             <dia:string>#Portfolio Definition
-Cashflow / Netting#</dia:string>
+Cashflow / Recovery#</dia:string>
           </dia:attribute>
           <dia:attribute name="font">
             <dia:font family="sans" style="0" name="Helvetica"/>
@@ -374,7 +372,7 @@ Cashflow / Netting#</dia:string>
             <dia:real val="1.2"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="2.01505,25.8"/>
+            <dia:point val="2.0001,25.8"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000"/>
@@ -527,13 +525,13 @@ Cashflow / Netting#</dia:string>
     </dia:object>
     <dia:object type="Standard - Line" version="0" id="O12">
       <dia:attribute name="obj_pos">
-        <dia:point val="6.88,26.1"/>
+        <dia:point val="6.9501,26.1"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="6.82922,25.5493;10.0979,26.5507"/>
+        <dia:rectangle val="6.8993,25.5493;10.0981,26.5507"/>
       </dia:attribute>
       <dia:attribute name="conn_endpoints">
-        <dia:point val="6.88,26.1"/>
+        <dia:point val="6.9501,26.1"/>
         <dia:point val="10.04,26.05"/>
       </dia:attribute>
       <dia:attribute name="numcp">
