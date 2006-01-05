@@ -47,6 +47,7 @@
 #include "segmentations/Segmentation.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor

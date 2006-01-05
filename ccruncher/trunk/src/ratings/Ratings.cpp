@@ -47,6 +47,7 @@
 #include "ratings/Ratings.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor privat

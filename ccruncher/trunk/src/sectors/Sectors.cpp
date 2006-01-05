@@ -43,6 +43,7 @@
 #include <algorithm>
 #include "sectors/Sectors.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // private constructor
