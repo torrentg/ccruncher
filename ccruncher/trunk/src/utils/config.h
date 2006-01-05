@@ -169,7 +169,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R360"
+#define SVNVERSION "R362M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
