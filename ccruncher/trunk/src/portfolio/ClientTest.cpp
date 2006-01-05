@@ -49,6 +49,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Client refactoring
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . netting replaced by recovery
+//
 //===========================================================================
 
 #include <iostream>
@@ -175,24 +178,24 @@ void ccruncher_test::ClientTest::test1()
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' netting='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
     </client>";
@@ -235,22 +238,22 @@ void ccruncher_test::ClientTest::test2()
     <client rating='K' sector='S2' name='cliente1' id='cif1'>\n\
       <asset name='generic' id='op1'>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' netting='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
     </client>";
@@ -277,22 +280,22 @@ void ccruncher_test::ClientTest::test3()
     <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
       <asset name='generic' id='op1'>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' netting='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' netting='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
     </client>";

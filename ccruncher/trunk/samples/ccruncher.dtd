@@ -208,5 +208,5 @@
 <!ATTLIST values
     at CDATA #REQUIRED
     cashflow CDATA #REQUIRED
-    netting CDATA #REQUIRED
+    recovery CDATA #REQUIRED
 >

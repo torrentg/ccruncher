@@ -55,6 +55,7 @@
 //
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simulate=values option
+//   . netting replaced by recovery
 //
 //===========================================================================
 
@@ -179,13 +180,13 @@ void ccruncher_test::AssetTest::test1()
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
-          <values at='01/07/2020' cashflow='10.0' netting='10.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
+          <values at='01/07/2020' cashflow='10.0' recovery='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -212,13 +213,13 @@ void ccruncher_test::AssetTest::test2()
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2000' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' netting='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' netting='450.0' />\n\
-          <values at='01/07/2020' cashflow='10.0' netting='10.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
+          <values at='01/07/2020' cashflow='10.0' recovery='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -250,31 +251,31 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 
   ASSERT(Date("01/01/2000") == data[0].date);
   ASSERT_DOUBLES_EQUAL(+10.0, data[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[0].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[0].recovery, EPSILON);
 
   ASSERT(Date("01/07/2000") == data[1].date);
   ASSERT_DOUBLES_EQUAL(+10.0 , data[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[1].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[1].recovery, EPSILON);
 
   ASSERT(Date("01/01/2001") == data[2].date);
   ASSERT_DOUBLES_EQUAL(+10.0 , data[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[2].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[2].recovery, EPSILON);
 
   ASSERT(Date("01/07/2001") == data[3].date);
   ASSERT_DOUBLES_EQUAL(+10.0 , data[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[3].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[3].recovery, EPSILON);
 
   ASSERT(Date("01/01/2002") == data[4].date);
   ASSERT_DOUBLES_EQUAL(+10.0 , data[4].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[4].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[4].recovery, EPSILON);
 
   ASSERT(Date("01/07/2002") == data[5].date);
   ASSERT_DOUBLES_EQUAL(+510.0, data[5].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[5].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+450.0, data[5].recovery, EPSILON);
 
   ASSERT(Date("01/07/2020") == data[6].date);
   ASSERT_DOUBLES_EQUAL(+10.0, data[6].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+10.0, data[6].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(+10.0, data[6].recovery, EPSILON);
 
   double *losses = new double[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };

@@ -44,6 +44,9 @@
 //   . Interests class refactoring
 //   . Asset refactoring
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . netting replaced by recovery
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -91,8 +94,8 @@ class Asset : public ExpatHandlers
 
     // compute cashflow 
     double getVCashFlow(Date &date1, Date &date2, const Interest &, bool);
-    // compute netting
-    double getVNetting(Date &date1, Date &date2, const Interest &);
+    // compute recovery
+    double getVRecovery(Date &date1, Date &date2, const Interest &);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation

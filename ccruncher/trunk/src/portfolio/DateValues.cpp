@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . netting replaced by recovery
+//
 //===========================================================================
 
 #include <cmath>
@@ -51,17 +54,17 @@ ccruncher::DateValues::DateValues()
 {
   date = Date(1,1,1);
   cashflow = NAN;
-  netting = NAN;
+  recovery = NAN;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _netting)
+ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _recovery)
 {
   date = _date;
   cashflow = _cashflow;
-  netting = _netting;
+  recovery = _recovery;
 }
 
 //===========================================================================

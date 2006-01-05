@@ -621,16 +621,16 @@
         <belongs-to segmentation="office" segment="0001"/>
         <!-- implicit: belongs-to segmentation="asset" segment="op1" -->
         <data>
-          <values at="01/01/2000" cashflow="10.0" netting="2.0" />
-          <values at="01/06/2000" cashflow="10.0" netting="2.0" />
-          <values at="01/01/2001" cashflow="10.0" netting="2.0" />
-          <values at="01/06/2001" cashflow="10.0" netting="2.0" />
-          <values at="01/01/2002" cashflow="10.0" netting="2.0" />
-          <values at="01/06/2002" cashflow="10.0" netting="2.0" />
-          <values at="01/01/2003" cashflow="10.0" netting="2.0" />
-          <values at="01/06/2003" cashflow="10.0" netting="2.0" />
-          <values at="01/01/2004" cashflow="10.0" netting="2.0" />
-          <values at="01/06/2004" cashflow="10.0" netting="2.0" />
+          <values at="01/01/2000" cashflow="10.0" recovery="2.0" />
+          <values at="01/06/2000" cashflow="10.0" recovery="2.0" />
+          <values at="01/01/2001" cashflow="10.0" recovery="2.0" />
+          <values at="01/06/2001" cashflow="10.0" recovery="2.0" />
+          <values at="01/01/2002" cashflow="10.0" recovery="2.0" />
+          <values at="01/06/2002" cashflow="10.0" recovery="2.0" />
+          <values at="01/01/2003" cashflow="10.0" recovery="2.0" />
+          <values at="01/06/2003" cashflow="10.0" recovery="2.0" />
+          <values at="01/01/2004" cashflow="10.0" recovery="2.0" />
+          <values at="01/06/2004" cashflow="10.0" recovery="2.0" />
         </data>
       </asset>
     </client>

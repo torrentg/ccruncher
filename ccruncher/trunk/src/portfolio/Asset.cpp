@@ -59,6 +59,9 @@
 //     taked in account. Previously, only chasflows between initial
 //     and end simulation date was taked in account). Thanks GG.
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . netting replaced by recovery
+//
 //===========================================================================
 
 #include <cmath>
@@ -160,9 +163,9 @@ double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &
 }
 
 //===========================================================================
-// getVNetting at date2
+// getVRecovery at date2
 //===========================================================================
-double ccruncher::Asset::getVNetting(Date &date1, Date &date2, const Interest &spot)
+double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, const Interest &spot)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -187,7 +190,7 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, const Interest &s
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;
 
-    return data[n-1].netting * val1/val2 * spot.getUpsilon(data[n-1].date, date2);
+    return data[n-1].recovery * val1/val2 * spot.getUpsilon(data[n-1].date, date2);
   }
 
   for(int i=1;i<n;i++)
@@ -195,9 +198,9 @@ double ccruncher::Asset::getVNetting(Date &date1, Date &date2, const Interest &s
     if (date2 <= data[i].date)
     {
       Date datex = data[i-1].date;
-      double ex = data[i-1].netting * spot.getUpsilon(data[i-1].date, date2);
+      double ex = data[i-1].recovery * spot.getUpsilon(data[i-1].date, date2);
       Date datey = data[i].date;
-      double ey = data[i].netting * spot.getUpsilon(data[i].date, date2);
+      double ey = data[i].recovery * spot.getUpsilon(data[i].date, date2);
 
       ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
 
@@ -234,7 +237,7 @@ void ccruncher::Asset::getLosses(Date *dates, int n, Interests &interests, doubl
       }
     }
     ufactor =  spot.getUpsilon(dates[i], dates[n-1]);
-    ret[i] -= getVNetting(dates[max(i-1,0)], dates[i], spot) * ufactor;
+    ret[i] -= getVRecovery(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 }
 
@@ -280,13 +283,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   else if (isEqual(name_,"values") && have_data == true) {
     Date date = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
-    double netting = getDoubleAttribute(attributes, "netting", NAN);
+    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
 
-    if (date == Date(1,1,1) || isnan(cashflow) || isnan(netting)) {
+    if (date == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
       throw eperror(eu, "invalid attributes at <values>");
     }
     else {
-      DateValues aux(date, cashflow, netting);
+      DateValues aux(date, cashflow, recovery);
       insertDateValues(aux);
     }
   }

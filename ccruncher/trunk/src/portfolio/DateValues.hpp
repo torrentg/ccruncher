@@ -40,6 +40,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . netting replaced by recovery
+//
 //===========================================================================
 
 #ifndef _DateValues_
@@ -66,10 +69,10 @@ class DateValues
 
     Date date;
     double cashflow;
-    double netting;
+    double recovery;
 
     DateValues();
-    DateValues(Date date, double cashflow, double netting);
+    DateValues(Date date, double cashflow, double recovery);
 
 };
 
