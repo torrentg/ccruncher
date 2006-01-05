@@ -63,6 +63,9 @@
 // 2006/02/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . IData refactoring
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simulate=values and method=rating-path params
+//
 //===========================================================================
 
 #include <iostream>
@@ -102,9 +105,7 @@ void ccruncher_test::IDataTest::test1()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
-      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>\n\
     <interests>\n\
       <interest name='spot' date='18/02/2003'>\n\

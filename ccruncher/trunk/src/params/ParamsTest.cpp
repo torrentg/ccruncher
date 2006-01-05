@@ -46,6 +46,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simulate=values option
+//   . removed method=rating-path
+//
 //===========================================================================
 
 #include <iostream>
@@ -83,9 +87,7 @@ void ccruncher_test::ParamsTest::test1()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
-      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";
 
   // creating xml
@@ -100,8 +102,6 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(2 == params.steplength);
   ASSERT(3000 == params.maxiterations);
   ASSERT(30000000 == params.maxseconds);
-  ASSERT("rating-path" == params.method);
-  ASSERT("loss" == params.simule);
   ASSERT("gaussian" == params.copula_type);
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
@@ -142,9 +142,7 @@ void ccruncher_test::ParamsTest::test2()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
-      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";
 
   // creating xml

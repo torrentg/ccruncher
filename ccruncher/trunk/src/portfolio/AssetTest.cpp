@@ -53,6 +53,9 @@
 //   . Asset refactoring
 //   . modified asset value algorithm
 //
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed simulate=values option
+//
 //===========================================================================
 
 #include <iostream>
@@ -273,25 +276,14 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_DOUBLES_EQUAL(+10.0, data[6].cashflow, EPSILON);
   ASSERT_DOUBLES_EQUAL(+10.0, data[6].netting, EPSILON);
 
-  DateValues *vertexes = new DateValues[4];
+  double *losses = new double[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
-  ASSERT_NO_THROW(asset->getVertexes(dates, 4, interests, vertexes));
+  ASSERT_NO_THROW(asset->getLosses(dates, 4, interests, losses));
 
-  ASSERT(Date("01/01/1999") == vertexes[0].date);
-  ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(0.0   , vertexes[0].netting, EPSILON);
+  ASSERT_DOUBLES_EQUAL(570.0, losses[0], EPSILON);
+  ASSERT_DOUBLES_EQUAL(120.0, losses[1], EPSILON);
+  ASSERT_DOUBLES_EQUAL(70.0, losses[2], EPSILON);
+  ASSERT_DOUBLES_EQUAL(-256.572, losses[3], EPSILON);
 
-  ASSERT(Date("01/01/2000") == vertexes[1].date);
-  ASSERT_DOUBLES_EQUAL(10.0  , vertexes[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(450.0 , vertexes[1].netting, EPSILON);
-
-  ASSERT(Date("01/06/2002") == vertexes[2].date);
-  ASSERT_DOUBLES_EQUAL(50.0  , vertexes[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(450.0 , vertexes[2].netting, EPSILON);
-
-  ASSERT(Date("01/01/2010") == vertexes[3].date);
-  ASSERT_DOUBLES_EQUAL(570.0 , vertexes[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(266.572 , vertexes[3].netting, EPSILON);
-
-  delete [] vertexes;
+  delete [] losses;
 }
