@@ -17,11 +17,10 @@
 
     <p>
       CreditCruncher computes the Value At Risk (VAR) of large credit
-      portfolios using the Monte Carlo method. It is a command line
-      solver that read an xml input file and returns a plain text file
-      with the simulated values of portfolio. The current version is 0.9.
-      This software is released under the 
-      <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a>.
+      portfolios using the Monte Carlo method. This application is useful
+      for risk managers. The current version is 0.9. This software is 
+      released under the <a href="http://www.gnu.org/copyleft/gpl.html">GNU 
+      General Public License</a>.
     </p>
 
     <p>
@@ -60,27 +59,28 @@
 
     <p>
       CreditCruncher is designed to work in batch mode, without graphical support.
-      Computation time can be reduced enabling the MPI instructions when compiling
-      and deploying the application in a cluster.
+      If the application is compiled and deployed in a cluster, then, computation 
+      time can be reduced by enabling the MPI instructions.
       <br />
       <br />
       <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
       <br />
-      The user create a <i>xml</i> file where the portfolio is described. CreditCruncher
-      take this file and simulate <i>N</i> times the portfolio described in the
-      input file. The simulated values are stored in a file with extension <i>.out</i>.
-      Finally, a R script takes the simulated values and do some statistic over
-      there to generate the risk indicators (VaR, TCE, etc.)
+      The user must create a <i>xml</i> file with the description of the portfolio.
+      CreditCruncher takes this file and simulates <i>N</i> times the portfolio. 
+      The simulated values are stored in a file with extension <i>.out</i>.
+      Finally, a <a href="http://www.r-project.org/">R script</a> takes the simulated 
+      values and do some statistics over there to generate the risk indicators 
+      (VaR, TCE, etc.)
     </p>
 
     <h2 id="recruitement">Recruitement</h2>
 
     <p>
-      We are searching a translator from spanish to english to translate the <i>Technical
-      Document</i> and revise the CreditCruncher site. Also, we are searching beta-tester
-      to stress CreditCruncher, check results, review documentation, create new samples
-      and compare results with other solvers. If you desire to take part, please send a
-      mail to <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>.
+      We are searching a spanish to english translator to translate the <i>Technical
+      Document</i>. We are also looking for a beta-tester to put CreditCruncher to the 
+      test, check results, review documentation, create new samples and compare results 
+      with other solvers. If you wish to take part, please send a mail to 
+      <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>.
     </p>
 
     <div id="footpage">
@@ -98,7 +98,7 @@
             </a>
           </td>
           <td class="footer" align="right">
-            Last modified: 02-Jan-2006 &nbsp;
+            Last modified: 05-Jan-2006 &nbsp;
           </td>
         </tr>
       </table>
