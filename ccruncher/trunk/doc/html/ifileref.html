@@ -750,22 +750,22 @@
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;belongs-to segmentation="office" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values at="01/06/2002" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2003" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2003" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2004" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2004" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/06/2002" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2003" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2004" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset name="bond" id="op2">&gt;
         &lt;belongs-to segmentation="office" segment="0004"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
@@ -776,11 +776,11 @@
         &lt;belongs-to segmentation="office" segment="0003"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" netting="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" netting="2000.0" /&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/client&gt;
@@ -910,9 +910,9 @@
         <td style="text-align:center;"><code>double</code></td>
       </tr>
       <tr class="a">
-        <td style="text-align:center;">netting</td>
+        <td style="text-align:center;">recovery</td>
         <td style="text-align:justify;">
-          Netting at date "at" in case of default. Positive values = client
+          Recovery at date "at" in case of default. Positive values = client
           pays, negative values = client earns
         </td>
         <td style="text-align:center;"><code>double</code></td>
@@ -938,7 +938,7 @@
             </a> 
           </td>
           <td class="footer" align="right">
-            Last modified: 05-Jan-2006 &nbsp;
+            Last modified: 07-Jan-2006 &nbsp;
           </td>
         </tr>
       </table>

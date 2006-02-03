@@ -195,7 +195,7 @@ void ccruncher::MonteCarlo::release()
     dates = NULL;
   }
 
-  // deallocating time-to-default arrays
+  // deallocating workspace array
   if (ittd != NULL) {
     Arrays<int>::deallocVector(ittd);
     ittd = NULL;
@@ -560,7 +560,7 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   assert(ittd == NULL);
 
   // setting logger header
-  Logger::trace("initializing time-to-default workspace", '-');
+  Logger::trace("initializing workspace", '-');
   Logger::newIndentLevel();
 
   // setting logger info
@@ -936,7 +936,7 @@ double ccruncher::MonteCarlo::getRandom(int iclient)
 }
 
 //===========================================================================
-// given a client, simule using time-to-default algorithm
+// given a client, simule time to default
 //===========================================================================
 int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
 {

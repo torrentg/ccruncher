@@ -28,7 +28,7 @@ Description:
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  1 time step of 12 months length
+  12 time steps of 1 month length
   The client has an unique asset with this profile:
     asset value at t=12 is 1 if client is alive and
     asset value at t=12 is 0 if client dead (default)
@@ -69,7 +69,7 @@ Description:
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  1 time step of 12 months length
+  12 time steps of 1 month length
   Each client has an unique asset with this profile:
     asset value at t=12 is 1 if client is alive and
     asset value at t=12 is 0 if client dead (default)
@@ -111,7 +111,7 @@ Description:
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  1 time step of 12 months length
+  12 time steps of 1 month length
   Each client has an asset with this profile:
     asset value at t=12 is 1 if client is alive and
     asset value at t=12 is 0 if client dead (default)
@@ -180,11 +180,11 @@ Description:
     correl(S1,S1) = 0.20
     correl(S1,S2) = 0.10
     correl(S2,S2) = 0.25
-    survival function user defined
     100 clients
     each client with 3 assets
+    24 time steps of 1 month length
     asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
-                    if client defaults, recovery=0.
+                    if client defaults, recovery=80% last payement.
     each client belongs to a random sector.
     interest spot curve defined
 
