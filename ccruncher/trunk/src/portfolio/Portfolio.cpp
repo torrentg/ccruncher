@@ -43,6 +43,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Portfolio refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -168,7 +171,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 {
   if (isEqual(name_,"portfolio")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag portfolio");
+      throw Exception("attributes are not allowed in tag portfolio");
     }
   }
   else if (isEqual(name_,"client")) {
@@ -176,7 +179,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     eppush(eu, auxclient, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -197,7 +200,7 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
     auxclient = NULL;
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

@@ -43,11 +43,15 @@
 // 2005/10/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added expat legacy code support (thanks Stephen Ronderos)
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . string parser refactorized
+//
 //===========================================================================
 
 #include <cstring>
 #include <map>
 #include <cstdio>
+#include <sstream>
 #include "utils/ExpatParser.hpp"
 #include "utils/ExpatUserData.hpp"
 #include <cassert>
@@ -137,15 +141,7 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) th
   {
     if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
     {
-      ExpatUserData *ud = (ExpatUserData *) ud_;
-      XML_Parser xmlparser = ud->getParser();
-      char buf[256];
-
-      sprintf(buf, "unexpected text at line %d and column %d",
-               XML_GetCurrentLineNumber(xmlparser),
-               XML_GetCurrentColumnNumber(xmlparser));
-
-      throw Exception(string(buf));
+      throw Exception("unexpected text parsing xml");
     }
   }
 }
@@ -155,39 +151,8 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) th
 //===========================================================================
 void ccruncher::ExpatParser::parse(string xmlcontent, ExpatHandlers *eh) throw(Exception)
 {
-  // pushing handlers to stack
-  userdata.setCurrentHandlers("", eh);
-
-  // parsing doc
-  try
-  {
-    if (XML_Parse(xmlparser, xmlcontent.c_str(), xmlcontent.length(), 1) == XML_STATUS_ERROR)
-    {
-      char buf[512];
-      sprintf(buf, "%s at line %d at column %d",
-                   XML_ErrorString(XML_GetErrorCode(xmlparser)),
-                   XML_GetCurrentLineNumber(xmlparser),
-                   XML_GetCurrentColumnNumber(xmlparser));
-      throw Exception(string(buf));
-    }
-  }
-  catch(Exception &e)
-  {
-    char buf[512];
-    sprintf(buf, "%s at line %d at column %d",
-                 e.what(),
-                 XML_GetCurrentLineNumber(xmlparser),
-                 XML_GetCurrentColumnNumber(xmlparser));
-    throw Exception(string(buf));
-  }
-  catch(...)
-  {
-    char buf[512];
-    sprintf(buf, "error at line %d at column %d",
-                 XML_GetCurrentLineNumber(xmlparser),
-                 XML_GetCurrentColumnNumber(xmlparser));
-    throw Exception(string(buf));
-  }
+  istringstream iss (xmlcontent, istringstream::in);
+  parse(iss, eh);
 }
 
 //===========================================================================

@@ -63,6 +63,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -111,14 +114,14 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
   if (isEqual(name,"params")) {
     // checking that don't have attributes
     if (getNumAttributes(atrs) > 0) {
-      throw eperror(eu, "attributes are not allowed in tag params");
+      throw Exception("attributes are not allowed in tag params");
     }
   }
   else if (isEqual(name,"property")) {
     parseProperty(eu, atrs);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name));
+    throw Exception("unexpected tag " + string(name));
   }
 }
 
@@ -134,7 +137,7 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name));
+    throw Exception("unexpected end tag " + string(name));
   }
 }
 
@@ -167,7 +170,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
     if (begindate != Date(1,1,1900) || aux == Date(1,1,1900)) {
-      throw eperror(eu, "invalid time.begintime");
+      throw Exception("invalid time.begintime");
     } else {
       begindate = aux;
     }
@@ -176,7 +179,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     int aux = getIntAttribute(attributes, "value", 0);
     if (steps != 0 || aux <= 0) {
-      throw eperror(eu, "invalid time.steps");
+      throw Exception("invalid time.steps");
     } else {
       steps = aux;
     }
@@ -185,7 +188,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     int aux = getIntAttribute(attributes, "value", 0);
     if (steplength != 0 || aux <= 0) {
-      throw eperror(eu, "invalid time.steplength");
+      throw Exception("invalid time.steplength");
     } else {
       steplength = aux;
     }
@@ -194,7 +197,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", -1L);
     if (maxiterations >= 0L || aux < 0L) {
-      throw eperror(eu, "invalid stopcriteria.maxiterations");
+      throw Exception("invalid stopcriteria.maxiterations");
     } else {
       maxiterations = aux;
     }
@@ -203,7 +206,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", -1L);
     if (maxseconds >= 0L || aux < 0L) {
-      throw eperror(eu, "invalid stopcriteria.maxseconds");
+      throw Exception("invalid stopcriteria.maxseconds");
     } else {
       maxseconds = aux;
     }
@@ -212,7 +215,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     string aux = getStringAttribute(attributes, "value", "");
     if (copula_type != "" || aux != "gaussian") {
-      throw eperror(eu, "invalid copula.type. supported values: gaussian");
+      throw Exception("invalid copula.type. supported values: gaussian");
     }
     else {
       copula_type = aux;
@@ -222,7 +225,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   {
     long aux = getLongAttribute(attributes, "value", -1L);
     if (aux == -1L) {
-      throw eperror(eu, "invalid copula.seed");
+      throw Exception("invalid copula.seed");
     }
     else {
       copula_seed = aux;
@@ -240,7 +243,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else
   {
-    throw eperror(eu, "found unexpected property: " + name);
+    throw Exception("found unexpected property: " + name);
   }
 }
 

@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed eperror method
+//
 //===========================================================================
 
 #ifndef _ExpatHandlers_
@@ -60,7 +63,6 @@ class ExpatHandlers
 
   protected:
 
-    Exception eperror(ExpatUserData &eud, const string &msg);
     void epback(ExpatUserData &eud);
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
     void epstop(ExpatUserData &eud);

@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed eperror method
+//
 //===========================================================================
 
 #include <cstdio>
@@ -49,22 +52,6 @@
 ccruncher::ExpatHandlers::~ExpatHandlers()
 {
   // nothing to do
-}
-
-//===========================================================================
-// throw an error
-//===========================================================================
-Exception ccruncher::ExpatHandlers::eperror(ExpatUserData &eud, const string &msg)
-{
-  XML_Parser xmlparser = eud.getParser();
-  char buf[256];
-
-  sprintf(buf, "%s at line %d and column %d",
-               msg.c_str(),
-               XML_GetCurrentLineNumber(xmlparser),
-               XML_GetCurrentColumnNumber(xmlparser));
-
-  return Exception(string(buf));
 }
 
 //===========================================================================

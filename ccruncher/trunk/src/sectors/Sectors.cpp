@@ -37,6 +37,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sectors refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -147,7 +150,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
 {
   if (isEqual(name_,"sectors")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag sectors");
+      throw Exception("attributes are not allowed in tag sectors");
     }
   }
   else if (isEqual(name_,"sector")) {
@@ -155,7 +158,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
     eppush(eu, &auxsector, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -172,7 +175,7 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
     insertSector(auxsector);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

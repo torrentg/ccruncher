@@ -47,6 +47,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Ratings refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -202,13 +205,13 @@ void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const cha
 {
   if (isEqual(name,"survival")) {
     if (getNumAttributes(attributes) < 1 || getNumAttributes(attributes) > 2) {
-      throw eperror(eu, "invalid number of attributes in tag survival");
+      throw Exception("invalid number of attributes in tag survival");
     }
     else {
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       maxmonths = getIntAttribute(attributes, "maxmonths", INT_MAX);
       if (maxmonths == INT_MAX || maxmonths < 0 || epsilon < 0.0 || epsilon > 0.5) {
-        throw eperror(eu, "invalid attributes at <survival>");
+        throw Exception("invalid attributes at <survival>");
       }
     }
   }
@@ -218,14 +221,14 @@ void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const cha
     double value = getDoubleAttribute(attributes, "value", DBL_MAX);
 
     if (srating == "" || t == INT_MAX || value == DBL_MAX) {
-      throw eperror(eu, "invalid values at <svalue>");
+      throw Exception("invalid values at <svalue>");
     }
     else {
       insertValue(srating, t, value);
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name));
+    throw Exception("unexpected tag " + string(name));
   }
 }
 
@@ -243,7 +246,7 @@ void ccruncher::Survival::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name));
+    throw Exception("unexpected end tag " + string(name));
   }
 }
 

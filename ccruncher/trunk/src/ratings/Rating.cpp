@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include "ratings/Rating.hpp"
@@ -76,7 +79,7 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
 {
   if (isEqual(name_,"rating")) {
     if (getNumAttributes(attributes) != 3) {
-      throw eperror(eu, "invalid number of attributes at rating");
+      throw Exception("invalid number of attributes at rating");
     }
     else {
       order = getIntAttribute(attributes, "order", 0) - 1;
@@ -85,12 +88,12 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
 
       if (order < 0 || name == "" || desc == "_UNDEF_")
       {
-        throw eperror(eu, "invalid values at <rating>");
+        throw Exception("invalid values at <rating>");
       }
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -103,7 +106,7 @@ void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

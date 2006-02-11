@@ -62,6 +62,9 @@
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -248,14 +251,14 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 {
   if (isEqual(name_,"asset")) {
     if (getNumAttributes(attributes) != 2) {
-      throw eperror(eu, "incorrect number of attributes in tag asset");
+      throw Exception("incorrect number of attributes in tag asset");
     }
     else {
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
       if (id == "" || name == "")
       {
-        throw eperror(eu, "invalid attributes at <asset>");
+        throw Exception("invalid attributes at <asset>");
       }
     }
   }
@@ -264,7 +267,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     string ssegment = getStringAttribute(attributes, "segment", "");
 
     if (ssegmentation == "" || ssegment == "") {
-      throw eperror(eu, "invalid attributes at <belongs-to> tag");
+      throw Exception("invalid attributes at <belongs-to> tag");
     }
 
     int isegmentation = (*segmentations)[ssegmentation].order;
@@ -274,7 +277,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   else if (isEqual(name_,"data")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag data");
+      throw Exception("attributes are not allowed in tag data");
     }
     else {
       have_data = true;
@@ -286,7 +289,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     double recovery = getDoubleAttribute(attributes, "recovery", NAN);
 
     if (date == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
-      throw eperror(eu, "invalid attributes at <values>");
+      throw Exception("invalid attributes at <values>");
     }
     else {
       DateValues aux(date, cashflow, recovery);
@@ -294,7 +297,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -307,7 +310,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 
     // checking data size
     if (data.size() == 0) {
-      throw eperror(eu, "asset without data");
+      throw Exception("asset without data");
     }
     else {
       // sorting data by date
@@ -355,7 +358,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

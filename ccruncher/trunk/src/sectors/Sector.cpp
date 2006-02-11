@@ -41,6 +41,9 @@
 //   . added const qualifiers
 //   . order = tag value - 1
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include "sectors/Sector.hpp"
@@ -80,7 +83,7 @@ void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char
 {
   if (isEqual(name_,"sector")) {
     if (getNumAttributes(attributes) != 3) {
-      throw eperror(eu, "invalid number of attributes at sector");
+      throw Exception("invalid number of attributes at sector");
     }
     else {
       order = getIntAttribute(attributes, "order", 0)-1;
@@ -89,12 +92,12 @@ void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char
 
       if (order < 0 || name == "" || desc == "_UNDEF_")
       {
-        throw eperror(eu, "invalid values at <sector>");
+        throw Exception("invalid values at <sector>");
       }
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -107,7 +110,7 @@ void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

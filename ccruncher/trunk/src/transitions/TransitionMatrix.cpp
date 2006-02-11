@@ -60,6 +60,9 @@
 //   . added bound checking at survival function
 //   . removed Forward Default Rate references
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -205,13 +208,13 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
 {
   if (isEqual(name,"mtransitions")) {
     if (getNumAttributes(attributes) < 1 || 2 < getNumAttributes(attributes)) {
-      throw eperror(eu, "invalid number of attributes in tag mtransitions");
+      throw Exception("invalid number of attributes in tag mtransitions");
     }
     else {
       period = getIntAttribute(attributes, "period", INT_MAX);
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       if (period == INT_MAX || epsilon < 0.0 || epsilon > 1.0) {
-        throw eperror(eu, "invalid attributes at <mtransitions>");
+        throw Exception("invalid attributes at <mtransitions>");
       }
     }
   }
@@ -221,14 +224,14 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
     double value = getDoubleAttribute(attributes, "value", DBL_MAX);
 
     if (from == "" || to == "" || value == DBL_MAX) {
-      throw eperror(eu, "invalid values at <transition>");
+      throw Exception("invalid values at <transition>");
     }
     else {
       insertTransition(from, to, value);
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name));
+    throw Exception("unexpected tag " + string(name));
   }
 }
 
@@ -244,7 +247,7 @@ void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name));
+    throw Exception("unexpected end tag " + string(name));
   }
 }
 

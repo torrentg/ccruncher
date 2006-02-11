@@ -55,6 +55,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Client refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -135,7 +138,7 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
 {
   if (isEqual(name_,"client")) {
     if (getNumAttributes(attributes) != 4) {
-      throw eperror(eu, "incorrect number of attributes in tag client");
+      throw Exception("incorrect number of attributes in tag client");
     }
     else {
       // reading atributes
@@ -150,7 +153,7 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
 
       // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {
-        throw eperror(eu, "invalid attributes at <client>");
+        throw Exception("invalid attributes at <client>");
       }
 
       // computing hash key
@@ -162,7 +165,7 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
     string ssegment = getStringAttribute(attributes, "segment", "");
 
     if (ssegmentation == "" || ssegment == "") {
-      throw eperror(eu, "invalid attributes at <belongs-to> tag");
+      throw Exception("invalid attributes at <belongs-to> tag");
     }
 
     int isegmentation = (*segmentations)[ssegmentation].order;
@@ -175,7 +178,7 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
     eppush(eu, &auxasset, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -226,7 +229,7 @@ void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
     insertAsset(auxasset);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

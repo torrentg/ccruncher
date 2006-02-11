@@ -43,6 +43,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . fecha renamed to date0
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -225,7 +228,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
 {
   if (isEqual(name_,"interest")) {
     if (getNumAttributes(attributes) != 2) {
-      throw eperror(eu, "incorrect number of attributes");
+      throw Exception("incorrect number of attributes");
     }
     else
     {
@@ -234,7 +237,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
       date0 = getDateAttribute(attributes, "date", Date(1,1,1900));
       if (name == "" || date0 == Date(1,1,1900))
       {
-        throw eperror(eu, "invalid attributes values at <interest>");
+        throw Exception("invalid attributes values at <interest>");
       }
     }
   }
@@ -244,7 +247,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
     eppush(eu, &auxrate, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -260,7 +263,7 @@ void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
     insertRate(auxrate);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

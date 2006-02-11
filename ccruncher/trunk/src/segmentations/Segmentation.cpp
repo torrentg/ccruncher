@@ -40,6 +40,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -172,7 +175,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
 {
   if (isEqual(name_,"segmentation")) {
     if (getNumAttributes(attributes) != 2) {
-      throw eperror(eu, "incorrect number of attributes in tag segmentation");
+      throw Exception("incorrect number of attributes in tag segmentation");
     }
     else {
       name = getStringAttribute(attributes, "name", "");
@@ -180,7 +183,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
 
       // checking name
       if (name == "") {
-        throw eperror(eu, "tag <segmentation> with invalid name attribute");
+        throw Exception("tag <segmentation> with invalid name attribute");
       }
 
       // filling components variable
@@ -191,7 +194,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
         components = client;
       }
       else {
-        throw eperror(eu, "tag <segmentation> with invalid components attribute");
+        throw Exception("tag <segmentation> with invalid components attribute");
       }
     }
   }
@@ -199,7 +202,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
     string sname = getStringAttribute(attributes, "name", "");
     // checking segment name
     if (sname == "") {
-      throw eperror(eu, "tag <segment> with invalid name attribute");
+      throw Exception("tag <segment> with invalid name attribute");
     }
     else {
       Segment aux(vsegments.size(), sname);
@@ -207,7 +210,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -223,7 +226,7 @@ void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

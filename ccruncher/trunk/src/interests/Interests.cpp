@@ -37,6 +37,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -149,7 +152,7 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
 {
   if (isEqual(name_,"interests")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "found attributes in interests");
+      throw Exception("found attributes in interests");
     }
   }
   else if (isEqual(name_,"interest")) {
@@ -158,7 +161,7 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
     eppush(eu, &auxinterest, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -175,7 +178,7 @@ void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
     insertInterest(auxinterest);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

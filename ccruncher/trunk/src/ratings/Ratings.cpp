@@ -40,6 +40,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -151,7 +154,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
 {
   if (isEqual(name_,"ratings")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag ratings");
+      throw Exception("attributes are not allowed in tag ratings");
     }
   }
   else if (isEqual(name_,"rating")) {
@@ -159,7 +162,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
     eppush(eu, &auxrating, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -176,7 +179,7 @@ void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
     insertRating(auxrating);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

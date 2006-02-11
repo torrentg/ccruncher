@@ -61,6 +61,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <fstream>
@@ -175,7 +178,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
 {
   if (isEqual(name_,"ccruncher")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag ccruncher");
+      throw Exception("attributes are not allowed in tag ccruncher");
     }
     else {
       hasmaintag = true;
@@ -183,13 +186,13 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   else if (hasmaintag == false) {
-    throw eperror(eu, "expected main ccruncher tag not found");
+    throw Exception("expected main ccruncher tag not found");
   }
 
   // section params
   if (isEqual(name_,"params")) {
     if (params != NULL) {
-      throw eperror(eu, "tag params repeated");
+      throw Exception("tag params repeated");
     }
     else {
       Logger::trace("parsing parameters", true);
@@ -200,7 +203,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section interests
   else if (isEqual(name_,"interests")) {
     if (interests != NULL) {
-      throw eperror(eu, "tag interests repeated");
+      throw Exception("tag interests repeated");
     }
     else {
       Logger::trace("parsing interests", true);
@@ -211,7 +214,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section ratings
   else if (isEqual(name_,"ratings")) {
     if (ratings != NULL) {
-      throw eperror(eu, "tag ratings repeated");
+      throw Exception("tag ratings repeated");
     }
     else {
       Logger::trace("parsing ratings", true);
@@ -222,10 +225,10 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section transition matrix
   else if (isEqual(name_,"mtransitions")) {
     if (ratings == NULL) {
-      throw eperror(eu, "tag <mtransition> defined before <ratings> tag");
+      throw Exception("tag <mtransition> defined before <ratings> tag");
     }
     else if (transitions != NULL) {
-      throw eperror(eu, "tag transitions repeated");
+      throw Exception("tag transitions repeated");
     }
     else {
       Logger::trace("parsing transition matrix", true);
@@ -236,10 +239,10 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section survival
   else if (isEqual(name_,"survival")) {
     if (ratings == NULL) {
-      throw eperror(eu, "tag <survivaal> defined before <ratings> tag");
+      throw Exception("tag <survivaal> defined before <ratings> tag");
     }
     else if (survival != NULL) {
-      throw eperror(eu, "tag survival repeated");
+      throw Exception("tag survival repeated");
     }
     else {
       Logger::trace("parsing survival function", true);
@@ -250,7 +253,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section sectors
   else if (isEqual(name_,"sectors")) {
     if (sectors != NULL) {
-      throw eperror(eu, "tag sectors repeated");
+      throw Exception("tag sectors repeated");
     }
      else {
       Logger::trace("parsing sectors", true);
@@ -261,10 +264,10 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section correlation matrix
   else if (isEqual(name_,"mcorrels")) {
     if (sectors == NULL) {
-      throw eperror(eu, "tag <mcorrels> defined before <sectors> tag");
+      throw Exception("tag <mcorrels> defined before <sectors> tag");
     }
     else if (correlations != NULL) {
-      throw eperror(eu, "tag correlations repeated");
+      throw Exception("tag correlations repeated");
     }
     else {
       Logger::trace("parsing correlation matrix", true);
@@ -275,7 +278,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section segmentations
   else if (isEqual(name_,"segmentations")) {
     if (segmentations != NULL) {
-      throw eperror(eu, "tag segmentations repeated");
+      throw Exception("tag segmentations repeated");
     }
     else {
       Logger::trace("parsing segmentations", true);
@@ -286,19 +289,19 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section portfolio
   else if (isEqual(name_,"portfolio")) {
     if (interests == NULL) {
-      throw eperror(eu, "tag <portfolio> defined before <interests> tag");
+      throw Exception("tag <portfolio> defined before <interests> tag");
     }
     else if (ratings == NULL) {
-      throw eperror(eu, "tag <portfolio> defined before <ratings> tag");
+      throw Exception("tag <portfolio> defined before <ratings> tag");
     }
     else if (sectors == NULL) {
-      throw eperror(eu, "tag <portfolio> defined before <sectors> tag");
+      throw Exception("tag <portfolio> defined before <sectors> tag");
     }
     else if (segmentations == NULL) {
-      throw eperror(eu, "tag <portfolio> defined before <segmentations> tag");
+      throw Exception("tag <portfolio> defined before <segmentations> tag");
     }
     if (portfolio != NULL) {
-      throw eperror(eu, "tag portfolio repeated");
+      throw Exception("tag portfolio repeated");
     }
     if (parse_portfolio == false) {
       // checking current content
@@ -314,7 +317,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   // default catcher
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -354,7 +357,7 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 

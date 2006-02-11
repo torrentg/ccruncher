@@ -46,6 +46,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -152,7 +155,7 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
 {
   if (isEqual(name_,"segmentations")) {
     if (getNumAttributes(attributes) != 0) {
-      throw eperror(eu, "attributes are not allowed in tag segmentations");
+      throw Exception("attributes are not allowed in tag segmentations");
     }
   }
   else if (isEqual(name_,"segmentation")) {
@@ -160,7 +163,7 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
     eppush(eu, &auxsegmentation, name_, attributes);
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name_));
+    throw Exception("unexpected tag " + string(name_));
   }
 }
 
@@ -177,7 +180,7 @@ void ccruncher::Segmentations::epend(ExpatUserData &eu, const char *name_)
     insertSegmentation(auxsegmentation);
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name_));
+    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

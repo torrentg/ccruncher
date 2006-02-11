@@ -48,6 +48,9 @@
 //   . changed pointers by references
 //   . Sectors class refactoring
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include <cmath>
@@ -164,12 +167,12 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 {
   if (isEqual(name,"mcorrels")) {
     if (1 < getNumAttributes(attributes)) {
-      throw eperror(eu, "invalid number of attributes in tag mcorrels");
+      throw Exception("invalid number of attributes in tag mcorrels");
     }
     else {
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       if (epsilon < 0.0 || epsilon > 1.0) {
-        throw eperror(eu, "invalid attribute at <mcorrels>");
+        throw Exception("invalid attribute at <mcorrels>");
       }
     }
   }
@@ -180,14 +183,14 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 
     if (sector1 == "" || sector2 == "" || value == DBL_MAX)
     {
-      throw eperror(eu, "invalid values at <sigma>");
+      throw Exception("invalid values at <sigma>");
     }
     else {
       insertSigma(sector1, sector2, value);
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name));
+    throw Exception("unexpected tag " + string(name));
   }
 }
 
@@ -203,7 +206,7 @@ void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name));
+    throw Exception("unexpected end tag " + string(name));
   }
 }
 

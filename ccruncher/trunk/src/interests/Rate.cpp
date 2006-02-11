@@ -40,6 +40,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added const qualifiers
 //
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed method ExpatHandlers::eperror()
+//
 //===========================================================================
 
 #include "interests/Rate.hpp"
@@ -78,7 +81,7 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
 {
   if (isEqual(name,"rate")) {
     if (getNumAttributes(attributes) != 2) {
-      throw eperror(eu, "incorrect number of attributes");
+      throw Exception("incorrect number of attributes");
     }
     else
     {
@@ -87,12 +90,12 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
 
       if (t <= -1.0+1E-14 || r <= -1.0+1E-14)
       {
-        throw eperror(eu, "invalid attributes values at <rate>");
+        throw Exception("invalid attributes values at <rate>");
       }
     }
   }
   else {
-    throw eperror(eu, "unexpected tag " + string(name));
+    throw Exception("unexpected tag " + string(name));
   }
 }
 
@@ -105,7 +108,7 @@ void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw eperror(eu, "unexpected end tag " + string(name));
+    throw Exception("unexpected end tag " + string(name));
   }
 }
 
