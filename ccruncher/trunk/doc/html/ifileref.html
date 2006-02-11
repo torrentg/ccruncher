@@ -33,7 +33,7 @@
 
     <p>
       where the encoding attribute can be one of these 
-      values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take in account that 
+      values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
       XML is case-sensitive.
     </p>
 
@@ -44,8 +44,8 @@
     <h2>Section Params</h2>
 
     <p>
-      This section shows the properties of the problem to be solved.
-      The list can be unordered.
+      This section shows the properties of the problem that need to
+      be solved. The list can be unordered.
     </p>
 
     <h3>Example</h3>
@@ -109,7 +109,7 @@
       <tr class="b">
         <td style="text-align:center;">stopcriteria.maxseconds</td>
         <td style="text-align:justify;">
-          Maximum number of seconds to last by the current execution.
+          Maximum number of seconds that the current execution can last.
           If 0, this stop criteria is not considered. ccruncher stops when
           a stop criteria is achieved.
         </td>
@@ -128,7 +128,7 @@
         <td style="text-align:center;">copula.seed</td>
         <td style="text-align:justify;">
           Seed used to initialize a random number generator. Value 0
-          indicate to use value based on clock to initialize the randomizer.
+          indicate that a random number based on current time will be used.
           This property is optional. Default value is 0.
         </td>
         <td style="text-align:center;"><code>long</code></td>
@@ -145,8 +145,8 @@
       <tr class="b">
         <td style="text-align:center;">portfolio.onlyActiveClients</td>
         <td style="text-align:justify;">
-          If you want to simulate all the clients, even though clients without 
-          risk along the analized period, type 'false'. If you want to simulate 
+          If you want to simulate all the clients, even clients without
+          risk along the time range, type 'false'. If you want to simulate
           only active clients along the simulation period type 'true'. We 
           suggest writing always 'true'.
         </td>
@@ -203,8 +203,7 @@
         <td style="text-align:center;">date</td>
         <td style="text-align:justify;">
           Initial date of the interest curve. Usually this value matches 
-          the initial simulation date (but is not required). The format 
-          of this field is: DD/MM/YYYY.
+          the initial simulation date. The format of this field is: DD/MM/YYYY.
         </td>
         <td style="text-align:center;"><code>date</code></td>
       </tr>
@@ -938,7 +937,7 @@
             </a> 
           </td>
           <td class="footer" align="right">
-            Last modified: 07-Jan-2006 &nbsp;
+            Last modified: 11-Feb-2006 &nbsp;
           </td>
         </tr>
       </table>
@@ -946,6 +945,6 @@
         Copyright &copy; 2004-2006 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
       </p>
     </div>
-    
+
   </body>
 </html>
