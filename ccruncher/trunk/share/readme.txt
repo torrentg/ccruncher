@@ -6,7 +6,7 @@ All related projects used by CreditCruncher are:
 ------------------------------------------------------------------------
 
 project: minicppunit
-version: 2.2
+version: 2.5
 licence: GNU GPL
 homeurl: http://minicppunit.sourceforge.net/ 
 descrip: MiniCppUnit is a C++ unit testing framework. 

@@ -119,7 +119,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
   {
     for(int j=0;j<2;j++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix[j+i*2], matrix[i][j], EPSILON);
     }
   }
 }

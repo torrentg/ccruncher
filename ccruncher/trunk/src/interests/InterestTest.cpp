@@ -120,7 +120,7 @@ void ccruncher_test::InterestTest::test1()
     Date aux = addMonths(date0, i);
     double val1 = iobj.getUpsilon(date0, aux);
     double val2 = iobj.getUpsilon(aux, date0);
-    ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
-    ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
+    ASSERT_EQUALS_EPSILON(vupdate[i], val1, EPSILON);
+    ASSERT_EQUALS_EPSILON(vactual[i], val2, EPSILON);
   }
 }

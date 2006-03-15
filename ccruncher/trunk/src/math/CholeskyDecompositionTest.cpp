@@ -108,7 +108,7 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
   {
     for (int j=i;j<3;j++)
     {
-      ASSERT_DOUBLES_EQUAL(solA[j+3*i], A[j][i], EPSILON);
+      ASSERT_EQUALS_EPSILON(solA[j+3*i], A[j][i], EPSILON);
     }
   }
 

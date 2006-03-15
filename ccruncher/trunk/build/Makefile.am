@@ -7,9 +7,9 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../share/MiniCppUnit-2.2/TestsRunner.cxx\
-    ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
-    ../share/MiniCppUnit-2.2/MiniCppUnit.hxx\
+    ../share/MiniCppUnit-2.5/TestsRunner.cxx\
+    ../share/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../share/MiniCppUnit-2.5/MiniCppUnit.hxx\
     ../share/Mersenne-1.0/MersenneTwister.h\
     ../share/jama-1.2.4/jama_cholesky.h\
     ../share/jama-1.2.4/jama_eig.h\
@@ -144,8 +144,8 @@ ccruncher_LDFLAGS =
 # tests
 # -------------------------------------------------------------
 tests_SOURCES = \
-    ../share/MiniCppUnit-2.2/MiniCppUnit.cxx\
-    ../share/MiniCppUnit-2.2/TestsRunner.cxx\
+    ../share/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../share/MiniCppUnit-2.5/TestsRunner.cxx\
     ../share/gzstream-1.5/gzstream.cpp\
     ../src/utils/ArraysTest.cpp\
     ../src/utils/StringsTest.cpp\

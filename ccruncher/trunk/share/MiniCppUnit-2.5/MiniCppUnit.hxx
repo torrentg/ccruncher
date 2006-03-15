@@ -24,38 +24,49 @@
 /**
  * @mainpage
  * miniCppUnit 
- * (C) 2003-2004 Pau Arumi & David Garcia
- * 
- * @version 2.4 2005-03-26 modified macro ASSERT_EQUALS
- * @version 2.3 2004-12-25 minor bug correction 
- *                         avoid usage param name. using pname
- *                         added macro ASSERT_THROW
- *                         added macro ASSERT_NO_THROW
- *                         added macro ASSERT_DOUBLES_EQUAL
+ * (C) 2003-2006 Pau Arumi & David Garcia
+ *
+ * @version 2.5-ccruncher 2006-03-15
+ *   - solved bug in macro std:min definition
+ *   - removed warnings "declaration of 'XXX' shadows a member of 'this'"
+ *   - added macro ASSERT_THROW
+ *   - added macro ASSERT_NO_THROW
+ * @version 2.5 2006-03-14
+ *   - MS Visual compatibility: SConstruct ccflags, usage example, #ifdefs
+ * @version 2.4 2006-03-14
+ *   - exit test case after first failure
+ *   - double and float comparison with fuzzy equals (using scalable epsilon)
+ *   - have into account not a numbers
+ *   - new ASSERT_EQUALS_EPSILON macro
+ *   - more colors, and disabled when comiled in MS Visual
+ *   - removed catalan location.
+ *   - UsageExample.cxx now uses all macros and features
+ * @version 2.3 2006-02-13 added usage example and SConstruct
  * @version 2.2 2004-11-28 code in english and tests suites
  * @version 2.1 2004-11-04 char* especialization
- * @version 2.0 2004-10-26 Tests Factory
- * @version 1.0 2003-10-28 Initial
+ * @version 2.0 2004-10-26 TestsFactory
+ * @version 1.0 2003-10-28 initial
  * 
  * Example of use:
  *
  * @code
+ * #include "MiniCppUnit.hxx"
  * class MyTests : public TestFixture<MyTests>
  * {
  *  public:
- *  	GRUP_DE_TESTS( MyTests )
+ *  	TEST_FIXTURE( MyTests )
  *		{
- *			CAS_DE_TEST( test );
+ *			CAS_DE_TEST( testAddition );
  *			// etc
  *		}
- *		void test()
+ *		void testAddition()
  *		{ 
- *			ASSERT_IGUALS( 4, 1+1+2 );
+ *			ASSERT_EQUALS( 4, 1+1+2 );
  *		}  
  *		// etc
  * };
  *
- * REGISTRA_TEST(MyTests);
+ * REGISTER_FIXTURE( MyTests );
  * @endcode
  * @code
  * int main()
@@ -82,14 +93,13 @@
 #include <string>
 #include <sstream>
 #include <list>
-#include <cmath>
 
-#ifdef WIN32
+#if defined (_MSC_VER) && (_MSC_VER < 1300)
 /** necesary for Visual 6 which don't define std::min */
 namespace std
 {
 	template<typename T>
-	min(const T& a, const T& b) { return a < b ? a: b; }
+	T min(const T& a, const T& b) { return a < b ? a: b; }
 }
 #endif
 
@@ -133,6 +143,10 @@ private:
 	unsigned _exceptions;
 };
 
+class TestFailedException
+{
+};
+
 /**
  * Abstract class with interface that allows run a test. That is runTest
  * and name. It is implemented by TestFixture and TestCase
@@ -147,6 +161,88 @@ public:
 	virtual void runTest() = 0;
 	/** the test human-readable name */
 	virtual std::string name() const = 0;
+};
+
+
+/**
+ * This class is just a placeholder for all assert functions --as static methods.
+ * It is meant for being used just by the assert macros
+ */
+class Assert
+{
+	static const char * errmsgTag_testFailedIn() { return "Test failed in "; }
+	static const char * errmsgTag_inLine() { return ", line: "; };
+	static const char * errmsgTag_failedExpression() { return "Failed expression: "; } 
+	static const char * errmsgTag_expected() { return "Expected: "; } 
+	static const char * errmsgTag_butWas() { return "But was: "; } 
+
+public:
+#ifdef _MSC_VER
+	static const char * blue() { return ""; }
+	static const char * green() { return ""; }
+	static const char * red() { return ""; }
+	static const char * normal() { return ""; }
+	static const char * bold() { return ""; }
+	static const char * yellow() { return ""; }
+#else
+	static const char * blue() { return "\033[36;1m"; }
+	static const char * green() { return "\033[32;1m"; }
+	static const char * red() { return "\033[31;1m"; }
+	static const char * normal() { return "\033[0m"; }
+	static const char * bold() { return "\033[" "1m"; }
+	static const char * yellow() { return "\033[93;1m"; }
+#endif
+	template<typename AType>
+	static void assertEquals( const AType& expected, const AType& result,
+		const char* file="", int linia=0 )
+	{
+		if(expected != result)
+		{
+			TestsListener::theInstance().errorsLog() 
+				<< file << ", linia: " << linia << "\n"
+				<< errmsgTag_expected() << " " << expected << " "
+				<< errmsgTag_butWas() << " " << result << "\n";
+			TestsListener::theInstance().testHasFailed();
+		}
+	}
+
+	static void assertTrue(char* strExpression, bool expression,
+			const char* file="", int linia=0);
+
+	static void assertTrueMissatge(char* strExpression, bool expression, 
+			const char* missatge, const char* file="", int linia=0);
+
+	static void assertEquals( const char * expected, const char * result,
+		const char* file="", int linia=0 );
+	
+	static void assertEquals( const bool& expected, const bool& result,
+		const char* file="", int linia=0 );
+	
+	static void assertEquals( const double& expected, const double& result,
+		const char* file="", int linia=0 );
+
+	static void assertEquals( const float& expected, const float& result,
+		const char* file="", int linia=0 );
+	
+	static void assertEquals( const long double& expected, const long double& result,
+		const char* file="", int linia=0 );
+	
+	static void assertEqualsEpsilon( const double& expected, const double& result, const double& epsilon,
+		const char* file="", int linia=0 );
+
+	static int notEqualIndex( const std::string & one, const std::string & other );
+
+	/**
+	 * we overload the assert with string doing colored diffs
+	 *
+	 * MS Visual6 doesn't allow string by reference :-( 
+	 */
+	static void assertEquals( const std::string expected, const std::string result,
+		const char* file="", int linia=0 );
+	
+	static void fail(const char* motiu, const char* file="", int linia=0);
+
+
 };
 
 /**
@@ -184,10 +280,10 @@ protected:
 	class TestCase : public Test
 	{
 	public:
-		TestCase(ConcreteFixture* parent, TestCaseMethod method, const std::string & pname) : 
+		TestCase(ConcreteFixture* parent, TestCaseMethod method, const std::string & name_) : 
 		  _parent(parent),
 		  _testCaseMethod(method),
-		  _name(pname)
+		  _name(name_)
 		{
 		}
 		/** calls TestFixture method.  setUp and tearDown methods are called by
@@ -205,8 +301,13 @@ protected:
 			{
 				TestsListener::theInstance().testHasThrown();
 				TestsListener::theInstance().errorsLog() 
-					<< "std::exception catched by MiniCppUnit: "
-					<< error.what() << "\n";
+					<< "std::exception catched by MiniCppUnit: \n"
+					<< "what() : " 
+					<< Assert::yellow() << error.what() 
+					<< Assert::normal() << "\n";
+			}
+			catch ( TestFailedException& failure) //just for skiping current test case
+			{
 			}
 			catch(...)
 			{
@@ -253,13 +354,13 @@ public:
 		return _name;
 	};
 
-	TestFixture(const std::string& pname="A text fixture") : _name(pname)
+	TestFixture(const std::string& name_="A text fixture") : _name(name_)
 	{
 	}
 
-	void afegeixCasDeTest(ConcreteFixture* parent, TestCaseMethod method, const char* pname)
+	void afegeixCasDeTest(ConcreteFixture* parent, TestCaseMethod method, const char* name_)
 	{
-		TestCase* casDeTest = new TestCase(parent, method, _name + "::" + pname);
+		TestCase* casDeTest = new TestCase(parent, method, _name + "::" + name_);
 		_testCases.push_back( casDeTest );
 	}
 	/** calls each test after setUp and tearDown TestFixture methods */
@@ -284,61 +385,6 @@ public:
 	}
 };
 
-//----------------------------------------------------------
-
-/**
- * This class is just a placeholder for all assert functions --as static methods.
- * It is meant for being used just by the assert macros
- */
-class Assert
-{
-	static const char * errmsgTag_testFailedIn() { return "Test failed in "; }
-	static const char * errmsgTag_inLine() { return ", line: "; };
-	static const char * errmsgTag_failedExpression() { return "Failed expression: "; } 
-	static const char * errmsgTag_expected() { return "Expected: "; } 
-	static const char * errmsgTag_butWas() { return "But was: "; } 
-public:
-	template<typename AType>
-	static void assertIguals( const AType& expected, const AType& result,
-		const char* fitxer="", int linia=0 )
-	{
-		if(expected != result)
-		{
-			TestsListener::theInstance().errorsLog() 
-				<< fitxer << ", linia: " << linia << "\n"
-				<< errmsgTag_expected() << "\n" << expected << "\n"
-				<< errmsgTag_butWas() << "\n" << result << "\n";
-			TestsListener::theInstance().testHasFailed();
-		}
-	}
-
-	static void assertTrue(char* strExpression, bool expression,
-			const char* file="", int linia=0);
-
-	static void assertTrueMissatge(char* strExpression, bool expression, 
-			const char* missatge, const char* file="", int linia=0);
-/*
-	static void assertIguals( const char * expected, const char * result,
-               const char* file="", int linia=0 );
-	
-	static void assertIguals( const bool& expected, const bool& result,
-		const char* file="", int linia=0 );
-*/
-	static int notEqualIndex( const std::string & one, const std::string & other );
-
-	/**
-	 * we overload the assert with string doing colored diffs
-	 *
-	 * MS Visual6 doesn't allow string by reference :-( 
-	 */
-/*
-	static void assertIguals( const std::string expected, const std::string result,
-		const char* file="", int linia=0 );
-*/
-	static void fail(const char* motiu, const char* file="", int linia=0);
-
-
-};
 
 /**
  * This class is aimed to hold a creator method for each concrete TestFixture
@@ -407,8 +453,10 @@ static Registrador##ConcreteTestFixture estatic##ConcreteTestFixture;
  * we want to check.
  */
 #define ASSERT_EQUALS( expected, result) \
-	Assert::assertTrue((char*) string(string(#expected)+" = "+string(#result)).c_str(), expected==result, __FILE__, __LINE__ );
-//	Assert::assertIguals( expected, result, __FILE__, __LINE__ );
+	Assert::assertEquals( expected, result, __FILE__, __LINE__ );
+
+#define ASSERT_EQUALS_EPSILON( expected, result, epsilon) \
+	Assert::assertEqualsEpsilon( expected, result, epsilon, __FILE__, __LINE__ );
 
 #define ASSERT( exp ) \
 	Assert::assertTrue(#exp, exp, __FILE__, __LINE__);
@@ -420,17 +468,13 @@ static Registrador##ConcreteTestFixture estatic##ConcreteTestFixture;
 	Assert::fail(#why, __FILE__, __LINE__);
 
 #define ASSERT_THROW( exp ) \
-	try { (exp); Assert::fail("exception expected", __FILE__, __LINE__); } catch(...){;};
+  try { (exp); Assert::fail("exception expected", __FILE__, __LINE__); } catch(...){;};
 
 #define ASSERT_NO_THROW( exp ) \
-	try { (exp); } catch(...){ Assert::fail("unexpected exception", __FILE__, __LINE__); };
-
-#define ASSERT_DOUBLES_EQUAL( expected, result, epsilon) \
-	Assert::assertTrue((char*) string("|(" + string(#expected) + ")-(" + string(#result) + \
-	")| < " + string(#epsilon)).c_str() , fabs(expected-result) < fabs(epsilon), __FILE__, __LINE__);
+  try { (exp); } catch(...){ Assert::fail("unexpected exception", __FILE__, __LINE__); };
 
 /**
- * Macros that allows to write the  constructor of the concrete TestsFixture.
+ * Macros that allows to write the  constructor of the concrete TestFixture.
  * What the constructor does is agregate a wrapper for each test case (method)
  * As easy to write as this:
  *
@@ -459,73 +503,5 @@ static Registrador##ConcreteTestFixture estatic##ConcreteTestFixture;
 
 
 
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-// TODO move to another file
-// Catalan :
-#define GrupDeTests TestFixture
-
-/** 
- * Macro a usar després de cada classe de test
- */
-#define REGISTRA_TEST( ClasseDeTest ) \
-\
-Test* Creador##ClasseDeTest() { return new ClasseDeTest; } \
-\
-class Registrador##ClasseDeTest \
-{ \
-public: \
-	Registrador##ClasseDeTest() \
-	{ \
-		TestFixtureFactory::theInstance().addFixtureCreator( \
-				Creador##ClasseDeTest); \
-	} \
-}; \
-static Registrador##ClasseDeTest estatic##ClasseDeTest;
-/**
- * Macros d'assert a usar dins dels mètodes de testeig.
- * Un assert és una comprovació que volem testejar.
- */
-#define ASSERT_IGUALS( esperat, resultat) \
-	Assert::assertIguals( esperat, resultat, __FILE__, __LINE__ );
-
-#define ASSERT( exp ) \
-	Assert::assertTrue(#exp, exp, __FILE__, __LINE__);
-
-#define ASSERT_MISSATGE( exp, missatge ) \
-	Assert::assertTrueMissatge(#exp, exp, missatge, __FILE__, __LINE__);
-
-
-#define FALLA( motiu ) \
-	Assert::fail(#motiu, __FILE__, __LINE__);
-
-/**
- * Macros que faciliten l'escriptura del constructor de la classe
- * amb mètodes de test. Tant senzill com això:
- *
- * /code
- * class ElsMeusTests : public TestFixture<ElsMeusTests>
- * {
- *  public:
- *  	GRUP_DE_TESTS( TestosPrimeraIteracio )
- *		{
- *			CAS_DE_TEST( test );
- *			// etc
- *		}
- *		void test()
- *		{
- *			ASSERT_IGUALS( 4, 1+1+2 );
- *		}
- */
-
-#define GRUP_DE_TESTS( GrupTestsConcret ) \
-	GrupTestsConcret() : TestFixture<ConcreteFixture>( #GrupTestsConcret )
-
-#define CAS_DE_TEST( nomDelMetode ) \
-	afegeixCasDeTest( this, &ConcreteFixture::nomDelMetode, #nomDelMetode );
-
+			     
 #endif  // MiniCppUnit_hxx

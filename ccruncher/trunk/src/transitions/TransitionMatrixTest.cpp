@@ -151,7 +151,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
 
@@ -166,7 +166,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
 

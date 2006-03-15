@@ -84,26 +84,26 @@ void ccruncher_test::ArraysTest::test1()
   for (int i=0;i<XLENGTH;i++)
   {
     ASSERT(isnan(vector1[i]));
-    ASSERT_DOUBLES_EQUAL(vvals[i], vector2[i], EPSILON);
+    ASSERT_EQUALS_EPSILON(vvals[i], vector2[i], EPSILON);
   }
 
   for (int i=0;i<YLENGTH;i++)
   {
-    ASSERT_DOUBLES_EQUAL(1.0, vector3[i], EPSILON);
+    ASSERT_EQUALS_EPSILON(1.0, vector3[i], EPSILON);
   }
 
   Arrays<double>::initVector(vector1, XLENGTH, 1.0);
 
   for (int i=0;i<XLENGTH;i++)
   {
-    ASSERT_DOUBLES_EQUAL(1.0, vector1[i], EPSILON);
+    ASSERT_EQUALS_EPSILON(1.0, vector1[i], EPSILON);
   }
 
   Arrays<double>::copyVector(vector1, XLENGTH, vector2);
 
   for (int i=0;i<XLENGTH;i++)
   {
-    ASSERT_DOUBLES_EQUAL(vector1[i], vector2[i], EPSILON);
+    ASSERT_EQUALS_EPSILON(vector1[i], vector2[i], EPSILON);
   }
 
   matrix1 = Arrays<double>::allocMatrix(XLENGTH, YLENGTH, NAN);
@@ -116,9 +116,9 @@ void ccruncher_test::ArraysTest::test1()
     for (int j=0;j<YLENGTH;j++)
     {
       ASSERT(isnan(matrix1[i][j]));
-      ASSERT_DOUBLES_EQUAL(1.0, matrix2[i][j], EPSILON);
-      ASSERT_DOUBLES_EQUAL(mvals[j+i*YLENGTH], matrix3[i][j], EPSILON);
-      ASSERT_DOUBLES_EQUAL(matrix3[i][j], matrix4[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(1.0, matrix2[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(mvals[j+i*YLENGTH], matrix3[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(matrix3[i][j], matrix4[i][j], EPSILON);
     }
   }
 
@@ -128,7 +128,7 @@ void ccruncher_test::ArraysTest::test1()
   {
     for (int j=0;j<YLENGTH;j++)
     {
-      ASSERT_DOUBLES_EQUAL(1.0, matrix1[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(1.0, matrix1[i][j], EPSILON);
     }
   }
 
@@ -138,7 +138,7 @@ void ccruncher_test::ArraysTest::test1()
   {
     for (int j=0;j<YLENGTH;j++)
     {
-      ASSERT_DOUBLES_EQUAL(1.0, matrix3[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(1.0, matrix3[i][j], EPSILON);
     }
   }
 
@@ -146,7 +146,7 @@ void ccruncher_test::ArraysTest::test1()
 
   for (int j=0;j<XLENGTH;j++)
   {
-    ASSERT_DOUBLES_EQUAL(7.0, vector1[j], EPSILON);
+    ASSERT_EQUALS_EPSILON(7.0, vector1[j], EPSILON);
   }
 
   Arrays<double>::deallocVector(vector1);
@@ -177,7 +177,7 @@ void ccruncher_test::ArraysTest::test2()
   {
     for(int j=0;j<1;j++)
     {
-      ASSERT_DOUBLES_EQUAL(C[i][j], Cvals[i], EPSILON);
+      ASSERT_EQUALS_EPSILON(C[i][j], Cvals[i], EPSILON);
     }
   }
 

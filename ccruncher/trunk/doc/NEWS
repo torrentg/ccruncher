@@ -3,6 +3,10 @@ CREDITCRUNCHER NEWS
 ===================
 
 
+version 1.0 (???. 2006)
+--------------------------
+  * upgraded to new MiniCppUnit version
+
 version 0.9 (Feb. 2006)
 --------------------------
   * code refactoring

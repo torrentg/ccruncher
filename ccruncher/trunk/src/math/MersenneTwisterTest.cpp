@@ -105,7 +105,7 @@ void ccruncher_test::MersenneTwisterTest::test1(void)
   {
     double prob1 = 1.0/(double)NUMBINS;
     double prob2 = (double)ybins[i]/(double)NUMITERS;
-    ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
+    ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
   }
 }
 
@@ -157,16 +157,16 @@ void ccruncher_test::MersenneTwisterTest::test2(void)
 
   prob1 = Normal::cdf(xbin[0]);
   prob2 = (double) ybin[0] / (double) NUMITERS;
-  ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
+  ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
 
   for (int i=1;i<NUMBINS-1;i++)
   {
     prob1 = Normal::cdf(xbin[i]) - Normal::cdf(xbin[i-1]);
     prob2 = (double) ybin[i] / (double) NUMITERS;
-    ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
+    ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
   }
 
   prob1 = 1.0 - Normal::cdf(xbin[NUMBINS-1]);
   prob2 = (double) ybin[NUMBINS-1] / (double) NUMITERS;
-  ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
+  ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
 }

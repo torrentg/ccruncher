@@ -247,44 +247,44 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT(asset->belongsTo(6, 1)); // office-0001
 
   vector <DateValues> &data = asset->getData();
-  ASSERT_EQUALS(7, data.size());
+  ASSERT_EQUALS(7, (int) data.size());
 
   ASSERT(Date("01/01/2000") == data[0].date);
-  ASSERT_DOUBLES_EQUAL(+10.0, data[0].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[0].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0, data[0].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[0].recovery, EPSILON);
 
   ASSERT(Date("01/07/2000") == data[1].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , data[1].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[1].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0 , data[1].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[1].recovery, EPSILON);
 
   ASSERT(Date("01/01/2001") == data[2].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , data[2].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[2].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0 , data[2].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[2].recovery, EPSILON);
 
   ASSERT(Date("01/07/2001") == data[3].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , data[3].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[3].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0 , data[3].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[3].recovery, EPSILON);
 
   ASSERT(Date("01/01/2002") == data[4].date);
-  ASSERT_DOUBLES_EQUAL(+10.0 , data[4].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[4].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0 , data[4].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[4].recovery, EPSILON);
 
   ASSERT(Date("01/07/2002") == data[5].date);
-  ASSERT_DOUBLES_EQUAL(+510.0, data[5].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+450.0, data[5].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+510.0, data[5].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[5].recovery, EPSILON);
 
   ASSERT(Date("01/07/2020") == data[6].date);
-  ASSERT_DOUBLES_EQUAL(+10.0, data[6].cashflow, EPSILON);
-  ASSERT_DOUBLES_EQUAL(+10.0, data[6].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0, data[6].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+10.0, data[6].recovery, EPSILON);
 
   double *losses = new double[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
   ASSERT_NO_THROW(asset->getLosses(dates, 4, interests, losses));
 
-  ASSERT_DOUBLES_EQUAL(570.0, losses[0], EPSILON);
-  ASSERT_DOUBLES_EQUAL(120.0, losses[1], EPSILON);
-  ASSERT_DOUBLES_EQUAL(70.0, losses[2], EPSILON);
-  ASSERT_DOUBLES_EQUAL(-256.572, losses[3], EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, losses[0], EPSILON);
+  ASSERT_EQUALS_EPSILON(120.0, losses[1], EPSILON);
+  ASSERT_EQUALS_EPSILON(70.0, losses[2], EPSILON);
+  ASSERT_EQUALS_EPSILON(-256.572, losses[3], EPSILON);
 
   delete [] losses;
 }

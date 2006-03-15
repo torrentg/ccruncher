@@ -71,7 +71,7 @@ void ccruncher_test::TimerTest::test1()
   double x = 2.1;
   Timer timer;
 
-  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
   timer.start();
 
   // making some stuff
@@ -98,7 +98,7 @@ void ccruncher_test::TimerTest::test1()
 
   // reseting timer (acumulated time = 0 seconds)
   timer.reset();
-  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
 }
 
 //===========================================================================

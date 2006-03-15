@@ -296,7 +296,7 @@ void ccruncher_test::GaussianCopulaTest::testCopula(GaussianCopula &copula, doub
     for (int j=0;j<n;j++)
     {
       double sigma = pearsn(values[i], values[j], NITERS);
-      ASSERT_DOUBLES_EQUAL(correls[j+n*i], sigma, EPSILON);
+      ASSERT_EQUALS_EPSILON(correls[j+n*i], sigma, EPSILON);
     }
   }
 

@@ -102,7 +102,7 @@ void ccruncher_test::NormalTest::test_pdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_DOUBLES_EQUAL(y1[i], Normal::pdf(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::pdf(x1[i]), EPSILON1);
   }
 }
 
@@ -145,7 +145,7 @@ void ccruncher_test::NormalTest::test_cdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_DOUBLES_EQUAL(y1[i], Normal::cdf(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdf(x1[i]), EPSILON1);
   }
 }
 
@@ -176,7 +176,7 @@ void ccruncher_test::NormalTest::test_cdfinv(void)
 
   for (int i=0;i<7;i++)
   {
-    ASSERT_DOUBLES_EQUAL(y1[i], Normal::cdfinv(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdfinv(x1[i]), EPSILON1);
   }
 
   ASSERT(isnan(Normal::cdfinv(-1.0)));
