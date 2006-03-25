@@ -6,6 +6,8 @@ CREDITCRUNCHER NEWS
 version 1.0 (???. 2006)
 --------------------------
   * upgraded to new MiniCppUnit version
+  * updated to new valgrind version
+  * forced explicit friend function declaration
 
 version 0.9 (Feb. 2006)
 --------------------------
