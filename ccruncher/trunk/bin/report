@@ -68,7 +68,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2006 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 

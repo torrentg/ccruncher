@@ -455,9 +455,9 @@ void usage()
   "    1           KO. finished with errors\n"
   "  examples:\n"
   "    ccruncher --validate input.xml\n"
-  "    ccruncher --path=20050601 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml.gz\n"
+  "    ccruncher --path=20060601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20060601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20060601 input.xml.gz\n"
   << endl;
 }
 
@@ -467,7 +467,7 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "   ccruncher is Copyright (C) 2003-2005 Gerard Torrent and licensed\n"
+  "   ccruncher is Copyright (C) 2003-2006 Gerard Torrent and licensed\n"
   "     under the GNU General Public License, version 2. more info at\n"
   "               http://www.generacio.com/ccruncher\n"
   << endl;
