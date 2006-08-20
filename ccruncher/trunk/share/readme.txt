@@ -80,7 +80,7 @@ descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux
 ------------------------------------------------------------------------
 
 project: lam-mpi
-version: 7.1.1
+version: 7.1.2
 licence: Indiana University Software License (see home site)
 homeurl: http://www.lam-mpi.org/
 descrip: LAM/MPI is a high-quality open-source implementation of the Message 

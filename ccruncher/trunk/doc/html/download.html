@@ -28,21 +28,13 @@
       </tr>
       <tr class="b">
         <td>GNU/Linux 2.6</td>
-        <td>Fedora Core 2</td>
-        <td>gcc 3.3.3</td>
-        <td>2.3.3</td>
+        <td>Fedora Core 5</td>
+        <td>gcc 4.1.1</td>
+        <td>2.4.8</td>
         <td>YES</td>
         <td>development environment</td>
       </tr>
       <tr class="a">
-        <td>GNU/Linux 2.6</td>
-        <td>Fedora Core 3</td>
-        <td>gcc 3.4.2</td>
-        <td>2.3.3</td>
-        <td>YES</td>
-        <td>development environment</td>
-      </tr>
-      <tr class="b">
         <td>GNU/Linux 2.6</td>
         <td>Fedora Core 4</td>
         <td>gcc 4.0.0</td>
@@ -50,7 +42,23 @@
         <td>YES</td>
         <td>development environment</td>
       </tr>
+      <tr class="b">
+        <td>GNU/Linux 2.6</td>
+        <td>Fedora Core 3</td>
+        <td>gcc 3.4.2</td>
+        <td>2.3.3</td>
+        <td>YES</td>
+        <td>development environment</td>
+      </tr>
       <tr class="a">
+        <td>GNU/Linux 2.6</td>
+        <td>Fedora Core 2</td>
+        <td>gcc 3.3.3</td>
+        <td>2.3.3</td>
+        <td>YES</td>
+        <td>development environment</td>
+      </tr>
+      <tr class="b">
         <td>GNU/Linux</td>
         <td>other</td>
         <td>-</td>
@@ -58,7 +66,7 @@
         <td>NO</td>
         <td></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td>AIX</td>
         <td>5.1</td>
         <td>-</td>
@@ -66,7 +74,7 @@
         <td>NO</td>
         <td></td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td>solaris</td>
         <td>2.8</td>
         <td>-</td>
@@ -74,7 +82,7 @@
         <td>NO</td>
         <td></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td>hp ux</td>
         <td>11i</td>
         <td>-</td>
@@ -82,7 +90,7 @@
         <td>NO</td>
         <td></td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td>Windows</td>
         <td>2000</td>
         <td>cygwin</td>
@@ -90,7 +98,7 @@
         <td>YES</td>
         <td></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td>Windows</td>
         <td>2000</td>
         <td>MSVC7</td>
@@ -197,7 +205,8 @@
       If you want to create a MPI version (to run ccruncher in a cluster) type:
     </p>
     <pre>
-
+        &nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/lam
+        &nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/lam
         &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
         &nbsp;&nbsp;make
         &nbsp;&nbsp;make install
@@ -277,7 +286,7 @@
             </a>
           </td>
           <td class="footer" align="right">
-            Last modified: 11-Feb-2006 &nbsp;
+            Last modified: 20-Aug-2006 &nbsp;
           </td>
         </tr>
       </table> 

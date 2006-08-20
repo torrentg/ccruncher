@@ -5,6 +5,7 @@ CREDITCRUNCHER NEWS
 
 version 1.0 (???. 2006)
 --------------------------
+  * upgraded to new LAM/MPI version
   * upgraded to new MiniCppUnit version
   * updated to new valgrind version
   * updated to new R project version

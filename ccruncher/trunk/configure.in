@@ -8,7 +8,7 @@ dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
 AC_PREREQ(2.59)
-AC_INIT(ccruncher, 0.9, gerard@mail.generacio.com)
+AC_INIT(ccruncher, 1.0, gerard@mail.generacio.com)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE
@@ -163,7 +163,7 @@ AH_BOTTOM([
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R366"
+#define SVNVERSION "R371:373M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
