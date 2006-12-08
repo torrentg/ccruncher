@@ -490,7 +490,6 @@ bool ccruncher::SegmentAggregator::flush() throw(Exception)
         // printing simulated value
         fout << cvalues[i] << "\n";
       }
-
       // reseting buffer counter
       icont = 0;
     }

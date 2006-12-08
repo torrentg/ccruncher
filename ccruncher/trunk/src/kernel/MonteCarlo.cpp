@@ -106,6 +106,10 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2006/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . solved bug in mpi version (SegmentAggregator::touch() 
+//     called by all ranks, not just master)
+//
 //===========================================================================
 
 #include <cfloat>
@@ -619,7 +623,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
       numsegments++;
       if (tmp->getNumElements() > 0) {
         // creating output file
-        if (fpath != "") tmp->touch();
+        if (fpath != "" && Utils::isMaster()) tmp->touch();
         // add aggregator to list
         aggregators.push_back(tmp);
       } else {

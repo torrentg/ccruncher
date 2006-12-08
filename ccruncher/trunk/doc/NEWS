@@ -5,6 +5,8 @@ CREDITCRUNCHER NEWS
 
 version 1.0 (???. 2006)
 --------------------------
+  * verified that ccruncher works using Open-MPI
+  * bug: solved multiple touch files (in mpi version)
   * upgraded to new LAM/MPI version
   * upgraded to new MiniCppUnit version
   * updated to new valgrind version
