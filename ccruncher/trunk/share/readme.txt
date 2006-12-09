@@ -79,13 +79,20 @@ descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux
 
 ------------------------------------------------------------------------
 
-project: lam-mpi
-version: 7.1.2
-licence: Indiana University Software License (see home site)
+project: mpi (parallel computing)
+version: lam-mpi-7.1.2 
+         open-mpi-1.1.7
+licence: Lam-MPI: Indiana University Software License (see home site)
+         Open-MPI: New BSD license
 homeurl: http://www.lam-mpi.org/
+         http://www.open-mpi.org/
 descrip: LAM/MPI is a high-quality open-source implementation of the Message 
          Passing Interface specification, including all of MPI-1.2 and much 
          of MPI-2.
+         Open MPI is an open source, freely available implementation of both 
+         the MPI-1 and MPI-2 documents. The Open MPI software achieves high 
+         performance; the Open MPI project is quite receptive to community 
+         input.
          In CreditCruncher is used to implements parallel execution.
 
 ------------------------------------------------------------------------

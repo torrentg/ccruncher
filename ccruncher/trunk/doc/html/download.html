@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CreditCruncher - Download</title>
+    <title>CreditCruncher - Download &amp; Run</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <!-- repository version = $Rev$ -->
@@ -11,7 +11,7 @@
 
   <body>
 
-    <h1>CreditCruncher - Download</h1>
+    <h1>CreditCruncher - Download &amp; Run</h1>
 
     <h2>System Requirements</h2>
     <p>
@@ -213,12 +213,17 @@
       If you want to create a MPI version (to run ccruncher in a cluster) type:
     </p>
     <pre>
+
         &nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/lam
         &nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/lam
         &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
         &nbsp;&nbsp;make
         &nbsp;&nbsp;make install
     </pre>
+    <p>
+      Replace <code>lam</code> by <code>openmpi</code> if you are using a Open-MPI
+      MPI implementation instead of Lam-MPI MPI implementation.
+    </p>
 
     <h2>Usage</h2>
 
@@ -294,7 +299,7 @@
             </a>
           </td>
           <td class="footer" align="right">
-            Last modified: 03-Dec-2006 &nbsp;
+            Last modified: 09-Dec-2006 &nbsp;
           </td>
         </tr>
       </table> 
