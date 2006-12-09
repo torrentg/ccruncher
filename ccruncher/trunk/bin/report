@@ -48,7 +48,7 @@
 CCRUNCHER=`dirname $0`/..
 progname=report
 numversion="1.0"
-svnversion="R376:380"
+svnversion="R381"
 retcode=0
 options=""
 
