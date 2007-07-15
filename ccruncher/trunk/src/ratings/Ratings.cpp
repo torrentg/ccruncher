@@ -43,6 +43,10 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//   . added getIndex() method
+//
 //===========================================================================
 
 #include <cmath>
@@ -105,6 +109,21 @@ Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
 }
 
 //===========================================================================
+// return the index of the rating (-1 if rating not found)
+//===========================================================================
+int ccruncher::Ratings::getIndex(const string &name)
+{
+  for (unsigned int i=0;i<vratings.size();i++)
+  {
+    if (vratings[i].name == name)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+//===========================================================================
 // insert a rating into list
 //===========================================================================
 void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
@@ -118,13 +137,6 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
     {
       string msg = "Ratings::insertRating(): rating name ";
       msg += val.name;
-      msg += " repeated";
-      throw Exception(msg);
-    }
-    else if (aux.order == val.order)
-    {
-      string msg = "Ratings::insertRating(): rating order ";
-      msg += val.order;
       msg += " repeated";
       throw Exception(msg);
     }
@@ -192,22 +204,6 @@ void ccruncher::Ratings::validations() throw(Exception)
   if (vratings.size() == 0)
   {
     throw Exception("Ratings::validations(): ratings have no elements");
-  }
-
-  // sorting ratings by filed 'order'
-  sort(vratings.begin(), vratings.end());
-
-  // checking that first 'order' is 1 and don't exist holes
-  for(unsigned int i=0;i<vratings.size();i++)
-  {
-    Rating aux = vratings[i];
-
-    if (aux.order != (int)(i))
-    {
-      string msg = "Ratings::validations(): incorrect order rating at or near order = ";
-      msg += Format::int2string(aux.order);
-      throw Exception(msg);
-    }
   }
 }
 

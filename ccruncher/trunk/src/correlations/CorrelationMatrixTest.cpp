@@ -37,6 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -71,8 +74,8 @@ Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S2' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml

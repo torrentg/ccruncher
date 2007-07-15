@@ -34,6 +34,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sectors refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getIndex() method
+//
 //===========================================================================
 
 #ifndef _Sectors_
@@ -80,6 +83,8 @@ class Sectors : public ExpatHandlers
 
     // return the number of sectors
     int size() const;
+    // return the index of the sector
+    int getIndex(const string &name);
     // [] operator
     Sector& operator [] (int i);
     // [] operator

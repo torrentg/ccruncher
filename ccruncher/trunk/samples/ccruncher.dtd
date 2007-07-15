@@ -64,7 +64,6 @@
 >
 <!ATTLIST rating 
     name ID #REQUIRED
-    order CDATA #REQUIRED
     desc CDATA #REQUIRED
 >
 
@@ -120,7 +119,6 @@
 >
 <!ATTLIST sector
     name ID #REQUIRED
-    order CDATA #REQUIRED
     desc CDATA #REQUIRED
 >
 

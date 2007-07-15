@@ -42,8 +42,8 @@
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="A" order="1" desc="alive"/>
-    <rating name="E" order="2" desc="dead"/>
+    <rating name="A" desc="alive"/>
+    <rating name="E" desc="dead"/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -60,8 +60,8 @@
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" order="1" desc="sector 1"/>
-    <sector name="S2" order="2" desc="sector 2"/>
+    <sector name="S1" desc="sector 1"/>
+    <sector name="S2" desc="sector 2"/>
   </sectors>
 
   <!-- ============================================================== -->

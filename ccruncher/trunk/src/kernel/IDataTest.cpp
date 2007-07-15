@@ -67,6 +67,10 @@
 //   . removed simulate=values and method=rating-path params
 //   . netting replaced by recovery
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -122,11 +126,11 @@ void ccruncher_test::IDataTest::test1()
       </interest>\n\
     </interests>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='bueno'/>\n\
-      <rating name='D' order='4' desc='malo'/>\n\
-      <rating name='C' order='3' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
@@ -163,8 +167,8 @@ void ccruncher_test::IDataTest::test1()
       <svalue rating='E' t='0' value='0.0'/>\n\
     </survival>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S2' desc='otros sectores'/>\n\
     </sectors>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\

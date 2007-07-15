@@ -3,6 +3,11 @@ CREDITCRUNCHER NEWS
 ===================
 
 
+version 1.1 (???. 2007)
+--------------------------
+  * removed order xml tag in rating and sector
+  * updated autoconf configuration
+
 version 1.0 (Dec. 2006)
 --------------------------
   * verified that ccruncher works using Open-MPI

@@ -58,6 +58,10 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <cmath>
@@ -148,8 +152,8 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
       string strsector= getStringAttribute(attributes, "sector", "");
 
       // retrieving indexes
-      irating = (*ratings)[strrating].order;
-      isector = (*sectors)[strsector].order;
+      irating = (*ratings).getIndex(strrating);
+      isector = (*sectors).getIndex(strsector);
 
       // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {

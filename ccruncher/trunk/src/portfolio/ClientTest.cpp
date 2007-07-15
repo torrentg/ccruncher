@@ -52,6 +52,10 @@
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -80,14 +84,13 @@ void ccruncher_test::ClientTest::tearDown()
 //===========================================================================
 Ratings ccruncher_test::ClientTest::getRatings()
 {
-  // note that ratings are unordered
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='bueno'/>\n\
-      <rating name='D' order='4' desc='malo'/>\n\
-      <rating name='C' order='3' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -107,8 +110,8 @@ Sectors ccruncher_test::ClientTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S2' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml

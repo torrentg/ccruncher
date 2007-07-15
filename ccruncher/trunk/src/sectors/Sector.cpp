@@ -44,6 +44,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include "sectors/Sector.hpp"
@@ -55,7 +58,6 @@
 //===========================================================================
 void ccruncher::Sector::reset()
 {
-  order = -1;
   name = "";
   desc = "";
 }
@@ -69,28 +71,19 @@ ccruncher::Sector::Sector()
 }
 
 //===========================================================================
-// operator less-than (needed by sort functions)
-//===========================================================================
-bool ccruncher::operator <  (const Sector &x, const Sector &y)
-{
-  return (x.order < y.order);
-}
-
-//===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
 void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"sector")) {
-    if (getNumAttributes(attributes) != 3) {
+    if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes at sector");
     }
     else {
-      order = getIntAttribute(attributes, "order", 0)-1;
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (order < 0 || name == "" || desc == "_UNDEF_")
+      if (name == "" || desc == "_UNDEF_")
       {
         throw Exception("invalid values at <sector>");
       }
@@ -123,7 +116,6 @@ string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";
-  ret += "order ='" + Format::int2string(order+1) + "' ";
   ret += "desc ='" + desc + "'";
   ret += "/>\n";
 

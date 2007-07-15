@@ -68,7 +68,7 @@ descrip: The Mersenne Twister is an algorithm for generating random numbers.
 ------------------------------------------------------------------------
 
 project: valgrind
-version: 3.2.1
+version: 3.2.3
 licence: GNU GPL
 homeurl: http://valgrind.kde.org
 descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux 
@@ -81,7 +81,7 @@ descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux
 
 project: mpi (parallel computing)
 version: lam-mpi-7.1.2 
-         open-mpi-1.1.7
+         open-mpi-1.1.8
 licence: Lam-MPI: Indiana University Software License (see home site)
          Open-MPI: New BSD license
 homeurl: http://www.lam-mpi.org/
@@ -98,7 +98,7 @@ descrip: LAM/MPI is a high-quality open-source implementation of the Message
 ------------------------------------------------------------------------
 
 project: R
-version: 2.4.0
+version: 2.5.1
 licence: GNU GPL
 homeurl: http://www.r-project.org/
 descrip: R is a system for statistical computation and graphics. It consists

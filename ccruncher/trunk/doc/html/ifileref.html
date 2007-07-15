@@ -243,7 +243,8 @@
     <h2>Section Ratings</h2>
 
     <p>
-      This section shows how to define the ratings.
+      This section shows how to define the ratings. A minimum of two ratings
+      are required (a non-default rating and the default rating).
     </p>
 
     <h3>Example</h3>
@@ -251,11 +252,11 @@
     <pre>
 
   &lt;ratings&gt;
-    &lt;rating name="A" order="1" desc="excelent"/&gt;
-    &lt;rating name="B" order="2" desc="good"/&gt;
-    &lt;rating name="C" order="3" desc="medium"/&gt;
-    &lt;rating name="D" order="4" desc="bad"/&gt;
-    &lt;rating name="E" order="5" desc="default"/&gt;
+    &lt;rating name="A" desc="excelent"/&gt;
+    &lt;rating name="B" desc="good"/&gt;
+    &lt;rating name="C" desc="medium"/&gt;
+    &lt;rating name="D" desc="bad"/&gt;
+    &lt;rating name="E" desc="default"/&gt;
   &lt;/ratings&gt;
     </pre>
 
@@ -270,20 +271,12 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Rating identifier. All references to a rating (f.ex client rating) 
-          are made using this field.
+          Rating identifier. All references to a rating (eg. client rating) 
+          are made using this field. Includes default rating in this list.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
-        <td style="text-align:center;">order</td>
-        <td style="text-align:justify;">
-          Priority level of this rating. The most priority rating value must have priority 1, the next priority rating must have priority 2, etc.
-          (sequentially). The default rating have always the highest value.
-        </td>
-        <td style="text-align:center;"><code>int</code></td>
-      </tr>
-      <tr class="a">
         <td style="text-align:center;">desc</td>
         <td style="text-align:justify;">
           Rating description. This value is only used in reports. This
@@ -502,7 +495,8 @@
     <h2>Section Sectors</h2>
 
     <p>
-        This section shows how to define the sectors.
+      This section shows how to define the sectors. A minimum of one sector
+      is required.
     </p>
 
     <h3>Example</h3>
@@ -510,8 +504,8 @@
     <pre>
 
   &lt;sectors&gt;
-    &lt;sector name="S1" order="1" desc="oil and gas"/&gt;
-    &lt;sector name="S2" order="2" desc="other sectors"/&gt;
+    &lt;sector name="S1" desc="oil and gas"/&gt;
+    &lt;sector name="S2" desc="other sectors"/&gt;
   &lt;/sectors&gt;
     </pre>
 
@@ -526,19 +520,12 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Sector identifier. All references to a sector (f.ex. client 
+          Sector identifier. All references to a sector (eg. client 
           sector) are made using this field.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
-        <td style="text-align:center;">order</td>
-        <td style="text-align:justify;">
-          Priority level of this sector. This number is a sequence that begins at 1 being 1 the most priority value.
-        </td>
-        <td style="text-align:center;"><code>int</code></td>
-      </tr>
-      <tr class="a">
         <td style="text-align:center;">desc</td>
         <td style="text-align:justify;">
           Sector description. This value is only used in reports.
@@ -937,12 +924,12 @@
             </a> 
           </td>
           <td class="footer" align="right">
-            Last modified: 03-Dec-2006 &nbsp;
+            Last modified: 15-Jul-2007 &nbsp;
           </td>
         </tr>
       </table>
       <p style="text-align: center; font-size: smaller;">
-        Copyright &copy; 2004-2006 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+        Copyright &copy; 2004-2007 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
       </p>
     </div>
 

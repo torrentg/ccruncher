@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #ifndef _SectorsTest_
@@ -60,7 +63,6 @@ class SectorsTest : public TestFixture<SectorsTest>
     void test2(void);
     void test3(void);
     void test4(void);
-    void test5(void);
 
 
   public:
@@ -71,7 +73,6 @@ class SectorsTest : public TestFixture<SectorsTest>
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
-      TEST_CASE(test5);
     }
 
     void setUp();

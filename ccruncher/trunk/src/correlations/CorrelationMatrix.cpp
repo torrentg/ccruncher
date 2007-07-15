@@ -51,6 +51,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <cmath>
@@ -119,8 +122,8 @@ double ** ccruncher::CorrelationMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = (*sectors)[sector1].order;
-  int col = (*sectors)[sector2].order;
+  int row = (*sectors).getIndex(sector1);
+  int col = (*sectors).getIndex(sector2);
 
   // checking index sector
   if (row < 0 || col < 0)

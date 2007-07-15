@@ -63,6 +63,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #include <cmath>
@@ -161,8 +164,8 @@ double ** ccruncher::TransitionMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
-  int row = (*ratings)[rating1].order;
-  int col = (*ratings)[rating2].order;
+  int row = (*ratings).getIndex(rating1);
+  int col = (*ratings).getIndex(rating2);
 
   // validating ratings
   if (row < 0 || col < 0)

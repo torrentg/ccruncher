@@ -5,6 +5,7 @@ CREDITCRUNCHER TODO
 
 Works in progress
 -------------------
+  * update jama library (1.2.4 -> 1.2.5)
   * add a reference to Mersenne Twister RNG in pdf doc
   * create document 'CreditCruncher - Coder Companion'
 

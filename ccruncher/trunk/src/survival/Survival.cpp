@@ -50,6 +50,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #include <cmath>
@@ -141,7 +144,7 @@ ccruncher::Survival::~Survival()
 //===========================================================================
 void ccruncher::Survival::insertValue(const string &srating, int t, double value) throw(Exception)
 {
-  int irating = (*ratings)[srating].order;
+  int irating = (*ratings).getIndex(srating);
 
   // checking rating index
   if (irating < 0 || irating > nratings)

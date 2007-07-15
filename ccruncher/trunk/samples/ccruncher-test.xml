@@ -46,14 +46,14 @@
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="AAA" order="1" desc="AAA desc"/>
-    <rating name="AA" order="2" desc="AA desc"/>
-    <rating name="A" order="3" desc="A desc"/>
-    <rating name="BBB" order="4" desc="BBB desc"/>
-    <rating name="BB" order="5" desc="BB desc"/>
-    <rating name="B" order="6" desc="B desc"/>
-    <rating name="CCC" order="7" desc="CCC desc"/>
-    <rating name="Default" order="8" desc="Default desc"/>
+    <rating name="AAA" desc="AAA desc"/>
+    <rating name="AA" desc="AA desc"/>
+    <rating name="A" desc="A desc"/>
+    <rating name="BBB" desc="BBB desc"/>
+    <rating name="BB" desc="BB desc"/>
+    <rating name="B" desc="B desc"/>
+    <rating name="CCC" desc="CCC desc"/>
+    <rating name="Default" desc="Default desc"/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -563,8 +563,8 @@
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" order="1" desc="oil and gas"/>
-    <sector name="S2" order="2" desc="other sectors"/>
+    <sector name="S1" desc="oil and gas"/>
+    <sector name="S2" desc="other sectors"/>
   </sectors>
 
   <!-- ============================================================== -->
@@ -581,7 +581,6 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-<!--
     <segmentation name="client" components="client">
       <segment name="*"/>
     </segmentation>
@@ -605,7 +604,6 @@
       <segment name="0003"/>
       <segment name="0004"/>
     </segmentation>
--->
   </segmentations>
 
   <!-- ============================================================== -->

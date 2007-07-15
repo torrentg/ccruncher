@@ -34,6 +34,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added getIndex() method
+//
 //===========================================================================
 
 #ifndef _Ratings_
@@ -81,6 +84,8 @@ class Ratings : public ExpatHandlers
 
     // return the number of ratings
     int size() const;
+    // return the index of the rating
+    int getIndex(const string &name);
     // [] operator
     Rating& operator [] (int i);
     // [] operator

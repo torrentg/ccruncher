@@ -40,6 +40,10 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Ratings refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//   . added function ratings.getIndex()
+//
 //===========================================================================
 
 #include <iostream>
@@ -68,14 +72,13 @@ void ccruncher_test::RatingsTest::tearDown()
 //===========================================================================
 void ccruncher_test::RatingsTest::test1()
 {
-  // note that ratings are unordered
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='bueno'/>\n\
-      <rating name='D' order='4' desc='malo'/>\n\
-      <rating name='C' order='3' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -87,28 +90,23 @@ void ccruncher_test::RatingsTest::test1()
 
   ASSERT(5 == ratings.size());
 
-  ASSERT_EQUALS(0, ratings[0].order);
-  ASSERT_EQUALS(1, ratings[1].order);
-  ASSERT_EQUALS(2, ratings[2].order);
-  ASSERT_EQUALS(3, ratings[3].order);
-  ASSERT_EQUALS(4, ratings[4].order);
-
   ASSERT("A" == ratings[0].name);
   ASSERT("B" == ratings[1].name);
-  ASSERT("C" == ratings[2].name);
-  ASSERT("D" == ratings[3].name);
+  ASSERT("D" == ratings[2].name);
+  ASSERT("C" == ratings[3].name);
   ASSERT("E" == ratings[4].name);
+
+  ASSERT(0 == ratings.getIndex("A"));
+  ASSERT(1 == ratings.getIndex("B"));
+  ASSERT(2 == ratings.getIndex("D"));
+  ASSERT(3 == ratings.getIndex("C"));
+  ASSERT(4 == ratings.getIndex("E"));
 
   ASSERT("muy bueno" == ratings[0].desc);
   ASSERT("bueno" == ratings[1].desc);
-  ASSERT("regular" == ratings[2].desc);
-  ASSERT("malo" == ratings[3].desc);
+  ASSERT("malo" == ratings[2].desc);
+  ASSERT("regular" == ratings[3].desc);
   ASSERT("fallido" == ratings[4].desc);
-
-  ASSERT(ratings[0] < ratings[1]);
-  ASSERT(ratings[1] < ratings[2]);
-  ASSERT(ratings[2] < ratings[3]);
-  ASSERT(ratings[3] < ratings[4]);
 }
 
 //===========================================================================
@@ -116,14 +114,14 @@ void ccruncher_test::RatingsTest::test1()
 //===========================================================================
 void ccruncher_test::RatingsTest::test2()
 {
-  // note that ratings are incompleted (order 1 not exist)
+  // note that ratings are incorrect (A is a name repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='2' desc='muy bueno'/>\n\
-      <rating name='B' order='3' desc='bueno'/>\n\
-      <rating name='D' order='4' desc='malo'/>\n\
-      <rating name='C' order='5' desc='regular'/>\n\
-      <rating name='E' order='6' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='A' desc='bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -139,14 +137,14 @@ void ccruncher_test::RatingsTest::test2()
 //===========================================================================
 void ccruncher_test::RatingsTest::test3()
 {
-  // note that ratings are incorrect (A is a name repeated)
+  // note that ratings are incorrect (descriptions repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='A' order='2' desc='bueno'/>\n\
-      <rating name='D' order='3' desc='malo'/>\n\
-      <rating name='C' order='4' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='muy bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -162,37 +160,14 @@ void ccruncher_test::RatingsTest::test3()
 //===========================================================================
 void ccruncher_test::RatingsTest::test4()
 {
-  // note that ratings are incorrect (descriptions repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='muy bueno'/>\n\
-      <rating name='D' order='3' desc='malo'/>\n\
-      <rating name='C' order='4' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
-    </ratings>";
-
-  // creating xml
-  ExpatParser xmlparser;
-
-  // ratings list creation
-  Ratings ratings;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
-}
-
-//===========================================================================
-// test5
-//===========================================================================
-void ccruncher_test::RatingsTest::test5()
-{
   // note that xml are not valid (ratong tag)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <ratong name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='bueno'/>\n\
-      <rating name='D' order='3' desc='malo'/>\n\
-      <rating name='C' order='4' desc='regular'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <ratong name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='bueno'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml

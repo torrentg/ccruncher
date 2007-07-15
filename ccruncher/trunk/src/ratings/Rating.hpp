@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #ifndef _Rating_
@@ -55,8 +58,6 @@ class Rating : public ExpatHandlers
 
   public:
 
-    // relative rating order
-    int order;
     // rating name
     string name;
     // rating description
@@ -74,11 +75,6 @@ class Rating : public ExpatHandlers
     void epend(ExpatUserData &, const char *);
 
 };
-
-//---------------------------------------------------------------------------
-
-// comparation operator
-bool operator <  (const Rating&, const Rating&);
 
 //---------------------------------------------------------------------------
 

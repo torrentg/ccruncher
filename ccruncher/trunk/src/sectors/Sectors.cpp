@@ -40,6 +40,10 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//   . added getIndex() method
+//
 //===========================================================================
 
 #include <cmath>
@@ -101,6 +105,21 @@ Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
 }
 
 //===========================================================================
+// return the index of the sector (-1 if rating not found)
+//===========================================================================
+int ccruncher::Sectors::getIndex(const string &name)
+{
+  for (unsigned int i=0;i<vsectors.size();i++)
+  {
+    if (vsectors[i].name == name)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+//===========================================================================
 // inserts a sector in list
 //===========================================================================
 void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
@@ -114,13 +133,6 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
     {
       string msg = "Sectors::insertSector(): sector name ";
       msg += val.name;
-      msg += " repeated";
-      throw Exception(msg);
-    }
-    else if (aux.order == val.order)
-    {
-      string msg = "Sectors::insertSector(): sector order ";
-      msg += val.order;
       msg += " repeated";
       throw Exception(msg);
     }
@@ -188,22 +200,6 @@ void ccruncher::Sectors::validations() throw(Exception)
   if (vsectors.size() == 0)
   {
     throw Exception("Sectors::validations(): sectors have no elements");
-  }
-
-  // sorting sector list by field 'order'
-  sort(vsectors.begin(), vsectors.end());
-
-  // checking that first 'order' is 1 and don't exists holes
-  for(unsigned int i=0;i<vsectors.size();i++)
-  {
-    Sector aux = vsectors[i];
-
-    if (aux.order != (int)(i))
-    {
-      string msg = "Sectors::validations(): incorrect order sector at or near order = ";
-      msg += aux.order;
-      throw Exception(msg);
-    }
   }
 }
 

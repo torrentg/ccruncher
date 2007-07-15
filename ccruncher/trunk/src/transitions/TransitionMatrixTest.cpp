@@ -43,6 +43,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . TransitionMatrix class refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -77,11 +80,11 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='muy bueno'/>\n\
-      <rating name='B' order='2' desc='bueno'/>\n\
-      <rating name='C' order='3' desc='regular'/>\n\
-      <rating name='D' order='4' desc='malo'/>\n\
-      <rating name='E' order='5' desc='fallido'/>\n\
+      <rating name='A' desc='muy bueno'/>\n\
+      <rating name='B' desc='bueno'/>\n\
+      <rating name='C' desc='regular'/>\n\
+      <rating name='D' desc='malo'/>\n\
+      <rating name='E' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml

@@ -10,7 +10,7 @@ SUBDIRS = build
 
 EXTRA_DIST = bin share data doc samples
 
-install-hook:
+install-exec-hook:
 	echo "setting executable flag to scripts ..."
 	chmod +x $(distdir)/bin/*
 

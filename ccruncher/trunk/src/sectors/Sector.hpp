@@ -34,6 +34,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added const qualifiers
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #ifndef _Sector_
@@ -58,8 +61,6 @@ class Sector : public ExpatHandlers
 
   public:
 
-    // evaluation order
-    int order;
     // sector name
     string name;
     // sector descriuption
@@ -77,11 +78,6 @@ class Sector : public ExpatHandlers
     void epend(ExpatUserData &, const char *);
 
 };
-
-//---------------------------------------------------------------------------
-
-// comparation operator
-bool operator <  (const Sector&, const Sector&);
 
 //---------------------------------------------------------------------------
 

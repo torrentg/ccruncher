@@ -40,6 +40,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sector class refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed sector.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -70,8 +73,8 @@ void ccruncher_test::SectorsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S2' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml
@@ -83,16 +86,14 @@ void ccruncher_test::SectorsTest::test1()
 
   ASSERT(2 == sectors.size());
 
-  ASSERT_EQUALS(0, sectors[0].order);
-  ASSERT_EQUALS(1, sectors[1].order);
+  ASSERT_EQUALS(0, sectors.getIndex("S1"));
+  ASSERT_EQUALS(1, sectors.getIndex("S2"));
 
   ASSERT("S1" == sectors[0].name);
   ASSERT("S2" == sectors[1].name);
 
   ASSERT("calzado" == sectors[0].desc);
   ASSERT("otros sectores" == sectors[1].desc);
-
-  ASSERT(sectors[0] < sectors[1]);
 
   ASSERT(sectors[0].name == "S1");
   ASSERT(sectors[1].name == "S2");
@@ -103,11 +104,11 @@ void ccruncher_test::SectorsTest::test1()
 //===========================================================================
 void ccruncher_test::SectorsTest::test2()
 {
-  // xml with error (order 2 not exist)
+  // xml with error (repeated sector)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='3' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S1' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml
@@ -123,11 +124,11 @@ void ccruncher_test::SectorsTest::test2()
 //===========================================================================
 void ccruncher_test::SectorsTest::test3()
 {
-  // xml with error (repeated sector)
+  // xml with error (repeated description)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S1' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sector name='S2' desc='calzado'/>\n\
     </sectors>";
 
   // creating xml
@@ -143,31 +144,11 @@ void ccruncher_test::SectorsTest::test3()
 //===========================================================================
 void ccruncher_test::SectorsTest::test4()
 {
-  // xml with error (repeated description)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sector name='S2' order='2' desc='calzado'/>\n\
-    </sectors>";
-
-  // creating xml
-  ExpatParser xmlparser;
-
-  // sectors creation
-  Sectors sectors;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
-}
-
-//===========================================================================
-// test5
-//===========================================================================
-void ccruncher_test::SectorsTest::test5()
-{
   // xml with error (tag sectir)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' order='1' desc='calzado'/>\n\
-      <sectir name='S2' order='2' desc='otros sectores'/>\n\
+      <sector name='S1' desc='calzado'/>\n\
+      <sectir name='S2' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml

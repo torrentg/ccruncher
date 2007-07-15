@@ -40,6 +40,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #include "ratings/Rating.hpp"
@@ -59,17 +62,8 @@ ccruncher::Rating::Rating()
 //===========================================================================
 void ccruncher::Rating::reset()
 {
-  order = -1;
   name = "";
   desc = "";
-}
-
-//===========================================================================
-// operator less-than (needed by sort functions)
-//===========================================================================
-bool ccruncher::operator <  (const Rating &x, const Rating &y)
-{
-  return (x.order < y.order);
 }
 
 //===========================================================================
@@ -78,15 +72,14 @@ bool ccruncher::operator <  (const Rating &x, const Rating &y)
 void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"rating")) {
-    if (getNumAttributes(attributes) != 3) {
+    if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes at rating");
     }
     else {
-      order = getIntAttribute(attributes, "order", 0) - 1;
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (order < 0 || name == "" || desc == "_UNDEF_")
+      if (name == "" || desc == "_UNDEF_")
       {
         throw Exception("invalid values at <rating>");
       }
@@ -119,7 +112,6 @@ string ccruncher::Rating::getXML(int ilevel) const throw(Exception)
 
   ret += "<rating ";
   ret += "name='" + name + "' ";
-  ret += "order='" + Format::int2string(order+1) + "' ";
   ret += "desc='" + desc + "'";
   ret += "/>\n";
 

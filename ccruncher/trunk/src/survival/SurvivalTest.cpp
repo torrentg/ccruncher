@@ -43,6 +43,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Survival class refactoring
 //
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed rating.order tag
+//
 //===========================================================================
 
 #include <iostream>
@@ -79,8 +82,8 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' order='1' desc='rating1'/>\n\
-      <rating name='E' order='2' desc='default'/>\n\
+      <rating name='A' desc='rating1'/>\n\
+      <rating name='E' desc='default'/>\n\
     </ratings>";
 
   // creating xml
