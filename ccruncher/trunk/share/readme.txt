@@ -46,7 +46,7 @@ descrip: Gzstream is a small C++ library, basically just a wrapper, that
 ------------------------------------------------------------------------
 
 project: jama/tnt
-version: 1.2.4 (jama) + 1.2.6 (tnt)
+version: 1.2.5 (jama) + 1.2.6 (tnt)
 licence: public domain (see declaration at home site)
 homeurl: http://math.nist.gov/tnt/
 descrip: The Template Numerical Toolkit (TNT) is a collection of interfaces 

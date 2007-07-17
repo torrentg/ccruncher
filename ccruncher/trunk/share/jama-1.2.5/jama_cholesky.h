@@ -110,10 +110,10 @@ Cholesky<Real>::Cholesky(const Array2D<Real> &A)
       // Main loop.
      for (int j = 0; j < n; j++) 
 	 {
-        double d = 0.0;
+        Real d(0.0);
         for (int k = 0; k < j; k++) 
 		{
-            Real s = 0.0;
+            Real s(0.0);
             for (int i = 0; i < k; i++) 
 			{
                s += L_[k][i]*L_[j][i];
