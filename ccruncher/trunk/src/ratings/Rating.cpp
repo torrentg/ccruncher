@@ -73,7 +73,7 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
 {
   if (isEqual(name_,"rating")) {
     if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes at rating");
+      throw Exception("invalid number of attributes in rating tag");
     }
     else {
       name = getStringAttribute(attributes, "name", "");

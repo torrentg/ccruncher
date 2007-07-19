@@ -56,8 +56,7 @@
 
 #===========================================================================
 # description
-#   Computes the standar error of a quantile quantile using
-#   Maritz-Jarrett method
+#   Computes the standar error of a quantile using the Maritz-Jarrett method
 # arguments
 #   x: vector with values
 #   prob: numeric. probability with value in [0,1]

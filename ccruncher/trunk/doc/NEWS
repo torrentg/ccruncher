@@ -8,6 +8,7 @@ version 1.1 (???. 2007)
   * removed order xml tag in rating and sector
   * updated autoconf configuration
   * updated to new jama version (1.2.4 -> 1.2.5)
+  * solved bug related with unique asset id check
 
 version 1.0 (Dec. 2006)
 --------------------------

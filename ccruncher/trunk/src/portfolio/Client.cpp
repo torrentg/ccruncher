@@ -61,6 +61,7 @@
 // 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed rating.order tag
 //   . removed sector.order tag
+//   . added unique asset id check
 //
 //===========================================================================
 
@@ -125,6 +126,20 @@ vector<Asset> & ccruncher::Client::getAssets()
 //===========================================================================
 void ccruncher::Client::insertAsset(const Asset &val) throw(Exception)
 {
+  // checking coherence
+  for (unsigned int i=0;i<vassets.size();i++)
+  {
+    Asset aux = vassets[i];
+
+    if (aux.getId() == val.getId())
+    {
+      string msg = "Client::insertAsset(): asset identifier ";
+      msg += val.getId();
+      msg += " repeated";
+      throw Exception(msg);
+    }
+  }
+
   try
   {
     vassets.push_back(val);
