@@ -68,6 +68,9 @@
 // 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved bug when computing recovery with a unique data
 //
+// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added asset creation date
+//
 //===========================================================================
 
 #include <cmath>
@@ -126,6 +129,14 @@ string ccruncher::Asset::getId(void) const
 string ccruncher::Asset::getName(void) const
 {
   return name;
+}
+
+//===========================================================================
+// getDate
+//===========================================================================
+Date ccruncher::Asset::getDate(void) const
+{
+  return date;
 }
 
 //===========================================================================
@@ -253,13 +264,14 @@ void ccruncher::Asset::getLosses(Date *dates, int n, Interests &interests, doubl
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset")) {
-    if (getNumAttributes(attributes) != 2) {
+    if (getNumAttributes(attributes) != 3) {
       throw Exception("incorrect number of attributes in tag asset");
     }
     else {
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
-      if (id == "" || name == "")
+      date = getDateAttribute(attributes, "date", Date(1,1,1));
+      if (id == "" || name == "" || date == Date(1,1,1))
       {
         throw Exception("invalid attributes at <asset>");
       }
@@ -287,15 +299,15 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   else if (isEqual(name_,"values") && have_data == true) {
-    Date date = getDateAttribute(attributes, "at", Date(1,1,1));
+    Date at = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
     double recovery = getDoubleAttribute(attributes, "recovery", NAN);
 
-    if (date == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
+    if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
     }
     else {
-      DateValues aux(date, cashflow, recovery);
+      DateValues aux(at, cashflow, recovery);
       insertDateValues(aux);
     }
   }
@@ -316,6 +328,16 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
       throw Exception("asset without data");
     }
     else {
+      try 
+      { 
+        // adding creation date as an event
+        DateValues event0(date, 0.0, 0.0);
+        insertDateValues(event0);
+      }
+      catch(...) 
+      {
+        // no problem, creation date exist
+      }
       // sorting data by date
       sort(data.begin(), data.end());
     }
@@ -370,6 +392,12 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 {
+  // checking if date is previous to creation date
+  if (val.date < date)
+  {
+    throw Exception("Asset::insertDateValues(): trying to insert an event with date previous to asset creation date");
+  }
+
   // checking if date exist
   for(unsigned int i=0;i<data.size();i++)
   {

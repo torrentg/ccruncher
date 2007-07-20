@@ -614,7 +614,7 @@
       <belongs-to segmentation="sector" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
       <!-- implicit: belongs-to segmentation="client" value="cif1" -->
-      <asset name="generic" id="op1">
+      <asset date="01/01/1999" name="generic" id="op1">
         <belongs-to segmentation="product" segment="bond"/>
         <belongs-to segmentation="office" segment="0001"/>
         <!-- implicit: belongs-to segmentation="asset" segment="op1" -->

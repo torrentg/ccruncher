@@ -52,9 +52,10 @@
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //   . removed sector.order tag
+//   . added asset creation date
 //
 //===========================================================================
 
@@ -177,7 +178,7 @@ void ccruncher_test::ClientTest::test1()
     <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
       <belongs-to segmentation='sector' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
-      <asset name='generic' id='op1'>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
@@ -189,7 +190,7 @@ void ccruncher_test::ClientTest::test1()
           <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2'>\n\
+      <asset name='generic' id='op2' date='01/01/2000'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
@@ -239,7 +240,7 @@ void ccruncher_test::ClientTest::test2()
   // client definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <client rating='K' sector='S2' name='cliente1' id='cif1'>\n\
-      <asset name='generic' id='op1'>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -249,7 +250,7 @@ void ccruncher_test::ClientTest::test2()
           <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2'>\n\
+      <asset name='generic' id='op2' date='01/01/2000'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
           <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
@@ -281,7 +282,7 @@ void ccruncher_test::ClientTest::test3()
   // client definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
-      <asset name='generic' id='op1'>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -291,7 +292,7 @@ void ccruncher_test::ClientTest::test3()
           <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2'>\n\
+      <asset name='generic' id='op2' date='01/01/2000'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
           <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\

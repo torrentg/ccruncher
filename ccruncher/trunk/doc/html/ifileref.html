@@ -721,7 +721,11 @@
     <h2>Section Portfolio</h2>
 
     <p>
-      This section shows how to define the portfolio.
+      This section shows how to define the portfolio. For each defined asset 
+      indicate the events that will occur between initial date and end date
+      (see section params). Also indicate (if exists) the event just before 
+      initial date and the event just before final date. Of course, if you 
+      desire, you can report all asset events.
     </p>
 
     <h3>Example</h3>
@@ -732,7 +736,7 @@
     &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
       &lt;belongs-to segmentation="sector" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op1"&gt;
+      &lt;asset name="bond" id="op1" date="01/01/2001"&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;belongs-to segmentation="office" segment="0001"/&gt;
         &lt;data&gt;
@@ -743,7 +747,7 @@
           &lt;values at="01/06/2004" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-      &lt;asset name="bond" id="op2"&gt;
+      &lt;asset name="bond" id="op2" date="01/06/1999"&gt;
         &lt;belongs-to segmentation="office" segment="0004"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
@@ -758,7 +762,7 @@
     &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
       &lt;belongs-to segmentation="sector" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="big"/&gt;
-      &lt;asset name="bond" id="op3"&gt;
+      &lt;asset name="bond" id="op3" date="01/06/1999"&gt;
         &lt;belongs-to segmentation="office" segment="0003"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
@@ -870,6 +874,14 @@
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
+      <tr class="a">
+        <td style="text-align:center;">date</td>
+        <td style="text-align:justify;">
+          Date (in format DD/MM/YYYY) at the signing of contract. Date when 
+          the contract is created.
+        </td>
+        <td style="text-align:center;"><code>date</code></td>
+      </tr>
     </table>
 
     <h3>Values Attributes</h3>
@@ -883,7 +895,7 @@
       <tr class="a">
         <td style="text-align:center;">at</td>
         <td style="text-align:justify;">
-          date (in format DD/MM/YYYY) where the values take place 
+          Date (in format DD/MM/YYYY) where the values take place 
         </td>
         <td style="text-align:center;"><code>date</code></td>
       </tr>
@@ -924,7 +936,7 @@
             </a> 
           </td>
           <td class="footer" align="right">
-            Last modified: 15-Jul-2007 &nbsp;
+            Last modified: 20-Jul-2007 &nbsp;
           </td>
         </tr>
       </table>

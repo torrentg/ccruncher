@@ -47,6 +47,9 @@
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
+// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added asset creation date
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -83,6 +86,8 @@ class Asset : public ExpatHandlers
     string id;
     // asset name
     string name;
+    // asset creation date
+    Date date;
     // segmentation-segment relations
     map<int,int> belongsto;
     // cashflow values
@@ -115,6 +120,8 @@ class Asset : public ExpatHandlers
     string getId(void) const;
     // returns asset name
     string getName(void) const;
+    // returns asset creation date
+    Date getDate(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // return losses at given dates

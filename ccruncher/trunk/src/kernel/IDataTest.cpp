@@ -67,9 +67,10 @@
 //   . removed simulate=values and method=rating-path params
 //   . netting replaced by recovery
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //   . removed sector.order tag
+//   . added asset creation date
 //
 //===========================================================================
 
@@ -203,7 +204,7 @@ void ccruncher_test::IDataTest::test1()
     </segmentations>\n\
     <portfolio>\n\
       <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
-        <asset name='generic' id='op1'>\n\
+        <asset name='generic' id='op1' date='01/01/1999'>\n\
           <belongs-to segmentation='product' segment='bond'/>\n\
           <belongs-to segmentation='office' segment='0001'/>\n\
           <data>\n\
@@ -215,7 +216,7 @@ void ccruncher_test::IDataTest::test1()
             <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
           </data>\n\
         </asset>\n\
-        <asset name='generic' id='op2'>\n\
+        <asset name='generic' id='op2' date='01/01/2000'>\n\
           <belongs-to segmentation='product' segment='bond'/>\n\
           <belongs-to segmentation='office' segment='0001'/>\n\
           <data>\n\
