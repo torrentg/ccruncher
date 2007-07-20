@@ -65,6 +65,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+//   . solved bug when computing recovery with a unique data
+//
 //===========================================================================
 
 #include <cmath>
@@ -188,7 +191,7 @@ double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, const Interest &
     return 0.0;
   }
 
-  if (date1 < data[n-1].date && data[n-1].date < date2)
+  if (date1 < data[n-1].date && data[n-1].date <= date2)
   {
     double val1 = data[n-1].date - date1;
     double val2 = date2 - date1;

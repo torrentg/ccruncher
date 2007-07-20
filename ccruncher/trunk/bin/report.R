@@ -562,14 +562,14 @@ ccruncher.read <- function(filename)
 # --------------------------------------------------------------------------
 # >
 # > source("bin/report.R")                              #load R script
-# > x <- ccruncher.load("file.out")                     #load data
+# > x <- ccruncher.read("file.out")                     #load data
 # > x                                                   #list data
 # > ccruncher.summary(x, alpha=0.95)                    #print summary
 # > lines <- ccruncher.summary(x, format="xml")         #create xml summary
 # > write(lines, file="")                               #print xml summary
 # > ccruncher.plot(x, show="pdf")                       #plots a graphic
 # > ccruncher.plot(x, show="cdf")                       #plots a graphic
-# > ccruncher.plot(x, show="mean")                      #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") #plots a graphic

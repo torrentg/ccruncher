@@ -46,6 +46,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . string parser refactorized
 //
+// 2007/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . correct mistake in error message
+//
 //===========================================================================
 
 #include <cstring>
@@ -180,7 +183,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
       if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
       {
         char aux[512];
-        sprintf(aux, "%s at line %d at column %d",
+        sprintf(aux, "%s at line %d column %d",
                      XML_ErrorString(XML_GetErrorCode(xmlparser)),
                      XML_GetCurrentLineNumber(xmlparser),
                      XML_GetCurrentColumnNumber(xmlparser));
@@ -197,7 +200,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
     // unknow exception
     else {
       char aux[512];
-      sprintf(aux, "error at line %d at column %d",
+      sprintf(aux, "error at line %d column %d",
                  XML_GetCurrentLineNumber(xmlparser),
                  XML_GetCurrentColumnNumber(xmlparser));
       throw Exception(string(aux));
@@ -206,7 +209,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   catch(Exception &e)
   {
     char aux[512];
-    sprintf(aux, "%s at line %d at column %d",
+    sprintf(aux, "%s at line %d column %d",
                  e.what(),
                  XML_GetCurrentLineNumber(xmlparser),
                  XML_GetCurrentColumnNumber(xmlparser));
@@ -215,7 +218,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   catch(...)
   {
     char aux[512];
-    sprintf(aux, "error at line %d at column %d",
+    sprintf(aux, "error at line %d column %d",
                  XML_GetCurrentLineNumber(xmlparser),
                  XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(string(aux));

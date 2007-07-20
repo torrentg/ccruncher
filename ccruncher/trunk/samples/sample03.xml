@@ -84,7 +84,6 @@
     <client rating="A" sector="S1" name="001" id="001">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -92,7 +91,6 @@
     <client rating="A" sector="S1" name="002" id="002">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -100,7 +98,6 @@
     <client rating="A" sector="S1" name="003" id="003">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -108,7 +105,6 @@
     <client rating="A" sector="S1" name="004" id="004">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -116,7 +112,6 @@
     <client rating="A" sector="S1" name="005" id="005">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -124,7 +119,6 @@
     <client rating="A" sector="S1" name="006" id="006">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -132,7 +126,6 @@
     <client rating="A" sector="S1" name="007" id="007">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -140,7 +133,6 @@
     <client rating="A" sector="S1" name="008" id="008">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -148,7 +140,6 @@
     <client rating="A" sector="S1" name="009" id="009">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -156,7 +147,6 @@
     <client rating="A" sector="S1" name="010" id="010">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -164,7 +154,6 @@
     <client rating="A" sector="S1" name="011" id="011">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -172,7 +161,6 @@
     <client rating="A" sector="S1" name="012" id="012">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -180,7 +168,6 @@
     <client rating="A" sector="S1" name="013" id="013">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -188,7 +175,6 @@
     <client rating="A" sector="S1" name="014" id="014">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -196,7 +182,6 @@
     <client rating="A" sector="S1" name="015" id="015">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -204,7 +189,6 @@
     <client rating="A" sector="S1" name="016" id="016">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -212,7 +196,6 @@
     <client rating="A" sector="S1" name="017" id="017">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -220,7 +203,6 @@
     <client rating="A" sector="S1" name="018" id="018">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -228,7 +210,6 @@
     <client rating="A" sector="S1" name="019" id="019">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -236,7 +217,6 @@
     <client rating="A" sector="S1" name="020" id="020">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -244,7 +224,6 @@
     <client rating="A" sector="S1" name="021" id="021">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -252,7 +231,6 @@
     <client rating="A" sector="S1" name="022" id="022">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -260,7 +238,6 @@
     <client rating="A" sector="S1" name="023" id="023">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -268,7 +245,6 @@
     <client rating="A" sector="S1" name="024" id="024">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -276,7 +252,6 @@
     <client rating="A" sector="S1" name="025" id="025">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -284,7 +259,6 @@
     <client rating="A" sector="S1" name="026" id="026">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -292,7 +266,6 @@
     <client rating="A" sector="S1" name="027" id="027">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -300,7 +273,6 @@
     <client rating="A" sector="S1" name="028" id="028">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -308,7 +280,6 @@
     <client rating="A" sector="S1" name="029" id="029">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -316,7 +287,6 @@
     <client rating="A" sector="S1" name="030" id="030">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -324,7 +294,6 @@
     <client rating="A" sector="S1" name="031" id="031">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -332,7 +301,6 @@
     <client rating="A" sector="S1" name="032" id="032">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -340,7 +308,6 @@
     <client rating="A" sector="S1" name="033" id="033">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -348,7 +315,6 @@
     <client rating="A" sector="S1" name="034" id="034">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -356,7 +322,6 @@
     <client rating="A" sector="S1" name="035" id="035">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -364,7 +329,6 @@
     <client rating="A" sector="S1" name="036" id="036">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -372,7 +336,6 @@
     <client rating="A" sector="S1" name="037" id="037">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -380,7 +343,6 @@
     <client rating="A" sector="S1" name="038" id="038">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -388,7 +350,6 @@
     <client rating="A" sector="S1" name="039" id="039">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -396,7 +357,6 @@
     <client rating="A" sector="S1" name="040" id="040">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -404,7 +364,6 @@
     <client rating="A" sector="S1" name="041" id="041">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -412,7 +371,6 @@
     <client rating="A" sector="S1" name="042" id="042">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -420,7 +378,6 @@
     <client rating="A" sector="S1" name="043" id="043">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -428,7 +385,6 @@
     <client rating="A" sector="S1" name="044" id="044">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -436,7 +392,6 @@
     <client rating="A" sector="S1" name="045" id="045">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -444,7 +399,6 @@
     <client rating="A" sector="S1" name="046" id="046">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -452,7 +406,6 @@
     <client rating="A" sector="S1" name="047" id="047">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -460,7 +413,6 @@
     <client rating="A" sector="S1" name="048" id="048">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -468,7 +420,6 @@
     <client rating="A" sector="S1" name="049" id="049">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -476,7 +427,6 @@
     <client rating="A" sector="S1" name="050" id="050">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -484,7 +434,6 @@
     <client rating="A" sector="S1" name="051" id="051">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -492,7 +441,6 @@
     <client rating="A" sector="S1" name="052" id="052">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -500,7 +448,6 @@
     <client rating="A" sector="S1" name="053" id="053">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -508,7 +455,6 @@
     <client rating="A" sector="S1" name="054" id="054">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -516,7 +462,6 @@
     <client rating="A" sector="S1" name="055" id="055">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -524,7 +469,6 @@
     <client rating="A" sector="S1" name="056" id="056">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -532,7 +476,6 @@
     <client rating="A" sector="S1" name="057" id="057">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -540,7 +483,6 @@
     <client rating="A" sector="S1" name="058" id="058">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -548,7 +490,6 @@
     <client rating="A" sector="S1" name="059" id="059">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -556,7 +497,6 @@
     <client rating="A" sector="S1" name="060" id="060">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -564,7 +504,6 @@
     <client rating="A" sector="S1" name="061" id="061">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -572,7 +511,6 @@
     <client rating="A" sector="S1" name="062" id="062">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -580,7 +518,6 @@
     <client rating="A" sector="S1" name="063" id="063">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -588,7 +525,6 @@
     <client rating="A" sector="S1" name="064" id="064">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -596,7 +532,6 @@
     <client rating="A" sector="S1" name="065" id="065">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -604,7 +539,6 @@
     <client rating="A" sector="S1" name="066" id="066">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -612,7 +546,6 @@
     <client rating="A" sector="S1" name="067" id="067">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -620,7 +553,6 @@
     <client rating="A" sector="S1" name="068" id="068">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -628,7 +560,6 @@
     <client rating="A" sector="S1" name="069" id="069">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -636,7 +567,6 @@
     <client rating="A" sector="S1" name="070" id="070">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -644,7 +574,6 @@
     <client rating="A" sector="S1" name="071" id="071">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -652,7 +581,6 @@
     <client rating="A" sector="S1" name="072" id="072">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -660,7 +588,6 @@
     <client rating="A" sector="S1" name="073" id="073">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -668,7 +595,6 @@
     <client rating="A" sector="S1" name="074" id="074">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -676,7 +602,6 @@
     <client rating="A" sector="S1" name="075" id="075">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -684,7 +609,6 @@
     <client rating="A" sector="S1" name="076" id="076">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -692,7 +616,6 @@
     <client rating="A" sector="S1" name="077" id="077">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -700,7 +623,6 @@
     <client rating="A" sector="S1" name="078" id="078">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -708,7 +630,6 @@
     <client rating="A" sector="S1" name="079" id="079">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -716,7 +637,6 @@
     <client rating="A" sector="S1" name="080" id="080">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -724,7 +644,6 @@
     <client rating="A" sector="S1" name="081" id="081">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -732,7 +651,6 @@
     <client rating="A" sector="S1" name="082" id="082">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -740,7 +658,6 @@
     <client rating="A" sector="S1" name="083" id="083">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -748,7 +665,6 @@
     <client rating="A" sector="S1" name="084" id="084">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -756,7 +672,6 @@
     <client rating="A" sector="S1" name="085" id="085">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -764,7 +679,6 @@
     <client rating="A" sector="S1" name="086" id="086">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -772,7 +686,6 @@
     <client rating="A" sector="S1" name="087" id="087">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -780,7 +693,6 @@
     <client rating="A" sector="S1" name="088" id="088">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -788,7 +700,6 @@
     <client rating="A" sector="S1" name="089" id="089">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -796,7 +707,6 @@
     <client rating="A" sector="S1" name="090" id="090">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -804,7 +714,6 @@
     <client rating="A" sector="S1" name="091" id="091">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -812,7 +721,6 @@
     <client rating="A" sector="S1" name="092" id="092">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -820,7 +728,6 @@
     <client rating="A" sector="S1" name="093" id="093">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -828,7 +735,6 @@
     <client rating="A" sector="S1" name="094" id="094">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -836,7 +742,6 @@
     <client rating="A" sector="S1" name="095" id="095">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -844,7 +749,6 @@
     <client rating="A" sector="S1" name="096" id="096">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -852,7 +756,6 @@
     <client rating="A" sector="S1" name="097" id="097">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -860,7 +763,6 @@
     <client rating="A" sector="S1" name="098" id="098">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -868,7 +770,6 @@
     <client rating="A" sector="S1" name="099" id="099">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -876,7 +777,6 @@
     <client rating="A" sector="S1" name="100" id="100">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>

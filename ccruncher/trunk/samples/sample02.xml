@@ -84,7 +84,6 @@
     <client rating="A" sector="S1" name="001" id="001">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
@@ -92,7 +91,6 @@
     <client rating="A" sector="S1" name="002" id="002">
       <asset name="generic" id="op1">
         <data>
-          <values at="01/01/2005" cashflow="0.0" recovery="0.0" />
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
