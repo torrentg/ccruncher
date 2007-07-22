@@ -88,7 +88,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2006 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2007 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -221,7 +221,7 @@ makeBinDist() {
   rm -rvf autom4te.cache;
   rm config*;
   rm depcomp install-sh missing;
-  rm INSTALL;
+  rm doc/INSTALL;
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
@@ -284,7 +284,8 @@ makeWinDist() {
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
-  unix2dos samples/readme.txt;
+  unix2dos samples/*.xsd;
+  unix2dos samples/*.txt;
   unix2dos doc/html/*.html;
   unix2dos doc/html/*.css;
   unix2dos data/readme.txt;
