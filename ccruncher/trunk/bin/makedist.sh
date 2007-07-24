@@ -24,7 +24,7 @@
 #   . 'svn checkout' replaced by 'svn export'
 #
 # 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
-#   . moved $CCRUNCHER/ doc files to doc $CCRUNCHER/directory
+#   . moved $CCRUNCHER/ doc files to directory $CCRUNCHER/doc
 #   . changed argument flag -l by -b (binary distribution)
 #   . added file data/readme.txt
 #
@@ -35,8 +35,11 @@
 #   . added Rev svn:keyword
 #   . added dependences paragraph at comments
 #
-# 2005/11/08 - Gerard Torrent [gerardfobos.generacio.com]
+# 2005/11/08 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . solved minor bugs related to windows installation
+#
+# 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+#   . added doc/other directory
 #
 #=============================================================
 
@@ -155,6 +158,7 @@ rmDevFiles() {
   rm -rvf `find $1/ -name \.svn\*`;
   rm -rvf $1/doc/share;
   rm -rvf $1/doc/tex;
+  rm -rvf $1/doc/other;
 
 }
 

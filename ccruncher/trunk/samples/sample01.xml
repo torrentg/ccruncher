@@ -4,7 +4,10 @@
 <!-- read file $CCRUNCHER$/samples/readme.txt                       -->
 <!-- ************************************************************** -->
 
-<ccruncher>
+<ccruncher
+	xmlns="http://www.generacio.com/ccruncher"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.generacio.com/ccruncher ccruncher.xsd">
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
