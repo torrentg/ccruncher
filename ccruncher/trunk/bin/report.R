@@ -36,8 +36,9 @@
 # 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added Rev svn:keyword
 #
-# 2007/07/17 - Gerard Torrent [gerard@mail.generacio.com]
+# 2007/07/27 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added breaks param in cmean(), cstddev() and plot()
+#   . TCE renamed to ES
 #
 #***************************************************************************
 
@@ -260,24 +261,24 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 
 #===========================================================================
 # description
-#   Compute the requested TCE (Tail Conditional Expectation or Expected 
-#   Shortfall) and standar error for each Monte Carlo iteration
+#   Compute the requested ES (Expected Shortfall) and standar error for 
+#   each Monte Carlo iteration
 # arguments
 #   x: vector with values
 #   prob: numeric. quantile related to VaR. probability with value in [0,1]
 #   breaks: numeric. number of evaluated values
 # returns
-#   matrix(1,): prob-tce
-#   matrix(2,): standard error of prob-tce
+#   matrix(1,): prob-es
+#   matrix(2,): standard error of prob-es
 # example
 #   x <- rnorm(5000)
-#   ccruncher.ctce(x, 0.01)
+#   ccruncher.ces(x, 0.01)
 # notes
 #   when length(x) is large, this function is expensive
 #   because involve calls to sort() function. breaks
 #   argument allows you to reduce the number of computations
 #===========================================================================
-ccruncher.ctce <- function(x, prob, breaks=250)
+ccruncher.ces <- function(x, prob, breaks=250)
 {
   #initializing values
   ret <- matrix(NA, 2, length(x));
@@ -394,13 +395,13 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
     table1[i,3] <- ccruncher.quantstderr(x, xvar[i]);
   }
 
-  #computing TCE (Tail Conditional Expectation or Expected Shortfall)
+  #computing ES (Expected Shortfall)
   for(i in 1:length(xvar))
   {
     #retrieving simulations with value great than VaR
     aux <- x[x >= table1[i,2]];
 
-    #coputing aux mean (=TCE) and related stderr
+    #computing aux mean (=ES) and related stderr
     table2[i,1] <- xvar[i];
     table2[i,2] <- mean(aux);
     table2[i,3] <- sqrt(var(aux))/sqrt(length(aux));
@@ -431,7 +432,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 
     for(i in 1:length(table2[,1]))
     {
-      ret[length(ret)+1] <- "TCE(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
+      ret[length(ret)+1] <- "ES(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
     }
 
     #adding indentation
@@ -461,7 +462,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 
     for(i in 1:length(table2[,1]))
     {
-      ret[length(ret)+1] <- "  <TCE prob='" %&% table2[i,1] %&%
+      ret[length(ret)+1] <- "  <ES prob='" %&% table2[i,1] %&%
                   "' value='" %&% table2[i,2] %&% 
                   "' stderr='" %&% table2[i,3] %&% "' />";
     }
@@ -485,12 +486,12 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 #     - mean convergence
 #     - stddev convergence
 #     - VaR convergence
-#     - TCE convergence
+#     - ES convergence
 # arguments
 #   x: vector with values
 #   var: numeric. VaR level with value in [0,1]
 #   alpha: numeric. confidence level with value in [0,1]
-#   show: string. pdf|cdf|mean|stddev|VaR|TCE|all
+#   show: string. pdf|cdf|mean|stddev|VaR|ES|all
 #   breaks: numeric. number of evaluated values in plots
 # returns
 #   the requested graphic
@@ -529,9 +530,9 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
     aux <- ccruncher.cquantile(x, prob=var, breaks=breaks);
     ccruncher.cplot(aux, alpha, "VaR("%&%(var*100)%&%"%)");
   }
-  if (show == "TCE" || show == "all") {
-    aux <- ccruncher.ctce(x, prob=var, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "TCE("%&%(var*100)%&%"%)");
+  if (show == "ES" || show == "all") {
+    aux <- ccruncher.ces(x, prob=var, breaks=breaks);
+    ccruncher.cplot(aux, alpha, "ES("%&%(var*100)%&%"%)");
   }
 }
 
@@ -572,7 +573,7 @@ ccruncher.read <- function(filename)
 # > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")  #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
 # > quit(save='no')                                     #quit R environement
 #
