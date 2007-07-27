@@ -47,8 +47,9 @@
 // 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
+//   . removed function getVCashflow
 //
 //===========================================================================
 
@@ -97,8 +98,6 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
 
-    // compute cashflow 
-    double getVCashFlow(Date &date1, Date &date2, const Interest &, bool);
     // compute recovery
     double getVRecovery(Date &date1, Date &date2, const Interest &);
     // insert a cashflow value

@@ -65,11 +65,10 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved bug when computing recovery with a unique data
-//
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
+//   . removed function getVCashflow
 //
 //===========================================================================
 
@@ -137,46 +136,6 @@ string ccruncher::Asset::getName(void) const
 Date ccruncher::Asset::getDate(void) const
 {
   return date;
-}
-
-//===========================================================================
-// getVCashFlow between date1 and date2
-//===========================================================================
-double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &spot, bool last)
-{
-  int n = (int) data.size();
-  double ret = 0.0;
-
-  if (date2 < data[0].date)
-  {
-    return 0.0;
-  }
-
-  for(int i=0;i<n;i++)
-  {
-    if (date1 == date2 && date1 == data[i].date)
-    {
-      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
-      break;
-    }
-    if (date1 < data[i].date && data[i].date <= date2)
-    {
-      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
-    }
-    if (date2 < data[i].date)
-    {
-      if (last == false)
-      {
-        break;
-      }
-      else
-      {
-        ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
-      }
-    }
-  }
-
-  return ret;
 }
 
 //===========================================================================
