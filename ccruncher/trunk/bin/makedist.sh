@@ -283,7 +283,7 @@ makeWinDist() {
   unix2dos doc/README;
   unix2dos doc/TODO;
   unix2dos doc/COPYING;
-  unix2dos doc/NEWS;
+  unix2dos doc/ChangeLog;
   unix2dos doc/index.html;
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
