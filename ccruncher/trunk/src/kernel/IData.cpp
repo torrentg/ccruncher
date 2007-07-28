@@ -64,6 +64,10 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/07/28 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed check number of attributes in ccruncher tag to
+//     avoid errors when references to xsd are set.
+//
 //===========================================================================
 
 #include <fstream>
@@ -177,16 +181,11 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ccruncher")) {
-    if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag ccruncher");
-    }
-    else {
-      hasmaintag = true;
-      return;
-    }
+    hasmaintag = true;
+    return;
   }
   else if (hasmaintag == false) {
-    throw Exception("expected main ccruncher tag not found");
+    throw Exception("ccruncher tag expected but not found");
   }
 
   // section params
