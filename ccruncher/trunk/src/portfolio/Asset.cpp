@@ -161,6 +161,7 @@ double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, const Interest &
     return 0.0;
   }
 
+  // caution: whould be better take a mean?
   if (date1 < data[n-1].date && data[n-1].date <= date2)
   {
     double val1 = data[n-1].date - date1;
