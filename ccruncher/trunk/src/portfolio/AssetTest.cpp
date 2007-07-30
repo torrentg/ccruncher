@@ -57,8 +57,9 @@
 //   . removed simulate=values option
 //   . netting replaced by recovery
 //
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
+//   . added new tests
 //
 //===========================================================================
 
@@ -189,7 +190,7 @@ void ccruncher_test::AssetTest::test1()
           <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
-          <values at='01/07/2020' cashflow='10.0' recovery='10.0' />\n\
+          <values at='01/07/2020' cashflow='10.0' recovery='3.0' />\n\
         </data>\n\
       </asset>";
 
@@ -269,6 +270,190 @@ void ccruncher_test::AssetTest::test3()
 }
 
 //===========================================================================
+// test4 (xml with errors, events previous to asset date)
+//===========================================================================
+void ccruncher_test::AssetTest::test4()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+      <asset name='generic' id='op1' date='01/01/2007'>\n\
+        <data>\n\
+          <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
+          <values at='15/01/2006' cashflow='+1000.0' recovery='3000.0' />\n\
+          <values at='15/01/2007' cashflow='+1000.0' recovery='2500.0' />\n\
+          <values at='15/01/2008' cashflow='+1000.0' recovery='3500.0' />\n\
+          <values at='15/01/2009' cashflow='+1000.0' recovery='750' />\n\
+          <values at='15/01/2010' cashflow='+1000.0' recovery='250' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+
+  // asset object creation
+  Asset asset(segs);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
+}
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::AssetTest::test5()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+      <asset name='generic' id='op1' date='15/01/2005'>\n\
+        <data>\n\
+          <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
+          <values at='15/01/2006' cashflow='+1000.0' recovery='3000.0' />\n\
+          <values at='15/01/2007' cashflow='+1000.0' recovery='2500.0' />\n\
+          <values at='15/01/2008' cashflow='+1000.0' recovery='1500.0' />\n\
+          <values at='15/01/2009' cashflow='+1000.0' recovery='750' />\n\
+          <values at='15/01/2010' cashflow='+1000.0' recovery='250' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+  Interests interests = getInterests();
+
+  // asset object creation
+  Asset asset(segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
+
+  double *losses = new double[16];
+  Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
+                   Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
+                   Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
+                   Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
+                   Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
+                   Date("1/7/2011") };
+  ASSERT_NO_THROW(asset.getLosses(dates, 16, interests, losses));
+
+  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[1], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[2], EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, losses[3], EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, losses[4], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[5], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[6], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[7], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[8], EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, losses[9], EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, losses[10], EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, losses[11], EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, losses[12], EPSILON);
+  ASSERT_EQUALS_EPSILON(58.011, losses[13], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[14], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[15], EPSILON);
+
+  delete [] losses;
+}
+
+//===========================================================================
+// test6
+//===========================================================================
+void ccruncher_test::AssetTest::test6()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+      <asset name='generic' id='op1' date='15/01/2005'>\n\
+        <data>\n\
+          <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
+          <values at='15/01/2006' cashflow='+1000.0' recovery='3000.0' />\n\
+          <values at='15/01/2007' cashflow='+1000.0' recovery='2500.0' />\n\
+          <values at='15/01/2008' cashflow='+1000.0' recovery='1500.0' />\n\
+          <values at='15/01/2009' cashflow='+1000.0' recovery='750' />\n\
+          <values at='15/01/2010' cashflow='+500.0' recovery='250' />\n\
+          <values at='15/03/2010' cashflow='+500.0' recovery='100' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+  Interests interests = getInterests();
+
+  // asset object creation
+  Asset asset(segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
+
+  double *losses = new double[16];
+  Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
+                   Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
+                   Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
+                   Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
+                   Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
+                   Date("1/7/2011") };
+  ASSERT_NO_THROW(asset.getLosses(dates, 16, interests, losses));
+
+  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[1], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[2], EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, losses[3], EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, losses[4], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[5], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[6], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[7], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[8], EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, losses[9], EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, losses[10], EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, losses[11], EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, losses[12], EPSILON);
+  ASSERT_EQUALS_EPSILON(188.398, losses[13], EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, losses[14], EPSILON);
+
+  delete [] losses;
+}
+
+//===========================================================================
+// test7
+//===========================================================================
+void ccruncher_test::AssetTest::test7()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+      <asset name='generic' id='op1' date='15/01/2005'>\n\
+        <data>\n\
+          <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
+          <values at='15/01/2006' cashflow='+1000.0' recovery='3000.0' />\n\
+          <values at='15/01/2007' cashflow='+1000.0' recovery='2500.0' />\n\
+          <values at='15/01/2008' cashflow='+1000.0' recovery='1500.0' />\n\
+          <values at='15/01/2009' cashflow='+1000.0' recovery='750' />\n\
+          <values at='15/01/2010' cashflow='+1000.0' recovery='250' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+  Interests interests = getInterests();
+
+  // asset object creation
+  Asset asset(segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
+
+  double *losses = new double[5];
+  Date dates[] = { Date("1/1/2004"), Date("1/1/2006"), Date("1/1/2008"), 
+                   Date("1/1/2010"), Date("1/1/2012") };
+  ASSERT_NO_THROW(asset.getLosses(dates, 5, interests, losses));
+
+  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, losses[1], EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, losses[2], EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, losses[3], EPSILON);
+  ASSERT_EQUALS_EPSILON(14.3836, losses[4], EPSILON);
+
+  delete [] losses;
+}
+
+//===========================================================================
 // makeAssertions
 //===========================================================================
 void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
@@ -313,7 +498,7 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 
   ASSERT(Date("01/07/2020") == data[7].date);
   ASSERT_EQUALS_EPSILON(+10.0, data[7].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(+10.0, data[7].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(+3.0, data[7].recovery, EPSILON);
 
   double *losses = new double[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
@@ -322,7 +507,7 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_EQUALS_EPSILON(570.0, losses[0], EPSILON);
   ASSERT_EQUALS_EPSILON(120.0, losses[1], EPSILON);
   ASSERT_EQUALS_EPSILON(70.0, losses[2], EPSILON);
-  ASSERT_EQUALS_EPSILON(-256.572, losses[3], EPSILON);
+  ASSERT_EQUALS_EPSILON(7.0, losses[3], EPSILON);
 
   delete [] losses;
 }

@@ -3,12 +3,7 @@ CREDITCRUNCHER TODO
 ===================
 
 
-Works in progress
--------------------
-  * add a reference to Mersenne Twister RNG in pdf doc
-  * create document 'CreditCruncher - Coder Companion'
-
-
 Future works
 -------------------
+  * refactor site style
   * add new copula types

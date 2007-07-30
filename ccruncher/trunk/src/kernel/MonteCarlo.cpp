@@ -954,7 +954,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
   int month = survival->inverse(r1, u);
 
   // return index time where defaults (always bigger than 0)
-  return max(1, int(ceil(double(month)/double(STEPLENGTH))));
+  return std::max(1, int(ceil(double(month)/double(STEPLENGTH))));
 }
 
 //===========================================================================
@@ -986,7 +986,7 @@ bool ccruncher::MonteCarlo::evalue() throw(Exception)
 void ccruncher::MonteCarlo::setHash(int num)
 {
   assert(num >= 0);
-  hash = max(0, num);
+  hash = std::max(0, num);
 }
 
 //===========================================================================

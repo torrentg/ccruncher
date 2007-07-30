@@ -37,8 +37,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
+//   . added new tests
 //
 //===========================================================================
 
@@ -70,6 +71,10 @@ class AssetTest : public TestFixture<AssetTest>
     void test1(void);
     void test2(void);
     void test3(void);
+    void test4(void);
+    void test5(void);
+    void test6(void);
+    void test7(void);
 
 
   public:
@@ -79,6 +84,10 @@ class AssetTest : public TestFixture<AssetTest>
       TEST_CASE(test1);
       TEST_CASE(test2);
       TEST_CASE(test3);
+      TEST_CASE(test4);
+      TEST_CASE(test5);
+      TEST_CASE(test6);
+      TEST_CASE(test7);
     }
 
     void setUp();

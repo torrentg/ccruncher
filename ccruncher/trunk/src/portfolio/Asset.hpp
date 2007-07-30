@@ -49,7 +49,7 @@
 //
 // 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
-//   . removed function getVCashflow
+//   . getLosses function reviewed
 //
 //===========================================================================
 
@@ -98,8 +98,12 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
 
-    // compute recovery
-    double getVRecovery(Date &date1, Date &date2, const Interest &);
+    // returns data index by left, -1 if don't exist
+    int getLeftIdx(Date d);
+    // returns data index by right, -1 if don't exist
+    int getRightIdx(Date d);
+    // returns cashflow sum from given date
+    double getCashflowSum(Date d, const Interest &);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation

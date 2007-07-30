@@ -246,11 +246,11 @@ The following paragraphs tells how compute losses at time nodes.
 
 %...........................................................................
 \subsubsection{Recovery at time nodes}
-We compute the recovery at time nodes as a linear interpolation using defined
-asset recoveries just below and over. If don't exist previous recovery we 
-considerer a value of $0$. If don't exist subsequent recovery we considerer a 
-value of $0$. Figure \ref{recoverymapping} shows recovery displayed in figure 
-\ref{recovery} mapped to biannual time nodes.
+We considerer the recovery at time node $k$ as the closest asset recovery by 
+right. If time node $k$ is previous to the first asset event then the recovery 
+value at time node $k$ is $0$. If time node $k$ is later to the last asset event 
+then the recovery value at time node $k$ is $0$. Figure \ref{recoverymapping} 
+shows recovery displayed in figure \ref{recovery} mapped to biannual time nodes.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -619,6 +619,22 @@ $(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher antithetic mode, each copula
 generation is used $2$ times, as $(u_1, u_2, \cdots, u_N)$ and 
 as $(1-u_1, 1-u_2, \cdots, 1-u_N)$ reducing in this way the number of generated
 copulas.
+
+%---------------------------------------------------------------------------
+\subsection{Parallel computing}
+Monte Carlo problems are embarrassingly parallel problems.
+In the jargon of parallel computing, an embarrassingly parallel workload 
+(or embarrassingly parallel problem) is one for which no particular effort 
+is needed to segment the problem into a very large number of parallel tasks, 
+and there is no essential dependency (or communication) between those parallel 
+tasks.
+\newline
+
+In CCruncher a master sends the RNG seed to each slave 
+($seed_i = seed + i \cdot 30001$) and wait results (portfolio loss simulated
+values) from slaves that put in a file. When stop criteria is achieved 
+(execution time exceded or number of required simulations achieved) send a 
+stop signal to slaves and leaves.
 
 %===========================================================================
 \newpage

@@ -65,10 +65,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
-// 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . solved bug when computing recovery with a unique data
+// 2007/07/29 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
-//   . removed function getVCashflow
+//   . getLosses function reviewed
 //
 //===========================================================================
 
@@ -139,82 +138,158 @@ Date ccruncher::Asset::getDate(void) const
 }
 
 //===========================================================================
-// getVRecovery at date2
+// getLeftIdx
 //===========================================================================
-double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, const Interest &spot)
+int ccruncher::Asset::getLeftIdx(Date d)
 {
   int n = (int) data.size();
-  double ret = 0.0;
 
-  if (n == 0)
+  if (d < data[0].date)
   {
-    return 0.0;
+    return -1;
   }
 
-  if (date2 < data[0].date)
+  if (data[n-1].date <= d)
   {
-    return 0.0;
+    return n-1;
   }
 
-  if (date1 > data[n-1].date)
+  for(int i=n-1; i>=0; i--)
   {
-    return 0.0;
-  }
-
-  // caution: whould be better take a mean?
-  if (date1 < data[n-1].date && data[n-1].date <= date2)
-  {
-    double val1 = data[n-1].date - date1;
-    double val2 = date2 - date1;
-
-    return data[n-1].recovery * val1/val2 * spot.getUpsilon(data[n-1].date, date2);
-  }
-
-  for(int i=1;i<n;i++)
-  {
-    if (date2 <= data[i].date)
+    if (data[i].date <= d) 
     {
-      Date datex = data[i-1].date;
-      double ex = data[i-1].recovery * spot.getUpsilon(data[i-1].date, date2);
-      Date datey = data[i].date;
-      double ey = data[i].recovery * spot.getUpsilon(data[i].date, date2);
-
-      ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
-
-      return ret;
+      return i;
     }
   }
 
-  // assertion, this line is never reached
   assert(false);
-  return 0.0;
+  return -1;
+}
+
+//===========================================================================
+// getRightIdx
+//===========================================================================
+int ccruncher::Asset::getRightIdx(Date d)
+{
+  int n = (int) data.size();
+
+  if (d <= data[0].date)
+  {
+    return 0;
+  }
+
+  if (data[n-1].date < d)
+  {
+    return -1;
+  }
+
+  for(int i=0; i<n; i++)
+  {
+    if (d <= data[i].date) 
+    {
+      return i;
+    }
+  }
+
+  assert(false);
+  return -1;
+}
+
+//===========================================================================
+// getCashflowSum
+//===========================================================================
+double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
+{
+  double ufactor;
+  int n = (int) data.size();
+  double ret = 0.0;
+
+  if (d < date)
+  {
+    return 0.0;
+  }
+
+  for(int i=0; i<n; i++)
+  {
+    if (d <= data[i].date && date <= data[i].date )
+    {
+      ufactor =  spot.getUpsilon(data[i].date, d);
+      ret += ufactor * data[i].cashflow;
+    }
+  }
+
+  return ret;
 }
 
 //===========================================================================
 // getLosses
 //===========================================================================
-void ccruncher::Asset::getLosses(Date *dates, int n, Interests &interests, double *ret)
+void ccruncher::Asset::getLosses(Date *dates, int m, Interests &interests, double *ret)
 {
   double ufactor;
+  int n = (int) data.size();
   Interest &spot = interests["spot"];
 
   // sorting dates
-  sort(dates, dates+n);
+  sort(dates, dates+m);
 
-  // computing losses (=unreceived cashflow-recovery)
-  for (int i=0;i<n;i++)
+  // computing losses at given time nodes (array dates)
+  for (int i=0;i<m;i++)
   {
+    double csum = 0.0;
+    double recv = 0.0;
+    int idx1 = getLeftIdx(dates[i]);
+    int idx2 = getRightIdx(dates[i]);
     ret[i] = 0.0;
-    for(unsigned int j=0;j<data.size();j++)
+
+    if (dates[i] < date) // time node before asset initial date
     {
-      if (dates[i] <= data[j].date)
+      assert(idx1 == -1); // because asset initial date = data[0]
+      ret[i] = 0.0;
+    }
+    else if (idx1 >= 0 && idx2 != -1 && idx2 < n) // time node between 2 events
+    {
+      ufactor = spot.getUpsilon(dates[i], dates[m-1]);
+      csum = getCashflowSum(dates[i], spot);
+      recv = data[idx2].recovery * spot.getUpsilon(data[idx2].date, dates[i]);
+      ret[i] = ufactor * (csum - recv);
+    }
+    else if (idx1 >= 0 && idx2 == -1) // time node after last event
+    {
+      assert(idx1==n-1);
+      if (i == 0) // asset has ended before initial date (dates[0])
       {
-        ufactor =  spot.getUpsilon(data[j].date, dates[n-1]);
-        ret[i] += ufactor * data[j].cashflow;
+        ret[i] = 0.0;
+      }
+      else
+      {
+        Date prevdate = ccruncher::max(date, dates[i-1]);
+        assert(prevdate<=dates[i]);
+        if (data[n-1].date <= prevdate) // no risk queue to compute
+        {
+          ret[i] = 0.0;
+        }
+        else // risk queue remains
+        {
+          int idx0 = getRightIdx(prevdate);
+          Date aux = prevdate;
+          double tfactor = 0.0;
+          for (int j=idx0; j<n; j++)
+          {
+            ufactor = spot.getUpsilon(data[j].date, dates[m-1]);
+            csum = getCashflowSum(data[j].date, spot);
+            recv = data[j].recovery;
+            tfactor = (double)(data[j].date-aux)/(double)(dates[i]-prevdate);
+            ret[i] += ufactor * (csum - recv) * tfactor;
+            aux = data[j].date;
+          }
+        }
       }
     }
-    ufactor =  spot.getUpsilon(dates[i], dates[n-1]);
-    ret[i] -= getVRecovery(dates[max(i-1,0)], dates[i], spot) * ufactor;
+    else // panic! unexpected case
+    {
+      assert(false);
+    }
   }
 }
 

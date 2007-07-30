@@ -13,6 +13,7 @@ version 1.1 (???. 2007)
   * added asset creation date
   * created XSD file for ccruncher xml input file
   * Technical Document rewrited and translated to english
+  * Modified asset losses computation algorithm
 
 version 1.0 (Dec. 2006)
 --------------------------

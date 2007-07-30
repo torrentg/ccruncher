@@ -42,6 +42,9 @@
 //   . added getCentury() methods
 //   . added getDayOfWeek() method
 //
+// 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added min and max functions
+//
 //===========================================================================
 
 #include <vector>
@@ -690,12 +693,12 @@ Date ccruncher::addMonths(const Date& inDate, const int& no_months)
   {
     if (d.getMonth()+nmonths<=12)
     {
-      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
+      int nd = std::min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
       return Date(nd, d.getMonth()+nmonths,d.getYear());
     }
     else
     {
-      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths-12,d.getYear()+1));
+      int nd = std::min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths-12,d.getYear()+1));
       return Date(nd, d.getMonth()+nmonths-12,d.getYear()+1);
     }
   }
@@ -703,12 +706,12 @@ Date ccruncher::addMonths(const Date& inDate, const int& no_months)
   {
     if (d.getMonth()+nmonths>=1)
     {
-      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
+      int nd = std::min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
       return Date(nd, d.getMonth()+nmonths,d.getYear());
     }
     else
     {
-      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths+12,d.getYear()-1));
+      int nd = std::min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths+12,d.getYear()-1));
       return Date(nd, d.getMonth()+nmonths+12,d.getYear()-1);
     }
   }
@@ -768,5 +771,35 @@ int ccruncher::operator -(const Date &d1, const Date &d2)
   else
   {
     return d1.getDayOfYear() - d2.getDayOfYear();
+  }
+}
+
+//===========================================================================
+// minimum of 2 dates
+//===========================================================================
+Date ccruncher::min(const Date &d1, const Date &d2)
+{
+  if (d1 < d2)
+  {
+    return d1;
+  }
+  else 
+  {
+    return d2;
+  }
+}
+
+//===========================================================================
+// maximum of 2 dates
+//===========================================================================
+Date ccruncher::max(const Date &d1, const Date &d2)
+{
+  if (d1 < d2)
+  {
+    return d2;
+  }
+  else 
+  {
+    return d1;
   }
 }

@@ -36,6 +36,9 @@
 //   . added getCentury() methods
 //   . added getDayOfWeek() method
 //
+// 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added min and max functions
+//
 //===========================================================================
 
 #ifndef _Date_
@@ -147,8 +150,12 @@ ostream& operator << (ostream& os, const Date& d);
 Date operator +(const Date&, const int&);
 // decrement n number of days
 Date operator -(const Date&, const int&);
-// diferencia de dies entre 2 dates
+// number of days between 2 dates
 int operator -(const Date&, const Date&);
+// minimum of 2 dates
+Date min(const Date&, const Date&);
+// maximum of 2 dates
+Date max(const Date&, const Date&);
 
 //---------------------------------------------------------------------------
 
