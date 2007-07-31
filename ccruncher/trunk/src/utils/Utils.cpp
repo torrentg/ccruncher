@@ -118,7 +118,7 @@ unsigned long ccruncher::Utils::hash(const string &str)
   while ( *name )
   {
     h = ( h << 4 ) + *name++;
-    if ( g = h & 0xF0000000 )
+    if ( (g = h & 0xF0000000) )
       h ^= g >> 24;
     h &= ~g;
   }

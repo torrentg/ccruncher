@@ -100,7 +100,7 @@ class Segmentation : public ExpatHandlers
     // [] operator
     Segment& operator [] (int i);
     // [] operator
-    Segment& operator [] (const string &name) throw(Exception);
+    Segment& operator [] (const string &sname) throw(Exception);
     // add a segment to list
     void addSegment(const string segname) throw(Exception);
     // serialize object content as xml

@@ -92,17 +92,17 @@ Segment& ccruncher::Segmentation::operator []  (int i)
 //===========================================================================
 // [] operator. returns segment by name
 //===========================================================================
-Segment& ccruncher::Segmentation::operator []  (const string &name) throw(Exception)
+Segment& ccruncher::Segmentation::operator []  (const string &sname) throw(Exception)
 {
   for (unsigned int i=0;i<vsegments.size();i++)
   {
-    if (vsegments[i].name == name)
+    if (vsegments[i].name == sname)
     {
       return vsegments[i];
     }
   }
 
-  throw Exception("Segmentation::[]: segment " + name + " not found");
+  throw Exception("Segmentation::[]: segment " + sname + " not found");
 }
 
 //===========================================================================
