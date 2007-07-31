@@ -14,6 +14,7 @@ version 1.1 (???. 2007)
   * created XSD file for ccruncher xml input file
   * Technical Document rewrited and translated to english
   * Modified asset losses computation algorithm
+  * added --listloss command line option
 
 version 1.0 (Dec. 2006)
 --------------------------
