@@ -101,12 +101,12 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
 
-    // returns data index by left, -1 if don't exist
-    int getLeftIdx(Date d);
     // returns data index by right, -1 if don't exist
     int getRightIdx(Date d);
     // returns cashflow sum from given date
     double getCashflowSum(Date d, const Interest &);
+    // precompute loss at d2
+    double precomputeLoss(const Date d1, const Date d2, Interest &spot);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation

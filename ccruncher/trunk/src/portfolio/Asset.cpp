@@ -145,35 +145,6 @@ Date ccruncher::Asset::getDate(void) const
 }
 
 //===========================================================================
-// getLeftIdx
-//===========================================================================
-int ccruncher::Asset::getLeftIdx(Date d)
-{
-  int n = (int) data.size();
-
-  if (d < data[0].date)
-  {
-    return -1;
-  }
-
-  if (data[n-1].date <= d)
-  {
-    return n-1;
-  }
-
-  for(int i=n-1; i>=0; i--)
-  {
-    if (data[i].date <= d) 
-    {
-      return i;
-    }
-  }
-
-  assert(false);
-  return -1;
-}
-
-//===========================================================================
 // getRightIdx
 //===========================================================================
 int ccruncher::Asset::getRightIdx(Date d)
@@ -229,13 +200,50 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 }
 
 //===========================================================================
+// precomputeLoss
+// precompute loss at time node d2 (d1 is the previous time node)
+//===========================================================================
+double ccruncher::Asset::precomputeLoss(Date d1, Date d2, Interest &spot)
+{
+  double ret = 0.0;
+  double ufactor, tfactor, csum, recv;
+  Date prevdate = d1;
+
+  if (d2 < date) return 0.0;
+  if (d1 < date) prevdate = date;
+  int idx1 = getRightIdx(prevdate);
+  if (idx1 == -1) return 0.0;
+  int idx2 = getRightIdx(d2);
+  if (idx2 == -1) idx2 = data.size()-1;
+
+  for (int i=idx1; i<=idx2; i++)
+  {
+    if (data[i].date <= d2) 
+    {
+      ufactor = spot.getUpsilon(data[i].date, d2);
+      tfactor = (double)(data[i].date-prevdate)/(double)(d2-d1);
+      csum = getCashflowSum(data[i].date, spot);
+      recv = data[i].recovery;
+      ret += ufactor * (csum - recv) * tfactor;
+    }
+    else
+    {
+      tfactor = (double)(d2-prevdate)/(double)(d2-d1);
+      csum = getCashflowSum(d2, spot);
+      recv = data[i].recovery * spot.getUpsilon(data[i].date, d2);
+      ret += (csum - recv) * tfactor;
+    }
+    prevdate = data[i].date;
+  }
+
+  return ret;
+}
+
+//===========================================================================
 // precomputeLosses
-// precompute losses at time nodes
 //===========================================================================
 void ccruncher::Asset::precomputeLosses(Date *dates, int m, Interests &interests)
 {
-  double ufactor;
-  int n = (int) data.size();
   Interest &spot = interests["spot"];
 
   // allocating & initializing memory
@@ -247,60 +255,7 @@ void ccruncher::Asset::precomputeLosses(Date *dates, int m, Interests &interests
   // computing losses at given time nodes (array dates)
   for (int i=0;i<m;i++)
   {
-    double csum = 0.0;
-    double recv = 0.0;
-    int idx1 = getLeftIdx(dates[i]);
-    int idx2 = getRightIdx(dates[i]);
-
-    if (dates[i] < date) // time node before asset initial date
-    {
-      assert(idx1 == -1); // because asset initial date = data[0]
-      plosses[i] = 0.0;
-    }
-    else if (idx1 >= 0 && idx2 != -1 && idx2 < n) // time node between 2 events
-    {
-      ufactor = spot.getUpsilon(dates[i], dates[m-1]);
-      csum = getCashflowSum(dates[i], spot);
-      recv = data[idx2].recovery * spot.getUpsilon(data[idx2].date, dates[i]);
-      plosses[i] = ufactor * (csum - recv);
-    }
-    else if (idx1 >= 0 && idx2 == -1) // time node after last event
-    {
-      assert(idx1==n-1);
-      if (i == 0) // asset has ended before initial date (dates[0])
-      {
-        plosses[i] = 0.0;
-      }
-      else
-      {
-        Date prevdate = ccruncher::max(date, dates[i-1]);
-        assert(prevdate<=dates[i]);
-        if (data[n-1].date <= prevdate) // no risk queue to compute
-        {
-          plosses[i] = 0.0;
-        }
-        else // risk queue remains
-        {
-          int idx0 = getRightIdx(prevdate);
-          Date aux = prevdate;
-          double tfactor = 0.0;
-          plosses[i] = 0.0;
-          for (int j=idx0; j<n; j++)
-          {
-            ufactor = spot.getUpsilon(data[j].date, dates[m-1]);
-            csum = getCashflowSum(data[j].date, spot);
-            recv = data[j].recovery;
-            tfactor = (double)(data[j].date-aux)/(double)(dates[i]-prevdate);
-            plosses[i] += ufactor * (csum - recv) * tfactor;
-            aux = data[j].date;
-          }
-        }
-      }
-    }
-    else // panic! unexpected case
-    {
-      assert(false);
-    }
+    plosses[i] = precomputeLoss((i==0?Date(1,1,1):dates[i-1]), dates[i], spot);
   }
 }
 
