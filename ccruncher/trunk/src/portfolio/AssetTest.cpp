@@ -60,6 +60,7 @@
 // 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
 //   . added new tests
+//   . added precomputeLosses function
 //
 //===========================================================================
 
@@ -325,33 +326,30 @@ void ccruncher_test::AssetTest::test5()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  double *losses = new double[16];
   Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
                    Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
                    Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
                    Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
                    Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
                    Date("1/7/2011") };
-  ASSERT_NO_THROW(asset.getLosses(dates, 16, interests, losses));
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, 16, interests));
 
-  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[1], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[2], EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, losses[3], EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, losses[4], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[5], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[6], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[7], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[8], EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, losses[9], EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, losses[10], EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, losses[11], EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, losses[12], EPSILON);
-  ASSERT_EQUALS_EPSILON(58.011, losses[13], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[14], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[15], EPSILON);
-
-  delete [] losses;
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(2), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(3), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(4), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(5), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(6), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(7), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(8), EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(9), EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(10), EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(11), EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(12), EPSILON);
+  ASSERT_EQUALS_EPSILON(58.011, asset.getLoss(13), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(14), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(15), EPSILON);
 }
 
 //===========================================================================
@@ -383,32 +381,29 @@ void ccruncher_test::AssetTest::test6()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  double *losses = new double[16];
   Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
                    Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
                    Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
                    Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
                    Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
                    Date("1/7/2011") };
-  ASSERT_NO_THROW(asset.getLosses(dates, 16, interests, losses));
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, 16, interests));
 
-  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[1], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[2], EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, losses[3], EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, losses[4], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[5], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[6], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[7], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[8], EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, losses[9], EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, losses[10], EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, losses[11], EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, losses[12], EPSILON);
-  ASSERT_EQUALS_EPSILON(188.398, losses[13], EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, losses[14], EPSILON);
-
-  delete [] losses;
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(2), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(3), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(4), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(5), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(6), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(7), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(8), EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(9), EPSILON);
+  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(10), EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(11), EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(12), EPSILON);
+  ASSERT_EQUALS_EPSILON(188.398, asset.getLoss(13), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(14), EPSILON);
 }
 
 //===========================================================================
@@ -439,18 +434,15 @@ void ccruncher_test::AssetTest::test7()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  double *losses = new double[5];
   Date dates[] = { Date("1/1/2004"), Date("1/1/2006"), Date("1/1/2008"), 
                    Date("1/1/2010"), Date("1/1/2012") };
-  ASSERT_NO_THROW(asset.getLosses(dates, 5, interests, losses));
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, 5, interests));
 
-  ASSERT_EQUALS_EPSILON(0.0, losses[0], EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, losses[1], EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, losses[2], EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, losses[3], EPSILON);
-  ASSERT_EQUALS_EPSILON(14.3836, losses[4], EPSILON);
-
-  delete [] losses;
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(1), EPSILON);
+  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(2), EPSILON);
+  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(3), EPSILON);
+  ASSERT_EQUALS_EPSILON(14.3836, asset.getLoss(4), EPSILON);
 }
 
 //===========================================================================
@@ -500,14 +492,12 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_EQUALS_EPSILON(+10.0, data[7].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+3.0, data[7].recovery, EPSILON);
 
-  double *losses = new double[4];
   Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
-  ASSERT_NO_THROW(asset->getLosses(dates, 4, interests, losses));
+  ASSERT_NO_THROW(asset->precomputeLosses(dates, 4, interests));
 
-  ASSERT_EQUALS_EPSILON(570.0, losses[0], EPSILON);
-  ASSERT_EQUALS_EPSILON(120.0, losses[1], EPSILON);
-  ASSERT_EQUALS_EPSILON(70.0, losses[2], EPSILON);
-  ASSERT_EQUALS_EPSILON(7.0, losses[3], EPSILON);
-
-  delete [] losses;
+  ASSERT_EQUALS_EPSILON(570.0, asset->getLoss(0), EPSILON);
+  ASSERT_EQUALS_EPSILON(120.0, asset->getLoss(1), EPSILON);
+  ASSERT_EQUALS_EPSILON(70.0, asset->getLoss(2), EPSILON);
+  ASSERT_EQUALS_EPSILON(7.0, asset->getLoss(3), EPSILON);
 }
+

@@ -110,6 +110,9 @@
 //   . solved bug in mpi version (SegmentAggregator::touch() 
 //     called by all ranks, not just master)
 //
+// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added method printPrecomputedLosses()
+//
 //===========================================================================
 
 #include <cfloat>
@@ -326,12 +329,12 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int isteps) throw(Exception)
 {
   // setting logger header
-  Logger::trace("fixing clients to simulate", '-');
+  Logger::trace("setting borrowers to simulate", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active clients", Format::bool2string(idata.getParams().onlyactive));
-  Logger::trace("number of initial clients", Format::long2string(idata.getPortfolio().getClients().size()));
+  Logger::trace("simulate only active borrowers", Format::bool2string(idata.getParams().onlyactive));
+  Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getClients().size()));
 
   // sorting clients by sector and rating
   idata.getPortfolio().sortClients(idates[0], idates[isteps], idata.getParams().onlyactive);
@@ -346,16 +349,27 @@ void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int is
     N = idata.getPortfolio().getClients().size();
   }
 
-  Logger::trace("number of simulated clients", Format::long2string(N));
+  Logger::trace("number of simulated borrowers", Format::long2string(N));
 
   // checking that exist clients to simulate
   if (N == 0)
   {
-    throw Exception("MonteCarlo::init(): 0 clients to simulate");
+    throw Exception("MonteCarlo::init(): 0 borrowers to simulate");
   }
 
   // setting client object
   clients = &(idata.getPortfolio().getClients());
+
+  // precomputing asset losses at time nodes
+  Logger::trace("elapsed time precomputing assets losses", true);
+  for(long i=0;i<N;i++)
+  {
+    vector<Asset> &assets = (*clients)[i]->getAssets();
+    for(unsigned int j=0;j<assets.size();j++)
+    {
+      assets[j].precomputeLosses(dates, STEPS+1, idata.getInterests());
+    }
+  }
 
   // exit function
   Logger::previousIndentLevel();
@@ -568,7 +582,7 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("workspace dimension (= number of clients)", Format::long2string(n));
+  Logger::trace("workspace dimension (= number of borrowers)", Format::long2string(n));
 
   // allocating space
   ittd = Arrays<int>::allocVector(n);
@@ -617,7 +631,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
       // initializing SegmentAggregator
       tmp->define(aggregators.size(), i, j, segmentations[i].components);
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, STEPS+1, *clients, N, idata.getInterests());
+      tmp->initialize(dates, STEPS+1, *clients, N);
 
       // adding aggregator to list (only if have elements)
       numsegments++;
@@ -745,7 +759,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 
     // printing traces
     Logger::trace("elapsed time creating random numbers", Timer::format(timer1.read()));
-    Logger::trace("elapsed time simulating clients", Timer::format(timer2.read()));
+    Logger::trace("elapsed time simulating default times", Timer::format(timer2.read()));
     Logger::trace("elapsed time aggregating data", Timer::format(timer3.read()));
     Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()+timer3.read()));
   }
@@ -997,3 +1011,28 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
   fpath = path;
   bforce = force;
 }
+
+//===========================================================================
+// printPrecomputedLosses
+//===========================================================================
+void ccruncher::MonteCarlo::printPrecomputedLosses()
+{
+  cout << "<ccruncher-plosses>" << endl;
+  for(long i=0;i<N;i++)
+  {
+    cout << "  <client id=\"" << (*clients)[i]->id << "\">" << endl;
+    vector<Asset> &assets = (*clients)[i]->getAssets();
+    for(unsigned int j=0;j<assets.size();j++)
+    {
+      cout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
+      for(int k=0; k<STEPS+1; k++)
+      {
+        cout << "      <loss at=\"" << dates[k] << "\" value=\"" << assets[j].getLoss(k) << "\"/>" << endl;
+      }
+      cout << "    </asset>" << endl;
+    }
+    cout << "  </client>" << endl;
+  }
+  cout << "</ccruncher-plosses>" << endl;
+}
+

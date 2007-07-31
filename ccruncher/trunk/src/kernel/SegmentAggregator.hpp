@@ -44,6 +44,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed interests arguments
+//
 //===========================================================================
 
 #ifndef _SegmentAggregator_
@@ -132,7 +135,7 @@ class SegmentAggregator
     long getANumAssets(vector<Client *> &, long, bool *);
     long getCNumAssets(vector<Client *> &, long, bool *);
     long* allocIClients(long, bool *, long) throw(Exception);
-    double** allocLosses(Date *, int, vector<Client *> &, Interests &) throw(Exception);
+    double** allocLosses(Date *, int, vector<Client *> &) throw(Exception);
 
     // output functions
     string getFilePath() throw(Exception);
@@ -148,7 +151,7 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(Date *, int, vector<Client *> &, long, Interests &) throw(Exception);
+    void initialize(Date *, int, vector<Client *> &, long) throw(Exception);
 
     // other methods
     long getNumElements() const;

@@ -68,12 +68,14 @@
 // 2007/07/29 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
 //   . getLosses function reviewed
+//   . added precomputeLosses function
 //
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "portfolio/Asset.hpp"
+#include "utils/Arrays.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -81,6 +83,7 @@
 //===========================================================================
 ccruncher::Asset::Asset()
 {
+  reset(NULL);
 }
 
 //===========================================================================
@@ -88,7 +91,6 @@ ccruncher::Asset::Asset()
 //===========================================================================
 ccruncher::Asset::Asset(const Segmentations &segs)
 {
-  // setting default values
   reset((Segmentations *) &segs);
 }
 
@@ -97,7 +99,11 @@ ccruncher::Asset::Asset(const Segmentations &segs)
 //===========================================================================
 ccruncher::Asset::~Asset()
 {
-  // nothing to do
+  if (plosses != NULL)
+  {
+    Arrays<double>::deallocVector(plosses);
+    plosses = NULL;
+  }
 }
 
 //===========================================================================
@@ -111,6 +117,7 @@ void ccruncher::Asset::reset(Segmentations *segs)
   data.clear();
   belongsto.clear();
   have_data = false;
+  plosses = NULL;
 }
 
 //===========================================================================
@@ -222,13 +229,17 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 }
 
 //===========================================================================
-// getLosses
+// precomputeLosses
+// precompute losses at time nodes
 //===========================================================================
-void ccruncher::Asset::getLosses(Date *dates, int m, Interests &interests, double *ret)
+void ccruncher::Asset::precomputeLosses(Date *dates, int m, Interests &interests)
 {
   double ufactor;
   int n = (int) data.size();
   Interest &spot = interests["spot"];
+
+  // allocating & initializing memory
+  plosses = Arrays<double>::allocVector(m, 0.0);
 
   // sorting dates
   sort(dates, dates+m);
@@ -240,26 +251,25 @@ void ccruncher::Asset::getLosses(Date *dates, int m, Interests &interests, doubl
     double recv = 0.0;
     int idx1 = getLeftIdx(dates[i]);
     int idx2 = getRightIdx(dates[i]);
-    ret[i] = 0.0;
 
     if (dates[i] < date) // time node before asset initial date
     {
       assert(idx1 == -1); // because asset initial date = data[0]
-      ret[i] = 0.0;
+      plosses[i] = 0.0;
     }
     else if (idx1 >= 0 && idx2 != -1 && idx2 < n) // time node between 2 events
     {
       ufactor = spot.getUpsilon(dates[i], dates[m-1]);
       csum = getCashflowSum(dates[i], spot);
       recv = data[idx2].recovery * spot.getUpsilon(data[idx2].date, dates[i]);
-      ret[i] = ufactor * (csum - recv);
+      plosses[i] = ufactor * (csum - recv);
     }
     else if (idx1 >= 0 && idx2 == -1) // time node after last event
     {
       assert(idx1==n-1);
       if (i == 0) // asset has ended before initial date (dates[0])
       {
-        ret[i] = 0.0;
+        plosses[i] = 0.0;
       }
       else
       {
@@ -267,20 +277,21 @@ void ccruncher::Asset::getLosses(Date *dates, int m, Interests &interests, doubl
         assert(prevdate<=dates[i]);
         if (data[n-1].date <= prevdate) // no risk queue to compute
         {
-          ret[i] = 0.0;
+          plosses[i] = 0.0;
         }
         else // risk queue remains
         {
           int idx0 = getRightIdx(prevdate);
           Date aux = prevdate;
           double tfactor = 0.0;
+          plosses[i] = 0.0;
           for (int j=idx0; j<n; j++)
           {
             ufactor = spot.getUpsilon(data[j].date, dates[m-1]);
             csum = getCashflowSum(data[j].date, spot);
             recv = data[j].recovery;
             tfactor = (double)(data[j].date-aux)/(double)(dates[i]-prevdate);
-            ret[i] += ufactor * (csum - recv) * tfactor;
+            plosses[i] += ufactor * (csum - recv) * tfactor;
             aux = data[j].date;
           }
         }
@@ -290,6 +301,21 @@ void ccruncher::Asset::getLosses(Date *dates, int m, Interests &interests, doubl
     {
       assert(false);
     }
+  }
+}
+
+//===========================================================================
+// getLoss
+//===========================================================================
+double ccruncher::Asset::getLoss(int k)
+{
+  if (plosses == NULL || k < 0)
+  {
+    return NAN;
+  }
+  else 
+  {
+    return plosses[k];
   }
 }
 

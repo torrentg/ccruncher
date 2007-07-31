@@ -260,3 +260,4 @@ void ccruncher::Portfolio::mtlp(unsigned int pos)
 
   vclients[vclients.size()-1] = p;
 }
+

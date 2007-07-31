@@ -50,6 +50,7 @@
 // 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added asset creation date
 //   . getLosses function reviewed
+//   . added precomputeLosses function
 //
 //===========================================================================
 
@@ -95,6 +96,8 @@ class Asset : public ExpatHandlers
     vector<DateValues> data;
     // pointer to segmentations list
     Segmentations *segmentations;
+    // precomputed losses at time nodes
+    double *plosses;
     // auxiliary variable (used by parser)
     bool have_data;
 
@@ -127,8 +130,10 @@ class Asset : public ExpatHandlers
     Date getDate(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // return losses at given dates
-    void getLosses(Date *dates, int n, Interests &interests, double *ret);
+    // precompute losses at given dates
+    void precomputeLosses(Date *dates, int n, Interests &interests);
+    // returns precomputed loss at requested time node index
+    double getLoss(int k);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment

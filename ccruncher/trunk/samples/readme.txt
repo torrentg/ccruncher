@@ -194,7 +194,7 @@ Expected Results:
   report it).
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-    0.0   485.8   931.2  1147.0  1566.0  9002.0
+      0    1569    2970    3619    4936   34830
 
 How I can check results?
 

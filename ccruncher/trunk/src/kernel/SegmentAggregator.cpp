@@ -55,6 +55,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed interests arguments
+//
 //===========================================================================
 
 #include <cmath>
@@ -161,7 +164,7 @@ void ccruncher::SegmentAggregator::release()
 // initialize
 //===========================================================================
 void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> &clients,
-  long n, Interests &interests_) throw(Exception)
+  long n) throw(Exception)
 {
   bool *clientflag = NULL;
 
@@ -204,7 +207,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
     iclients = allocIClients(nclients, clientflag, N);
 
     // allocating & filling losses
-    losses = allocLosses(dates, M, clients, interests_);
+    losses = allocLosses(dates, M, clients);
 
     // allocating cvalues
     cvalues = Arrays<double>::allocVector(buffersize);
@@ -343,8 +346,7 @@ long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n)
 //===========================================================================
 // allocLosses
 //===========================================================================
-double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Client *> &clients,
-                Interests &interests_) throw(Exception)
+double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Client *> &clients) throw(Exception)
 {
   double **ret = NULL;
 
@@ -361,7 +363,10 @@ double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Cl
     {
       if (components==client || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
       {
-        assets[j].getLosses(dates, m, interests_, ret[i]);
+        for(int k=0; k<m; k++)
+        {
+          ret[i][k] += assets[j].getLoss(k);
+        }
       }
     }
   }
@@ -378,7 +383,6 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   assert(defaulttimes != NULL);
   int cpos;
   int itime;
-  double val=0.0;
 
   // initializing segment value
   cvalues[icont] = 0.0;

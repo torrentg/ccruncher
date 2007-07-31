@@ -68,6 +68,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
 //
+// 2007/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added listloss method
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -106,7 +109,8 @@ void run(string, string) throw(Exception);
 
 string sfilename = "";
 string spath = "";
-bool bsimulate = true;
+bool bvalidate = false;
+bool blistloss = false;
 bool bverbose = false;
 bool bforce = false;
 int inice = -999;
@@ -129,6 +133,7 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "validate",     0,  NULL,  305 },
+      { "listloss",     0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -213,12 +218,16 @@ int main(int argc, char *argv[])
           break;
 
       case 305: // --validate (validate input file)
-          bsimulate = false;
+          bvalidate = true;
+          break;
+
+      case 306: // --listloss (list precomputed asset losses at time nodes)
+          blistloss = true;
           break;
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gerard@fobos.generacio.com\n";
+                  "ccruncher version and arguments at gerard@mail.generacio.com\n";
           return shutdown(1);
     }
   }
@@ -242,7 +251,7 @@ int main(int argc, char *argv[])
   }
 
   // checking arguments consistency
-  if (spath == "" && bsimulate == true)
+  if (spath == "" && !bvalidate && !blistloss)
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
@@ -250,7 +259,10 @@ int main(int argc, char *argv[])
   }
 
   // license info
-  copyright();
+  if (bverbose || !blistloss)
+  {
+    copyright();
+  }
 
   try
   {
@@ -270,7 +282,7 @@ int main(int argc, char *argv[])
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gerard@fobos.generacio.com\n";
+            "ccruncher version and arguments at gerard@mail.generacio.com\n";
     return shutdown(1);
   }
 
@@ -296,7 +308,7 @@ void startup(int argc, char *argv[]) throw(Exception)
   // checking number of nodes (minimum required = 2 nodes)
   if (MPI::COMM_WORLD.Get_size() <= 1)
   {
-    throw Exception("needed more than 1 node to run ccruncher");
+    throw Exception("needed more than 1 cluster node to run ccruncher");
   }
 #else
   // nothing to do
@@ -360,8 +372,19 @@ void run(string filename, string path) throw(Exception)
   // initializing simulation
   simul.initialize(idata);
 
-  // exiting if only validation
-  if (bsimulate == false) return;
+  // validate file and exit
+  if (bvalidate == true)
+  {
+    Logger::addBlankLine();
+    return;
+  }
+
+  // list precomputed losses and exit
+  if (blistloss == true)
+  {
+    simul.printPrecomputedLosses();
+    return;
+  }
 
   // checking output dir
   if (!File::existDir(path))
@@ -448,6 +471,7 @@ void usage()
   "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
   "    --validate  perform input file validations and exit\n"
+  "    --listloss  list precomputed assets losses at time nodes and exit\n"
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"
   "  return codes:\n"
@@ -455,6 +479,7 @@ void usage()
   "    1           KO. finished with errors\n"
   "  examples:\n"
   "    ccruncher --validate input.xml\n"
+  "    ccruncher --listloss input.xml\n"
   "    ccruncher --path=20070801 input.xml\n"
   "    ccruncher --hash=100 -fv --path=./E20070801 input.xml\n"
   "    ccruncher --hash=100 -fv --path=./E20070801 input.xml.gz\n"

@@ -61,6 +61,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added method printPrecomputedLosses()
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -101,19 +104,19 @@ class MonteCarlo
     vector<SegmentAggregator *> aggregators;
     vector<Client *> *clients;
 
-    /** numero maxim de iteracions */
+    /** maximum number of iterations */
     long MAXITERATIONS;
-    /** numero maxim de segons */
+    /** maximum execution time */
     long MAXSECONDS;
-    /** numero de talls temporals */
+    /** number of time steps */
     int STEPS;
-    /** amplada de cada pas temporal */
+    /** step length */
     int STEPLENGTH;
-    /** numero de clients */
+    /** number of borrowers (taking into account onlyActiveClients flag) */
     long N;
-    /** contador de iteracions */
+    /** iterations counter */
     long CONT;
-    /** data de inici de la simulacio */
+    /** initial date */
     Date begindate;
     /* antithetic technologie for simetric copulas */
     bool antithetic;
@@ -176,6 +179,7 @@ class MonteCarlo
     void setHash(int num);
     void initialize(IData &) throw(Exception);
     long execute() throw(Exception);
+    void printPrecomputedLosses();
 
 };
 

@@ -172,8 +172,8 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
-        &nbsp;&nbsp;cd ccruncher-X.Y
+&nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
+&nbsp;&nbsp;cd ccruncher-X.Y
     </pre>
 
     <p>
@@ -212,9 +212,9 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;./configure --prefix=$PWD
-        &nbsp;&nbsp;make
-        &nbsp;&nbsp;make install
+&nbsp;&nbsp;./configure --prefix=$PWD
+&nbsp;&nbsp;make
+&nbsp;&nbsp;make install
     </pre>
 
     <p>
@@ -222,11 +222,11 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/lam
-        &nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/lam
-        &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
-        &nbsp;&nbsp;make
-        &nbsp;&nbsp;make install
+&nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/lam
+&nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/lam
+&nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
+&nbsp;&nbsp;make
+&nbsp;&nbsp;make install
     </pre>
     <p>
       Replace <code>lam</code> by <code>openmpi</code> if you are using a Open-MPI
@@ -249,8 +249,8 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;bin/ccruncher --help
-        &nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=./data file.xml
+&nbsp;&nbsp;bin/ccruncher --help
+&nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=./data file.xml
     </pre>
 
     <p>
@@ -259,8 +259,8 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;ls -l data/*
-        &nbsp;&nbsp;more data/segmentation-segment.out
+&nbsp;&nbsp;ls -l data/*
+&nbsp;&nbsp;more data/segmentation-segment.out
     </pre>
 
     <p>
@@ -268,24 +268,24 @@
     </p>
     <pre>
 
-        &nbsp;&nbsp;bin/report data/segmentation-segment.out
+&nbsp;&nbsp;bin/report data/segmentation-segment.out
     </pre>
     <p>
       or open a <a href="http://www.r-project.org">R</a> console and type:
     </p>
     <pre>
 
-        &nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R")
-        &nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out")
-        &nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99)
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")
-        &nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
-        &nbsp;&nbsp;>&nbsp;quit(save='no')
+&nbsp;&nbsp;>&nbsp;source("$CCRUNCHER/bin/report.R")
+&nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("$CCRUNCHER/data/file.out")
+&nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99)
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")
+&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+&nbsp;&nbsp;>&nbsp;quit(save='no')
     </pre>
 
     <div id="footpage">
@@ -307,7 +307,7 @@
             </a>
           </td>
           <td class="footer" align="right">
-            Last modified: 27-Jul-2007 &nbsp;
+            Last modified: 31-Jul-2007 &nbsp;
           </td>
         </tr>
       </table> 
