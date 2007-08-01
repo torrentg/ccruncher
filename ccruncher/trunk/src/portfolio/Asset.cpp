@@ -189,7 +189,7 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 
   for(int i=0; i<n; i++)
   {
-    if (d <= data[i].date && date <= data[i].date )
+    if (d <= data[i].date)
     {
       ufactor =  spot.getUpsilon(data[i].date, d);
       ret += ufactor * data[i].cashflow;
@@ -218,17 +218,18 @@ double ccruncher::Asset::precomputeLoss(Date d1, Date d2, Interest &spot)
 
   for (int i=idx1; i<=idx2; i++)
   {
+    int d2d1 = d2 - d1;
     if (data[i].date <= d2) 
     {
       ufactor = spot.getUpsilon(data[i].date, d2);
-      tfactor = (double)(data[i].date-prevdate)/(double)(d2-d1);
+      tfactor = (double)(data[i].date-prevdate)/(double)(d2d1);
       csum = getCashflowSum(data[i].date, spot);
       recv = data[i].recovery;
       ret += ufactor * (csum - recv) * tfactor;
     }
     else
     {
-      tfactor = (double)(d2-prevdate)/(double)(d2-d1);
+      tfactor = (double)(d2-prevdate)/(double)(d2d1);
       csum = getCashflowSum(d2, spot);
       recv = data[i].recovery * spot.getUpsilon(data[i].date, d2);
       ret += (csum - recv) * tfactor;

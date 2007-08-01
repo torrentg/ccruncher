@@ -180,7 +180,7 @@ int ccruncher::Date::getCentury() const
 }
 
 //===========================================================================
-// returns day of year (1...364/365)
+// returns day of year (1...365/366)
 //===========================================================================
 int ccruncher::Date::getDayOfYear() const
 {

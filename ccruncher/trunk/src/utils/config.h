@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue Jul 17 18:22:17 CEST 2007"
+#define BUILD_DATE "Wed Aug  1 07:22:54 CEST 2007"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -107,7 +107,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -128,7 +128,7 @@
 #define PACKAGE_VERSION "1.1"
 
 /* Profiler instructions are added when this is defined. */
-/* #undef PROFILER */
+#define PROFILER 1
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

@@ -37,6 +37,9 @@
 // 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tests related to getDayOfWeek()
 //
+// 2007/08/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added new tests
+//
 //===========================================================================
 
 #include <iostream>
@@ -98,6 +101,12 @@ void ccruncher_test::DateTest::test_gets(void)
   ASSERT_EQUALS(12, date1.getMonth());
   ASSERT_EQUALS(2005, date1.getYear());
   ASSERT_EQUALS(359, date1.getDayOfYear());
+
+  Date date2 = Date(25,12,2008);
+  ASSERT_EQUALS(25, date2.getDay());
+  ASSERT_EQUALS(12, date2.getMonth());
+  ASSERT_EQUALS(2008, date2.getYear());
+  ASSERT_EQUALS(360, date2.getDayOfYear());
 }
 
 //===========================================================================
@@ -205,6 +214,11 @@ void ccruncher_test::DateTest::test_comparators(void)
 
   ASSERT(!(date1 >= date2));
   ASSERT(date1 >= datex);
+
+  ASSERT(date1 == ccruncher::min(date1, date2));
+  ASSERT(date2 == ccruncher::max(date1, date2));
+  ASSERT(date1 == ccruncher::min(date1, datex));
+  ASSERT(date1 == ccruncher::max(date1, datex));
 }
 
 //===========================================================================
