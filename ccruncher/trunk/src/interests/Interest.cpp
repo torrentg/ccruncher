@@ -140,7 +140,6 @@ double ccruncher::Interest::getValue(const double t) const
     }
 
     aux = vrates[vrates.size()-1];
-
     return aux.r;
   }
 }
@@ -162,7 +161,7 @@ double ccruncher::Interest::date2idx(Date &date1) const
 }
 
 //===========================================================================
-// returns factor to aply to transport a money value from date1 to date0
+// returns factor to aply to transport a money value from date0 to date1
 // r: interest rate to apply
 // t: time (in months)
 //===========================================================================
@@ -183,7 +182,7 @@ double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const throw(Exc
   double r1 = getValue(t1);
   double r2 = getValue(t2);
 
-  return getUpsilon(r1,-t1) * getUpsilon(r2,+t2);
+  return getUpsilon(r1, -t1) * getUpsilon(r2, +t2);
 }
 
 //===========================================================================
@@ -286,3 +285,4 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 
   return ret;
 }
+

@@ -15,6 +15,7 @@ version 1.1 (???. 2007)
   * Technical Document rewrited and translated to english
   * Modified asset losses computation algorithm
   * added --listloss command line option
+  * changed Date class (in order to avoid bottlenecks)
 
 version 1.0 (Dec. 2006)
 --------------------------

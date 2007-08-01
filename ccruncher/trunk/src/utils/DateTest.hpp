@@ -62,7 +62,6 @@ class DateTest : public TestFixture<DateTest>
     void test_constructors(void);
     void test_valid(void);
     void test_gets(void);
-    void test_sets(void);
     void test_rollers(void);
     void test_misc(void);
     void test_comparators(void);
@@ -75,7 +74,6 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_constructors);
       TEST_CASE(test_valid);
       TEST_CASE(test_gets);
-      TEST_CASE(test_sets);
       TEST_CASE(test_rollers);
       TEST_CASE(test_misc);
       TEST_CASE(test_comparators);

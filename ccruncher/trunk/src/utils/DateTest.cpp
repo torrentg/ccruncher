@@ -38,7 +38,7 @@
 //   . added tests related to getDayOfWeek()
 //
 // 2007/08/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added new tests
+//   . adapted to new Date class
 //
 //===========================================================================
 
@@ -72,10 +72,11 @@ void ccruncher_test::DateTest::test_constructors(void)
   Date now = Date();
   Date date1 = Date(25,7,2001);
   Date date2 = Date("25/07/2001");
-  Date date3 = Date(20010725);
+  Date date3 = Date(date2);
 
   ASSERT(date1 == date2);
   ASSERT(date2 == date3);
+  ASSERT(date3 == date2);
   ASSERT_THROW(Date("30/02/2003"));
 }
 
@@ -110,26 +111,6 @@ void ccruncher_test::DateTest::test_gets(void)
 }
 
 //===========================================================================
-// test_gets
-//===========================================================================
-void ccruncher_test::DateTest::test_sets(void)
-{
-  Date date1;
-
-  date1 = Date("24/12/2004");
-  ASSERT_NO_THROW(date1.setDay(27));
-  ASSERT_THROW(date1.setDay(35));
-
-  date1 = Date("24/12/2004");
-  ASSERT_NO_THROW(date1.setMonth(11));
-  ASSERT_THROW(date1.setMonth(13));
-
-  date1 = Date("24/12/2004");
-  ASSERT_NO_THROW(date1.setYear(2019));
-  ASSERT_THROW(date1.setYear(-10));
-}
-
-//===========================================================================
 // test_rollers
 //===========================================================================
 void ccruncher_test::DateTest::test_rollers(void)
@@ -151,15 +132,15 @@ void ccruncher_test::DateTest::test_rollers(void)
   date1 -= 3;
   ASSERT(Date("25/12/2004") == date1);
 
-  date2 = nextDate(date1);
+  date2 = date1 + 1;
   ASSERT(Date("26/12/2004") == date2);
 
-  date2 = previousDate(date1);
+  date2 = date1 - 1;
   ASSERT(Date("24/12/2004") == date2);
 
-  date2 = nextMonth(date1);
+  date2 = addMonths(date1, 1);
   ASSERT(Date("25/1/2005") == date2);
-  ASSERT(Date("28/2/2005") == nextMonth(Date("30/1/2005")));
+  ASSERT(Date("28/2/2005") == addMonths(Date("30/1/2005"), 1));
 
   date2 = addMonths(date1, 3);
   ASSERT(Date("25/3/2005") == date2);
@@ -173,17 +154,14 @@ void ccruncher_test::DateTest::test_misc(void)
   Date date1 = Date(1,2,2005);
 
   ASSERT("01/02/2005" == date1.toString());
-  ASSERT(20050201 == date1.longDate());
 
   ASSERT_EQUALS(false, date1.isLeapYear());
   ASSERT_EQUALS(false, Date::isLeapYear(2005));
   ASSERT_EQUALS(true, Date::isLeapYear(2004));
 
-  ASSERT_EQUALS(365, date1.numDaysInYear());
   ASSERT_EQUALS(365, Date::numDaysInYear(2005));
   ASSERT_EQUALS(366, Date::numDaysInYear(2004));
 
-  ASSERT_EQUALS(28, date1.numDaysInMonth());
   ASSERT_EQUALS(28, Date::numDaysInMonth(2, 2005));
   ASSERT_EQUALS(29, Date::numDaysInMonth(2, 2004));
 }
@@ -242,3 +220,4 @@ void ccruncher_test::DateTest::test_dayofweek(void)
   ASSERT(date5.getDayOfWeek() == 5);
   ASSERT(date6.getDayOfWeek() == 6);
 }
+
