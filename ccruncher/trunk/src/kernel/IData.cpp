@@ -146,7 +146,7 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 
     if (!xmlstream.good())
     {
-      throw Exception("IData::IData(): can't open file " + xmlfilename);
+      throw Exception("can't open file " + xmlfilename);
     }
     else
     {

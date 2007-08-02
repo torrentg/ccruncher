@@ -131,10 +131,7 @@ void ccruncher::Client::insertAsset(const Asset &val) throw(Exception)
 
     if (aux.getId() == val.getId())
     {
-      string msg = "Client::insertAsset(): asset identifier ";
-      msg += val.getId();
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("asset identifier " + val.getId() + " repeated");
     }
   }
 
@@ -336,7 +333,7 @@ void ccruncher::Client::insertBelongsTo(int isegmentation, int isegment) throw(E
 
   if (getSegment(isegmentation) > 0)
   {
-    throw Exception("Client::insertBelongsTo(): trying to reinsert a defined segmentation");
+    throw Exception("trying to reinsert a defined segmentation");
   }
 
   if (isegment > 0)

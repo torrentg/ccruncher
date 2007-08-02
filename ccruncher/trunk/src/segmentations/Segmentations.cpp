@@ -104,7 +104,7 @@ Segmentation& ccruncher::Segmentations::operator []  (const string &name) throw(
     }
   }
 
-  throw Exception("Segmentations::[]: segmentation " + name + " not found");
+  throw Exception("segmentation " + name + " not found");
 }
 
 //===========================================================================
@@ -114,7 +114,7 @@ void ccruncher::Segmentations::validate() throw(Exception)
 {
   if (vsegmentations.size() == 0)
   {
-    throw Exception("Segmentations::validate(): no segmentations defined");
+    throw Exception("no segmentations defined");
   }
 }
 
@@ -128,10 +128,7 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
   {
     if (vsegmentations[i].name == val.name)
     {
-      string msg = "Segmentations::insertSegmentation(): segmentation name ";
-      msg += val.name;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("segmentation name " + val.name + " repeated");
     }
   }
 

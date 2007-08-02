@@ -160,7 +160,7 @@ long ccruncher::Date::YmdToJd( const int iYear, const int iMonth, const int iDay
 
     if ( year < 0 )
         year++;
-    year_corr = ( year > 0 ? 0.0 : 0.75 );
+    year_corr = ( year > 0 ? 0.0f : 0.75f );
     if ( month <= 2 )
     {
         year--;

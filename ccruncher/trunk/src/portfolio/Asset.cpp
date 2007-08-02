@@ -411,7 +411,7 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
   // checking if date is previous to creation date
   if (val.date < date)
   {
-    throw Exception("Asset::insertDateValues(): trying to insert an event with date previous to asset creation date");
+    throw Exception("trying to insert an event with date previous to asset creation date");
   }
 
   // checking if date exist
@@ -419,7 +419,7 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
   {
     if (data[i].date == val.date)
     {
-      throw Exception("Asset::insertDateValues(): trying to insert an existent date");
+      throw Exception("trying to insert an existent date");
     }
   }
 
@@ -452,7 +452,7 @@ void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Ex
 
   if (getSegment(isegmentation) > 0)
   {
-    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined segmentation");
+    throw Exception("trying to reinsert a defined segmentation");
   }
 
   if (isegment > 0)

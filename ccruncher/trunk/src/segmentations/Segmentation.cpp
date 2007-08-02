@@ -99,7 +99,7 @@ Segment& ccruncher::Segmentation::operator []  (const string &sname) throw(Excep
     }
   }
 
-  throw Exception("Segmentation::[]: segment " + sname + " not found");
+  throw Exception("segment " + sname + " not found");
 }
 
 //===========================================================================
@@ -125,7 +125,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
 {
   if (val.name == "")
   {
-    throw Exception("Segmentation::insertSegment(): invalid name value");
+    throw Exception("trying to insert a segment with invalid name (void name)");
   }
 
   // checking coherence
@@ -133,10 +133,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
   {
     if (vsegments[i].name == val.name)
     {
-      string msg = "Segmentation::insertSegment(): segment ";
-      msg += vsegments[i].name;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("segment " + vsegments[i].name + " repeated");
     }
   }
 
@@ -145,7 +142,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
   {
     if (name != "client" && name != "asset")
     {
-      throw Exception("Segmentation::insertSegment(): invalid segment name '*'");
+      throw Exception("invalid segment name '*'");
     }
     else
     {
@@ -234,7 +231,7 @@ void ccruncher::Segmentation::addSegment(const string segname) throw(Exception)
 {
   if (modificable == false)
   {
-    throw Exception("Segmentation::addSegment(): fixed segments");
+    throw Exception("implicit segments defined. can't define other segments");
   }
   else
   {

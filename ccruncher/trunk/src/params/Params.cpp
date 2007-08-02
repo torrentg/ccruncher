@@ -255,37 +255,37 @@ void ccruncher::Params::validate(void) const throw(Exception)
 
   if (begindate == Date(1,1,1900))
   {
-    throw Exception("Params::validate(): property time.begindate not defined");
+    throw Exception("property time.begindate not defined");
   }
 
   if (steps <= 0)
   {
-    throw Exception("Params::validate(): property time.steps not defined");
+    throw Exception("property time.steps not defined");
   }
 
   if (steplength <= 0)
   {
-    throw Exception("Params::validate(): property time.steplength not defined");
+    throw Exception("property time.steplength not defined");
   }
 
   if (maxiterations < 0L)
   {
-    throw Exception("Params::validate(): property stopcriteria.maxiterations not defined");
+    throw Exception("property stopcriteria.maxiterations not defined");
   }
 
   if (maxseconds < 0L)
   {
-    throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
+    throw Exception("property stopcriteria.maxseconds not defined");
   }
 
   if (copula_type == "")
   {
-    throw Exception("Params::validate(): property copula.type not defined");
+    throw Exception("property copula.type not defined");
   }
 
   if (maxiterations == 0 && maxseconds == 0)
   {
-    throw Exception("Params::validate(): non finite stop criteria");
+    throw Exception("non finite stop criteria");
   }
 }
 

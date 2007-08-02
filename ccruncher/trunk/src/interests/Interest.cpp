@@ -189,9 +189,9 @@ double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const throw(Exc
 //===========================================================================
 void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 {
-  if (val.t < 0)
+  if (val.t < 0.0)
   {
-    throw Exception("Interest::insertRate(): invalid time value");
+    throw Exception("rate with invalid time: " + Format::double2string(val.t) + " < 0");
   }
 
   // checking consistency

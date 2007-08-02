@@ -170,7 +170,7 @@ void ccruncher::GaussianCopula::correls2sigmas(double **correlations) throw(Exce
 
   if (!def_pos)
   {
-    throw Exception("GaussianCopula::correls2sigmas(): correlation matrix not definite positive");
+    throw Exception("correlation matrix not definite positive");
   }
   else
   {

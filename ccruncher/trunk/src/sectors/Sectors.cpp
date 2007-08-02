@@ -99,7 +99,7 @@ Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
     }
   }
 
-  throw Exception("Sectors::[]: sector " + name + " not found");
+  throw Exception("sector " + name + " not found");
 }
 
 //===========================================================================
@@ -129,17 +129,11 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      string msg = "Sectors::insertSector(): sector name ";
-      msg += val.name;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("sector name " + val.name + " repeated");
     }
     else if (aux.desc == val.desc)
     {
-      string msg = "Sectors::insertSector(): sector desc ";
-      msg += val.desc;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("sector description " + val.desc + " repeated");
     }
   }
 
@@ -197,7 +191,7 @@ void ccruncher::Sectors::validations() throw(Exception)
   // checking number of sectors
   if (vsectors.size() == 0)
   {
-    throw Exception("Sectors::validations(): sectors have no elements");
+    throw Exception("sectors have no elements");
   }
 }
 

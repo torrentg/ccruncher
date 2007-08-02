@@ -43,6 +43,7 @@
 #include <jama_eig.h>
 #include <jama_lu.h>
 #include "math/PowMatrix.hpp"
+#include "utils/Format.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -82,7 +83,7 @@ double ccruncher::fpow(double x, double y) throw(Exception)
       }
       else
       {
-        throw Exception("ccruncher::fpow(): unable to pow this negative number");
+        throw Exception("unable to pow this negative number: " + Format::double2string(x) + "^" + Format::double2string(y));
       }
     }
   }
@@ -109,11 +110,11 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "PowMatrix::inverse(): unable to inverse matrix");
+    throw Exception(e, "unable to inverse matrix");
   }
   catch(...)
   {
-    throw Exception("PowMatrix::inverse(): unable to inverse matrix");
+    throw Exception("unable to inverse matrix");
   }
 }
 
@@ -157,7 +158,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
     }
     if (sum >= EPSILON)
     {
-      throw Exception("PowMatrix::pow(): imag eigenvalues");
+      throw Exception("can't pow matrix due to imaginary eigenvalues");
     }
 
     // retrieving eigenvalues and eigenvectors
@@ -191,10 +192,10 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "PowMatrix::pow(): unable to pow matrix");
+    throw Exception(e, "unable to pow matrix");
   }
   catch(...)
   {
-    throw Exception("PowMatrix::pow(): unable to pow matrix");
+    throw Exception("unable to pow matrix");
   }
 }

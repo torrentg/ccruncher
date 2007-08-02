@@ -37,6 +37,7 @@
 //===========================================================================
 
 #include <cctype>
+#include <algorithm>
 #include "utils/Strings.hpp"
 #include <cassert>
 

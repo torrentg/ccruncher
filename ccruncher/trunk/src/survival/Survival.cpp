@@ -80,7 +80,7 @@ void ccruncher::Survival::init(const Ratings &ratings_) throw(Exception)
   nratings = ratings->size();
 
   if (nratings <= 0) {
-    throw Exception("Survival::init(): invalid number of ratings");
+    throw Exception("invalid number of ratings (" + Format::int2string(nratings) + " <= 0)");
   }
   else {
     ddata = new vector<double>[nratings];
@@ -149,7 +149,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // checking rating index
   if (irating < 0 || irating > nratings)
   {
-    string msg = "Survival::insertValue(): undefined rating at <survival>: ";
+    string msg = "unknow rating at <survival>: ";
     msg += srating;
     throw Exception(msg);
   }
@@ -157,7 +157,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // validating time
   if (t < 0)
   {
-    string msg = "Survival::insertValue(): value[";
+    string msg = "survival value[";
     msg += srating;
     msg += "][";
     msg += Format::int2string(t);
@@ -168,7 +168,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // validating value
   if (value < -epsilon || value-1.0 > epsilon)
   {
-    string msg = "Survival::insertValue(): value[";
+    string msg = "survival value[";
     msg += srating;
     msg += "][";
     msg += Format::int2string(t);
@@ -180,7 +180,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // checking that is not previously defined
   if ((int) ddata[irating].size() >= t+1 && !isnan(ddata[irating][t]))
   {
-    string msg = "Survival::insertValue(): value[";
+    string msg = "survival value[";
     msg += srating;
     msg += "][";
     msg += Format::int2string(t);
@@ -265,8 +265,8 @@ void ccruncher::Survival::validate() throw(Exception)
   for (int i=0;i<nratings-1;i++)
   {
     if (ddata[i].size() <= 0) {
-      string msg = "Survival::validate(): rating ";
-      msg += (*ratings)[i].name + " haven't survival function defined";
+      string msg = "rating ";
+      msg += (*ratings)[i].name + " without survival function defined";
       throw Exception(msg);
     }
   }
@@ -280,8 +280,8 @@ void ccruncher::Survival::validate() throw(Exception)
     }
     if (fabs(ddata[i][0]-1.0) > epsilon)
     {
-      string msg = "Survival::validate(): rating ";
-      msg += (*ratings)[i].name + " have a value distinct that 1 at t=0";
+      string msg = "rating ";
+      msg += (*ratings)[i].name + " have a survival value distinct that 1 at t=0";
       throw Exception(msg);
     }
   }
@@ -294,7 +294,7 @@ void ccruncher::Survival::validate() throw(Exception)
     }
     if (fabs(ddata[nratings-1][j]) > epsilon)
     {
-      throw Exception("Survival::validate(): default rating have a survival value distinct that 0");
+      throw Exception("default rating have a survival value distinct that 0");
     }
   }
 
@@ -313,7 +313,7 @@ void ccruncher::Survival::validate() throw(Exception)
         }
         else
         {
-          string msg = "Survival::validate(): rating ";
+          string msg = "rating ";
           msg += (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
           throw Exception(msg);
         }

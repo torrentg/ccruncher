@@ -102,7 +102,7 @@ Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
     }
   }
 
-  throw Exception("Ratings::[]: rating " + name + " not found");
+  throw Exception("rating " + name + " not found");
 }
 
 //===========================================================================
@@ -132,17 +132,11 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      string msg = "Ratings::insertRating(): rating name ";
-      msg += val.name;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("rating name " + val.name + " repeated");
     }
     else if (aux.desc == val.desc)
     {
-      string msg = "Ratings::insertRating(): rating desc ";
-      msg += val.desc;
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("rating description " + val.desc + " repeated");
     }
   }
 
@@ -200,7 +194,7 @@ void ccruncher::Ratings::validations() throw(Exception)
   // checking number of ratings
   if (vratings.size() == 0)
   {
-    throw Exception("Ratings::validations(): ratings have no elements");
+    throw Exception("ratings have no elements");
   }
 }
 

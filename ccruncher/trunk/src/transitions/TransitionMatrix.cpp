@@ -90,7 +90,7 @@ void ccruncher::TransitionMatrix::init(const Ratings &ratings_) throw(Exception)
 
   if (n <= 0)
   {
-    throw Exception("TransitionMatrix::init(): invalid matrix range");
+    throw Exception("invalid transition matrix dimension (" + Format::int2string(n) + " <= 0)");
   }
 
   // initializing matrix
@@ -170,7 +170,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   // validating ratings
   if (row < 0 || col < 0)
   {
-    string msg = "TransitionMatrix::insertTransition(): undefined rating at <transition> ";
+    string msg = "undefined rating at <transition> ";
     msg += rating1;
     msg += " -> ";
     msg += rating2;
@@ -180,7 +180,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   // validating value
   if (value < -epsilon || value > (1.0 + epsilon))
   {
-    string msg = "TransitionMatrix::insertTransition(): value[";
+    string msg = " transition value[";
     msg += rating1;
     msg += "][";
     msg += rating2;
@@ -192,7 +192,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   // checking that not exist
   if (!isnan(matrix[row][col]))
   {
-    string msg = "TransitionMatrix::insertTransition(): redefined element [";
+    string msg = "redefined transition [";
     msg += rating1;
     msg += "][";
     msg += rating2;
@@ -266,7 +266,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     {
       if (matrix[i][j] == NAN)
       {
-        throw Exception("TransitionMatrix::validate(): transition matrix have an undefined element");
+        throw Exception("transition matrix have an undefined element [" + Format::int2string(i+1) + "][" + Format::int2string(j+1) + "]");
       }
     }
   }
@@ -283,7 +283,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-epsilon) || sum > (1.0+epsilon))
     {
-      throw Exception("TransitionMatrix::validate(): transition matrix row " + Format::int2string(i+1) + " not sums 1");
+      throw Exception("transition matrix row " + Format::int2string(i+1) + " don't sums 1");
     }
   }
 
@@ -300,13 +300,13 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
       }
       else
       {
-        throw Exception("TransitionMatrix::validate(): found 2 or more default ratings");
+        throw Exception("found 2 or more default ratings in transition matrix");
       }
     }
   }
   if (indexdefault < 0)
   {
-    throw Exception("TransitionMatrix::validate(): default rating not found");
+    throw Exception("default rating not found");
   }
 
   // checking property 4 (all rating can be defaulted)
@@ -325,7 +325,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (bcon == false)
     {
-      throw Exception("TransitionMatrix::validate(): property 4 not satisfied");
+      throw Exception("transition matrix: property 4 not satisfied");
     }
   }
 }

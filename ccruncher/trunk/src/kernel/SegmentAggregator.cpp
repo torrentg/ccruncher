@@ -64,6 +64,7 @@
 #include "utils/Arrays.hpp"
 #include "utils/Utils.hpp"
 #include "utils/File.hpp"
+#include "utils/Format.hpp"
 #include "kernel/SegmentAggregator.hpp"
 #include <cassert>
 
@@ -177,7 +178,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   // initial validations
   if (isegmentation == -1)
   {
-    throw Exception("SegmentAggregator::initialize(): main variables not fixed. Call define method first.");
+    throw Exception("aggregator initialized with main variables not fixed (call define method first)");
   }
 
   // setting vars values
@@ -218,7 +219,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   catch(std::exception &e)
   {
     Arrays<bool>::deallocVector(clientflag);
-    throw Exception(e, "SegmentAggregator::initialize()");
+    throw Exception(e, "error initializing aggregator");
   }
 
   Arrays<bool>::deallocVector(clientflag);
@@ -501,7 +502,7 @@ bool ccruncher::SegmentAggregator::flush() throw(Exception)
     catch(Exception e)
     {
       ofsclose();
-      throw Exception(e, "SegmentAggregator::flush()");
+      throw Exception(e, "error flushing aggregator content");
     }
 
     // closing output stream
@@ -532,7 +533,7 @@ void ccruncher::SegmentAggregator::setOutputProperties(const string &spath, cons
     buffersize = CCMAXBUFSIZE;
   }
   else {
-    throw Exception("SegmentAggregator::setOutputProperties(): invalid buffer size");
+    throw Exception("aggregator with invalid buffer size (" + Format::int2string(ibs) + " < 0)");
   }
 }
 
@@ -550,7 +551,7 @@ void ccruncher::SegmentAggregator::ofsopen() throw(Exception)
   }
   catch(...)
   {
-    throw Exception("SegmentAggregator::open(): error opening file " + getFilePath());
+    throw Exception("error opening file " + getFilePath());
   }
 }
 
@@ -565,7 +566,7 @@ void ccruncher::SegmentAggregator::ofsclose() throw(Exception)
   }
   catch(...)
   {
-    throw Exception("SegmentAggregator::open(): error closing file" + getFilePath());
+    throw Exception("error closing file" + getFilePath());
   }
 }
 
@@ -576,7 +577,7 @@ void ccruncher::SegmentAggregator::touch() throw(Exception)
 {
   if (bforce == false && access(getFilePath().c_str(), W_OK) == 0)
   {
-    throw Exception("SegmentAggregator::touch(): file " + getFilePath() + " already exist");
+    throw Exception("file " + getFilePath() + " already exist");
   }
 
   try
@@ -586,7 +587,7 @@ void ccruncher::SegmentAggregator::touch() throw(Exception)
   }
   catch(...)
   {
-    throw Exception("SegmentAggregator::touch(): error initializing file " + getFilePath());
+    throw Exception("error initializing file " + getFilePath());
   }
 }
 

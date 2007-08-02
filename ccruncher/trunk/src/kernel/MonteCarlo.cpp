@@ -1,4 +1,4 @@
-// 
+
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
@@ -227,11 +227,11 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
   if (MAXITERATIONS != 0L)
   {
-    throw Exception("MonteCarlo::initialize(): reinitialization not allowed");
+    throw Exception("Monte Carlo reinitialization not allowed");
   }
   else if (fpath == "path not set")
   {
-    throw Exception("MonteCarlo::initialize(): output files path not established");
+    throw Exception("error initializing Monte Carlo: output files path not established");
   }
 
   try
@@ -241,7 +241,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
   catch(Exception &e)
   {
     release();
-    throw Exception(e, "MonteCarlo::initialize()");
+    throw Exception(e, "error initializing Monte Carlo");
   }
 }
 

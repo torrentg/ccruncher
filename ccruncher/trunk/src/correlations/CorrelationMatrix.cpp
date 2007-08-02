@@ -75,7 +75,7 @@ void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 
   if (n <= 0)
   {
-    throw Exception("CorrelationMatrix::init(): invalid matrix range");
+    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
   }
 
   // inicializing matrix
@@ -127,7 +127,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   // checking index sector
   if (row < 0 || col < 0)
   {
-    string msg = "CorrelationMatrix::insertSigma(): undefined sector at <sigma> ";
+    string msg = "undefined sector at <sigma>, sector1=" + sector1 + ", sector2=" + sector2;
     msg += sector1;
     msg += " -> ";
     msg += sector2;
@@ -137,7 +137,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   // checking value
   if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
   {
-    string msg = "CorrelationMatrix::insertSigma(): value[";
+    string msg = "correlation value[";
     msg += sector1;
     msg += "][";
     msg += sector2;
@@ -149,7 +149,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "CorrelationMatrix::insertSigma(): redefined element [";
+    string msg = "redefined correlation [";
     msg += sector1;
     msg += "][";
     msg += sector2;
@@ -224,7 +224,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "CorrelationMatrix::validate(): undefined element [";
+        string msg = "non defined correlation element [";
         msg += Format::int2string(i+1);
         msg +=  "][";
         msg += Format::int2string(j+1);

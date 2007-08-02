@@ -97,7 +97,7 @@ Interest& ccruncher::Interests::operator []  (const string &name) throw(Exceptio
     }
   }
 
-  throw Exception("Interests::[]: interest " + name + " not found");
+  throw Exception("interest " + name + " not found");
 }
 
 //===========================================================================
@@ -114,7 +114,7 @@ void ccruncher::Interests::validate() throw(Exception)
     }
   }
 
-  throw Exception("Interests::validate(): interest spot not found");
+  throw Exception("interest 'spot' not defined");
 }
 
 //===========================================================================
@@ -127,10 +127,7 @@ void ccruncher::Interests::insertInterest(const Interest &val) throw(Exception)
   {
     if (vinterests[i].getName() == val.getName())
     {
-      string msg = "Interests::insertInterest(): interest name ";
-      msg += val.getName();
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("interest name " + val.getName() + " repeated");
     }
   }
 
