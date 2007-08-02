@@ -48,7 +48,6 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Date.hpp"
 #include "segmentations/Segment.hpp"
 
 //---------------------------------------------------------------------------

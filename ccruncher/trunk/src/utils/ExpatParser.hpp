@@ -43,7 +43,6 @@
 
 #include "utils/config.h"
 #include <expat.h>
-#include <iostream>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 

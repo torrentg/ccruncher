@@ -100,7 +100,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
 
     if (ret != tempname)
     {
-      throw Exception("File::getWorkDirectory(): unable to get work directory");
+      throw Exception("unable to retrieve current working directory");
     }
     else
     {
@@ -116,7 +116,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
   }
   catch(...)
   {
-    throw Exception("File::getWorkDirectory(): unable to get work directory");
+    throw Exception("unable to retrieve current working directory");
   }
 }
 
@@ -130,7 +130,7 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
 
   if (path.length() == 0)
   {
-    throw Exception("File::normalizePath(): non valid path (void)");
+    throw Exception("error normalizing path: non valid path (length=0)");
   }
 
   if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
@@ -218,7 +218,7 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
     code = (errno==EMLINK?"[EMLINK]":code);
     code = (errno==ENOSPC?"[ENOSPC]":code);
     code = (errno==EROFS?"[EROFS]":code);
-    throw Exception("File::makeDir(): unable to create directory " + dirname + " " + code);
+    throw Exception("unable to create directory " + dirname + " [errno=" + code + "]");
   }
 }
 
@@ -238,7 +238,7 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   if (smode == "r") mode = R_OK;
   else if (smode == "w") mode = W_OK;
   else if (smode == "rw") mode = R_OK | W_OK;
-  else throw Exception("File::checkFile(): panic. not allowed mode " + smode);
+  else throw Exception("error checking file " + pathname + ": " + smode + " is not an allowed mode");
 
   // checking file
   aux = access(pathname.c_str(), mode);
@@ -246,6 +246,7 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   // checking return code
   if (aux != 0)
   {
-    throw Exception("File::checkFile(): file " + pathname + " fails " + smode + " check");
+    throw Exception("file " + pathname + " fails " + smode + " check");
   }
 }
+

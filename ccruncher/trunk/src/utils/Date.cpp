@@ -84,7 +84,9 @@ ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(E
 {
   if (!valid(iDay, iMonth, iYear))
   {
-    throw Exception("Date::Date(int,int,int): invalid Date");
+    char buf[150];
+    sprintf(buf, "invalid Date: %i/%i/%i", iDay, iMonth, iYear);
+    throw Exception(buf);
   }
 
   lJulianDay = YmdToJd( iYear, iMonth, iDay );
@@ -117,7 +119,7 @@ ccruncher::Date::Date(const string &str) throw(Exception)
 
   if (tokens.size() != 3)
   {
-    throw Exception("Date::Date(str): num tokens distinct 3");
+    throw Exception("invalid date: " + str + " (num tokens distinct than 3)");
   }
 
   try
@@ -128,12 +130,12 @@ ccruncher::Date::Date(const string &str) throw(Exception)
   }
   catch(Exception &e)
   {
-    throw Exception(e, "Date::Date(str): invalid day or month or year");
+    throw Exception(e, "invalid date: " + str + " (non valid values)");
   }
 
   if (!valid(d, m, y))
   {
-    throw Exception("Date::Date(str): invalid Date");
+    throw Exception("invalid Date: " + str + " (non valid date)");
   }
   else
   {

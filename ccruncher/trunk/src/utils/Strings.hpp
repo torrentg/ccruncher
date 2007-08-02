@@ -39,14 +39,12 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "utils/Exception.hpp"
 #include <vector>
 #include <string>
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------

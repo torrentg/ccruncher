@@ -51,8 +51,6 @@
 //
 //===========================================================================
 
-#include <cmath>
-#include <algorithm>
 #include "segmentations/Segmentations.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>

@@ -46,6 +46,7 @@
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
+#include "math/GaussianCopula.hpp"
 
 //---------------------------------------------------------------------------
 

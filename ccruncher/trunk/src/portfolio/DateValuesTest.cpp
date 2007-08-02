@@ -36,7 +36,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "portfolio/DateValuesTest.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"

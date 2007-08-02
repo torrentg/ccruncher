@@ -51,6 +51,7 @@
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
 #include "segmentations/Segmentations.hpp"
+#include "interests/Interests.hpp"
 
 //---------------------------------------------------------------------------
 

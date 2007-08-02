@@ -75,7 +75,6 @@
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/ExpatParser.hpp"
-#include "utils/Timer.hpp"
 #include <gzstream.h>
 #include <cassert>
 
@@ -143,7 +142,7 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
   try
   {
     // gziped file stream, if file isn't a gzip, is like a ifstream
-    igzstream  xmlstream((const char *) xmlfilename.c_str());
+    igzstream xmlstream((const char *) xmlfilename.c_str());
 
     if (!xmlstream.good())
     {

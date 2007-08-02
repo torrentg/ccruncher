@@ -64,7 +64,6 @@
 #include <vector>
 #include "interests/Interest.hpp"
 #include "interests/Interests.hpp"
-#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"

@@ -51,7 +51,6 @@
 
 #include "sectors/Sector.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Format.hpp"
 
 //===========================================================================
 // reset

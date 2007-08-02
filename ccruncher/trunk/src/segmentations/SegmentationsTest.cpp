@@ -42,9 +42,6 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include "segmentations/Segment.hpp"
-#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "segmentations/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"

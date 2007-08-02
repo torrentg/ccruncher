@@ -35,7 +35,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <ctime>
 #include <cstdlib>
 #include "math/Normal.hpp"
 

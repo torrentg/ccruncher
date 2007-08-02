@@ -52,7 +52,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "params/Params.hpp"
 #include "params/ParamsTest.hpp"
 #include "utils/ExpatParser.hpp"

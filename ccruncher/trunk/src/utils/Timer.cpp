@@ -41,6 +41,7 @@
 //===========================================================================
 
 #include "utils/Timer.hpp"
+#include <ctime>
 #include <cmath>
 #include <cstdio>
 #include <cassert>

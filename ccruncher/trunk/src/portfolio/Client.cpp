@@ -65,8 +65,6 @@
 //
 //===========================================================================
 
-#include <cmath>
-#include <algorithm>
 #include "portfolio/Client.hpp"
 #include "utils/Utils.hpp"
 #include <cassert>

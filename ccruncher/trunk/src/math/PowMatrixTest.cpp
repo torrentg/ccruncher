@@ -56,7 +56,6 @@
 #include "math/PowMatrix.hpp"
 #include "math/PowMatrixTest.hpp"
 #include "utils/Arrays.hpp"
-#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 

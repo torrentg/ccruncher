@@ -45,7 +45,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "sectors/Sectors.hpp"
 #include "sectors/SectorsTest.hpp"
 #include "utils/ExpatParser.hpp"

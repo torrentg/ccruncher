@@ -43,7 +43,6 @@
 
 #include "utils/config.h"
 #include "utils/ExpatUserData.hpp"
-#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -51,6 +50,8 @@
 using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
+
+class ExpatUserData; // defined in file ExpatUserData.hpp
 
 //---------------------------------------------------------------------------
 

@@ -48,7 +48,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "transitions/TransitionMatrix.hpp"
 #include "transitions/TransitionMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"

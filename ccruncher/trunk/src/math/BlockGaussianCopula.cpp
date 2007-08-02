@@ -31,7 +31,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <ctime>
 #include <cfloat>
 #include <cstdlib>
 #include "math/Normal.hpp"

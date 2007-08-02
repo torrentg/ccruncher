@@ -59,7 +59,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "portfolio/Client.hpp"
 #include "portfolio/ClientTest.hpp"
 #include "utils/ExpatParser.hpp"

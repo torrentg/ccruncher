@@ -118,8 +118,13 @@ const char * ccruncher::Exception::what() const throw()
 //===========================================================================
 ostream & ccruncher::operator << (ostream& os, Exception const &e)
 {
-  os << "\nException: " << e.toString() << "\n" << e.getStackTrace() << endl;
-
+  os << "\nException: " << e.toString();
+  string stacktrace = e.getStackTrace();
+  if (stacktrace == "") {
+    os << endl;
+    os << stacktrace;
+  }
+  os << endl;
   return os;
 }
 
@@ -218,3 +223,4 @@ string ccruncher::Exception::getStackTrace() const
 {
   return stacktrace;
 }
+

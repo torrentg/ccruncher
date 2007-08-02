@@ -44,7 +44,6 @@
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "sectors/Sectors.hpp"

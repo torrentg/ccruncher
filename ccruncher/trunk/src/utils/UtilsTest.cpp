@@ -34,7 +34,6 @@
 #include <string>
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"
-#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp

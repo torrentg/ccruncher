@@ -118,6 +118,7 @@
 #include <cfloat>
 #include <MersenneTwister.h>
 #include "kernel/MonteCarlo.hpp"
+#include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/GaussianCopula.hpp"
 #include "utils/Utils.hpp"
@@ -125,6 +126,7 @@
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
+#include "utils/File.hpp"
 #include <cassert>
 
 #ifdef USE_MPI
@@ -354,7 +356,7 @@ void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int is
   // checking that exist clients to simulate
   if (N == 0)
   {
-    throw Exception("MonteCarlo::init(): 0 borrowers to simulate");
+    throw Exception("error initializing borrowers: 0 borrowers to simulate");
   }
 
   // setting client object
@@ -539,7 +541,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     }
 
     // copula deallocated by release method
-    throw Exception(e, "MonteCarlo::initCopula()");
+    throw Exception(e, "error ocurred while initializing copula");
   }
 
   // if no seed is given /dev/urandom or time() will be used
@@ -765,7 +767,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
   }
   catch(Exception &e)
   {
-    throw Exception(e, "MonteCarlo::execute()");
+    throw Exception(e, "error ocurred while executing Monte Carlo");
   }
 
 #ifdef USE_MPI
@@ -880,7 +882,7 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 
       // other messages cause errors
       default:
-        throw Exception("executeCollector: unexpected MPI tag");
+        throw Exception("unexpected MPI tag");
     }
   }
 

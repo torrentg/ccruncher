@@ -63,6 +63,7 @@
 #include <cmath>
 #include "utils/Arrays.hpp"
 #include "utils/Utils.hpp"
+#include "utils/File.hpp"
 #include "kernel/SegmentAggregator.hpp"
 #include <cassert>
 

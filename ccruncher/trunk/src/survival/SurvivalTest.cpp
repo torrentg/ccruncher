@@ -48,7 +48,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
 #include "math/GaussianCopula.hpp"

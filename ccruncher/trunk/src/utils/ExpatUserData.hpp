@@ -35,16 +35,18 @@
 
 //---------------------------------------------------------------------------
 
+#include "utils/config.h"
+#include "utils/ExpatHandlers.hpp"
 #include <stack>
-#include <vector>
+#include <string>
 #include <expat.h>
-#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
+
+class ExpatHandlers; // defined in file ExpatHandlers.hpp
 
 //---------------------------------------------------------------------------
 
@@ -62,18 +64,19 @@ class ExpatUserData
     class ExpatUserDataToken
     {
       public:
-        /** constructor */
-        ExpatUserDataToken(string &n, ExpatHandlers *h)
-        {
-          name = n;
-          handlers = h;
-        }
 
         /** token name related to handler */
         string name;
 
         /** pointer to class handlers container */
         ExpatHandlers *handlers;
+
+        /** constructor */
+        ExpatUserDataToken(string &n, ExpatHandlers *h)
+        {
+          name = n;
+          handlers = h;
+        }
     };
 
 

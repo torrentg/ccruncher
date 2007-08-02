@@ -144,12 +144,12 @@ int main(int argc, char *argv[])
   }
   catch(Exception &e)
   {
-    cerr << e;
+    cerr << e << endl;
     return shutdown(1);
   }
   catch(...)
   {
-    cerr << "unknow error";
+    cerr << "unknow error" << endl;
     return shutdown(1);
   }
 
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gerard@mail.generacio.com\n";
+                  "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
           return shutdown(1);
     }
   }
@@ -276,13 +276,13 @@ int main(int argc, char *argv[])
   }
   catch(Exception &e)
   {
-    cerr << e;
+    cerr << endl << e << endl;
     return shutdown(1);
   }
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gerard@mail.generacio.com\n";
+            "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
     return shutdown(1);
   }
 
@@ -497,3 +497,4 @@ void copyright()
   "               http://www.generacio.com/ccruncher\n"
   << endl;
 }
+

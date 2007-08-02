@@ -44,8 +44,6 @@
 #include <sstream>
 #include "utils/Parser.hpp"
 
-using namespace ccruncher;
-
 //===========================================================================
 // parse an integer
 //===========================================================================
@@ -68,13 +66,13 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
   }
   catch(Exception)
   {
-    throw Exception("Parser::intValue(): invalid number");
+    throw Exception("error parsing integer value " + string(pnum) + ": not a number");
   }
 
   // checking that is an integer
   if (aux < INT_MIN || INT_MAX < aux)
   {
-    throw Exception("Parser::intValue(): value out of range");
+    throw Exception("error parsing integer value " + string(pnum) + ": value out of range");
   }
   else
   {
@@ -106,7 +104,7 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
   // checking that is a long
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
-    throw Exception("Parser::longValue(): invalid long number");
+    throw Exception("error parsing long value " + string(pnum) + ": not a number");
   }
   else
   {
@@ -138,7 +136,7 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   // checking that is a double
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
-    throw Exception("Parser::doubleValue(): invalid double value");
+    throw Exception("error parsing double value " + string(pnum) + ": not a number");
   }
   else
   {
@@ -181,7 +179,7 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
   }
   else
   {
-    throw Exception("Parser::boolValue(): invalid boolean value");
+    throw Exception("error parsing boolean value " + str + " : distinct than 'true' or 'false'");
   }
 }
 
@@ -200,6 +198,7 @@ bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
   }
   else
   {
-    throw Exception("Parser::boolValue(): invalid boolean value");
+    throw Exception("error parsing boolean value " + string(cstr) + " : distinct than 'true' or 'false'");
   }
 }
+

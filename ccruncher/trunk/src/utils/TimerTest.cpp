@@ -36,7 +36,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include <cmath>
 #include "utils/Timer.hpp"
 #include "utils/TimerTest.hpp"

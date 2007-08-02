@@ -44,7 +44,6 @@
 
 #include <cmath>
 #include <cfloat>
-#include <algorithm>
 #include "portfolio/DateValues.hpp"
 
 //===========================================================================

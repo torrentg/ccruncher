@@ -52,17 +52,13 @@
 
 #include "utils/config.h"
 #include <map>
-#include <algorithm>
 #include "portfolio/Asset.hpp"
-#include "portfolio/DateValues.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
-#include "interests/Interest.hpp"
-#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------

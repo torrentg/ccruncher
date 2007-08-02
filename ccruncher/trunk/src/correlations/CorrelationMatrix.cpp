@@ -62,7 +62,6 @@
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
-#include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
 // private initializator

@@ -42,11 +42,9 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include <string>
 #include "utils/Date.hpp"
 #include "utils/DateTest.hpp"
-#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp

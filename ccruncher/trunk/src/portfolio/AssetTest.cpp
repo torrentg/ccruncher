@@ -64,8 +64,6 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include <algorithm>
 #include "portfolio/Asset.hpp"
 #include "portfolio/AssetTest.hpp"
 #include "utils/Date.hpp"

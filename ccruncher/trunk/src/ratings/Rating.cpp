@@ -47,7 +47,6 @@
 
 #include "ratings/Rating.hpp"
 #include "utils/Strings.hpp"
-#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor

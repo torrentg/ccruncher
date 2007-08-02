@@ -43,7 +43,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <algorithm>
 #include "interests/Interests.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>

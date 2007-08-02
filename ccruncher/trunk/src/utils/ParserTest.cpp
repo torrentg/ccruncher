@@ -39,9 +39,6 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include <string>
-#include <climits>
 #include "utils/Parser.hpp"
 #include "utils/ParserTest.hpp"
 

@@ -52,7 +52,6 @@
 //===========================================================================
 
 #include <cstring>
-#include <map>
 #include <cstdio>
 #include <sstream>
 #include "utils/ExpatParser.hpp"

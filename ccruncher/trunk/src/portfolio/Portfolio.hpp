@@ -45,7 +45,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <algorithm>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"

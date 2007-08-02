@@ -39,6 +39,7 @@
 //
 //===========================================================================
 
+#include <iostream>
 #include "utils/Logger.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>

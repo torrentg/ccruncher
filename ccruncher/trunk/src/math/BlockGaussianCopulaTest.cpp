@@ -34,15 +34,13 @@
 #include <cmath>
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockGaussianCopulaTest.hpp"
-#include "math/Normal.hpp"
 #include "utils/Arrays.hpp"
-#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 #define NITERS 100000
 #define EPSILON  0.1
-#define NTALLS   100
+#define NBINS 100
 
 //===========================================================================
 // setUp
@@ -164,12 +162,12 @@ void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula
 {
   double x, y;
   int a, b;
-  int hits[NTALLS+1][NTALLS+1];
+  int hits[NBINS+1][NBINS+1];
 
   // initializing counters
-  for(int i=0;i<(NTALLS+1);i++)
+  for(int i=0;i<(NBINS+1);i++)
   {
-    for(int j=0;j<(NTALLS+1);j++)
+    for(int j=0;j<(NBINS+1);j++)
     {
       hits[i][j] = 0;
     }
@@ -183,20 +181,20 @@ void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula
     x = copula.get(0);
     y = copula.get(1);
 
-    a = (int)(x*NTALLS);
-    b = (int)(y*NTALLS);
+    a = (int)(x*NBINS);
+    b = (int)(y*NBINS);
 
     hits[a][b]++;
   }
 
   // plotting histogram
-  for(int i=0;i<NTALLS;i++)
+  for(int i=0;i<NBINS;i++)
   {
-    x = (double)(i)/(double)(NTALLS);
+    x = (double)(i)/(double)(NBINS);
 
-    for(int j=0;j<NTALLS;j++)
+    for(int j=0;j<NBINS;j++)
     {
-      y = (double)(j)/(double)(NTALLS);
+      y = (double)(j)/(double)(NBINS);
 
       cout << x << "\t" << y << "\t" << hits[i][j] << endl;
     }

@@ -36,8 +36,6 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include <string>
 #include "math/Normal.hpp"
 #include <MersenneTwister.h>
 #include "math/MersenneTwisterTest.hpp"

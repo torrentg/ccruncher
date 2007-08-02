@@ -35,7 +35,6 @@
 
 #include <iostream>
 #include <cmath>
-#include <string>
 #include "utils/Arrays.hpp"
 #include "utils/ArraysTest.hpp"
 

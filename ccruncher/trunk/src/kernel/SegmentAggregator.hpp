@@ -56,16 +56,13 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
-#include <iomanip>
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
-#include "utils/File.hpp"
 #include "utils/Timer.hpp"
 #include "portfolio/Client.hpp"
-#include "portfolio/DateValues.hpp"
-#include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
 

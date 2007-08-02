@@ -46,7 +46,6 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include "ratings/Ratings.hpp"
 #include "ratings/RatingsTest.hpp"
 #include "utils/ExpatParser.hpp"

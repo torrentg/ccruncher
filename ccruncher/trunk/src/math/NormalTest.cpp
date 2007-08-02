@@ -36,8 +36,6 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include <string>
 #include <cmath>
 #include "math/Normal.hpp"
 #include "math/NormalTest.hpp"

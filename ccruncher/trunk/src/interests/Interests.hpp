@@ -45,7 +45,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <algorithm>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "interests/Interest.hpp"

@@ -36,11 +36,8 @@
 //
 //===========================================================================
 
-#include <iostream>
-#include <string>
 #include "utils/File.hpp"
 #include "utils/FileTest.hpp"
-#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp
