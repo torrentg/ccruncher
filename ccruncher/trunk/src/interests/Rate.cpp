@@ -85,12 +85,16 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
     }
     else
     {
-      t = getDoubleAttribute(attributes, "t", -1.0);
-      r = getDoubleAttribute(attributes, "r", -1.0);
+      t = getDoubleAttribute(attributes, "t", -99.0);
+      r = getDoubleAttribute(attributes, "r", -99.0);
 
-      if (t <= -1.0+1E-14 || r <= -1.0+1E-14)
+      if (t == -99.0 || r == -99.0)
       {
         throw Exception("invalid attributes values at <rate>");
+      }
+      else if (r < -0.5 || 1.0 < r)
+      {
+        throw Exception("rate value " + Format::double2string(r) + " out of range [-0.5, +1.0]");
       }
     }
   }
