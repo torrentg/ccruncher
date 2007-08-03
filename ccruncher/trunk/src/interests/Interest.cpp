@@ -52,6 +52,7 @@
 #include "interests/Interest.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
+#include <cassert>
 
 // --------------------------------------------------------------------------
 
@@ -118,28 +119,28 @@ Date ccruncher::Interest::getDate0() const
 //===========================================================================
 double ccruncher::Interest::getValue(const double t) const
 {
-  Rate aux = vrates[0];
+  unsigned int n = vrates.size();
 
-  if (t <= aux.t)
+  if (t <= vrates[0].t)
   {
-    return aux.r;
+    return vrates[0].r;
+  }
+  else if (vrates[n-1].t <= t)
+  {
+    return vrates[n-1].r;
   }
   else
   {
-    for(unsigned int i=1;i<vrates.size();i++)
+    for(register unsigned int i=1;i<n;i++)
     {
-      aux = vrates[i];
-
-      if (t <= aux.t)
+      if (t <= vrates[i].t)
       {
-        Rate prev = vrates[i-1];
-
-        return prev.r + (t-prev.t)*(aux.r - prev.r)/(aux.t - prev.t);
+        return vrates[i-1].r + (t-vrates[i-1].t)*(vrates[i].r - vrates[i-1].r)/(vrates[i].t - vrates[i-1].t);
       }
     }
 
-    aux = vrates[vrates.size()-1];
-    return aux.r;
+    assert(false);
+    return vrates[n-1].r;
   }
 }
 
@@ -154,7 +155,7 @@ Date ccruncher::Interest::idx2date(int t) const
 //===========================================================================
 // returns index of date date1
 //===========================================================================
-double ccruncher::Interest::date2idx(Date &date1) const
+inline double ccruncher::Interest::date2idx(Date &date1) const
 {
   return (double)(date1-date0)/30.3958;
 }
@@ -164,7 +165,7 @@ double ccruncher::Interest::date2idx(Date &date1) const
 // r: interest rate to apply
 // t: time (in months)
 //===========================================================================
-double ccruncher::Interest::getUpsilon(const double r, const double t) const
+inline double ccruncher::Interest::getUpsilon(const double r, const double t) const
 {
   return pow(1.0 + r, t/12.0);
 }
@@ -173,7 +174,7 @@ double ccruncher::Interest::getUpsilon(const double r, const double t) const
 // returns factor to aply to transport a money value from date1 to date2
 // satisfying interest curve rate values
 //===========================================================================
-double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const throw(Exception)
+double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
@@ -201,7 +202,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 
     if (fabs(aux.t-val.t) < EPSILON)
     {
-      string msg = "Interest::insertRate(): time ";
+      string msg = "rate time ";
       msg += Format::double2string(val.t);
       msg += " repeated";
       throw Exception(msg);

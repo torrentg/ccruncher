@@ -99,7 +99,7 @@ class Interest : public ExpatHandlers
     // returns initial date
     Date getDate0() const;
     // returns upsilon value
-    double getUpsilon(Date &date1, Date &date2) const throw(Exception);
+    double getUpsilon(Date &date1, Date &date2) const;
     // seriealize object content as xml
     string getXML(int) const throw(Exception);
     // reset object content

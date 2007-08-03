@@ -140,6 +140,112 @@ Date max(const Date&, const Date&);
 
 }
 
+//===========================================================================
+// asignation operator
+//===========================================================================
+inline Date& ccruncher::Date::operator=( const Date& Orig )
+{
+    lJulianDay = Orig.lJulianDay;
+    return *this;
+}
+
+//===========================================================================
+// adds the number of days in the integral type to the Date
+//===========================================================================
+inline Date ccruncher::operator+( const Date& Left, const long Right )
+{
+    Date Temp = Left;
+    Temp.lJulianDay += Right;
+    return Temp;
+}
+inline Date ccruncher::operator+( const long Left, const Date& Right )
+{
+    Date Temp = Right;
+    Temp.lJulianDay += Left;
+    return Temp;
+}
+inline Date& ccruncher::Date::operator+=( const long Right )
+{
+    lJulianDay += Right;
+    return *this;
+}
+inline Date& ccruncher::Date::operator++()
+{
+    lJulianDay++;
+    return *this;
+}
+inline Date ccruncher::Date::operator++( int )
+{
+    Date Temp = *this;
+    lJulianDay++;
+    return Temp;
+}
+
+//===========================================================================
+// subtracts two dates yields the difference between them in days.
+//===========================================================================
+inline Date ccruncher::operator-( const Date& Left, const long Right )
+{
+    Date Temp = Left;
+    Temp.lJulianDay -= Right;
+    return Temp;
+}
+inline Date ccruncher::operator-( const long Left, const Date& Right )
+{
+    Date Temp = Right;
+    Temp.lJulianDay -= Left;
+    return Temp;
+}
+inline Date& ccruncher::Date::operator-=( const long Right )
+{
+    lJulianDay -= Right;
+    return *this;
+}
+inline long ccruncher::Date::operator-( const Date& Right )
+{
+    return lJulianDay - Right.lJulianDay;
+}
+inline Date& ccruncher::Date::operator--()
+{
+    lJulianDay--;
+    return *this;
+}
+inline Date ccruncher::Date::operator--( int )
+{
+    Date Temp = *this;
+    lJulianDay--;
+    return Temp;
+}
+
+//===========================================================================
+// comparison operators
+// non-zero if the comparison succeeds 0 if it fails
+//===========================================================================
+inline int ccruncher::Date::operator==( const Date& Right ) const
+{
+    return lJulianDay == Right.lJulianDay;
+}
+inline int ccruncher::Date::operator!=( const Date& Right ) const
+{
+    return lJulianDay != Right.lJulianDay;
+}
+inline int ccruncher::Date::operator<( const Date& Right ) const
+{
+    return lJulianDay < Right.lJulianDay;
+}
+inline int ccruncher::Date::operator<=( const Date& Right ) const
+{
+    return lJulianDay <= Right.lJulianDay;
+}
+inline int ccruncher::Date::operator>( const Date& Right ) const
+{
+    return lJulianDay > Right.lJulianDay;
+}
+inline int ccruncher::Date::operator>=( const Date& Right ) const
+{
+    return lJulianDay >= Right.lJulianDay;
+}
+
 //---------------------------------------------------------------------------
 
 #endif
