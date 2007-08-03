@@ -18,7 +18,7 @@
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveClients" value="true"/>
+    <property name="portfolio.onlyActiveBorrowers" value="true"/>
   </params>
 
   <!-- ============================================================== -->
@@ -81,20 +81,20 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <client rating="A" sector="S1" name="001" id="001">
+    <borrower rating="A" sector="S1" name="001" id="001">
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
-    </client>
-    <client rating="A" sector="S1" name="002" id="002">
+    </borrower>
+    <borrower rating="A" sector="S1" name="002" id="002">
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
-    </client>
+    </borrower>
   </portfolio>
 
 </ccruncher>

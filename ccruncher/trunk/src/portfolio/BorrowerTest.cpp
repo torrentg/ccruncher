@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ClientTest.cpp - ClientTest code - $Rev$
+// BorrowerTest.cpp - BorrowerTest code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -57,16 +57,19 @@
 //   . removed sector.order tag
 //   . added asset creation date
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
-#include "portfolio/Client.hpp"
-#include "portfolio/ClientTest.hpp"
+#include "portfolio/Borrower.hpp"
+#include "portfolio/BorrowerTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::ClientTest::setUp()
+void ccruncher_test::BorrowerTest::setUp()
 {
   // nothing to do
 }
@@ -74,7 +77,7 @@ void ccruncher_test::ClientTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::ClientTest::tearDown()
+void ccruncher_test::BorrowerTest::tearDown()
 {
   // nothing to do
 }
@@ -82,7 +85,7 @@ void ccruncher_test::ClientTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ccruncher_test::ClientTest::getRatings()
+Ratings ccruncher_test::BorrowerTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
@@ -106,7 +109,7 @@ Ratings ccruncher_test::ClientTest::getRatings()
 //===========================================================================
 // getSectors
 //===========================================================================
-Sectors ccruncher_test::ClientTest::getSectors()
+Sectors ccruncher_test::BorrowerTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
@@ -127,22 +130,22 @@ Sectors ccruncher_test::ClientTest::getSectors()
 //===========================================================================
 // getSegmentations1
 //===========================================================================
-Segmentations ccruncher_test::ClientTest::getSegmentations()
+Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 {
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='client' components='client'>\n\
+    <segmentation name='borrower' components='borrower'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='asset' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sector' components='client'>\n\
+    <segmentation name='sector' components='borrower'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='client'>\n\
+    <segmentation name='size' components='borrower'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
@@ -170,11 +173,11 @@ Segmentations ccruncher_test::ClientTest::getSegmentations()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::ClientTest::test1()
+void ccruncher_test::BorrowerTest::test1()
 {
-  // client definition
+  // borrower definition
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
+    <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
       <belongs-to segmentation='sector' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
@@ -201,30 +204,30 @@ void ccruncher_test::ClientTest::test1()
           <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
-    </client>";
+    </borrower>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // client creation
+  // borrower creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests;
-  Client client(ratings, sectors, segmentations, interests);
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &client));
+  Borrower borrower(ratings, sectors, segmentations, interests);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
 
   // assertions
-  ASSERT(client.id == "cif1");
-  ASSERT(client.name == "cliente1");
-  ASSERT(client.irating == 0);
-  ASSERT(client.isector == 1);
+  ASSERT(borrower.id == "cif1");
+  ASSERT(borrower.name == "Borrower1");
+  ASSERT(borrower.irating == 0);
+  ASSERT(borrower.isector == 1);
 
-  ASSERT(client.belongsTo(1, 1));
-  ASSERT(client.belongsTo(3, 2));
-  ASSERT(client.belongsTo(4, 1));
+  ASSERT(borrower.belongsTo(1, 1));
+  ASSERT(borrower.belongsTo(3, 2));
+  ASSERT(borrower.belongsTo(4, 1));
 
-  vector<Asset> &assets = client.getAssets();
+  vector<Asset> &assets = borrower.getAssets();
 
   ASSERT(2 == assets.size());
   ASSERT(assets[0].getId() == "op1");
@@ -234,11 +237,11 @@ void ccruncher_test::ClientTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::ClientTest::test2()
+void ccruncher_test::BorrowerTest::test2()
 {
-  // client definition with invalid rating
+  // borrower definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <client rating='K' sector='S2' name='cliente1' id='cif1'>\n\
+    <borrower rating='K' sector='S2' name='Borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -259,28 +262,28 @@ void ccruncher_test::ClientTest::test2()
           <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
-    </client>";
+    </borrower>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // client creation
+  // borrower creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests;
-  Client client(ratings, sectors, segmentations, interests);
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
+  Borrower borrower(ratings, sectors, segmentations, interests);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::ClientTest::test3()
+void ccruncher_test::BorrowerTest::test3()
 {
-  // client definition with invalid asset (data repeated)
+  // borrower definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
-    <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
+    <borrower rating='A' sector='S2' name='borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -301,16 +304,16 @@ void ccruncher_test::ClientTest::test3()
           <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
         </data>\n\
       </asset>\n\
-    </client>";
+    </borrower>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // client creation
+  // borrower creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests;
-  Client client(ratings, sectors, segmentations, interests);
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &client));
+  Borrower borrower(ratings, sectors, segmentations, interests);
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }

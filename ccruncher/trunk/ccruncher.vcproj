@@ -245,10 +245,10 @@
 					RelativePath="src\portfolio\Asset.hpp">
 				</File>
 				<File
-					RelativePath="src\portfolio\Client.cpp">
+					RelativePath="src\portfolio\Borrower.cpp">
 				</File>
 				<File
-					RelativePath="src\portfolio\Client.hpp">
+					RelativePath="src\portfolio\Borrower.hpp">
 				</File>
 				<File
 					RelativePath="src\portfolio\DateValues.cpp">

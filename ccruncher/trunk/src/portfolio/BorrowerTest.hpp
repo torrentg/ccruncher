@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ClientTest.hpp - ClientTest header - $Rev$
+// BorrowerTest.hpp - BorrowerTest header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -34,10 +34,13 @@
 // 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
-#ifndef _ClientTest_
-#define _ClientTest_
+#ifndef _BorrowerTest_
+#define _BorrowerTest_
 
 //---------------------------------------------------------------------------
 
@@ -54,7 +57,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class ClientTest : public TestFixture<ClientTest>
+class BorrowerTest : public TestFixture<BorrowerTest>
 {
 
   private:
@@ -70,7 +73,7 @@ class ClientTest : public TestFixture<ClientTest>
 
   public:
 
-    TEST_FIXTURE(ClientTest)
+    TEST_FIXTURE(BorrowerTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -82,7 +85,7 @@ class ClientTest : public TestFixture<ClientTest>
 
 };
 
-REGISTER_FIXTURE(ClientTest);
+REGISTER_FIXTURE(BorrowerTest);
 
 //---------------------------------------------------------------------------
 

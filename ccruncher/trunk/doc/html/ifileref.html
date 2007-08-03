@@ -10,11 +10,19 @@
   </head>
 
   <body>
+    <div id="main-container">
+  	<div id="page-header">
+	  	<img style="margin-top:30px; margin-left:20px;" src="http://www.generacio.com/ccwi-static/logo.png" alt="logo"/>
+  	</div>
+  	<br/>
 
-    <h1>CreditCruncher - Input File Reference</h1>
+<!-- ==================================================== -->
+<!--    introduction                                      -->
+<!-- ==================================================== -->
+    <h1>Input File Reference</h1>
 
     <p>
-      This document describes the xml input file for CreditCruncher-1.0.
+      This document describes the xml input file for CCruncher-1.1.
       In the distribution package you can find the DTD, the XSD and some XML 
       samples into the $CCRUNCHER/samples directory.
       <br /><br />
@@ -40,8 +48,8 @@
 <!-- ==================================================== -->
 <!--    params section                                    -->
 <!-- ==================================================== -->
-
-    <h2>Section Params</h2>
+    <br/>
+    <h1>Section Params</h1>
 
     <p>
       This section shows the properties of the problem that need to
@@ -61,7 +69,7 @@
     &lt;property name="copula.type" value="gaussian"/&gt;
     &lt;property name="copula.seed" value="387650932874"/&gt;
     &lt;property name="montecarlo.antithetic" value="false"/&gt;
-    &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
+    &lt;property name="portfolio.onlyActiveBorrowers" value="true"/&gt;
   &lt;/params&gt;
     </pre>
 
@@ -76,7 +84,7 @@
       <tr class="b">
         <td style="text-align:center;">time.begindate</td>
         <td style="text-align:justify;">
-          Starting date of the simulation. Initial client ratings are referred to this 
+          Starting date of the simulation. Initial borrowers ratings are referred to this 
           date. The format of this attribute is: DD/MM/YYYY.
         </td>
         <td style="text-align:center;"><code>date</code></td>
@@ -143,11 +151,11 @@
         <td style="text-align:center;"><code>boolean</code></td>
       </tr>
       <tr class="b">
-        <td style="text-align:center;">portfolio.onlyActiveClients</td>
+        <td style="text-align:center;">portfolio.onlyActiveBorrowers</td>
         <td style="text-align:justify;">
-          If you want to simulate all the clients, even clients without
+          If you want to simulate all the borrowers, even borrowers without
           risk along the time range, type 'false'. If you want to simulate
-          only active clients along the simulation period type 'true'. We 
+          only active borrowers along the simulation period type 'true'. We 
           suggest writing always 'true'.
         </td>
         <td style="text-align:center;"><code>boolean</code></td>
@@ -157,8 +165,8 @@
 <!-- ==================================================== -->
 <!--    interests section                                 -->
 <!-- ==================================================== -->
-
-    <h2>Section Interests</h2>
+    <br/>
+    <h1>Section Interests</h1>
 
     <p>
       This section shows how to define the interest rates curves used to 
@@ -239,8 +247,8 @@
 <!-- ==================================================== -->
 <!--    ratings section                                   -->
 <!-- ==================================================== -->
-
-    <h2>Section Ratings</h2>
+    <br/>
+    <h1>Section Ratings</h1>
 
     <p>
       This section shows how to define the ratings. A minimum of two ratings
@@ -271,7 +279,7 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Rating identifier. All references to a rating (eg. client rating) 
+          Rating identifier. All references to a rating (eg. borrower rating) 
           are made using this field. Includes default rating in this list.
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -289,8 +297,8 @@
 <!-- ==================================================== -->
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
-
-    <h2>Section Transition Matrix</h2>
+    <br/>
+    <h1>Section Transition Matrix</h1>
 
     <p>
       This section shows how to define the transition matrix used by ccruncher. ccruncher always
@@ -396,8 +404,8 @@
 <!-- ==================================================== -->
 <!--    survival section                                  -->
 <!-- ==================================================== -->
-
-    <h2>Section Survival Function</h2>
+    <br/>
+    <h1>Section Survival Function</h1>
 
     <p>
       This section contains the survival function for each rating. If this 
@@ -480,7 +488,7 @@
       <tr class="a">
         <td style="text-align:center;">value</td>
         <td style="text-align:justify;">
-          Probability that a client with initial rating <i>rating</i> 
+          Probability that a borrower with initial rating <i>rating</i> 
           survives (non-defaulted) at time <i>t</i>. It is a value between 
           0 and 1.
         </td>
@@ -491,8 +499,8 @@
 <!-- ==================================================== -->
 <!--    sectors section                                   -->
 <!-- ==================================================== -->
-
-    <h2>Section Sectors</h2>
+    <br/>
+    <h1>Section Sectors</h1>
 
     <p>
       This section shows how to define the sectors. A minimum of one sector
@@ -520,7 +528,7 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Sector identifier. All references to a sector (eg. client 
+          Sector identifier. All references to a sector (eg. borrower 
           sector) are made using this field.
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -538,8 +546,8 @@
 <!-- ==================================================== -->
 <!--    correlations section                              -->
 <!-- ==================================================== -->
-
-    <h2>Section Correlations</h2>
+    <br/>
+    <h1>Section Correlations</h1>
 
     <p>
       This section shows how to define the correlation matrix between sectors.
@@ -614,22 +622,22 @@
 <!-- ==================================================== -->
 <!--    segmentations section                             -->
 <!-- ==================================================== -->
-
-    <h2>Segmentations</h2>
+    <br/>
+    <h1>Section Segmentations</h1>
 
     <p>
       This section shows how to define segmentations. Segmentations
       allow you to analyze your portfolio's risk according to a hierarchical organization
       or another type of segmentation. A segmentation is composed by segments.
       There are 2 types of segmentations depending on the class of elements 
-      which a segmentation contains; client segmentations (eg. sector, client size, initial
+      which a segmentation contains; borrower segmentations (eg. sector, borrower size, initial
       rating, etc.) and asset segmentations (eg. products, branch where the
       contract is made, etc.). All segmentations must be complete (one 
       element only belongs to one segment and the union of all segments 
       results in the total portfolio). Every segmentation must have a segment named 'rest' defined (in a
-      implicit way). If a client (or an asset)
+      implicit way). If a borrower (or an asset)
       belongs nowhere, then it belongs to the 'rest' segment. Finally, there are 2
-      special segmentations, 'client' (one segment per client) and 'asset'
+      special segmentations, 'borrower' (one segment per borrower) and 'asset'
       (one segment per asset), in these cases you don't need to specify all the segments,
       these are defined in a implicit way. 
     </p>
@@ -640,17 +648,17 @@
 
   &lt;segmentations&gt;
     &lt;segmentation name="portfolio" components="asset"/&gt;
-    &lt;segmentation name="client" components="client"&gt;
+    &lt;segmentation name="borrower" components="borrower"&gt;
       &lt;segment name="*"/&gt;
     &lt;/segmentation&gt;
-    &lt;segmentation name="asset" components="asset"&gt;
+    &lt;segmentation name="asset" components="borrower"&gt;
       &lt;segment name="*"/&gt;
     &lt;/segmentation&gt;
-    &lt;segmentation name="sector" components="client"&gt;
+    &lt;segmentation name="sector" components="borrower"&gt;
       &lt;segment name="S1"/&gt;
       &lt;segment name="S2"/&gt;
     &lt;/segmentation&gt;
-    &lt;segmentation name="size" components="client"&gt;
+    &lt;segmentation name="size" components="borrower"&gt;
       &lt;segment name="big"/&gt;
       &lt;segment name="medium"/&gt;
     &lt;/segmentation&gt;
@@ -685,7 +693,7 @@
       <tr class="b">
         <td style="text-align:center;">components</td>
         <td style="text-align:justify;">
-          Type of segments. Accepted values are 'client'
+          Type of segments. Accepted values are 'borrower'
           and 'asset'
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -707,8 +715,9 @@
           the same name. All references to a segment (eg. belongs-to tag)
           are made using this field (always in conjunction with the segmentation). 
           If a segmentation doesn't have any segments, all the elements belong to
-          the 'rest' segment. The 'client' and 'asset' segmentations allow
-          the to define the '*' segment. The '*' segment contains a implicit definition of a segment to every asset and client.
+          the 'rest' segment. The 'borrower' and 'asset' segmentations allow
+          the to define the '*' segment. The '*' segment contains a implicit 
+          definition of a segment to every asset and borrower.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -717,8 +726,8 @@
 <!-- ==================================================== -->
 <!--    portfolio section                                 -->
 <!-- ==================================================== -->
-
-    <h2>Section Portfolio</h2>
+    <br/>
+    <h1>Section Portfolio</h1>
 
     <p>
       This section shows how to define the portfolio. For each defined asset 
@@ -730,7 +739,7 @@
     <pre>
 
   &lt;portfolio&gt;
-    &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
+    &lt;borrower rating="A" sector="S1" name="Repsol" id="000001"&gt;
       &lt;belongs-to segmentation="sector" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
       &lt;asset name="bond" id="op1" date="01/01/2001"&gt;
@@ -755,8 +764,8 @@
           &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-    &lt;/client&gt;
-    &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
+    &lt;/borrower&gt;
+    &lt;borrower rating="B" sector="S2" name="ATT" id="000002"&gt;
       &lt;belongs-to segmentation="sector" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="big"/&gt;
       &lt;asset name="bond" id="op3" date="01/06/1999"&gt;
@@ -770,19 +779,19 @@
           &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-    &lt;/client&gt;
+    &lt;/borrower&gt;
   &lt;/portfolio&gt;
 
     </pre>
 
     <p>
-      Look how the client haven't a 'belongs-to segmentation=client defined.
+      Look how the borrower haven't a 'belongs-to segmentation=borrower defined.
       This is done implicitly (the same occurs with 'asset').
-      If you try to assign a client to a segmentation of asset components 
+      If you try to assign a borrower to a segmentation of asset components 
       (or viceversa), the input file will be rejected.
     </p>
 
-    <h3>Client Attributes</h3>
+    <h3>Borrower Attributes</h3>
 
     <table cellpadding="3">
       <tr class="b">
@@ -793,7 +802,7 @@
       <tr class="a">
         <td style="text-align:center;">rating</td>
         <td style="text-align:justify;">
-          Initial client rating at time t0 (see time.begindate at params section).
+          Initial borrower rating at time t0 (see time.begindate at params section).
           This value must be a rating identifier (see name attribute in rating tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -801,7 +810,7 @@
       <tr class="b">
         <td style="text-align:center;">sector</td>
         <td style="text-align:justify;">
-          Sector where this client is included.
+          Sector where this borrower is included.
           This value must be a sector identifier (see name attribute in sector tag).
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -809,14 +818,14 @@
       <tr class="a">
         <td style="text-align:center;">name</td>
         <td style="text-align:justify;">
-          Client name. Currently not used. Can be used in reports.
+          Borrower name. Currently not used. Can be used in reports.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
       <tr class="b">
         <td style="text-align:center;">id</td>
         <td style="text-align:justify;">
-          Unique client identifier. Used by implicit client segmentation.
+          Unique borrower identifier. Used by implicit borrower segmentation.
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -899,48 +908,36 @@
       <tr class="b">
         <td style="text-align:center;">cashflow</td>
         <td style="text-align:justify;">
-          Cashflow at date "at". Positive values = client pays, negative
-          values = client earns
+          Cashflow at date "at". Positive values = borrower pays, negative
+          values = borrower receive money
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
       <tr class="a">
         <td style="text-align:center;">recovery</td>
         <td style="text-align:justify;">
-          Recovery at date "at" in case of default. Positive values = client
-          pays, negative values = client earns
+          Recovery at date "at" in case of default. Positive values = borrower
+          pays, negative values = borrower earns
         </td>
         <td style="text-align:center;"><code>double</code></td>
       </tr>
     </table>
 
-    <div id="footpage">
-      <div style="height:75px"></div>
-      <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-          <td class="footer" align="left">
-            <a href="index.html">
-              <img src="ccruncher.png" alt="return to home page"
-                height="31" width="88"  />
-            </a>
-            <a href="http://validator.w3.org/check?uri=referer">
-              <img src="http://www.w3.org/Icons/valid-xhtml10"
-                alt="Valid XHTML 1.0!" height="31" width="88" />
-            </a>
-            <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
-              <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
-               width="88" height="31" alt="SourceForge.net Logo" />
-            </a> 
-          </td>
-          <td class="footer" align="right">
-            Last modified: 27-Jul-2007 &nbsp;
-          </td>
-        </tr>
-      </table>
-      <p style="text-align: center; font-size: smaller;">
-        Copyright &copy; 2004-2007 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
-      </p>
+    <br />
+    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+    		<table width="100%"><tr>
+    			<td width="100%" style="text-align:center; font-size: smaller;">
+            Copyright &copy; 2004-2007 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+    			</td>
+    			<td nowrap="nowrap" style="text-align:right; font-size:smaller; font-weight:bold;">
+    				 Last modified: 03-Aug-2007
+    			</td>
+    		</tr></table>			
+    	</div></div></div></div></div>
     </div>
+    <br />
 
+  </div>
   </body>
 </html>

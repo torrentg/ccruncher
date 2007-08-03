@@ -37,6 +37,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #ifndef _Segmentation_
@@ -60,7 +63,7 @@ namespace ccruncher {
 
 enum components_t {
   asset,
-  client,
+  borrower,
   undefined
 };
 
@@ -86,7 +89,7 @@ class Segmentation : public ExpatHandlers
     int order;
     // segmentation name
     string name;
-    // type of components (clients/assets)
+    // type of components (borrowers/assets)
     components_t components;
 
     // constructor

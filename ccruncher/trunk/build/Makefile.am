@@ -56,7 +56,7 @@ ccruncher_SOURCES = \
     ../src/kernel/IData.cpp\
     ../src/kernel/SegmentAggregator.cpp\
     ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Client.cpp\
+    ../src/portfolio/Borrower.cpp\
     ../src/params/Params.cpp\
     ../src/interests/Interests.cpp\
     ../src/interests/Interest.cpp\
@@ -97,7 +97,7 @@ ccruncher_SOURCES = \
     ../src/kernel/IData.hpp\
     ../src/kernel/SegmentAggregator.hpp\
     ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Client.hpp\
+    ../src/portfolio/Borrower.hpp\
     ../src/params/Params.hpp\
     ../src/interests/Interests.hpp\
     ../src/interests/Interest.hpp\
@@ -172,7 +172,7 @@ tests_SOURCES = \
     ../src/segmentations/SegmentationsTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/params/ParamsTest.cpp\
-    ../src/portfolio/ClientTest.cpp\
+    ../src/portfolio/BorrowerTest.cpp\
     ../src/ratings/RatingsTest.cpp\
     ../src/sectors/SectorsTest.cpp\
     ../src/transitions/TransitionMatrixTest.cpp\
@@ -209,7 +209,7 @@ tests_SOURCES = \
     ../src/transitions/TransitionMatrix.cpp\
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Client.cpp\
+    ../src/portfolio/Borrower.cpp\
     ../src/interests/Rate.cpp\
     ../src/interests/Interest.cpp\
     ../src/interests/Interests.cpp\
@@ -244,7 +244,7 @@ tests_SOURCES = \
     ../src/segmentations/SegmentationsTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/params/ParamsTest.hpp\
-    ../src/portfolio/ClientTest.hpp\
+    ../src/portfolio/BorrowerTest.hpp\
     ../src/ratings/RatingsTest.hpp\
     ../src/sectors/SectorsTest.hpp\
     ../src/transitions/TransitionMatrixTest.hpp\
@@ -281,7 +281,7 @@ tests_SOURCES = \
     ../src/transitions/TransitionMatrix.hpp\
     ../src/correlations/CorrelationMatrix.hpp\
     ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Client.hpp\
+    ../src/portfolio/Borrower.hpp\
     ../src/interests/Rate.hpp\
     ../src/interests/Interest.hpp\
     ../src/interests/Interests.hpp\

@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Client.cpp - Client code - $Rev$
+// Borrower.cpp - Borrower code - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -63,16 +63,19 @@
 //   . removed sector.order tag
 //   . added unique asset id check
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
-#include "portfolio/Client.hpp"
+#include "portfolio/Borrower.hpp"
 #include "utils/Utils.hpp"
 #include <cassert>
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Client::Client(Ratings &ratings_, Sectors &sectors_,
+ccruncher::Borrower::Borrower(Ratings &ratings_, Sectors &sectors_,
                Segmentations &segmentations_, Interests &interests_)
 {
   // initializing class
@@ -82,7 +85,7 @@ ccruncher::Client::Client(Ratings &ratings_, Sectors &sectors_,
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::Client::~Client()
+ccruncher::Borrower::~Borrower()
 {
   // nothing to do
 }
@@ -90,7 +93,7 @@ ccruncher::Client::~Client()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Client::reset(Ratings &ratings_, Sectors &sectors_,
+void ccruncher::Borrower::reset(Ratings &ratings_, Sectors &sectors_,
                Segmentations &segmentations_, Interests &interests_)
 {
   // setting external objects references
@@ -114,7 +117,7 @@ void ccruncher::Client::reset(Ratings &ratings_, Sectors &sectors_,
 //===========================================================================
 // getAssets
 //===========================================================================
-vector<Asset> & ccruncher::Client::getAssets()
+vector<Asset> & ccruncher::Borrower::getAssets()
 {
   return vassets;
 }
@@ -122,7 +125,7 @@ vector<Asset> & ccruncher::Client::getAssets()
 //===========================================================================
 // insert an asset into list
 //===========================================================================
-void ccruncher::Client::insertAsset(const Asset &val) throw(Exception)
+void ccruncher::Borrower::insertAsset(const Asset &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vassets.size();i++)
@@ -148,11 +151,11 @@ void ccruncher::Client::insertAsset(const Asset &val) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"client")) {
+  if (isEqual(name_,"borrower")) {
     if (getNumAttributes(attributes) != 4) {
-      throw Exception("incorrect number of attributes in tag client");
+      throw Exception("incorrect number of attributes in tag borrower");
     }
     else {
       // reading atributes
@@ -167,7 +170,7 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
 
       // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {
-        throw Exception("invalid attributes at <client>");
+        throw Exception("invalid attributes at <borrower>");
       }
 
       // computing hash key
@@ -199,9 +202,9 @@ void ccruncher::Client::epstart(ExpatUserData &eu, const char *name_, const char
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 {
-  if (isEqual(name_,"client")) {
+  if (isEqual(name_,"borrower")) {
 
     // reseting auxiliar variables (flushing data)
     auxasset.reset(NULL);
@@ -209,22 +212,22 @@ void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
     // filling implicit segment
     try
     {
-      if ((*segmentations)["client"].components == client) {
-        segmentations->addSegment("client", id);
-        int isegmentation = (*segmentations)["client"].order;
-        int isegment = (*segmentations)["client"][id].order;
+      if ((*segmentations)["borrower"].components == borrower) {
+        segmentations->addSegment("borrower", id);
+        int isegmentation = (*segmentations)["borrower"].order;
+        int isegment = (*segmentations)["borrower"][id].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
     catch(...)
     {
-      // segmentation 'client' not found
+      // segmentation 'borrower' not found
     }
 
     // filling implicit segment
     try
     {
-      if ((*segmentations)["portfolio"].components == client) {
+      if ((*segmentations)["portfolio"].components == borrower) {
         int isegmentation = (*segmentations)["portfolio"].order;
         int isegment = (*segmentations)["portfolio"]["rest"].order;
         insertBelongsTo(isegmentation, isegment);
@@ -250,7 +253,7 @@ void ccruncher::Client::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // isActive
 //===========================================================================
-bool ccruncher::Client::isActive(const Date &from, const Date &to) throw(Exception)
+bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Exception)
 {
   if (vassets.size() == 0)
   {
@@ -286,9 +289,9 @@ bool ccruncher::Client::isActive(const Date &from, const Date &to) throw(Excepti
 
 //===========================================================================
 // comparation operator (used by sort function)
-// used to group clients by sector and rating
+// used to group borrowers by sector and rating
 //===========================================================================
-bool ccruncher::operator < (const Client &x1, const Client &x2)
+bool ccruncher::operator < (const Borrower &x1, const Borrower &x2)
 {
   if (x1.isector < x2.isector)
   {
@@ -318,7 +321,7 @@ bool ccruncher::operator < (const Client &x1, const Client &x2)
 //===========================================================================
 // addBelongsTo
 //===========================================================================
-void ccruncher::Client::addBelongsTo(int isegmentation, int isegment) throw(Exception)
+void ccruncher::Borrower::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   insertBelongsTo(isegmentation, isegment);
 }
@@ -326,7 +329,7 @@ void ccruncher::Client::addBelongsTo(int isegmentation, int isegment) throw(Exce
 //===========================================================================
 // insertBelongsTo
 //===========================================================================
-void ccruncher::Client::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
+void ccruncher::Borrower::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
   assert(isegment >= 0);
@@ -349,7 +352,7 @@ void ccruncher::Client::insertBelongsTo(int isegmentation, int isegment) throw(E
 //===========================================================================
 // belongsTo
 //===========================================================================
-bool ccruncher::Client::belongsTo(int isegmentation, int isegment)
+bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 {
   return ((getSegment(isegmentation)==isegment)?true:false);
 }
@@ -357,7 +360,7 @@ bool ccruncher::Client::belongsTo(int isegmentation, int isegment)
 //===========================================================================
 // getSegment
 //===========================================================================
-int ccruncher::Client::getSegment(int isegmentation)
+int ccruncher::Borrower::getSegment(int isegmentation)
 {
   map<int,int>::iterator pos = belongsto.find(isegmentation);
 
@@ -373,9 +376,9 @@ int ccruncher::Client::getSegment(int isegmentation)
 }
 
 //===========================================================================
-// less (used for sorting pointer clients)
+// less (used for sorting pointer borrowers)
 //===========================================================================
-bool ccruncher::Client::less(const Client *left, const Client *right)
+bool ccruncher::Borrower::less(const Borrower *left, const Borrower *right)
 {
   return *left < *right;
 }

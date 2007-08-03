@@ -22,7 +22,7 @@
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveClients" value="true"/>
+    <property name="portfolio.onlyActiveBorrowers" value="true"/>
   </params>
 
   <!-- ============================================================== -->
@@ -581,17 +581,17 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-    <segmentation name="client" components="client">
+    <segmentation name="borrower" components="borrower">
       <segment name="*"/>
     </segmentation>
     <segmentation name="asset" components="asset">
       <segment name="*"/>
     </segmentation>
-    <segmentation name="sector" components="client">
+    <segmentation name="sector" components="borrower">
       <segment name="S1"/>
       <segment name="S2"/>
     </segmentation>
-    <segmentation name="size" components="client">
+    <segmentation name="size" components="borrower">
       <segment name="big"/>
       <segment name="medium"/>
     </segmentation>
@@ -610,10 +610,10 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <client rating="BB" sector="S1" name="Repsol" id="000001">
+    <borrower rating="BB" sector="S1" name="Repsol" id="000001">
       <belongs-to segmentation="sector" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <!-- implicit: belongs-to segmentation="client" value="cif1" -->
+      <!-- implicit: belongs-to segmentation="borrower" value="cif1" -->
       <asset date="01/01/1999" name="generic" id="op1">
         <belongs-to segmentation="product" segment="bond"/>
         <belongs-to segmentation="office" segment="0001"/>
@@ -631,7 +631,7 @@
           <values at="01/06/2004" cashflow="10.0" recovery="2.0" />
         </data>
       </asset>
-    </client>
+    </borrower>
   </portfolio>
 
 </ccruncher>

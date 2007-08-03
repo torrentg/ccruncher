@@ -153,7 +153,7 @@
 )>
 <!ATTLIST segmentation
     name CDATA #REQUIRED
-    components (asset|client) #REQUIRED
+    components (asset|borrower) #REQUIRED
 >
 
 <!ELEMENT segment
@@ -167,13 +167,13 @@
 <!--                        portfolio                               -->
 <!-- .............................................................. -->
 <!ELEMENT portfolio (
-    client+
+    borrower+
 )>
 
-<!ELEMENT client (
+<!ELEMENT borrower (
     (belongs-to*, asset*)
 )>
-<!ATTLIST client
+<!ATTLIST borrower
     id CDATA #REQUIRED
     name CDATA #REQUIRED
     rating IDREF #REQUIRED

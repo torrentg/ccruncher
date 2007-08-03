@@ -37,6 +37,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Portfolio refactoring
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #ifndef _Portfolio_
@@ -52,7 +55,7 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "portfolio/Client.hpp"
+#include "portfolio/Borrower.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -67,15 +70,15 @@ class Portfolio : public ExpatHandlers
 
   private:
 
-    vector<Client *> vclients;
+    vector<Borrower *> vborrowers;
 
     Ratings *ratings;
     Sectors *sectors;
     Segmentations *segmentations;
     Interests *interests;
-    Client *auxclient;
+    Borrower *auxborrower;
 
-    void insertClient(Client &) throw(Exception);
+    void insertBorrower(Borrower &) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
     void reset(Ratings &, Sectors &, Segmentations &, Interests &);
@@ -85,9 +88,9 @@ class Portfolio : public ExpatHandlers
     Portfolio(Ratings &, Sectors &, Segmentations &, Interests &);
     ~Portfolio();
 
-    vector<Client *> &getClients();
-    int getNumActiveClients(const Date &, const Date &) throw(Exception);
-    void sortClients(const Date &from, const Date &to, bool onlyactive) throw(Exception);
+    vector<Borrower *> &getBorrowers();
+    int getNumActiveBorrowers(const Date &, const Date &) throw(Exception);
+    void sortBorrowers(const Date &from, const Date &to, bool onlyactive) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

@@ -72,6 +72,9 @@
 //   . removed sector.order tag
 //   . added asset creation date
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #include <iostream>
@@ -178,17 +181,17 @@ void ccruncher_test::IDataTest::test1()
     </mcorrels>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
-      <segmentation name='client' components='client'>\n\
+      <segmentation name='borrower' components='borrower'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
       <segmentation name='asset' components='asset'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
-      <segmentation name='sector' components='client'>\n\
+      <segmentation name='sector' components='borrower'>\n\
         <segment name='S1'/>\n\
         <segment name='S2'/>\n\
       </segmentation>\n\
-      <segmentation name='size' components='client'>\n\
+      <segmentation name='size' components='borrower'>\n\
         <segment name='big'/>\n\
         <segment name='medium'/>\n\
       </segmentation>\n\
@@ -203,7 +206,7 @@ void ccruncher_test::IDataTest::test1()
       </segmentation>\n\
     </segmentations>\n\
     <portfolio>\n\
-      <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
+      <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
         <asset name='generic' id='op1' date='01/01/1999'>\n\
           <belongs-to segmentation='product' segment='bond'/>\n\
           <belongs-to segmentation='office' segment='0001'/>\n\
@@ -228,14 +231,14 @@ void ccruncher_test::IDataTest::test1()
             <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
           </data>\n\
         </asset>\n\
-      </client>\n\
+      </borrower>\n\
     </portfolio>\n\
   </ccruncher>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // client creation
+  // borrower creation
   IData idata;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
 }

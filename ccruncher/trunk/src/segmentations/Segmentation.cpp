@@ -43,6 +43,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #include "segmentations/Segmentation.hpp"
@@ -111,7 +114,7 @@ void ccruncher::Segmentation::reset()
   modificable = false;
   order = -1;
   name = "";
-  components = client;
+  components = borrower;
 
   // adding catcher segment
   Segment catcher = Segment(0, "rest");
@@ -140,7 +143,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
   // checking for patterns
   if (val.name == "*")
   {
-    if (name != "client" && name != "asset")
+    if (name != "borrower" && name != "asset")
     {
       throw Exception("invalid segment name '*'");
     }
@@ -184,8 +187,8 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
       if (strcomp == "asset") {
         components = asset;
       }
-      else if (strcomp == "client") {
-        components = client;
+      else if (strcomp == "borrower") {
+        components = borrower;
       }
       else {
         throw Exception("tag <segmentation> with invalid components attribute");
@@ -249,14 +252,14 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   string ret = "";
 
   ret += spc + "<segmentation name='" + name + "' components='";
-  ret += (components==asset?"asset":"client");
+  ret += (components==asset?"asset":"borrower");
   ret += "'>\n";
 
   if (name == "portfolio")
   {
     // nothing to do
   }
-  else if (name == "client" || name == "asset")
+  else if (name == "borrower" || name == "asset")
   {
     ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
   }

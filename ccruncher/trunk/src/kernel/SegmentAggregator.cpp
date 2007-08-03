@@ -58,6 +58,9 @@
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed interests arguments
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #include <cmath>
@@ -106,7 +109,7 @@ void ccruncher::SegmentAggregator::define(int iaggre, int isegs, int iseg, compo
 //===========================================================================
 void ccruncher::SegmentAggregator::init()
 {
-  iclients = NULL;
+  iborrowers = NULL;
   cvalues = NULL;
   losses = NULL;
 
@@ -122,7 +125,7 @@ void ccruncher::SegmentAggregator::init()
 
   N = 0L;
   M = 0;
-  nclients = 0L;
+  nborrowers = 0L;
   nassets = 0L;
   cont = 0L;
   icont = 0L;
@@ -143,15 +146,15 @@ ccruncher::SegmentAggregator::~SegmentAggregator()
 //===========================================================================
 void ccruncher::SegmentAggregator::release()
 {
-  // deleting clients array
-  if (iclients != NULL) {
-    Arrays<long>::deallocVector(iclients);
-    iclients = NULL;
+  // deleting borrowers array
+  if (iborrowers != NULL) {
+    Arrays<long>::deallocVector(iborrowers);
+    iborrowers = NULL;
   }
 
   // deleting losses arrays
   if (losses != NULL) {
-    Arrays<double>::deallocMatrix(losses, nclients);
+    Arrays<double>::deallocMatrix(losses, nborrowers);
     losses = NULL;
   }
 
@@ -165,10 +168,10 @@ void ccruncher::SegmentAggregator::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client *> &clients,
+void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Borrower *> &borrowers,
   long n) throw(Exception)
 {
-  bool *clientflag = NULL;
+  bool *borrowerflag = NULL;
 
   // assertions
   assert(dates != NULL);
@@ -185,31 +188,31 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   N = n;
   M = m;
 
-  // allocating clientflag
-  clientflag = Arrays<bool>::allocVector(N, false);
+  // allocating borrowerflag
+  borrowerflag = Arrays<bool>::allocVector(N, false);
 
   try
   {
     if (components == asset)
     {
-      // counting clients + filling clientflag
-      nclients = getANumClients(clients, N, clientflag);
+      // counting borrowers + filling borrowerflag
+      nborrowers = getANumBorrowers(borrowers, N, borrowerflag);
       // counting assets
-      nassets = getANumAssets(clients, N, clientflag);
+      nassets = getANumAssets(borrowers, N, borrowerflag);
     }
-    else // components == clients
+    else // components == borrowers
     {
-      // counting clients + filling clientflag
-      nclients = getCNumClients(clients, N, clientflag);
+      // counting borrowers + filling borrowerflag
+      nborrowers = getCNumBorrowers(borrowers, N, borrowerflag);
       // counting assets
-      nassets = getCNumAssets(clients, N, clientflag);
+      nassets = getCNumAssets(borrowers, N, borrowerflag);
     }
 
-    // allocating & fixing clients
-    iclients = allocIClients(nclients, clientflag, N);
+    // allocating & fixing borrowers
+    iborrowers = allocIBorrowers(nborrowers, borrowerflag, N);
 
     // allocating & filling losses
-    losses = allocLosses(dates, M, clients);
+    losses = allocLosses(dates, M, borrowers);
 
     // allocating cvalues
     cvalues = Arrays<double>::allocVector(buffersize);
@@ -218,17 +221,17 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Client 
   }
   catch(std::exception &e)
   {
-    Arrays<bool>::deallocVector(clientflag);
+    Arrays<bool>::deallocVector(borrowerflag);
     throw Exception(e, "error initializing aggregator");
   }
 
-  Arrays<bool>::deallocVector(clientflag);
+  Arrays<bool>::deallocVector(borrowerflag);
 }
 
 //===========================================================================
-// getCNumClients
+// getCNumBorrowers
 //===========================================================================
-long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> &clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getCNumBorrowers(vector<Borrower *> &borrowers, long n, bool *flags)
 {
   long ret = 0L;
 
@@ -236,7 +239,7 @@ long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> &clients, lon
   {
     flags[i] = false;
 
-    if (clients[i]->belongsTo(isegmentation, isegment))
+    if (borrowers[i]->belongsTo(isegmentation, isegment))
     {
       flags[i] = true;
       ret++;
@@ -247,9 +250,9 @@ long ccruncher::SegmentAggregator::getCNumClients(vector<Client *> &clients, lon
 }
 
 //===========================================================================
-// getANumClients
+// getANumBorrowers
 //===========================================================================
-long ccruncher::SegmentAggregator::getANumClients(vector<Client *> &clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getANumBorrowers(vector<Borrower *> &borrowers, long n, bool *flags)
 {
   long ret = 0L;
 
@@ -257,7 +260,7 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> &clients, lon
   {
     flags[i] = false;
 
-    vector<Asset> &assets = clients[i]->getAssets();
+    vector<Asset> &assets = borrowers[i]->getAssets();
 
     for(unsigned int j=0;j<assets.size();j++)
     {
@@ -276,13 +279,13 @@ long ccruncher::SegmentAggregator::getANumClients(vector<Client *> &clients, lon
 //===========================================================================
 // getANumAssets
 //===========================================================================
-long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> &clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getANumAssets(vector<Borrower *> &borrowers, long n, bool *flags)
 {
   long ret = 0L;
 
   for(long i=0;i<n;i++)
   {
-    vector<Asset> &assets = clients[i]->getAssets();
+    vector<Asset> &assets = borrowers[i]->getAssets();
 
     for(unsigned int j=0;j<assets.size();j++)
     {
@@ -299,7 +302,7 @@ long ccruncher::SegmentAggregator::getANumAssets(vector<Client *> &clients, long
 //===========================================================================
 // getCNumAssets
 //===========================================================================
-long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> &clients, long n, bool *flags)
+long ccruncher::SegmentAggregator::getCNumAssets(vector<Borrower *> &borrowers, long n, bool *flags)
 {
   long ret = 0L;
 
@@ -307,7 +310,7 @@ long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> &clients, long
   {
     if (flags[i] == true)
     {
-      vector<Asset> &assets = clients[i]->getAssets();
+      vector<Asset> &assets = borrowers[i]->getAssets();
       ret += assets.size();
     }
   }
@@ -316,9 +319,9 @@ long ccruncher::SegmentAggregator::getCNumAssets(vector<Client *> &clients, long
 }
 
 //===========================================================================
-// allocIClients
+// allocIBorrowers
 //===========================================================================
-long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n) throw(Exception)
+long* ccruncher::SegmentAggregator::allocIBorrowers(long len, bool *flags, long n) throw(Exception)
 {
   long *ret = NULL;
   long aux = 0L;
@@ -348,22 +351,22 @@ long* ccruncher::SegmentAggregator::allocIClients(long len, bool *flags, long n)
 //===========================================================================
 // allocLosses
 //===========================================================================
-double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Client *> &clients) throw(Exception)
+double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Borrower *> &borrowers) throw(Exception)
 {
   double **ret = NULL;
 
-  ret = Arrays<double>::allocMatrix(nclients, m, 0.0);
+  ret = Arrays<double>::allocMatrix(nborrowers, m, 0.0);
 
-  for(long i=0;i<nclients;i++)
+  for(long i=0;i<nborrowers;i++)
   {
-    // finding client info
-    long cpos = iclients[i];
-    vector<Asset> &assets = clients[cpos]->getAssets();
+    // finding borrower info
+    long cpos = iborrowers[i];
+    vector<Asset> &assets = borrowers[cpos]->getAssets();
 
     // filling row
     for(unsigned int j=0;j<assets.size();j++)
     {
-      if (components==client || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
+      if (components==borrower || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
       {
         for(int k=0; k<m; k++)
         {
@@ -378,7 +381,7 @@ double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Cl
 
 //===========================================================================
 // append
-// input vector has length N with the index time (in months) where client defaults
+// input vector has length N with the index time (in months) where borrower defaults
 //===========================================================================
 bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
 {
@@ -390,12 +393,12 @@ bool ccruncher::SegmentAggregator::append(int *defaulttimes) throw(Exception)
   cvalues[icont] = 0.0;
 
   // filling values
-  for(long i=0;i<nclients;i++)
+  for(long i=0;i<nborrowers;i++)
   {
-    cpos = iclients[i];
+    cpos = iborrowers[i];
     itime = defaulttimes[cpos];
 
-    // asserting that at time 0 client is alive
+    // asserting that at time 0 borrower is alive
     assert(itime > 0);
 
     if (itime < M) {
@@ -451,7 +454,7 @@ bool ccruncher::SegmentAggregator::appendRawData(double *data, int datasize) thr
 bool ccruncher::SegmentAggregator::flush() throw(Exception)
 {
   // if haven't elements to aggregate, exits
-  if (nclients == 0 && nassets == 0)
+  if (nborrowers == 0 && nassets == 0)
   {
     return true;
   }
@@ -607,6 +610,6 @@ long ccruncher::SegmentAggregator::getNumElements() const
   if (components == asset) {
     return nassets;
   } else {
-    return nclients;
+    return nborrowers;
   }
 }

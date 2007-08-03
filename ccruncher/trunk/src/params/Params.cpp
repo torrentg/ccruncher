@@ -66,6 +66,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -236,7 +239,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
     bool aux = getBooleanAttribute(attributes, "value", false);
     antithetic = aux;
   }
-  else if (name == "portfolio.onlyActiveClients")
+  else if (name == "portfolio.onlyActiveBorrowers")
   {
     bool aux = getBooleanAttribute(attributes, "value", false);
     onlyactive = aux;
@@ -307,7 +310,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Format::bool2string(onlyactive) + "'/>\n";
+  ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";
 
   return ret;

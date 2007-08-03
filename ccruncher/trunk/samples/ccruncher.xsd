@@ -154,7 +154,7 @@
 			<xsd:element name="portfolio" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="client" minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="borrower" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element name="belongs-to" minOccurs="0" maxOccurs="unbounded">
@@ -214,14 +214,14 @@
 			<xsd:enumeration value="copula.type"/>
 			<xsd:enumeration value="copula.seed"/>
 			<xsd:enumeration value="montecarlo.antithetic"/>
-			<xsd:enumeration value="portfolio.onlyActiveClients"/>
+			<xsd:enumeration value="portfolio.onlyActiveBorrowers"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
 	<xsd:simpleType name="componentsType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="asset"/>
-			<xsd:enumeration value="client"/>
+			<xsd:enumeration value="borrower"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	

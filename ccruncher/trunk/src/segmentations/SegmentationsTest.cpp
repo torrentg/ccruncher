@@ -40,6 +40,9 @@
 // 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Segmentations class refactoring
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
 #include "segmentations/Segmentations.hpp"
@@ -74,17 +77,17 @@ void ccruncher_test::SegmentationsTest::test1()
   string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='client' components='client'>\n\
+    <segmentation name='borrower' components='borrower'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='asset' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sector' components='client'>\n\
+    <segmentation name='sector' components='borrower'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='client'>\n\
+    <segmentation name='size' components='borrower'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\

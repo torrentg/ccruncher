@@ -112,6 +112,7 @@
 //
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added method printPrecomputedLosses()
+//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -176,7 +177,7 @@ void ccruncher::MonteCarlo::reset()
 
   ratings = NULL;
   sectors = NULL;
-  clients = NULL;
+  borrowers = NULL;
 
   copula = NULL;
   survival = NULL;
@@ -257,8 +258,8 @@ void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
   // initializing parameters
   initParams(idata);
 
-  // initializing clients
-  initClients(idata, dates, STEPS);
+  // initializing borrowers
+  initBorrowers(idata, dates, STEPS);
 
   // initializing ratings and transition matrix
   initRatings(idata);
@@ -326,9 +327,9 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initClients
+// initBorrowers
 //===========================================================================
-void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int isteps) throw(Exception)
+void ccruncher::MonteCarlo::initBorrowers(const IData &idata, Date *idates, int isteps) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting borrowers to simulate", '-');
@@ -336,37 +337,37 @@ void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int is
 
   // setting logger info
   Logger::trace("simulate only active borrowers", Format::bool2string(idata.getParams().onlyactive));
-  Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getClients().size()));
+  Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
 
-  // sorting clients by sector and rating
-  idata.getPortfolio().sortClients(idates[0], idates[isteps], idata.getParams().onlyactive);
+  // sorting borrowers by sector and rating
+  idata.getPortfolio().sortBorrowers(idates[0], idates[isteps], idata.getParams().onlyactive);
 
-  // fixing number of clients
+  // fixing number of borrowers
   if (idata.getParams().onlyactive)
   {
-    N = idata.getPortfolio().getNumActiveClients(idates[0], idates[isteps]);
+    N = idata.getPortfolio().getNumActiveBorrowers(idates[0], idates[isteps]);
   }
   else
   {
-    N = idata.getPortfolio().getClients().size();
+    N = idata.getPortfolio().getBorrowers().size();
   }
 
   Logger::trace("number of simulated borrowers", Format::long2string(N));
 
-  // checking that exist clients to simulate
+  // checking that exist borrowers to simulate
   if (N == 0)
   {
     throw Exception("error initializing borrowers: 0 borrowers to simulate");
   }
 
-  // setting client object
-  clients = &(idata.getPortfolio().getClients());
+  // setting borrowers object
+  borrowers = &(idata.getPortfolio().getBorrowers());
 
   // precomputing asset losses at time nodes
   Logger::trace("elapsed time precomputing assets losses", true);
   for(long i=0;i<N;i++)
   {
-    vector<Asset> &assets = (*clients)[i]->getAssets();
+    vector<Asset> &assets = (*borrowers)[i]->getAssets();
     for(unsigned int j=0;j<assets.size();j++)
     {
       assets[j].precomputeLosses(dates, STEPS+1, idata.getInterests());
@@ -469,19 +470,19 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// getClientCorrelationMatrix
+// getBorrowerCorrelationMatrix
 //===========================================================================
-double ** ccruncher::MonteCarlo::getClientCorrelationMatrix(const IData &idata)
+double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata)
 {
   double **ret = Arrays<double>::allocMatrix(N, N, 0.0);
   double **scorrels = idata.getCorrelationMatrix().getMatrix();
 
   for (int i=0;i<N;i++)
   {
-    int sector1 = (*clients)[i]->isector;
+    int sector1 = (*borrowers)[i]->isector;
     for(int j=0;j<N;j++)
     {
-      int sector2 = (*clients)[j]->isector;
+      int sector2 = (*borrowers)[j]->isector;
       if (i == j) {
         ret[i][j] = 1.0;
       }
@@ -518,14 +519,14 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     // allocating temporal memory
     tmp = Arrays<int>::allocVector(idata.getCorrelationMatrix().size(),0);
 
-    // computing the number of clients in each sector
+    // computing the number of borrowers in each sector
     for(long i=0;i<N;i++)
     {
-      tmp[(*clients)[i]->isector]++;
+      tmp[(*borrowers)[i]->isector]++;
     }
 
     // creating the copula object
-    //copula = new GaussianCopula(N, getClientCorrelationMatrix(idata));
+    //copula = new GaussianCopula(N, getBorrowerCorrelationMatrix(idata));
     copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
 
     // releasing temporal memory
@@ -633,7 +634,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
       // initializing SegmentAggregator
       tmp->define(aggregators.size(), i, j, segmentations[i].components);
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, STEPS+1, *clients, N);
+      tmp->initialize(dates, STEPS+1, *borrowers, N);
 
       // adding aggregator to list (only if have elements)
       numsegments++;
@@ -716,7 +717,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       randomize();
       timer1.stop();
 
-      // simulating default time for each client
+      // simulating default time for each borrower
       timer2.resume();
       simulate();
       timer2.stop();
@@ -921,12 +922,12 @@ void ccruncher::MonteCarlo::randomize()
 }
 
 //===========================================================================
-// simulate time-to-default for each client
-// put result in rpaths[iclient]
+// simulate time-to-default for each borrower
+// put result in rpaths[iborrower]
 //===========================================================================
 void ccruncher::MonteCarlo::simulate()
 {
-  // for each client we simule the time where defaults
+  // for each borrower we simule the time where defaults
   for (int i=0;i<N;i++) {
     ittd[i] = simTimeToDefault(i);
   }
@@ -936,37 +937,37 @@ void ccruncher::MonteCarlo::simulate()
 // getRandom. Returns requested copula value
 // encapsules antithetic management
 //===========================================================================
-double ccruncher::MonteCarlo::getRandom(int iclient)
+double ccruncher::MonteCarlo::getRandom(int iborrower)
 {
   if (antithetic)
   {
     if (reversed)
     {
-      return copula->get(iclient);
+      return copula->get(iborrower);
     }
     else
     {
-      return 1.0 - copula->get(iclient);
+      return 1.0 - copula->get(iborrower);
     }
   }
   else
   {
-    return copula->get(iclient);
+    return copula->get(iborrower);
   }
 }
 
 //===========================================================================
-// given a client, simule time to default
+// given a borrower, simule time to default
 //===========================================================================
-int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
+int ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
 {
   // rating at t0 is initial rating
-  int r1 = (*clients)[iclient]->irating;
+  int r1 = (*borrowers)[iborrower]->irating;
 
-  // getting random number U[0,1] (correlated with rest of clients...)
-  double u = getRandom(iclient);
+  // getting random number U[0,1] (correlated with rest of borrowers...)
+  double u = getRandom(iborrower);
 
-  // simulate month where this client defaults
+  // simulate month where this borrower defaults
   int month = survival->inverse(r1, u);
 
   // return index time where defaults (always bigger than 0)
@@ -1022,8 +1023,8 @@ void ccruncher::MonteCarlo::printPrecomputedLosses()
   cout << "<ccruncher-plosses>" << endl;
   for(long i=0;i<N;i++)
   {
-    cout << "  <client id=\"" << (*clients)[i]->id << "\">" << endl;
-    vector<Asset> &assets = (*clients)[i]->getAssets();
+    cout << "  <borrower id=\"" << (*borrowers)[i]->id << "\">" << endl;
+    vector<Asset> &assets = (*borrowers)[i]->getAssets();
     for(unsigned int j=0;j<assets.size();j++)
     {
       cout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
@@ -1033,7 +1034,7 @@ void ccruncher::MonteCarlo::printPrecomputedLosses()
       }
       cout << "    </asset>" << endl;
     }
-    cout << "  </client>" << endl;
+    cout << "  </borrower>" << endl;
   }
   cout << "</ccruncher-plosses>" << endl;
 }

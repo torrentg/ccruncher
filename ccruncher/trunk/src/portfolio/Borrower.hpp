@@ -19,7 +19,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Client.hpp - Client header - $Rev$
+// Borrower.hpp - Borrower header - $Rev$
 // --------------------------------------------------------------------------
 //
 // 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
@@ -43,10 +43,13 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Client refactoring
 //
+// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
+//   . Client class renamed to Borrower
+//
 //===========================================================================
 
-#ifndef _Client_
-#define _Client_
+#ifndef _Borrower_
+#define _Borrower_
 
 //---------------------------------------------------------------------------
 
@@ -69,7 +72,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Client : public ExpatHandlers
+class Borrower : public ExpatHandlers
 {
 
   private:
@@ -94,8 +97,8 @@ class Client : public ExpatHandlers
     string name;
     unsigned long hkey;
 
-    Client(Ratings &, Sectors &, Segmentations &, Interests &);
-    ~Client();
+    Borrower(Ratings &, Sectors &, Segmentations &, Interests &);
+    ~Borrower();
 
     vector<Asset> & getAssets();
     bool isActive(const Date &, const Date &) throw(Exception);
@@ -104,7 +107,7 @@ class Client : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     int getSegment(int isegmentation);
 
-    static bool less(const Client *left, const Client *right);
+    static bool less(const Borrower *left, const Borrower *right);
     void reset(Ratings &, Sectors &, Segmentations &, Interests &);
 
     /** ExpatHandlers methods declaration */
@@ -116,7 +119,7 @@ class Client : public ExpatHandlers
 //---------------------------------------------------------------------------
 
 // comparation operator
-bool operator <  (const Client&, const Client&);
+bool operator <  (const Borrower&, const Borrower&);
 
 //---------------------------------------------------------------------------
 

@@ -19,9 +19,9 @@ sample01.xml
 
 Description:
 
-  1 client
+  1 borrower
   1 unique sector
-  uncorrelated defaults (due to only exist 1 client)
+  uncorrelated defaults (due to only exist 1 borrower)
   2 ratings (dead and alive)
   transition values:
     P(alive->alive) = 0.9
@@ -29,9 +29,9 @@ Description:
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
   12 time steps of 1 month length
-  The client has an unique asset with this profile:
-    asset value at t=12 is 1 if client is alive and
-    asset value at t=12 is 0 if client dead (default)
+  The borrower has an unique asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
   time-to-default resolution method
 
 Expected Results:
@@ -60,7 +60,7 @@ sample02.xml
 
 Description:
 
-  2 clients
+  2 borrowers
   1 unique sector
   uncorrelated defaults
   2 ratings (dead and alive)
@@ -70,9 +70,9 @@ Description:
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
   12 time steps of 1 month length
-  Each client has an unique asset with this profile:
-    asset value at t=12 is 1 if client is alive and
-    asset value at t=12 is 0 if client dead (default)
+  Each borrower has an unique asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
   time-to-default resolution method
 
 Expected Results:
@@ -102,7 +102,7 @@ sample03.xml
 
 Description:
 
-  100 clients
+  100 borrowers
   1 unique sector
   uncorrelated defaults
   2 ratings (dead and alive)
@@ -112,9 +112,9 @@ Description:
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
   12 time steps of 1 month length
-  Each client has an asset with this profile:
-    asset value at t=12 is 1 if client is alive and
-    asset value at t=12 is 0 if client dead (default)
+  Each borrower has an asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
   time-to-default resolution method
 
 Expected Results:
@@ -146,7 +146,7 @@ Description:
     correl(S1,S1) = 0.10
     correl(S1,S2) = 0.05
     correl(S2,S2) = 0.15
-    Odds clients (50) belongs to S1 and even clients (50) belongs to S2
+    Odds borrowers (50) belongs to S1 and even borrowers (50) belongs to S2
 
 Expected Results:
 
@@ -180,12 +180,12 @@ Description:
     correl(S1,S1) = 0.20
     correl(S1,S2) = 0.10
     correl(S2,S2) = 0.25
-    100 clients
-    each client with 3 assets
+    100 borrowers
+    each borrower with 3 assets
     24 time steps of 1 month length
     asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
-                    if client defaults, recovery=80% last payement.
-    each client belongs to a random sector.
+                    if borrower defaults, recovery=80% last payement.
+    each borrower belongs to a random sector.
     interest spot curve defined
 
 Expected Results:

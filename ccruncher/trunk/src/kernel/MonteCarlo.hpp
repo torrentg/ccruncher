@@ -63,6 +63,7 @@
 //
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added method printPrecomputedLosses()
+//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -78,7 +79,7 @@
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
 #include "math/Copula.hpp"
-#include "portfolio/Client.hpp"
+#include "portfolio/Borrower.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
@@ -98,7 +99,7 @@ class MonteCarlo
     Ratings *ratings;
     Sectors *sectors;
     vector<SegmentAggregator *> aggregators;
-    vector<Client *> *clients;
+    vector<Borrower *> *borrowers;
 
     /** maximum number of iterations */
     long MAXITERATIONS;
@@ -108,7 +109,7 @@ class MonteCarlo
     int STEPS;
     /** step length */
     int STEPLENGTH;
-    /** number of borrowers (taking into account onlyActiveClients flag) */
+    /** number of borrowers (taking into account onlyActiveBorrowers flag) */
     long N;
     /** iterations counter */
     long CONT;
@@ -125,7 +126,7 @@ class MonteCarlo
     Copula *copula;
     /** date per time tranch (size = M) */
     Date *dates;
-    /** simulated time-to-default per client (size = N) */
+    /** simulated time-to-default per borrower (size = N) */
     int *ittd;
 
     /* management flag for antithetic method (default=false) */
@@ -145,7 +146,7 @@ class MonteCarlo
     // init methods
     void init(IData &) throw(Exception);
     void initParams(const IData &) throw(Exception);
-    void initClients(const IData &, Date *, int) throw(Exception);
+    void initBorrowers(const IData &, Date *, int) throw(Exception);
     void initRatings(const IData &) throw(Exception);
     void initSectors(const IData &) throw(Exception);
     void initTimeToDefault(IData &) throw(Exception);
@@ -157,13 +158,13 @@ class MonteCarlo
     void randomize();
     void simulate();
     bool evalue() throw(Exception);
-    int simTimeToDefault(int iclient);
-    double getRandom(int iclient);
+    int simTimeToDefault(int iborrower);
+    double getRandom(int iborrower);
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
 
     // auxiliary methods
-    double** getClientCorrelationMatrix(const IData &);
+    double** getBorrowerCorrelationMatrix(const IData &);
 
 
   public:
