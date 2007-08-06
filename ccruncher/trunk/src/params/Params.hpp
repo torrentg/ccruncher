@@ -40,6 +40,9 @@
 // 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
+// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed dates management
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -49,6 +52,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
@@ -72,7 +76,8 @@ class Params : public ExpatHandlers
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
     // validate object content
     void validate(void) const throw(Exception);
-
+    // set dates values using begindate + steps x steplength
+    void setDates();
 
   public:
 
@@ -94,14 +99,16 @@ class Params : public ExpatHandlers
     bool antithetic;
     // portfolio.onlyActiveClients param value
     bool onlyactive;
+    // time nodes
+    vector<Date> dates;
 
     // constructor
     Params();
     // destructor
     ~Params();
 
-    // return array with dates (caller will free mem)
-    Date* getDates() const throw(Exception);
+    // return array with dates
+    vector<Date>& getDates() const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

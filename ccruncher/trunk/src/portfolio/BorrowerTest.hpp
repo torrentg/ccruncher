@@ -45,9 +45,12 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include <MiniCppUnit.hxx>
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
+#include "interests/Interests.hpp"
+#include "utils/Date.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
@@ -65,6 +68,8 @@ class BorrowerTest : public TestFixture<BorrowerTest>
     Ratings getRatings();
     Sectors getSectors();
     Segmentations getSegmentations();
+    Interests getInterests();
+    vector<Date> getDates();
 
     void test1(void);
     void test2(void);

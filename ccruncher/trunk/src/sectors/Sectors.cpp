@@ -105,7 +105,7 @@ Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
 //===========================================================================
 // return the index of the sector (-1 if rating not found)
 //===========================================================================
-int ccruncher::Sectors::getIndex(const string &name)
+int ccruncher::Sectors::getIndex(const string &name) const
 {
   for (unsigned int i=0;i<vsectors.size();i++)
   {

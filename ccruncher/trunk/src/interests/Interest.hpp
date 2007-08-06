@@ -78,7 +78,7 @@ class Interest : public ExpatHandlers
     // given a time, returns the rate (interpolated)
     double getValue(const double) const;
     // transforms from date to index
-    double date2idx(Date &date1) const;
+    double date2idx(const Date &date1) const;
     // transforms from index to date
     Date idx2date(int t) const;
     // returns upsilon function value
@@ -99,7 +99,7 @@ class Interest : public ExpatHandlers
     // returns initial date
     Date getDate0() const;
     // returns upsilon value
-    double getUpsilon(Date &date1, Date &date2) const;
+    double getUpsilon(const Date &date1, const Date &date2) const;
     // seriealize object content as xml
     string getXML(int) const throw(Exception);
     // reset object content

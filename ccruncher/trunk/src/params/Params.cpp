@@ -69,6 +69,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed dates management
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -79,9 +82,8 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Params::Params()
+ccruncher::Params::Params() : dates(0)
 {
-  // posem valors per defecte (incorrectes)
   init();
 }
 
@@ -135,6 +137,7 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 {
   if (isEqual(name,"params")) {
     validate();
+    setDates();
   }
   else if (isEqual(name,"property")) {
     // nothing to do
@@ -147,18 +150,14 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 // return Date array = begindate, begindate+steplength, bengindate+2*steplength
 //===========================================================================
-Date * ccruncher::Params::getDates() const throw(Exception)
+void ccruncher::Params::setDates()
 {
-  validate();
-
-  Date *ret = Arrays<Date>::allocVector(steps+1);
-
+  dates.clear();
+  dates.reserve(steps+1);
   for (int i=0;i<=steps;i++)
   {
-    ret[i] = addMonths(begindate, i*steplength);
+    dates.push_back(addMonths(begindate, i*steplength));
   }
-
-  return ret;
 }
 
 //===========================================================================

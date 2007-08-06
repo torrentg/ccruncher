@@ -105,26 +105,19 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
 
-  Date *dates = NULL;
-  ASSERT_NO_THROW(dates = params.getDates());
-
-  if (dates != NULL)
-  {
-    ASSERT(Date("18/02/2003") == dates[0]);
-    ASSERT(Date("18/04/2003") == dates[1]);
-    ASSERT(Date("18/06/2003") == dates[2]);
-    ASSERT(Date("18/08/2003") == dates[3]);
-    ASSERT(Date("18/10/2003") == dates[4]);
-    ASSERT(Date("18/12/2003") == dates[5]);
-    ASSERT(Date("18/02/2004") == dates[6]);
-    ASSERT(Date("18/04/2004") == dates[7]);
-    ASSERT(Date("18/06/2004") == dates[8]);
-    ASSERT(Date("18/08/2004") == dates[9]);
-    ASSERT(Date("18/10/2004") == dates[10]);
-    ASSERT(Date("18/12/2004") == dates[11]);
-    ASSERT(Date("18/02/2005") == dates[12]);
-    delete [] dates;
-  }
+  ASSERT(Date("18/02/2003") == params.dates[0]);
+  ASSERT(Date("18/04/2003") == params.dates[1]);
+  ASSERT(Date("18/06/2003") == params.dates[2]);
+  ASSERT(Date("18/08/2003") == params.dates[3]);
+  ASSERT(Date("18/10/2003") == params.dates[4]);
+  ASSERT(Date("18/12/2003") == params.dates[5]);
+  ASSERT(Date("18/02/2004") == params.dates[6]);
+  ASSERT(Date("18/04/2004") == params.dates[7]);
+  ASSERT(Date("18/06/2004") == params.dates[8]);
+  ASSERT(Date("18/08/2004") == params.dates[9]);
+  ASSERT(Date("18/10/2004") == params.dates[10]);
+  ASSERT(Date("18/12/2004") == params.dates[11]);
+  ASSERT(Date("18/02/2005") == params.dates[12]);
 }
 
 //===========================================================================

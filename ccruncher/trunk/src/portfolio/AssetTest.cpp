@@ -327,16 +327,26 @@ void ccruncher_test::AssetTest::test5()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
-                   Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
-                   Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
-                   Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
-                   Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
-                   Date("1/7/2011") };
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, 16, interests));
+  vector<Date> dates;
+  dates.push_back(Date("1/1/2004"));
+  dates.push_back(Date("1/7/2004"));
+  dates.push_back(Date("1/1/2005"));
+  dates.push_back(Date("1/7/2005"));
+  dates.push_back(Date("1/1/2006"));
+  dates.push_back(Date("1/7/2006"));
+  dates.push_back(Date("1/1/2007"));
+  dates.push_back(Date("1/7/2007"));
+  dates.push_back(Date("1/1/2008"));
+  dates.push_back(Date("1/7/2008"));
+  dates.push_back(Date("1/1/2009"));
+  dates.push_back(Date("1/7/2009"));
+  dates.push_back(Date("1/1/2010"));
+  dates.push_back(Date("1/7/2010"));
+  dates.push_back(Date("1/1/2011"));
+  dates.push_back(Date("1/7/2011"));
 
-  // observe that losses at 01/07/xx contains 15 days of one type of 
-  // recovery and the rest of other type of recovery
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
+
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(2), EPSILON);
@@ -384,13 +394,25 @@ void ccruncher_test::AssetTest::test6()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  Date dates[] = { Date("1/1/2004"), Date("1/7/2004"), Date("1/1/2005"), 
-                   Date("1/7/2005"), Date("1/1/2006"), Date("1/7/2006"),
-                   Date("1/1/2007"), Date("1/7/2007"), Date("1/1/2008"), 
-                   Date("1/7/2008"), Date("1/1/2009"), Date("1/7/2009"), 
-                   Date("1/1/2010"), Date("1/7/2010"), Date("1/1/2011"),
-                   Date("1/7/2011") };
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, 16, interests));
+  vector<Date> dates;
+  dates.push_back(Date("1/1/2004"));
+  dates.push_back(Date("1/7/2004"));
+  dates.push_back(Date("1/1/2005"));
+  dates.push_back(Date("1/7/2005"));
+  dates.push_back(Date("1/1/2006"));
+  dates.push_back(Date("1/7/2006"));
+  dates.push_back(Date("1/1/2007"));
+  dates.push_back(Date("1/7/2007"));
+  dates.push_back(Date("1/1/2008"));
+  dates.push_back(Date("1/7/2008"));
+  dates.push_back(Date("1/1/2009"));
+  dates.push_back(Date("1/7/2009"));
+  dates.push_back(Date("1/1/2010"));
+  dates.push_back(Date("1/7/2010"));
+  dates.push_back(Date("1/1/2011"));
+  dates.push_back(Date("1/7/2011"));
+
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
@@ -438,9 +460,14 @@ void ccruncher_test::AssetTest::test7()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  Date dates[] = { Date("1/1/2004"), Date("1/1/2006"), Date("1/1/2008"), 
-                   Date("1/1/2010"), Date("1/1/2012") };
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, 5, interests));
+  vector<Date> dates;
+  dates.push_back(Date("1/1/2004"));
+  dates.push_back(Date("1/1/2006"));
+  dates.push_back(Date("1/1/2008"));
+  dates.push_back(Date("1/1/2010"));
+  dates.push_back(Date("1/1/2012"));
+
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
   ASSERT_EQUALS_EPSILON(960.328, asset.getLoss(1), EPSILON);
@@ -477,10 +504,17 @@ void ccruncher_test::AssetTest::test8()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  Date dates[] = { Date("15/1/2004"), Date("15/1/2005"), Date("15/1/2006"), 
-                   Date("15/1/2007"), Date("15/1/2008"), Date("15/1/2009"), 
-                   Date("15/1/2010"), Date("15/1/2011") };
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, 8, interests));
+  vector<Date> dates;
+  dates.push_back(Date("15/1/2004"));
+  dates.push_back(Date("15/1/2005"));
+  dates.push_back(Date("15/1/2006"));
+  dates.push_back(Date("15/1/2007"));
+  dates.push_back(Date("15/1/2008"));
+  dates.push_back(Date("15/1/2009"));
+  dates.push_back(Date("15/1/2010"));
+  dates.push_back(Date("15/1/2011"));
+
+  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
@@ -539,8 +573,13 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT_EQUALS_EPSILON(+10.0, data[7].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+3.0, data[7].recovery, EPSILON);
 
-  Date dates[] = { Date("1/1/1999"), Date("1/1/2000"), Date("1/6/2002"), Date("1/1/2010") };
-  ASSERT_NO_THROW(asset->precomputeLosses(dates, 4, interests));
+  vector<Date> dates;
+  dates.push_back(Date("1/1/1999"));
+  dates.push_back(Date("1/1/2000"));
+  dates.push_back(Date("1/6/2002"));
+  dates.push_back(Date("1/1/2010"));
+
+  ASSERT_NO_THROW(asset->precomputeLosses(dates, interests));
 
   ASSERT_EQUALS_EPSILON(0.0, asset->getLoss(0), EPSILON);
   ASSERT_EQUALS_EPSILON(120.0, asset->getLoss(1), EPSILON);

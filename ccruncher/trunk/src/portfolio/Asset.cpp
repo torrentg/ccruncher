@@ -79,17 +79,9 @@
 #include <cassert>
 
 //===========================================================================
-// constructor (don't use it)
-//===========================================================================
-ccruncher::Asset::Asset()
-{
-  reset(NULL);
-}
-
-//===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(const Segmentations &segs)
+ccruncher::Asset::Asset(Segmentations &segs) : plosses(0)
 {
   reset((Segmentations *) &segs);
 }
@@ -99,11 +91,7 @@ ccruncher::Asset::Asset(const Segmentations &segs)
 //===========================================================================
 ccruncher::Asset::~Asset()
 {
-  if (plosses != NULL)
-  {
-    Arrays<double>::deallocVector(plosses);
-    plosses = NULL;
-  }
+  // nothing to do
 }
 
 //===========================================================================
@@ -117,7 +105,8 @@ void ccruncher::Asset::reset(Segmentations *segs)
   data.clear();
   belongsto.clear();
   have_data = false;
-  plosses = NULL;
+  mindate = Date(1,1,1);
+  maxdate = Date(1,1,1);
 }
 
 //===========================================================================
@@ -137,19 +126,16 @@ string ccruncher::Asset::getName(void) const
 }
 
 //===========================================================================
-// getDate
-//===========================================================================
-Date ccruncher::Asset::getDate(void) const
-{
-  return date;
-}
-
-//===========================================================================
 // getRightIdx
 //===========================================================================
 int ccruncher::Asset::getRightIdx(Date d)
 {
   int n = (int) data.size();
+
+  if (n == 0)
+  {
+    return -1;
+  }
 
   if (d <= data[0].date)
   {
@@ -182,7 +168,7 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
   int n = (int) data.size();
   double ret = 0.0;
 
-  if (d < date)
+  if (d < mindate)
   {
     return 0.0;
   }
@@ -203,14 +189,14 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 // precomputeLoss
 // precompute loss at time node d2 (d1 is the previous time node)
 //===========================================================================
-double ccruncher::Asset::precomputeLoss(Date d1, Date d2, Interest &spot)
+double ccruncher::Asset::precomputeLoss(const Date d1, const Date d2, const Interest &spot)
 {
   double ret = 0.0;
   double ufactor, tfactor, csum, recv;
   Date prevdate = d1;
 
-  if (d2 < date) return 0.0;
-  if (d1 < date) prevdate = date;
+  if (d2 < mindate) return 0.0;
+  if (d1 < mindate) prevdate = mindate;
   int idx1 = getRightIdx(prevdate);
   if (idx1 == -1) return 0.0;
   int idx2 = getRightIdx(d2);
@@ -241,19 +227,19 @@ double ccruncher::Asset::precomputeLoss(Date d1, Date d2, Interest &spot)
 
 //===========================================================================
 // precomputeLosses
+// caution: is assumed that dates is sorted
 //===========================================================================
-void ccruncher::Asset::precomputeLosses(Date *dates, int m, Interests &interests)
+void ccruncher::Asset::precomputeLosses(const vector<Date> &dates, const Interests &interests)
 {
-  Interest &spot = interests["spot"];
+  Interest &spot = ((Interests&)interests)["spot"];
 
   // allocating & initializing memory
-  plosses = Arrays<double>::allocVector(m, 0.0);
-
-  // sorting dates
-  sort(dates, dates+m);
+  plosses.clear();
+  plosses.reserve(dates.size());
+  plosses.insert(plosses.begin(), dates.size(), 0.0);
 
   // computing losses at given time nodes (array dates)
-  for (int i=0;i<m;i++)
+  for (unsigned int i=0;i<dates.size();i++)
   {
     plosses[i] = precomputeLoss((i==0?Date(1,1,1):dates[i-1]), dates[i], spot);
   }
@@ -264,7 +250,7 @@ void ccruncher::Asset::precomputeLosses(Date *dates, int m, Interests &interests
 //===========================================================================
 double ccruncher::Asset::getLoss(int k)
 {
-  if (plosses == NULL || k < 0)
+  if (k < 0 || (int) plosses.size()-1 < k)
   {
     return NAN;
   }
@@ -286,8 +272,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     else {
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
-      date = getDateAttribute(attributes, "date", Date(1,1,1));
-      if (id == "" || name == "" || date == Date(1,1,1))
+      mindate = getDateAttribute(attributes, "date", Date(1,1,1));
+      if (id == "" || name == "" || mindate == Date(1,1,1))
       {
         throw Exception("invalid attributes at <asset>");
       }
@@ -347,7 +333,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
       try 
       { 
         // adding creation date as an event
-        DateValues event0(date, 0.0, 0.0);
+        DateValues event0(mindate, 0.0, 0.0);
         insertDateValues(event0);
       }
       catch(...) 
@@ -409,7 +395,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 {
   // checking if date is previous to creation date
-  if (val.date < date)
+  if (val.date < mindate)
   {
     throw Exception("trying to insert an event with date previous to asset creation date");
   }
@@ -421,6 +407,12 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
     {
       throw Exception("trying to insert an existent date");
     }
+  }
+
+  // filling maxdate
+  if (maxdate < val.date)
+  {
+    maxdate = val.date;
   }
 
   // inserting date-values
@@ -498,3 +490,30 @@ vector<DateValues>& ccruncher::Asset::getData()
 {
   return data;
 }
+
+//===========================================================================
+// getData
+//===========================================================================
+void ccruncher::Asset::deleteData()
+{
+  data.clear();
+  // incredible but true, this shrink memory
+  std::vector<DateValues>(data.begin(), data.end()).swap(data);
+}
+
+//===========================================================================
+// getMinDate
+//===========================================================================
+Date ccruncher::Asset::getMinDate()
+{
+  return mindate;
+}
+
+//===========================================================================
+// getMaxDate
+//===========================================================================
+Date ccruncher::Asset::getMaxDate()
+{
+  return maxdate;
+}
+

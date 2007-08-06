@@ -84,7 +84,7 @@ class Sectors : public ExpatHandlers
     // return the number of sectors
     int size() const;
     // return the index of the sector
-    int getIndex(const string &name);
+    int getIndex(const string &name) const;
     // [] operator
     Sector& operator [] (int i);
     // [] operator

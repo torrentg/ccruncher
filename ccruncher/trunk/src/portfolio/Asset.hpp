@@ -87,8 +87,10 @@ class Asset : public ExpatHandlers
     string id;
     // asset name
     string name;
-    // asset creation date
-    Date date;
+    // minimum event date (= creation date)
+    Date mindate;
+    // maximum event date
+    Date maxdate;
     // segmentation-segment relations
     map<int,int> belongsto;
     // cashflow values
@@ -96,7 +98,7 @@ class Asset : public ExpatHandlers
     // pointer to segmentations list
     Segmentations *segmentations;
     // precomputed losses at time nodes
-    double *plosses;
+    vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
 
@@ -105,7 +107,7 @@ class Asset : public ExpatHandlers
     // returns cashflow sum from given date
     double getCashflowSum(Date d, const Interest &);
     // precompute loss at d2
-    double precomputeLoss(const Date d1, const Date d2, Interest &spot);
+    double precomputeLoss(const Date d1, const Date d2, const Interest &spot);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation
@@ -114,10 +116,8 @@ class Asset : public ExpatHandlers
 
   public:
 
-    // default constructor
-    Asset();
     // constructor
-    Asset(const Segmentations &);
+    Asset(Segmentations &);
     // destructor
     ~Asset();
 
@@ -125,12 +125,10 @@ class Asset : public ExpatHandlers
     string getId(void) const;
     // returns asset name
     string getName(void) const;
-    // returns asset creation date
-    Date getDate(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precompute losses at given dates
-    void precomputeLosses(Date *dates, int n, Interests &interests);
+    void precomputeLosses(const vector<Date> &dates, const Interests &interests);
     // returns precomputed loss at requested time node index
     double getLoss(int k);
     // returns a pointer to cashflow
@@ -141,6 +139,12 @@ class Asset : public ExpatHandlers
     int getSegment(int isegmentation);
     // reset object content
     void reset(Segmentations *);
+    // free memory allocated by DateValues
+    void deleteData();
+    // returns minimum event date
+    Date getMinDate();
+    // returns maximum event date
+    Date getMaxDate();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

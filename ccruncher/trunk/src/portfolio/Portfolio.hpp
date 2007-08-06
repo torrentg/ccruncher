@@ -48,6 +48,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
@@ -72,20 +73,21 @@ class Portfolio : public ExpatHandlers
 
     vector<Borrower *> vborrowers;
 
-    Ratings *ratings;
-    Sectors *sectors;
+    const Ratings *ratings;
+    const Sectors *sectors;
     Segmentations *segmentations;
-    Interests *interests;
+    const Interests *interests;
     Borrower *auxborrower;
+    const vector<Date> *dates;
 
     void insertBorrower(Borrower &) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
-    void reset(Ratings &, Sectors &, Segmentations &, Interests &);
+    void reset(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
 
   public:
 
-    Portfolio(Ratings &, Sectors &, Segmentations &, Interests &);
+    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
     ~Portfolio();
 
     vector<Borrower *> &getBorrowers();

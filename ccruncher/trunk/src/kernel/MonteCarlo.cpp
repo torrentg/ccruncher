@@ -128,17 +128,8 @@
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
+#include "utils/ccmpi.h"
 #include <cassert>
-
-#ifdef USE_MPI
-  #include <mpi.h>
-  #define MPI_VAL_WORK 1025   // work tag (see task variable)
-  #define MPI_VAL_STOP 1026   // stop tag (see task variable)
-  #define MPI_TAG_DATA 1027   // data tag (used to send results)
-  #define MPI_TAG_INFO 1028   // info tag (used to send results)
-  #define MPI_TAG_TASK 1029   // task tag (used to send results)
-  #define MPI_TAG_EXIT 1030   // task tag (used to send results)
-#endif
 
 //===========================================================================
 // constructor
@@ -181,8 +172,6 @@ void ccruncher::MonteCarlo::reset()
 
   copula = NULL;
   survival = NULL;
-  mtrans = NULL;
-  dates = NULL;
   ittd = NULL;
 }
 
@@ -191,19 +180,10 @@ void ccruncher::MonteCarlo::reset()
 //===========================================================================
 void ccruncher::MonteCarlo::release()
 {
-  // deallocating transition matrix object
-  if (mtrans != NULL) { delete mtrans; mtrans = NULL; }
-
   // deallocating copula
   if (copula != NULL) { delete copula; copula = NULL; }
 
   // survival fuction object deallocated by IData (its container)
-
-  // deallocating dates vector
-  if (dates != NULL) {
-    Arrays<Date>::deallocVector(dates);
-    dates = NULL;
-  }
 
   // deallocating workspace array
   if (ittd != NULL) {
@@ -259,7 +239,7 @@ void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
   initParams(idata);
 
   // initializing borrowers
-  initBorrowers(idata, dates, STEPS);
+  initBorrowers(idata);
 
   // initializing ratings and transition matrix
   initRatings(idata);
@@ -312,7 +292,7 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 
   // fixing time-tranches
   begindate = idata.getParams().begindate;
-  dates = idata.getParams().getDates();
+  dates = idata.getParams().dates;
 
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
@@ -329,7 +309,7 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 //===========================================================================
 // initBorrowers
 //===========================================================================
-void ccruncher::MonteCarlo::initBorrowers(const IData &idata, Date *idates, int isteps) throw(Exception)
+void ccruncher::MonteCarlo::initBorrowers(const IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting borrowers to simulate", '-');
@@ -340,12 +320,12 @@ void ccruncher::MonteCarlo::initBorrowers(const IData &idata, Date *idates, int 
   Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
 
   // sorting borrowers by sector and rating
-  idata.getPortfolio().sortBorrowers(idates[0], idates[isteps], idata.getParams().onlyactive);
+  idata.getPortfolio().sortBorrowers(dates[0], dates[STEPS], idata.getParams().onlyactive);
 
   // fixing number of borrowers
   if (idata.getParams().onlyactive)
   {
-    N = idata.getPortfolio().getNumActiveBorrowers(idates[0], idates[isteps]);
+    N = idata.getPortfolio().getNumActiveBorrowers(dates[0], dates[STEPS]);
   }
   else
   {
@@ -363,16 +343,10 @@ void ccruncher::MonteCarlo::initBorrowers(const IData &idata, Date *idates, int 
   // setting borrowers object
   borrowers = &(idata.getPortfolio().getBorrowers());
 
-  // precomputing asset losses at time nodes
-  Logger::trace("elapsed time precomputing assets losses", true);
-  for(long i=0;i<N;i++)
-  {
-    vector<Asset> &assets = (*borrowers)[i]->getAssets();
-    for(unsigned int j=0;j<assets.size();j++)
-    {
-      assets[j].precomputeLosses(dates, STEPS+1, idata.getInterests());
-    }
-  }
+  // note: this is the place where it must have the asset losses precomputation.
+  // Asset losses has been moved to Borrower:insertAsset() with the purpose of 
+  // being able flush memory on asset events just after precomputation because 
+  // in massive portfolios memory can be exhausted
 
   // exit function
   Logger::previousIndentLevel();
@@ -469,6 +443,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
   Logger::previousIndentLevel();
 }
 
+/*
 //===========================================================================
 // getBorrowerCorrelationMatrix
 //===========================================================================
@@ -494,6 +469,7 @@ double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata
 
   return ret;
 }
+*/
 
 //===========================================================================
 // copula construction
@@ -634,7 +610,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
       // initializing SegmentAggregator
       tmp->define(aggregators.size(), i, j, segmentations[i].components);
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, STEPS+1, *borrowers, N);
+      tmp->initialize(dates, *borrowers, N);
 
       // adding aggregator to list (only if have elements)
       numsegments++;

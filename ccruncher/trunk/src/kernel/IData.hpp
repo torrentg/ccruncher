@@ -90,7 +90,7 @@ class IData : public ExpatHandlers
     Segmentations *segmentations;
     Portfolio *portfolio;
 
-    // portfolio can be huge (memory,time,...)
+    // portfolio can be huge (memory, time, ...)
     bool parse_portfolio;
     bool hasmaintag;
 

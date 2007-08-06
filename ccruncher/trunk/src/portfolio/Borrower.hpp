@@ -55,6 +55,7 @@
 
 #include "utils/config.h"
 #include <map>
+#include <vector>
 #include "portfolio/Asset.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
@@ -80,13 +81,14 @@ class Borrower : public ExpatHandlers
     map<int,int> belongsto;
     vector<Asset> vassets;
 
-    Ratings *ratings;
-    Sectors *sectors;
+    const Ratings *ratings;
+    const Sectors *sectors;
     Segmentations *segmentations;
-    Interests *interests;
+    const Interests *interests;
+    const vector<Date> *dates;
     Asset auxasset;
 
-    void insertAsset(const Asset &) throw(Exception);
+    void insertAsset(Asset &) throw(Exception);
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
   public:
@@ -97,7 +99,7 @@ class Borrower : public ExpatHandlers
     string name;
     unsigned long hkey;
 
-    Borrower(Ratings &, Sectors &, Segmentations &, Interests &);
+    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
     ~Borrower();
 
     vector<Asset> & getAssets();
@@ -108,7 +110,7 @@ class Borrower : public ExpatHandlers
     int getSegment(int isegmentation);
 
     static bool less(const Borrower *left, const Borrower *right);
-    void reset(Ratings &, Sectors &, Segmentations &, Interests &);
+    void reset(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

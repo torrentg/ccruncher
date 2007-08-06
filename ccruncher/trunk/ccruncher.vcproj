@@ -388,6 +388,9 @@
 					RelativePath="src\utils\Logger.hpp">
 				</File>
 				<File
+					RelativePath="src\utils\ccmpi.h">
+				</File>
+				<File
 					RelativePath="src\utils\Parser.cpp">
 				</File>
 				<File

@@ -44,11 +44,8 @@
 #include <cstdio>
 #include <ctime>
 #include "utils/Utils.hpp"
+#include "utils/ccmpi.h"
 #include <cassert>
-
-#ifdef USE_MPI
-  #include <mpi.h>
-#endif
 
 // --------------------------------------------------------------------------
 

@@ -42,7 +42,7 @@ EXTRA_DIST = \
 
 bin_PROGRAMS = ccruncher
 
-check_PROGRAMS = tests
+check_PROGRAMS = tests samplegen
 
 TESTS = tests
 
@@ -134,6 +134,7 @@ ccruncher_SOURCES = \
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
+    ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
 ccruncher_CXXFLAGS =
@@ -289,8 +290,104 @@ tests_SOURCES = \
     ../src/segmentations/Segmentation.hpp\
     ../src/segmentations/Segment.hpp\
     ../src/survival/Survival.hpp\
+    ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
 tests_CXXFLAGS =
 tests_LDADD =
 tests_LDFLAGS =
+
+# -------------------------------------------------------------
+# samplegen
+# -------------------------------------------------------------
+samplegen_SOURCES = \
+    ../share/gzstream-1.5/gzstream.cpp\
+    ../src/kernel/samplegen.cpp\
+    ../src/kernel/MonteCarlo.cpp\
+    ../src/kernel/IData.cpp\
+    ../src/kernel/SegmentAggregator.cpp\
+    ../src/portfolio/Portfolio.cpp\
+    ../src/portfolio/Borrower.cpp\
+    ../src/params/Params.cpp\
+    ../src/interests/Interests.cpp\
+    ../src/interests/Interest.cpp\
+    ../src/interests/Rate.cpp\
+    ../src/ratings/Rating.cpp\
+    ../src/ratings/Ratings.cpp\
+    ../src/transitions/TransitionMatrix.cpp\
+    ../src/survival/Survival.cpp\
+    ../src/sectors/Sector.cpp\
+    ../src/sectors/Sectors.cpp\
+    ../src/correlations/CorrelationMatrix.cpp\
+    ../src/math/CholeskyDecomposition.cpp\
+    ../src/math/PowMatrix.cpp\
+    ../src/math/GaussianCopula.cpp\
+    ../src/math/Normal.cpp\
+    ../src/math/BlockMatrixChol.cpp\
+    ../src/math/BlockGaussianCopula.cpp\
+    ../src/portfolio/Asset.cpp\
+    ../src/portfolio/DateValues.cpp\
+    ../src/segmentations/Segmentations.cpp\
+    ../src/segmentations/Segmentation.cpp\
+    ../src/segmentations/Segment.cpp\
+    ../src/utils/Exception.cpp\
+    ../src/utils/Logger.cpp\
+    ../src/utils/Parser.cpp\
+    ../src/utils/File.cpp\
+    ../src/utils/Date.cpp\
+    ../src/utils/Timer.cpp\
+    ../src/utils/Arrays.cpp\
+    ../src/utils/Strings.cpp\
+    ../src/utils/ExpatParser.cpp\
+    ../src/utils/ExpatUserData.cpp\
+    ../src/utils/ExpatHandlers.cpp\
+    ../src/utils/Utils.cpp\
+    ../src/utils/Format.cpp\
+    \
+    ../src/kernel/MonteCarlo.hpp\
+    ../src/kernel/IData.hpp\
+    ../src/kernel/SegmentAggregator.hpp\
+    ../src/portfolio/Portfolio.hpp\
+    ../src/portfolio/Borrower.hpp\
+    ../src/params/Params.hpp\
+    ../src/interests/Interests.hpp\
+    ../src/interests/Interest.hpp\
+    ../src/interests/Rate.hpp\
+    ../src/ratings/Rating.hpp\
+    ../src/ratings/Ratings.hpp\
+    ../src/transitions/TransitionMatrix.hpp\
+    ../src/survival/Survival.hpp\
+    ../src/sectors/Sector.hpp\
+    ../src/sectors/Sectors.hpp\
+    ../src/correlations/CorrelationMatrix.hpp\
+    ../src/math/CholeskyDecomposition.hpp\
+    ../src/math/PowMatrix.hpp\
+    ../src/math/Copula.hpp\
+    ../src/math/GaussianCopula.hpp\
+    ../src/math/Normal.hpp\
+    ../src/math/BlockMatrixChol.hpp\
+    ../src/math/BlockGaussianCopula.hpp\
+    ../src/portfolio/Asset.hpp\
+    ../src/portfolio/DateValues.hpp\
+    ../src/segmentations/Segmentations.hpp\
+    ../src/segmentations/Segmentation.hpp\
+    ../src/segmentations/Segment.hpp\
+    ../src/utils/Exception.hpp\
+    ../src/utils/Logger.hpp\
+    ../src/utils/Parser.hpp\
+    ../src/utils/File.hpp\
+    ../src/utils/Date.hpp\
+    ../src/utils/Timer.hpp\
+    ../src/utils/Arrays.hpp\
+    ../src/utils/Strings.hpp\
+    ../src/utils/ExpatParser.hpp\
+    ../src/utils/ExpatUserData.hpp\
+    ../src/utils/ExpatHandlers.hpp\
+    ../src/utils/Utils.hpp\
+    ../src/utils/Format.hpp\
+    ../src/utils/ccmpi.h\
+    ../src/utils/config.h
+
+samplegen_CXXFLAGS =
+samplegen_LDADD =
+samplegen_LDFLAGS =

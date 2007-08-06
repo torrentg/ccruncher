@@ -73,6 +73,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include "kernel/IData.hpp"
 #include "kernel/SegmentAggregator.hpp"
 #include "ratings/Ratings.hpp"
@@ -120,12 +121,10 @@ class MonteCarlo
 
     /** transition matrix (size = 1) (used by rating-path method, canbe used by time-to-default method) */
     Survival *survival;
-    /** survival function (can be used by time-to-default method) */
-    TransitionMatrix *mtrans;
     /** copula used to simulate correlations */
     Copula *copula;
     /** date per time tranch (size = M) */
-    Date *dates;
+    vector<Date> dates;
     /** simulated time-to-default per borrower (size = N) */
     int *ittd;
 
@@ -146,7 +145,7 @@ class MonteCarlo
     // init methods
     void init(IData &) throw(Exception);
     void initParams(const IData &) throw(Exception);
-    void initBorrowers(const IData &, Date *, int) throw(Exception);
+    void initBorrowers(const IData &) throw(Exception);
     void initRatings(const IData &) throw(Exception);
     void initSectors(const IData &) throw(Exception);
     void initTimeToDefault(IData &) throw(Exception);
@@ -164,7 +163,7 @@ class MonteCarlo
     long executeCollector() throw(Exception);
 
     // auxiliary methods
-    double** getBorrowerCorrelationMatrix(const IData &);
+    //double** getBorrowerCorrelationMatrix(const IData &);
 
 
   public:

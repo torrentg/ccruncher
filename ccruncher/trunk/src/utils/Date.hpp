@@ -112,7 +112,7 @@ class Date
     friend Date operator-( const Date& Left, const long Right );
     friend Date operator-( const long Left, const Date& Right );
     Date& operator-=( const long Right );
-    long operator-( const Date& Right );
+    long operator-( const Date& Right ) const;
     Date& operator--();
     Date operator--( int );
 
@@ -201,7 +201,7 @@ inline Date& ccruncher::Date::operator-=( const long Right )
     lJulianDay -= Right;
     return *this;
 }
-inline long ccruncher::Date::operator-( const Date& Right )
+inline long ccruncher::Date::operator-( const Date& Right ) const
 {
     return lJulianDay - Right.lJulianDay;
 }

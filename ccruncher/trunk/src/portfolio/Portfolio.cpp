@@ -59,11 +59,12 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(Ratings &ratings_, Sectors &sectors_,
-             Segmentations &segmentations_, Interests &interests_)
+ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
+             Segmentations &segmentations_, const Interests &interests_, 
+             const vector<Date> &dates_)
 {
   // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_);
+  reset(ratings_, sectors_, segmentations_, interests_, dates_);
 }
 
 //===========================================================================
@@ -81,8 +82,9 @@ ccruncher::Portfolio::~Portfolio()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Portfolio::reset(Ratings &ratings_, Sectors &sectors_,
-             Segmentations &segmentations_, Interests &interests_)
+void ccruncher::Portfolio::reset(const Ratings &ratings_, const Sectors &sectors_,
+             Segmentations &segmentations_, const Interests &interests_, 
+             const vector<Date> &dates_)
 {
   auxborrower = NULL;
 
@@ -91,6 +93,7 @@ void ccruncher::Portfolio::reset(Ratings &ratings_, Sectors &sectors_,
   sectors = &sectors_;
   segmentations = &segmentations_;
   interests = &interests_;
+  dates = &dates_;
 
   // dropping borrowers
   for(unsigned int i=0;i<vborrowers.size();i++) {
@@ -178,7 +181,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     }
   }
   else if (isEqual(name_,"borrower")) {
-    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests);
+    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests, *dates);
     eppush(eu, auxborrower, name_, attributes);
   }
   else {

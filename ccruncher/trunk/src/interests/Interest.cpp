@@ -121,7 +121,11 @@ double ccruncher::Interest::getValue(const double t) const
 {
   unsigned int n = vrates.size();
 
-  if (t <= vrates[0].t)
+  if (n == 0)
+  {
+    return 1.0;
+  }
+  else if (t <= vrates[0].t)
   {
     return vrates[0].r;
   }
@@ -155,7 +159,7 @@ Date ccruncher::Interest::idx2date(int t) const
 //===========================================================================
 // returns index of date date1
 //===========================================================================
-inline double ccruncher::Interest::date2idx(Date &date1) const
+inline double ccruncher::Interest::date2idx(const Date &date1) const
 {
   return (double)(date1-date0)/30.3958;
 }
@@ -174,7 +178,7 @@ inline double ccruncher::Interest::getUpsilon(const double r, const double t) co
 // returns factor to aply to transport a money value from date1 to date2
 // satisfying interest curve rate values
 //===========================================================================
-double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const
+double ccruncher::Interest::getUpsilon(const Date &date1, const Date &date2) const
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);

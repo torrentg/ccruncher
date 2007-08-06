@@ -90,10 +90,7 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-
-#ifdef USE_MPI
-  #include <mpi.h>
-#endif
+#include "utils/ccmpi.h"
 
 //---------------------------------------------------------------------------
 

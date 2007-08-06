@@ -116,26 +116,25 @@ class SegmentAggregator
     long icont;
 
     // related borrowers position index (size = nborrowers)
-    long *iborrowers;
+    vector<long> iborrowers;
     // vertexes of afected borrowers (size = nborrowers x M)
-    double **losses;
+    vector<vector<double> > losses;
     // vertex values aggregation per tranch (size = buffersize)
-    double *cvalues;
+    vector<double> cvalues;
 
     // internal timer (control time from last flush)
     Timer timer;
 
     // memory management
     void init();
-    void release();
 
     // internal functions
     long getANumBorrowers(vector<Borrower *> &, long, bool *);
     long getCNumBorrowers(vector<Borrower *> &, long, bool *);
     long getANumAssets(vector<Borrower *> &, long, bool *);
     long getCNumAssets(vector<Borrower *> &, long, bool *);
-    long* allocIBorrowers(long, bool *, long) throw(Exception);
-    double** allocLosses(Date *, int, vector<Borrower *> &) throw(Exception);
+    void allocIBorrowers(long, bool *, long) throw(Exception);
+    void allocLosses(vector<Date> &, vector<Borrower *> &) throw(Exception);
 
     // output functions
     string getFilePath() throw(Exception);
@@ -151,7 +150,7 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(Date *, int, vector<Borrower *> &, long) throw(Exception);
+    void initialize(vector<Date> &, vector<Borrower *> &, long) throw(Exception);
 
     // other methods
     long getNumElements() const;

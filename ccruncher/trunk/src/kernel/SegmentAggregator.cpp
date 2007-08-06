@@ -69,39 +69,15 @@
 #include "utils/File.hpp"
 #include "utils/Format.hpp"
 #include "kernel/SegmentAggregator.hpp"
+#include "utils/ccmpi.h"
 #include <cassert>
-
-#ifdef USE_MPI
-  #include <mpi.h>
-  #define MPI_VAL_WORK 1025   // work tag (see task variable)
-  #define MPI_VAL_STOP 1026   // stop tag (see task variable)
-  #define MPI_TAG_DATA 1027   // data tag (used to send results)
-  #define MPI_TAG_INFO 1028   // info tag (used to send results)
-  #define MPI_TAG_TASK 1029   // task tag (used to send results)
-  #define MPI_TAG_EXIT 1030   // task tag (used to send results)
-#endif
 
 //===========================================================================
 // void constructor
 //===========================================================================
-ccruncher::SegmentAggregator::SegmentAggregator()
+ccruncher::SegmentAggregator::SegmentAggregator() : iborrowers(0), losses(0, 0), cvalues(0)
 {
   init();
-}
-
-//===========================================================================
-// define
-//===========================================================================
-void ccruncher::SegmentAggregator::define(int iaggre, int isegs, int iseg, components_t comps)
-{
-  assert(iaggre >= 0);
-  assert(isegs >= 0);
-  assert(iseg >= 0);
-
-  iaggregator = iaggre;
-  isegmentation = isegs;
-  isegment = iseg;
-  components = comps;
 }
 
 //===========================================================================
@@ -109,10 +85,6 @@ void ccruncher::SegmentAggregator::define(int iaggre, int isegs, int iseg, compo
 //===========================================================================
 void ccruncher::SegmentAggregator::init()
 {
-  iborrowers = NULL;
-  cvalues = NULL;
-  losses = NULL;
-
   iaggregator = -1;
   isegmentation = -1;
   isegment = -1;
@@ -134,48 +106,37 @@ void ccruncher::SegmentAggregator::init()
 }
 
 //===========================================================================
+// define
+//===========================================================================
+void ccruncher::SegmentAggregator::define(int iaggre, int isegs, int iseg, components_t comps)
+{
+  assert(iaggre >= 0);
+  assert(isegs >= 0);
+  assert(iseg >= 0);
+
+  iaggregator = iaggre;
+  isegmentation = isegs;
+  isegment = iseg;
+  components = comps;
+}
+
+//===========================================================================
 // destructor
 //===========================================================================
 ccruncher::SegmentAggregator::~SegmentAggregator()
 {
-  release();
-}
-
-//===========================================================================
-// release
-//===========================================================================
-void ccruncher::SegmentAggregator::release()
-{
-  // deleting borrowers array
-  if (iborrowers != NULL) {
-    Arrays<long>::deallocVector(iborrowers);
-    iborrowers = NULL;
-  }
-
-  // deleting losses arrays
-  if (losses != NULL) {
-    Arrays<double>::deallocMatrix(losses, nborrowers);
-    losses = NULL;
-  }
-
-  // deleting cvalues
-  if (cvalues != NULL) {
-    Arrays<double>::deallocVector(cvalues);
-    cvalues = NULL;
-  }
+  // nothing to do
 }
 
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Borrower *> &borrowers,
+void ccruncher::SegmentAggregator::initialize(vector<Date> &dates, vector<Borrower *> &borrowers,
   long n) throw(Exception)
 {
   bool *borrowerflag = NULL;
 
   // assertions
-  assert(dates != NULL);
-  assert(m >= 0);
   assert(n >= 0);
 
   // initial validations
@@ -186,7 +147,7 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Borrowe
 
   // setting vars values
   N = n;
-  M = m;
+  M = dates.size();
 
   // allocating borrowerflag
   borrowerflag = Arrays<bool>::allocVector(N, false);
@@ -209,15 +170,14 @@ void ccruncher::SegmentAggregator::initialize(Date *dates, int m, vector<Borrowe
     }
 
     // allocating & fixing borrowers
-    iborrowers = allocIBorrowers(nborrowers, borrowerflag, N);
+    allocIBorrowers(nborrowers, borrowerflag, N);
 
     // allocating & filling losses
-    losses = allocLosses(dates, M, borrowers);
+    allocLosses(dates, borrowers);
 
     // allocating cvalues
-    cvalues = Arrays<double>::allocVector(buffersize);
-
-    // see MonteCarlo::init() for vertex computation
+    cvalues.reserve(buffersize);
+    cvalues.assign(buffersize, 0.0);
   }
   catch(std::exception &e)
   {
@@ -321,44 +281,43 @@ long ccruncher::SegmentAggregator::getCNumAssets(vector<Borrower *> &borrowers, 
 //===========================================================================
 // allocIBorrowers
 //===========================================================================
-long* ccruncher::SegmentAggregator::allocIBorrowers(long len, bool *flags, long n) throw(Exception)
+void ccruncher::SegmentAggregator::allocIBorrowers(long len, bool *flags, long n) throw(Exception)
 {
-  long *ret = NULL;
   long aux = 0L;
 
   // assertion
   assert(len <= n);
 
-  // allocating space
-  ret = Arrays<long>::allocVector(len, -1);
+  iborrowers.reserve(len);
+  iborrowers.assign(len, -1L);
 
   // initializing values
   for(long i=0;i<n;i++)
   {
     if(flags[i] == true)
     {
-      ret[aux] = i;
+      iborrowers[aux] = i;
       aux++;
     }
   }
 
   // assertion
   assert(aux == len);
-
-  return ret;
 }
 
 //===========================================================================
 // allocLosses
 //===========================================================================
-double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Borrower *> &borrowers) throw(Exception)
+void ccruncher::SegmentAggregator::allocLosses(vector<Date> &dates, vector<Borrower *> &borrowers) throw(Exception)
 {
-  double **ret = NULL;
-
-  ret = Arrays<double>::allocMatrix(nborrowers, m, 0.0);
+  losses.reserve(nborrowers);
+  losses.assign(nborrowers, vector<double>(0));
 
   for(long i=0;i<nborrowers;i++)
   {
+    losses[i].reserve(dates.size());
+    losses[i].assign(dates.size(), 0.0);
+
     // finding borrower info
     long cpos = iborrowers[i];
     vector<Asset> &assets = borrowers[cpos]->getAssets();
@@ -368,15 +327,13 @@ double** ccruncher::SegmentAggregator::allocLosses(Date *dates, int m, vector<Bo
     {
       if (components==borrower || (components==asset && assets[j].belongsTo(isegmentation, isegment)))
       {
-        for(int k=0; k<m; k++)
+        for(unsigned int k=0; k<dates.size(); k++)
         {
-          ret[i][k] += assets[j].getLoss(k);
+          losses[i][k] += assets[j].getLoss(k);
         }
       }
     }
   }
-
-  return ret;
 }
 
 //===========================================================================
@@ -473,7 +430,7 @@ bool ccruncher::SegmentAggregator::flush() throw(Exception)
     // sending info
     MPI::COMM_WORLD.Send(&iaggregator, 1, MPI::INT, 0, MPI_TAG_INFO);
     // sending data
-    MPI::COMM_WORLD.Send(cvalues, icont, MPI::DOUBLE, 0, MPI_TAG_DATA);
+    MPI::COMM_WORLD.Send(&(cvalues[0]), icont, MPI::DOUBLE, 0, MPI_TAG_DATA);
     // receiving task
     MPI::COMM_WORLD.Recv(&task, 1, MPI::INT, 0, MPI_TAG_TASK);
     // reseting timer

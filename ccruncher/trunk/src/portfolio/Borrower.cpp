@@ -75,11 +75,12 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Borrower::Borrower(Ratings &ratings_, Sectors &sectors_,
-               Segmentations &segmentations_, Interests &interests_)
+ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
+               Segmentations &segmentations_, const Interests &interests_,
+               const vector<Date> &dates_) : auxasset(segmentations_)
 {
   // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_);
+  reset(ratings_, sectors_, segmentations_, interests_, dates_);
 }
 
 //===========================================================================
@@ -93,14 +94,16 @@ ccruncher::Borrower::~Borrower()
 //===========================================================================
 // reset
 //===========================================================================
-void ccruncher::Borrower::reset(Ratings &ratings_, Sectors &sectors_,
-               Segmentations &segmentations_, Interests &interests_)
+void ccruncher::Borrower::reset(const Ratings &ratings_, const Sectors &sectors_,
+               Segmentations &segmentations_, const Interests &interests_,
+               const vector<Date> &dates_)
 {
   // setting external objects references
   ratings = &(ratings_);
   sectors = &(sectors_);
   segmentations = &(segmentations_);
   interests = &(interests_);
+  dates = &(dates_);
   hkey = 0UL;
 
   // cleaning containers
@@ -125,7 +128,7 @@ vector<Asset> & ccruncher::Borrower::getAssets()
 //===========================================================================
 // insert an asset into list
 //===========================================================================
-void ccruncher::Borrower::insertAsset(const Asset &val) throw(Exception)
+void ccruncher::Borrower::insertAsset(Asset &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vassets.size();i++)
@@ -140,6 +143,8 @@ void ccruncher::Borrower::insertAsset(const Asset &val) throw(Exception)
 
   try
   {
+    val.precomputeLosses(*dates, *interests);
+    val.deleteData();
     vassets.push_back(val);
   }
   catch(std::exception &e)
@@ -255,32 +260,22 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Exception)
 {
-  if (vassets.size() == 0)
-  {
-    return false;
-  }
-
   for(unsigned int i=0;i<vassets.size();i++)
   {
-    vector<DateValues> &data = vassets[i].getData();
+    Date date1 = vassets[i].getMinDate();
+    Date date2 = vassets[i].getMaxDate();
 
-    if (data.size() > 0)
+    if (from <= date1 && date1 <= to)
     {
-      Date date1 = data[0].date;
-      Date date2 = data[data.size()-1].date;
-
-      if (from <= date1 && date1 <= to)
-      {
-        return true;
-      }
-      else if (from <= date2 && date2 <= to)
-      {
-        return true;
-      }
-      else if (date1 <= from && to <= date2)
-      {
-        return true;
-      }
+      return true;
+    }
+    else if (from <= date2 && date2 <= to)
+    {
+      return true;
+    }
+    else if (date1 <= from && to <= date2)
+    {
+      return true;
     }
   }
 
