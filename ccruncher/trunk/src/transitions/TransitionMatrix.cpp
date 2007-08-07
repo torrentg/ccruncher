@@ -170,33 +170,21 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   // validating ratings
   if (row < 0 || col < 0)
   {
-    string msg = "undefined rating at <transition> ";
-    msg += rating1;
-    msg += " -> ";
-    msg += rating2;
-    throw Exception(msg);
+    throw Exception("undefined rating at <transition> " + rating1 + " -> " + rating2);
   }
 
   // validating value
   if (value < -epsilon || value > (1.0 + epsilon))
   {
-    string msg = " transition value[";
-    msg += rating1;
-    msg += "][";
-    msg += rating2;
-    msg += "] out of range: ";
-    msg += Format::double2string(value);
+    string msg = " transition value[" + rating1 + "][" + rating2 + "] out of range: " + 
+                 Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that not exist
   if (!isnan(matrix[row][col]))
   {
-    string msg = "redefined transition [";
-    msg += rating1;
-    msg += "][";
-    msg += rating2;
-    msg += "] in <mtransitions>";
+    string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <mtransitions>";
     throw Exception(msg);
   }
 

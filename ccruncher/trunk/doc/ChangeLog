@@ -20,6 +20,7 @@ version 1.1 (Aug. 2007)
   * Class Client renamed to Borrower
   * changed site look & feel
   * releases unused memory
+  * added check over asset id uniqueness
 
 version 1.0 (Dec. 2006)
 --------------------------

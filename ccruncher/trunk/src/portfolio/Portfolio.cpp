@@ -126,26 +126,38 @@ void ccruncher::Portfolio::insertBorrower(Borrower &val) throw(Exception)
   {
     curr = vborrowers[i];
 
-    if (curr->hkey == chkey)
+    if (curr->hkey == chkey) // checking borrower id uniqueness
     {
       // resolving hash key collision
       if (curr->id == val.id)
       {
+        string msg = "borrower id " + val.id + " repeated";
         delete &val;
-        string msg = "borrower id ";
-        msg += val.id;
-        msg += " repeated";
-        throw Exception(msg);
-      }
-      else if (curr->name == val.name)
-      {
-        delete &val;
-        string msg = "borrower name ";
-        msg += val.name;
-        msg += " repeated";
         throw Exception(msg);
       }
     }
+    else // checking asset id uniqueness
+    {
+      vector<Asset> &currassets = curr->getAssets();
+      for(unsigned int j=0; j<currassets.size(); j++)
+      {
+        for(unsigned int k=0; k<val.getAssets().size(); k++)
+        {
+          if (currassets[j].hkey == val.getAssets()[k].hkey)
+          {
+            // resolving hash key collision
+            if (currassets[j].getId() == val.getAssets()[k].getId())
+            {
+              string msg = "borrowers " + curr->name + " and " + val.name + 
+                            " have a asset with same id (" + val.getAssets()[k].getId() + ")";
+              delete &val;
+              throw Exception(msg);
+            }
+          }
+        }
+      }
+    }
+
   }
 
   try

@@ -149,42 +149,28 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // checking rating index
   if (irating < 0 || irating > nratings)
   {
-    string msg = "unknow rating at <survival>: ";
-    msg += srating;
-    throw Exception(msg);
+    throw Exception("unknow rating at <survival>: " + srating);
   }
 
   // validating time
   if (t < 0)
   {
-    string msg = "survival value[";
-    msg += srating;
-    msg += "][";
-    msg += Format::int2string(t);
-    msg += "] has time < 0";
+    string msg = "survival value[" + srating + "][" + Format::int2string(t) + "] has time < 0";
     throw Exception(msg);
   }
 
   // validating value
   if (value < -epsilon || value-1.0 > epsilon)
   {
-    string msg = "survival value[";
-    msg += srating;
-    msg += "][";
-    msg += Format::int2string(t);
-    msg += "] out of range: ";
-    msg += Format::double2string(value);
+    string msg = "survival value[" + srating + "][" + Format::int2string(t) + 
+                 "] out of range: " + Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that is not previously defined
   if ((int) ddata[irating].size() >= t+1 && !isnan(ddata[irating][t]))
   {
-    string msg = "survival value[";
-    msg += srating;
-    msg += "][";
-    msg += Format::int2string(t);
-    msg += "] redefined";
+    string msg = "survival value[" + srating + "][" + Format::int2string(t) + "] redefined";
     throw Exception(msg);
   }
 
@@ -265,8 +251,7 @@ void ccruncher::Survival::validate() throw(Exception)
   for (int i=0;i<nratings-1;i++)
   {
     if (ddata[i].size() <= 0) {
-      string msg = "rating ";
-      msg += (*ratings)[i].name + " without survival function defined";
+      string msg = "rating " + (*ratings)[i].name + " without survival function defined";
       throw Exception(msg);
     }
   }
@@ -280,8 +265,7 @@ void ccruncher::Survival::validate() throw(Exception)
     }
     if (fabs(ddata[i][0]-1.0) > epsilon)
     {
-      string msg = "rating ";
-      msg += (*ratings)[i].name + " have a survival value distinct that 1 at t=0";
+      string msg = "rating " + (*ratings)[i].name + " have a survival value distinct that 1 at t=0";
       throw Exception(msg);
     }
   }
@@ -313,8 +297,7 @@ void ccruncher::Survival::validate() throw(Exception)
         }
         else
         {
-          string msg = "rating ";
-          msg += (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
+          string msg = "rating " + (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
           throw Exception(msg);
         }
       }

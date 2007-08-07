@@ -76,6 +76,7 @@
 #include <algorithm>
 #include "portfolio/Asset.hpp"
 #include "utils/Arrays.hpp"
+#include "utils/Utils.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -107,6 +108,7 @@ void ccruncher::Asset::reset(Segmentations *segs)
   have_data = false;
   mindate = Date(1,1,1);
   maxdate = Date(1,1,1);
+  hkey = 0UL;
 }
 
 //===========================================================================
@@ -277,6 +279,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       {
         throw Exception("invalid attributes at <asset>");
       }
+      // computing hash key
+      hkey = Utils::hash(id);
     }
   }
   else if (isEqual(name_,"belongs-to")) {

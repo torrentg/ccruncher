@@ -128,32 +128,21 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   if (row < 0 || col < 0)
   {
     string msg = "undefined sector at <sigma>, sector1=" + sector1 + ", sector2=" + sector2;
-    msg += sector1;
-    msg += " -> ";
-    msg += sector2;
     throw Exception(msg);
   }
 
   // checking value
   if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
   {
-    string msg = "correlation value[";
-    msg += sector1;
-    msg += "][";
-    msg += sector2;
-    msg += "] out of range: ";
-    msg += Format::double2string(value);
+    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
+                 Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [";
-    msg += sector1;
-    msg += "][";
-    msg += sector2;
-    msg += "] in <sigma>";
+    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <sigma>";
     throw Exception(msg);
   }
 
@@ -224,11 +213,8 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "non defined correlation element [";
-        msg += Format::int2string(i+1);
-        msg +=  "][";
-        msg += Format::int2string(j+1);
-        msg += "]";
+        string msg = "non defined correlation element [" + Format::int2string(i+1) + 
+                     "][" + Format::int2string(j+1) + "]";
         throw Exception(msg);
       }
     }

@@ -121,6 +121,9 @@ class Asset : public ExpatHandlers
     // destructor
     ~Asset();
 
+    // hash key (to speed up equals by id)
+    unsigned long hkey;
+
     // return asset id
     string getId(void) const;
     // returns asset name
