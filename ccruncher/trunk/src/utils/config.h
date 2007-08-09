@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue Aug  7 11:03:34 CEST 2007"
+#define BUILD_DATE "Tue Aug  7 12:17:58 CEST 2007"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -128,7 +128,7 @@
 #define PACKAGE_VERSION "1.1"
 
 /* Profiler instructions are added when this is defined. */
-#define PROFILER 1
+/* #undef PROFILER */
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1

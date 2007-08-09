@@ -37,12 +37,13 @@
 \usepackage[final]{listings}
 \usepackage{fancyhdr}
 \usepackage[flushmargin]{footmisc}
+\usepackage{placeins}
 
 %-----------------------------------------------------
 % defining some useful values
 %-----------------------------------------------------
 \def\numversion{1.1}
-\def\svnversion{R405}
+\def\svnversion{R418}
 
 %-----------------------------------------------------
 % some format directives
@@ -56,7 +57,6 @@
 %-----------------------------------------------------
 \begin{document}
 
-
 \title{CreditCruncher - Technical Document}
 \author{Gerard Torrent Gironella\\\\Version \numversion\ -\ \svnversion}
 \date{}
@@ -65,12 +65,12 @@
 
 %===========================================================================
 \begin{abstract}
-The CCruncher goal is compute the credit risk of portfolios where 
-investments are fixed income assets taking into account default correlations
-between sectors. This is done determining the probability distribution of the 
-portfolio loss at time $T$ using Monte Carlo simulation method and computing 
-risk statistics over there (Expected Loss, Standard Deviation, Value at Risk,
-Expected Shortfall).
+The CCruncher goal is to compute the credit risk of a portfolio, where 
+investments are fixed income assets, taking into account default correlations
+between economic sectors. This is done by determining the probability distribution 
+of portfolio loss at time $T$ using the Monte Carlo simulation method and computing 
+risk statistics (Expected Loss, Standard Deviation, Value at Risk, Expected 
+Shortfall).
 \newline
 \newline
 \textbf{Keywords}: credit risk, Monte Carlo, gaussian copula, Value at Risk,
@@ -81,104 +81,121 @@ Expected Shortfall.
 %===========================================================================
 \section{Parameters}
 
+This section explains the input parameters required by CCruncher.
+
 %---------------------------------------------------------------------------
-\subsection{Time}
-In order to speed up the calculations we precomputes asset losses at fixed 
-times. To fix this time nodes we need an \emph{initial date}, the 
+\subsection{Time nodes}
+In order to speed up the calculations we precompute asset losses at fixed 
+times. To fix these time nodes we need an \emph{initial date}, the 
 \emph{number of steps} and the \emph{step length}. The probability distribution
 is computed at date $T = initial\ date + number\ of\ steps \times step\ length$.
+See figure \ref{cctime1}.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=3.0cm, angle=0]{./images/cctime1.eps}
-%\caption{Time nodes}
+\caption{Time nodes}
 \label{cctime1}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %---------------------------------------------------------------------------
 \subsection{Ratings and Survival Functions}
-A credit rating tells a lender or investor the probability of the subject being 
-able to pay back a loan. A poor credit rating indicates a high risk of defaulting.
-Every rating has associated a survival function. This function indicates the 
+A rating tells a lender or investor the probability of the subject being 
+able to pay back a loan. A poor rating indicates a high risk of defaulting.
+Every rating has a survival function associated. This function indicates the 
 probability that a borrower with initial rating $X$ be non-defaulted at time $t$.
-The rating system creation and the construction of the survivals functions is 
+The creation of a rating system and the construction of the survival functions are 
 outside the scope of this paper\footnote{Appendix \ref{ap:tmatrix} shows 
-how determine the survival functions using the transition matrix.}.
+how to determine the survival functions using the transition matrix.}.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=10cm, angle=-90]{./images/survival.ps}
 \caption{Survival functions}
 \label{survival}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %---------------------------------------------------------------------------
-\subsection{Sectors and correlations}
-The risk of a credit portfolio depends crucially on defaults correlations between 
-economic sectors. Sectors are groupings of companies that react similarly to 
-given economic conditions. Sectors examples are: energy, financial, technology, 
-media and entertainment, utilities, health care, etc. Default correlation between 
-sectors measures the dependence to default between the defined sectors. This can 
-be expressed in table form where 
-$\rho_{i,j} = Corr(Sector_i, Sector_j)$:
+\subsection{Sectors and Correlations}
+\label{sectors}
+The risk of a credit portfolio depends crucially on default correlations between 
+economic sectors. These sectors are groupings of companies that react similarly to 
+given economic conditions. Example of sectors: energy, financial, technology, 
+media and entertainment, utilities, health care, etc. Default correlations between 
+sectors measures the default dependence between the defined sectors. This can 
+be expressed in tabular form:
 
 \begin{center}
+\begin{tabular}[]{cc}
 \begin{tabular}[]{c|ccc}
-             & $Sector_1$     & $\dots$  & $Sector_{m}$   \cr
+             & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
 \hline
 $Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \cr
 $\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \cr
 $Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
 \end{tabular}
+&
+\qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
+\end{tabular}
 \end{center}
+
+How to fix the $\rho_{i,j}$ values is outside the scope of this paper.
 
 %---------------------------------------------------------------------------
 \subsection{Portfolio}
-Portfolio is composed by borrowers where each one has an initial rating and 
+Portfolio is composed by borrowers. Each borrower has an initial rating and 
 belongs to a sector. Each borrower have one or more assets. Each asset
-is defined by the date when it was incorporated in the portfolio, a expected
-cashflow and a forecasted recovery at certain dates.
+is defined by its addition date in the portfolio, expected cashflow and 
+forecasted recovery at certain dates. Figure \ref{portfolio} shows the 
+structure of a portfolio.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=11cm, angle=0]{./images/portfolio.eps}
 \caption{Portfolio example}
 \label{portfolio}
 \end{center}
 \end{figure}
+\FloatBarrier
 
-Cashflow indicates the cash given to the borrower (negative amounts) and the
-cash received from borrower (positive amounts) at each date (see figure\ref{cashflow}).
-\newline
+\emph{Cashflow} indicates the cash given to the borrower (negative amounts) and the
+cash received from the borrower (positive amounts) at each date (see figure \ref{cashflow}).
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[width=7cm, angle=0]{./images/cashflow.eps}
 \caption{Asset cashflow example}
 \label{cashflow}
 \end{center}
 \end{figure}
+\FloatBarrier
 
-Recovery indicates the cash recovered (after to take legal action against the 
-borrower) if the borrower default at this date (see figure\ref{recovery}).
-\newline
+\emph{Recovery} indicates the cash recovered (after taking legal action against the 
+borrower) if the borrower defaults at a certain date (see figure \ref{recovery}).
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[width=7cm, angle=0]{./images/recovery.eps}
 \caption{Asset recovery example}
 \label{recovery}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 If a borrower defaults, the loss due to this default is the sum of all remaining
 cashflows at default time minus the recovery at default time.
 
 
 %===========================================================================
+\clearpage
 \section{Resolution}
+
+This section explains how CCruncher computes the credit risk of a portfolio, as 
+defined in the abstract.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -189,27 +206,33 @@ cashflows at default time minus the recovery at default time.
 \end{figure}
 
 %---------------------------------------------------------------------------
-\subsection{Correlation matrix between borrowers}
+\subsection{Borrowers correlation matrix}
 \label{tcorrel}
-We need translate the correlations between sectors to a correlations between
-borrowers. Suppose that we have $n$ borrowers and $m$ sectors. Each borrower
-belongs to a sector. Correlations between sectors are known:
+We need to translate from default correlations between sectors to default 
+correlations between borrowers. Let us suppose that we have $n$ borrowers and $m$ 
+sectors. Each borrower belongs to a sector. Correlations between sectors are 
+known (see \ref{sectors}):
 
 \begin{center}
+\begin{tabular}[]{cc}
 \begin{tabular}[]{c|ccc}
-             & $Sector_1$     & $\dots$  & $Sector_{m}$   \cr
+             & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
 \hline
 $Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \cr
 $\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \cr
 $Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
 \end{tabular}
+&
+\qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
+\end{tabular}
 \end{center}
 
-where $\rho_{i,j} = Corr(Sector_i, Sector_j)$. We sort the borrowers so that
-at the beginning are those of sector $1$ and at the end those of sector $m$. 
-Then we create the borrowers correlation matrix taking as correlation between
-two borrowers the correlation between his sectors.
+We sort the borrowers so that we find those of sector $1$ at the beginning and
+those of sector $m$ at the end. Then we create the borrowers correlation matrix 
+taking as correlation between two borrowers the correlation between their sectors
+(see figure \ref{borrowercorrel}).
 
+\begin{figure}[!hb]
 \begin{displaymath}
 \begin{array}{c}
 \left(
@@ -232,6 +255,9 @@ two borrowers the correlation between his sectors.
 \right)
 \end{array}
 \end{displaymath}
+\caption{Borrowers correlation matrix}
+\label{borrowercorrel}
+\end{figure}
 
 Observe that this is a correlation matrix (symmetric, definite positive, 
 $|\rho_{i,j}| < 1$, $|\rho_{i,i}| = 1$) composed by blocks. We will use this 
@@ -239,60 +265,67 @@ characteristic to adapt the Cholesky algorithm with the aim to improve memory
 size and speed.
 
 %---------------------------------------------------------------------------
-\subsection{Mapping losses at time nodes}
-Because we want a very fast implementation we precompute losses for each asset 
-at fixed time nodes. Time nodes can be distinct than cashflow or recovery dates. 
-The following paragraphs tells how compute losses at time nodes.
+\subsection{Mapping asset losses at fixed time nodes}
+Fixed time nodes can be different from cashflow dates. Because we want CCruncher 
+to be fast in performing Monte Carlo simulation we precompute the losses of each 
+asset at fixed time nodes. The following paragraphs tell how to compute losses at 
+fixed time nodes.
 
 %...........................................................................
-\subsubsection{Recovery at time nodes}
-We considerer the recovery at time node $k$ as the closest asset recovery by 
+\subsubsection{Asset recovery at fixed time nodes}
+We consider the recovery at time node $k$ as the closest asset recovery by 
 right. If time node $k$ is previous to the first asset event then the recovery 
 value at time node $k$ is $0$. If time node $k$ is later to the last asset event 
 then the recovery value at time node $k$ is $0$. Figure \ref{recoverymapping} 
-shows recovery displayed in figure \ref{recovery} mapped to biannual time nodes.
+shows the recoveries displayed in figure \ref{recovery} mapped to, in this case,
+half-yearly time nodes.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbtp]
 \begin{center}
 \includegraphics[width=12cm, angle=0]{./images/recoverymapping.eps}
-\caption{Asset recoveries mapped to time nodes}
+\caption{Asset recoveries mapped to fixed time nodes}
 \label{recoverymapping}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %...........................................................................
-\subsubsection{Losses at time nodes}
+\subsubsection{Asset losses at fixed time nodes}
 If borrower defaults before the date of asset risk assumption then loss is $0$.
 If borrower defaults after asset finalization date then loss is $0$. 
 If borrower defaults at time node $k$ then loss is the averaged sum of all 
 pending cashflows minus the recovery at time node $k$.
-Figure \ref{lossesmapping} shows asset losses mapped to biannual time nodes of 
-asset displayed at figures \ref{cashflow}, \ref{recovery} and \ref{recoverymapping}.
+Figure \ref{lossesmapping} shows asset losses mapped to, in this case, half-yearly 
+time nodes of the asset displayed in figures \ref{cashflow}, \ref{recovery} and 
+\ref{recoverymapping}.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbtp]
 \begin{center}
 \includegraphics[width=7.34cm, angle=0]{./images/lossesmapping.eps}
 \caption{Asset losses mapped to time nodes 01/07/06 and 01/01/07}
 \label{lossesmapping}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
-Monte Carlo methods \cite{mc:mervyn} are class of computational algorithms for 
+\label{mcsim}
+Monte Carlo methods \cite{mc:mervyn} are a class of computational algorithms for 
 simulating the behavior of various physical and mathematical systems. 
-Each simulation consist to compute a random default time for each borrower and
-found the portfolio loss value. We need that every default time fulfill the
-borrower survival functions and the borrowers correlation matrix. This is 
-achieved with the simulation of copulas. A copula \cite{copu:pitfalls} 
-\cite{copu:wang}is a multivariate random variable where each component is a 
-uniform $U[0,1]$.
+Each simulation consists of computing a random default time for each borrower and
+then calculate the loss of the portfolio. We need that default times fulfill two 
+conditions: the borrower's survival functions and the borrower's correlation matrix. 
+This is achieved by simulating a copula. A copula \cite{copu:pitfalls} 
+\cite{copu:wang} is a multivariate random variable where each component is a 
+uniform $U[0,1]$. Lets go step by step:
 
 %...........................................................................
 \subsubsection{Random numbers generation}
-Each simulation requires a set of random numbers between $[0, 1]$ correlated by 
-the borrowers correlation matrix (see section \ref{tcorrel}), $\Sigma_1$. 
-We generate them using the gaussian copula simulation algorithm:
+Each simulation requires a set of random numbers between $[0, 1]$ and correlated 
+by the borrowers' correlation matrix, $\Sigma_1$ (see \ref{tcorrel}, figure 
+\ref{borrowercorrel}). We generate these numbers using the gaussian copula simulation 
+algorithm:
 
 \paragraph{Step 1.} We create the covariance\footnote{Correlation and covariance 
 matrix are the same because diagonal elements are $1$.} matrix $\Sigma_2$ mapping 
@@ -323,7 +356,7 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \right)
 \end{displaymath}
 
-\paragraph{Step 3.} We simulates\footnote{The algorithm used to simulates a $N(0,1)$
+\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
 is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
 \begin{displaymath}
 \vec{Y} =
@@ -369,7 +402,7 @@ z_n
 \vec{Z}
 \end{displaymath}
 
-\paragraph{Step 5.} Finally we obtain the copula, $\vec{U}$.
+\paragraph{Step 5.} Finally we obtain the copula $\vec{U}$ doing:
 \begin{displaymath}
 \left(
 \begin{array}{c}
@@ -394,65 +427,68 @@ where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 \Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}} dt
 \end{displaymath}
 
-Steps 1 and 2 are done only one time previous to simulation. The rest of steps
-are performed for every Monte Carlo simulation.
+Steps 1 and 2 are done only one time before the simulations. The rest of steps
+are performed in each Monte Carlo simulation.
 \newline
 
 In appendix \ref{ap:cholblock} is described a Cholesky decomposition adapted to 
-block matrix that allows to work with matrix of size bigger than $50000$.
+block matrix. It allows to work with matrix bigger than $50000 \times 50000$.
 
 %...........................................................................
-\subsubsection{Default time simulation}
-Given the borrower $k$ and a random number $u_k \in [0,1]$ (generated using a 
-copula in the previous step) we simulates the default time considering the 
+\subsubsection{Default times generation}
+Given the borrower $k$ and the random number $u_k \in [0,1]$ (generated using a 
+copula in the previous step) we simulate the default time considering the 
 inverse of the borrower survival function at $u_k$. Figure \ref{simttd} shows 
 this in a graphic manner.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[width=10cm,angle=0]{./images/simttd.eps}
-\caption{Default time simulation with initial rating $BBB$}
+\caption{Default time generation with initial rating $BBB$}
 \label{simttd}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %...........................................................................
 \subsubsection{Portfolio loss evaluation}
 At this point, given any borrower, we have a simulated default time. We map
-this default time to time node closest by the right where we have the precomputed 
-losses for his assets. To obtain the simulated portfolio loss value we sum all 
-assets losses and we kept this value in a list.
+this default time to the closest time node to the right. In this node we have 
+the precomputed losses of that borrower's assets. To obtain the simulated 
+value of the portfolio loss we sum all asset losses and we keep this value 
+in a list. Afterwards we will use this list to compute risk.
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
 After $N$ simulations (eg. $20000$, $50000$ or more) we have a list
-of numbers, $x_i$, where each number represents a simulated portfolio loss. More 
-values imply more accuracy in results. All risk statistics (eg. Expected Loss) 
-have an error that will be estimated. First of all we can approximate the 
-portfolio loss probability distribution creating an histogram with the simulated 
-values. 
+of numbers, ${x_1, ..., x_N}$, where each number represents a simulated portfolio 
+loss. The more values, the more accuracy in the results. All risk statistics (eg. 
+Expected Loss) have an error margin that will be estimated. CCruncher uses 
+\emph{R package}\footnote{http://www.r-project.org} to perform the statistical
+computations described below.
 \newline
 
-CCruncher uses \emph{R package}\footnote{http://www.r-project.org} to perform 
-the statistical computations described in this section.
+First of all we can approximate the probability distribution of the portfolio 
+loss creating an histogram with the simulated values.
 
-\begin{figure}[!hb]
+\begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
 \caption{Portfolio loss at time $T$}
 \label{creditvar}
 \end{center}
 \end{figure}
+\FloatBarrier
 
 %...........................................................................
 \subsubsection{Expected Loss}
-Expected Loss is the mean of the portfolio loss probability distribution.
+Expected Loss is the probability distribution mean of the portfolio loss.
 Central Limit Theorem \cite{stats:schaum} grants that:
 
 \begin{displaymath}
 \mu = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
 \end{displaymath}
-where $\alpha$ is the confidence level for error, $\phi^{-1}$ the N(0,1) inverse 
+where $\alpha$ is the error confidence level, $\phi^{-1}$ the N(0,1) inverse 
 cumulative distribution function and $\widehat{\mu}$ and $\widehat{\sigma}$ are 
 the mean and stddev estimators:
 
@@ -468,15 +504,15 @@ the mean and stddev estimators:
 
 %...........................................................................
 \subsubsection{Portfolio Loss Standard Deviation}
-Other usual risk statistic is the portfolio loss standard deviation as measure
-of dispersion from mean. Central Limit Theorem \cite{stats:schaum} grants that:
+Another usual risk statistic is the standard deviation of the portfolio loss.
+Central Limit Theorem \cite{stats:schaum} grants that:
 
 \begin{displaymath}
 \sigma = \widehat{\sigma} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{2N}}
 \end{displaymath}
 
-where $\alpha$ is the confidence level for error, $\phi^{-1}$ the N(0,1) inverse 
-cumulative distribution function and $\widehat{\sigma}$ is stddev estimator:
+where $\alpha$ is the error confidence level, $\phi^{-1}$ the N(0,1) inverse 
+cumulative distribution function and $\widehat{\sigma}$ is the stddev estimator:
 
 \begin{displaymath}
 \widehat{\sigma} =
@@ -486,7 +522,7 @@ cumulative distribution function and $\widehat{\sigma}$ is stddev estimator:
 
 %...........................................................................
 \subsubsection{Value At Risk}
-Value at Risk \cite{var:jorion} is the most used risk value. We note as 
+Value at Risk \cite{var:jorion} is the most used risk value. We call it 
 $VAR_{\beta}$ where $\beta$ is the VAR confidence level (eg. VAR at $95\%$).
 VAR is another form to say quantile. Then
 $VAR_{\beta} = q_{\beta} = \textrm{inf}\{x | F(x) \geq \beta \}$. 
@@ -495,10 +531,10 @@ $VAR_{\beta} = q_{\beta} = \textrm{inf}\{x | F(x) \geq \beta \}$.
 VAR_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
 \end{displaymath}
 
-where $\alpha$ is the confidence level for error, $\beta$ is the VAR confidence 
+where $\alpha$ is the error confidence level, $\beta$ is the VAR confidence 
 level, $\phi^{-1}$ the N(0,1) inverse cumulative distribution function, 
 $\widehat{q_{\beta}}$ is the quantile estimator, and $\textrm{stderr}(q_{\beta})$
-is a estimation of the standard error.
+is the estimation of the standard error.
 
 \begin{displaymath}
 \widehat{q_{\beta}} = x_{k:N}
@@ -534,22 +570,24 @@ Then,
 
 %...........................................................................
 \subsubsection{Expected Shortfall}
-VAR is not a distance because it don't fulfills sub-additive property \cite{var:varbad}, 
-that is $VAR(A+B) \nleq VAR(A)+VAR(B)$. Expected Shortfall is a consistent risk 
-measure \cite{var:eshortfall} similar to VAR. Can be described as the average of 
-the $\beta\%$ worst losses.
+VAR is not a distance because it does not fulfill the sub-additive property 
+\cite{var:varbad}, $VAR(A+B) \nleq VAR(A)+VAR(B)$. Expected Shortfall is a 
+consistent risk measure \cite{var:eshortfall} similar to VAR. It can be described
+as the average of the $\beta\%$ worst losses.
 
 \begin{displaymath}
 ES_{\beta} = \widehat{ES_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(ES_{\beta})
 \end{displaymath}
 
-where $\alpha$ is the confidence level for error, $\beta$ is the ES confidence 
+where $\alpha$ is the error confidence level, $\beta$ is the ES confidence 
 level, $\phi^{-1}$ the N(0,1) inverse cumulative distribution function, 
 $\widehat{ES_{\beta}}$ is the ES estimator and $\textrm{stderr}(ES_{\beta})$
-is a estimation of the standard error.
+is the estimation of the standard error.
 \newline
 
-We select the simulation portfolio loss values that are bigger than $VAR_{\beta}$.
+We select the simulation portfolio loss values ($x_1, ..., x_N$) that are bigger 
+than $VAR_{\beta}$.
+
 \begin{displaymath}
 y_1, y_2, y_3, \cdots, y_K \qquad \textrm{where} \quad y_i > VAR_{\beta}
 \end{displaymath}
@@ -586,26 +624,26 @@ We can compute the Economic Capital at confidence level $\beta$ as:
 
 
 %===========================================================================
+\clearpage
 \section{Other considerations}
-CCruncher takes other considerations that they have not been exposed
-until this moment with the purpose of simplifying the content.
+CCruncher takes into consideration other concepts that have not been exposed 
+up to this moment with the purpose of simplifying the content.
 
 %---------------------------------------------------------------------------
 \subsection{Risk aggregation}
-CCruncher simulates the whole portfolio loss at time $T$. Also allows simulates 
-(in the same execution), subportfolios defining one or more aggregators. 
-Consequently you can determine what are the branches (or products or borrowers 
-or regions or assets, etc.) that contributes to increase the risk of your portfolio.
-Every subportfolio have its own list of simulated values that can be processed
-to obtain the risk indicators for this subportfolio.
+CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
+the same execution) the simulation of subportfolios by defining one or more 
+aggregators. Consequently you can determine which are the borrowers (or products 
+or branches or regions or assets, etc.) that increase the risk of your portfolio. 
+Every subportfolio has its own list of simulated values that can be processed to 
+obtain the risk indicators for this subportfolio.
 
 %---------------------------------------------------------------------------
-\subsection{Time updates}
-CCruncher can considerer that money value decrease along the time following a fixed 
-curve (eg. yield curve). CCruncher allows to specify the yield curve and perform
-all computations that involves cash transport along the time (recovery mapping, 
-losses mapping and portfolio value at time $T$) taking into account this fact.
-The time transport coeficient is determined using the compound interest formula:
+\subsection{Yield curve}
+CCruncher can consider that money value decreases along the time following a fixed 
+curve (eg. yield curve). CCruncher allows the input of the yield curve and and takes
+it into account in all its computations. The coeficient that determines the money 
+value decreases along the time is given by the compound interest formula:
 
 \begin{displaymath}
 \Upsilon(r, t_0,t_1) = (1+r)^{(t_1-t_0)}
@@ -615,9 +653,9 @@ The time transport coeficient is determined using the compound interest formula:
 \subsection{Antithetic technique}
 The random number generation using a copula is time expensive. Gaussian copula
 is symmetric, that means that $(u_1, u_2, \cdots, u_N)$ is equiprobable to
-$(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher antithetic mode, each copula 
-generation is used $2$ times, as $(u_1, u_2, \cdots, u_N)$ and 
-as $(1-u_1, 1-u_2, \cdots, 1-u_N)$ reducing in this way the number of generated
+$(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher's antithetic mode, each copula 
+generation is used $2$ times, $(u_1, u_2, \cdots, u_N)$ and 
+$(1-u_1, 1-u_2, \cdots, 1-u_N)$, reducing to the half the number of generated
 copulas.
 
 %---------------------------------------------------------------------------
@@ -630,19 +668,18 @@ and there is no essential dependency (or communication) between those parallel
 tasks.
 \newline
 
-In CCruncher a master sends the RNG seed to each slave 
-($seed_i = seed + i \cdot 30001$) and wait results (portfolio loss simulated
-values) from slaves that put in a file. When stop criteria is achieved 
-(execution time exceded or number of required simulations achieved) send a 
-stop signal to slaves and leaves.
+In CCruncher the master sends the RNG seed to each slave 
+($seed_i = seed + i \cdot 30001$) and waits for results (the simulated values of
+the portfolio loss) from slaves that store them in a file. When one of the two stop 
+criteria is achieved (maximum execution time exceded or maximum number of 
+simulations reached) the master sends a stop signal to the slaves and leaves.
 
 %===========================================================================
-\newpage
 \appendix
 \section{Appendices}
 
 %---------------------------------------------------------------------------
-\subsection{How simulate a N(0,1)}
+\subsection{How to simulate a N(0,1)}
 \label{ap:normsim}
 
 In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use:
@@ -658,21 +695,20 @@ Where $u_i$ are generated by a Mersenne Twister random number generator.
 \subsection{Cholesky decomposition for block matrix}
 \label{ap:cholblock}
 
-Cholesky algorithm decompose a symmetric positive definite matrix into a lower
+Cholesky algorithm decomposes a symmetric positive definite matrix into a lower
 triangular matrix and the transpose of the lower triangular matrix. Algorithm 
 description can be found in \emph{Numerical Recipes in C}\footnote{http://www.nr.com}.
 
 \begin{displaymath}
-U^{\top} \cdot U = A
+A = U^{\top} \cdot U
 \end{displaymath}
 
-If we have a portfolio of $50000$ borrowers, our correlation matrix size will
-be a $50000 \times 50000$ matrix. This requires up to 19 Gb. of RAM memory and
-multiply this matrix by a vector suppose $2500000000$ multiplications.
-\newline
-
-We adapt the Cholesky algorithm in order to consider that borrower correlations
-matrix is a block matrix with $1$'s in diagonal like this example:
+If we have a portfolio of $50000$ borrowers, the correlation matrix size will
+be a $50000 \times 50000$. This requires up to 19 Gb. of RAM memory. The 
+multiplication of this matrix by a vector implies $2500000000$ multiplications.
+This is far too much. So we adapt the Cholesky algorithm in order to consider that 
+the borrowers' correlation matrix is a block matrix with $1$'s in diagonal. 
+For instance:
 
 \begin{displaymath}
 A = \left(
@@ -706,7 +742,8 @@ U = \left(
 \right)
 \end{displaymath}
 
-Observe that $U$ have repeated elements that allows to kept in RAM memory like this:
+We can see that $U$ have repeated elements that can be kept in RAM memory in 
+this way:
 
 \begin{displaymath}
 U = \left|
@@ -722,15 +759,15 @@ U = \left|
 \right|
 \end{displaymath}
 
-that is, for each row we kept the diagonal value and the value of each sector. 
+that is, for each row we keep the diagonal value and the value of each sector. 
 With this strategy the required memory size is $N \times (M+1)$ where $N$ is
 the number of borrowers and $M$ the number of sectors. With this consideration
-the memory required to store a $50000$ borrowers correlation matrix is only
-$4.2$ Mb.
+the memory required to store a $50000 \times 50000$ borrowers correlation matrix
+is only $4.2$ Mb.
 \newline
 
 We use the fact that matrix $U$ have repeated elements to reduce the number of 
-operations required to multiply $A$ by a vector. Let us to see an example:
+operations required to multiply $U$ by a vector. Let see an example:
 
 \begin{displaymath}
 \begin{array}{l}
@@ -740,9 +777,9 @@ operations required to multiply $A$ by a vector. Let us to see an example:
 \end{array}
 \end{displaymath}
 
-With this consideration we can reduce the number of operations from $N^2$ to 
+Considering this, we can reduce the number of operations from $N^2$ to 
 $N \times (M+1)$ where $N$ is the number of borrowers and $M$ the number of 
-sectors. In the $50000$ borrowers example, the operations number reduce from 
+sectors. In the $50000$ borrowers example, the operations number reduces from 
 $2500000000$ to only $500000$.
 
 %---------------------------------------------------------------------------
@@ -765,7 +802,7 @@ m_{i,j} = P(r_i \to r_j;T)
 
 where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
 borrower with rating $r_i$ jumps to $r_j$ in $T$ years.
-Figure \ref{tmatrix1} shows a transition matrix example with the probability 
+Figure \ref{tmatrix1} shows a transition matrix example where the probability 
 that a borrower with rating $AA$ jumps to rating $B$ in $1$ year is $0.14\%$.
 \newline
 
@@ -799,7 +836,7 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}} \nonumber
 \end{array}
 \end{equation}
 
-The root of matrix can be computed as:
+The root of a matrix can be computed as:
 
 \begin{displaymath}
 M = P^{-1} \cdot D \cdot P 
@@ -809,15 +846,15 @@ M^{\gamma} = P^{-1} \cdot D^{\gamma} \cdot P
 
 where $P$ is a matrix composed by the eigenvectors of $M$ and $D$ is a diagonal 
 matrix composed by the eigenvalues of $M$. The inverse of a matrix can be 
-computed using the $LU$ decomposition as it explained in \emph{Numerical 
+computed using the $LU$ decomposition as it is explained in \emph{Numerical 
 Recipes in C}\footnote{http://www.nr.com}:
 
 \begin{displaymath}
 Id = P^{-1} \cdot P = L \cdot U \cdot P
 \end{displaymath}
 
-This allows us to compute probability default for any time and any initial rating
-(that is, the survival functions) doing:
+This allows us to compute default probability at any time and at any initial 
+rating (that is, the survival functions), doing:
 
 \begin{displaymath}
 Survival(r_i, t) = \left( M_t \right)_{i, n}
@@ -825,13 +862,11 @@ Survival(r_i, t) = \left( M_t \right)_{i, n}
 
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
 matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
-index of default rating, $r_n$.
+index of default rating $r_n$.
 
 %===========================================================================
-\newpage
 \bibliography{refs}
 \bibliographystyle{plain}
 
 
 \end{document}
-
