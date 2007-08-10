@@ -1,12 +1,12 @@
 
-CREDITCRUNCHER SAMPLES
-======================
+CCRUNCHER TESTS
+===============
 
 This directory contains some xml input file samples for ccruncher.
-You can run any sample file tipying next commands on a console:
+You can run any file tipying next commands on a console:
 
   > cd $CCRUNCHER$
-  > bin/ccruncher -vf --hash=100 --path=data samples/sampleXX.xml
+  > bin/ccruncher -vf --hash=100 --path=data samples/testXX.xml
 
 The ouput will be written in files located at data directory
 
@@ -14,7 +14,7 @@ Currently, the checks are weak. Checks can be improved doing
 some tests (Chi-Square, Kolmogorov-Smirnof).
 
 
-sample01.xml
+test01.xml
 ---------------------------------------------------------------------
 
 Description:
@@ -55,7 +55,7 @@ How I can check results?
   > tabulate(x+1, 2)
 
 
-sample02.xml
+test02.xml
 ---------------------------------------------------------------------
 
 Description:
@@ -97,7 +97,7 @@ How I can check results?
   > tabulate(x+1, 3)
 
 
-sample03.xml
+test03.xml
 ---------------------------------------------------------------------
 
 Description:
@@ -136,12 +136,12 @@ How I can check results?
   > tabulate(x+1, 101)
 
 
-sample04.xml
+test04.xml
 ---------------------------------------------------------------------
 
 Description:
 
-  The same that sample03, with these diferences:
+  The same that test03, with these diferences:
     2 sectors
     correl(S1,S1) = 0.10
     correl(S1,S2) = 0.05
@@ -170,12 +170,12 @@ How I can check results?
   > hist(x,breaks=101)
 
 
-sample100.xml.gz
+test100.xml.gz
 ---------------------------------------------------------------------
 
 Description:
 
-  The same that sample03, with these diferences:
+  The same that test03, with these diferences:
     2 sectors
     correl(S1,S1) = 0.20
     correl(S1,S2) = 0.10
@@ -210,5 +210,5 @@ How I can check results?
   > hist(x)
 
 
-The CreditCruncher Team
+The CCruncher Team
 http://www.generacio.com/ccruncher/

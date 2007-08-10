@@ -1,12 +1,12 @@
 
-CREDITCRUNCHER README
-=====================
+CCRUNCHER README
+================
 
 
 Description
 --------------------------------
 
-CreditCruncher computes the Value At Risk (VAR) of large credit
+CCruncher computes the Value At Risk (VAR) of large credit
 portfolios using the Monte Carlo method. It is a command line solver
 that read an xml input file and returns a plain text file with the
 simulated values of portfolio.
@@ -52,7 +52,7 @@ Required libraries installation
    that you have a valid MPI installation (you need mpi.h,
    mpic++ wrapper, mpi link library, etc.)
 
-4. CreditCruncher use a statistical package named R to compute
+4. CCruncher use a statistical package named R to compute
    risk indicators. Install it from http://www.r-project.org/
    or install from R rpm package.
 
@@ -86,12 +86,12 @@ Installation from binary package
 2. install required libraries (explained before)
 
 
-Using CreditCruncher
+Using CCruncher
 --------------------------------
 
 1. create your input file. Read documentation to perform this step
 
-2. run CreditCruncher
+2. run CCruncher
      $CCRUNCHER/bin/ccruncher --help
      $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
@@ -112,7 +112,7 @@ Using CreditCruncher
 
 
 Notes for Windows developers (MSVC7)
---------------------------------
+------------------------------------
 
 1. install a subversion client
    (eg. http://tortoisesvn.tigris.org/)
@@ -138,7 +138,7 @@ Notes for Windows developers (MSVC7)
 
 
 Notes for Windows developers (cygwin)
---------------------------------
+-------------------------------------
 
 1. retrieve repository content
    (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
@@ -160,7 +160,7 @@ Notes for Windows developers (cygwin)
 Developers tips & tricks
 --------------------------------
 
-1. download CreditCruncher sources from subversion repositori
+1. download CCruncher sources from subversion repositori
      svn checkout http://www.generacio.com/svn/repos/ccruncher/
      cd trunk
 
@@ -216,5 +216,5 @@ Developers tips & tricks
       $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 
-CreditCruncher Team
+CCruncher Team
 http://www.generacio.com/ccruncher/

@@ -68,7 +68,7 @@
 // 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
 //
-// 2007/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added listloss method
 //
 //===========================================================================
@@ -455,8 +455,8 @@ void usage()
   "  usage: ccruncher [options] <file>\n"
   "\n"
   "  description:\n"
-  "    creditcruncher is a tool used to evalute VAR (value at risk)\n"
-  "    of a pure credit portfolio using monte carlo techniques.\n"
+  "    ccruncher is a tool used to evalute VAR (value at risk)\n"
+  "    of a pure credit portfolio using Monte Carlo simulation.\n"
   "    more info at http://www.generacio.com/ccruncher\n"
   "  arguments:\n"
   "    file        xml file containing the problem to be solved. This\n"

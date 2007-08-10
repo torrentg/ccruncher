@@ -47,6 +47,7 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
+AC_CHECK_HEADERS([float.h malloc.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
@@ -62,6 +63,7 @@ AC_CHECK_FUNCS([gettimeofday])
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRTOD
+AC_FUNC_MKTIME
 
 dnl -------------------------------------------------------------
 dnl other checks (consts, structs, types)
