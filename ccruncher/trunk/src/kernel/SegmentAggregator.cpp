@@ -75,7 +75,7 @@
 //===========================================================================
 // void constructor
 //===========================================================================
-ccruncher::SegmentAggregator::SegmentAggregator() : iborrowers(0), losses(0, 0), cvalues(0)
+ccruncher::SegmentAggregator::SegmentAggregator() : iborrowers(0), losses(0), cvalues(0)
 {
   init();
 }
