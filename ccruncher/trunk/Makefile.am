@@ -10,10 +10,6 @@ SUBDIRS = build
 
 EXTRA_DIST = bin share data doc samples
 
-install-exec-hook:
-	echo "setting executable flag to scripts ..."
-	chmod +x bin/report
-
 dist-hook:
 	echo "dropping subversion stuff ..."
 	rm -rf `find $(distdir) -name \.svn`
