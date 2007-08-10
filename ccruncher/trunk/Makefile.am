@@ -12,7 +12,7 @@ EXTRA_DIST = bin share data doc samples
 
 install-exec-hook:
 	echo "setting executable flag to scripts ..."
-	chmod +x $(distdir)/bin/*
+	chmod +x bin/report
 
 dist-hook:
 	echo "dropping subversion stuff ..."
