@@ -32,7 +32,6 @@ Description:
   The borrower has an unique asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
-  time-to-default resolution method
 
 Expected Results:
 
@@ -73,7 +72,6 @@ Description:
   Each borrower has an unique asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
-  time-to-default resolution method
 
 Expected Results:
 
@@ -115,7 +113,6 @@ Description:
   Each borrower has an asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
-  time-to-default resolution method
 
 Expected Results:
 
