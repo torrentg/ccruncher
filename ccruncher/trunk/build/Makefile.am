@@ -7,38 +7,38 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../share/MiniCppUnit-2.5/TestsRunner.cxx\
-    ../share/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../share/MiniCppUnit-2.5/MiniCppUnit.hxx\
-    ../share/Mersenne-1.0/MersenneTwister.h\
-    ../share/jama-1.2.5/jama_cholesky.h\
-    ../share/jama-1.2.5/jama_eig.h\
-    ../share/jama-1.2.5/jama_lu.h\
-    ../share/jama-1.2.5/jama_qr.h\
-    ../share/jama-1.2.5/jama_svd.h\
-    ../share/jama-1.2.5/tnt_array1d.h\
-    ../share/jama-1.2.5/tnt_array1d_utils.h\
-    ../share/jama-1.2.5/tnt_array2d.h\
-    ../share/jama-1.2.5/tnt_array2d_utils.h\
-    ../share/jama-1.2.5/tnt_array3d.h\
-    ../share/jama-1.2.5/tnt_array3d_utils.h\
-    ../share/jama-1.2.5/tnt_cmat.h\
-    ../share/jama-1.2.5/tnt_fortran_array1d.h\
-    ../share/jama-1.2.5/tnt_fortran_array1d_utils.h\
-    ../share/jama-1.2.5/tnt_fortran_array2d.h\
-    ../share/jama-1.2.5/tnt_fortran_array2d_utils.h\
-    ../share/jama-1.2.5/tnt_fortran_array3d.h\
-    ../share/jama-1.2.5/tnt_fortran_array3d_utils.h\
-    ../share/jama-1.2.5/tnt.h\
-    ../share/jama-1.2.5/tnt_i_refvec.h\
-    ../share/jama-1.2.5/tnt_math_utils.h\
-    ../share/jama-1.2.5/tnt_sparse_matrix_csr.h\
-    ../share/jama-1.2.5/tnt_stopwatch.h\
-    ../share/jama-1.2.5/tnt_subscript.h\
-    ../share/jama-1.2.5/tnt_vec.h\
-    ../share/jama-1.2.5/tnt_version.h\
-    ../share/gzstream-1.5/gzstream.h\
-    ../share/gzstream-1.5/gzstream.cpp
+    ../dependencies/MiniCppUnit-2.5/TestsRunner.cxx\
+    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.hxx\
+    ../dependencies/Mersenne-1.0/MersenneTwister.h\
+    ../dependencies/jama-1.2.5/jama_cholesky.h\
+    ../dependencies/jama-1.2.5/jama_eig.h\
+    ../dependencies/jama-1.2.5/jama_lu.h\
+    ../dependencies/jama-1.2.5/jama_qr.h\
+    ../dependencies/jama-1.2.5/jama_svd.h\
+    ../dependencies/jama-1.2.5/tnt_array1d.h\
+    ../dependencies/jama-1.2.5/tnt_array1d_utils.h\
+    ../dependencies/jama-1.2.5/tnt_array2d.h\
+    ../dependencies/jama-1.2.5/tnt_array2d_utils.h\
+    ../dependencies/jama-1.2.5/tnt_array3d.h\
+    ../dependencies/jama-1.2.5/tnt_array3d_utils.h\
+    ../dependencies/jama-1.2.5/tnt_cmat.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array1d.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array1d_utils.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array2d.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array2d_utils.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array3d.h\
+    ../dependencies/jama-1.2.5/tnt_fortran_array3d_utils.h\
+    ../dependencies/jama-1.2.5/tnt.h\
+    ../dependencies/jama-1.2.5/tnt_i_refvec.h\
+    ../dependencies/jama-1.2.5/tnt_math_utils.h\
+    ../dependencies/jama-1.2.5/tnt_sparse_matrix_csr.h\
+    ../dependencies/jama-1.2.5/tnt_stopwatch.h\
+    ../dependencies/jama-1.2.5/tnt_subscript.h\
+    ../dependencies/jama-1.2.5/tnt_vec.h\
+    ../dependencies/jama-1.2.5/tnt_version.h\
+    ../dependencies/gzstream-1.5/gzstream.h\
+    ../dependencies/gzstream-1.5/gzstream.cpp
 
 bin_PROGRAMS = ccruncher
 
@@ -51,7 +51,7 @@ TESTS = tests
 # ccruncher
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
-    ../share/gzstream-1.5/gzstream.cpp\
+    ../dependencies/gzstream-1.5/gzstream.cpp\
     ../src/kernel/ccruncher.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/IData.cpp\
@@ -146,9 +146,9 @@ ccruncher_LDFLAGS =
 # tests
 # -------------------------------------------------------------
 tests_SOURCES = \
-    ../share/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../share/MiniCppUnit-2.5/TestsRunner.cxx\
-    ../share/gzstream-1.5/gzstream.cpp\
+    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../dependencies/MiniCppUnit-2.5/TestsRunner.cxx\
+    ../dependencies/gzstream-1.5/gzstream.cpp\
     ../src/utils/ArraysTest.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
@@ -302,7 +302,7 @@ tests_LDFLAGS =
 # samplegen
 # -------------------------------------------------------------
 #samplegen_SOURCES = \
-#    ../share/gzstream-1.5/gzstream.cpp\
+#    ../dependencies/gzstream-1.5/gzstream.cpp\
 #    ../src/kernel/samplegen.cpp\
 #    ../src/kernel/MonteCarlo.cpp\
 #    ../src/kernel/IData.cpp\

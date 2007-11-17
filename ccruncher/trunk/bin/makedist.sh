@@ -229,7 +229,7 @@ makeBinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf share;
+  rm -rvf dependencies;
   rm -rvf oblivion;
 
   #creating tarball
@@ -275,7 +275,7 @@ makeWinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf share;
+  rm -rvf dependencies;
   rm -rvf oblivion;
 
   #setting windows end-line
