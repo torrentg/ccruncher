@@ -16,7 +16,7 @@ descrip: MiniCppUnit is a C++ unit testing framework.
 ------------------------------------------------------------------------
 
 project: expat
-version: 1.95.8
+version: 2.0.1
 licence: MIT License
 homeurl: http://expat.sourceforge.net/
 descrip: Expat is an XML parser library written in C. It is a stream-oriented 
