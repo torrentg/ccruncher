@@ -24,13 +24,13 @@ $CCRUNCHER/
 
 Directory structure for source distribution:
 $CCRUNCHER/
-  |- bin/          : executables and scripts directory
-  |- build         : directory used to put the *.o files
-  |- data/         : put your output here (recomended)
-  |- doc/          : doc directory
-  |- samples/      : samples directory
-  |- dependencies/ : source code from other projects required by ccruncher
-  |- src/          : ccruncher source code files
+  |- bin/     : executables and scripts directory
+  |- build    : directory used to put the *.o files
+  |- data/    : put your output here (recomended)
+  |- doc/     : doc directory
+  |- samples/ : samples directory
+  |- deps/    : source code from other projects required by ccruncher
+  |- src/     : ccruncher source code files
 
 
 Required libraries installation
@@ -121,10 +121,10 @@ Notes for Windows developers (MSVC7)
    (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
 
 3. download expat package from http://expat.sourceforge.net/
-   and unpack at $CCRUNCHER\dependencies\expat-X.Y.Z directory
+   and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
 
 4. download zlib package from http://www.zlib.net/
-   and unpack at $CCRUNCHER\dependencies\zlib-X.Y.Z directory
+   and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
 
 5. copy zlib1.dll and libexpat.dll (installed in steps 3 and 4) to
    $CCRUNCHER\bin (required to execute bin\ccruncher.exe)

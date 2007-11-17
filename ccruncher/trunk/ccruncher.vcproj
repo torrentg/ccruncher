@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;dependencies\Mersenne-1.0&quot;;&quot;dependencies\jama-1.2.5&quot;;&quot;dependencies\MiniCppUnit-2.5&quot;;&quot;dependencies\expat-2.0.1\Source\lib&quot;;&quot;dependencies\zlib-1.2.3&quot;;&quot;dependencies\gzstream-1.5&quot;;dependencies;src"
+				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="1"
@@ -37,7 +37,7 @@
 				OutputFile="bin\ccruncher.exe"
 				Version=""
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;dependencies\expat-2.0.1\Libs\&quot;;&quot;dependencies\zlib-1.2.3&quot;"
+				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/ccruncher.pdb"
 				SubSystem="1"
@@ -76,7 +76,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;dependencies\Mersenne-1.0&quot;;&quot;dependencies\jama-1.2.5&quot;;&quot;dependencies\MiniCppUnit-2.5&quot;;&quot;dependencies\expat-2.0.1\Source\lib&quot;;&quot;dependencies\zlib-1.2.3&quot;;&quot;dependencies\gzstream-1.5&quot;;dependencies;src"
+				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
@@ -90,7 +90,7 @@
 				AdditionalDependencies="libexpat.lib zdll.lib"
 				OutputFile="bin\ccruncher.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;dependencies\expat-2.0.1\Libs\&quot;;&quot;dependencies\zlib-1.2.3&quot;"
+				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -454,10 +454,10 @@
 				Name="gzstream"
 				Filter="">
 				<File
-					RelativePath="dependencies\gzstream-1.5\gzstream.cpp">
+					RelativePath="deps\gzstream-1.5\gzstream.cpp">
 				</File>
 				<File
-					RelativePath="dependencies\gzstream-1.5\gzstream.h">
+					RelativePath="deps\gzstream-1.5\gzstream.h">
 				</File>
 			</Filter>
 		</Filter>

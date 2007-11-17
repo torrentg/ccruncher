@@ -7,7 +7,7 @@
 # repository version:
 #   $Rev$
 #
-# dependences:
+# dependencies:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
 #
 # retcodes:
@@ -33,13 +33,16 @@
 #   . removed unused checkVersion() function
 #   . check that a distribution option is filled (xxx)
 #   . added Rev svn:keyword
-#   . added dependences paragraph at comments
+#   . added dependencies paragraph at comments
 #
 # 2005/11/08 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . solved minor bugs related to windows installation
 #
 # 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added doc/other directory
+#
+# 2007/11/17 - Gerard Torrent [gerard@mail.generacio.com]
+#   . directory share/ renamed to deps/
 #
 #=============================================================
 
@@ -229,7 +232,7 @@ makeBinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf dependencies;
+  rm -rvf deps;
   rm -rvf oblivion;
 
   #creating tarball
@@ -275,7 +278,7 @@ makeWinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf dependencies;
+  rm -rvf deps;
   rm -rvf oblivion;
 
   #setting windows end-line

@@ -7,38 +7,38 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../dependencies/MiniCppUnit-2.5/TestsRunner.cxx\
-    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.hxx\
-    ../dependencies/Mersenne-1.0/MersenneTwister.h\
-    ../dependencies/jama-1.2.5/jama_cholesky.h\
-    ../dependencies/jama-1.2.5/jama_eig.h\
-    ../dependencies/jama-1.2.5/jama_lu.h\
-    ../dependencies/jama-1.2.5/jama_qr.h\
-    ../dependencies/jama-1.2.5/jama_svd.h\
-    ../dependencies/jama-1.2.5/tnt_array1d.h\
-    ../dependencies/jama-1.2.5/tnt_array1d_utils.h\
-    ../dependencies/jama-1.2.5/tnt_array2d.h\
-    ../dependencies/jama-1.2.5/tnt_array2d_utils.h\
-    ../dependencies/jama-1.2.5/tnt_array3d.h\
-    ../dependencies/jama-1.2.5/tnt_array3d_utils.h\
-    ../dependencies/jama-1.2.5/tnt_cmat.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array1d.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array1d_utils.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array2d.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array2d_utils.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array3d.h\
-    ../dependencies/jama-1.2.5/tnt_fortran_array3d_utils.h\
-    ../dependencies/jama-1.2.5/tnt.h\
-    ../dependencies/jama-1.2.5/tnt_i_refvec.h\
-    ../dependencies/jama-1.2.5/tnt_math_utils.h\
-    ../dependencies/jama-1.2.5/tnt_sparse_matrix_csr.h\
-    ../dependencies/jama-1.2.5/tnt_stopwatch.h\
-    ../dependencies/jama-1.2.5/tnt_subscript.h\
-    ../dependencies/jama-1.2.5/tnt_vec.h\
-    ../dependencies/jama-1.2.5/tnt_version.h\
-    ../dependencies/gzstream-1.5/gzstream.h\
-    ../dependencies/gzstream-1.5/gzstream.cpp
+    ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
+    ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../deps/MiniCppUnit-2.5/MiniCppUnit.hxx\
+    ../deps/Mersenne-1.0/MersenneTwister.h\
+    ../deps/jama-1.2.5/jama_cholesky.h\
+    ../deps/jama-1.2.5/jama_eig.h\
+    ../deps/jama-1.2.5/jama_lu.h\
+    ../deps/jama-1.2.5/jama_qr.h\
+    ../deps/jama-1.2.5/jama_svd.h\
+    ../deps/jama-1.2.5/tnt_array1d.h\
+    ../deps/jama-1.2.5/tnt_array1d_utils.h\
+    ../deps/jama-1.2.5/tnt_array2d.h\
+    ../deps/jama-1.2.5/tnt_array2d_utils.h\
+    ../deps/jama-1.2.5/tnt_array3d.h\
+    ../deps/jama-1.2.5/tnt_array3d_utils.h\
+    ../deps/jama-1.2.5/tnt_cmat.h\
+    ../deps/jama-1.2.5/tnt_fortran_array1d.h\
+    ../deps/jama-1.2.5/tnt_fortran_array1d_utils.h\
+    ../deps/jama-1.2.5/tnt_fortran_array2d.h\
+    ../deps/jama-1.2.5/tnt_fortran_array2d_utils.h\
+    ../deps/jama-1.2.5/tnt_fortran_array3d.h\
+    ../deps/jama-1.2.5/tnt_fortran_array3d_utils.h\
+    ../deps/jama-1.2.5/tnt.h\
+    ../deps/jama-1.2.5/tnt_i_refvec.h\
+    ../deps/jama-1.2.5/tnt_math_utils.h\
+    ../deps/jama-1.2.5/tnt_sparse_matrix_csr.h\
+    ../deps/jama-1.2.5/tnt_stopwatch.h\
+    ../deps/jama-1.2.5/tnt_subscript.h\
+    ../deps/jama-1.2.5/tnt_vec.h\
+    ../deps/jama-1.2.5/tnt_version.h\
+    ../deps/gzstream-1.5/gzstream.h\
+    ../deps/gzstream-1.5/gzstream.cpp
 
 bin_PROGRAMS = ccruncher
 
@@ -51,7 +51,7 @@ TESTS = tests
 # ccruncher
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
-    ../dependencies/gzstream-1.5/gzstream.cpp\
+    ../deps/gzstream-1.5/gzstream.cpp\
     ../src/kernel/ccruncher.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/IData.cpp\
@@ -146,9 +146,9 @@ ccruncher_LDFLAGS =
 # tests
 # -------------------------------------------------------------
 tests_SOURCES = \
-    ../dependencies/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../dependencies/MiniCppUnit-2.5/TestsRunner.cxx\
-    ../dependencies/gzstream-1.5/gzstream.cpp\
+    ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
+    ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
+    ../deps/gzstream-1.5/gzstream.cpp\
     ../src/utils/ArraysTest.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
@@ -302,7 +302,7 @@ tests_LDFLAGS =
 # samplegen
 # -------------------------------------------------------------
 #samplegen_SOURCES = \
-#    ../dependencies/gzstream-1.5/gzstream.cpp\
+#    ../deps/gzstream-1.5/gzstream.cpp\
 #    ../src/kernel/samplegen.cpp\
 #    ../src/kernel/MonteCarlo.cpp\
 #    ../src/kernel/IData.cpp\
