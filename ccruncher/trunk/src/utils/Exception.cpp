@@ -142,7 +142,7 @@ string ccruncher::Exception::retrieveStackTrace()
   char **symbuf;
   int status;
   char *demangledname;
-  unsigned int pos1, pos2;
+  size_t pos1, pos2;
   string addr, func;
   string ret="\n";
 
