@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sun Dec 23 18:37:05 CET 2007"
+#define BUILD_DATE "Sun Dec 30 12:32:58 CET 2007"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "root"
+#define BUILD_USER "gerard"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -119,7 +119,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -140,7 +140,7 @@
 #define PACKAGE_VERSION "1.1"
 
 /* Profiler instructions are added when this is defined. */
-#define PROFILER 1
+/* #undef PROFILER */
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
