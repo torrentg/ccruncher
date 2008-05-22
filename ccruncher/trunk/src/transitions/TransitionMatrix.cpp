@@ -70,6 +70,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <climits>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"

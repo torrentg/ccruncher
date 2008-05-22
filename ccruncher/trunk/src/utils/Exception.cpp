@@ -38,7 +38,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(char *str) : exception()
+ccruncher::Exception::Exception(const char *str) : exception()
 {
   msg = string(str);
   stacktrace = retrieveStackTrace();
