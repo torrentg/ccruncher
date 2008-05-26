@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004  Pau Arumí & David García
+ * Copyright (c) 2003-2004  Pau ArumÃ­ & David GarcÃ­a
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -105,7 +105,7 @@ bool TestsListener::allTestsPassed()
 
 
 
-void Assert::assertTrue(char* strExpression, bool expression,
+void Assert::assertTrue(const char* strExpression, bool expression,
 		const char* file, int linia)
 {
 	if (!expression)
@@ -119,7 +119,7 @@ void Assert::assertTrue(char* strExpression, bool expression,
 	}
 }
 
-void Assert::assertTrueMissatge(char* strExpression, bool expression, 
+void Assert::assertTrueMissatge(const char* strExpression, bool expression, 
 		const char* missatge, const char* file, int linia)
 {
 	if (!expression)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004  Pau Arumí & David García
+ * Copyright (c) 2003-2004  Pau ArumÃ­ & David GarcÃ­a
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -206,10 +206,10 @@ public:
 		}
 	}
 
-	static void assertTrue(char* strExpression, bool expression,
+	static void assertTrue(const char* strExpression, bool expression,
 			const char* file="", int linia=0);
 
-	static void assertTrueMissatge(char* strExpression, bool expression, 
+	static void assertTrueMissatge(const char* strExpression, bool expression, 
 			const char* missatge, const char* file="", int linia=0);
 
 	static void assertEquals( const char * expected, const char * result,
@@ -430,7 +430,7 @@ public:
 };
 
 /** 
- * Macro a usar després de cada classe de test
+ * Macro a usar desprï¿½s de cada classe de test
  */
 #define REGISTER_FIXTURE( ConcreteTestFixture ) \
 \
