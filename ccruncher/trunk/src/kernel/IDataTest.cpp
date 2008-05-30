@@ -104,7 +104,7 @@ void ccruncher_test::IDataTest::tearDown()
 void ccruncher_test::IDataTest::test1()
 {
   // simple creditcruncher XML
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <ccruncher>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\

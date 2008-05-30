@@ -240,7 +240,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   // parsing input file
   IData idata = IData(filename, false);
 
-  cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
+  cout << "<?xml version='1.0' encoding='UTF-8'?>\n";
   cout << "<ccruncher>\n";
   cout << idata.getParams().getXML(2);
   cout << idata.getInterests().getXML(2);

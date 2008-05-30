@@ -90,7 +90,7 @@ void ccruncher_test::InterestTest::test1()
     0.931439, 0.927579, 0.923845, 0.919991, 0.916265, 0.912417,
     0.908578};
 
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest name='discount' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.04'/>\n\

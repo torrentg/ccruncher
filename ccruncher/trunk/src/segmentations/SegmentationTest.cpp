@@ -68,7 +68,7 @@ void ccruncher_test::SegmentationTest::tearDown()
 //===========================================================================
 void ccruncher_test::SegmentationTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <segmentation name='office' components='asset'>\n\
       <segment name='0001'/>\n\
       <segment name='0002'/>\n\

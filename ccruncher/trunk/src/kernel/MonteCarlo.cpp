@@ -419,7 +419,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     // setting logger info
     string sval = Format::int2string(idata.getTransitionMatrix().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("matrix term (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
+    Logger::trace("transition matrix period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
     double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), STEPS+1);

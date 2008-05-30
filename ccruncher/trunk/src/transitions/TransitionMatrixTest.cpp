@@ -77,7 +77,7 @@ void ccruncher_test::TransitionMatrixTest::tearDown()
 //===========================================================================
 Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\
@@ -99,7 +99,7 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 //===========================================================================
 void ccruncher_test::TransitionMatrixTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -181,7 +181,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
 void ccruncher_test::TransitionMatrixTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.90'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -227,7 +227,7 @@ void ccruncher_test::TransitionMatrixTest::test2()
 void ccruncher_test::TransitionMatrixTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='K' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -273,7 +273,7 @@ void ccruncher_test::TransitionMatrixTest::test3()
 void ccruncher_test::TransitionMatrixTest::test4()
 {
   // non valid transition matrix (default element not defined)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -319,7 +319,7 @@ void ccruncher_test::TransitionMatrixTest::test4()
 void ccruncher_test::TransitionMatrixTest::test5()
 {
   // non valid transition matrix (property 4 not acomplished)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\

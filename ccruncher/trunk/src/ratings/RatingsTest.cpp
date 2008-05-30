@@ -71,7 +71,7 @@ void ccruncher_test::RatingsTest::tearDown()
 //===========================================================================
 void ccruncher_test::RatingsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\
@@ -114,7 +114,7 @@ void ccruncher_test::RatingsTest::test1()
 void ccruncher_test::RatingsTest::test2()
 {
   // note that ratings are incorrect (A is a name repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='A' desc='bueno'/>\n\
@@ -137,7 +137,7 @@ void ccruncher_test::RatingsTest::test2()
 void ccruncher_test::RatingsTest::test3()
 {
   // note that ratings are incorrect (descriptions repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='muy bueno'/>\n\
@@ -160,7 +160,7 @@ void ccruncher_test::RatingsTest::test3()
 void ccruncher_test::RatingsTest::test4()
 {
   // note that xml are not valid (ratong tag)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <ratong name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\

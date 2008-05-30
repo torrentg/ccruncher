@@ -87,7 +87,7 @@ void ccruncher_test::BorrowerTest::tearDown()
 //===========================================================================
 Ratings ccruncher_test::BorrowerTest::getRatings()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\
@@ -111,7 +111,7 @@ Ratings ccruncher_test::BorrowerTest::getRatings()
 //===========================================================================
 Sectors ccruncher_test::BorrowerTest::getSectors()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
       <sector name='S1' desc='calzado'/>\n\
       <sector name='S2' desc='otros sectores'/>\n\
@@ -132,7 +132,7 @@ Sectors ccruncher_test::BorrowerTest::getSectors()
 //===========================================================================
 Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
     <segmentation name='borrower' components='borrower'>\n\
@@ -175,7 +175,7 @@ Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 //===========================================================================
 Interests ccruncher_test::BorrowerTest::getInterests()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <interests>\n\
       <interest name='spot' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
@@ -232,7 +232,7 @@ vector<Date> ccruncher_test::BorrowerTest::getDates()
 void ccruncher_test::BorrowerTest::test1()
 {
   // borrower definition
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
       <belongs-to segmentation='sector' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
@@ -298,7 +298,7 @@ void ccruncher_test::BorrowerTest::test1()
 void ccruncher_test::BorrowerTest::test2()
 {
   // borrower definition with invalid rating
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <borrower rating='K' sector='S2' name='Borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
@@ -341,7 +341,7 @@ void ccruncher_test::BorrowerTest::test2()
 void ccruncher_test::BorrowerTest::test3()
 {
   // borrower definition with invalid asset (data repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <borrower rating='A' sector='S2' name='borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\

@@ -74,7 +74,7 @@ void ccruncher_test::SegmentationsTest::tearDown()
 //===========================================================================
 void ccruncher_test::SegmentationsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
     <segmentation name='borrower' components='borrower'>\n\
