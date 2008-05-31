@@ -22,20 +22,20 @@
 // Utils.cpp - Utils code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/19 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added hash() method
 //   . added timestamp() method
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added method getCompilationOptions()
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

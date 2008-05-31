@@ -22,17 +22,17 @@
 // PowMatrix.hpp - PowMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added private constructor (non-instantiable class)
 //   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
 //
-// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . pow method renamed: pow(x,y) -> fpow(x,y)
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

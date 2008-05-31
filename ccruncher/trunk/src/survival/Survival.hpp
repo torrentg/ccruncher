@@ -22,16 +22,16 @@
 // Survival.hpp - Survival header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/29 - Gerard Torrent [gerard@mail.generacio.com]
 //   . improved performance for inverse method
 //
-// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added getMinCommonTime() method
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

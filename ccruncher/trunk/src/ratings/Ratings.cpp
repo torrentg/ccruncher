@@ -22,28 +22,28 @@
 // Ratings.cpp - Ratings code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . class refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //   . added getIndex() method
 //

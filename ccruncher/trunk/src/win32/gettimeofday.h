@@ -50,7 +50,7 @@
  * -------------------------------------------------------------------
  * An implementation of gettimeofday for Windows.
  * -------------------------------------------------------------------
- * 09/10/2005 [gerard@fobos.generacio.com]
+ * 09/10/2005 [gerard@mail.generacio.com]
  * commented HAVE_GETTIMEOFDAY define (conflict autotools-Windows)
  * ------------------------------------------------------------------- */
 

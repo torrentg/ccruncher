@@ -16,26 +16,26 @@
 #
 #-------------------------------------------------------------
 #
-# 2005/06/07 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/06/07 - Gerard Torrent [gerard@mail.generacio.com]
 #   . initial release
 #
-# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added oblivion directory management
 #   . 'svn checkout' replaced by 'svn export'
 #
-# 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
 #   . moved $CCRUNCHER/ doc files to directory $CCRUNCHER/doc
 #   . changed argument flag -l by -b (binary distribution)
 #   . added file data/readme.txt
 #
-# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added support for build/ directory
 #   . removed unused checkVersion() function
 #   . check that a distribution option is filled (xxx)
 #   . added Rev svn:keyword
 #   . added dependencies paragraph at comments
 #
-# 2005/11/08 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/11/08 - Gerard Torrent [gerard@mail.generacio.com]
 #   . solved minor bugs related to windows installation
 #
 # 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
@@ -121,7 +121,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         echo "$progname version and arguments at gerard@mail.generacio.com";
          exit 1;;
     esac
   done
@@ -326,7 +326,7 @@ case $disttype in
          echo "use -h option for more information";
          exit 1;;
       *) echo "unexpected error. Please report this bug sending";
-         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         echo "$progname version and arguments at gerard@mail.generacio.com";
          exit 1;;
 
 esac

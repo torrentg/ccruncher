@@ -22,38 +22,38 @@
 // AssetTest.cpp - AssetTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . update to t[0] -> update to t[n-1]
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Asset refactoring
 //   . modified asset value algorithm
 //
-// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed simulate=values option
 //   . netting replaced by recovery
 //

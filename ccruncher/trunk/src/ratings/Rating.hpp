@@ -22,16 +22,16 @@
 // Rating.hpp - Rating header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //
 //===========================================================================

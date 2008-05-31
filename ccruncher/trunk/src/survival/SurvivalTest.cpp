@@ -22,28 +22,28 @@
 // SurvivalTest.cpp - SurvivalTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added test6()
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed cout's
 //
-// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Survival class refactoring
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //
 //===========================================================================

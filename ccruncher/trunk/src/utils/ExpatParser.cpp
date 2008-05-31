@@ -22,31 +22,31 @@
 // ExpatParser.cpp - ExpatParser code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/06/10 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added characterData method
 //
-// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added stop parsing ability
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/29 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/29 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed XMLCALL's
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/28 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/28 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added expat legacy code support (thanks Stephen Ronderos)
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . string parser refactorized
 //
-// 2007/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/19 - Gerard Torrent [gerard@mail.generacio.com]
 //   . correct mistake in error message
 //
 //===========================================================================

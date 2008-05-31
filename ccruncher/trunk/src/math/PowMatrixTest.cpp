@@ -22,32 +22,32 @@
 // PowMatrixTest.cpp - PowMatrixTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/01/29 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed epsilon value because in debug mode test2 fails
 //     it is due that optimized code sometimes gives different
 //     answers not because of an error but because optimization
 //     changes the order of calculations, resulting in slightly
 //     different results due to the limits of floating-point precision.
 //
-// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . implemented Arrays class
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
 //
-// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . pow method renamed: pow(x,y) -> fpow(x,y)
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

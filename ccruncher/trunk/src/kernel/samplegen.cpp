@@ -22,37 +22,37 @@
 // generator.cpp - generator tool code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/03/12 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/12 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added POSIX compliance in command line arguments
 //
-// 2005/03/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . asset refactoring
 //
-// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added logger
 //
-// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added survival function section
 //
-// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . performing partial parsing (without portfolio)
 //
-// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved performance problem when nclients is high
 //
-// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added getCompilationOptions() to version output
 //
 // 2007/08/04 - Gerard Torrent [gerard@mail.generacio.com]
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "generator version and arguments at gerard@fobos.generacio.com\n";
+                  "generator version and arguments at gerard@mail.generacio.com\n";
           return 1;
     }
   }

@@ -22,37 +22,37 @@
 // SegmentAggregator.cpp - SegmentAggregator code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . portfolio evaluation modified
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added timer to control last flush time
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . implemented MPI support
 //
-// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client refactoring
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . SegmentAggregator refactoring
 //
-// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed simule and method params
 //
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]

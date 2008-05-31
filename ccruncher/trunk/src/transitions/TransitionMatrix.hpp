@@ -22,30 +22,30 @@
 // TransitionMatrix.hpp - TransitionMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/22 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
-// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . class refactoring
 //
-// 2006/01/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed Forward Default Rate references
 //
-// 2006/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/03/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . forced explicit friend function declaration
 //
 //===========================================================================

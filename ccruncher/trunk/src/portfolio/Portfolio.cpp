@@ -22,28 +22,28 @@
 // Portfolio.cpp - Portfolio code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . some modifications trying to achieve better performance
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added onlyactive argument to sortClients() method
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Portfolio refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]

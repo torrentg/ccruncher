@@ -22,19 +22,19 @@
 // ExpatHandlers.cpp - ExpatHandlers code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added method epstop(), stops current parsing
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed eperror method
 //
 //===========================================================================

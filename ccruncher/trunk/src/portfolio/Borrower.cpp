@@ -22,43 +22,43 @@
 // Borrower.cpp - Borrower code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved bug related to default segment (rest segment = default)
 //
-// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added hash key (to accelerate comparations)
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Sectors refactoring
 //   . Ratings refactoring
 //   . Segmentations refactoring
 //   . Asset refactoring
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
-// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //   . removed sector.order tag
 //   . added unique asset id check

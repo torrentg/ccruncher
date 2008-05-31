@@ -17,22 +17,22 @@
 #
 #-------------------------------------------------------------
 #
-# 2005/05/29 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/05/29 - Gerard Torrent [gerard@mail.generacio.com]
 #   . initial release
 #
-# 2005/09/04 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/04 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added script report
 #
-# 2005/09/06 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added tex files
 #
-# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
 #   . removed plotdata and plotmtrans scripts
 #
-# 2005/09/27 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/27 - Gerard Torrent [gerard@mail.generacio.com]
 #   . changed CCRUNCHERPATH asignation
 #
-# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added Rev svn:keyword
 #   . added dependences paragraph at comments
 #
@@ -108,7 +108,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         echo "$progname version and arguments at gerard@mail.generacio.com";
          exit 1;;
     esac
   done

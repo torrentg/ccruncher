@@ -22,16 +22,16 @@
 // Strings.cpp - Strings code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/14 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/12/14 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved bug in methods ltrim(), rtrim() and trim()
 //
 //===========================================================================

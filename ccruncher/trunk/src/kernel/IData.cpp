@@ -22,46 +22,46 @@
 // IData.cpp - IData code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . solved bug at XML read that hangs ccruncher when input file isn't
 //     a true xml file
 //
-// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added logger
 //
-// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added survival section
 //
-// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed aggregators class
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added gziped input files suport
 //
-// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . moved <cassert> include at last position
 //   . check that sections are included into ccruncher main tag
 //
-// 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/16 - Gerard Torrent [gerard@mail.generacio.com]
 //   . thread-safe modification (variable hasmaintag)
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Portfolio refactoring
 //   . IData refactoring
 //
-// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed simule and method params
 //
-// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
 // 2007/07/28 - Gerard Torrent [gerard@mail.generacio.com]

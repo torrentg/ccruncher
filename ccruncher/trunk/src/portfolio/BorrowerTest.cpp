@@ -22,34 +22,34 @@
 // BorrowerTest.cpp - BorrowerTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client refactoring
 //
-// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . netting replaced by recovery
 //
 // 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]

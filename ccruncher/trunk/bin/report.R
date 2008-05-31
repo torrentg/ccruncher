@@ -22,18 +22,18 @@
 # report.R - report script for R (http://www.r-project.org) - $Rev$
 # --------------------------------------------------------------------------
 #
-# 2005/08/30 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/08/30 - Gerard Torrent [gerard@mail.generacio.com]
 #   . initial release
 #
-# 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added TCE support (Tail Conditional Expectation or Expected Shortfall)
 #   . code refactored
 #   . added usage example
 #
-# 2005/09/06 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
 #   . removed portfolio value support
 #
-# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added Rev svn:keyword
 #
 # 2007/07/27 - Gerard Torrent [gerard@mail.generacio.com]

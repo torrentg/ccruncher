@@ -22,19 +22,19 @@
 // Segmentations.hpp - Segmentations header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added methods getNum*
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . class refactoring
 //
 //===========================================================================

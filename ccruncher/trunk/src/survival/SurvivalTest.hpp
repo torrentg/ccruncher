@@ -22,16 +22,16 @@
 // SurvivalTest.hpp - SurvivalTest header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added test6()
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

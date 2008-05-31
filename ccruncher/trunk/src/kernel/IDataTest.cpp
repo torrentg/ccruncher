@@ -22,48 +22,48 @@
 // IDataTest.cpp - IDataTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added logger
 //
-// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added param montecarlo.method
 //   . changed period time resolution (year->month)
 //   . added survival section
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
-// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/09/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . creditcruncher tag replaced by ccruncher tag
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/02/01 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/02/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . IData refactoring
 //
-// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed simulate=values and method=rating-path params
 //   . netting replaced by recovery
 //

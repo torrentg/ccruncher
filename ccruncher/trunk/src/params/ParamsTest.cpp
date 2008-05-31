@@ -22,31 +22,31 @@
 // ParamsTest.cpp - ParamsTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added param montecarlo.method
 //
-// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
-// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed simulate=values option
 //   . removed method=rating-path
 //
