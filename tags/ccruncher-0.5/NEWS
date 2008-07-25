@@ -1,0 +1,58 @@
+
+CREDITCRUNCHER NEWS
+===================
+
+version 0.5 (??? 2005)
+--------------------------
+  * important: implemented specialized Gaussian Copula
+      . adapted to client correlation matrix structure
+      . low memory footprint
+      . fast computations
+      . allows copulas of 50.000 components
+  * some classes has been refactorized
+  * upgraded to new zlib version
+  * increased verbosity
+  * increased performance in inverse survival computation
+  * added MPI support
+
+version 0.4 (July 2005)
+--------------------------
+  * bugfix: solved bug when seed=0L
+  * bugfix: solved bug in time-to-default algorithm
+  * upgraded to new tnt/jama version
+  * added survival tag at DTD
+  * autoflush if more than 30 secs without saving results
+  * added gzip input file suport
+  * modified portfolio value function computation
+  * replaced concept recovery/exposure by netting
+  * fast parsing when portfolio section is not required
+
+version 0.3 (June 2005)
+--------------------------
+  * bugfix: solved bug in correlation matrix check when correl = 0
+  * changed attribute period from mtransitions tag: (year -> month)
+  * improved checks applied to transition matrix
+  * removed aggregators
+  * new SegmentAggregator (simplified)
+  * cc2gpi tool replaced by plotdata script
+  * added time-to-default simulation method
+  * create script grapher for mtrans
+  * create script bin/rollversion.sh
+  * add repository version number (RXXXX) to --version options
+  * upgraded to new tnt/jama version 
+  * www site content reviewed & updated
+  * created MSVC7 project (and code companion)
+  * when a error raise, prints stack trace (only in linux)
+
+version 0.2 (April 2005)
+--------------------------
+  * added POSIX compliance in command line arguments (Gerard Torrent)
+  * output file changed from xml to tabulated text (Gerard Torrent)
+  * output beautified (Gerard Torrent)
+  * asset refactoring (Gerard Torrent)
+  * bugfix: 'make distcheck' now works (Gerard Torrent)
+  * migrated from xercesc xml parser to expat xml parser (Gerard Torrent)
+
+version 0.1 (January 2005)
+--------------------------
+  * initial release (Gerard Torrent)
