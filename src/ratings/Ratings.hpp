@@ -19,23 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Ratings.hpp - Ratings header - $Rev$
+// Ratings.hpp - Ratings header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getIndex() method
 //
 //===========================================================================
 
@@ -64,34 +55,22 @@ class Ratings : public ExpatHandlers
 
   private:
 
-    // ratings list
     vector<Rating> vratings;
-    // auxiliary variable (used by parser)
     Rating auxrating;
 
-    // insert a rating in the list
-    void insertRating(const Rating &) throw(Exception);
-    // validate object content
+    void insertRating(Rating &) throw(Exception);
     void validations() throw(Exception);
 
 
   public:
 
-    // constructor
     Ratings();
-    // destructor
     ~Ratings();
 
-    // return the number of ratings
-    int size() const;
-    // return the index of the rating
-    int getIndex(const string &name) const;
-    // [] operator
-    Rating& operator [] (int i);
-    // [] operator
-    Rating& operator [] (const string &name) throw(Exception);
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    vector<Rating> * getRatings();
+    int getIndex(const string &);
+    string getName(int index) throw(Exception);
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

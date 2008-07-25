@@ -19,22 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatUserData.cpp - ExpatUserData code - $Rev$
+// ExpatUserData.cpp - ExpatUserData code
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
-#include "utils/ExpatUserData.hpp"
 #include <cassert>
+#include "utils/ExpatUserData.hpp"
 
 //===========================================================================
 // void constructor (don't use)

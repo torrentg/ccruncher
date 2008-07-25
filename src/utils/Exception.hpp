@@ -19,17 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Exception.hpp - Exception header - $Rev$
+// Exception.hpp - Exception header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getStackTrace() method (link with -rdynamic flag)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -69,7 +66,7 @@ class Exception : public std::exception
     Exception(const std::exception &);
     Exception(const ccruncher::Exception &, const std::string&);
     Exception(const std::exception &, const std::string&);
-    Exception(const char *);
+    Exception(char *);
 
     ~Exception() throw ();
 

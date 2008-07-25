@@ -19,20 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// TransitionMatrixTest.hpp - TransitionMatrixTest header - $Rev$
+// TransitionMatrixTest.hpp - TransitionMatrixTest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -48,7 +42,6 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
-namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -83,10 +76,6 @@ class TransitionMatrixTest : public TestFixture<TransitionMatrixTest>
 };
 
 REGISTER_FIXTURE(TransitionMatrixTest);
-
-//---------------------------------------------------------------------------
-
-}
 
 //---------------------------------------------------------------------------
 

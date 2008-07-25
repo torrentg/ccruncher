@@ -19,27 +19,23 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Exception.cpp - Exception code - $Rev$
+// Exception.cpp - Exception code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getStackTrace() method (link with -rdynamic flag)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include "utils/Exception.hpp"
-#include <cstdlib>
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const char *str) : exception()
+ccruncher::Exception::Exception(char *str) : exception()
 {
   msg = string(str);
   stacktrace = retrieveStackTrace();
@@ -119,13 +115,8 @@ const char * ccruncher::Exception::what() const throw()
 //===========================================================================
 ostream & ccruncher::operator << (ostream& os, Exception const &e)
 {
-  os << "\nException: " << e.toString();
-  string stacktrace = e.getStackTrace();
-  if (stacktrace == "") {
-    os << endl;
-    os << stacktrace;
-  }
-  os << endl;
+  os << "\nException: " << e.toString() << "\n" << e.getStackTrace() << endl;
+
   return os;
 }
 
@@ -136,14 +127,14 @@ ostream & ccruncher::operator << (ostream& os, Exception const &e)
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================
-string ccruncher::Exception::retrieveStackTrace()
+string ccruncher::Exception::retrieveStackTrace() 
 {
   int maxbt=100, numbt;
   void *btbuf[maxbt];
   char **symbuf;
   int status;
   char *demangledname;
-  size_t pos1, pos2;
+  unsigned int pos1, pos2;
   string addr, func;
   string ret="\n";
 
@@ -160,14 +151,14 @@ string ccruncher::Exception::retrieveStackTrace()
   }
 
   // printing backtrace lines (atention: first 2 frames skiped!)
-  for (int i=2; i<numbt; ++i)
+  for (int i=2; i<numbt; ++i) 
   {
     string cur = symbuf[i];
 
     // retrieving mem adress
     pos1 = cur.rfind ('[');
     pos2 = cur.rfind (']');
-    if ((pos1 != string::npos) && (pos2 != string::npos))
+    if ((pos1 != string::npos) && (pos2 != string::npos)) 
     {
       addr = cur.substr(pos1 + 1, pos2 - pos1 - 1);
     }
@@ -175,9 +166,9 @@ string ccruncher::Exception::retrieveStackTrace()
     // retrieving function name (link with -rdynamic flag)
     pos1 = cur.rfind ("(_Z");
     pos2 = cur.rfind ('+');
-    if (pos2 != string::npos)
+    if (pos2 != string::npos) 
     {
-      if (pos1 != string::npos)
+      if (pos1 != string::npos) 
       {
         func = cur.substr(pos1 + 1, pos2 - pos1 - 1);
         demangledname = NULL;
@@ -191,8 +182,8 @@ string ccruncher::Exception::retrieveStackTrace()
         if (demangledname != NULL) {
           free(demangledname);
         }
-      }
-      else
+      } 
+      else 
       {
         pos1 = cur.rfind ('(');
         func = cur.substr (pos1 + 1, pos2 - pos1 - 1);
@@ -211,7 +202,7 @@ string ccruncher::Exception::retrieveStackTrace()
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================
-string ccruncher::Exception::retrieveStackTrace()
+string ccruncher::Exception::retrieveStackTrace() 
 {
   return string("");
 }
@@ -224,4 +215,3 @@ string ccruncher::Exception::getStackTrace() const
 {
   return stacktrace;
 }
-

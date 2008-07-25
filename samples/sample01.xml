@@ -1,165 +1,89 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 
-<ccruncher>
+<!-- ************************************************************** -->
+<!-- description:                                                   -->
+<!--   this sample is linked with documentation                     -->
+<!--   used to show the importance of correlation                   -->
+<!--   compared with sample02.xml (correlated)                      -->
+<!-- escenario:                                                     -->
+<!--   100 clients, 1 sector, 2 ratings (alive + defaulted),        -->
+<!--   uncorrelated defaults, 1 step of length 1 year (12 months)   -->
+<!-- ************************************************************** -->
+
+<creditcruncher>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
+  <!-- a unique step of length 1 year (12 months)                     -->
   <!-- ============================================================== -->
   <params>
-    <property name="time.begindate" value="01/07/2004"/>
-    <property name="time.steps" value="15"/>
-    <property name="time.steplength" value="6"/>
-    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="time.begindate" value="01/01/2005"/>
+    <property name="time.steps" value="1"/>
+    <property name="time.steplength" value="12"/>
+    <property name="stopcriteria.maxiterations" value="5000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
-    <property name="copula.type" value="gaussian"/>
-    <property name="copula.seed" value="0"/>
+    <property name="copula.type" value="normal"/>
+    <property name="copula.seed" value="387650932"/>
+    <property name="montecarlo.method" value="rating-path"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+    <property name="portfolio.onlyActiveClients" value="true"/>
   </params>
 
   <!-- ============================================================== -->
   <!--                       INTERESTS                                -->
+  <!-- without value update (non value transportation along time)     -->
   <!-- ============================================================== -->
   <interests>
-    <interest name='spot' date='18/11/2004'>
-      <rate t='0' r='0'/>
-      <rate t='1' r='0.04'/>
-      <rate t='2' r='0.041'/>
-      <rate t='3' r='0.045'/>
-      <rate t='6' r='0.0455'/>
-      <rate t='12' r='0.048'/>
-      <rate t='24' r='0.049'/>
-      <rate t='60' r='0.05'/>
-      <rate t='120' r='0.052'/>
+    <interest name="spot" date="01/01/2005">
+      <rate t="0" r="0.0"/>
+      <rate t="1" r="0.0"/>
+      <rate t="2" r="0.0"/>
+      <rate t="3" r="0.0"/>
+      <rate t="6" r="0.0"/>
+      <rate t="12" r="0.0"/>
+      <rate t="24" r="0.0"/>
+      <rate t="60" r="0.0"/>
+      <rate t="120" r="0.0"/>
     </interest>
   </interests>
 
   <!-- ============================================================== -->
   <!--                           RATINGS                              -->
+  <!-- only 2 status: alive and death                                 -->                               
   <!-- ============================================================== -->
   <ratings>
-    <rating name='AAA' desc='AAA'/>
-    <rating name='AA' desc='AA'/>
-    <rating name='A' desc='A'/>
-    <rating name='BBB' desc='BBB'/>
-    <rating name='BB' desc='BB'/>
-    <rating name='B' desc='B'/>
-    <rating name='CCC' desc='CCC'/>
-    <rating name='Default' desc='Default'/>
+    <rating name="A" order="1" desc="alive"/>
+    <rating name="E" order="2" desc="death"/>
   </ratings>
 
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
   <mtransitions period="12" epsilon="1e-12">
-
-    <transition from="AAA" to="AAA" value="0.9081"/>
-    <transition from="AAA" to="AA" value="0.0833"/>
-    <transition from="AAA" to="A" value="0.0068"/>
-    <transition from="AAA" to="BBB" value="0.0006"/>
-    <transition from="AAA" to="BB" value="0.0012"/>
-    <transition from="AAA" to="B" value="0.0"/>
-    <transition from="AAA" to="CCC" value="0.0"/>
-    <transition from="AAA" to="Default" value="0.0"/>
-
-    <transition from="AA" to="AAA" value="0.0070"/>
-    <transition from="AA" to="AA" value="0.9065"/>
-    <transition from="AA" to="A" value="0.0779"/>
-    <transition from="AA" to="BBB" value="0.0064"/>
-    <transition from="AA" to="BB" value="0.0006"/>
-    <transition from="AA" to="B" value="0.0014"/>
-    <transition from="AA" to="CCC" value="0.0002"/>
-    <transition from="AA" to="Default" value="0.0"/>
-
-    <transition from="A" to="AAA" value="0.0009"/>
-    <transition from="A" to="AA" value="0.0227"/>
-    <transition from="A" to="A" value="0.9105"/>
-    <transition from="A" to="BBB" value="0.0552"/>
-    <transition from="A" to="BB" value="0.0074"/>
-    <transition from="A" to="B" value="0.0026"/>
-    <transition from="A" to="CCC" value="0.0001"/>
-    <transition from="A" to="Default" value="0.0006"/>
-
-    <transition from="BBB" to="AAA" value="0.0002"/>
-    <transition from="BBB" to="AA" value="0.0033"/>
-    <transition from="BBB" to="A" value="0.0595"/>
-    <transition from="BBB" to="BBB" value="0.8693"/>
-    <transition from="BBB" to="BB" value="0.0530"/>
-    <transition from="BBB" to="B" value="0.0117"/>
-    <transition from="BBB" to="CCC" value="0.0012"/>
-    <transition from="BBB" to="Default" value="0.0018"/>
-
-    <transition from="BB" to="AAA" value="0.0003"/>
-    <transition from="BB" to="AA" value="0.0014"/>
-    <transition from="BB" to="A" value="0.0067"/>
-    <transition from="BB" to="BBB" value="0.0773"/>
-    <transition from="BB" to="BB" value="0.8053"/>
-    <transition from="BB" to="B" value="0.0884"/>
-    <transition from="BB" to="CCC" value="0.01"/>
-    <transition from="BB" to="Default" value="0.0106"/>
-
-    <transition from="B" to="AAA" value="0.0"/>
-    <transition from="B" to="AA" value="0.0011"/>
-    <transition from="B" to="A" value="0.0024"/>
-    <transition from="B" to="BBB" value="0.0043"/>
-    <transition from="B" to="BB" value="0.0648"/>
-    <transition from="B" to="B" value="0.8346"/>
-    <transition from="B" to="CCC" value="0.0407"/>
-    <transition from="B" to="Default" value="0.0521"/>
-
-    <transition from="CCC" to="AAA" value="0.0022"/>
-    <transition from="CCC" to="AA" value="0.0"/>
-    <transition from="CCC" to="A" value="0.0022"/>
-    <transition from="CCC" to="BBB" value="0.0130"/>
-    <transition from="CCC" to="BB" value="0.0238"/>
-    <transition from="CCC" to="B" value="0.1124"/>
-    <transition from="CCC" to="CCC" value="0.6486"/>
-    <transition from="CCC" to="Default" value="0.1978"/>
-
-    <transition from="Default" to="AAA" value="0.0"/>
-    <transition from="Default" to="AA" value="0.0"/>
-    <transition from="Default" to="A" value="0.0"/>
-    <transition from="Default" to="BBB" value="0.0"/>
-    <transition from="Default" to="BB" value="0.0"/>
-    <transition from="Default" to="B" value="0.0"/>
-    <transition from="Default" to="CCC" value="0.0"/>
-    <transition from="Default" to="Default" value="1.0"/>
-
+    <transition from="A" to="A" value="0.80"/>
+    <transition from="A" to="E" value="0.20"/>
+    <transition from="E" to="A" value="0.00"/>
+    <transition from="E" to="E" value="1.00"/>
   </mtransitions>
 
   <!-- ============================================================== -->
   <!--                           SECTORS                              -->
+  <!-- only 1 sector, all clients belongs                             -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="tech" desc="technology"/>
-    <sector name="util" desc="utilities"/>
-    <sector name="energ" desc="energy"/>
-    <sector name="bank" desc="banking"/>
+    <sector name="S1" order="1" desc="unique sector"/>
   </sectors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
+  <!-- uncorrelated defaults                                          -->
   <!-- ============================================================== -->
   <mcorrels epsilon="1e-12">
-
-    <sigma sector1="tech" sector2="tech" value="0.2"/>
-    <sigma sector1="tech" sector2="util" value="0.01"/>
-    <sigma sector1="tech" sector2="energ" value="0.02"/>
-    <sigma sector1="tech" sector2="bank" value="-0.03"/>
-
-    <sigma sector1="util" sector2="util" value="0.35"/>
-    <sigma sector1="util" sector2="energ" value="-0.04"/>
-    <sigma sector1="util" sector2="bank" value="-0.01"/>
-
-    <sigma sector1="energ" sector2="energ" value="0.20"/>
-    <sigma sector1="energ" sector2="bank" value="-0.06"/>
-
-    <sigma sector1="bank" sector2="bank" value="0.4"/>
-
+    <sigma sector1="S1" sector2="S1" value="0.0"/>
   </mcorrels>
 
   <!-- ============================================================== -->
-  <!--                SEGMENTATIONS/AGGREGATORS                       -->
+  <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
@@ -169,18 +93,806 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <borrower rating="A" sector="bank" name="BenderBank" id="001">
-      <asset name="generic" id="op1" date="15/01/2005">
+    <client rating="A" sector="S1" name="001" id="001">
+      <asset name="generic" id="op1">
         <data>
-          <values at="15/01/2005" cashflow="-4000.0" recovery="2500.0" />
-          <values at="15/01/2006" cashflow="+1000.0" recovery="3000.0" />
-          <values at="15/01/2007" cashflow="+1000.0" recovery="2500.0" />
-          <values at="15/01/2008" cashflow="+1000.0" recovery="1500.0" />
-          <values at="15/01/2009" cashflow="+1000.0" recovery="750.0" />
-          <values at="15/01/2010" cashflow="+1000.0" recovery="250.0" />
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
         </data>
       </asset>
-    </borrower>
+    </client>
+    <client rating="A" sector="S1" name="002" id="002">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="003" id="003">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="004" id="004">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="005" id="005">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="006" id="006">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="007" id="007">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="008" id="008">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="009" id="009">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="010" id="010">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="011" id="011">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="012" id="012">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="013" id="013">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="014" id="014">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="015" id="015">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="016" id="016">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="017" id="017">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="018" id="018">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="019" id="019">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="020" id="020">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="021" id="021">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="022" id="022">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="023" id="023">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="024" id="024">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="025" id="025">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="026" id="026">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="027" id="027">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="028" id="028">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="029" id="029">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="030" id="030">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="031" id="031">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="032" id="032">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="033" id="033">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="034" id="034">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="035" id="035">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="036" id="036">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="037" id="037">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="038" id="038">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="039" id="039">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="040" id="040">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="041" id="041">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="042" id="042">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="043" id="043">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="044" id="044">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="045" id="045">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="046" id="046">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="047" id="047">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="048" id="048">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="049" id="049">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="050" id="050">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="051" id="051">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="052" id="052">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="053" id="053">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="054" id="054">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="055" id="055">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="056" id="056">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="057" id="057">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="058" id="058">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="059" id="059">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="060" id="060">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="061" id="061">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="062" id="062">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="063" id="063">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="064" id="064">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="065" id="065">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="066" id="066">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="067" id="067">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="068" id="068">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="069" id="069">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="070" id="070">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="071" id="071">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="072" id="072">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="073" id="073">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="074" id="074">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="075" id="075">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="076" id="076">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="077" id="077">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="078" id="078">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="079" id="079">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="080" id="080">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="081" id="081">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="082" id="082">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="083" id="083">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="084" id="084">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="085" id="085">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="086" id="086">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="087" id="087">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="088" id="088">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="089" id="089">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="090" id="090">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="091" id="091">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="092" id="092">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="093" id="093">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="094" id="094">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="095" id="095">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="096" id="096">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="097" id="097">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="098" id="098">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="099" id="099">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
+    <client rating="A" sector="S1" name="100" id="100">
+      <asset name="generic" id="op1">
+        <data>
+          <values at="01/01/2005" cashflow="1.0" exposure="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" exposure="1.0" recovery="0.0" />
+        </data>
+      </asset>
+    </client>
   </portfolio>
 
-</ccruncher>
+</creditcruncher>

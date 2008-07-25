@@ -19,20 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// StringsTest.cpp - StringsTest code - $Rev$
+// StringsTest.cpp - StringsTest code
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.cpp)
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
 #include "utils/Strings.hpp"
 #include "utils/StringsTest.hpp"
 
@@ -45,7 +41,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::StringsTest::setUp()
+void StringsTest::setUp()
 {
   // nothing to do
 }
@@ -53,7 +49,7 @@ void ccruncher_test::StringsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::StringsTest::tearDown()
+void StringsTest::tearDown()
 {
   // nothing to do
 }
@@ -61,7 +57,7 @@ void ccruncher_test::StringsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::StringsTest::test1()
+void StringsTest::test1()
 {
   vector<string> tokens;
   string str1 = "  I Am A String Ready For Sacrifice  ";

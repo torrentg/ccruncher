@@ -19,36 +19,24 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// PowMatrixTest.cpp - PowMatrixTest code - $Rev$
+// PowMatrixTest.cpp - PowMatrixTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/01/29 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed epsilon value because in debug mode test2 fails
-//     it is due that optimized code sometimes gives different
-//     answers not because of an error but because optimization
-//     changes the order of calculations, resulting in slightly
+//     it is due that optimized code sometimes gives different 
+//     answers not because of an error but because optimization 
+//     changes the order of calculations, resulting in slightly 
 //     different results due to the limits of floating-point precision.
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . pow method renamed: pow(x,y) -> fpow(x,y)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -56,15 +44,20 @@
 #include "math/PowMatrix.hpp"
 #include "math/PowMatrixTest.hpp"
 #include "utils/Arrays.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 #define EPSILON 0.00175
 
+//---------------------------------------------------------------------------
+
+void printMatrix(double **a, int n);
+
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::PowMatrixTest::setUp()
+void PowMatrixTest::setUp()
 {
   // nothing to do
 }
@@ -72,7 +65,7 @@ void ccruncher_test::PowMatrixTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::PowMatrixTest::tearDown()
+void PowMatrixTest::tearDown()
 {
   // nothing to do
 }
@@ -91,7 +84,7 @@ void ccruncher_test::PowMatrixTest::tearDown()
 //        +0.0306268 +0.998907   -0.00327799
 //        +0.0918803 -0.00327799 +0.990166
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test1()
+void PowMatrixTest::test1()
 {
   // matrix powerable
   double valA[] = {
@@ -115,7 +108,7 @@ void ccruncher_test::PowMatrixTest::test1()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[j+3*i], M[i][j], EPSILON);
     }
   }
 
@@ -139,7 +132,7 @@ void ccruncher_test::PowMatrixTest::test1()
 //        +0.0479328 +0.999403  -0.0157408
 //        +1.36792   +0.0329025 +0.414152
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test2()
+void PowMatrixTest::test2()
 {
   // singular matrix
   double valB[] = {
@@ -163,7 +156,7 @@ void ccruncher_test::PowMatrixTest::test2()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solB[j+3*i], M[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solB[j+3*i], M[i][j], EPSILON);
     }
   }
 
@@ -178,7 +171,7 @@ void ccruncher_test::PowMatrixTest::test2()
 //    A = {{3, -2, 0},{4, -1, -2}, {0, 0, -1}}
 //    Eigenvalues[A]
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test3()
+void PowMatrixTest::test3()
 {
   // matrix with complex eigenvalues
   double valC[] = {
@@ -198,27 +191,27 @@ void ccruncher_test::PowMatrixTest::test3()
 //===========================================================================
 // test4. testing pow function
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test4()
+void PowMatrixTest::test4()
 {
   double x = 2.0;
   double y = 1.0/3.0;
+/*
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, +3.0), +8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, +3.0), -8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+2.0, -3.0), +1.0/8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-2.0, -3.0), -1.0/8.0, 1E-6);
 
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, +3.0), +8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, +3.0), -8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, -3.0), +1.0/8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, -3.0), -1.0/8.0, 1E-6);
-
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, +y), +1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, -y), +0.79370115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, +y), -1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, -y), -0.79370115, 1E-6);
-
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, +y), +1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(+x, -y), +0.79370115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-x, +y), -1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(PowMatrix::pow(-x, -y), -0.79370115, 1E-6);
+*/
 }
 
 //===========================================================================
 // printMatrix. local function used for debug
 //===========================================================================
-void ccruncher_test::PowMatrixTest::printMatrix(double **a, int n)
+void printMatrix(double **a, int n)
 {
   for(int i=0;i<n;i++)
   {

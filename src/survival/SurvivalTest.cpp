@@ -19,39 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// SurvivalTest.cpp - SurvivalTest code - $Rev$
+// SurvivalTest.cpp - SurvivalTest code
 // --------------------------------------------------------------------------
 //
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added test6()
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed cout's
-//
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class CopulaNormal renamed to GaussianCopula
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Survival class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
+#include <iostream>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
-#include "math/GaussianCopula.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
@@ -61,7 +39,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::SurvivalTest::setUp()
+void SurvivalTest::setUp()
 {
   // nothing to do
 }
@@ -69,7 +47,7 @@ void ccruncher_test::SurvivalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::SurvivalTest::tearDown()
+void SurvivalTest::tearDown()
 {
   // nothing to do
 }
@@ -77,12 +55,12 @@ void ccruncher_test::SurvivalTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ccruncher_test::SurvivalTest::getRatings()
+Ratings SurvivalTest::getRatings()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='rating1'/>\n\
-      <rating name='E' desc='default'/>\n\
+      <rating name='A' order='1' desc='rating1'/>\n\
+      <rating name='E' order='2' desc='default'/>\n\
     </ratings>";
 
   // creating xml
@@ -96,9 +74,9 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::SurvivalTest::test1()
+void SurvivalTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -107,7 +85,7 @@ void ccruncher_test::SurvivalTest::test1()
       <!-- optionally you can add default rating info (value=0 always) -->\n\
     </survival>";
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
+  int ivalues[] = { 7, 5, 4, 3, 2, 2, 2, 1, 1, 0, 0};
 
   // creating xml
   ExpatParser xmlparser;
@@ -116,31 +94,31 @@ void ccruncher_test::SurvivalTest::test1()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values
   for(int i=0;i<9;i++)
   {
-    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
-    ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
+    ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
-
+  
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
     ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
   }
 }
 
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::SurvivalTest::test2()
+void SurvivalTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='0.98'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -155,17 +133,17 @@ void ccruncher_test::SurvivalTest::test2()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::SurvivalTest::test3()
+void SurvivalTest::test3()
 {
   // non valid survival function, non monotone
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -180,17 +158,17 @@ void ccruncher_test::SurvivalTest::test3()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test4
 //===========================================================================
-void ccruncher_test::SurvivalTest::test4()
+void SurvivalTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='-0.50'/>\n\
@@ -205,85 +183,39 @@ void ccruncher_test::SurvivalTest::test4()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test5 (equals than test1, but with diferent constructor)
 //===========================================================================
-void ccruncher_test::SurvivalTest::test5()
+void SurvivalTest::test5()
 {
   double mvalues1[] = {1.00, 0.75, 0.50, 0.25, 0.175, 0.10};
   double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
   double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 1, 2, 3, 4, 5};
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
+  int ivalues[] = { 7, 5, 4, 3, 2, 2, 2, 1, 1, 0, 0};
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues, 7);
+  Survival sf(&ratings, 6, (int *) imonths, (double**) mvalues, 7);
 
   // checking values
   for(int i=0;i<9;i++)
   {
-    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
-    ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
+    ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
-
+  
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
     ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
+    ASSERT_EQUALS(0, sf.inverse(1, 0.0))
   }
-}
-
-//===========================================================================
-// test6 (checks distribution assumptions)
-//===========================================================================
-void ccruncher_test::SurvivalTest::test6()
-{
-  double mvalues1[] = {1.00, 0.90};
-  double mvalues2[] = {0.00, 0.00};
-  double *mvalues[] = {mvalues1, mvalues2};
-  int imonths[] = {0, 12};
-  int ivalues[] = {0, 0};
-  double **id = Arrays<double>::allocMatrix(2,2,0.0);
-
-  // ratings list creation
-  Ratings ratings = getRatings();
-
-  // survival function creation
-  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues, 48);
-
-  // creating Id matrix 2x2
-  id[0][0] = 1.0;
-  id[0][1] = 0.0;
-  id[1][0] = 0.0;
-  id[1][1] = 1.0;
-
-  // creating randomizer
-  GaussianCopula randomizer(2, (double**) id);
-
-  // checking values
-  for(int i=0;i<20000;i++)
-  {
-    if (sf.inverse(0,randomizer.get(0)) > 12) {
-      ivalues[0]++;
-    }
-    else {
-      ivalues[1]++;
-    }
-
-    randomizer.next();
-  }
-
-  // checking that P(X in [0,0.9]) = 0.9
-  ASSERT(ivalues[0] > 17500);  // exact value is 18000 (margin=500)
-  // checking that P(X in [0.9,1.0]) = 0.1
-  ASSERT(ivalues[1] < 2500);  // exact value is 2000 (margin=500)
 }

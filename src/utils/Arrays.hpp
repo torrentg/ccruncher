@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Arrays.hpp - Arrays header - $Rev$
+// Arrays.hpp - Arrays header
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -39,8 +33,8 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "utils/Exception.hpp"
 #include <cassert>
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -50,32 +44,23 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-template <class T>
+template <class T> 
 class Arrays
 {
 
-  private:
-
-    // non-instantiable class
-    Arrays() {};
-
-
   public:
 
-    // alloc/dealloc array methods
     static T * allocVector(int n) throw(Exception);
     static T * allocVector(int n, T x) throw(Exception);
     static T * allocVector(int n, T *x) throw(Exception);
     static void deallocVector(T *x);
 
-    // alloc/dealloc matrix methods
     static T ** allocMatrix(int n, int m) throw(Exception);
     static T ** allocMatrix(int n, int m, T x) throw(Exception);
     static T ** allocMatrix(int n, int m, T *x) throw(Exception);
     static T ** allocMatrix(int n, int m, T **x) throw(Exception);
     static void deallocMatrix(T **x, int n);
 
-    // related methods
     static void prodMatrixVector(T **A, T *x, int n1, int n2, T *ret);
     static void prodMatrixMatrix(T **A, T **B, int n1, int n2, int n3, T **ret);
     static void copyVector(T *x, int n, T *ret);
@@ -90,7 +75,7 @@ class Arrays
 //===========================================================================
 // allocVector
 //===========================================================================
-template <class T>
+template <class T> 
 T * ccruncher::Arrays<T>::allocVector(int n) throw(Exception)
 {
   T aux;
@@ -105,7 +90,7 @@ T * ccruncher::Arrays<T>::allocVector(int n, T val) throw(Exception)
 {
   T *ret = NULL;
 
-  try
+  try 
   {
     ret = new T[n];
 
@@ -299,7 +284,7 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
   // making assertions
   assert(n1 > 0); assert(n2 > 0); assert(n3 > 0);
   assert(A != NULL); assert(B != NULL); assert(ret != NULL);
-
+  
   T *aux1 = allocVector(n1);
   T *aux2 = allocVector(n2);
 
@@ -309,15 +294,15 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
     {
       aux2[j] = B[j][i];
     }
-
+    
     prodMatrixVector(A, aux2, n1, n2, aux1);
-
+    
     for(register int j=0;j<n1;j++)
     {
       ret[j][i] = aux1[j];
     }
   }
-
+  
   deallocVector(aux1);
   deallocVector(aux2);
 }

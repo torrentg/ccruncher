@@ -19,23 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Sectors.hpp - Sectors header - $Rev$
+// Sectors.hpp - Sectors header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Sectors refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getIndex() method
 //
 //===========================================================================
 
@@ -63,34 +54,22 @@ class Sectors : public ExpatHandlers
 
   private:
 
-    // list of sectors
     vector<Sector> vsectors;
-    // auxiliary variable (used by parser)
     Sector auxsector;
 
-    // add a sector to list
-    void insertSector(const Sector &) throw(Exception);
-    // validate list
+    void insertSector(Sector &) throw(Exception);
     void validations() throw(Exception);
 
 
   public:
 
-    // default constructor
     Sectors();
-    // destructor
     ~Sectors();
 
-    // return the number of sectors
-    int size() const;
-    // return the index of the sector
-    int getIndex(const string &name) const;
-    // [] operator
-    Sector& operator [] (int i);
-    // [] operator
-    Sector& operator [] (const string &name) throw(Exception);
-    // returns object content as xml
-    string getXML(int) const throw(Exception);
+    vector<Sector> * getSectors();
+    int getIndex(const string &);
+    string getName(int index) throw(Exception);
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

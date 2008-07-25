@@ -19,23 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CholeskyDecompositionTest.cpp - CholeskyDecompositionTest code - $Rev$
+// CholeskyDecompositionTest.cpp - CholeskyDecompositionTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -52,7 +46,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::setUp()
+void CholeskyDecompositionTest::setUp()
 {
   // nothing to do
 }
@@ -60,7 +54,7 @@ void ccruncher_test::CholeskyDecompositionTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::tearDown()
+void CholeskyDecompositionTest::tearDown()
 {
   // nothing to do
 }
@@ -78,7 +72,7 @@ void ccruncher_test::CholeskyDecompositionTest::tearDown()
 //      0.00000  1.22474  0.40825
 //      0.00000  0.00000  1.15470
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::test1()
+void CholeskyDecompositionTest::test1()
 {
   // cholesky decomposition feasible
   double valA[] = {
@@ -108,7 +102,7 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
   {
     for (int j=i;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[j+3*i], A[j][i], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[j+3*i], A[j][i], EPSILON);
     }
   }
 
@@ -127,7 +121,7 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
 //    B = chol(A)
 //      error: chol: matrix not positive definite
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::test2()
+void CholeskyDecompositionTest::test2()
 {
   // cholesky decomposition non feasible
   double valB[] = {

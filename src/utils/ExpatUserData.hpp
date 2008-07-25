@@ -19,14 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatUserData.hpp - ExpatUserData header - $Rev$
+// ExpatUserData.hpp - ExpatUserData header
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -35,18 +32,16 @@
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include "utils/ExpatHandlers.hpp"
 #include <stack>
-#include <string>
+#include <vector>
 #include <expat.h>
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace ccruncher;
 namespace ccruncher {
-
-class ExpatHandlers; // defined in file ExpatHandlers.hpp
 
 //---------------------------------------------------------------------------
 
@@ -61,22 +56,21 @@ class ExpatUserData
   public:
 
     /** internal class */
-    class ExpatUserDataToken
+    class ExpatUserDataToken 
     {
       public:
-
+        /** constructor */
+        ExpatUserDataToken(string &n, ExpatHandlers *h) 
+        { 
+          name = n; 
+          handlers = h; 
+        }
+        
         /** token name related to handler */
         string name;
-
+        
         /** pointer to class handlers container */
         ExpatHandlers *handlers;
-
-        /** constructor */
-        ExpatUserDataToken(string &n, ExpatHandlers *h)
-        {
-          name = n;
-          handlers = h;
-        }
     };
 
 

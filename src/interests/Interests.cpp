@@ -19,33 +19,24 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Interests.cpp - Interests code - $Rev$
+// Interests.cpp - Interests code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
 //
 //===========================================================================
 
 #include <cmath>
+#include <algorithm>
 #include "interests/Interests.hpp"
 #include "utils/Strings.hpp"
-#include <cassert>
 
 //===========================================================================
 // constructor
@@ -64,40 +55,27 @@ ccruncher::Interests::~Interests()
 }
 
 //===========================================================================
-// size
+// return interests list
 //===========================================================================
-int ccruncher::Interests::size() const
+vector<Interest> * ccruncher::Interests::getInterests()
 {
-  // return size
-  return vinterests.size();
+  return &vinterests;
 }
 
 //===========================================================================
-// [] operator
+// return interest by name
 //===========================================================================
-Interest& ccruncher::Interests::operator []  (int i)
-{
-  // assertions
-  assert(i >= 0 && i < (int) vinterests.size());
-
-  // return i-th symbol
-  return vinterests[i];
-}
-
-//===========================================================================
-// [] operator
-//===========================================================================
-Interest& ccruncher::Interests::operator []  (const string &name) throw(Exception)
+Interest * ccruncher::Interests::getInterest(string name) throw(Exception)
 {
   for (unsigned int i=0;i<vinterests.size();i++)
   {
     if (vinterests[i].getName() == name)
     {
-      return vinterests[i];
+      return &(vinterests[i]);
     }
   }
 
-  throw Exception("interest " + name + " not found");
+  throw Exception("Interests::getInterest(): interest " + name + " not found");
 }
 
 //===========================================================================
@@ -114,20 +92,23 @@ void ccruncher::Interests::validate() throw(Exception)
     }
   }
 
-  throw Exception("interest 'spot' not defined");
+  throw Exception("Interests::validate(): interest spot not found");
 }
 
 //===========================================================================
 // insert a new interest in list
 //===========================================================================
-void ccruncher::Interests::insertInterest(const Interest &val) throw(Exception)
+void ccruncher::Interests::insertInterest(Interest &val) throw(Exception)
 {
   // validem coherencia
   for (unsigned int i=0;i<vinterests.size();i++)
   {
     if (vinterests[i].getName() == val.getName())
     {
-      throw Exception("interest name " + val.getName() + " repeated");
+      string msg = "Interests::insertInterest(): interest name ";
+      msg += val.getName();
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 
@@ -148,16 +129,16 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
 {
   if (isEqual(name_,"interests")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("found attributes in interests");
+      throw eperror(eu, "found attributes in interests");
     }
   }
   else if (isEqual(name_,"interest")) {
     // setting new handlers
     auxinterest.reset();
-    eppush(eu, &auxinterest, name_, attributes);
+    eppush(eu, &auxinterest, name_, attributes);  
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw eperror(eu, "unexpected tag " + string(name_));
   }
 }
 
@@ -174,14 +155,14 @@ void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
     insertInterest(auxinterest);
   }
   else {
-    throw Exception("unexpected end tag " + string(name_));
+    throw eperror(eu, "unexpected end tag " + string(name_));
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Interests::getXML(int ilevel) const throw(Exception)
+string ccruncher::Interests::getXML(int ilevel) throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";

@@ -19,54 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatParser.cpp - ExpatParser code - $Rev$
+// ExpatParser.cpp - ExpatParser code
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/10 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added characterData method
-//
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added stop parsing ability
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/08/29 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed XMLCALL's
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/28 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added expat legacy code support (thanks Stephen Ronderos)
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . string parser refactorized
-//
-// 2007/07/19 - Gerard Torrent [gerard@mail.generacio.com]
-//   . correct mistake in error message
 //
 //===========================================================================
 
+#include <cassert>
 #include <cstring>
+#include <map>
 #include <cstdio>
-#include <sstream>
 #include "utils/ExpatParser.hpp"
 #include "utils/ExpatUserData.hpp"
-#include <cassert>
 
 // --------------------------------------------------------------------------
 
 #define BUFSIZE 32768
-
-// expat versions previous to 1.95.x don't have defined these macros
-#ifndef XML_STATUS_OK
-#define XML_STATUS_OK    1
-#define XML_STATUS_ERROR 0
-#endif
 
 //===========================================================================
 // constructor
@@ -99,7 +72,7 @@ ccruncher::ExpatParser::~ExpatParser()
 //===========================================================================
 // startElement
 //===========================================================================
-void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
+void XMLCALL ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
@@ -112,7 +85,7 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 //===========================================================================
 // endElement
 //===========================================================================
-void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
+void XMLCALL ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
@@ -136,14 +109,22 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 //===========================================================================
 // characterData
 //===========================================================================
-void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
+void XMLCALL ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
 {
   // simple rule: character data is not allowed
-  for(int i=0;i<len;i++)
+  for(int i=0;i<len;i++) 
   {
-    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
+    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t') 
     {
-      throw Exception("unexpected text parsing xml");
+      ExpatUserData *ud = (ExpatUserData *) ud_;
+      XML_Parser xmlparser = ud->getParser();
+      char buf[256];
+
+      sprintf(buf, "unexpected text at line %d and column %d", 
+               XML_GetCurrentLineNumber(xmlparser),
+               XML_GetCurrentColumnNumber(xmlparser));
+
+      throw Exception(string(buf));
     }
   }
 }
@@ -153,8 +134,30 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) th
 //===========================================================================
 void ccruncher::ExpatParser::parse(string xmlcontent, ExpatHandlers *eh) throw(Exception)
 {
-  istringstream iss (xmlcontent, istringstream::in);
-  parse(iss, eh);
+  // pushing handlers to stack  
+  userdata.setCurrentHandlers("", eh);
+  
+  // parsing doc
+  try
+  {
+    if (XML_Parse(xmlparser, xmlcontent.c_str(), xmlcontent.length(), 1) == XML_STATUS_ERROR)
+    {
+      char buf[512];
+      sprintf(buf, "ExpatParser::parse(): %s at line %d at column %d", 
+                   XML_ErrorString(XML_GetErrorCode(xmlparser)),
+                   XML_GetCurrentLineNumber(xmlparser),
+                   XML_GetCurrentColumnNumber(xmlparser));
+      throw Exception(string(buf));
+    }
+  }
+  catch(Exception &e)
+  {
+    throw e;
+  }
+  catch(...)
+  {
+    throw Exception("ExpatParsers::parse()");
+  }
 }
 
 //===========================================================================
@@ -166,7 +169,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   streamsize len=0;
   int done;
 
-  // pushing handlers to stack
+  // pushing handlers to stack  
   userdata.setCurrentHandlers("", eh);
 
   // parsing doc
@@ -179,48 +182,24 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
       buf[len] = 0;
       done = (len < BUFSIZE);
 
-      if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
+      if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR) 
       {
         char aux[512];
-        sprintf(aux, "%s at line %ld column %ld",
+        sprintf(aux, "ExpatParser::parse(): %s at line %d at column %d", 
                      XML_ErrorString(XML_GetErrorCode(xmlparser)),
-                     (long) XML_GetCurrentLineNumber(xmlparser),
-                     (long) XML_GetCurrentColumnNumber(xmlparser));
+                     XML_GetCurrentLineNumber(xmlparser),
+                     XML_GetCurrentColumnNumber(xmlparser));
         throw Exception(string(aux));
       }
     } while(!done);
   }
-  catch(int spe)
-  {
-    // stop parser request
-    if (spe == 999) {
-      // nothing to do
-    }
-    // unknow exception
-    else {
-      char aux[512];
-      sprintf(aux, "error at line %ld column %ld",
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
-      throw Exception(string(aux));
-    }
-  }
   catch(Exception &e)
   {
-    char aux[512];
-    sprintf(aux, "%s at line %ld column %ld",
-                 e.what(),
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
-    throw Exception(string(aux));
+    throw e;
   }
   catch(...)
   {
-    char aux[512];
-    sprintf(aux, "error at line %ld column %ld",
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
-    throw Exception(string(aux));
+    throw Exception("ExpatParsers::parse()");
   }
 }
 

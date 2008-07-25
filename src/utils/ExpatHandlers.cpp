@@ -19,32 +19,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatHandlers.cpp - ExpatHandlers code - $Rev$
+// ExpatHandlers.cpp - ExpatHandlers code
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method epstop(), stops current parsing
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed eperror method
 //
 //===========================================================================
 
 #include <cstdio>
+#include <cassert>
 #include <cstring>
 #include <expat.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Parser.hpp"
-#include <cassert>
 
 //===========================================================================
 // destructor
@@ -52,6 +40,22 @@
 ccruncher::ExpatHandlers::~ExpatHandlers()
 {
   // nothing to do
+}
+    
+//===========================================================================
+// throw an error
+//===========================================================================
+Exception ccruncher::ExpatHandlers::eperror(ExpatUserData &eud, const string &msg)
+{
+  XML_Parser xmlparser = eud.getParser();
+  char buf[256];
+
+  sprintf(buf, "%s at line %d and column %d", 
+               msg.c_str(),
+               XML_GetCurrentLineNumber(xmlparser),
+               XML_GetCurrentColumnNumber(xmlparser));
+
+  return Exception(string(buf));
 }
 
 //===========================================================================
@@ -69,7 +73,7 @@ void ccruncher::ExpatHandlers::epback(ExpatUserData &eud)
 //===========================================================================
 // eppush
 //===========================================================================
-void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
+void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud, 
                   ExpatHandlers *eh, const char *name, const char **atts)
 {
   // assertion
@@ -83,24 +87,11 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
 }
 
 //===========================================================================
-// epstop
-//===========================================================================
-void ccruncher::ExpatHandlers::epstop(ExpatUserData &eud)
-{
-  // assertions
-  assert(eud.getCurrentHandlers() == this);
-
-  // throwing an exception to stop parser
-  // retrieved by ExpatParser::parse() method
-  throw int(999);
-}
-
-//===========================================================================
 // getAttributeValue
 //===========================================================================
-char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const
+char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const 
 {
-  for (int i=0; atts[i]; i+=2)
+  for (int i=0; atts[i]; i+=2) 
   {
     if (strcmp(attname.c_str(),atts[i]) == 0)
     {
@@ -117,7 +108,7 @@ char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const stri
 string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const string &attname, const string &defval)
 {
   char *val = getAttributeValue(atts, attname);
-
+  
   if (val != NULL)
   {
     return string(val);
@@ -270,7 +261,7 @@ int ccruncher::ExpatHandlers::getNumAttributes(const char **atts)
 {
   int ret = 0;
 
-  for (int i=0; atts[i]; i+=2)
+  for (int i=0; atts[i]; i+=2) 
   {
     ret++;
   }

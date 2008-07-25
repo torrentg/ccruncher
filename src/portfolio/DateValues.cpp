@@ -19,31 +19,23 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// DateValues.cpp - DateValues code - $Rev$
+// DateValues.cpp - DateValues code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added recovery value
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-//
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed exposure/recovery by netting
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
-//   . netting replaced by recovery
 //
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
+#include <algorithm>
 #include "portfolio/DateValues.hpp"
 
 //===========================================================================
@@ -53,21 +45,23 @@ ccruncher::DateValues::DateValues()
 {
   date = Date(1,1,1);
   cashflow = NAN;
+  exposure = NAN;
   recovery = NAN;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _recovery)
+ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _exposure, double _recovery)
 {
   date = _date;
   cashflow = _cashflow;
+  exposure = _exposure;
   recovery = _recovery;
 }
 
 //===========================================================================
-// comparation operador (needed by sort functions)
+// comparation operador (for sort function)
 //===========================================================================
 bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
 {

@@ -19,23 +19,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// DateValuesTest.hpp - DateValuesTest code - $Rev$
+// DateValuesTest.hpp - DateValuesTest code
 // --------------------------------------------------------------------------
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed exposure/recovery by netting
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
 #include "portfolio/DateValuesTest.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
@@ -51,7 +43,7 @@ using namespace ccruncher;
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::DateValuesTest::setUp()
+void DateValuesTest::setUp()
 {
   // nothing to do
 }
@@ -59,7 +51,7 @@ void ccruncher_test::DateValuesTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::DateValuesTest::tearDown()
+void DateValuesTest::tearDown()
 {
   // nothing to do
 }
@@ -67,11 +59,11 @@ void ccruncher_test::DateValuesTest::tearDown()
 //===========================================================================
 // comparators tests
 //===========================================================================
-void ccruncher_test::DateValuesTest::test1()
+void DateValuesTest::test1()
 {
-  DateValues val1(Date(10,10,2001), +1.0, +2.0);
-  DateValues val2(Date(01,01,2006), -1.0, -2.0);
-
+  DateValues val1(Date(10,10,2001), +1.0, +2.0, +3.0);
+  DateValues val2(Date(01,01,2006), -1.0, -2.0, -3.0);
+  
   // checking that sorts by date
   ASSERT(val1 < val2);
 }

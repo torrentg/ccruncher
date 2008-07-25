@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// StringsTest.hpp - StringsTest header - $Rev$
+// StringsTest.hpp - StringsTest header
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.hpp)
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -44,7 +38,6 @@
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
-namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -69,10 +62,6 @@ class StringsTest : public TestFixture<StringsTest>
 };
 
 REGISTER_FIXTURE(StringsTest);
-
-//---------------------------------------------------------------------------
-
-}
 
 //---------------------------------------------------------------------------
 
