@@ -3,6 +3,9 @@
 #=============================================================
 # description: 
 #   Create a CreditCruncher distribution package
+#   Command to create the tag in the repo:
+#     > svn -r xxx cp http://www.generacio.com/svn/ccruncher/trunk \
+#     >  http://www.generacio.com/svn/ccruncher/tags/ccruncher-X.Y
 #
 # repository version:
 #   $Rev$
@@ -43,6 +46,9 @@
 #
 # 2007/11/17 - Gerard Torrent [gerard@mail.generacio.com]
 #   . directory share/ renamed to deps/
+#
+# 2008/07/25 - Gerard Torrent [gerard@mail.generacio.com]
+#   . changed subversion repository path
 #
 #=============================================================
 
@@ -144,7 +150,7 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  svn export http://www.generacio.com/svn/repos/ccruncher/trunk;
+  svn export http://www.generacio.com/svn/ccruncher/trunk;
   chmod -R +w trunk
   mv trunk $1;
 
@@ -338,3 +344,4 @@ else
 fi
 
 exit $retcode;
+
