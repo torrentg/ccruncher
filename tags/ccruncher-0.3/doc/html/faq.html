@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CreditCruncher - FAQ</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+  </head>
+
+  <body>
+
+    <h1>CreditCruncher - FAQ</h1>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        1. What is the project maturity ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      The main goal of CreditCruncher is compute the VAR for a large credit 
+      risk portfolio (about 50.000 clients grouped in some sectors) using 
+      MonteCarlo. At this moment (version 0.3 alpha), the main goal is not yet 
+      achieved. The reasons are:
+    </p>
+    <ul class="none">
+      <li style="text-align:justify;">
+        The portfolio price algorithm need to be reviewed (not critical)
+      </li>
+      <li style="text-align:justify;">
+        The copula generator uses an algorithm based on a matrix NxN. A
+        matrix of 50.000x50.000 elements is not acceptable. Even so, 
+        works well for some hundreds of clients.
+      </li>
+      <li style="text-align:justify;">
+        Documentation is under construction (this works slow)
+      </li>
+      <li style="text-align:justify;">
+        The parallel procesing code is not yet implemented
+      </li>
+    </ul>
+    <p>
+      In short, CreditCruncher-0.3 have the main framework builded and 
+      produce outputs, but can't be used in a real environement, yet. Is 
+      in alpha developement stage.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        2. Windows platform is suported ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      Yes, but the main stream is in unix environement. Project compile fine 
+      using <a href="http://www.cygwin.com/">cygwin</a>. Also, the source 
+      distribution include the project files for MSVC7 compiler. MSVC6 is
+      not suported because embeded projects (MersenneTwister and TNT/Jama) 
+      have problems with this compiler due to the obsolete implementation of 
+      C++ standar made by Microsoft (variable scope is non ISO C++ standar).
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        3. CreditCruncher have a graphic environement ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      No. CreditCruncher has been designed to work in batch mode, without 
+      graphical support. The output are plain text files containing the 
+      portfolio values obtained in each simulation. In adition, 
+      CreditCruncher supply utilities for a report generation (graphics, etc.) 
+      using unix utilities (shell scripts, gnuplot). If the user desire make 
+      this work, he can take output files and process with Excel to produce 
+      the distribution of portfolio value and compute VAR.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        4. Can I found docs where the CreditCruncher algorithm is explained?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      Yes. The document is named <i>CreditCruncher - Technical Document</i> and
+      you can found a link <a href="index.html">here</a>. This document is included
+      in all distributions under the directory <code>docs/</code>.
+      At this moment, it is under developement and only in spanish. It will 
+      be translated to english when completed. 
+    </p>
+
+    <div style="height:75px"></div>
+    
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td class="footer" align="left">
+          <a href="index.html">
+            <img src="ccruncher.png" alt="return to home page"
+              height="31" width="88"  />
+          </a>
+          <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+              alt="Valid XHTML 1.0!" height="31" width="88" />
+          </a>
+          <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
+            <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+             width="88" height="31" alt="SourceForge.net Logo" />
+          </a>    
+        </td>
+        <td class="footer" align="right">
+          Last modified: 03-Jun-2005 &nbsp;
+        </td>
+      </tr>
+    </table>    
+
+    <p style="text-align: center; font-size: smaller;">
+      Copyright &copy; 2004-2005 <a href="mailto:gerard@fobos.generacio.com">Gerard Torrent</a>
+    </p>
+
+  </body>
+  
+</html>

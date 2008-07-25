@@ -1,0 +1,257 @@
+#!/bin/sh
+
+#=============================================================
+# description: 
+#   Use this script to generate the Probability Distribution
+#   Function (pdf) plot for a creditcruncher output data file
+#
+# dependences:
+#   shell, gnuplot, X11
+#
+# input:
+#   ccruncher output data file (*.out)
+#
+# output:
+#   a window with the plot
+#
+# retcodes:
+#   0    : OK
+#   other: KO
+#
+#-------------------------------------------------------------
+#
+# 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . initial release
+#
+#=============================================================
+
+#-------------------------------------------------------------
+# variables declaration
+#-------------------------------------------------------------
+progname=plotdata
+numversion="0.3"
+svnversion="R173"
+tplot=pdf
+numrows=0
+numbins=100
+binsize=0
+minval=0
+maxval=0
+listgpi=false;
+retcode=0
+
+#-------------------------------------------------------------
+# version function
+#-------------------------------------------------------------
+version() {
+
+  echo $progname-$numversion \($svnversion\)
+
+}
+
+#-------------------------------------------------------------
+# copyright function
+#-------------------------------------------------------------
+copyright() {
+
+  cat << _EOF_
+
+   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
+     under the GNU General Public License, version 2. more info at
+               http://www.generacio.com/ccruncher
+
+_EOF_
+
+}
+
+#-------------------------------------------------------------
+# usage function
+#-------------------------------------------------------------
+usage() {
+
+  cat << _EOF_
+  usage: $progname [options] <file>
+
+  description:
+    $progname is a shell script to plot the output data files 
+    generates by ccruncher using gnuplot. more info at 
+    http://www.generacio.com/ccruncher
+  arguments:
+    file     ccruncher output data file to plot
+  options
+    -p       plot Probability Distribution Function (default)
+    -c       plot Cumulative Distribution Function
+    -n num   number of bins used to construct the pdf (default=100)
+    -l       not graph, only list gnuplot instructions
+    -h       show this message and exit
+    -v       show version and exit
+  return codes:
+    0        OK. finished without errors
+    1        KO. finished with errors
+  examples:
+    $progname portfolio-rest.out
+    $progname -n 100 portfolio-rest.out
+    $progname -p -n 100 portfolio-rest.out
+
+_EOF_
+
+}
+
+#-------------------------------------------------------------
+# readconf function
+#-------------------------------------------------------------
+readconf() {
+
+  OPTIND=0
+
+  while getopts 'plchvn:' opt
+  do
+    case $opt in
+      p) tplot=pdf;;
+      c) tplot=cdf;;
+      n) numbins=$OPTARG;;
+      l) listgpi=true;;
+      v) version; 
+         exit 0;;
+      h) usage; 
+         exit 0;;
+     \?) echo "unknow option. use -h for more information"; 
+         exit 1;;
+      *) echo "unexpected error parsing arguments. Please report this bug sending";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         exit 1;;
+    esac
+  done
+
+  shift `expr $OPTIND - 1`
+
+  if [ "$*" != "" ]; then
+    for arg in "$@"
+    do
+      if [ ! -f $arg ]; then
+        echo "file $arg not exist";
+        echo "please, try again";
+        exit 1;
+      fi
+    done
+  fi
+
+  which gnuplot > /dev/null 2> /dev/null
+  
+  if [ $? != 0 ]; then
+    echo "gnuplot not found. please report to system administrator";
+    echo "gnuplot can be found at http://www.gnuplot.info/";
+    exit 1;
+  fi
+
+}
+
+#-------------------------------------------------------------
+# fvalues function
+#-------------------------------------------------------------
+fvalues() {
+
+  numrows=`wc -l < $1`
+  minval=`sort -n -k 2 $1 | head -1 | awk " { print \\\$2} "`;
+  maxval=`sort -n -k 2 $1 | tail -1 | awk " { print \\\$2} "`;
+  binsize=`echo "scale=2; ($maxval-($minval))/($numbins);" | bc 2> /dev/null`;
+
+}
+
+#-------------------------------------------------------------
+# plotpdf function
+#-------------------------------------------------------------
+plotpdf() {
+
+  if [ $listgpi = 'true' ]; then
+    prog="cat"
+  else
+    prog="gnuplot -persist "
+  fi
+  
+  $prog 2>/dev/null << _EOF_
+    reset
+    set terminal x11 title "$1"
+    set xrange [$minval:$maxval]
+    set xlabel 'portfolio value'
+    set ylabel 'number of ocurrences'
+    set grid
+    binsize=$binsize
+    set title 'Portfolio Value Histogram'
+    plot '$1' using (floor(\$2/binsize)*binsize):(1) smooth frequency with histeps notitle
+
+_EOF_
+
+  if [ $? != 0 ]; then
+    echo "found problems plotting file $1";
+    retcode=`expr $retcode + 1`;
+  fi
+
+}
+
+#-------------------------------------------------------------
+# plotcdf function 
+#-------------------------------------------------------------
+plotcdf() {
+
+  if [ $listgpi = 'true' ]; then
+    prog="cat"
+  else
+    prog="gnuplot -persist "
+  fi
+
+  $prog 2>/dev/null << _EOF_
+    reset
+    set terminal x11 title "$1"
+    set xrange [$minval:$maxval]
+    set xlabel 'portfolio value'
+    set ylabel 'P(X < x)'
+    set grid
+    numrows=$numrows
+    set title 'Portfolio Value Cumulative Distribution Function'
+    plot "< sort -n -k 2 $1" using 2:(column(0)/numrows) with lines notitle
+
+_EOF_
+
+  if [ $? != 0 ]; then
+    echo "found problems plotting file $1";
+    retcode=`expr $retcode + 1`;
+  fi
+
+}
+
+#-------------------------------------------------------------
+# main function
+#-------------------------------------------------------------
+
+readconf $@;
+shift `expr $OPTIND - 1`
+
+copyright;
+
+for filename in "$@"
+do
+  #echo ext=${filename##*.}
+  #echo path=${filename#*\/}
+
+  case $tplot in
+
+    'pdf') fvalues $filename;
+           plotpdf $filename;;
+
+    'cdf') fvalues $filename;
+           plotcdf $filename;;
+
+        *) echo "unexpected error. Please report this bug sending";
+           echo "$progname version and arguments at gerard@fobos.generacio.com";
+           exit 1;;
+
+  esac
+done
+
+if [ $retcode != 0 ]; then
+  echo "";
+  echo "check that rejected files are valid ccruncher output files";
+fi
+
+exit $retcode;

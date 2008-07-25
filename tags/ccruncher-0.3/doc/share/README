@@ -1,0 +1,61 @@
+
+This directory contains third part documentation used by CreditCruncher:
+
+------------------------------------------------------------------------
+
+docname: Different Strokes
+authors: Ken Phelan, Colin Alexander
+publish: Risk Magazine, October 1999, CreditRisk supplement
+homeurl: http://www.financewise.com/public/edit/riskm/credit/cre-models.htm
+locfile: difstr/index.html
+descrip: comparative review of credit risk models and methodologies for 
+         managing credit portfolios
+
+------------------------------------------------------------------------
+
+docname: CreditMetrics - Technical Document
+authors: Greg M. Gupton, Christopher C. Finger, Mickey Bhatia
+publish: J.P. Morgan & Co. Incorporated
+homeurl: http://www.riskmetrics.com/cmtdovv.html
+locfile: cmetrics/cmtd1.pdf, cmetrics/cmtd2.pdf, cmetrics/cmtd3.pdf
+descrip: a Value-at-risk (VaR) framework applicable to all institutions
+         worldwide that carry credit risk in the course of their 
+         business
+
+------------------------------------------------------------------------
+
+docname: Probability models of credit risk
+authors: Paul Glasserman
+publish: Columbia Business School, 2000
+homeurl: http://www2.gsb.columbia.edu/faculty/pglasserman/B6014/Prob_Credit.pdf
+locfile: cbs/Prob_Credit.pdf
+descrip: a short and good introduction to CreditMetrics
+
+------------------------------------------------------------------------
+
+docname: Aggregation of correlated risk portfolios: Models & Algorithms
+authors: Shaun S. Wang
+publish: CAS Committee on Theory of Risk
+homeurl: http://www.casact.org/cotor/wang.pdf 
+locfile: copulas/wang.pdf
+descrip: copula normal algorithm description
+
+------------------------------------------------------------------------
+
+docname: Correlation and dependence in risk management: properties and pitfalls
+authors: Paul Embrechts, Alexander McNeil and Daniel Straumann
+publish: RiskLab
+homeurl: http://www.risklab.ch/ftp/papers/CorrelationPitfalls.pdf
+locfile: copulas/pitfalls.pdf
+descrip: pitfalls over correlation + factor rho'=2*sin(pi*rho/6)
+
+------------------------------------------------------------------------
+
+docname: Monte Carlo Methods
+authors: Mervyn Marasinghe
+publish: Iowa State University, Dept of Statistics, 
+homeurl: http://www.public.iastate.edu/~mervyn/stat580/Notes/s04mc.pdf
+locfile: montecarlo/sc04mc.pdf
+descrip: Monte Carlo method description
+
+------------------------------------------------------------------------

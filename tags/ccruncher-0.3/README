@@ -1,0 +1,108 @@
+
+CREDITCRUNCHER README
+=====================
+
+
+Install expat package
+--------------------------------
+
+1. check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://expat.sourceforge.net/ and install it. 
+   Also you can install from a rpm package.
+  
+
+Installation from source package
+--------------------------------
+
+1. uncompress package
+     tar -xvzf ccruncher-X.Y_src.tgz
+
+2. install expat package (explained before)
+
+3. execute commands (read INSTALL file):
+     cd ccruncher-X.Y
+     ./configure --prefix=$PWD
+     make
+     make install
+
+
+Installation from binary package
+--------------------------------
+
+1. uncompress package
+     tar -xvzf ccruncher-X.Y_bin.tgz
+
+2. install expat package (explained before)
+
+
+Using CreditCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step
+
+2. run CreditCruncher
+     $CCRUNCHER/bin/ccruncher --help
+     $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
+
+3. process info using your prefered spreadsheet or use scripts to generate
+   a report file created using TeX and gnuplot
+     $CCRUNCHER/bin/plotdata -h
+     $CCRUNCHER/bin/plotdata -p data/segmentation-segment.out
+     $CCRUNCHER/bin/plotdata -c data/segmentation-segment.out
+     $CCRUNCHER/bin/plotmtrans -h
+     $CCRUNCHER/bin/plotmtrans -f file.xml
+     $CCRUNCHER/bin/plotmtrans -c file.xml
+     $CCRUNCHER/bin/plotmtrans -s file.xml 
+
+Developers tips & tricks
+--------------------------------
+
+1. download CreditCruncher sources from subversion repositori
+     svn checkout http://www.generacio.com/svn/repos/ccruncher/
+     cd trunk
+
+2. install expat package (explained before)
+
+3. create auto-files (run only 1 time)
+     autoscan (produces configure.in)
+     autoheader (produces config.h.in)
+     mv config.h.in src/utils/
+     
+4. create ./configure script
+     aclocal
+     autoconf
+     automake -a -v -c -f    (--help --warnings=all)
+
+5. compile project in debug mode
+     ./configure --prefix=$PWD --enable-debug --enable-profiler
+     make
+     make check
+
+6. executing test suite
+     src/tests
+
+7. checking memory leaks
+     don't enable profiler because can cause problems to valgrind
+     valgrind --tool=memcheck --leak-check=yes <progname>
+
+8. profiling executable
+     ./path/progname (-> writes gmon.out because we compiled with -pg flag)
+     gprof ./path/progname gmon.out
+
+9. debuging executable
+     gdb ./path/progname
+       > help
+       > set args arg1 arg2 arg3 ... argn
+       > run
+       > backtrace
+       > quit
+
+10. making source distribution package
+     make distcheck
+     make dist
+
+
+CreditCruncher Team
+http://www.generacio.com/ccruncher/

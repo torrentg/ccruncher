@@ -1,0 +1,863 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CreditCruncher - Input File Reference</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+  </head>
+
+  <body>
+
+    <h1>CreditCruncher - Input File Reference</h1>
+
+    <p>
+      This document describes the xml input file for CreditCruncher-0.3. 
+      In the distribution package you can find the DTD and some XML samples 
+      into the samples directory. 
+      <br /><br />
+      The main XML file structure is like this:
+    </p>
+
+    <pre>
+
+  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+  &lt;creditcruncher&gt;
+
+    <i>&lt;!-- put sections here (see below) --&gt;</i>
+
+  &lt;/creditcruncher&gt;
+    </pre>
+          
+    <p>
+      where the encoding attribute can be one of these 
+      values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take in account that 
+      XML is case-sensitive.
+    </p>
+
+<!-- ==================================================== -->
+<!--    params section                                    -->
+<!-- ==================================================== -->
+    
+    <h3>Section Params</h3>
+
+    <p>
+      This section shows the basic properties of the problem to be solved.
+      The properties showed here can be unordered.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+            
+  &lt;params&gt;
+    &lt;property name="time.begindate" value="18/02/2003"/&gt;
+    &lt;property name="time.steps" value="12"/&gt;
+    &lt;property name="time.steplength" value="2"/&gt;
+    &lt;property name="stopcriteria.maxiterations" value="3000"/&gt;
+    &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
+    &lt;property name="copula.type" value="normal"/&gt;
+    &lt;property name="copula.seed" value="387650932874"/&gt;
+    &lt;property name="montecarlo.method" value="rating-path"/&gt;
+    &lt;property name="montecarlo.antithetic" value="false"/&gt;
+    &lt;property name="portfolio.onlyActiveClients" value="true"/&gt;
+  &lt;/params&gt;
+    </pre>
+
+    <h4>property tag Attributes</h4>
+
+    <table>
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">time.begindate</td>
+        <td style="text-align:justify;">
+          Starting date of the simulation. Initial ratings are referred to this date. 
+          The format of this attribute is: DD/MM/YYYY.
+        </td>
+        <td style="text-align:center;"><code>date</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">time.steps</td>
+        <td style="text-align:justify;">
+          Number of time steps. Fix this number with caution because it has a
+          big impact in the number of calculations to be performed.
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">time.steplength</td>
+        <td style="text-align:justify;">
+          Specifies how long the time step in natural months is. We suggest putting
+          low values (pe. 1, 3 o 6).
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">stopcriteria.maxiterations</td>
+        <td style="text-align:justify;">
+          Maximum number of iterations performed by the Monte Carlo algorithm. 
+          ccruncher stops when one of the stop criteria is achieved. 
+        </td>
+        <td style="text-align:center;"><code>long</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">stopcriteria.maxseconds</td>
+        <td style="text-align:justify;">
+          Maximum number of seconds to last by the current execution. 
+          ccruncher stops when one of the stop criteria is achieved. 
+        </td>
+        <td style="text-align:center;"><code>long</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">copula.type</td>
+        <td style="text-align:justify;">
+          Type of copula used to generate correlated variables. Nowadays
+          only one implementation exists, the normal copula. <br />
+          accepted values: 'normal'.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">copula.seed</td>
+        <td style="text-align:justify;">
+          Seed used to initialize a random number generator. If this 
+          property is not set, the seed will depend on the cpu clock.
+        </td>
+        <td style="text-align:center;"><code>long</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">montecarlo.method</td>
+        <td style="text-align:justify;">
+          Specifies the method used to solve the problem. See the 
+          <i>CreditCruncher - Technical Document</i>. In doubt, put
+          'time-to-default' value.<br />
+          accepted values: 'rating-path', 'time-to-default'
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">montecarlo.antithetic</td>
+        <td style="text-align:justify;">
+          Specifies whether to use or not a variance reduction technique 
+          named antithetic. If you have doubts about establishing this 
+          setting then set it to 'false', otherwise set it to 'true'.
+        </td>
+        <td style="text-align:center;"><code>boolean</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">portfolio.onlyActiveClients</td>
+        <td style="text-align:justify;">
+          If you want to simulate all the clients, even though clients without 
+          risk along the analized period, type 'false'. If you want to simulate 
+          only active clients along the simulation period type 'true'. 
+          We suggest writing always 'true' because of performance reasons.
+        </td>
+        <td style="text-align:center;"><code>boolean</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    interests section                                 -->
+<!-- ==================================================== -->
+
+    <h3>Section Interests</h3>
+
+    <p>
+      This section shows how to define the interest rates curves used to 
+      update the capital along time. It is required to specify the curve 
+      'spot'.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+  
+  &lt;interests&gt;
+    &lt;interest name="spot" date="18/11/2004"&gt;
+      &lt;rate t="0" r="0.0"/&gt;
+      &lt;rate t="1" r="0.04"/&gt;
+      &lt;rate t="2" r="0.041"/&gt;
+      &lt;rate t="3" r="0.045"/&gt;
+      &lt;rate t="6" r="0.0455"/&gt;
+      &lt;rate t="12" r="0.048"/&gt;
+      &lt;rate t="24" r="0.049"/&gt;
+      &lt;rate t="60" r="0.05"/&gt;
+      &lt;rate t="120" r="0.052"/&gt;
+    &lt;/interest&gt;
+  &lt;/interests&gt;
+    </pre>
+
+    <h4>Interest attributes</h4>
+
+    <table>
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Name of the interest rate type
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">date</td>
+        <td style="text-align:justify;">
+          Initial date of the interest curve. Usually this value matches 
+          the initial simulation date (but is not required). The format 
+          of this field is: DD/MM/YYYY.
+        </td>
+        <td style="text-align:center;"><code>date</code></td>
+      </tr>
+    </table>
+
+    <h4>Rate attributes</h4>
+
+    <table>
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">t</td>
+        <td style="text-align:justify;">
+          Increment (in months) from the initial date of the interest curve. 
+          If a value between two given dates is needed, the value will be 
+          interpolated (linear).
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">r</td>
+        <td style="text-align:justify;">
+          Interest rate at time t. It is a value between -0.5 and 1.0. (for 
+          example, a rate of 2.5% will be represented as 0.025).
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    ratings section                                   -->
+<!-- ==================================================== -->
+
+    <h3>Section Ratings</h3>
+
+    <p>
+      This section shows how to define the ratings.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+
+  &lt;ratings&gt;
+    &lt;rating name="A" order="1" desc="excelent"/&gt;
+    &lt;rating name="B" order="2" desc="good"/&gt;
+    &lt;rating name="C" order="3" desc="medium"/&gt;
+    &lt;rating name="D" order="4" desc="bad"/&gt;
+    &lt;rating name="E" order="5" desc="default"/&gt;
+  &lt;/ratings&gt;
+    </pre>
+
+    <h4>Rating Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Rating identifier. All references to a rating (f.ex client rating) 
+          are made using this field.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">order</td>
+        <td style="text-align:justify;">
+          Priority level of this rating. The most priority rating value must have priority 1, the next priority rating must have priority 2, etc.
+          (sequentially). The default rating have always the highest value.
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">desc</td>
+        <td style="text-align:justify;">
+          Rating description. This value is only used in reports. This
+          description must be unique.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    transition matrix section                         -->
+<!-- ==================================================== -->
+    
+    <h3>Section Transition Matrix</h3>
+
+    <p>
+      This section shows how to define the transition matrix used by ccruncher. ccruncher always
+      checks that the sum of elements of each row is 1.0. Also, ccruncher checks
+      that only one row with all probability concentred in a unique
+      element exists. The number of elements to be established is NxN, where N is the 
+      number of ratings.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+
+  &lt;mtransitions period="12" epsilon="1e-12"&gt;
+    &lt;transition from="A" to="A" value="0.80"/&gt;
+    &lt;transition from="A" to="B" value="0.10"/&gt;
+    &lt;transition from="A" to="C" value="0.07"/&gt;
+    &lt;transition from="A" to="D" value="0.02"/&gt;
+    &lt;transition from="A" to="E" value="0.01"/&gt;
+    &lt;transition from="B" to="A" value="0.05"/&gt;
+    &lt;transition from="B" to="B" value="0.75"/&gt;
+    &lt;transition from="B" to="C" value="0.10"/&gt;
+    &lt;transition from="B" to="D" value="0.07"/&gt;
+    &lt;transition from="B" to="E" value="0.03"/&gt;
+    &lt;transition from="C" to="A" value="0.03"/&gt;
+    &lt;transition from="C" to="B" value="0.07"/&gt;
+    &lt;transition from="C" to="C" value="0.70"/&gt;
+    &lt;transition from="C" to="D" value="0.14"/&gt;
+    &lt;transition from="C" to="E" value="0.06"/&gt;
+    &lt;transition from="D" to="A" value="0.05"/&gt;
+    &lt;transition from="D" to="B" value="0.05"/&gt;
+    &lt;transition from="D" to="C" value="0.15"/&gt;
+    &lt;transition from="D" to="D" value="0.60"/&gt;
+    &lt;transition from="D" to="E" value="0.15"/&gt;
+    &lt;transition from="E" to="A" value="0.00"/&gt;
+    &lt;transition from="E" to="B" value="0.00"/&gt;
+    &lt;transition from="E" to="C" value="0.00"/&gt;
+    &lt;transition from="E" to="D" value="0.00"/&gt;
+    &lt;transition from="E" to="E" value="1.00"/&gt;
+  &lt;/mtransitions&gt;
+  
+    </pre>
+
+    <h4>MTransitions Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">period</td>
+        <td style="text-align:justify;">
+          Number of months covered by the transition matrix. Usually
+          transition matrix cover 1 year, in this case, set 12. 
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">epsilon</td>
+        <td style="text-align:justify;">
+          Value used as threshold to determine if a value is equal to 0.0 or not. 
+          It must be a value near to 0 like 1E-12.
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+    <h4>Transition Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">from</td>
+        <td style="text-align:justify;">
+          Initial rating. This value must be a rating identifier (see name
+          attribute in the rating tag)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">to</td>
+        <td style="text-align:justify;">
+          Final rating. This value must be a rating identifier (see name 
+          attribute in the rating tag).
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">value</td>
+        <td style="text-align:justify;">
+          Probability for rating migration (a value between 0 and 1)
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    sectors section                                   -->
+<!-- ==================================================== -->
+
+    <h3>Section Sectors</h3>
+
+    <p>
+        This section shows how to define the sectors.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+            
+  &lt;sectors&gt;
+    &lt;sector name="S1" order="1" desc="oil and gas"/&gt;
+    &lt;sector name="S2" order="2" desc="other sectors"/&gt;
+  &lt;/sectors&gt;
+    </pre>
+
+    <h4>Sector Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Sector identifier. All references to a sector (f.ex. client 
+          sector) are made using this field.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">order</td>
+        <td style="text-align:justify;">
+          Priority level of this sector. This number is a sequence that begins at 1 being 1 the most priority value.
+        </td>
+        <td style="text-align:center;"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">desc</td>
+        <td style="text-align:justify;">
+          Sector description. This value is only used in reports. 
+          This description must be unique.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    correlations section                              -->
+<!-- ==================================================== -->
+        
+    <h3>Section Correlations</h3>
+
+    <p>
+      This section shows how to define the correlation matrix between sectors.
+      The correlation matrix must be a simmetric. You only need to set up the 
+      upper triangle's elements. ccruncher checks that all the elements are in 
+      [-1.0, +1.0]. The number of elements to set up is (numsectors+1) x numsectors / 2.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+  
+  &lt;mcorrels epsilon="1e-12"&gt;
+    &lt;sigma sector1="S1" sector2="S1" value="0.2"/&gt;
+    &lt;sigma sector1="S1" sector2="S2" value="0.1"/&gt;
+    &lt;sigma sector1="S2" sector2="S2" value="0.25"/&gt;
+  &lt;/mcorrels&gt;
+    </pre>
+
+    <h4>MCorrels Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">epsilon</td>
+        <td style="text-align:justify;">
+          Value used as threshold to determine if a value is equal to 0.0 or not. 
+          It must be a value near to 0 like 1E-12.
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+    <h4>Sigma Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">sector1</td>
+        <td style="text-align:justify;">
+          This value must be a sector identifier (see name attribute in sector tag)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">sector2</td>
+        <td style="text-align:justify;">
+          This value must be a sector identifier (see name attribute in sector tag)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">value</td>
+        <td style="text-align:justify;">
+          Correlation of defaults between sector1 and sector2. <br />
+          Correlation(defaults(S1), defaults(S2))
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    segmentations section                             -->
+<!-- ==================================================== -->
+    
+    <h3>Segmentations</h3>
+
+    <p>
+      This section shows how to define segmentations. Segmentations
+      allow you to analyze your portfolio's risk according to a hierarchical organization
+      or another type of segmentation. A segmentation is composed by segments.
+      There are 2 types of segmentations depending on the class of elements 
+      which a segmentation contains; client segmentations (pe. sector, client size, initial 
+      rating, etc.) and asset segmentations (pe. products, branch where the 
+      contract is made, etc.). All segmentations must be complete (one 
+      element only belongs to one segment and the union of all segments 
+      results in the total portfolio). Every segmentation must have a segment named 'rest' defined (in a
+      implicit way). If a client (or an asset)
+      belongs nowhere, then it belongs to the 'rest' segment. Finally, there are 2
+      special segmentations, 'client' (one segment per client) and 'asset'
+      (one segment per asset), in these cases you don't need to specify all the segments,
+      these are defined in a implicit way. 
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+  
+  &lt;segmentations&gt;
+    &lt;segmentation name="portfolio" components="asset"/&gt;
+    &lt;segmentation name="client" components="client"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="asset" components="asset"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="sector" components="client"&gt;
+      &lt;segment name="S1"/&gt;
+      &lt;segment name="S2"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="size" components="client"&gt;
+      &lt;segment name="big"/&gt;
+      &lt;segment name="medium"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="product" components="asset"&gt;
+      &lt;segment name="bond"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="office" components="asset"&gt;
+      &lt;segment name="0001"/&gt;
+      &lt;segment name="0002"/&gt;
+      &lt;segment name="0003"/&gt;
+      &lt;segment name="0004"/&gt;
+    &lt;/segmentation&gt;
+  &lt;/segmentations&gt;
+    </pre>
+
+    <h4>Segmentation Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Segmentation identifier. All references to a segmentation (pe. belongs-to tag) 
+          are made using this field.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">components</td>
+        <td style="text-align:justify;">
+          Type of segments. Accepted values are 'client'
+          and 'asset'
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h4>Segment Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Segment name. Different segmentations can have segments with
+          the same name. All references to a segment (pe. belongs-to tag) 
+          are made using this field (always in conjunction with the segmentation). 
+          If a segmentation doesn't have any segments, all the elements belong to
+          the 'rest' segment. The 'client' and 'asset' segmentations allow
+          the to define the '*' segment. The '*' segment contains a implicit definition of a segment to every asset and client.
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    portfolio section                                 -->
+<!-- ==================================================== -->
+
+    <h3>Section Portfolio</h3>
+
+    <p>
+      This section shows how to define the portfolio.
+    </p>
+
+    <h4>Example</h4>
+
+    <pre>
+  
+  &lt;portfolio&gt;
+    &lt;client rating="A" sector="S1" name="Repsol" id="000001"&gt;
+      &lt;belongs-to concept="sector" segment="S1"/&gt;
+      &lt;belongs-to concept="size" segment="medium"/&gt;
+      &lt;asset class="bond" id="op1"&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;belongs-to concept="office" segment="0001"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/06/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2003" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2004" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+      &lt;asset class="bond" id="op2">&gt;
+        &lt;belongs-to concept="office" segment="0004"/&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/client&gt;
+    &lt;client rating="B" sector="S2" name="ATT" id="000002"&gt;
+      &lt;belongs-to concept="sector" segment="S2"/&gt;
+      &lt;belongs-to concept="size" segment="big"/&gt;
+      &lt;asset class="bond" id="op3"&gt;
+        &lt;belongs-to concept="office" segment="0003"/&gt;
+        &lt;belongs-to concept="product" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2000" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2001" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="10.0" exposure="1500.0" recovery="2000.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/client&gt;
+  &lt;/portfolio&gt;
+
+    </pre>
+          
+    <p>
+      Look how the client does not have a 'belong-to' to 'client' segmentation defined.
+      This is done implicitly (the same occurs with 'asset'). 
+      If you try to assign a client to a segmentation of asset components 
+      (or viceversa), the input file will be rejected.
+    </p>
+
+    <h4>Client Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">rating</td>
+        <td style="text-align:justify;">
+          Initial client rating
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">sector</td>
+        <td style="text-align:justify;">
+          Sector where this client is included
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          Client name. Only used in reports
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">id</td>
+        <td style="text-align:justify;">
+          Unique client identifier
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h4>Belongs-To Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">concept</td>
+        <td style="text-align:justify;">
+          Segmentation identifier (see segmentations)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">segment</td>
+        <td style="text-align:justify;">
+          Segment identifier (see segmentations)
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+  
+    <h4>Asset Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">name</td>
+        <td style="text-align:justify;">
+          A descriptive name of the asset. Doesn't need to be unique
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">id</td>
+        <td style="text-align:justify;">
+          Unique asset identifier
+        </td>
+        <td style="text-align:center;"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h4>Values Attributes</h4>
+
+    <table>
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">at</td>
+        <td style="text-align:justify;">
+          date (in format DD/MM/YYYY) where the values take place 
+        </td>
+        <td style="text-align:center;"><code>date</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">cashflow</td>
+        <td style="text-align:justify;">
+          Cashflow at date "at"
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+      <tr class="a">
+        <td style="text-align:center;">exposure</td>
+        <td style="text-align:justify;">
+          Exposure at date "at"
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>
+      <tr class="b">
+        <td style="text-align:center;">recovery</td>
+        <td style="text-align:justify;">
+          Recovery at date "at"
+        </td>
+        <td style="text-align:center;"><code>double</code></td>
+      </tr>            
+    </table>
+
+    <div style="height:75px"></div>
+    
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td class="footer" align="left">
+          <a href="index.html">
+            <img src="ccruncher.png" alt="return to home page"
+              height="31" width="88"  />
+          </a>
+          <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+              alt="Valid XHTML 1.0!" height="31" width="88" />
+          </a>
+          <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
+            <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+             width="88" height="31" alt="SourceForge.net Logo" />
+          </a>    
+        </td>
+        <td class="footer" align="right">
+          Last modified: 03-Jun-2005 &nbsp;
+        </td>
+      </tr>
+    </table>    
+
+    <p style="text-align: center; font-size: smaller;">
+      Copyright &copy; 2004-2005 <a href="mailto:gerard@fobos.generacio.com">Gerard Torrent</a>
+    </p>
+
+  </body>
+
+</html>
