@@ -19,17 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// FormatTest.cpp - FormatTest code - $Rev$
+// FormatTest.cpp - FormatTest code
 // --------------------------------------------------------------------------
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
 #include "utils/Format.hpp"
 #include "utils/FormatTest.hpp"
 

@@ -19,36 +19,24 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Sectors.cpp - Sectors code - $Rev$
+// Sectors.cpp - Sectors code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Sectors refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
-//   . added getIndex() method
 //
 //===========================================================================
 
+#include <cmath>
+#include <algorithm>
 #include "sectors/Sectors.hpp"
 #include "utils/Strings.hpp"
-#include <cassert>
 
 //===========================================================================
 // private constructor
@@ -67,60 +55,17 @@ ccruncher::Sectors::~Sectors()
 }
 
 //===========================================================================
-// size
+// destructor
 //===========================================================================
-int ccruncher::Sectors::size() const
+vector<Sector> * ccruncher::Sectors::getSectors()
 {
-  return vsectors.size();
-}
-
-//===========================================================================
-// [] operator
-//===========================================================================
-Sector& ccruncher::Sectors::operator []  (int i)
-{
-  // assertions
-  assert(i >= 0 && i < (int) vsectors.size());
-
-  // return i-th sector
-  return vsectors[i];
-}
-
-//===========================================================================
-// [] operator. returns sector by name
-//===========================================================================
-Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
-{
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == name)
-    {
-      return vsectors[i];
-    }
-  }
-
-  throw Exception("sector " + name + " not found");
-}
-
-//===========================================================================
-// return the index of the sector (-1 if rating not found)
-//===========================================================================
-int ccruncher::Sectors::getIndex(const string &name) const
-{
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == name)
-    {
-      return i;
-    }
-  }
-  return -1;
+  return &vsectors;
 }
 
 //===========================================================================
 // inserts a sector in list
 //===========================================================================
-void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
+void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vsectors.size();i++)
@@ -129,11 +74,24 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      throw Exception("sector name " + val.name + " repeated");
+      string msg = "Sectors::insertSector(): sector name ";
+      msg += val.name;
+      msg += " repeated";
+      throw Exception(msg);
+    }
+    else if (aux.order == val.order)
+    {
+      string msg = "Sectors::insertSector(): sector order ";
+      msg += val.order;
+      msg += " repeated";
+      throw Exception(msg);
     }
     else if (aux.desc == val.desc)
     {
-      throw Exception("sector description " + val.desc + " repeated");
+      string msg = "Sectors::insertSector(): sector desc ";
+      msg += val.desc;
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 
@@ -147,6 +105,7 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
   }
 }
 
+
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
@@ -154,7 +113,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
 {
   if (isEqual(name_,"sectors")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag sectors");
+      throw eperror(eu, "attributes are not allowed in tag sectors");
     }
   }
   else if (isEqual(name_,"sector")) {
@@ -162,7 +121,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
     eppush(eu, &auxsector, name_, attributes);
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw eperror(eu, "unexpected tag " + string(name_));
   }
 }
 
@@ -179,7 +138,7 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
     insertSector(auxsector);
   }
   else {
-    throw Exception("unexpected end tag " + string(name_));
+    throw eperror(eu, "unexpected end tag " + string(name_));
   }
 }
 
@@ -191,14 +150,62 @@ void ccruncher::Sectors::validations() throw(Exception)
   // checking number of sectors
   if (vsectors.size() == 0)
   {
-    throw Exception("sectors have no elements");
+    throw Exception("Sectors::validations(): sectors have no elements");
+  }
+
+  // sorting sector list by field 'order'
+  sort(vsectors.begin(), vsectors.end());
+
+  // checking that first 'order' is 1 and don't exists holes
+  for(unsigned int i=0;i<vsectors.size();i++)
+  {
+    Sector aux = vsectors[i];
+
+    if (aux.order != (int)(i+1))
+    {
+      string msg = "Sectors::validations(): incorrect order sector at or near order = ";
+      msg += aux.order;
+      throw Exception(msg);
+    }
+  }
+}
+
+//===========================================================================
+// returns sector index (-1 if sector not found)
+//===========================================================================
+int ccruncher::Sectors::getIndex(const string &sector_name)
+{
+
+  for (unsigned int i=0;i<vsectors.size();i++)
+  {
+    if (vsectors[i].name == sector_name)
+    {
+      return (int) i;
+    }
+  }
+
+  return -1;
+}
+
+//===========================================================================
+// returns sector name
+//===========================================================================
+string ccruncher::Sectors::getName(int index) throw(Exception)
+{
+  if (index < 0 || index >= (int) vsectors.size())
+  {
+    throw Exception("Sectors::getName(): index out of range");
+  }
+  else
+  {
+    return vsectors[index].name;
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
+string ccruncher::Sectors::getXML(int ilevel) throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";

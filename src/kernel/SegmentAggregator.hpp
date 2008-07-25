@@ -19,36 +19,18 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// SegmentAggregator.hpp - SegmentAggregator header - $Rev$
+// SegmentAggregator.hpp - SegmentAggregator header
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added timer to control last flush time
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added segmentaggregator identifier support
 //   . added appendRawData() method (used in MPI mode)
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . SegmentAggregator refactoring
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed interests arguments
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -59,13 +41,16 @@
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include "utils/File.hpp"
 #include "utils/Timer.hpp"
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Client.hpp"
+#include "portfolio/DateValues.hpp"
+#include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -88,7 +73,7 @@ class SegmentAggregator
     string name2;
     // segment index
     int isegment;
-    // type of components (assets/borrowers) of segmentation
+    // type of components (assets/clients) of segmentation
     components_t components;
 
     // output file stream
@@ -102,12 +87,12 @@ class SegmentAggregator
     // buffer size
     int buffersize;
 
-    // number of all borrowers considered
+    // number of all clients considered
     long N;
     // number of time tranches
     int M;
-    // num borrowers belonging this segment
-    long nborrowers;
+    // num clients belonging this segment
+    long nclients;
     // num asset belonging this segment
     long nassets;
     // number of realizations
@@ -115,26 +100,27 @@ class SegmentAggregator
     // buffer counter
     long icont;
 
-    // related borrowers position index (size = nborrowers)
-    vector<long> iborrowers;
-    // vertexes of afected borrowers (size = nborrowers x M)
-    vector<vector<double> > losses;
+    // related clients position index (size = nclients)
+    long *iclients;
+    // vertexes of afected clients (size = nclients x M)
+    DateValues **vertexes;
     // vertex values aggregation per tranch (size = buffersize)
-    vector<double> cvalues;
+    double *cvalues;
 
     // internal timer (control time from last flush)
     Timer timer;
 
     // memory management
     void init();
+    void release();
 
     // internal functions
-    long getANumBorrowers(vector<Borrower *> &, long, bool *);
-    long getCNumBorrowers(vector<Borrower *> &, long, bool *);
-    long getANumAssets(vector<Borrower *> &, long, bool *);
-    long getCNumAssets(vector<Borrower *> &, long, bool *);
-    void allocIBorrowers(long, bool *, long) throw(Exception);
-    void allocLosses(vector<Date> &, vector<Borrower *> &) throw(Exception);
+    long getANumClients(vector<Client *> *, long, bool *);
+    long getCNumClients(vector<Client *> *, long, bool *);
+    long getANumAssets(vector<Client *> *, long, bool *);
+    long getCNumAssets(vector<Client *> *, long, bool *);
+    long* allocIClients(long, bool *, long) throw(Exception);
+    DateValues** allocVertexes(Date *, int, vector<Client *> *, Interests *) throw(Exception);
 
     // output functions
     string getFilePath() throw(Exception);
@@ -150,10 +136,10 @@ class SegmentAggregator
     // initialization methods
     void define(int, int, int, components_t);
     void setOutputProperties(const string &path, const string &filename, bool force, int buffersize) throw(Exception);
-    void initialize(vector<Date> &, vector<Borrower *> &, long) throw(Exception);
+    void initialize(Date *, int, vector<Client *> *, long, Interests *) throw(Exception);
 
     // other methods
-    long getNumElements() const;
+    long getNumElements();
     bool append(int *defaulttimes) throw(Exception);
     bool appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);

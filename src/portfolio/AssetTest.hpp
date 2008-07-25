@@ -19,27 +19,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// AssetTest.hpp - AssetTest header - $Rev$
+// AssetTest.hpp - AssetTest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2007/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added asset creation date
-//   . added new tests
 //
 //===========================================================================
 
@@ -51,7 +44,6 @@
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
 #include "segmentations/Segmentations.hpp"
-#include "interests/Interests.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -71,12 +63,6 @@ class AssetTest : public TestFixture<AssetTest>
 
     void test1(void);
     void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
-    void test6(void);
-    void test7(void);
-    void test8(void);
 
 
   public:
@@ -85,12 +71,6 @@ class AssetTest : public TestFixture<AssetTest>
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-      TEST_CASE(test6);
-      TEST_CASE(test7);
-      TEST_CASE(test8);
     }
 
     void setUp();

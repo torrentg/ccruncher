@@ -19,35 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// TransitionMatrixTest.cpp - TransitionMatrixTest code - $Rev$
+// TransitionMatrixTest.cpp - TransitionMatrixTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed period time resolution (year->month)
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . TransitionMatrix class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
+#include <iostream>
 #include "transitions/TransitionMatrix.hpp"
 #include "transitions/TransitionMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"
@@ -77,13 +69,13 @@ void ccruncher_test::TransitionMatrixTest::tearDown()
 //===========================================================================
 Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='B' order='2' desc='bueno'/>\n\
+      <rating name='C' order='3' desc='regular'/>\n\
+      <rating name='D' order='4' desc='malo'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -99,7 +91,7 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 //===========================================================================
 void ccruncher_test::TransitionMatrixTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -142,7 +134,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(ratings);
+  TransitionMatrix trm(&ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &trm));
 
   double **matrix = trm.getMatrix();
@@ -153,7 +145,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
 
@@ -161,14 +153,14 @@ void ccruncher_test::TransitionMatrixTest::test1()
   ASSERT(4 == trm.getIndexDefault());
 
   // testing function translate()
-  TransitionMatrix *aux = translate(trm, 12);
+  TransitionMatrix *aux = translate(&trm, 12);
   matrix = aux->getMatrix();
 
   for(int i=0;i<5;i++)
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*5], matrix[i][j], EPSILON);
     }
   }
 
@@ -181,7 +173,7 @@ void ccruncher_test::TransitionMatrixTest::test1()
 void ccruncher_test::TransitionMatrixTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.90'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -217,7 +209,7 @@ void ccruncher_test::TransitionMatrixTest::test2()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(ratings);
+  TransitionMatrix trm(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -227,7 +219,7 @@ void ccruncher_test::TransitionMatrixTest::test2()
 void ccruncher_test::TransitionMatrixTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='K' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -263,7 +255,7 @@ void ccruncher_test::TransitionMatrixTest::test3()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(ratings);
+  TransitionMatrix trm(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -273,7 +265,7 @@ void ccruncher_test::TransitionMatrixTest::test3()
 void ccruncher_test::TransitionMatrixTest::test4()
 {
   // non valid transition matrix (default element not defined)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -309,7 +301,7 @@ void ccruncher_test::TransitionMatrixTest::test4()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(ratings);
+  TransitionMatrix trm(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }
 
@@ -319,7 +311,7 @@ void ccruncher_test::TransitionMatrixTest::test4()
 void ccruncher_test::TransitionMatrixTest::test5()
 {
   // non valid transition matrix (property 4 not acomplished)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mtransitions period='12' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
@@ -355,6 +347,6 @@ void ccruncher_test::TransitionMatrixTest::test5()
   Ratings ratings = getRatings();
 
   // transition matrix creation
-  TransitionMatrix trm(ratings);
+  TransitionMatrix trm(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
 }

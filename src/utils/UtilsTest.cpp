@@ -19,14 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// UtilsTest.cpp - UtilsTest code - $Rev$
+// UtilsTest.cpp - UtilsTest code
 // --------------------------------------------------------------------------
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -34,6 +31,7 @@
 #include <string>
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"
+#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp

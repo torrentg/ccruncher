@@ -19,20 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// GaussianCopula.cpp - GaussianCopula code - $Rev$
+// GaussianCopula.cpp - GaussianCopula code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -170,7 +167,7 @@ void ccruncher::GaussianCopula::correls2sigmas(double **correlations) throw(Exce
 
   if (!def_pos)
   {
-    throw Exception("correlation matrix not definite positive");
+    throw Exception("GaussianCopula::correls2sigmas(): correlation matrix not definite positive");
   }
   else
   {

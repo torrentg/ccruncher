@@ -19,17 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// BlockMatrixChol.cpp - BlockMatrixChol code - $Rev$
+// BlockMatrixChol.cpp - BlockMatrixChol code
 // --------------------------------------------------------------------------
 //
-// 2005/07/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -114,7 +111,7 @@
 // previous explanation works with diagonal elements d1,d2,...,dn.
 // This feature dirts the interface (force to add the diagonal values at
 // constructor, etc). For this reason is suposed that all diagonal elements
-// have value = 1.0 (the value that we need for solve borrowers correlation matrix
+// have value = 1.0 (the value that we need for solve client correlation matrix
 // factorization problem)
 //
 //===========================================================================

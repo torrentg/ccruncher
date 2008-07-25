@@ -5,36 +5,14 @@
 #   Use this script to roll creditcruncher versions numbers
 #   Caution: this is a tool for developers
 #
-# repository version:
-#   $Rev$
-#
-# dependences:
-#   shell, svnversion
-#
 # retcodes:
 #   0    : OK
 #   other: KO
 #
 #-------------------------------------------------------------
 #
-# 2005/05/29 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/05/29 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
-#
-# 2005/09/04 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added script report
-#
-# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added tex files
-#
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
-#   . removed plotdata and plotmtrans scripts
-#
-# 2005/09/27 - Gerard Torrent [gerard@mail.generacio.com]
-#   . changed CCRUNCHERPATH asignation
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added Rev svn:keyword
-#   . added dependences paragraph at comments
 #
 #=============================================================
 
@@ -82,7 +60,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2006 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -108,7 +86,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
     esac
   done
@@ -150,8 +128,9 @@ replace() {
 #-------------------------------------------------------------
 getPath() {
 
-  CCRUNCHERPATH=`dirname $0`/..
+  CCRUNCHERPATH=.
 
+  #TODO; retrieve path from directori script
 }
 
 #-------------------------------------------------------------
@@ -184,16 +163,16 @@ if [ "$csvn" = "true" ]; then
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.in
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
-  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/report
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotdata
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
-  replace "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
 fi
 
 if [ "$cver" = "true" ]; then
   replace "s/AC_INIT(ccruncher,\(.*\),\ *gerard@mail.generacio.com)/AC_INIT(ccruncher, $gloversion, gerard@mail.generacio.com)/g" $CCRUNCHERPATH/configure.in
-  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/report
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotdata
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/plotmtrans
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
-  replace "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   echo "you need to run autoconf to take effect some changes";
 fi
 
