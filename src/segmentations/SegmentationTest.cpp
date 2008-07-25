@@ -19,29 +19,25 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// SegmentationTest.cpp - SegmentationTest code - $Rev$
+// SegmentationTest.cpp - SegmentationTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Segmentation class refactoring
 //
 //===========================================================================
 
+#include <iostream>
 #include "segmentations/Segmentation.hpp"
 #include "segmentations/SegmentationTest.hpp"
 #include "utils/ExpatParser.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -68,7 +64,7 @@ void ccruncher_test::SegmentationTest::tearDown()
 //===========================================================================
 void ccruncher_test::SegmentationTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <segmentation name='office' components='asset'>\n\
       <segment name='0001'/>\n\
       <segment name='0002'/>\n\
@@ -86,11 +82,12 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT("office" == sobj.name);
   ASSERT(asset == sobj.components);
 
-  ASSERT(5 == sobj.size());
+  vector<Segment> vsegments = sobj.getSegments();
+  ASSERT(5 == vsegments.size());
 
-  ASSERT(0 == sobj["rest"].order);
-  ASSERT(1 == sobj["0001"].order);
-  ASSERT(2 == sobj["0002"].order);
-  ASSERT(3 == sobj["0003"].order);
-  ASSERT(4 == sobj["0004"].order);
+  ASSERT(0 == sobj.getSegment("rest"));
+  ASSERT(1 == sobj.getSegment("0001"));
+  ASSERT(2 == sobj.getSegment("0002"));
+  ASSERT(3 == sobj.getSegment("0003"));
+  ASSERT(4 == sobj.getSegment("0004"));
 }

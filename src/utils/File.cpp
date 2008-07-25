@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// File.cpp - File code - $Rev$
+// File.cpp - File code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -42,7 +36,7 @@
 #endif
 #include <cstdio>
 #include <cerrno>
-#include "utils/Format.hpp"
+#include "utils/Parser.hpp"
 #include "utils/File.hpp"
 
 // --------------------------------------------------------------------------
@@ -100,7 +94,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
 
     if (ret != tempname)
     {
-      throw Exception("unable to retrieve current working directory");
+      throw Exception("File::getWorkDirectory(): unable to get work directory");
     }
     else
     {
@@ -116,7 +110,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
   }
   catch(...)
   {
-    throw Exception("unable to retrieve current working directory");
+    throw Exception("File::getWorkDirectory(): unable to get work directory");
   }
 }
 
@@ -130,7 +124,7 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
 
   if (path.length() == 0)
   {
-    throw Exception("error normalizing path: non valid path (length=0)");
+    throw Exception("File::normalizePath(): non valid path (void)");
   }
 
   if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
@@ -212,13 +206,13 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
   // checking creation
   if (aux != 0)
   {
-    string code = "[" + Format::int2string(errno) + "]";
+    string code = "[" + Parser::int2string(errno) + "]";
     code = (errno==EACCES?"[EACCES]":code);
     code = (errno==EEXIST?"[EEXIST]":code);
     code = (errno==EMLINK?"[EMLINK]":code);
     code = (errno==ENOSPC?"[ENOSPC]":code);
     code = (errno==EROFS?"[EROFS]":code);
-    throw Exception("unable to create directory " + dirname + " [errno=" + code + "]");
+    throw Exception("File::makeDir(): unable to create directory " + dirname + " " + code);
   }
 }
 
@@ -238,7 +232,7 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   if (smode == "r") mode = R_OK;
   else if (smode == "w") mode = W_OK;
   else if (smode == "rw") mode = R_OK | W_OK;
-  else throw Exception("error checking file " + pathname + ": " + smode + " is not an allowed mode");
+  else throw Exception("File::checkFile(): panic. not allowed mode " + smode);
 
   // checking file
   aux = access(pathname.c_str(), mode);
@@ -246,7 +240,6 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   // checking return code
   if (aux != 0)
   {
-    throw Exception("file " + pathname + " fails " + smode + " check");
+    throw Exception("File::checkFile(): file " + pathname + " fails " + smode + " check");
   }
 }
-

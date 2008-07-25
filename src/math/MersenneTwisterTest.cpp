@@ -19,23 +19,22 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// MersenneTwisterTest.cpp - MersenneTwisterTest code - $Rev$
+// MersenneTwisterTest.cpp - MersenneTwisterTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
 #include "math/Normal.hpp"
 #include <MersenneTwister.h>
 #include "math/MersenneTwisterTest.hpp"
@@ -103,7 +102,7 @@ void ccruncher_test::MersenneTwisterTest::test1(void)
   {
     double prob1 = 1.0/(double)NUMBINS;
     double prob2 = (double)ybins[i]/(double)NUMITERS;
-    ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
+    ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
   }
 }
 
@@ -155,16 +154,16 @@ void ccruncher_test::MersenneTwisterTest::test2(void)
 
   prob1 = Normal::cdf(xbin[0]);
   prob2 = (double) ybin[0] / (double) NUMITERS;
-  ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
+  ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
 
   for (int i=1;i<NUMBINS-1;i++)
   {
     prob1 = Normal::cdf(xbin[i]) - Normal::cdf(xbin[i-1]);
     prob2 = (double) ybin[i] / (double) NUMITERS;
-    ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
+    ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
   }
 
   prob1 = 1.0 - Normal::cdf(xbin[NUMBINS-1]);
   prob2 = (double) ybin[NUMBINS-1] / (double) NUMITERS;
-  ASSERT_EQUALS_EPSILON(prob1, prob2, EPSILON);
+  ASSERT_DOUBLES_EQUAL(prob1, prob2, EPSILON);
 }

@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Arrays.hpp - Arrays header - $Rev$
+// Arrays.hpp - Arrays header
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -39,8 +33,8 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "utils/Exception.hpp"
 #include <cassert>
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -54,28 +48,19 @@ template <class T>
 class Arrays
 {
 
-  private:
-
-    // non-instantiable class
-    Arrays() {};
-
-
   public:
 
-    // alloc/dealloc array methods
     static T * allocVector(int n) throw(Exception);
     static T * allocVector(int n, T x) throw(Exception);
     static T * allocVector(int n, T *x) throw(Exception);
     static void deallocVector(T *x);
 
-    // alloc/dealloc matrix methods
     static T ** allocMatrix(int n, int m) throw(Exception);
     static T ** allocMatrix(int n, int m, T x) throw(Exception);
     static T ** allocMatrix(int n, int m, T *x) throw(Exception);
     static T ** allocMatrix(int n, int m, T **x) throw(Exception);
     static void deallocMatrix(T **x, int n);
 
-    // related methods
     static void prodMatrixVector(T **A, T *x, int n1, int n2, T *ret);
     static void prodMatrixMatrix(T **A, T **B, int n1, int n2, int n3, T **ret);
     static void copyVector(T *x, int n, T *ret);

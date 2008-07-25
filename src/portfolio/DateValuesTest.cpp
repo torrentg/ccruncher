@@ -19,23 +19,21 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// DateValuesTest.hpp - DateValuesTest code - $Rev$
+// DateValuesTest.hpp - DateValuesTest code
 // --------------------------------------------------------------------------
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
 #include "portfolio/DateValuesTest.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"

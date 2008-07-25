@@ -1,0 +1,375 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CreditCruncher - Embeded Projects</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+  </head>
+
+  <body class="composite">
+
+    <h1>CreditCruncher - Embeded Projects</h1>
+
+    <p style="text-align:justify;">
+      CreditCruncher use existent projects. The selection criteria 
+      has been: non error prone, simplicity, eficiency and open source.
+    </p>
+
+    <h3 class="bolded">MiniCppUnit</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>MiniCppUnit</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.2</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          MiniCppUnit is a C++ unit testing framework.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to test all basic classes.
+          All classes that match pattern <code>*Test.?pp</code> are unit test.
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Due to problems whith <a href="http://sourceforge.net/projects/cppunit">CppUnit</a> 
+          (memory leaks, dinamic link, etc.) we change the test unit framework to MiniCppUnit. <br />
+          Some modifications applied to original project because seems that original author
+          don't work more about it (home page down, project files don't exist in sourceforge, etc.).
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">Expat</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>expat</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.95.8</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>MIT License</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Expat is an XML parser library written in C. It is a stream-oriented
+          parser in which an application registers handlers for things the
+          parser might find in the XML document (like start tags).
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to implements XML management.
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Due to problems whith <a href="http://xml.apache.org/xerces-c/">xerces-c</a> 
+          (memory leaks, complexity, dinamic link, etc.) we change the xml framework to 
+          expat.
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">Zlib</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>zlib</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.2.2</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.zlib.net/">http://www.zlib.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>free license (see declaration at home site)</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          zlib is designed to be a free, general-purpose, legally unencumbered
+          , that is, not covered by any patents -- lossless data-compression
+          library for use on virtually any computer hardware and operating system.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher allows the usage of gziped input files (size reduces drastically
+          in xml input files)
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">Gzstream</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>gzstream</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.cs.unc.edu/Research/compgeom/gzstream/">http://www.cs.unc.edu/Research/compgeom/gzstream/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU LGPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Gzstream is a small C++ library, basically just a wrapper, that
+          provides the functionality of the zlib C-library in a C++ iostream.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used a wrapper to zlib library 
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          File gzstream.C renamed to gzstream.cpp due to MSVC7 confusion about *.C extension
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">JAMA/TNT</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>jama - tnt</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.2.4 (jama), 1.2.6 (tnt)</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://math.nist.gov/tnt/">http://math.nist.gov/tnt/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>public domain (see declaration at home site)</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          The Template Numerical Toolkit (TNT) is a collection of interfaces 
+          and reference implementations of numerical objects useful for 
+          scientific computing in C++.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to operate with matrix (pe. eigenvalues
+          decomposition).
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">Mersenne Twister</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>MersenneTwister</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.0</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www-personal.engin.umich.edu/~wagnerr/MersenneTwister.html">http://www-personal.engin.umich.edu/~wagnerr/MersenneTwister.html</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>BSD license</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          The Mersenne Twister is an algorithm for generating random numbers.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to generate the random numbers used by
+          MonteCarlo.
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Applied minor patch (reported to author) over randNorm() method.
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">Valgrind</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>valgrind</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.2.0</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://valgrind.kde.org">http://valgrind.kde.org</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Valgrind is a GPL'd system for debugging and profiling x86-Linux 
+          programs.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to avoid memory leaks at development 
+          time. No references into the code because valgrind don't need to
+          be linked to code. No penalization at runtime, only at developement 
+          time. 
+        </td>
+      </tr>
+    </table>
+
+    <h3 class="bolded">LAM/MPI</h3>
+    <table>
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td>lam-mpi</td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>7.1.1</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.lam-mpi.org/">http://www.lam-mpi.org/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>Indiana University Software License (see home site)</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          LAM/MPI is a high-quality open-source implementation of the Message 
+          Passing Interface specification, including all of MPI-1.2 and much 
+          of MPI-2.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is used to implements parallel execution.
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Parallel execution instructions not yet implemented.
+        </td>
+      </tr>
+    </table>
+
+
+    <div style="height:75px"></div>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td class="footer" align="left">
+          <a href="index.html">
+            <img src="ccruncher.png" alt="return to home page"
+              height="31" width="88"  />
+          </a>
+          <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+              alt="Valid XHTML 1.0!" height="31" width="88" />
+          </a>
+          <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
+            <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+             width="88" height="31" alt="SourceForge.net Logo" />
+          </a>
+        </td>
+        <td class="footer" align="right">
+          Last modified: 14-Jul-2005 &nbsp;
+        </td>
+      </tr>
+    </table>
+
+    <p style="text-align: center; font-size: smaller;">
+      Copyright &copy; 2004-2005 <a href="mailto:gerard@fobos.generacio.com">Gerard Torrent</a>
+    </p>
+
+  </body>
+
+</html>

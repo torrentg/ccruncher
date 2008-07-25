@@ -6,10 +6,16 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = build
+SUBDIRS = src
 
-EXTRA_DIST = bin deps data doc samples
+EXTRA_DIST = COPYING AUTHORS README INSTALL TODO NEWS \
+             bin share samples data doc
+
+install-hook:
+	echo "setting executable flag to scripts ..."
+	chmod +x $(distdir)/bin/*
 
 dist-hook:
 	echo "dropping subversion stuff ..."
 	rm -rf `find $(distdir) -name \.svn`
+

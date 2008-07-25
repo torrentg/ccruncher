@@ -19,26 +19,23 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ParserTest.cpp - ParserTest code - $Rev$
+// ParserTest.cpp - ParserTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
+#include <climits>
 #include "utils/Parser.hpp"
 #include "utils/ParserTest.hpp"
 
@@ -99,17 +96,17 @@ void ccruncher_test::ParserTest::test_long(void)
 //===========================================================================
 void ccruncher_test::ParserTest::test_double(void)
 {
-  ASSERT_EQUALS_EPSILON(1.0, Parser::doubleValue("1"), EPSILON);
-  ASSERT_EQUALS_EPSILON(2.0, Parser::doubleValue("+2"), EPSILON);
-  ASSERT_EQUALS_EPSILON(-3.0, Parser::doubleValue("-3"), EPSILON);
-  ASSERT_EQUALS_EPSILON(4.5, Parser::doubleValue("4.5"), EPSILON);
-  ASSERT_EQUALS_EPSILON(4.0, Parser::doubleValue("4."), EPSILON);
+  ASSERT_DOUBLES_EQUAL(1.0, Parser::doubleValue("1"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(2.0, Parser::doubleValue("+2"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(-3.0, Parser::doubleValue("-3"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(4.5, Parser::doubleValue("4.5"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(4.0, Parser::doubleValue("4."), EPSILON);
   ASSERT_THROW(Parser::doubleValue(" 6 "));
-  ASSERT_EQUALS_EPSILON(-10.12345365457657886789699, Parser::doubleValue("-10.12345365457657886789699"), EPSILON);
-  ASSERT_EQUALS_EPSILON(-12343246556457666756876867968907609.12, Parser::doubleValue("-12343246556457666756876867968907609.12"), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.9, Parser::doubleValue(".9"), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.1, Parser::doubleValue("+.10"), EPSILON);
-  ASSERT_EQUALS_EPSILON(-0.11, Parser::doubleValue("-.11"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(-10.12345365457657886789699, Parser::doubleValue("-10.12345365457657886789699"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(-12343246556457666756876867968907609.12, Parser::doubleValue("-12343246556457666756876867968907609.12"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.9, Parser::doubleValue(".9"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.1, Parser::doubleValue("+.10"), EPSILON);
+  ASSERT_DOUBLES_EQUAL(-0.11, Parser::doubleValue("-.11"), EPSILON);
 }
 
 //===========================================================================
@@ -151,4 +148,19 @@ void ccruncher_test::ParserTest::test_bool(void)
   ASSERT_THROW(Parser::boolValue("FALSE"));
   ASSERT_THROW(Parser::boolValue("True"));
   ASSERT_THROW(Parser::boolValue("False"));
+}
+
+//===========================================================================
+// toString
+//===========================================================================
+void ccruncher_test::ParserTest::test_toString(void)
+{
+  Date date1 = Date("1/1/2005");
+
+  ASSERT("35" == Parser::int2string(35));
+  ASSERT("50000" == Parser::long2string(50000));
+  ASSERT("3.1415" == Parser::double2string(3.1415));
+  ASSERT("01/01/2005" == Parser::date2string(date1));
+  ASSERT("true" == Parser::bool2string(true));
+  ASSERT("false" == Parser::bool2string(false));
 }
