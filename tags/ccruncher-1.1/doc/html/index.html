@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>CreditCruncher</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="keywords" content="credit risk, Sectorial Correlation, Survival Function, Copula, Monte Carlo, VAR, Expected Shortfall, Ratings, Transition Matrix, Cholesky Block Matrix, MPI, linux, win32, open source" />
+    <!-- repository version = $Rev$ -->
+  </head>
+
+  <body>
+    <div id="main-container">
+	<div id="page-header">
+		<a href="./index.html">
+			<img style="margin-top:35px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
+		</a>
+	</div>
+	<br/>
+
+	<div id="right-menu">
+		<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding-top:1px;padding-left:12px;padding-right:12px;padding-bottom:25px;">
+			<h3>Documentation</h3>
+			<a href="../ccruncher.pdf">Technical Document</a><br />
+			<a href="ifileref.html">Input File Reference</a><br />
+			<h3>Show me the pink!</h3>
+			<a href="screenshots.html">Screen Shots</a><br />
+			<a href="http://www.generacio.com/ccwi/">Demo site&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
+			<h3>Lets go work!</h3>
+			<a href="faq.html">F.A.Q.</a><br />
+			<a href="http://sourceforge.net/project/showfiles.php?group_id=128910&amp;package_id=141273">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
+			<a href="gstarted.html">Getting Started</a><br />
+			<h3>Development</h3>
+			<a href="http://www.generacio.com/svn/repos/ccruncher/trunk/">Main SVN&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
+			<a href="http://sourceforge.net/projects/ccruncher/">SourceForge&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
+			<a href="dependencies.html">Dependencies</a><br />
+		</div></div></div></div></div>
+	</div>
+
+    <h1 id="welcome">Welcome to CreditCruncher</h1>
+    <p>
+      CCruncher computes the Value At Risk (VAR) of large credit
+      portfolios using the Monte Carlo method. This application is useful
+      for risk managers. The current version is 1.1. This software is
+      released under the <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU 
+      General Public License</a>.
+    </p>
+    <p>
+      <strong>Keywords</strong>: Credit risk, Monte Carlo, Copula, VAR, 
+      Expected Shortfall, Correlations, Survival Functions, Ratings,
+      Transition Matrix.
+    </p>
+
+    <br/>
+    <h1 id="overview">Overview</h1>
+    <p>
+      CCruncher is designed to work in batch mode, without graphical support.
+      If the application is compiled and deployed in a cluster, then, computation 
+      time can be reduced.
+      <br />
+      <br />
+      <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
+      <br />
+      The user must create a <i>xml</i> file with the description of the portfolio.
+      CCruncher takes this file and simulates <i>N</i> times the portfolio. 
+      The simulated values are stored in a file with extension <i>.out</i>.
+      Finally, a <a href="http://www.r-project.org/">R script</a> takes the simulated 
+      values and do some statistics on them to generate graphics and the risk 
+      indicators (Expected Loss, Stddev, VaR and Expected Shortfall).
+    </p>
+
+	<br/>
+	<div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+		<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+			<table width="100%"><tr>
+				<td width="100%" style="text-align:center; font-size: smaller;">
+					Copyright &copy; 2004-2007 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+				</td>
+				<td nowrap="nowrap" style="text-align:right; font-size:smaller; font-weight:bold;">
+					Last modified: 04-Aug-2007
+				</td>
+			</tr></table>			
+		</div></div></div></div></div>
+	</div>
+	<br/>
+
+  </div>
+  </body>
+</html>
