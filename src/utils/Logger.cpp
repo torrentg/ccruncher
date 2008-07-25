@@ -22,24 +22,23 @@
 // Logger.cpp - Logger code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/03/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . const + referenced string arguments
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
-#include <iostream>
 #include "utils/Logger.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>

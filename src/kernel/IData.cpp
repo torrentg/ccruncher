@@ -22,51 +22,47 @@
 // IData.cpp - IData code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug at XML read that hangs ccruncher when input file isn't
 //     a true xml file
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival section
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added gziped input files suport
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //   . check that sections are included into ccruncher main tag
 //
-// 2005/09/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . thread-safe modification (variable hasmaintag)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Portfolio refactoring
 //   . IData refactoring
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/28 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed check number of attributes in ccruncher tag to
-//     avoid errors when references to xsd are set.
 //
 //===========================================================================
 
@@ -75,6 +71,7 @@
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/ExpatParser.hpp"
+#include "utils/Timer.hpp"
 #include <gzstream.h>
 #include <cassert>
 
@@ -142,11 +139,11 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
   try
   {
     // gziped file stream, if file isn't a gzip, is like a ifstream
-    igzstream xmlstream((const char *) xmlfilename.c_str());
+    igzstream  xmlstream((const char *) xmlfilename.c_str());
 
     if (!xmlstream.good())
     {
-      throw Exception("can't open file " + xmlfilename);
+      throw Exception("IData::IData(): can't open file " + xmlfilename);
     }
     else
     {
@@ -180,11 +177,16 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ccruncher")) {
-    hasmaintag = true;
-    return;
+    if (getNumAttributes(attributes) != 0) {
+      throw Exception("attributes are not allowed in tag ccruncher");
+    }
+    else {
+      hasmaintag = true;
+      return;
+    }
   }
   else if (hasmaintag == false) {
-    throw Exception("ccruncher tag expected but not found");
+    throw Exception("expected main ccruncher tag not found");
   }
 
   // section params
@@ -309,7 +311,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing portfolio", true);
-      portfolio = new Portfolio(*ratings, *sectors, *segmentations, *interests, params->dates);
+      portfolio = new Portfolio(*ratings, *sectors, *segmentations, *interests);
       eppush(eu, portfolio, name_, attributes);
     }
   }

@@ -22,27 +22,28 @@
 // Interests.cpp - Interests code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
 //===========================================================================
 
 #include <cmath>
+#include <algorithm>
 #include "interests/Interests.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
@@ -97,7 +98,7 @@ Interest& ccruncher::Interests::operator []  (const string &name) throw(Exceptio
     }
   }
 
-  throw Exception("interest " + name + " not found");
+  throw Exception("Interests::[]: interest " + name + " not found");
 }
 
 //===========================================================================
@@ -114,7 +115,7 @@ void ccruncher::Interests::validate() throw(Exception)
     }
   }
 
-  throw Exception("interest 'spot' not defined");
+  throw Exception("Interests::validate(): interest spot not found");
 }
 
 //===========================================================================
@@ -127,7 +128,10 @@ void ccruncher::Interests::insertInterest(const Interest &val) throw(Exception)
   {
     if (vinterests[i].getName() == val.getName())
     {
-      throw Exception("interest name " + val.getName() + " repeated");
+      string msg = "Interests::insertInterest(): interest name ";
+      msg += val.getName();
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 

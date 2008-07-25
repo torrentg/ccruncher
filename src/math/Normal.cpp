@@ -22,22 +22,20 @@
 // Normal.cpp - Normal code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added a new cdf function more acurate (18 digits) extracted from
 //     R code. Comented because is more expensive (in computation time)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . cdf(x) and pdf(x) converted to inline
 //
 //===========================================================================
 
 #include <cmath>
+#include <ctime>
 #include <cstdlib>
 #include "math/Normal.hpp"
 
@@ -71,12 +69,81 @@
 #define P_LOW   0.02425
 #define P_HIGH  0.97575
 
+#define POSITIVE +1
+#define NEGATIVE -1
+#define NCOEFS   6
+
+#ifndef M_PI
+#define M_PI    3.141592653589793238462643383279502884197196
+#endif
+
+//---------------------------------------------------------------------------
+
+static double coef[] =
+  {
+    +0.0,
+    +0.319381530,
+    -0.356563782,
+    +1.781477937,
+    -1.821255978,
+    +1.330274429
+  };
+
+//===========================================================================
+// probability density function Normal(0, 1)
+//===========================================================================
+double ccruncher::Normal::pdf(double x)
+{
+  //return exp(-x*x/2.0)/sqrt(2.0*M_PI);
+  return exp(-x*x/2.0)/2.50662827463100050241576528481104525;
+}
+
 //===========================================================================
 // probability density function Normal(mu, sigma)
 //===========================================================================
 double ccruncher::Normal::pdf(double x, double mu, double sigma)
 {
   return pdf((x-mu)/sigma);
+}
+
+//===========================================================================
+// cumulative distribution function Normal(0, 1)
+// use algorithm explained in Hull book
+// precision achieved = 6 digits
+// x: point where we evaluate function
+//===========================================================================
+double ccruncher::Normal::cdf(double x)
+{
+  double ret, k;
+  int i, sign;
+
+  if(x < 0.0)
+  {
+    sign = NEGATIVE;
+    x = -x;
+  }
+  else
+  {
+    sign = POSITIVE;
+  }
+
+  k = 1.0/(1.0 + x*0.2316419);
+
+  ret = 0.0;
+
+  for(i=NCOEFS-1;i>0;i--)
+  {
+    ret = (ret + coef[i])*k;
+  }
+
+  ret = 1.0 - pdf(x)*ret;
+
+  if(sign == NEGATIVE)
+  {
+    ret = 1.0 - ret;
+  }
+
+  return ret;
 }
 
 //===========================================================================

@@ -22,7 +22,7 @@
 // winconfig.hpp - winconfig header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added comments on header
 //   . added Rev (aka LastChangedRevision) svn tag
 //

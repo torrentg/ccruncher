@@ -22,23 +22,20 @@
 // Segmentation.hpp - Segmentation header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method getNumSegments
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -51,6 +48,7 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
+#include "utils/Date.hpp"
 #include "segmentations/Segment.hpp"
 
 //---------------------------------------------------------------------------
@@ -63,7 +61,7 @@ namespace ccruncher {
 
 enum components_t {
   asset,
-  borrower,
+  client,
   undefined
 };
 
@@ -89,7 +87,7 @@ class Segmentation : public ExpatHandlers
     int order;
     // segmentation name
     string name;
-    // type of components (borrowers/assets)
+    // type of components (clients/assets)
     components_t components;
 
     // constructor
@@ -102,7 +100,7 @@ class Segmentation : public ExpatHandlers
     // [] operator
     Segment& operator [] (int i);
     // [] operator
-    Segment& operator [] (const string &sname) throw(Exception);
+    Segment& operator [] (const string &name) throw(Exception);
     // add a segment to list
     void addSegment(const string segname) throw(Exception);
     // serialize object content as xml

@@ -22,20 +22,17 @@
 // SectorsTest.hpp - SectorsTest header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -63,6 +60,7 @@ class SectorsTest : public TestFixture<SectorsTest>
     void test2(void);
     void test3(void);
     void test4(void);
+    void test5(void);
 
 
   public:
@@ -73,6 +71,7 @@ class SectorsTest : public TestFixture<SectorsTest>
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
+      TEST_CASE(test5);
     }
 
     void setUp();

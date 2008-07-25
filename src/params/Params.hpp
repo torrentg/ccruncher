@@ -22,26 +22,23 @@
 // Params.hpp - Params header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed dates management
 //
 //===========================================================================
 
@@ -52,7 +49,6 @@
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
@@ -76,8 +72,7 @@ class Params : public ExpatHandlers
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
     // validate object content
     void validate(void) const throw(Exception);
-    // set dates values using begindate + steps x steplength
-    void setDates();
+
 
   public:
 
@@ -99,16 +94,14 @@ class Params : public ExpatHandlers
     bool antithetic;
     // portfolio.onlyActiveClients param value
     bool onlyactive;
-    // time nodes
-    vector<Date> dates;
 
     // constructor
     Params();
     // destructor
     ~Params();
 
-    // return array with dates
-    vector<Date>& getDates() const throw(Exception);
+    // return array with dates (caller will free mem)
+    Date* getDates() const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

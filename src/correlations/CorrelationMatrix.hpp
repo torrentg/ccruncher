@@ -22,16 +22,16 @@
 // CorrelationMatrix.hpp - CorrelationMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed pointers by references
 //   . Sectors class refactoring
 //
@@ -44,6 +44,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "sectors/Sectors.hpp"

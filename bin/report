@@ -23,21 +23,21 @@
 #
 #-------------------------------------------------------------
 #
-# 2005/08/28 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/08/28 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
-# 2005/09/04 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/04 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added xml format argument
 #   . added portfolio value|loss argument
 #
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . removed unused options
 #   . CCRUNCHER var filled with dirname
 #
-# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . shows a message when no files found (and return KO)
 #
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added Rev svn:keyword
 #
 #=============================================================
@@ -47,8 +47,8 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=report
-numversion="1.1"
-svnversion="R420"
+numversion="1.0"
+svnversion="R381"
 retcode=0
 options=""
 
@@ -68,7 +68,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2007 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2006 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -123,7 +123,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information";
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
     esac
   done

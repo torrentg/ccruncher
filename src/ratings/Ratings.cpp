@@ -22,35 +22,34 @@
 // Ratings.cpp - Ratings code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
-//   . added getIndex() method
 //
 //===========================================================================
 
+#include <cmath>
+#include <algorithm>
 #include "ratings/Ratings.hpp"
 #include "utils/Strings.hpp"
+#include "utils/Format.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -102,22 +101,7 @@ Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
     }
   }
 
-  throw Exception("rating " + name + " not found");
-}
-
-//===========================================================================
-// return the index of the rating (-1 if rating not found)
-//===========================================================================
-int ccruncher::Ratings::getIndex(const string &name) const
-{
-  for (unsigned int i=0;i<vratings.size();i++)
-  {
-    if (vratings[i].name == name)
-    {
-      return i;
-    }
-  }
-  return -1;
+  throw Exception("Ratings::[]: rating " + name + " not found");
 }
 
 //===========================================================================
@@ -132,11 +116,24 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      throw Exception("rating name " + val.name + " repeated");
+      string msg = "Ratings::insertRating(): rating name ";
+      msg += val.name;
+      msg += " repeated";
+      throw Exception(msg);
+    }
+    else if (aux.order == val.order)
+    {
+      string msg = "Ratings::insertRating(): rating order ";
+      msg += val.order;
+      msg += " repeated";
+      throw Exception(msg);
     }
     else if (aux.desc == val.desc)
     {
-      throw Exception("rating description " + val.desc + " repeated");
+      string msg = "Ratings::insertRating(): rating desc ";
+      msg += val.desc;
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 
@@ -194,7 +191,23 @@ void ccruncher::Ratings::validations() throw(Exception)
   // checking number of ratings
   if (vratings.size() == 0)
   {
-    throw Exception("ratings have no elements");
+    throw Exception("Ratings::validations(): ratings have no elements");
+  }
+
+  // sorting ratings by filed 'order'
+  sort(vratings.begin(), vratings.end());
+
+  // checking that first 'order' is 1 and don't exist holes
+  for(unsigned int i=0;i<vratings.size();i++)
+  {
+    Rating aux = vratings[i];
+
+    if (aux.order != (int)(i))
+    {
+      string msg = "Ratings::validations(): incorrect order rating at or near order = ";
+      msg += Format::int2string(aux.order);
+      throw Exception(msg);
+    }
   }
 }
 

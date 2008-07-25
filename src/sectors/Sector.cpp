@@ -22,41 +22,40 @@
 // Sector.cpp - Sector code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added const qualifiers
 //   . order = tag value - 1
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
 #include "sectors/Sector.hpp"
 #include "utils/Strings.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // reset
 //===========================================================================
 void ccruncher::Sector::reset()
 {
+  order = -1;
   name = "";
   desc = "";
 }
@@ -70,19 +69,28 @@ ccruncher::Sector::Sector()
 }
 
 //===========================================================================
+// operator less-than (needed by sort functions)
+//===========================================================================
+bool ccruncher::operator <  (const Sector &x, const Sector &y)
+{
+  return (x.order < y.order);
+}
+
+//===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
 void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"sector")) {
-    if (getNumAttributes(attributes) != 2) {
+    if (getNumAttributes(attributes) != 3) {
       throw Exception("invalid number of attributes at sector");
     }
     else {
+      order = getIntAttribute(attributes, "order", 0)-1;
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (name == "" || desc == "_UNDEF_")
+      if (order < 0 || name == "" || desc == "_UNDEF_")
       {
         throw Exception("invalid values at <sector>");
       }
@@ -115,6 +123,7 @@ string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";
+  ret += "order ='" + Format::int2string(order+1) + "' ";
   ret += "desc ='" + desc + "'";
   ret += "/>\n";
 

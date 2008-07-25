@@ -22,10 +22,10 @@
 // Arrays.hpp - Arrays code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

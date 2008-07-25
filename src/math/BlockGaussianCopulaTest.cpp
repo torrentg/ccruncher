@@ -22,10 +22,10 @@
 // BlockGaussianCopulaTest.cpp - BlockGaussianCopulaTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -34,13 +34,15 @@
 #include <cmath>
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockGaussianCopulaTest.hpp"
+#include "math/Normal.hpp"
 #include "utils/Arrays.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 #define NITERS 100000
 #define EPSILON  0.1
-#define NBINS 100
+#define NTALLS   100
 
 //===========================================================================
 // setUp
@@ -162,12 +164,12 @@ void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula
 {
   double x, y;
   int a, b;
-  int hits[NBINS+1][NBINS+1];
+  int hits[NTALLS+1][NTALLS+1];
 
   // initializing counters
-  for(int i=0;i<(NBINS+1);i++)
+  for(int i=0;i<(NTALLS+1);i++)
   {
-    for(int j=0;j<(NBINS+1);j++)
+    for(int j=0;j<(NTALLS+1);j++)
     {
       hits[i][j] = 0;
     }
@@ -181,20 +183,20 @@ void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula
     x = copula.get(0);
     y = copula.get(1);
 
-    a = (int)(x*NBINS);
-    b = (int)(y*NBINS);
+    a = (int)(x*NTALLS);
+    b = (int)(y*NTALLS);
 
     hits[a][b]++;
   }
 
   // plotting histogram
-  for(int i=0;i<NBINS;i++)
+  for(int i=0;i<NTALLS;i++)
   {
-    x = (double)(i)/(double)(NBINS);
+    x = (double)(i)/(double)(NTALLS);
 
-    for(int j=0;j<NBINS;j++)
+    for(int j=0;j<NTALLS;j++)
     {
-      y = (double)(j)/(double)(NBINS);
+      y = (double)(j)/(double)(NTALLS);
 
       cout << x << "\t" << y << "\t" << hits[i][j] << endl;
     }

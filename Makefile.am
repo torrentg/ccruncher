@@ -8,7 +8,11 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = build
 
-EXTRA_DIST = bin deps data doc samples
+EXTRA_DIST = bin share data doc samples
+
+install-hook:
+	echo "setting executable flag to scripts ..."
+	chmod +x $(distdir)/bin/*
 
 dist-hook:
 	echo "dropping subversion stuff ..."

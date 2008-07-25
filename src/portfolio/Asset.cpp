@@ -22,68 +22,69 @@
 // Asset.cpp - Asset code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to getSegment method (rest segment = default)
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . update to t[0] -> update to t[n-1]
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Interests class refactoring
 //   . Segmentations class refactoring
 //   . Asset refactoring
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Changed Net Current Value computation (now all cashflows are
 //     taked in account. Previously, only chasflows between initial
 //     and end simulation date was taked in account). Thanks GG.
 //
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/29 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added asset creation date
-//   . getLosses function reviewed
-//   . added precomputeLosses function
 //
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
 #include "portfolio/Asset.hpp"
-#include "utils/Arrays.hpp"
-#include "utils/Utils.hpp"
 #include <cassert>
+
+//===========================================================================
+// constructor (don't use it)
+//===========================================================================
+ccruncher::Asset::Asset()
+{
+}
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations &segs) : plosses(0)
+ccruncher::Asset::Asset(const Segmentations &segs)
 {
+  // setting default values
   reset((Segmentations *) &segs);
 }
 
@@ -106,9 +107,6 @@ void ccruncher::Asset::reset(Segmentations *segs)
   data.clear();
   belongsto.clear();
   have_data = false;
-  mindate = Date(1,1,1);
-  maxdate = Date(1,1,1);
-  hkey = 0UL;
 }
 
 //===========================================================================
@@ -128,59 +126,39 @@ string ccruncher::Asset::getName(void) const
 }
 
 //===========================================================================
-// getRightIdx
+// getVCashFlow between date1 and date2
 //===========================================================================
-int ccruncher::Asset::getRightIdx(Date d)
+double ccruncher::Asset::getVCashFlow(Date &date1, Date &date2, const Interest &spot, bool last)
 {
-  int n = (int) data.size();
-
-  if (n == 0)
-  {
-    return -1;
-  }
-
-  if (d <= data[0].date)
-  {
-    return 0;
-  }
-
-  if (data[n-1].date < d)
-  {
-    return -1;
-  }
-
-  for(int i=0; i<n; i++)
-  {
-    if (d <= data[i].date) 
-    {
-      return i;
-    }
-  }
-
-  assert(false);
-  return -1;
-}
-
-//===========================================================================
-// getCashflowSum
-//===========================================================================
-double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
-{
-  double ufactor;
   int n = (int) data.size();
   double ret = 0.0;
 
-  if (d < mindate)
+  if (date2 < data[0].date)
   {
     return 0.0;
   }
 
-  for(int i=0; i<n; i++)
+  for(int i=0;i<n;i++)
   {
-    if (d <= data[i].date)
+    if (date1 == date2 && date1 == data[i].date)
     {
-      ufactor =  spot.getUpsilon(data[i].date, d);
-      ret += ufactor * data[i].cashflow;
+      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
+      break;
+    }
+    if (date1 < data[i].date && data[i].date <= date2)
+    {
+      ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
+    }
+    if (date2 < data[i].date)
+    {
+      if (last == false)
+      {
+        break;
+      }
+      else
+      {
+        ret += data[i].cashflow * spot.getUpsilon(data[i].date, date2);
+      }
     }
   }
 
@@ -188,77 +166,81 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 }
 
 //===========================================================================
-// precomputeLoss
-// precompute loss at time node d2 (d1 is the previous time node)
+// getVRecovery at date2
 //===========================================================================
-double ccruncher::Asset::precomputeLoss(const Date d1, const Date d2, const Interest &spot)
+double ccruncher::Asset::getVRecovery(Date &date1, Date &date2, const Interest &spot)
 {
+  int n = (int) data.size();
   double ret = 0.0;
-  double ufactor, tfactor, csum, recv;
-  Date prevdate = d1;
 
-  if (d2 < mindate) return 0.0;
-  if (d1 < mindate) prevdate = mindate;
-  int idx1 = getRightIdx(prevdate);
-  if (idx1 == -1) return 0.0;
-  int idx2 = getRightIdx(d2);
-  if (idx2 == -1) idx2 = data.size()-1;
-
-  for (int i=idx1; i<=idx2; i++)
+  if (n == 0)
   {
-    if (data[i].date <= d2) 
-    {
-      ufactor = spot.getUpsilon(data[i].date, d2);
-      tfactor = (double)(data[i].date-prevdate)/(double)(d2-d1);
-      csum = getCashflowSum(data[i].date, spot);
-      recv = data[i].recovery;
-      ret += ufactor * (csum - recv) * tfactor;
-    }
-    else
-    {
-      tfactor = (double)(d2-prevdate)/(double)(d2-d1);
-      csum = getCashflowSum(d2, spot);
-      recv = data[i].recovery * spot.getUpsilon(data[i].date, d2);
-      ret += (csum - recv) * tfactor;
-    }
-    prevdate = data[i].date;
+    return 0.0;
   }
 
-  return ret;
+  if (date2 < data[0].date)
+  {
+    return 0.0;
+  }
+
+  if (date1 > data[n-1].date)
+  {
+    return 0.0;
+  }
+
+  if (date1 < data[n-1].date && data[n-1].date < date2)
+  {
+    double val1 = data[n-1].date - date1;
+    double val2 = date2 - date1;
+
+    return data[n-1].recovery * val1/val2 * spot.getUpsilon(data[n-1].date, date2);
+  }
+
+  for(int i=1;i<n;i++)
+  {
+    if (date2 <= data[i].date)
+    {
+      Date datex = data[i-1].date;
+      double ex = data[i-1].recovery * spot.getUpsilon(data[i-1].date, date2);
+      Date datey = data[i].date;
+      double ey = data[i].recovery * spot.getUpsilon(data[i].date, date2);
+
+      ret = ex + (date2-datex)*(ey - ex)/(datey - datex);
+
+      return ret;
+    }
+  }
+
+  // assertion, this line is never reached
+  assert(false);
+  return 0.0;
 }
 
 //===========================================================================
-// precomputeLosses
-// caution: is assumed that dates is sorted
+// getLosses
 //===========================================================================
-void ccruncher::Asset::precomputeLosses(const vector<Date> &dates, const Interests &interests)
+void ccruncher::Asset::getLosses(Date *dates, int n, Interests &interests, double *ret)
 {
-  Interest &spot = ((Interests&)interests)["spot"];
+  double ufactor;
+  Interest &spot = interests["spot"];
 
-  // allocating & initializing memory
-  plosses.clear();
-  plosses.reserve(dates.size());
-  plosses.insert(plosses.begin(), dates.size(), 0.0);
+  // sorting dates
+  sort(dates, dates+n);
 
-  // computing losses at given time nodes (array dates)
-  for (unsigned int i=0;i<dates.size();i++)
+  // computing losses (=unreceived cashflow-recovery)
+  for (int i=0;i<n;i++)
   {
-    plosses[i] = precomputeLoss((i==0?Date(1,1,1):dates[i-1]), dates[i], spot);
-  }
-}
-
-//===========================================================================
-// getLoss
-//===========================================================================
-double ccruncher::Asset::getLoss(int k)
-{
-  if (k < 0 || (int) plosses.size()-1 < k)
-  {
-    return NAN;
-  }
-  else 
-  {
-    return plosses[k];
+    ret[i] = 0.0;
+    for(unsigned int j=0;j<data.size();j++)
+    {
+      if (dates[i] <= data[j].date)
+      {
+        ufactor =  spot.getUpsilon(data[j].date, dates[n-1]);
+        ret[i] += ufactor * data[j].cashflow;
+      }
+    }
+    ufactor =  spot.getUpsilon(dates[i], dates[n-1]);
+    ret[i] -= getVRecovery(dates[max(i-1,0)], dates[i], spot) * ufactor;
   }
 }
 
@@ -268,19 +250,16 @@ double ccruncher::Asset::getLoss(int k)
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset")) {
-    if (getNumAttributes(attributes) != 3) {
+    if (getNumAttributes(attributes) != 2) {
       throw Exception("incorrect number of attributes in tag asset");
     }
     else {
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
-      mindate = getDateAttribute(attributes, "date", Date(1,1,1));
-      if (id == "" || name == "" || mindate == Date(1,1,1))
+      if (id == "" || name == "")
       {
         throw Exception("invalid attributes at <asset>");
       }
-      // computing hash key
-      hkey = Utils::hash(id);
     }
   }
   else if (isEqual(name_,"belongs-to")) {
@@ -305,15 +284,15 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   else if (isEqual(name_,"values") && have_data == true) {
-    Date at = getDateAttribute(attributes, "at", Date(1,1,1));
+    Date date = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
     double recovery = getDoubleAttribute(attributes, "recovery", NAN);
 
-    if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
+    if (date == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
     }
     else {
-      DateValues aux(at, cashflow, recovery);
+      DateValues aux(date, cashflow, recovery);
       insertDateValues(aux);
     }
   }
@@ -334,16 +313,6 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
       throw Exception("asset without data");
     }
     else {
-      try 
-      { 
-        // adding creation date as an event
-        DateValues event0(mindate, 0.0, 0.0);
-        insertDateValues(event0);
-      }
-      catch(...) 
-      {
-        // no problem, creation date exist
-      }
       // sorting data by date
       sort(data.begin(), data.end());
     }
@@ -398,25 +367,13 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 {
-  // checking if date is previous to creation date
-  if (val.date < mindate)
-  {
-    throw Exception("trying to insert an event with date previous to asset creation date");
-  }
-
   // checking if date exist
   for(unsigned int i=0;i<data.size();i++)
   {
     if (data[i].date == val.date)
     {
-      throw Exception("trying to insert an existent date");
+      throw Exception("Asset::insertDateValues(): trying to insert an existent date");
     }
-  }
-
-  // filling maxdate
-  if (maxdate < val.date)
-  {
-    maxdate = val.date;
   }
 
   // inserting date-values
@@ -448,7 +405,7 @@ void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Ex
 
   if (getSegment(isegmentation) > 0)
   {
-    throw Exception("trying to reinsert a defined segmentation");
+    throw Exception("Asset::insertBelongsTo(): trying to reinsert a defined segmentation");
   }
 
   if (isegment > 0)
@@ -494,30 +451,3 @@ vector<DateValues>& ccruncher::Asset::getData()
 {
   return data;
 }
-
-//===========================================================================
-// getData
-//===========================================================================
-void ccruncher::Asset::deleteData()
-{
-  data.clear();
-  // incredible but true, this shrink memory
-  std::vector<DateValues>(data.begin(), data.end()).swap(data);
-}
-
-//===========================================================================
-// getMinDate
-//===========================================================================
-Date ccruncher::Asset::getMinDate()
-{
-  return mindate;
-}
-
-//===========================================================================
-// getMaxDate
-//===========================================================================
-Date ccruncher::Asset::getMaxDate()
-{
-  return maxdate;
-}
-

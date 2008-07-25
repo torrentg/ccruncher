@@ -22,20 +22,17 @@
 // Ratings.hpp - Ratings header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getIndex() method
 //
 //===========================================================================
 
@@ -84,8 +81,6 @@ class Ratings : public ExpatHandlers
 
     // return the number of ratings
     int size() const;
-    // return the index of the rating
-    int getIndex(const string &name) const;
     // [] operator
     Rating& operator [] (int i);
     // [] operator

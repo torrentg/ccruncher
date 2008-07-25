@@ -22,19 +22,20 @@
 // ArraysTest.cpp - ArraysTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from UtilsTest.cpp)
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <iostream>
 #include <cmath>
+#include <string>
 #include "utils/Arrays.hpp"
 #include "utils/ArraysTest.hpp"
 

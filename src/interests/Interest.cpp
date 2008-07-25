@@ -22,37 +22,37 @@
 // Interest.cpp - Interest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . fecha renamed to date0
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
 //===========================================================================
 
 #include <cmath>
+#include <algorithm>
 #include "interests/Interest.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 // --------------------------------------------------------------------------
 
@@ -119,32 +119,29 @@ Date ccruncher::Interest::getDate0() const
 //===========================================================================
 double ccruncher::Interest::getValue(const double t) const
 {
-  unsigned int n = vrates.size();
+  Rate aux = vrates[0];
 
-  if (n == 0)
+  if (t <= aux.t)
   {
-    return 1.0;
-  }
-  else if (t <= vrates[0].t)
-  {
-    return vrates[0].r;
-  }
-  else if (vrates[n-1].t <= t)
-  {
-    return vrates[n-1].r;
+    return aux.r;
   }
   else
   {
-    for(register unsigned int i=1;i<n;i++)
+    for(unsigned int i=1;i<vrates.size();i++)
     {
-      if (t <= vrates[i].t)
+      aux = vrates[i];
+
+      if (t <= aux.t)
       {
-        return vrates[i-1].r + (t-vrates[i-1].t)*(vrates[i].r - vrates[i-1].r)/(vrates[i].t - vrates[i-1].t);
+        Rate prev = vrates[i-1];
+
+        return prev.r + (t-prev.t)*(aux.r - prev.r)/(aux.t - prev.t);
       }
     }
 
-    assert(false);
-    return vrates[n-1].r;
+    aux = vrates[vrates.size()-1];
+
+    return aux.r;
   }
 }
 
@@ -159,17 +156,17 @@ Date ccruncher::Interest::idx2date(int t) const
 //===========================================================================
 // returns index of date date1
 //===========================================================================
-inline double ccruncher::Interest::date2idx(const Date &date1) const
+double ccruncher::Interest::date2idx(Date &date1) const
 {
   return (double)(date1-date0)/30.3958;
 }
 
 //===========================================================================
-// returns factor to aply to transport a money value from date0 to date1
+// returns factor to aply to transport a money value from date1 to date0
 // r: interest rate to apply
 // t: time (in months)
 //===========================================================================
-inline double ccruncher::Interest::getUpsilon(const double r, const double t) const
+double ccruncher::Interest::getUpsilon(const double r, const double t) const
 {
   return pow(1.0 + r, t/12.0);
 }
@@ -178,7 +175,7 @@ inline double ccruncher::Interest::getUpsilon(const double r, const double t) co
 // returns factor to aply to transport a money value from date1 to date2
 // satisfying interest curve rate values
 //===========================================================================
-double ccruncher::Interest::getUpsilon(const Date &date1, const Date &date2) const
+double ccruncher::Interest::getUpsilon(Date &date1, Date &date2) const throw(Exception)
 {
   double t1 = date2idx(date1);
   double t2 = date2idx(date2);
@@ -186,7 +183,7 @@ double ccruncher::Interest::getUpsilon(const Date &date1, const Date &date2) con
   double r1 = getValue(t1);
   double r2 = getValue(t2);
 
-  return getUpsilon(r1, -t1) * getUpsilon(r2, +t2);
+  return getUpsilon(r1,-t1) * getUpsilon(r2,+t2);
 }
 
 //===========================================================================
@@ -194,9 +191,9 @@ double ccruncher::Interest::getUpsilon(const Date &date1, const Date &date2) con
 //===========================================================================
 void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 {
-  if (val.t < 0.0)
+  if (val.t < 0)
   {
-    throw Exception("rate with invalid time: " + Format::double2string(val.t) + " < 0");
+    throw Exception("Interest::insertRate(): invalid time value");
   }
 
   // checking consistency
@@ -206,7 +203,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 
     if (fabs(aux.t-val.t) < EPSILON)
     {
-      string msg = "rate time ";
+      string msg = "Interest::insertRate(): time ";
       msg += Format::double2string(val.t);
       msg += " repeated";
       throw Exception(msg);
@@ -289,4 +286,3 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 
   return ret;
 }
-

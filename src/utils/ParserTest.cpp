@@ -22,23 +22,26 @@
 // ParserTest.cpp - ParserTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
+#include <climits>
 #include "utils/Parser.hpp"
 #include "utils/ParserTest.hpp"
 
