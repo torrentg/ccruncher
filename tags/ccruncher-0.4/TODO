@@ -1,0 +1,19 @@
+
+CREDITCRUNCHER TODO
+===================
+
+
+Works in progress
+-------------------
+  * improve given samples
+  * append filename + start and end timestamp at output
+  * append output filenames at output
+  * working in pdf documentation explaining methodology used in CreditCruncher
+  * working in scripts that generates report using LaTeX and gnuplot
+
+
+Future works
+-------------------
+  * add optional LAM/MPI support 
+  * add new copula types
+
