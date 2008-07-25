@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>CreditCruncher - Overview</title>
+  <link rel="stylesheet" href="project.css" type="text/css"/>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /
+</head>
+
+<body class="composite">
+
+  <div id="banner" style="font-size:18pt; font-weight: bold; color: #003399; text-align: right;">
+    CREDITCRUNCHER
+  </div>
+
+  <div id="leftColumn">
+    <div id="navcolumn">
+      <div id="menuGeneral">
+        <h5>General</h5>
+        <ul>
+          <li class="none"><a href="index.html">Overview</a></li>
+        </ul>
+      </div>
+      <div id="menuInstallation">
+        <h5>Installation</h5>
+        <ul>
+          <li class="none"><a href="requeriments.html">Requirements</a></li>
+          <li class="none"><a href="download.html">Download</a></li>
+          <li class="none"><a href="install.html">Install</a></li>
+          <li class="none"><a href="usage.html">Basic usage</a></li>
+        </ul>
+      </div>
+      <div id="menuTutorial">
+        <h5>Documentation</h5>
+        <ul>
+          <li class="none"><a href="manual.html">Risk manual</a></li>
+          <li class="none"><a href="tagreference.html">Tag reference</a></li>
+          <li class="none"><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div id="menuOther">
+        <h5>Other</h5>
+        <ul>
+          <li class="none"><a href="relproj.html">Related projects</a></li>
+          <li class="none"><a href="license.html">General</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <a href="http://sourceforge.net/projects/ccruncher/">
+        <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+          width="88" height="31" border="0" alt="SourceForge.net Logo" />
+      </a>
+    </div>
+  </div>
+
+  <div id="bodyColumn">
+    <div class="contentBox">
+      <div class="section">
+        <a name="Overview" id="Overview"></a>
+        <h2>System Requeriments</h2>
+        <p style="text-align:justify;">
+          List of environements where is expected that a CreditCruncher 
+          installation works without problems:
+        </p>
+        <table>
+          <tr>
+            <td width="75px"><b>System</b></td>
+            <td><b>flavour</b></td>
+            <td><b>compiler</b></td>
+            <td><b>glibc</b></td>
+            <td><b>tested</b></td>
+            <td><b>notes</b></td>
+          </tr>
+          <tr>
+            <td>Linux 2.6</td>
+            <td>Fedora Core 2</td>
+            <td>gcc 3.3.3</td>
+            <td>2.3.3</td>
+            <td>YES</td>
+            <td>developement environement</td>
+          </tr>
+          <tr>
+            <td>Linux 2.6</td>
+            <td>Fedora Core 3</td>
+            <td>gcc 3.4.2</td>
+            <td>2.3.3</td>
+            <td>YES</td>
+            <td>developement environement</td>
+          </tr>
+          <tr>
+            <td>linux</td>
+            <td>other</td>
+            <td>-</td>
+            <td>-</td>
+            <td>NO</td>
+            <td>expat supported</td>
+          </tr>
+          <tr>
+            <td>AIX</td>
+            <td>5.1</td>
+            <td>-</td>
+            <td>-</td>
+            <td>NO</td>
+            <td>expat supported</td>
+          </tr>
+          <tr>
+            <td>solaris</td>
+            <td>2.8</td>
+            <td>-</td>
+            <td>-</td>
+            <td>NO</td>
+            <td>expat supported</td>
+          </tr>
+          <tr>
+            <td>hp ux</td>
+            <td>11i</td>
+            <td>-</td>
+            <td>-</td>
+            <td>NO</td>
+            <td>expat supported</td>
+          </tr>
+          <tr>
+            <td>Windows</td>
+            <td>2000</td>
+            <td>cygwin</td>
+            <td>-</td>
+            <td>YES</td>
+            <td>very bad performance</td>
+          </tr>
+        </table>
+        <p style="text-align:justify;">
+          If you make a instalation in a system not tested or listed, please, 
+          report it, explaining problems found, modifications realized, etc.
+        </p>
+      </div>
+
+      <div class="section">
+        <a name="Overview" id="Overview"></a>
+        <h2>Expat library</h2>
+        <p style="text-align:justify;">
+          CreditCruncher use expat for xml input file parsing. Expat is linked
+          statically. If you take binary installation you don't need install 
+          expat library. Otherwhise, you need install the expat package from 
+          <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>, 
+          that include the libexpat.a and expat.h files. These elements are needed
+          at compilation time.
+        </p>
+      </div>
+
+      <div class="section">
+        <a name="Overview" id="Overview"></a>
+        <h2>lam-mpi environement</h2>
+        <p style="text-align:justify;">
+          Not yet implemented parallel procesing support. If you plan to deploy 
+          CreditCruncher in a cluster (to take advantage of parallelization 
+          capabilities) you need an LAM/MPI installation. Otherwise, forget 
+          this section and LAM/MPI.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
