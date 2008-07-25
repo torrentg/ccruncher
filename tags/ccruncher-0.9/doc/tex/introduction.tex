@@ -1,0 +1,102 @@
+
+%***************************************************************************
+%
+% CreditCruncher - A portfolio credit risk valorator
+% Copyright (C) 2004 Gerard Torrent
+%
+% This program is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License
+% as published by the Free Software Foundation; either version 2
+% of the License.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+%
+%
+% introduction.tex - TeX documentation file - $Rev$
+% --------------------------------------------------------------------------
+%
+% 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . initial release
+%
+% 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . added Rev (aka LastChangedRevision) svn tag
+%
+%***************************************************************************
+
+\chapter{Introducci\'on}
+\label{sec:introduction}
+
+Este documento contiene la descripci\'on del m\'etodo de valoraci\'on del riesgo
+de cr\'edito implementado por el proyecto CreditCruncher. Para su lectura no se
+presuponen conocimientos avanzados de matem\'aticas o finanzas. En caso de 
+encontrar un error, sugerir mejoras o no entender alg\'un punto,
+no dude en ponerse en contacto con el equipo de desarrollo de 
+CreditCruncher\footnote{http://www.generacio.com/ccruncher/} que tendr\'a en 
+cuenta sus aportaciones para futuras versiones de este documento.
+
+
+\section{Acerca de CreditCruncher}
+
+La valoraci\'on del riesgo de cr\'edito no es un tema cerrado, muestra de ello 
+es la multitud de m\'etodos que existen para su valoraci\'on. Se recomienda la 
+lectura del art\'iculo \emph{Different strokes} \cite{Risk:Dif_Str} donde se 
+exponen los principales modelos de valoraci\'on del riesgo de cr\'edito y sus 
+caracter\'isticas. 
+\newline
+\newline
+CreditCruncher valora el riesgo de impago de una cartera de cr\'editos usando la 
+t\'ecnica de simulaci\'on Monte Carlo. Pretende ofrecer un m\'etodo de valoraci\'on 
+del riesgo de cr\'edito totalmente documentado y soportado por una implementaci\'on 
+libre y gratuita. Pertenece a la familia de m\'etodos tipo 
+CreditMetrics\footnote{http://www.riskmetrics.com/}.
+\newline
+\newline
+La mayor\'ia de conceptos y explicaciones que pueden 
+encontrarse en este documento han sido extra\'idas o inspiradas en el documento 
+\emph{CreditMetrics - Technical Document} \cite{CreditMetrics:Tech_Doc}.
+Puede usarse el art\'iculo \emph{Probability models of credit risk} \cite{cbs:glasser} 
+como una introducci\'on corta y clara.
+
+
+\section{Organizaci\'on del contenido}
+
+Se ha organizado el contenido en tres secciones principales y un bloque de
+ap\'endices.
+
+\paragraph{Formulaci\'on.} Contiene la descripci\'on del problema que se
+pretende resolver y se introducen los elementos y propiedades considerados
+claves para la posterior resoluci\'on. La lectura de este apartado es necesaria para
+entender los elementos del fichero de entrada de datos del programa.
+
+\paragraph{Resoluci\'on.} Se exponen los elementos usados para
+resolver el problema y se detalla la estructura del m\'etodo de resoluci\'on.
+La lectura de este apartado es necesaria para la interpretaci\'on de los 
+resultados proporcionados por el programa.
+
+\paragraph{Implementaci\'on.} Se explican los detalles de la implementaci\'on.
+La lectura de este apartado es necesaria para entender alguno de los apartados
+del fichero de entrada de datos del programa as\'i como para la interpretaci\'on
+de los resultados proporcionados por este.
+
+\paragraph{Ap\'endices.} Contienen elementos necesarios para la comprensi\'on
+del contenido de las secciones principales, pero que su inclusi\'on en estas 
+oscurecer\'ia la explicaci\'on.
+
+\section{Consideraciones}
+
+Recomendamos la lectura de las referencias bibliogr\'aficas que se incluyen, 
+pueden ayudarle en la comprensi\'on de lo expuesto en este documento.\\
+
+Los textos contenidos en los gr\'aficos est\'an en ingl\'es debido a que son 
+compartidos por todas las posibles traducciones de este documento.\\
+
+Si utiliza un visualizador tipo \emph{Adobe} o \emph{gsview} puede que algunos
+gr\'aficos se muestren en un trazo inadecuado. Imprima el documento para obtener
+una presentaci\'on \'optima.
