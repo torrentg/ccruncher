@@ -1,407 +1,309 @@
 
 //===========================================================================
-// $Id: Date.h,v 1.3 2002/10/18 05:56:10 tknarr Exp $
-// Copyright (C) 2000, 2002
-// Todd T. Knarr <tknarr@silverglass.org>
-
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-// Description    :
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// Provides a Date class which represents dates as
-// Julian day numbers ( days since 1 Jan 4713 BC ).
-// This class can handle all dates from  1 Jan 4713BC to 31 Dec 4999AD.
 //
-// Note: Years AD are positive, years BC are negative. There is
-// no year 0AD, it goes from 1BC to 1AD. A year of 0 will be treated
-// as 1BC. No attempt is made to validate ranges. Physical errors
-// will not result from insane day-month combinations like the 87th
-// day of the 45th month, but the results will obviously not make
-// much sense.
+// Date.cpp - Date code - $Rev$
+// --------------------------------------------------------------------------
 //
-// Date conversion routines  by Eric bergman-Terrell, Computer Language,
-//     Dec 1990.
-// Alternate method by David Burki, CUJ Feb 1993.
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release based on a Bernt A Oedegaard class
 //
-// To Do:
-// * Add << and >> operators for iostreams. They should probably output
-//   and input the string form.
-//--------------------------------------------------------------------------
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . implemented Strings class
 //
-// 09/11/1995 - Todd Knarr
-//   . initial release
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added class Format (previously format function included in Parser)
 //
-// 01/08/2007 - Gerard Torrent
-//   . code set in ccruncher form
-//   . added required ccruncher methods and operators
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . converting to inline some critical methods
+//
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added Rev (aka LastChangedRevision) svn tag
+//
+// 2005/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . added assert support
+//   . added getCentury() methods
+//   . added getDayOfWeek() method
 //
 //===========================================================================
 
-#include <time.h>
 #include <vector>
+#include <ctime>
+#include <cstdio>
+#include <cmath>
 #include "utils/Date.hpp"
-#include "utils/Parser.hpp"
 #include "utils/Strings.hpp"
+#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 #include <cassert>
 
 //===========================================================================
-// Constructor. constructs a new object initialized to 1 Jan 4713BC
+// constructor
 //===========================================================================
 ccruncher::Date::Date()
 {
   time_t now = time(NULL);
   tm lt = *(localtime(&now));
-  int y = lt.tm_year + 1900;
-  int m = (char) (lt.tm_mon + 1);
-  int d = (char) lt.tm_mday;
-  lJulianDay = YmdToJd( y, m, d );
+
+  year_ = lt.tm_year + 1900;
+  month_ = (char) (lt.tm_mon + 1);
+  day_ = (char) lt.tm_mday;
 }
 
 //===========================================================================
-// Constructor. Copy constructor
+// constructor
 //===========================================================================
-ccruncher::Date::Date(const Date& Orig) 
-{ 
-  lJulianDay = Orig.lJulianDay; 
-}
-
-//===========================================================================
-// Constructor
-//===========================================================================
-ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(Exception)
+ccruncher::Date::Date(int d, int m, int y) throw(Exception)
 {
-  if (!valid(iDay, iMonth, iYear))
+  day_ = (char) d;
+  month_ = (char) m;
+  year_ = y;
+
+  if (!valid())
   {
-    char buf[150];
-    sprintf(buf, "invalid Date: %i/%i/%i", iDay, iMonth, iYear);
-    throw Exception(buf);
+    throw Exception("Date::Date(int,int,int): invalid Date");
   }
-
-  lJulianDay = YmdToJd( iYear, iMonth, iDay );
 }
 
 //===========================================================================
-// Constructor. Constructs an object initialized to the date
-// represented by a system time value.
-//===========================================================================
-ccruncher::Date::Date( const time_t tSysTime )
-{
-  struct tm *ptm;
-  int y, m, d;
-
-  ptm = localtime( &tSysTime );
-  y = ptm->tm_year + 1900;
-  m = ptm->tm_mon + 1;
-  d = ptm->tm_mday;
-  lJulianDay = YmdToJd( y, m, d );
-}
-
-//===========================================================================
-// Constructor from string (format string = dd/mm/yyyy)
+// constructor
 //===========================================================================
 ccruncher::Date::Date(const string &str) throw(Exception)
 {
-  int d, m, y;
   vector<string> tokens;
   Strings::tokenize(str, tokens, "/");
 
   if (tokens.size() != 3)
   {
-    throw Exception("invalid date: " + str + " (num tokens distinct than 3)");
+    throw Exception("Date::Date(str): num tokens distinct 3");
   }
 
   try
   {
-    d = (char) Parser::intValue(tokens[0]);
-    m = (char) Parser::intValue(tokens[1]);
-    y = Parser::intValue(tokens[2]);
+    day_ = (char) Parser::intValue(tokens[0]);
+    month_ = (char) Parser::intValue(tokens[1]);
+    year_ = Parser::intValue(tokens[2]);
   }
   catch(Exception &e)
   {
-    throw Exception(e, "invalid date: " + str + " (non valid values)");
+    throw Exception(e, "Date::Date(str): invalid day or month or year");
   }
 
-  if (!valid(d, m, y))
+  if (!valid())
   {
-    throw Exception("invalid Date: " + str + " (non valid date)");
+    throw Exception("Date::Date(str): invalid Date");
+  }
+}
+
+//===========================================================================
+// constructor
+//===========================================================================
+ccruncher::Date::Date(const long date) throw(Exception)
+{
+  year_  = date/10000;
+  month_ = (char) ((date%10000)/100);
+  day_   = (char) (date%100);
+
+  if (!valid())
+  {
+    throw Exception("Date::Date(long): invalid Date (" + Format::long2string(date) + ")");
+  }
+}
+
+//===========================================================================
+// setXXX() methods
+//===========================================================================
+void ccruncher::Date::setDay (const int day) throw(Exception)
+{
+  Date::day_ = (char) day;
+
+  if (!valid())
+  {
+    throw Exception("Date::setDay(): invalid Date");
+  }
+}
+
+void ccruncher::Date::setMonth(const int month) throw(Exception)
+{
+  Date::month_ = (char) month;
+
+  if (!valid())
+  {
+    throw Exception("Date::setMonth(): invalid Date");
+  }
+}
+
+void ccruncher::Date::setYear (const int year) throw(Exception)
+{
+  Date::year_ = year;
+
+  if (!valid())
+  {
+    throw Exception("Date::setYear(): invalid Date");
+  }
+}
+
+//===========================================================================
+// returns century
+//===========================================================================
+int ccruncher::Date::getCentury(const int y)
+{
+  return y - (y % 100);
+}
+
+//===========================================================================
+// returns century
+//===========================================================================
+int ccruncher::Date::getCentury() const
+{
+  return getCentury(getYear());
+}
+
+//===========================================================================
+// returns day of year (1...364/365)
+//===========================================================================
+int ccruncher::Date::getDayOfYear() const
+{
+  int ret = 0;
+
+  for (int i=1;i<month_;i++)
+  {
+    ret += numDaysInMonth(i, getYear());
+  }
+
+  return ret + (int) day_;
+}
+
+//===========================================================================
+// returns day of week
+// 0=sunday, 1=monday, 2=tuesday, 3=wednesday, 4=thursday, 5=friday, 6=saturday
+// implements Doomsday rule
+// http://www.cst.cmich.edu/users/graha1sw/Pub/Doomsday/Doomsday.html
+//===========================================================================
+int ccruncher::Date::getDayOfWeek() const
+{
+  int x, y, aux;
+  int ddm = getDoomsDayMonth(getMonth(), getYear());
+  int ddc = getDoomsDayCentury(getYear());
+
+  if( ddc < 0 ) return -1;
+  if( ddm < 0 ) return -1;
+
+  if( ddm > getDay() )
+  {
+    aux = (7 - ((ddm-getDay()) % 7 ) + ddm);
   }
   else
   {
-    lJulianDay = YmdToJd(y, m, d);
+    aux = getDay();
+  }
+
+  x = (aux - ddm) % 7;
+  x %= 7;
+  y = ddc + (getYear()-getCentury()) + int(floor((getYear()-getCentury())/4.0));
+  y %= 7;
+
+  return (x+y)%7;
+}
+
+//===========================================================================
+// returns dooms day month (internal function required by getDayOfWeek)
+//===========================================================================
+int ccruncher::Date::getDoomsDayMonth(int m, int y)
+{
+  switch(m)
+  {
+    case 1: //january
+      if( isLeapYear(y) ) return 32;
+      else return 31;
+    case 2: //february
+      if( isLeapYear(y) ) return 29;
+      else return 28;
+    case 3: //march
+      return 7;
+    case 4: //april
+      return 4;
+    case 5: //may
+      return 9;
+    case 6: //june
+      return 6;
+    case 7: //july
+      return 11;
+    case 8: //august
+      return 8;
+    case 9: //september
+      return 5;
+    case 10: //october
+      return 10;
+    case 11: //november
+      return 7;
+    case 12: //december
+      return 12;
+    default:
+      assert(false);
+      return -1;
   }
 }
 
 //===========================================================================
-// YmdToJd
-// Internal routine that does the physical conversion 
-// from YMD form to Julian day number.
+// returns dooms day century (internal function required by getDayOfWeek)
 //===========================================================================
-long ccruncher::Date::YmdToJd( const int iYear, const int iMonth, const int iDay )
+int ccruncher::Date::getDoomsDayCentury(int y)
 {
-    long jul_day;
-
-#ifndef JULDATE_USE_ALTERNATE_METHOD
-
-    int a,b;
-    int year = iYear, month = iMonth, day = iDay;
-    float year_corr;
-
-    if ( year < 0 )
-        year++;
-    year_corr = ( year > 0 ? 0.0f : 0.75f );
-    if ( month <= 2 )
-    {
-        year--;
-        month += 12;
-    }
-    b = 0;
-    if ( year * 10000.0 + month * 100.0 + day >= 15821015.0 )
-    {
-        a = year / 100;
-        b = 2 - a + a / 4;
-    }
-    jul_day = (long) ( 365.25 * year - year_corr ) +
-              (long) ( 30.6001 * ( month + 1 ) ) + day + 1720995L + b;
-
-#else
-
-    long lmonth = (long) iMonth, lday = (long) iDay, lyear = (long) iYear;
-
-    // Adjust BC years
-    if ( lyear < 0 )
-        lyear++;
-
-    jul_day = lday - 32075L +
-        1461L * ( lyear + 4800L + ( lmonth - 14L ) / 12L ) / 4L +
-        367L * ( lmonth - 2L - ( lmonth - 14L ) / 12L * 12L ) / 12L -
-        3L * ( ( lyear + 4900L + ( lmonth - 14L ) / 12L ) / 100L ) / 4L;
-
-#endif
-
-    return jul_day;
-}
-
-//===========================================================================
-// JdToYmd
-// Internal routine that reverses the conversion, turning a Julian
-// day number into YMD values.
-//===========================================================================
-void ccruncher::Date::JdToYmd( const long lJD, int *piYear, int *piMonth, int *piDay )
-{
-#ifndef JULDATE_USE_ALTERNATE_METHOD
-
-    long a, b, c, d, e, z, alpha;
-
-    z = lJD;
-    if ( z < 2299161L )
-        a = z;
-    else
-    {
-        alpha = (long) ( ( z - 1867216.25 ) / 36524.25 );
-        a = z + 1 + alpha - alpha / 4;
-    }
-    b = a + 1524;
-    c = (long) ( ( b - 122.1 ) / 365.25 );
-    d = (long) ( 365.25 * c );
-    e = (long) ( ( b - d ) / 30.6001 );
-    *piDay = (int) b - d - (long) ( 30.6001 * e );
-    *piMonth = (int) ( e < 13.5 ) ? e - 1 : e - 13;
-    *piYear = (int) ( *piMonth > 2.5 ) ? ( c - 4716 ) : c - 4715;
-    if ( *piYear <= 0 )
-        *piYear -= 1;
-
-#else
-
-    long t1, t2, yr, mo;
-
-    t1 = lJD + 68569L;
-    t2 = 4L * t1 / 146097L;
-    t1 = t1 - ( 146097L * t2 + 3L ) / 4L;
-    yr = 4000L * ( t1 + 1L ) / 1461001L;
-    t1 = t1 - 1461L * yr / 4L + 31L;
-    mo = 80L * t1 / 2447L;
-    *piDay = (int) ( t1 - 2447L * mo / 80L );
-    t1 = mo / 11L;
-    *piMonth = (int) ( mo + 2L - 12L * t1 );
-    *piYear = (int) ( 100L * ( t2 - 49L ) + yr + t1 );
-
-    // Correct for BC years
-    if ( *piYear <= 0 )
-        *piYear -= 1;
-
-#endif
-
-    return;
-}
-
-//===========================================================================
-// getters for day, month and year
-//===========================================================================
-int ccruncher::Date::getYear( void ) const
-{
-    int y, m, d;
-
-    JdToYmd( lJulianDay, &y, &m, &d );
-    return y;
-}
-int ccruncher::Date::getMonth( void ) const
-{
-    int y, m, d;
-
-    JdToYmd( lJulianDay, &y, &m, &d );
-    return m;
-}
-int ccruncher::Date::getDay( void ) const
-{
-    int y, m, d;
-
-    JdToYmd( lJulianDay, &y, &m, &d );
-    return d;
-}
-
-//===========================================================================
-// DayOfYear
-// returns the day of the year, with 1 Jan being day 1
-//===========================================================================
-int ccruncher::Date::getDayOfYear( void ) const
-{
-    int y, m, d;
-    long soy;
-
-    JdToYmd( lJulianDay, &y, &m, &d );
-    soy = YmdToJd( y, 1, 1 );
-    return (int) ( lJulianDay - soy + 1 );
-}
-
-//===========================================================================
-// DayOfWeek
-// return the day of the week, from 0 through 6
-// 0 = Sunday, ...,  6 = Saturday
-//===========================================================================
-int ccruncher::Date::getDayOfWeek( void ) const
-{
-    return ( ( ( (int) ( lJulianDay % 7L ) ) + 1 ) % 7 );
-}
-
-//===========================================================================
-// DayOfWorkWeek
-// return the day of the week, from 0 through 6
-// 0 = Monday, ..., 6 = Sunday
-//===========================================================================
-int ccruncher::Date::getDayOfWorkWeek( void ) const
-{
-    return ( (int) ( lJulianDay % 7L ) );
-}
-
-//===========================================================================
-// isLeapYear
-//===========================================================================
-bool ccruncher::Date::isLeapYear( const int iYear )
-{
-    long jd1, jd2;
-    jd1 = YmdToJd( iYear, 2, 28 );
-    jd2 = YmdToJd( iYear, 3, 1 );
-    return ( ( jd2 - jd1 ) > 1 );
-}
-
-//===========================================================================
-// isLeapYear
-//===========================================================================
-bool ccruncher::Date::isLeapYear( void ) const
-{
-    int y, m, d;
-    JdToYmd( lJulianDay, &y, &m, &d );
-    return isLeapYear( y );
-}
-
-//===========================================================================
-// YMD() puts theyear, month and day values directly into three integer 
-// variables, for times when you need all three at the same time.
-//===========================================================================
-void ccruncher::Date::YMD( int *pY, int *pM, int *pD ) const
-{
-    JdToYmd( lJulianDay, pY, pM, pD );
-    return;
-}
-
-//===========================================================================
-// Converts the date to a time_t value
-// representing midnight of that date.
-//===========================================================================
-time_t ccruncher::Date::ToSysTime( void ) const
-{
-    struct tm tmRep;
-    int y, m, d;
-    time_t t;
-    
-    JdToYmd( lJulianDay, &y, &m, &d );
-    if ( y < 1970 )
-    {
-        y = 70;
-        m = 1;
-        d = 1;
-    }
-    tmRep.tm_year = y - 1900 ;
-    tmRep.tm_mon = m-1;
-    tmRep.tm_mday = d;
-    tmRep.tm_hour = 0;
-    tmRep.tm_min = 0;
-    tmRep.tm_sec = 0;
-    tmRep.tm_isdst = 0;
-    
-    t = mktime( &tmRep );
-    return t;
-}
-
-//===========================================================================
-// toString
-//===========================================================================
-string ccruncher::Date::toString() const
-{
-  int y, m, d;
-  char aux[] = "dd/mm/yyyy ";
-  aux[10] = 0;
-  JdToYmd( lJulianDay, &y, &m, &d );
-  sprintf(aux, "%02d/%02d/%04d", d, m, y);
-  return string(aux);
-}
-
-//===========================================================================
-// returns number of days in month
-//===========================================================================
-int ccruncher::Date::numDaysInMonth(int m, int y)
-{
-  if (m==4 || m==6 || m==9 || m==11)
+  switch( getCentury(y) % 400 )
   {
-    return 30;
+    case 0:
+      return 2;
+    case 100:
+      return 0;
+    case 200:
+      return 5;
+    case 300:
+      return 3;
+    default:
+      assert(false);
+      return -1;
   }
-  else if (m == 2)
+}
+
+//===========================================================================
+// check if given year is a leap year
+//===========================================================================
+bool ccruncher::Date::isLeapYear(int y)
+{
+  if (y%4!=0 || y%100==0)
   {
-    if (Date::isLeapYear(y))
-    {
-      return 29;
-    }
-    else
-    {
-      return 28;
-    }
+    return false;
   }
   else
   {
-    return 31;
+    return true;
   }
+}
+
+//===========================================================================
+// check if given year is a leap year
+//===========================================================================
+bool ccruncher::Date::isLeapYear() const
+{
+  return isLeapYear(getYear());
 }
 
 //===========================================================================
@@ -420,89 +322,45 @@ int ccruncher::Date::numDaysInYear(int y)
 }
 
 //===========================================================================
-// output operator
+// returns number of days in year
 //===========================================================================
-ostream & ccruncher::operator << (ostream& os, const Date& d)
+int ccruncher::Date::numDaysInYear() const
 {
-  os << d.toString();
-  return os;
+  return numDaysInYear(getYear());
 }
 
 //===========================================================================
-// increment n number of months
+// returns number of days in month
 //===========================================================================
-Date ccruncher::addMonths(const Date& inDate, const int& num_months)
+int ccruncher::Date::numDaysInMonth(int m, int y)
 {
-  int y1, m1, d1;
-  inDate.YMD( &y1, &m1, &d1 );
-
-  if (num_months == 0) {
-    return inDate;
-  }
-
-  int num_years = num_months/12;
-  if (num_years != 0) {
-    y1 += num_years;
-  }
-
-  int nmonths = num_months%12;
-  if (nmonths == 0) {
-    return Date(d1, m1, y1);
-  }
-
-  if (num_months > 0) {
-    if (m1+nmonths<=12) {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
-      return Date(nd, m1+nmonths, y1);
-    }
-    else {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths-12, y1+1));
-      return Date(nd, m1+nmonths-12, y1+1);
-    }
-  }
-  else {
-    if (m1+nmonths>=1) {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
-      return Date(nd, m1+nmonths, y1);
-    }
-    else {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths+12, y1-1));
-      return Date(nd, m1+nmonths+12, y1-1);
-    }
-  }
-
-  assert(false);
-  return Date(1,1,1);
-}
-
-//===========================================================================
-// minimum of 2 dates
-//===========================================================================
-Date ccruncher::min(const Date &d1, const Date &d2)
-{
-  if (d1 < d2)
+  if (m==4 || m==6 || m==9 || m==11)
   {
-    return d1;
+    return 30;
   }
-  else 
+  else if (m == 2)
   {
-    return d2;
+    if (isLeapYear(y))
+    {
+      return 29;
+    }
+    else
+    {
+      return 28;
+    }
+  }
+  else
+  {
+    return 31;
   }
 }
 
 //===========================================================================
-// maximum of 2 dates
+// returns number of days in month
 //===========================================================================
-Date ccruncher::max(const Date &d1, const Date &d2)
+int ccruncher::Date::numDaysInMonth() const
 {
-  if (d1 < d2)
-  {
-    return d2;
-  }
-  else 
-  {
-    return d1;
-  }
+  return numDaysInMonth(getMonth(), getYear());
 }
 
 //===========================================================================
@@ -528,3 +386,387 @@ bool ccruncher::Date::valid(int d, int m, int y)
   }
 }
 
+//===========================================================================
+// check if is a valid date
+//===========================================================================
+bool ccruncher::Date::valid() const
+{
+  return valid(getDay(), getMonth(), getYear());
+}
+
+//===========================================================================
+// postfix operator
+//===========================================================================
+Date ccruncher::Date::operator ++(int)
+{
+  Date d = *this;
+  *this = nextDate(d);
+  return d;
+}
+
+//===========================================================================
+// prefix operator
+//===========================================================================
+Date ccruncher::Date::operator ++()
+{
+  *this = nextDate(*this);
+  return *this;
+}
+
+//===========================================================================
+// postfix operator, return current value
+//===========================================================================
+Date ccruncher::Date::operator --(int)
+{
+  Date d = *this;
+  *this = previousDate(*this);
+  return d;
+}
+
+//===========================================================================
+// prefix operator, return new value
+//===========================================================================
+Date ccruncher::Date::operator --()
+{
+  *this = previousDate(*this);
+  return *this;
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator == (const Date& d1, const Date& d2)
+{
+  if ((d1.getDay()==d2.getDay()) && (d1.getMonth()==d2.getMonth()) && (d1.getYear()==d2.getYear()))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator !=(const Date& d1, const Date& d2)
+{
+  return !(d1==d2);
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator < (const Date& d1, const Date& d2)
+{
+  if (d1.getYear()<d2.getYear())
+  {
+    return true;
+  }
+  else if (d1.getYear()>d2.getYear())
+  {
+    return false;
+  }
+  else
+  {
+    if (d1.getMonth()<d2.getMonth())
+    {
+      return true;
+    }
+    else if (d1.getMonth()>d2.getMonth())
+    {
+      return false;
+    }
+    else
+    {
+      if (d1.getDay()<d2.getDay())
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+  }
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator > (const Date& d1, const Date& d2)
+{
+  if (d1==d2)
+  {
+    return false;
+  }
+  else if (d1<d2)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator <=(const Date& d1, const Date& d2)
+{
+  if (d1==d2)
+  {
+    return true;
+  }
+  else
+  {
+    return (d1<d2);
+  }
+}
+
+//===========================================================================
+// comparation operator
+//===========================================================================
+bool ccruncher::operator >=(const Date& d1, const Date& d2)
+{
+  if (d1==d2)
+  {
+    return true;
+  }
+  else
+  {
+    return (d1>d2);
+  }
+}
+
+//===========================================================================
+// roll-up 1 day the Date
+//===========================================================================
+Date ccruncher::nextDate(const Date& d)
+{
+  if (d.getDay()+1 <= Date::numDaysInMonth(d.getMonth(), d.getYear()))
+  {
+    return Date(d.getDay()+1, d.getMonth(), d.getYear());
+  }
+  else if (d.getMonth()+1 <= 12)
+  {
+    return Date(1, d.getMonth()+1, d.getYear());
+  }
+  else
+  {
+    return Date(1, 1, d.getYear()+1);
+  }
+}
+
+//===========================================================================
+// roll-down 1 day the Date
+//===========================================================================
+Date ccruncher::previousDate(const Date& d)
+{
+  if (d.getDay() > 1)
+  {
+    return Date(d.getDay()-1, d.getMonth(), d.getYear());
+  }
+  else if (d.getMonth() > 1)
+  {
+    int nd = Date::numDaysInMonth(d.getMonth()-1, d.getYear());
+    return Date(nd, d.getMonth()-1, d.getYear());
+  }
+  else
+  {
+    return Date(31, 12, d.getYear()-1);
+  }
+}
+
+//===========================================================================
+// return long with yyyymmdd
+//===========================================================================
+long ccruncher::Date::longDate() const
+{
+  return getYear() * 10000 + getMonth() * 100 + getDay();
+}
+
+//===========================================================================
+// output operator
+//===========================================================================
+ostream & ccruncher::operator << (ostream& os, const Date& d)
+{
+  os << d.toString();
+
+  return os;
+}
+
+//===========================================================================
+// increment n number of days
+//===========================================================================
+Date ccruncher::operator + (const Date& d, const int& days)
+{
+  if (days<0)
+  {
+    return (d-(-days));
+  }
+  else
+  {
+    Date ret = d;
+
+    for (int day=1;day<=days;++day)
+    {
+      ret = ccruncher::nextDate(ret);
+    }
+
+    return ret;
+  }
+}
+
+//===========================================================================
+// increment n number of days
+//===========================================================================
+Date ccruncher::operator += (Date& d, const int& days)
+{
+  d = (d+days);
+  return d;
+}
+
+//===========================================================================
+// decrement n number of days
+//===========================================================================
+Date ccruncher::operator - (const Date& d, const int& days)
+{
+  if (days<0)
+  {
+    return (d+(-days));
+  }
+  else
+  {
+    Date ret=d;
+
+    for (int day=0; day<days; ++day)
+    {
+      ret = ccruncher::previousDate(ret);
+    }
+
+    return ret;
+  }
+}
+
+//===========================================================================
+// decrement n number of days
+//===========================================================================
+Date ccruncher::operator -= (Date& d, const int& days)
+{
+  d = (d-days);
+  return d;
+}
+
+//===========================================================================
+// increment n number of months
+//===========================================================================
+Date ccruncher::addMonths(const Date& inDate, const int& no_months)
+{
+  Date d=inDate;
+
+  if (no_months == 0)
+  {
+    return inDate;
+  }
+
+  int no_years = no_months/12;
+
+  if (no_years != 0)
+  {
+    d.setYear(inDate.getYear()+no_years);
+  }
+
+  int nmonths = no_months%12;
+
+  if (nmonths == 0)
+  {
+    return d;
+  }
+
+  if (no_months > 0)
+  {
+    if (d.getMonth()+nmonths<=12)
+    {
+      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
+      return Date(nd, d.getMonth()+nmonths,d.getYear());
+    }
+    else
+    {
+      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths-12,d.getYear()+1));
+      return Date(nd, d.getMonth()+nmonths-12,d.getYear()+1);
+    }
+  }
+  else
+  {
+    if (d.getMonth()+nmonths>=1)
+    {
+      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths,d.getYear()));
+      return Date(nd, d.getMonth()+nmonths,d.getYear());
+    }
+    else
+    {
+      int nd = min(d.getDay(), Date::numDaysInMonth(d.getMonth()+nmonths+12,d.getYear()-1));
+      return Date(nd, d.getMonth()+nmonths+12,d.getYear()-1);
+    }
+  }
+
+  cerr << "Date::AddMonths():  error!" << endl;
+  return inDate;  // something wroong if arrive here
+}
+
+//===========================================================================
+// increment 1 month
+//===========================================================================
+Date ccruncher::nextMonth(const Date& d)
+{
+  return ccruncher::addMonths(d, 1);
+}
+
+//===========================================================================
+// toString
+//===========================================================================
+string ccruncher::Date::toString() const
+{
+  char aux[] = "dd/mm/yyyy ";
+  aux[10] = 0;
+
+  sprintf(aux, "%02d/%02d/%04d", getDay(), getMonth(), getYear());
+
+  return string(aux);
+}
+
+//===========================================================================
+// return days between date1 and date2
+//===========================================================================
+int ccruncher::operator -(const Date &d1, const Date &d2)
+{
+  int ret = 0;
+
+  if (d1 == d2)
+  {
+    return 0;
+  }
+  else if (d1 < d2)
+  {
+    return -(d2-d1);
+  }
+
+  if (d1.getYear() != d2.getYear())
+  {
+    ret += Date::numDaysInYear(d2.getYear()) - d2.getDayOfYear();
+
+    for (int i=d2.getYear()+1;i<d1.getYear();i++)
+    {
+      ret += Date::numDaysInYear(i);
+    }
+
+    return ret + d1.getDayOfYear();
+  }
+  else
+  {
+    return d1.getDayOfYear() - d2.getDayOfYear();
+  }
+}

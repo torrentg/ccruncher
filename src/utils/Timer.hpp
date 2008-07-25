@@ -22,16 +22,16 @@
 // Timer.hpp - Timer header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . running_ variable changed from int to boolean
 //
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . replaced clock() function by gettimeofday() function
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -43,6 +43,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <ctime>
 
 //---------------------------------------------------------------------------
 

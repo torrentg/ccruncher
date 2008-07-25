@@ -22,37 +22,33 @@
 # makefile - a simple makefile to create pdf doc - $Rev$
 # --------------------------------------------------------------------------
 #
-# 2005/09/01 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/01 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added Rev (aka LastChangedRevision) svn tag
-#
-# 2007/07/28 - Gerard Torrent [gerard@mail.generacio.com]
-#   . removed makeindex command
-#   . replaced ccruncher.aux, etc. by wildcards
 #
 #***************************************************************************
 
 all:
 	latex ccruncher
 	bibtex ccruncher
+	makeindex ccruncher
 	latex ccruncher
 	latex ccruncher
 	dvipdfm ccruncher
 
 clean:
-	rm -f *.aux
-	rm -f *.bbl
-	rm -f *.blg
-	rm -f *.dvi
-	rm -f *.idx
-	rm -f *.ilg
-	rm -f *.ind
-	rm -f *.toc
-	rm -f *.log
+	rm -f ccruncher.aux
+	rm -f ccruncher.bbl
+	rm -f ccruncher.blg
+	rm -f ccruncher.dvi
+	rm -f ccruncher.idx
+	rm -f ccruncher.ilg
+	rm -f ccruncher.ind
+	rm -f ccruncher.toc
+	rm -f ccruncher.log
 	rm -f *~
 
 install:
 	cp ccruncher.pdf ../
-

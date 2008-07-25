@@ -22,31 +22,28 @@
 // TransitionMatrix.hpp - TransitionMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class refactoring
 //
-// 2006/01/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed Forward Default Rate references
-//
-// 2006/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . forced explicit friend function declaration
+// 2006/01/03 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . removed Forward Default Rate references//
 //
 //===========================================================================
 
@@ -57,6 +54,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
@@ -129,15 +127,6 @@ class TransitionMatrix : public ExpatHandlers
     friend void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
 
 };
-
-//---------------------------------------------------------------------------
-
-  // returns equivalent transition matrix that covers t months
-  TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
-  // computes Cumulated Default Forward Rate
-  void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-  // computes survival function related to this transition matrix
-  void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

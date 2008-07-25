@@ -22,35 +22,30 @@
 // Asset.hpp - Asset header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Interests class refactoring
 //   . Asset refactoring
 //
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
-//
-// 2007/07/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added asset creation date
-//   . getLosses function reviewed
-//   . added precomputeLosses function
 //
 //===========================================================================
 
@@ -64,6 +59,7 @@
 #include <vector>
 #include "interests/Interest.hpp"
 #include "interests/Interests.hpp"
+#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
@@ -87,27 +83,19 @@ class Asset : public ExpatHandlers
     string id;
     // asset name
     string name;
-    // minimum event date (= creation date)
-    Date mindate;
-    // maximum event date
-    Date maxdate;
     // segmentation-segment relations
     map<int,int> belongsto;
     // cashflow values
     vector<DateValues> data;
     // pointer to segmentations list
     Segmentations *segmentations;
-    // precomputed losses at time nodes
-    vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
 
-    // returns data index by right, -1 if don't exist
-    int getRightIdx(Date d);
-    // returns cashflow sum from given date
-    double getCashflowSum(Date d, const Interest &);
-    // precompute loss at d2
-    double precomputeLoss(const Date d1, const Date d2, const Interest &spot);
+    // compute cashflow 
+    double getVCashFlow(Date &date1, Date &date2, const Interest &, bool);
+    // compute recovery
+    double getVRecovery(Date &date1, Date &date2, const Interest &);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation
@@ -116,13 +104,12 @@ class Asset : public ExpatHandlers
 
   public:
 
+    // default constructor
+    Asset();
     // constructor
-    Asset(Segmentations &);
+    Asset(const Segmentations &);
     // destructor
     ~Asset();
-
-    // hash key (to speed up equals by id)
-    unsigned long hkey;
 
     // return asset id
     string getId(void) const;
@@ -130,10 +117,8 @@ class Asset : public ExpatHandlers
     string getName(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // precompute losses at given dates
-    void precomputeLosses(const vector<Date> &dates, const Interests &interests);
-    // returns precomputed loss at requested time node index
-    double getLoss(int k);
+    // return losses at given dates
+    void getLosses(Date *dates, int n, Interests &interests, double *ret);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment
@@ -142,12 +127,6 @@ class Asset : public ExpatHandlers
     int getSegment(int isegmentation);
     // reset object content
     void reset(Segmentations *);
-    // free memory allocated by DateValues
-    void deleteData();
-    // returns minimum event date
-    Date getMinDate();
-    // returns maximum event date
-    Date getMaxDate();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

@@ -22,20 +22,21 @@
 // TimerTest.cpp - TimerTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
 #include <cmath>
 #include "utils/Timer.hpp"
 #include "utils/TimerTest.hpp"
@@ -70,7 +71,7 @@ void ccruncher_test::TimerTest::test1()
   double x = 2.1;
   Timer timer;
 
-  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
   timer.start();
 
   // making some stuff
@@ -97,7 +98,7 @@ void ccruncher_test::TimerTest::test1()
 
   // reseting timer (acumulated time = 0 seconds)
   timer.reset();
-  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
 }
 
 //===========================================================================

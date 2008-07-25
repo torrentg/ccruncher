@@ -22,25 +22,25 @@
 // DateValues.hpp - DateValues header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added recovery value
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added constructor based on DOMNode
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . netting replaced by recovery
 //
 //===========================================================================
@@ -51,6 +51,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------

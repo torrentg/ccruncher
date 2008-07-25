@@ -22,37 +22,34 @@
 // CorrelationMatrix.cpp - CorrelationMatrix code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug when correlation = 0 and exist only 1 sector
 //
-// 2005/04/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to validation
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed pointers by references
 //   . Sectors class refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -62,6 +59,7 @@
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
+#include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
 // private initializator
@@ -75,7 +73,7 @@ void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 
   if (n <= 0)
   {
-    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
+    throw Exception("CorrelationMatrix::init(): invalid matrix range");
   }
 
   // inicializing matrix
@@ -121,28 +119,39 @@ double ** ccruncher::CorrelationMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = (*sectors).getIndex(sector1);
-  int col = (*sectors).getIndex(sector2);
+  int row = (*sectors)[sector1].order;
+  int col = (*sectors)[sector2].order;
 
   // checking index sector
   if (row < 0 || col < 0)
   {
-    string msg = "undefined sector at <sigma>, sector1=" + sector1 + ", sector2=" + sector2;
+    string msg = "CorrelationMatrix::insertSigma(): undefined sector at <sigma> ";
+    msg += sector1;
+    msg += " -> ";
+    msg += sector2;
     throw Exception(msg);
   }
 
   // checking value
   if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
   {
-    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
-                 Format::double2string(value);
+    string msg = "CorrelationMatrix::insertSigma(): value[";
+    msg += sector1;
+    msg += "][";
+    msg += sector2;
+    msg += "] out of range: ";
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <sigma>";
+    string msg = "CorrelationMatrix::insertSigma(): redefined element [";
+    msg += sector1;
+    msg += "][";
+    msg += sector2;
+    msg += "] in <sigma>";
     throw Exception(msg);
   }
 
@@ -213,8 +222,11 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "non defined correlation element [" + Format::int2string(i+1) + 
-                     "][" + Format::int2string(j+1) + "]";
+        string msg = "CorrelationMatrix::validate(): undefined element [";
+        msg += Format::int2string(i+1);
+        msg +=  "][";
+        msg += Format::int2string(j+1);
+        msg += "]";
         throw Exception(msg);
       }
     }

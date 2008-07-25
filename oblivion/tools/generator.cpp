@@ -111,14 +111,14 @@ int main(int argc, char *argv[])
   {
       { "help",         0,  NULL,  300 },
       { "version",      0,  NULL,  301 },
-      { "nborrowers",   1,  NULL,  302 },
+      { "nclients",     1,  NULL,  302 },
       { "nassets",      1,  NULL,  303 },
       { "copyright",    0,  NULL,  304 },
       { NULL,           0,  NULL,   0  }
   };
 
   string sfilename = "";
-  long nborrowers = 0L;
+  long nclients = 0L;
   long nassets = 0L;
 
   // parsing options
@@ -147,20 +147,20 @@ int main(int argc, char *argv[])
           version();
           return 0;
 
-      case 302: // --nborrowers (set number borrowers)
+      case 302: // --nclients (set number clients)
           try
           {
-            string sborrowers = string(optarg);
-            nborrowers = Parser::longValue(sborrowers);
+            string sclients = string(optarg);
+            nclients = Parser::longValue(sclients);
           }
           catch(Exception &e)
           {
-            cerr << "invalid nborrowers value" << endl;
+            cerr << "invalid nclients value" << endl;
             return 1;
           }
           break;
 
-      case 303: // --nassets (set number assets)
+      case 303: // --nassets (set number clients)
           try
           {
             string sassets = string(optarg);
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
   }
 
   // checking basic arguments existence
-  if (nborrowers == 0L || nassets == 0L)
+  if (nclients == 0L || nassets == 0L)
   {
     cerr << "required arguments not especified" << endl;
     cerr << "use --help option for more information" << endl;
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
   try
   {
-    run(sfilename, nborrowers, nassets);
+    run(sfilename, nclients, nassets);
   }
   catch(Exception &e)
   {
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, int nborrowers, int nassets) throw(Exception)
+void run(string filename, int nclients, int nassets) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -239,6 +239,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   IData idata = IData(filename, false);
 
   cout << "<?xml version='1.0' encoding='ISO-8859-1'?>\n";
+  //cout << "<!DOCTYPE creditcruncher SYSTEM 'creditcruncher-0.3.dtd'>\n";
   cout << "<ccruncher>\n";
   cout << idata.getParams().getXML(2);
   cout << idata.getInterests().getXML(2);
@@ -251,7 +252,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   cout << idata.getCorrelationMatrix().getXML(2);
   cout << idata.getSegmentations().getXML(2);
   cout << "  <portfolio>\n";
-  printXMLPortfolio(2, idata, nborrowers, nassets);
+  printXMLPortfolio(2, idata, nclients, nassets);
   cout << "  </portfolio>\n";
   cout << "</ccruncher>\n";
 }
@@ -259,7 +260,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
 //===========================================================================
 // getXMLPortfolio
 //===========================================================================
-void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) throw(Exception)
+void printXMLPortfolio(int ilevel, IData &idata, int nclients, int nassets) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -269,27 +270,26 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
   int nsectors = idata.getSectors().size();
   Date date1 = idata.getParams().begindate;
 
-  for (int i=1;i<=nborrowers;i++)
+  for (int i=1;i<=nclients;i++)
   {
-    cout << spc2 + "<borrower ";
+    cout << spc2 + "<client ";
     cout << "rating='" + idata.getRatings()[rand()%(nratings-1)].name + "' ";
     cout << "sector='" + idata.getSectors()[rand()%(nsectors)].name + "' ";
-    cout << "name='borrower" + Format::int2string(i) + "' ";
+    cout << "name='client" + Format::int2string(i) + "' ";
     cout << "id='" + Format::int2string(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
     {
       cout << spc3;
       cout << "<asset name='bond' ";
-      cout << "id='" + Format::int2string(i) + "-" + Format::int2string(j) + " ";
-      cout << "date='" + Format::date2string(date1) + "'>\n";
+      cout << "id='" + Format::int2string(i) + "-" + Format::int2string(j) + "'>\n";
 
       cout << getXMLData(ilevel+6, date1, 120, getNominal(), 0.07, 120);
 
       cout << spc3 + "</asset>\n";
     }
 
-    cout << spc2 +  "</borrower>\n" << endl;
+    cout << spc2 +  "</client>\n" << endl;
   }
 }
 
@@ -336,7 +336,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double r
     ret += spc2;
     ret += "<values at='" + Format::date2string(events[i].date) + "' ";
     ret += "cashflow='" + Format::double2string(max(0.0, events[i].cashflow)) + "' ";
-    ret += "recovery='" + Format::double2string(events[i].netting) + "' ";
+    ret += "netting='" + Format::double2string(events[i].netting) + "' ";
     ret += "/>\n";
   }
 
@@ -361,24 +361,24 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: generator [options] --nborrowers=num1 --nassets=num2 file.xml\n"
+  "  usage: generator [options] --nclients=num1 --nassets=num2 file.xml\n"
   "\n"
   "  description:\n"
   "    generator is a creditcruncher tool for generating input test files\n"
   "    ratings and sectors are extracted from template file\n"
   "  arguments:\n"
-  "    file.xml         file used as template\n"
-  "    --nborrowers=val number of borrowers in portfolio\n"
-  "    --nassets=val    number of assets per borrower\n"
+  "    file.xml        file used as template\n"
+  "    --nclients=val  number of clients in portfolio\n"
+  "    --nassets=val   number of assets per client\n"
   "  options:\n"
-  "    --help           show this message and exit\n"
-  "    --version        show version and exit\n"
-  "    --copyright      show copyright and exit\n"
+  "    --help          show this message and exit\n"
+  "    --version       show version and exit\n"
+  "    --copyright     show copyright and exit\n"
   "  return codes:\n"
-  "        0            OK. finished without errors\n"
-  "        1            KO. finished with errors\n"
+  "    0          OK. finished without errors\n"
+  "    1          KO. finished with errors\n"
   "  examples:\n"
-  "    generator --nborrowers=50000 --nassets=4 template.xml\n"
+  "    generator --nclients=20 --nassets=3 template.xml\n"
   << endl;
 }
 

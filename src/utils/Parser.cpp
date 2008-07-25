@@ -22,16 +22,16 @@
 // Parser.cpp - Parser code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added support for char * type
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . format methods segregated to Format class
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -43,6 +43,8 @@
 #include <iostream>
 #include <sstream>
 #include "utils/Parser.hpp"
+
+using namespace ccruncher;
 
 //===========================================================================
 // parse an integer
@@ -66,13 +68,13 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
   }
   catch(Exception)
   {
-    throw Exception("error parsing integer value " + string(pnum) + ": not a number");
+    throw Exception("Parser::intValue(): invalid number");
   }
 
   // checking that is an integer
   if (aux < INT_MIN || INT_MAX < aux)
   {
-    throw Exception("error parsing integer value " + string(pnum) + ": value out of range");
+    throw Exception("Parser::intValue(): value out of range");
   }
   else
   {
@@ -104,7 +106,7 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
   // checking that is a long
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
-    throw Exception("error parsing long value " + string(pnum) + ": not a number");
+    throw Exception("Parser::longValue(): invalid long number");
   }
   else
   {
@@ -136,7 +138,7 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   // checking that is a double
   if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
   {
-    throw Exception("error parsing double value " + string(pnum) + ": not a number");
+    throw Exception("Parser::doubleValue(): invalid double value");
   }
   else
   {
@@ -179,7 +181,7 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
   }
   else
   {
-    throw Exception("error parsing boolean value " + str + " : distinct than 'true' or 'false'");
+    throw Exception("Parser::boolValue(): invalid boolean value");
   }
 }
 
@@ -198,7 +200,6 @@ bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
   }
   else
   {
-    throw Exception("error parsing boolean value " + string(cstr) + " : distinct than 'true' or 'false'");
+    throw Exception("Parser::boolValue(): invalid boolean value");
   }
 }
-

@@ -22,16 +22,16 @@
 // Logger.hpp - Logger header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/03/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . const + referenced string arguments
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

@@ -1,4 +1,4 @@
-
+// 
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
@@ -22,104 +22,95 @@
 // Montecarlo.cpp - MonteCarlo code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed period time resolution (year->month)
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . removed aggregators class
 //   . added new SegmentAggregator class
 //
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added interests support
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added new check over survival defined user
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented MPI support
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/09/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed date list output
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added onlyactive argument to sortClients() method
 //
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
 //   . reindexed copulas vector
 //
-// 2005/09/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added timer at random number generation step
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sectors refactoring
 //   . Ratings refactoring
 //   . Segmentations refactoring
 //   . Survival refactoring
 //   . TransitionMatrix refactoring
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Portfolio refactoring
 //   . IData refactoring
 //   . SegmentAggregator refactoring
 //   . MonteCarlo refactoring
 //   . generic copula array
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
-//
-// 2006/12/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . solved bug in mpi version (SegmentAggregator::touch() 
-//     called by all ranks, not just master)
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method printPrecomputedLosses()
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
 #include <cfloat>
 #include <MersenneTwister.h>
 #include "kernel/MonteCarlo.hpp"
-#include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/GaussianCopula.hpp"
 #include "utils/Utils.hpp"
@@ -127,9 +118,17 @@
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
-#include "utils/File.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
+
+#ifdef USE_MPI
+  #include <mpi.h>
+  #define MPI_VAL_WORK 1025   // work tag (see task variable)
+  #define MPI_VAL_STOP 1026   // stop tag (see task variable)
+  #define MPI_TAG_DATA 1027   // data tag (used to send results)
+  #define MPI_TAG_INFO 1028   // info tag (used to send results)
+  #define MPI_TAG_TASK 1029   // task tag (used to send results)
+  #define MPI_TAG_EXIT 1030   // task tag (used to send results)
+#endif
 
 //===========================================================================
 // constructor
@@ -168,10 +167,12 @@ void ccruncher::MonteCarlo::reset()
 
   ratings = NULL;
   sectors = NULL;
-  borrowers = NULL;
+  clients = NULL;
 
   copula = NULL;
   survival = NULL;
+  mtrans = NULL;
+  dates = NULL;
   ittd = NULL;
 }
 
@@ -180,10 +181,19 @@ void ccruncher::MonteCarlo::reset()
 //===========================================================================
 void ccruncher::MonteCarlo::release()
 {
+  // deallocating transition matrix object
+  if (mtrans != NULL) { delete mtrans; mtrans = NULL; }
+
   // deallocating copula
   if (copula != NULL) { delete copula; copula = NULL; }
 
   // survival fuction object deallocated by IData (its container)
+
+  // deallocating dates vector
+  if (dates != NULL) {
+    Arrays<Date>::deallocVector(dates);
+    dates = NULL;
+  }
 
   // deallocating workspace array
   if (ittd != NULL) {
@@ -208,11 +218,11 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
   if (MAXITERATIONS != 0L)
   {
-    throw Exception("Monte Carlo reinitialization not allowed");
+    throw Exception("MonteCarlo::initialize(): reinitialization not allowed");
   }
   else if (fpath == "path not set")
   {
-    throw Exception("error initializing Monte Carlo: output files path not established");
+    throw Exception("MonteCarlo::initialize(): output files path not established");
   }
 
   try
@@ -222,7 +232,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
   catch(Exception &e)
   {
     release();
-    throw Exception(e, "error initializing Monte Carlo");
+    throw Exception(e, "MonteCarlo::initialize()");
   }
 }
 
@@ -238,8 +248,8 @@ void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
   // initializing parameters
   initParams(idata);
 
-  // initializing borrowers
-  initBorrowers(idata);
+  // initializing clients
+  initClients(idata, dates, STEPS);
 
   // initializing ratings and transition matrix
   initRatings(idata);
@@ -292,7 +302,7 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 
   // fixing time-tranches
   begindate = idata.getParams().begindate;
-  dates = idata.getParams().dates;
+  dates = idata.getParams().getDates();
 
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
@@ -307,46 +317,41 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initBorrowers
+// initClients
 //===========================================================================
-void ccruncher::MonteCarlo::initBorrowers(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initClients(const IData &idata, Date *idates, int isteps) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting borrowers to simulate", '-');
+  Logger::trace("fixing clients to simulate", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active borrowers", Format::bool2string(idata.getParams().onlyactive));
-  Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
+  Logger::trace("simulate only active clients", Format::bool2string(idata.getParams().onlyactive));
+  Logger::trace("number of initial clients", Format::long2string(idata.getPortfolio().getClients().size()));
 
-  // sorting borrowers by sector and rating
-  idata.getPortfolio().sortBorrowers(dates[0], dates[STEPS], idata.getParams().onlyactive);
+  // sorting clients by sector and rating
+  idata.getPortfolio().sortClients(idates[0], idates[isteps], idata.getParams().onlyactive);
 
-  // fixing number of borrowers
+  // fixing number of clients
   if (idata.getParams().onlyactive)
   {
-    N = idata.getPortfolio().getNumActiveBorrowers(dates[0], dates[STEPS]);
+    N = idata.getPortfolio().getNumActiveClients(idates[0], idates[isteps]);
   }
   else
   {
-    N = idata.getPortfolio().getBorrowers().size();
+    N = idata.getPortfolio().getClients().size();
   }
 
-  Logger::trace("number of simulated borrowers", Format::long2string(N));
+  Logger::trace("number of simulated clients", Format::long2string(N));
 
-  // checking that exist borrowers to simulate
+  // checking that exist clients to simulate
   if (N == 0)
   {
-    throw Exception("error initializing borrowers: 0 borrowers to simulate");
+    throw Exception("MonteCarlo::init(): 0 clients to simulate");
   }
 
-  // setting borrowers object
-  borrowers = &(idata.getPortfolio().getBorrowers());
-
-  // note: this is the place where it must have the asset losses precomputation.
-  // Asset losses has been moved to Borrower:insertAsset() with the purpose of 
-  // being able flush memory on asset events just after precomputation because 
-  // in massive portfolios memory can be exhausted
+  // setting client object
+  clients = &(idata.getPortfolio().getClients());
 
   // exit function
   Logger::previousIndentLevel();
@@ -419,7 +424,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     // setting logger info
     string sval = Format::int2string(idata.getTransitionMatrix().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("transition matrix period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
+    Logger::trace("initial period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
     double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), STEPS+1);
@@ -443,21 +448,20 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
   Logger::previousIndentLevel();
 }
 
-/*
 //===========================================================================
-// getBorrowerCorrelationMatrix
+// getClientCorrelationMatrix
 //===========================================================================
-double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata)
+double ** ccruncher::MonteCarlo::getClientCorrelationMatrix(const IData &idata)
 {
   double **ret = Arrays<double>::allocMatrix(N, N, 0.0);
   double **scorrels = idata.getCorrelationMatrix().getMatrix();
 
   for (int i=0;i<N;i++)
   {
-    int sector1 = (*borrowers)[i]->isector;
+    int sector1 = (*clients)[i]->isector;
     for(int j=0;j<N;j++)
     {
-      int sector2 = (*borrowers)[j]->isector;
+      int sector2 = (*clients)[j]->isector;
       if (i == j) {
         ret[i][j] = 1.0;
       }
@@ -469,7 +473,6 @@ double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata
 
   return ret;
 }
-*/
 
 //===========================================================================
 // copula construction
@@ -495,14 +498,14 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     // allocating temporal memory
     tmp = Arrays<int>::allocVector(idata.getCorrelationMatrix().size(),0);
 
-    // computing the number of borrowers in each sector
+    // computing the number of clients in each sector
     for(long i=0;i<N;i++)
     {
-      tmp[(*borrowers)[i]->isector]++;
+      tmp[(*clients)[i]->isector]++;
     }
 
     // creating the copula object
-    //copula = new GaussianCopula(N, getBorrowerCorrelationMatrix(idata));
+    //copula = new GaussianCopula(N, getClientCorrelationMatrix(idata));
     copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
 
     // releasing temporal memory
@@ -518,7 +521,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     }
 
     // copula deallocated by release method
-    throw Exception(e, "error ocurred while initializing copula");
+    throw Exception(e, "MonteCarlo::initCopula()");
   }
 
   // if no seed is given /dev/urandom or time() will be used
@@ -561,7 +564,7 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("workspace dimension (= number of borrowers)", Format::long2string(n));
+  Logger::trace("workspace dimension (= number of clients)", Format::long2string(n));
 
   // allocating space
   ittd = Arrays<int>::allocVector(n);
@@ -610,13 +613,13 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
       // initializing SegmentAggregator
       tmp->define(aggregators.size(), i, j, segmentations[i].components);
       tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, *borrowers, N);
+      tmp->initialize(dates, STEPS+1, *clients, N, idata.getInterests());
 
       // adding aggregator to list (only if have elements)
       numsegments++;
       if (tmp->getNumElements() > 0) {
         // creating output file
-        if (fpath != "" && Utils::isMaster()) tmp->touch();
+        if (fpath != "") tmp->touch();
         // add aggregator to list
         aggregators.push_back(tmp);
       } else {
@@ -693,7 +696,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       randomize();
       timer1.stop();
 
-      // simulating default time for each borrower
+      // simulating default time for each client
       timer2.resume();
       simulate();
       timer2.stop();
@@ -738,13 +741,13 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 
     // printing traces
     Logger::trace("elapsed time creating random numbers", Timer::format(timer1.read()));
-    Logger::trace("elapsed time simulating default times", Timer::format(timer2.read()));
+    Logger::trace("elapsed time simulating clients", Timer::format(timer2.read()));
     Logger::trace("elapsed time aggregating data", Timer::format(timer3.read()));
     Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()+timer3.read()));
   }
   catch(Exception &e)
   {
-    throw Exception(e, "error ocurred while executing Monte Carlo");
+    throw Exception(e, "MonteCarlo::execute()");
   }
 
 #ifdef USE_MPI
@@ -859,7 +862,7 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 
       // other messages cause errors
       default:
-        throw Exception("unexpected MPI tag");
+        throw Exception("executeCollector: unexpected MPI tag");
     }
   }
 
@@ -898,12 +901,12 @@ void ccruncher::MonteCarlo::randomize()
 }
 
 //===========================================================================
-// simulate time-to-default for each borrower
-// put result in rpaths[iborrower]
+// simulate time-to-default for each client
+// put result in rpaths[iclient]
 //===========================================================================
 void ccruncher::MonteCarlo::simulate()
 {
-  // for each borrower we simule the time where defaults
+  // for each client we simule the time where defaults
   for (int i=0;i<N;i++) {
     ittd[i] = simTimeToDefault(i);
   }
@@ -913,41 +916,41 @@ void ccruncher::MonteCarlo::simulate()
 // getRandom. Returns requested copula value
 // encapsules antithetic management
 //===========================================================================
-double ccruncher::MonteCarlo::getRandom(int iborrower)
+double ccruncher::MonteCarlo::getRandom(int iclient)
 {
   if (antithetic)
   {
     if (reversed)
     {
-      return copula->get(iborrower);
+      return copula->get(iclient);
     }
     else
     {
-      return 1.0 - copula->get(iborrower);
+      return 1.0 - copula->get(iclient);
     }
   }
   else
   {
-    return copula->get(iborrower);
+    return copula->get(iclient);
   }
 }
 
 //===========================================================================
-// given a borrower, simule time to default
+// given a client, simule time to default
 //===========================================================================
-int ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
+int ccruncher::MonteCarlo::simTimeToDefault(int iclient)
 {
   // rating at t0 is initial rating
-  int r1 = (*borrowers)[iborrower]->irating;
+  int r1 = (*clients)[iclient]->irating;
 
-  // getting random number U[0,1] (correlated with rest of borrowers...)
-  double u = getRandom(iborrower);
+  // getting random number U[0,1] (correlated with rest of clients...)
+  double u = getRandom(iclient);
 
-  // simulate month where this borrower defaults
+  // simulate month where this client defaults
   int month = survival->inverse(r1, u);
 
   // return index time where defaults (always bigger than 0)
-  return std::max(1, int(ceil(double(month)/double(STEPLENGTH))));
+  return max(1, int(ceil(double(month)/double(STEPLENGTH))));
 }
 
 //===========================================================================
@@ -979,7 +982,7 @@ bool ccruncher::MonteCarlo::evalue() throw(Exception)
 void ccruncher::MonteCarlo::setHash(int num)
 {
   assert(num >= 0);
-  hash = std::max(0, num);
+  hash = max(0, num);
 }
 
 //===========================================================================
@@ -990,28 +993,3 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
   fpath = path;
   bforce = force;
 }
-
-//===========================================================================
-// printPrecomputedLosses
-//===========================================================================
-void ccruncher::MonteCarlo::printPrecomputedLosses()
-{
-  cout << "<ccruncher-plosses>" << endl;
-  for(long i=0;i<N;i++)
-  {
-    cout << "  <borrower id=\"" << (*borrowers)[i]->id << "\">" << endl;
-    vector<Asset> &assets = (*borrowers)[i]->getAssets();
-    for(unsigned int j=0;j<assets.size();j++)
-    {
-      cout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
-      for(int k=0; k<STEPS+1; k++)
-      {
-        cout << "      <loss at=\"" << dates[k] << "\" value=\"" << assets[j].getLoss(k) << "\"/>" << endl;
-      }
-      cout << "    </asset>" << endl;
-    }
-    cout << "  </borrower>" << endl;
-  }
-  cout << "</ccruncher-plosses>" << endl;
-}
-

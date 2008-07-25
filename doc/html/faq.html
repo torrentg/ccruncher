@@ -5,18 +5,11 @@
   <head>
     <title>CreditCruncher - FAQ</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <!-- repository version = $Rev$ -->
   </head>
 
   <body>
-    <div id="main-container">
-  	<div id="page-header">
-      <a href="./index.html">
-	  	  <img style="margin-top:35px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
-      </a>
-  	</div>
-  	<br/>
 
     <h1>CreditCruncher - FAQ</h1>
 
@@ -29,9 +22,9 @@
     <p>
       CreditCruncher is a program that uses the Monte Carlo method to compute the 
       credit risk of large portfolios in which assets are mortgages, loans, bonds, 
-      endorsements, or the like (all of them fixed income with a policy buy/sell 
+      endorsements, or the like (all of them of fixed income with a policy buy/sell 
       and hold). The default time is simulated using a gaussian copula, taking into 
-      account the transition matrix (or survival functions) and sectorial correlation 
+      account the transition matrix (or survival function) and sectorial correlation 
       matrix defined by the user.
     </p>
 
@@ -42,9 +35,12 @@
     </table>
 
     <p>
-      CreditCruncher-1.1 is a stable version. If you have any bug or suggestion to report, 
-      please send a mail to <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>
-      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+      CreditCruncher-0.9 has the main framework built and is able to produce outputs.
+      Now we are on the beta development stage (next stage will be production/stable).
+      We need to translate documentation, check results, find bugs, improve
+      documentation, etc. We ask for assistance from the net community. If you desire to
+      take part in this phase, please send a mail to
+      <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>.
     </p>
 
     <table cellpadding="5" width="100%">
@@ -56,7 +52,8 @@
     <p>
       Yes. The document is named <i>CreditCruncher - Technical Document</i> and
       you can find a link <a href="index.html">here</a>. This document is included
-      in all the distributions under the directory <code>docs/</code>.
+      in all the distributions under the directory <code>docs/</code>. It is waiting
+      for a brave man to translate it from Spanish to English.
     </p>
 
     <table cellpadding="5" width="100%">
@@ -92,26 +89,38 @@
 
     <p>
       Yes. CreditCruncher is designed to be very fast. It allows you to evaluate
-      the credit risk of your whole portfolio (there can be more than 50.000 borrowers)
+      the credit risk of your whole portfolio (there can be more than 50.000 clients)
       each day. If ccruncher sunk your computer, you can execute it on a cluster
       enabling the MPI compilation option.
     </p>
 
-    <br/>
-    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
-    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
-    		<table width="100%"><tr>
-    			<td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
-    			</td>
-    			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 30-May-2008
-    			</td>
-    		</tr></table>			
-    	</div></div></div></div></div>
+    <div id="footpage">
+      <div style="height:75px"></div>
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td class="footer" align="left">
+            <a href="index.html">
+              <img src="ccruncher.png" alt="return to home page"
+                height="31" width="88"  />
+            </a>
+            <a href="http://validator.w3.org/check?uri=referer">
+              <img src="http://www.w3.org/Icons/valid-xhtml10"
+                alt="Valid XHTML 1.0!" height="31" width="88" />
+            </a>
+            <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
+              <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+               width="88" height="31" alt="SourceForge.net Logo" />
+            </a>
+          </td>
+          <td class="footer" align="right">
+            Last modified: 11-Feb-2006 &nbsp;
+          </td>
+        </tr>
+      </table>
+      <p style="text-align: center; font-size: smaller;">
+        Copyright &copy; 2004-2006 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+      </p>
     </div>
-    <br/>
 
-  </div>
   </body>
 </html>

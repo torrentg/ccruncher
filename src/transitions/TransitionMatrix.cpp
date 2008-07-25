@@ -22,55 +22,51 @@
 // TransitionMatrix.cpp - TransitionMatrix code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . implemented Strings class
 //
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added property 4 check
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Ratings refactoring
 //   . class refactoring
 //
-// 2006/01/03 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added bound checking at survival function
 //   . removed Forward Default Rate references
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
-#include <climits>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
@@ -91,7 +87,7 @@ void ccruncher::TransitionMatrix::init(const Ratings &ratings_) throw(Exception)
 
   if (n <= 0)
   {
-    throw Exception("invalid transition matrix dimension (" + Format::int2string(n) + " <= 0)");
+    throw Exception("TransitionMatrix::init(): invalid matrix range");
   }
 
   // initializing matrix
@@ -165,27 +161,39 @@ double ** ccruncher::TransitionMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
-  int row = (*ratings).getIndex(rating1);
-  int col = (*ratings).getIndex(rating2);
+  int row = (*ratings)[rating1].order;
+  int col = (*ratings)[rating2].order;
 
   // validating ratings
   if (row < 0 || col < 0)
   {
-    throw Exception("undefined rating at <transition> " + rating1 + " -> " + rating2);
+    string msg = "TransitionMatrix::insertTransition(): undefined rating at <transition> ";
+    msg += rating1;
+    msg += " -> ";
+    msg += rating2;
+    throw Exception(msg);
   }
 
   // validating value
   if (value < -epsilon || value > (1.0 + epsilon))
   {
-    string msg = " transition value[" + rating1 + "][" + rating2 + "] out of range: " + 
-                 Format::double2string(value);
+    string msg = "TransitionMatrix::insertTransition(): value[";
+    msg += rating1;
+    msg += "][";
+    msg += rating2;
+    msg += "] out of range: ";
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that not exist
   if (!isnan(matrix[row][col]))
   {
-    string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <mtransitions>";
+    string msg = "TransitionMatrix::insertTransition(): redefined element [";
+    msg += rating1;
+    msg += "][";
+    msg += rating2;
+    msg += "] in <mtransitions>";
     throw Exception(msg);
   }
 
@@ -255,7 +263,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     {
       if (matrix[i][j] == NAN)
       {
-        throw Exception("transition matrix have an undefined element [" + Format::int2string(i+1) + "][" + Format::int2string(j+1) + "]");
+        throw Exception("TransitionMatrix::validate(): transition matrix have an undefined element");
       }
     }
   }
@@ -272,7 +280,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-epsilon) || sum > (1.0+epsilon))
     {
-      throw Exception("transition matrix row " + Format::int2string(i+1) + " don't sums 1");
+      throw Exception("TransitionMatrix::validate(): transition matrix row " + Format::int2string(i+1) + " not sums 1");
     }
   }
 
@@ -289,13 +297,13 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
       }
       else
       {
-        throw Exception("found 2 or more default ratings in transition matrix");
+        throw Exception("TransitionMatrix::validate(): found 2 or more default ratings");
       }
     }
   }
   if (indexdefault < 0)
   {
-    throw Exception("default rating not found");
+    throw Exception("TransitionMatrix::validate(): default rating not found");
   }
 
   // checking property 4 (all rating can be defaulted)
@@ -314,7 +322,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (bcon == false)
     {
-      throw Exception("transition matrix: property 4 not satisfied");
+      throw Exception("TransitionMatrix::validate(): property 4 not satisfied");
     }
   }
 }

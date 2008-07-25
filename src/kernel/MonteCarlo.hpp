@@ -22,48 +22,44 @@
 // Montecarlo.hpp - MonteCarlo header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //   . added new SegmentAggregator class
 //
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
 //   . generic copula array
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method printPrecomputedLosses()
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -73,14 +69,17 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
 #include "kernel/IData.hpp"
 #include "kernel/SegmentAggregator.hpp"
+#include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
+#include "correlations/CorrelationMatrix.hpp"
 #include "math/Copula.hpp"
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Portfolio.hpp"
+#include "portfolio/Client.hpp"
+#include "segmentations/Segmentations.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
@@ -100,32 +99,34 @@ class MonteCarlo
     Ratings *ratings;
     Sectors *sectors;
     vector<SegmentAggregator *> aggregators;
-    vector<Borrower *> *borrowers;
+    vector<Client *> *clients;
 
-    /** maximum number of iterations */
+    /** numero maxim de iteracions */
     long MAXITERATIONS;
-    /** maximum execution time */
+    /** numero maxim de segons */
     long MAXSECONDS;
-    /** number of time steps */
+    /** numero de talls temporals */
     int STEPS;
-    /** step length */
+    /** amplada de cada pas temporal */
     int STEPLENGTH;
-    /** number of borrowers (taking into account onlyActiveBorrowers flag) */
+    /** numero de clients */
     long N;
-    /** iterations counter */
+    /** contador de iteracions */
     long CONT;
-    /** initial date */
+    /** data de inici de la simulacio */
     Date begindate;
     /* antithetic technologie for simetric copulas */
     bool antithetic;
 
     /** transition matrix (size = 1) (used by rating-path method, canbe used by time-to-default method) */
     Survival *survival;
+    /** survival function (can be used by time-to-default method) */
+    TransitionMatrix *mtrans;
     /** copula used to simulate correlations */
     Copula *copula;
     /** date per time tranch (size = M) */
-    vector<Date> dates;
-    /** simulated time-to-default per borrower (size = N) */
+    Date *dates;
+    /** simulated time-to-default per client (size = N) */
     int *ittd;
 
     /* management flag for antithetic method (default=false) */
@@ -145,7 +146,7 @@ class MonteCarlo
     // init methods
     void init(IData &) throw(Exception);
     void initParams(const IData &) throw(Exception);
-    void initBorrowers(const IData &) throw(Exception);
+    void initClients(const IData &, Date *, int) throw(Exception);
     void initRatings(const IData &) throw(Exception);
     void initSectors(const IData &) throw(Exception);
     void initTimeToDefault(IData &) throw(Exception);
@@ -157,13 +158,13 @@ class MonteCarlo
     void randomize();
     void simulate();
     bool evalue() throw(Exception);
-    int simTimeToDefault(int iborrower);
-    double getRandom(int iborrower);
+    int simTimeToDefault(int iclient);
+    double getRandom(int iclient);
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
 
     // auxiliary methods
-    //double** getBorrowerCorrelationMatrix(const IData &);
+    double** getClientCorrelationMatrix(const IData &);
 
 
   public:
@@ -175,7 +176,6 @@ class MonteCarlo
     void setHash(int num);
     void initialize(IData &) throw(Exception);
     long execute() throw(Exception);
-    void printPrecomputedLosses();
 
 };
 

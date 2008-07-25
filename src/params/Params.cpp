@@ -22,55 +22,49 @@
 // Params.cpp - Params code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //   . implemented Arrays class
 //
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to seed=0 (random seed)
 //   . added montecarlo.method param to getXML() method
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . allowed maxseconds=0 or maxiterations=0 (0 remove stop criteria)
 //
-// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/09/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed default seed value from -1 to 0
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed default maxiteration and maxseconds values 0 to -1
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed dates management
 //
 //===========================================================================
 
@@ -82,8 +76,9 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Params::Params() : dates(0)
+ccruncher::Params::Params()
 {
+  // posem valors per defecte (incorrectes)
   init();
 }
 
@@ -137,7 +132,6 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 {
   if (isEqual(name,"params")) {
     validate();
-    setDates();
   }
   else if (isEqual(name,"property")) {
     // nothing to do
@@ -150,14 +144,18 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 // return Date array = begindate, begindate+steplength, bengindate+2*steplength
 //===========================================================================
-void ccruncher::Params::setDates()
+Date * ccruncher::Params::getDates() const throw(Exception)
 {
-  dates.clear();
-  dates.reserve(steps+1);
+  validate();
+
+  Date *ret = Arrays<Date>::allocVector(steps+1);
+
   for (int i=0;i<=steps;i++)
   {
-    dates.push_back(addMonths(begindate, i*steplength));
+    ret[i] = addMonths(begindate, i*steplength);
   }
+
+  return ret;
 }
 
 //===========================================================================
@@ -238,7 +236,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
     bool aux = getBooleanAttribute(attributes, "value", false);
     antithetic = aux;
   }
-  else if (name == "portfolio.onlyActiveBorrowers")
+  else if (name == "portfolio.onlyActiveClients")
   {
     bool aux = getBooleanAttribute(attributes, "value", false);
     onlyactive = aux;
@@ -257,37 +255,37 @@ void ccruncher::Params::validate(void) const throw(Exception)
 
   if (begindate == Date(1,1,1900))
   {
-    throw Exception("property time.begindate not defined");
+    throw Exception("Params::validate(): property time.begindate not defined");
   }
 
   if (steps <= 0)
   {
-    throw Exception("property time.steps not defined");
+    throw Exception("Params::validate(): property time.steps not defined");
   }
 
   if (steplength <= 0)
   {
-    throw Exception("property time.steplength not defined");
+    throw Exception("Params::validate(): property time.steplength not defined");
   }
 
   if (maxiterations < 0L)
   {
-    throw Exception("property stopcriteria.maxiterations not defined");
+    throw Exception("Params::validate(): property stopcriteria.maxiterations not defined");
   }
 
   if (maxseconds < 0L)
   {
-    throw Exception("property stopcriteria.maxseconds not defined");
+    throw Exception("Params::validate(): property stopcriteria.maxseconds not defined");
   }
 
   if (copula_type == "")
   {
-    throw Exception("property copula.type not defined");
+    throw Exception("Params::validate(): property copula.type not defined");
   }
 
   if (maxiterations == 0 && maxseconds == 0)
   {
-    throw Exception("non finite stop criteria");
+    throw Exception("Params::validate(): non finite stop criteria");
   }
 }
 
@@ -309,7 +307,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::bool2string(onlyactive) + "'/>\n";
+  ret += spc2 + "<property name='portfolio.onlyActiveClients' value='" + Format::bool2string(onlyactive) + "'/>\n";
   ret += spc1 + "</params>\n";
 
   return ret;
