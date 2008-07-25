@@ -1,0 +1,145 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//
+// ParamsTest.cpp - ParamsTest code
+// --------------------------------------------------------------------------
+//
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . initial release
+//
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from cppUnit to MiniCppUnit
+//
+//===========================================================================
+
+#include <iostream>
+#include "Params.hpp"
+#include "ParamsTest.hpp"
+#include "utils/XMLUtils.hpp"
+
+//===========================================================================
+// setUp
+//===========================================================================
+void ParamsTest::setUp()
+{
+  // nothing to do
+}
+
+//===========================================================================
+// setUp
+//===========================================================================
+void ParamsTest::tearDown()
+{
+  // nothing to do
+}
+
+//===========================================================================
+// test1
+//===========================================================================
+void ParamsTest::test1()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+    <params>\n\
+      <property name='time.begindate' value='18/02/2003'/>\n\
+      <property name='time.steps' value='12'/>\n\
+      <property name='time.steplength' value='2'/>\n\
+      <property name='stopcriteria.maxiterations' value='3000'/>\n\
+      <property name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <property name='copula.type' value='normal'/>\n\
+      <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.antithetic' value='true'/>\n\
+    </params>";
+
+  // creating xml
+  XMLUtils::initialize();
+  DOMBuilder *parser = XMLUtils::getParser();
+  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
+  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+
+  // ratings list creation
+  Params *params = NULL;
+  ASSERT_NO_THROW(params = new Params(*(doc->getDocumentElement())));
+
+  ASSERT(Date("18/02/2003") == params->begindate);
+  ASSERT(12 == params->steps);
+  ASSERT(2 == params->steplength);
+  ASSERT(3000 == params->maxiterations);
+  ASSERT(30000000 == params->maxseconds);
+  ASSERT("normal" == params->copula_type);
+  ASSERT(38765874L == params->copula_seed);
+  ASSERT(true == params->antithetic);
+
+  Date *dates = NULL;
+  ASSERT_NO_THROW(dates = params->getDates());
+
+  ASSERT(Date("18/02/2003") == dates[0]);
+  ASSERT(Date("18/04/2003") == dates[1]);
+  ASSERT(Date("18/06/2003") == dates[2]);
+  ASSERT(Date("18/08/2003") == dates[3]);
+  ASSERT(Date("18/10/2003") == dates[4]);
+  ASSERT(Date("18/12/2003") == dates[5]);
+  ASSERT(Date("18/02/2004") == dates[6]);
+  ASSERT(Date("18/04/2004") == dates[7]);
+  ASSERT(Date("18/06/2004") == dates[8]);
+  ASSERT(Date("18/08/2004") == dates[9]);
+  ASSERT(Date("18/10/2004") == dates[10]);
+  ASSERT(Date("18/12/2004") == dates[11]);
+  ASSERT(Date("18/02/2005") == dates[12]);
+
+  if (dates != NULL) delete [] dates;
+  if (params != NULL) delete params;
+  delete wis;
+  delete parser;
+  XMLUtils::terminate();
+}
+
+//===========================================================================
+// test1
+//===========================================================================
+void ParamsTest::test2()
+{
+  // error: steplength not given
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+    <params>\n\
+      <property name='time.begindate' value='18/02/2003'/>\n\
+      <property name='time.steps' value='12'/>\n\
+      <property name='stopcriteria.maxiterations' value='3000'/>\n\
+      <property name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <property name='copula.type' value='normal'/>\n\
+      <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.antithetic' value='true'/>\n\
+    </params>";
+
+  // creating xml
+  XMLUtils::initialize();
+  DOMBuilder *parser = XMLUtils::getParser();
+  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
+  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
+
+  // ratings list creation
+  Params *params = NULL;
+  ASSERT_THROW(params = new Params(*(doc->getDocumentElement())));
+
+  if (params != NULL) delete params;
+  delete wis;
+  delete parser;
+  XMLUtils::terminate();
+}

@@ -1,0 +1,24 @@
+
+CREDITCRUNCHER TODO
+===================
+
+Works in progress
+-------------------
+
+1. working in pdf documentation explaining methodology used in CreditCruncher
+
+2. working in scripts that generates report using LaTeX and gnuplot
+
+3. working in CreditCruncher site content
+
+
+Future works
+-------------------
+
+1. add optional LAM/MPI support 
+
+2. add covenant support
+
+3. add new copula types
+
+4. add new asset types
