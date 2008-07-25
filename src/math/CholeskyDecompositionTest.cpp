@@ -19,31 +19,22 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CholeskyDecompositionTest.cpp - CholeskyDecompositionTest code - $Rev$
+// CholeskyDecompositionTest.cpp - CholeskyDecompositionTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Arrays class
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <iostream>
 #include <cmath>
-#include "math/CholeskyDecomposition.hpp"
-#include "math/CholeskyDecompositionTest.hpp"
-#include "utils/Arrays.hpp"
+#include "CholeskyDecomposition.hpp"
+#include "CholeskyDecompositionTest.hpp"
+#include "utils/Utils.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -52,7 +43,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::setUp()
+void CholeskyDecompositionTest::setUp()
 {
   // nothing to do
 }
@@ -60,7 +51,7 @@ void ccruncher_test::CholeskyDecompositionTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::tearDown()
+void CholeskyDecompositionTest::tearDown()
 {
   // nothing to do
 }
@@ -78,7 +69,7 @@ void ccruncher_test::CholeskyDecompositionTest::tearDown()
 //      0.00000  1.22474  0.40825
 //      0.00000  0.00000  1.15470
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::test1()
+void CholeskyDecompositionTest::test1()
 {
   // cholesky decomposition feasible
   double valA[] = {
@@ -92,8 +83,8 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
      +0.00000, +1.22474, +0.40825,
      +0.00000, +0.00000, +1.15470
   };
-  double **A = Arrays<double>::allocMatrix(3,3,valA);
-  double *aux = Arrays<double>::allocVector(3);
+  double **A = Utils::allocMatrix(3,3,valA);
+  double *aux = Utils::allocVector(3);
 
   ASSERT(CholeskyDecomposition::choldc(A, aux, 3));
 
@@ -108,12 +99,12 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
   {
     for (int j=i;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[j+3*i], A[j][i], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[j+3*i], A[j][i], EPSILON);
     }
   }
 
-  Arrays<double>::deallocMatrix(A, 3);
-  Arrays<double>::deallocVector(aux);
+  Utils::deallocMatrix(A, 3);
+  Utils::deallocVector(aux);
 }
 
 //===========================================================================
@@ -127,7 +118,7 @@ void ccruncher_test::CholeskyDecompositionTest::test1()
 //    B = chol(A)
 //      error: chol: matrix not positive definite
 //===========================================================================
-void ccruncher_test::CholeskyDecompositionTest::test2()
+void CholeskyDecompositionTest::test2()
 {
   // cholesky decomposition non feasible
   double valB[] = {
@@ -135,11 +126,11 @@ void ccruncher_test::CholeskyDecompositionTest::test2()
      +2.0, +2.0, +5.0,
      +2.0, +1.0, +6.0
   };
-  double **B = Arrays<double>::allocMatrix(3,3, valB);
-  double *aux = Arrays<double>::allocVector(3);
+  double **B = Utils::allocMatrix(3,3, valB);
+  double *aux = Utils::allocVector(3);
 
   ASSERT(!CholeskyDecomposition::choldc(B, aux, 3));
 
-  Arrays<double>::deallocMatrix(B, 3);
-  Arrays<double>::deallocVector(aux);
+  Utils::deallocMatrix(B, 3);
+  Utils::deallocVector(aux);
 }

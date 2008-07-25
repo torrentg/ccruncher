@@ -19,31 +19,25 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExceptionTest.cpp - ExceptionTest code - $Rev$
+// ExceptionTest.cpp - ExceptionTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <iostream>
-#include "utils/Exception.hpp"
-#include "utils/ExceptionTest.hpp"
+#include "Exception.hpp"
+#include "ExceptionTest.hpp"
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::ExceptionTest::setUp()
+void ExceptionTest::setUp()
 {
   // nothing to do
 }
@@ -51,7 +45,7 @@ void ccruncher_test::ExceptionTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::ExceptionTest::tearDown()
+void ExceptionTest::tearDown()
 {
   // nothing to do
 }
@@ -59,7 +53,7 @@ void ccruncher_test::ExceptionTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::ExceptionTest::test1()
+void ExceptionTest::test1()
 {
   ASSERT_NO_THROW(function4());
   ASSERT_THROW(function3());
@@ -70,7 +64,7 @@ void ccruncher_test::ExceptionTest::test1()
 //===========================================================================
 // function1. Can throw anything (no throw clause)
 //===========================================================================
-void ccruncher_test::ExceptionTest::function1(void)
+void ExceptionTest::function1(void)
 {
   try
   {
@@ -89,7 +83,7 @@ void ccruncher_test::ExceptionTest::function1(void)
 //===========================================================================
 // function2. Can throw 2 exceptions types: Exception and exception
 //===========================================================================
-void ccruncher_test::ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
+void ExceptionTest::function2(void) throw(ccruncher::Exception, exception)
 {
   try
   {
@@ -104,7 +98,7 @@ void ccruncher_test::ExceptionTest::function2(void) throw(ccruncher::Exception, 
 //===========================================================================
 // function3. Only can throw exceptions type Exception
 //===========================================================================
-void ccruncher_test::ExceptionTest::function3(void) throw(ccruncher::Exception)
+void ExceptionTest::function3(void) throw(ccruncher::Exception)
 {
   function4();
 
@@ -114,7 +108,7 @@ void ccruncher_test::ExceptionTest::function3(void) throw(ccruncher::Exception)
 //===========================================================================
 // function4. Can't throw exceptions
 //===========================================================================
-void ccruncher_test::ExceptionTest::function4(void) throw()
+void ExceptionTest::function4(void) throw()
 {
   // nothing to do
 }

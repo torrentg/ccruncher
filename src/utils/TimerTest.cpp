@@ -19,26 +19,21 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// TimerTest.cpp - TimerTest code - $Rev$
+// TimerTest.cpp - TimerTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
 #include <cmath>
-#include "utils/Timer.hpp"
-#include "utils/TimerTest.hpp"
+#include "Timer.hpp"
+#include "TimerTest.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -48,7 +43,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::TimerTest::setUp()
+void TimerTest::setUp()
 {
   // nothing to do
 }
@@ -56,7 +51,7 @@ void ccruncher_test::TimerTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::TimerTest::tearDown()
+void TimerTest::tearDown()
 {
   // nothing to do
 }
@@ -64,13 +59,13 @@ void ccruncher_test::TimerTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::TimerTest::test1()
+void TimerTest::test1()
 {
   double t1;
   double x = 2.1;
   Timer timer;
 
-  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
+  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
   timer.start();
 
   // making some stuff
@@ -97,17 +92,5 @@ void ccruncher_test::TimerTest::test1()
 
   // reseting timer (acumulated time = 0 seconds)
   timer.reset();
-  ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
-}
-
-//===========================================================================
-// test2. test format function
-//===========================================================================
-void ccruncher_test::TimerTest::test2()
-{
-  ASSERT(Timer::format(0.510) == string("00:00:00.510"));
-  ASSERT(Timer::format(50.510) == string("00:00:50.510"));
-  ASSERT(Timer::format(500.510) == string("00:08:20.510"));
-  ASSERT(Timer::format(5000.510) == string("01:23:20.510"));
-  ASSERT(Timer::format(1555000.510) == string("431:56:40.510"));
+  ASSERT_DOUBLES_EQUAL(0.0, timer.read(), EPSILON);
 }

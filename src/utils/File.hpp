@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// File.hpp - File header - $Rev$
+// File.hpp - File header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -38,9 +32,9 @@
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
+#include "config.h"
 #include <string>
-#include "utils/Exception.hpp"
+#include "Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -55,18 +49,16 @@ class File
 
   private:
 
-    // non-instantiable class
-    File() {};
-
 
   public:
 
-    static string normalizePath(const string &) throw(Exception);
+    static string normalizePath(string) throw(Exception);
+
     static string getWorkDir() throw(Exception);
-    static bool existDir(const string &);
-    static void makeDir(const string &) throw(Exception);
-    static bool isAbsolutePath(const string &);
-    static void checkFile(const string &pathname, const string &smode) throw(Exception);
+    static bool existDir(string);
+    static void makeDir(string) throw(Exception);
+
+    static void checkFile(string pathname, string smode) throw(Exception);
 
 };
 

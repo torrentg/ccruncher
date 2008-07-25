@@ -19,29 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Params.hpp - Params header - $Rev$
+// Params.hpp - Params header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.method
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed dates management
 //
 //===========================================================================
 
@@ -52,69 +34,46 @@
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
-#include "utils/ExpatHandlers.hpp"
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Params : public ExpatHandlers
+class Params
 {
 
   private:
 
-    // initialize variables
     void init();
-    // parse a property
-    void parseProperty(ExpatUserData &, const char **) throw(Exception);
-    // validate object content
-    void validate(void) const throw(Exception);
-    // set dates values using begindate + steps x steplength
-    void setDates();
+    void parseDOMNode(const DOMNode&) throw(Exception);
+    void parseProperty(const DOMNode& node) throw(Exception);
+    void validate(void) throw(Exception);
 
   public:
 
-    // time.begindate param value
     Date begindate;
-    // time.steps param value
     int steps;
-    // time.steplength param value
     int steplength;
-    // stopcriteria.maxiterations param value
     long maxiterations;
-    // stopcriteria.maxseconds param value
     long maxseconds;
-    // copula.type param value
-    string copula_type; // gaussian
-    // copula.seed param value
+    string copula_type;
     long copula_seed;
-    // montecarlo.antithetic param value
     bool antithetic;
-    // portfolio.onlyActiveClients param value
-    bool onlyactive;
-    // time nodes
-    vector<Date> dates;
+    bool onlyactive; // only active clients
 
-    // constructor
-    Params();
-    // destructor
+    Params(const DOMNode &) throw(Exception);
     ~Params();
 
-    // return array with dates
-    vector<Date>& getDates() const throw(Exception);
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    Date* getDates() throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

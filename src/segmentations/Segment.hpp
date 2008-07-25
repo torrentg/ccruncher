@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.hpp - Segment header - $Rev$
+// Segment.hpp - Segment header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -39,12 +33,13 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -53,17 +48,20 @@ namespace ccruncher {
 class Segment
 {
 
+  private:
+
+    void parseDOMNode(const DOMNode&) throw(Exception);
+
+
   public:
 
-    // segment order
-    int order;
-    // segment name
     string name;
 
-    // constructor
     Segment();
-    // destructor
-    Segment(int order, string name_);
+    Segment(string name_);
+    Segment(const DOMNode &) throw(Exception);
+
+    string getXML(int) throw(Exception);
 
 };
 

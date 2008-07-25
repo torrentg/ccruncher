@@ -19,23 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Sector.hpp - Sector header - $Rev$
+// Sector.hpp - Sector header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added const qualifiers
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -45,40 +33,44 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include "utils/ExpatHandlers.hpp"
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Sector : public ExpatHandlers
+class Sector
 {
+
+  private:
+
+    void init();
+    void parseDOMNode(const DOMNode&) throw(Exception);
+
 
   public:
 
-    // sector name
+    int order;
     string name;
-    // sector descriuption
     string desc;
 
-    // default constructor
     Sector();
-    // serialize object constent as xml
-    string getXML(int) const throw(Exception);
-    // reset content
-    void reset();
+    Sector(const DOMNode &) throw(Exception);
 
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    string getXML(int) throw(Exception);
 
 };
+
+//---------------------------------------------------------------------------
+
+// comparation operator
+bool operator <  (const Sector&, const Sector&);
 
 //---------------------------------------------------------------------------
 

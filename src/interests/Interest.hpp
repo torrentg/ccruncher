@@ -19,23 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Interest.hpp - Interest header - $Rev$
+// Interest.hpp - Interest header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . fecha renamed to date0
 //
 //===========================================================================
 
@@ -47,67 +35,53 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
-#include "utils/ExpatHandlers.hpp"
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Date.hpp"
-#include "interests/Rate.hpp"
+#include "Rate.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Interest : public ExpatHandlers
+class Interest
 {
 
   private:
 
-    // interest name
+    static const double EPSILON=1e-7;
+
     string name;
-    // date where interest curve is defined
-    Date date0;
-    // rate values
+    Date fecha;
     vector<Rate> vrates;
-    // auxiliary variable (used by parser)
-    Rate auxrate;
 
-    // insert a rate to list
+    void parseDOMNode(const DOMNode&) throw(Exception);
     void insertRate(Rate &) throw(Exception);
-    // given a time, returns the rate (interpolated)
-    double getValue(const double) const;
-    // transforms from date to index
-    double date2idx(const Date &date1) const;
-    // transforms from index to date
-    Date idx2date(int t) const;
-    // returns upsilon function value
-    double getUpsilon(const double r, const double t) const;
 
+    double getValue(const double);
+    double date2idx(Date &date1);
+    Date idx2date(int t);
+    double actualCoef(const double r, const double t);
+    double updateCoef(const double r, const double t);
 
   public:
 
-    // default constructor
     Interest();
-    // constructor
     Interest(const string &);
-    // destructor
+    Interest(const DOMNode &) throw(Exception);
     ~Interest();
 
-    // returns curve name
     string getName() const;
-    // returns initial date
-    Date getDate0() const;
-    // returns upsilon value
-    double getUpsilon(const Date &date1, const Date &date2) const;
-    // seriealize object content as xml
-    string getXML(int) const throw(Exception);
-    // reset object content
-    void reset();
+    Date getFecha() const;
 
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    double getActualCoef(Date &date1, Date &date2) throw(Exception);
+    double getUpdateCoef(Date &date1, Date &date2) throw(Exception);
+
+    string getXML(int) throw(Exception);
 
 };
 

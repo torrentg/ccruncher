@@ -19,43 +19,42 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Sectors.cpp - Sectors code - $Rev$
+// Sectors.cpp - Sectors code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Sectors refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
-//   . added getIndex() method
-//
 //===========================================================================
 
-#include "sectors/Sectors.hpp"
-#include "utils/Strings.hpp"
-#include <cassert>
+#include <cmath>
+#include <algorithm>
+#include "Sectors.hpp"
+#include "utils/Utils.hpp"
+#include "utils/XMLUtils.hpp"
 
 //===========================================================================
-// private constructor
+// constructor privat
 //===========================================================================
 ccruncher::Sectors::Sectors()
 {
-  // nothing to do
+  // inicialitzem el vector de sectors
+  vsectors = vector<Sector>();
+}
+
+//===========================================================================
+// constructor
+//===========================================================================
+ccruncher::Sectors::Sectors(const DOMNode& node) throw(Exception)
+{
+  // inicialitzem el vector de sectors
+  vsectors = vector<Sector>();
+
+  // recollim els parametres de la simulacio
+  parseDOMNode(node);
+
+  // validem la llista recollida
+  validations();
 }
 
 //===========================================================================
@@ -63,77 +62,47 @@ ccruncher::Sectors::Sectors()
 //===========================================================================
 ccruncher::Sectors::~Sectors()
 {
-  // nothing to do
+  // cal assegurar que es destrueix vsectors;
 }
 
 //===========================================================================
-// size
+// destructor
 //===========================================================================
-int ccruncher::Sectors::size() const
+vector<Sector> * ccruncher::Sectors::getSectors()
 {
-  return vsectors.size();
+  return &vsectors;
 }
 
 //===========================================================================
-// [] operator
+// insercio nou sector en la llista
 //===========================================================================
-Sector& ccruncher::Sectors::operator []  (int i)
+void ccruncher::Sectors::insertSector(Sector &val) throw(Exception)
 {
-  // assertions
-  assert(i >= 0 && i < (int) vsectors.size());
-
-  // return i-th sector
-  return vsectors[i];
-}
-
-//===========================================================================
-// [] operator. returns sector by name
-//===========================================================================
-Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
-{
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == name)
-    {
-      return vsectors[i];
-    }
-  }
-
-  throw Exception("sector " + name + " not found");
-}
-
-//===========================================================================
-// return the index of the sector (-1 if rating not found)
-//===========================================================================
-int ccruncher::Sectors::getIndex(const string &name) const
-{
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == name)
-    {
-      return i;
-    }
-  }
-  return -1;
-}
-
-//===========================================================================
-// inserts a sector in list
-//===========================================================================
-void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
-{
-  // checking coherence
+  // validem coherencia
   for (unsigned int i=0;i<vsectors.size();i++)
   {
     Sector aux = vsectors[i];
 
     if (aux.name == val.name)
     {
-      throw Exception("sector name " + val.name + " repeated");
+      string msg = "Sectors::insertSector(): sector name ";
+      msg += val.name;
+      msg += " repeated";
+      throw Exception(msg);
+    }
+    else if (aux.order == val.order)
+    {
+      string msg = "Sectors::insertSector(): sector order ";
+      msg += val.order;
+      msg += " repeated";
+      throw Exception(msg);
     }
     else if (aux.desc == val.desc)
     {
-      throw Exception("sector description " + val.desc + " repeated");
+      string msg = "Sectors::insertSector(): sector desc ";
+      msg += val.desc;
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 
@@ -148,38 +117,41 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 }
 
 //===========================================================================
-// epstart - ExpatHandlers method implementation
+// interpreta un node XML params
 //===========================================================================
-void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Sectors::parseDOMNode(const DOMNode& node) throw(Exception)
 {
-  if (isEqual(name_,"sectors")) {
-    if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag sectors");
-    }
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "sectors"))
+  {
+    string msg = "Sectors::parseDOMNode(): Invalid tag. Expected: sectors. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
   }
-  else if (isEqual(name_,"sector")) {
-    auxsector.reset();
-    eppush(eu, &auxsector, name_, attributes);
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
-  }
-}
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
-void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
-{
-  if (isEqual(name_,"sectors")) {
-    validations();
-    auxsector.reset();
-  }
-  else if (isEqual(name_,"sector")) {
-    insertSector(auxsector);
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else if (XMLUtils::isNodeName(child, "sector"))
+      {
+        Sector aux = Sector(child);
+        insertSector(aux);
+      }
+      else
+      {
+        throw Exception("Sectors::parseDOMNode(): invalid data structure at <sectors>");
+      }
+    }
   }
 }
 
@@ -188,19 +160,67 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 void ccruncher::Sectors::validations() throw(Exception)
 {
-  // checking number of sectors
+  // validacio longitud
   if (vsectors.size() == 0)
   {
-    throw Exception("sectors have no elements");
+    throw Exception("Sectors::validations(): sectors have no elements");
+  }
+
+  // ordenem la llista de sectors per camp order
+  sort(vsectors.begin(), vsectors.end());
+
+  // comprovem que el camp order comença per 1 i no hi ha buits
+  for(unsigned int i=0;i<vsectors.size();i++)
+  {
+    Sector aux = vsectors[i];
+
+    if (aux.order != (int)(i+1))
+    {
+      string msg = "Sectors::validations(): incorrect order sector at or near order = ";
+      msg += aux.order;
+      throw Exception(msg);
+    }
+  }
+}
+
+//===========================================================================
+// retorna el index del rating dins la llista (-1 si no es troba)
+//===========================================================================
+int ccruncher::Sectors::getIndex(const string &sector_name)
+{
+
+  for (unsigned int i=0;i<vsectors.size();i++)
+  {
+    if (vsectors[i].name == sector_name)
+    {
+      return (int) i;
+    }
+  }
+
+  return -1;
+}
+
+//===========================================================================
+// retorna el nom del rating dins la llista (-1 si no es troba)
+//===========================================================================
+string ccruncher::Sectors::getName(int index) throw(Exception)
+{
+  if (index < 0 || index >= (int) vsectors.size())
+  {
+    throw Exception("Sectors::getName(): index out of range");
+  }
+  else
+  {
+    return vsectors[index].name;
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
+string ccruncher::Sectors::getXML(int ilevel) throw(Exception)
 {
-  string spc = Strings::blanks(ilevel);
+  string spc = Utils::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<sectors>\n";

@@ -19,44 +19,25 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Sector.cpp - Sector code - $Rev$
+// Sector.cpp - Sector code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added const qualifiers
-//   . order = tag value - 1
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
-//
 //===========================================================================
 
-#include "sectors/Sector.hpp"
-#include "utils/Strings.hpp"
+#include "Sector.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
+#include "utils/XMLUtils.hpp"
 
 //===========================================================================
-// reset
+// inicialitzador
 //===========================================================================
-void ccruncher::Sector::reset()
+void ccruncher::Sector::init()
 {
+  order = -1;
   name = "";
   desc = "";
 }
@@ -66,55 +47,86 @@ void ccruncher::Sector::reset()
 //===========================================================================
 ccruncher::Sector::Sector()
 {
-  reset();
+  init();
 }
 
 //===========================================================================
-// epstart - ExpatHandlers method implementation
+// constructor
 //===========================================================================
-void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+ccruncher::Sector::Sector(const DOMNode& node) throw(Exception)
 {
-  if (isEqual(name_,"sector")) {
-    if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes at sector");
-    }
-    else {
-      name = getStringAttribute(attributes, "name", "");
-      desc = getStringAttribute(attributes, "desc", "_UNDEF_");
+  // inicialitzem les variables de la classe
+  init();
 
-      if (name == "" || desc == "_UNDEF_")
+  // recollim els parametres de la simulacio
+  parseDOMNode(node);
+}
+
+//===========================================================================
+// operador de comparacio (per permetre ordenacio)
+//===========================================================================
+bool ccruncher::operator <  (const Sector &x, const Sector &y)
+{
+  return (x.order < y.order);
+}
+
+//===========================================================================
+// interpreta un node XML params
+//===========================================================================
+void ccruncher::Sector::parseDOMNode(const DOMNode& node) throw(Exception)
+{
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "sector"))
+  {
+    string msg = "Sector::parseDOMNode(): Invalid tag. Expected: sector. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
+  }
+
+  // agafem els atributs del node
+  DOMNamedNodeMap &attributes = *node.getAttributes();
+  order = XMLUtils::getIntAttribute(attributes, "order", -1);
+  name = XMLUtils::getStringAttribute(attributes, "name", "");
+  desc = XMLUtils::getStringAttribute(attributes, "desc", "_UNDEF_");
+
+  if (order <= 0 || name == "" || desc == "_UNDEF_")
+  {
+    throw Exception("Sector::parseDOMNode(): invalid values at <sector>");
+  }
+
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
       {
-        throw Exception("invalid values at <sector>");
+        continue;
+      }
+      else
+      {
+        string msg = "Sector::parseDOMNode(): invalid data structure at <sector>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
+        throw Exception(msg);
       }
     }
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
-void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
-{
-  if (isEqual(name_,"sector")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
+string ccruncher::Sector::getXML(int ilevel) throw(Exception)
 {
-  string ret = Strings::blanks(ilevel);
+  string ret = Utils::blanks(ilevel);
 
   ret += "<sector ";
   ret += "name ='" + name + "' ";
+  ret += "order ='" + Parser::int2string(order) + "' ";
   ret += "desc ='" + desc + "'";
   ret += "/>\n";
 

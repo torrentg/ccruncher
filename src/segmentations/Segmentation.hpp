@@ -19,26 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segmentation.hpp - Segmentation header - $Rev$
+// Segmentation.hpp - Segmentation header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method getNumSegments
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -50,12 +35,14 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
-#include "utils/ExpatHandlers.hpp"
-#include "segmentations/Segment.hpp"
+#include "xercesc/dom/DOM.hpp"
+#include "utils/Date.hpp"
+#include "Segment.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -63,56 +50,38 @@ namespace ccruncher {
 
 enum components_t {
   asset,
-  borrower,
+  client,
   undefined
 };
 
 //---------------------------------------------------------------------------
 
-class Segmentation : public ExpatHandlers
+class Segmentation
 {
 
   private:
 
-    // list of segments
     vector<Segment> vsegments;
-    // if generic pattern (eg: *) -> modificable=true, false otherwise
     bool modificable;
 
-    // inserts a segment into the list
-    void insertSegment(const Segment &) throw(Exception);
+    void parseDOMNode(const DOMNode&) throw(Exception);
+    void insertSegment(Segment &) throw(Exception);
 
 
   public:
 
-    // segmentation order
-    int order;
-    // segmentation name
     string name;
-    // type of components (borrowers/assets)
     components_t components;
 
-    // constructor
-    Segmentation();
-    // destructor
+    Segmentation(const DOMNode &) throw(Exception);
     ~Segmentation();
 
-    // return the number of segments
-    int size() const;
-    // [] operator
-    Segment& operator [] (int i);
-    // [] operator
-    Segment& operator [] (const string &sname) throw(Exception);
-    // add a segment to list
-    void addSegment(const string segname) throw(Exception);
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
-    // reset object content
-    void reset();
+    vector<Segment> getSegments() const;
+    int getSegment(string segname) const;
+    string getSegmentName(int isegment) throw(Exception);
 
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    void addSegment(string segname) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

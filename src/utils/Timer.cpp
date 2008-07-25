@@ -19,61 +19,33 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Timer.cpp - Timer code - $Rev$
+// Timer.cpp - Timer code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
-//
-// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added tolerance at format function. in debug mode can reach a
-//     negative number (very near to 0).
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . running_ variable changed from int to boolean
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . replced clock() function by gettimeofday() function
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
-#include "utils/Timer.hpp"
-#include <ctime>
-#include <cmath>
-#include <cstdio>
-#include <cassert>
-
-#ifdef _MSC_VER
-#include "win32/gettimeofday.h"
-#else
-#include "sys/time.h"
-#endif
+#include "Timer.hpp"
 
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter
 //===========================================================================
 ccruncher::Timer::Timer()
 {
-  running_ = false;
+  running_ = 0;
   start_time_ = 0.0;
   total_ = 0.0;
-  //secs_per_tick = 1.0 / CLOCKS_PER_SEC;
+  secs_per_tick = 1.0 / CLOCKS_PER_SEC;
 }
 
 //===========================================================================
 // seconds
-// gettimeofday() return system time
-// clock() return cpu process time
 //===========================================================================
 double ccruncher::Timer::seconds()
 {
-  timeval tv;
-  gettimeofday(&tv, NULL);
-  return double(tv.tv_sec) + double(tv.tv_usec)/1000000.0;
-  //return ( (double) clock() ) * secs_per_tick;
+  return ( (double) clock() ) * secs_per_tick;
 }
 
 //===========================================================================
@@ -81,7 +53,7 @@ double ccruncher::Timer::seconds()
 //===========================================================================
 void ccruncher::Timer::start()
 {
-  running_ = true;
+  running_ = 1;
   total_ = 0.0;
   start_time_ = seconds();
 }
@@ -91,7 +63,7 @@ void ccruncher::Timer::start()
 //===========================================================================
 void ccruncher::Timer::reset()
 {
-  running_ = false;
+  running_ = 0;
   start_time_ = 0.0;
   total_ = 0.0;
 }
@@ -104,7 +76,7 @@ double ccruncher::Timer::stop()
   if (running_)
   {
     total_ += (seconds() - start_time_);
-    running_ = false;
+    running_ = 0;
   }
   return total_;
 }
@@ -118,7 +90,7 @@ void ccruncher::Timer::resume()
   if (!running_)
   {
     start_time_ = seconds();
-    running_ = true;
+    running_ = 1;
   }
 }
 
@@ -133,38 +105,4 @@ double ccruncher::Timer::read()
     resume();
   }
   return total_;
-}
-
-//===========================================================================
-// returns elapsed time in seconds formated like hh:mm:ss.mmm
-//===========================================================================
-string ccruncher::Timer::format(double val)
-{
-  assert(val >= -1e-14);
-  val = fabs(val);
-
-  char buf[20];
-  double cur = val;
-
-  // computing milliseconds
-  int ms = int((cur-floor(cur+1.0E-14)+1.0E-14)*1000.0);
-  cur = floor(cur+1.0E-14) + 1.0E-8;
-
-  // computing hours
-  int hh = int(cur/3600.0);
-  cur = cur - double(hh)*3600.0;
-
-  // computing minutes
-  int min = int(cur/60.0);
-  cur = cur - double(min)*60.0;
-
-  // computing seconds
-  int sec = int(floor(cur));
-  //cur = cur-double(sec);
-
-  // formating elapsed time
-  sprintf(buf,"%02d:%02d:%02d.%03d", hh, min, sec, ms);
-
-  // exit function
-  return string(buf);
 }

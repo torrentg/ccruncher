@@ -19,23 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Interests.hpp - Interests header - $Rev$
+// Interests.hpp - Interests header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/03/19 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added dummy constructor
-//
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
 //
 //===========================================================================
 
@@ -45,56 +33,41 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
-#include "utils/ExpatHandlers.hpp"
+#include <algorithm>
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
-#include "interests/Interest.hpp"
+#include "Interest.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Interests : public ExpatHandlers
+class Interests
 {
 
   private:
 
-    // list of interest curves
     vector<Interest> vinterests;
-    // index for spot curve
     int ispot;
-    // uaxiliary variable (used by parser)
-    Interest auxinterest;
 
-    // insert an interest curve to list
-    void insertInterest(const Interest &) throw(Exception);
-    // validate list
+    void parseDOMNode(const DOMNode&) throw(Exception);
+    void insertInterest(Interest &) throw(Exception);
     void validate() throw(Exception);
 
 
   public:
 
-    // default constructor
-    Interests();
-    // destructor
+    Interests(const DOMNode &) throw(Exception);
     ~Interests();
 
-    // returns the number of interests
-    int size() const;
-    // [] operator
-    Interest& operator [] (int i);
-    // [] operator
-    Interest& operator [] (const string &name) throw(Exception);
-    // return xml string with object content
-    string getXML(int ilevel) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    vector<Interest> * getInterests();
+    Interest * getInterest(string name) throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

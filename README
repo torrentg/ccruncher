@@ -1,0 +1,119 @@
+
+CREDITCRUNCHER README
+=====================
+
+Install xerces-c package
+--------------------------------
+
+1. download binary package from http://xml.apache.org/xerces-c/
+   don't be lazy, read docs, installation instructions, etc.
+
+2. uncompress package
+     gunzip xerces-c_2_6.tar.gz
+     tar -xvf xerces-c_2_6.tar
+   we sugest install xercesc at $CCRUNCHER/share/xercesc-2.6
+
+3. modify your .profile file. adding the following lines
+     XERCESROOT=<path_to_xerces_dir>
+     export PATH=$PATH:$XERCESROOT/bin
+     export LD_LIBRARY_PATH=$XERCESROOT/lib:$LD_LIBRARY_PATH
+     export LIBRARY_PATH=$XERCESROOT/lib:$LIBRARY_PATH
+     export C_INCLUDE_PATH=$XERCESROOT/include:$C_INCLUDE_PATH
+     export CPLUS_INCLUDE_PATH=$XERCESROOT/include:$CPLUS_INCLUDE_PATH
+     export XERCESC_NLS_HOME=$XERCESCROOT/msg
+   the bin/xercesenv.sh is a script that can help you (read it).
+
+
+Installation from source package
+--------------------------------
+
+1. uncompress package
+     gunzip ccruncher-0.1.tar.gz
+     tar -xvf ccruncher-0.1.tar
+
+2. install xerces-c package (explained before)
+
+3. execute commands (read INSTALL file):
+     cd ccruncher-0.1
+     ./configure --prefix=$PWD
+     make
+     make check
+     make install
+
+
+Installation from binary package
+--------------------------------
+
+1. uncompress package
+     gunzip ccruncher-0.1_bin.tar.gz
+     tar -xvf ccruncher-0.1_bin.tar
+
+2. install xerces-c package (explained before)
+
+
+Using CreditCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step
+
+2. run CreditCruncher
+     $CCRUNCHER/bin/ccruncher --help
+     $CCRUNCHER/bin/ccruncher -hash=100 -f -v -path=./data file.xml
+
+3. extract data from output files
+     $CCRUNCHER/bin/tabulate --help
+     $CCRUNCHER/bin/tabulate ./data/outputfilex.xml
+
+4. process info using your prefered spreadsheet or use scripts to generate
+   a report file created using TeX and gnuplot
+
+
+Developers tips & tricks
+--------------------------------
+
+1. download CreditCruncher sources from subversion repositori
+     svn checkout http://www.generacio.com/svn/repos/ccruncher/
+     cd trunk
+
+2. install xerces-c package (explained before)
+
+3. create auto-files (run only 1 time)
+     autoscan (produces configure.in)
+     autoheader (produces config.h.in)
+     mv config.h.in src/utils/
+     
+4. create ./configure script
+     aclocal
+     autoconf
+     automake -avc --warnings=all
+
+5. compile project in debug mode
+     ./configure --prefix=$PWD --enable-debug
+     make
+     make check
+
+6. executing test suite
+     src/tests
+
+7. checking memory leaks
+     valgrind --tool=memcheck --leak-check=yes <progname>
+
+8. profiling executable
+     ./path/progname (-> writes gmon.out because we compiled with -pg flag)
+     gprof ./path/progname gmon.out
+
+9. debuging executable
+     gdb ./path/progname
+       > help
+       > set args arg1 arg2 arg3 ... argn
+       > run
+       > backtrace
+       > quit
+
+10. making source distribution package
+     make distcheck
+     make dist
+
+
+CreditCruncher Team
+http://www.generacio.com/ccruncher/

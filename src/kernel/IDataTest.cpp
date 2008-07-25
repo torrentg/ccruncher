@@ -19,73 +19,26 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// IDataTest.cpp - IDataTest code - $Rev$
+// IDataTest.cpp - IDataTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added logger
-//
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.method
-//   . changed period time resolution (year->month)
-//   . added survival section
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed exposure/recovery by netting
-//
-// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed copula identifier: normal -> gaussian
-//
-// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . tag concept renamed to segmentation
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/09/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . creditcruncher tag replaced by ccruncher tag
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . IData refactoring
-//
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simulate=values and method=rating-path params
-//   . netting replaced by recovery
-//
-// 2007/07/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
-//   . removed sector.order tag
-//   . added asset creation date
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
 #include <iostream>
-#include "kernel/IData.hpp"
-#include "kernel/IDataTest.hpp"
-#include "utils/ExpatParser.hpp"
+#include "IData.hpp"
+#include "IDataTest.hpp"
+#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::IDataTest::setUp()
+void IDataTest::setUp()
 {
   // nothing to do
 }
@@ -93,7 +46,7 @@ void ccruncher_test::IDataTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::IDataTest::tearDown()
+void IDataTest::tearDown()
 {
   // nothing to do
 }
@@ -101,18 +54,18 @@ void ccruncher_test::IDataTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::IDataTest::test1()
+void IDataTest::test1()
 {
   // simple creditcruncher XML
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-  <ccruncher>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+  <creditcruncher>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\
       <property name='time.steps' value='12'/>\n\
       <property name='time.steplength' value='2'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
-      <property name='copula.type' value='gaussian'/>\n\
+      <property name='copula.type' value='normal'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </params>\n\
@@ -130,13 +83,13 @@ void ccruncher_test::IDataTest::test1()
       </interest>\n\
     </interests>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='B' order='2' desc='bueno'/>\n\
+      <rating name='D' order='4' desc='malo'/>\n\
+      <rating name='C' order='3' desc='regular'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='1' epsilon='1e-12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -163,16 +116,9 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </mtransitions>\n\
-    <survival maxmonths='2500' epsilon='1e-12'>\n\
-      <svalue rating='A' t='0' value='1.0'/>\n\
-      <svalue rating='B' t='0' value='1.0'/>\n\
-      <svalue rating='C' t='0' value='1.0'/>\n\
-      <svalue rating='D' t='0' value='1.0'/>\n\
-      <svalue rating='E' t='0' value='0.0'/>\n\
-    </survival>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' order='1' desc='calzado'/>\n\
+      <sector name='S2' order='2' desc='otros sectores'/>\n\
     </sectors>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
@@ -181,17 +127,17 @@ void ccruncher_test::IDataTest::test1()
     </mcorrels>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
-      <segmentation name='borrower' components='borrower'>\n\
+      <segmentation name='client' components='client'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
       <segmentation name='asset' components='asset'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
-      <segmentation name='sector' components='borrower'>\n\
+      <segmentation name='sector' components='client'>\n\
         <segment name='S1'/>\n\
         <segment name='S2'/>\n\
       </segmentation>\n\
-      <segmentation name='size' components='borrower'>\n\
+      <segmentation name='size' components='client'>\n\
         <segment name='big'/>\n\
         <segment name='medium'/>\n\
       </segmentation>\n\
@@ -205,40 +151,65 @@ void ccruncher_test::IDataTest::test1()
         <segment name='0004'/>\n\
       </segmentation>\n\
     </segmentations>\n\
+    <aggregators>\n\
+      <aggregator name='aggregator1' segmentation='portfolio' \n\
+                  type='values' full='true'/>\n\
+      <aggregator name='aggregator2' segmentation='client' \n\
+                  type='values' full='false'/>\n\
+      <aggregator name='aggregator3' segmentation='client' \n\
+                  type='ratings' full='false'/>\n\
+      <aggregator name='aggregator4' segmentation='sector' \n\
+                  type='values' full='false'/>\n\
+      <aggregator name='aggregator5' segmentation='sector' \n\
+                  type='ratings' full='false'/>\n\
+    </aggregators>\n\
     <portfolio>\n\
-      <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
-        <asset name='generic' id='op1' date='01/01/1999'>\n\
-          <belongs-to segmentation='product' segment='bond'/>\n\
-          <belongs-to segmentation='office' segment='0001'/>\n\
-          <data>\n\
-            <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
-            <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
-            <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
-            <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
-            <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
-            <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
-          </data>\n\
+      <client rating='A' sector='S2' name='cliente1' id='cif1'>\n\
+        <asset class='bond' id='op1'>\n\
+          <belongs-to concept='product' segment='bond'/>\n\
+          <property name='issuedate' value='1/1/2000'/>\n\
+          <property name='term' value='120'/>\n\
+          <property name='nominal' value='1000.0'/>\n\
+          <property name='rate' value='0.06'/>\n\
+          <property name='ncoupons' value='10'/>\n\
+          <property name='adquisitiondate' value='1/1/2002'/>\n\
+          <property name='adquisitionprice' value='1000.0'/>\n\
         </asset>\n\
-        <asset name='generic' id='op2' date='01/01/2000'>\n\
-          <belongs-to segmentation='product' segment='bond'/>\n\
-          <belongs-to segmentation='office' segment='0001'/>\n\
-          <data>\n\
-            <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
-            <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
-            <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
-            <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
-            <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
-            <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
-          </data>\n\
+        <asset class='bond' id='op2'>\n\
+          <property name='issuedate' value='1/1/2000'/>\n\
+          <property name='term' value='120'/>\n\
+          <property name='nominal' value='1500.0'/>\n\
+          <property name='rate' value='0.07'/>\n\
+          <property name='ncoupons' value='20'/>\n\
+          <property name='adquisitiondate' value='1/1/2003'/>\n\
+          <property name='adquisitionprice' value='1500.0'/>\n\
         </asset>\n\
-      </borrower>\n\
+      </client>\n\
     </portfolio>\n\
-  </ccruncher>";
+  </creditcruncher>";
 
   // creating xml
-  ExpatParser xmlparser;
+  XMLUtils::initialize();
+  DOMBuilder *parser = XMLUtils::getParser();
+  Wrapper4InputSource *wis = XMLUtils::getInputSource(xmlcontent);
+  DOMDocument *doc = XMLUtils::getDocument(parser, wis);
 
-  // borrower creation
-  IData idata;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
+  // client creation
+  IData *idata = NULL;
+  ASSERT_NO_THROW(idata = new IData(*(doc->getDocumentElement()),0));
+
+  // assertions
+  ASSERT(idata->params != NULL);
+  ASSERT(idata->interests != NULL);
+  ASSERT(idata->ratings != NULL);
+  ASSERT(idata->transitions != NULL);
+  ASSERT(idata->sectors != NULL);
+  ASSERT(idata->correlations != NULL);
+  ASSERT(idata->portfolio != NULL);
+
+  // exit test
+  if (idata != NULL) delete idata;
+  delete wis;
+  delete parser;
+  XMLUtils::terminate();
 }

@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,156 +19,254 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Utils.cpp - Utils code - $Rev$
+// Utils.cpp - Utils code
 // --------------------------------------------------------------------------
 //
-// 2005/07/19 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added hash() method
-//   . added timestamp() method
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method getCompilationOptions()
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
 //===========================================================================
 
-#include <iostream>
-#include <cstdio>
-#include <ctime>
-#include "utils/Utils.hpp"
-#include "utils/ccmpi.h"
+#include <cctype>
 #include <cassert>
-
-// --------------------------------------------------------------------------
-
-ofstream *ccruncher::Utils::nullstream = NULL;
-int ccruncher::Utils::rankid = -1;
+#include <algorithm>
+#include "Utils.hpp"
 
 //===========================================================================
-// isMaster
+// allocVectors
 //===========================================================================
-bool ccruncher::Utils::isMaster()
+double * ccruncher::Utils::allocVector(int n, double val) throw(Exception)
 {
-#ifdef USE_MPI
-  // if rankid uninitialized
-  if (rankid < 0)
-  {
-    rankid = MPI::COMM_WORLD.Get_rank();
-  }
+  double *ret = NULL;
 
-  if (rankid > 0)
+  try
   {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-#else
-  return true;
-#endif
-}
+    ret = new double[n];
 
-//===========================================================================
-// setSilentMode. Send cout and cerr to /dev/null (oblivion)
-//===========================================================================
-void ccruncher::Utils::setSilentMode() throw(Exception)
-{
-  if (nullstream == NULL)
-  {
-    nullstream = new ofstream("/dev/null");
-  }
+    for (int i=0;i<n;i++)
+    {
+      ret[i] = val;
+    }
 
-  if (!nullstream->good())
-  {
-    throw Exception("problems removing output on slaves nodes");
+    return ret;
   }
-  else
+  catch(std::exception &e)
   {
-    // closing C++ streams
-    cout.rdbuf(nullstream->rdbuf());
-    cerr.rdbuf(nullstream->rdbuf());
-
-    // closing C streams (used by getop)
-    freopen("/dev/null", "w", stdout);
-    freopen("/dev/null", "w", stderr);
+    throw Exception(e, "Utils::allocVector(): not enougth space");
   }
 }
 
 //===========================================================================
-// create a hash using ELF hash algorithm
-// extracted from "Hashing Rehashed." Andrew Binstock, Dr. Dobb's Journal, APR96
+// allocVectors and initialize with x content
 //===========================================================================
-unsigned long ccruncher::Utils::hash(const string &str)
+double * ccruncher::Utils::allocVector(int n, double *x) throw(Exception)
 {
-  unsigned long h=0, g;
-  const unsigned char *name = (const unsigned char *)(str.c_str());
+  double *ret = allocVector(n);
 
-  while ( *name )
+  for (int i=0;i<n;i++)
   {
-    h = ( h << 4 ) + *name++;
-    if ( (g = h & 0xF0000000) )
-      h ^= g >> 24;
-    h &= ~g;
+    ret[i] = x[i];
   }
-  return h;
+
+  return ret;
 }
 
 //===========================================================================
-// return the current timestamp in format dd/mm/yyyy hh:mm:ss
+// allocMatrix
 //===========================================================================
-string ccruncher::Utils::timestamp()
+double ** ccruncher::Utils::allocMatrix(int n, int m, double val) throw(Exception)
 {
-  time_t now = time(NULL);
-  tm lt = *(localtime(&now));
+  double **ret = NULL;
 
-  char aux[] = "dd/mm/yyyy hh:mm:ss ";
-  aux[19] = 0;
+  try
+  {
+    ret = new double *[n];
 
-  sprintf(aux, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1, lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
+    for(int i=0;i<n;i++)
+    {
+      ret[i] = NULL;
+    }
+  }
+  catch(std::exception &e)
+  {
+    throw Exception(e, "Utils::allocMatrix(): not enougth space");
+  }
 
-  return string(aux);
+  try
+  {
+    for(int i=0;i<n;i++)
+    {
+      ret[i] = new double[m];
+
+      for(int j=0;j<m;j++)
+      {
+        ret[i][j] = val;
+      }
+    }
+
+    return ret;
+  }
+  catch(std::exception &e)
+  {
+    deallocMatrix(ret, n);
+    throw Exception(e, "Utils::allocMatrix(): not enougth space");
+  }
 }
 
 //===========================================================================
-// return a string with compilation options
+// allocMatrix and initializes with x content (nxm array)
 //===========================================================================
-string ccruncher::Utils::getCompilationOptions()
+double ** ccruncher::Utils::allocMatrix(int n, int m, double *x) throw(Exception)
+{
+  double **ret = allocMatrix(n, m);
+
+  for(int i=0;i<n;i++)
+  {
+    for(int j=0;j<m;j++)
+    {
+      ret[i][j] = x[j+m*i];
+    }
+  }
+
+  return ret;
+}
+
+//===========================================================================
+// allocMatrix and initializes with x content
+//===========================================================================
+double ** ccruncher::Utils::allocMatrix(int n, int m, double **x) throw(Exception)
+{
+  double **ret = allocMatrix(n, m);
+
+  for(int i=0;i<n;i++)
+  {
+    for(int j=0;j<m;j++)
+    {
+      ret[i][j] = x[i][j];
+    }
+  }
+
+  return ret;
+}
+
+//===========================================================================
+// deallocMatrix
+//===========================================================================
+void ccruncher::Utils::deallocMatrix(double **x, int n)
+{
+  if (x != NULL)
+  {
+    for(int i=0;i<n;i++)
+    {
+      if (x[i] != NULL)
+      {
+        delete [] x[i];
+        x[i] = NULL;
+      }
+    }
+    delete [] x;
+    x = NULL;
+  }
+}
+
+//===========================================================================
+// deallocVector
+//===========================================================================
+void ccruncher::Utils::deallocVector(double *x)
+{
+  if (x != NULL)
+  {
+    delete [] x;
+    x = NULL;
+  }
+}
+
+//===========================================================================
+// tokenize
+//===========================================================================
+void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const string& delimiters)
+{
+  // Skip delimiters at beginning.
+  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  // Find first "non-delimiter".
+  string::size_type pos = str.find_first_of(delimiters, lastPos);
+
+  while (string::npos != pos || string::npos != lastPos)
+  {
+     // Found a token, add it to the vector.
+     tokens.push_back(str.substr(lastPos, pos - lastPos));
+     // Skip delimiters.  Note the "not_of"
+     lastPos = str.find_first_not_of(delimiters, pos);
+     // Find next "non-delimiter"
+     pos = str.find_first_of(delimiters, lastPos);
+  }
+}
+
+//===========================================================================
+// trim
+//===========================================================================
+string ccruncher::Utils::rtrim(string s)
+{
+  string::size_type pos = s.find_last_not_of(" \t\n");
+  return s.substr( 0, pos+1 );
+}
+
+//===========================================================================
+// trim
+//===========================================================================
+string ccruncher::Utils::ltrim(string s)
+{
+  string::size_type pos = s.find_first_not_of(" \t\n");
+  return s.substr( pos, s.size()-pos );
+}
+
+//===========================================================================
+// trim
+//===========================================================================
+string ccruncher::Utils::trim(string s)
+{
+  string::size_type lpos = s.find_first_not_of(" \t\n");
+  string::size_type rpos = s.find_last_not_of(" \t\n");
+  return s.substr( lpos, rpos-lpos+1 );
+}
+
+//===========================================================================
+// uppercase
+//===========================================================================
+string ccruncher::Utils::uppercase(string str)
+{
+  string res = str;
+
+  transform(res.begin(), res.end(), res.begin(), ccruncher::ltoupper);
+
+  return res;
+}
+
+//===========================================================================
+// uppercase
+//===========================================================================
+string ccruncher::Utils::lowercase(string str)
+{
+  string res = str;
+
+  transform(res.begin(), res.end(), res.begin(), ccruncher::ltolower);
+
+  return res;
+}
+
+//===========================================================================
+// blanks
+//===========================================================================
+string ccruncher::Utils::blanks(int n)
 {
   string ret = "";
 
-  // debug option
-  ret += "debug";
-#ifdef NDEBUG
-  ret += "[disabled] | ";
-#else
-  ret += "[enabled] | ";
-#endif
+  assert(n >= 0);
 
-
-  // profiler option
-  ret += "profiler";
-#ifdef PROFILER
-  ret += "[enabled] | ";
-#else
-  ret += "[disabled] | ";
-#endif
-
-  // MPI option
-  ret += "MPI";
-#ifdef USE_MPI
-  ret += "[enabled]";
-#else
-  ret += "[disabled]";
-#endif
+  for (int i=0;i<n;i++)
+  {
+    ret += " ";
+  }
 
   return ret;
 }

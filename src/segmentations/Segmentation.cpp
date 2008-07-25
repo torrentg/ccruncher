@@ -19,46 +19,38 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segmentation.cpp - Segmentation code - $Rev$
+// Segmentation.cpp - Segmentation code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method getNumSegments
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
-#include "segmentations/Segmentation.hpp"
-#include "utils/Strings.hpp"
-#include <cassert>
+#include <cmath>
+#include <algorithm>
+#include "Segmentation.hpp"
+#include "utils/XMLUtils.hpp"
+#include "utils/Parser.hpp"
+#include "utils/Utils.hpp"
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Segmentation::Segmentation()
+ccruncher::Segmentation::Segmentation(const DOMNode& node) throw(Exception)
 {
   // default values
-  reset();
+  modificable = false;
+
+  // inicialitzem el vector de segments
+  vsegments = vector<Segment>();
+
+  // adding catcher segment
+  Segment catcher = Segment("rest");
+  insertSegment(catcher);
+
+  // recollim els parametres de la simulacio
+  parseDOMNode(node);
 }
 
 //===========================================================================
@@ -70,82 +62,33 @@ ccruncher::Segmentation::~Segmentation()
 }
 
 //===========================================================================
-// size
-//===========================================================================
-int ccruncher::Segmentation::size() const
-{
-  return vsegments.size();
-}
-
-//===========================================================================
-// [] operator
-//===========================================================================
-Segment& ccruncher::Segmentation::operator []  (int i)
-{
-  // assertions
-  assert(i >= 0 && i < (int) vsegments.size());
-
-  // return i-th segment
-  return vsegments[i];
-}
-
-//===========================================================================
-// [] operator. returns segment by name
-//===========================================================================
-Segment& ccruncher::Segmentation::operator []  (const string &sname) throw(Exception)
-{
-  for (unsigned int i=0;i<vsegments.size();i++)
-  {
-    if (vsegments[i].name == sname)
-    {
-      return vsegments[i];
-    }
-  }
-
-  throw Exception("segment " + sname + " not found");
-}
-
-//===========================================================================
-// reset
-//===========================================================================
-void ccruncher::Segmentation::reset()
-{
-  vsegments.clear();
-  modificable = false;
-  order = -1;
-  name = "";
-  components = borrower;
-
-  // adding catcher segment
-  Segment catcher = Segment(0, "rest");
-  insertSegment(catcher);
-}
-
-//===========================================================================
 // insertSegment
 //===========================================================================
-void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
+void ccruncher::Segmentation::insertSegment(Segment &val) throw(Exception)
 {
   if (val.name == "")
   {
-    throw Exception("trying to insert a segment with invalid name (void name)");
+    throw Exception("Segmentation::insertSegment(): invalid name value");
   }
 
-  // checking coherence
+  // validem coherencia
   for (unsigned int i=0;i<vsegments.size();i++)
   {
     if (vsegments[i].name == val.name)
     {
-      throw Exception("segment " + vsegments[i].name + " repeated");
+      string msg = "Segmentation::insertSegment(): segment ";
+      msg += vsegments[i].name;
+      msg += " repeated";
+      throw Exception(msg);
     }
   }
 
   // checking for patterns
   if (val.name == "*")
   {
-    if (name != "borrower" && name != "asset")
+    if (name != "client" && name != "asset")
     {
-      throw Exception("invalid segment name '*'");
+      throw Exception("Segmentation::insertSegment(): invalid segment name '*'");
     }
     else
     {
@@ -154,7 +97,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
     }
   }
 
-  // inserting value
+  // inserim el valor
   try
   {
     vsegments.push_back(val);
@@ -166,102 +109,143 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
 }
 
 //===========================================================================
-// epstart - ExpatHandlers method implementation
+// interpreta un node XML params
 //===========================================================================
-void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Segmentation::parseDOMNode(const DOMNode& node) throw(Exception)
 {
-  if (isEqual(name_,"segmentation")) {
-    if (getNumAttributes(attributes) != 2) {
-      throw Exception("incorrect number of attributes in tag segmentation");
-    }
-    else {
-      name = getStringAttribute(attributes, "name", "");
-      string strcomp = getStringAttribute(attributes, "components", "");
+  string strcomp;
 
-      // checking name
-      if (name == "") {
-        throw Exception("tag <segmentation> with invalid name attribute");
-      }
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "segmentation"))
+  {
+    string msg = "Segmentation::parseDOMNode(): Invalid tag. Expected: segmentation. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
+  }
 
-      // filling components variable
-      if (strcomp == "asset") {
-        components = asset;
-      }
-      else if (strcomp == "borrower") {
-        components = borrower;
-      }
-      else {
-        throw Exception("tag <segmentation> with invalid components attribute");
-      }
-    }
+  // agafem la llista d'atributs
+  DOMNamedNodeMap &attributes = *node.getAttributes();
+  name = XMLUtils::getStringAttribute(attributes, "name", "");
+  strcomp = XMLUtils::getStringAttribute(attributes, "components", "");
+  if (name == "")
+  {
+    throw Exception("Segmentation::parseDOMNode(): tag <segmentation> with invalid name attribute");
   }
-  else if (isEqual(name_,"segment")) {
-    string sname = getStringAttribute(attributes, "name", "");
-    // checking segment name
-    if (sname == "") {
-      throw Exception("tag <segment> with invalid name attribute");
-    }
-    else {
-      Segment aux(vsegments.size(), sname);
-      insertSegment(aux);
-    }
+
+  // filling components variable
+  if (strcomp == "asset")
+  {
+    components = asset;
   }
-  else {
-    throw Exception("unexpected tag " + string(name_));
+  else if (strcomp == "client")
+  {
+    components = client;
+  }
+  else
+  {
+    throw Exception("Segmentation::parseDOMNode(): tag <segmentation> with invalid components attribute");
+  }
+
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else if (XMLUtils::isNodeName(child, "segment"))
+      {
+        Segment aux = Segment(child);
+        insertSegment(aux);
+      }
+      else
+      {
+        throw Exception("Segmentation::parseDOMNode(): invalid data structure at <segmentation>");
+      }
+    }
   }
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
+// getSegment
 //===========================================================================
-void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
+int ccruncher::Segmentation::getSegment(string segname) const
 {
-  if (isEqual(name_,"segmentation")) {
-    // nothing to do
+  for (unsigned int i=0;i<vsegments.size();i++)
+  {
+    if (vsegments[i].name == segname)
+    {
+      return i;
+    }
   }
-  else if (isEqual(name_,"segment")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
+
+  return -1;
+}
+
+//===========================================================================
+// getSegments
+//===========================================================================
+vector<Segment> ccruncher::Segmentation::getSegments() const
+{
+  return vsegments;
 }
 
 //===========================================================================
 // addSegment
 //===========================================================================
-void ccruncher::Segmentation::addSegment(const string segname) throw(Exception)
+void ccruncher::Segmentation::addSegment(string segname) throw(Exception)
 {
   if (modificable == false)
   {
-    throw Exception("implicit segments defined. can't define other segments");
+    throw Exception("Segmentation::addSegment(): fixed segments");
   }
   else
   {
-    Segment aux = Segment(vsegments.size(), segname);
+    Segment aux = Segment(segname);
     insertSegment(aux);
+  }
+}
+
+//===========================================================================
+// getSegmentName
+//===========================================================================
+string ccruncher::Segmentation::getSegmentName(int isegment) throw(Exception)
+{
+  if (isegment < 0 || isegment >= (int) vsegments.size())
+  {
+    throw Exception("Segmentation::getSegmentName(): index out of range");
+  }
+  else
+  {
+    return vsegments[isegment].name;
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
+string ccruncher::Segmentation::getXML(int ilevel) throw(Exception)
 {
-  string spc = Strings::blanks(ilevel);
+  string spc = Utils::blanks(ilevel);
   string ret = "";
 
   ret += spc + "<segmentation name='" + name + "' components='";
-  ret += (components==asset?"asset":"borrower");
+  ret += (components==asset?"asset":"client");
   ret += "'>\n";
 
   if (name == "portfolio")
   {
     // nothing to do
   }
-  else if (name == "borrower" || name == "asset")
+  else if (name == "client" || name == "asset")
   {
-    ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
+    ret += Utils::blanks(ilevel+2) + "<segment name='*'/>\n";
   }
   else
   {
@@ -269,7 +253,7 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
     {
       if (vsegments[i].name != "rest")
       {
-        ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i].name + "'/>\n";
+        ret += vsegments[i].getXML(ilevel+2);
       }
     }
   }

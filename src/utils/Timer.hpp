@@ -19,20 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Timer.hpp - Timer header - $Rev$
+// Timer.hpp - Timer header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . running_ variable changed from int to boolean
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . replaced clock() function by gettimeofday() function
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -41,8 +32,8 @@
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
-#include <string>
+#include "config.h"
+#include <time.h>
 
 //---------------------------------------------------------------------------
 
@@ -55,11 +46,11 @@ class Timer
 {
   private:
 
-     bool running_;
+     int running_;
      double start_time_;
      double total_;
      double seconds();
-     //double secs_per_tick;
+     double secs_per_tick;
 
   public:
      Timer();
@@ -69,7 +60,6 @@ class Timer
      void resume();
      int running();
      void reset();
-     static string format(double seconds_);
 };
 
 //---------------------------------------------------------------------------

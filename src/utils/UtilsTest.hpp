@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,14 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// UtilsTest.hpp - UtilsTest header - $Rev$
+// UtilsTest.hpp - UtilsTest header
 // --------------------------------------------------------------------------
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . migrated from cppUnit to MiniCppUnit
 //
 //===========================================================================
 
@@ -35,13 +35,12 @@
 
 //---------------------------------------------------------------------------
 
-#include "utils/config.h"
+#include "config.h"
 #include <MiniCppUnit.hxx>
 
 //---------------------------------------------------------------------------
 
 using namespace ccruncher;
-namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -51,6 +50,7 @@ class UtilsTest : public TestFixture<UtilsTest>
   private:
 
     void test1(void);
+    void test2(void);
 
 
   public:
@@ -58,6 +58,7 @@ class UtilsTest : public TestFixture<UtilsTest>
     TEST_FIXTURE(UtilsTest)
     {
       TEST_CASE(test1);
+      TEST_CASE(test2);
     }
 
     void setUp();
@@ -66,10 +67,6 @@ class UtilsTest : public TestFixture<UtilsTest>
 };
 
 REGISTER_FIXTURE(UtilsTest);
-
-//---------------------------------------------------------------------------
-
-}
 
 //---------------------------------------------------------------------------
 

@@ -19,19 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CholeskyDecomposition.cpp - CholeskyDecomposition code - $Rev$
+// CholeskyDecomposition.cpp - CholeskyDecomposition code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (Extracted from 'Numerical Recipes in C')
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <cmath>
-#include "math/CholeskyDecomposition.hpp"
+#include <iostream>
+#include "CholeskyDecomposition.hpp"
 
 //===========================================================================
 // implements cholesky decomposition matrix
@@ -57,7 +55,7 @@ bool ccruncher::CholeskyDecomposition::choldc(double **a, double *p, int n)
 
       if(i == j)
       {
-        if(sum <= 0.0)
+        if(sum <= 0.0) 
         {
           return false;
         }
@@ -66,7 +64,7 @@ bool ccruncher::CholeskyDecomposition::choldc(double **a, double *p, int n)
           p[i] = std::sqrt(sum);
         }
       }
-      else
+      else 
       {
         a[j][i] = sum/p[i];
       }

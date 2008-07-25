@@ -1,0 +1,69 @@
+
+This directory contains third part projects used by CreditCruncher:
+
+------------------------------------------------------------------------
+
+project: minicppunit
+version: 2.2
+licence: GNU GPL
+homeurl: http://minicppunit.sourceforge.net/ 
+descrip: MiniCppUnit is a C++ unit testing framework. 
+         In CreeditCruncher is used to test all basic classes.
+         All classes that match pattern *Test.?pp are unit test.
+
+------------------------------------------------------------------------
+
+project: xercesc
+version: 2.6
+licence: Apache Software License, Version 2.0
+homeurl: http://xml.apache.org/xerces-c/
+descrip: Xerces-C++ is a validating XML parser written in a portable 
+         subset of C++.
+         In CreeditCruncher is used to implements XML management.
+
+------------------------------------------------------------------------
+
+project: jama
+version: 1.2.2
+licence: public domain (see declaration at home site)
+homeurl: http://math.nist.gov/tnt/
+descrip: The Template Numerical Toolkit (TNT) is a collection of interfaces 
+         and reference implementations of numerical objects useful for 
+         scientific computing in C++.
+         In CreeditCruncher is used to operate with matrix (pe. eigenvalues
+         decomposition).
+
+------------------------------------------------------------------------
+
+project: MersenneTwister
+version: 1.0
+licence: BSD license
+homeurl: http://www-personal.engin.umich.edu/~wagnerr/MersenneTwister.html
+descrip: The Mersenne Twister is an algorithm for generating random numbers.
+         In CreeditCruncher is used to generate the random numbers used by
+         MonteCarlo.
+
+------------------------------------------------------------------------
+
+project: valgrind
+version: 2.2.0
+licence: GNU GPL
+homeurl: http://valgrind.kde.org
+descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux 
+         programs.
+         In CreeditCruncher is used to avoid memory leaks at development 
+         time. No references into the code because valgrind don't need to
+         be linked to code.
+
+------------------------------------------------------------------------
+
+project: lam-mpi
+version: 7.1.1
+licence: Indiana University Software License (see home site)
+homeurl: http://www.lam-mpi.org/ 
+descrip: LAM/MPI is a high-quality open-source implementation of the Message 
+         Passing Interface specification, including all of MPI-1.2 and much 
+         of MPI-2.
+         In CreeditCruncher is used to implements parallel execution.
+
+------------------------------------------------------------------------

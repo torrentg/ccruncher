@@ -19,52 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Portfolio.cpp - Portfolio code - $Rev$
+// Portfolio.cpp - Portfolio code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . some modifications trying to achieve better performance
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added onlyactive argument to sortClients() method
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Portfolio refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
 #include <cmath>
 #include <algorithm>
-#include "portfolio/Portfolio.hpp"
-#include <cassert>
+#include "Portfolio.hpp"
+#include "utils/XMLUtils.hpp"
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
-             Segmentations &segmentations_, const Interests &interests_, 
-             const vector<Date> &dates_)
+ccruncher::Portfolio::Portfolio(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
+                     Interests *interests, const DOMNode& node) throw(Exception)
 {
-  // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_, dates_);
+  // recollim els parametres de la simulacio
+  parseDOMNode(ratings, sectors, segmentations, interests, node);
 }
 
 //===========================================================================
@@ -72,166 +47,106 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_
 //===========================================================================
 ccruncher::Portfolio::~Portfolio()
 {
-  // dropping borrowers
-  for(unsigned int i=0;i<vborrowers.size();i++)
+  // dropping clients
+  for(unsigned int i=0;i<vclients.size();i++)
   {
-    delete vborrowers[i];
+    delete vclients[i];
   }
 }
 
 //===========================================================================
-// reset
+// retorna la llista de clients
 //===========================================================================
-void ccruncher::Portfolio::reset(const Ratings &ratings_, const Sectors &sectors_,
-             Segmentations &segmentations_, const Interests &interests_, 
-             const vector<Date> &dates_)
+vector<Client *> * ccruncher::Portfolio::getClients()
 {
-  auxborrower = NULL;
-
-  // setting external objects
-  ratings = &ratings_;
-  sectors = &sectors_;
-  segmentations = &segmentations_;
-  interests = &interests_;
-  dates = &dates_;
-
-  // dropping borrowers
-  for(unsigned int i=0;i<vborrowers.size();i++) {
-    delete vborrowers[i];
-  }
-
-  // flushing borrowers
-  vborrowers.clear();
+  return &vclients;
 }
 
 //===========================================================================
-// returns borrower list
+// insercio nou client en la llista
 //===========================================================================
-vector<Borrower *> & ccruncher::Portfolio::getBorrowers()
+void ccruncher::Portfolio::insertClient(Client *val) throw(Exception)
 {
-  return vborrowers;
-}
-
-//===========================================================================
-// inserting a borrower into list
-//===========================================================================
-void ccruncher::Portfolio::insertBorrower(Borrower &val) throw(Exception)
-{
-  unsigned int vcs = vborrowers.size();
-  unsigned long chkey = val.hkey;
-  Borrower *curr = NULL;
-
-  // checking coherence
-  for (unsigned int i=0;i<vcs;i++)
+  // validem coherencia
+  for (unsigned int i=0;i<vclients.size();i++)
   {
-    curr = vborrowers[i];
-
-    if (curr->hkey == chkey) // checking borrower id uniqueness
+    if (vclients[i]->id == val->id)
     {
-      // resolving hash key collision
-      if (curr->id == val.id)
-      {
-        string msg = "borrower id " + val.id + " repeated";
-        delete &val;
-        throw Exception(msg);
-      }
+      string msg = "Portfolio::insertClient(): client id ";
+      msg += val->id;
+      msg += " repeated";
+      throw Exception(msg);
     }
-    else // checking asset id uniqueness
+    else if (vclients[i]->name == val->name)
     {
-      vector<Asset> &currassets = curr->getAssets();
-      for(unsigned int j=0; j<currassets.size(); j++)
-      {
-        for(unsigned int k=0; k<val.getAssets().size(); k++)
-        {
-          if (currassets[j].hkey == val.getAssets()[k].hkey)
-          {
-            // resolving hash key collision
-            if (currassets[j].getId() == val.getAssets()[k].getId())
-            {
-              string msg = "borrowers " + curr->name + " and " + val.name + 
-                            " have a asset with same id (" + val.getAssets()[k].getId() + ")";
-              delete &val;
-              throw Exception(msg);
-            }
-          }
-        }
-      }
+      string msg = "Portfolio::insertClient(): client name ";
+      msg += val->name;
+      msg += " repeated";
+      throw Exception(msg);
     }
-
   }
 
   try
   {
-    vborrowers.push_back(&val);
+    vclients.push_back(val);
   }
   catch(std::exception &e)
   {
-    delete &val;
-    throw Exception(e);
+     throw Exception(e);
   }
 }
 
+
 //===========================================================================
-// validations
+// interpreta un node XML params
 //===========================================================================
-void ccruncher::Portfolio::validations() throw(Exception)
+void ccruncher::Portfolio::parseDOMNode(Ratings *ratings, Sectors *sectors, Segmentations *segmentations,
+                             Interests *interests, const DOMNode& node) throw(Exception)
 {
-  if (vborrowers.size() == 0)
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "portfolio"))
   {
-    throw Exception("portfolio without borrowers");
+    string msg = "Portfolio::parseDOMNode(): Invalid tag. Expected: portfolio. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
   }
-}
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
-void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
-{
-  if (isEqual(name_,"portfolio")) {
-    if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag portfolio");
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
+      {
+        continue;
+      }
+      else if (XMLUtils::isNodeName(child, "client"))
+      {
+        Client *aux = new Client(ratings, sectors, segmentations, interests, child);
+        insertClient(aux);
+      }
+      else
+      {
+        throw Exception("Portfolio::parseDOMNode(): invalid data structure at <portfolio>");
+      }
     }
   }
-  else if (isEqual(name_,"borrower")) {
-    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests, *dates);
-    eppush(eu, auxborrower, name_, attributes);
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
-  }
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
+// getNumActiveClients
 //===========================================================================
-void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
-{
-  if (isEqual(name_,"portfolio")) {
-    // cleaning temp objects
-    auxborrower = NULL;
-    // checking coherence
-    validations();
-  }
-  else if (isEqual(name_,"borrower")) {
-    assert(auxborrower != NULL);
-    insertBorrower(*auxborrower);
-    auxborrower = NULL;
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// getNumActiveBorrowers
-//===========================================================================
-int ccruncher::Portfolio::getNumActiveBorrowers(const Date &from, const Date &to) throw(Exception)
+int ccruncher::Portfolio::getNumActiveClients(Date from, Date to) throw(Exception)
 {
   int ret = 0;
 
-  for (int i=vborrowers.size()-1;i>=0;i--)
+  for (int i=vclients.size()-1;i>=0;i--)
   {
-    if (vborrowers[i]->isActive(from, to))
+    if (vclients[i]->isActive(from, to))
     {
       ret++;
     }
@@ -241,26 +156,23 @@ int ccruncher::Portfolio::getNumActiveBorrowers(const Date &from, const Date &to
 }
 
 //===========================================================================
-// sortBorrowers
+// sortClients
 //===========================================================================
-void ccruncher::Portfolio::sortBorrowers(const Date &from, const Date &to, bool onlyactive) throw(Exception)
+void ccruncher::Portfolio::sortClients(Date from, Date to) throw(Exception)
 {
-  // sorting borrower by sector and rating
-  sort(vborrowers.begin(), vborrowers.end(), Borrower::less);
+  // sorting clients by sector and rating
+  sort(vclients.begin(), vclients.end(), Client::less);
 
-  if (onlyactive == true)
+  // we move non-active clients to last position of array
+  for(unsigned int cont=0,i=0;cont<vclients.size();cont++)
   {
-    // we move non-active borrowers to last position of array
-    for(unsigned int cont=0,i=0;cont<vborrowers.size();cont++)
+    if (!(*vclients[i]).isActive(from,to))
     {
-      if (!(*vborrowers[i]).isActive(from,to))
-      {
-        mtlp(i);
-        i--;
-      }
-
-      i++;
+      mtlp(i);
+      i--;
     }
+
+    i++;
   }
 }
 
@@ -269,13 +181,12 @@ void ccruncher::Portfolio::sortBorrowers(const Date &from, const Date &to, bool 
 //===========================================================================
 void ccruncher::Portfolio::mtlp(unsigned int pos)
 {
-  Borrower *p = vborrowers[pos];
+  Client *p = vclients[pos];
 
-  for(unsigned int i=pos;i<vborrowers.size()-1;i++)
+  for(unsigned int i=pos;i<vclients.size()-1;i++)
   {
-    vborrowers[i] = vborrowers[i+1];
+    vclients[i] = vclients[i+1];
   }
 
-  vborrowers[vborrowers.size()-1] = p;
+  vclients[vclients.size()-1] = p;
 }
-

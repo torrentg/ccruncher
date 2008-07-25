@@ -19,98 +19,114 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Rating.cpp - Rating code - $Rev$
+// Rating.cpp - Rating code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
-#include "ratings/Rating.hpp"
-#include "utils/Strings.hpp"
+#include "Rating.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
+#include "utils/XMLUtils.hpp"
+
+//===========================================================================
+// inicialitzador
+//===========================================================================
+void ccruncher::Rating::init()
+{
+  order = -1;
+  name = "";
+  desc = "";
+}
 
 //===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Rating::Rating()
 {
-  reset();
+  init();
 }
 
 //===========================================================================
-// reset
+// constructor
 //===========================================================================
-void ccruncher::Rating::reset()
+ccruncher::Rating::Rating(const DOMNode& node) throw(Exception)
 {
-  name = "";
-  desc = "";
+  // inicialitzem les variables de la classe
+  init();
+
+  // recollim els parametres de la simulacio
+  parseDOMNode(node);
 }
 
 //===========================================================================
-// epstart - ExpatHandlers method implementation
+// operador de comparacio (per permetre ordenacio)
 //===========================================================================
-void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+bool ccruncher::operator <  (const Rating &x, const Rating &y)
 {
-  if (isEqual(name_,"rating")) {
-    if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes in rating tag");
-    }
-    else {
-      name = getStringAttribute(attributes, "name", "");
-      desc = getStringAttribute(attributes, "desc", "_UNDEF_");
+  return (x.order < y.order);
+}
 
-      if (name == "" || desc == "_UNDEF_")
+//===========================================================================
+// interpreta un node XML params
+//===========================================================================
+void ccruncher::Rating::parseDOMNode(const DOMNode& node) throw(Exception)
+{
+  // validem el node passat com argument
+  if (!XMLUtils::isNodeName(node, "rating"))
+  {
+    string msg = "Rating::parseDOMNode(): Invalid tag. Expected: rating. Found: ";
+    msg += XMLUtils::XMLCh2String(node.getNodeName());
+    throw Exception(msg);
+  }
+
+  // agafem els atributs del node
+  DOMNamedNodeMap &attributes = *node.getAttributes();
+  order = XMLUtils::getIntAttribute(attributes, "order", -1);
+  name = XMLUtils::getStringAttribute(attributes, "name", "");
+  desc = XMLUtils::getStringAttribute(attributes, "desc", "_UNDEF_");
+
+  if (order <= 0 || name == "" || desc == "_UNDEF_")
+  {
+    throw Exception("Rating::parseDOMNode(): invalid values at <rating>");
+  }
+
+  // recorrem tots els items
+  DOMNodeList &children = *node.getChildNodes();
+
+  if (&children != NULL)
+  {
+    for(unsigned int i=0;i<children.getLength();i++)
+    {
+      DOMNode &child = *children.item(i);
+
+      if (XMLUtils::isVoidTextNode(child) || XMLUtils::isCommentNode(child))
       {
-        throw Exception("invalid values at <rating>");
+        continue;
+      }
+      else
+      {
+        string msg = "Rating::parseDOMNode(): invalid data structure at <rating>: ";
+        msg += XMLUtils::XMLCh2String(child.getNodeName());
+        throw Exception(msg);
       }
     }
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
-  }
-}
-
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
-void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
-{
-  if (isEqual(name_,"rating")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Rating::getXML(int ilevel) const throw(Exception)
+string ccruncher::Rating::getXML(int ilevel) throw(Exception)
 {
-  string ret = Strings::blanks(ilevel);
+  string ret = Utils::blanks(ilevel);
 
   ret += "<rating ";
   ret += "name='" + name + "' ";
+  ret += "order='" + Parser::int2string(order) + "' ";
   ret += "desc='" + desc + "'";
   ret += "/>\n";
 

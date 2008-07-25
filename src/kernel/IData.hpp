@@ -19,32 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// IData.hpp - IData header - $Rev$
+// IData.hpp - IData header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added logger
-//
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added survival section
-//
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed aggregators class
-//
-// 2005/09/16 - Gerard Torrent [gerard@mail.generacio.com]
-//   . thread-safe modification (variable hasmaintag)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . IData refactoring
 //
 //===========================================================================
 
@@ -55,72 +34,65 @@
 
 #include "utils/config.h"
 #include <string>
+#include "xercesc/dom/DOM.hpp"
 #include "params/Params.hpp"
 #include "interests/Interests.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "transitions/TransitionMatrix.hpp"
-#include "survival/Survival.hpp"
 #include "correlations/CorrelationMatrix.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "utils/ExpatHandlers.hpp"
+#include "aggregators/Aggregators.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class IData : public ExpatHandlers
+class IData
 {
 
   private:
+
+    /* verbosity level (0=quiet, 1=verbose) (default=0)*/
+    int verbosity;
+
+    void init();
+    void release();
+    void parseDOMNode(const DOMNode&) throw(Exception);
+    void parseRootNode(const DOMNode &) throw(Exception);
+    void parseParams(const DOMNode &) throw(Exception);
+    void parseInterests(const DOMNode &) throw(Exception);
+    void parseRatings(const DOMNode &) throw(Exception);
+    void parseTransitions(const DOMNode &) throw(Exception);
+    void parseSectors(const DOMNode &) throw(Exception);
+    void parseCorrelations(const DOMNode &) throw(Exception);
+    void parseSegmentations(const DOMNode &) throw(Exception);
+    void parseAggregators(const DOMNode &) throw(Exception);
+    void parsePortfolio(const DOMNode &) throw(Exception);
+
+
+  public:
 
     Params *params;
     Interests *interests;
     Ratings *ratings;
     TransitionMatrix *transitions;
-    Survival *survival;
     Sectors *sectors;
     CorrelationMatrix *correlations;
     Segmentations *segmentations;
+    Aggregators *aggregators;
     Portfolio *portfolio;
 
-    // portfolio can be huge (memory, time, ...)
-    bool parse_portfolio;
-    bool hasmaintag;
-
-    void init();
-    void release();
-    void validate() throw(Exception);
-
-  public:
-
-    IData();
-    IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
+    IData(const DOMNode &, int) throw(Exception);
+    IData(const string &xmlfilename, int) throw(Exception);
     ~IData();
-
-    /** gets methods */
-    Params & getParams() const;
-    Interests & getInterests() const;
-    Ratings & getRatings() const;
-    TransitionMatrix & getTransitionMatrix() const;
-    Survival & getSurvival() const;
-    Sectors & getSectors() const;
-    CorrelationMatrix & getCorrelationMatrix() const;
-    Segmentations & getSegmentations() const;
-    Portfolio & getPortfolio() const;
-    /** gets methods */
-    void setSurvival(const Survival &);
-    /** has methods */
-    bool hasSurvival() const;
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
 
 };
 

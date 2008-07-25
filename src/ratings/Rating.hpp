@@ -19,20 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Rating.hpp - Rating header - $Rev$
+// Rating.hpp - Rating header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
@@ -42,40 +33,44 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
+#include "xercesc/dom/DOM.hpp"
 #include "utils/Exception.hpp"
-#include "utils/ExpatHandlers.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace xercesc;
 using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Rating : public ExpatHandlers
+class Rating
 {
+
+  private:
+
+    void init();
+    void parseDOMNode(const DOMNode&) throw(Exception);
+
 
   public:
 
-    // rating name
+    int order;
     string name;
-    // rating description
     string desc;
 
-    // rating constructor
     Rating();
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
-    // reset object content
-    void reset();
+    Rating(const DOMNode &) throw(Exception);
 
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
+    string getXML(int) throw(Exception);
 
 };
+
+//---------------------------------------------------------------------------
+
+// comparation operator
+bool operator <  (const Rating&, const Rating&);
 
 //---------------------------------------------------------------------------
 
