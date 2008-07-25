@@ -19,23 +19,22 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// NormalTest.cpp - NormalTest code - $Rev$
+// NormalTest.cpp - NormalTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
 #include <cmath>
 #include "math/Normal.hpp"
 #include "math/NormalTest.hpp"
@@ -100,7 +99,7 @@ void ccruncher_test::NormalTest::test_pdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::pdf(x1[i]), EPSILON1);
+    ASSERT_DOUBLES_EQUAL(y1[i], Normal::pdf(x1[i]), EPSILON1);
   }
 }
 
@@ -143,7 +142,7 @@ void ccruncher_test::NormalTest::test_cdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdf(x1[i]), EPSILON1);
+    ASSERT_DOUBLES_EQUAL(y1[i], Normal::cdf(x1[i]), EPSILON1);
   }
 }
 
@@ -174,7 +173,7 @@ void ccruncher_test::NormalTest::test_cdfinv(void)
 
   for (int i=0;i<7;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdfinv(x1[i]), EPSILON1);
+    ASSERT_DOUBLES_EQUAL(y1[i], Normal::cdfinv(x1[i]), EPSILON1);
   }
 
   ASSERT(isnan(Normal::cdfinv(-1.0)));

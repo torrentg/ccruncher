@@ -19,29 +19,25 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Timer.cpp - Timer code - $Rev$
+// Timer.cpp - Timer code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
-// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tolerance at format function. in debug mode can reach a
 //     negative number (very near to 0).
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . running_ variable changed from int to boolean
 //
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . replced clock() function by gettimeofday() function
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . changed clock() function by gettimeofday() function
 //
 //===========================================================================
 
 #include "utils/Timer.hpp"
-#include <ctime>
 #include <cmath>
 #include <cstdio>
 #include <cassert>

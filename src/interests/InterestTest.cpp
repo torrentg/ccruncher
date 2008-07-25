@@ -19,29 +19,23 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// InterestTest.cpp - InterestTest code - $Rev$
+// InterestTest.cpp - InterestTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . methods getActualCoef and getUpdateCoef replaced by getUpsilon
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . fecha renamed to date0
 //
 //===========================================================================
 
@@ -90,7 +84,7 @@ void ccruncher_test::InterestTest::test1()
     0.931439, 0.927579, 0.923845, 0.919991, 0.916265, 0.912417,
     0.908578};
 
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <interest name='discount' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.04'/>\n\
@@ -111,7 +105,7 @@ void ccruncher_test::InterestTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
   ASSERT("discount" == iobj.getName());
-  ASSERT(Date("18/02/2003") == iobj.getDate0());
+  ASSERT(Date("18/02/2003") == iobj.getFecha());
 
   Date date0 = Date("18/02/2003");
 
@@ -120,7 +114,7 @@ void ccruncher_test::InterestTest::test1()
     Date aux = addMonths(date0, i);
     double val1 = iobj.getUpsilon(date0, aux);
     double val2 = iobj.getUpsilon(aux, date0);
-    ASSERT_EQUALS_EPSILON(vupdate[i], val1, EPSILON);
-    ASSERT_EQUALS_EPSILON(vactual[i], val2, EPSILON);
+    ASSERT_DOUBLES_EQUAL(vupdate[i], val1, EPSILON);
+    ASSERT_DOUBLES_EQUAL(vactual[i], val2, EPSILON);
   }
 }

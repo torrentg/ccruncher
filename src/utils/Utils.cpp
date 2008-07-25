@@ -19,24 +19,21 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Utils.cpp - Utils code - $Rev$
+// Utils.cpp - Utils code
 // --------------------------------------------------------------------------
 //
-// 2005/07/19 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added hash() method
 //   . added timestamp() method
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method getCompilationOptions()
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -44,8 +41,11 @@
 #include <cstdio>
 #include <ctime>
 #include "utils/Utils.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
+
+#ifdef USE_MPI
+  #include <mpi.h>
+#endif
 
 // --------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ unsigned long ccruncher::Utils::hash(const string &str)
   while ( *name )
   {
     h = ( h << 4 ) + *name++;
-    if ( (g = h & 0xF0000000) )
+    if ( g = h & 0xF0000000 )
       h ^= g >> 24;
     h &= ~g;
   }

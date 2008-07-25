@@ -19,23 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatHandlers.cpp - ExpatHandlers code - $Rev$
+// ExpatHandlers.cpp - ExpatHandlers code
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method epstop(), stops current parsing
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed eperror method
 //
 //===========================================================================
 
@@ -52,6 +46,22 @@
 ccruncher::ExpatHandlers::~ExpatHandlers()
 {
   // nothing to do
+}
+
+//===========================================================================
+// throw an error
+//===========================================================================
+Exception ccruncher::ExpatHandlers::eperror(ExpatUserData &eud, const string &msg)
+{
+  XML_Parser xmlparser = eud.getParser();
+  char buf[256];
+
+  sprintf(buf, "%s at line %d and column %d",
+               msg.c_str(),
+               XML_GetCurrentLineNumber(xmlparser),
+               XML_GetCurrentColumnNumber(xmlparser));
+
+  return Exception(string(buf));
 }
 
 //===========================================================================

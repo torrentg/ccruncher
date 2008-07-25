@@ -19,25 +19,22 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Utils.hpp - Utils header - $Rev$
+// Utils.hpp - Utils header
 // --------------------------------------------------------------------------
 //
-// 2005/07/19 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added hash() method
 //   . added timestamp() method
 //
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method getCompilationOptions()
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
 //   . added rankid static variable (to avoid rank reorder when exits a proces)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

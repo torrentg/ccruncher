@@ -4,86 +4,108 @@
   <head>
     <title>CreditCruncher</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="credit risk, Sectorial Correlation, Survival Function, Copula, Monte Carlo, VAR, Expected Shortfall, Ratings, Transition Matrix, Cholesky Block Matrix, MPI, linux, win32, open source" />
-    <!-- repository version = $Rev$ -->
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="keywords" content="CreditMetrics, Sectorial Correlation, Survival Function,
+          Copula, Monte Carlo, VAR, TCE, Ratings, Transition Matrix, Cholesky Block Matrix,
+          MPI, linux, win32, open source, free econometric software" />
   </head>
 
   <body>
-    <div id="main-container">
-	<div id="page-header">
-		<a href="./index.html">
-			<img style="margin-top:35px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
-		</a>
-	</div>
-	<br/>
 
-	<div id="right-menu">
-		<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding-top:1px;padding-left:12px;padding-right:12px;padding-bottom:25px;">
-			<h3>Documentation</h3>
-			<a href="../ccruncher.pdf">Technical Document</a><br />
-			<a href="ifileref.html">Input File Reference</a><br />
-			<h3>Show me the pink!</h3>
-			<a href="screenshots.html">Screen Shots</a><br />
-			<a href="http://www.generacio.com/ccwi/">Demo site&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
-			<h3>Lets go work!</h3>
-			<a href="faq.html">F.A.Q.</a><br />
-			<a href="http://sourceforge.net/project/showfiles.php?group_id=128910&amp;package_id=141273">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
-			<a href="gstarted.html">Getting Started</a><br />
-			<h3>Development</h3>
-			<a href="http://www.generacio.com/svn/ccruncher/">Main SVN&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
-			<a href="http://sourceforge.net/projects/ccruncher/">SourceForge&nbsp;<img src="external.png" alt="" style="border:none;"/></a><br />
-			<a href="dependencies.html">Dependencies</a><br />
-		</div></div></div></div></div>
-	</div>
+    <h1>CreditCruncher</h1>
 
-    <h1 id="welcome">Welcome to CreditCruncher</h1>
     <p>
-      CCruncher computes the Value At Risk (VAR) of large credit
-      portfolios using the Monte Carlo method. This application is useful
-      for risk managers. The current version is 1.1. This software is
-      released under the <a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU 
-      General Public License</a>.
-    </p>
-    <p>
-      <strong>Keywords</strong>: Credit risk, Monte Carlo, Copula, VAR, 
-      Expected Shortfall, Correlations, Survival Functions, Ratings,
-      Transition Matrix.
+      CreditCruncher computes the Value At Risk (VAR) of large credit 
+      portfolios using the Monte Carlo method. It is a command line
+      solver that read an xml input file and returns a plain text file
+      with the simulated values of portfolio. The current version is 0.7.
+      This software is released under the 
+      <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a>.
     </p>
 
-    <br/>
-    <h1 id="overview">Overview</h1>
     <p>
-      CCruncher is designed to work in batch mode, without graphical support.
-      If the application is compiled and deployed in a cluster, then, computation 
-      time can be reduced.
+      <strong>Keywords</strong>: CreditMetrics, Sectorial Correlation, Survival 
+      Function, Copula, Monte Carlo, VAR (Value At Risk), TCE (Tail Conditional
+      Expectation or Expected Shortfall), Ratings, Transition Matrix, Cholesky
+      Block Matrix, MPI
+    </p>
+
+    <h3 id="sections">Sections</h3>
+
+    <table>
+      <tr>
+        <td>
+          <ul>
+            <li class="none"><a href="../ccruncher.pdf">Technical Document</a>
+              <a href="../ccruncher.pdf"><img src="pdf.gif" alt="pdf icon" /></a>
+            </li>
+            <li class="none"><a href="ifileref.html">Input File Reference</a>
+              <a href="ifileref.html"><img src="html.gif" alt="html icon" /></a>
+            </li>
+            <li class="none"><a href="install.html">Installation Instructions</a></li>
+            <li class="none"><a href="faq.html">F.A.Q.</a></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li class="none"><a href="screenshots.html">Screen Shots</a></li>
+            <li class="none"><a href="relproj.html">Related Projects</a></li>
+            <li class="none"><a href="http://sourceforge.net/tracker/?atid=713208&amp;group_id=128910&amp;func=browse">Submit a bug</a></li>
+            <li class="none"><a href="http://sourceforge.net/tracker/?atid=713211&amp;group_id=128910&amp;func=browse">New Feature Request</a></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+
+    <h3 id="overview">Overview</h3>
+
+    <p>
+      CreditCruncher is designed to work in batch mode, without graphical support.
+      Computation time can be reduced enabling the MPI instructions when compiling
+      and deploying the application in a cluster.
       <br />
       <br />
       <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
       <br />
-      The user must create a <i>xml</i> file with the description of the portfolio.
-      CCruncher takes this file and simulates <i>N</i> times the portfolio. 
-      The simulated values are stored in a file with extension <i>.out</i>.
-      Finally, a <a href="http://www.r-project.org/">R script</a> takes the simulated 
-      values and do some statistics on them to generate graphics and the risk 
-      indicators (Expected Loss, Stddev, VaR and Expected Shortfall).
+      The user create a <i>xml</i> file where the portfolio is described. CreditCruncher
+      take this file and simulate <i>N</i> times the portfolio described in the
+      input file. The simulated values are stored in a file with extension <i>.out</i>.
+      Finally, a R script takes the simulated values and do some statistic over
+      there to generate the risk indicators (VaR, TCE, etc.)
     </p>
 
-	<br/>
-	<div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
-		<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
-			<table width="100%"><tr>
-				<td style="width:100%; text-align:center; font-size:smaller;">
-					Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
-				</td>
-				<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-					Last modified: 13-Apr-2008
-				</td>
-			</tr></table>
-		</div></div></div></div></div>
-	</div>
-	<br/>
+    <h3 id="recruitement">Recruitement</h3>
 
-  </div>
+    <p>
+      We are searching a translator from spanish to english to translate the <i>Technical
+      Document</i> and revise the CreditCruncher site. We are searching beta-tester to
+      stress CreditCruncher, check results, review documentation, create new samples and
+      compare results with other solvers.
+    </p>
+
+    <div style="height:55px"></div>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td class="footer" align="left">
+          <a href="http://validator.w3.org/check?uri=referer">
+            <img src="http://www.w3.org/Icons/valid-xhtml10"
+              alt="Valid XHTML 1.0!" height="31" width="88" />
+          </a>
+          <a style="border-style: none;" href="http://sourceforge.net/projects/ccruncher/">
+            <img src="http://sourceforge.net/sflogo.php?group_id=128910&amp;type=1" 
+             width="88" height="31" alt="SourceForge.net Logo" />
+          </a>
+        </td>
+        <td class="footer" align="right">
+          Last modified: 09-Oct-2005 &nbsp;
+        </td>
+      </tr>
+    </table>
+
+    <p style="text-align: center; font-size: smaller;">
+      Copyright &copy; 2004-2005 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+    </p>
+
   </body>
 </html>

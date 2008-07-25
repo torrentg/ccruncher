@@ -19,26 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Portfolio.hpp - Portfolio header - $Rev$
+// Portfolio.hpp - Portfolio header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added onlyactive argument to sortClients() method
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Portfolio refactoring
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
@@ -48,7 +39,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
+#include <algorithm>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
@@ -56,7 +47,7 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interests.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Client.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -71,28 +62,27 @@ class Portfolio : public ExpatHandlers
 
   private:
 
-    vector<Borrower *> vborrowers;
+    vector<Client *> vclients;
 
-    const Ratings *ratings;
-    const Sectors *sectors;
+    Ratings *ratings;
+    Sectors *sectors;
     Segmentations *segmentations;
-    const Interests *interests;
-    Borrower *auxborrower;
-    const vector<Date> *dates;
+    Interests *interests;
+    Client *auxclient;
 
-    void insertBorrower(Borrower &) throw(Exception);
+    void insertClient(Client *) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
-    void reset(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
+    void reset(Ratings *, Sectors *, Segmentations *, Interests *);
 
   public:
 
-    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
+    Portfolio(Ratings *, Sectors *, Segmentations *, Interests *);
     ~Portfolio();
 
-    vector<Borrower *> &getBorrowers();
-    int getNumActiveBorrowers(const Date &, const Date &) throw(Exception);
-    void sortBorrowers(const Date &from, const Date &to, bool onlyactive) throw(Exception);
+    vector<Client *> *getClients();
+    int getNumActiveClients(Date, Date) throw(Exception);
+    void sortClients(Date from, Date to, bool onlyactive) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

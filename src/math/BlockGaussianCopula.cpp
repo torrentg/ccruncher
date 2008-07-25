@@ -19,18 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// BlockGaussianCopula.cpp - BlockGaussianCopula code - $Rev$
+// BlockGaussianCopula.cpp - BlockGaussianCopula code
 // --------------------------------------------------------------------------
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <cmath>
+#include <ctime>
 #include <cfloat>
 #include <cstdlib>
 #include "math/Normal.hpp"

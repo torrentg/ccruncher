@@ -19,17 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Strings.hpp - Strings header - $Rev$
+// Strings.hpp - Strings header
 // --------------------------------------------------------------------------
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (segregated from Utils.hpp)
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -39,12 +36,14 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "utils/Exception.hpp"
 #include <vector>
 #include <string>
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------

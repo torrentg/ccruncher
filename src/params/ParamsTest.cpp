@@ -19,39 +19,33 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ParamsTest.cpp - ParamsTest code - $Rev$
+// ParamsTest.cpp - ParamsTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed copula identifier: normal -> gaussian
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simulate=values option
-//   . removed method=rating-path
 //
 //===========================================================================
 
+#include <iostream>
 #include "params/Params.hpp"
 #include "params/ParamsTest.hpp"
 #include "utils/ExpatParser.hpp"
@@ -77,7 +71,7 @@ void ccruncher_test::ParamsTest::tearDown()
 //===========================================================================
 void ccruncher_test::ParamsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\
       <property name='time.steps' value='12'/>\n\
@@ -86,7 +80,9 @@ void ccruncher_test::ParamsTest::test1()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
+      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";
 
   // creating xml
@@ -101,23 +97,32 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(2 == params.steplength);
   ASSERT(3000 == params.maxiterations);
   ASSERT(30000000 == params.maxseconds);
+  ASSERT("rating-path" == params.method);
+  ASSERT("loss" == params.simule);
   ASSERT("gaussian" == params.copula_type);
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
 
-  ASSERT(Date("18/02/2003") == params.dates[0]);
-  ASSERT(Date("18/04/2003") == params.dates[1]);
-  ASSERT(Date("18/06/2003") == params.dates[2]);
-  ASSERT(Date("18/08/2003") == params.dates[3]);
-  ASSERT(Date("18/10/2003") == params.dates[4]);
-  ASSERT(Date("18/12/2003") == params.dates[5]);
-  ASSERT(Date("18/02/2004") == params.dates[6]);
-  ASSERT(Date("18/04/2004") == params.dates[7]);
-  ASSERT(Date("18/06/2004") == params.dates[8]);
-  ASSERT(Date("18/08/2004") == params.dates[9]);
-  ASSERT(Date("18/10/2004") == params.dates[10]);
-  ASSERT(Date("18/12/2004") == params.dates[11]);
-  ASSERT(Date("18/02/2005") == params.dates[12]);
+  Date *dates = NULL;
+  ASSERT_NO_THROW(dates = params.getDates());
+
+  if (dates != NULL)
+  {
+    ASSERT(Date("18/02/2003") == dates[0]);
+    ASSERT(Date("18/04/2003") == dates[1]);
+    ASSERT(Date("18/06/2003") == dates[2]);
+    ASSERT(Date("18/08/2003") == dates[3]);
+    ASSERT(Date("18/10/2003") == dates[4]);
+    ASSERT(Date("18/12/2003") == dates[5]);
+    ASSERT(Date("18/02/2004") == dates[6]);
+    ASSERT(Date("18/04/2004") == dates[7]);
+    ASSERT(Date("18/06/2004") == dates[8]);
+    ASSERT(Date("18/08/2004") == dates[9]);
+    ASSERT(Date("18/10/2004") == dates[10]);
+    ASSERT(Date("18/12/2004") == dates[11]);
+    ASSERT(Date("18/02/2005") == dates[12]);
+    delete [] dates;
+  }
 }
 
 //===========================================================================
@@ -126,7 +131,7 @@ void ccruncher_test::ParamsTest::test1()
 void ccruncher_test::ParamsTest::test2()
 {
   // error: steplength not given
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\
       <property name='time.steps' value='12'/>\n\
@@ -134,7 +139,9 @@ void ccruncher_test::ParamsTest::test2()
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.simule' value='loss'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
+      <property name='montecarlo.method' value='rating-path'/>\n\
     </params>";
 
   // creating xml

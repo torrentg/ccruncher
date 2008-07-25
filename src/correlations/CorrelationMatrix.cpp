@@ -19,40 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CorrelationMatrix.cpp - CorrelationMatrix code - $Rev$
+// CorrelationMatrix.cpp - CorrelationMatrix code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug when correlation = 0 and exist only 1 sector
 //
-// 2005/04/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to validation
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed pointers by references
-//   . Sectors class refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -62,20 +49,21 @@
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
+#include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================
 // private initializator
 //===========================================================================
-void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
+void ccruncher::CorrelationMatrix::init(Sectors *sectors_) throw(Exception)
 {
   epsilon = -1.0;
-  sectors = &sectors_;
+  sectors = sectors_;
 
-  n = (*sectors).size();
+  n = sectors->getSectors()->size();
 
   if (n <= 0)
   {
-    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
+    throw Exception("CorrelationMatrix::init(): invalid matrix range");
   }
 
   // inicializing matrix
@@ -85,7 +73,7 @@ void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Exception)
+ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors *sectors_) throw(Exception)
 {
   // seting default values
   init(sectors_);
@@ -102,7 +90,7 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 //===========================================================================
 // returns size (number of sectors)
 //===========================================================================
-int ccruncher::CorrelationMatrix::size() const
+int ccruncher::CorrelationMatrix::size()
 {
   return n;
 }
@@ -110,7 +98,7 @@ int ccruncher::CorrelationMatrix::size() const
 //===========================================================================
 // returns matrix
 //===========================================================================
-double ** ccruncher::CorrelationMatrix::getMatrix() const
+double ** ccruncher::CorrelationMatrix::getMatrix()
 {
   return matrix;
 }
@@ -121,28 +109,39 @@ double ** ccruncher::CorrelationMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = (*sectors).getIndex(sector1);
-  int col = (*sectors).getIndex(sector2);
+  int row = sectors->getIndex(sector1);
+  int col = sectors->getIndex(sector2);
 
   // checking index sector
   if (row < 0 || col < 0)
   {
-    string msg = "undefined sector at <sigma>, sector1=" + sector1 + ", sector2=" + sector2;
+    string msg = "CorrelationMatrix::insertSigma(): undefined sector at <sigma> ";
+    msg += sector1;
+    msg += " -> ";
+    msg += sector2;
     throw Exception(msg);
   }
 
   // checking value
   if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
   {
-    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
-                 Format::double2string(value);
+    string msg = "CorrelationMatrix::insertSigma(): value[";
+    msg += sector1;
+    msg += "][";
+    msg += sector2;
+    msg += "] out of range: ";
+    msg += Format::double2string(value);
     throw Exception(msg);
   }
 
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <sigma>";
+    string msg = "CorrelationMatrix::insertSigma(): redefined element [";
+    msg += sector1;
+    msg += "][";
+    msg += sector2;
+    msg += "] in <sigma>";
     throw Exception(msg);
   }
 
@@ -158,12 +157,12 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 {
   if (isEqual(name,"mcorrels")) {
     if (1 < getNumAttributes(attributes)) {
-      throw Exception("invalid number of attributes in tag mcorrels");
+      throw eperror(eu, "invalid number of attributes in tag mcorrels");
     }
     else {
       epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
       if (epsilon < 0.0 || epsilon > 1.0) {
-        throw Exception("invalid attribute at <mcorrels>");
+        throw eperror(eu, "invalid attribute at <mcorrels>");
       }
     }
   }
@@ -174,14 +173,14 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 
     if (sector1 == "" || sector2 == "" || value == DBL_MAX)
     {
-      throw Exception("invalid values at <sigma>");
+      throw eperror(eu, "invalid values at <sigma>");
     }
     else {
       insertSigma(sector1, sector2, value);
     }
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw eperror(eu, "unexpected tag " + string(name));
   }
 }
 
@@ -197,7 +196,7 @@ void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw Exception("unexpected end tag " + string(name));
+    throw eperror(eu, "unexpected end tag " + string(name));
   }
 }
 
@@ -213,8 +212,11 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "non defined correlation element [" + Format::int2string(i+1) + 
-                     "][" + Format::int2string(j+1) + "]";
+        string msg = "CorrelationMatrix::validate(): undefined element [";
+        msg += Format::int2string(i+1);
+        msg +=  "][";
+        msg += Format::int2string(j+1);
+        msg += "]";
         throw Exception(msg);
       }
     }
@@ -224,7 +226,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::CorrelationMatrix::getXML(int ilevel) const throw(Exception)
+string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -237,8 +239,8 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) const throw(Exception)
     for(int j=i;j<n;j++)
     {
       ret += spc2 + "<sigma ";
-      ret += "sector1 ='" + (*sectors)[i].name + "' ";
-      ret += "sector2 ='" + (*sectors)[j].name + "' ";
+      ret += "sector1 ='" + sectors->getName(i) + "' ";
+      ret += "sector2 ='" + sectors->getName(j) + "' ";
       ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }

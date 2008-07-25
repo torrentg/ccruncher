@@ -19,14 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// BlockMatrixCholTest.cpp - BlockMatrixCholTest code - $Rev$
+// BlockMatrixCholTest.cpp - BlockMatrixCholTest code
 // --------------------------------------------------------------------------
 //
-// 2005/07/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -92,7 +89,7 @@ void ccruncher_test::BlockMatrixCholTest::test1()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[3*i+j], chol->get(i,j), EPSILON);
     }
   }
 
@@ -103,7 +100,7 @@ void ccruncher_test::BlockMatrixCholTest::test1()
   chol->mult(x, y);
   for(int i=0;i<3;i++)
   {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
+    ASSERT_DOUBLES_EQUAL(y[i], z[i], EPSILON);
   }
 
   // exit function
@@ -151,7 +148,7 @@ void ccruncher_test::BlockMatrixCholTest::test2()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[3*i+j], chol->get(i,j), EPSILON);
     }
   }
 
@@ -162,7 +159,7 @@ void ccruncher_test::BlockMatrixCholTest::test2()
   chol->mult(x, y);
   for(int i=0;i<3;i++)
   {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
+    ASSERT_DOUBLES_EQUAL(y[i], z[i], EPSILON);
   }
 
   // exit function
@@ -214,7 +211,7 @@ void ccruncher_test::BlockMatrixCholTest::test3()
   {
     for (int j=0;j<5;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[5*i+j], chol->get(i,j), EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[5*i+j], chol->get(i,j), EPSILON);
     }
   }
 
@@ -225,7 +222,7 @@ void ccruncher_test::BlockMatrixCholTest::test3()
   chol->mult(x, y);
   for(int i=0;i<5;i++)
   {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
+    ASSERT_DOUBLES_EQUAL(y[i], z[i], EPSILON);
   }
 
   // exit function
@@ -363,7 +360,7 @@ void ccruncher_test::BlockMatrixCholTest::test7()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[3*i+j], chol->get(i,j), EPSILON);
     }
   }
 
@@ -374,7 +371,7 @@ void ccruncher_test::BlockMatrixCholTest::test7()
   chol->mult(x, y);
   for(int i=0;i<3;i++)
   {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
+    ASSERT_DOUBLES_EQUAL(y[i], z[i], EPSILON);
   }
 
   // checking that a 0 elements matrix decomposition crash
