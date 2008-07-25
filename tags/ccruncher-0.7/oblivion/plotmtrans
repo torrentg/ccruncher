@@ -1,0 +1,235 @@
+#!/bin/sh
+
+#=============================================================
+# description: 
+#   Use this script to generate the TMA or TMAA or Survival
+#   plot for a creditcruncher output data file
+#
+# dependences:
+#   shell, gnuplot, X11
+#
+# input:
+#   ccruncher input data file (*.out)
+#
+# output:
+#   a window with the plot
+#
+# retcodes:
+#   0    : OK
+#   other: KO
+#
+#-------------------------------------------------------------
+#
+# 2005/05/28 - Gerard Torrent [gerard@fobos.generacio.com]
+#   . initial release
+#
+#=============================================================
+
+#-------------------------------------------------------------
+# variables declaration
+#-------------------------------------------------------------
+progname=plotmtrans
+numversion="0.6"
+svnversion="R262M"
+tplot=survival
+numrows=50
+steplength=12
+listgpi=false;
+retcode=0
+
+#-------------------------------------------------------------
+# version function
+#-------------------------------------------------------------
+version() {
+
+  echo $progname-$numversion \($svnversion\)
+
+}
+
+#-------------------------------------------------------------
+# copyright function
+#-------------------------------------------------------------
+copyright() {
+
+  cat << _EOF_
+
+   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
+     under the GNU General Public License, version 2. more info at
+               http://www.generacio.com/ccruncher
+
+_EOF_
+
+}
+
+#-------------------------------------------------------------
+# usage function
+#-------------------------------------------------------------
+usage() {
+
+  cat << _EOF_
+  usage: $progname [options] <file>
+
+  description:
+    $progname is a shell script to plot the survival function
+    included in creditcurncher input data files. more info at 
+    http://www.generacio.com/ccruncher
+  arguments:
+    file     ccruncher xml input data file
+  options
+    -f       plot Forward Default Rate
+    -c       plot Cumulative Formad Default Rate
+    -s       plot Survival Function (default)
+    -b num   steplength. numbre of months between rows (default=12)
+    -n num   numrows. number of rows displayed (default=50)
+    -l       not graph, only list gnuplot instructions
+    -h       show this message and exit
+    -v       show version and exit
+  return codes:
+    0        OK. finished without errors
+    1        KO. finished with errors
+  examples:
+    $progname input.xml
+    $progname -c -n 100 input.xml
+    $progname -b 1 -n 100 input.xml
+
+_EOF_
+
+}
+
+#-------------------------------------------------------------
+# readconf function
+#-------------------------------------------------------------
+readconf() {
+
+  OPTIND=0
+
+  while getopts 'fcslhvb:n:' opt
+  do
+    case $opt in
+      f) tplot=tma;;
+      c) tplot=tmaa;;
+      s) tplot=survival;;
+      b) steplength=$OPTARG;;
+      n) numrows=$OPTARG;;
+      l) listgpi=true;;
+      v) version; 
+         exit 0;;
+      h) usage; 
+         exit 0;;
+     \?) echo "unknow option. use -h for more information"; 
+         exit 1;;
+      *) echo "unexpected error parsing arguments. Please report this bug sending";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
+         exit 1;;
+    esac
+  done
+
+  shift `expr $OPTIND - 1`
+
+  if [ "$*" != "" ]; then
+    for arg in "$@"
+    do
+      if [ ! -f $arg ]; then
+        echo "file $arg not exist";
+        echo "please, try again";
+        exit 1;
+      fi
+    done
+  fi
+
+  which gnuplot > /dev/null 2> /dev/null
+
+  if [ $? != 0 ]; then
+    echo "gnuplot not found. please report to system administrator";
+    echo "gnuplot can be found at http://www.gnuplot.info/";
+    exit 1;
+  fi
+
+}
+
+#-------------------------------------------------------------
+# plotmtrans function 
+#-------------------------------------------------------------
+plotmtrans() {
+
+  i=2;
+  mtrans="src/mtrans -x --$tplot --numrows=$numrows --steplength=$steplength $1";
+  gpistr="plot ";
+  line1=$($mtrans | head -1);
+
+  while [ $i != 0 ]
+  do
+    val=$(echo $line1 | awk "{ print \$$i }");
+
+    if [ ! -n "$val" ]; then
+      i=0;
+    else
+      if [ "$gpistr" != 'plot ' ]; then
+        gpistr="$gpistr, "
+      else
+        gpistr="$gpistr "
+      fi
+
+      gpistr="$gpistr '<$mtrans' using 1:$i with lines title '$val'";
+      i=`expr $i + 1`;
+    fi
+
+  done
+
+  if [ $listgpi = 'true' ]; then
+    prog="cat"
+  else
+    prog="gnuplot -persist "
+  fi
+
+  maxval=`expr $numrows \* $steplength`;
+  if [ $numrows -gt 30 ]; then
+    xtics="#set xtics $steplength"
+  else
+    xtics="set xtics $steplength"
+  fi
+
+  $prog 2>/dev/null << _EOF_
+    reset
+    set terminal x11 title "$1"
+    set xlabel 'time (in months)'
+    set ylabel '$tplot'
+    set grid
+    set title '$tplot'
+    set yrange [-0.05:1.05]
+    set xrange [0:$maxval]
+    set ytics 0.1
+    $xtics
+    $gpistr
+
+_EOF_
+
+  if [ $? != 0 ]; then
+    echo "found problems plotting file $1";
+    retcode=`expr $retcode + 1`;
+  fi
+}
+
+#-------------------------------------------------------------
+# main function
+#-------------------------------------------------------------
+
+readconf $@;
+shift `expr $OPTIND - 1`
+
+copyright;
+
+for filename in "$@"
+do
+  #echo ext=${filename##*.}
+  #echo path=${filename#*\/}
+  plotmtrans $filename;
+
+done
+
+if [ $retcode != 0 ]; then
+  echo "";
+  echo "check that rejected files are valid ccruncher output files";
+fi
+
+exit $retcode;

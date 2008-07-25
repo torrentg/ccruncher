@@ -1,0 +1,116 @@
+  /* http://www.w3.org/People/Raggett/tidy/ */
+
+body { 
+  margin-left: 10%;
+  margin-right: 10%;
+  font-family:verdana, arial, helvetica, sans-serif;
+  line-height:130%;
+}
+
+h1 { 
+  margin-left: -8%;
+}
+
+h2,h3 { 
+  margin-left: -4%;
+}
+
+h3.bolded { 
+  font-weight: bold ; 
+  color: #333333   ;
+  background-color: #E0E0E0 ; 
+}
+
+p {
+  text-align:justify;
+}
+
+pre { 
+/*  font-size: 10pt !important; */
+  font-family: monospace;
+  margin: 0;
+  background-color: #ddd;
+}
+
+em { 
+  font-style: italic; 
+  color: rgb(0, 0, 153);
+}
+
+strong { 
+  text-transform: uppercase; 
+  font-weight: bold;
+}
+
+.note {
+  font-style: italic; 
+  color: rgb(192, 101, 101); 
+}
+
+div h4 {
+  margin-left: 3%;
+}
+
+div p {
+  margin-left: 5%;
+}
+
+table {
+  font-family: sans-serif;
+  /*
+  font-size: 80%;
+  background: rgb(255,255,153);
+  */
+}
+
+table {
+  width: 100%;
+}
+/*
+td {
+  font-size: 80%;
+}
+*/
+td.faq_question { 
+  font-weight: bold ; 
+  color: #333333   ;
+  background-color: #E0E0E0 ; 
+}
+
+td.footer { 
+  font-size   : 11px ;
+  font-weight   : bold ;
+  color     : black ;
+  background-color  : #E0E0E0 ; 
+}
+
+tr.even, tr.a {
+  background-color: #ddd;
+}
+
+tr.odd, tr.b {
+  background-color: #eee ;
+}
+
+:link { 
+  color: rgb(0, 0, 153) ;
+}
+
+:visited { 
+  color: rgb(153, 0, 153) ;
+}
+
+
+a:hover { 
+  color: rgb(0, 0, 255) ;
+  background-color: #eee ;
+}
+
+li {
+  list-style-image: url('item.gif') ;
+  padding: 5px ;
+}
+
+img {
+  border: none ;
+}
