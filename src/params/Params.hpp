@@ -22,22 +22,22 @@
 // Params.hpp - Params header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.method
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
 // 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]

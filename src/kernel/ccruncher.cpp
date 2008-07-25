@@ -22,50 +22,50 @@
 // ccruncher.cpp - ccruncher main code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added POSIX compliance in command line arguments
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added gziped input files suport
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed mpi argument
 //
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added trace info (input file name + begin/end time)
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . don't apply nice if user don't put nice number
 //   . added trace info (simulations realized)
 //
-// 2005/07/28 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . defined signal handlers (to caught Ctrl-C, kill's, etc.)
 //
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getCompilationOptions() to version output
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed signal handlers
 //
-// 2005/09/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added version info at stdout
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
 //
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]

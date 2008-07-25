@@ -22,13 +22,13 @@
 // File.hpp - File header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added private constructor (non-instantiable class)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================

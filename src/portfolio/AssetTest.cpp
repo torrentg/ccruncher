@@ -22,38 +22,38 @@
 // AssetTest.cpp - AssetTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed exposure/recovery by netting
 //
-// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . update to t[0] -> update to t[n-1]
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Asset refactoring
 //   . modified asset value algorithm
 //
-// 2006/01/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simulate=values option
 //   . netting replaced by recovery
 //
@@ -97,7 +97,7 @@ void ccruncher_test::AssetTest::tearDown()
 //===========================================================================
 Segmentations ccruncher_test::AssetTest::getSegmentations()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
     <segmentation name='borrower' components='borrower'>\n\
@@ -140,7 +140,7 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
 //===========================================================================
 Interests ccruncher_test::AssetTest::getInterests()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <interests>\n\
       <interest name='spot' date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
@@ -181,7 +181,7 @@ Interests ccruncher_test::AssetTest::getInterests()
 //===========================================================================
 void ccruncher_test::AssetTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
@@ -214,7 +214,7 @@ void ccruncher_test::AssetTest::test1()
 //===========================================================================
 void ccruncher_test::AssetTest::test2()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
@@ -245,7 +245,7 @@ void ccruncher_test::AssetTest::test2()
 //===========================================================================
 void ccruncher_test::AssetTest::test3()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='01/01/2005'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
@@ -276,7 +276,7 @@ void ccruncher_test::AssetTest::test3()
 //===========================================================================
 void ccruncher_test::AssetTest::test4()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='01/01/2007'>\n\
         <data>\n\
           <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
@@ -304,7 +304,7 @@ void ccruncher_test::AssetTest::test4()
 //===========================================================================
 void ccruncher_test::AssetTest::test5()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='15/01/2005'>\n\
         <data>\n\
           <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
@@ -370,7 +370,7 @@ void ccruncher_test::AssetTest::test5()
 //===========================================================================
 void ccruncher_test::AssetTest::test6()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='15/01/2005'>\n\
         <data>\n\
           <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
@@ -437,7 +437,7 @@ void ccruncher_test::AssetTest::test6()
 //===========================================================================
 void ccruncher_test::AssetTest::test7()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='15/01/2005'>\n\
         <data>\n\
           <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\
@@ -481,7 +481,7 @@ void ccruncher_test::AssetTest::test7()
 //===========================================================================
 void ccruncher_test::AssetTest::test8()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
       <asset name='generic' id='op1' date='15/01/2005'>\n\
         <data>\n\
           <values at='15/01/2005' cashflow='-4000.0' recovery='2500.0' />\n\

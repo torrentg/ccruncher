@@ -145,7 +145,7 @@ dnl -------------------------------------------------------------
 dnl defining include directories
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/jama-1.2.5 -I$(top_srcdir)/deps/Mersenne-1.0 -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])
+         ['-I$(top_srcdir)/src -I$(top_srcdir)/share/jama-1.2.5 -I$(top_srcdir)/share/Mersenne-1.0 -I$(top_srcdir)/share/MiniCppUnit-2.5 -I$(top_srcdir)/share/gzstream-1.5'])
 
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h

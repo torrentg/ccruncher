@@ -22,25 +22,25 @@
 // Borrower.hpp - Borrower header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . asset refactoring
 //
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added hash key (to accelerate comparations)
 //
-// 2005/08/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . tag concept renamed to segmentation
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Client refactoring
 //
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]

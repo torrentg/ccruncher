@@ -22,25 +22,25 @@
 // SectorsTest.cpp - SectorsTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sector class refactoring
 //
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed sector.order tag
 //
 //===========================================================================
@@ -70,7 +70,7 @@ void ccruncher_test::SectorsTest::tearDown()
 //===========================================================================
 void ccruncher_test::SectorsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
       <sector name='S1' desc='calzado'/>\n\
       <sector name='S2' desc='otros sectores'/>\n\
@@ -104,7 +104,7 @@ void ccruncher_test::SectorsTest::test1()
 void ccruncher_test::SectorsTest::test2()
 {
   // xml with error (repeated sector)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
       <sector name='S1' desc='calzado'/>\n\
       <sector name='S1' desc='otros sectores'/>\n\
@@ -124,7 +124,7 @@ void ccruncher_test::SectorsTest::test2()
 void ccruncher_test::SectorsTest::test3()
 {
   // xml with error (repeated description)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
       <sector name='S1' desc='calzado'/>\n\
       <sector name='S2' desc='calzado'/>\n\
@@ -144,7 +144,7 @@ void ccruncher_test::SectorsTest::test3()
 void ccruncher_test::SectorsTest::test4()
 {
   // xml with error (tag sectir)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
       <sector name='S1' desc='calzado'/>\n\
       <sectir name='S2' desc='otros sectores'/>\n\

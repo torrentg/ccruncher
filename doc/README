@@ -29,7 +29,7 @@ $CCRUNCHER/
   |- data/    : put your output here (recomended)
   |- doc/     : doc directory
   |- samples/ : samples directory
-  |- deps/    : source code from other projects required by ccruncher
+  |- share/   : source code from other projects required by ccruncher
   |- src/     : ccruncher source code files
 
 
@@ -121,10 +121,10 @@ Notes for Windows developers (MSVC7)
    (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
 
 3. download expat package from http://expat.sourceforge.net/
-   and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
+   and unpack at $CCRUNCHER\share\expat-X.Y.Z directory
 
 4. download zlib package from http://www.zlib.net/
-   and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
+   and unpack at $CCRUNCHER\share\zlib-X.Y.Z directory
 
 5. copy zlib1.dll and libexpat.dll (installed in steps 3 and 4) to
    $CCRUNCHER\bin (required to execute bin\ccruncher.exe)

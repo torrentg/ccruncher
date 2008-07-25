@@ -22,19 +22,19 @@
 // SegmentationTest.cpp - SegmentationTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Segmentation class refactoring
 //
 //===========================================================================
@@ -68,7 +68,7 @@ void ccruncher_test::SegmentationTest::tearDown()
 //===========================================================================
 void ccruncher_test::SegmentationTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <segmentation name='office' components='asset'>\n\
       <segment name='0001'/>\n\
       <segment name='0002'/>\n\

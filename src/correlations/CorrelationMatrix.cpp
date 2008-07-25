@@ -22,36 +22,36 @@
 // CorrelationMatrix.cpp - CorrelationMatrix code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug when correlation = 0 and exist only 1 sector
 //
-// 2005/04/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug related to validation
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed pointers by references
 //   . Sectors class refactoring
 //
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/02/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed method ExpatHandlers::eperror()
 //
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed sector.order tag
 //
 //===========================================================================

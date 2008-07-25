@@ -22,24 +22,23 @@
 // Exception.cpp - Exception code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/05 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/05 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getStackTrace() method (link with -rdynamic flag)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include "utils/Exception.hpp"
-#include <cstdlib>
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const char *str) : exception()
+ccruncher::Exception::Exception(char *str) : exception()
 {
   msg = string(str);
   stacktrace = retrieveStackTrace();
@@ -143,7 +142,7 @@ string ccruncher::Exception::retrieveStackTrace()
   char **symbuf;
   int status;
   char *demangledname;
-  size_t pos1, pos2;
+  unsigned int pos1, pos2;
   string addr, func;
   string ret="\n";
 

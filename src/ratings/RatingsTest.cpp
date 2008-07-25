@@ -22,25 +22,25 @@
 // RatingsTest.cpp - RatingsTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Ratings refactoring
 //
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2007/07/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed rating.order tag
 //   . added function ratings.getIndex()
 //
@@ -71,7 +71,7 @@ void ccruncher_test::RatingsTest::tearDown()
 //===========================================================================
 void ccruncher_test::RatingsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\
@@ -114,7 +114,7 @@ void ccruncher_test::RatingsTest::test1()
 void ccruncher_test::RatingsTest::test2()
 {
   // note that ratings are incorrect (A is a name repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='A' desc='bueno'/>\n\
@@ -137,7 +137,7 @@ void ccruncher_test::RatingsTest::test2()
 void ccruncher_test::RatingsTest::test3()
 {
   // note that ratings are incorrect (descriptions repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
       <rating name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='muy bueno'/>\n\
@@ -160,7 +160,7 @@ void ccruncher_test::RatingsTest::test3()
 void ccruncher_test::RatingsTest::test4()
 {
   // note that xml are not valid (ratong tag)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
       <ratong name='A' desc='muy bueno'/>\n\
       <rating name='B' desc='bueno'/>\n\

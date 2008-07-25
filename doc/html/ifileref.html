@@ -5,7 +5,7 @@
   <head>
     <title>CreditCruncher - Input File Reference</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <!-- repository version = $Rev$ -->
   </head>
 
@@ -33,7 +33,7 @@
 
     <pre>
 
-  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
   &lt;ccruncher&gt;
 
     <i>&lt;!-- put sections here (see below) --&gt;</i>
@@ -553,7 +553,7 @@
 
     <p>
       This section shows how to define the correlation matrix between sectors.
-      The correlation matrix must be simmetric. You only need to set up the 
+      The correlation matrix must be a simmetric. You only need to set up the 
       upper triangle's elements. ccruncher checks that all the elements are in 
       [-1.0, +1.0]. The number of elements to set up is (numsectors+1) x numsectors / 2.
     </p>
@@ -598,7 +598,7 @@
       <tr class="a">
         <td style="text-align:center;">sector1</td>
         <td style="text-align:justify;">
-          First sector involved in correlation value.
+          Firt sector involved in correlation value.
           This value must be a sector identifier (see name attribute in sector tag)
         </td>
         <td style="text-align:center;"><code>string</code></td>
@@ -635,8 +635,8 @@
       which a segmentation contains; borrower segmentations (eg. sector, borrower size, initial
       rating, etc.) and asset segmentations (eg. products, branch where the
       contract is made, etc.). All segmentations must be complete (one 
-      element only belongs to one segment and the union of all segments gives the whole
-      portfolio). Every segmentation must have a segment named 'rest' defined (in a
+      element only belongs to one segment and the union of all segments 
+      results in the total portfolio). Every segmentation must have a segment named 'rest' defined (in a
       implicit way). If a borrower (or an asset)
       belongs nowhere, then it belongs to the 'rest' segment. Finally, there are 2
       special segmentations, 'borrower' (one segment per borrower) and 'asset'
@@ -930,11 +930,11 @@
     <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
       <div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
         <table width="100%"><tr>
-          <td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+          <td width="100%" style="text-align:center; font-size: smaller;">
+            Copyright &copy; 2004-2007 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
           </td>
-          <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 30-May-2008
+          <td nowrap="nowrap" style="text-align:right; font-size:smaller; font-weight:bold;">
+            Last modified: 07-Aug-2007
           </td>
         </tr></table>
       </div></div></div></div></div>

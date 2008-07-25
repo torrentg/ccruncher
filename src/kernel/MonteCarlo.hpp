@@ -22,43 +22,43 @@
 // Montecarlo.hpp - MonteCarlo header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //   . added new SegmentAggregator class
 //
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . MonteCarlo refactoring
 //   . generic copula array
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]

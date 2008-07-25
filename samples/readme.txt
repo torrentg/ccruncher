@@ -32,6 +32,7 @@ Description:
   The borrower has an unique asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
+  time-to-default resolution method
 
 Expected Results:
 
@@ -72,6 +73,7 @@ Description:
   Each borrower has an unique asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
+  time-to-default resolution method
 
 Expected Results:
 
@@ -79,9 +81,9 @@ Expected Results:
   at t=12 can be modeled as a Bernouilli(0.1). Then, the
   portfolio loss at t=12 can be modeled as:
 
-     P(Z=0) = P(X1=0)Â·P(X2=0) = 0.9 Â· 0.9 = 0.81
-     P(Z=1) = P(X1=0)Â·P(X2=1) + P(X1=1)Â·P(X2=0) = 0.9 Â· 0.1 + 0.1 Â· 0.9 = 0.18
-     P(Z=2) = P(X1=1)Â·P(X2=1) = 0.1 Â· 0.1 = 0.01
+     P(Z=0) = P(X1=0)·P(X2=0) = 0.9 · 0.9 = 0.81
+     P(Z=1) = P(X1=0)·P(X2=1) + P(X1=1)·P(X2=0) = 0.9 · 0.1 + 0.1 · 0.9 = 0.18
+     P(Z=2) = P(X1=1)·P(X2=1) = 0.1 · 0.1 = 0.01
 
 How I can check results?
 
@@ -113,6 +115,7 @@ Description:
   Each borrower has an asset with this profile:
     asset value at t=12 is 1 if borrower is alive and
     asset value at t=12 is 0 if borrower dead (default)
+  time-to-default resolution method
 
 Expected Results:
 

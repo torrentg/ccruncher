@@ -12,13 +12,11 @@ homeurl: http://minicppunit.sourceforge.net/
 descrip: MiniCppUnit is a C++ unit testing framework. 
          In CreditCruncher is used to test all basic classes.
          All classes that match pattern *Test.?pp are unit test.
-modific: Applied minor patch (reported to authors) related to encoding 
-         (from ISO-8859-1 to UTF-8) and assertTrue(), assertTrueMissatge() methods.
 
 ------------------------------------------------------------------------
 
 project: expat
-version: 2.0.1
+version: 1.95.8
 licence: MIT License
 homeurl: http://expat.sourceforge.net/
 descrip: Expat is an XML parser library written in C. It is a stream-oriented 
@@ -70,7 +68,7 @@ descrip: The Mersenne Twister is an algorithm for generating random numbers.
 ------------------------------------------------------------------------
 
 project: valgrind
-version: 3.3.0
+version: 3.2.3
 licence: GNU GPL
 homeurl: http://valgrind.kde.org
 descrip: Valgrind is a GPL'd system for debugging and profiling x86-Linux 
@@ -100,7 +98,7 @@ descrip: LAM/MPI is a high-quality open-source implementation of the Message
 ------------------------------------------------------------------------
 
 project: R
-version: 2.7.0
+version: 2.5.1
 licence: GNU GPL
 homeurl: http://www.r-project.org/
 descrip: R is a system for statistical computation and graphics. It consists

@@ -22,91 +22,91 @@
 // Montecarlo.cpp - MonteCarlo code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed period time resolution (year->month)
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //   . removed aggregators class
 //   . added new SegmentAggregator class
 //
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added simulation method time-to-default
 //
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added interests support
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed useMPI() method
 //
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //   . GaussianCopula replaced by BlockGaussianCopula
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . execute() method returns number of realized simulations
 //
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/30 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . moved <cassert> include at last position
 //
-// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added new check over survival defined user
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented MPI support
 //
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added param montecarlo.simule
 //
-// 2005/09/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed date list output
 //
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added onlyactive argument to sortClients() method
 //
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method randomize()
 //   . reindexed copulas vector
 //
-// 2005/09/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added timer at random number generation step
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/23 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed some method signatures
 //
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/12/17 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Sectors refactoring
 //   . Ratings refactoring
 //   . Segmentations refactoring
 //   . Survival refactoring
 //   . TransitionMatrix refactoring
 //
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . Portfolio refactoring
 //   . IData refactoring
 //   . SegmentAggregator refactoring
 //   . MonteCarlo refactoring
 //   . generic copula array
 //
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/01/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed simule and method params
 //
-// 2006/12/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2006/12/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . solved bug in mpi version (SegmentAggregator::touch() 
 //     called by all ranks, not just master)
 //
@@ -419,7 +419,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     // setting logger info
     string sval = Format::int2string(idata.getTransitionMatrix().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("transition matrix period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
+    Logger::trace("matrix term (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
     double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), STEPS+1);

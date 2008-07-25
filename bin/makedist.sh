@@ -7,7 +7,7 @@
 # repository version:
 #   $Rev$
 #
-# dependencies:
+# dependences:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
 #
 # retcodes:
@@ -16,33 +16,30 @@
 #
 #-------------------------------------------------------------
 #
-# 2005/06/07 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/06/07 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added oblivion directory management
 #   . 'svn checkout' replaced by 'svn export'
 #
-# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/10/12 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . moved $CCRUNCHER/ doc files to directory $CCRUNCHER/doc
 #   . changed argument flag -l by -b (binary distribution)
 #   . added file data/readme.txt
 #
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added support for build/ directory
 #   . removed unused checkVersion() function
 #   . check that a distribution option is filled (xxx)
 #   . added Rev svn:keyword
-#   . added dependencies paragraph at comments
+#   . added dependences paragraph at comments
 #
-# 2005/11/08 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/11/08 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . solved minor bugs related to windows installation
 #
 # 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added doc/other directory
-#
-# 2007/11/17 - Gerard Torrent [gerard@mail.generacio.com]
-#   . directory share/ renamed to deps/
 #
 #=============================================================
 
@@ -121,7 +118,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
     esac
   done
@@ -232,7 +229,7 @@ makeBinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf deps;
+  rm -rvf share;
   rm -rvf oblivion;
 
   #creating tarball
@@ -278,7 +275,7 @@ makeWinDist() {
   rm Makefile*;
   rm -rvf src;
   rm -rvf build;
-  rm -rvf deps;
+  rm -rvf share;
   rm -rvf oblivion;
 
   #setting windows end-line
@@ -326,7 +323,7 @@ case $disttype in
          echo "use -h option for more information";
          exit 1;;
       *) echo "unexpected error. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
 
 esac

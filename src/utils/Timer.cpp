@@ -22,20 +22,20 @@
 // Timer.cpp - Timer code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see jama/tnt_stopwatch && boost/timer)
 //
-// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tolerance at format function. in debug mode can reach a
 //     negative number (very near to 0).
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . running_ variable changed from int to boolean
 //
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . replced clock() function by gettimeofday() function
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
