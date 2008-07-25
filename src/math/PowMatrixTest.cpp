@@ -22,32 +22,32 @@
 // PowMatrixTest.cpp - PowMatrixTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/01/29 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed epsilon value because in debug mode test2 fails
 //     it is due that optimized code sometimes gives different
 //     answers not because of an error but because optimization
 //     changes the order of calculations, resulting in slightly
 //     different results due to the limits of floating-point precision.
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Arrays class
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
 //
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . pow method renamed: pow(x,y) -> fpow(x,y)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -56,6 +56,7 @@
 #include "math/PowMatrix.hpp"
 #include "math/PowMatrixTest.hpp"
 #include "utils/Arrays.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -115,7 +116,7 @@ void ccruncher_test::PowMatrixTest::test1()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solA[j+3*i], M[i][j], EPSILON);
     }
   }
 
@@ -163,7 +164,7 @@ void ccruncher_test::PowMatrixTest::test2()
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solB[j+3*i], M[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(solB[j+3*i], M[i][j], EPSILON);
     }
   }
 
@@ -203,15 +204,15 @@ void ccruncher_test::PowMatrixTest::test4()
   double x = 2.0;
   double y = 1.0/3.0;
 
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, +3.0), +8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, +3.0), -8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, -3.0), +1.0/8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, -3.0), -1.0/8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(+2.0, +3.0), +8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(-2.0, +3.0), -8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(+2.0, -3.0), +1.0/8.0, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(-2.0, -3.0), -1.0/8.0, 1E-6);
 
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, +y), +1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, -y), +0.79370115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, +y), -1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, -y), -0.79370115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(+x, +y), +1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(+x, -y), +0.79370115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(-x, +y), -1.25992115, 1E-6);
+  ASSERT_DOUBLES_EQUAL(ccruncher::fpow(-x, -y), -0.79370115, 1E-6);
 
 }
 

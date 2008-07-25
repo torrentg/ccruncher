@@ -22,17 +22,14 @@
 // ExpatHandlers.hpp - ExpatHandlers header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added method epstop(), stops current parsing
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed eperror method
 //
 //===========================================================================
 
@@ -43,6 +40,7 @@
 
 #include "utils/config.h"
 #include "utils/ExpatUserData.hpp"
+#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -50,8 +48,6 @@
 using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
-
-class ExpatUserData; // defined in file ExpatUserData.hpp
 
 //---------------------------------------------------------------------------
 
@@ -64,6 +60,7 @@ class ExpatHandlers
 
   protected:
 
+    Exception eperror(ExpatUserData &eud, const string &msg);
     void epback(ExpatUserData &eud);
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
     void epstop(ExpatUserData &eud);

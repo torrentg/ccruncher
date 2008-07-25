@@ -22,31 +22,26 @@
 // Rating.cpp - Rating code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . implemented Strings class
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
 #include "ratings/Rating.hpp"
 #include "utils/Strings.hpp"
+#include "utils/Format.hpp"
 
 //===========================================================================
 // constructor
@@ -61,8 +56,17 @@ ccruncher::Rating::Rating()
 //===========================================================================
 void ccruncher::Rating::reset()
 {
+  order = -1;
   name = "";
   desc = "";
+}
+
+//===========================================================================
+// operator less-than (needed by sort functions)
+//===========================================================================
+bool ccruncher::operator <  (const Rating &x, const Rating &y)
+{
+  return (x.order < y.order);
 }
 
 //===========================================================================
@@ -71,21 +75,22 @@ void ccruncher::Rating::reset()
 void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"rating")) {
-    if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes in rating tag");
+    if (getNumAttributes(attributes) != 3) {
+      throw eperror(eu, "invalid number of attributes at rating");
     }
     else {
+      order = getIntAttribute(attributes, "order", -1);
       name = getStringAttribute(attributes, "name", "");
       desc = getStringAttribute(attributes, "desc", "_UNDEF_");
 
-      if (name == "" || desc == "_UNDEF_")
+      if (order <= 0 || name == "" || desc == "_UNDEF_")
       {
-        throw Exception("invalid values at <rating>");
+        throw eperror(eu, "invalid values at <rating>");
       }
     }
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw eperror(eu, "unexpected tag " + string(name_));
   }
 }
 
@@ -98,19 +103,20 @@ void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else {
-    throw Exception("unexpected end tag " + string(name_));
+    throw eperror(eu, "unexpected end tag " + string(name_));
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Rating::getXML(int ilevel) const throw(Exception)
+string ccruncher::Rating::getXML(int ilevel) throw(Exception)
 {
   string ret = Strings::blanks(ilevel);
 
   ret += "<rating ";
   ret += "name='" + name + "' ";
+  ret += "order='" + Format::int2string(order) + "' ";
   ret += "desc='" + desc + "'";
   ret += "/>\n";
 

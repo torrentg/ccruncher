@@ -22,14 +22,11 @@
 // Copula.hpp - Copula header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added setSeed abstract method
 //
 //===========================================================================
 
@@ -39,6 +36,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <string>
 
 //---------------------------------------------------------------------------
 
@@ -54,7 +52,6 @@ class Copula
     virtual int size() = 0;
     virtual void next() = 0;
     virtual double get(int) = 0;
-    virtual void setSeed(long) = 0;
 
     virtual ~Copula() {};
 };

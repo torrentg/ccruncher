@@ -50,7 +50,7 @@
  * A (hack) implementation of gettimeofday for Windows.
  * Since I send sec/usec in UDP packets, this made the most sense.
  * -------------------------------------------------------------------
- * 09/10/2005 [gerard@mail.generacio.com]
+ * 09/10/2005 [gerard@fobos.generacio.com]
  * commented HAVE_GETTIMEOFDAY define (conflict autotools-Windows)
  * ------------------------------------------------------------------- */
 

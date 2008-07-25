@@ -22,29 +22,26 @@
 // SegmentationsTest.cpp - SegmentationsTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Segmentations class refactoring
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
 //
 //===========================================================================
 
+#include <iostream>
+#include "segmentations/Segment.hpp"
+#include "segmentations/Segmentation.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "segmentations/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"
@@ -74,20 +71,20 @@ void ccruncher_test::SegmentationsTest::tearDown()
 //===========================================================================
 void ccruncher_test::SegmentationsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='borrower' components='borrower'>\n\
+    <segmentation name='client' components='client'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='asset' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sector' components='borrower'>\n\
+    <segmentation name='sector' components='client'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='borrower'>\n\
+    <segmentation name='size' components='client'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
@@ -109,6 +106,7 @@ void ccruncher_test::SegmentationsTest::test1()
   Segmentations sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  ASSERT(7 == sobj.size());
-  ASSERT(0 == sobj["portfolio"].order);
+  vector<Segmentation> v = sobj.getSegmentations();
+  ASSERT(7 == v.size());
+  ASSERT(0 == sobj.getSegmentation("portfolio"));
 }

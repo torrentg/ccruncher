@@ -22,20 +22,17 @@
 // Interests.hpp - Interests header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/19 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/19 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added dummy constructor
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
 //
 //===========================================================================
 
@@ -45,7 +42,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
+#include <algorithm>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "interests/Interest.hpp"
@@ -63,34 +60,22 @@ class Interests : public ExpatHandlers
 
   private:
 
-    // list of interest curves
     vector<Interest> vinterests;
-    // index for spot curve
     int ispot;
-    // uaxiliary variable (used by parser)
     Interest auxinterest;
 
-    // insert an interest curve to list
-    void insertInterest(const Interest &) throw(Exception);
-    // validate list
+    void insertInterest(Interest &) throw(Exception);
     void validate() throw(Exception);
 
 
   public:
 
-    // default constructor
     Interests();
-    // destructor
     ~Interests();
 
-    // returns the number of interests
-    int size() const;
-    // [] operator
-    Interest& operator [] (int i);
-    // [] operator
-    Interest& operator [] (const string &name) throw(Exception);
-    // return xml string with object content
-    string getXML(int ilevel) const throw(Exception);
+    vector<Interest> * getInterests();
+    Interest * getInterest(const string &name) throw(Exception);
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

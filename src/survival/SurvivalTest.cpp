@@ -22,32 +22,27 @@
 // SurvivalTest.cpp - SurvivalTest code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added test6()
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed cout's
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/24 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . class CopulaNormal renamed to GaussianCopula
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Survival class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
 //
 //===========================================================================
 
+#include <iostream>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
 #include "math/GaussianCopula.hpp"
@@ -79,10 +74,10 @@ void ccruncher_test::SurvivalTest::tearDown()
 //===========================================================================
 Ratings ccruncher_test::SurvivalTest::getRatings()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='rating1'/>\n\
-      <rating name='E' desc='default'/>\n\
+      <rating name='A' order='1' desc='rating1'/>\n\
+      <rating name='E' order='2' desc='default'/>\n\
     </ratings>";
 
   // creating xml
@@ -98,7 +93,7 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 //===========================================================================
 void ccruncher_test::SurvivalTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -116,14 +111,14 @@ void ccruncher_test::SurvivalTest::test1()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values
   for(int i=0;i<9;i++)
   {
-    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
-    ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
+    ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
 
   // checking inverse values
@@ -140,7 +135,7 @@ void ccruncher_test::SurvivalTest::test1()
 void ccruncher_test::SurvivalTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='0.98'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -155,7 +150,7 @@ void ccruncher_test::SurvivalTest::test2()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -165,7 +160,7 @@ void ccruncher_test::SurvivalTest::test2()
 void ccruncher_test::SurvivalTest::test3()
 {
   // non valid survival function, non monotone
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
@@ -180,7 +175,7 @@ void ccruncher_test::SurvivalTest::test3()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -190,7 +185,7 @@ void ccruncher_test::SurvivalTest::test3()
 void ccruncher_test::SurvivalTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <survival maxmonths='7' epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='-0.50'/>\n\
@@ -205,7 +200,7 @@ void ccruncher_test::SurvivalTest::test4()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survival sf(&ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
@@ -225,13 +220,13 @@ void ccruncher_test::SurvivalTest::test5()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues, 7);
+  Survival sf(&ratings, 6, (int *) imonths, (double**) mvalues, 7);
 
   // checking values
   for(int i=0;i<9;i++)
   {
-    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
-    ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
+    ASSERT_DOUBLES_EQUAL(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_DOUBLES_EQUAL(sf.evalue(1, i), 0.0, EPSILON)
   }
 
   // checking inverse values
@@ -258,7 +253,7 @@ void ccruncher_test::SurvivalTest::test6()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues, 48);
+  Survival sf(&ratings, 2, (int *) imonths, (double**) mvalues, 48);
 
   // creating Id matrix 2x2
   id[0][0] = 1.0;

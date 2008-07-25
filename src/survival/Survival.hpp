@@ -22,16 +22,16 @@
 // Survival.hpp - Survival header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/14 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/29 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . improved performance for inverse method
 //
-// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/31 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getMinCommonTime() method
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -61,52 +61,34 @@ class Survival : public ExpatHandlers
 
   private:
 
-    // maximum number of months where survival function > 0
     int maxmonths;
-    // survival function for each rating
     vector<double> *ddata;
-    // inverse survival function values
     int **idata;
-    // number of ratings
     int nratings;
-    // pointer to ratings table
     Ratings *ratings;
-    // epsilon used to compare doubles
     double epsilon;
 
-    // initialize object
-    void init(const Ratings &) throw(Exception);
-    // insert a survival value
+    void init(Ratings *) throw(Exception);
     void insertValue(const string &r1, int t, double val) throw(Exception);
-    // validate object content
     void validate() throw(Exception);
-    // fill holes in survival functions
     void fillHoles();
-    // compute inverse for each survival function
     void computeInvTable();
-    // linear interpolation algorithm
-    double interpole(double x, double x0, double y0, double x1, double y1) const;
-    // inverse function
-    int inverse1(const int irating, double val) const;
+    double interpole(double x, double x0, double y0, double x1, double y1);
+    int inverse1(const int irating, double val);
 
 
   public:
 
-    // constructor
-    Survival(const Ratings &) throw(Exception);
-    // constructor
-    Survival(const Ratings &, int, int *, double**, int) throw(Exception);
-    // destructor
+    Survival(Ratings *) throw(Exception);
+    Survival(Ratings *, int, int *, double**, int) throw(Exception);
     ~Survival();
 
-    // evalue survival for irating at t
-    double evalue(const int irating, int t) const;
-    // evalue inverse survival for irating at t
-    int inverse(const int irating, double val) const;
-    // return minimal defined time
-    int getMinCommonTime() const;
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    void evalue(int steplength, int numrows, double **ret);
+    double evalue(const int irating, int t);
+    int inverse(const int irating, double val);
+
+    int getMinCommonTime();
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

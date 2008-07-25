@@ -17,59 +17,53 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
+// 
 //
 // ccruncher.cpp - ccruncher main code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/11 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/11 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added POSIX compliance in command line arguments
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/09 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added gziped input files suport
 //
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/12 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed mpi argument
 //
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added mpi support
 //
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added class Format (previously format function included in Parser)
 //
-// 2005/07/26 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/26 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added trace info (input file name + begin/end time)
 //
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . don't apply nice if user don't put nice number
 //   . added trace info (simulations realized)
 //
-// 2005/07/28 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/28 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . defined signal handlers (to caught Ctrl-C, kill's, etc.)
 //
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/06 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added getCompilationOptions() to version output
 //
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed signal handlers
 //
-// 2005/09/20 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/20 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added version info at stdout
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . MonteCarlo refactoring
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added listloss method
 //
 //===========================================================================
 
@@ -90,7 +84,10 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-#include "utils/ccmpi.h"
+
+#ifdef USE_MPI
+  #include <mpi.h>
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -106,8 +103,7 @@ void run(string, string) throw(Exception);
 
 string sfilename = "";
 string spath = "";
-bool bvalidate = false;
-bool blistloss = false;
+bool bsimulate = true;
 bool bverbose = false;
 bool bforce = false;
 int inice = -999;
@@ -130,7 +126,6 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "validate",     0,  NULL,  305 },
-      { "listloss",     0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -141,12 +136,12 @@ int main(int argc, char *argv[])
   }
   catch(Exception &e)
   {
-    cerr << e << endl;
+    cerr << e;
     return shutdown(1);
   }
   catch(...)
   {
-    cerr << "unknow error" << endl;
+    cerr << "unknow error";
     return shutdown(1);
   }
 
@@ -215,16 +210,12 @@ int main(int argc, char *argv[])
           break;
 
       case 305: // --validate (validate input file)
-          bvalidate = true;
-          break;
-
-      case 306: // --listloss (list precomputed asset losses at time nodes)
-          blistloss = true;
+          bsimulate = false;
           break;
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
+                  "ccruncher version and arguments at gerard@fobos.generacio.com\n";
           return shutdown(1);
     }
   }
@@ -248,7 +239,7 @@ int main(int argc, char *argv[])
   }
 
   // checking arguments consistency
-  if (spath == "" && !bvalidate && !blistloss)
+  if (spath == "" && bsimulate == true)
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
@@ -256,10 +247,7 @@ int main(int argc, char *argv[])
   }
 
   // license info
-  if (bverbose || !blistloss)
-  {
-    copyright();
-  }
+  copyright();
 
   try
   {
@@ -273,13 +261,13 @@ int main(int argc, char *argv[])
   }
   catch(Exception &e)
   {
-    cerr << endl << e << endl;
+    cerr << e;
     return shutdown(1);
   }
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
+            "ccruncher version and arguments at gerard@fobos.generacio.com\n";
     return shutdown(1);
   }
 
@@ -305,7 +293,7 @@ void startup(int argc, char *argv[]) throw(Exception)
   // checking number of nodes (minimum required = 2 nodes)
   if (MPI::COMM_WORLD.Get_size() <= 1)
   {
-    throw Exception("needed more than 1 cluster node to run ccruncher");
+    throw Exception("needed more than 1 node to run ccruncher");
   }
 #else
   // nothing to do
@@ -367,21 +355,10 @@ void run(string filename, string path) throw(Exception)
   simul.setHash(ihash);
 
   // initializing simulation
-  simul.initialize(idata);
+  simul.initialize(&idata);
 
-  // validate file and exit
-  if (bvalidate == true)
-  {
-    Logger::addBlankLine();
-    return;
-  }
-
-  // list precomputed losses and exit
-  if (blistloss == true)
-  {
-    simul.printPrecomputedLosses();
-    return;
-  }
+  // exiting if only validation
+  if (bsimulate == false) return;
 
   // checking output dir
   if (!File::existDir(path))
@@ -455,8 +432,8 @@ void usage()
   "  usage: ccruncher [options] <file>\n"
   "\n"
   "  description:\n"
-  "    ccruncher is a tool used to evalute VAR (value at risk)\n"
-  "    of a pure credit portfolio using Monte Carlo simulation.\n"
+  "    creditcruncher is a tool used to evalute VAR (value at risk)\n"
+  "    of a pure credit portfolio using monte carlo techniques.\n"
   "    more info at http://www.generacio.com/ccruncher\n"
   "  arguments:\n"
   "    file        xml file containing the problem to be solved. This\n"
@@ -468,7 +445,6 @@ void usage()
   "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
   "    --validate  perform input file validations and exit\n"
-  "    --listloss  list precomputed assets losses at time nodes and exit\n"
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"
   "  return codes:\n"
@@ -476,10 +452,9 @@ void usage()
   "    1           KO. finished with errors\n"
   "  examples:\n"
   "    ccruncher --validate input.xml\n"
-  "    ccruncher --listloss input.xml\n"
-  "    ccruncher --path=20070801 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20070801 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20070801 input.xml.gz\n"
+  "    ccruncher --path=20050601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml\n"
+  "    ccruncher --hash=100 -fv --path=./E20050601 input.xml.gz\n"
   << endl;
 }
 
@@ -489,9 +464,8 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "   ccruncher is Copyright (C) 2003-2007 Gerard Torrent and licensed\n"
+  "   ccruncher is Copyright (C) 2003-2005 Gerard Torrent and licensed\n"
   "     under the GNU General Public License, version 2. more info at\n"
   "               http://www.generacio.com/ccruncher\n"
   << endl;
 }
-

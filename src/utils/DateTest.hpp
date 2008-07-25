@@ -22,20 +22,17 @@
 // DateTest.hpp - DateTest header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added tests related to getDayOfWeek()
 //
 //===========================================================================
 
@@ -62,10 +59,10 @@ class DateTest : public TestFixture<DateTest>
     void test_constructors(void);
     void test_valid(void);
     void test_gets(void);
+    void test_sets(void);
     void test_rollers(void);
     void test_misc(void);
     void test_comparators(void);
-    void test_dayofweek(void);
 
   public:
 
@@ -74,10 +71,10 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_constructors);
       TEST_CASE(test_valid);
       TEST_CASE(test_gets);
+      TEST_CASE(test_sets);
       TEST_CASE(test_rollers);
       TEST_CASE(test_misc);
       TEST_CASE(test_comparators);
-      TEST_CASE(test_dayofweek);
     }
 
     void setUp();

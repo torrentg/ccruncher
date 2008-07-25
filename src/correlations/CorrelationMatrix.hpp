@@ -22,18 +22,14 @@
 // CorrelationMatrix.hpp - CorrelationMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed pointers by references
-//   . Sectors class refactoring
 //
 //===========================================================================
 
@@ -44,6 +40,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "sectors/Sectors.hpp"
@@ -61,39 +58,28 @@ class CorrelationMatrix : public ExpatHandlers
 
   private:
 
-    // nxn = matrix size (n = number of sectors)
     int n;
-    // epsilon used to compare doubles
     double epsilon;
-    // list of sectors
     Sectors *sectors;
-    // matrix of values
     double **matrix;
 
-    // initialize object
-    void init(Sectors &) throw(Exception);
-    // insert a new matrix value
+    void init(Sectors *) throw(Exception);
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
-    // validate object content
     void validate(void) throw(Exception);
-
 
   public:
 
-    // constructor
-    CorrelationMatrix(Sectors &) throw(Exception);
-    // destructor
+    CorrelationMatrix(Sectors *) throw(Exception);
     ~CorrelationMatrix();
-    // matrix size (= number of sector)
-    int size() const;
-    // returns a pointer to matrix values
-    double ** getMatrix() const;
-    // serializes object content as xml
-    string getXML(int) const throw(Exception);
+
+    int size();
+    double ** getMatrix();
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
+
 
 };
 

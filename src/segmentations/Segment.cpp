@@ -22,13 +22,13 @@
 // Segment.cpp - Segment code - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
@@ -40,15 +40,13 @@
 //===========================================================================
 ccruncher::Segment::Segment()
 {
-  order = -1;
   name = "";
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Segment::Segment(int order_, string name_)
+ccruncher::Segment::Segment(string name_)
 {
-  order = order_;
   name = name_;
 }

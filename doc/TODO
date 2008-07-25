@@ -1,11 +1,15 @@
 
-CCRUNCHER TODO
-==============
+CREDITCRUNCHER TODO
+===================
+
+
+Works in progress
+-------------------
+  * Beta stage = check, recheck, double-check.
+  * add a reference to Mersenne Twister RNG in pdf doc
+  * create document 'CreditCruncher - Coder Companion'
 
 
 Future works
 -------------------
   * add new copula types
-  * fuzzy values
-  * risk-to-market
-  * graphic interface

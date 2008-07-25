@@ -22,20 +22,14 @@
 // Sector.hpp - Sector header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added const qualifiers
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -45,7 +39,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
@@ -62,16 +55,13 @@ class Sector : public ExpatHandlers
 
   public:
 
-    // sector name
+    int order;
     string name;
-    // sector descriuption
     string desc;
 
-    // default constructor
     Sector();
-    // serialize object constent as xml
-    string getXML(int) const throw(Exception);
-    // reset content
+
+    string getXML(int) throw(Exception);
     void reset();
 
     /** ExpatHandlers methods declaration */
@@ -79,6 +69,11 @@ class Sector : public ExpatHandlers
     void epend(ExpatUserData &, const char *);
 
 };
+
+//---------------------------------------------------------------------------
+
+// comparation operator
+bool operator <  (const Sector&, const Sector&);
 
 //---------------------------------------------------------------------------
 

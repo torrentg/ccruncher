@@ -2,16 +2,6 @@
 <!--                DTD CREDITCRUNCHER VERSION                      -->
 <!-- ============================================================== -->
 
-<!--
-    if you desire debug your xml add these lines to main tag:
-    <!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
-
-    export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
-    java dom.Writer -v sample01.xml
-    java sax.Writer -v sample01.xml
--->
-
-<!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
 
 <!-- .............................................................. -->
 <!--                       common stuff                             -->
@@ -74,6 +64,7 @@
 >
 <!ATTLIST rating 
     name ID #REQUIRED
+    order CDATA #REQUIRED
     desc CDATA #REQUIRED
 >
 
@@ -129,6 +120,7 @@
 >
 <!ATTLIST sector
     name ID #REQUIRED
+    order CDATA #REQUIRED
     desc CDATA #REQUIRED
 >
 
@@ -163,7 +155,7 @@
 )>
 <!ATTLIST segmentation
     name CDATA #REQUIRED
-    components (asset|borrower) #REQUIRED
+    components (asset|client) #REQUIRED
 >
 
 <!ELEMENT segment
@@ -177,13 +169,13 @@
 <!--                        portfolio                               -->
 <!-- .............................................................. -->
 <!ELEMENT portfolio (
-    borrower+
+    client+
 )>
 
-<!ELEMENT borrower (
+<!ELEMENT client (
     (belongs-to*, asset*)
 )>
-<!ATTLIST borrower
+<!ATTLIST client
     id CDATA #REQUIRED
     name CDATA #REQUIRED
     rating IDREF #REQUIRED
@@ -196,7 +188,6 @@
 <!ATTLIST asset
     id CDATA #REQUIRED
     name CDATA #REQUIRED
-    date CDATA #REQUIRED
 >
 
 <!ELEMENT belongs-to
@@ -217,5 +208,5 @@
 <!ATTLIST values
     at CDATA #REQUIRED
     cashflow CDATA #REQUIRED
-    recovery CDATA #REQUIRED
+    netting CDATA #REQUIRED
 >

@@ -8,7 +8,7 @@ dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
 AC_PREREQ(2.59)
-AC_INIT(ccruncher, 1.1, gerard@mail.generacio.com)
+AC_INIT(ccruncher, 0.8, gerard@mail.generacio.com)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE
@@ -47,7 +47,6 @@ AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([float.h malloc.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
@@ -63,7 +62,6 @@ AC_CHECK_FUNCS([gettimeofday])
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRTOD
-AC_FUNC_MKTIME
 
 dnl -------------------------------------------------------------
 dnl other checks (consts, structs, types)
@@ -145,7 +143,7 @@ dnl -------------------------------------------------------------
 dnl defining include directories
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/jama-1.2.5 -I$(top_srcdir)/deps/Mersenne-1.0 -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])
+         ['-I$(top_srcdir)/src -I$(top_srcdir)/share/jama-1.2.4 -I$(top_srcdir)/share/Mersenne-1.0 -I$(top_srcdir)/share/MiniCppUnit-2.2 -I$(top_srcdir)/share/gzstream-1.5'])
 
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h
@@ -165,7 +163,7 @@ AH_BOTTOM([
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R420"
+#define SVNVERSION "R348"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

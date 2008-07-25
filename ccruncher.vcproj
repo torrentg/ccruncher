@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.4&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;&quot;share\zlib-1.2.3&quot;;&quot;share\gzstream-1.5&quot;;share;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="1"
@@ -37,7 +37,7 @@
 				OutputFile="bin\ccruncher.exe"
 				Version=""
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
+				AdditionalLibraryDirectories="&quot;share\expat-1.95.8\Libs\&quot;;&quot;share\zlib-1.2.3&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/ccruncher.pdb"
 				SubSystem="1"
@@ -76,7 +76,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;share\Mersenne-1.0&quot;;&quot;share\jama-1.2.4&quot;;&quot;share\MiniCppUnit-2.2&quot;;&quot;share\expat-1.95.8\Source\lib&quot;;&quot;share\zlib-1.2.3&quot;;&quot;share\gzstream-1.5&quot;;share;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				RuntimeLibrary="4"
 				UsePrecompiledHeader="0"
@@ -90,7 +90,7 @@
 				AdditionalDependencies="libexpat.lib zdll.lib"
 				OutputFile="bin\ccruncher.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
+				AdditionalLibraryDirectories="&quot;share\expat-1.95.8\Libs\&quot;;&quot;share\zlib-1.2.3&quot;"
 				GenerateDebugInformation="FALSE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -245,10 +245,10 @@
 					RelativePath="src\portfolio\Asset.hpp">
 				</File>
 				<File
-					RelativePath="src\portfolio\Borrower.cpp">
+					RelativePath="src\portfolio\Client.cpp">
 				</File>
 				<File
-					RelativePath="src\portfolio\Borrower.hpp">
+					RelativePath="src\portfolio\Client.hpp">
 				</File>
 				<File
 					RelativePath="src\portfolio\DateValues.cpp">
@@ -388,9 +388,6 @@
 					RelativePath="src\utils\Logger.hpp">
 				</File>
 				<File
-					RelativePath="src\utils\ccmpi.h">
-				</File>
-				<File
 					RelativePath="src\utils\Parser.cpp">
 				</File>
 				<File
@@ -454,10 +451,10 @@
 				Name="gzstream"
 				Filter="">
 				<File
-					RelativePath="deps\gzstream-1.5\gzstream.cpp">
+					RelativePath="share\gzstream-1.5\gzstream.cpp">
 				</File>
 				<File
-					RelativePath="deps\gzstream-1.5\gzstream.h">
+					RelativePath="share\gzstream-1.5\gzstream.h">
 				</File>
 			</Filter>
 		</Filter>

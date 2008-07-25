@@ -22,31 +22,22 @@
 // TransitionMatrix.hpp - TransitionMatrix header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/04/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
 //
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/13 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival function (1-TMAA)
 //   . changed period time resolution (year->month)
 //   . added steplength parameter at tma, tmaa and survival methods
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2006/01/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed Forward Default Rate references
-//
-// 2006/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . forced explicit friend function declaration
 //
 //===========================================================================
 
@@ -57,6 +48,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
@@ -74,70 +66,42 @@ class TransitionMatrix : public ExpatHandlers
 
   private:
 
-    // nxn = matrix size (n=number of ratings)
-    int n;
-    // period (in months) that this transition matrix covers
-    int period;
-    // matrix values
-    double **matrix;
-    // epsilon value used to compare doubles
-    double epsilon;
-    // list of ratings
-    Ratings *ratings;
-    // index of default rating
-    int indexdefault;
-
-    // initialize object
-    void init(const Ratings &) throw(Exception);
-    // insert a transition value into the matrix
+    void init(Ratings *) throw(Exception);
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
-    // validate object content
     void validate() throw(Exception);
-
 
   public:
 
-    // constructor
-    TransitionMatrix(const Ratings &) throw(Exception);
-    // constructor
-    TransitionMatrix(const TransitionMatrix &) throw(Exception);
-    // destructor
+    int n;
+    int period;
+    double **matrix;
+    double epsilon;
+    Ratings *ratings;
+
+    int indexdefault;
+
+    TransitionMatrix(Ratings *) throw(Exception);
+    TransitionMatrix(TransitionMatrix &) throw(Exception);
     ~TransitionMatrix();
 
-    // returns n (number of ratings)
-    int size() const;
-    // returns period that covers this matrix
-    int getPeriod() const;
-    // returns pointer to matrix values
-    double ** getMatrix() const;
-    // returns defaault rating index
-    int getIndexDefault() const;
-    // simulate transition with random value val
-    int evalue(const int irating, const double val) const;
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    int size();
+    double ** getMatrix();
+    int getIndexDefault();
+    int evalue(const int irating, const double val);
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
 
-    // returns equivalent transition matrix that covers t months
-    friend TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
-    // computes Cumulated Default Forward Rate
-    friend void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-    // computes survival function related to this transition matrix
-    friend void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-
 };
 
 //---------------------------------------------------------------------------
 
-  // returns equivalent transition matrix that covers t months
-  TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
-  // computes Cumulated Default Forward Rate
-  void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-  // computes survival function related to this transition matrix
-  void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+TransitionMatrix * translate(TransitionMatrix *tm, int t) throw(Exception);
+void tmaa(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
+void tma(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
+void survival(TransitionMatrix *tm, int steplength, int numrows, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

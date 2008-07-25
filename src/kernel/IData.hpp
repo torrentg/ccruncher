@@ -22,29 +22,26 @@
 // IData.hpp - IData header - $Rev$
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added logger
 //
-// 2005/04/03 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/03 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added survival section
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed aggregators class
 //
-// 2005/09/16 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/09/16 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . thread-safe modification (variable hasmaintag)
 //
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . IData refactoring
 //
 //===========================================================================
 
@@ -80,6 +77,16 @@ class IData : public ExpatHandlers
 
   private:
 
+    // portfolio can be huge (memory,time,...)
+    bool parse_portfolio;
+    bool hasmaintag;
+    
+    void init();
+    void release();
+    void validate() throw(Exception);
+
+  public:
+
     Params *params;
     Interests *interests;
     Ratings *ratings;
@@ -90,34 +97,10 @@ class IData : public ExpatHandlers
     Segmentations *segmentations;
     Portfolio *portfolio;
 
-    // portfolio can be huge (memory, time, ...)
-    bool parse_portfolio;
-    bool hasmaintag;
-
-    void init();
-    void release();
-    void validate() throw(Exception);
-
-  public:
-
     IData();
     IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
     ~IData();
 
-    /** gets methods */
-    Params & getParams() const;
-    Interests & getInterests() const;
-    Ratings & getRatings() const;
-    TransitionMatrix & getTransitionMatrix() const;
-    Survival & getSurvival() const;
-    Sectors & getSectors() const;
-    CorrelationMatrix & getCorrelationMatrix() const;
-    Segmentations & getSegmentations() const;
-    Portfolio & getPortfolio() const;
-    /** gets methods */
-    void setSurvival(const Survival &);
-    /** has methods */
-    bool hasSurvival() const;
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
