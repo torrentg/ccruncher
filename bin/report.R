@@ -19,26 +19,19 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 #
-# report.R - report script for R (http://www.r-project.org) - $Rev$
+# report.R - report script for R (http://www.r-project.org)
 # --------------------------------------------------------------------------
 #
-# 2005/08/30 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/08/30 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
-# 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/02 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added TCE support (Tail Conditional Expectation or Expected Shortfall)
 #   . code refactored
 #   . added usage example
 #
-# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/06 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . removed portfolio value support
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added Rev svn:keyword
-#
-# 2007/07/27 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added breaks param in cmean(), cstddev() and plot()
-#   . TCE renamed to ES
 #
 #***************************************************************************
 
@@ -57,7 +50,8 @@
 
 #===========================================================================
 # description
-#   Computes the standar error of a quantile using the Maritz-Jarrett method
+#   Computes the standar error of a quantile quantile using
+#   Maritz-Jarrett method
 # arguments
 #   x: vector with values
 #   prob: numeric. probability with value in [0,1]
@@ -119,7 +113,6 @@ ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
 #   Monte Carlo iteration
 # arguments
 #   x: vector with values
-#   breaks: numeric. number of evaluated values
 # returns
 #   matrix(1,): mean
 #   matrix(2,): standard error of mean
@@ -127,7 +120,7 @@ ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
 #   x <- rnorm(5000)
 #   ccruncher.cmean(x)
 #===========================================================================
-ccruncher.cmean <- function(x, breaks=250)
+ccruncher.cmean <- function(x)
 {
   #initializing values
   ret <- matrix(NaN, 2, length(x));
@@ -135,7 +128,6 @@ ccruncher.cmean <- function(x, breaks=250)
   ret[2,1] <- 0;
   aux1 <- x[1];
   aux2 <- x[1]*x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
 
   #computing values
   for(i in 2:length(x))
@@ -143,18 +135,11 @@ ccruncher.cmean <- function(x, breaks=250)
     aux1 <- aux1 + x[i];
     aux2 <- aux2 + x[i]*x[i];
 
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      mu <- aux1/i;
-      stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
-      ret[1,i] <- mu;
-      ret[2,i] <- stddev/sqrt(i);
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    mu <- aux1/i;
+    stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
+
+    ret[1,i] <- mu;
+    ret[2,i] <- stddev/sqrt(i);
   }
 
   #returning values
@@ -167,7 +152,6 @@ ccruncher.cmean <- function(x, breaks=250)
 #   Monte Carlo iteration
 # arguments
 #   x: vector with values
-#   breaks: numeric. number of evaluated values
 # returns
 #   matrix(1,): standard deviation
 #   matrix(2,): standard error of standar deviation
@@ -175,7 +159,7 @@ ccruncher.cmean <- function(x, breaks=250)
 #   x <- rnorm(5000)
 #   ccruncher.cstddev(x)
 #===========================================================================
-ccruncher.cstddev <- function(x, breaks=250)
+ccruncher.cstddev <- function(x)
 {
   #initializing values
   ret <- matrix(NaN, 2, length(x));
@@ -183,7 +167,6 @@ ccruncher.cstddev <- function(x, breaks=250)
   ret[2,1] <- 0;
   aux1 <- x[1];
   aux2 <- x[1]*x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
 
   #computing values
   for(i in 2:length(x))
@@ -191,17 +174,10 @@ ccruncher.cstddev <- function(x, breaks=250)
     aux1 <- aux1 + x[i];
     aux2 <- aux2 + x[i]*x[i];
 
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
-      ret[1,i] <- stddev;
-      ret[2,i] <- stddev/sqrt(2*i);
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
+
+    ret[1,i] <- stddev;
+    ret[2,i] <- stddev/sqrt(2*i);
   }
 
   #returning values
@@ -261,24 +237,24 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 
 #===========================================================================
 # description
-#   Compute the requested ES (Expected Shortfall) and standar error for 
-#   each Monte Carlo iteration
+#   Compute the requested TCE (Tail Conditional Expectation or Expected 
+#   Shortfall) and standar error for each Monte Carlo iteration
 # arguments
 #   x: vector with values
 #   prob: numeric. quantile related to VaR. probability with value in [0,1]
 #   breaks: numeric. number of evaluated values
 # returns
-#   matrix(1,): prob-es
-#   matrix(2,): standard error of prob-es
+#   matrix(1,): prob-tce
+#   matrix(2,): standard error of prob-tce
 # example
 #   x <- rnorm(5000)
-#   ccruncher.ces(x, 0.01)
+#   ccruncher.ctce(x, 0.01)
 # notes
 #   when length(x) is large, this function is expensive
 #   because involve calls to sort() function. breaks
 #   argument allows you to reduce the number of computations
 #===========================================================================
-ccruncher.ces <- function(x, prob, breaks=250)
+ccruncher.ctce <- function(x, prob, breaks=250)
 {
   #initializing values
   ret <- matrix(NA, 2, length(x));
@@ -344,7 +320,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
   plot(values[1,], type='l', ylim=yrange,
        main=name%&%" convergence",
        xlab="Monte Carlo iteration",
-       ylab=name%&%" +/- "%&%(alpha*100)%&%"% confidence bound");
+       ylab=name%&%" + "%&%(alpha*100)%&%"% confidence bound");
   par(new=TRUE);
 
   #plotting confidence levels bounds
@@ -395,13 +371,13 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
     table1[i,3] <- ccruncher.quantstderr(x, xvar[i]);
   }
 
-  #computing ES (Expected Shortfall)
+  #computing TCE (Tail Conditional Expectation or Expected Shortfall)
   for(i in 1:length(xvar))
   {
     #retrieving simulations with value great than VaR
     aux <- x[x >= table1[i,2]];
 
-    #computing aux mean (=ES) and related stderr
+    #coputing aux mean (=TCE) and related stderr
     table2[i,1] <- xvar[i];
     table2[i,2] <- mean(aux);
     table2[i,3] <- sqrt(var(aux))/sqrt(length(aux));
@@ -432,7 +408,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 
     for(i in 1:length(table2[,1]))
     {
-      ret[length(ret)+1] <- "ES(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
+      ret[length(ret)+1] <- "TCE(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
     }
 
     #adding indentation
@@ -441,12 +417,12 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
   else if (format == "xml")
   {
     ret[length(ret)+1] <- "<ccruncher-report>";
-    ret[length(ret)+1] <- "  <!--";
-    ret[length(ret)+1] <- "  confidence bounds can be computed as follows:";
-    ret[length(ret)+1] <- "  X = value +/- qnorm((1-alpha)/2) * stderr";
-    ret[length(ret)+1] <- "  where qnorm() is the inverse CDF for Normal(0,1) and";
-    ret[length(ret)+1] <- "  alpha is the desired confidence level (eg. alpha=0.99)";
-    ret[length(ret)+1] <- "  -->";
+    ret[length(ret)+1] <- "  <!-- ====================================================== -->";
+    ret[length(ret)+1] <- "  <!-- confidence bounds can be computed as follows:          -->";
+    ret[length(ret)+1] <- "  <!-- X = value +/- qnorm((1-alpha)/2) * stderr              -->";
+    ret[length(ret)+1] <- "  <!-- where qnorm() is the inverse CDF for Normal(0,1) and   -->";
+    ret[length(ret)+1] <- "  <!-- alpha is the desired confidence level (pe. alpha=0.99) -->";
+    ret[length(ret)+1] <- "  <!-- ====================================================== -->";
     ret[length(ret)+1] <- "  <size value='" %&% n %&% "' />";
     ret[length(ret)+1] <- "  <min value='" %&% minx %&% "' />";
     ret[length(ret)+1] <- "  <max value='" %&% maxx %&% "' />";
@@ -462,7 +438,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 
     for(i in 1:length(table2[,1]))
     {
-      ret[length(ret)+1] <- "  <ES prob='" %&% table2[i,1] %&%
+      ret[length(ret)+1] <- "  <TCE prob='" %&% table2[i,1] %&%
                   "' value='" %&% table2[i,2] %&% 
                   "' stderr='" %&% table2[i,3] %&% "' />";
     }
@@ -486,13 +462,12 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 #     - mean convergence
 #     - stddev convergence
 #     - VaR convergence
-#     - ES convergence
+#     - TCE convergence
 # arguments
 #   x: vector with values
-#   var: numeric. VaR level with value in [0,1]
 #   alpha: numeric. confidence level with value in [0,1]
-#   show: string. pdf|cdf|mean|stddev|VaR|ES|all
-#   breaks: numeric. number of evaluated values in plots
+#   var: numeric. VaR level with value in [0,1]
+#   show: string. pdf|cdf|mean|stddev|VaR|TCE|all
 # returns
 #   the requested graphic
 # example
@@ -503,7 +478,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
 #     convergence graphics.
 #   - caution with convergence plots, can take some time to plot them
 #===========================================================================
-ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
+ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf")
 {
   if (show == "all") { par(mfrow=c(3,2)); }
 
@@ -519,20 +494,20 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
        xlab="portfolio loss", ylab="probability");
   }
   if (show == "mean" || show == "all") {
-    aux <- ccruncher.cmean(x, breaks=breaks);
+    aux <- ccruncher.cmean(x);
     ccruncher.cplot(aux, alpha, "Mean");
   }
   if (show == "stddev" || show == "all") {
-    aux <- ccruncher.cstddev(x, breaks=breaks);
+    aux <- ccruncher.cstddev(x);
     ccruncher.cplot(aux, alpha, "StdDev");
   }
   if (show == "VaR" || show == "all") {
-    aux <- ccruncher.cquantile(x, prob=var, breaks=breaks);
+    aux <- ccruncher.cquantile(x, prob=var, breaks=250);
     ccruncher.cplot(aux, alpha, "VaR("%&%(var*100)%&%"%)");
   }
-  if (show == "ES" || show == "all") {
-    aux <- ccruncher.ces(x, prob=var, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "ES("%&%(var*100)%&%"%)");
+  if (show == "TCE" || show == "all") {
+    aux <- ccruncher.ctce(x, prob=var, breaks=250);
+    ccruncher.cplot(aux, alpha, "TCE("%&%(var*100)%&%"%)");
   }
 }
 
@@ -563,17 +538,17 @@ ccruncher.read <- function(filename)
 # --------------------------------------------------------------------------
 # >
 # > source("bin/report.R")                              #load R script
-# > x <- ccruncher.read("file.out")                     #load data
+# > x <- ccruncher.load("file.out")                     #load data
 # > x                                                   #list data
 # > ccruncher.summary(x, alpha=0.95)                    #print summary
 # > lines <- ccruncher.summary(x, format="xml")         #create xml summary
 # > write(lines, file="")                               #print xml summary
 # > ccruncher.plot(x, show="pdf")                       #plots a graphic
 # > ccruncher.plot(x, show="cdf")                       #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
+# > ccruncher.plot(x, show="mean")                      #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")  #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE") #plots a graphic
 # > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
 # > quit(save='no')                                     #quit R environement
 #

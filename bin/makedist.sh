@@ -4,45 +4,18 @@
 # description: 
 #   Create a CreditCruncher distribution package
 #
-# repository version:
-#   $Rev$
-#
-# dependencies:
-#   shell, tar, gzip, zip, svn, auto-tools, unix2dos
-#
 # retcodes:
 #   0    : OK
 #   other: KO
 #
 #-------------------------------------------------------------
 #
-# 2005/06/07 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/06/07 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . initial release
 #
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
+# 2005/09/10 - Gerard Torrent [gerard@fobos.generacio.com]
 #   . added oblivion directory management
 #   . 'svn checkout' replaced by 'svn export'
-#
-# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
-#   . moved $CCRUNCHER/ doc files to directory $CCRUNCHER/doc
-#   . changed argument flag -l by -b (binary distribution)
-#   . added file data/readme.txt
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added support for build/ directory
-#   . removed unused checkVersion() function
-#   . check that a distribution option is filled (xxx)
-#   . added Rev svn:keyword
-#   . added dependencies paragraph at comments
-#
-# 2005/11/08 - Gerard Torrent [gerard@mail.generacio.com]
-#   . solved minor bugs related to windows installation
-#
-# 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added doc/other directory
-#
-# 2007/11/17 - Gerard Torrent [gerard@mail.generacio.com]
-#   . directory share/ renamed to deps/
 #
 #=============================================================
 
@@ -50,9 +23,9 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=makedist.sh
-numversion="1.1"
-svnversion="R420"
-disttype="xxx"
+numversion="0.6"
+svnversion="R266"
+disttype="src"
 PACKAGE="ccruncher"
 pathexes=""
 retcode=0
@@ -71,7 +44,7 @@ usage() {
     used by developers.
   options
     -s       make source package (default)
-    -b       make binary linux package
+    -l       make binary linux package
     -w       make binary windows package
     -d       directory where resides exe files (only win dist)
     -h       show this message and exit
@@ -80,8 +53,8 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname -s
-    $progname -b
-    $progname -w -d /c:/temp/ccruncher/bin
+    $progname -l
+    $progname -w -d /compiled/windows/project/path
 
 _EOF_
 
@@ -94,7 +67,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2007 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2005 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -109,11 +82,11 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'sbwhd:' opt
+  while getopts 'slwhd:' opt
   do
     case $opt in
       s) disttype="src";;
-      b) disttype="bin";;
+      l) disttype="bin";;
       w) disttype="win";;
       d) pathexes=$OPTARG;;
       h) usage; 
@@ -121,10 +94,12 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
     esac
   done
+
+  #TODO: check that if win -> pathexes is full
 
   shift `expr $OPTIND - 1`
 
@@ -151,6 +126,21 @@ checkout() {
 }
 
 # -------------------------------------------------------------
+# check version numbers
+# -------------------------------------------------------------
+checkVersion() {
+
+  aux=R$(svnversion $1);
+
+  if [ "$aux" != "$svnversion" ]; then
+    echo "conflict with version numbers";
+    echo "run rollversion.sh + svn commit and try again";
+    exit 1;
+  fi
+
+}
+
+# -------------------------------------------------------------
 # remove developers files
 # -------------------------------------------------------------
 rmDevFiles() {
@@ -161,7 +151,6 @@ rmDevFiles() {
   rm -rvf `find $1/ -name \.svn\*`;
   rm -rvf $1/doc/share;
   rm -rvf $1/doc/tex;
-  rm -rvf $1/doc/other;
 
 }
 
@@ -179,6 +168,7 @@ makeSrcDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
+#  checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -210,6 +200,7 @@ makeBinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
+  #checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -227,12 +218,11 @@ makeBinDist() {
   rm aclocal.m4;
   rm -rvf autom4te.cache;
   rm config*;
-  rm depcomp install-sh missing;
-  rm doc/INSTALL;
   rm Makefile*;
+  rm depcomp install-sh missing;
+  rm INSTALL;
   rm -rvf src;
-  rm -rvf build;
-  rm -rvf deps;
+  rm -rvf share;
   rm -rvf oblivion;
 
   #creating tarball
@@ -258,6 +248,7 @@ makeWinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
+  #checkVersion $workpath;
   rmDevFiles $workpath;
   cd $workpath;
 
@@ -273,29 +264,22 @@ makeWinDist() {
   rm aclocal.m4;
   rm -rvf autom4te.cache;
   rm config*;
-  rm depcomp install-sh missing;
-  rm doc/INSTALL;
   rm Makefile*;
+  rm depcomp install-sh missing;
+  rm INSTALL;
   rm -rvf src;
-  rm -rvf build;
-  rm -rvf deps;
+  rm -rvf share;
   rm -rvf oblivion;
 
   #setting windows end-line
-  unix2dos doc/AUTHORS;
-  unix2dos doc/README;
-  unix2dos doc/TODO;
-  unix2dos doc/COPYING;
-  unix2dos doc/ChangeLog;
-  unix2dos doc/index.html;
+  unix2dos AUTHORS;
+  unix2dos README;
+  unix2dos TODO;
+  unix2dos COPYING;
+  unix2dos NEWS;
   unix2dos bin/report.R;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
-  unix2dos samples/*.xsd;
-  unix2dos samples/*.txt;
-  unix2dos doc/html/*.html;
-  unix2dos doc/html/*.css;
-  unix2dos data/readme.txt;
 
   #creating tarball
   cd /tmp/;
@@ -314,19 +298,15 @@ makeWinDist() {
 readconf $@;
 shift `expr $OPTIND - 1`
 
+copyright;
+
 case $disttype in
 
-  'src') copyright;
-         makeSrcDist;;
-  'bin') copyright;
-         makeBinDist;;
-  'win') copyright;
-         makeWinDist;;
-  'xxx') echo "please, specify the distribution type";
-         echo "use -h option for more information";
-         exit 1;;
+  'src') makeSrcDist;;
+  'bin') makeBinDist;;
+  'win') makeWinDist;;
       *) echo "unexpected error. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gerard@fobos.generacio.com";
          exit 1;;
 
 esac

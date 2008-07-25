@@ -19,20 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ExpatParser.hpp - ExpatParser header - $Rev$
+// ExpatParser.hpp - ExpatParser header
 // --------------------------------------------------------------------------
 //
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/27 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/06/10 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/06/10 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added characterData method
 //
-// 2005/08/29 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/08/29 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . removed XMLCALL's
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -43,6 +40,7 @@
 
 #include "utils/config.h"
 #include <expat.h>
+#include <iostream>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 

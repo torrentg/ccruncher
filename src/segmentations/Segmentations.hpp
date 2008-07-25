@@ -19,23 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segmentations.hpp - Segmentations header - $Rev$
+// Segmentations.hpp - Segmentations header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/05/21 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . added methods getNum*
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
 //
 //===========================================================================
 
@@ -45,6 +39,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <algorithm>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "segmentations/Segmentation.hpp"
@@ -62,34 +57,31 @@ class Segmentations : public ExpatHandlers
 
   private:
 
-    // list of segmentations
     vector<Segmentation> vsegmentations;
-    // auxiliary variable (used by parser)
     Segmentation auxsegmentation;
 
-    // insert a segmentation to list
     void insertSegmentation(Segmentation &) throw(Exception);
-    // validate object content
     void validate() throw(Exception);
 
 
   public:
 
-    // constructor
     Segmentations();
-    // destructor
     ~Segmentations();
 
-    // return the number of segments
-    int size() const;
-    // [] operator
-    Segmentation& operator [] (int i);
-    // [] operator
-    Segmentation& operator [] (const string &name) throw(Exception);
-    // add a segmentation-segment
-    void addSegment(const string segmentation, const string segment) throw(Exception);
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    vector<Segmentation> getSegmentations();
+    int getSegmentation(string name);
+    components_t getComponents(string name);
+    components_t getComponents(int iseg);
+    int getSegment(string segmentation, string segment);
+    string getSegmentationName(int isegmentation) throw(Exception);
+    string getSegmentName(int isegmentation, int isegment) throw(Exception);
+
+    void addSegment(string segmentation, string segment) throw(Exception);
+    string getXML(int) throw(Exception);
+
+    int getNumSegmentations();
+    int getNumSegments(int isegmentation);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

@@ -19,18 +19,16 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CholeskyDecomposition.cpp - CholeskyDecomposition code - $Rev$
+// CholeskyDecomposition.cpp - CholeskyDecomposition code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (Extracted from 'Numerical Recipes in C')
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
 #include <cmath>
+#include <iostream>
 #include "math/CholeskyDecomposition.hpp"
 
 //===========================================================================

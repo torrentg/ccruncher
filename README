@@ -1,0 +1,159 @@
+
+CREDITCRUNCHER README
+=====================
+
+
+Install required libraries
+--------------------------------
+
+1. check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://expat.sourceforge.net/ and install it. 
+   Also you can install from rpm packages.
+
+2. check that you have libz.so in a lib directory and
+   check that you have zlib.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.zlib.net/ and install it. 
+   Also you can install from rpm packages.
+
+3. if you are compiling a ccruncher MPI executable, check
+   that you have a valid MPI installation (you need mpi.h,
+   mpic++ wrapper, mpi link library, etc.)
+
+4. CreditCruncher use a statistical package named R to compute
+   risk indicators. Install it from http://www.r-project.org/.
+
+
+Installation from source package
+--------------------------------
+
+1. uncompress package
+     tar -xvzf ccruncher-X.Y_src.tgz
+
+2. install required libraries (explained before)
+
+3. execute commands (read INSTALL file):
+     cd ccruncher-X.Y
+     ./configure --prefix=$PWD
+     make
+     make install
+
+   supported ./configure options:
+     --enable-debug:    add debug instructions
+     --enable-profiler: add profiler instructions
+     --enable-mpi:      add mpi instructions
+
+
+Installation from binary package
+--------------------------------
+
+1. uncompress package
+     tar -xvzf ccruncher-X.Y_bin.tgz
+
+2. install required libraries (explained before)
+
+
+Using CreditCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step
+
+2. run CreditCruncher
+     $CCRUNCHER/bin/ccruncher --help
+     $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
+
+3. compute risk indicators typing:
+     $CCRUNCHER/bin/report data/segmentation-segment.out
+   or open a R console and type:
+     > source("$CCRUNCHER/bin/report.R")
+     > x <- ccruncher.read("$CCRUNCHER/data/file.out")
+     > ccruncher.summary(x, alpha=0.99)
+     > ccruncher.plot(x, show="pdf")
+     > ccruncher.plot(x, show="cdf")
+     > ccruncher.plot(x, alpha=0.95, show="mean")
+     > ccruncher.plot(x, alpha=0.95, show="stddev")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE")
+     > ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+     > quit(save='no')
+
+Notes for Windows developers
+--------------------------------
+
+1. download expat package from internet and unpack it
+   at $CCRUNCHER/share/expat-X.Y
+
+2. download zlib package from internet and unpack it
+   at $CCRUNCHER/share/zlib-X.Y
+
+3. copy zlib1.dll and libexpat.dll to $CCRUNCHER/bin
+   (required to execute bin\ccruncher.exe)
+
+4. open MSVC7 project and check that dependences, libraries,
+   etc. are correct
+
+
+Developers tips & tricks
+--------------------------------
+
+1. download CreditCruncher sources from subversion repositori
+     svn checkout http://www.generacio.com/svn/repos/ccruncher/
+     cd trunk
+
+2. install required libraries (explained before)
+
+3. create auto-files (run only 1 time)
+     autoscan (produces configure.in)
+     autoheader (produces config.h.in)
+     mv config.h.in src/utils/
+
+4. create ./configure script
+     aclocal
+     autoconf
+     automake -a -v -c -f    (--help --warnings=all)
+
+5. compile project in debug mode
+     ./configure --prefix=$PWD --enable-debug --enable-profiler
+     make
+     make check
+   or compile project enabling MPI
+     ./configure --prefix=$PWD --enable-debug --enable-profiler --enable-mpi
+     make
+     make check
+
+6. executing test suite
+     src/tests
+
+7. checking memory leaks
+     don't enable profiler because can cause problems to valgrind
+     valgrind --tool=memcheck --leak-check=yes <progname>
+
+8. profiling executable
+     ./path/progname (-> writes gmon.out because we compiled with -pg flag)
+     gprof ./path/progname gmon.out
+
+9. debuging executable
+     gdb ./path/progname
+       > help
+       > set args arg1 arg2 arg3 ... argn
+       > run
+       > backtrace
+       > quit
+
+10. creating pdf documentation
+      $CCRUNCHER/doc/tex/make
+      $CCRUNCHER/doc/tex/make install
+
+11. making source distribution package
+      make distcheck
+      make dist
+    or (better) use script $CCRUNCHER/bin/makedist.sh
+      $CCRUNCHER/bin/makedist.sh -s
+      $CCRUNCHER/bin/makedist.sh -l
+      $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
+
+
+CreditCruncher Team
+http://www.generacio.com/ccruncher/

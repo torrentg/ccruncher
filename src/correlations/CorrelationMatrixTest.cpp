@@ -19,26 +19,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CorrelationMatrixTest.cpp - CorrelationMatrixTest code - $Rev$
+// CorrelationMatrixTest.cpp - CorrelationMatrixTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed sector.order tag
 //
 //===========================================================================
 
@@ -72,10 +66,10 @@ void ccruncher_test::CorrelationMatrixTest::tearDown()
 //===========================================================================
 Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' order='1' desc='calzado'/>\n\
+      <sector name='S2' order='2' desc='otros sectores'/>\n\
     </sectors>";
 
   // creating xml
@@ -93,7 +87,7 @@ Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 //===========================================================================
 void ccruncher_test::CorrelationMatrixTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
@@ -111,7 +105,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  CorrelationMatrix crm(&sectors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   double **matrix = crm.getMatrix();
@@ -122,7 +116,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
   {
     for(int j=0;j<2;j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*2], matrix[i][j], EPSILON);
+      ASSERT_DOUBLES_EQUAL(vmatrix[j+i*2], matrix[i][j], EPSILON);
     }
   }
 }
@@ -133,7 +127,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
 void ccruncher_test::CorrelationMatrixTest::test2()
 {
   // non valid xml (undefined sector S4)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
@@ -147,7 +141,7 @@ void ccruncher_test::CorrelationMatrixTest::test2()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  CorrelationMatrix crm(&sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -157,7 +151,7 @@ void ccruncher_test::CorrelationMatrixTest::test2()
 void ccruncher_test::CorrelationMatrixTest::test3()
 {
   // incomplete matrix
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
@@ -170,7 +164,7 @@ void ccruncher_test::CorrelationMatrixTest::test3()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  CorrelationMatrix crm(&sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -180,7 +174,7 @@ void ccruncher_test::CorrelationMatrixTest::test3()
 void ccruncher_test::CorrelationMatrixTest::test4()
 {
   // non valid correlation matrix (elements not belonging to (-1,1))
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <mcorrels epsilon='1e-12'>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='1.1'/>\n\
@@ -194,6 +188,6 @@ void ccruncher_test::CorrelationMatrixTest::test4()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  CorrelationMatrix crm(&sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }

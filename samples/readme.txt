@@ -1,12 +1,12 @@
 
-CCRUNCHER TESTS
-===============
+CREDITCRUNCHER SAMPLES
+======================
 
 This directory contains some xml input file samples for ccruncher.
-You can run any file tipying next commands on a console:
+You can run any sample file tipying next commands on a console:
 
   > cd $CCRUNCHER$
-  > bin/ccruncher -vf --hash=100 --path=data samples/testXX.xml
+  > bin/ccruncher -vf --hash=100 --path=data samples/sampleXX.xml
 
 The ouput will be written in files located at data directory
 
@@ -14,24 +14,25 @@ Currently, the checks are weak. Checks can be improved doing
 some tests (Chi-Square, Kolmogorov-Smirnof).
 
 
-test01.xml
+sample01.xml
 ---------------------------------------------------------------------
 
 Description:
 
-  1 borrower
+  1 client
   1 unique sector
-  uncorrelated defaults (due to only exist 1 borrower)
+  uncorrelated defaults (due to only exist 1 client)
   2 ratings (dead and alive)
   transition values:
     P(alive->alive) = 0.9
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  12 time steps of 1 month length
-  The borrower has an unique asset with this profile:
-    asset value at t=12 is 1 if borrower is alive and
-    asset value at t=12 is 0 if borrower dead (default)
+  1 time step of 12 months length
+  The client has an unique asset with this profile:
+    asset value at t=12 is 1 if client is alive and
+    asset value at t=12 is 0 if client dead (default)
+  time-to-default resolution method
 
 Expected Results:
 
@@ -54,12 +55,12 @@ How I can check results?
   > tabulate(x+1, 2)
 
 
-test02.xml
+sample02.xml
 ---------------------------------------------------------------------
 
 Description:
 
-  2 borrowers
+  2 clients
   1 unique sector
   uncorrelated defaults
   2 ratings (dead and alive)
@@ -68,10 +69,11 @@ Description:
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  12 time steps of 1 month length
-  Each borrower has an unique asset with this profile:
-    asset value at t=12 is 1 if borrower is alive and
-    asset value at t=12 is 0 if borrower dead (default)
+  1 time step of 12 months length
+  Each client has an unique asset with this profile:
+    asset value at t=12 is 1 if client is alive and
+    asset value at t=12 is 0 if client dead (default)
+  time-to-default resolution method
 
 Expected Results:
 
@@ -79,9 +81,9 @@ Expected Results:
   at t=12 can be modeled as a Bernouilli(0.1). Then, the
   portfolio loss at t=12 can be modeled as:
 
-     P(Z=0) = P(X1=0)Â·P(X2=0) = 0.9 Â· 0.9 = 0.81
-     P(Z=1) = P(X1=0)Â·P(X2=1) + P(X1=1)Â·P(X2=0) = 0.9 Â· 0.1 + 0.1 Â· 0.9 = 0.18
-     P(Z=2) = P(X1=1)Â·P(X2=1) = 0.1 Â· 0.1 = 0.01
+     P(Z=0) = P(X1=0)·P(X2=0) = 0.9 · 0.9 = 0.81
+     P(Z=1) = P(X1=0)·P(X2=1) + P(X1=1)·P(X2=0) = 0.9 · 0.1 + 0.1 · 0.9 = 0.18
+     P(Z=2) = P(X1=1)·P(X2=1) = 0.1 · 0.1 = 0.01
 
 How I can check results?
 
@@ -95,12 +97,12 @@ How I can check results?
   > tabulate(x+1, 3)
 
 
-test03.xml
+sample03.xml
 ---------------------------------------------------------------------
 
 Description:
 
-  100 borrowers
+  100 clients
   1 unique sector
   uncorrelated defaults
   2 ratings (dead and alive)
@@ -109,10 +111,11 @@ Description:
     P(alive->dead)  = 0.1
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
-  12 time steps of 1 month length
-  Each borrower has an asset with this profile:
-    asset value at t=12 is 1 if borrower is alive and
-    asset value at t=12 is 0 if borrower dead (default)
+  1 time step of 12 months length
+  Each client has an asset with this profile:
+    asset value at t=12 is 1 if client is alive and
+    asset value at t=12 is 0 if client dead (default)
+  time-to-default resolution method
 
 Expected Results:
 
@@ -133,17 +136,17 @@ How I can check results?
   > tabulate(x+1, 101)
 
 
-test04.xml
+sample04.xml
 ---------------------------------------------------------------------
 
 Description:
 
-  The same that test03, with these diferences:
+  The same that sample03, with these diferences:
     2 sectors
     correl(S1,S1) = 0.10
     correl(S1,S2) = 0.05
     correl(S2,S2) = 0.15
-    Odds borrowers (50) belongs to S1 and even borrowers (50) belongs to S2
+    Odds clients (50) belongs to S1 and even clients (50) belongs to S2
 
 Expected Results:
 
@@ -167,23 +170,22 @@ How I can check results?
   > hist(x,breaks=101)
 
 
-test100.xml.gz
+sample100.xml.gz
 ---------------------------------------------------------------------
 
 Description:
 
-  The same that test03, with these diferences:
+  The same that sample03, with these diferences:
     2 sectors
     correl(S1,S1) = 0.20
     correl(S1,S2) = 0.10
     correl(S2,S2) = 0.25
-    100 borrowers
-    each borrower with 3 assets
-    24 time steps of 1 month length
+    survival function user defined
+    100 clients
+    each client with 3 assets
     asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
-                    if borrower defaults, recovery=80% last payement.
-    each borrower belongs to a random sector.
-    interest spot curve defined
+                    if client defaults, recovery=0.
+    each client belongs to a random sector.
 
 Expected Results:
 
@@ -191,7 +193,7 @@ Expected Results:
   report it).
 
    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
-      0    1569    2970    3619    4936   34830
+    0.0   501.9   998.3  1213.0  1677.0  8381.0
 
 How I can check results?
 
@@ -207,5 +209,5 @@ How I can check results?
   > hist(x)
 
 
-The CCruncher Team
+The CreditCruncher Team
 http://www.generacio.com/ccruncher/

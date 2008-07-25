@@ -49,15 +49,12 @@
  * Mark Gates <mgates@nlanr.net>
  * -------------------------------------------------------------------
  * An implementation of gettimeofday for Windows.
- * -------------------------------------------------------------------
- * 09/10/2005 [gerard@mail.generacio.com]
- * commented HAVE_GETTIMEOFDAY define (conflict autotools-Windows)
  * ------------------------------------------------------------------- */
 
 #ifndef GETTIMEOFDAY_H
 #define GETTIMEOFDAY_H
 
-//#ifndef HAVE_GETTIMEOFDAY
+#ifndef HAVE_GETTIMEOFDAY
 
 #include <Windows.h>
 
@@ -71,5 +68,5 @@ int gettimeofday( struct timeval* tv, void* timezone );
 } /* end extern "C" */
 #endif
 
-//#endif /* HAVE_GETTIMEOFDAY */
+#endif /* HAVE_GETTIMEOFDAY */
 #endif /* GETTIMEOFDAY_H */

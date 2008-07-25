@@ -19,33 +19,24 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// RatingsTest.cpp - RatingsTest code - $Rev$
+// RatingsTest.cpp - RatingsTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
 //
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/07/08 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Ratings refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
-//   . added function ratings.getIndex()
 //
 //===========================================================================
 
+#include <iostream>
 #include "ratings/Ratings.hpp"
 #include "ratings/RatingsTest.hpp"
 #include "utils/ExpatParser.hpp"
@@ -71,13 +62,14 @@ void ccruncher_test::RatingsTest::tearDown()
 //===========================================================================
 void ccruncher_test::RatingsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  // note that ratings are unordered
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='B' order='2' desc='bueno'/>\n\
+      <rating name='D' order='4' desc='malo'/>\n\
+      <rating name='C' order='3' desc='regular'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -86,26 +78,32 @@ void ccruncher_test::RatingsTest::test1()
   // ratings list creation
   Ratings ratings;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ratings));
+  vector<Rating> &list = *(ratings.getRatings());
 
-  ASSERT(5 == ratings.size());
+  ASSERT(5 == list.size());
 
-  ASSERT("A" == ratings[0].name);
-  ASSERT("B" == ratings[1].name);
-  ASSERT("D" == ratings[2].name);
-  ASSERT("C" == ratings[3].name);
-  ASSERT("E" == ratings[4].name);
+  ASSERT_EQUALS(1, list[0].order);
+  ASSERT_EQUALS(2, list[1].order);
+  ASSERT_EQUALS(3, list[2].order);
+  ASSERT_EQUALS(4, list[3].order);
+  ASSERT_EQUALS(5, list[4].order);
 
-  ASSERT(0 == ratings.getIndex("A"));
-  ASSERT(1 == ratings.getIndex("B"));
-  ASSERT(2 == ratings.getIndex("D"));
-  ASSERT(3 == ratings.getIndex("C"));
-  ASSERT(4 == ratings.getIndex("E"));
+  ASSERT("A" == list[0].name);
+  ASSERT("B" == list[1].name);
+  ASSERT("C" == list[2].name);
+  ASSERT("D" == list[3].name);
+  ASSERT("E" == list[4].name);
 
-  ASSERT("muy bueno" == ratings[0].desc);
-  ASSERT("bueno" == ratings[1].desc);
-  ASSERT("malo" == ratings[2].desc);
-  ASSERT("regular" == ratings[3].desc);
-  ASSERT("fallido" == ratings[4].desc);
+  ASSERT("muy bueno" == list[0].desc);
+  ASSERT("bueno" == list[1].desc);
+  ASSERT("regular" == list[2].desc);
+  ASSERT("malo" == list[3].desc);
+  ASSERT("fallido" == list[4].desc);
+
+  ASSERT(list[0] < list[1]);
+  ASSERT(list[1] < list[2]);
+  ASSERT(list[2] < list[3]);
+  ASSERT(list[3] < list[4]);
 }
 
 //===========================================================================
@@ -113,14 +111,14 @@ void ccruncher_test::RatingsTest::test1()
 //===========================================================================
 void ccruncher_test::RatingsTest::test2()
 {
-  // note that ratings are incorrect (A is a name repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  // note that ratings are incompleted (order 1 not exist)
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='A' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='2' desc='muy bueno'/>\n\
+      <rating name='B' order='3' desc='bueno'/>\n\
+      <rating name='D' order='4' desc='malo'/>\n\
+      <rating name='C' order='5' desc='regular'/>\n\
+      <rating name='E' order='6' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -136,14 +134,14 @@ void ccruncher_test::RatingsTest::test2()
 //===========================================================================
 void ccruncher_test::RatingsTest::test3()
 {
-  // note that ratings are incorrect (descriptions repeated)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  // note that ratings are incorrect (A is a name repeated)
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='muy bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='A' order='2' desc='bueno'/>\n\
+      <rating name='D' order='3' desc='malo'/>\n\
+      <rating name='C' order='4' desc='regular'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
@@ -159,14 +157,37 @@ void ccruncher_test::RatingsTest::test3()
 //===========================================================================
 void ccruncher_test::RatingsTest::test4()
 {
-  // note that xml are not valid (ratong tag)
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+  // note that ratings are incorrect (descriptions repeated)
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
     <ratings>\n\
-      <ratong name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='B' order='2' desc='muy bueno'/>\n\
+      <rating name='D' order='3' desc='malo'/>\n\
+      <rating name='C' order='4' desc='regular'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
+    </ratings>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // ratings list creation
+  Ratings ratings;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
+}
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::RatingsTest::test5()
+{
+  // note that xml are not valid (ratong tag)
+  string xmlcontent = "<?xml version='1.0' encoding='ISO-8859-1'?>\n\
+    <ratings>\n\
+      <ratong name='A' order='1' desc='muy bueno'/>\n\
+      <rating name='B' order='2' desc='bueno'/>\n\
+      <rating name='D' order='3' desc='malo'/>\n\
+      <rating name='C' order='4' desc='regular'/>\n\
+      <rating name='E' order='5' desc='fallido'/>\n\
     </ratings>";
 
   // creating xml
