@@ -1,0 +1,606 @@
+
+%***************************************************************************
+%
+% CreditCruncher - A portfolio credit risk valorator
+% Copyright (C) 2004 Gerard Torrent
+%
+% This program is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License
+% as published by the Free Software Foundation; either version 2
+% of the License.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+%
+%
+% appendices.tex - TeX documentation file - $Rev$
+% --------------------------------------------------------------------------
+%
+% 2005/01/22 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . initial release
+%
+% 2005/10/15 - Gerard Torrent [gerard@fobos.generacio.com]
+%   . added Rev (aka LastChangedRevision) svn tag
+%
+%***************************************************************************
+
+\chapter{Ap\'endices}
+\label{sec:apendixes}
+
+%---------------------------------------------------------------------------
+\section{Conceptos b\'asicos de estad\'istica}
+\label{apendix:stats}
+
+\paragraph{Definici\'on.} Llamamos \emph{funci\'on de distribuci\'on}
+\index{Funci\'on de distribuci\'on} o cdf de la variable aleatoria $X$ a la
+funci\'on $F$ que cumple:
+\begin{displaymath}
+F(x) = P(X \leq x)
+\end{displaymath}
+
+\paragraph{Definici\'on.} Llamamos \emph{funci\'on de probabilidad}
+\index{Funci\'on de probabilidad} o \emph{densidad}\index{Densidad} o pdf
+ de la variable aleatoria $X$ a la funci\'on $f$ que cumple:
+\begin{displaymath}
+F(x) = \int_{-\infty}^{x} f(t) dt
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Sea $X$ una variable aleatoria continua con
+funci\'on de densidad $f_X(x)$. La funci\'on de densidad de $Y=H(X)$ siendo 
+$H(.)$ mon\'otona (estrictamente creciente o estrictamente decreciente) es:
+\begin{displaymath}
+f_Y(y) = f_X(H^{-1}(y))\cdot \left| \frac{d(H^{-1}(y))}{dy} \right|
+\end{displaymath}
+
+\paragraph{Esperanza.} Definimos la \emph{esperanza}\index{Esperanza} de una
+variable aleatoria discreta de la forma siguiente:
+\begin{displaymath}
+E(X) = \sum_{i} i \cdot P(X=i)
+\end{displaymath}
+En el caso de una variable aleatoria continua con funci\'on de distribuci\'on 
+$f(x)$ la esperanza se expresa como:
+\begin{displaymath}
+E(X) = \int_{-\infty}^{\infty} x \cdot f(x) dx
+\end{displaymath}
+
+\paragraph{Varianza.} Definimos la \emph{varianza}\index{Varianza} de una variable
+aleatoria discreta de la forma siguiente:
+\begin{displaymath}
+Var(X) = \sum_{i} (i-E(X))^2 \cdot P(X=i)
+\end{displaymath}
+En el caso de una variable aleatoria continua con funci\'on de distribuci\'on 
+$f(x)$ la varianza se expresa como:
+\begin{displaymath}
+Var(X) = \int_{-\infty}^{\infty} (x-E(X))^2 \cdot f(x) dx
+\end{displaymath}
+
+\paragraph{Covarianza.} Definimos la \emph{covarianza}\index{Covarianza} entre dos
+variables aleatorias $X$ e $Y$ de la forma siguiente:
+\begin{displaymath}
+Cov(X,Y) = E(X \cdot Y) - E(X) \cdot E(Y)
+\end{displaymath}
+
+\paragraph{Correlaci\'on.} Definimos la \emph{correlaci\'on}\index{Correlaci\'on},
+$\rho$, entre dos variables aleatorias $X$ e $Y$ de la forma siguiente:
+\begin{displaymath}
+\rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{Var(x) \cdot Var(Y)}}
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Sea $X$ una variable aleatoria continua con
+funci\'on de densidad $f(x)$ y $H(x)$ una funci\'on diferenciable. Entonces:
+\begin{displaymath}
+E(H(X)) = \int_{-\infty}^{\infty} H(x) \cdot f(x) dx
+\end{displaymath}
+
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria de Bernoulli}
+
+\paragraph{Definici\'on.} La variable aleatoria discreta \emph{Bernouilli}
+\index{Bernouilli}, $X$, se utiliza para modelar fen\'omenos que solamente pueden
+tomar dos estados, $0$ y $1$, con probabilidades $p$ y $(1-p)$ respectivamente.
+La notaremos como $X \sim Ber(p)$:
+\begin{displaymath}
+P(X=0) = (1 - p) \qquad   P(X=1) = p \qquad p \in [0,1]
+\end{displaymath}
+ 
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Bernouilli $X \sim Ber(p)$ 
+es $p$. Este resultado es la aplicaci\'on directa de la definici\'on de esperanza 
+para una variable aleatoria discreta:
+\begin{displaymath}
+E(X) = \sum_{i} i \cdot P(X=i) = 1 \cdot p + 0 \cdot (1-p) = p
+\end{displaymath}
+
+\paragraph{Varianza.} La varianza de una variable aleatoria Bernouilli $X \sim Ber(p)$ 
+es $p \cdot (1-p)$. Este resultado es la aplicaci\'on directa de la definici\'on 
+de varianza para una variable aleatoria discreta:
+\begin{displaymath}
+Var(X)= \sum_{i} (i-E(X))^2 \cdot P(X=i) = (1-p)^2 \cdot p + (-p)^2 \cdot (1-p) = p \cdot (1-p)
+\end{displaymath}
+ 
+\paragraph{Simulaci\'on.} La simulaci\'on de una variable Bernouilli 
+$X \sim Ber(p)$ la realizamos de la siguiente forma:
+\begin{displaymath}
+x= \left\{
+\begin{array}{cc}
+0 & u \in [0,1-p) \cr
+1 & u \in [1-p,1]
+\end{array}
+\right.
+\qquad u \sim U[0,1]
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria Binomial}
+
+\paragraph{Definici\'on.} La suma de $n$ variables aleatorias Bernoulli, $Ber(p)$,  
+independientes e id\'enticamente distribuidas es una variable aleatoria discreta, 
+$X$, que llamamos \emph{Binomial}\index{Binomial}, $X \sim B(n,p)$.
+\begin{displaymath}
+P(X=k) = {n \choose k} \cdot p^k \cdot (1-p)^{n-k} \qquad {n \choose k} = \frac{n!}{k! \cdot (n-k)!}
+\qquad k \in \{0, \cdots, n\}
+\end{displaymath}
+
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Binomial 
+$X \sim B(n,p)$ es:
+\begin{displaymath}
+E(X) = n \cdot p
+\end{displaymath}
+
+\paragraph{Varianza.} La varianza de una variable aleatoria Binomial 
+$X \sim B(n,p)$ es:
+\begin{displaymath}
+Var(X)= n \cdot p \cdot (1-p)
+\end{displaymath}
+
+\paragraph{Proposici\'on.} El Teorema Central del L\'imite nos permite, en el
+caso de $n$ grande, aproximar la distribuci\'on discreta Binomial por una
+distribuci\'on continua Normal:
+\begin{displaymath}
+B(n,p) \approx N\left(n p, n p (1-p)\right)
+\end{displaymath}
+
+
+%---------------------------------------------------------------------------
+
+\section{La variable aleatoria Normal}
+\label{sec:normal}
+
+\paragraph{Definici\'on.} Decimos que una variable aleatoria continua $Z$ es 
+una \emph{Normal}\index{Normal} con media $\mu$ y desviaci\'on est\'andar $\sigma$, 
+$Z \sim N(\mu, \sigma^2)$ si tiene la siguiente funci\'on de densidad:
+\begin{displaymath}
+f(x) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{(x-\mu)^2}{2 \sigma^2}}
+\end{displaymath}
+
+\paragraph{Esperanza.} La esperanza de una variable aleatoria Normal 
+$X \sim N(\mu,\sigma^2)$ es:
+\begin{displaymath}
+E(X) = \mu
+\end{displaymath}
+
+\paragraph{Varianza.} La varianza de una variable aleatoria Normal 
+$X \sim N(\mu,\sigma^2)$ es:
+\begin{displaymath}
+Var(X)= \sigma^2
+\end{displaymath}
+
+\paragraph{Simulaci\'on.} Para la generaci\'on de una realizaci\'on, $z$, de 
+una variable aleatoria normal $Z \sim N(\mu, \sigma^2)$ utilizamos el siguiente 
+algoritmo:
+\begin{displaymath}
+z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
+\qquad u_1, u_2 \sim U[0,1]
+\end{displaymath}
+
+\paragraph{Definici\'on.} Decimos que una variable aleatoria continua 
+$n$-dimensional, $Z$, es una \emph{Normal}\index{Normal} con media $\vec{\mu}$
+y matriz de covarianza $\Sigma$, $Z \sim N(\vec{\mu}, \Sigma)$, si tiene la
+siguiente funci\'on de densidad:
+\begin{displaymath}
+f(\vec{x}) = \frac{1}{\sqrt{(2 \pi)^n \left| \Sigma \right|}}
+exp\left\{-\frac{1}{2}\left(\vec{x}-\vec{\mu})^{\top} \Sigma^{-1} (\vec{x}-\vec{\mu}) \right)\right\}
+\end{displaymath}
+donde $\left|\Sigma\right|$ es el determinante de la matriz de covarianzas 
+$\Sigma$, y $\Sigma^{-1}$ es la inversa de la matriz $\Sigma$.
+
+\paragraph{Simulaci\'on.} Para la generaci\'on de una realizaci\'on, $\vec{z}$, 
+de una variable aleatoria normal $Z \sim N(\vec{\mu}, \Sigma)$ utilizamos el 
+siguiente algoritmo:
+\begin{displaymath}
+\vec{z} = \vec{\mu} + \Sigma^{1/2} \vec{x}
+\qquad x_i \sim N(0,1)
+\end{displaymath}
+La matriz $\Sigma^{1/2}$ la calculamos usando el algoritmo de Cholesky. Sabemos 
+que existe soluci\'on debido a que $\Sigma$ es definida positiva por tratarse
+de una matriz de covarianzas.
+
+%---------------------------------------------------------------------------
+
+\section{Estimadores estad\'isticos}
+\label{apendix:estim}
+
+Sea $\{x_1,x_2,x_3,\cdots,x_N\}$ $N$ realizaciones de la variable aleatoria
+$X$.
+
+\paragraph{Proposici\'on.} Estimamos la media de $X$ usando el siguiente
+estimador no sesgado:
+\begin{displaymath}
+E(X) = \mu_X  \approx \widehat{\mu_X} = \frac{1}{N} \sum_{i=1}^{N} x_i
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Estimamos la varianza de $X$ usando el siguiente
+estimador no sesgado:
+\begin{displaymath}
+Var(X) = \sigma_{X}^{2} \approx \widehat{\sigma_{X}^{2}} =
+\frac{1}{N-1} \sum_{i=1}^{N} (x_i - \widehat{X})^2 =
+\frac{1}{N-1} \left( \sum_{i=1}^{N} x_i^2 - \frac{\left(\sum_{i=1}^{N} x_i \right)^2}{N} \right)
+\end{displaymath}
+
+\paragraph{Proposici\'on.} Estimamos el VAR\index{Value At Risk} de $X$ al nivel de
+confianza $\alpha$ usando el siguiente estimador:
+\begin{displaymath}
+VAR_{\alpha}(X) = \textrm{inf}\{x | F_X(x) \geq \alpha \} \approx \widehat{VAR_{\alpha}(X)} = x_{k:N}
+\end{displaymath}
+donde,
+\begin{itemize}
+\item $F_X$ es la funci\'on de distribuci\'on de $X$
+\item $k$ cumple $\frac{k}{N} \leq \alpha < \frac{k+1}{N}$
+\item $x_{k:N}$ es el $k$-\'esimo elemento de la serie ordenada de forma creciente
+\end{itemize}
+
+\paragraph{Proposici\'on.} Estimamos el TCE (Tail Conditional Expectation o Expected
+Shortfall) \index{Tail Conditional Expectation}\index{Expected Shortfall}
+de $X$ al nivel de confianza $\alpha$ usando el siguiente estimador:
+\begin{displaymath}
+TCE_{\alpha}(X) = E(X | X > VAR_{\alpha}(X)) \approx \widehat{TCE_{\alpha}(X)} =
+\frac{\sum_{i=1}^{N} x_i \cdot \textrm{1}_{\{x_i >  \widehat{VAR_{\alpha}(X)}\}}}{\sum_{i=1}^{N} \textrm{1}_{\{x_i >  \widehat{VAR_{\alpha}(X)}\}}}
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{Error est\'andar de un quantil (o VaR)}
+\label{apendix:stderrvar}
+\index{Error est\'andar}
+\index{Value At Risk}
+
+A continuaci\'on se describe el m\'etodo de Maritz-Jarrett basado en el
+estad\'istico de orden para calcular el error est\'andar de un quantil.
+F\'ormula extra\'ida de \cite{quant:algor}. Sea $x_1, x_2, x_3, \cdots, x_N$
+la muestra sobre la que se desea calcular el error est\'andar del quantil $\alpha$.
+
+\begin{eqnarray}
+M   & = & [N \alpha + 0.5] \nonumber \\
+a   & = & M - 1 \nonumber \\
+b   & = & N - M \nonumber \\
+W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \nonumber \\
+C_k & = & \sum_{i=1}^{N} W_i \cdot x_i \nonumber
+\end{eqnarray}
+
+donde $[x]$ es la parte entera de $x$  y $B(a,b,x)$ es la funci\'on
+beta incompleta:
+
+\begin{displaymath}
+B(a,b,x)=\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\int_0^x t^{a-1} (1-t)^{b-1} dt
+\end{displaymath}
+
+entonces,
+\begin{displaymath}
+\textrm{stderr}(q_{\alpha}) = \sqrt{C_2 - C_1^2}
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{Error est\'andar del TCE}
+\label{apendix:stderrtce}
+\index{Error est\'andar}
+\index{Tail Conditional Expectation}
+
+El TCE (Tail Conditional Expectation o Expected Shortfall) es la esperanza
+de una variable aleatoria condicionada a que sea superior a un cierto quantil.
+Dado un conjunto de observaciones $x_1, x_2, x_3, \cdots, x_N$ de una variable
+aleatoria $X$, calculamos el error est\'andar del TCE siguiendo los siguientes
+pasos:
+
+\paragraph{Paso 1.} Calculamos el estimador de $VAR_{\alpha}(X)$.
+
+\paragraph{Paso 2.} Definimos la variable aleatoria $Y = \{X|X > VAR_{\alpha}(X)$\}.
+Generamos un conjunto de observaciones de $Y$ seleccionando las observaciones de $X$
+que son superiores a $VAR_{\alpha}(X)$:
+\begin{displaymath}
+y_1, y_2, y_3, \cdots, y_M
+\end{displaymath}
+
+\paragraph{Paso 3.} Usamos el teorema central del l\'imite para estimar la media
+de $Y$ y calcular su error est\'andar:
+
+\begin{eqnarray}
+\widehat{TCE_{\alpha}(X)} & = & \widehat{\mu_Y} \nonumber \\
+\textrm{stderr}(TCE_\alpha(X)) & = & \frac{\widehat{\sigma_Y}}{\sqrt{M}} \nonumber
+\end{eqnarray}
+
+%---------------------------------------------------------------------------
+
+\section{C\'alculo de la ra\'iz de una matriz}
+\label{apendix:sqrtmat}
+
+\paragraph{Definici\'on.}
+Diremos que 2 matrices $A$ y $B$ de orden $n$ son \emph{semejantes}
+\index{Matrices semejantes} si existe una matriz, $P$, de orden $n$ con
+$det(P) \neq 0$ tal que $B = P^{-1} \cdot A \cdot P$.
+
+
+\paragraph{Proposici\'on.} Si dos matrices $A$ y $B$ son semejantes 
+($B = P^{-1} \cdot A \cdot P$) entonces:
+\begin{displaymath}
+det(A) = det(B)
+\end{displaymath}
+\begin{displaymath}
+B^n = P^{-1} \cdot A^{n} \cdot P
+\end{displaymath}
+
+\paragraph{Definici\'on.} 
+Diremos que una matriz $A$ de orden $n$ es \emph{diagonalizable}
+\index{Matriz diagonalizable} si es semejante a una matriz diagonal $D$, o sea,
+$A = P^{-1} \cdot D \cdot P$ siendo $det(D) \neq 0$.
+
+\paragraph{Proposici\'on.} 
+Para que una matriz $A$ sea diagonalizable es necesario y suficiente que:
+\begin{itemize}
+\item Los valores propios de $A$ sean todos reales
+\item Los $n$ vectores propios de $A$ sean independientes
+\end{itemize}
+
+\paragraph{Proposici\'on.}
+Si una matriz $A$ es diagonalizable ($A = P^{-1} \cdot D \cdot P$) entonces: 
+\begin{itemize}
+\item $D$ es una matriz diagonal compuesta por los valores propios de la matriz $A$
+\item $P$ es la matriz formada por los vectores propios de la matriz $A$
+\end{itemize}
+
+\paragraph{Resultado.}
+Sea $A$ la ra\'iz $n$-esima de una matriz diagonalizable $B$. Entonces:
+\begin{displaymath}
+A^n = B = P^{-1} \cdot D \cdot P 
+\Longrightarrow  
+A = \sqrt[n]{B} = P^{-1} \cdot \sqrt[n]{D} \cdot P
+\end{displaymath} 
+
+\paragraph{Observaci\'on.}
+Si $D$ es una matriz diagonal con $d_1, d_2, d_3, \cdots, d_n$ en la diagonal,
+entonces la matriz $D^x$ es una matriz diagonal y sus valores son
+$d_1^x, d_2^x, d_3^x, \cdots, d_n^x$.
+
+\paragraph{Algoritmo.}
+Sea $A$ una matriz diagonalizable. Obtenemos $A^x$ , siendo $x > 0$, calculando
+los autovectores y autovalores de $A$:
+\begin{displaymath}
+\textrm{eigenvectors}(A) = P \qquad \textrm{eigenvalues}(A) = D
+\end{displaymath}
+donde $D$ es una matriz con los valores propios en la diagonal y el resto de
+elementos iguales a $0$. Entonces:
+\begin{displaymath}
+A^x = P^{-1} \cdot D^x \cdot P
+\end{displaymath}
+Para calcular la inversa de una matriz se calcula la descomposici\'on
+$LU$\index{Algoritmo LU} de dicha matriz y se resuelve el sistema
+$L \cdot U \cdot P^{-1} = Id$ elemento a elemento. El m\'etodo $LU$ y la inversa de
+una matriz usando la descomposici\'on $LU$ se encuentra explicada con detalle en el
+libro \emph{Numerical Recipes in C}\footnote{http://www.nr.com}.
+
+%---------------------------------------------------------------------------
+
+\section{Algoritmo de la c\'opula gaussiana}
+\label{apendix:gaussiancopula}
+
+\index{C\'opula gaussiana} Sea $\Sigma_1$ la matriz de correlaci\'on a cumplir
+por la c\'opula. Observemos que se trata tambi\'en de la matriz de covarianzas
+al valer $1$ los elementos de la diagonal.
+\begin{displaymath}
+\Sigma_1 = \left( 
+\begin{array}{cccc}
+1          & \rho_{12} & \ldots & \rho_{1n} \cr
+\rho_{21} & 1          & \ldots & \rho_{2n} \cr
+\vdots    & \vdots    & \ddots & \vdots   \cr
+\rho_{n1} & \rho_{n2} & \ldots & 1
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Paso 1.} Creamos la matriz de covarianzas $\Sigma_2$ transformando 
+la matriz $\Sigma_1$ componente a componente:
+\begin{displaymath}
+\Sigma_2 = \left( 
+\begin{array}{cccc}
+2 sin(\frac{\pi}{6})           & 2 sin(\rho_{12} \frac{\pi}{6}) & \ldots & 2 sin(\rho_{1n} \frac{\pi}{6})\cr
+2 sin(\rho_{21} \frac{\pi}{6}) & 2 sin(\frac{\pi}{6})           & \ldots & 2 sin(\rho_{2n} \frac{\pi}{6})\cr
+\vdots                          & \vdots                          & \ddots  & \vdots   \cr
+2 sin(\rho_{n1} \frac{\pi}{6}) & 2 sin(\rho_{n2} \frac{\pi}{6}) & \ldots & 2 sin(\frac{\pi}{6})
+\end{array}
+\right)
+\end{displaymath}
+Observamos que la matriz $\Sigma_2$ vuelve a tener los elementos de la
+diagonal iguales a $1$ debido a que $2 sin(\frac{\pi}{6}) = 1$.
+
+\paragraph{Paso 2.} A la matriz $\Sigma_2$ le aplicamos el algoritmo de 
+Cholesky\index{Algoritmo de Cholesky} para obtener la matriz triangular
+inferior $B$ cumpliendo $\Sigma_2 = B \cdot B^{\top}$:
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Paso 3.} Simulamos $n$ variables aleatorias $N(0,1)$ independientes
+\footnote{El algoritmo de simulaci\'on de una variable aleatoia Normal(0,1) se
+encuentra explicado en el apartado \ref{sec:normal}}:
+\begin{displaymath}
+\vec{Y} =
+\left(
+\begin{array}{c}
+Y_1 \cr
+\vdots \cr
+Y_n
+\end{array}
+\right) 
+\qquad Y_k \sim N(0,1) \textrm{ independientes}
+\end{displaymath}
+
+\paragraph{Paso 4.} Simulamos una variable n-dimensional $\vec{Z} \sim N(\vec{0}, \Sigma_2)$
+haciendo:
+\begin{displaymath}
+\vec{Z} = 
+\left(
+\begin{array}{c}
+Z_1 \cr
+\vdots \cr
+Z_n
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\left(
+\begin{array}{c}
+Y_1 \cr
+\vdots \cr
+Y_n
+\end{array}
+\right) 
+ = B \cdot \vec{Y}
+\end{displaymath}
+
+\paragraph{Paso 5.} Finalmente obtenemos la simulaci\'on de la c\'opula, $\vec{X}$.
+\begin{displaymath}
+\vec{X} =
+\left(
+\begin{array}{c}
+X_1 \cr
+\vdots \cr
+X_n
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+\Phi(Z_1) \cr
+\vdots \cr
+\Phi(Z_n)
+\end{array}
+\right) 
+\end{displaymath}
+donde $\Phi(x)$ es la funci\'on de distribuci\'on de la Normal est\'andar
+\begin{displaymath}
+\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}} dt
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+
+\section{Descomposici\'on de Cholesky de una matriz en bloques}
+\label{apendix:cholblock}
+\index{Matriz en bloques}
+
+Dada una matriz cuadrada, sim\'etrica y definida positiva, $A$, el algoritmo
+de Cholesky\index{Algoritmo de Cholesky} realiza la siguiente descomposici\'on:
+\begin{displaymath}
+U^{\top} \cdot U = A
+\end{displaymath}
+donde $U$ es una matriz triangular superior (por tanto, $U^{\top}$ es una matriz
+triangular inferior). Una descripci\'on e implementaci\'on del algoritmo puede
+encontrarse en \emph{Numerical Recipes in C}\footnote{http://www.nr.com}.
+\newline
+\newline
+Si intentamos realizar la descomposici\'on de Cholesky de una matriz de correlaci\'on
+entre clientes de una cartera de $50.000$ clientes nos encontraremos con problemas
+de tama\~no (la matriz ocupar\'a 19 Gb. de memoria) y n\'umero de operaciones al
+multiplicar la matriz por un vector ($2.500.000.000$ multiplicaciones).
+\newline
+\newline
+Modificaremos el algoritmo de Cholesky para aprovechar el hecho que la matriz
+de correlaci\'on entre clientes es una matriz en bloques con 1's en la diagonal.
+Veamos un ejemplo de una cartera de $7$ clientes con dos sectores:
+\begin{displaymath}
+A = \left(
+\begin{array}{cccc|ccc}
+1   & 0.5 & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 1   & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 0.5 & 1   & 0.5 & 0.1 & 0.1 & 0.1 \cr
+0.5 & 0.5 & 0.5 & 1   & 0.1 & 0.1 & 0.1 \cr
+\hline
+0.1 & 0.1 & 0.1 & 0.1 & 1   & 0.3 & 0.3 \cr
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 1   & 0.3 \cr
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 0.3 & 1
+\end{array}
+\right)
+\end{displaymath}
+Realizamos la descomposici\'on de Cholesky:
+\begin{displaymath}
+U = \left(
+\begin{array}{cccc|ccc}
+ 1.00000 & 0.50000 & 0.50000 & 0.50000 & 0.10000 & 0.10000 & 0.10000 \cr
+ 0       & 0.86603 & 0.28868 & 0.28868 & 0.05774 & 0.05774 & 0.05774 \cr
+ 0       & 0       & 0.81650 & 0.20412 & 0.04082 & 0.04082 & 0.04082 \cr
+ 0       & 0       & 0       & 0.79057 & 0.03162 & 0.03162 & 0.03162 \cr
+\hline
+ 0       & 0       & 0       & 0       & 0.99197 & 0.28630 & 0.28630 \cr
+ 0       & 0       & 0       & 0       & 0       & 0.94975 & 0.21272 \cr
+ 0       & 0       & 0       & 0       & 0       & 0       & 0.92563
+\end{array}
+\right)
+\end{displaymath}
+Observamos que $U$ contiene elementos repetidos. Guardaremos la matriz $U$
+en memoria de la forma siguiente:
+\begin{displaymath}
+U = \left|
+\begin{array}{c|cc}
+ 1.00000 & 0.50000 & 0.10000 \cr
+ 0.86603 & 0.28868 & 0.05774 \cr
+ 0.81650 & 0.20412 & 0.04082 \cr
+ 0.79057 & 0       & 0.03162 \cr
+ 0.99197 & 0       & 0.28630 \cr
+ 0.94975 & 0       & 0.21272 \cr
+ 0.92563 & 0       & 0
+\end{array}
+\right|
+\end{displaymath}
+o sea, para cada fila guardamos el valor de la diagonal y el valor de
+cada sector. El tama\~no en memoria ahora pasa a ser $N \times (M+1)$
+donde $N$ es el n\'umero de clientes y $M$ el n\'umero de sectores.
+\newline
+\newline
+Para reducir el n\'umero de operaciones realizadas al multiplicar la
+matriz por un vector aprovechamos que la matriz $U$ tiene elementos
+repetidos. Veamos un ejemplo:
+\begin{displaymath}
+\begin{array}{l}
+(U \cdot x)_2 =  0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 + \cr
+                 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7 \cr
+              = 0.86603 \cdot x_2 + 2\cdot 0.28868 \cdot (x_3 + x_4) + 3 \cdot 0.05774 \cdot (x_5 + x_6 + x_7)
+\end{array}
+\end{displaymath}
+
+Con estas dos consideraciones se obtiene una algoritmo de Cholesky para matrices
+en bloques con uso de memoria y n\'umero de operaciones (al multiplicar por un
+vector) del orden $N \times (M+1)$ en vez de orden $N^2$. Con el nuevo algoritmo
+la memoria necesaria para almacenar la matriz de $50.000$ clientes es de $4.2$ Mb.
+y el n\'umero de multiplicaciones se reduce a $500.000$.
