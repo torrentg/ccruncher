@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Exception.hpp - Exception header - $Rev$
+// Exception.hpp - Exception header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/06/05 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getStackTrace() method (link with -rdynamic flag)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -53,29 +47,20 @@ namespace ccruncher {
 class Exception : public std::exception
 {
 
-  private:
-
-    std::string retrieveStackTrace();
-
   protected:
 
-    std::string stacktrace;
     std::string msg;
 
   public:
 
     Exception(const std::string&);
-    Exception(const ccruncher::Exception &);
     Exception(const std::exception &);
-    Exception(const ccruncher::Exception &, const std::string&);
     Exception(const std::exception &, const std::string&);
-    Exception(const char *);
 
     ~Exception() throw ();
 
     const char * what() const throw();
     std::string toString() const;
-    std::string getStackTrace() const;
 
 };
 

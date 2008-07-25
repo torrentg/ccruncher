@@ -19,35 +19,20 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Rate.cpp - Rate code - $Rev$
+// Rate.cpp - Rate code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/02 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/02 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added const qualifiers
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
 //
 //===========================================================================
 
 #include "interests/Rate.hpp"
-#include "utils/Strings.hpp"
-#include "utils/Format.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Parser.hpp"
 
 //===========================================================================
 // constructor
@@ -67,7 +52,7 @@ void ccruncher::Rate::reset()
 }
 
 //===========================================================================
-// operator less-than (needed by sort functions)
+// operador de comparacio (per permetre ordenacio)
 //===========================================================================
 bool ccruncher::operator <  (const Rate &x, const Rate &y)
 {
@@ -81,25 +66,21 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
 {
   if (isEqual(name,"rate")) {
     if (getNumAttributes(attributes) != 2) {
-      throw Exception("incorrect number of attributes");
+      throw eperror(eu, "incorrect number of attributes");
     }
     else
     {
-      t = getDoubleAttribute(attributes, "t", -99.0);
-      r = getDoubleAttribute(attributes, "r", -99.0);
-
-      if (t == -99.0 || r == -99.0)
+      t = getDoubleAttribute(attributes, "t", -1.0);
+      r = getDoubleAttribute(attributes, "r", -1.0);
+      
+      if (t <= -1.0+1E-14 || r <= -1.0+1E-14)
       {
-        throw Exception("invalid attributes values at <rate>");
-      }
-      else if (r < -0.5 || 1.0 < r)
-      {
-        throw Exception("rate value " + Format::double2string(r) + " out of range [-0.5, +1.0]");
+        throw eperror(eu, "invalid attributes values at <rate>");
       }
     }
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw eperror(eu, "unexpected tag " + string(name));
   }
 }
 
@@ -112,20 +93,20 @@ void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
     // nothing to do
   }
   else {
-    throw Exception("unexpected end tag " + string(name));
+    throw eperror(eu, "unexpected end tag " + string(name));
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Rate::getXML(int ilevel) const throw(Exception)
+string ccruncher::Rate::getXML(int ilevel) throw(Exception)
 {
-  string ret = Strings::blanks(ilevel);
+  string ret = Utils::blanks(ilevel);
 
   ret += "<rate ";
-  ret += "t='" + Format::double2string(t) + "' ";
-  ret += "r='" + Format::double2string(r) + "'";
+  ret += "t='" + Parser::double2string(t) + "' ";
+  ret += "r='" + Parser::double2string(r) + "'";
   ret += "/>\n";
 
   return ret;

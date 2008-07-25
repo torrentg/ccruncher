@@ -19,17 +19,14 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Segment.hpp - Segment header - $Rev$
+// Segment.hpp - Segment header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/04/01 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from xerces to expat
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -39,7 +36,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -50,20 +46,15 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Segment
+class Segment 
 {
 
   public:
 
-    // segment order
-    int order;
-    // segment name
     string name;
 
-    // constructor
     Segment();
-    // destructor
-    Segment(int order, string name_);
+    Segment(string name_);
 
 };
 

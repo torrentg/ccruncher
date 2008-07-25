@@ -1,19 +1,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
-/* build date */
-#undef BUILD_DATE
-
-/* build host name */
-#undef BUILD_HOST
-
-/* build user */
-#undef BUILD_USER
-
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 #undef CLOSEDIR_VOID
-
-/* Define to 1 if you have the `alarm' function. */
-#undef HAVE_ALARM
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
@@ -22,17 +10,11 @@
 /* Define to 1 if you have the <expat.h> header file. */
 #undef HAVE_EXPAT_H
 
-/* Define to 1 if you have the <float.h> header file. */
-#undef HAVE_FLOAT_H
-
 /* Define to 1 if you have the `floor' function. */
 #undef HAVE_FLOOR
 
 /* Define to 1 if you have the `getcwd' function. */
 #undef HAVE_GETCWD
-
-/* Define to 1 if you have the `gettimeofday' function. */
-#undef HAVE_GETTIMEOFDAY
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -43,23 +25,14 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 
-/* Define to 1 if you have the `z' library (-lz). */
-#undef HAVE_LIBZ
-
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
-
-/* Define to 1 if you have the <malloc.h> header file. */
-#undef HAVE_MALLOC_H
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
 /* Define to 1 if you have the `mkdir' function. */
 #undef HAVE_MKDIR
-
-/* Define to 1 if you have the <mpi.h> header file. */
-#undef HAVE_MPI_H
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
@@ -102,17 +75,11 @@
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
-/* Define to 1 if you have the <sys/time.h> header file. */
-#undef HAVE_SYS_TIME_H
-
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Define to 1 if you have the <zlib.h> header file. */
-#undef HAVE_ZLIB_H
 
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
@@ -138,20 +105,11 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Profiler instructions are added when this is defined. */
-#undef PROFILER
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#undef TIME_WITH_SYS_TIME
-
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
-
-/* Add parallel instructions to code. */
-#undef USE_MPI
 
 /* Version number of package */
 #undef VERSION
@@ -169,27 +127,5 @@
    supported. Do not define if restrict is supported directly. */
 #undef restrict
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define to `unsigned' if <sys/types.h> does not define. */
 #undef size_t
-
-
-/* SegmentAggregator buffer size */
-#define CCMAXBUFSIZE 500
-
-/* flush results time (to disk or to master) */
-#define CCEFLUSHSECS 30.0
-
-/* subversion identifier */
-#define SVNVERSION "R420"
-
-/* required by Microsoft project */
-#ifdef _MSC_VER
-#include "../win32/winconfig.h"
-#endif
-
-/* cygwin patch */
-#if defined (__CYGWIN__) 
-#define NAN sqrt(-1.0)
-#endif
-
-

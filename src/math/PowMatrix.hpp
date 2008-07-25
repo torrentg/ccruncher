@@ -19,21 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// PowMatrix.hpp - PowMatrix header - $Rev$
+// PowMatrix.hpp - PowMatrix header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . pow method renamed: pow(x,y) -> fpow(x,y)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -59,24 +49,15 @@ class PowMatrix
 
   private:
 
-    // non-instantiable class
-    PowMatrix() {};
-
-    // internal function
     static Array2D<double> inverse(Array2D<double> &x) throw(Exception);
 
 
   public:
 
-    // matrix pow function
+    static double pow(double, double) throw(Exception);
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
 
 };
-
-//---------------------------------------------------------------------------
-
-// improved pow() function [belongs to ccruncher namespace]
-double fpow(double, double) throw(Exception);
 
 //---------------------------------------------------------------------------
 

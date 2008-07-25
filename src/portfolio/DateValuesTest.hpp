@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// DateValuesTest.hpp - DateValuesTest header - $Rev$
+// DateValuesTest.hpp - DateValuesTest header
 // --------------------------------------------------------------------------
 //
-// 2005/03/18 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/18 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -40,10 +34,6 @@
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
-
-//---------------------------------------------------------------------------
-
-namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
@@ -68,10 +58,6 @@ class DateValuesTest : public TestFixture<DateValuesTest>
 };
 
 REGISTER_FIXTURE(DateValuesTest);
-
-//---------------------------------------------------------------------------
-
-}
 
 //---------------------------------------------------------------------------
 

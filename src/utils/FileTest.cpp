@@ -19,30 +19,27 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// FileTest.cpp - FileTest code - $Rev$
+// FileTest.cpp - FileTest code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/25 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
+#include <iostream>
+#include <string>
 #include "utils/File.hpp"
 #include "utils/FileTest.hpp"
+#include "utils/Exception.hpp"
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::FileTest::setUp()
+void FileTest::setUp()
 {
   // nothing to do
 }
@@ -50,7 +47,7 @@ void ccruncher_test::FileTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::FileTest::tearDown()
+void FileTest::tearDown()
 {
   // nothing to do
 }
@@ -58,7 +55,7 @@ void ccruncher_test::FileTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::FileTest::test1(void)
+void FileTest::test1(void)
 {
   // testing normalizePath function
   string str1;

@@ -19,30 +19,17 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Logger.cpp - Logger code - $Rev$
+// Logger.cpp - Logger code
 // --------------------------------------------------------------------------
 //
-// 2005/03/22 - Gerard Torrent [gerard@mail.generacio.com]
+// 2005/03/22 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
-//   . const + referenced string arguments
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
-#include <iostream>
-#include "utils/Logger.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
+#include "utils/Logger.hpp"
+#include "utils/Utils.hpp"
 
 // --------------------------------------------------------------------------
 
@@ -72,7 +59,7 @@ ccruncher::Logger::Logger()
 void ccruncher::Logger::init(bool verbose_)
 {
   verbose = verbose_;
-
+  
   ilevel = DEFAULT_INDENTATION_LEVEL;
   curcol = -1;
   tracetime = false;
@@ -120,7 +107,7 @@ void ccruncher::Logger::addBlankLine()
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(const string &msg)
+void ccruncher::Logger::trace(string msg)
 {
   trace(msg, false);
 }
@@ -128,7 +115,7 @@ void ccruncher::Logger::trace(const string &msg)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(const string &msg, char c)
+void ccruncher::Logger::trace(string msg, char c)
 {
   trace(msg, c, false);
 }
@@ -136,7 +123,7 @@ void ccruncher::Logger::trace(const string &msg, char c)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(const string &msg, bool tracetime_)
+void ccruncher::Logger::trace(string msg, bool tracetime_)
 {
   trace(msg, ' ', tracetime_);
 }
@@ -144,22 +131,22 @@ void ccruncher::Logger::trace(const string &msg, bool tracetime_)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(const string &msg, const string &value)
+void ccruncher::Logger::trace(string msg, string value)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
-
+  
   // flushing previous message
   flush();
 
   // defining indentator
-  string indentator = Strings::blanks(ilevel*INDENTSIZE);
+  string indentator = Utils::blanks(ilevel*INDENTSIZE);
 
   // creating intermediate filler
   int fsize = ilevel*INDENTSIZE + msg.size() + 1 + value.size();
-  string sfill = Strings::blanks(max(0,MAXCOLS-fsize));
+  string sfill = Utils::blanks(max(0,MAXCOLS-fsize));
 
-  // showing output
+  // showing output  
   cout << indentator << msg << " " << sfill << value << std::endl << std::flush;
 
   // setting status values
@@ -170,28 +157,28 @@ void ccruncher::Logger::trace(const string &msg, const string &value)
 //===========================================================================
 // trace
 //===========================================================================
-void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
+void ccruncher::Logger::trace(string msg, char c, bool tracetime_)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
-
+  
   // flushing previous message
   flush();
 
   // defining indentator
-  string indentator = Strings::blanks(ilevel*INDENTSIZE);
+  string indentator = Utils::blanks(ilevel*INDENTSIZE);
 
   // setting status values
   curcol = indentator.size() + msg.size();
-  tracetime = tracetime_;
+  tracetime = tracetime_;  
 
-  // tracing msg
+  // tracing msg  
   cout << indentator + msg << std::flush;
 
   // post trace actions
   if (tracetime == false)
   {
-    cout << " " << Strings::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
+    cout << " " << Utils::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
     curcol = -1;
   }
   else
@@ -203,7 +190,7 @@ void ccruncher::Logger::trace(const string &msg, char c, bool tracetime_)
 //===========================================================================
 // append
 //===========================================================================
-void ccruncher::Logger::append(const string &msg)
+void ccruncher::Logger::append(string msg)
 {
   // none if non-verbose mode enabled
   if (verbose == false) return;
@@ -212,14 +199,14 @@ void ccruncher::Logger::append(const string &msg)
   if (curcol < 0)
   {
     tracetime = false;
-    cout << Strings::blanks(ilevel*INDENTSIZE) << std::flush;
+    cout << Utils::blanks(ilevel*INDENTSIZE) << std::flush;
     curcol = ilevel*INDENTSIZE;
   }
-
+  
   // appending msg
   cout << msg << std::flush;
   curcol += msg.size();
-
+  
   // checking bounds
   if (curcol >= MAXCOLS)
   {
@@ -248,19 +235,19 @@ void ccruncher::Logger::flush()
   // printing time + new line
   if (tracetime == true)
   {
-
+    
     string etime = Timer::format(timer.stop());
     int fsize = int(MAXCOLS - (curcol + etime.size()));
-    string filler = Strings::blanks(max(fsize, 0));
+    string filler = Utils::blanks(max(fsize, 0));
 
-    // tracing time
+    // tracing time    
     cout << filler << etime << std::endl << std::flush;
 
     // setting class values
     curcol = -1;
     tracetime = false;
   }
-
+  
   if (curcol >= 0)
   {
     cout << std::endl << std::flush;

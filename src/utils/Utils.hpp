@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,25 +19,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// Utils.hpp - Utils header - $Rev$
+// Utils.hpp - Utils header
 // --------------------------------------------------------------------------
 //
-// 2005/07/19 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
 //
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added hash() method
-//   . added timestamp() method
-//
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method getCompilationOptions()
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//   . added rankid static variable (to avoid rank reorder when exits a proces)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
+// 2005/01/29 - Gerard Torrent [gerard@fobos.generacio.com]
+//   . optimized? prodMatrixVector() function. This functions takes
+//     aprox. 50% of execution time.
 //
 //===========================================================================
 
@@ -47,8 +37,10 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <cmath>
+#include <string>
+#include <vector>
 #include "utils/Exception.hpp"
-#include <fstream>
 
 //---------------------------------------------------------------------------
 
@@ -60,26 +52,117 @@ namespace ccruncher {
 
 class Utils
 {
-  private:
-
-    // non-instantiable class
-    Utils() {};
-
-    // pointer to /dev/null
-    static ofstream *nullstream;
-    // mpi rank id
-    static int rankid;
-
 
   public:
 
-    static bool isMaster();
-    static void setSilentMode() throw(Exception);
-    static unsigned long hash(const string &str);
-    static string timestamp();
-    static string getCompilationOptions();
+    static double * allocVector(int n, double x = NAN) throw(Exception);
+    static double * allocVector(int n, double *x) throw(Exception);
+    static void deallocVector(double *x);
 
+    static double ** allocMatrix(int n, int m, double x = NAN) throw(Exception);
+    static double ** allocMatrix(int n, int m, double *x) throw(Exception);
+    static double ** allocMatrix(int n, int m, double **x) throw(Exception);
+    static void deallocMatrix(double **x, int n);
+
+    static void prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret);
+    static void copyVector(double *x, int n, double *ret);
+    static void copyMatrix(double **x, int n, int m, double **ret);
+    static void initVector(double *x, int n, double val);
+    static void initMatrix(double **x, int n, int m, double val);
+
+    static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
+    static string rtrim(string s);
+    static string ltrim(string s);
+    static string trim(string s);
+    static string uppercase(string str);
+    static string lowercase(string str);
+    static string filler(int, char);
+    static string blanks(int);
 };
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// tolower manage int. Wrapper for manage chars
+//===========================================================================
+inline char ltolower (char ch) { return tolower(ch); }
+
+//===========================================================================
+// toupper manage int. Wrapper for manage chars
+//===========================================================================
+inline char ltoupper (char ch) { return toupper(ch); }
+
+//===========================================================================
+// Producte de matriu per vector = A.x
+//===========================================================================
+inline void Utils::prodMatrixVector(double **matriu, double *vector, int n, int m, double *ret)
+{
+  double aux;
+  double *currentrow;
+
+  for(register int i=0;i<n;i++)
+  {
+    aux = 0.0;
+    currentrow = matriu[i];
+
+    for(register int j=0;j<m;j++)
+    {
+      aux += currentrow[j]*vector[j];
+    }
+
+    ret[i] = aux;
+  }
+}
+
+//===========================================================================
+// copyVector
+//===========================================================================
+inline void Utils::copyVector(double *x, int n, double *ret)
+{
+  for(register int i=0;i<n;i++)
+  {
+    ret[i] = x[i];
+  }
+}
+
+//===========================================================================
+// copyMatrix
+//===========================================================================
+inline void Utils::copyMatrix(double **x, int n, int m, double **ret)
+{
+  for(register int i=0;i<n;i++)
+  {
+    for(register int j=0;j<m;j++)
+    {
+      ret[i][j] = x[i][j];
+    }
+  }
+}
+
+//===========================================================================
+// initVector
+//===========================================================================
+inline void Utils::initVector(double *x, int n, double val)
+{
+  for(register int i=0;i<n;i++)
+  {
+    x[i] = val;
+  }
+}
+
+//===========================================================================
+// initMatrix
+//===========================================================================
+inline void Utils::initMatrix(double **x, int n, int m, double val)
+{
+  for(register int i=0;i<n;i++)
+  {
+    for(register int j=0;j<m;j++)
+    {
+      x[i][j] = val;
+    }
+  }
+}
 
 //---------------------------------------------------------------------------
 

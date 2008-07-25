@@ -19,23 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// PowMatrix.cpp - PowMatrix code - $Rev$
+// PowMatrix.cpp - PowMatrix code
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release
-//
-// 2005/06/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . minor changes
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . pow method renamed: pow(x,y) -> fpow(x,y)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -43,7 +31,6 @@
 #include <jama_eig.h>
 #include <jama_lu.h>
 #include "math/PowMatrix.hpp"
-#include "utils/Format.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -51,16 +38,15 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace TNT;
 using namespace JAMA;
 
 //===========================================================================
 // return x^y
 // the difference with std::pow is that allow negatives x
-// example: std::pow(-8.0, 1/3)=nan, ccruncher::fpow(-8.0, 1/3)=-2
+// example: std::pow(-8.0, 1/3)=nan, PowMatrixx::pow(-8.0, 1/3)=-2
 //===========================================================================
-double ccruncher::fpow(double x, double y) throw(Exception)
+double PowMatrix::pow(double x, double y) throw(Exception)
 {
   if (x >= 0.0)
   {
@@ -70,7 +56,7 @@ double ccruncher::fpow(double x, double y) throw(Exception)
   {
     if (std::fabs(y) < EPSILON)
     {
-       return 1.0; // x^0 = 1
+       return 1.0; // x^0 = 0
     }
     else
     {
@@ -83,14 +69,16 @@ double ccruncher::fpow(double x, double y) throw(Exception)
       }
       else
       {
-        throw Exception("unable to pow this negative number: " + Format::double2string(x) + "^" + Format::double2string(y));
+        throw Exception("PowMatrix::pow(): unable to pow this negative number");
       }
     }
   }
 }
 
 //===========================================================================
-// given a matrix, returns the inverse
+// retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
+// atencio: nomes dimensions petites (pe. n < 100)
+// atencio: Exception si VAPS imaginaris
 //===========================================================================
 Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exception)
 {
@@ -110,34 +98,33 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "unable to inverse matrix");
+    throw Exception(e, "PowMatrix::inverse(): unable to inverse matrix");
   }
   catch(...)
   {
-    throw Exception("unable to inverse matrix");
+    throw Exception("PowMatrix::inverse(): unable to inverse matrix");
   }
 }
 
 //===========================================================================
-// returns a matrix powered to an exponent: ret=a^x (where a is a nxn matrix)
-// ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
-// atention: use with low dimensions (pe. n < 100)
-// atention: Exception if complex eigenvalues
+// retorna ret[0..n-1][0..n-1] = a[0..n-][0..n-1]^x
+// atencio: nomes dimensions petites (pe. n < 100)
+// atencio: Exception si VAPS imaginaris
 //===========================================================================
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {
   try
   {
-    // auxiliar vector
+    // vector auxiliar
     TNT::Array1D<double> V = TNT::Array1D<double>(n);
-    // matrix declaration
+    // declarem la matriu
     TNT::Array2D<double> M = TNT::Array2D<double>(n, n);
-    // eigenvalues
+    // VAPS
     TNT::Array2D<double> VAPS = TNT::Array2D<double>(n, n);
-    // eigenvectors
+    // VEPS
     TNT::Array2D<double> VEPS = TNT::Array2D<double>(n, n);
 
-    // filling matrix
+    // omplim la matriu original
     for(int i=0;i<n;i++)
     {
       for(int j=0;j<n;j++)
@@ -146,10 +133,10 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
       }
     }
 
-    // computing eigenvalues and eigenvectors
+    // diagonalitzacio de la matriu (obtencio de VAPS i VEPS)
     JAMA::Eigenvalue<double> eigen = JAMA::Eigenvalue<double>(M);
 
-    // checking that eigenvalues aren't complex
+    // comprovem que no existeix part imaginaria
     eigen.getImagEigenvalues(V);
     double sum = 0.0;
     for(int i=0;i<n;i++)
@@ -158,26 +145,33 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
     }
     if (sum >= EPSILON)
     {
-      throw Exception("can't pow matrix due to imaginary eigenvalues");
+      throw Exception("PowMatrix::pow(): imag eigenvalues");
     }
 
-    // retrieving eigenvalues and eigenvectors
+    // recollim els VAPS i VEPS
     eigen.getD(VAPS);
     eigen.getV(VEPS);
 
-    // raising diagonal to the power of x
+    // elevem la diagonal a x
     for(int i=0;i<n;i++)
     {
-       VAPS[i][i] = ccruncher::fpow(VAPS[i][i], x);
+       if (VAPS[i][i] < EPSILON)
+       {
+         VAPS[i][i] = -std::pow(std::fabs(VAPS[i][i]), x);
+       }
+       else
+       {
+         VAPS[i][i] = pow(VAPS[i][i], x);
+       }
     }
 
-    // finding eigenvectors inverse
+    // trobem la inversa de VEPS
     TNT::Array2D<double> SPEV = inverse(VEPS);
 
-    // computing a^x
+    // calculem la matriu^x
     TNT::Array2D<double> K = matmult(matmult(VEPS, VAPS), SPEV);
 
-    // taking values and exit
+    // recollim i sortim
     for(int i=0;i<n;i++)
     {
       for(int j=0;j<n;j++)
@@ -192,10 +186,10 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "unable to pow matrix");
+    throw Exception(e, "PowMatrix::pow(): unable to pow matrix");
   }
   catch(...)
   {
-    throw Exception("unable to pow matrix");
+    throw Exception("PowMatrix::pow(): unable to pow matrix");
   }
 }

@@ -19,17 +19,11 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// CholeskyDecomposition.hpp - CholeskyDecomposition header - $Rev$
+// CholeskyDecomposition.hpp - CholeskyDecomposition header
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2004/12/04 - Gerard Torrent [gerard@fobos.generacio.com]
 //   . initial release (see 'Numerical Recipes in C')
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added private constructor (non-instantiable class)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 
@@ -49,16 +43,10 @@ namespace ccruncher {
 class CholeskyDecomposition
 {
 
-  private:
-
-    // non-instantiable class
-    CholeskyDecomposition() {};
-
-
   public:
 
     static bool choldc(double **a, double *p, int n);
-
+    
 };
 
 //---------------------------------------------------------------------------
