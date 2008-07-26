@@ -118,7 +118,7 @@ Notes for Windows developers (MSVC7)
    (eg. http://tortoisesvn.tigris.org/)
 
 2. retrieve repository content
-   (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
+   (checkout from http://www.generacio.com/svn/ccruncher/trunk/)
 
 3. download expat package from http://expat.sourceforge.net/
    and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
@@ -141,7 +141,7 @@ Notes for Windows developers (cygwin)
 -------------------------------------
 
 1. retrieve repository content
-   (checkout from http://www.generacio.com/svn/repos/ccruncher/trunk/)
+   (checkout from http://www.generacio.com/svn/ccruncher/trunk/)
 
 2. install gcc, aclocal, autoconf, automake, expat and zlib
    cygwin packages
@@ -157,12 +157,22 @@ Notes for Windows developers (cygwin)
      > make check
 
 
+Notes on MPI version
+--------------------------------
+
+1. check that your mpi environment is enabled
+     > export PATH=$PATH:/usr/share/openmpi/1.2.4-gcc/bin64/
+     > export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/openmpi/1.2.4-gcc/
+     > export LIBRARY_PATH=$LIBRARY_PATH:/usr/lib64/openmpi/1.2.4-gcc/
+     > export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/openmpi/1.2.4-gcc/
+     > export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/openmpi/1.2.4-gcc/
+
+
 Developers tips & tricks
 --------------------------------
 
 1. download CCruncher sources from subversion repositori
-     svn checkout http://www.generacio.com/svn/repos/ccruncher/
-     cd trunk
+     svn checkout http://www.generacio.com/svn/ccruncher/trunk/ ccruncher 
 
 2. install required libraries (explained before)
 
@@ -218,3 +228,4 @@ Developers tips & tricks
 
 CCruncher Team
 http://www.generacio.com/ccruncher/
+

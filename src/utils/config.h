@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue May 27 08:02:52 CEST 2008"
+#define BUILD_DATE "Sat Jul 26 10:48:37 CEST 2008"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -60,7 +60,7 @@
 #define HAVE_MKDIR 1
 
 /* Define to 1 if you have the <mpi.h> header file. */
-/* #undef HAVE_MPI_H */
+#define HAVE_MPI_H 1
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
@@ -119,7 +119,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -131,13 +131,13 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 1.1"
+#define PACKAGE_STRING "ccruncher 1.2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.1"
+#define PACKAGE_VERSION "1.2"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -152,10 +152,10 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Add parallel instructions to code. */
-/* #undef USE_MPI */
+#define USE_MPI 1
 
 /* Version number of package */
-#define VERSION "1.1"
+#define VERSION "1.2"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
@@ -181,7 +181,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R420"
+#define SVNVERSION "R450M"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

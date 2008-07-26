@@ -114,6 +114,9 @@
 //   . added method printPrecomputedLosses()
 //   . Client class renamed to Borrower
 //
+// 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
+//   . trace output data directory changed from absolute to relative
+//
 //===========================================================================
 
 #include <cfloat>
@@ -589,7 +592,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("output data directory", File::normalizePath(fpath));
+  Logger::trace("output data directory", fpath);
   Logger::trace("number of segmentations defined", Format::int2string(segmentations.size()));
   Logger::trace("elapsed time initializing aggregators", true);
 
