@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Jul 26 10:48:37 CEST 2008"
+#define BUILD_DATE "Sun Jul 27 09:00:45 CEST 2008"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -60,7 +60,7 @@
 #define HAVE_MKDIR 1
 
 /* Define to 1 if you have the <mpi.h> header file. */
-#define HAVE_MPI_H 1
+/* #undef HAVE_MPI_H */
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
@@ -119,7 +119,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-#define NDEBUG 1
+/* #undef NDEBUG */
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -152,7 +152,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Add parallel instructions to code. */
-#define USE_MPI 1
+/* #undef USE_MPI */
 
 /* Version number of package */
 #define VERSION "1.2"
