@@ -26,6 +26,9 @@
 //   . added comments on header
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/08/30 - Gerard Torrent [gerard@mail.generacio.com]
+//   . adapted to MSVC9
+//
 //===========================================================================
 
 #ifndef WINCONFIG_H
@@ -92,5 +95,6 @@ inline double round( double d )
 #pragma warning( disable : 4267 )
 #pragma warning( disable : 4700 )
 #pragma warning( disable : 4800 )
+#pragma warning( disable : 4996 )
 
 #endif

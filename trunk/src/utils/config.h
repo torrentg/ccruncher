@@ -168,7 +168,7 @@
 
 /* Define to equivalent of C99 restrict keyword, or to nothing if this is not
    supported. Do not define if restrict is supported directly. */
-#define restrict __restrict
+/* #define restrict __restrict */
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
