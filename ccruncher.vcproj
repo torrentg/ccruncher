@@ -1,36 +1,66 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9,00"
 	Name="ccruncher"
 	ProjectGUID="{F8042CFB-A59F-4D72-8726-E2A544166376}"
 	RootNamespace="ccruncher"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="bin\"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="1"
-				RuntimeLibrary="5"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libexpat.lib zdll.lib"
@@ -38,84 +68,115 @@
 				Version=""
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ccruncher.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="bin\"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				GlobalOptimizations="TRUE"
-				EnableIntrinsicFunctions="TRUE"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				EnableFiberSafeOptimizations="TRUE"
-				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				EnableFiberSafeOptimizations="true"
+				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
-				RuntimeLibrary="4"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libexpat.lib zdll.lib"
 				OutputFile="bin\ccruncher.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
-				GenerateDebugInformation="FALSE"
+				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;"
+				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -124,352 +185,448 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
 			<Filter
 				Name="correlations"
-				Filter="">
+				>
 				<File
-					RelativePath="src\correlations\CorrelationMatrix.cpp">
+					RelativePath="src\correlations\CorrelationMatrix.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\correlations\CorrelationMatrix.hpp">
+					RelativePath="src\correlations\CorrelationMatrix.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="interests"
-				Filter="">
+				>
 				<File
-					RelativePath="src\interests\Interest.cpp">
+					RelativePath="src\interests\Interest.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\interests\Interest.hpp">
+					RelativePath="src\interests\Interest.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\interests\Interests.cpp">
+					RelativePath="src\interests\Interests.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\interests\Interests.hpp">
+					RelativePath="src\interests\Interests.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\interests\Rate.cpp">
+					RelativePath="src\interests\Rate.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\interests\Rate.hpp">
+					RelativePath="src\interests\Rate.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="kernel"
-				Filter="">
+				>
 				<File
-					RelativePath="src\kernel\ccruncher.cpp">
+					RelativePath="src\kernel\ccruncher.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\IData.cpp">
+					RelativePath="src\kernel\IData.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\IData.hpp">
+					RelativePath="src\kernel\IData.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\MonteCarlo.cpp">
+					RelativePath="src\kernel\MonteCarlo.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\MonteCarlo.hpp">
+					RelativePath="src\kernel\MonteCarlo.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\SegmentAggregator.cpp">
+					RelativePath="src\kernel\SegmentAggregator.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\kernel\SegmentAggregator.hpp">
+					RelativePath="src\kernel\SegmentAggregator.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="math"
-				Filter="">
+				>
 				<File
-					RelativePath="src\math\BlockGaussianCopula.cpp">
+					RelativePath="src\math\BlockGaussianCopula.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\BlockGaussianCopula.hpp">
+					RelativePath="src\math\BlockGaussianCopula.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\BlockMatrixChol.cpp">
+					RelativePath="src\math\BlockMatrixChol.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\BlockMatrixChol.hpp">
+					RelativePath="src\math\BlockMatrixChol.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\CholeskyDecomposition.cpp">
+					RelativePath="src\math\CholeskyDecomposition.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\CholeskyDecomposition.hpp">
+					RelativePath="src\math\CholeskyDecomposition.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\Copula.hpp">
+					RelativePath="src\math\Copula.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\GaussianCopula.cpp">
+					RelativePath="src\math\GaussianCopula.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\GaussianCopula.hpp">
+					RelativePath="src\math\GaussianCopula.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\Normal.cpp">
+					RelativePath="src\math\Normal.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\Normal.hpp">
+					RelativePath="src\math\Normal.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\PowMatrix.cpp">
+					RelativePath="src\math\PowMatrix.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\math\PowMatrix.hpp">
+					RelativePath="src\math\PowMatrix.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="params"
-				Filter="">
+				>
 				<File
-					RelativePath="src\params\Params.cpp">
+					RelativePath="src\params\Params.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\params\Params.hpp">
+					RelativePath="src\params\Params.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="portfolio"
-				Filter="">
+				>
 				<File
-					RelativePath="src\portfolio\Asset.cpp">
+					RelativePath="src\portfolio\Asset.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Asset.hpp">
+					RelativePath="src\portfolio\Asset.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Borrower.cpp">
+					RelativePath="src\portfolio\Borrower.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Borrower.hpp">
+					RelativePath="src\portfolio\Borrower.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\DateValues.cpp">
+					RelativePath="src\portfolio\DateValues.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\DateValues.hpp">
+					RelativePath="src\portfolio\DateValues.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Portfolio.cpp">
+					RelativePath="src\portfolio\Portfolio.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Portfolio.hpp">
+					RelativePath="src\portfolio\Portfolio.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="ratings"
-				Filter="">
+				>
 				<File
-					RelativePath="src\ratings\Rating.cpp">
+					RelativePath="src\ratings\Rating.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\ratings\Rating.hpp">
+					RelativePath="src\ratings\Rating.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\ratings\Ratings.cpp">
+					RelativePath="src\ratings\Ratings.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\ratings\Ratings.hpp">
+					RelativePath="src\ratings\Ratings.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="sectors"
-				Filter="">
+				>
 				<File
-					RelativePath="src\sectors\Sector.cpp">
+					RelativePath="src\sectors\Sector.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sector.hpp">
+					RelativePath="src\sectors\Sector.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sectors.cpp">
+					RelativePath="src\sectors\Sectors.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sectors.hpp">
+					RelativePath="src\sectors\Sectors.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="segmentations"
-				Filter="">
+				>
 				<File
-					RelativePath="src\segmentations\Segment.cpp">
+					RelativePath="src\segmentations\Segment.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segment.hpp">
+					RelativePath="src\segmentations\Segment.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentation.cpp">
+					RelativePath="src\segmentations\Segmentation.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentation.hpp">
+					RelativePath="src\segmentations\Segmentation.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentations.cpp">
+					RelativePath="src\segmentations\Segmentations.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentations.hpp">
+					RelativePath="src\segmentations\Segmentations.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="transitions"
-				Filter="">
+				>
 				<File
-					RelativePath="src\transitions\TransitionMatrix.cpp">
+					RelativePath="src\transitions\TransitionMatrix.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\transitions\TransitionMatrix.hpp">
+					RelativePath="src\transitions\TransitionMatrix.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="utils"
-				Filter="">
+				>
 				<File
-					RelativePath="src\utils\Arrays.cpp">
+					RelativePath="src\utils\Arrays.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Arrays.hpp">
+					RelativePath="src\utils\Arrays.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\config.h">
+					RelativePath="src\utils\ccmpi.h"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Date.cpp">
+					RelativePath="src\utils\config.h"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Date.hpp">
+					RelativePath="src\utils\Date.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Exception.cpp">
+					RelativePath="src\utils\Date.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Exception.hpp">
+					RelativePath="src\utils\Exception.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatHandlers.cpp">
+					RelativePath="src\utils\Exception.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatHandlers.hpp">
+					RelativePath="src\utils\ExpatHandlers.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatParser.cpp">
+					RelativePath="src\utils\ExpatHandlers.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatParser.hpp">
+					RelativePath="src\utils\ExpatParser.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatUserData.cpp">
+					RelativePath="src\utils\ExpatParser.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ExpatUserData.hpp">
+					RelativePath="src\utils\ExpatUserData.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\File.cpp">
+					RelativePath="src\utils\ExpatUserData.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\File.hpp">
+					RelativePath="src\utils\File.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Format.cpp">
+					RelativePath="src\utils\File.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Format.hpp">
+					RelativePath="src\utils\Format.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Logger.cpp">
+					RelativePath="src\utils\Format.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Logger.hpp">
+					RelativePath="src\utils\Logger.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\ccmpi.h">
+					RelativePath="src\utils\Logger.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Parser.cpp">
+					RelativePath="src\utils\Parser.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Parser.hpp">
+					RelativePath="src\utils\Parser.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Strings.cpp">
+					RelativePath="src\utils\Strings.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Strings.hpp">
+					RelativePath="src\utils\Strings.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Timer.cpp">
+					RelativePath="src\utils\Timer.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Timer.hpp">
+					RelativePath="src\utils\Timer.hpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Utils.cpp">
+					RelativePath="src\utils\Utils.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\utils\Utils.hpp">
+					RelativePath="src\utils\Utils.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="win32"
-				Filter="">
+				>
 				<File
-					RelativePath="src\win32\dirent.c">
+					RelativePath="src\win32\dirent.c"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\dirent.h">
+					RelativePath="src\win32\dirent.h"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\getopt.c">
+					RelativePath="src\win32\getopt.c"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\getopt.h">
+					RelativePath="src\win32\getopt.h"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\gettimeofday.c">
+					RelativePath="src\win32\gettimeofday.c"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\gettimeofday.h">
+					RelativePath="src\win32\gettimeofday.h"
+					>
 				</File>
 				<File
-					RelativePath="src\win32\winconfig.h">
+					RelativePath="src\win32\winconfig.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="survival"
-				Filter="">
+				>
 				<File
-					RelativePath="src\survival\Survival.cpp">
+					RelativePath="src\survival\Survival.cpp"
+					>
 				</File>
 				<File
-					RelativePath="src\survival\Survival.hpp">
+					RelativePath="src\survival\Survival.hpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="gzstream"
-				Filter="">
+				>
 				<File
-					RelativePath="deps\gzstream-1.5\gzstream.cpp">
+					RelativePath="deps\gzstream-1.5\gzstream.cpp"
+					>
 				</File>
 				<File
-					RelativePath="deps\gzstream-1.5\gzstream.h">
+					RelativePath="deps\gzstream-1.5\gzstream.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 		</Filter>
 	</Files>
 	<Globals>
