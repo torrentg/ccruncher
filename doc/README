@@ -111,7 +111,7 @@ Using CCruncher
      > quit(save='no')
 
 
-Notes for Windows developers (MSVC7)
+Notes for Windows developers (MSVC9)
 ------------------------------------
 
 1. install a subversion client
@@ -129,12 +129,15 @@ Notes for Windows developers (MSVC7)
 5. copy zlib1.dll and libexpat.dll (installed in steps 3 and 4) to
    $CCRUNCHER\bin (required to execute bin\ccruncher.exe)
 
-6. double-click ccruncher.vcproj (opens MSVC7)
+6. double-click ccruncher.sln (opens MSVC9)
 
 7. execute compile option
 
-(*) A MSVC7 (Microsoft Visual C++ .NET) is required.
-    Microsoft Visual C++ 6 don't work at all.
+Microsoft Visual C++ versions:
+ - MSVC6: don't work at all
+ - MSVC7: possibly works, but need to create the file project
+ - MSVC8: possibly works, but need to create the file project
+ - MSVC9: works. see current file project
 
 
 Notes for Windows developers (cygwin)

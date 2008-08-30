@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sun Jul 27 09:00:45 CEST 2008"
+#define BUILD_DATE "Sat Aug 30 20:35:22 CEST 2008"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -168,7 +168,7 @@
 
 /* Define to equivalent of C99 restrict keyword, or to nothing if this is not
    supported. Do not define if restrict is supported directly. */
-/* #define restrict __restrict */
+/* #undef restrict */
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
@@ -181,7 +181,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R450M"
+#define SVNVERSION "R454"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
