@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/09/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added asserts to avoid failures due to code optimization
+//
 //===========================================================================
 
 #include <cmath>
@@ -81,6 +84,7 @@ void ccruncher_test::TimerTest::test1()
 
   timer.stop();
   t1 = timer.read();
+  ASSERT(x != 2.1);
   ASSERT(0.0 < t1);
 
   // reusing the timer (without lost acumulated time)
@@ -93,6 +97,7 @@ void ccruncher_test::TimerTest::test1()
 
   // stopping the timer
   timer.stop();
+  ASSERT(x != 2.1);
   ASSERT(t1 < timer.read());
 
   // reseting timer (acumulated time = 0 seconds)
