@@ -2,10 +2,20 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 1.2 (???. 2007)
+version 1.2 (Sept. 2008)
 --------------------------
+  * improved W3C compliance in html documentation
+  * changed html encoding (ISO-8859-1 -> UTF-8)
   * directory share/ renamed to deps/
-  * upgraded expat version (1.95.8 -> 2.0.1)
+  * updated expat version (1.95.8 -> 2.0.1)
+  * updated valgrind version (3.2.3 -> 3.3.0)
+  * updated open-mpi version (1.1.8 -> 1.2.4)
+  * updated R project version (2.5.1 -> 2.7.1)
+  * directory shared/ renamed to deps/
+  * minor adaptions to gcc-4.3.0
+  * subversion repository reorganized
+  * updated MS Visual Studio project (MSVC7 -> MSVC9)
+  * solved minor bug in TimerTest class
 
 version 1.1 (Aug. 2007)
 --------------------------
@@ -131,3 +141,4 @@ version 0.2 (April 2005)
 version 0.1 (January 2005)
 --------------------------
   * initial release
+
