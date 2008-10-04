@@ -40,7 +40,32 @@
 #   . added breaks param in cmean(), cstddev() and plot()
 #   . TCE renamed to ES
 #
+# 2008/10/04 - Gerard Torrent [gerard@mail.generacio.com]
+#   . added rdigits argument in summary() function
+#
 #***************************************************************************
+
+#===========================================================================
+# usage example
+# --------------------------------------------------------------------------
+# >
+# > source("bin/report.R")                              #load R script
+# > x <- ccruncher.read("file.out")                     #load data
+# > x                                                   #list data
+# > ccruncher.summary(x, alpha=0.95)                    #print summary
+# > ccruncher.summary(x, alpha=0.95, rdigits=3)         #print summary
+# > lines <- ccruncher.summary(x, format="xml")         #create xml summary
+# > write(lines, file="")                               #print xml summary
+# > ccruncher.plot(x, show="pdf")                       #plots a graphic
+# > ccruncher.plot(x, show="cdf")                       #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")  #plots a graphic
+# > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
+# > quit(save='no')                                     #quit R environement
+#
+#===========================================================================
 
 #===========================================================================
 # description
@@ -362,6 +387,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 #   x: vector with values
 #   alpha: numeric. confidence level with value in [0,1]
 #   format: string. plain={plain text}, xml={xml format}
+#   rdigits: number of decimal digits showed in report
 # returns
 #   vector: each line is a text line of the summary
 # example
@@ -369,7 +395,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 #   lines <- ccruncher.summary(x, 0.99, format="xml")
 #   write(lines, file="")
 #===========================================================================
-ccruncher.summary <- function(x, alpha=0.99, format="plain")
+ccruncher.summary <- function(x, alpha=0.99, format="plain", rdigits=2)
 {
   #VaR values scaned (add your values here)
   xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
@@ -422,17 +448,17 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
     ret[length(ret)+1] <- "n = " %&% n;
     ret[length(ret)+1] <- "min = " %&% minx;
     ret[length(ret)+1] <- "max = " %&% maxx;
-    ret[length(ret)+1] <- "mean = " %&% mu %&% " +/- " %&% abs(k*stderr1);
-    ret[length(ret)+1] <- "stddev = " %&% stddev %&% " +/- " %&% abs(k*stderr2);
+    ret[length(ret)+1] <- "mean = " %&% round(mu,rdigits) %&% " +/- " %&% round(abs(k*stderr1),rdigits);
+    ret[length(ret)+1] <- "stddev = " %&% round(stddev,rdigits) %&% " +/- " %&% round(abs(k*stderr2),rdigits);
 
     for(i in 1:length(table1[,1]))
     {
-      ret[length(ret)+1] <- "VAR(" %&% (table1[i,1]*100) %&% "%) = " %&% table1[i,2] %&% " +/- " %&% abs(k*table1[i,3]);
+      ret[length(ret)+1] <- "VAR(" %&% (table1[i,1]*100) %&% "%) = " %&% round(table1[i,2],rdigits) %&% " +/- " %&% round(abs(k*table1[i,3]),rdigits);
     }
 
     for(i in 1:length(table2[,1]))
     {
-      ret[length(ret)+1] <- "ES(" %&% (table2[i,1]*100) %&% "%) = " %&% table2[i,2] %&% " +/- " %&% abs(k*table2[i,3]);
+      ret[length(ret)+1] <- "ES(" %&% (table2[i,1]*100) %&% "%) = " %&% round(table2[i,2],rdigits) %&% " +/- " %&% round(abs(k*table2[i,3]),rdigits);
     }
 
     #adding indentation
@@ -450,21 +476,21 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain")
     ret[length(ret)+1] <- "  <size value='" %&% n %&% "' />";
     ret[length(ret)+1] <- "  <min value='" %&% minx %&% "' />";
     ret[length(ret)+1] <- "  <max value='" %&% maxx %&% "' />";
-    ret[length(ret)+1] <- "  <mean value='" %&% mu %&% "' stderr='" %&% stderr1 %&% "' />";
-    ret[length(ret)+1] <- "  <stddev value='" %&% stddev %&% "' stderr='" %&% stderr2 %&% "' />";
+    ret[length(ret)+1] <- "  <mean value='" %&% round(mu,rdigits) %&% "' stderr='" %&% round(stderr1,rdigits) %&% "' />";
+    ret[length(ret)+1] <- "  <stddev value='" %&% round(stddev,rdigits) %&% "' stderr='" %&% round(stderr2,rdigits) %&% "' />";
 
     for(i in 1:length(table1[,1]))
     {
       ret[length(ret)+1] <- "  <VaR prob='" %&% table1[i,1] %&%
-                  "' value='" %&% table1[i,2] %&% 
-                  "' stderr='" %&% table1[i,3] %&% "' />";
+                  "' value='" %&% round(table1[i,2],rdigits) %&% 
+                  "' stderr='" %&% round(table1[i,3],rdigits) %&% "' />";
     }
 
     for(i in 1:length(table2[,1]))
     {
       ret[length(ret)+1] <- "  <ES prob='" %&% table2[i,1] %&%
-                  "' value='" %&% table2[i,2] %&% 
-                  "' stderr='" %&% table2[i,3] %&% "' />";
+                  "' value='" %&% round(table2[i,2],rdigits) %&% 
+                  "' stderr='" %&% round(table2[i,3],rdigits) %&% "' />";
     }
 
     ret[length(ret)+1] <- "</ccruncher-report>";
@@ -558,23 +584,3 @@ ccruncher.read <- function(filename)
   return(z);
 }
 
-#===========================================================================
-# usage example
-# --------------------------------------------------------------------------
-# >
-# > source("bin/report.R")                              #load R script
-# > x <- ccruncher.read("file.out")                     #load data
-# > x                                                   #list data
-# > ccruncher.summary(x, alpha=0.95)                    #print summary
-# > lines <- ccruncher.summary(x, format="xml")         #create xml summary
-# > write(lines, file="")                               #print xml summary
-# > ccruncher.plot(x, show="pdf")                       #plots a graphic
-# > ccruncher.plot(x, show="cdf")                       #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")  #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
-# > quit(save='no')                                     #quit R environement
-#
-#===========================================================================
