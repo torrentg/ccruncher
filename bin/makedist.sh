@@ -50,6 +50,9 @@
 # 2008/07/25 - Gerard Torrent [gerard@mail.generacio.com]
 #   . changed subversion repository path
 #
+# 2008/10/16 - Gerard Torrent [gerard@mail.generacio.com]
+#   . script report renamed to report.sh
+#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -273,7 +276,7 @@ makeWinDist() {
   cp $pathexes/zlib1.dll bin/
 
   #dropping unused files
-  rm bin/report
+  rm bin/report.sh
   rm ccruncher.sln
   rm ccruncher.vcproj
   rm aclocal.m4;

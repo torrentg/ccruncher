@@ -46,7 +46,7 @@
 # variables declaration
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
-progname=report
+progname=report.sh
 numversion="1.2"
 svnversion="R454"
 retcode=0
@@ -57,7 +57,7 @@ options=""
 #-------------------------------------------------------------
 version() {
 
-  echo $progname-$numversion \($svnversion\)
+  echo $progname ccruncher-$numversion \($svnversion\)
 
 }
 
@@ -68,7 +68,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2007 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2008 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
