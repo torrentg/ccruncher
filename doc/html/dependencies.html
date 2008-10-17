@@ -25,55 +25,11 @@
       has been: non error prone, simplicity, efficiency and open source.
     </p>
 
-    <h3 class="bolded">MiniCppUnit</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>MiniCppUnit</td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.5</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          MiniCppUnit is a C++ unit testing framework.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In ccruncher MiniCppUnit is used to test all basic classes.
-          All classes that match the pattern <code>*Test.?pp</code> are unit tests.
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Notes</b></td>
-        <td style="text-align:justify;">
-          Due to problems whith <a href="http://sourceforge.net/projects/cppunit">CppUnit</a> 
-          (memory leaks, dynamic link, etc.), test framework has been changed to MiniCppUnit.<br/>
-          Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 to UTF-8) and 
-          assertTrue(), assertTrueMissatge() methods. 
-        </td>
-      </tr>
-    </table>
-
-    <h3 class="bolded">Expat</h3>
-    <table cellpadding="5">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td>expat</td>
+        <td><b>expat</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -98,12 +54,18 @@
         </td>
       </tr>
       <tr class="b">
-        <td><b>Usage</b></td>
+        <td><b>Type</b></td>
         <td style="text-align:justify;">
-          In ccruncher expat is used to implement XML management.
+		  Required
         </td>
       </tr>
       <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher expat is used to do the XML management.
+        </td>
+      </tr>
+      <tr class="b">
         <td><b>Notes</b></td>
         <td style="text-align:justify;">
           Due to problems whith <a href="http://xml.apache.org/xerces-c/">xerces-c</a> 
@@ -113,11 +75,11 @@
       </tr>
     </table>
 
-    <h3 class="bolded">Zlib</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>zlib</td>
+        <td><b>zlib</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -142,6 +104,12 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher allows the usage of gziped input files (size reduces drastically
@@ -150,11 +118,11 @@
       </tr>
     </table>
 
-    <h3 class="bolded">Gzstream</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>gzstream</td>
+        <td><b>gzstream</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -178,12 +146,18 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher is used to access the zlib library
         </td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td><b>Notes</b></td>
         <td style="text-align:justify;">
           File gzstream.C renamed to gzstream.cpp due to MSVC7 confusion about *.C extension
@@ -191,11 +165,11 @@
       </tr>
     </table>
 
-    <h3 class="bolded">JAMA/TNT</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>jama - tnt</td>
+        <td><b>jama - tnt</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -220,19 +194,25 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher is used to operate with matrix (eg. eigenvalues
-          decomposition).
+          decomposition)
         </td>
       </tr>
     </table>
 
-    <h3 class="bolded">Mersenne Twister</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>MersenneTwister</td>
+        <td><b>MersenneTwister</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -256,12 +236,18 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher is used to generate the random numbers used by Monte Carlo.
         </td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td><b>Notes</b></td>
         <td style="text-align:justify;">
           Applied minor patch (reported to author) over randNorm() method.
@@ -269,11 +255,104 @@
       </tr>
     </table>
 
-    <h3 class="bolded">Valgrind</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>valgrind</td>
+        <td><b>MiniCppUnit</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          MiniCppUnit is a C++ unit testing framework.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher MiniCppUnit is used to test all basic classes.
+          All classes that match the pattern <code>*Test.?pp</code> are unit tests.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Due to problems whith <a href="http://sourceforge.net/projects/cppunit">CppUnit</a> 
+          (memory leaks, dynamic link, etc.), test framework has been changed to MiniCppUnit.<br/>
+          Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 to UTF-8) and 
+          assertTrue(), assertTrueMissatge() methods. 
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>R project</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.7.1</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.r-project.org/">http://www.r-project.org/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          R is a system for statistical computation and graphics. It consists of a
+          language plus a run-time environment with graphics, a debugger, access to
+          certain system functions, and the ability to run programs stored in script
+          files.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Recomended
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CreditCruncher is the tool used to do the statistical report.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>valgrind</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -297,6 +376,12 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Optional
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher is used to avoid memory leaks at development time.
@@ -307,11 +392,11 @@
       </tr>
     </table>
 
-    <h3 class="bolded">LAM/MPI</h3>
-    <table cellpadding="5">
+	<br/>
+    <table cellpadding="5" style="border:1px solid black;">
       <tr class="a">
         <td style="width:75px;"><b>Name</b></td>
-        <td>mpi (parallel computing)</td>
+        <td><b>mpi</b></td>
       </tr>
       <tr class="b">
         <td><b>Version</b></td>
@@ -344,46 +429,15 @@
         </td>
       </tr>
       <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Optional
+        </td>
+      </tr>
+      <tr class="a">
         <td><b>Usage</b></td>
         <td style="text-align:justify;">
           In ccruncher you can select one of them to compile and run in a cluster.
-        </td>
-      </tr>
-    </table>
-
-    <h3 class="bolded">The R project</h3>
-    <table cellpadding="5">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td>R</td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.7.1</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://www.r-project.org/">http://www.r-project.org/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          R is a system for statistical computation and graphics. It consists of a
-          language plus a run-time environment with graphics, a debugger, access to
-          certain system functions, and the ability to run programs stored in script
-          files.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CreditCruncher is the tool used to do the statistical report.
         </td>
       </tr>
     </table>
@@ -396,7 +450,7 @@
             Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 02-Sep-2008
+    				 Last modified: 17-Oct-2008
     			</td>
     		</tr></table>
     	</div></div></div></div></div>
@@ -406,3 +460,4 @@
   </div>
   </body>
 </html>
+
