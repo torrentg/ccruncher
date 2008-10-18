@@ -96,7 +96,8 @@ Using CCruncher
      $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
 3. compute risk indicators typing:
-     $CCRUNCHER/bin/report.sh data/segmentation-segment.out
+     $CCRUNCHER/bin/ccreport.sh data/segmentation-segment.out
+     firefox data/segmentation-segment.html
    or open a R console and type:
      > source("$CCRUNCHER/bin/report.R")
      > x <- ccruncher.read("$CCRUNCHER/data/file.out")

@@ -114,7 +114,7 @@
     <pre>
 
 &nbsp;&nbsp;ls -l data/*
-&nbsp;&nbsp;more data/segmentation-segment.out
+&nbsp;&nbsp;more data/file.out
     </pre>
 
     <p>
@@ -122,24 +122,25 @@
     </p>
     <pre>
 
-&nbsp;&nbsp;bin/report.sh data/segmentation-segment.out
+&nbsp;&nbsp;bin/ccreport.sh data/file.out
+&nbsp;&nbsp;firefox data/file.html
     </pre>
     <p>
       or open a <a href="http://www.r-project.org">R</a> console and type:
     </p>
     <pre>
 
-&nbsp;&nbsp;>&nbsp;source("bin/report.R")
-&nbsp;&nbsp;>&nbsp;x &lt;- ccruncher.read("data/portfolio-rest.out")
-&nbsp;&nbsp;>&nbsp;ccruncher.summary(x, alpha=0.99)
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="pdf")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, show="cdf")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")
-&nbsp;&nbsp;>&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
-&nbsp;&nbsp;>&nbsp;quit(save='no')
+&nbsp;&nbsp;source("bin/report.R")
+&nbsp;&nbsp;x &lt;- ccruncher.read("data/portfolio-rest.out")
+&nbsp;&nbsp;ccruncher.summary(x, alpha=0.99)
+&nbsp;&nbsp;ccruncher.plot(x, show="pdf")
+&nbsp;&nbsp;ccruncher.plot(x, show="cdf")
+&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
+&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
+&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
+&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")
+&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+&nbsp;&nbsp;quit(save='no')
     </pre>
 
     <br/>
@@ -150,7 +151,7 @@
             Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 16-Oct-2008
+    				 Last modified: 18-Oct-2008
     			</td>
     		</tr></table>
     	</div></div></div></div></div>
