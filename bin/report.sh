@@ -8,11 +8,11 @@
 # repository version:
 #   $Rev$
 #
-# dependences:
-#   shell, R
+# dependencies:
+#   R, xsltproc
 #
 # input:
-#   ccruncher output data file (*.out)
+#   ccruncher output data files (*.out)
 #
 # output:
 #   mean, stddev, VaR results
@@ -40,13 +40,17 @@
 # 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added Rev svn:keyword
 #
+# 2008/10/18 - Gerard Torrent [gerard@mail.generacio.com]
+#   . xml and txt output replaced by html output
+#   . renamed to ccreport.sh
+#
 #=============================================================
 
 #-------------------------------------------------------------
 # variables declaration
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
-progname=report.sh
+progname=ccreport.sh
 numversion="1.2"
 svnversion="R454"
 retcode=0
@@ -82,16 +86,17 @@ _EOF_
 usage() {
 
   cat << _EOF_
-  usage: $progname [options] <file>
+  usage: $progname [options] <file1> <file2>
 
   description:
-    $progname is a shell script to compute the VaR using the
-    output data files generates by ccruncher using R.
+    $progname computes the credit risk using the output data 
+    files generates by ccruncher using R. The report is 
+    stored in an html file in the same directory where output
+    data file resides.
     more info at http://www.generacio.com/ccruncher
   arguments:
     file     ccruncher output data file
   options
-    -x       print output in xml format
     -h       show this message and exit
     -v       show version and exit
   return codes:
@@ -99,7 +104,7 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname portfolio-rest.out
-    $progname -x portfolio-rest.out
+    $progname *.out
 
 _EOF_
 
@@ -115,7 +120,6 @@ readconf() {
   while getopts 'hvx' opt
   do
     case $opt in
-      x) options="$options, format='xml'";;
       v) version;
          exit 0;;
       h) usage;
@@ -145,12 +149,60 @@ readconf() {
     exit 1;
   fi
 
-  which R > /dev/null 2> /dev/null
+  which R > /dev/null 2> /dev/null;
 
   if [ $? != 0 ]; then
     echo "R not found. please report to system administrator";
     echo "R can be found at http://www.r-project.org/";
     exit 1;
+  fi
+
+  which xsltproc > /dev/null 2> /dev/null;
+
+  if [ $? != 0 ]; then
+    echo "xsltproc not found. please report to system administrator";
+    echo "xsltproc can be found at http://xmlsoft.org/XSLT/xsltproc2.html";
+    exit 1;
+  fi
+
+}
+
+#-------------------------------------------------------------
+# create report
+#-------------------------------------------------------------
+doreport() {
+
+  name=${1%.*};
+  extension=${1##*.};
+
+  if [ $extension != "out" ];  then
+    echo "warning: $filename is not a data file" 1>&2;
+    return 1;
+  fi
+
+  rm -f $name.xml;
+  rm -f $name.png;
+  rm -f $name.html;
+
+  R --vanilla --slave > /dev/null << _EOF_
+    source("$CCRUNCHER/bin/report.R", echo=FALSE);
+    x <- ccruncher.read("$filename");
+    lines <- ccruncher.summary(x, rdigits=2, format="xml");
+    write(lines, file="${name}.xml");
+    png(file="${name}.png", width=600);
+    ccruncher.plot(x, alpha=0.95, var=0.99, show="all");
+    dev.off();
+_EOF_
+
+  if [ $? != 0 ]; then
+    return $?;
+  fi
+
+  segment=`basename $name`;
+  xsltproc --stringparam name $segment -o $name.html $CCRUNCHER/bin/transform.xsl ${name}.xml;
+
+  if [ $? != 0 ]; then
+    return $?;
   fi
 
 }
@@ -167,17 +219,11 @@ shift `expr $OPTIND - 1`
 
 for filename in "$@"
 do
-  R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$filename");
-    lines <- ccruncher.summary(x, alpha=0.99 $options);
-    write(lines, file="");
-_EOF_
-
+  doreport $filename;
   if [ $? != 0 ]; then
     retcode=`expr $retcode + 1`;
   fi
-
 done
 
 exit $retcode;
+
