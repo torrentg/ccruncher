@@ -6,7 +6,9 @@ version 1.3 (??? 2008)
 --------------------------
   * decimal digits rounded at report
   * added ccruncher name explanation in faq
-  * script report renamed to report.sh
+  * changed dependencies info look&feel
+  * script report renamed to ccreport.sh
+  * report modified to be displayed as html
 
 version 1.2 (Sept. 2008)
 --------------------------

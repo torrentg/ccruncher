@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+===========================================================================
+#
+# CreditCruncher - A portfolio credit risk valorator
+# Copyright (C) 2008 Gerard Torrent
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#
+# transform.xsl - report stylesheet (http://www.r-project.org) - $Rev: 461 $
+# __________________________________________________________________________
+#
+# usage:
+# xsltproc \-\-stringparam name portfolio-rest transform.xsl portfolio-rest.xml 
+# __________________________________________________________________________
+#
+# 2008/10/18 - Gerard Torrent [gerard@mail.generacio.com]
+#   . initial release
+#
+===========================================================================
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 	<xsl:output method="xml" encoding="UTF-8"
@@ -10,7 +44,7 @@
 
 <html>
 	<head>
-		<title>ccruncher report</title>
+		<title>ccruncher report: <xsl:value-of select="$name" /></title>
 		<style type="text/css">
 body {
 	padding: 0px;
@@ -113,13 +147,23 @@ table.its tr.odd {
 					<td>
 						<b>Simulations file</b>
 					</td>
-					<td align="center"><a href="portfolio-rest.out">file</a></td>
+					<td align="center">
+						<xsl:element name="a">
+							<xsl:attribute name="href"><xsl:value-of select="$name" />.out</xsl:attribute>
+							file
+						</xsl:element>
+					</td>
 				</tr>
 				<tr class="even">
 					<td>
 						<b>Results file</b>
 					</td>
-					<td align="center"><a href="portfolio-rest.xml">file</a></td>
+					<td align="center">
+						<xsl:element name="a">
+							<xsl:attribute name="href"><xsl:value-of select="$name" />.xml</xsl:attribute>
+							file
+						</xsl:element>
+					</td>
 				</tr>
 			</table>
 			</td>
@@ -221,7 +265,10 @@ table.its tr.odd {
 				<span class="big">Graphics</span>
 			</div>
 			<center>
-				<img src="portfolio-rest.png" alt="graphics" />
+				<xsl:element name="img">
+					<xsl:attribute name="src"><xsl:value-of select="$name" />.png</xsl:attribute>
+					<xsl:attribute name="alt">graphics</xsl:attribute>
+				</xsl:element>
 			</center>
 			<div class="gray-bar">
 				<span class="little">
