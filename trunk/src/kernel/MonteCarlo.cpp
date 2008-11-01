@@ -117,6 +117,9 @@
 // 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . trace output data directory changed from absolute to relative
 //
+// 2008/11/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . modified output file name (portfolio-rest.out -> portfolio.out)
+//
 //===========================================================================
 
 #include <cfloat>
@@ -605,25 +608,28 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
     for(int j=0;j<segmentations[i].size();j++)
     {
       // allocating SegmentAggregator
-      SegmentAggregator *tmp = new SegmentAggregator();
+      SegmentAggregator *aggregator = new SegmentAggregator();
 
       // asigning a filename
       string filename = segmentations[i].name + "-" + segmentations[i][j].name + ".out";
+      if (segmentations[i].size() && segmentations[i][j].name == "rest") {
+        filename = segmentations[i].name + ".out";
+      }
 
       // initializing SegmentAggregator
-      tmp->define(aggregators.size(), i, j, segmentations[i].components);
-      tmp->setOutputProperties(fpath, filename, bforce, 0);
-      tmp->initialize(dates, *borrowers, N);
+      aggregator->define(aggregators.size(), i, j, segmentations[i].components);
+      aggregator->setOutputProperties(fpath, filename, bforce, 0);
+      aggregator->initialize(dates, *borrowers, N);
 
       // adding aggregator to list (only if have elements)
       numsegments++;
-      if (tmp->getNumElements() > 0) {
+      if (aggregator->getNumElements() > 0) {
         // creating output file
-        if (fpath != "" && Utils::isMaster()) tmp->touch();
+        if (fpath != "" && Utils::isMaster()) aggregator->touch();
         // add aggregator to list
-        aggregators.push_back(tmp);
+        aggregators.push_back(aggregator);
       } else {
-        delete tmp;
+        delete aggregator;
       }
     }
   }
