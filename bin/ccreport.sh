@@ -51,8 +51,8 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=ccreport.sh
-numversion="1.2"
-svnversion="R454"
+numversion="1.3"
+svnversion="R465M"
 retcode=0
 options=""
 
@@ -86,7 +86,7 @@ _EOF_
 usage() {
 
   cat << _EOF_
-  usage: $progname [options] <file1> <file2>
+  usage: $progname [options] <file1> <file2> ...
 
   description:
     $progname computes the credit risk using the output data 
@@ -95,7 +95,7 @@ usage() {
     data file resides.
     more info at http://www.generacio.com/ccruncher
   arguments:
-    file     ccruncher output data file
+    files    ccruncher output data files
   options
     -h       show this message and exit
     -v       show version and exit
@@ -103,7 +103,7 @@ usage() {
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname portfolio-rest.out
+    $progname portfolio.out
     $progname *.out
 
 _EOF_

@@ -2,7 +2,7 @@
 #***************************************************************************
 #
 # CreditCruncher - A portfolio credit risk valorator
-# Copyright (C) 2004-2005 Gerard Torrent
+# Copyright (C) 2004-2008 Gerard Torrent
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,6 +42,9 @@
 #
 # 2008/10/04 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added rdigits argument in summary() function
+#
+# 2008/10/27 - Gerard Torrent [gerard@mail.generacio.com]
+#   . added grid in graphics
 #
 #***************************************************************************
 
@@ -366,7 +369,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
   yrange[2] <- values[1,n] + 7.5*abs(k*values[2,n]);
 
   #plotting statistic evolution
-  plot(values[1,], type='l', ylim=yrange,
+  plot(values[1,], type='l', ylim=yrange, panel.first = grid(),
        main=name%&%" convergence",
        xlab="Monte Carlo iteration",
        ylab=name%&%" +/- "%&%(alpha*100)%&%"% confidence bound");
@@ -391,7 +394,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 # returns
 #   vector: each line is a text line of the summary
 # example
-#   ccruncher.read("data/portfolio-rest.out")
+#   ccruncher.read("data/portfolio.out")
 #   lines <- ccruncher.summary(x, 0.99, format="xml")
 #   write(lines, file="")
 #===========================================================================
@@ -522,7 +525,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain", rdigits=2)
 # returns
 #   the requested graphic
 # example
-#   x <- ccruncher.read("data/portfolio-rest.out")
+#   x <- ccruncher.read("data/portfolio.out")
 #   ccruncher.plot(x, alpha=0.95, var=0.99)
 # notes
 #   - confidence level is used to plot the confidence bounds on
@@ -535,12 +538,13 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
 
   if (show == "pdf" || show == "all") {
     aux <- density(x);
-    plot(aux,
+    plot(aux, panel.first = grid(),
        main="Density Function",
        xlab="portfolio loss", ylab="probability");
   }
   if (show == "cdf" || show == "all") {
     plot.ecdf(x, verticals=TRUE, do.p=FALSE,
+       panel.first = grid(), 
        main="Cumulative Distribution Function",
        xlab="portfolio loss", ylab="probability");
   }
@@ -570,7 +574,7 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
 # returns
 #   vector with values
 # example
-#   x <- ccruncher.read("data/portfolio-rest.out")
+#   x <- ccruncher.read("data/portfolio.out")
 #   ccruncher.summary(x, alpha=0.95, format="plain")
 #===========================================================================
 ccruncher.read <- function(filename)

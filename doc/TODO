@@ -4,12 +4,11 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * use references in technical document (eg. 2.3.1)
+  * add references in technical document (eg. 2.3.1)
   * functional test (kolmogorov-Smirnof tests, etc.)
   * add examples at technical document
   * change image banner
   * change name to creditquant?
-  * create a script + xsl that generates a beautified output
 
 Future works
 -------------------

@@ -78,6 +78,10 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
+    <segmentation name="sector" components="borrower">
+      <segment name="S1"/>
+      <segment name="S2"/>
+    </segmentation>
   </segmentations>
 
   <!-- ============================================================== -->
@@ -85,6 +89,7 @@
   <!-- ============================================================== -->
   <portfolio>
     <borrower rating="A" sector="S1" name="001" id="001">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op01">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -92,6 +97,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="002" id="002">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op02">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -99,6 +105,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="003" id="003">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op03">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -106,6 +113,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="004" id="004">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op04">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -113,6 +121,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="005" id="005">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op05">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -120,6 +129,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="006" id="006">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op06">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -127,6 +137,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="007" id="007">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op07">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -134,6 +145,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="008" id="008">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op08">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -141,6 +153,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="009" id="009">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op09">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -148,6 +161,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="010" id="010">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op10">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -155,6 +169,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="011" id="011">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op11">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -162,6 +177,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="012" id="012">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op12">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -169,6 +185,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="013" id="013">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op13">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -176,6 +193,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="014" id="014">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op14">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -183,6 +201,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="015" id="015">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op15">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -190,6 +209,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="016" id="016">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op16">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -197,6 +217,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="017" id="017">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op17">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -204,6 +225,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="018" id="018">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op18">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -211,6 +233,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="019" id="019">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op19">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -218,6 +241,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="020" id="020">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op20">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -225,6 +249,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="021" id="021">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op21">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -232,6 +257,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="022" id="022">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op22">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -239,6 +265,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="023" id="023">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op23">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -246,6 +273,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="024" id="024">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op24">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -253,6 +281,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="025" id="025">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op25">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -260,6 +289,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="026" id="026">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op26">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -267,6 +297,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="027" id="027">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op27">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -274,6 +305,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="028" id="028">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op28">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -281,6 +313,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="029" id="029">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op29">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -288,6 +321,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="030" id="030">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op30">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -295,6 +329,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="031" id="031">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op31">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -302,6 +337,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="032" id="032">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op32">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -309,6 +345,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="033" id="033">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op33">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -316,6 +353,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="034" id="034">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op34">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -323,6 +361,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="035" id="035">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op35">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -330,6 +369,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="036" id="036">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op36">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -337,6 +377,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="037" id="037">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op37">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -344,6 +385,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="038" id="038">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op38">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -351,6 +393,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="039" id="039">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op39">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -358,6 +401,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="040" id="040">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op40">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -365,6 +409,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="041" id="041">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op41">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -372,6 +417,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="042" id="042">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op42">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -379,6 +425,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="043" id="043">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op43">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -386,6 +433,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="044" id="044">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op44">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -393,6 +441,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="045" id="045">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op45">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -400,6 +449,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="046" id="046">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op46">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -407,6 +457,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="047" id="047">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op47">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -414,6 +465,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="048" id="048">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op48">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -421,6 +473,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="049" id="049">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op49">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -428,6 +481,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="050" id="050">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op50">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -435,6 +489,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="051" id="051">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op51">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -442,6 +497,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="052" id="052">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op52">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -449,6 +505,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="053" id="053">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op53">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -456,6 +513,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="054" id="054">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op54">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -463,6 +521,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="055" id="055">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op55">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -470,6 +529,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="056" id="056">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op56">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -477,6 +537,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="057" id="057">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op57">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -484,6 +545,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="058" id="058">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op58">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -491,6 +553,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="059" id="059">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op59">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -498,6 +561,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="060" id="060">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op60">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -505,6 +569,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="061" id="061">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op61">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -512,6 +577,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="062" id="062">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op62">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -519,6 +585,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="063" id="063">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op63">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -526,6 +593,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="064" id="064">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op64">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -533,6 +601,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="065" id="065">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op65">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -540,6 +609,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="066" id="066">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op66">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -547,6 +617,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="067" id="067">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op67">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -554,6 +625,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="068" id="068">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op68">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -561,6 +633,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="069" id="069">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op69">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -568,6 +641,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="070" id="070">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op70">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -575,6 +649,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="071" id="071">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op71">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -582,6 +657,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="072" id="072">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op72">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -589,6 +665,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="073" id="073">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op73">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -596,6 +673,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="074" id="074">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op74">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -603,6 +681,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="075" id="075">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op75">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -610,6 +689,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="076" id="076">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op76">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -617,6 +697,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="077" id="077">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op77">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -624,6 +705,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="078" id="078">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op78">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -631,6 +713,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="079" id="079">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op79">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -638,6 +721,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="080" id="080">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op80">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -645,6 +729,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="081" id="081">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op81">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -652,6 +737,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="082" id="082">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op82">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -659,6 +745,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="083" id="083">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op83">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -666,6 +753,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="084" id="084">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op84">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -673,6 +761,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="085" id="085">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op85">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -680,6 +769,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="086" id="086">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op86">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -687,6 +777,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="087" id="087">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op87">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -694,6 +785,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="088" id="088">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op88">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -701,6 +793,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="089" id="089">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op89">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -708,6 +801,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="090" id="090">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op90">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -715,6 +809,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="091" id="091">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op91">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -722,6 +817,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="092" id="092">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op92">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -729,6 +825,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="093" id="093">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op93">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -736,6 +833,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="094" id="094">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op94">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -743,6 +841,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="095" id="095">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op95">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -750,6 +849,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="096" id="096">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op96">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -757,6 +857,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="097" id="097">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op97">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -764,6 +865,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="098" id="098">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op98">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -771,6 +873,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S1" name="099" id="099">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op99">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
@@ -778,6 +881,7 @@
       </asset>
     </borrower>
     <borrower rating="A" sector="S2" name="100" id="100">
+      <belongs-to segmentation="sector" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op100">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
