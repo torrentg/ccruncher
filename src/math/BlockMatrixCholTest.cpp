@@ -28,6 +28,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/05 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added new tests
+//
 //===========================================================================
 
 #include <iostream>
@@ -80,35 +83,7 @@ void ccruncher_test::BlockMatrixCholTest::test1()
       0.50000, 0.86603, 0.00000,
       0.50000, 0.28868, 0.81650
   };
-  double **A = Arrays<double>::allocMatrix(1,1,valA);
-
-  BlockMatrixChol *chol=NULL;
-
-  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 1));
-  ASSERT_EQUALS(3, chol->getDim());
-
-  // checking cholesky values
-  for (int i=0;i<3;i++)
-  {
-    for (int j=0;j<3;j++)
-    {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
-    }
-  }
-
-  // checking mult method
-  double x[3] = {1.0, 1.0, 1.0};
-  double y[3] = {0.0, 0.0, 0.0};
-  double z[3] = {1.0, 1.36603, 1.60518};
-  chol->mult(x, y);
-  for(int i=0;i<3;i++)
-  {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
-  }
-
-  // exit function
-  delete chol;
-  Arrays<double>::deallocMatrix(A, 1);
+  run(valA, solA, n, 1);
 }
 
 //===========================================================================
@@ -138,36 +113,7 @@ void ccruncher_test::BlockMatrixCholTest::test2()
      0.10000, 0.99499, 0.00000,
      0.20000, 0.28141, 0.93851
   };
-  double **A = Arrays<double>::allocMatrix(3,3,valA);
-
-  BlockMatrixChol *chol=NULL;
-
-  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 3));
-  ASSERT_EQUALS(3, chol->getDim());
-  ASSERT_NO_THROW(check(A, n, 3, chol));
-
-  // checking cholesky values
-  for (int i=0;i<3;i++)
-  {
-    for (int j=0;j<3;j++)
-    {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
-    }
-  }
-
-  // checking mult method
-  double x[3] = {1.0, 1.0, 1.0};
-  double y[3] = {0.0, 0.0, 0.0};
-  double z[3] = {1.0, 1.09499, 1.41992};
-  chol->mult(x, y);
-  for(int i=0;i<3;i++)
-  {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
-  }
-
-  // exit function
-  delete chol;
-  Arrays<double>::deallocMatrix(A, 3);
+  run(valA, solA, n, 3);
 }
 
 //===========================================================================
@@ -201,36 +147,7 @@ void ccruncher_test::BlockMatrixCholTest::test3()
      0.10000, 0.05774, 0.04082, 0.99247, 0.00000,
      0.10000, 0.05774, 0.04082, 0.33754, 0.93331
   };
-  double **A = Arrays<double>::allocMatrix(2,2,valA);
-
-  BlockMatrixChol *chol=NULL;
-
-  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 2));
-  ASSERT_EQUALS(5, chol->getDim());
-  ASSERT_NO_THROW(check(A, n, 2, chol));
-
-  // checking cholesky values
-  for (int i=0;i<5;i++)
-  {
-    for (int j=0;j<5;j++)
-    {
-      ASSERT_EQUALS_EPSILON(solA[5*i+j], chol->get(i,j), EPSILON);
-    }
-  }
-
-  // checking mult method
-  double x[5] = {1.0, 1.0, 1.0, 1.0, 1.0};
-  double y[5] = {0.0, 0.0, 0.0, 0.0, 0.0};
-  double z[5] = {1.0, 1.36603, 1.60518, 1.19103, 1.46941};
-  chol->mult(x, y);
-  for(int i=0;i<5;i++)
-  {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
-  }
-
-  // exit function
-  delete chol;
-  Arrays<double>::deallocMatrix(A, 2);
+  run(valA, solA, n, 2);
 }
 
 //===========================================================================
@@ -250,7 +167,6 @@ void ccruncher_test::BlockMatrixCholTest::test4()
   double **A = Arrays<double>::allocMatrix(4,4,valA);
 
   BlockMatrixChol *chol=NULL;
-
   ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4));
   ASSERT_EQUALS(100, chol->getDim());
   ASSERT_NO_THROW(check(A, n, 4, chol));
@@ -323,7 +239,7 @@ void ccruncher_test::BlockMatrixCholTest::test6()
 }
 
 //===========================================================================
-// test2. test cholesky decomposition (M=4, N=3), sector2 have 0 elements
+// test7. test cholesky decomposition (M=4, N=3), sector2 have 0 elements
 //
 // validated with octave using:
 //    A = [1,0.1,0.2;0.1,1,0.3;0.2,0.3,1]
@@ -351,46 +267,205 @@ void ccruncher_test::BlockMatrixCholTest::test7()
      0.10000, 0.99499, 0.00000,
      0.20000, 0.28141, 0.93851
   };
-  double **A = Arrays<double>::allocMatrix(4,4,valA);
+  run(valA, solA, n, 4);
+}
 
-  BlockMatrixChol *chol=NULL;
+//===========================================================================
+// test8. test cholesky decomposition (M=1, N=2)
+//
+// validated with octave using:
+//    A = [1,0.4;0.4,1]
+//      1.00000  0.40000
+//      0.40000  1.00000
+//    B = chol(A)' (octave & mathematica considerer L'·L instead of L·L')
+//      1.00000  0.00000
+//      0.40000  0.91652
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test8()
+{
+  double valA[] = {
+     +0.4
+  };
+  int n[] = { 2 };
+  double solA[] = {
+      1.00000, 0.00000,
+      0.40000, 0.91652
+  };
+  run(valA, solA, n, 1);
+}
 
-  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4));
-  ASSERT_EQUALS(3, chol->getDim());
+//===========================================================================
+// test9. test cholesky decomposition (M=1, N=1)
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test9()
+{
+  double valA[] = {
+     +0.4
+  };
+  int n[] = { 1 };
+  double solA[] = {
+      1.00000
+  };
+  run(valA, solA, n, 1);
+}
 
-  // checking cholesky values
-  for (int i=0;i<3;i++)
-  {
-    for (int j=0;j<3;j++)
-    {
-      ASSERT_EQUALS_EPSILON(solA[3*i+j], chol->get(i,j), EPSILON);
-    }
-  }
+//===========================================================================
+// test9. test cholesky decomposition (M=2, various N)
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test10()
+{
+  double valA[] = {
+      0.50000, 0.10000,
+      0.10000, 0.35000
+  };
 
-  // checking mult method
-  double x[3] = {1.0, 1.0, 1.0};
-  double y[3] = {0.0, 0.0, 0.0};
-  double z[3] = {1.0, 1.09499, 1.41992};
-  chol->mult(x, y);
-  for(int i=0;i<3;i++)
-  {
-    ASSERT_EQUALS_EPSILON(y[i], z[i], EPSILON);
-  }
+  int n1[] = { 1, 1 }; //A=[1,0.1;0.1,1]
+  double sol1[] = {    //chol(A)'
+      1.00000, 0.00000,
+      0.10000, 0.99499
+  };
+  run(valA, sol1, n1, 2);
 
-  // checking that a 0 elements matrix decomposition crash
-  delete chol;
-  n[0] = 0; n[1] = 0; n[2] = 0; n[3] = 0;
-  ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4));
+  int n2[] = { 1, 2 }; //A=[1,0.1,0.1; 0.1,1,0.35; 0.1,0.35,1]
+  double sol2[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,
+   0.10000,   0.99499,   0.00000,
+   0.10000,   0.34171,   0.93447
+  };
+  run(valA, sol2, n2, 2);
 
-  // exit function
-  Arrays<double>::deallocMatrix(A, 4);
+  int n3[] = { 1, 3 }; //A=[1,0.1,0.1,0.1; 0.1,1,0.35,0.35; 0.1,0.35,1,0.35; 0.1,0.35,0.35,1]
+  double sol3[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,
+   0.10000,   0.99499,   0.00000,   0.00000,
+   0.10000,   0.34171,   0.93447,   0.00000,
+   0.10000,   0.34171,   0.23889,   0.90342
+  };
+  run(valA, sol3, n3, 2);
+
+  int n4[] = { 2, 1 }; //A=[1,0.5,0.1; 0.5,1,0.1; 0.1,0.1,1]
+  double sol4[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,
+   0.10000,   0.05774,   0.99331
+  };
+  run(valA, sol4, n4, 2);
+
+  int n5[] = { 2, 2 }; //A=[1,0.5,0.1,0.1; 0.5,1,0.1,0.1; 0.1,0.1,1,0.35; 0.1,0.1,0.35,1]
+  double sol5[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.99331,   0.00000,
+   0.10000,   0.05774,   0.33893,   0.93370
+  };
+  run(valA, sol5, n5, 2);
+
+  int n6[] = { 2, 3 }; //A=[1,0.5,0.1,0.1,0.1; 0.5,1,0.1,0.1,0.1; 0.1,0.1,1,0.35,0.35; 0.1,0.1,0.35,1,0.35; 0.1,0.1,0.35,0.35,1]
+  double sol6[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.99331,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.33893,   0.93370,   0.00000,
+   0.10000,   0.05774,   0.33893,   0.23754,   0.90298
+  };
+  run(valA, sol6, n6, 2);
+
+  int n7[] = { 3, 1 }; //A=[1,0.5,0.5,0.1; 0.5,1,0.5,0.1; 0.5,0.5,1,0.1; 0.1,0.1,0.1,1]
+  double sol7[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,   0.00000,
+   0.50000,   0.28868,   0.81650,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.99247
+  };
+  run(valA, sol7, n7, 2);
+
+  int n8[] = { 3, 2 }; //A=[1,0.5,0.5,0.1,0.1; 0.5,1,0.5,0.1,0.1; 0.5,0.5,1,0.1,0.1; 0.1,0.1,0.1,1,0.35; 0.1,0.1,0.1,0.35,1]
+  double sol8[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.28868,   0.81650,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.99247,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.33754,   0.93331
+  };
+  run(valA, sol8, n8, 2);
+
+  int n9[] = { 3, 3 }; //A=[1,0.5,0.5,0.1,0.1,0.1; 0.5,1,0.5,0.1,0.1,0.1; 0.5,0.5,1,0.1,0.1,0.1; 0.1,0.1,0.1,1,0.35,0.35; 0.1,0.1,0.1,0.35,1,0.35; 0.1,0.1,0.1,0.35,0.35,1]
+  double sol9[] = {    //chol(A)'
+   1.00000,   0.00000,   0.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.86603,   0.00000,   0.00000,   0.00000,   0.00000,
+   0.50000,   0.28868,   0.81650,   0.00000,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.99247,   0.00000,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.33754,   0.93331,   0.00000,
+   0.10000,   0.05774,   0.04082,   0.33754,   0.23686,   0.90275
+  };
+  run(valA, sol9, n9, 2);
+
 }
 
 //===========================================================================
 //  given a blockmatrix, A, and his cholesky decomposition, L, check that:
 //    L·L' = A
 //===========================================================================
-void ccruncher_test::BlockMatrixCholTest::check(double **C, int *n, int M, BlockMatrixChol *chol) throw(Exception)
+void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution, int *n, int M)
+{
+  int N = 0;
+  for(int i=0; i<M; i++) N += n[i];
+
+  double **A = Arrays<double>::allocMatrix(M, M, correls);
+  double **B = Arrays<double>::allocMatrix(N, N, solution);
+
+  BlockMatrixChol *chol=NULL;
+  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, M));
+  ASSERT_EQUALS(N, chol->getDim());
+
+  // checking cholesky values
+  for (int i=0;i<N;i++)
+  {
+    for (int j=0;j<N;j++)
+    {
+      ASSERT_EQUALS_EPSILON(solution[N*i+j], chol->get(i,j), EPSILON);
+    }
+  }
+
+  // checking mult method
+  double *x = Arrays<double>::allocVector(N);
+  double *y = Arrays<double>::allocVector(N);
+  double *z = Arrays<double>::allocVector(N);
+  for(int i=0; i<N; i++) 
+  {
+    x[i] = (double) i;
+    y[i] = -1.0;
+  }
+  Arrays<double>::prodMatrixVector(B, x, N, N, z);
+  chol->mult(x, y);
+  for(int i=0;i<N; i++) 
+  {
+    ASSERT_EQUALS_EPSILON(z[i], y[i], EPSILON);
+    double val = 0.0;
+    for(int j=0;j<N; j++) 
+    {
+      val += chol->get(i,j)*x[j];
+    }
+    ASSERT_EQUALS_EPSILON(val, y[i], EPSILON);
+  }
+
+  // checking L·L'=A
+  check(A, n, M, chol);
+
+  // exit function
+  delete chol;
+  Arrays<double>::deallocMatrix(A, M);
+  Arrays<double>::deallocMatrix(B, N);
+  Arrays<double>::deallocVector(x);
+  Arrays<double>::deallocVector(y);
+  Arrays<double>::deallocVector(z);
+}
+
+//===========================================================================
+//  given a blockmatrix, A, and his cholesky decomposition, L, check that:
+//    L·L' = A
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::check(double **C, int *n, int M, BlockMatrixChol *chol)
 {
   // retrieving the dimension matrix
   int N = chol->getDim();
@@ -423,8 +498,7 @@ void ccruncher_test::BlockMatrixCholTest::check(double **C, int *n, int M, Block
 
       if (fabs(val1-val2) > EPSILON)
       {
-        Arrays<int>::deallocVector(spe);
-        throw Exception("check failed");
+        ASSERT(false);
       }
     }
   }
@@ -432,3 +506,4 @@ void ccruncher_test::BlockMatrixCholTest::check(double **C, int *n, int M, Block
   // dealloc spe array
   Arrays<int>::deallocVector(spe);
 }
+

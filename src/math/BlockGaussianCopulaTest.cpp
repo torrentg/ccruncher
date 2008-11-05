@@ -28,6 +28,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/02 - Gerard Torrent [gerard@mail.generacio.com]
+//   . improved testCopula() function
+//   . added test6
+//
 //===========================================================================
 
 #include <iostream>
@@ -39,7 +43,7 @@
 //---------------------------------------------------------------------------
 
 #define NITERS 100000
-#define EPSILON  0.1
+#define EPSILON  0.01
 #define NBINS 100
 
 //===========================================================================
@@ -77,7 +81,7 @@ void ccruncher_test::BlockGaussianCopulaTest::test1()
   BlockGaussianCopula copula = BlockGaussianCopula(correls, n, 3);
 
   // testing copula
-  ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
+  testCopula(copula, sigmas, n, 3);
 
   // exit function
   Arrays<double>::deallocMatrix(correls, 3);
@@ -148,12 +152,61 @@ void ccruncher_test::BlockGaussianCopulaTest::test4()
   BlockGaussianCopula copula = BlockGaussianCopula(orig);
 
   // testing copula
-  ASSERT_NO_THROW(testCopula(copula, sigmas, 3));
+  testCopula(copula, sigmas, n, 3);
 
   // exit function
   Arrays<double>::deallocMatrix(correls, 3);
 }
 
+//===========================================================================
+// test5. generates NITERS realization of a copula and test that expected
+// correlations are true
+//===========================================================================
+void ccruncher_test::BlockGaussianCopulaTest::test5()
+{
+  // valid correlation matrix
+  double sigmas[] = {
+    +1.0 , +0.2,
+    +0.2 , +1.0
+  };
+  double **correls = Arrays<double>::allocMatrix(2,2,sigmas);
+  int n[2] = {1, 1};
+
+  // copula construction
+  BlockGaussianCopula copula = BlockGaussianCopula(correls, n, 2);
+
+  // testing copula
+  testCopula(copula, sigmas, n, 2);
+
+  // making 2-D density plot
+  //computeDensity(copula);
+
+  // exit function
+  Arrays<double>::deallocMatrix(correls, 2);
+}
+
+//===========================================================================
+// test6. generates NITERS realization of a copula and test that expected
+// correlations are true
+//===========================================================================
+void ccruncher_test::BlockGaussianCopulaTest::test6()
+{
+  // valid correlation matrix
+  double sigmas[] = {
+    +0.4
+  };
+  double **correls = Arrays<double>::allocMatrix(1,1,sigmas);
+  int n[] = {2};
+
+  // copula construction
+  BlockGaussianCopula copula = BlockGaussianCopula(correls, n, 1);
+
+  // testing copula
+  testCopula(copula, sigmas, n, 1);
+
+  // exit function
+  Arrays<double>::deallocMatrix(correls, 1);
+}
 
 //===========================================================================
 // generate a 2-D histogram
@@ -202,33 +255,6 @@ void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula
 }
 
 //===========================================================================
-// test5. generates NITERS realization of a copula and test that expected
-// correlations are true
-//===========================================================================
-void ccruncher_test::BlockGaussianCopulaTest::test5()
-{
-  // valid correlation matrix
-  double sigmas[] = {
-    +1.0 , +0.2,
-    +0.2 , +1.0
-  };
-  double **correls = Arrays<double>::allocMatrix(2,2,sigmas);
-  int n[2] = {1, 1};
-
-  // copula construction
-  BlockGaussianCopula copula = BlockGaussianCopula(correls, n, 2);
-
-  // testing copula
-  ASSERT_NO_THROW(testCopula(copula, sigmas, 2));
-
-  // making 2-D density plot
-  //computeDensity(copula);
-
-  // exit function
-  Arrays<double>::deallocMatrix(correls, 2);
-}
-
-//===========================================================================
 // computes the correlation factor of 2 series
 // extracted from 'Numerical Recipes in C'
 //===========================================================================
@@ -261,41 +287,63 @@ double ccruncher_test::BlockGaussianCopulaTest::pearsn(double *x, double *y, int
 }
 
 //===========================================================================
+// given an element index returns the sector
+// x: element index value (0-based)
+// n: number of elements at each sector
+// m: number of sectors
+//===========================================================================
+int ccruncher_test::BlockGaussianCopulaTest::getSector(int x, int *n, int m)
+{
+  int acum = 0;
+  for(int i=0; i<m; i++) {
+    acum += n[i];
+    if (x+1 <= acum) return i;
+  }
+  ASSERT(false);
+}
+
+//===========================================================================
 // testCopula. generates NITERS realization of a copula and test that expected
 // correlations are true
-// correls is a vector of size nxn
+// copula: copula to be tested
+// correls: vector of size mxm containing sectors correlations 
+// n: number of elements at each sector
+// m: number of sectors
 //===========================================================================
-void ccruncher_test::BlockGaussianCopulaTest::testCopula(BlockGaussianCopula &copula, double *correls, int n)
+void ccruncher_test::BlockGaussianCopulaTest::testCopula(BlockGaussianCopula &copula, double *correls, int *n, int m)
 {
   double **values;
 
   // testing size method
-  ASSERT(copula.size() == n);
+  int nn = 0;
+  for(int i=0; i<m; i++) nn += n[i];
+  ASSERT(copula.size() == nn);
 
   // allocating space
-  values = Arrays<double>::allocMatrix(n, NITERS);
+  values = Arrays<double>::allocMatrix(nn, NITERS);
 
   // generating copulas
   for(int i=0;i<NITERS;i++)
   {
     copula.next();
-
-    for (int j=0;j<n;j++)
+    for (int j=0;j<nn;j++)
     {
-
       values[j][i] = copula.get(j);
     }
   }
-
-  for (int i=0;i<n;i++)
+  for (int i=0;i<nn;i++)
   {
-    for (int j=0;j<n;j++)
+    int s1 = getSector(i, n, m);
+    for (int j=0;j<nn;j++)
     {
+      if (i==j) continue;
+      int s2 = getSector(j, n, m);
       double sigma = pearsn(values[i], values[j], NITERS);
-      ASSERT_EQUALS_EPSILON(correls[j+n*i], sigma, EPSILON);
+      ASSERT_EQUALS_EPSILON(correls[s2+m*s1], sigma, EPSILON);
     }
   }
 
   // exit
-  Arrays<double>::deallocMatrix(values, n);
+  Arrays<double>::deallocMatrix(values, nn);
 }
+

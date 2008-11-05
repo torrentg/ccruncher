@@ -449,7 +449,7 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
   Logger::previousIndentLevel();
 }
 
-/*
+
 //===========================================================================
 // getBorrowerCorrelationMatrix
 //===========================================================================
@@ -475,7 +475,7 @@ double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata
 
   return ret;
 }
-*/
+
 
 //===========================================================================
 // copula construction
@@ -705,6 +705,15 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       // simulating default time for each borrower
       timer2.resume();
       simulate();
+/*
+for(int i=0; i<N; i++) {
+cout << getRandom(i) << "\t";
+}
+for(int i=0; i<N; i++) {
+cout << ittd[i] << "\t";
+}
+cout << endl;
+*/
       timer2.stop();
 
       // portfolio evaluation

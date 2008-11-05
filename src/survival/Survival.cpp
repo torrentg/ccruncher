@@ -470,7 +470,6 @@ int ccruncher::Survival::inverse(const int irating, double val) const
 
   int n = ddata[irating].size();
   int i1 = int(ceil(val*ISURVFNUMBINS));
-  //double xt1 = double(i1)/double(ISURVFNUMBINS);
   int t1 = idata[irating][i1];
 
   // defaults rating allways default at time 0

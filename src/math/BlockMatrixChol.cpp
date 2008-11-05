@@ -31,6 +31,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/05 - Gerard Torrent [gerard@mail.generacio.com]
+//   . solved important bug in mult() method
+//
 //===========================================================================
 
 #include <cmath>
@@ -121,6 +124,16 @@
 
 //===========================================================================
 // Constructor
+// C: matrix with correlations between sectors (simmetric with size = mxm)
+// n: number of elements in each sector (size = m)
+// m: number of sectors
+// Example: C = { {0.2,0.1}, {0.1, 0.3}}, n={2,3}, m=2
+// indicates the following matrix:
+//    1.0 0.2 0.1 0.1 0.1
+//    0.2 1.0 0.1 0.1 0.1
+//    0.1 0.1 1.0 0.3 0.3
+//    0.1 0.1 0.3 1.0 0.3
+//    0.1 0.1 0.3 0.3 1.0
 // first we asure that input arguments are valids and  don't exist sectors
 // without elements. If exist, they are removed
 //===========================================================================
@@ -277,7 +290,7 @@ void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Except
   // allocating memory for spe array
   spe = Arrays<int>::allocVector(N, 0);
 
-  // filling spe
+  // filling spe (sector per element)
   for (int i=0,j=0;j<M;j++)
   {
     for(int k=0;k<n[j];k++)
@@ -384,23 +397,23 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
   }
 
   // computing the first element of each sector (diagonal product not included)
-  for(int j=0,i=0;j<M;j++)
+  for(int s=0,i=0;s<M;s++)
   {
-    for(int k=0;k<i;k++)
+    for(int j=0;j<i;j++)
     {
-      ret[i] += coefs[k][j] * x[k];
+      ret[i] += get(i,j) * x[j];
     }
-
-    i += n[j];
+    i += n[s];
   }
 
   // computing the rest of elements for each sector (diagonal product not included)
-  for(int j=0,i=0;j<M;j++)
+  for(int s=0,i=0;s<M;s++)
   {
     i++;
-    for(int k=1;k<n[j];k++)
+    for(int k=1;k<n[s];k++)
     {
-      ret[i] += ret[i-1] + coefs[i-1][j]*x[i];
+      int j = i+k;
+      ret[i] += ret[i-1] + get(i,i-1)*x[i-1];
       i++;
     }
   }
@@ -414,7 +427,7 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
 
 //===========================================================================
 // adapted cholesky for block matrix (see header of this file)
-// TODO: is posible to save some multiplications more
+// TODO: it is still posible to reduce the number of multiplications
 //===========================================================================
 void ccruncher::BlockMatrixChol::chold(double **C) throw(Exception)
 {

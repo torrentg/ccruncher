@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Nov  1 09:02:59 CET 2008"
+#define BUILD_DATE "Sun Nov  2 19:54:31 CET 2008"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -119,7 +119,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-#define NDEBUG 1
+/* #undef NDEBUG */
 
 /* Name of package */
 #define PACKAGE "ccruncher"
