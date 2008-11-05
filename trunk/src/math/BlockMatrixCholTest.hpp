@@ -28,6 +28,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/05 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added new tests
+//
 //===========================================================================
 
 #ifndef _BlockMatrixCholTest_
@@ -59,7 +62,11 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
     void test5();
     void test6();
     void test7();
-    void check(double **C, int *n, int M, BlockMatrixChol *x) throw(Exception);
+    void test8();
+    void test9();
+    void test10();
+    void run(double *correls, double *solution, int *n, int M);
+    void check(double **correls, int *n, int M, BlockMatrixChol *chol);
 
 
   public:
@@ -73,6 +80,9 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
       TEST_CASE(test5);
       TEST_CASE(test6);
       TEST_CASE(test7);
+      TEST_CASE(test8);
+      TEST_CASE(test9);
+      TEST_CASE(test10);
     }
 
     void setUp();

@@ -28,6 +28,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/02 - Gerard Torrent [gerard@mail.generacio.com]
+//   . improved testCopula() function
+//   . added test6
+//
 //===========================================================================
 
 #ifndef _BlockGaussianCopulaTest_
@@ -51,8 +55,9 @@ class BlockGaussianCopulaTest : public TestFixture<BlockGaussianCopulaTest>
 
   private:
 
+    int getSector(int x, int *n, int m);
     double pearsn(double *x, double *y, int n);
-    void testCopula(BlockGaussianCopula &, double *, int n);
+    void testCopula(BlockGaussianCopula &, double *, int *n, int m);
     void computeDensity(BlockGaussianCopula &copula);
 
     void test1();
@@ -60,6 +65,7 @@ class BlockGaussianCopulaTest : public TestFixture<BlockGaussianCopulaTest>
     void test3();
     void test4();
     void test5();
+    void test6();
 
 
   public:
@@ -71,6 +77,7 @@ class BlockGaussianCopulaTest : public TestFixture<BlockGaussianCopulaTest>
       TEST_CASE(test3);
       TEST_CASE(test4);
       TEST_CASE(test5);
+      TEST_CASE(test6);
     }
 
     void setUp();

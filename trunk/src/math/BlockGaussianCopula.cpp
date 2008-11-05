@@ -28,6 +28,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2008/11/05 - Gerard Torrent [gerard@mail.generacio.com]
+//   . solved bug: use transformed correls, not original correls
+//
 //===========================================================================
 
 #include <cmath>
@@ -129,7 +132,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
     }
 
     // computing cholesky factorization
-    chol = new BlockMatrixChol(C_, n_, m_);
+    chol = new BlockMatrixChol(correls, n_, m_);
 
     // allocating mem for temp arrays
     n = chol->getDim();

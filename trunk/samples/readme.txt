@@ -48,7 +48,7 @@ How I can check results?
   > source("bin/report.R")
   > #reading data
   > x <- ccruncher.read("data/portfolio.out")
-  > #computed values (number of 0's and 1's)
+  > #observed frequencies (number of 0's and 1's)
   > obs <- tabulate(x+1, 2)
   > #theoretical probabilities
   > prob <- c(0.9, 0.1)
@@ -93,10 +93,14 @@ How I can check results?
   > source("bin/report.R")
   > #reading data
   > x <- ccruncher.read("data/portfolio.out")
-  > #exact values
-  > c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1)*length(x)
-  > #computed values
-  > tabulate(x+1, 3)
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x+1, 3)
+  > #theoretical probabilities
+  > prob <- c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1)
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst[3]
 
 
 test03.xml
@@ -131,10 +135,14 @@ How I can check results?
   > source("bin/report.R")
   > #reading data
   > x <- ccruncher.read("data/portfolio.out")
-  > #exact values
-  > round(dbinom(0:100, 100, 0.1)*length(x))
-  > #computed values
-  > tabulate(x+1, 101)
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x+1, 101)
+  > #theoretical probabilities
+  > prob <- round(dbinom(0:100, 100, 0.1))
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst[3]
 
 
 test04.xml

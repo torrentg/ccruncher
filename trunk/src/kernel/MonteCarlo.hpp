@@ -163,7 +163,7 @@ class MonteCarlo
     long executeCollector() throw(Exception);
 
     // auxiliary methods
-    //double** getBorrowerCorrelationMatrix(const IData &);
+    double** getBorrowerCorrelationMatrix(const IData &);
 
 
   public:

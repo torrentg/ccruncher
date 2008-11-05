@@ -769,10 +769,10 @@ We use the fact that matrix $U$ have repeated elements to reduce the number of
 operations required to multiply $U$ by a vector. Let see an example:
 
 \begin{displaymath}
-\begin{array}{l}
-(U \cdot x)_2 =  0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 + \cr
-                 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7 \cr
-              = 0.86603 \cdot x_2 + 2\cdot 0.28868 \cdot (x_3 + x_4) + 3 \cdot 0.05774 \cdot (x_5 + x_6 + x_7)
+\begin{array}{rcl}
+(U \cdot x)_2 & = & 0.0 \cdot x_1 + 0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 + \cr
+              &   & 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7 \cr
+              & = & 0.86603 \cdot x_2 + 0.28868 \cdot (x_3 + x_4) + 0.05774 \cdot (x_5 + x_6 + x_7)
 \end{array}
 \end{displaymath}
 
