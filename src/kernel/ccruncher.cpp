@@ -71,6 +71,10 @@
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added listloss method
 //
+// 2008/11/06 - Gerard Torrent [gerard@mail.generacio.com]
+//   . updated listloss option to lplosses
+//   . added lcopula and ldeftime options
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -107,11 +111,15 @@ void run(string, string) throw(Exception);
 string sfilename = "";
 string spath = "";
 bool bvalidate = false;
-bool blistloss = false;
 bool bverbose = false;
 bool bforce = false;
 int inice = -999;
 int ihash = 0;
+#ifndef USE_MPI
+bool blplosses = false;
+bool blcopulas = false;
+bool bldeftime = false;
+#endif
 
 //===========================================================================
 // main
@@ -130,7 +138,11 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "validate",     0,  NULL,  305 },
-      { "listloss",     0,  NULL,  306 },
+#ifndef USE_MPI
+      { "lplosses",     0,  NULL,  306 },
+      { "lcopulas",     0,  NULL,  307 },
+      { "ldeftime",     0,  NULL,  308 },
+#endif
       { NULL,           0,  NULL,   0  }
   };
 
@@ -218,9 +230,19 @@ int main(int argc, char *argv[])
           bvalidate = true;
           break;
 
-      case 306: // --listloss (list precomputed asset losses at time nodes)
-          blistloss = true;
+#ifndef USE_MPI
+      case 306: // --lplosses (list precomputed asset losses at time nodes)
+          blplosses = true;
           break;
+
+      case 307: // --lcopulas (list copula values)
+          blcopulas = true;
+          break;
+
+      case 308: // --ldeftime (list default times)
+          bldeftime = true;
+          break;
+#endif
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
@@ -248,7 +270,7 @@ int main(int argc, char *argv[])
   }
 
   // checking arguments consistency
-  if (spath == "" && !bvalidate && !blistloss)
+  if (spath == "" && !bvalidate)
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
@@ -256,7 +278,7 @@ int main(int argc, char *argv[])
   }
 
   // license info
-  if (bverbose || !blistloss)
+  if (bverbose)
   {
     copyright();
   }
@@ -365,6 +387,9 @@ void run(string filename, string path) throw(Exception)
   MonteCarlo simul;
   simul.setFilePath(path, bforce);
   simul.setHash(ihash);
+#ifndef USE_MPI
+  simul.setAdditionalOutput(blplosses, blcopulas, bldeftime);
+#endif
 
   // initializing simulation
   simul.initialize(idata);
@@ -373,13 +398,6 @@ void run(string filename, string path) throw(Exception)
   if (bvalidate == true)
   {
     Logger::addBlankLine();
-    return;
-  }
-
-  // list precomputed losses and exit
-  if (blistloss == true)
-  {
-    simul.printPrecomputedLosses();
     return;
   }
 
@@ -451,9 +469,9 @@ void version()
 //===========================================================================
 void usage()
 {
-  cout << "\n"
-  "  usage: ccruncher [options] <file>\n"
-  "\n"
+  cout <<
+  "  usage:\n"
+  "    ccruncher [options] <file>\n"
   "  description:\n"
   "    ccruncher is a tool used to evalute VAR (value at risk)\n"
   "    of a pure credit portfolio using Monte Carlo simulation.\n"
@@ -462,13 +480,25 @@ void usage()
   "    file        xml file containing the problem to be solved. This\n"
   "                file can be gziped (caution, zip format not suported)\n"
   "  options:\n"
-  "    -f          force output files overwriting\n"
-  "    -v          be more verbose\n"
+  "    -f          force output files overwrite\n"
+  "    -v          be verbose\n"
   "    --path=dir  directory where output files will be placed (required)\n"
   "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
-  "    --validate  perform input file validations and exit\n"
-  "    --listloss  list precomputed assets losses at time nodes and exit\n"
+  "    --validate  validates input file and exits\n"
+#ifndef USE_MPI
+  "    --lplosses  list precomputed assets losses at time nodes\n"
+  "                for depuration and validation purposes only.\n"
+  "                create the file plosses.xml\n"
+  "    --lcopulas  list simulated copula values\n"
+  "                for depuration and validation purposes only.\n"
+  "                use with care. time and disk consuming option.\n"
+  "                creates the file copula.csv\n"
+  "    --ldeftime  list simulated borrower default times\n"
+  "                for depuration and validation purposes only.\n"
+  "                use with care. time and disk consuming option.\n"
+  "                creates the file deftimes.csv\n"
+#endif
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"
   "  return codes:\n"
@@ -476,10 +506,10 @@ void usage()
   "    1           KO. finished with errors\n"
   "  examples:\n"
   "    ccruncher --validate input.xml\n"
-  "    ccruncher --listloss input.xml\n"
   "    ccruncher --path=20070801 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20070801 input.xml\n"
-  "    ccruncher --hash=100 -fv --path=./E20070801 input.xml.gz\n"
+  "    ccruncher -fv --hash=100 --path=data/ samples/test01.xml\n"
+  "    ccruncher -fv --hash=100 --path=data/ samples/test100.xml.gz\n"
+  "    ccruncher -fv --hash=100 --lplosses --ldeftime --path=data/ samples/test04.xml\n"
   << endl;
 }
 

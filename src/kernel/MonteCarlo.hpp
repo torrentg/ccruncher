@@ -65,6 +65,11 @@
 //   . added method printPrecomputedLosses()
 //   . Client class renamed to Borrower
 //
+// 2008/11/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . modified output file name (portfolio-rest.out -> portfolio.out)
+//   . added optional bulk of copula values to file
+//   . added optional bulk of simulated default to file
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -136,6 +141,16 @@ class MonteCarlo
     string fpath;
     /* force file overwriting flag */
     bool bforce;
+    /* list precomputed asset losses flag */
+    bool blplosses;
+    /* list simulated copula values flag */
+    bool blcopulas;
+    /* list simulated default times */
+    bool bldeftime;
+    /** file where copula values are stored (if blcopulas flag is set) */
+    ofstream fcopulas;
+    /** file where default times are stored (if bldeftime flag is set) */
+    ofstream fdeftime;
 
     // internal methods
     void reset();
@@ -162,6 +177,11 @@ class MonteCarlo
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
 
+    // trace methods
+    void initAdditionalOutput() throw(Exception);
+    void printCopulaValues() throw(Exception);
+    void printDefaultTimes() throw(Exception);
+
     // auxiliary methods
     double** getBorrowerCorrelationMatrix(const IData &);
 
@@ -175,7 +195,7 @@ class MonteCarlo
     void setHash(int num);
     void initialize(IData &) throw(Exception);
     long execute() throw(Exception);
-    void printPrecomputedLosses();
+    void setAdditionalOutput(bool losses, bool copulas, bool deftimes);
 
 };
 

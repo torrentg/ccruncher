@@ -117,8 +117,10 @@
 // 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . trace output data directory changed from absolute to relative
 //
-// 2008/11/01 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/11/07 - Gerard Torrent [gerard@mail.generacio.com]
 //   . modified output file name (portfolio-rest.out -> portfolio.out)
+//   . added optional bulk of copula values to file
+//   . added optional bulk of simulated default to file
 //
 //===========================================================================
 
@@ -179,6 +181,10 @@ void ccruncher::MonteCarlo::reset()
   copula = NULL;
   survival = NULL;
   ittd = NULL;
+
+  blplosses = false;
+  blcopulas = false;
+  bldeftime = false;
 }
 
 //===========================================================================
@@ -205,6 +211,10 @@ void ccruncher::MonteCarlo::release()
     }
   }
   aggregators.clear();
+
+  // closing files
+  if (blcopulas) fcopulas.close();
+  if (bldeftime) fdeftime.close();
 }
 
 //===========================================================================
@@ -264,6 +274,10 @@ void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
 
   // initializing aggregators
   initAggregators(idata);
+
+  // initializes debug bulk files 
+  // precomputed losses, copula values, simulated default times
+  initAdditionalOutput();
 
   // exit function
   Logger::previousIndentLevel();
@@ -584,11 +598,8 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
   long numsegments = 0;
   Segmentations &segmentations = idata.getSegmentations();
 
-  // init only if spath is set
-  if (fpath == "")
-  {
-    return;
-  }
+  // assertions
+  assert(fpath != "" && fpath != "path not set"); 
 
   // setting logger header
   Logger::trace("initializing aggregators", '-');
@@ -650,7 +661,7 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
   long ret;
 
   // assertions
-  assert(fpath != "");
+  assert(fpath != "" && fpath != "path not set"); 
 
   // setting logger header
   Logger::addBlankLine();
@@ -705,21 +716,16 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       // simulating default time for each borrower
       timer2.resume();
       simulate();
-/*
-for(int i=0; i<N; i++) {
-cout << getRandom(i) << "\t";
-}
-for(int i=0; i<N; i++) {
-cout << ittd[i] << "\t";
-}
-cout << endl;
-*/
       timer2.stop();
 
       // portfolio evaluation
       timer3.resume();
       aux = evalue();
       timer3.stop();
+
+      // additional traces
+      if (blcopulas) printCopulaValues();
+      if (bldeftime) printDefaultTimes();
 
       // counter increment
       CONT++;
@@ -1010,26 +1016,128 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
 }
 
 //===========================================================================
-// printPrecomputedLosses
+// setAdditionalOutput
 //===========================================================================
-void ccruncher::MonteCarlo::printPrecomputedLosses()
+void ccruncher::MonteCarlo::setAdditionalOutput(bool losses, bool copulas, bool deftimes)
 {
-  cout << "<ccruncher-plosses>" << endl;
-  for(long i=0;i<N;i++)
+  blplosses = losses;
+  blcopulas = copulas;
+  bldeftime = deftimes;
+}
+
+//===========================================================================
+// initAdditionalOutput
+//===========================================================================
+void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
+{
+#ifndef USE_MPI
+  assert(fpath != "" && fpath != "path not set"); 
+  string dirpath = File::normalizePath(fpath);
+  
+  // creates precomputed losses file
+  if (blplosses)
   {
-    cout << "  <borrower id=\"" << (*borrowers)[i]->id << "\">" << endl;
-    vector<Asset> &assets = (*borrowers)[i]->getAssets();
-    for(unsigned int j=0;j<assets.size();j++)
+    string filename = dirpath + "plosses.xml";
+    try
     {
-      cout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
-      for(int k=0; k<STEPS+1; k++)
+      ofstream fout;
+      fout.open(filename.c_str(), ios::out|ios::trunc);
+      fout.setf(ios::fixed);
+      fout.setf(ios::showpoint);
+      fout.precision(2);
+
+      fout << "<ccruncher-plosses>" << endl;
+      for(long i=0;i<N;i++)
       {
-        cout << "      <loss at=\"" << dates[k] << "\" value=\"" << assets[j].getLoss(k) << "\"/>" << endl;
+        fout << "  <borrower id=\"" << (*borrowers)[i]->id << "\">" << endl;
+        vector<Asset> &assets = (*borrowers)[i]->getAssets();
+        for(unsigned int j=0;j<assets.size();j++)
+        {
+          fout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
+          for(int k=0; k<STEPS+1; k++)
+          {
+            fout << "      <loss at=\"" << dates[k] << "\" value=\"" << assets[j].getLoss(k) << "\"/>" << endl;
+          }
+          fout << "    </asset>" << endl;
+        }
+        fout << "  </borrower>" << endl;
       }
-      cout << "    </asset>" << endl;
+      fout << "</ccruncher-plosses>" << endl;
+      fout.close();
     }
-    cout << "  </borrower>" << endl;
+    catch(...)
+    {
+      throw Exception("error writing file " + filename);
+    }
   }
-  cout << "</ccruncher-plosses>" << endl;
+
+  // initializes copula values file
+  if (blcopulas)
+  {
+    string filename = dirpath + "copula.csv";
+    try
+    {
+      fcopulas.open(filename.c_str(), ios::out|ios::trunc);
+      fcopulas << "#";
+      for(int i=0; i<N; i++)
+      {
+        fcopulas << (*borrowers)[i]->name << (i!=N-1?", ":"");
+      }
+      fcopulas << endl;
+    }
+    catch(...)
+    {
+      throw Exception("error writing file " + filename);
+    }
+  }
+
+  // initializes simulated default times file
+  if (bldeftime)
+  {
+    string filename = dirpath + "deftimes.csv";
+    try
+    {
+      fdeftime.open(filename.c_str(), ios::out|ios::trunc);
+      fdeftime << "#";
+      for(int i=0; i<N; i++)
+      {
+        fdeftime << (*borrowers)[i]->name << (i!=N-1?", ":"");
+      }
+      fdeftime << endl;
+    }
+    catch(...)
+    {
+      throw Exception("error writing file " + filename);
+    }
+  }
+#endif
+}
+
+//===========================================================================
+// printCopulaValues
+//===========================================================================
+void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
+{
+#ifndef USE_MPI
+  for(int i=0; i<N; i++) 
+  {
+    fcopulas << getRandom(i) << (i!=N-1?", ":"");
+  }
+  fcopulas << endl;
+#endif
+}
+
+//===========================================================================
+// printDefaultTimes
+//===========================================================================
+void ccruncher::MonteCarlo::printDefaultTimes() throw(Exception)
+{
+#ifndef USE_MPI
+  for(int i=0; i<N; i++) 
+  {
+    fdeftime << getRandom(i) << (i!=N-1?", ":"");
+  }
+  fdeftime << endl;
+#endif
 }
 
