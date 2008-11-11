@@ -117,10 +117,11 @@
 // 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . trace output data directory changed from absolute to relative
 //
-// 2008/11/07 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . modified output file name (portfolio-rest.out -> portfolio.out)
 //   . added optional bulk of copula values to file
 //   . added optional bulk of simulated default to file
+//   . changed from SegmentAggregator to Aggregator
 //
 //===========================================================================
 
@@ -463,16 +464,16 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
   Logger::previousIndentLevel();
 }
 
-
 //===========================================================================
 // getBorrowerCorrelationMatrix
+// method not used because can exhaust memory with large portfolios (eg. N=50000)
 //===========================================================================
 double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata)
 {
   double **ret = Arrays<double>::allocMatrix(N, N, 0.0);
   double **scorrels = idata.getCorrelationMatrix().getMatrix();
 
-  for (int i=0;i<N;i++)
+  for (long i=0;i<N;i++)
   {
     int sector1 = (*borrowers)[i]->isector;
     for(int j=0;j<N;j++)
@@ -489,7 +490,6 @@ double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata
 
   return ret;
 }
-
 
 //===========================================================================
 // copula construction
@@ -516,7 +516,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     tmp = Arrays<int>::allocVector(idata.getCorrelationMatrix().size(),0);
 
     // computing the number of borrowers in each sector
-    for(long i=0;i<N;i++)
+    for(long i=0; i<N; i++)
     {
       tmp[(*borrowers)[i]->isector]++;
     }
@@ -595,7 +595,6 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
 {
-  long numsegments = 0;
   Segmentations &segmentations = idata.getSegmentations();
 
   // assertions
@@ -607,47 +606,18 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", fpath);
-  Logger::trace("number of segmentations defined", Format::int2string(segmentations.size()));
+  Logger::trace("number of segmentations", Format::int2string(segmentations.size()));
   Logger::trace("elapsed time initializing aggregators", true);
 
-  // setting objects
-  aggregators.clear();
-
   // allocating and initializing aggregators
+  aggregators.clear();
   for(int i=0;i<segmentations.size();i++)
   {
-    for(int j=0;j<segmentations[i].size();j++)
-    {
-      // allocating SegmentAggregator
-      SegmentAggregator *aggregator = new SegmentAggregator();
-
-      // asigning a filename
-      string filename = segmentations[i].name + "-" + segmentations[i][j].name + ".out";
-      if (segmentations[i].size() && segmentations[i][j].name == "rest") {
-        filename = segmentations[i].name + ".out";
-      }
-
-      // initializing SegmentAggregator
-      aggregator->define(aggregators.size(), i, j, segmentations[i].components);
-      aggregator->setOutputProperties(fpath, filename, bforce, 0);
-      aggregator->initialize(dates, *borrowers, N);
-
-      // adding aggregator to list (only if have elements)
-      numsegments++;
-      if (aggregator->getNumElements() > 0) {
-        // creating output file
-        if (fpath != "" && Utils::isMaster()) aggregator->touch();
-        // add aggregator to list
-        aggregators.push_back(aggregator);
-      } else {
-        delete aggregator;
-      }
-    }
+    string filename = File::normalizePath(fpath) + segmentations[i].name + ".csv";
+    Aggregator *aggregator = new Aggregator(aggregators.size(), segmentations[i], *borrowers, N, dates.size());
+    aggregator->setOutputProperties(filename, bforce);
+    aggregators.push_back(aggregator);
   }
-
-  // setting logger info
-  Logger::trace("number of segments", Format::long2string(numsegments));
-  Logger::trace("number of segments with elements", Format::long2string(aggregators.size()));
 
   // exit function
   Logger::previousIndentLevel();
@@ -722,10 +692,6 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       timer3.resume();
       aux = evalue();
       timer3.stop();
-
-      // additional traces
-      if (blcopulas) printCopulaValues();
-      if (bldeftime) printDefaultTimes();
 
       // counter increment
       CONT++;
@@ -919,6 +885,12 @@ void ccruncher::MonteCarlo::randomize()
       reversed = false;
     }
   }
+
+  // trace copula values
+  if (blcopulas) 
+  {
+    printCopulaValues();
+  }
 }
 
 //===========================================================================
@@ -927,9 +899,22 @@ void ccruncher::MonteCarlo::randomize()
 //===========================================================================
 void ccruncher::MonteCarlo::simulate()
 {
-  // for each borrower we simule the time where defaults
-  for (int i=0;i<N;i++) {
+  // simulates default times
+  for (long i=0; i<N; i++) 
+  {
     ittd[i] = simTimeToDefault(i);
+  }
+
+  // trace default times
+  if (bldeftime) 
+  {
+    printDefaultTimes(ittd);
+  }
+
+  // maps default times to time nodes
+  for(long i=0; i<N; i++) 
+  {
+    ittd[i] = std::max(1, int(ceil(double(ittd[i])/double(STEPLENGTH))));
   }
 }
 
@@ -969,9 +954,7 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
 
   // simulate month where this borrower defaults
   int month = survival->inverse(r1, u);
-
-  // return index time where defaults (always bigger than 0)
-  return std::max(1, int(ceil(double(month)/double(STEPLENGTH))));
+  return month;
 }
 
 //===========================================================================
@@ -1079,7 +1062,7 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     {
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
       fcopulas << "#";
-      for(int i=0; i<N; i++)
+      for(long i=0; i<N; i++)
       {
         fcopulas << (*borrowers)[i]->name << (i!=N-1?", ":"");
       }
@@ -1099,7 +1082,7 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     {
       fdeftime.open(filename.c_str(), ios::out|ios::trunc);
       fdeftime << "#";
-      for(int i=0; i<N; i++)
+      for(long i=0; i<N; i++)
       {
         fdeftime << (*borrowers)[i]->name << (i!=N-1?", ":"");
       }
@@ -1119,25 +1102,25 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
 void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 {
 #ifndef USE_MPI
-  for(int i=0; i<N; i++) 
+  for(long i=0; i<N; i++) 
   {
     fcopulas << getRandom(i) << (i!=N-1?", ":"");
   }
-  fcopulas << endl;
+  fcopulas << "\n";
 #endif
 }
 
 //===========================================================================
 // printDefaultTimes
 //===========================================================================
-void ccruncher::MonteCarlo::printDefaultTimes() throw(Exception)
+void ccruncher::MonteCarlo::printDefaultTimes(int *values) throw(Exception)
 {
 #ifndef USE_MPI
-  for(int i=0; i<N; i++) 
+  for(long i=0; i<N; i++) 
   {
-    fdeftime << getRandom(i) << (i!=N-1?", ":"");
+    fdeftime << values[i] << (i!=N-1?", ":"");
   }
-  fdeftime << endl;
+  fdeftime << "\n";
 #endif
 }
 
