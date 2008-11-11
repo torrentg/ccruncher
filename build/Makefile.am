@@ -55,7 +55,7 @@ ccruncher_SOURCES = \
     ../src/kernel/ccruncher.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/IData.cpp\
-    ../src/kernel/SegmentAggregator.cpp\
+    ../src/kernel/Aggregator.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Borrower.cpp\
     ../src/params/Params.cpp\
@@ -96,7 +96,7 @@ ccruncher_SOURCES = \
     \
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/IData.hpp\
-    ../src/kernel/SegmentAggregator.hpp\
+    ../src/kernel/Aggregator.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Borrower.hpp\
     ../src/params/Params.hpp\
@@ -202,7 +202,7 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/IData.cpp\
-    ../src/kernel/SegmentAggregator.cpp\
+    ../src/kernel/Aggregator.cpp\
     ../src/sectors/Sector.cpp\
     ../src/sectors/Sectors.cpp\
     ../src/ratings/Rating.cpp\
@@ -274,7 +274,7 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/IData.hpp\
-    ../src/kernel/SegmentAggregator.hpp\
+    ../src/kernel/Aggregator.hpp\
     ../src/sectors/Sector.hpp\
     ../src/sectors/Sectors.hpp\
     ../src/ratings/Rating.hpp\
@@ -306,7 +306,7 @@ tests_LDFLAGS =
 #    ../src/kernel/samplegen.cpp\
 #    ../src/kernel/MonteCarlo.cpp\
 #    ../src/kernel/IData.cpp\
-#    ../src/kernel/SegmentAggregator.cpp\
+#    ../src/kernel/Aggregator.cpp\
 #    ../src/portfolio/Portfolio.cpp\
 #    ../src/portfolio/Borrower.cpp\
 #    ../src/params/Params.cpp\
@@ -347,7 +347,7 @@ tests_LDFLAGS =
 #    \
 #    ../src/kernel/MonteCarlo.hpp\
 #    ../src/kernel/IData.hpp\
-#    ../src/kernel/SegmentAggregator.hpp\
+#    ../src/kernel/Aggregator.hpp\
 #    ../src/portfolio/Portfolio.hpp\
 #    ../src/portfolio/Borrower.hpp\
 #    ../src/params/Params.hpp\

@@ -89,8 +89,13 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT(5 == sobj.size());
 
   ASSERT(0 == sobj["rest"].order);
+  ASSERT(0 == sobj[0].order);
   ASSERT(1 == sobj["0001"].order);
+  ASSERT(1 == sobj[1].order);
   ASSERT(2 == sobj["0002"].order);
+  ASSERT(2 == sobj[2].order);
   ASSERT(3 == sobj["0003"].order);
+  ASSERT(3 == sobj[3].order);
   ASSERT(4 == sobj["0004"].order);
+  ASSERT(4 == sobj[4].order);
 }

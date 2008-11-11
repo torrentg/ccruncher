@@ -65,10 +65,11 @@
 //   . added method printPrecomputedLosses()
 //   . Client class renamed to Borrower
 //
-// 2008/11/07 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . modified output file name (portfolio-rest.out -> portfolio.out)
 //   . added optional bulk of copula values to file
 //   . added optional bulk of simulated default to file
+//   . changed from SegmentAggregator to Aggregator
 //
 //===========================================================================
 
@@ -80,7 +81,7 @@
 #include "utils/config.h"
 #include <vector>
 #include "kernel/IData.hpp"
-#include "kernel/SegmentAggregator.hpp"
+#include "kernel/Aggregator.hpp"
 #include "ratings/Ratings.hpp"
 #include "transitions/TransitionMatrix.hpp"
 #include "sectors/Sectors.hpp"
@@ -104,7 +105,7 @@ class MonteCarlo
 
     Ratings *ratings;
     Sectors *sectors;
-    vector<SegmentAggregator *> aggregators;
+    vector<Aggregator *> aggregators;
     vector<Borrower *> *borrowers;
 
     /** maximum number of iterations */
@@ -180,7 +181,7 @@ class MonteCarlo
     // trace methods
     void initAdditionalOutput() throw(Exception);
     void printCopulaValues() throw(Exception);
-    void printDefaultTimes() throw(Exception);
+    void printDefaultTimes(int *) throw(Exception);
 
     // auxiliary methods
     double** getBorrowerCorrelationMatrix(const IData &);

@@ -251,11 +251,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\kernel\SegmentAggregator.cpp"
+					RelativePath="src\kernel\Aggregator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\kernel\SegmentAggregator.hpp"
+					RelativePath="src\kernel\Aggregator.hpp"
 					>
 				</File>
 			</Filter>
