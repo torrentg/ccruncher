@@ -152,6 +152,8 @@ class MonteCarlo
     ofstream fcopulas;
     /** file where default times are stored (if bldeftime flag is set) */
     ofstream fdeftime;
+    /** maximum number of segments in a aggregator * sizeof(double) */
+    long ccmaxbufsize;
 
     // internal methods
     void reset();

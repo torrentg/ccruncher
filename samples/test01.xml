@@ -88,6 +88,7 @@
   <!-- ============================================================== -->
   <portfolio>
     <borrower rating="A" sector="S1" name="001" id="001">
+      <belongs-to segmentation="sector" segment="S1"/>
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2007" cashflow="1.0" recovery="0.0" />

@@ -78,10 +78,10 @@ class Aggregator
 
     // cumulated values (size = numsegments x buffersize)
     vector<double> cvalues;
-    // buffer size for each segment in cvalues
-    int buffersize;
+    // number of rows in buffer (1 row = numsegments values)
+    int bufferrows;
 
-    // indicates if rest segment has borrowres/assets
+    // indicates if rest segment has borrowers/assets
     bool printRestSegment;
     // internal timer (control time from last flush)
     Timer timer;
@@ -101,8 +101,9 @@ class Aggregator
     // other methods
     void setOutputProperties(const string &filename, bool force) throw(Exception);
     bool append(int *defaulttimes) throw(Exception);
-    bool appendRawData(double *data, int datasize) throw(Exception);
+    long appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);
+    long getBufferSize();
 
 };
 
