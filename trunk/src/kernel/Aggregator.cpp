@@ -54,10 +54,10 @@ ccruncher::Aggregator::Aggregator(int id, Segmentation &segmentation_,
   maxitime = m;
   printRestSegment = hasRestSegment();
 
-  buffersize = CCMAXBUFSIZE/(numsegments*sizeof(double));
-  if (buffersize <= 0) buffersize = 1;
-  cvalues.reserve(buffersize*numsegments);
-  cvalues.assign(buffersize*numsegments, 0.0);
+  bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
+  if (bufferrows <= 0) bufferrows = 1;
+  cvalues.reserve(bufferrows*numsegments);
+  cvalues.assign(bufferrows*numsegments, 0.0);
 
   cont = 0L;
   icont = 0L;
@@ -98,7 +98,7 @@ bool ccruncher::Aggregator::append(int *defaulttimes) throw(Exception)
   }
 
   // flushing if buffer is full
-  if (icont >= buffersize || timer.read() > CCEFLUSHSECS)
+  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
   {
     return flush();
   }
@@ -179,9 +179,11 @@ void ccruncher::Aggregator::append2(int *defaulttimes)
 
 //===========================================================================
 // appendRawData
+// returns the number of simulations added
 //===========================================================================
-bool ccruncher::Aggregator::appendRawData(double *data, int datasize) throw(Exception)
+long ccruncher::Aggregator::appendRawData(double *data, int datasize) throw(Exception)
 {
+  long numsims = 0L;
   assert(data != NULL);
   assert(datasize >= 0);
   
@@ -192,7 +194,8 @@ bool ccruncher::Aggregator::appendRawData(double *data, int datasize) throw(Exce
   }
 
   // appending data
-  for(int i=0; i<datasize/numsegments; i++)
+  numsims = datasize/numsegments;
+  for(int i=0; i<numsims; i++)
   {
     for(int j=0; j<numsegments; j++)
     {
@@ -201,14 +204,14 @@ bool ccruncher::Aggregator::appendRawData(double *data, int datasize) throw(Exce
     icont++;
     cont++;
     // flushing if buffer is full
-    if (icont >= buffersize || timer.read() > CCEFLUSHSECS)
+    if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
     {
       flush();
     }
   }
 
   // exit function
-  return true;
+  return numsims;
 }
 
 //===========================================================================
@@ -346,4 +349,13 @@ bool ccruncher::Aggregator::hasRestSegment()
   }
 
   return false;
+}
+
+//===========================================================================
+// getBufferSize
+// returns buffersize in bytes
+//===========================================================================
+long ccruncher::Aggregator::getBufferSize()
+{
+  return bufferrows*numsegments*sizeof(double);
 }

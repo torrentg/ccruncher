@@ -186,6 +186,8 @@ void ccruncher::MonteCarlo::reset()
   blplosses = false;
   blcopulas = false;
   bldeftime = false;
+
+  ccmaxbufsize = CCMAXBUFSIZE;
 }
 
 //===========================================================================
@@ -619,6 +621,16 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
     aggregators.push_back(aggregator);
   }
 
+#ifdef USE_MPI
+  ccmaxbufsize = CCMAXBUFSIZE;
+  for(unsigned int i=0; i<aggregators.size(); i++) {
+    long numbytes = aggregators[i]->getBufferSize();
+    if (numbytes > ccmaxbufsize) {
+      ccmaxbufsize = numbytes;
+    }
+  }
+#endif
+
   // exit function
   Logger::previousIndentLevel();
 }
@@ -760,7 +772,7 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 {
 #ifdef USE_MPI
   bool more=true, moreiterations=true;
-  double data[CCMAXBUFSIZE];
+  double data[ccmaxbufsize];
   int nranks=MPI::COMM_WORLD.Get_size();
   int aggregatorid=0, rankid=0, tagid=0, datalength=0, task=0, nexits=0;
   MPI::Status status;
@@ -809,12 +821,14 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
           // retrieving data size
           datalength = status.Get_count(MPI::DOUBLE);
           // receiving data
-          MPI::COMM_WORLD.Recv(&data, CCMAXBUFSIZE, MPI::DOUBLE, rankid, MPI_TAG_DATA);
+          MPI::COMM_WORLD.Recv(&data, datalength, MPI::DOUBLE, rankid, MPI_TAG_DATA);
+          // aggregating data
+          long numsims = aggregators[aggregatorid]->appendRawData(data, datalength);
 
           // updating simulations counter
           if (aggregatorid == 0)
           {
-            for(int i=0;i<datalength;i++)
+            for(int i=0;i<numsims;i++)
             {
               // counter increment
               CONT++;
@@ -825,9 +839,6 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
               }
             }
           }
-
-          // aggregating data
-          aggregators[aggregatorid]->appendRawData(data, datalength);
 
           // checking stop criteria
           if (MAXITERATIONS > 0L && CONT >= MAXITERATIONS) {

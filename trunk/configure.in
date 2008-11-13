@@ -64,6 +64,7 @@ AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_ERROR_AT_LINE
 AC_FUNC_STRTOD
 AC_FUNC_MKTIME
+AC_FUNC_ALLOCA
 
 dnl -------------------------------------------------------------
 dnl other checks (consts, structs, types)

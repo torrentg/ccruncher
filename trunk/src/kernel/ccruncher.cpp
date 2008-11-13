@@ -509,7 +509,9 @@ void usage()
   "    ccruncher --path=20070801 input.xml\n"
   "    ccruncher -fv --hash=100 --path=data/ samples/test01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/ samples/test100.xml.gz\n"
+#ifndef USE_MPI
   "    ccruncher -fv --hash=100 --lplosses --ldeftime --path=data/ samples/test04.xml\n"
+#endif
   << endl;
 }
 
