@@ -1072,10 +1072,9 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     try
     {
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
-      fcopulas << "#";
       for(long i=0; i<N; i++)
       {
-        fcopulas << (*borrowers)[i]->name << (i!=N-1?", ":"");
+        fcopulas << "\"" << (*borrowers)[i]->name << "\"" << (i!=N-1?", ":"");
       }
       fcopulas << endl;
     }
@@ -1092,10 +1091,9 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     try
     {
       fdeftime.open(filename.c_str(), ios::out|ios::trunc);
-      fdeftime << "#";
       for(long i=0; i<N; i++)
       {
-        fdeftime << (*borrowers)[i]->name << (i!=N-1?", ":"");
+        fdeftime << "\"" << (*borrowers)[i]->name << "\"" << (i!=N-1?", ":"");
       }
       fdeftime << endl;
     }

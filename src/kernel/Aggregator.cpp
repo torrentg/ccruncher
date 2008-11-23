@@ -42,7 +42,7 @@
 // void constructor
 //===========================================================================
 ccruncher::Aggregator::Aggregator(int id, Segmentation &segmentation_, 
-  vector<Borrower *> &borrowers_, long n, int m) : cvalues(0), segmentation(segmentation_), 
+  vector<Borrower *> &borrowers_, long n, int m) : segmentation(segmentation_), 
   borrowers(borrowers_)
 {
   assert(id >= 0);
@@ -295,16 +295,15 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
     fout.setf(ios::fixed);
     fout.setf(ios::showpoint);
     fout.precision(2);
-    fout << "#";
     if (numsegments == 1)
     {
-      fout << segmentation.name;
+      fout << "\"" << segmentation.name << "\"";
     }
     else
     {
       for(int i=(printRestSegment?0:1); i<numsegments; i++)
       {
-        fout << segmentation[i].name << (i<numsegments-1?", ":"");
+        fout << "\"" << segmentation[i].name << "\"" << (i<numsegments-1?", ":"");
       }
     }
     fout << endl;
