@@ -27,9 +27,9 @@ $CCRUNCHER/
   |- bin/     : executables and scripts directory
   |- build    : directory used to put the *.o files
   |- data/    : put your output here (recomended)
+  |- deps/    : source code from other projects used by ccruncher
   |- doc/     : doc directory
   |- samples/ : samples directory
-  |- deps/    : source code from other projects required by ccruncher
   |- src/     : ccruncher source code files
 
 

@@ -185,7 +185,7 @@ doreport() {
   rm -f $name.html;
 
   R --vanilla --slave > /dev/null << _EOF_
-    source("$CCRUNCHER/bin/report.R", echo=FALSE);
+    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
     lines <- ccruncher.summary("$filename", format="xml");
     write(lines, file="${name}.xml");
     png(file="${name}.png", width=400);
