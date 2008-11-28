@@ -75,16 +75,15 @@
     </p>
     <pre>
 
-&nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/lam
-&nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/lam
+&nbsp;&nbsp;export PATH=$PATH:<i>path_to_your_mpi_execs</i>
+&nbsp;&nbsp;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<i>path_to_your_mpi_libs</i>
+&nbsp;&nbsp;export LIBRARY_PATH=$LIBRARY_PATH:<i>path_to_your_mpi_libs</i>
+&nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
+&nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
 &nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
 &nbsp;&nbsp;make
 &nbsp;&nbsp;make install
     </pre>
-    <p>
-      Replace <code>lam</code> by <code>openmpi</code> if you are using a Open-MPI
-      MPI implementation instead of Lam-MPI MPI implementation.
-    </p>
 
     <br/>
     <h1>Getting Started - Usage</h1>
@@ -104,17 +103,18 @@
     <pre>
 
 &nbsp;&nbsp;bin/ccruncher --help
-&nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=./data file.xml
+&nbsp;&nbsp;bin/ccruncher -vf --hash=100 --path=data/ samples/test03.xml
     </pre>
 
     <p>
-      <b>Step 3.</b> Check the output generated (plain text files). The first
-      field is the simulation counter, second field is the simulated value.
+      <b>Step 3.</b> Check the output files (csv text files). Each column has 
+      the simulated segment values. The first line is a header that contains the 
+      segments names.
     </p>
     <pre>
 
 &nbsp;&nbsp;ls -l data/*
-&nbsp;&nbsp;more data/file.out
+&nbsp;&nbsp;more data/portfolio.csv
     </pre>
 
     <p>
@@ -122,24 +122,17 @@
     </p>
     <pre>
 
-&nbsp;&nbsp;bin/ccreport.sh data/file.out
-&nbsp;&nbsp;firefox data/file.html
+&nbsp;&nbsp;bin/ccreport.sh data/portfolio.csv
+&nbsp;&nbsp;firefox data/portfolio.html
     </pre>
     <p>
       or open a <a href="http://www.r-project.org">R</a> console and type:
     </p>
     <pre>
 
-&nbsp;&nbsp;source("bin/report.R")
-&nbsp;&nbsp;x &lt;- ccruncher.read("data/portfolio.out")
-&nbsp;&nbsp;ccruncher.summary(x, alpha=0.99)
-&nbsp;&nbsp;ccruncher.plot(x, show="pdf")
-&nbsp;&nbsp;ccruncher.plot(x, show="cdf")
-&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, show="mean")
-&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, show="stddev")
-&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
-&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")
-&nbsp;&nbsp;ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+&nbsp;&nbsp;source("bin/ccreport.R")
+&nbsp;&nbsp;ccruncher.summary("data/portfolio.csv")
+&nbsp;&nbsp;ccruncher.graphic("data/portfolio.csv")
 &nbsp;&nbsp;quit(save='no')
     </pre>
 
@@ -151,7 +144,7 @@
             Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 01-Nov-2008
+    				 Last modified: 28-Nov-2008
     			</td>
     		</tr></table>
     	</div></div></div></div></div>

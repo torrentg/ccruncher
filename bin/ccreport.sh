@@ -175,8 +175,8 @@ doreport() {
   name=${1%.*};
   extension=${1##*.};
 
-  if [ $extension != "out" ];  then
-    echo "warning: $filename is not a data file" 1>&2;
+  if [ $extension != "csv" ];  then
+    echo "warning: $filename has not csv extension" 1>&2;
     return 1;
   fi
 
@@ -186,11 +186,10 @@ doreport() {
 
   R --vanilla --slave > /dev/null << _EOF_
     source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$filename");
-    lines <- ccruncher.summary(x, rdigits=2, format="xml");
+    lines <- ccruncher.summary("$filename", format="xml");
     write(lines, file="${name}.xml");
-    png(file="${name}.png", width=600);
-    ccruncher.plot(x, alpha=0.95, var=0.99, show="all");
+    png(file="${name}.png", width=400);
+    ccruncher.graphic("$filename");
     dev.off();
 _EOF_
 
@@ -198,8 +197,7 @@ _EOF_
     return $?;
   fi
 
-  segment=`basename $name`;
-  xsltproc --stringparam name $segment -o $name.html $CCRUNCHER/bin/transform.xsl ${name}.xml;
+  xsltproc -o $name.html $CCRUNCHER/bin/ccreport.xsl ${name}.xml;
 
   if [ $? != 0 ]; then
     return $?;

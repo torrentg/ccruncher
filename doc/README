@@ -89,26 +89,21 @@ Installation from binary package
 Using CCruncher
 --------------------------------
 
-1. create your input file. Read documentation to perform this step
+1. create your input file. Read documentation to perform this step.
+   use any file in samples directory as template.
 
 2. run CCruncher
      $CCRUNCHER/bin/ccruncher --help
      $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data file.xml
 
 3. compute risk indicators typing:
-     $CCRUNCHER/bin/ccreport.sh data/segmentation-segment.out
-     firefox data/segmentation-segment.html
+     $CCRUNCHER/bin/ccreport.sh data/file.csv
+     firefox data/file.html
    or open a R console and type:
-     > source("$CCRUNCHER/bin/report.R")
-     > x <- ccruncher.read("$CCRUNCHER/data/file.out")
-     > ccruncher.summary(x, alpha=0.99)
-     > ccruncher.plot(x, show="pdf")
-     > ccruncher.plot(x, show="cdf")
-     > ccruncher.plot(x, alpha=0.95, show="mean")
-     > ccruncher.plot(x, alpha=0.95, show="stddev")
-     > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR")
-     > ccruncher.plot(x, alpha=0.95, var=0.99, show="TCE")
-     > ccruncher.plot(x, alpha=0.95, var=0.99, show="all")
+     > source("$CCRUNCHER/bin/ccreport.R")
+     > ccruncher.summary("$CCRUNCHER/data/file.csv")
+     > x <- ccruncher.read("$CCRUNCHER/data/file.csv")
+     > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="all")
      > quit(save='no')
 
 
