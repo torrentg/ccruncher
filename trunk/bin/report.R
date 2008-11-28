@@ -40,33 +40,38 @@
 #   . added breaks param in cmean(), cstddev() and plot()
 #   . TCE renamed to ES
 #
-# 2008/10/04 - Gerard Torrent [gerard@mail.generacio.com]
+# 2008/11/26 - Gerard Torrent [gerard@mail.generacio.com]
 #   . added rdigits argument in summary() function
-#
-# 2008/10/27 - Gerard Torrent [gerard@mail.generacio.com]
+#   . added function ccruncher.risk
+#   . added function ccruncher.graphic
 #   . added grid in graphics
+#   . adapted to new output format (csv + multiple segments in the same file)
+#   . renamed to ccreport.R
 #
 #***************************************************************************
 
 #===========================================================================
 # usage example
 # --------------------------------------------------------------------------
-# >
-# > source("bin/report.R")                              #load R script
-# > x <- ccruncher.read("file.out")                     #load data
-# > x                                                   #list data
-# > ccruncher.summary(x, alpha=0.95)                    #print summary
-# > ccruncher.summary(x, alpha=0.95, rdigits=3)         #print summary
-# > lines <- ccruncher.summary(x, format="xml")         #create xml summary
-# > write(lines, file="")                               #print xml summary
-# > ccruncher.plot(x, show="pdf")                       #plots a graphic
-# > ccruncher.plot(x, show="cdf")                       #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, show="mean")          #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, show="stddev")        #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="ES")  #plots a graphic
-# > ccruncher.plot(x, alpha=0.95, var=0.99, show="all") #plots a graphic
-# > quit(save='no')                                     #quit R environement
+# > source("bin/ccreport.R")                                 #load this R script
+# > ccruncher.summary("data/portfolio.csv")                  #segmentation summary
+# > ccruncher.graphic("data/portfolio.csv")                  #simple graphic
+# > quit(save='no')                                          #quits R
+#
+# advanced functions
+# --------------------------------------------------------------------------
+# > source("bin/ccreport.R")                                 #load this R script
+# > x <- ccruncher.read("sectors.csv")                       #load ccruncher data
+# > names(x)                                                 #segment names
+# > x[[2]]                                                   #list second column
+# > ccruncher.risk(x[[2]])                                   #computes risk
+# > ccruncher.plot(x[[2]], show="pdf")                       #plots a graphic
+# > ccruncher.plot(x[[2]], show="cdf")                       #plots a graphic
+# > ccruncher.plot(x[[2]], alpha=0.95, show="mean")          #plots a graphic
+# > ccruncher.plot(x[[2]], alpha=0.95, show="stddev")        #plots a graphic
+# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="VaR") #plots a graphic
+# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="ES")  #plots a graphic
+# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="all") #plots a graphic
 #
 #===========================================================================
 
@@ -385,125 +390,68 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 
 #===========================================================================
 # description
-#   writes a summary
+#   writes a summary in xml format
 # arguments
-#   x: vector with values
-#   alpha: numeric. confidence level with value in [0,1]
-#   format: string. plain={plain text}, xml={xml format}
-#   rdigits: number of decimal digits showed in report
+#   x: vector. simulated segment losses
+#   percentiles: vector. VaR percentiles
 # returns
-#   vector: each line is a text line of the summary
+#   list: risk statitstics
 # example
-#   ccruncher.read("data/portfolio.out")
-#   lines <- ccruncher.summary(x, 0.99, format="xml")
-#   write(lines, file="")
+#   df <- ccruncher.read("data/portfolio.csv")
+#   risk <- ccruncher.summary(df[[1]])
+#   risk
+#   risk$n
+#   risk$min
+#   risk$max
+#   risk$mean
+#   risk$mean_stderr
+#   risk$sd
+#   risk$sd_stderr
+#   risk$VAR
+#   risk$ES
 #===========================================================================
-ccruncher.summary <- function(x, alpha=0.99, format="plain", rdigits=2)
+ccruncher.risk <- function(x, percentiles=c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999))
 {
-  #VaR values scaned (add your values here)
-  xvar <- c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999);
-  table1 <- matrix(NaN, length(xvar), 3);
-  table2 <- matrix(NaN, length(xvar), 3);
+  #VaR and ES tables (column1=percentile, column2=value, column3=stderr)
+  table1 <- matrix(NaN, length(percentiles), 3);
+  table2 <- matrix(NaN, length(percentiles), 3);
 
-  #size, min, max, mean and stddev
+  #size, min, max
   n <- length(x);
   minx <- min(x);
   maxx <- max(x);
-  mu <- mean(x);
-  stddev <- sqrt(var(x));
 
-  #standar error for mean and stddev
-  stderr1 <- stddev/sqrt(n);
+  #standar deviation and its standar error
+  stddev <- sqrt(var(x));
   stderr2 <- stddev/sqrt(2*n);
 
+  #mean and its standar error
+  mu <- mean(x);
+  stderr1 <- stddev/sqrt(n);
+
   #computing VaR (Value at Risk)
-  for(i in 1:length(xvar))
+  for(i in 1:length(percentiles))
   {
-    table1[i,1] <- xvar[i];
-    table1[i,2] <- quantile(x, xvar[i], names=FALSE);
-    table1[i,3] <- ccruncher.quantstderr(x, xvar[i]);
+    table1[i,1] <- percentiles[i];
+    table1[i,2] <- quantile(x, percentiles[i], names=FALSE);
+    table1[i,3] <- ccruncher.quantstderr(x, percentiles[i]);
   }
 
   #computing ES (Expected Shortfall)
-  for(i in 1:length(xvar))
+  for(i in 1:length(percentiles))
   {
     #retrieving simulations with value great than VaR
     aux <- x[x >= table1[i,2]];
-
     #computing aux mean (=ES) and related stderr
-    table2[i,1] <- xvar[i];
+    table2[i,1] <- percentiles[i];
     table2[i,2] <- mean(aux);
     table2[i,3] <- sqrt(var(aux))/sqrt(length(aux));
   }
 
-  #factor used to compute confidence bounds
-  k <- qnorm((1-alpha)/2);
-
-  #creating return object
-  ret <- vector();
-
-  #printing summary
-  if (format == "plain")
-  {
-    ret[length(ret)+1] <- "";
-    ret[length(ret)+1] <- "portfolio loss summary at "%&%(alpha*100)%&%"% confidence level";
-    ret[length(ret)+1] <- "---------------------------------------------------------------";
-    ret[length(ret)+1] <- "n = " %&% n;
-    ret[length(ret)+1] <- "min = " %&% minx;
-    ret[length(ret)+1] <- "max = " %&% maxx;
-    ret[length(ret)+1] <- "mean = " %&% round(mu,rdigits) %&% " +/- " %&% round(abs(k*stderr1),rdigits);
-    ret[length(ret)+1] <- "stddev = " %&% round(stddev,rdigits) %&% " +/- " %&% round(abs(k*stderr2),rdigits);
-
-    for(i in 1:length(table1[,1]))
-    {
-      ret[length(ret)+1] <- "VAR(" %&% (table1[i,1]*100) %&% "%) = " %&% round(table1[i,2],rdigits) %&% " +/- " %&% round(abs(k*table1[i,3]),rdigits);
-    }
-
-    for(i in 1:length(table2[,1]))
-    {
-      ret[length(ret)+1] <- "ES(" %&% (table2[i,1]*100) %&% "%) = " %&% round(table2[i,2],rdigits) %&% " +/- " %&% round(abs(k*table2[i,3]),rdigits);
-    }
-
-    #adding indentation
-    ret <- "  " %&% ret;
-  }
-  else if (format == "xml")
-  {
-    ret[length(ret)+1] <- "<ccruncher-report>";
-    ret[length(ret)+1] <- "  <!--";
-    ret[length(ret)+1] <- "  confidence bounds can be computed as follows:";
-    ret[length(ret)+1] <- "  X = value +/- qnorm((1-alpha)/2) * stderr";
-    ret[length(ret)+1] <- "  where qnorm() is the inverse CDF for Normal(0,1) and";
-    ret[length(ret)+1] <- "  alpha is the desired confidence level (eg. alpha=0.99)";
-    ret[length(ret)+1] <- "  -->";
-    ret[length(ret)+1] <- "  <size value='" %&% n %&% "' />";
-    ret[length(ret)+1] <- "  <min value='" %&% minx %&% "' />";
-    ret[length(ret)+1] <- "  <max value='" %&% maxx %&% "' />";
-    ret[length(ret)+1] <- "  <mean value='" %&% round(mu,rdigits) %&% "' stderr='" %&% round(stderr1,rdigits) %&% "' />";
-    ret[length(ret)+1] <- "  <stddev value='" %&% round(stddev,rdigits) %&% "' stderr='" %&% round(stderr2,rdigits) %&% "' />";
-
-    for(i in 1:length(table1[,1]))
-    {
-      ret[length(ret)+1] <- "  <VaR prob='" %&% table1[i,1] %&%
-                  "' value='" %&% round(table1[i,2],rdigits) %&% 
-                  "' stderr='" %&% round(table1[i,3],rdigits) %&% "' />";
-    }
-
-    for(i in 1:length(table2[,1]))
-    {
-      ret[length(ret)+1] <- "  <ES prob='" %&% table2[i,1] %&%
-                  "' value='" %&% round(table2[i,2],rdigits) %&% 
-                  "' stderr='" %&% round(table2[i,3],rdigits) %&% "' />";
-    }
-
-    ret[length(ret)+1] <- "</ccruncher-report>";
-  }
-  else
-  {
-    return("error: incorrect format value. try plain or xml");
-  }
-
   #exit function
+  ret <- list(n=n, min=minx, max=maxx, 
+              mean=mu, mean_stderr=stderr1, sd=stddev, sd_stderr=stderr2,
+              VAR=table1, ES=table2);
   return(ret);
 }
 
@@ -525,7 +473,7 @@ ccruncher.summary <- function(x, alpha=0.99, format="plain", rdigits=2)
 # returns
 #   the requested graphic
 # example
-#   x <- ccruncher.read("data/portfolio.out")
+#   x <- ccruncher.read("data/portfolio.csv")
 #   ccruncher.plot(x, alpha=0.95, var=0.99)
 # notes
 #   - confidence level is used to plot the confidence bounds on
@@ -568,23 +516,148 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
 
 #===========================================================================
 # description
-#   read a ccruncher output file and put values in a vector
+#   reads a ccruncher csv output file
 # arguments
 #   filename: string. ccruncher output filename
 # returns
-#   vector with values
+#   a data frame with file content
 # example
-#   x <- ccruncher.read("data/portfolio.out")
-#   ccruncher.summary(x, alpha=0.95, format="plain")
+#   segments <- ccruncher.read("data/segments.csv")
+#   names(segments)
+#   segments[["S1"]]
+#   segments[[1]]
+#   ccruncher.summary(segments, "segments")
 #===========================================================================
 ccruncher.read <- function(filename)
 {
-  #retrieving data from file
-  df <- read.table(filename, col.names=c('index', 'value'));
-  z <- as.vector(t(df["value"]));
-  rm(df);
+  df <- read.csv(filename, header=TRUE, sep=",");
+  return(df);
+}
 
-  #return function
-  return(z);
+#===========================================================================
+# description
+#   given a csv ccruncher output file returns a risk summary
+# arguments
+#   filename: string. csv ccruncher output filename
+#   format: string. allowed values: plain/xml
+#   alpha: numeric. confidence level with value in (0,1)
+#   rdigits: number of decimal digits showed in report
+# returns
+#   vector: each line is a text line of the summary
+# example
+#   lines <- ccruncher.summary("portfolio.csv", alpha=0.975)
+#   write(lines, file="")
+#===========================================================================
+ccruncher.summary <- function(filename, format="plain", alpha=0.99, rdigits=2)
+{
+  #retrieves segmentation name from filename
+  tokens <- strsplit(filename, "/");
+  token <- tokens[[1]][length(tokens[[1]])];
+  token <- strsplit(token, "\\.");
+  segmentationname <- token[[1]][1];
+
+  #read data file
+  x <- ccruncher.read(filename);
+  segmentnames <- names(x);
+
+  #creating report object
+  ret <- vector();
+
+  for(i in 1:length(x))
+  {
+    #compute risk
+    risk <- ccruncher.risk(x[[i]]);
+
+    #prints risk
+    if (format == "xml")
+    {
+      ret[length(ret)+1] <- "<segment name='" %&% segmentnames[i] %&% "'>";
+      ret[length(ret)+1] <- "  <size value='" %&% risk$n %&% "' />";
+      ret[length(ret)+1] <- "  <min value='" %&% risk$min %&% "' />";
+      ret[length(ret)+1] <- "  <max value='" %&% risk$max %&% "' />";
+      ret[length(ret)+1] <- "  <mean value='" %&% round(risk$mean,rdigits) %&% "' stderr='" %&% round(risk$mean_stderr,rdigits) %&% "' />";
+      ret[length(ret)+1] <- "  <stddev value='" %&% round(risk$sd,rdigits) %&% "' stderr='" %&% round(risk$sd_stderr,rdigits) %&% "' />";
+      for(i in 1:length(risk$VAR[,1]))
+      {
+        ret[length(ret)+1] <- "  <VaR prob='" %&% risk$VAR[i,1] %&%
+                    "' value='" %&% round(risk$VAR[i,2],rdigits) %&% 
+                    "' stderr='" %&% round(risk$VAR[i,3],rdigits) %&% "' />";
+      }
+      for(i in 1:length(risk$ES[,1]))
+      {
+        ret[length(ret)+1] <- "  <ES prob='" %&% risk$ES[i,1] %&%
+                    "' value='" %&% round(risk$ES[i,2],rdigits) %&% 
+                    "' stderr='" %&% round(risk$ES[i,3],rdigits) %&% "' />";
+      }
+      ret[length(ret)+1] <- "</segment>";
+    }
+    else
+    {
+      k <- qnorm((1-alpha)/2);
+      ret[length(ret)+1] <- "";
+      ret[length(ret)+1] <- "segment " %&% segmentnames[i] %&% ". summary at "%&%(alpha*100)%&%"% confidence level";
+      ret[length(ret)+1] <- "---------------------------------------------------------------";
+      ret[length(ret)+1] <- "n = " %&% risk$n;
+      ret[length(ret)+1] <- "min = " %&% risk$min;
+      ret[length(ret)+1] <- "max = " %&% risk$max;
+      ret[length(ret)+1] <- "mean = " %&% round(risk$mean,rdigits) %&% " +/- " %&% round(abs(k*risk$mean_stderr),rdigits);
+      ret[length(ret)+1] <- "stddev = " %&% round(risk$sd,rdigits) %&% " +/- " %&% round(abs(k*risk$sd_stderr),rdigits);
+      for(i in 1:length(risk$VAR[,1]))
+      {
+        ret[length(ret)+1] <- "VAR(" %&% (risk$VAR[i,1]*100) %&% "%) = " %&% round(risk$VAR[i,2],rdigits) %&% " +/- " %&% round(abs(k*risk$VAR[i,3]),rdigits);
+      }
+      for(i in 1:length(risk$ES[,1]))
+      {
+        ret[length(ret)+1] <- "ES(" %&% (risk$ES[i,1]*100) %&% "%) = " %&% round(risk$ES[i,2],rdigits) %&% " +/- " %&% round(abs(k*risk$ES[i,3]),rdigits);
+      }
+    }
+
+  }
+
+  if (format=="xml")
+  {
+    ret <- c("<segmentation name='" %&% segmentationname %&% "'>", "  " %&% ret);
+    ret <- c(ret, "</segmentation>");
+    ret <- c("<ccruncher-report>", "  " %&% ret);
+    ret <- c(ret, "</ccruncher-report>");
+  }
+
+  return(ret);
+}
+
+#===========================================================================
+# description
+#   creates a graphic for the given ccruncher output data
+#   if only exists 1 segment -> plots density function
+#   if more than 1 segment -> plots pie chart with expected loss per segment
+# arguments
+#   filename: string. csv ccruncher output filename
+# returns
+#   the requested graphic
+# example
+#   ccruncher.graphic("portfolio.csv")
+#===========================================================================
+ccruncher.graphic <- function(filename, rdigits=1)
+{
+  x <- ccruncher.read(filename);
+  if (length(x) == 1)
+  {
+    aux <- density(x[[1]]);
+    plot(aux, panel.first = grid(),
+       main="Density Function",
+       xlab="portfolio loss", ylab="probability");
+  }
+  else
+  {
+    txts <- names(x);
+    vals <- vector(length=length(x));
+    for(i in 1:length(x)) {
+      vals[i] <- mean(x[[i]]);
+    }
+    for(i in 1:length(x)) {
+      txts[i] <- txts[i] %&% " (" %&% round(100*vals[i]/sum(vals),rdigits) %&% "%)";
+    }
+    pie(vals, txts, main="Expected Loss by segment")
+  }
 }
 
