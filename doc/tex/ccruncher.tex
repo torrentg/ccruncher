@@ -25,6 +25,9 @@
 % 2007/07/25 - Gerard Torrent [gerard@mail.generacio.com]
 %   . initial release
 %
+% 2008/11/28 - Gerard Torrent [gerard@mail.generacio.com]
+%   . added t-student copula
+%
 %***************************************************************************
 
 \documentclass[a4paper,12pt,final]{article}
@@ -65,7 +68,7 @@
 
 %===========================================================================
 \begin{abstract}
-The CCruncher goal is to compute the credit risk of a portfolio, where 
+The ccruncher goal is to compute the credit risk of a portfolio, where 
 investments are fixed income assets, taking into account default correlations
 between economic sectors. This is done by determining the probability distribution 
 of portfolio loss at time $T$ using the Monte Carlo simulation method and computing 
@@ -73,10 +76,14 @@ risk statistics (Expected Loss, Standard Deviation, Value at Risk, Expected
 Shortfall).
 \newline
 \newline
-\textbf{Keywords}: credit risk, Monte Carlo, gaussian copula, Value at Risk,
-Expected Shortfall.
+\textbf{Keywords}: credit risk, Monte Carlo, gaussian copula, t-Student copula,
+value at risk, expected shortfall.
 \end{abstract}
+\newpage
 
+%===========================================================================
+\tableofcontents
+\newpage
 
 %===========================================================================
 \section{Parameters}
@@ -315,123 +322,45 @@ simulating the behavior of various physical and mathematical systems.
 Each simulation consists of computing a random default time for each borrower and
 then calculate the loss of the portfolio. We need that default times fulfill two 
 conditions: the borrower's survival functions and the borrower's correlation matrix. 
-This is achieved by simulating a copula. A copula \cite{copu:pitfalls} 
-\cite{copu:wang} is a multivariate random variable where each component is a 
-uniform $U[0,1]$. Lets go step by step:
+This is achieved by simulating a copula. 
 
 %...........................................................................
 \subsubsection{Random numbers generation}
-Each simulation requires a set of random numbers between $[0, 1]$ and correlated 
-by the borrowers' correlation matrix, $\Sigma_1$ (see \ref{tcorrel}, figure 
-\ref{borrowercorrel}). We generate these numbers using the gaussian copula simulation 
-algorithm:
+A copula \cite{copu:pitfalls} \cite{copu:wang} is a multivariate random variable 
+where each component is a uniform $U[0,1]$. Each simulation requires a set of 
+random numbers between $[0, 1]$ and correlated by the borrowers' correlation 
+matrix, $\Sigma$ (see figure \ref{borrowercorrel}).
 
-\paragraph{Step 1.} We create the covariance\footnote{Correlation and covariance 
-matrix are the same because diagonal elements are $1$.} matrix $\Sigma_2$ mapping 
-$\Sigma_1$ component by component:
 \begin{displaymath}
-\Sigma_2 = \left( 
-\begin{array}{cccc}
-2 sin(\frac{\pi}{6})           & 2 sin(\rho_{12} \frac{\pi}{6}) & \ldots & 2 sin(\rho_{1n} \frac{\pi}{6})\cr
-2 sin(\rho_{12} \frac{\pi}{6}) & 2 sin(\frac{\pi}{6})           & \ldots & 2 sin(\rho_{2n} \frac{\pi}{6})\cr
-\vdots                         & \vdots                         & \ddots  & \vdots   \cr
-2 sin(\rho_{1n} \frac{\pi}{6}) & 2 sin(\rho_{2n} \frac{\pi}{6}) & \ldots & 2 sin(\frac{\pi}{6})
+\begin{array}{ccc}
+\begin{array}{|c|c|c|c|}
+u_{11} & u_{12} & \dots  & u_{1n} \cr
+u_{21} & u_{22} & \dots  & u_{2n} \cr
+\vdots & \vdots & \vdots & \vdots \cr
+u_{k1} & u_{k2} & \dots  & u_{kn} \cr
 \end{array}
-\right)
-\end{displaymath}
-Observe that $\Sigma_2$ have diagonal elements with $1$ because $2 sin(\frac{\pi}{6}) = 1$.
-
-\paragraph{Step 2.} We apply Cholesky to $\Sigma_2$, then $\Sigma_2 = B \cdot B^{\top}$, 
-where:
-\begin{displaymath}
-B = 
-\left(
-\begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
-\end{array}
-\right)
-\end{displaymath}
-
-\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
-is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
-\begin{displaymath}
-\vec{Y} =
-\left(
+&
+\qquad
+&
 \begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
+n \textrm{ number of borrowers} \cr
+k \textrm{ number of simulations} \cr
+u_{.i} \sim U[0,1] \cr
+Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \cr
 \end{array}
-\right) 
-\qquad y_k \sim N(0,1) \textrm{ independents}
+\end{array}
 \end{displaymath}
 
-\paragraph{Step 4.} We simulate a normal multivariate $\vec{Z} \sim N(\vec{0}, \Sigma_2)$ 
-doing:
-\begin{displaymath}
-B \cdot \vec{Y} 
-=
-\left(
-\begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
-\end{array}
-\right)
-\left(
-\begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
-\end{array}
-\right) 
-=
-\left(
-\begin{array}{c}
-z_1 \cr
-\vdots \cr
-z_n
-\end{array}
-\right) 
-= 
-\vec{Z}
-\end{displaymath}
-
-\paragraph{Step 5.} Finally we obtain the copula $\vec{U}$ doing:
-\begin{displaymath}
-\left(
-\begin{array}{c}
-\Phi(z_1) \cr
-\vdots \cr
-\Phi(z_n)
-\end{array}
-\right) 
-=
-\left(
-\begin{array}{c}
-u_1 \cr
-\vdots \cr
-u_n
-\end{array}
-\right) 
-=
-\vec{U} 
-\end{displaymath}
-where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
-\begin{displaymath}
-\Phi(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2 \pi}} e^{-\frac{t^2}{2}} dt
-\end{displaymath}
-
-Steps 1 and 2 are done only one time before the simulations. The rest of steps
-are performed in each Monte Carlo simulation.
+There are implemented two copula generators, the gaussian and the t-Student
+copulas. Apendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu} describes the 
+algorithms used to generate them.
 \newline
 
-In appendix \ref{ap:cholblock} is described a Cholesky decomposition adapted to 
-block matrix. It allows to work with matrix bigger than $50000 \times 50000$.
+Exists evidences, \cite{copu:selecting}, in favor of the t-Student copula. 
+In comparison with the t-Student copula, gaussian copula underestimates the probability 
+of joint extreme downward movements, while the Gumbel copula overestimates this risk. 
+Moreover gaussian copula is too optimistic on diversiﬁcation beneﬁts, while the Gumbel 
+copula is too pessimistic.
 
 %...........................................................................
 \subsubsection{Default times generation}
@@ -650,10 +579,10 @@ value decreases along the time is given by the compound interest formula:
 
 %---------------------------------------------------------------------------
 \subsection{Antithetic technique}
-The random number generation using a copula is time expensive. Gaussian copula
-is symmetric, that means that $(u_1, u_2, \cdots, u_N)$ is equiprobable to
-$(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher's antithetic mode, each copula 
-generation is used $2$ times, $(u_1, u_2, \cdots, u_N)$ and 
+The random number generation using a copula is time expensive. Gaussian and 
+t-Student copula are symmetric, that means that $(u_1, u_2, \cdots, u_N)$ is 
+equiprobable to $(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher's antithetic mode, 
+each copula generation is used $2$ times, $(u_1, u_2, \cdots, u_N)$ and 
 $(1-u_1, 1-u_2, \cdots, 1-u_N)$, reducing to the half the number of generated
 copulas.
 
@@ -678,7 +607,7 @@ simulations reached) the master sends a stop signal to the slaves and leaves.
 \section{Appendices}
 
 %---------------------------------------------------------------------------
-\subsection{How to simulate a N(0,1)}
+\subsection{N(0,1) simulation}
 \label{ap:normsim}
 
 In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use:
@@ -689,6 +618,236 @@ z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
 \end{displaymath}
 
 Where $u_i$ are generated by a Mersenne Twister random number generator.
+
+%---------------------------------------------------------------------------
+\subsection{$\chi^2(\nu)$ simulation}
+\label{ap:chi2sim}
+
+In order to simulate $Z \sim \chi^2(\nu)$ values we use:
+
+\begin{displaymath}
+z = \sum_{i=1}^{\nu} x_i^2
+\end{displaymath}
+
+Where $x_i$ are simulated values from independent, normally distributed 
+random variables with mean 0 and variance 1, $X_i \sim N(0,1)$.
+
+%...........................................................................
+\subsection{Gaussian copula simulation}
+\label{ap:gaussiancopu}
+Algorithm to simulate a gaussian copula satisfying correlation matrix $\Sigma$ 
+\cite{copu:wang} \cite{copu:pricing}:
+
+\paragraph{Step 1.} We create the covariance\footnote{Correlation and covariance 
+matrix are the same because diagonal elements are $1$.} matrix $\Sigma'$ mapping 
+$\Sigma$ component by component:
+\begin{displaymath}
+\Sigma' = \left( 
+\begin{array}{cccc}
+2 sin(\frac{\pi}{6})           & 2 sin(\rho_{12} \frac{\pi}{6}) & \ldots & 2 sin(\rho_{1n} \frac{\pi}{6})\cr
+2 sin(\rho_{12} \frac{\pi}{6}) & 2 sin(\frac{\pi}{6})           & \ldots & 2 sin(\rho_{2n} \frac{\pi}{6})\cr
+\vdots                         & \vdots                         & \ddots  & \vdots   \cr
+2 sin(\rho_{1n} \frac{\pi}{6}) & 2 sin(\rho_{2n} \frac{\pi}{6}) & \ldots & 2 sin(\frac{\pi}{6})
+\end{array}
+\right)
+\end{displaymath}
+Observe that $\Sigma'$ have diagonal elements with $1$ because $2 sin(\frac{\pi}{6}) = 1$.
+
+\paragraph{Step 2.} We apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
+decomposition to deal with block matrix.} to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
+where:
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
+is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
+\begin{displaymath}
+\vec{Y} =
+\left(
+\begin{array}{c}
+y_1 \cr
+\vdots \cr
+y_n
+\end{array}
+\right) 
+\qquad y_k \sim N(0,1) \textrm{ independents}
+\end{displaymath}
+
+\paragraph{Step 4.} We simulate a multivariate normal, $\vec{Z} \sim N(\vec{0}, \Sigma')$, 
+doing:
+\begin{displaymath}
+B \cdot \vec{Y} 
+=
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\left(
+\begin{array}{c}
+y_1 \cr
+\vdots \cr
+y_n
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+z_1 \cr
+\vdots \cr
+z_n
+\end{array}
+\right) 
+= 
+\vec{Z}
+\end{displaymath}
+
+\paragraph{Step 5.} Finally we obtain the copula $\vec{U}$ doing:
+\begin{displaymath}
+\left(
+\begin{array}{c}
+\Phi(z_1) \cr
+\vdots \cr
+\Phi(z_n)
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+u_1 \cr
+\vdots \cr
+u_n
+\end{array}
+\right) 
+=
+\vec{U} 
+\end{displaymath}
+where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
+
+%...........................................................................
+\subsection{t-Student copula simulation}
+\label{ap:tstudentcopu}
+Algorithm to simulate a t-Sudent copula with $\nu$ degrees of freedom satisfying 
+correlation matrix $\Sigma$ \cite{copu:pricing}:
+
+\paragraph{Step 1.} We create the covariance\footnote{Correlation and covariance 
+matrix are the same because diagonal elements are $1$.} matrix $\Sigma'$ mapping 
+$\Sigma$ component by component:
+\begin{displaymath}
+\Sigma' = \left( 
+\begin{array}{cccc}
+2 sin(\frac{\pi}{6})           & 2 sin(\rho_{12} \frac{\pi}{6}) & \ldots & 2 sin(\rho_{1n} \frac{\pi}{6})\cr
+2 sin(\rho_{12} \frac{\pi}{6}) & 2 sin(\frac{\pi}{6})           & \ldots & 2 sin(\rho_{2n} \frac{\pi}{6})\cr
+\vdots                         & \vdots                         & \ddots  & \vdots   \cr
+2 sin(\rho_{1n} \frac{\pi}{6}) & 2 sin(\rho_{2n} \frac{\pi}{6}) & \ldots & 2 sin(\frac{\pi}{6})
+\end{array}
+\right)
+\end{displaymath}
+Observe that $\Sigma'$ have diagonal elements with $1$ because $2 sin(\frac{\pi}{6}) = 1$.
+
+\paragraph{Step 2.} We apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
+decomposition to deal with block matrix.} to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
+where:
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
+is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
+\begin{displaymath}
+\vec{Y} =
+\left(
+\begin{array}{c}
+y_1 \cr
+\vdots \cr
+y_n
+\end{array}
+\right) 
+\qquad y_k \sim N(0,1) \textrm{ independents}
+\end{displaymath}
+
+\paragraph{Step 4.} We simulate\footnote{The algorithm used to simulate a $\chi^2(\nu)$
+is explained in appendix \ref{ap:chi2sim}} a chi-square with $\nu$ degrees of freedom 
+independent of $\vec{Y}$:
+\begin{displaymath}
+s \sim \chi^2(\nu)
+\end{displaymath}
+
+\paragraph{Step 5.} We simulate a multivariate t-Student with $\nu$ degrees of freedom, 
+$\vec{Z} \sim \frac{\sqrt{d}}{\sqrt{\chi^2(\nu)}} \cdot N(\vec{0}, \Sigma')$, doing:
+\begin{displaymath}
+\frac{\sqrt{\nu}}{\sqrt{s}} \cdot B \cdot \vec{Y} 
+=
+\frac{\sqrt{\nu}}{\sqrt{s}} \cdot 
+\left(
+\begin{array}{cccc}
+b_{11}   & 0        & \ldots & 0       \cr
+b_{21}   & b_{22}   & \ldots & 0       \cr
+\vdots  & \vdots  & \ddots & \vdots \cr
+b_{n1}   & b_{n2}   & \ldots & b_{nn}
+\end{array}
+\right)
+\left(
+\begin{array}{c}
+y_1 \cr
+\vdots \cr
+y_n
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+z_1 \cr
+\vdots \cr
+z_n
+\end{array}
+\right) 
+= 
+\vec{Z}
+\end{displaymath}
+
+\paragraph{Step 6.} Finally we obtain the copula $\vec{U}$ doing:
+\begin{displaymath}
+\left(
+\begin{array}{c}
+t_\nu(z_1) \cr
+\vdots \cr
+t_\nu(z_n)
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+u_1 \cr
+\vdots \cr
+u_n
+\end{array}
+\right) 
+=
+\vec{U} 
+\end{displaymath}
+where $t_\nu(x)$ is the t-Student with $\nu$ degrees of freedom cumulative distribution 
+function.
 
 %---------------------------------------------------------------------------
 \subsection{Cholesky decomposition for block matrix}
@@ -864,6 +1023,7 @@ matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the
 index of default rating $r_n$.
 
 %===========================================================================
+\newpage
 \bibliography{refs}
 \bibliographystyle{plain}
 
