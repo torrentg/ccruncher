@@ -73,6 +73,7 @@ ccruncher_SOURCES = \
     ../src/math/PowMatrix.cpp\
     ../src/math/GaussianCopula.cpp\
     ../src/math/Normal.cpp\
+    ../src/math/TStudent.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/portfolio/Asset.cpp\
@@ -115,6 +116,7 @@ ccruncher_SOURCES = \
     ../src/math/Copula.hpp\
     ../src/math/GaussianCopula.hpp\
     ../src/math/Normal.hpp\
+    ../src/math/TStudent.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/portfolio/Asset.hpp\
@@ -160,6 +162,7 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.cpp\
     ../src/math/PowMatrixTest.cpp\
     ../src/math/NormalTest.cpp\
+    ../src/math/TStudentTest.cpp\
     ../src/math/GaussianCopulaTest.cpp\
     ../src/math/MersenneTwisterTest.cpp\
     ../src/math/CholeskyDecompositionTest.cpp\
@@ -197,6 +200,7 @@ tests_SOURCES = \
     ../src/math/CholeskyDecomposition.cpp\
     ../src/math/GaussianCopula.cpp\
     ../src/math/Normal.cpp\
+    ../src/math/TStudent.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -232,6 +236,7 @@ tests_SOURCES = \
     ../src/math/Copula.hpp\
     ../src/math/PowMatrixTest.hpp\
     ../src/math/NormalTest.hpp\
+    ../src/math/TStudentTest.hpp\
     ../src/math/GaussianCopulaTest.hpp\
     ../src/math/MersenneTwisterTest.hpp\
     ../src/math/CholeskyDecompositionTest.hpp\
@@ -269,6 +274,7 @@ tests_SOURCES = \
     ../src/math/CholeskyDecomposition.hpp\
     ../src/math/GaussianCopula.hpp\
     ../src/math/Normal.hpp\
+    ../src/math/TStudent.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -324,6 +330,7 @@ tests_LDFLAGS =
 #    ../src/math/PowMatrix.cpp\
 #    ../src/math/GaussianCopula.cpp\
 #    ../src/math/Normal.cpp\
+#    ../src/math/TStudent.cpp\
 #    ../src/math/BlockMatrixChol.cpp\
 #    ../src/math/BlockGaussianCopula.cpp\
 #    ../src/portfolio/Asset.cpp\
@@ -366,6 +373,7 @@ tests_LDFLAGS =
 #    ../src/math/Copula.hpp\
 #    ../src/math/GaussianCopula.hpp\
 #    ../src/math/Normal.hpp\
+#    ../src/math/TStudent.hpp\
 #    ../src/math/BlockMatrixChol.hpp\
 #    ../src/math/BlockGaussianCopula.hpp\
 #    ../src/portfolio/Asset.hpp\

@@ -42,9 +42,7 @@
 
 //---------------------------------------------------------------------------
 
-#define EPSILON1 0.0001
-#define NUMITERS 10000
-#define NUMBINS 41
+#define EPSILON 0.0001
 
 //===========================================================================
 // setUp
@@ -100,7 +98,7 @@ void ccruncher_test::NormalTest::test_pdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::pdf(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::pdf(x1[i]), EPSILON);
   }
 }
 
@@ -143,7 +141,7 @@ void ccruncher_test::NormalTest::test_cdf(void)
 
   for (int i=0;i<13;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdf(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdf(x1[i]), EPSILON);
   }
 }
 
@@ -174,7 +172,7 @@ void ccruncher_test::NormalTest::test_cdfinv(void)
 
   for (int i=0;i<7;i++)
   {
-    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdfinv(x1[i]), EPSILON1);
+    ASSERT_EQUALS_EPSILON(y1[i], Normal::cdfinv(x1[i]), EPSILON);
   }
 
   ASSERT(isnan(Normal::cdfinv(-1.0)));
