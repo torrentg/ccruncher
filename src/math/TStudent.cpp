@@ -24,6 +24,7 @@
 //
 // 2008/12/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
+//   . https://svn.r-project.org/R/trunk/src/nmath/
 //
 //===========================================================================
 
@@ -31,12 +32,162 @@
 #include <cstdlib>
 #include "math/TStudent.hpp"
 #include "math/Normal.hpp"
+#include "math/toms708.h"
 
 //---------------------------------------------------------------------------
 
-#define  M_2PI           6.283185307179586476925286766559  /* 2*pi */
-#define  M_LN_SQRT_2PI   0.918938533204672741780329736406  /* log(sqrt(2*pi)) */
-#define  M_LN_SQRT_PId2  0.225791352644727432363097614947  /* log(sqrt(pi/2)) */
+#define M_2PI           6.283185307179586476925286766559  /* 2*pi */
+#define M_LN_SQRT_2PI   0.918938533204672741780329736406  /* log(sqrt(2*pi)) */
+#define M_LN_SQRT_PId2  0.225791352644727432363097614947  /* log(sqrt(pi/2)) */
+//#define M_1_PI          0.318309886183790671537767526745  /* 1/pi */
+//#define M_PI            3.141592653589793238462643383280  /* pi */
+//#define M_SQRT2         1.414213562373095048801688724210  /* sqrt(2) */
+//#define M_PI_2          1.570796326794896619231321691640  /* pi/2 */
+
+//===========================================================================
+// pbeta. internal function
+//===========================================================================
+/*
+ *  Mathlib : A C Library of Special Functions
+ *  Copyright (C) 2006 The R Development Core Team
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, a copy is available at
+ *  http://www.r-project.org/Licenses/
+ *
+ *  SYNOPSIS
+ *
+ * #include <Rmath.h>
+ *
+ * double pbeta_raw(double x, double pin, double qin, int lower_tail, int log_p)
+ * double pbeta	   (double x, double pin, double qin, int lower_tail, int log_p)
+ *
+ *  DESCRIPTION
+ *
+ *	Returns distribution function of the beta distribution.
+ *	( = The incomplete beta ratio I_x(p,q) ).
+ *
+ *  NOTES
+ *
+ *      As from R 2.3.0, a wrapper for TOMS708
+ *      as from R 2.6.0, 'log_p' partially improved over log(p..)
+ */
+#define R_D__0	(log_p ? -INFINITY : 0.)		/* 0 */
+#define R_D__1	(log_p ? 0. : 1.)			/* 1 */
+#define R_DT_0	(lower_tail ? R_D__0 : R_D__1)		/* 0 */
+#define R_DT_1	(lower_tail ? R_D__1 : R_D__0)		/* 1 */
+double ccruncher::TStudent::pbeta_raw(double x, double pin, double qin, int lower_tail, int log_p)
+{
+    double x1 = 0.5 - x + 0.5, w, wc;
+    int ierr;
+    bratio(pin, qin, x, x1, &w, &wc, &ierr, log_p); /* -> ./toms708.c */
+    //if(ierr) 
+		//MATHLIB_WARNING(_("pbeta_raw() -> bratio() gave error code %d"), ierr);
+    return lower_tail ? w : wc;
+} /* pbeta_raw() */
+
+double ccruncher::TStudent::pbeta(double x, double pin, double qin, int lower_tail, int log_p)
+{
+    if (isnan(x) || isnan(pin) || isnan(qin)) return x + pin + qin;
+
+    if (pin <= 0 || qin <= 0) return NAN; //ML_ERR_return_NAN;
+
+    if (x <= 0)
+		return R_DT_0;
+    if (x >= 1)
+		return R_DT_1;
+    return pbeta_raw(x, pin, qin, lower_tail, log_p);
+}
+#undef R_D__0
+#undef R_D__1
+#undef R_DT_0
+#undef R_DT_1
+
+//===========================================================================
+// lbeta. internal function
+//===========================================================================
+/*
+ *  Mathlib : A C Library of Special Functions
+ *  Copyright (C) 1998 Ross Ihaka
+ *  Copyright (C) 2000 The R Development Core Team
+ *  Copyright (C) 2003 The R Foundation
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, a copy is available at
+ *  http://www.r-project.org/Licenses/
+ *
+ *  SYNOPSIS
+ *
+ *    #include <Rmath.h>
+ *    double lbeta(double a, double b);
+ *
+ *  DESCRIPTION
+ *
+ *    This function returns the value of the log beta function.
+ *
+ *  NOTES
+ *
+ *    This routine is a translation into C of a Fortran subroutine
+ *    by W. Fullerton of Los Alamos Scientific Laboratory.
+ */
+double ccruncher::TStudent::lbeta(double a, double b)
+{
+    double corr, p, q;
+
+    p = q = a;
+    if(b < p) p = b;/* := min(a,b) */
+    if(b > q) q = b;/* := max(a,b) */
+
+    if(isnan(a) || isnan(b))
+		return a + b;
+
+    /* both arguments must be >= 0 */
+
+    if (p < 0)
+		return NAN; //ML_ERR_return_NAN
+    else if (p == 0) {
+		return +INFINITY; //ML_POSINF;
+    }
+    else if (isinf(q)) {
+		return -INFINITY; //ML_NEGINF;
+    }
+
+    if (p >= 10) {
+		/* p and q are big. */
+		corr = lgammacor(p) + lgammacor(q) - lgammacor(p + q);
+		return log(q) * -0.5 + M_LN_SQRT_2PI + corr
+			+ (p - 0.5) * log(p / (p + q)) + q * log1p(-p / (p + q));
+    }
+    else if (q >= 10) {
+		/* p is small, but q is big. */
+		corr = lgammacor(q) - lgammacor(p + q);
+		return lgammafn(p) + corr + p - p * log(p + q)
+			+ (q - 0.5) * log1p(-p / (p + q));
+    }
+    else
+		/* p and q are small: p <= q < 10. */
+		return log(gammafn(p) * (gammafn(q) / gammafn(p + q)));
+}
 
 //===========================================================================
 // chebyshev_eval. internal function
@@ -751,16 +902,339 @@ double ccruncher::TStudent::pdf(double x, double n)
 //===========================================================================
 // cumulative distribution function TStudent(ndf)
 //===========================================================================
-double ccruncher::TStudent::cdf(double x, double ndf)
+/*
+ *  R : A Computer Language for Statistical Data Analysis
+ *  Copyright (C) 1995, 1996  Robert Gentleman and Ross Ihaka
+ *  Copyright (C) 2000-2007   The R Development Core Team
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, a copy is available at
+ *  http://www.r-project.org/Licenses/
+ */
+double ccruncher::TStudent::cdf(double x, double n)
 {
-  //TODO
+/* return  P[ T <= x ]	where
+ * T ~ t_{n}  (t distrib. with n degrees of freedom).
+
+ *	--> ./pnt.c for NON-central
+ */
+    double val, nx;
+    bool lower_tail = true;
+
+    if (isnan(x) || isnan(n))
+		return x + n;
+
+    if (n <= 0.0) return NAN; //ML_ERR_return_NAN;
+
+    if(isinf(x))
+		return (x < 0) ? 0.0 : 1.0;
+    if(isinf(n))
+		return Normal::cdf(x); //pnorm(x, 0.0, 1.0, lower_tail, log_p);
+
+    if (n > 4e5) { /*-- Fixme(?): test should depend on `n' AND `x' ! */
+		/* Approx. from	 Abramowitz & Stegun 26.7.8 (p.949) */
+		val = 1./(4.*n);
+		return Normal::cdf(x*(1. - val)/sqrt(1. + x*x*2.*val));
+    }
+
+    nx = 1 + (x/n)*x;
+    /* FIXME: This test is probably losing rather than gaining precision,
+     * now that pbeta(*, log_p = TRUE) is much better.
+     * Note however that a version of this test *is* needed for x*x > D_MAX */
+    if(nx > 1e100) { /* <==>  x*x > 1e100 * n  */
+		/* Danger of underflow. So use Abramowitz & Stegun 26.5.4
+		   pbeta(z, a, b) ~ z^a(1-z)^b / aB(a,b) ~ z^a / aB(a,b),
+		   with z = 1/nx,  a = n/2,  b= 1/2 :
+		*/
+		double lval;
+		lval = -0.5*n*(2*log(fabs(x)) - log(n))
+			    - lbeta(0.5*n, 0.5) - log(0.5*n);
+		val = exp(lval);
+    } else {
+		val = (n > x * x)
+			? pbeta (x * x / (n + x * x), 0.5, n / 2., /*lower_tail*/0, /*log_p*/0)
+			: pbeta (1. / nx,             n / 2., 0.5, /*lower_tail*/1, /*log_p*/0);
+    }
+
+    /* Use "1 - v"  if	lower_tail  and	 x > 0 (but not both):*/
+    if(x <= 0.)
+		lower_tail = !lower_tail;
+    //
+    //if(log_p) {
+	//	if(lower_tail) return log1p(-0.5*exp(val));
+	//	else return val - M_LN2; /* = log(.5* pbeta(....)) */
+	//}
+	//else {
+		val /= 2.;
+		return (lower_tail ? (0.5 - (val) + 0.5) : (val));	/*  1 - p */ //R_D_Cval(val);
+	//}
 }
 
 //===========================================================================
 // cdfinv.
 //===========================================================================
+/*
+ *  Mathlib : A C Library of Special Functions
+ *  Copyright (C) 1998 Ross Ihaka
+ *  Copyright (C) 2000-2007 The R Development Core Team
+ *  Copyright (C) 2003	    The R Foundation
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, a copy is available at
+ *  http://www.r-project.org/Licenses/
+ *
+ *  DESCRIPTION
+ *
+ *	The "Student" t distribution quantile function.
+ *
+ *  NOTES
+ *
+ *	This is a C translation of the Fortran routine given in:
+ *	Hill, G.W (1970) "Algorithm 396: Student's t-quantiles"
+ *	CACM 13(10), 619-620.
+ *
+ *	Supplemented by inversion for 0 < ndf < 1.
+ *
+ *  ADDITIONS:
+ *	- lower_tail, log_p
+ *	- using	 expm1() : takes care of  Lozy (1979) "Remark on Algo.", TOMS
+ *	- Apply 2-term Taylor expansion as in
+ *	  Hill, G.W (1981) "Remark on Algo.396", ACM TOMS 7, 250-1
+ *	- Improve the formula decision for 1 < df < 2
+ */
+#define R_Q_P01_boundaries(p, _LEFT_, _RIGHT_)		\
+    if (log_p) {									\
+		if(p > 0)									\
+			return NAN; /*ML_ERR_return_NAN;*/      \
+		if(p == 0) /* upper bound*/					\
+			return lower_tail ? _RIGHT_ : _LEFT_;	\
+		if(p == -INFINITY/*ML_NEGINF*/)				\
+			return lower_tail ? _LEFT_ : _RIGHT_;	\
+    }												\
+    else { /* !log_p */								\
+		if(p < 0 || p > 1)							\
+			return NAN; /*ML_ERR_return_NAN;*/ 		\
+		if(p == 0)									\
+			return lower_tail ? _LEFT_ : _RIGHT_;	\
+		if(p == 1)									\
+			return lower_tail ? _RIGHT_ : _LEFT_;	\
+    }
+#define R_DT_qIv(p)	(log_p ? (lower_tail ? exp(p) : - expm1(p)) \
+			       : R_D_Lval(p))
+#define R_D_qIv(p)	(log_p	? exp(p) : (p))		/*  p  in qF(p,..) */
+#define R_D_Lval(p)	(lower_tail ? (p) : (0.5 - (p) + 0.5))	/*  p  */
+#define R_D_Cval(p)	(lower_tail ? (0.5 - (p) + 0.5) : (p))	/*  1 - p */
+#define R_Log1_Exp(x)   ((x) > -M_LN2 ? log(-expm1(x)) : log1p(-exp(x)))
+double fmin2(double x, double y)
+{
+	if (isnan(x) || isnan(y))
+		return x + y;
+	return (x < y) ? x : y;
+}
+#include <values.h>
 double ccruncher::TStudent::cdfinv(double p, double ndf)
 {
-  //TODO
+    bool lower_tail = true;
+    bool log_p = false;
+    const static double eps = 1.e-12;
+
+    double P, q;
+    bool neg;
+
+    if (isnan(p) || isnan(ndf))
+		return p + ndf;
+
+    R_Q_P01_boundaries(p, -INFINITY, +INFINITY);
+
+    if (ndf <= 0) return NAN; //ML_ERR_return_NAN;
+
+    if (ndf < 1) { /* based on qnt */
+		const static double accu = 1e-13;
+		const static double Eps = 1e-11; /* must be > accu */
+
+		double ux, lx, nx, pp, pu, pl;
+
+		p = R_DT_qIv(p);
+
+		/* Invert pt(.) :
+		 * 1. finding an upper and lower bound */
+		if(p > 1 - DBL_EPSILON) return INFINITY; //ML_POSINF;
+		pp = fmin2(1 - DBL_EPSILON, p * (1 + Eps));
+		for(ux = 1.; ux < DBL_MAX && (pu = cdf(ux, ndf)/*pt(ux, ndf, TRUE, FALSE)*/) < pp; ux *= 2){};
+		pp = p * (1 - Eps);
+		for(lx =-1.; lx > -DBL_MAX&& (pl = cdf(lx, ndf)/*pt(lx, ndf, TRUE, FALSE)*/) > pp; lx *= 2){};
+
+		/* 2. interval (lx,ux)  halving : nx = 0.5 * (lx + ux);
+		 *    lower but secure: bisection method: */
+		int cont=0;
+		do {
+			cont++;
+			nx = lx + (ux - lx)/2.0;
+			pp = cdf(nx, ndf);
+			if (pp > p) {
+				ux = nx; pu = pp;
+			} else {
+				lx = nx; pl = pp;
+			}
+		}
+		while ((ux - lx) / fabs(nx) > accu && cont < 100);
+
+		/* 2. interval (lx,ux)  halving : nx = 0.5 * (lx + ux);
+		 *    faster: use regula falsi: */
+/*
+		do {
+			nx = lx + (ux - lx)* (p - pl)/(pu - pl);
+			pp = cdf(nx, ndf)//pt(nx, ndf, TRUE, FALSE)
+
+			if ((pp = cdf(nx, ndf)) > p) { //pt(nx, ndf, TRUE, FALSE)
+				ux = nx; pu = pp;
+			} else {
+				lx = nx; pl = pp;
+			}
+		}
+		while ((ux - lx) / fabs(nx) > accu);
+*/
+		return 0.5 * (lx + ux);
+    }
+
+    /* Old comment:
+     * FIXME: "This test should depend on  ndf  AND p  !!
+     * -----  and in fact should be replaced by
+     * something like Abramowitz & Stegun 26.7.5 (p.949)"
+     *
+     * That would say that if the qnorm value is x then
+     * the result is about x + (x^3+x)/4df + (5x^5+16x^3+3x)/96df^2
+     * The differences are tiny even if x ~ 1e5, and qnorm is not
+     * that accurate in the extreme tails.
+     */
+    if (ndf > 1e20) return Normal::cdfinv(p); //qnorm(p, 0., 1., lower_tail, log_p);
+
+    P = R_D_qIv(p); /* if exp(p) underflows, we fix below */
+
+    neg = (!lower_tail || P < 0.5) && (lower_tail || P > 0.5);
+    if(neg)
+		P = 2 * (log_p ? (lower_tail ? P : -expm1(p)) : R_D_Lval(p));
+    else
+		P = 2 * (log_p ? (lower_tail ? -expm1(p) : P) : R_D_Cval(p));
+    /* 0 <= P <= 1 ; P = 2*min(P', 1 - P')  in all cases */
+
+/* Use this if(log_p) only : */
+#define P_is_exp_2p (lower_tail == neg) /* both TRUE or FALSE == !xor */
+
+	if (fabs(ndf - 2) < eps) {	/* df ~= 2 */
+		if(P > DBL_MIN) {
+			if(3* P < DBL_EPSILON) /* P ~= 0 */
+				q = 1 / sqrt(P);
+			else if (P > 0.9)	   /* P ~= 1 */
+				q = (1 - P) * sqrt(2 /(P * (2 - P)));
+			else /* eps/3 <= P <= 0.9 */
+				q = sqrt(2 / (P * (2 - P)) - 2);
+		}
+		else { /* P << 1, q = 1/sqrt(P) = ... */
+			if(log_p)
+				q = P_is_exp_2p ? exp(- p/2) / M_SQRT2 : 1/sqrt(-expm1(p));
+			else
+				q = INFINITY; //ML_POSINF;
+		}
+    }
+    else if (ndf < 1 + eps) { /* df ~= 1  (df < 1 excluded above): Cauchy */
+		if(P > 0)
+			q = 1/tan(P * M_PI_2);/* == - tan((P+1) * M_PI_2) -- suffers for P ~= 0 */
+
+		else { /* P = 0, but maybe = 2*exp(p) ! */
+			if(log_p) /* 1/tan(e) ~ 1/e */
+				q = P_is_exp_2p ? M_1_PI * exp(-p) : -1./(M_PI * expm1(p));
+			else
+				q = INFINITY; //ML_POSINF;
+		}
+    }
+    else {		/*-- usual case;  including, e.g.,  df = 1.1 */
+		double x = 0., y, log_P2 = 0./* -Wall */,
+			a = 1 / (ndf - 0.5),
+			b = 48 / (a * a),
+			c = ((20700 * a / b - 98) * a - 16) * a + 96.36,
+			d = ((94.5 / (b + c) - 3) / b + 1) * sqrt(a * M_PI_2) * ndf;
+
+		bool P_ok1 = P > DBL_MIN || !log_p,  P_ok = P_ok1;
+		if(P_ok1) {
+			y = pow(d * P, 2 / ndf);
+			P_ok = (y >= DBL_EPSILON);
+		}
+		if(!P_ok) { /* log_p && P very small */
+			log_P2 = P_is_exp_2p ? p : R_Log1_Exp(p); /* == log(P / 2) */
+			x = (log(d) + M_LN2 + log_P2) / ndf;
+			y = exp(2 * x);
+		}
+
+		if ((ndf < 2.1 && P > 0.5) || y > 0.05 + a) { /* P > P0(df) */
+			/* Asymptotic inverse expansion about normal */
+			if(P_ok)
+				x = Normal::cdf(0.5 * P);//qnorm(0.5 * P, 0., 1., /*lower_tail*/TRUE,  /*log_p*/FALSE);
+			else /* log_p && P underflowed */
+				x = Normal::cdf(log_P2);//qnorm(log_P2,  0., 1., lower_tail,	        /*log_p*/ TRUE);
+
+			y = x * x;
+			if (ndf < 5)
+			c += 0.3 * (ndf - 4.5) * (x + 0.6);
+			c = (((0.05 * d * x - 5) * x - 7) * x - 2) * x + b + c;
+			y = (((((0.4 * y + 6.3) * y + 36) * y + 94.5) / c
+			  - y - 3) / b + 1) * x;
+			y = expm1(a * y * y);
+			q = sqrt(ndf * y);
+		} else { /* re-use 'y' from above */
+
+			if(!P_ok && x < - M_LN2 * DBL_MANT_DIG) {/* 0.5* log(DBL_EPSILON) */
+				/* y above might have underflown */
+				q = sqrt(ndf) * exp(-x);
+			}
+			else {
+				y = ((1 / (((ndf + 6) / (ndf * y) - 0.089 * d - 0.822)
+					   * (ndf + 2) * 3) + 0.5 / (ndf + 4))
+					 * y - 1) * (ndf + 1) / (ndf + 2) + 1 / y;
+				q = sqrt(ndf * y);
+			}
+		}
+
+
+		/* Now apply 2-term Taylor expansion improvement (1-term = Newton):
+		 * as by Hill (1981) [ref.above] */
+
+		/* FIXME: This can be far from optimal when log_p = TRUE
+		 *      but is still needed, e.g. for qt(-2, df=1.01, log=TRUE).
+		 *	Probably also improvable when  lower_tail = FALSE */
+
+		if(P_ok1) {
+			int it=0;
+			while(it++ < 10 && (y = pdf/*dt*/(q, ndf/*, FALSE*/)) > 0 &&
+			  !isinf/*R_FINITE*/(x = (1.0-cdf/*pt*/(q, ndf/*, FALSE, FALSE*/) - P/2) / y) &&
+			  fabs(x) > 1e-14*fabs(q))
+			/* Newton (=Taylor 1 term):
+			 *  q += x;
+			 * Taylor 2-term : */
+			q += x * (1. + x * q * (ndf + 1) / (2 * (q * q + ndf)));
+		}
+    }
+    if(neg) q = -q;
+    return q;
 }
 

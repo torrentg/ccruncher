@@ -56,6 +56,9 @@ class TStudent
     static double lgammacor(double x);
     static double lgammafn_sign(double x, int *sgn);
     static double lgammafn(double x);
+    static double lbeta(double a, double b);
+    static double pbeta_raw(double x, double pin, double qin, int lower_tail, int log_p);
+    static double pbeta(double x, double pin, double qin, int lower_tail, int log_p);
 
 
   public:
