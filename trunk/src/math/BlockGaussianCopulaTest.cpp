@@ -300,6 +300,7 @@ int ccruncher_test::BlockGaussianCopulaTest::getSector(int x, int *n, int m)
     if (x+1 <= acum) return i;
   }
   ASSERT(false);
+  return -1;
 }
 
 //===========================================================================

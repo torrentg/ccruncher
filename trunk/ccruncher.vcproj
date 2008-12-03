@@ -307,6 +307,21 @@
 					>
 				</File>
 				<File
+					RelativePath="src\math\TStudent.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\TStudent.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\toms708.c"
+					>
+				</File>
+				<File
+					RelativePath="src\math\toms708.h"
+					>
+				</File>				<File
 					RelativePath="src\math\PowMatrix.cpp"
 					>
 				</File>

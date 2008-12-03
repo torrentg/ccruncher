@@ -74,6 +74,7 @@ ccruncher_SOURCES = \
     ../src/math/GaussianCopula.cpp\
     ../src/math/Normal.cpp\
     ../src/math/TStudent.cpp\
+    ../src/math/toms708.c\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/portfolio/Asset.cpp\
@@ -117,6 +118,7 @@ ccruncher_SOURCES = \
     ../src/math/GaussianCopula.hpp\
     ../src/math/Normal.hpp\
     ../src/math/TStudent.hpp\
+    ../src/math/toms708.h\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/portfolio/Asset.hpp\
@@ -201,6 +203,7 @@ tests_SOURCES = \
     ../src/math/GaussianCopula.cpp\
     ../src/math/Normal.cpp\
     ../src/math/TStudent.cpp\
+    ../src/math/toms708.c\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -275,6 +278,7 @@ tests_SOURCES = \
     ../src/math/GaussianCopula.hpp\
     ../src/math/Normal.hpp\
     ../src/math/TStudent.hpp\
+    ../src/math/toms708.h\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -331,6 +335,7 @@ tests_LDFLAGS =
 #    ../src/math/GaussianCopula.cpp\
 #    ../src/math/Normal.cpp\
 #    ../src/math/TStudent.cpp\
+#    ../src/math/toms708.c\
 #    ../src/math/BlockMatrixChol.cpp\
 #    ../src/math/BlockGaussianCopula.cpp\
 #    ../src/portfolio/Asset.cpp\
@@ -374,6 +379,7 @@ tests_LDFLAGS =
 #    ../src/math/GaussianCopula.hpp\
 #    ../src/math/Normal.hpp\
 #    ../src/math/TStudent.hpp\
+#    ../src/math/toms708.h\
 #    ../src/math/BlockMatrixChol.hpp\
 #    ../src/math/BlockGaussianCopula.hpp\
 #    ../src/portfolio/Asset.hpp\
