@@ -271,6 +271,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\math\BlockTStudentCopula.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\BlockTStudentCopula.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\math\BlockMatrixChol.cpp"
 					>
 				</File>
