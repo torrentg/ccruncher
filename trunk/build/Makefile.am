@@ -77,6 +77,7 @@ ccruncher_SOURCES = \
     ../src/math/toms708.c\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
+    ../src/math/BlockTStudentCopula.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/segmentations/Segmentations.cpp\
@@ -121,6 +122,7 @@ ccruncher_SOURCES = \
     ../src/math/toms708.h\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
+    ../src/math/BlockTStudentCopula.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/segmentations/Segmentations.hpp\
@@ -170,6 +172,7 @@ tests_SOURCES = \
     ../src/math/CholeskyDecompositionTest.cpp\
     ../src/math/BlockMatrixCholTest.cpp\
     ../src/math/BlockGaussianCopulaTest.cpp\
+    ../src/math/BlockTStudentCopulaTest.cpp\
     ../src/correlations/CorrelationMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
@@ -207,6 +210,7 @@ tests_SOURCES = \
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
+    ../src/math/BlockTStudentCopula.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
@@ -245,6 +249,7 @@ tests_SOURCES = \
     ../src/math/CholeskyDecompositionTest.hpp\
     ../src/math/BlockMatrixCholTest.hpp\
     ../src/math/BlockGaussianCopulaTest.hpp\
+    ../src/math/BlockTStudentCopulaTest.hpp\
     ../src/correlations/CorrelationMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
@@ -282,6 +287,7 @@ tests_SOURCES = \
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
+    ../src/math/BlockTStudentCopula.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
@@ -338,6 +344,7 @@ tests_LDFLAGS =
 #    ../src/math/toms708.c\
 #    ../src/math/BlockMatrixChol.cpp\
 #    ../src/math/BlockGaussianCopula.cpp\
+#    ../src/math/BlockTStudentCopula.cpp\
 #    ../src/portfolio/Asset.cpp\
 #    ../src/portfolio/DateValues.cpp\
 #    ../src/segmentations/Segmentations.cpp\
@@ -382,6 +389,7 @@ tests_LDFLAGS =
 #    ../src/math/toms708.h\
 #    ../src/math/BlockMatrixChol.hpp\
 #    ../src/math/BlockGaussianCopula.hpp\
+#    ../src/math/BlockTStudentCopula.hpp\
 #    ../src/portfolio/Asset.hpp\
 #    ../src/portfolio/DateValues.hpp\
 #    ../src/segmentations/Segmentations.hpp\

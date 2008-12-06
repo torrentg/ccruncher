@@ -177,7 +177,7 @@ double ccruncher::BlockGaussianCopula::transform(double val)
 //===========================================================================
 // randNm
 // fill aux1 with rand N(0,1) (independents)
-// fill aux2 with rand N(0,1) (correlateds per sigmas)
+// fill aux2 with rand N(0,1) (correlateds)
 //===========================================================================
 void ccruncher::BlockGaussianCopula::randNm()
 {
@@ -202,7 +202,6 @@ void ccruncher::BlockGaussianCopula::next()
   for(int i=0;i<n;i++)
   {
     aux1[i] = Normal::cdf(aux2[i]);
-    //aux1[i] = Normal::cdf(aux2[i], 0.0, sigmas[i][i]); //sigmas[i][i]=1.0
   }
 }
 
