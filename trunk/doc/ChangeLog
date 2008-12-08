@@ -13,6 +13,7 @@ version 1.3 (??? 2008)
   * modified output files (name, format and content)
   * added optional bulk of copula values to file
   * added optional bulk of simulated default times to file
+  * added t-student copula generator
 
 version 1.2 (Sept. 2008)
 --------------------------

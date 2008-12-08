@@ -4,11 +4,9 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * add references in technical document (eg. 2.3.1)
   * functional test (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
   * change image banner
-  * add t-copula
 
 Future works
 -------------------

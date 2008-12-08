@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2008 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -19,66 +19,68 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 //
-// ParamsTest.hpp - ParamsTest header - $Rev$
+// BlockTStudentCopula.hpp - BlockTStudentCopula header - $Rev: 435 $
 // --------------------------------------------------------------------------
 //
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/12/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
-//
-// 2004/12/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from cppUnit to MiniCppUnit
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2008/12/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added t-student copula type
 //
 //===========================================================================
 
-#ifndef _ParamsTest_
-#define _ParamsTest_
+#ifndef _BlockTStudentCopula_
+#define _BlockTStudentCopula_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
+#include "math/Copula.hpp"
+#include "math/BlockMatrixChol.hpp"
+#include <MersenneTwister.h>
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
-namespace ccruncher_test {
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class ParamsTest : public TestFixture<ParamsTest>
+class BlockTStudentCopula : public Copula
 {
-
   private:
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
+    int n;
+    int m;
+    int ndf;
+    BlockMatrixChol *chol;
+    double **correls;
+    double *aux1;
+    double *aux2;
+    double chisim;
+    bool owner;
+
+    MTRand mtrand;
+
+    void init();
+    void finalize();
+    double transform(double val);
+    void randNm();
+    void randCs();
 
 
   public:
 
-    TEST_FIXTURE(ParamsTest)
-    {
-      TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-    }
+    int size();
+    void next();
+    double get(int);
+    void setSeed(long);
 
-    void setUp();
-    void tearDown();
+    BlockTStudentCopula(double **C, int *n, int m, int ndf) throw(Exception);
+    BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);
+    ~BlockTStudentCopula();
 
 };
-
-REGISTER_FIXTURE(ParamsTest);
 
 //---------------------------------------------------------------------------
 

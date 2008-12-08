@@ -79,6 +79,7 @@ class Params : public ExpatHandlers
     // set dates values using begindate + steps x steplength
     void setDates();
 
+
   public:
 
     // time.begindate param value
@@ -92,7 +93,7 @@ class Params : public ExpatHandlers
     // stopcriteria.maxseconds param value
     long maxseconds;
     // copula.type param value
-    string copula_type; // gaussian
+    string copula_type; // gaussian, t(4)
     // copula.seed param value
     long copula_seed;
     // montecarlo.antithetic param value
@@ -109,6 +110,10 @@ class Params : public ExpatHandlers
 
     // return array with dates
     vector<Date>& getDates() const throw(Exception);
+    // returns copula type as string (gaussian or t)
+    string getCopulaType() const throw(Exception);
+    // returns copula param (if exists)
+    int getCopulaParam() throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 
