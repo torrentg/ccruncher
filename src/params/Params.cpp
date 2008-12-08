@@ -78,6 +78,7 @@
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
+#include "utils/Parser.hpp"
 
 //===========================================================================
 // constructor
@@ -161,6 +162,45 @@ void ccruncher::Params::setDates()
 }
 
 //===========================================================================
+// checks copula type string
+//===========================================================================
+string ccruncher::Params::getCopulaType() const throw(Exception)
+{
+  // gaussian case
+  if (copula_type == "gaussian") {
+    return "gaussian";
+  }
+  // t-student case t(x)
+  else if (copula_type.length() >= 3 && copula_type.substr(0,2) == "t(" && copula_type.at(copula_type.length()-1) == ')') {
+    return "t";
+  }
+  // non-valid copula type
+  else {
+    throw Exception("invalid copula type: " + copula_type + ". try 'gaussian' or 't(x)' with x>2");
+  }
+}
+
+//===========================================================================
+// checks copula type string
+//===========================================================================
+int ccruncher::Params::getCopulaParam() throw(Exception)
+{
+  if (getCopulaType() != "t") {
+    throw Exception("copula without params");
+  }
+  // t-student case t(x), where x is a integer
+  else {
+    string val = copula_type.substr(2, copula_type.length()-3);
+    int ndf = Parser::intValue(val);
+    if (ndf <= 2) 
+    {
+      throw Exception("t-student copula requires ndf > 2");
+    }
+    return ndf;
+  }
+}
+
+//===========================================================================
 // parse a XML property
 //===========================================================================
 void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes) throw(Exception)
@@ -215,12 +255,9 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "copula.type")
   {
-    string aux = getStringAttribute(attributes, "value", "");
-    if (copula_type != "" || aux != "gaussian") {
-      throw Exception("invalid copula.type. supported values: gaussian");
-    }
-    else {
-      copula_type = aux;
+    copula_type = getStringAttribute(attributes, "value", "");
+    if (getCopulaType() == "t") {
+      getCopulaParam(); //parse and validate param
     }
   }
   else if (name == "copula.seed")

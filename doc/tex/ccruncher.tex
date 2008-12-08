@@ -739,8 +739,8 @@ where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 %...........................................................................
 \subsection{t-Student copula simulation}
 \label{ap:tstudentcopu}
-Algorithm to simulate a t-Sudent copula with $\nu$ degrees of freedom satisfying 
-correlation matrix $\Sigma$ \cite{copu:pricing}:
+Algorithm to simulate a t-Sudent copula with $\nu$ degrees of freedom ($\nu > 2$) 
+satisfying correlation matrix $\Sigma$ \cite{copu:pricing}:
 
 \paragraph{Step 1.} We create the covariance\footnote{Correlation and covariance 
 matrix are the same because diagonal elements are $1$.} matrix $\Sigma'$ mapping 
@@ -796,9 +796,9 @@ s \sim \chi^2(\nu)
 \paragraph{Step 5.} We simulate a multivariate t-Student with $\nu$ degrees of freedom, 
 $\vec{Z} \sim \frac{\sqrt{\nu}}{\sqrt{\chi^2(\nu)}} \cdot N(\vec{0}, \Sigma')$, doing:
 \begin{displaymath}
-\frac{\sqrt{\nu}}{\sqrt{s}} \cdot B \cdot \vec{Y} 
+\frac{\sqrt{\nu-2}}{\sqrt{\nu}} \cdot \frac{\sqrt{\nu}}{\sqrt{s}} \cdot B \cdot \vec{Y} 
 =
-\frac{\sqrt{\nu}}{\sqrt{s}} \cdot 
+\frac{\sqrt{\nu-2}}{\sqrt{s}} \cdot 
 \left(
 \begin{array}{cccc}
 b_{11}   & 0        & \ldots & 0       \cr

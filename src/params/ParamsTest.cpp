@@ -50,6 +50,9 @@
 //   . removed simulate=values option
 //   . removed method=rating-path
 //
+// 2008/12/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added t-student copula type
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -102,6 +105,7 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(3000 == params.maxiterations);
   ASSERT(30000000 == params.maxseconds);
   ASSERT("gaussian" == params.copula_type);
+  ASSERT("gaussian" == params.getCopulaType());
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
 
@@ -144,3 +148,33 @@ void ccruncher_test::ParamsTest::test2()
   Params params;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
 }
+
+//===========================================================================
+// test3
+// test copula_type param (case t-student)
+//===========================================================================
+void ccruncher_test::ParamsTest::test3()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <params>\n\
+      <property name='time.begindate' value='18/02/2003'/>\n\
+      <property name='time.steps' value='12'/>\n\
+      <property name='time.steplength' value='2'/>\n\
+      <property name='stopcriteria.maxiterations' value='3000'/>\n\
+      <property name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <property name='copula.type' value='t(3)'/>\n\
+      <property name='copula.seed' value='38765874'/>\n\
+      <property name='montecarlo.antithetic' value='true'/>\n\
+    </params>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // ratings list creation
+  Params params;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
+
+  ASSERT(params.getCopulaType() == "t");
+  ASSERT(params.getCopulaParam() == 3);
+}
+

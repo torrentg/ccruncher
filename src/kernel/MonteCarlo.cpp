@@ -117,11 +117,12 @@
 // 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
 //   . trace output data directory changed from absolute to relative
 //
-// 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/12/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . modified output file name (portfolio-rest.out -> portfolio.out)
 //   . added optional bulk of copula values to file
 //   . added optional bulk of simulated default to file
 //   . changed from SegmentAggregator to Aggregator
+//   . added t-Student copula generator
 //
 //===========================================================================
 
@@ -130,6 +131,7 @@
 #include "kernel/MonteCarlo.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
+#include "math/BlockTStudentCopula.hpp"
 #include "math/GaussianCopula.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Arrays.hpp"
@@ -508,6 +510,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
   Logger::newIndentLevel();
 
   // setting logger info
+  Logger::trace("copula type", idata.getParams().copula_type);
   Logger::trace("copula dimension", Format::long2string(N));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
   Logger::trace("elapsed time initializing copula", true);
@@ -524,8 +527,19 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     }
 
     // creating the copula object
-    //copula = new GaussianCopula(N, getBorrowerCorrelationMatrix(idata));
-    copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
+    if (idata.getParams().getCopulaType() == "gaussian")
+    {
+      //copula = new GaussianCopula(N, getBorrowerCorrelationMatrix(idata));
+      copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
+    }
+    else if (idata.getParams().getCopulaType() == "t")
+    {
+      int ndf = idata.getParams().getCopulaParam();
+      copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size(), ndf);
+    }
+    else {
+      throw Exception("invalid copula type");
+    }
 
     // releasing temporal memory
     Arrays<int>::deallocVector(tmp);

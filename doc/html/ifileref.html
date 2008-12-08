@@ -24,7 +24,7 @@
     <h1>Input File Reference</h1>
 
     <p>
-      This document describes the xml input file for ccruncher-1.2.
+      This document describes the xml input file for ccruncher-1.3.
       In the distribution package you can find the DTD, the XSD and some XML 
       samples into the $CCRUNCHER/samples directory.
       <br /><br />
@@ -128,9 +128,9 @@
       <tr class="a">
         <td style="text-align:center;">copula.type</td>
         <td style="text-align:justify;">
-          Type of copula used to generate correlated variables. Nowadays
-          only one implementation exists, the gaussian copula. <br />
-          accepted values: 'gaussian'.
+          Type of copula used to generate correlated variables. Are implemented 
+          two families of copulas. The gaussian copula ('gaussian') and the 
+          t-Student copula ('t(n)' where <i>n > 2</i> is the degree of freedom).
         </td>
         <td style="text-align:center;"><code>string</code></td>
       </tr>
@@ -936,7 +936,7 @@
             Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 30-Aug-2008
+            Last modified: 08-Dec-2008
           </td>
         </tr></table>
       </div></div></div></div></div>
