@@ -24,7 +24,7 @@
 #define R_Log1_Exp(x)   ((x) > -M_LN2 ? log(-rexpm1(x)) : log1p(-exp(x)))
 
 /* begin GTG */
-#include <values.h>
+#include <float.h>
 #define attribute_hidden 
 typedef enum { FALSE = 0, TRUE } Rboolean;
 #define ML_NEGINF	-1.0/0.0
