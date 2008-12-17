@@ -15,7 +15,7 @@
     <property name="time.steplength" value="1"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
-    <property name="copula.type" value="t(250)"/>
+    <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveBorrowers" value="true"/>

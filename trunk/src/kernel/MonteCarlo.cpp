@@ -592,18 +592,8 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
   // doing assertions
   assert(ittd == NULL);
 
-  // setting logger header
-  Logger::trace("initializing workspace", '-');
-  Logger::newIndentLevel();
-
-  // setting logger info
-  Logger::trace("workspace dimension (= number of borrowers)", Format::long2string(n));
-
   // allocating space
   ittd = Arrays<int>::allocVector(n);
-
-  // exit function
-  Logger::previousIndentLevel();
 }
 
 //===========================================================================
