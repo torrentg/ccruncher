@@ -55,10 +55,10 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <string>
-#include <time.h>
+#include <ctime>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------

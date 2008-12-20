@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2005-2008 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -29,10 +29,20 @@
 // 2008/08/30 - Gerard Torrent [gerard@mail.generacio.com]
 //   . adapted to MSVC9
 //
+// 2008/12/20 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added some stuff (trunc, restrict, etc.)
+//
 //===========================================================================
 
 #ifndef WINCONFIG_H
 #define WINCONFIG_H
+
+// ======================================================
+// restrict keyword supported directly?
+// ======================================================
+#ifdef restrict
+#undef restrict
+#endif
 
 // ======================================================
 // patch against NAN problem
@@ -41,6 +51,18 @@
 #include <cfloat>
 #define NAN sqrt(-1.0)
 #define isnan _isnan
+
+// ======================================================
+// patch against infinity problem
+// ======================================================
+#define INFINITY HUGE_VAL
+#define isinf(x) !_finite(x)
+
+// ======================================================
+// define some special functions (caution, low accuracy?)
+// ======================================================
+#define log1p(x) log(1.0 + x)
+#define expm1(x) (exp(x)-1.0)
 
 // ======================================================
 // patch against round() function
@@ -107,3 +129,4 @@ inline double trunc( double d )
 #pragma warning( disable : 4996 )
 
 #endif
+

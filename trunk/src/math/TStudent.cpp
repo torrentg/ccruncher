@@ -1062,7 +1062,7 @@ double fmin2(double x, double y)
 		return x + y;
 	return (x < y) ? x : y;
 }
-#include <float.h>
+#include <cfloat>
 double ccruncher::TStudent::cdfinv(double p, double ndf)
 {
     bool lower_tail = true;
