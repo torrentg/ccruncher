@@ -71,7 +71,6 @@ dnl other checks (consts, structs, types)
 dnl -------------------------------------------------------------
 AC_C_CONST
 AC_C_INLINE
-AC_C_RESTRICT
 AC_STRUCT_TM
 AC_TYPE_SIZE_T
 

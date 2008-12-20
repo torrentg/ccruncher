@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Dec 20 08:29:50 CET 2008"
+#define BUILD_DATE "Sat Dec 20 20:35:46 CET 2008"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -155,7 +155,7 @@
 #define PACKAGE_VERSION "1.3"
 
 /* Profiler instructions are added when this is defined. */
-/* #undef PROFILER */
+#define PROFILER 1
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -188,10 +188,6 @@
 #ifndef __cplusplus
 /* #undef inline */
 #endif
-
-/* Define to equivalent of C99 restrict keyword, or to nothing if this is not
-   supported. Do not define if restrict is supported directly. */
-#define restrict __restrict
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */

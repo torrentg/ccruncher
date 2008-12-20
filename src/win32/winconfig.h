@@ -30,19 +30,12 @@
 //   . adapted to MSVC9
 //
 // 2008/12/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added some stuff (trunc, restrict, etc.)
+//   . added some stuff (trunc, log1p, expm1, isinf, etc.)
 //
 //===========================================================================
 
 #ifndef WINCONFIG_H
 #define WINCONFIG_H
-
-// ======================================================
-// restrict keyword supported directly?
-// ======================================================
-#ifdef restrict
-#undef restrict
-#endif
 
 // ======================================================
 // patch against NAN problem
