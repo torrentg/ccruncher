@@ -53,7 +53,10 @@
 //
 // It would be nice to CC: rjwagner@writeme.com and Cokus@math.washington.edu
 // when you write.
-
+//
+// 2008/12/20 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed 2 compilation warnings
+//
 #ifndef MERSENNETWISTER_H
 #define MERSENNETWISTER_H
 
@@ -231,7 +234,7 @@ inline void MTRand::seed( uint32 *const bigSeed, const uint32 seedLength )
 	initialize(19650218UL);
 	register int i = 1;
 	register uint32 j = 0;
-	register int k = ( N > seedLength ? N : seedLength );
+	register int k = ( (uint32) N > seedLength ? (uint32) N : seedLength );
 	for( ; k; --k )
 	{
 		state[i] =
@@ -280,7 +283,7 @@ inline void MTRand::seed()
 }
 
 
-inline void MTRand::initialize( const uint32 seed )
+inline void MTRand::initialize( const uint32 seed_ )
 {
 	// Initialize generator state with seed
 	// See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.
@@ -289,7 +292,7 @@ inline void MTRand::initialize( const uint32 seed )
 	register uint32 *s = state;
 	register uint32 *r = state;
 	register int i = 1;
-	*s++ = seed & 0xffffffffUL;
+	*s++ = seed_ & 0xffffffffUL;
 	for( ; i < N; ++i )
 	{
 		*s++ = ( 1812433253UL * ( *r ^ (*r >> 30) ) + i ) & 0xffffffffUL;

@@ -25,9 +25,15 @@
 
 /* begin GTG */
 #include <float.h>
+#ifdef _MSC_VER
+  #define log1p(x) log(1.0 + x)
+  #define ML_NEGINF _FPCLASS_NINF
+  #define M_LN2            0.693147180559945309417232121458        /* ln(2) */
+#else
+  #define ML_NEGINF	-1.0/0.0
+#endif
 #define attribute_hidden 
 typedef enum { FALSE = 0, TRUE } Rboolean;
-#define ML_NEGINF	-1.0/0.0
 #define R_D__0	(log_p ? ML_NEGINF : 0.)		/* 0 */
 #define R_D__1	(log_p ? 0. : 1.)			/* 1 */
 #define M_LN_SQRT_2PI   0.918938533204672741780329736406  /* log(sqrt(2*pi)) */
