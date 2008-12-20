@@ -51,6 +51,15 @@ inline double round( double d )
 }
 
 // ======================================================
+// patch against trunc() function
+// ======================================================
+inline double trunc( double d ) 
+{ 
+  if (d >= 0) return floor(d);
+  else return -floor(-d);
+}
+
+// ======================================================
 // patch against getopt problem
 // properties->configuration properties->C/C++->
 // preprocessor->preprocessor definitions (add BUILD_GETOPT)

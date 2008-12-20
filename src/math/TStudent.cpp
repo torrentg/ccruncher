@@ -39,10 +39,21 @@
 #define M_2PI           6.283185307179586476925286766559  /* 2*pi */
 #define M_LN_SQRT_2PI   0.918938533204672741780329736406  /* log(sqrt(2*pi)) */
 #define M_LN_SQRT_PId2  0.225791352644727432363097614947  /* log(sqrt(pi/2)) */
-//#define M_1_PI          0.318309886183790671537767526745  /* 1/pi */
-//#define M_PI            3.141592653589793238462643383280  /* pi */
-//#define M_SQRT2         1.414213562373095048801688724210  /* sqrt(2) */
-//#define M_PI_2          1.570796326794896619231321691640  /* pi/2 */
+#ifndef M_1_PI
+#define M_1_PI          0.318309886183790671537767526745  /* 1/pi */
+#endif
+#ifndef M_PI
+#define M_PI            3.141592653589793238462643383280  /* pi */
+#endif
+#ifndef M_SQRT2
+#define M_SQRT2         1.414213562373095048801688724210  /* sqrt(2) */
+#endif
+#ifndef M_PI_2
+#define M_PI_2          1.570796326794896619231321691640  /* pi/2 */
+#endif
+#ifndef M_LN2
+#define M_LN2           0.693147180559945309417232121458  /* ln(2) */
+#endif
 
 //===========================================================================
 // pbeta. internal function
@@ -1051,7 +1062,7 @@ double fmin2(double x, double y)
 		return x + y;
 	return (x < y) ? x : y;
 }
-#include <values.h>
+#include <float.h>
 double ccruncher::TStudent::cdfinv(double p, double ndf)
 {
     bool lower_tail = true;

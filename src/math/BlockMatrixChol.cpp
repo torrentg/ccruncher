@@ -412,7 +412,6 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
     i++;
     for(int k=1;k<n[s];k++)
     {
-      int j = i+k;
       ret[i] += ret[i-1] + get(i,i-1)*x[i-1];
       i++;
     }
