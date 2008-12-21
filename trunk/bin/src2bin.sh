@@ -32,11 +32,11 @@ svnversion="R465M"
 #-------------------------------------------------------------
 # checking arguments
 #-------------------------------------------------------------
-if [ $1 != "-y" ]; then
+if [ "$1" != "-y" ]; then
   echo "This script removes all ccruncher development files";
-  echo "Do you want to continue? (y/n): ";
-  read $WISH;
-  if [ $WISH != 'y' ]; then
+  echo -n "Do you want to continue? (y/n): ";
+  read WISH;
+  if [ "$WISH" != "y" ]; then
     exit 1;
   fi
 fi
