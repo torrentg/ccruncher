@@ -50,8 +50,9 @@
 # 2008/07/25 - Gerard Torrent [gerard@mail.generacio.com]
 #   . changed subversion repository path
 #
-# 2008/10/18 - Gerard Torrent [gerard@mail.generacio.com]
+# 2008/12/21 - Gerard Torrent [gerard@mail.generacio.com]
 #   . script report renamed to ccreport.sh
+#   . removed oblivion directory
 #
 #=============================================================
 
@@ -244,7 +245,6 @@ makeBinDist() {
   rm -rvf src;
   rm -rvf build;
   rm -rvf deps;
-  rm -rvf oblivion;
 
   #creating tarball
   cd /tmp/;
@@ -290,7 +290,6 @@ makeWinDist() {
   rm -rvf src;
   rm -rvf build;
   rm -rvf deps;
-  rm -rvf oblivion;
 
   #setting windows end-line
   unix2dos doc/AUTHORS;
