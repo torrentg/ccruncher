@@ -53,6 +53,7 @@
 # 2008/12/21 - Gerard Torrent [gerard@mail.generacio.com]
 #   . script report renamed to ccreport.sh
 #   . removed oblivion directory
+#   . added src2bin.sh script
 #
 #=============================================================
 
@@ -104,7 +105,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2007 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2008 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -232,19 +233,7 @@ makeBinDist() {
   ./configure --prefix=$PWD;
   make;
   make install;
-
-  #dropping unused files
-  rm ccruncher.sln
-  rm ccruncher.vcproj
-  rm aclocal.m4;
-  rm -rvf autom4te.cache;
-  rm config*;
-  rm depcomp install-sh missing;
-  rm doc/INSTALL;
-  rm Makefile*;
-  rm -rvf src;
-  rm -rvf build;
-  rm -rvf deps;
+  bin/src2bin.sh -y;
 
   #creating tarball
   cd /tmp/;
@@ -278,18 +267,8 @@ makeWinDist() {
   cp $pathexes/zlib1.dll bin/
 
   #dropping unused files
+  bin/src2bin.sh -y;
   rm bin/ccreport.sh
-  rm ccruncher.sln
-  rm ccruncher.vcproj
-  rm aclocal.m4;
-  rm -rvf autom4te.cache;
-  rm config*;
-  rm depcomp install-sh missing;
-  rm doc/INSTALL;
-  rm Makefile*;
-  rm -rvf src;
-  rm -rvf build;
-  rm -rvf deps;
 
   #setting windows end-line
   unix2dos doc/AUTHORS;
