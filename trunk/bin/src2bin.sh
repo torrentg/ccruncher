@@ -51,7 +51,7 @@ rm -f  $CCRUNCHER/ccruncher.sln
 rm -f  $CCRUNCHER/ccruncher.vcproj
 rm -f  $CCRUNCHER/aclocal.m4;
 rm -f  $CCRUNCHER/config*;
-rm -f  $CCRUNCHER/depcomp:
+rm -f  $CCRUNCHER/depcomp;
 rm -f  $CCRUNCHER/install-sh;
 rm -f  $CCRUNCHER/missing;
 rm -rf $CCRUNCHER/autom4te.cache;
