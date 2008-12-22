@@ -81,41 +81,33 @@ value at risk, expected shortfall.
 \end{abstract}
 \newpage
 
+
 %===========================================================================
 \tableofcontents
 \newpage
 
+
 %===========================================================================
 \section{Parameters}
 
+Some of the best known credit risk methods are CreditMetrics, CreditRisk+, 
+CreditPortfolioView and CreditMonitor. A comprehensive discussion of these
+methods can be found at \emph{Credit Risk Measurement} by Anthony Saunders 
+and Linda Allen \cite{ref:saunders_allen}.
+\newline
+
 This section explains the input parameters required by CCruncher.
-
-%---------------------------------------------------------------------------
-\subsection{Time nodes}
-In order to speed up the calculations we precompute asset losses at fixed 
-times. To fix these time nodes we need an \emph{initial date}, the 
-\emph{number of steps} and the \emph{step length}. The probability distribution
-is computed at date $T = initial\ date + number\ of\ steps \times step\ length$.
-See figure \ref{cctime1}.
-
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[height=3.0cm, angle=0]{./images/cctime1.eps}
-\caption{Time nodes}
-\label{cctime1}
-\end{center}
-\end{figure}
-\FloatBarrier
 
 %---------------------------------------------------------------------------
 \subsection{Ratings and Survival Functions}
 A rating tells a lender or investor the probability of the subject being 
 able to pay back a loan. A poor rating indicates a high risk of defaulting.
-Every rating has a survival function associated. This function indicates the 
-probability that a borrower with initial rating $X$ be non-defaulted at time $t$.
-The creation of a rating system and the construction of the survival functions are 
-outside the scope of this paper\footnote{Appendix \ref{ap:tmatrix} shows 
-how to determine the survival functions using the transition matrix.}.
+Every rating has a survival function associated. This function\footnote{
+Appendix \ref{ap:tmatrix} shows how to determine the survival functions 
+using the transition matrix.} indicates the probability that a borrower with 
+initial rating $X$ be non-defaulted at time $t$. The creation of a rating 
+system and the construction of the survival functions are outside the scope 
+of this paper.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -159,15 +151,7 @@ belongs to a sector. Each borrower have one or more assets. Each asset
 is defined by its addition date in the portfolio, expected cashflow and 
 forecasted recovery at certain dates. Figure \ref{portfolio} shows the 
 structure of a portfolio.
-
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[height=11cm, angle=0]{./images/portfolio.eps}
-\caption{Portfolio example}
-\label{portfolio}
-\end{center}
-\end{figure}
-\FloatBarrier
+\newline
 
 \emph{Cashflow} indicates the cash given to the borrower (negative amounts) and the
 cash received from the borrower (positive amounts) at each date (see figure \ref{cashflow}).
@@ -181,8 +165,8 @@ cash received from the borrower (positive amounts) at each date (see figure \ref
 \end{figure}
 \FloatBarrier
 
-\emph{Recovery} indicates the cash recovered (after taking legal action against the 
-borrower) if the borrower defaults at a certain date (see figure \ref{recovery}).
+\emph{Recovery} indicates the expected cash recovered (after taking legal action against 
+the borrower) if the borrower defaults at a certain date (see figure \ref{recovery}).
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -195,6 +179,32 @@ borrower) if the borrower defaults at a certain date (see figure \ref{recovery})
 
 If a borrower defaults, the loss due to this default is the sum of all remaining
 cashflows at default time minus the recovery at default time.
+
+\begin{figure}[!hbt]
+\begin{center}
+\includegraphics[height=11cm, angle=0]{./images/portfolio.eps}
+\caption{Portfolio example}
+\label{portfolio}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+%---------------------------------------------------------------------------
+\subsection{Time nodes}
+In order to speed up the calculations we precompute asset losses at fixed 
+times. To fix these time nodes we need an \emph{initial date}, the 
+\emph{number of steps} and the \emph{step length}. The probability distribution
+is computed at date $T = initial\ date + number\ of\ steps \times step\ length$.
+See figure \ref{cctime1}.
+
+\begin{figure}[!hbt]
+\begin{center}
+\includegraphics[height=3.0cm, angle=0]{./images/cctime1.eps}
+\caption{Time nodes}
+\label{cctime1}
+\end{center}
+\end{figure}
+\FloatBarrier
 
 
 %===========================================================================
@@ -317,7 +327,7 @@ time nodes of the asset displayed in figures \ref{cashflow}, \ref{recovery} and
 %---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
 \label{mcsim}
-Monte Carlo methods \cite{mc:mervyn} are a class of computational algorithms for 
+Monte Carlo methods are a class of computational algorithms for 
 simulating the behavior of various physical and mathematical systems. 
 Each simulation consists of computing a random default time for each borrower and
 then calculate the loss of the portfolio. We need that default times fulfill two 
@@ -356,7 +366,7 @@ copulas. Apendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu} describes the
 algorithms used to generate them.
 \newline
 
-Exists evidences, \cite{copu:selecting}, in favor of the t-Student copula. 
+Exists evidences \cite{copu:selecting} in favor of the t-Student copula. 
 In comparison with the t-Student copula, gaussian copula underestimates the probability 
 of joint extreme downward movements, while the Gumbel copula overestimates this risk. 
 Moreover gaussian copula is too optimistic on diversiﬁcation benefits, while the Gumbel 
@@ -366,8 +376,8 @@ copula is too pessimistic.
 \subsubsection{Default times generation}
 Given the borrower $k$ and the random number $u_k \in [0,1]$ (generated using a 
 copula in the previous step) we simulate the default time considering the 
-inverse of the borrower survival function at $u_k$. Figure \ref{simttd} shows 
-this in a graphic manner.
+inverse of the borrower survival function at $u_k$ \cite{ref:cred_risk}. 
+Figure \ref{simttd} shows this in a graphic manner.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -601,6 +611,7 @@ In CCruncher the master sends the RNG seed to each slave
 the portfolio loss) from slaves that store them in a file. When one of the two stop 
 criteria is achieved (maximum execution time exceded or maximum number of 
 simulations reached) the master sends a stop signal to the slaves and leaves.
+
 
 %===========================================================================
 \appendix
@@ -1021,6 +1032,7 @@ Survival(r_i, t) = \left( M_t \right)_{i, n}
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
 matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
 index of default rating $r_n$.
+
 
 %===========================================================================
 \newpage
