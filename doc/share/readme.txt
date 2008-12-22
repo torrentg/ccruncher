@@ -3,16 +3,6 @@ This directory contains third part documentation used by CreditCruncher:
 
 ------------------------------------------------------------------------
 
-docname: Different Strokes
-authors: Ken Phelan, Colin Alexander
-publish: Risk Magazine, October 1999, CreditRisk supplement
-homeurl: http://www.financewise.com/public/edit/riskm/credit/cre-models.htm
-locfile: difstr/index.html
-descrip: comparative review of credit risk models and methodologies for 
-         managing credit portfolios
-
-------------------------------------------------------------------------
-
 docname: CreditMetrics - Technical Document
 authors: Greg M. Gupton, Christopher C. Finger, Mickey Bhatia
 publish: J.P. Morgan & Co. Incorporated
@@ -28,7 +18,7 @@ docname: Probability models of credit risk
 authors: Paul Glasserman
 publish: Columbia Business School, 2000
 homeurl: http://www2.gsb.columbia.edu/faculty/pglasserman/B6014/Prob_Credit.pdf
-locfile: cbs/Prob_Credit.pdf
+locfile: cmetrics/Prob_Credit.pdf
 descrip: a short and good introduction to CreditMetrics
 
 ------------------------------------------------------------------------
@@ -86,3 +76,20 @@ locfile: var/eshortfall.pdf
 descrip: var alternative
 
 ------------------------------------------------------------------------
+
+docname: Credit Risk. Pricing, Measurement, and Management
+authors: Darrel Duffie and Kenneth J. Singleton
+publish: Princeton University Press
+locfile: risk/credit_risk_book.pdf
+descrip: risk book
+
+------------------------------------------------------------------------
+
+docname: Credit Risk measurement. New Approaches to Value at Risk and Other Paradigms
+authors: Anthony Saunders and Linda Allen
+publish: John Wiley & Sons, Inc.
+locfile: risk/saunders_allen.pdf
+descrip: credit models review
+
+------------------------------------------------------------------------
+
