@@ -61,13 +61,13 @@
     </p>
 
     <p>
-      <b>Step 5.</b> If you have a source distribution, run next commands (pay attention to $PWD):
+      <b>Step 5.</b> If you have a source distribution, run next commands:
     </p>
     <pre>
 
-&nbsp;&nbsp;./configure --prefix=$PWD
-&nbsp;&nbsp;make
-&nbsp;&nbsp;make install
+&nbsp;&nbsp;./configure       # prepare compilation
+&nbsp;&nbsp;make              # compile ccruncher
+&nbsp;&nbsp;bin/src2bin.sh    # install and clean
     </pre>
 
     <p>
@@ -80,9 +80,10 @@
 &nbsp;&nbsp;export LIBRARY_PATH=$LIBRARY_PATH:<i>path_to_your_mpi_libs</i>
 &nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
 &nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
-&nbsp;&nbsp;./configure --prefix=$PWD --enable-mpi
-&nbsp;&nbsp;make
-&nbsp;&nbsp;make install
+
+&nbsp;&nbsp;./configure --enable-mpi   # prepare compilation
+&nbsp;&nbsp;make                       # compile ccruncher
+&nbsp;&nbsp;bin/src2bin.sh             # install and clean
     </pre>
 
     <br/>
@@ -144,7 +145,7 @@
             Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 28-Nov-2008
+    				 Last modified: 22-Dec-2008
     			</td>
     		</tr></table>
     	</div></div></div></div></div>

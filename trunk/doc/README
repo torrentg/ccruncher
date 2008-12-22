@@ -67,9 +67,9 @@ Installation from source package
 
 3. execute commands (read INSTALL file):
      cd ccruncher-X.Y
-     ./configure --prefix=$PWD
+     ./configure
      make
-     make install
+     bin/src2bin.sh
 
    supported ./configure options:
      --enable-debug:    add debug instructions
@@ -151,9 +151,8 @@ Notes for Windows developers (cygwin)
      > aclocal
      > autoconf
      > automake -a -v -c -f
-     > ./configure --prefix=$PWD
+     > ./configure
      > make
-     > make check
 
 
 Notes on MPI version
@@ -185,7 +184,7 @@ Developers tips & tricks
      automake -a -v -c -f    (--help --warnings=all)
 
 5. compile project in debug mode
-     ./configure --prefix=$PWD --enable-debug --enable-profiler
+     ./configure --enable-debug --enable-profiler
      make
      make check
    or compile project enabling MPI
