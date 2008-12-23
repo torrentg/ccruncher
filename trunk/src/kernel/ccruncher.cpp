@@ -71,9 +71,10 @@
 // 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added listloss method
 //
-// 2008/11/06 - Gerard Torrent [gerard@mail.generacio.com]
+// 2008/12/23 - Gerard Torrent [gerard@mail.generacio.com]
 //   . updated listloss option to lplosses
 //   . added lcopula and ldeftime options
+//   . bugfix: output data directory creation
 //
 //===========================================================================
 
@@ -366,6 +367,19 @@ void run(string filename, string path) throw(Exception)
   // checking input file readeability
   File::checkFile(filename, "r");
 
+  // checking output directory
+  if (bvalidate == false && !File::existDir(path))
+  {
+    if (bforce == false)
+    {
+      throw Exception("path " + path + " not exist");
+    }
+    else
+    {
+      File::makeDir(path);
+    }
+  }
+
   // initializing logger
   Logger::setVerbosity(bverbose?1:0);
 
@@ -399,19 +413,6 @@ void run(string filename, string path) throw(Exception)
   {
     Logger::addBlankLine();
     return;
-  }
-
-  // checking output dir
-  if (!File::existDir(path))
-  {
-    if (bforce == false)
-    {
-      throw Exception("path " + path + " not exist");
-    }
-    else
-    {
-      File::makeDir(path);
-    }
   }
 
   // running simulation
