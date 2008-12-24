@@ -125,8 +125,8 @@ The risk of a credit portfolio depends crucially on default correlations between
 economic sectors. These sectors are groupings of companies that react similarly to 
 given economic conditions. Example of sectors: energy, financial, technology, 
 media and entertainment, utilities, health care, etc. Default correlations between 
-sectors measures the default dependence between the defined sectors. This can 
-be expressed in tabular form:
+sectors measures the defaults times dependence between the defined sectors. This 
+can be expressed in tabular form:
 
 \begin{center}
 \begin{tabular}[]{cc}
@@ -251,6 +251,7 @@ taking as correlation between two borrowers the correlation between their sector
 \begin{figure}[!hb]
 \begin{displaymath}
 \begin{array}{c}
+\Sigma=
 \left(
 \begin{array}{ccccccccccc}
 1           & \dots    & \rho_{1,1}  &          & \rho_{1,k}  & \dots   & \rho_{1,k}  &         & \rho_{1,m}  & \dots      & \rho_{1,m}  \cr
@@ -275,9 +276,9 @@ taking as correlation between two borrowers the correlation between their sector
 \label{borrowercorrel}
 \end{figure}
 
-Observe that this is a correlation matrix (symmetric, $|\rho_{i,j}| < 1$, 
+Observe that this is a correlation matrix (symmetric, $|\rho_{i,j}| \leq 1$, 
 $|\rho_{i,i}| = 1$) composed by blocks. This matrix will be decomposed using 
-the algorithm cholesky, so it must be definite positive.
+the Cholesky algorithm, so it must be definite positive.
 
 %---------------------------------------------------------------------------
 \subsection{Mapping asset losses at fixed time nodes}
@@ -367,9 +368,8 @@ algorithms used to generate them.
 
 Exists evidences \cite{copu:selecting} in favor of the t-Student copula. 
 In comparison with the t-Student copula, gaussian copula underestimates the probability 
-of joint extreme downward movements, while the Gumbel copula overestimates this risk. 
-Moreover gaussian copula is too optimistic on diversiﬁcation benefits, while the Gumbel 
-copula is too pessimistic.
+of joint extreme downward movements. Moreover gaussian copula is too optimistic on 
+diversiﬁcation benefits.
 
 %...........................................................................
 \subsubsection{Default times generation}
@@ -397,7 +397,7 @@ in a list. Afterwards we will use this list to compute risk.
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
-After $N$ simulations (eg. $20000$, $50000$ or more) we have a list
+After $N$ simulations (eg. $20000$, $500000$ or more) we have a list
 of numbers, ${x_1, ..., x_N}$, where each number represents a simulated portfolio 
 loss. The more values, the more accuracy in the results. All risk statistics (eg. 
 Expected Loss) have an error margin that will be estimated. CCruncher uses 
@@ -449,13 +449,8 @@ Central Limit Theorem \cite{stats:schaum} grants that:
 \end{displaymath}
 
 where $\alpha$ is the error confidence level, $\phi^{-1}$ the N(0,1) inverse 
-cumulative distribution function and $\widehat{\sigma}$ is the stddev estimator:
-
-\begin{displaymath}
-\widehat{\sigma} =
-\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2} =
-\sqrt{\frac{1}{N-1} \left( \sum_{i=1}^{N} x_i^2 - \frac{\left(\sum_{i=1}^{N} x_i \right)^2}{N} \right)}
-\end{displaymath}
+cumulative distribution function and $\widehat{\sigma}$ is the stddev estimator
+defined previously.
 
 %...........................................................................
 \subsubsection{Value At Risk}
@@ -589,10 +584,10 @@ value decreases along the time is given by the compound interest formula:
 %---------------------------------------------------------------------------
 \subsection{Antithetic technique}
 The random number generation using a copula is time expensive. Gaussian and 
-t-Student copula are symmetric, that means that $(u_1, u_2, \cdots, u_N)$ is 
-equiprobable to $(1-u_1, 1-u_2, \cdots, 1-u_N)$. In CCruncher's antithetic mode, 
-each copula generation is used $2$ times, $(u_1, u_2, \cdots, u_N)$ and 
-$(1-u_1, 1-u_2, \cdots, 1-u_N)$, reducing to the half the number of generated
+t-Student copula are symmetric, that means that $(u_1, u_2, \cdots, u_n)$ is 
+equiprobable to $(1-u_1, 1-u_2, \cdots, 1-u_n)$. In CCruncher's antithetic mode, 
+each copula generation is used $2$ times, $(u_1, u_2, \cdots, u_n)$ and 
+$(1-u_1, 1-u_2, \cdots, 1-u_n)$, reducing to the half the number of generated
 copulas.
 
 %---------------------------------------------------------------------------
@@ -953,8 +948,8 @@ $2500000000$ to only $500000$.
 %---------------------------------------------------------------------------
 \subsection{From transition matrix to survival functions}
 \label{ap:tmatrix}
-The $T$-years transition matrix gives the probability to jump from rating $r_i$ 
-to rating $r_j$ in a term of $T$ years.
+The $T$-years transition matrix gives the probability to change from rating $r_i$ 
+to rating $r_j$ in a period of $T$ years.
 
 \begin{displaymath}
 M_T = \left(
@@ -969,9 +964,9 @@ m_{i,j} = P(r_i \to r_j;T)
 \end{displaymath}
 
 where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
-borrower with rating $r_i$ jumps to $r_j$ in $T$ years.
+borrower with rating $r_i$ change to rating $r_j$ in $T$ years.
 Figure \ref{tmatrix1} shows a transition matrix example where the probability 
-that a borrower with rating $AA$ jumps to rating $B$ in $1$ year is $0.14\%$.
+that a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
 \newline
 
 \begin{figure}[!hb]
