@@ -161,7 +161,6 @@ class MonteCarlo
     void release();
 
     // init methods
-    void init(IData &) throw(Exception);
     void initParams(const IData &) throw(Exception);
     void initBorrowers(const IData &) throw(Exception);
     void initRatings(const IData &) throw(Exception);
@@ -196,7 +195,7 @@ class MonteCarlo
 
     void setFilePath(string path, bool force);
     void setHash(int num);
-    void initialize(IData &) throw(Exception);
+    void initialize(IData &, bool only_validation=false) throw(Exception);
     long execute() throw(Exception);
     void setAdditionalOutput(bool losses, bool copulas, bool deftimes);
 
