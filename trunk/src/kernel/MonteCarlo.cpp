@@ -225,7 +225,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw(Exception)
 {
   if (MAXITERATIONS != 0L)
   {
@@ -238,54 +238,48 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 
   try
   {
-    init(idata);
+    Logger::addBlankLine();
+    Logger::trace("initialing procedure", '*');
+    Logger::newIndentLevel();
+
+    // initializing parameters
+    initParams(idata);
+
+    // initializing borrowers
+    initBorrowers(idata);
+
+    // initializing ratings and transition matrix
+    initRatings(idata);
+
+    // initializing sectors
+    initSectors(idata);
+
+    // initializing survival function
+    initTimeToDefault(idata);
+
+    // initializing copula
+    initCopula(idata, idata.getParams().copula_seed);
+
+    // ratings paths allocation
+    initTimeToDefaultArray(N);
+
+    if (!only_validation)
+    {
+      // initializing aggregators
+      initAggregators(idata);
+
+      // initializes debug bulk files 
+      initAdditionalOutput();
+    }
+
+    // exit function
+    Logger::previousIndentLevel();
   }
   catch(Exception &e)
   {
     release();
     throw Exception(e, "error initializing Monte Carlo");
   }
-}
-
-//===========================================================================
-// init
-//===========================================================================
-void ccruncher::MonteCarlo::init(IData &idata) throw(Exception)
-{
-  Logger::addBlankLine();
-  Logger::trace("initialing procedure", '*');
-  Logger::newIndentLevel();
-
-  // initializing parameters
-  initParams(idata);
-
-  // initializing borrowers
-  initBorrowers(idata);
-
-  // initializing ratings and transition matrix
-  initRatings(idata);
-
-  // initializing sectors
-  initSectors(idata);
-
-  // initializing survival function
-  initTimeToDefault(idata);
-
-  // initializing copula
-  initCopula(idata, idata.getParams().copula_seed);
-
-  // ratings paths allocation
-  initTimeToDefaultArray(N);
-
-  // initializing aggregators
-  initAggregators(idata);
-
-  // initializes debug bulk files 
-  // precomputed losses, copula values, simulated default times
-  initAdditionalOutput();
-
-  // exit function
-  Logger::previousIndentLevel();
 }
 
 //===========================================================================

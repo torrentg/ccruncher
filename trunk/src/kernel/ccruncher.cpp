@@ -406,7 +406,7 @@ void run(string filename, string path) throw(Exception)
 #endif
 
   // initializing simulation
-  simul.initialize(idata);
+  simul.initialize(idata, bvalidate);
 
   // validate file and exit
   if (bvalidate == true)
