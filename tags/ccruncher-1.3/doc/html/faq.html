@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CreditCruncher - FAQ</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <!-- repository version = $Rev$ -->
+  </head>
+
+  <body>
+    <div id="main-container">
+  	<div id="page-header">
+      <a href="./index.html">
+	  	  <img style="margin-top:35px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
+      </a>
+  	</div>
+  	<br/>
+
+    <h1>CreditCruncher - FAQ</h1>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        1. What try to solve CreditCruncher ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      CreditCruncher is a program that uses the Monte Carlo method to compute the 
+      credit risk of large portfolios in which assets are mortgages, loans, bonds, 
+      endorsements, or the like (all of them fixed income with a policy buy/sell 
+      and hold). The default time is simulated using a copula (gaussian or t-Student), 
+      taking into account the transition matrix (or survival functions) and sectorial 
+      correlation matrix defined by the user.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        2. Why this ugly name ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      CreditCruncher solve the credit portfolio risk valuation doing intensive usage 
+      of numerical computation. This kind of programs are named 
+      <a href="http://en.wikipedia.org/wiki/Number_crunching">number crunchers</a>.
+      A not very smart mix between the terms 'credit' and 'number cruncher' generates 
+      the name 'credit cruncher'. Of course, CreditCruncher is not related with the recent 
+      <a href="http://en.wikipedia.org/wiki/Credit_crunch">credit crunch</a>, but is
+      a tool that can aid to control the risks involved in this crisis.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        3. What is the project maturity ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      ccruncher-1.3 is a stable version. If you have any bug or suggestion to report, 
+      please send a mail to <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>
+      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        4. Can I found docs where the CreditCruncher algorithm is explained?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      Yes. The document is named <i>CreditCruncher - Technical Document</i> and
+      you can find a link <a href="index.html">here</a>. This document is included
+      in all the distributions under the directory <code>docs/</code>.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        5. Windows platform is suported ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      Yes, but the main stream is in unix environment. If you desire to compile ccruncher
+      under Windows, read the file docs/README. The repository contains the project
+      files for MSVC9 compiler (*.sln, *.vcproj).
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        6. Why input files can be gziped (*.gz) but not ziped (<span style="text-decoration:line-through">*.zip</span>) ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
+      source. You can download a gzip tool for windows from
+      <a href="http://www.7-zip.org/">7-zip</a>. Usually, unix environments
+      have gzip/gunzip commands. You can read more at <a href="http://www.gzip.org/">gzip home</a>.
+    </p>
+
+    <table cellpadding="5" width="100%">
+      <tbody><tr><td class="faq_question">
+        7. CreditCruncher is fast ?
+      </td></tr></tbody>
+    </table>
+
+    <p>
+      Yes. It is designed to be very fast. It allows you to evaluate
+      the credit risk of your whole portfolio (there can be more than 50.000 borrowers)
+      each day. If ccruncher sunk your computer, you can execute it on a cluster
+      enabling the MPI compilation option.
+    </p>
+
+    <br/>
+    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+    		<table width="100%"><tr>
+    			<td style="width:100%; text-align:center; font-size:smaller;">
+            Copyright &copy; 2004-2008 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+    			</td>
+    			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
+    				 Last modified: 19-Dec-2008
+    			</td>
+    		</tr></table>			
+    	</div></div></div></div></div>
+    </div>
+    <br/>
+
+  </div>
+  </body>
+</html>
