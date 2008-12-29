@@ -1002,12 +1002,12 @@ M^{\gamma} = P^{-1} \cdot D^{\gamma} \cdot P
 \end{displaymath}
 
 where $P$ is a matrix composed by the eigenvectors of $M$ and $D$ is a diagonal 
-matrix composed by the eigenvalues of $M$. The inverse of a matrix can be 
-computed using the $LU$ decomposition as it is explained in \emph{Numerical 
+matrix composed by the eigenvalues of $M$. The inverse of a matrix $P$ can be 
+computed using the $LU$ decomposition of $P$ as it is explained in \emph{Numerical 
 Recipes in C}\footnote{http://www.nr.com}:
 
 \begin{displaymath}
-Id = P^{-1} \cdot P = L \cdot U \cdot P
+L \cdot U \cdot P^{-1} = Id
 \end{displaymath}
 
 This allows us to compute default probability at any time and at any initial 
@@ -1019,7 +1019,7 @@ Survival(r_i, t) = \left( M_t \right)_{i, n}
 
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
 matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
-index of default rating $r_n$.
+index of default rating, $r_n$.
 
 
 %===========================================================================
