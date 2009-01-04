@@ -6,10 +6,11 @@ Current works
 -------------------
   * functional test (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
-  * change image banner
+  * add optional tag 'title' in xml file input
+  * add optional tag 'description' in xml file input
 
 Future works
 -------------------
-  * fuzzy fixed income values
+  * allow stochastic recovery (eg. beta distribution)
   * graphic interface
 
