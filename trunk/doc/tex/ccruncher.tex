@@ -45,7 +45,7 @@
 %-----------------------------------------------------
 % defining some useful values
 %-----------------------------------------------------
-\def\numversion{1.3}
+\def\numversion{1.4}
 \def\svnversion{R494}
 
 %-----------------------------------------------------
@@ -85,6 +85,29 @@ value at risk, expected shortfall.
 %===========================================================================
 \tableofcontents
 \newpage
+
+
+%===========================================================================
+\section{Introduction}
+
+%TODO: Little schema how ccruncher solves problem (Monte Carlo, Copula, Portfolio, etc.)
+
+\subsection{Alternatives}
+
+\subsubsection{CreditRisk+ approach}
+%TODO: fill this section
+
+\subsubsection{CreditMetrics approach}
+%TODO: fill this section
+
+\subsubsection{Copula approach}
+%TODO: fill this section
+
+\subsection{Comparison}
+%TODO: Comparison with other methods (CreditRisk+, CreditMetrics)
+%TODO: bottom-up approach
+
+%TODO: Tell how losses are considered (non-revolvered, transported along time)
 
 
 %===========================================================================
@@ -135,6 +158,11 @@ $Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
 \qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
 \end{tabular}
 \end{center}
+
+Note that diagonal elements are default time correlations between members of the 
+same sector (values distinct than $1$) while elements outside diagonal are 
+default time correlations between sectors.
+\newline
 
 How to fix the $\rho_{i,j}$ values is outside the scope of this paper.
 
@@ -602,6 +630,347 @@ simulations reached) the master sends a stop signal to the slaves and leaves.
 
 
 %===========================================================================
+\section{Numerical example}
+
+Lets go to compute the credit risk at $T=3$ years for the following portfolio.
+
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{c|l|c|c|c|l}
+Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \cr
+\hline
+B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \cr
+B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \cr
+B3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \cr
+B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5         \cr
+B5  & White \& Rebolan     & B      & Services       & 30\%     & A6, A7, A8 \cr
+B6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \cr
+B7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \cr
+B8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \cr
+B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \cr
+\end{tabular}
+\caption{Portfolio composition}
+\label{example.portfolio}
+\end{center}
+\end{table}
+
+The following table list the assets events.
+
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{c|c|c|c|c|c|c|c|c|c|c|c|c}
+Date     & A1   & A2   & A3   & A4   & A5   & A6   & A7   & A8   & A9   & A10  & A11  & A12   \cr
+\hline
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
+dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &             
+\end{tabular}
+\caption{Assets events}
+\label{example.assets}
+\end{center}
+\end{table}
+
+In this example we supose that we don't dispose of survival functions but we have the transition
+matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
+
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{l|rrrrrrrr}
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
+\hline
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
+\end{tabular}
+\caption{$1$-year transition matrix}
+\label{example.tmatrix}
+\end{center}
+\end{table}
+
+The default times sectorial correlations are:
+
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{c|ccc}
+               & Construction & Consumer goods & Services \cr
+\hline
+Construction   &    $0.50$    &     $0.20$     &   $0.30$ \cr
+Consumer goods &    $0.20$    &     $0.60$     &   $0.34$ \cr
+Services       &    $0.30$    &     $0.34$     &   $0.40$ 
+\end{tabular}
+\caption{Sector correlation matrix}
+\label{example.scorrels}
+\end{center}
+\end{table}
+
+%---------------------------------------------------------------------------
+\subsection{Computing survival functions from transition matrix}
+
+We use appendix \ref{ap:tmatrix} to compute the survivals functions 
+with a time resolution of $1$ month. We scale the transition matrix 
+to $1$ month doing $T_{\frac{1}{12}} = T_{1}^{\frac{1}{12}}$. Caution, 
+do calculations using absolute values, not percentages. $1$-month 
+transition matrix, $T_{\frac{1}{12}}$:
+
+{\small
+\begin{displaymath}
+%T_{\frac{1}{12}} = 
+\left( 
+\begin{array}{cccccccc}
+    99.1972  &   0.7588  &   0.0320  &   0.0020  &   0.0112  &  -0.0011  &  -0.0001  &   0.0000  \cr
+     0.0635  &  99.1745  &   0.7083  &   0.0392  &   0.0015  &   0.0120  &   0.0018  &  -0.0007  \cr
+     0.0074  &   0.2057  &  99.1980  &   0.5102  &   0.0557  &   0.0189  &  -0.0001  &   0.0042  \cr
+     0.0015  &   0.0239  &   0.5507  &  98.8021  &   0.5164  &   0.0871  &   0.0077  &   0.0107  \cr
+     0.0027  &   0.0113  &   0.0396  &   0.7581  &  98.1558  &   0.8774  &   0.0889  &   0.0664  \cr
+    -0.0007  &   0.0098  &   0.0196  &   0.0111  &   0.6447  &  98.4443  &   0.4463  &   0.4249  \cr
+     0.0233  &  -0.0023  &   0.0170  &   0.1287  &   0.2166  &   1.2298  &  96.4213  &   1.9657  \cr
+     0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  & 100.0000 
+\end{array}
+\right)
+\end{displaymath}
+}
+
+Note negative values in the computed $1$-month transition matrix. Something wrong happens 
+because transition matrix values are probabilities. The cause is that the original matrix 
+$T_1$ is not a regular Markov matrix. In this cases CreditCruncher replace negative 
+values by $0$.
+\newline
+
+One time we dispose $1$-month transition matrix, we compute the survivals
+values at month $1$ doing ($d$ subindex means default column):
+
+\begin{displaymath}
+S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} = 
+\left( 
+\begin{array}{c}
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100
+\end{array}
+\right)
+ - 
+\left( 
+\begin{array}{c}
+ 0.0000 \cr
+ 0.0000 \cr
+ 0.0042 \cr
+ 0.0107 \cr
+ 0.0664 \cr
+ 0.4249 \cr
+ 1.9657
+\end{array}
+\right)
+=
+\left( 
+\begin{array}{c}
+ 100.000 \cr
+ 100.000 \cr
+  99.996 \cr
+  99.989 \cr
+  99.934 \cr
+  99.975 \cr
+  90.034 
+\end{array}
+\right)
+\end{displaymath}
+
+We compute the survivals values at month $2$ doing:
+
+\begin{displaymath}
+S(.,2 \textrm{ months}) = \vec{1} - (T_{1/12}^2)_{.d} = 
+\left( 
+\begin{array}{c}
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100
+\end{array}
+\right)
+ - 
+\left( 
+\begin{array}{c}
+ 0.0000 \cr
+ 0.0000 \cr
+ 0.0084 \cr
+ 0.0221 \cr
+ 0.1372 \cr
+ 0.8524 \cr
+ 3.8664
+\end{array}
+\right)
+=
+\left( 
+\begin{array}{c}
+ 100.000 \cr
+ 100.000 \cr
+  99.992 \cr
+  99.978 \cr
+  99.863 \cr
+  99.148 \cr
+  96.134 
+\end{array}
+\right)
+\end{displaymath}
+
+We compute the survivals values at month $3$ doing:
+
+\begin{displaymath}
+S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} = 
+\left( 
+\begin{array}{c}
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100 \cr
+ 100
+\end{array}
+\right)
+ - 
+\left( 
+\begin{array}{c}
+ 0.0000 \cr
+ 0.0000 \cr
+ 0.0129 \cr
+ 0.0342 \cr
+ 0.2122 \cr
+ 1.2821 \cr
+ 5.7045
+\end{array}
+\right)
+=
+\left( 
+\begin{array}{c}
+ 100.000 \cr
+ 100.000 \cr
+  99.987 \cr
+  99.966 \cr
+  99.788 \cr
+  98.718 \cr
+  94.296 
+\end{array}
+\right)
+\end{displaymath}
+
+If we repeat the same procedure for the $36$ month we obtain the survival
+table exposed at figure \ref{example.survivals}.
+
+\begin{table}[!hb]
+\begin{center}
+{\small
+\begin{tabular}[]{c|rrrrrrrr}
+Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
+\hline
+1  & 100.000 & 100.000 &  99.996 &  99.989 &  99.934 &  99.575 &  98.034 \cr
+2  & 100.000 & 100.000 &  99.992 &  99.978 &  99.863 &  99.148 &  96.134 \cr
+3  & 100.000 & 100.000 &  99.987 &  99.966 &  99.788 &  98.718 &  94.296 \cr
+4  & 100.000 & 100.000 &  99.983 &  99.953 &  99.709 &  98.286 &  92.518 \cr
+5  & 100.000 & 100.000 &  99.978 &  99.939 &  99.626 &  97.853 &  90.798 \cr
+6  & 100.000 & 100.000 &  99.973 &  99.925 &  99.539 &  97.418 &  89.134 \cr
+7  & 100.000 & 100.000 &  99.968 &  99.909 &  99.448 &  96.981 &  87.525 \cr
+8  & 100.000 & 100.000 &  99.963 &  99.893 &  99.353 &  96.544 &  85.967 \cr
+9  & 100.000 & 100.000 &  99.957 &  99.876 &  99.255 &  96.106 &  84.460 \cr
+10 & 100.000 & 100.000 &  99.952 &  99.858 &  99.153 &  95.668 &  83.000 \cr
+11 & 100.000 & 100.000 &  99.946 &  99.840 &  99.048 &  95.229 &  81.588 \cr
+12 & 100.000 & 100.000 &  99.940 &  99.820 &  98.940 &  94.790 &  80.220 \cr
+13 & 100.000 &  99.999 &  99.934 &  99.800 &  98.828 &  94.351 &  78.896 \cr
+14 & 100.000 &  99.998 &  99.928 &  99.778 &  98.714 &  93.912 &  77.613 \cr
+15 & 100.000 &  99.997 &  99.921 &  99.756 &  98.596 &  93.474 &  76.370 \cr
+16 & 100.000 &  99.996 &  99.914 &  99.733 &  98.475 &  93.036 &  75.167 \cr
+17 & 100.000 &  99.995 &  99.907 &  99.710 &  98.352 &  92.599 &  74.000 \cr
+18 &  99.999 &  99.993 &  99.900 &  99.685 &  98.225 &  92.162 &  72.870 \cr
+19 &  99.999 &  99.992 &  99.893 &  99.660 &  98.096 &  91.727 &  71.775 \cr
+20 &  99.999 &  99.990 &  99.885 &  99.633 &  97.965 &  91.292 &  70.713 \cr
+21 &  99.999 &  99.988 &  99.877 &  99.606 &  97.831 &  90.859 &  69.683 \cr
+22 &  99.999 &  99.986 &  99.869 &  99.578 &  97.694 &  90.427 &  68.685 \cr
+23 &  99.998 &  99.984 &  99.861 &  99.549 &  97.555 &  89.996 &  67.717 \cr
+24 &  99.998 &  99.982 &  99.852 &  99.519 &  97.414 &  89.567 &  66.777 \cr
+25 &  99.998 &  99.980 &  99.843 &  99.488 &  97.270 &  89.139 &  65.866 \cr
+26 &  99.998 &  99.978 &  99.834 &  99.457 &  97.125 &  88.714 &  64.982 \cr
+27 &  99.997 &  99.975 &  99.825 &  99.424 &  96.977 &  88.289 &  64.124 \cr
+28 &  99.997 &  99.972 &  99.815 &  99.391 &  96.827 &  87.867 &  63.290 \cr
+29 &  99.996 &  99.970 &  99.805 &  99.357 &  96.675 &  87.446 &  62.482 \cr
+30 &  99.996 &  99.967 &  99.795 &  99.322 &  96.522 &  87.028 &  61.696 \cr
+31 &  99.995 &  99.964 &  99.785 &  99.286 &  96.366 &  86.611 &  60.933 \cr
+32 &  99.995 &  99.961 &  99.774 &  99.249 &  96.209 &  86.197 &  60.192 \cr
+33 &  99.994 &  99.957 &  99.763 &  99.212 &  96.050 &  85.784 &  59.472 \cr
+34 &  99.994 &  99.954 &  99.752 &  99.173 &  95.890 &  85.374 &  58.772 \cr
+35 &  99.993 &  99.950 &  99.741 &  99.134 &  95.728 &  84.966 &  58.092 \cr
+36 &  99.993 &  99.947 &  99.729 &  99.094 &  95.565 &  84.560 &  57.431 
+\end{tabular}
+}
+\caption{Survival functions table}
+\label{example.survivals}
+\end{center}
+\end{table}
+
+%---------------------------------------------------------------------------
+\subsection{Creating borrowers correlation matrix}
+
+We use section \ref{tcorrel} to create the borrowers correlation matrix. In 
+this example, the debtors are sorted by sector and therefore no reorder is 
+required.
+
+\begin{displaymath}
+\Sigma = 
+\left( 
+\begin{array}{ccccccccc}
+ 1.00 & 0.50 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
+ 0.50 & 1.00 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
+ 0.20 & 0.20 & 1.00 & 0.60 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
+ 0.20 & 0.20 & 0.60 & 1.00 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 1.00 & 0.40 & 0.40 & 0.40 & 0.40 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 1.00 & 0.40 & 0.40 & 0.40 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 1.00 & 0.40 & 0.40 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 1.00 & 0.40 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 0.40 & 1.00 \cr
+\end{array}
+\right)
+\end{displaymath}
+
+\FloatBarrier
+
+
+%===========================================================================
+\section{Case studies}
+
+\subsection{Identical uncorrelated borrowers}
+%TODO: fill this section. use samples/README
+
+\subsection{Identical correlated borrowers}
+%TODO: fill this section. use samples/README
+
+\subsection{Non-identical uncorrelated borrowers}
+%TODO: fill this section. use samples/README
+
+\subsection{Non-identical correlated borrowers}
+%TODO: fill this section. use samples/READMEç
+
+
+%===========================================================================
 \appendix
 \section{Appendices}
 
@@ -609,7 +978,8 @@ simulations reached) the master sends a stop signal to the slaves and leaves.
 \subsection{N(0,1) simulation}
 \label{ap:normsim}
 
-In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use:
+In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use the Box-Muller 
+method:
 
 \begin{displaymath}
 z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
@@ -996,9 +1366,9 @@ M_{\frac{T}{k}} = \sqrt[k]{M_{T}} \nonumber
 The root of a matrix can be computed as:
 
 \begin{displaymath}
-M = P^{-1} \cdot D \cdot P 
+M = P \cdot D \cdot P^{-1}
 \longrightarrow
-M^{\gamma} = P^{-1} \cdot D^{\gamma} \cdot P
+M^{\gamma} = P \cdot D^{\gamma} \cdot P^{-1}
 \end{displaymath}
 
 where $P$ is a matrix composed by the eigenvectors of $M$ and $D$ is a diagonal 
@@ -1007,14 +1377,14 @@ computed using the $LU$ decomposition of $P$ as it is explained in \emph{Numeric
 Recipes in C}\footnote{http://www.nr.com}:
 
 \begin{displaymath}
-L \cdot U \cdot P^{-1} = Id
+P \cdot P^{-1} = L \cdot U \cdot P^{-1} = Id
 \end{displaymath}
 
 This allows us to compute default probability at any time and at any initial 
 rating (that is, the survival functions), doing:
 
 \begin{displaymath}
-Survival(r_i, t) = \left( M_t \right)_{i, n}
+Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
 \end{displaymath}
 
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
