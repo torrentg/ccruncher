@@ -951,6 +951,67 @@ required.
 \right)
 \end{displaymath}
 
+%---------------------------------------------------------------------------
+\subsection{Copula initialization}
+
+The copulas implemented by CreditCruncher, gaussian and T-Student, 
+requires the same covariance matrix, $\Sigma'$. We compute this matrix
+following the steps $1$ and $2$ from appendices \ref{ap:gaussiancopu} 
+and \ref{ap:tstudentcopu}.
+
+\paragraph{Step 1.} We create the covariance matrix $\Sigma'$ mapping 
+$\Sigma$ component by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ 
+transformation):
+\begin{displaymath}
+\Sigma' = \left( 
+\begin{array}{ccccccccc}
+   1.0000 & 0.5176 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
+   0.5176 & 1.0000 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
+   0.2091 & 0.2091 & 1.0000 & 0.6180 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \cr
+   0.2091 & 0.2091 & 0.6180 & 1.0000 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \cr
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 1.0000 & 0.4158 & 0.4158 & 0.4158 & 0.4158 \cr
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 1.0000 & 0.4158 & 0.4158 & 0.4158 \cr
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 1.0000 & 0.4158 & 0.4158 \cr
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 1.0000 & 0.4158 \cr
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 0.4158 & 1.0000 \cr
+\end{array}
+\right)
+\end{displaymath}
+
+\paragraph{Step 2.} We apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
+where:
+\begin{displaymath}
+B = 
+\left(
+\begin{array}{ccccccccc}
+   1.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.5176 & 0.8556 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.2091 & 0.1179 & 0.9708 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.2091 & 0.1179 & 0.5773 & 0.7805 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.8806 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.8534 & 0.0000 & 0.0000 & 0.0000 \cr
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.8365 & 0.0000 & 0.0000 \cr
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.8250 & 0.0000 \cr
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.1170 & 0.8167 \cr
+\end{array}
+\right)
+\end{displaymath}
+
+%---------------------------------------------------------------------------
+\subsection{Monte Carlo simulation}
+
+\subsubsection{Random numbers generation}
+
+\subsubsection{Copula simulation}
+
+\subsubsection{Default times simulation}
+
+\subsubsection{Portfolio Loss simulation}
+
+
+%---------------------------------------------------------------------------
+\subsection{Risk computation}
+
 \FloatBarrier
 
 
