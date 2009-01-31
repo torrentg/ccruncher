@@ -35,22 +35,32 @@
 
   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;ccruncher&gt;
-
-    <i>&lt;!-- put sections here (see below) --&gt;</i>
-
+    &lt;title&gt;<i>your title here</i>&lt;/title&gt;
+    &lt;description&gt;<i>your description here</i>&lt;/description&gt;
+    <a href="#params">&lt;params&gt;</a>         ...         <a href="#params">&lt;/params&gt;</a>
+    <a href="#interests">&lt;interests&gt;</a>      ...      <a href="#interests">&lt;/interests&gt;</a>
+    <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
+    <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
+    <a href="#survival">&lt;survival&gt;</a>       ...       <a href="#survival">&lt;/survival&gt;</a>
+    <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
+    <a href="#mcorrels">&lt;mcorrels&gt;</a>       ...       <a href="#mcorrels">&lt;/mcorrels&gt;</a>
+    <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
+    <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
   &lt;/ccruncher&gt;
     </pre>
 
     <p>
-      where the encoding attribute can be one of these 
-      values: UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
-      XML is case-sensitive.
+      The encoding attribute can be one of these values: 
+      UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
+      XML is case-sensitive. Title and description tags are optionals. 
+      You must define mtransitions or survival, but not both.
     </p>
 
 <!-- ==================================================== -->
 <!--    params section                                    -->
 <!-- ==================================================== -->
     <br/>
+    <a name="params"></a>
     <h1>Section Params</h1>
 
     <p>
@@ -168,6 +178,7 @@
 <!--    interests section                                 -->
 <!-- ==================================================== -->
     <br/>
+    <a name="interests"></a>
     <h1>Section Interests</h1>
 
     <p>
@@ -250,6 +261,7 @@
 <!--    ratings section                                   -->
 <!-- ==================================================== -->
     <br/>
+    <a name="ratings"></a>
     <h1>Section Ratings</h1>
 
     <p>
@@ -300,6 +312,7 @@
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
     <br/>
+    <a name="mtransitions"></a>
     <h1>Section Transition Matrix</h1>
 
     <p>
@@ -407,6 +420,7 @@
 <!--    survival section                                  -->
 <!-- ==================================================== -->
     <br/>
+    <a name="survival"></a>
     <h1>Section Survival Function</h1>
 
     <p>
@@ -502,6 +516,7 @@
 <!--    sectors section                                   -->
 <!-- ==================================================== -->
     <br/>
+    <a name="sectors"></a>
     <h1>Section Sectors</h1>
 
     <p>
@@ -549,6 +564,7 @@
 <!--    correlations section                              -->
 <!-- ==================================================== -->
     <br/>
+    <a name="mcorrels"></a>
     <h1>Section Correlations</h1>
 
     <p>
@@ -627,6 +643,7 @@
 <!--    segmentations section                             -->
 <!-- ==================================================== -->
     <br/>
+    <a name="segmentations"></a>
     <h1>Section Segmentations</h1>
 
     <p>
@@ -731,6 +748,7 @@
 <!--    portfolio section                                 -->
 <!-- ==================================================== -->
     <br/>
+    <a name="portfolio"></a>
     <h1>Section Portfolio</h1>
 
     <p>
@@ -936,7 +954,7 @@
             Copyright &copy; 2004-2009 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 11-Jan-2008
+            Last modified: 31-Jan-2009
           </td>
         </tr></table>
       </div></div></div></div></div>

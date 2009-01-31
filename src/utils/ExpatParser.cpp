@@ -49,6 +49,9 @@
 // 2007/07/19 - Gerard Torrent [gerard@mail.generacio.com]
 //   . correct mistake in error message
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . modified method characterData
+//
 //===========================================================================
 
 #include <cstring>
@@ -69,6 +72,11 @@
 #endif
 
 //===========================================================================
+// static variable definition
+//===========================================================================
+const char *ccruncher::ExpatParser::current_tag = NULL;
+
+//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::ExpatParser::ExpatParser()
@@ -86,6 +94,9 @@ ccruncher::ExpatParser::ExpatParser()
 
   // setting characterdata handler
   XML_SetCharacterDataHandler(xmlparser, characterData);
+
+  // other initializations
+  current_tag = NULL;
 }
 
 //===========================================================================
@@ -101,6 +112,9 @@ ccruncher::ExpatParser::~ExpatParser()
 //===========================================================================
 void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
+  // setting current tag
+  current_tag = name;
+
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
   ExpatHandlers *eh = ud->getCurrentHandlers();
@@ -114,6 +128,9 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 //===========================================================================
 void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
+  // setting current tag
+  current_tag = NULL;
+
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
   ExpatHandlers *eh = ud->getCurrentHandlers();
@@ -138,14 +155,9 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 //===========================================================================
 void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
 {
-  // simple rule: character data is not allowed
-  for(int i=0;i<len;i++)
-  {
-    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
-    {
-      throw Exception("unexpected text parsing xml");
-    }
-  }
+  ExpatUserData *ud = (ExpatUserData *) ud_;
+  ExpatHandlers *eh = ud->getCurrentHandlers();
+  eh->epdata(*ud, current_tag, s, len);
 }
 
 //===========================================================================
