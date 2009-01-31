@@ -37,6 +37,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed eperror method
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added epdata method
+//
 //===========================================================================
 
 #include <cstdio>
@@ -93,6 +96,21 @@ void ccruncher::ExpatHandlers::epstop(ExpatUserData &eud)
   // throwing an exception to stop parser
   // retrieved by ExpatParser::parse() method
   throw int(999);
+}
+
+//===========================================================================
+// epdata
+//===========================================================================
+void ccruncher::ExpatHandlers::epdata(ExpatUserData &eud, const char *name, const char *s, int len)
+{
+  // default simple rule: character data is not allowed
+  for(int i=0;i<len;i++)
+  {
+    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
+    {
+      throw Exception("unexpected text parsing xml");
+    }
+  }
 }
 
 //===========================================================================
@@ -253,7 +271,11 @@ bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const stri
 //===========================================================================
 bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const string &str)
 {
-  if (strcmp(str.c_str(), pchr) == 0)
+  if (pchr == NULL) 
+  {
+    return false;
+  }
+  else if (strcmp(str.c_str(), pchr) == 0)
   {
     return true;
   }

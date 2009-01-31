@@ -34,6 +34,9 @@
 // 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed eperror method
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added epdata method
+//
 //===========================================================================
 
 #ifndef _ExpatHandlers_
@@ -83,6 +86,7 @@ class ExpatHandlers
     virtual ~ExpatHandlers();
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
     virtual void epend(ExpatUserData &eud, const char *name) = 0;
+    virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
 
 };
 

@@ -46,6 +46,9 @@
 // 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
 //   . IData refactoring
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added title and description tags
+//
 //===========================================================================
 
 #ifndef _IData_
@@ -80,6 +83,8 @@ class IData : public ExpatHandlers
 
   private:
 
+    string title;
+    string description;
     Params *params;
     Interests *interests;
     Ratings *ratings;
@@ -104,7 +109,9 @@ class IData : public ExpatHandlers
     IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
     ~IData();
 
-    /** gets methods */
+    /** get methods */
+    string & getTitle();
+    string & getDescription();
     Params & getParams() const;
     Interests & getInterests() const;
     Ratings & getRatings() const;
@@ -114,13 +121,14 @@ class IData : public ExpatHandlers
     CorrelationMatrix & getCorrelationMatrix() const;
     Segmentations & getSegmentations() const;
     Portfolio & getPortfolio() const;
-    /** gets methods */
+    /** set methods */
     void setSurvival(const Survival &);
     /** has methods */
     bool hasSurvival() const;
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
+    void epdata(ExpatUserData &eu, const char *name_, const char *data, int len);
 
 };
 

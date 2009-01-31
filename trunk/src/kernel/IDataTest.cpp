@@ -75,6 +75,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added title and description tags
+//
 //===========================================================================
 
 #include <iostream>
@@ -106,6 +109,8 @@ void ccruncher_test::IDataTest::test1()
   // simple creditcruncher XML
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <ccruncher>\n\
+    <title>set your title here</title>\n\
+    <description><![CDATA[set your description here]]></description>\n\
     <params>\n\
       <property name='time.begindate' value='18/02/2003'/>\n\
       <property name='time.steps' value='12'/>\n\
@@ -241,4 +246,6 @@ void ccruncher_test::IDataTest::test1()
   // borrower creation
   IData idata;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
+  ASSERT_EQUALS("set your title here", idata.getTitle());
+  ASSERT_EQUALS("set your description here", idata.getDescription());
 }

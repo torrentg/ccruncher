@@ -34,6 +34,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . modified method characterData (added current_tag variable)
+//
 //===========================================================================
 
 #ifndef _ExpatParser_
@@ -64,6 +67,9 @@ class ExpatParser
 
     /** user data */
     ExpatUserData userdata;
+
+    /** current tag (internal use) */
+    static const char *current_tag;
 
     /** startElement function catcher */
     static void startElement(void *ud, const char *name, const char **atts);

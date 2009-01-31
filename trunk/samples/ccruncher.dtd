@@ -1,17 +1,15 @@
 <!-- ============================================================== -->
-<!--                DTD CREDITCRUNCHER VERSION                      -->
+<!--                   CREDITCRUNCHER DTD                           -->
 <!-- ============================================================== -->
 
 <!--
-    if you desire debug your xml add these lines to main tag:
+    if you desire debug your xml add these lines just after xml declaration:
     <!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
 
     export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
     java dom.Writer -v sample01.xml
     java sax.Writer -v sample01.xml
 -->
-
-<!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
 
 <!-- .............................................................. -->
 <!--                       common stuff                             -->
@@ -28,9 +26,15 @@
 <!--                        creditcruncher                          -->
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
-    (params, interests, ratings, mtransitions, survival?, sectors,
-     mcorrels, segmentations, portfolio)
+    (title?, description?, params, interests, ratings, mtransitions, 
+     survival?, sectors, mcorrels, segmentations, portfolio)
 )>
+
+<!-- .............................................................. -->
+<!--                         descriptives                           -->
+<!-- .............................................................. -->
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
 
 <!-- .............................................................. -->
 <!--                           params                               -->

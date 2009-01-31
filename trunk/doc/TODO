@@ -6,8 +6,6 @@ Current works
 -------------------
   * functional test (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
-  * add optional tag 'title' in xml file input
-  * add optional tag 'description' in xml file input
   * remove time steps framework (src, xml param, samples, technical doc)
 
 Future works

@@ -1001,6 +1001,25 @@ B =
 \subsection{Monte Carlo simulation}
 
 \subsubsection{Random numbers generation}
+All required random numbers follows a $N(0,1)$ distribution. To obtain them
+we apply the Box-Muller algorithm exposed in appendix \ref{ap:normsim}. Every 
+time that we need a $N(0,1)$ random number, we do:
+
+\paragraph{Step 1.} We generate $2$ independent random numbers following 
+a $U[0,1]$ distribution.
+
+\begin{displaymath}
+u_1 = 0.72286 \quad , \quad u_2 = 0.38991
+\end{displaymath}
+
+\paragraph{Step 2.} We compute the $N(0,1)$ random number doing:
+
+\begin{displaymath}
+z = 
+\sqrt{-2 \cdot ln(0.72286)} \cdot cos(2 \pi \cdot 0.38991) =
+-0.62048
+\end{displaymath}
+
 
 \subsubsection{Copula simulation}
 
@@ -1028,10 +1047,11 @@ B =
 %TODO: fill this section. use samples/README
 
 \subsection{Non-identical correlated borrowers}
-%TODO: fill this section. use samples/READMEç
+%TODO: fill this section. use samples/README
 
 
 %===========================================================================
+\newpage
 \appendix
 \section{Appendices}
 
@@ -1043,7 +1063,7 @@ In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use the Box-Muller
 method:
 
 \begin{displaymath}
-z = \mu + \sigma\cdot \sqrt{-2 ln(u_1)} \cdot cos(2 \pi \cdot u_2)
+z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u_1)} \cdot cos(2 \pi \cdot u_2)
 \qquad u_1, u_2 \sim U[0,1]
 \end{displaymath}
 

@@ -68,6 +68,9 @@
 //   . removed check number of attributes in ccruncher tag to
 //     avoid errors when references to xsd are set.
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added title and description tags
+//
 //===========================================================================
 
 #include <fstream>
@@ -86,6 +89,8 @@ void ccruncher::IData::init()
    parse_portfolio = true;
    hasmaintag = false;
 
+   title = "";
+   description = "";
    params = NULL;
    interests = NULL;
    ratings = NULL;
@@ -187,8 +192,15 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     throw Exception("ccruncher tag expected but not found");
   }
 
+  // descriptive tags
+  if (isEqual(name_,"title")) {
+    // nothing to do (see epdata method)
+  }
+  else if (isEqual(name_,"description")) {
+    // nothing to do (see epdata method)
+  }
   // section params
-  if (isEqual(name_,"params")) {
+  else if (isEqual(name_,"params")) {
     if (params != NULL) {
       throw Exception("tag params repeated");
     }
@@ -322,10 +334,32 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
+void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
+{
+  if (isEqual(name_,"title")) {
+    title += string(data, len);
+  }
+  else if (isEqual(name_,"description")) {
+    description += string(data, len);
+  }
+  else {
+    ExpatHandlers::epdata(eu, name_, data, len);
+  }
+}
+
+//===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
 void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"ccruncher")) {
     validate();
+  }
+  else if (isEqual(name_,"title")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"description")) {
+    // nothing to do
   }
   else if (isEqual(name_,"params")) {
     // nothing to do
@@ -396,6 +430,22 @@ void ccruncher::IData::validate() throw(Exception)
 ccruncher::IData::~IData()
 {
   release();
+}
+
+//===========================================================================
+// getTitle
+//===========================================================================
+string & ccruncher::IData::getTitle() 
+{
+  return title;
+}
+
+//===========================================================================
+// getDescription
+//===========================================================================
+string & ccruncher::IData::getDescription() 
+{
+  return description;
 }
 
 //===========================================================================

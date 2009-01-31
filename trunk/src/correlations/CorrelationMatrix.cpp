@@ -54,6 +54,9 @@
 // 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed sector.order tag
 //
+// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+//   . reviewed 'out of range' condition
+//
 //===========================================================================
 
 #include <cmath>
@@ -132,7 +135,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   }
 
   // checking value
-  if (value <= -(1.0 - epsilon) || value >= (1.0 - epsilon))
+  if (value <= -(1.0+epsilon) || (1.0+epsilon) <= value )
   {
     string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
                  Format::double2string(value);
