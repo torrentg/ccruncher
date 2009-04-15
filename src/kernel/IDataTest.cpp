@@ -75,8 +75,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
-// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
+// 2009/02/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added title and description tags
+//   . changed from discrete to continuous time
 //
 //===========================================================================
 
@@ -112,9 +113,8 @@ void ccruncher_test::IDataTest::test1()
     <title>set your title here</title>\n\
     <description><![CDATA[set your description here]]></description>\n\
     <params>\n\
-      <property name='time.begindate' value='18/02/2003'/>\n\
-      <property name='time.steps' value='12'/>\n\
-      <property name='time.steplength' value='2'/>\n\
+      <property name='time.0' value='18/02/2003'/>\n\
+      <property name='time.T' value='18/02/2005'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
@@ -168,7 +168,7 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </mtransitions>\n\
-    <survival maxmonths='2500' epsilon='1e-12'>\n\
+    <survival epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.0'/>\n\
       <svalue rating='B' t='0' value='1.0'/>\n\
       <svalue rating='C' t='0' value='1.0'/>\n\

@@ -72,6 +72,9 @@
 // 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed dates management
 //
+// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -83,7 +86,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Params::Params() : dates(0)
+ccruncher::Params::Params()
 {
   init();
 }
@@ -93,9 +96,8 @@ ccruncher::Params::Params() : dates(0)
 //===========================================================================
 void ccruncher::Params::init()
 {
-  begindate = Date(1,1,1900);
-  steps = 0;
-  steplength = 0;
+  time0 = Date(1,1,1900);
+  timeT = Date(1,1,1900);
   maxiterations = -1L;
   maxseconds = -1L;
   copula_type = "";
@@ -138,26 +140,12 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 {
   if (isEqual(name,"params")) {
     validate();
-    setDates();
   }
   else if (isEqual(name,"property")) {
     // nothing to do
   }
   else {
     throw Exception("unexpected end tag " + string(name));
-  }
-}
-
-//===========================================================================
-// return Date array = begindate, begindate+steplength, bengindate+2*steplength
-//===========================================================================
-void ccruncher::Params::setDates()
-{
-  dates.clear();
-  dates.reserve(steps+1);
-  for (int i=0;i<=steps;i++)
-  {
-    dates.push_back(addMonths(begindate, i*steplength));
   }
 }
 
@@ -208,31 +196,22 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   // reading attribute name
   string name = getStringAttribute(attributes,"name", "");
 
-  if (name == "time.begindate")
+  if (name == "time.0")
   {
     Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
-    if (begindate != Date(1,1,1900) || aux == Date(1,1,1900)) {
+    if (time0 != Date(1,1,1900) || aux == Date(1,1,1900)) {
       throw Exception("invalid time.begintime");
     } else {
-      begindate = aux;
+      time0 = aux;
     }
   }
-  else if (name == "time.steps")
+  else if (name == "time.T")
   {
-    int aux = getIntAttribute(attributes, "value", 0);
-    if (steps != 0 || aux <= 0) {
-      throw Exception("invalid time.steps");
+    Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
+    if (timeT != Date(1,1,1900) || aux == Date(1,1,1900)) {
+      throw Exception("invalid time.begintime");
     } else {
-      steps = aux;
-    }
-  }
-  else if (name == "time.steplength")
-  {
-    int aux = getIntAttribute(attributes, "value", 0);
-    if (steplength != 0 || aux <= 0) {
-      throw Exception("invalid time.steplength");
-    } else {
-      steplength = aux;
+      timeT = aux;
     }
   }
   else if (name == "stopcriteria.maxiterations")
@@ -292,19 +271,23 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 void ccruncher::Params::validate(void) const throw(Exception)
 {
 
-  if (begindate == Date(1,1,1900))
+  if (time0 == Date(1,1,1900))
   {
-    throw Exception("property time.begindate not defined");
+    throw Exception("property time.0 not defined");
   }
 
-  if (steps <= 0)
+  if (timeT == Date(1,1,1900))
   {
-    throw Exception("property time.steps not defined");
+    throw Exception("property time.T not defined");
   }
 
-  if (steplength <= 0)
+  if (time0 >= timeT)
   {
-    throw Exception("property time.steplength not defined");
+    throw Exception("time.0 >= time.T");
+  }
+
+  if (timeT.getYear()-time0.getYear() > 101) {
+    throw Exception("more than 100 years between time0 and timeT");
   }
 
   if (maxiterations < 0L)
@@ -338,9 +321,8 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   string ret = "";
 
   ret += spc1 + "<params>\n";
-  ret += spc2 + "<property name='time.begindate' value='" + Format::date2string(begindate) + "'/>\n";
-  ret += spc2 + "<property name='time.steps' value='" + Format::int2string(steps) + "'/>\n";
-  ret += spc2 + "<property name='time.steplength' value='" + Format::int2string(steplength) + "'/>\n";
+  ret += spc2 + "<property name='time.0' value='" + Format::date2string(time0) + "'/>\n";
+  ret += spc2 + "<property name='time.T' value='" + Format::date2string(timeT) + "'/>\n";
   ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::long2string(maxiterations) + "'/>\n";
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::long2string(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";

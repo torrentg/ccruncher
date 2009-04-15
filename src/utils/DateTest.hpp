@@ -37,6 +37,9 @@
 // 2005/12/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added tests related to getDayOfWeek()
 //
+// 07/02/2009 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added tests related to getMonthsTo()
+//
 //===========================================================================
 
 #ifndef _DateTest_
@@ -66,6 +69,7 @@ class DateTest : public TestFixture<DateTest>
     void test_misc(void);
     void test_comparators(void);
     void test_dayofweek(void);
+    void test_distances(void);
 
   public:
 
@@ -78,6 +82,7 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_misc);
       TEST_CASE(test_comparators);
       TEST_CASE(test_dayofweek);
+      TEST_CASE(test_distances);
     }
 
     void setUp();

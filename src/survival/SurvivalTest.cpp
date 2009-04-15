@@ -46,6 +46,9 @@
 // 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . removed rating.order tag
 //
+// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed maxmonths attribute
+//
 //===========================================================================
 
 #include "survival/Survival.hpp"
@@ -56,7 +59,7 @@
 
 //---------------------------------------------------------------------------
 
-#define EPSILON 1E-14
+#define EPSILON 1E-6
 
 //===========================================================================
 // setUp
@@ -99,15 +102,15 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 void ccruncher_test::SurvivalTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival maxmonths='7' epsilon='1e-12'>\n\
+    <survival epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
       <svalue rating='A' t='5' value='0.10'/>\n\
       <!-- optionally you can add default rating info (value=0 always) -->\n\
     </survival>";
-  double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
+  double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
+  double ivalues[] = { (double)INT_MAX, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
 
   // creating xml
   ExpatParser xmlparser;
@@ -120,17 +123,17 @@ void ccruncher_test::SurvivalTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values
-  for(int i=0;i<9;i++)
+  for(int i=0;i<7;i++)
   {
-    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
+    ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0, i), EPSILON);
     ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
   }
 
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
+    ASSERT_EQUALS_EPSILON(ivalues[i], sf.inverse(0, i/10.0), EPSILON);
+    ASSERT_EQUALS_EPSILON(0.0, sf.inverse(1, i/10.0), EPSILON);
   }
 }
 
@@ -141,7 +144,7 @@ void ccruncher_test::SurvivalTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival maxmonths='7' epsilon='1e-12'>\n\
+    <survival epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='0.98'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
@@ -166,7 +169,7 @@ void ccruncher_test::SurvivalTest::test3()
 {
   // non valid survival function, non monotone
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival maxmonths='7' epsilon='1e-12'>\n\
+    <survival epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.75'/>\n\
@@ -191,7 +194,7 @@ void ccruncher_test::SurvivalTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival maxmonths='7' epsilon='1e-12'>\n\
+    <survival epsilon='1e-12'>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='-0.50'/>\n\
       <svalue rating='A' t='3' value='-0.75'/>\n\
@@ -218,17 +221,17 @@ void ccruncher_test::SurvivalTest::test5()
   double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
   double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 1, 2, 3, 4, 5};
-  double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 0.05, 0.00, 0.00};
-  int ivalues[] = { 7, 5, 4, 3, 3, 2, 2, 2, 1, 1, 0};
+  double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
+  double ivalues[] = { (double)INT_MAX, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues, 7);
+  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues);
 
   // checking values
-  for(int i=0;i<9;i++)
+  for(int i=0;i<7;i++)
   {
     ASSERT_EQUALS_EPSILON(svalues[i], sf.evalue(0,i), EPSILON);
     ASSERT_EQUALS_EPSILON(sf.evalue(1, i), 0.0, EPSILON)
@@ -237,8 +240,8 @@ void ccruncher_test::SurvivalTest::test5()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-    ASSERT_EQUALS(ivalues[i], sf.inverse(0,i/10.0));
-    ASSERT_EQUALS(0, sf.inverse(1, i/10.0));
+    ASSERT_EQUALS_EPSILON(ivalues[i], sf.inverse(0, i/10.0), EPSILON);
+    ASSERT_EQUALS_EPSILON(0.0, sf.inverse(1, i/10.0), EPSILON);
   }
 }
 
@@ -258,7 +261,7 @@ void ccruncher_test::SurvivalTest::test6()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues, 48);
+  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues);
 
   // creating Id matrix 2x2
   id[0][0] = 1.0;

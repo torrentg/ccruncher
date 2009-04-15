@@ -46,6 +46,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _Borrower_
@@ -85,11 +88,13 @@ class Borrower : public ExpatHandlers
     const Sectors *sectors;
     Segmentations *segmentations;
     const Interests *interests;
-    const vector<Date> *dates;
+    Date date1;
+    Date date2;
     Asset auxasset;
 
     void insertAsset(Asset &) throw(Exception);
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
+
 
   public:
 
@@ -99,7 +104,7 @@ class Borrower : public ExpatHandlers
     string name;
     unsigned long hkey;
 
-    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
+    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interests &, const Date &d1, const Date &d2);
     ~Borrower();
 
     vector<Asset> & getAssets();
@@ -110,7 +115,6 @@ class Borrower : public ExpatHandlers
     int getSegment(int isegmentation);
 
     static bool less(const Borrower *left, const Borrower *right);
-    void reset(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

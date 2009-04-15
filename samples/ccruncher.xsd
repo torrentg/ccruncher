@@ -104,7 +104,6 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="maxmonths" type="xsd:positiveInteger" use="required"/>
 					<xsd:attribute name="epsilon" type="xsd:double" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
@@ -208,9 +207,8 @@
 
 	<xsd:simpleType name="propertyType">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="time.begindate"/>
-			<xsd:enumeration value="time.steps"/>
-			<xsd:enumeration value="time.steplength"/>
+			<xsd:enumeration value="time.0"/>
+			<xsd:enumeration value="time.T"/>
 			<xsd:enumeration value="stopcriteria.maxiterations"/>
 			<xsd:enumeration value="stopcriteria.maxseconds"/>
 			<xsd:enumeration value="copula.type"/>

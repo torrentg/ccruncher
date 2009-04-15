@@ -43,6 +43,9 @@
 // 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed dates management
 //
+// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _Params_
@@ -76,18 +79,14 @@ class Params : public ExpatHandlers
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
     // validate object content
     void validate(void) const throw(Exception);
-    // set dates values using begindate + steps x steplength
-    void setDates();
 
 
   public:
 
-    // time.begindate param value
-    Date begindate;
-    // time.steps param value
-    int steps;
-    // time.steplength param value
-    int steplength;
+    // time.0 param value
+    Date time0;
+    // time.T param value
+    Date timeT;
     // stopcriteria.maxiterations param value
     long maxiterations;
     // stopcriteria.maxseconds param value
@@ -100,16 +99,12 @@ class Params : public ExpatHandlers
     bool antithetic;
     // portfolio.onlyActiveClients param value
     bool onlyactive;
-    // time nodes
-    vector<Date> dates;
 
     // constructor
     Params();
     // destructor
     ~Params();
 
-    // return array with dates
-    vector<Date>& getDates() const throw(Exception);
     // returns copula type as string (gaussian or t)
     string getCopulaType() const throw(Exception);
     // returns copula param (if exists)

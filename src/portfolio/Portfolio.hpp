@@ -40,6 +40,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _Portfolio_
@@ -77,17 +80,18 @@ class Portfolio : public ExpatHandlers
     const Sectors *sectors;
     Segmentations *segmentations;
     const Interests *interests;
+    Date date1;
+    Date date2;
     Borrower *auxborrower;
-    const vector<Date> *dates;
 
     void insertBorrower(Borrower &) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
-    void reset(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
+
 
   public:
 
-    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interests &, const vector<Date> &);
+    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interests &, const Date &date1, const Date &date2);
     ~Portfolio();
 
     vector<Borrower *> &getBorrowers();

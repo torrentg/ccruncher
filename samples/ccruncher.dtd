@@ -108,7 +108,6 @@
     svalue+
 )>
 <!ATTLIST survival
-    maxmonths CDATA #REQUIRED
     epsilon CDATA #REQUIRED
 >
 

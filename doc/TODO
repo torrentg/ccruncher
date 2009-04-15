@@ -6,11 +6,9 @@ Current works
 -------------------
   * functional test (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
-  * remove time steps framework (src, xml param, samples, technical doc)
 
 Future works
 -------------------
-  * considere to remove time steps
   * allow stochastic recovery (eg. beta distribution)
   * graphic interface
 

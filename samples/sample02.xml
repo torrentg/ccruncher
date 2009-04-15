@@ -14,9 +14,8 @@
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
   <params>
-    <property name="time.begindate" value="18/02/2003"/>
-    <property name="time.steps" value="12"/>
-    <property name="time.steplength" value="2"/>
+    <property name="time.0" value="18/02/2003"/>
+    <property name="time.T" value="18/02/2005"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="gaussian"/>
@@ -139,7 +138,7 @@
   <!--                    SURVIVAL FUNCTION                           -->
   <!-- ============================================================== -->
 <!--
-  <survival maxmonths="2500" epsilon="1e-12">
+  <survival epsilon="1e-12">
 
     <svalue rating="AAA" t="0" value="1"/>
     <svalue rating="AAA" t="12" value="1"/>

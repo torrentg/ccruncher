@@ -49,6 +49,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include <cmath>
@@ -61,10 +64,17 @@
 //===========================================================================
 ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
              Segmentations &segmentations_, const Interests &interests_, 
-             const vector<Date> &dates_)
+             const Date &date1_, const Date &date2_)
 {
-  // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_, dates_);
+  auxborrower = NULL;
+  vborrowers.clear();
+  // setting external objects
+  ratings = &ratings_;
+  sectors = &sectors_;
+  segmentations = &segmentations_;
+  interests = &interests_;
+  date1 = date1_;
+  date2 = date2_;
 }
 
 //===========================================================================
@@ -77,31 +87,6 @@ ccruncher::Portfolio::~Portfolio()
   {
     delete vborrowers[i];
   }
-}
-
-//===========================================================================
-// reset
-//===========================================================================
-void ccruncher::Portfolio::reset(const Ratings &ratings_, const Sectors &sectors_,
-             Segmentations &segmentations_, const Interests &interests_, 
-             const vector<Date> &dates_)
-{
-  auxborrower = NULL;
-
-  // setting external objects
-  ratings = &ratings_;
-  sectors = &sectors_;
-  segmentations = &segmentations_;
-  interests = &interests_;
-  dates = &dates_;
-
-  // dropping borrowers
-  for(unsigned int i=0;i<vborrowers.size();i++) {
-    delete vborrowers[i];
-  }
-
-  // flushing borrowers
-  vborrowers.clear();
 }
 
 //===========================================================================
@@ -157,7 +142,6 @@ void ccruncher::Portfolio::insertBorrower(Borrower &val) throw(Exception)
         }
       }
     }
-
   }
 
   try
@@ -193,7 +177,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     }
   }
   else if (isEqual(name_,"borrower")) {
-    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests, *dates);
+    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests, date1, date2);
     eppush(eu, auxborrower, name_, attributes);
   }
   else {

@@ -65,6 +65,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include "portfolio/Asset.hpp"
@@ -327,42 +330,20 @@ void ccruncher_test::AssetTest::test5()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  vector<Date> dates;
-  dates.push_back(Date("1/1/2004"));
-  dates.push_back(Date("1/7/2004"));
-  dates.push_back(Date("1/1/2005"));
-  dates.push_back(Date("1/7/2005"));
-  dates.push_back(Date("1/1/2006"));
-  dates.push_back(Date("1/7/2006"));
-  dates.push_back(Date("1/1/2007"));
-  dates.push_back(Date("1/7/2007"));
-  dates.push_back(Date("1/1/2008"));
-  dates.push_back(Date("1/7/2008"));
-  dates.push_back(Date("1/1/2009"));
-  dates.push_back(Date("1/7/2009"));
-  dates.push_back(Date("1/1/2010"));
-  dates.push_back(Date("1/7/2010"));
-  dates.push_back(Date("1/1/2011"));
-  dates.push_back(Date("1/7/2011"));
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/7/2011");
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
 
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
-
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(2), EPSILON);
-  ASSERT_EQUALS_EPSILON(1845.3, asset.getLoss(3), EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(4), EPSILON);
-  ASSERT_EQUALS_EPSILON(1538.67, asset.getLoss(5), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(6), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(7), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(8), EPSILON);
-  ASSERT_EQUALS_EPSILON(1269.23, asset.getLoss(9), EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(10), EPSILON);
-  ASSERT_EQUALS_EPSILON(788.674, asset.getLoss(11), EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(12), EPSILON);
-  ASSERT_EQUALS_EPSILON(58.011, asset.getLoss(13), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(14), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(15), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getLoss(Date("15/01/2006")), EPSILON);
+  ASSERT_EQUALS_EPSILON(4000.0, asset.getLoss(Date("15/01/2007")), EPSILON);
+  ASSERT_EQUALS_EPSILON(3000.0, asset.getLoss(Date("15/01/2008")), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(Date("15/01/2009")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("15/01/2011")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2020")), EPSILON);
 }
 
 //===========================================================================
@@ -394,42 +375,21 @@ void ccruncher_test::AssetTest::test6()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  vector<Date> dates;
-  dates.push_back(Date("1/1/2004"));
-  dates.push_back(Date("1/7/2004"));
-  dates.push_back(Date("1/1/2005"));
-  dates.push_back(Date("1/7/2005"));
-  dates.push_back(Date("1/1/2006"));
-  dates.push_back(Date("1/7/2006"));
-  dates.push_back(Date("1/1/2007"));
-  dates.push_back(Date("1/7/2007"));
-  dates.push_back(Date("1/1/2008"));
-  dates.push_back(Date("1/7/2008"));
-  dates.push_back(Date("1/1/2009"));
-  dates.push_back(Date("1/7/2009"));
-  dates.push_back(Date("1/1/2010"));
-  dates.push_back(Date("1/7/2010"));
-  dates.push_back(Date("1/1/2011"));
-  dates.push_back(Date("1/7/2011"));
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/7/2011");
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
 
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
-
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(2), EPSILON);
-  ASSERT_EQUALS_EPSILON(1845.3, asset.getLoss(3), EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(4), EPSILON);
-  ASSERT_EQUALS_EPSILON(1538.67, asset.getLoss(5), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(6), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(7), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(8), EPSILON);
-  ASSERT_EQUALS_EPSILON(1269.23, asset.getLoss(9), EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(10), EPSILON);
-  ASSERT_EQUALS_EPSILON(788.674, asset.getLoss(11), EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(12), EPSILON);
-  ASSERT_EQUALS_EPSILON(188.398, asset.getLoss(13), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(14), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(15), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getLoss(Date("15/01/2006")), EPSILON);
+  ASSERT_EQUALS_EPSILON(4000.0, asset.getLoss(Date("15/01/2007")), EPSILON);
+  ASSERT_EQUALS_EPSILON(3000.0, asset.getLoss(Date("15/01/2008")), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(Date("15/01/2009")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(500.0, asset.getLoss(Date("15/03/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("15/01/2011")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2020")), EPSILON);
 }
 
 //===========================================================================
@@ -460,20 +420,20 @@ void ccruncher_test::AssetTest::test7()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  vector<Date> dates;
-  dates.push_back(Date("1/1/2004"));
-  dates.push_back(Date("1/1/2006"));
-  dates.push_back(Date("1/1/2008"));
-  dates.push_back(Date("1/1/2010"));
-  dates.push_back(Date("1/1/2012"));
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/1/2012");
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
 
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
-
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
-  ASSERT_EQUALS_EPSILON(960.328, asset.getLoss(1), EPSILON);
-  ASSERT_EQUALS_EPSILON(1509.59, asset.getLoss(2), EPSILON);
-  ASSERT_EQUALS_EPSILON(1014.71, asset.getLoss(3), EPSILON);
-  ASSERT_EQUALS_EPSILON(14.3836, asset.getLoss(4), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getLoss(Date("15/01/2006")), EPSILON);
+  ASSERT_EQUALS_EPSILON(4000.0, asset.getLoss(Date("15/01/2007")), EPSILON);
+  ASSERT_EQUALS_EPSILON(3000.0, asset.getLoss(Date("15/01/2008")), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(Date("15/01/2009")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("15/01/2011")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2020")), EPSILON);
 }
 
 //===========================================================================
@@ -504,26 +464,20 @@ void ccruncher_test::AssetTest::test8()
   Asset asset(segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
-  vector<Date> dates;
-  dates.push_back(Date("15/1/2004"));
-  dates.push_back(Date("15/1/2005"));
-  dates.push_back(Date("15/1/2006"));
-  dates.push_back(Date("15/1/2007"));
-  dates.push_back(Date("15/1/2008"));
-  dates.push_back(Date("15/1/2009"));
-  dates.push_back(Date("15/1/2010"));
-  dates.push_back(Date("15/1/2011"));
+  Date time0 = Date("15/1/2004");
+  Date timeT = Date("15/1/2011");
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
 
-  ASSERT_NO_THROW(asset.precomputeLosses(dates, interests));
-
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(0), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(1), EPSILON);
-  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(2), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(3), EPSILON);
-  ASSERT_EQUALS_EPSILON(1500.0, asset.getLoss(4), EPSILON);
-  ASSERT_EQUALS_EPSILON(1250.0, asset.getLoss(5), EPSILON);
-  ASSERT_EQUALS_EPSILON(750.0, asset.getLoss(6), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(7), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2005")), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getLoss(Date("15/01/2006")), EPSILON);
+  ASSERT_EQUALS_EPSILON(4000.0, asset.getLoss(Date("15/01/2007")), EPSILON);
+  ASSERT_EQUALS_EPSILON(3000.0, asset.getLoss(Date("15/01/2008")), EPSILON);
+  ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(Date("15/01/2009")), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("15/01/2011")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2020")), EPSILON);
 }
 
 //===========================================================================
@@ -539,51 +493,52 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT(asset->belongsTo(6, 1)); // office-0001
 
   vector <DateValues> &data = asset->getData();
-  ASSERT_EQUALS(8, (int) data.size()); // num events + asset creation date
+  ASSERT_EQUALS(7, (int) data.size()); // num events
 
-  ASSERT(Date("01/01/1999") == data[0].date); // creation asset event
-  ASSERT_EQUALS_EPSILON(+0.0, data[0].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(+0.0, data[0].recovery, EPSILON);
+  ASSERT(Date("01/01/2000") == data[0].date);
+  ASSERT_EQUALS_EPSILON(+10.0 , data[0].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+450.0, data[0].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2000") == data[1].date);
+  ASSERT(Date("01/07/2000") == data[1].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[1].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+450.0, data[1].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2000") == data[2].date);
+  ASSERT(Date("01/01/2001") == data[2].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[2].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+450.0, data[2].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2001") == data[3].date);
+  ASSERT(Date("01/07/2001") == data[3].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[3].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+450.0, data[3].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2001") == data[4].date);
+  ASSERT(Date("01/01/2002") == data[4].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[4].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+450.0, data[4].recovery, EPSILON);
 
-  ASSERT(Date("01/01/2002") == data[5].date);
-  ASSERT_EQUALS_EPSILON(+10.0 , data[5].cashflow, EPSILON);
+  ASSERT(Date("01/07/2002") == data[5].date);
+  ASSERT_EQUALS_EPSILON(+510.0, data[5].cashflow, EPSILON);
   ASSERT_EQUALS_EPSILON(+450.0, data[5].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2002") == data[6].date);
-  ASSERT_EQUALS_EPSILON(+510.0, data[6].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(+450.0, data[6].recovery, EPSILON);
+  ASSERT(Date("01/07/2020") == data[6].date);
+  ASSERT_EQUALS_EPSILON(+10.0, data[6].cashflow, EPSILON);
+  ASSERT_EQUALS_EPSILON(+3.0, data[6].recovery, EPSILON);
 
-  ASSERT(Date("01/07/2020") == data[7].date);
-  ASSERT_EQUALS_EPSILON(+10.0, data[7].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(+3.0, data[7].recovery, EPSILON);
+  Date time0 = Date("1/1/1999");
+  Date timeT = Date("1/1/2010");
+  ASSERT_NO_THROW(asset->precomputeLosses(time0, timeT, interests));
 
-  vector<Date> dates;
-  dates.push_back(Date("1/1/1999"));
-  dates.push_back(Date("1/1/2000"));
-  dates.push_back(Date("1/6/2002"));
-  dates.push_back(Date("1/1/2010"));
-
-  ASSERT_NO_THROW(asset->precomputeLosses(dates, interests));
-
-  ASSERT_EQUALS_EPSILON(0.0, asset->getLoss(0), EPSILON);
-  ASSERT_EQUALS_EPSILON(120.0, asset->getLoss(1), EPSILON);
-  ASSERT_EQUALS_EPSILON(90.681, asset->getLoss(2), EPSILON);
-  ASSERT_EQUALS_EPSILON(7.68206, asset->getLoss(3), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset->getLoss(Date("01/01/1995")), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset->getLoss(Date("01/01/1999")), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset->getLoss(Date("31/12/1999")), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset->getLoss(Date("01/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset->getLoss(Date("02/01/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset->getLoss(Date("01/07/2000")), EPSILON);
+  ASSERT_EQUALS_EPSILON(550.0, asset->getLoss(Date("01/01/2001")), EPSILON);
+  ASSERT_EQUALS_EPSILON(540.0, asset->getLoss(Date("01/07/2001")), EPSILON);
+  ASSERT_EQUALS_EPSILON(530.0, asset->getLoss(Date("01/01/2002")), EPSILON);
+  ASSERT_EQUALS_EPSILON(520.0, asset->getLoss(Date("01/07/2002")), EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset->getLoss(Date("01/01/2003")), EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset->getLoss(Date("01/01/2010")), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset->getLoss(Date("01/07/2010")), EPSILON);
 }
 

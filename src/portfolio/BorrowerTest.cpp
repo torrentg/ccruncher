@@ -60,6 +60,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/10 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include "portfolio/Borrower.hpp"
@@ -212,21 +215,6 @@ Interests ccruncher_test::BorrowerTest::getInterests()
 }
 
 //===========================================================================
-// getDates
-//===========================================================================
-vector<Date> ccruncher_test::BorrowerTest::getDates()
-{
-  vector<Date> ret;
-  ret.push_back(Date("01/01/2000"));
-  ret.push_back(Date("01/01/2001"));
-  ret.push_back(Date("01/01/2002"));
-  ret.push_back(Date("01/01/2003"));
-  ret.push_back(Date("01/01/2004"));
-  ret.push_back(Date("01/01/2005"));
-  return ret;
-}
-
-//===========================================================================
 // test1
 //===========================================================================
 void ccruncher_test::BorrowerTest::test1()
@@ -270,8 +258,7 @@ void ccruncher_test::BorrowerTest::test1()
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests = getInterests();
-  vector<Date> dates = getDates();
-  Borrower borrower(ratings, sectors, segmentations, interests, dates);
+  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
 
@@ -330,8 +317,7 @@ void ccruncher_test::BorrowerTest::test2()
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests = getInterests();
-  vector<Date> dates = getDates();
-  Borrower borrower(ratings, sectors, segmentations, interests, dates);
+  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }
 
@@ -373,7 +359,6 @@ void ccruncher_test::BorrowerTest::test3()
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interests interests = getInterests();
-  vector<Date> dates = getDates();
-  Borrower borrower(ratings, sectors, segmentations, interests, dates);
+  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }
