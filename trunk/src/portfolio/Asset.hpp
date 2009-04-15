@@ -52,6 +52,9 @@
 //   . getLosses function reviewed
 //   . added precomputeLosses function
 //
+// 2009/02/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _Asset_
@@ -97,17 +100,15 @@ class Asset : public ExpatHandlers
     vector<DateValues> data;
     // pointer to segmentations list
     Segmentations *segmentations;
-    // precomputed losses at time nodes
+    // precomputed times at event dates
+    vector<Date> ptimes;
+    // precomputed losses at event dates
     vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
 
-    // returns data index by right, -1 if don't exist
-    int getRightIdx(Date d);
     // returns cashflow sum from given date
     double getCashflowSum(Date d, const Interest &);
-    // precompute loss at d2
-    double precomputeLoss(const Date d1, const Date d2, const Interest &spot);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation
@@ -130,10 +131,10 @@ class Asset : public ExpatHandlers
     string getName(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // precompute losses at given dates
-    void precomputeLosses(const vector<Date> &dates, const Interests &interests);
+    // precompute losses
+    void precomputeLosses(const Date &d1, const Date &d2, const Interests &interests);
     // returns precomputed loss at requested time node index
-    double getLoss(int k);
+    double getLoss(const Date &at);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment

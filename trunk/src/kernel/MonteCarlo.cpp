@@ -124,6 +124,9 @@
 //   . changed from SegmentAggregator to Aggregator
 //   . added t-Student copula generator
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include <cfloat>
@@ -166,8 +169,6 @@ void ccruncher::MonteCarlo::reset()
 {
   MAXSECONDS = 0L;
   MAXITERATIONS = 0L;
-  STEPS = 0;
-  STEPLENGTH = 0;
   N = 0L;
   CONT = 0L;
   antithetic = false;
@@ -183,9 +184,8 @@ void ccruncher::MonteCarlo::reset()
 
   copula = NULL;
   survival = NULL;
-  ittd = NULL;
+  ttd = NULL;
 
-  blplosses = false;
   blcopulas = false;
   bldeftime = false;
 
@@ -203,9 +203,9 @@ void ccruncher::MonteCarlo::release()
   // survival fuction object deallocated by IData (its container)
 
   // deallocating workspace array
-  if (ittd != NULL) {
-    Arrays<int>::deallocVector(ittd);
-    ittd = NULL;
+  if (ttd != NULL) {
+    Arrays<Date>::deallocVector(ttd);
+    ttd = NULL;
   }
 
   // dropping aggregators elements
@@ -300,18 +300,11 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
   Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
   // printing initial date
-  Logger::trace("initial date", Format::date2string(idata.getParams().begindate));
-  // fixing step number
-  STEPS = idata.getParams().steps;
-  Logger::trace("number of time steps", Format::int2string(STEPS));
-
-  // fixing steplength
-  STEPLENGTH = idata.getParams().steplength;
-  Logger::trace("length of each time step (in months)", Format::int2string(STEPLENGTH));
-
-  // fixing time-tranches
-  begindate = idata.getParams().begindate;
-  dates = idata.getParams().dates;
+  time0 = idata.getParams().time0;
+  Logger::trace("initial date", Format::date2string(time0));
+  // printing end date
+  timeT = idata.getParams().timeT;
+  Logger::trace("end date", Format::date2string(timeT));
 
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
@@ -339,12 +332,13 @@ void ccruncher::MonteCarlo::initBorrowers(const IData &idata) throw(Exception)
   Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
 
   // sorting borrowers by sector and rating
-  idata.getPortfolio().sortBorrowers(dates[0], dates[STEPS], idata.getParams().onlyactive);
+  bool onlyactive = idata.getParams().onlyactive;
+  idata.getPortfolio().sortBorrowers(time0, timeT, onlyactive);
 
   // fixing number of borrowers
   if (idata.getParams().onlyactive)
   {
-    N = idata.getPortfolio().getNumActiveBorrowers(dates[0], dates[STEPS]);
+    N = idata.getPortfolio().getNumActiveBorrowers(time0, timeT);
   }
   else
   {
@@ -423,10 +417,12 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
 
   if (idata.hasSurvival())
   {
-    // checking that survival function is defined for t <= STEPS*STEPLENGTH
-    if (idata.getSurvival().getMinCommonTime() < STEPS*STEPLENGTH)
+    // checking that survival function is defined for t <= timeT
+    int months = idata.getSurvival().getMinCommonTime();
+    Date aux = addMonths(time0, months);
+    if (aux < timeT)
     {
-      throw Exception("survival function not defined at t=" + Format::int2string(STEPS*STEPLENGTH));
+      throw Exception("survival function not defined at t=" + Format::date2string(timeT));
     }
 
     // setting survival function
@@ -441,15 +437,16 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     Logger::trace("transition matrix period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
-    double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), STEPS+1);
-    ccruncher::survival(idata.getTransitionMatrix(), STEPLENGTH, STEPS+1, aux);
-    int *itime = Arrays<int>::allocVector(STEPS+1);
-    for (int i=0;i<=STEPS;i++) {
-      itime[i] = i*STEPLENGTH;
+    int months = (int) ceil(time0.getMonthsTo(timeT));
+    double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), months+1);
+    ccruncher::survival(idata.getTransitionMatrix(), 1, months+1, aux);
+    int *itime = Arrays<int>::allocVector(months+1);
+    for (int i=0;i<=months;i++) {
+      itime[i] = i;
     }
 
     // creating survival function object
-    survival = new Survival(idata.getRatings(), STEPS+1, itime, aux, 2*(STEPS+1)*STEPLENGTH);
+    survival = new Survival(idata.getRatings(), months+1, itime, aux);
     Arrays<double>::deallocMatrix(aux, idata.getTransitionMatrix().size());
     Arrays<int>::deallocVector(itime);
     Logger::trace("transition matrix -> survival function", string("computed"));
@@ -584,10 +581,10 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
 void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 {
   // doing assertions
-  assert(ittd == NULL);
+  assert(ttd == NULL);
 
   // allocating space
-  ittd = Arrays<int>::allocVector(n);
+  ttd = Arrays<Date>::allocVector(n);
 }
 
 //===========================================================================
@@ -614,7 +611,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
   for(int i=0;i<segmentations.size();i++)
   {
     string filename = File::normalizePath(fpath) + segmentations[i].name + ".csv";
-    Aggregator *aggregator = new Aggregator(aggregators.size(), segmentations[i], *borrowers, N, dates.size());
+    Aggregator *aggregator = new Aggregator(aggregators.size(), segmentations[i], *borrowers, N);
     aggregator->setOutputProperties(filename, bforce);
     aggregators.push_back(aggregator);
   }
@@ -911,19 +908,13 @@ void ccruncher::MonteCarlo::simulate()
   // simulates default times
   for (long i=0; i<N; i++) 
   {
-    ittd[i] = simTimeToDefault(i);
+    ttd[i] = simTimeToDefault(i);
   }
 
   // trace default times
   if (bldeftime) 
   {
-    printDefaultTimes(ittd);
-  }
-
-  // maps default times to time nodes
-  for(long i=0; i<N; i++) 
-  {
-    ittd[i] = std::max(1, int(ceil(double(ittd[i])/double(STEPLENGTH))));
+    printDefaultTimes(ttd);
   }
 }
 
@@ -953,7 +944,7 @@ double ccruncher::MonteCarlo::getRandom(int iborrower)
 //===========================================================================
 // given a borrower, simule time to default
 //===========================================================================
-int ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
+Date ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
 {
   // rating at t0 is initial rating
   int r1 = (*borrowers)[iborrower]->irating;
@@ -961,9 +952,12 @@ int ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
   // getting random number U[0,1] (correlated with rest of borrowers...)
   double u = getRandom(iborrower);
 
-  // simulate month where this borrower defaults
-  int month = survival->inverse(r1, u);
-  return month;
+  // simulate time where this borrower defaults (in months)
+  double t = survival->inverse(r1, u);
+
+  // return simulated default date
+  // TODO: assumed no leap years (this can be improved)
+  return time0 + (long)(t*365.0/12.0);
 }
 
 //===========================================================================
@@ -979,7 +973,7 @@ bool ccruncher::MonteCarlo::evalue() throw(Exception)
   // adding current simulation to each aggregator
   for(unsigned int i=0;i<aggregators.size();i++)
   {
-    if (aggregators[i]->append(ittd) == false)
+    if (aggregators[i]->append(ttd) == false)
     {
       ret = false;
     }
@@ -1010,9 +1004,8 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
 //===========================================================================
 // setAdditionalOutput
 //===========================================================================
-void ccruncher::MonteCarlo::setAdditionalOutput(bool losses, bool copulas, bool deftimes)
+void ccruncher::MonteCarlo::setAdditionalOutput(bool copulas, bool deftimes)
 {
-  blplosses = losses;
   blcopulas = copulas;
   bldeftime = deftimes;
 }
@@ -1026,43 +1019,6 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
   assert(fpath != "" && fpath != "path not set"); 
   string dirpath = File::normalizePath(fpath);
   
-  // creates precomputed losses file
-  if (blplosses)
-  {
-    string filename = dirpath + "plosses.xml";
-    try
-    {
-      ofstream fout;
-      fout.open(filename.c_str(), ios::out|ios::trunc);
-      fout.setf(ios::fixed);
-      fout.setf(ios::showpoint);
-      fout.precision(2);
-
-      fout << "<ccruncher-plosses>" << endl;
-      for(long i=0;i<N;i++)
-      {
-        fout << "  <borrower id=\"" << (*borrowers)[i]->id << "\">" << endl;
-        vector<Asset> &assets = (*borrowers)[i]->getAssets();
-        for(unsigned int j=0;j<assets.size();j++)
-        {
-          fout << "    <asset id=\"" << assets[j].getId() << "\">" << endl;
-          for(int k=0; k<STEPS+1; k++)
-          {
-            fout << "      <loss at=\"" << dates[k] << "\" value=\"" << assets[j].getLoss(k) << "\"/>" << endl;
-          }
-          fout << "    </asset>" << endl;
-        }
-        fout << "  </borrower>" << endl;
-      }
-      fout << "</ccruncher-plosses>" << endl;
-      fout.close();
-    }
-    catch(...)
-    {
-      throw Exception("error writing file " + filename);
-    }
-  }
-
   // initializes copula values file
   if (blcopulas)
   {
@@ -1120,7 +1076,7 @@ void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 //===========================================================================
 // printDefaultTimes
 //===========================================================================
-void ccruncher::MonteCarlo::printDefaultTimes(int *values) throw(Exception)
+void ccruncher::MonteCarlo::printDefaultTimes(Date *values) throw(Exception)
 {
 #ifndef USE_MPI
   for(long i=0; i<N; i++) 

@@ -47,6 +47,9 @@
 //   . code set in ccruncher form
 //   . added required ccruncher methods and operators
 //
+// 07/02/2009 - Gerard Torrent
+//   . added method getMonthsTo()
+//
 //===========================================================================
 
 #include <ctime>
@@ -525,6 +528,24 @@ bool ccruncher::Date::valid(int d, int m, int y)
   else
   {
     return true;
+  }
+}
+
+//===========================================================================
+// returns the number of months between this date and d
+// fractional part are the remaining days / 30
+//===========================================================================
+double ccruncher::Date::getMonthsTo(Date &d)
+{
+  if (d < *this) {
+    return -d.getMonthsTo(*this);
+  }
+  else {
+    double ret = 0.0;
+    ret += 12.0 * (d.getYear() - getYear());
+    ret += 1.0 * (d.getMonth() - getMonth());
+    ret += (d.getDay() - getDay()) / 30.0;
+    return ret;
   }
 }
 

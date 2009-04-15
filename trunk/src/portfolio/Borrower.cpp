@@ -66,6 +66,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include "portfolio/Borrower.hpp"
@@ -77,33 +80,15 @@
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interests &interests_,
-               const vector<Date> &dates_) : auxasset(segmentations_)
-{
-  // initializing class
-  reset(ratings_, sectors_, segmentations_, interests_, dates_);
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Borrower::~Borrower()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// reset
-//===========================================================================
-void ccruncher::Borrower::reset(const Ratings &ratings_, const Sectors &sectors_,
-               Segmentations &segmentations_, const Interests &interests_,
-               const vector<Date> &dates_)
+               const Date &d1, const Date &d2) : auxasset(segmentations_)
 {
   // setting external objects references
   ratings = &(ratings_);
   sectors = &(sectors_);
   segmentations = &(segmentations_);
   interests = &(interests_);
-  dates = &(dates_);
+  date1 = d1;
+  date2 = d2;
   hkey = 0UL;
 
   // cleaning containers
@@ -115,6 +100,14 @@ void ccruncher::Borrower::reset(const Ratings &ratings_, const Sectors &sectors_
   isector = -1;
   id = "NON_ID";
   name = "NO_NAME";
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+ccruncher::Borrower::~Borrower()
+{
+  // nothing to do
 }
 
 //===========================================================================
@@ -143,7 +136,7 @@ void ccruncher::Borrower::insertAsset(Asset &val) throw(Exception)
 
   try
   {
-    val.precomputeLosses(*dates, *interests);
+    val.precomputeLosses(date1, date2, *interests);
     val.deleteData();
     vassets.push_back(val);
   }
@@ -262,18 +255,18 @@ bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Excep
 {
   for(unsigned int i=0;i<vassets.size();i++)
   {
-    Date date1 = vassets[i].getMinDate();
-    Date date2 = vassets[i].getMaxDate();
+    Date dmin = vassets[i].getMinDate();
+    Date dmax = vassets[i].getMaxDate();
 
-    if (from <= date1 && date1 <= to)
+    if (from <= dmin && dmin <= to)
     {
       return true;
     }
-    else if (from <= date2 && date2 <= to)
+    else if (from <= dmax && dmax <= to)
     {
       return true;
     }
-    else if (date1 <= from && to <= date2)
+    else if (dmin <= from && to <= dmax)
     {
       return true;
     }

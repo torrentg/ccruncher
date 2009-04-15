@@ -71,6 +71,9 @@
 //   . added optional bulk of simulated default to file
 //   . changed from SegmentAggregator to Aggregator
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _MonteCarlo_
@@ -112,27 +115,23 @@ class MonteCarlo
     long MAXITERATIONS;
     /** maximum execution time */
     long MAXSECONDS;
-    /** number of time steps */
-    int STEPS;
-    /** step length */
-    int STEPLENGTH;
     /** number of borrowers (taking into account onlyActiveBorrowers flag) */
     long N;
     /** iterations counter */
     long CONT;
     /** initial date */
-    Date begindate;
-    /* antithetic technologie for simetric copulas */
+    Date time0;
+    /** date where risk is computed */
+    Date timeT;
+    /* antithetic method flag */
     bool antithetic;
 
     /** transition matrix (size = 1) (used by rating-path method, canbe used by time-to-default method) */
     Survival *survival;
     /** copula used to simulate correlations */
     Copula *copula;
-    /** date per time tranch (size = M) */
-    vector<Date> dates;
     /** simulated time-to-default per borrower (size = N) */
-    int *ittd;
+    Date *ttd;
 
     /* management flag for antithetic method (default=false) */
     bool reversed;
@@ -142,8 +141,6 @@ class MonteCarlo
     string fpath;
     /* force file overwriting flag */
     bool bforce;
-    /* list precomputed asset losses flag */
-    bool blplosses;
     /* list simulated copula values flag */
     bool blcopulas;
     /* list simulated default times */
@@ -174,7 +171,7 @@ class MonteCarlo
     void randomize();
     void simulate();
     bool evalue() throw(Exception);
-    int simTimeToDefault(int iborrower);
+    Date simTimeToDefault(int iborrower);
     double getRandom(int iborrower);
     long executeWorker() throw(Exception);
     long executeCollector() throw(Exception);
@@ -182,7 +179,7 @@ class MonteCarlo
     // trace methods
     void initAdditionalOutput() throw(Exception);
     void printCopulaValues() throw(Exception);
-    void printDefaultTimes(int *) throw(Exception);
+    void printDefaultTimes(Date *) throw(Exception);
 
     // auxiliary methods
     double** getBorrowerCorrelationMatrix(const IData &);
@@ -197,7 +194,7 @@ class MonteCarlo
     void setHash(int num);
     void initialize(IData &, bool only_validation=false) throw(Exception);
     long execute() throw(Exception);
-    void setAdditionalOutput(bool losses, bool copulas, bool deftimes);
+    void setAdditionalOutput(bool copulas, bool deftimes);
 
 };
 

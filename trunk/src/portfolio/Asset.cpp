@@ -70,6 +70,9 @@
 //   . getLosses function reviewed
 //   . added precomputeLosses function
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include <cmath>
@@ -82,7 +85,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations &segs) : plosses(0)
+ccruncher::Asset::Asset(Segmentations &segs) : ptimes(0) , plosses(0)
 {
   reset((Segmentations *) &segs);
 }
@@ -109,6 +112,8 @@ void ccruncher::Asset::reset(Segmentations *segs)
   mindate = Date(1,1,1);
   maxdate = Date(1,1,1);
   hkey = 0UL;
+  plosses.clear();
+  ptimes.clear();
 }
 
 //===========================================================================
@@ -125,40 +130,6 @@ string ccruncher::Asset::getId(void) const
 string ccruncher::Asset::getName(void) const
 {
   return name;
-}
-
-//===========================================================================
-// getRightIdx
-//===========================================================================
-int ccruncher::Asset::getRightIdx(Date d)
-{
-  int n = (int) data.size();
-
-  if (n == 0)
-  {
-    return -1;
-  }
-
-  if (d <= data[0].date)
-  {
-    return 0;
-  }
-
-  if (data[n-1].date < d)
-  {
-    return -1;
-  }
-
-  for(int i=0; i<n; i++)
-  {
-    if (d <= data[i].date) 
-    {
-      return i;
-    }
-  }
-
-  assert(false);
-  return -1;
 }
 
 //===========================================================================
@@ -188,78 +159,82 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
 }
 
 //===========================================================================
-// precomputeLoss
-// precompute loss at time node d2 (d1 is the previous time node)
-//===========================================================================
-double ccruncher::Asset::precomputeLoss(const Date d1, const Date d2, const Interest &spot)
-{
-  double ret = 0.0;
-  double ufactor, tfactor, csum, recv;
-  Date prevdate = d1;
-
-  if (d2 < mindate) return 0.0;
-  if (d1 < mindate) prevdate = mindate;
-  int idx1 = getRightIdx(prevdate);
-  if (idx1 == -1) return 0.0;
-  int idx2 = getRightIdx(d2);
-  if (idx2 == -1) idx2 = data.size()-1;
-
-  for (int i=idx1; i<=idx2; i++)
-  {
-    if (data[i].date <= d2) 
-    {
-      ufactor = spot.getUpsilon(data[i].date, d2);
-      tfactor = (double)(data[i].date-prevdate)/(double)(d2-d1);
-      csum = getCashflowSum(data[i].date, spot);
-      recv = data[i].recovery;
-      ret += ufactor * (csum - recv) * tfactor;
-    }
-    else
-    {
-      tfactor = (double)(d2-prevdate)/(double)(d2-d1);
-      csum = getCashflowSum(d2, spot);
-      recv = data[i].recovery * spot.getUpsilon(data[i].date, d2);
-      ret += (csum - recv) * tfactor;
-    }
-    prevdate = data[i].date;
-  }
-
-  return ret;
-}
-
-//===========================================================================
 // precomputeLosses
-// caution: is assumed that dates is sorted
 //===========================================================================
-void ccruncher::Asset::precomputeLosses(const vector<Date> &dates, const Interests &interests)
+void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interests &interests)
 {
   Interest &spot = ((Interests&)interests)["spot"];
 
-  // allocating & initializing memory
-  plosses.clear();
-  plosses.reserve(dates.size());
-  plosses.insert(plosses.begin(), dates.size(), 0.0);
-
-  // computing losses at given time nodes (array dates)
-  for (unsigned int i=0;i<dates.size();i++)
+  // counting ptimes-plosses size
+  bool hasd2 = false;
+  int num = 0;
+  for (int i=0; i<(int)data.size(); i++) 
   {
-    plosses[i] = precomputeLoss((i==0?Date(1,1,1):dates[i-1]), dates[i], spot);
+    if (d1 <= data[i].date && data[i].date <= d2) 
+    {
+      num++;
+    }
+    if (data[i].date == d2) 
+    {
+      hasd2 = true;
+    }
   }
+  if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
+  {
+    num++;
+  }
+
+  // allocating & initializing memory
+  ptimes.clear();
+  plosses.clear();
+  ptimes.reserve(num);
+  plosses.reserve(num);
+
+  // precomputing losses (d1 <= t <= d2)
+  int cont = 0;
+  for (int i=0; i<(int)data.size(); i++) 
+  {
+    if (d1 <= data[i].date && data[i].date <= d2) 
+    {
+      ptimes.push_back(data[i].date);
+      plosses.push_back(getCashflowSum(data[i].date, spot));
+      cont++;
+    }
+  }
+  if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
+  {
+      ptimes.push_back(d2);
+      plosses.push_back(getCashflowSum(d2, spot));
+      cont++;    
+  }
+  assert(num == cont);
 }
 
 //===========================================================================
 // getLoss
 //===========================================================================
-double ccruncher::Asset::getLoss(int k)
+double ccruncher::Asset::getLoss(const Date &at)
 {
-  if (k < 0 || (int) plosses.size()-1 < k)
+  if (at < mindate || maxdate < at || ptimes.size()==0)
   {
-    return NAN;
+    return 0.0;
+  }
+  if (ptimes[ptimes.size()-1] < at)
+  {
+    return 0.0;
   }
   else 
   {
-    return plosses[k];
+    for(int i=0; i<ptimes.size(); i++) 
+    {
+      if (at <= ptimes[i]) 
+      {
+        //TODO: multiply by time-factor (add Interest ref?)
+        return plosses[i];
+      }
+    }
   }
+  assert(false);
 }
 
 //===========================================================================
@@ -333,20 +308,9 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     if (data.size() == 0) {
       throw Exception("asset without data");
     }
-    else {
-      try 
-      { 
-        // adding creation date as an event
-        DateValues event0(mindate, 0.0, 0.0);
-        insertDateValues(event0);
-      }
-      catch(...) 
-      {
-        // no problem, creation date exist
-      }
-      // sorting data by date
-      sort(data.begin(), data.end());
-    }
+
+    // sorting events by date
+    sort(data.begin(), data.end());
 
     // filling implicit segment
     try

@@ -34,6 +34,10 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/02/14 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed maxmonths attribute
+//   . inverse() returns double
+//
 //===========================================================================
 
 #ifndef _Survival_
@@ -61,12 +65,10 @@ class Survival : public ExpatHandlers
 
   private:
 
-    // maximum number of months where survival function > 0
-    int maxmonths;
     // survival function for each rating
     vector<double> *ddata;
     // inverse survival function values
-    int **idata;
+    double **idata;
     // number of ratings
     int nratings;
     // pointer to ratings table
@@ -87,7 +89,7 @@ class Survival : public ExpatHandlers
     // linear interpolation algorithm
     double interpole(double x, double x0, double y0, double x1, double y1) const;
     // inverse function
-    int inverse1(const int irating, double val) const;
+    double inverse1(const int irating, double val) const;
 
 
   public:
@@ -95,15 +97,15 @@ class Survival : public ExpatHandlers
     // constructor
     Survival(const Ratings &) throw(Exception);
     // constructor
-    Survival(const Ratings &, int, int *, double**, int) throw(Exception);
+    Survival(const Ratings &, int, int *, double**) throw(Exception);
     // destructor
     ~Survival();
 
     // evalue survival for irating at t
     double evalue(const int irating, int t) const;
     // evalue inverse survival for irating at t
-    int inverse(const int irating, double val) const;
-    // return minimal defined time
+    double inverse(const int irating, double val) const;
+    // return minimal defined time (in months)
     int getMinCommonTime() const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);

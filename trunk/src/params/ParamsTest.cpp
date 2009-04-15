@@ -53,6 +53,9 @@
 // 2008/12/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added t-student copula type
 //
+// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include "params/Params.hpp"
@@ -82,9 +85,8 @@ void ccruncher_test::ParamsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <params>\n\
-      <property name='time.begindate' value='18/02/2003'/>\n\
-      <property name='time.steps' value='12'/>\n\
-      <property name='time.steplength' value='2'/>\n\
+      <property name='time.0' value='18/02/2003'/>\n\
+      <property name='time.T' value='18/02/2008'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
@@ -92,48 +94,30 @@ void ccruncher_test::ParamsTest::test1()
       <property name='montecarlo.antithetic' value='true'/>\n\
     </params>";
 
-  // creating xml
   ExpatParser xmlparser;
-
-  // ratings list creation
   Params params;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
-  ASSERT(Date("18/02/2003") == params.begindate);
-  ASSERT(12 == params.steps);
-  ASSERT(2 == params.steplength);
+  ASSERT(Date("18/02/2003") == params.time0);
+  ASSERT(Date("18/02/2008") == params.timeT);
   ASSERT(3000 == params.maxiterations);
   ASSERT(30000000 == params.maxseconds);
   ASSERT("gaussian" == params.copula_type);
   ASSERT("gaussian" == params.getCopulaType());
   ASSERT(38765874L == params.copula_seed);
   ASSERT(true == params.antithetic);
-
-  ASSERT(Date("18/02/2003") == params.dates[0]);
-  ASSERT(Date("18/04/2003") == params.dates[1]);
-  ASSERT(Date("18/06/2003") == params.dates[2]);
-  ASSERT(Date("18/08/2003") == params.dates[3]);
-  ASSERT(Date("18/10/2003") == params.dates[4]);
-  ASSERT(Date("18/12/2003") == params.dates[5]);
-  ASSERT(Date("18/02/2004") == params.dates[6]);
-  ASSERT(Date("18/04/2004") == params.dates[7]);
-  ASSERT(Date("18/06/2004") == params.dates[8]);
-  ASSERT(Date("18/08/2004") == params.dates[9]);
-  ASSERT(Date("18/10/2004") == params.dates[10]);
-  ASSERT(Date("18/12/2004") == params.dates[11]);
-  ASSERT(Date("18/02/2005") == params.dates[12]);
 }
 
 //===========================================================================
 // test2
+// error: time.T < time.0
 //===========================================================================
 void ccruncher_test::ParamsTest::test2()
 {
-  // error: steplength not given
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <params>\n\
-      <property name='time.begindate' value='18/02/2003'/>\n\
-      <property name='time.steps' value='12'/>\n\
+      <property name='time.0' value='18/02/2003'/>\n\
+      <property name='time.T' value='21/03/2001'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
@@ -141,10 +125,7 @@ void ccruncher_test::ParamsTest::test2()
       <property name='montecarlo.antithetic' value='true'/>\n\
     </params>";
 
-  // creating xml
   ExpatParser xmlparser;
-
-  // ratings list creation
   Params params;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
 }
@@ -157,9 +138,8 @@ void ccruncher_test::ParamsTest::test3()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <params>\n\
-      <property name='time.begindate' value='18/02/2003'/>\n\
-      <property name='time.steps' value='12'/>\n\
-      <property name='time.steplength' value='2'/>\n\
+      <property name='time.0' value='18/02/2003'/>\n\
+      <property name='time.T' value='12/08/2010'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='t(3)'/>\n\
@@ -167,10 +147,7 @@ void ccruncher_test::ParamsTest::test3()
       <property name='montecarlo.antithetic' value='true'/>\n\
     </params>";
 
-  // creating xml
   ExpatParser xmlparser;
-
-  // ratings list creation
   Params params;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 

@@ -47,6 +47,9 @@
 //   . code set in ccruncher form
 //   . added required ccruncher methods and operators
 //
+// 07/02/2009 - Gerard Torrent
+//   . added method getMonthsTo()
+//
 //===========================================================================
 
 #ifndef _Date_
@@ -102,6 +105,7 @@ class Date
     bool isLeapYear( void ) const;
     void YMD( int *pY, int *pM, int *pD ) const;
     time_t ToSysTime( void ) const;
+    double getMonthsTo(Date& d);
 
     Date& operator=( const Date& Orig );
     friend Date operator+( const Date& Left, const long Right );

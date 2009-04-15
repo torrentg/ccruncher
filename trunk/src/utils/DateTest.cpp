@@ -40,11 +40,18 @@
 // 2007/08/01 - Gerard Torrent [gerard@mail.generacio.com]
 //   . adapted to new Date class
 //
+// 07/02/2009 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added tests related to getMonthsTo()
+//
 //===========================================================================
 
 #include <string>
 #include "utils/Date.hpp"
 #include "utils/DateTest.hpp"
+
+//---------------------------------------------------------------------------
+
+#define EPSILON 1E-14
 
 //===========================================================================
 // setUp
@@ -217,5 +224,26 @@ void ccruncher_test::DateTest::test_dayofweek(void)
   ASSERT(date4.getDayOfWeek() == 4);
   ASSERT(date5.getDayOfWeek() == 5);
   ASSERT(date6.getDayOfWeek() == 6);
+}
+
+//===========================================================================
+// test_distances
+//===========================================================================
+void ccruncher_test::DateTest::test_distances(void)
+{
+  Date date0 = Date( 1, 1,2010);
+  Date date1 = Date( 2, 1,2010);
+  Date date2 = Date( 1, 2,2010);
+  Date date3 = Date(28, 2,2010);
+  Date date4 = Date(31,12,2010);
+  Date date5 = Date( 1, 1,2011);
+  Date date6 = Date(15, 1,2010);
+
+  ASSERT_EQUALS_EPSILON(      1.0/30.0, date0.getMonthsTo(date1), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0           , date0.getMonthsTo(date2), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0 +27.0/30.0, date0.getMonthsTo(date3), EPSILON);
+  ASSERT_EQUALS_EPSILON(11.0+30.0/30.0, date0.getMonthsTo(date4), EPSILON);
+  ASSERT_EQUALS_EPSILON(12.0          , date0.getMonthsTo(date5), EPSILON);
+  ASSERT_EQUALS_EPSILON(     14.0/30.0, date0.getMonthsTo(date6), EPSILON);
 }
 

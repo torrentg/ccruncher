@@ -321,7 +321,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       Logger::trace("parsing portfolio", true);
-      portfolio = new Portfolio(*ratings, *sectors, *segmentations, *interests, params->dates);
+      portfolio = new Portfolio(*ratings, *sectors, *segmentations, *interests, params->time0, params->timeT);
       eppush(eu, portfolio, name_, attributes);
     }
   }

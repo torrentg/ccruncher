@@ -25,6 +25,9 @@
 // 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _Aggregator_
@@ -69,8 +72,6 @@ class Aggregator
     long numborrowers;
     // number of segments
     long numsegments;
-    // maximum index time node
-    int maxitime;
     // number of simulations
     long cont;
     // buffer counter
@@ -88,19 +89,19 @@ class Aggregator
 
     // internal functions
     bool hasRestSegment();
-    void append1(int *defaulttimes);
-    void append2(int *defaulttimes);
+    void append1(Date *defaulttimes);
+    void append2(Date *defaulttimes);
 
 
   public:
 
     // constructors & destructors
-    Aggregator(int, Segmentation&, vector<Borrower *> &, long, int);
+    Aggregator(int, Segmentation&, vector<Borrower *> &, long);
     ~Aggregator();
 
     // other methods
     void setOutputProperties(const string &filename, bool force) throw(Exception);
-    bool append(int *defaulttimes) throw(Exception);
+    bool append(Date *defaulttimes) throw(Exception);
     long appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);
     long getBufferSize();

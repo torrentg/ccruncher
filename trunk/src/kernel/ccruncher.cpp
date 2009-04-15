@@ -76,6 +76,9 @@
 //   . added lcopula and ldeftime options
 //   . bugfix: output data directory creation
 //
+// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
+//   . removed lplosses option
+//
 //===========================================================================
 
 #include "utils/config.h"
@@ -117,7 +120,6 @@ bool bforce = false;
 int inice = -999;
 int ihash = 0;
 #ifndef USE_MPI
-bool blplosses = false;
 bool blcopulas = false;
 bool bldeftime = false;
 #endif
@@ -140,9 +142,8 @@ int main(int argc, char *argv[])
       { "hash",         1,  NULL,  304 },
       { "validate",     0,  NULL,  305 },
 #ifndef USE_MPI
-      { "lplosses",     0,  NULL,  306 },
-      { "lcopulas",     0,  NULL,  307 },
-      { "ldeftime",     0,  NULL,  308 },
+      { "lcopulas",     0,  NULL,  306 },
+      { "ldeftime",     0,  NULL,  307 },
 #endif
       { NULL,           0,  NULL,   0  }
   };
@@ -232,15 +233,11 @@ int main(int argc, char *argv[])
           break;
 
 #ifndef USE_MPI
-      case 306: // --lplosses (list precomputed asset losses at time nodes)
-          blplosses = true;
-          break;
-
-      case 307: // --lcopulas (list copula values)
+      case 306: // --lcopulas (list copula values)
           blcopulas = true;
           break;
 
-      case 308: // --ldeftime (list default times)
+      case 307: // --ldeftime (list default times)
           bldeftime = true;
           break;
 #endif
@@ -402,7 +399,7 @@ void run(string filename, string path) throw(Exception)
   simul.setFilePath(path, bforce);
   simul.setHash(ihash);
 #ifndef USE_MPI
-  simul.setAdditionalOutput(blplosses, blcopulas, bldeftime);
+  simul.setAdditionalOutput(blcopulas, bldeftime);
 #endif
 
   // initializing simulation
@@ -488,9 +485,6 @@ void usage()
   "    --hash=num  print '.' for each num simulations (default=0)\n"
   "    --validate  validates input file and exits\n"
 #ifndef USE_MPI
-  "    --lplosses  list precomputed assets losses at time nodes\n"
-  "                for depuration and validation purposes only.\n"
-  "                create the file plosses.xml\n"
   "    --lcopulas  list simulated copula values\n"
   "                for depuration and validation purposes only.\n"
   "                use with care. time and disk consuming option.\n"
@@ -511,7 +505,7 @@ void usage()
   "    ccruncher -fv --hash=100 --path=data/ samples/test01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/ samples/test100.xml.gz\n"
 #ifndef USE_MPI
-  "    ccruncher -fv --hash=100 --lplosses --ldeftime --path=data/ samples/test04.xml\n"
+  "    ccruncher -fv --hash=100 --ldeftime --path=data/ samples/test04.xml\n"
 #endif
   << endl;
 }
@@ -522,7 +516,7 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "   ccruncher is Copyright (C) 2003-2008 Gerard Torrent and licensed\n"
+  "   ccruncher is Copyright (C) 2003-2009 Gerard Torrent and licensed\n"
   "     under the GNU General Public License, version 2. more info at\n"
   "               http://www.generacio.com/ccruncher\n"
   << endl;

@@ -25,6 +25,9 @@
 // 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release based on SegmentAggregator.cpp
 //
+// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #include <cmath>
@@ -42,7 +45,7 @@
 // void constructor
 //===========================================================================
 ccruncher::Aggregator::Aggregator(int id, Segmentation &segmentation_, 
-  vector<Borrower *> &borrowers_, long n, int m) : segmentation(segmentation_), 
+  vector<Borrower *> &borrowers_, long n) : segmentation(segmentation_), 
   borrowers(borrowers_)
 {
   assert(id >= 0);
@@ -50,8 +53,6 @@ ccruncher::Aggregator::Aggregator(int id, Segmentation &segmentation_,
   assert(n >= 0);
   numborrowers = n;
   numsegments = segmentation.size();
-  assert(m > 0);
-  maxitime = m;
   printRestSegment = hasRestSegment();
 
   bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
@@ -83,12 +84,13 @@ ccruncher::Aggregator::~Aggregator()
 // append
 // input vector has length numborrowers with the index time (in months) where borrower defaults
 //===========================================================================
-bool ccruncher::Aggregator::append(int *defaulttimes) throw(Exception)
+bool ccruncher::Aggregator::append(Date *defaulttimes) throw(Exception)
 {
   assert(defaulttimes != NULL);
 
   if (segmentation.components == borrower)
   {
+    assert(segmentation.components == borrower);
     append1(defaulttimes);
   }
   else 
@@ -112,7 +114,7 @@ bool ccruncher::Aggregator::append(int *defaulttimes) throw(Exception)
 // append1
 // when segmentation components are borrowers
 //===========================================================================
-void ccruncher::Aggregator::append1(int *defaulttimes)
+void ccruncher::Aggregator::append1(Date *defaulttimes)
 {
   // initializing values
   int isegmentation = segmentation.order;
@@ -127,27 +129,22 @@ void ccruncher::Aggregator::append1(int *defaulttimes)
     Borrower *borrower = borrowers[i];
     int isegment = borrower->getSegment(isegmentation);
     vector<Asset> &assets = borrower->getAssets();
-    int k = defaulttimes[i];
-    assert(k > 0);
-    if (k < maxitime)
+    for(unsigned int j=0; j<assets.size(); j++) 
     {
-      for(unsigned int j=0; j<assets.size(); j++) 
-      {
-        CVALUES(isegment,icont) += assets[j].getLoss(k);
-      }
+      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i]);
     }
   }
 
   // incrementing counters
   icont++;
-  cont++;  
+  cont++;
 }
 
 //===========================================================================
 // append2
 // when segmentation components are borrowers
 //===========================================================================
-void ccruncher::Aggregator::append2(int *defaulttimes)
+void ccruncher::Aggregator::append2(Date *defaulttimes)
 {
   // initializing values
   int isegmentation = segmentation.order;
@@ -160,21 +157,16 @@ void ccruncher::Aggregator::append2(int *defaulttimes)
   {
     Borrower *borrower = borrowers[i];
     vector<Asset> &assets = borrower->getAssets();
-    int k = defaulttimes[i];
-    assert(k > 0);
-    if (k < maxitime)
+    for(unsigned int j=0; j<assets.size(); j++) 
     {
-      for(unsigned int j=0; j<assets.size(); j++) 
-      {
-        int isegment = assets[j].getSegment(isegmentation);
-        CVALUES(isegment,icont) += assets[j].getLoss(k);
-      }
+      int isegment = assets[j].getSegment(isegmentation);
+      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i]);
     }
   }
 
   // incrementing counters
   icont++;
-  cont++;  
+  cont++;
 }
 
 //===========================================================================

@@ -37,6 +37,9 @@
 // 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
 //   . Client class renamed to Borrower
 //
+// 2009/02/10 - Gerard Torrent [gerard@mail.generacio.com]
+//   . changed from discrete time to continuous time
+//
 //===========================================================================
 
 #ifndef _BorrowerTest_
@@ -69,7 +72,6 @@ class BorrowerTest : public TestFixture<BorrowerTest>
     Sectors getSectors();
     Segmentations getSegmentations();
     Interests getInterests();
-    vector<Date> getDates();
 
     void test1(void);
     void test2(void);

@@ -7,6 +7,7 @@ version 1.4 (???. 2009)
   * improved technical document
   * add optional tag 'title' in xml file input
   * add optional tag 'description' in xml file input
+  * changed from discrete time to continuous time
 
 version 1.3 (Dec. 2008)
 --------------------------
