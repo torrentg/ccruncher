@@ -25,6 +25,9 @@
 // 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
+// 2009/04/25 - Gerard Torrent [gerard@mail.generacio.com]
+//   . added 'undef SEEK_' because MPICH conflicts with stdio
+//
 //===========================================================================
 
 #ifndef _ccmpi_
@@ -36,6 +39,9 @@
 
 #ifdef USE_MPI
 
+#undef SEEK_SET
+#undef SEEK_END
+#undef SEEK_CUR
 #include <mpi.h>
 #define MPI_VAL_WORK 1025   // work tag (see task variable)
 #define MPI_VAL_STOP 1026   // stop tag (see task variable)
