@@ -130,8 +130,8 @@ if test x$mpi = xtrue ; then
   AC_CHECK_HEADERS(mpi.h,,
     [AC_MSG_ERROR([cannot find mpi headers]) ])
   AC_DEFINE([USE_MPI], 1, [Add parallel instructions to code.])
-  AC_SUBST([CXX], [mpic++])
-  AC_SUBST([CXXLD], [mpic++])
+  AC_SUBST([CXX], [mpicxx])
+  AC_SUBST([CXXLD], [mpicxx])
 else
   AC_SUBST([CXXLD], ['$(CXX)'])
 fi
