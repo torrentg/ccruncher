@@ -12,7 +12,7 @@
 #   R, xsltproc
 #
 # input:
-#   ccruncher output data files (*.out)
+#   ccruncher output data files (*.csv)
 #
 # output:
 #   mean, stddev, VaR results
@@ -103,8 +103,8 @@ usage() {
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname portfolio.out
-    $progname *.out
+    $progname portfolio.csv
+    $progname *.csv
 
 _EOF_
 

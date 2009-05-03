@@ -4,11 +4,15 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * functional test (kolmogorov-Smirnof tests, etc.)
+  * functional tests (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
 
 Future works
 -------------------
+  * in MPI code: do that master sends params to slaves (avoid that slaves access to disk)
+  * multi-thread execution implementation
   * allow stochastic recovery (eg. beta distribution)
   * graphic interface
+  * add pure-risk assets like bank-guarantee
+  * borrower-borrower dependences
 

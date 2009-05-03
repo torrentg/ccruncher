@@ -63,15 +63,15 @@
 # > source("bin/ccreport.R")                                 #load this R script
 # > x <- ccruncher.read("sectors.csv")                       #load ccruncher data
 # > names(x)                                                 #segment names
-# > x[[2]]                                                   #list second column
-# > ccruncher.risk(x[[2]])                                   #computes risk
-# > ccruncher.plot(x[[2]], show="pdf")                       #plots a graphic
-# > ccruncher.plot(x[[2]], show="cdf")                       #plots a graphic
-# > ccruncher.plot(x[[2]], alpha=0.95, show="mean")          #plots a graphic
-# > ccruncher.plot(x[[2]], alpha=0.95, show="stddev")        #plots a graphic
-# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="ES")  #plots a graphic
-# > ccruncher.plot(x[[2]], alpha=0.95, var=0.99, show="all") #plots a graphic
+# > x[[1]]                                                   #list first column
+# > ccruncher.risk(x[[1]])                                   #computes risk
+# > ccruncher.plot(x[[1]], show="pdf")                       #plots a graphic
+# > ccruncher.plot(x[[1]], show="cdf")                       #plots a graphic
+# > ccruncher.plot(x[[1]], alpha=0.95, show="mean")          #plots a graphic
+# > ccruncher.plot(x[[1]], alpha=0.95, show="stddev")        #plots a graphic
+# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="VaR") #plots a graphic
+# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="ES")  #plots a graphic
+# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="all") #plots a graphic
 #
 #===========================================================================
 

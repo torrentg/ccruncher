@@ -194,7 +194,6 @@ void ccruncher::BlockTStudentCopula::randNm()
 //===========================================================================
 // randCs
 // simulates a chi-square with ndf degrees of freedom
-// fills chisim variable with sqrtt(chi-sqr/ndf)
 //===========================================================================
 void ccruncher::BlockTStudentCopula::randCs()
 {
@@ -205,18 +204,20 @@ void ccruncher::BlockTStudentCopula::randCs()
     x = mtrand.randNorm();
     chisim += x*x;
   }
-  //TODO: check divide-by-0
-  chisim = sqrt(double(ndf)/chisim);
 
-  // see Abramowitz and Stegun (pag 948)
-  if (ndf > 2) {
-    chisim *= sqrt((ndf-2.0)/double(ndf));
+  //avoid division by 0
+  if (chisim < 1e-14) 
+  {
+    chisim = 1e-14;
   }
+
+  //returns inverse of chi-square weighted by ndf
+  chisim = sqrt((double)(ndf)/chisim);
 }
 
 //===========================================================================
 // Compute a copula. Put in aux1 a random vector where each marginal follows
-// a U[0,1] related by a normal copula
+// a U[0,1] related by a t-student copula
 //===========================================================================
 void ccruncher::BlockTStudentCopula::next()
 {

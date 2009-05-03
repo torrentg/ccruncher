@@ -210,6 +210,11 @@ void ccruncher_test::BlockGaussianCopulaTest::test6()
 
 //===========================================================================
 // generate a 2-D histogram
+// can be viewed with gnuplot using:
+//  > set pm3d map
+//  > set dgrid3d 100,100
+//  > set hidden3d
+//  > splot "file.dat" using 1:2:3
 //===========================================================================
 void ccruncher_test::BlockGaussianCopulaTest::computeDensity(BlockGaussianCopula &copula)
 {

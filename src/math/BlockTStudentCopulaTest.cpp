@@ -36,7 +36,7 @@
 //---------------------------------------------------------------------------
 
 #define NITERS 100000
-#define EPSILON  0.01
+#define EPSILON  0.03
 #define NBINS 100
 #define ndf 3
 
@@ -207,6 +207,11 @@ void ccruncher_test::BlockTStudentCopulaTest::test6()
 
 //===========================================================================
 // generate a 2-D histogram
+// can be viewed with gnuplot using:
+//  > set pm3d map
+//  > set dgrid3d 100,100
+//  > set hidden3d
+//  > splot "file.dat" using 1:2:3
 //===========================================================================
 void ccruncher_test::BlockTStudentCopulaTest::computeDensity(BlockTStudentCopula &copula)
 {
