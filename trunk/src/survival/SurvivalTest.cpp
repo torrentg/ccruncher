@@ -110,7 +110,7 @@ void ccruncher_test::SurvivalTest::test1()
       <!-- optionally you can add default rating info (value=0 always) -->\n\
     </survival>";
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
-  double ivalues[] = { (double)INT_MAX, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
+  double ivalues[] = { 17.0, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
 
   // creating xml
   ExpatParser xmlparser;
@@ -132,6 +132,7 @@ void ccruncher_test::SurvivalTest::test1()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
+//cout << "isf(0," << (i/10.0) << ") = " << sf.inverse(0, i/10.0) << endl;
     ASSERT_EQUALS_EPSILON(ivalues[i], sf.inverse(0, i/10.0), EPSILON);
     ASSERT_EQUALS_EPSILON(0.0, sf.inverse(1, i/10.0), EPSILON);
   }
@@ -222,7 +223,7 @@ void ccruncher_test::SurvivalTest::test5()
   double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 1, 2, 3, 4, 5};
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
-  double ivalues[] = { (double)INT_MAX, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
+  double ivalues[] = { 17.0, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
 
   // ratings list creation
   Ratings ratings = getRatings();
