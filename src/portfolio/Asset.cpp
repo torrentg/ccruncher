@@ -134,8 +134,9 @@ string ccruncher::Asset::getName(void) const
 
 //===========================================================================
 // getCashflowSum
+// t0: date where cashflow is computed its actual value
 //===========================================================================
-double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
+double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
 {
   double ufactor;
   int n = (int) data.size();
@@ -150,7 +151,7 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot)
   {
     if (d <= data[i].date)
     {
-      ufactor =  spot.getUpsilon(data[i].date, d);
+      ufactor =  spot.getUpsilon(data[i].date, c);
       ret += ufactor * data[i].cashflow;
     }
   }
@@ -197,14 +198,14 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
       ptimes.push_back(data[i].date);
-      plosses.push_back(getCashflowSum(data[i].date, spot));
+      plosses.push_back(getCashflowSum(data[i].date, spot, d1));
       cont++;
     }
   }
   if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
   {
       ptimes.push_back(d2);
-      plosses.push_back(getCashflowSum(d2, spot));
+      plosses.push_back(getCashflowSum(d2, spot, d1));
       cont++;    
   }
   assert(num == cont);
@@ -229,7 +230,6 @@ double ccruncher::Asset::getLoss(const Date &at)
     {
       if (at <= ptimes[i]) 
       {
-        //TODO: multiply by time-factor (add Interest ref?)
         return plosses[i];
       }
     }

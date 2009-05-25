@@ -108,7 +108,7 @@ class Asset : public ExpatHandlers
     bool have_data;
 
     // returns cashflow sum from given date
-    double getCashflowSum(Date d, const Interest &);
+    double getCashflowSum(Date d, const Interest &, Date c);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation
