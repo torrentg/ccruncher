@@ -132,7 +132,6 @@ void ccruncher_test::SurvivalTest::test1()
   // checking inverse values
   for(int i=0;i<=10;i++)
   {
-//cout << "isf(0," << (i/10.0) << ") = " << sf.inverse(0, i/10.0) << endl;
     ASSERT_EQUALS_EPSILON(ivalues[i], sf.inverse(0, i/10.0), EPSILON);
     ASSERT_EQUALS_EPSILON(0.0, sf.inverse(1, i/10.0), EPSILON);
   }
