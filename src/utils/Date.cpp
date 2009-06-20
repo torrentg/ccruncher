@@ -52,6 +52,7 @@
 //
 //===========================================================================
 
+#include <cstdio>
 #include <ctime>
 #include <vector>
 #include "utils/Date.hpp"
