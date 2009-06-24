@@ -107,6 +107,8 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
 
+    // returns recovery at given date
+    double getRecovery(Date d, const Interest &, Date c);
     // returns cashflow sum from given date
     double getCashflowSum(Date d, const Interest &, Date c);
     // insert a cashflow value

@@ -87,15 +87,14 @@ ccruncher::Aggregator::~Aggregator()
 bool ccruncher::Aggregator::append(Date *defaulttimes) throw(Exception)
 {
   assert(defaulttimes != NULL);
+  assert(segmentation.components==borrower || segmentation.components==asset);
 
   if (segmentation.components == borrower)
   {
-    assert(segmentation.components == borrower);
     append1(defaulttimes);
   }
   else 
   {
-    assert(segmentation.components == asset);
     append2(defaulttimes);
   }
 
@@ -142,7 +141,7 @@ void ccruncher::Aggregator::append1(Date *defaulttimes)
 
 //===========================================================================
 // append2
-// when segmentation components are borrowers
+// when segmentation components are assets
 //===========================================================================
 void ccruncher::Aggregator::append2(Date *defaulttimes)
 {

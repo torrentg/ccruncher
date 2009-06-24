@@ -133,12 +133,35 @@ string ccruncher::Asset::getName(void) const
 }
 
 //===========================================================================
+// get recovery obtained at date d
+//===========================================================================
+double ccruncher::Asset::getRecovery(Date d, const Interest &spot, Date c)
+{
+  int n = (int) data.size();
+
+  if (d < mindate)
+  {
+    return 0.0;
+  }
+
+  for(int i=0; i<n; i++)
+  {
+    if (d <= data[i].date)
+    {
+      double ufactor =  spot.getUpsilon(data[i].date, c);
+      return ufactor*data[i].recovery;
+    }
+  }
+
+  return 0.0;
+}
+
+//===========================================================================
 // getCashflowSum
 // t0: date where cashflow is computed its actual value
 //===========================================================================
 double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
 {
-  double ufactor;
   int n = (int) data.size();
   double ret = 0.0;
 
@@ -151,10 +174,12 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
   {
     if (d <= data[i].date)
     {
-      ufactor =  spot.getUpsilon(data[i].date, c);
+      double ufactor =  spot.getUpsilon(data[i].date, c);
       ret += ufactor * data[i].cashflow;
     }
   }
+
+  ret -= getRecovery(d, spot, c);
 
   return ret;
 }

@@ -6,6 +6,7 @@ Current works
 -------------------
   * functional tests (kolmogorov-Smirnof tests, etc.)
   * add examples in technical document
+  * add info about correlation matrix estimation
 
 Future works
 -------------------
