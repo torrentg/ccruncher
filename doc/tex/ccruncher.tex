@@ -28,6 +28,9 @@
 % 2008/11/28 - Gerard Torrent [gerard@mail.generacio.com]
 %   . added t-student copula
 %
+% 2009/06/14 - Gerard Torrent [gerard@mail.generacio.com]
+%   . removed discrete time
+%
 %***************************************************************************
 
 \documentclass[a4paper,12pt,final]{article}
@@ -213,24 +216,6 @@ cashflows at default time minus the recovery at default time.
 \end{figure}
 \FloatBarrier
 
-%---------------------------------------------------------------------------
-\subsection{Time nodes}
-In order to speed up the calculations we precompute asset losses at fixed 
-times. To fix these time nodes we need an \emph{initial date}, the 
-\emph{number of steps} and the \emph{step length}. The probability distribution
-is computed at date $T = initial\ date + number\ of\ steps \times step\ length$.
-See figure \ref{cctime1}.
-
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[height=3.0cm, angle=0]{./images/cctime1.eps}
-\caption{Time nodes}
-\label{cctime1}
-\end{center}
-\end{figure}
-\FloatBarrier
-
-
 %===========================================================================
 \clearpage
 \section{Resolution}
@@ -305,50 +290,6 @@ $|\rho_{i,i}| = 1$) composed by blocks. This matrix will be decomposed using
 the Cholesky algorithm, so it must be definite positive.
 
 %---------------------------------------------------------------------------
-\subsection{Mapping asset losses at fixed time nodes}
-Fixed time nodes can be different from cashflow dates. Because we want CCruncher 
-to be fast in performing Monte Carlo simulation we precompute the losses of each 
-asset at fixed time nodes. The following paragraphs tell how to compute losses at 
-fixed time nodes.
-
-%...........................................................................
-\subsubsection{Asset recovery at fixed time nodes}
-We consider the recovery at time node $k$ as the closest asset recovery by 
-right. If time node $k$ is previous to the first asset event then the recovery 
-value at time node $k$ is $0$. If time node $k$ is later to the last asset event 
-then the recovery value at time node $k$ is $0$. Figure \ref{recoverymapping} 
-shows the recoveries displayed in figure \ref{recovery} mapped to, in this case,
-half-yearly time nodes.
-
-\begin{figure}[!hbtp]
-\begin{center}
-\includegraphics[width=12cm, angle=0]{./images/recoverymapping.eps}
-\caption{Asset recoveries mapped to fixed time nodes}
-\label{recoverymapping}
-\end{center}
-\end{figure}
-\FloatBarrier
-
-%...........................................................................
-\subsubsection{Asset losses at fixed time nodes}
-If borrower defaults before the date of asset risk assumption then loss is $0$.
-If borrower defaults after asset finalization date then loss is $0$. 
-If borrower defaults at time node $k$ then loss is the averaged sum of all 
-pending cashflows minus the recovery at time node $k$.
-Figure \ref{lossesmapping} shows asset losses mapped to, in this case, half-yearly 
-time nodes of the asset displayed in figures \ref{cashflow}, \ref{recovery} and 
-\ref{recoverymapping}.
-
-\begin{figure}[!hbtp]
-\begin{center}
-\includegraphics[width=7.34cm, angle=0]{./images/lossesmapping.eps}
-\caption{Asset losses mapped to time nodes 01/07/06 and 01/01/07}
-\label{lossesmapping}
-\end{center}
-\end{figure}
-\FloatBarrier
-
-%---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
 \label{mcsim}
 Monte Carlo methods are a class of computational algorithms for 
@@ -413,11 +354,28 @@ Figure \ref{simttd} shows this in a graphic manner.
 
 %...........................................................................
 \subsubsection{Portfolio loss evaluation}
-At this point, given any borrower, we have a simulated default time. We map
-this default time to the closest time node to the right. In this node we have 
-the precomputed losses of that borrower's assets. To obtain the simulated 
-value of the portfolio loss we sum all asset losses and we keep this value 
+At this point, given any borrower, we have a simulated default time. The loss
+caused by this borrower is the sum of all remaining cashflows at default time 
+minus the recovery at default default time. To obtain the simulated 
+value of the portfolio loss we sum all losses and we keep this value 
 in a list. Afterwards we will use this list to compute risk.
+\newline
+
+%TODO: add a graphic
+
+We consider the recovery at default time as the closest asset recovery by right.
+Figure \ref{recoverymapping} shows distinct default times and its recovery 
+values (bolded lines) using recoveries defined in figure \ref{recovery} 
+(grayed lines).
+
+\begin{figure}[!hbtp]
+\begin{center}
+\includegraphics[width=12cm, angle=0]{./images/recoverymapping.eps}
+\caption{Asset recoveries in distinct default times}
+\label{recoverymapping}
+\end{center}
+\end{figure}
+\FloatBarrier
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
@@ -878,7 +836,7 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 \end{displaymath}
 
 If we repeat the same procedure for the $36$ month we obtain the survival
-table exposed at figure \ref{example.survivals}.
+function exposed at table \ref{example.survivals}.
 
 \begin{table}[!hb]
 \begin{center}
