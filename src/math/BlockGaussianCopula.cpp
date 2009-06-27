@@ -36,7 +36,7 @@
 #include <cmath>
 #include <cfloat>
 #include <cstdlib>
-#include "math/Normal.hpp"
+#include <gsl/gsl_cdf.h>
 #include "math/BlockGaussianCopula.hpp"
 #include "utils/Arrays.hpp"
 
@@ -183,7 +183,7 @@ void ccruncher::BlockGaussianCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
-    aux1[i] = mtrand.randNorm();
+    aux1[i] = random.nextGaussian();
   }
 
   chol->mult(aux1, aux2);
@@ -201,7 +201,7 @@ void ccruncher::BlockGaussianCopula::next()
   // puting in aux1 the copula
   for(int i=0;i<n;i++)
   {
-    aux1[i] = Normal::cdf(aux2[i]);
+    aux1[i] = gsl_cdf_ugaussian_P(aux2[i]);
   }
 }
 
@@ -226,5 +226,5 @@ double ccruncher::BlockGaussianCopula::get(int i)
 //===========================================================================
 void ccruncher::BlockGaussianCopula::setSeed(long k)
 {
-  mtrand.seed((const unsigned long) k);
+  random.setSeed(k);
 }

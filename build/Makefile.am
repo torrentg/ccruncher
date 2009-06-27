@@ -10,40 +10,13 @@ EXTRA_DIST = \
     ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../deps/MiniCppUnit-2.5/MiniCppUnit.hxx\
-    ../deps/Mersenne-1.0/MersenneTwister.h\
-    ../deps/jama-1.2.5/jama_cholesky.h\
-    ../deps/jama-1.2.5/jama_eig.h\
-    ../deps/jama-1.2.5/jama_lu.h\
-    ../deps/jama-1.2.5/jama_qr.h\
-    ../deps/jama-1.2.5/jama_svd.h\
-    ../deps/jama-1.2.5/tnt_array1d.h\
-    ../deps/jama-1.2.5/tnt_array1d_utils.h\
-    ../deps/jama-1.2.5/tnt_array2d.h\
-    ../deps/jama-1.2.5/tnt_array2d_utils.h\
-    ../deps/jama-1.2.5/tnt_array3d.h\
-    ../deps/jama-1.2.5/tnt_array3d_utils.h\
-    ../deps/jama-1.2.5/tnt_cmat.h\
-    ../deps/jama-1.2.5/tnt_fortran_array1d.h\
-    ../deps/jama-1.2.5/tnt_fortran_array1d_utils.h\
-    ../deps/jama-1.2.5/tnt_fortran_array2d.h\
-    ../deps/jama-1.2.5/tnt_fortran_array2d_utils.h\
-    ../deps/jama-1.2.5/tnt_fortran_array3d.h\
-    ../deps/jama-1.2.5/tnt_fortran_array3d_utils.h\
-    ../deps/jama-1.2.5/tnt.h\
-    ../deps/jama-1.2.5/tnt_i_refvec.h\
-    ../deps/jama-1.2.5/tnt_math_utils.h\
-    ../deps/jama-1.2.5/tnt_sparse_matrix_csr.h\
-    ../deps/jama-1.2.5/tnt_stopwatch.h\
-    ../deps/jama-1.2.5/tnt_subscript.h\
-    ../deps/jama-1.2.5/tnt_vec.h\
-    ../deps/jama-1.2.5/tnt_version.h\
     ../deps/gzstream-1.5/gzstream.h\
     ../deps/gzstream-1.5/gzstream.cpp
 
 bin_PROGRAMS = ccruncher
+#samplegen
 
 check_PROGRAMS = tests
-#samplegen
 
 TESTS = tests
 
@@ -72,9 +45,7 @@ ccruncher_SOURCES = \
     ../src/math/CholeskyDecomposition.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/GaussianCopula.cpp\
-    ../src/math/Normal.cpp\
-    ../src/math/TStudent.cpp\
-    ../src/math/toms708.c\
+    ../src/math/Random.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
@@ -117,9 +88,7 @@ ccruncher_SOURCES = \
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/GaussianCopula.hpp\
-    ../src/math/Normal.hpp\
-    ../src/math/TStudent.hpp\
-    ../src/math/toms708.h\
+    ../src/math/Random.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
@@ -165,10 +134,7 @@ tests_SOURCES = \
     ../src/utils/FormatTest.cpp\
     ../src/utils/UtilsTest.cpp\
     ../src/math/PowMatrixTest.cpp\
-    ../src/math/NormalTest.cpp\
-    ../src/math/TStudentTest.cpp\
     ../src/math/GaussianCopulaTest.cpp\
-    ../src/math/MersenneTwisterTest.cpp\
     ../src/math/CholeskyDecompositionTest.cpp\
     ../src/math/BlockMatrixCholTest.cpp\
     ../src/math/BlockGaussianCopulaTest.cpp\
@@ -204,9 +170,7 @@ tests_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/math/CholeskyDecomposition.cpp\
     ../src/math/GaussianCopula.cpp\
-    ../src/math/Normal.cpp\
-    ../src/math/TStudent.cpp\
-    ../src/math/toms708.c\
+    ../src/math/Random.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -242,10 +206,7 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.hpp\
     ../src/math/Copula.hpp\
     ../src/math/PowMatrixTest.hpp\
-    ../src/math/NormalTest.hpp\
-    ../src/math/TStudentTest.hpp\
     ../src/math/GaussianCopulaTest.hpp\
-    ../src/math/MersenneTwisterTest.hpp\
     ../src/math/CholeskyDecompositionTest.hpp\
     ../src/math/BlockMatrixCholTest.hpp\
     ../src/math/BlockGaussianCopulaTest.hpp\
@@ -281,9 +242,7 @@ tests_SOURCES = \
     ../src/utils/Format.hpp\
     ../src/math/CholeskyDecomposition.hpp\
     ../src/math/GaussianCopula.hpp\
-    ../src/math/Normal.hpp\
-    ../src/math/TStudent.hpp\
-    ../src/math/toms708.h\
+    ../src/math/Random.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -339,9 +298,7 @@ tests_LDFLAGS =
 #    ../src/math/CholeskyDecomposition.cpp\
 #    ../src/math/PowMatrix.cpp\
 #    ../src/math/GaussianCopula.cpp\
-#    ../src/math/Normal.cpp\
-#    ../src/math/TStudent.cpp\
-#    ../src/math/toms708.c\
+#    ../src/math/Random.cpp\
 #    ../src/math/BlockMatrixChol.cpp\
 #    ../src/math/BlockGaussianCopula.cpp\
 #    ../src/math/BlockTStudentCopula.cpp\
@@ -384,9 +341,7 @@ tests_LDFLAGS =
 #    ../src/math/PowMatrix.hpp\
 #    ../src/math/Copula.hpp\
 #    ../src/math/GaussianCopula.hpp\
-#    ../src/math/Normal.hpp\
-#    ../src/math/TStudent.hpp\
-#    ../src/math/toms708.h\
+#    ../src/math/Random.hpp\
 #    ../src/math/BlockMatrixChol.hpp\
 #    ../src/math/BlockGaussianCopula.hpp\
 #    ../src/math/BlockTStudentCopula.hpp\

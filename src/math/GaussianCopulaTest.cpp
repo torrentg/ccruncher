@@ -158,7 +158,6 @@ void ccruncher_test::GaussianCopulaTest::test4()
   // correls deallocated by copula destructor
 }
 
-
 //===========================================================================
 // generate a 2-D histogram
 //===========================================================================

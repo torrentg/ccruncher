@@ -47,6 +47,12 @@
 #include "utils/ccmpi.h"
 #include <cassert>
 
+#ifdef _MSC_VER
+#include "win32/gettimeofday.h"
+#else
+#include "sys/time.h"
+#endif
+
 // --------------------------------------------------------------------------
 
 ofstream *ccruncher::Utils::nullstream = NULL;
@@ -136,6 +142,16 @@ string ccruncher::Utils::timestamp()
   sprintf(aux, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1, lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
 
   return string(aux);
+}
+
+//===========================================================================
+// returns a random value based on current time
+//===========================================================================
+long ccruncher::Utils::trand()
+{
+  timeval tv;
+  gettimeofday(&tv,NULL);
+  return tv.tv_sec*1000000L + long(tv.tv_usec);
 }
 
 //===========================================================================

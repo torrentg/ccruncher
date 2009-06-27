@@ -25,6 +25,9 @@
 // 2008/12/05 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
+// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
+//   . replaced random number generator
+//
 //===========================================================================
 
 #ifndef _BlockTStudentCopula_
@@ -33,9 +36,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "math/Random.hpp"
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
-#include <MersenneTwister.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -57,16 +60,14 @@ class BlockTStudentCopula : public Copula
     double **correls;
     double *aux1;
     double *aux2;
-    double chisim;
     bool owner;
 
-    MTRand mtrand;
+    Random random;
 
     void init();
     void finalize();
     double transform(double val);
     void randNm();
-    void randCs();
 
 
   public:

@@ -29,15 +29,21 @@ AC_PROG_INSTALL
 dnl -------------------------------------------------------------
 dnl checks for libraries
 dnl -------------------------------------------------------------
-AC_CHECK_LIB([m], [main])
-AC_CHECK_LIB([expat], [XML_ParserCreate],,
-    [AC_MSG_ERROR([cannot find the expat library]) ])
+AC_CHECK_LIB([m], [cos])
 AC_CHECK_HEADERS(expat.h,,
     [AC_MSG_ERROR([cannot find expat headers]) ])
-AC_CHECK_LIB([z], [zlibVersion],,
-    [AC_MSG_ERROR([cannot find the zlib library]) ])
+AC_CHECK_LIB([expat], [XML_ParserCreate],,
+    [AC_MSG_ERROR([cannot find the expat library]) ])
 AC_CHECK_HEADERS(zlib.h,,
     [AC_MSG_ERROR([cannot find zlib headers]) ])
+AC_CHECK_LIB([z], [zlibVersion],,
+    [AC_MSG_ERROR([cannot find the zlib library]) ])
+AC_CHECK_HEADERS(gsl/gsl_math.h,,
+    [AC_MSG_ERROR([cannot find gsl headers]) ])
+AC_CHECK_LIB([gslcblas],[cblas_dgemm],,
+    [AC_MSG_ERROR([cannot find the gsl library]) ])
+AC_CHECK_LIB([gsl], [gsl_rng_alloc],,
+    [AC_MSG_ERROR([cannot find the gsl library]) ])
 
 dnl -------------------------------------------------------------
 dnl checks for header
@@ -145,7 +151,7 @@ dnl -------------------------------------------------------------
 dnl defining include directories
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/jama-1.2.5 -I$(top_srcdir)/deps/Mersenne-1.0 -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])
+         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])
 
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h

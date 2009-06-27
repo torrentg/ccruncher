@@ -28,6 +28,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
+//   . replaced random number generator
+//
 //===========================================================================
 
 #ifndef _BlockGaussianCopula_
@@ -36,9 +39,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include "math/Random.hpp"
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
-#include <MersenneTwister.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -61,7 +64,7 @@ class BlockGaussianCopula : public Copula
     double *aux2;
     bool owner;
 
-    MTRand mtrand;
+    Random random;
 
     void init();
     void finalize();

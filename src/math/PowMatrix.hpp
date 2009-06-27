@@ -35,6 +35,9 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/06/25 - Gerard Torrent [gerard@mail.generacio.com]
+//   . jama library replaced by gsl
+//
 //===========================================================================
 
 #ifndef _PowMatrix_
@@ -43,12 +46,10 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <tnt_array2d.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace TNT;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -61,9 +62,6 @@ class PowMatrix
 
     // non-instantiable class
     PowMatrix() {};
-
-    // internal function
-    static Array2D<double> inverse(Array2D<double> &x) throw(Exception);
 
 
   public:

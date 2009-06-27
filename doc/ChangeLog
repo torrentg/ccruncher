@@ -9,6 +9,8 @@ version 1.4 (???. 2009)
   * add optional tag 'description' in xml file input
   * changed from discrete time to continuous time
   * bugfix: error in t-student copula simulation
+  * MersenneTwister library replaced by GSL library
+  * TNT/Jama library replaced by GSL library
 
 version 1.3 (Dec. 2008)
 --------------------------
