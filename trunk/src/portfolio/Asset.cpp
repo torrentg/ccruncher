@@ -196,7 +196,7 @@ double ccruncher::Asset::getLoss(const Date &at)
   }
   else 
   {
-    for(int i=0; i<ptimes.size(); i++) 
+    for(int i=0; i<(int)ptimes.size(); i++) 
     {
       if (at <= ptimes[i]) 
       {

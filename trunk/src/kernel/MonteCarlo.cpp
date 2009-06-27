@@ -26,7 +26,6 @@
 #include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockTStudentCopula.hpp"
-#include "math/GaussianCopula.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Timer.hpp"
@@ -411,7 +410,6 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     // creating the copula object
     if (idata.getParams().getCopulaType() == "gaussian")
     {
-      //copula = new GaussianCopula(N, getBorrowerCorrelationMatrix(idata));
       copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
     }
     else if (idata.getParams().getCopulaType() == "t")
