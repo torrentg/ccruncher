@@ -42,9 +42,7 @@ ccruncher_SOURCES = \
     ../src/sectors/Sector.cpp\
     ../src/sectors/Sectors.cpp\
     ../src/correlations/CorrelationMatrix.cpp\
-    ../src/math/CholeskyDecomposition.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/GaussianCopula.cpp\
     ../src/math/Random.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -84,10 +82,8 @@ ccruncher_SOURCES = \
     ../src/sectors/Sector.hpp\
     ../src/sectors/Sectors.hpp\
     ../src/correlations/CorrelationMatrix.hpp\
-    ../src/math/CholeskyDecomposition.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/GaussianCopula.hpp\
     ../src/math/Random.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -134,8 +130,6 @@ tests_SOURCES = \
     ../src/utils/FormatTest.cpp\
     ../src/utils/UtilsTest.cpp\
     ../src/math/PowMatrixTest.cpp\
-    ../src/math/GaussianCopulaTest.cpp\
-    ../src/math/CholeskyDecompositionTest.cpp\
     ../src/math/BlockMatrixCholTest.cpp\
     ../src/math/BlockGaussianCopulaTest.cpp\
     ../src/math/BlockTStudentCopulaTest.cpp\
@@ -168,8 +162,6 @@ tests_SOURCES = \
     ../src/utils/ExpatHandlers.cpp\
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
-    ../src/math/CholeskyDecomposition.cpp\
-    ../src/math/GaussianCopula.cpp\
     ../src/math/Random.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
@@ -206,8 +198,6 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.hpp\
     ../src/math/Copula.hpp\
     ../src/math/PowMatrixTest.hpp\
-    ../src/math/GaussianCopulaTest.hpp\
-    ../src/math/CholeskyDecompositionTest.hpp\
     ../src/math/BlockMatrixCholTest.hpp\
     ../src/math/BlockGaussianCopulaTest.hpp\
     ../src/math/BlockTStudentCopulaTest.hpp\
@@ -240,8 +230,6 @@ tests_SOURCES = \
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
-    ../src/math/CholeskyDecomposition.hpp\
-    ../src/math/GaussianCopula.hpp\
     ../src/math/Random.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
@@ -295,9 +283,7 @@ tests_LDFLAGS =
 #    ../src/sectors/Sector.cpp\
 #    ../src/sectors/Sectors.cpp\
 #    ../src/correlations/CorrelationMatrix.cpp\
-#    ../src/math/CholeskyDecomposition.cpp\
 #    ../src/math/PowMatrix.cpp\
-#    ../src/math/GaussianCopula.cpp\
 #    ../src/math/Random.cpp\
 #    ../src/math/BlockMatrixChol.cpp\
 #    ../src/math/BlockGaussianCopula.cpp\
@@ -337,10 +323,8 @@ tests_LDFLAGS =
 #    ../src/sectors/Sector.hpp\
 #    ../src/sectors/Sectors.hpp\
 #    ../src/correlations/CorrelationMatrix.hpp\
-#    ../src/math/CholeskyDecomposition.hpp\
 #    ../src/math/PowMatrix.hpp\
 #    ../src/math/Copula.hpp\
-#    ../src/math/GaussianCopula.hpp\
 #    ../src/math/Random.hpp\
 #    ../src/math/BlockMatrixChol.hpp\
 #    ../src/math/BlockGaussianCopula.hpp\

@@ -22,7 +22,7 @@
 
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
-#include "math/GaussianCopula.hpp"
+#include "math/Random.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
@@ -239,19 +239,18 @@ void ccruncher_test::SurvivalTest::test6()
   id[1][1] = 1.0;
 
   // creating randomizer
-  GaussianCopula randomizer(2, (double**) id);
+  Random random;
 
   // checking values
   for(int i=0;i<20000;i++)
   {
-    if (sf.inverse(0,randomizer.get(0)) > 12) {
+    double u = random.nextUnif(0.0, 1.0);
+    if (sf.inverse(0,u) > 12) {
       ivalues[0]++;
     }
     else {
       ivalues[1]++;
     }
-
-    randomizer.next();
   }
 
   // checking that P(X in [0,0.9]) = 0.9

@@ -20,31 +20,51 @@
 //
 //===========================================================================
 
-#ifndef _CholeskyDecomposition_
-#define _CholeskyDecomposition_
+#ifndef _Random_
+#define _Random_
 
 //---------------------------------------------------------------------------
 
+#include <gsl/gsl_rng.h>
 #include "utils/config.h"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class CholeskyDecomposition
+class Random
 {
 
   private:
 
-    // non-instantiable class
-    CholeskyDecomposition() {};
+    // RNG object
+    gsl_rng *rng;
+
+    // RNG initialization
+    void init();
 
 
   public:
 
-    static bool choldc(double **a, double *p, int n);
+    // constructors
+    Random();
+    Random(long seed);
+    // destructor
+    ~Random();
+
+    // set RNG seed
+    void setSeed(long);
+    // returns N(0,1)
+    double nextGaussian();
+    // returns N(mu,sigma)
+    double nextGaussian(double mu, double sigma);
+    // returns T(nu)
+    double nextChisq(double nu);
+    // returns Unif(a,b)
+    double nextUnif(double a, double b);
 
 };
 
