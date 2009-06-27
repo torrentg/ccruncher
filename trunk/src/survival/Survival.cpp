@@ -488,7 +488,7 @@ double ccruncher::Survival::inverse(const int irating, double val) const
   double x0 = (double)(k+0)/double(ISURVFNUMBINS);
   double y0 = idata[irating][k];
   double x1 = (double)(k+1)/double(ISURVFNUMBINS);
-  double y1 = ddata[irating][k+1];
+  double y1 = idata[irating][k+1];
 
   if (y0 == INT_MAX || y1 == INT_MAX) {
     return ddata[irating].size()+11.0;

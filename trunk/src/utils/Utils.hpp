@@ -78,6 +78,7 @@ class Utils
     static unsigned long hash(const string &str);
     static string timestamp();
     static string getCompilationOptions();
+    static long trand();
 
 };
 

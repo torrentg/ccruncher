@@ -25,13 +25,15 @@
 // 2008/12/06 - Gerard Torrent [gerard@mail.generacio.com]
 //   . initial release
 //
+// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
+//   . replaced random number generator
+//
 //===========================================================================
 
 #include <cmath>
 #include <cfloat>
 #include <cstdlib>
-#include "math/Normal.hpp"
-#include "math/TStudent.hpp"
+#include <gsl/gsl_cdf.h>
 #include "math/BlockTStudentCopula.hpp"
 #include "utils/Arrays.hpp"
 
@@ -185,34 +187,10 @@ void ccruncher::BlockTStudentCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
-    aux1[i] = mtrand.randNorm();
+    aux1[i] = random.nextGaussian();
   }
 
   chol->mult(aux1, aux2);
-}
-
-//===========================================================================
-// randCs
-// simulates a chi-square with ndf degrees of freedom
-//===========================================================================
-void ccruncher::BlockTStudentCopula::randCs()
-{
-  double x;
-  chisim = 0.0;
-  for(int i=0; i<ndf; i++)
-  {
-    x = mtrand.randNorm();
-    chisim += x*x;
-  }
-
-  //avoid division by 0
-  if (chisim < 1e-14) 
-  {
-    chisim = 1e-14;
-  }
-
-  //returns inverse of chi-square weighted by ndf
-  chisim = sqrt((double)(ndf)/chisim);
 }
 
 //===========================================================================
@@ -223,13 +201,15 @@ void ccruncher::BlockTStudentCopula::next()
 {
   // generate a random vector following N(0,sigmas) into aux2
   randNm();
-  // generate a single variable chi-square scaled into chisim
-  randCs();
+  // create the factor (involves the generation of a chi-square)
+  double chisq = random.nextChisq(double(ndf));
+  if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
+  double factor = sqrt(double(ndf)/chisq);
 
   // puting in aux1 the copula
   for(int i=0;i<n;i++)
   {
-    aux1[i] = TStudent::cdf(chisim*aux2[i], double(ndf));
+    aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], double(ndf));
   }
 }
 
@@ -254,5 +234,5 @@ double ccruncher::BlockTStudentCopula::get(int i)
 //===========================================================================
 void ccruncher::BlockTStudentCopula::setSeed(long k)
 {
-  mtrand.seed((const unsigned long) k);
+  random.setSeed(k);
 }

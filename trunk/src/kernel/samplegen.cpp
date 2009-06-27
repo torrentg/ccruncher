@@ -73,11 +73,12 @@
 #include "utils/Format.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Utils.hpp"
-#include <MersenneTwister.h>
+#include "math/Random.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 
@@ -88,7 +89,7 @@ using namespace std;
 
 //---------------------------------------------------------------------------
 
-MTRand mtw;
+Random randomizer = Random();
 
 //---------------------------------------------------------------------------
 
@@ -269,7 +270,7 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
   string spc4 = Strings::blanks(ilevel+6);
   int nratings = idata.getRatings().size();
   int nsectors = idata.getSectors().size();
-  Date date1 = idata.getParams().begindate;
+  Date date1 = idata.getParams().time0;
 
   for (int i=1;i<=nborrowers;i++)
   {
@@ -300,7 +301,7 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
 //===========================================================================
 double getNominal()
 {
-  double ret = mtw.randNorm(NOMINAL_MU, NOMINAL_SIGMA2);
+  double ret = randomizer.nextGaussian(NOMINAL_MU, NOMINAL_SIGMA2);
 
   if (ret <= NOMINAL_MIN) {
     return NOMINAL_MIN;
@@ -395,7 +396,7 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "  generator is Copyright (C) 2003-2008 Gerard Torrent\n"
+  "  generator is Copyright (C) 2003-2009 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
   "  more info at http://www.generacio.com/ccruncher\n"
   << endl;

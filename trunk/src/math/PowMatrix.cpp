@@ -37,11 +37,16 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/06/25 - Gerard Torrent [gerard@mail.generacio.com]
+//   . jama library replaced by gsl
+//
 //===========================================================================
 
 #include <cmath>
-#include <jama_eig.h>
-#include <jama_lu.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_eigen.h>
 #include "math/PowMatrix.hpp"
 #include "utils/Format.hpp"
 
@@ -52,8 +57,6 @@
 //---------------------------------------------------------------------------
 
 using namespace std;
-using namespace TNT;
-using namespace JAMA;
 
 //===========================================================================
 // return x^y
@@ -90,35 +93,6 @@ double ccruncher::fpow(double x, double y) throw(Exception)
 }
 
 //===========================================================================
-// given a matrix, returns the inverse
-//===========================================================================
-Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exception)
-{
-  try
-  {
-    int n = x.dim1();
-    Array2D<double> Id = Array2D<double>(n, n, 0.0);
-
-    for(int i=0;i<n;i++)
-    {
-      Id[i][i] = 1.0;
-    }
-
-    LU<double> lu = LU<double>(x);
-
-    return lu.solve(Id);
-  }
-  catch(std::exception &e)
-  {
-    throw Exception(e, "unable to inverse matrix");
-  }
-  catch(...)
-  {
-    throw Exception("unable to inverse matrix");
-  }
-}
-
-//===========================================================================
 // returns a matrix powered to an exponent: ret=a^x (where a is a nxn matrix)
 // ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
 // atention: use with low dimensions (pe. n < 100)
@@ -126,76 +100,97 @@ Array2D<double> ccruncher::PowMatrix::inverse(Array2D<double> &x) throw(Exceptio
 //===========================================================================
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {
-  try
-  {
-    // auxiliar vector
-    TNT::Array1D<double> V = TNT::Array1D<double>(n);
-    // matrix declaration
-    TNT::Array2D<double> M = TNT::Array2D<double>(n, n);
-    // eigenvalues
-    TNT::Array2D<double> VAPS = TNT::Array2D<double>(n, n);
-    // eigenvectors
-    TNT::Array2D<double> VEPS = TNT::Array2D<double>(n, n);
+  int rc=0;
 
-    // filling matrix
-    for(int i=0;i<n;i++)
-    {
-      for(int j=0;j<n;j++)
-      {
-        M[i][j] = a[i][j];
-      }
-    }
+  // allocating memory
+  gsl_matrix *M = gsl_matrix_alloc(n, n);
+  gsl_vector_complex *vaps = gsl_vector_complex_alloc(n);
+  gsl_matrix_complex *VAPS = gsl_matrix_complex_alloc(n, n);
+  gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(n, n);
 
-    // computing eigenvalues and eigenvectors
-    JAMA::Eigenvalue<double> eigen = JAMA::Eigenvalue<double>(M);
-
-    // checking that eigenvalues aren't complex
-    eigen.getImagEigenvalues(V);
-    double sum = 0.0;
-    for(int i=0;i<n;i++)
-    {
-      sum += fabs(V[i]);
-    }
-    if (sum >= EPSILON)
-    {
-      throw Exception("can't pow matrix due to imaginary eigenvalues");
-    }
-
-    // retrieving eigenvalues and eigenvectors
-    eigen.getD(VAPS);
-    eigen.getV(VEPS);
-
-    // raising diagonal to the power of x
-    for(int i=0;i<n;i++)
-    {
-       VAPS[i][i] = ccruncher::fpow(VAPS[i][i], x);
-    }
-
-    // finding eigenvectors inverse
-    TNT::Array2D<double> SPEV = inverse(VEPS);
-
-    // computing a^x
-    TNT::Array2D<double> K = matmult(matmult(VEPS, VAPS), SPEV);
-
-    // taking values and exit
-    for(int i=0;i<n;i++)
-    {
-      for(int j=0;j<n;j++)
-      {
-        ret[i][j] = K[i][j];
-      }
+  // preparing matrix
+  for(int i=0; i<n; i++) {
+    for(int j=0; j<n; j++) {
+      gsl_matrix_set(M, i, j, a[i][j]);
     }
   }
-  catch(Exception &e)
-  {
-    throw e;
+
+  // computing eigenvalues (vaps) and eigenvectors (VEPS)
+  gsl_eigen_nonsymmv_workspace *W1 = gsl_eigen_nonsymmv_alloc(n);
+  rc = gsl_eigen_nonsymmv(M, vaps, VEPS, W1);
+  gsl_eigen_nonsymmv_free(W1);
+  if (rc) {
+    gsl_matrix_free(M);
+    gsl_vector_complex_free(vaps);
+    gsl_matrix_complex_free(VAPS);
+    gsl_matrix_complex_free(VEPS);
+    throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
   }
-  catch(std::exception &e)
-  {
-    throw Exception(e, "unable to pow matrix");
+  gsl_matrix_free(M);
+
+  // raising eigenvalues (vaps) to the x-th power (VAPS)
+  gsl_matrix_complex_set_zero(VAPS);
+  for(int i=0; i<n; i++) {
+    // checks that eigenvalues are non-imaginary
+    gsl_complex z = gsl_vector_complex_get(vaps, i);
+    if (fabs(GSL_IMAG(z)) >= EPSILON) {
+      gsl_vector_complex_free(vaps);
+      gsl_matrix_complex_free(VAPS);
+      gsl_matrix_complex_free(VEPS);
+      throw Exception("can't pow matrix due to imaginary eigenvalue");
+    }
+    else {
+      GSL_REAL(z) = ccruncher::fpow(GSL_REAL(z), x);
+      GSL_IMAG(z) = 0.0;
+      gsl_matrix_complex_set(VAPS, i, i, z);
+    }
   }
-  catch(...)
-  {
-    throw Exception("unable to pow matrix");
+  gsl_vector_complex_free(vaps);
+
+  // computing the LU decomposition of eigenvectors (VEPS)
+  int signum=0;
+  gsl_matrix_complex *LU = gsl_matrix_complex_alloc(n, n);
+  gsl_matrix_complex_memcpy(LU, VEPS);
+  gsl_permutation *W2 = gsl_permutation_alloc(n);
+  rc = gsl_linalg_complex_LU_decomp(LU, W2, &signum);
+  if (rc) {
+    gsl_matrix_complex_free(VAPS);
+    gsl_matrix_complex_free(VEPS);
+    gsl_matrix_complex_free(LU);
+    gsl_permutation_free(W2);
+    throw Exception("unable to inverse matrix: " + string(gsl_strerror(rc)));
   }
+
+  // computing the inverse of eigenvectors (SPEV)
+  gsl_matrix_complex *SPEV = gsl_matrix_complex_alloc(n, n);
+  rc = gsl_linalg_complex_LU_invert(LU, W2, SPEV);
+  gsl_permutation_free(W2);
+  if (rc) {
+    gsl_matrix_complex_free(VAPS);
+    gsl_matrix_complex_free(VEPS);
+    gsl_matrix_complex_free(SPEV);
+    gsl_matrix_complex_free(LU);
+    throw Exception("unable to inverse matrix: " + string(gsl_strerror(rc)));
+  }
+
+  // computing VEPS*VAPS*SPEV
+  gsl_complex z0, z1;
+  GSL_REAL(z0)=0.0; GSL_IMAG(z0) = 0.0;
+  GSL_REAL(z1)=1.0; GSL_IMAG(z1) = 0.0;
+  gsl_matrix_complex_set_zero(LU);
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, VEPS, VAPS, z0, LU  );
+  gsl_matrix_complex_set_zero(VAPS);
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, LU  , SPEV, z0, VAPS);
+  gsl_matrix_complex_free(VEPS);
+  gsl_matrix_complex_free(SPEV);
+  gsl_matrix_complex_free(LU);
+
+  // preparing result
+  for(int i=0; i<n; i++) {
+    for(int j=0; j<n; j++) {
+      ret[i][j] = GSL_REAL(gsl_matrix_complex_get(VAPS, i, j));
+    }
+  }
+  gsl_matrix_complex_free(VAPS);
 }
+

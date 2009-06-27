@@ -127,10 +127,13 @@
 // 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
 //   . changed from discrete time to continuous time
 //
+// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
+//   . replaced random number generator
+//
 //===========================================================================
 
+#include <cmath>
 #include <cfloat>
-#include <MersenneTwister.h>
 #include "kernel/MonteCarlo.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
@@ -554,8 +557,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     if (Utils::isMaster())
     {
       // use a seed based on clock
-      MTRand mtrand;
-      seed = mtrand.randInt();
+      seed = Utils::trand();
     }
 #ifdef USE_MPI
     // all nodes knows the same seed

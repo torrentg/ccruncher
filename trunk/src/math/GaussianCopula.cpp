@@ -34,13 +34,16 @@
 // 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
 //   . added Rev (aka LastChangedRevision) svn tag
 //
+// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
+//   . replaced random number generator
+//
 //===========================================================================
 
 #include <cmath>
 #include <ctime>
 #include <cfloat>
 #include <cstdlib>
-#include "math/Normal.hpp"
+#include <gsl/gsl_cdf.h>
 #include "math/GaussianCopula.hpp"
 #include "math/CholeskyDecomposition.hpp"
 #include "utils/Arrays.hpp"
@@ -198,7 +201,7 @@ void ccruncher::GaussianCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
-    aux1[i] = mtrand.randNorm();
+    aux1[i] = random.nextGaussian();
   }
 
   Arrays<double>::prodMatrixVector(sigmas, aux1, n, n, aux2);
@@ -216,8 +219,7 @@ void ccruncher::GaussianCopula::next()
   // puting in aux1 the copula
   for(int i=0;i<n;i++)
   {
-    aux1[i] = Normal::cdf(aux2[i]);
-    //aux1[i] = Normal::cdf(aux2[i], 0.0, sigmas[i][i]); //sigmas[i][i]=1.0
+    aux1[i] = gsl_cdf_ugaussian_P(aux2[i]);
   }
 }
 
@@ -242,5 +244,5 @@ double ccruncher::GaussianCopula::get(int i)
 //===========================================================================
 void ccruncher::GaussianCopula::setSeed(long k)
 {
-  mtrand.seed((const unsigned long) k);
+  random.setSeed(k);
 }
