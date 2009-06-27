@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,28 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// PowMatrix.cpp - PowMatrix code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/06/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . minor changes
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed scope of pow(x,y) [ccruncher::PowMatrix:: -> ccruncher::]
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . pow method renamed: pow(x,y) -> fpow(x,y)
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2009/06/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . jama library replaced by gsl
 //
 //===========================================================================
 

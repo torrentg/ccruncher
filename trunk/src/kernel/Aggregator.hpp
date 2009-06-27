@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2008 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,16 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Aggregator.hpp - Aggregator header - $Rev: 435 $
-// --------------------------------------------------------------------------
-//
-// 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed from discrete time to continuous time
 //
 //===========================================================================
 

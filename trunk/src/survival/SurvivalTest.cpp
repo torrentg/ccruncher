@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,37 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// SurvivalTest.cpp - SurvivalTest code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/06/28 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added test6()
-//
-// 2005/07/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . created ccruncher_test namespace
-//
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed cout's
-//
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class CopulaNormal renamed to GaussianCopula
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Survival class refactoring
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
-//
-// 2009/02/07 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed maxmonths attribute
 //
 //===========================================================================
 

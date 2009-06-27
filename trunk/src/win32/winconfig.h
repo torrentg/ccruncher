@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005-2008 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,20 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// winconfig.hpp - winconfig header - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added comments on header
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2008/08/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . adapted to MSVC9
-//
-// 2008/12/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added some stuff (trunc, log1p, expm1, isinf, etc.)
 //
 //===========================================================================
 

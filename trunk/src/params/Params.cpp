@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,63 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Params.cpp - Params code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.method
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//   . implemented Arrays class
-//
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . solved bug related to seed=0 (random seed)
-//   . added montecarlo.method param to getXML() method
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . allowed maxseconds=0 or maxiterations=0 (0 remove stop criteria)
-//
-// 2005/08/12 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed copula identifier: normal -> gaussian
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/09/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed default seed value from -1 to 0
-//
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed default maxiteration and maxseconds values 0 to -1
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/08/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Client class renamed to Borrower
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed dates management
-//
-// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed from discrete time to continuous time
 //
 //===========================================================================
 

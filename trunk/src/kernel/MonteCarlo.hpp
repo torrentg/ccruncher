@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,62 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Montecarlo.hpp - MonteCarlo header - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added logger
-//
-// 2005/05/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed aggregators class
-//   . added new SegmentAggregator class
-//
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added simulation method time-to-default
-//
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed useMPI() method
-//
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class CopulaNormal renamed to GaussianCopula
-//   . GaussianCopula replaced by BlockGaussianCopula
-//
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . execute() method returns number of realized simulations
-//
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method randomize()
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed some method signatures
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . MonteCarlo refactoring
-//   . generic copula array
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method printPrecomputedLosses()
-//   . Client class renamed to Borrower
-//
-// 2008/11/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . modified output file name (portfolio-rest.out -> portfolio.out)
-//   . added optional bulk of copula values to file
-//   . added optional bulk of simulated default to file
-//   . changed from SegmentAggregator to Aggregator
-//
-// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed from discrete time to continuous time
 //
 //===========================================================================
 

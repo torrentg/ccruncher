@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,46 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// generator.cpp - generator tool code
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/03/12 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added POSIX compliance in command line arguments
-//
-// 2005/03/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . asset refactoring
-//
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added logger
-//
-// 2005/05/16 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added survival function section
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/07/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed exposure/recovery by netting
-//
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . performing partial parsing (without portfolio)
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . solved performance problem when nclients is high
-//
-// 2005/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getCompilationOptions() to version output
-//
-// 2007/08/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . file refactor
 //
 //===========================================================================
 

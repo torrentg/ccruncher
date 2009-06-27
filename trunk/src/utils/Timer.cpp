@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,26 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Timer.cpp - Timer code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release (see jama/tnt_stopwatch && boost/timer)
-//
-// 2005/05/22 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added tolerance at format function. in debug mode can reach a
-//     negative number (very near to 0).
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . running_ variable changed from int to boolean
-//
-// 2005/08/09 - Gerard Torrent [gerard@mail.generacio.com]
-//   . replced clock() function by gettimeofday() function
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
 //
 //===========================================================================
 

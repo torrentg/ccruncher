@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,36 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// TransitionMatrix.hpp - TransitionMatrix header - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/04/22 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added tma (Forward Default Rate) and tmaa (Cumulated Forward Default Rate)
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added survival function (1-TMAA)
-//   . changed period time resolution (year->month)
-//   . added steplength parameter at tma, tmaa and survival methods
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class refactoring
-//
-// 2006/01/03 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed Forward Default Rate references
-//
-// 2006/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . forced explicit friend function declaration
 //
 //===========================================================================
 

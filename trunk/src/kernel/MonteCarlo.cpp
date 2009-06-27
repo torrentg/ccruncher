@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,118 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Montecarlo.cpp - MonteCarlo code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/03/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added logger
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed period time resolution (year->month)
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Arrays class
-//   . removed aggregators class
-//   . added new SegmentAggregator class
-//
-// 2005/05/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added simulation method time-to-default
-//
-// 2005/06/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added interests support
-//
-// 2005/07/12 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed useMPI() method
-//
-// 2005/07/18 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added mpi support
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . class CopulaNormal renamed to GaussianCopula
-//   . GaussianCopula replaced by BlockGaussianCopula
-//
-// 2005/07/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . execute() method returns number of realized simulations
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added new check over survival defined user
-//
-// 2005/08/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented MPI support
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/09/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed date list output
-//
-// 2005/09/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added onlyactive argument to sortClients() method
-//
-// 2005/09/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method randomize()
-//   . reindexed copulas vector
-//
-// 2005/09/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added timer at random number generation step
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/23 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed some method signatures
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Sectors refactoring
-//   . Ratings refactoring
-//   . Segmentations refactoring
-//   . Survival refactoring
-//   . TransitionMatrix refactoring
-//
-// 2006/01/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Portfolio refactoring
-//   . IData refactoring
-//   . SegmentAggregator refactoring
-//   . MonteCarlo refactoring
-//   . generic copula array
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2006/12/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . solved bug in mpi version (SegmentAggregator::touch() 
-//     called by all ranks, not just master)
-//
-// 2007/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method printPrecomputedLosses()
-//   . Client class renamed to Borrower
-//
-// 2008/07/26 - Gerard Torrent [gerard@mail.generacio.com]
-//   . trace output data directory changed from absolute to relative
-//
-// 2008/12/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . modified output file name (portfolio-rest.out -> portfolio.out)
-//   . added optional bulk of copula values to file
-//   . added optional bulk of simulated default to file
-//   . changed from SegmentAggregator to Aggregator
-//   . added t-Student copula generator
-//
-// 2009/04/08 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed from discrete time to continuous time
-//
-// 2009/06/24 - Gerard Torrent [gerard@mail.generacio.com]
-//   . replaced random number generator
 //
 //===========================================================================
 

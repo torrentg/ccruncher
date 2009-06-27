@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,25 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// ExpatHandlers.hpp - ExpatHandlers header - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added method epstop(), stops current parsing
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed eperror method
-//
-// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added epdata method
 //
 //===========================================================================
 

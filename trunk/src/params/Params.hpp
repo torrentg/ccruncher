@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,34 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Params.hpp - Params header - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2004/12/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/04/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . migrated from xerces to expat
-//
-// 2005/05/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.method
-//
-// 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added param montecarlo.simule
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2006/01/04 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed simule and method params
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed dates management
-//
-// 2009/02/01 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed from discrete time to continuous time
 //
 //===========================================================================
 

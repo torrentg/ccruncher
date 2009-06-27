@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,40 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// ExpatParser.cpp - ExpatParser code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2005/03/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/06/10 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added characterData method
-//
-// 2005/07/13 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added stop parsing ability
-//
-// 2005/07/30 - Gerard Torrent [gerard@mail.generacio.com]
-//   . moved <cassert> include at last position
-//
-// 2005/08/29 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed XMLCALL's
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/10/28 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added expat legacy code support (thanks Stephen Ronderos)
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . string parser refactorized
-//
-// 2007/07/19 - Gerard Torrent [gerard@mail.generacio.com]
-//   . correct mistake in error message
-//
-// 2009/01/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . modified method characterData
 //
 //===========================================================================
 
