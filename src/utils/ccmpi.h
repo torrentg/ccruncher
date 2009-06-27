@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2007 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,16 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// mpi.h - mpi header - $Rev: 413 $
-// --------------------------------------------------------------------------
-//
-// 2007/08/06 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2009/04/25 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added 'undef SEEK_' because MPICH conflicts with stdio
 //
 //===========================================================================
 

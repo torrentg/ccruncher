@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2005 Gerard Torrent
+// Copyright (C) 2004-2009 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,48 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-//
-// Survival.cpp - Survival code - $Rev$
-// --------------------------------------------------------------------------
-//
-// 2005/05/14 - Gerard Torrent [gerard@mail.generacio.com]
-//   . initial release
-//
-// 2005/05/20 - Gerard Torrent [gerard@mail.generacio.com]
-//   . implemented Strings class
-//
-// 2005/06/29 - Gerard Torrent [gerard@mail.generacio.com]
-//   . modified inverse function (changed round per ceil)
-//
-// 2005/07/21 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added class Format (previously format function included in Parser)
-//
-// 2005/07/29 - Gerard Torrent [gerard@mail.generacio.com]
-//   . improved performance for inverse method
-//   . moved <cassert> include at last position
-//
-// 2005/07/31 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added getMinCommonTime() method
-//
-// 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . added Rev (aka LastChangedRevision) svn tag
-//
-// 2005/12/17 - Gerard Torrent [gerard@mail.generacio.com]
-//   . Ratings refactoring
-//
-// 2006/02/11 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed method ExpatHandlers::eperror()
-//
-// 2007/07/15 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed rating.order tag
-//
-// 2009/02/14 - Gerard Torrent [gerard@mail.generacio.com]
-//   . removed maxmonths attribute
-//   . inverse() returns double
-//
-// 2009/05/27 - Gerard Torrent [gerard@mail.generacio.com]
-//   . changed inverse function
 //
 //===========================================================================
 
