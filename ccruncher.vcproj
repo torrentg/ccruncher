@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.12&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="1"
@@ -125,7 +125,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
-				AdditionalIncludeDirectories="&quot;deps\Mersenne-1.0&quot;;&quot;deps\jama-1.2.5&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.12&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -287,11 +287,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\math\CholeskyDecomposition.cpp"
+					RelativePath="src\math\Random.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\math\CholeskyDecomposition.hpp"
+					RelativePath="src\math\Random.hpp"
 					>
 				</File>
 				<File
@@ -299,37 +299,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\math\GaussianCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\GaussianCopula.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\Normal.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\Normal.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TStudent.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TStudent.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\toms708.c"
-					>
-				</File>
-				<File
-					RelativePath="src\math\toms708.h"
-					>
-				</File>				<File
 					RelativePath="src\math\PowMatrix.cpp"
 					>
 				</File>
