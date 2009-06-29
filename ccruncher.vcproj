@@ -125,7 +125,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
-				AdditionalIncludeDirectories="&quot;deps\gsl-1.12&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -144,10 +144,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libexpat.lib zdll.lib"
+				AdditionalDependencies="libcmt.lib libexpat.lib zdll.lib gsl.lib cblas.lib"
 				OutputFile="bin\ccruncher.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;"
+				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;;&quot;deps\gsl-1.11\win32\lib\release_static-vs90&quot;"
+				GenerateManifest="false"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile=""
+				AddModuleNamesToAssembly=""
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -155,6 +160,7 @@
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
+				DelaySign="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -231,6 +237,14 @@
 				Name="kernel"
 				>
 				<File
+					RelativePath="src\kernel\Aggregator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\kernel\Aggregator.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\kernel\ccruncher.cpp"
 					>
 				</File>
@@ -250,14 +264,6 @@
 					RelativePath="src\kernel\MonteCarlo.hpp"
 					>
 				</File>
-				<File
-					RelativePath="src\kernel\Aggregator.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\kernel\Aggregator.hpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="math"
@@ -271,14 +277,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\math\BlockTStudentCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\BlockTStudentCopula.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\math\BlockMatrixChol.cpp"
 					>
 				</File>
@@ -287,11 +285,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\math\Random.cpp"
+					RelativePath="src\math\BlockTStudentCopula.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\math\Random.hpp"
+					RelativePath="src\math\BlockTStudentCopula.hpp"
 					>
 				</File>
 				<File
@@ -304,6 +302,14 @@
 				</File>
 				<File
 					RelativePath="src\math\PowMatrix.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\Random.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\Random.hpp"
 					>
 				</File>
 			</Filter>

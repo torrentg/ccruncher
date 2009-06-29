@@ -205,6 +205,7 @@ double ccruncher::Asset::getLoss(const Date &at)
     }
   }
   assert(false);
+  return 0.0;
 }
 
 //===========================================================================

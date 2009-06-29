@@ -1,14 +1,18 @@
 
-if you don't want make a gsl installation that fill your
-/usr/include and /usr/lib directories with files, you can
-install to this directory using 
-./configure --prefix=<path_to_this_directory>
-when you compile the gsl project
+GSL library (GNU Scientific Library) installation
+--------------------------------------------------
 
-In this case, you need to alter your environement variables:
-GSLROOT=<path_to_this_directory>
-export LD_LIBRARY_PATH=$GSLROOT/lib:$LD_LIBRARY_PATH
-export LIBRARY_PATH=$GSLROOT/lib:$LIBRARY_PATH
-export C_INCLUDE_PATH=$GSLROOT/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=$GSLROOT/include:$CPLUS_INCLUDE_PATH
+Linux systems:
+  - install gsl packages
+    [apt-get|yum] install gsl gsl-devel
+
+Windows systems:
+  - download the gsl windows port from:
+    http://matmidia.org/alexlaier/index.php/goodies/3-stuff/26-gsl-111-port-microsoft-visual-studio-2008-vc90.html
+  - unpack in $CCRUCNHER/deps/ (not in $CCRUCNHER/deps/gsl-xxx)
+
+Other systems:
+  - download source code from:
+    http://www.gnu.org/software/gsl/
+  - follow installation instructions
 
