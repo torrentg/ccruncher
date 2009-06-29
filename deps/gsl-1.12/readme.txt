@@ -1,5 +1,5 @@
 
-GSL library (GNU Scientific Library) installation
+gsl library installation
 --------------------------------------------------
 
 Linux systems:
@@ -12,7 +12,7 @@ Windows systems:
   - unpack in $CCRUCNHER/deps/ (not in $CCRUCNHER/deps/gsl-xxx)
 
 Other systems:
-  - download source code from:
+  - download package from:
     http://www.gnu.org/software/gsl/
   - follow installation instructions
 
