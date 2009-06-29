@@ -1,13 +1,19 @@
 
-if you don't want make a expat installation that fill your
-/usr/include and /usr/lib directories with files, you can
-install to this directory using 
-./configure --prefix=<path_to_this_directory>
-when you compile the expat project
+expat library installation
+--------------------------------------------------
 
-In this case, you need to alter your environement variables:
-EXPATROOT=<path_to_this_directory>
-export LD_LIBRARY_PATH=$EXPATROOT/lib:$LD_LIBRARY_PATH
-export LIBRARY_PATH=$EXPATROOT/lib:$LIBRARY_PATH
-export C_INCLUDE_PATH=$EXPATROOT/include:$C_INCLUDE_PATH
-export CPLUS_INCLUDE_PATH=$EXPATROOT/include:$CPLUS_INCLUDE_PATH
+Linux systems:
+  - install expat packages
+    [apt-get|yum] install expat expat-devel
+
+Windows systems:
+  - download the expat windows binaries from:
+    http://expat.sourceforge.net/
+  - install it (run installer) in this directory ($CCRUCNHER/deps/expat-xxx)
+  - copy libexpat.dll in $CCRUCNHER/bin/
+
+Other systems:
+  - download package from:
+    http://expat.sourceforge.net/
+  - follow installation instructions
+
