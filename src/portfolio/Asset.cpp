@@ -213,6 +213,7 @@ double ccruncher::Asset::getLoss(const Date &at)
 //===========================================================================
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"asset")) {
     if (getNumAttributes(attributes) != 3) {
       throw Exception("incorrect number of attributes in tag asset");
@@ -273,6 +274,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 //===========================================================================
 void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"asset")) {
 
     // checking data size

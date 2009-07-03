@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ************************************************************** -->
-<!-- read file $CCRUNCHER$/samples/readme.txt                       -->
-<!-- ************************************************************** -->
-
 <ccruncher>
+
+  <title>test03</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  100 borrowers
+  1 unique sector
+  uncorrelated defaults
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  Each borrower has an asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
+
+Expected Results:
+-------------------------------
+  This problem has an explicit solution. The asset loss
+  at t=12 for each clieant can be modeled as a Bernouilli(0.1).
+  The sum of 100 uncorrelated Bernouillis is a Binomial(100,0.1).
+  Then, the portfolio loss at t=12 is a Z~Binomial(100,0.1).
+
+How to check results?
+-------------------------------
+  > #loading script
+  > source("bin/ccreport.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio.csv")
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x[,1]+1, 101)
+  > #theoretical probabilities
+  > prob <- round(dbinom(0:100, 100, 0.1))
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst$p.value
+
+  ]]>
+  </description>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->

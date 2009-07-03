@@ -43,7 +43,7 @@ void ccruncher::BlockTStudentCopula::init()
   aux2 = NULL;
   chol = NULL;
   correls = NULL;
-  ndf = -1;
+  ndf = -1.0;
 }
 
 //===========================================================================
@@ -99,15 +99,15 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 // n: number of elements at each sector
 // m: number of sectors
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, int ndf_) throw(Exception)
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception)
 {
   // basic initializations
   init();
   owner = true;
   m = m_;
 
-  if (ndf_ <= 2) {
-    throw Exception("invalid degrees of freedom (ndf > 2 required)");
+  if (ndf_ <= 0.0) {
+    throw Exception("invalid degrees of freedom (ndf > 0 required)");
   }
   ndf = ndf_;
 
@@ -192,14 +192,14 @@ void ccruncher::BlockTStudentCopula::next()
   // generate a random vector following N(0,sigmas) into aux2
   randNm();
   // create the factor (involves the generation of a chi-square)
-  double chisq = random.nextChisq(double(ndf));
+  double chisq = random.nextChisq(ndf);
   if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
-  double factor = sqrt(double(ndf)/chisq);
+  double factor = sqrt(ndf/chisq);
 
   // puting in aux1 the copula
   for(int i=0;i<n;i++)
   {
-    aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], double(ndf));
+    aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], ndf);
   }
 }
 

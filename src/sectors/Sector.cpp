@@ -22,6 +22,7 @@
 
 #include "sectors/Sector.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // reset
@@ -45,6 +46,7 @@ ccruncher::Sector::Sector()
 //===========================================================================
 void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sector")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes at sector");
@@ -69,6 +71,7 @@ void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char
 //===========================================================================
 void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sector")) {
     // nothing to do
   }

@@ -114,6 +114,6 @@ void ccruncher_test::ParamsTest::test3()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
   ASSERT(params.getCopulaType() == "t");
-  ASSERT(params.getCopulaParam() == 3);
+  ASSERT(params.getCopulaParam() == 3.0);
 }
 

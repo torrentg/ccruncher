@@ -18,36 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#
-# report.R - report script for R (http://www.r-project.org) - $Rev$
-# --------------------------------------------------------------------------
-#
-# 2005/08/30 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
-# 2005/09/02 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added TCE support (Tail Conditional Expectation or Expected Shortfall)
-#   . code refactored
-#   . added usage example
-#
-# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
-#   . removed portfolio value support
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added Rev svn:keyword
-#
-# 2007/07/27 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added breaks param in cmean(), cstddev() and plot()
-#   . TCE renamed to ES
-#
-# 2008/11/26 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added rdigits argument in summary() function
-#   . added function ccruncher.risk
-#   . added function ccruncher.graphic
-#   . added grid in graphics
-#   . adapted to new output format (csv + multiple segments in the same file)
-#   . renamed to ccreport.R
-#
 #***************************************************************************
 
 #===========================================================================
@@ -63,15 +33,15 @@
 # > source("bin/ccreport.R")                                 #load this R script
 # > x <- ccruncher.read("sectors.csv")                       #load ccruncher data
 # > names(x)                                                 #segment names
-# > x[[1]]                                                   #list first column
-# > ccruncher.risk(x[[1]])                                   #computes risk
-# > ccruncher.plot(x[[1]], show="pdf")                       #plots a graphic
-# > ccruncher.plot(x[[1]], show="cdf")                       #plots a graphic
-# > ccruncher.plot(x[[1]], alpha=0.95, show="mean")          #plots a graphic
-# > ccruncher.plot(x[[1]], alpha=0.95, show="stddev")        #plots a graphic
-# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="VaR") #plots a graphic
-# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="ES")  #plots a graphic
-# > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="all") #plots a graphic
+# > x[,1]                                                    #list first column
+# > ccruncher.risk(x[,1])                                    #computes risk
+# > ccruncher.plot(x[,1], show="pdf")                        #plots a graphic
+# > ccruncher.plot(x[,1], show="cdf")                        #plots a graphic
+# > ccruncher.plot(x[,1], alpha=0.95, show="mean")           #plots a graphic
+# > ccruncher.plot(x[,1], alpha=0.95, show="stddev")         #plots a graphic
+# > ccruncher.plot(x[,1], alpha=0.95, var=0.99, show="VaR")  #plots a graphic
+# > ccruncher.plot(x[,1], alpha=0.95, var=0.99, show="ES")   #plots a graphic
+# > ccruncher.plot(x[,1], alpha=0.95, var=0.99, show="all")  #plots a graphic
 #
 #===========================================================================
 
@@ -398,7 +368,7 @@ ccruncher.cplot <- function(values, alpha, name="<name>")
 #   list: risk statitstics
 # example
 #   df <- ccruncher.read("data/portfolio.csv")
-#   risk <- ccruncher.summary(df[[1]])
+#   risk <- ccruncher.summary(df[,1])
 #   risk
 #   risk$n
 #   risk$min
@@ -524,8 +494,8 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
 # example
 #   segments <- ccruncher.read("data/segments.csv")
 #   names(segments)
-#   segments[["S1"]]
-#   segments[[1]]
+#   segments[,"S1"]
+#   segments[,1]
 #   ccruncher.summary(segments, "segments")
 #===========================================================================
 ccruncher.read <- function(filename)
@@ -566,7 +536,7 @@ ccruncher.summary <- function(filename, format="plain", alpha=0.99, rdigits=2)
   for(i in 1:length(x))
   {
     #compute risk
-    risk <- ccruncher.risk(x[[i]]);
+    risk <- ccruncher.risk(x[,i]);
 
     #prints risk
     if (format == "xml")
@@ -642,7 +612,7 @@ ccruncher.graphic <- function(filename, rdigits=1)
   x <- ccruncher.read(filename);
   if (length(x) == 1)
   {
-    aux <- density(x[[1]]);
+    aux <- density(x[,1]);
     plot(aux, panel.first = grid(),
        main="Density Function",
        xlab="portfolio loss", ylab="probability");
@@ -652,7 +622,7 @@ ccruncher.graphic <- function(filename, rdigits=1)
     txts <- names(x);
     vals <- vector(length=length(x));
     for(i in 1:length(x)) {
-      vals[i] <- mean(x[[i]]);
+      vals[i] <- mean(x[,i]);
     }
     for(i in 1:length(x)) {
       txts[i] <- txts[i] %&% " (" %&% round(100*vals[i]/sum(vals),rdigits) %&% "%)";

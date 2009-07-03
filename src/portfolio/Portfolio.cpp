@@ -156,6 +156,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 //===========================================================================
 void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"portfolio")) {
     // cleaning temp objects
     auxborrower = NULL;

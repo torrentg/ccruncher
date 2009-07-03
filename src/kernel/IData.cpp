@@ -299,6 +299,7 @@ void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *
 //===========================================================================
 void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"ccruncher")) {
     validate();
   }

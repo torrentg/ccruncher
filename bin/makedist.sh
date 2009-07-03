@@ -17,44 +17,6 @@
 #   0    : OK
 #   other: KO
 #
-#-------------------------------------------------------------
-#
-# 2005/06/07 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added oblivion directory management
-#   . 'svn checkout' replaced by 'svn export'
-#
-# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
-#   . moved $CCRUNCHER/ doc files to directory $CCRUNCHER/doc
-#   . changed argument flag -l by -b (binary distribution)
-#   . added file data/readme.txt
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added support for build/ directory
-#   . removed unused checkVersion() function
-#   . check that a distribution option is filled (xxx)
-#   . added Rev svn:keyword
-#   . added dependencies paragraph at comments
-#
-# 2005/11/08 - Gerard Torrent [gerard@mail.generacio.com]
-#   . solved minor bugs related to windows installation
-#
-# 2007/07/24 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added doc/other directory
-#
-# 2007/11/17 - Gerard Torrent [gerard@mail.generacio.com]
-#   . directory share/ renamed to deps/
-#
-# 2008/07/25 - Gerard Torrent [gerard@mail.generacio.com]
-#   . changed subversion repository path
-#
-# 2008/12/21 - Gerard Torrent [gerard@mail.generacio.com]
-#   . script report renamed to ccreport.sh
-#   . removed oblivion directory
-#   . added src2bin.sh script
-#
 #=============================================================
 
 #-------------------------------------------------------------

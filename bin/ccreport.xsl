@@ -20,17 +20,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#
-# ccreport.xsl - report stylesheet (http://www.r-project.org) - $Rev: 461 $
-# __________________________________________________________________________
-#
-# usage:
-# xsltproc ccreport.xsl file.xml 
-# __________________________________________________________________________
-#
-# 2008/11/28 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
 ===========================================================================
 -->
 

@@ -45,7 +45,7 @@ class BlockTStudentCopula : public Copula
 
     int n;
     int m;
-    int ndf;
+    double ndf;
     BlockMatrixChol *chol;
     double **correls;
     double *aux1;
@@ -67,7 +67,7 @@ class BlockTStudentCopula : public Copula
     double get(int);
     void setSeed(long);
 
-    BlockTStudentCopula(double **C, int *n, int m, int ndf) throw(Exception);
+    BlockTStudentCopula(double **C, int *n, int m, double ndf) throw(Exception);
     BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);
     ~BlockTStudentCopula();
 

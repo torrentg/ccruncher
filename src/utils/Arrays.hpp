@@ -80,7 +80,7 @@ class Arrays
 template <class T>
 T * ccruncher::Arrays<T>::allocVector(int n) throw(Exception)
 {
-  T aux;
+  T aux = T();
   return allocVector(n, aux);
 }
 
@@ -144,7 +144,7 @@ void ccruncher::Arrays<T>::deallocVector(T *x)
 template <class T>
 T ** ccruncher::Arrays<T>::allocMatrix(int n, int m) throw(Exception)
 {
-  T aux;
+  T aux = T();
   return allocMatrix(n, m, aux);
 }
 

@@ -22,6 +22,7 @@
 
 #include "ratings/Rating.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor
@@ -45,6 +46,7 @@ void ccruncher::Rating::reset()
 //===========================================================================
 void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"rating")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes in rating tag");
@@ -69,6 +71,7 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
 //===========================================================================
 void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"rating")) {
     // nothing to do
   }

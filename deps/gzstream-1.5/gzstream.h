@@ -62,7 +62,7 @@ public:
         // ASSERT: both input & output capabilities will not be used together
     }
     int is_open() { return opened; }
-    gzstreambuf* open( const char* name, int open_mode);
+    gzstreambuf* open( const char* name, int open_mode_);
     gzstreambuf* close();
     ~gzstreambuf() { close(); }
     
@@ -76,9 +76,9 @@ protected:
     gzstreambuf buf;
 public:
     gzstreambase() { init(&buf); }
-    gzstreambase( const char* name, int open_mode);
+    gzstreambase( const char* name, int open_mode_);
     ~gzstreambase();
-    void open( const char* name, int open_mode);
+    void open( const char* name, int open_mode_);
     void close();
     gzstreambuf* rdbuf() { return &buf; }
 };
@@ -92,11 +92,11 @@ public:
 class igzstream : public gzstreambase, public std::istream {
 public:
     igzstream() : std::istream( &buf) {} 
-    igzstream( const char* name, int open_mode = std::ios::in)
-        : gzstreambase( name, open_mode), std::istream( &buf) {}  
+    igzstream( const char* name, int open_mode_ = std::ios::in)
+        : gzstreambase( name, open_mode_), std::istream( &buf) {}  
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
-    void open( const char* name, int open_mode = std::ios::in) {
-        gzstreambase::open( name, open_mode);
+    void open( const char* name, int open_mode_ = std::ios::in) {
+        gzstreambase::open( name, open_mode_);
     }
 };
 
@@ -106,8 +106,8 @@ public:
     ogzstream( const char* name, int mode = std::ios::out)
         : gzstreambase( name, mode), std::ostream( &buf) {}  
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
-    void open( const char* name, int open_mode = std::ios::out) {
-        gzstreambase::open( name, open_mode);
+    void open( const char* name, int open_mode_ = std::ios::out) {
+        gzstreambase::open( name, open_mode_);
     }
 };
 

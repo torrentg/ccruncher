@@ -20,11 +20,6 @@
 #   0    : OK
 #   other: KO
 #
-#-------------------------------------------------------------
-#
-# 2008/11/01 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
 #=============================================================
 
 #-------------------------------------------------------------
@@ -32,7 +27,7 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=tests.sh
-numversion="1.3"
+numversion="1.4"
 svnversion="R454"
 retcode=0
 options=""
@@ -53,7 +48,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2008 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2009 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
@@ -134,7 +129,7 @@ readconf() {
 #-------------------------------------------------------------
 test01() {
 
-  $CCRUNCHER/bin/ccruncher -f --path=data $CCRUNCHER/samples/test01.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test01.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test01.xml";
@@ -142,16 +137,16 @@ test01() {
   fi
 
   R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$CCRUNCHER/data/portfolio.out");
+    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
+    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
     #computes observed frequencies
-    obs <- tabulate(x+1, 2);
+    obs <- tabulate(data[,1]+1, 2);
     #fixes theoretical probabilities
     prob <- c(0.9, 0.1);
     #performs chi square test
     cst <- chisq.test(obs, p=prob)
     #if p-value > 0.01 than distribution is correct
-    if (cst[3] > 0.01) { 
+    if (cst\$p.value > 0.01) { 
       cat("test01 passed\n");
       quit(save="no", status=0);
     }
@@ -170,7 +165,7 @@ _EOF_
 #-------------------------------------------------------------
 test02() {
 
-  $CCRUNCHER/bin/ccruncher -f --path=data $CCRUNCHER/samples/test02.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test02.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test02.xml";
@@ -178,23 +173,29 @@ test02() {
   fi
 
   R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$CCRUNCHER/data/portfolio.out");
+    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
+    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
     #computes observed frequencies
-    obs <- tabulate(x+1, 3);
+    obs <- tabulate(data[,1]+1, 3);
     #fixes theoretical probabilities
     prob <- c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1);
     #performs chi square test
     cst <- chisq.test(obs, p=prob)
     #if p-value > 0.01 than distribution is correct
-    if (cst[3] > 0.01) { 
-      cat("test02 passed\n");
-      quit(save="no", status=0);
-    }
-    else {
-      cat("test02 failed\n");
+    if (cst\$p.value <= 0.01) { 
+      cat("test02 failed (chisq test)\n");
       quit(save="no", status=1);
     }
+    #load copula data
+    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
+    correl <- cor(data[,1],data[,2])
+    if (abs(correl) > 0.05) { 
+      cat("test02 failed (correlation test)\n");
+      quit(save="no", status=1);
+    }
+    #exit
+    cat("test02 passed\n");
+    quit(save="no", status=0);
 _EOF_
 
   return $?;
@@ -206,7 +207,7 @@ _EOF_
 #-------------------------------------------------------------
 test03() {
 
-  $CCRUNCHER/bin/ccruncher -f --path=data $CCRUNCHER/samples/test03.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test03.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test03.xml";
@@ -214,29 +215,96 @@ test03() {
   fi
 
   R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/report.R", echo=FALSE);
-    x <- ccruncher.read("$CCRUNCHER/data/portfolio.out");
+    options(warn=-1)
+    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
+    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
     #computes observed frequencies
-    obs <- tabulate(x+1, 101);
+    obs <- tabulate(data[,1]+1, 101);
     #fixes theoretical probabilities
     prob <- dbinom(0:100, 100, 0.1);
     #performs chi square test
     cst <- chisq.test(obs, p=prob);
     #if p-value > 0.01 than distribution is correct
-    if (cst[3] > 0.01) { 
-      cat("test03 passed\n");
-      quit(save="no", status=0);
-    }
-    else {
-      cat("test03 failed\n");
+    if (cst\$p.value <= 0.01) { 
+      cat("test03 failed (chisq test)\n");
       quit(save="no", status=1);
     }
+    #load copula data
+    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
+    correl <- cor(data)
+    for(i in 1:length(data))
+    {
+       for(j in 1:i)
+       {
+         if (i!=j && abs(correl[i,j]) > 0.05) { 
+           cat("test03 failed (correlation test)\n");
+           quit(save="no", status=1);
+         }
+       }
+    }
+    #exit
+    cat("test03 passed\n");
+    quit(save="no", status=0);
 _EOF_
 
   return $?;
 
 }
 
+#-------------------------------------------------------------
+# performs test 4
+#-------------------------------------------------------------
+test04() {
+
+  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test04.xml > /dev/null;
+
+  if [ $? != 0 ]; then
+    echo "error: ccruncher has reported an error executing file samples/test04.xml";
+    return $?;
+  fi
+
+  R --vanilla --slave << _EOF_
+    #load copula data
+    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
+    correl <- cor(data)
+    for(i in 1:50)
+    {
+       for(j in 1:50)
+       {
+         if (i!=j && abs(correl[i,j]-0.1) > 0.025) { 
+           cat("test04 failed (correlation test)\n");
+           quit(save="no", status=1);
+         }
+       }
+    }
+    for(i in 51:100)
+    {
+       for(j in 51:100)
+       {
+         if (i!=j && abs(correl[i,j]-0.15) > 0.025) { 
+           cat("test04 failed (correlation test)\n");
+           quit(save="no", status=1);
+         }
+       }
+    }
+    for(i in 1:50)
+    {
+       for(j in 51:100)
+       {
+         if (i!=j && abs(correl[i,j]-0.05) > 0.025) { 
+           cat("test04 failed (correlation test)\n");
+           quit(save="no", status=1);
+         }
+       }
+    }
+    #exit
+    cat("test04 passed\n");
+    quit(save="no", status=0);
+_EOF_
+
+  return $?;
+
+}
 
 #-------------------------------------------------------------
 # main function
@@ -257,6 +325,11 @@ if [ $? != 0 ]; then
 fi
 
 test03;
+if [ $? != 0 ]; then
+  retcode=`expr $retcode + 1`;
+fi
+
+test04;
 if [ $? != 0 ]; then
   retcode=`expr $retcode + 1`;
 fi
