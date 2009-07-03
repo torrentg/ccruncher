@@ -159,6 +159,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
 //===========================================================================
 void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"survival")) {
     if (getNumAttributes(attributes) < 1 || getNumAttributes(attributes) > 2) {
       throw Exception("invalid number of attributes in tag survival");
@@ -190,6 +191,7 @@ void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const cha
 //===========================================================================
 void ccruncher::Survival::epend(ExpatUserData &eu, const char *name)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"survival")) {
     validate();
     fillHoles();

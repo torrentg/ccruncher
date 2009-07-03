@@ -145,6 +145,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
 //===========================================================================
 void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"ratings")) {
     validations();
     auxrating.reset();

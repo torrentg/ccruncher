@@ -1,13 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ************************************************************** -->
-<!-- read file $CCRUNCHER$/samples/readme.txt                       -->
-<!-- ************************************************************** -->
-
 <ccruncher
 	xmlns="http://www.generacio.com/ccruncher"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.generacio.com/ccruncher ccruncher.xsd">
+
+  <title>test01</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  1 borrower
+  1 unique sector
+  uncorrelated defaults (because only exist 1 borrower)
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  The borrower has an unique asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
+
+Expected Results:
+-------------------------------
+  This problem has an explicit solution. The asset loss
+  at t=12 can be modeled as a Bernouilli(0.1). Then, the
+  portfolio loss at t=12 can be modeled as Z~Bernouilli(0.1)
+    P(Z=0) = 0.9
+    P(Z=1) = 0.1
+
+How to check results?
+-------------------------------
+  > #loading script
+  > source("bin/ccreport.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio.csv")
+  > x <- x[,1]
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x+1, 2)
+  > #theoretical probabilities
+  > prob <- c(0.9, 0.1)
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst$p.value
+
+  ]]>
+  </description>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
@@ -97,3 +140,4 @@
   </portfolio>
 
 </ccruncher>
+

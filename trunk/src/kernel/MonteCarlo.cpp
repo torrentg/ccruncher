@@ -414,7 +414,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
-      int ndf = idata.getParams().getCopulaParam();
+      double ndf = idata.getParams().getCopulaParam();
       copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size(), ndf);
     }
     else {

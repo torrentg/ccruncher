@@ -120,6 +120,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
 //===========================================================================
 void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mcorrels")) {
     if (1 < getNumAttributes(attributes)) {
       throw Exception("invalid number of attributes in tag mcorrels");
@@ -154,6 +155,7 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 //===========================================================================
 void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mcorrels")) {
     validate();
   }

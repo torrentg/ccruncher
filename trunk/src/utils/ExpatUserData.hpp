@@ -48,7 +48,7 @@ class ExpatHandlers;
 class ExpatUserData
 {
 
-  public:
+  private:
 
     /** internal class */
     class ExpatUserDataToken

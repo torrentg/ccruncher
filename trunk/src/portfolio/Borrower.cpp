@@ -151,6 +151,7 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
 //===========================================================================
 void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"borrower")) {
 
     // reseting auxiliar variables (flushing data)

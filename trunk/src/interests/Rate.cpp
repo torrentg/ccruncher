@@ -23,6 +23,7 @@
 #include "interests/Rate.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor
@@ -54,6 +55,7 @@ bool ccruncher::operator <  (const Rate &x, const Rate &y)
 //===========================================================================
 void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"rate")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("incorrect number of attributes");
@@ -83,6 +85,7 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
 //===========================================================================
 void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"rate")) {
     // nothing to do
   }

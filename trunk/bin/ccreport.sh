@@ -21,29 +21,6 @@
 #   0    : OK
 #   other: KO
 #
-#-------------------------------------------------------------
-#
-# 2005/08/28 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
-# 2005/09/04 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added xml format argument
-#   . added portfolio value|loss argument
-#
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
-#   . removed unused options
-#   . CCRUNCHER var filled with dirname
-#
-# 2005/10/12 - Gerard Torrent [gerard@mail.generacio.com]
-#   . shows a message when no files found (and return KO)
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added Rev svn:keyword
-#
-# 2008/10/18 - Gerard Torrent [gerard@mail.generacio.com]
-#   . xml and txt output replaced by html output
-#   . renamed to ccreport.sh
-#
 #=============================================================
 
 #-------------------------------------------------------------

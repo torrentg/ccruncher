@@ -81,6 +81,7 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
 //===========================================================================
 void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"params")) {
     validate();
   }
@@ -114,7 +115,7 @@ string ccruncher::Params::getCopulaType() const throw(Exception)
 //===========================================================================
 // checks copula type string
 //===========================================================================
-int ccruncher::Params::getCopulaParam() throw(Exception)
+double ccruncher::Params::getCopulaParam() throw(Exception)
 {
   if (getCopulaType() != "t") {
     throw Exception("copula without params");
@@ -122,10 +123,10 @@ int ccruncher::Params::getCopulaParam() throw(Exception)
   // t-student case t(x), where x is a integer
   else {
     string val = copula_type.substr(2, copula_type.length()-3);
-    int ndf = Parser::intValue(val);
-    if (ndf <= 2) 
+    double ndf = Parser::doubleValue(val);
+    if (ndf <= 0.0) 
     {
-      throw Exception("t-student copula requires ndf > 2");
+      throw Exception("t-student copula requires ndf > 0");
     }
     return ndf;
   }
@@ -136,6 +137,7 @@ int ccruncher::Params::getCopulaParam() throw(Exception)
 //===========================================================================
 void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes) throw(Exception)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   // reading attribute name
   string name = getStringAttribute(attributes,"name", "");
 

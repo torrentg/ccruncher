@@ -15,30 +15,6 @@
 #   0    : OK
 #   other: KO
 #
-#-------------------------------------------------------------
-#
-# 2005/05/29 - Gerard Torrent [gerard@mail.generacio.com]
-#   . initial release
-#
-# 2005/09/04 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added script report
-#
-# 2005/09/06 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added tex files
-#
-# 2005/09/10 - Gerard Torrent [gerard@mail.generacio.com]
-#   . removed plotdata and plotmtrans scripts
-#
-# 2005/09/27 - Gerard Torrent [gerard@mail.generacio.com]
-#   . changed CCRUNCHERPATH asignation
-#
-# 2005/10/15 - Gerard Torrent [gerard@mail.generacio.com]
-#   . added Rev svn:keyword
-#   . added dependences paragraph at comments
-#
-# 2008/10/18 - Gerard Torrent [gerard@mail.generacio.com]
-#   . script report renamed to ccreport.sh
-#
 #=============================================================
 
 #-------------------------------------------------------------

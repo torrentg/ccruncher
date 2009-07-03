@@ -38,6 +38,7 @@
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/ccmpi.h"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -268,6 +269,8 @@ void startup(int argc, char *argv[]) throw(Exception)
   }
 #else
   // nothing to do
+  assert(argc > 0);
+  assert(argv != NULL);
 #endif
 }
 

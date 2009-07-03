@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ************************************************************** -->
-<!-- read file $CCRUNCHER$/samples/readme.txt                       -->
-<!-- ************************************************************** -->
-
 <ccruncher>
+
+  <title>test04</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  100 borrowers
+  2 sectors
+  Odds borrowers (50) belongs to S1 and even borrowers (50) belongs to S2
+  correlated defaults
+    correl(S1,S1) = 0.10
+    correl(S1,S2) = 0.05
+    correl(S2,S2) = 0.15
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  Each borrower has an asset with this profile:
+    asset value at t=12 is 1 if borrower is alive and
+    asset value at t=12 is 0 if borrower dead (default)
+
+Expected Results:
+-------------------------------
+  We don't know explicit solution for this problem (if you know, please
+  report it).
+
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+   0.00    6.00   10.00   10.78   14.00   49.00
+
+  ]]>
+  </description>
 
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
@@ -14,7 +45,7 @@
     <property name="time.T" value="01/01/2006"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
-    <property name="copula.type" value="t(250)"/>
+    <property name="copula.type" value="t(3)"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveBorrowers" value="true"/>

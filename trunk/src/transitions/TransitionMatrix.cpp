@@ -150,6 +150,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
 //===========================================================================
 void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mtransitions")) {
     if (getNumAttributes(attributes) < 1 || 2 < getNumAttributes(attributes)) {
       throw Exception("invalid number of attributes in tag mtransitions");
@@ -184,6 +185,7 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
 //===========================================================================
 void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mtransitions")) {
     validate();
   }
