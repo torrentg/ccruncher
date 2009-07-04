@@ -2,7 +2,7 @@
 %***************************************************************************
 %
 % CreditCruncher - A portfolio credit risk valorator
-% Copyright (C) 2007 Gerard Torrent
+% Copyright (C) 2003-2009 Gerard Torrent
 %
 % This program is free software; you can redistribute it and/or
 % modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@
 \usepackage{fancyhdr}
 \usepackage[flushmargin]{footmisc}
 \usepackage{placeins}
+\usepackage{verbatim}
 
 %-----------------------------------------------------
 % defining some useful values
@@ -78,6 +79,7 @@ value at risk, expected shortfall.
 
 
 %===========================================================================
+\begin{comment}
 \section{Introduction}
 
 %TODO: Little schema how ccruncher solves problem (Monte Carlo, Copula, Portfolio, etc.)
@@ -98,7 +100,7 @@ value at risk, expected shortfall.
 %TODO: bottom-up approach
 
 %TODO: Tell how losses are considered (non-revolvered, transported along time)
-
+\end{comment}
 
 %===========================================================================
 \section{Parameters}
@@ -324,7 +326,8 @@ of joint extreme downward movements. Moreover gaussian copula is too optimistic 
 diversiﬁcation benefits.
 
 %...........................................................................
-\subsubsection{Default times generation}
+\subsubsection{Default times simulation}
+\label{sec:deftimessim}
 Given the borrower $k$ and the random number $u_k \in [0,1]$ (generated using a 
 copula in the previous step) we simulate the default time considering the 
 inverse of the borrower survival function at $u_k$ \cite{ref:cred_risk}. 
@@ -341,6 +344,7 @@ Figure \ref{simttd} shows this in a graphic manner.
 
 %...........................................................................
 \subsubsection{Portfolio loss evaluation}
+\label{sec:portfolioloss}
 At this point, given any borrower, we have a simulated default time. The loss
 caused by this borrower is the sum of all remaining cashflows at default time 
 minus the recovery at default default time. To obtain the simulated 
@@ -579,7 +583,7 @@ simulations reached) the master sends a stop signal to the slaves and leaves.
 %===========================================================================
 \section{Numerical example}
 
-Lets go to compute the credit risk at $T=3$ years for the following portfolio.
+Lets go to compute the credit risk at $T=30$ years for the following portfolio.
 
 \begin{table}[!hb]
 \begin{center}
@@ -589,8 +593,8 @@ Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \cr
 B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \cr
 B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \cr
 B3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \cr
-B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5         \cr
-B5  & White \& Rebolan     & B      & Services       & 30\%     & A6, A7, A8 \cr
+B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5, A6, A7 \cr
+B5  & White \& Rebolan     & B      & Services       & 30\%     & A8         \cr
 B6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \cr
 B7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \cr
 B8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \cr
@@ -601,26 +605,25 @@ B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \cr
 \end{center}
 \end{table}
 
-The following table list the assets events.
+The following table list the assets events in months from current date.
 
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{c|c|c|c|c|c|c|c|c|c|c|c|c}
-Date     & A1   & A2   & A3   & A4   & A5   & A6   & A7   & A8   & A9   & A10  & A11  & A12   \cr
+Month & A1   & A2   & A3   & A4   & A5   & A6   & A7   & A8   & A9   & A10  & A11  & A12   \cr
 \hline
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &       \cr
-dd/mm/yy &      &      &      &      &      &      &      &      &      &      &      &             
+6     & 10 \$&      &      &      &100 \$&      &      &      &      &      &      & 70 \$ \cr
+12    &      & 50 \$&      &      &      & 20 \$& 80 \$&      & 20 \$&      &      &       \cr
+36    &      &      &      &      &      &      &      &      &      &      & 30 \$&       \cr
+60    &      & 30 \$&      &      & 10 \$&      & 20 \$& 80 \$&      &      &      &       \cr
+90    &      &      &      &      &      & 30 \$&      &      &      &      &      &       \cr
+120   & 15 \$&      & 40 \$&      & 30 \$&      &      &      &      &      &      &       \cr
+180   &      &      &      &      & 40 \$& 70 \$&      &      &      &      &      &       \cr
+216   &      & 10 \$&      &      & 50 \$&      &      &      &      &      &      & 80 \$ \cr
+240   &      &      &      &100 \$&      &      &      &      &      &      &      &       \cr
+312   &100 \$&      & 40 \$&      & 70 \$&      &      &      & 70 \$&      &      &       \cr
+360   &      &      &      &      &      & 15 \$&      &      &      &      & 40 \$&       \cr
+384   & 90 \$&      &      &      & 90 \$&      &      &      &      &100 \$& 90 \$&             
 \end{tabular}
 \caption{Assets events}
 \label{example.assets}
@@ -666,7 +669,7 @@ Services       &    $0.30$    &     $0.34$     &   $0.40$
 \end{table}
 
 %---------------------------------------------------------------------------
-\subsection{Computing survival functions from transition matrix}
+\subsection{Obtaining the survival functions}
 
 We use appendix \ref{ap:tmatrix} to compute the survivals functions 
 with a time resolution of $1$ month. We scale the transition matrix 
@@ -735,7 +738,7 @@ S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} =
   99.989 \cr
   99.934 \cr
   99.975 \cr
-  90.034 
+  98.034 
 \end{array}
 \right)
 \end{displaymath}
@@ -825,6 +828,8 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 If we repeat the same procedure for the $36$ month we obtain the survival
 function exposed at table \ref{example.survivals}.
 
+\clearpage 
+
 \begin{table}[!hb]
 \begin{center}
 {\small
@@ -866,7 +871,8 @@ Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
 33 &  99.994 &  99.957 &  99.763 &  99.212 &  96.050 &  85.784 &  59.472 \cr
 34 &  99.994 &  99.954 &  99.752 &  99.173 &  95.890 &  85.374 &  58.772 \cr
 35 &  99.993 &  99.950 &  99.741 &  99.134 &  95.728 &  84.966 &  58.092 \cr
-36 &  99.993 &  99.947 &  99.729 &  99.094 &  95.565 &  84.560 &  57.431 
+36 &  99.993 &  99.947 &  99.729 &  99.094 &  95.565 &  84.560 &  57.431 \cr
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
 \end{tabular}
 }
 \caption{Survival functions table}
@@ -909,8 +915,11 @@ and \ref{ap:tstudentcopu}.
 \paragraph{Step 1.} We create the covariance matrix $\Sigma'$ mapping 
 $\Sigma$ component by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ 
 transformation):
+
+{\small
 \begin{displaymath}
-\Sigma' = \left( 
+\Sigma' = 
+\left( 
 \begin{array}{ccccccccc}
    1.0000 & 0.5176 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
    0.5176 & 1.0000 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
@@ -924,9 +933,12 @@ transformation):
 \end{array}
 \right)
 \end{displaymath}
+}
 
 \paragraph{Step 2.} We apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
+
+{\small
 \begin{displaymath}
 B = 
 \left(
@@ -943,37 +955,147 @@ B =
 \end{array}
 \right)
 \end{displaymath}
+}
 
 %---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
 
-\subsubsection{Random numbers generation}
-All required random numbers follows a $N(0,1)$ distribution. To obtain them
-we apply the Box-Muller algorithm exposed in appendix \ref{ap:normsim}. Every 
-time that we need a $N(0,1)$ random number, we do:
+In this example we use a gaussian copula. Each Monte Carlo trial consist of 
+three parts, the copula simulation, the default times simulation and the
+portfolio loss evaluation.
 
-\paragraph{Step 1.} We generate $2$ independent random numbers following 
-a $U[0,1]$ distribution.
+\paragraph{Copula simulation.} To simulate the gaussian copula we follows the 
+steps $3$ to $5$ from appendice \ref{ap:gaussiancopu}. To simulate the multivariate
+$N(0,\Sigma')$ we simulate 9 independents $N(0,1)$ and multiplies with $B$.
 
+{\small
 \begin{displaymath}
-u_1 = 0.72286 \quad , \quad u_2 = 0.38991
+\vec{Z} = B \cdot
+\left(
+\begin{array}{c}
+  +0.0689 \cr
+  -0.3096 \cr
+  -0.2790 \cr
+  +0.4435 \cr
+  -1.2855 \cr
+  -0.8553 \cr
+  -0.6456 \cr
+  -0.0275 \cr
+  -0.6733 \cr
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+  +0.0689 \cr
+  -0.2292 \cr
+  -0.2929 \cr
+  +0.1630 \cr
+  -1.1803 \cr
+  -1.0575 \cr
+  -1.0120 \cr
+  -0.5839 \cr
+  -1.1143 \cr
+\end{array}
+\right) 
 \end{displaymath}
+}
 
-\paragraph{Step 2.} We compute the $N(0,1)$ random number doing:
-
+Finally we obtain the copula $\vec{U}$ doing:
+{\small
 \begin{displaymath}
-z = 
-\sqrt{-2 \cdot ln(0.72286)} \cdot cos(2 \pi \cdot 0.38991) =
--0.62048
+\vec{U} 
+=
+\left(
+\begin{array}{c}
+\Phi(+0.0689) \cr
+\Phi(-0.2292) \cr
+\Phi(-0.2929) \cr
+\Phi(+0.1630) \cr
+\Phi(-1.1803) \cr
+\Phi(-1.0575) \cr
+\Phi(-1.0120) \cr
+\Phi(-0.5839) \cr
+\Phi(-1.1143) \cr
+\end{array}
+\right) 
+=
+\left(
+\begin{array}{c}
+   0.5275 \cr
+   0.4093 \cr
+   0.3848 \cr
+   0.5647 \cr
+   0.1189 \cr
+   0.1452 \cr
+   0.1558 \cr
+   0.2797 \cr
+   0.1326 \cr
+\end{array}
+\right) 
 \end{displaymath}
+}
+where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 
+\paragraph{Default times simulation.} To simulate the default time we use the 
+inverse of survivals functions as explained in section \ref{sec:deftimessim}.
+The first borrower has an initial rating AA and a copula value of $52.75$. 
+In table \ref{example.survivals} we search the month where AA is near to 
+$52.75$ and we consider this month, $961$, as the month where the first borrower 
+defaults. 
 
-\subsubsection{Copula simulation}
+{\small
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{|c|c|c|c|}
+Borrower & Rating & $\vec{U}_i$ & Default month     \cr
+\hline
+B1       & AA     &  0.5275     &  961      \cr
+B2       & BBB    &  0.4093     &  898      \cr
+B3       & AA     &  0.3848     &  $>$ 1000 \cr
+B4       & BB     &  0.5647     &  310      \cr
+B5       & B      &  0.1189     &  $>$ 1000 \cr
+B6       & BBB    &  0.1452     &  $>$ 1000 \cr
+B7       & AAA    &  0.1558     &  $>$ 1000 \cr
+B8       & CCC    &  0.2797     &  171      \cr
+B9       & AA     &  0.1326     &  $>$ 1000 \cr
+\end{tabular}
+\caption{Simulated default times}
+\end{center}
+\end{table}
+}
 
-\subsubsection{Default times simulation}
+\paragraph{Portfolio loss evaluation.} To evaluate the portfolio loss 
+we use the simulated default times and the portfolio composition (tables 
+\ref{example.portfolio} and \ref{example.assets}) as explained in section 
+\ref{sec:portfolioloss}.
 
-\subsubsection{Portfolio Loss simulation}
+{\small
+\begin{table}[!hb]
+\begin{center}
+\begin{tabular}[]{|c|c|c|c|c|c|}
+Borrower & Default month & Asset & Exposed & Recovery & Loss \cr
+\hline
+B1       & 961           &  A1   &               &  80\%    &        \cr
+B2       & 898           &  A2   &               &  75\%    &        \cr
+B2       & 898           &  A3   &               &  75\%    &        \cr
+B3       & $>$ 1000      &  A4   &               &  60\%    &        \cr
+B4       & 310           &  A5   & 70 \$ + 90 \$ &  90\%    &  16 \$ \cr
+B4       & 310           &  A6   & 15 \$         &  90\%    & 1.5 \$ \cr
+B4       & 310           &  A7   &               &  90\%    &        \cr
+B5       & $>$ 1000      &  A8   &               &  30\%    &        \cr
+B6       & $>$ 1000      &  A9   &               &  60\%    &        \cr
+B7       & $>$ 1000      &  A10  &               &  50\%    &        \cr
+B8       & 171           &  A11  & 40 \$ + 90 \$ &  60\%    &  52 \$ \cr
+B9       & $>$ 1000      &  A12  &               &  50\%    &        \cr
+\end{tabular}
+\caption{Portfolio loss evaluation}
+\end{center}
+\end{table}
+}
 
+The simulated portfolio loss is the sum of all asset losses, $69.5$ \$ in this 
+Monte Carlo trial. 
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
@@ -982,6 +1104,7 @@ z =
 
 
 %===========================================================================
+\begin{comment}
 \section{Case studies}
 
 \subsection{Identical uncorrelated borrowers}
@@ -995,7 +1118,7 @@ z =
 
 \subsection{Non-identical correlated borrowers}
 %TODO: fill this section. use samples/README
-
+\end{comment}
 
 %===========================================================================
 \newpage
