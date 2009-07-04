@@ -144,6 +144,7 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
 //===========================================================================
 void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"interests")) {
     auxinterest.reset();
     validate();

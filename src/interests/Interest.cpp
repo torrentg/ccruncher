@@ -231,6 +231,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
 //===========================================================================
 void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"interest")) {
     // nothing to do
   }

@@ -145,6 +145,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
 //===========================================================================
 void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
 {
+  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sectors")) {
     validations();
     auxsector.reset();
