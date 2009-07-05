@@ -153,12 +153,11 @@ $Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
 
 Note that diagonal elements are default time correlations between members of the 
 same sector (values distinct than $1$) while elements outside diagonal are 
-default time correlations between sectors.
+default time correlations between elements of distinct sectors.
 \newline
 
-How to fix the $\rho_{i,j}$ values is outside the scope of this paper.
-You can find more information about this topic on \cite{correlations:ubs} 
-and \cite{correlations:cmetrics}.
+Appendice \ref{ap:mcorrel} expose a simple method to obtain an estimation of
+the correlation matrix based on the historical information about defaults.
 
 %---------------------------------------------------------------------------
 \subsection{Portfolio}
@@ -225,7 +224,7 @@ This section explains how CCruncher computes the credit risk of a portfolio.
 We need to translate from default correlations between sectors to default 
 correlations between borrowers. Let us suppose that we have $n$ borrowers and $m$ 
 sectors. Each borrower belongs to a sector. Correlations between sectors are 
-known (see \ref{sectors}):
+known (see section \ref{sectors}):
 
 \begin{center}
 \begin{tabular}[]{cc}
@@ -378,9 +377,6 @@ Expected Loss) have an error margin that will be estimated. CCruncher uses
 computations described below.
 \newline
 
-First of all we can approximate the probability distribution of the portfolio 
-loss creating an histogram with the simulated values.
-
 \begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=7cm, angle=0]{./images/creditvar.eps}
@@ -392,7 +388,7 @@ loss creating an histogram with the simulated values.
 
 %...........................................................................
 \subsubsection{Expected Loss}
-Expected Loss is the probability distribution mean of the portfolio loss.
+Expected Loss is mean of the portfolio loss distribution.
 Central Limit Theorem \cite{stats:schaum} grants that:
 
 \begin{displaymath}
@@ -408,8 +404,7 @@ the mean and stddev estimators:
 
 \begin{displaymath}
 \widehat{\sigma} =
-\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2} =
-\sqrt{\frac{1}{N-1} \left( \sum_{i=1}^{N} x_i^2 - \frac{\left(\sum_{i=1}^{N} x_i \right)^2}{N} \right)}
+\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2}
 \end{displaymath}
 
 %...........................................................................
@@ -505,8 +500,7 @@ Then,
 
 \begin{displaymath}
 \textrm{stderr}(ES_{\beta}) =
-\frac{\sqrt{\frac{1}{K-1} \sum_{i=1}^{K} \left( y_i - \widehat{ES_{\beta}} \right)^2}}{\sqrt{K}} =
-\frac{\sqrt{\frac{1}{K-1} \left( \sum_{i=1}^{K} y_i^2 - \frac{\left(\sum_{i=1}^{K} y_i \right)^2}{K} \right)}}{\sqrt{K}}
+\frac{\sqrt{\frac{1}{K-1} \sum_{i=1}^{K} \left( y_i - \widehat{ES_{\beta}} \right)^2}}{\sqrt{K}}
 \end{displaymath}
 
 %...........................................................................
@@ -607,31 +601,33 @@ B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \cr
 
 The following table list the assets events in months from current date.
 
+{\small
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{c|c|c|c|c|c|c|c|c|c|c|c|c}
-Month & A1   & A2   & A3   & A4   & A5   & A6   & A7   & A8   & A9   & A10  & A11  & A12   \cr
+Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \cr
 \hline
-6     & 10 \$&      &      &      &100 \$&      &      &      &      &      &      & 70 \$ \cr
-12    &      & 50 \$&      &      &      & 20 \$& 80 \$&      & 20 \$&      &      &       \cr
-36    &      &      &      &      &      &      &      &      &      &      & 30 \$&       \cr
-60    &      & 30 \$&      &      & 10 \$&      & 20 \$& 80 \$&      &      &      &       \cr
-90    &      &      &      &      &      & 30 \$&      &      &      &      &      &       \cr
-120   & 15 \$&      & 40 \$&      & 30 \$&      &      &      &      &      &      &       \cr
-180   &      &      &      &      & 40 \$& 70 \$&      &      &      &      &      &       \cr
-216   &      & 10 \$&      &      & 50 \$&      &      &      &      &      &      & 80 \$ \cr
-240   &      &      &      &100 \$&      &      &      &      &      &      &      &       \cr
-312   &100 \$&      & 40 \$&      & 70 \$&      &      &      & 70 \$&      &      &       \cr
-360   &      &      &      &      &      & 15 \$&      &      &      &      & 40 \$&       \cr
-384   & 90 \$&      &      &      & 90 \$&      &      &      &      &100 \$& 90 \$&             
+6     & 10\$&     &     &     &100\$&     &     &     &     &     &     & 70\$ \cr
+12    &     & 50\$&     &     &     & 20\$& 80\$&     & 20\$&     &     &      \cr
+36    &     &     &     &     &     &     &     &     &     &     & 30\$&      \cr
+60    &     & 30\$&     &     & 10\$&     & 20\$& 80\$&     &     &     &      \cr
+90    &     &     &     &     &     & 30\$&     &     &     &     &     &      \cr
+120   & 15\$&     & 40\$&     & 30\$&     &     &     &     &     &     &      \cr
+180   &     &     &     &     & 40\$& 70\$&     &     &     &     &     &      \cr
+216   &     & 10\$&     &     & 50\$&     &     &     &     &     &     & 80\$ \cr
+240   &     &     &     &100\$&     &     &     &     &     &     &     &      \cr
+312   &100\$&     & 40\$&     & 70\$&     &     &     & 70\$&     &     &      \cr
+360   &     &     &     &     &     & 15\$&     &     &     &     & 40\$&      \cr
+384   & 90\$&     &     &     & 90\$&     &     &     &     &100\$& 90\$&             
 \end{tabular}
 \caption{Assets events}
 \label{example.assets}
 \end{center}
 \end{table}
+}
 
-In this example we supose that we don't dispose of survival functions but we have the transition
-matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
+In this example we supose that we don't dispose of survival functions but we have the 
+$1$-year transition matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
 
 \begin{table}[!hb]
 \begin{center}
@@ -825,7 +821,7 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 \right)
 \end{displaymath}
 
-If we repeat the same procedure for the $36$ month we obtain the survival
+If we repeat the same procedure for the $360$ months we obtain the survival
 function exposed at table \ref{example.survivals}.
 
 \clearpage 
@@ -836,43 +832,37 @@ function exposed at table \ref{example.survivals}.
 \begin{tabular}[]{c|rrrrrrrr}
 Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
 \hline
-1  & 100.000 & 100.000 &  99.996 &  99.989 &  99.934 &  99.575 &  98.034 \cr
-2  & 100.000 & 100.000 &  99.992 &  99.978 &  99.863 &  99.148 &  96.134 \cr
-3  & 100.000 & 100.000 &  99.987 &  99.966 &  99.788 &  98.718 &  94.296 \cr
-4  & 100.000 & 100.000 &  99.983 &  99.953 &  99.709 &  98.286 &  92.518 \cr
-5  & 100.000 & 100.000 &  99.978 &  99.939 &  99.626 &  97.853 &  90.798 \cr
-6  & 100.000 & 100.000 &  99.973 &  99.925 &  99.539 &  97.418 &  89.134 \cr
-7  & 100.000 & 100.000 &  99.968 &  99.909 &  99.448 &  96.981 &  87.525 \cr
-8  & 100.000 & 100.000 &  99.963 &  99.893 &  99.353 &  96.544 &  85.967 \cr
-9  & 100.000 & 100.000 &  99.957 &  99.876 &  99.255 &  96.106 &  84.460 \cr
-10 & 100.000 & 100.000 &  99.952 &  99.858 &  99.153 &  95.668 &  83.000 \cr
-11 & 100.000 & 100.000 &  99.946 &  99.840 &  99.048 &  95.229 &  81.588 \cr
-12 & 100.000 & 100.000 &  99.940 &  99.820 &  98.940 &  94.790 &  80.220 \cr
-13 & 100.000 &  99.999 &  99.934 &  99.800 &  98.828 &  94.351 &  78.896 \cr
-14 & 100.000 &  99.998 &  99.928 &  99.778 &  98.714 &  93.912 &  77.613 \cr
-15 & 100.000 &  99.997 &  99.921 &  99.756 &  98.596 &  93.474 &  76.370 \cr
-16 & 100.000 &  99.996 &  99.914 &  99.733 &  98.475 &  93.036 &  75.167 \cr
-17 & 100.000 &  99.995 &  99.907 &  99.710 &  98.352 &  92.599 &  74.000 \cr
-18 &  99.999 &  99.993 &  99.900 &  99.685 &  98.225 &  92.162 &  72.870 \cr
-19 &  99.999 &  99.992 &  99.893 &  99.660 &  98.096 &  91.727 &  71.775 \cr
-20 &  99.999 &  99.990 &  99.885 &  99.633 &  97.965 &  91.292 &  70.713 \cr
-21 &  99.999 &  99.988 &  99.877 &  99.606 &  97.831 &  90.859 &  69.683 \cr
-22 &  99.999 &  99.986 &  99.869 &  99.578 &  97.694 &  90.427 &  68.685 \cr
-23 &  99.998 &  99.984 &  99.861 &  99.549 &  97.555 &  89.996 &  67.717 \cr
-24 &  99.998 &  99.982 &  99.852 &  99.519 &  97.414 &  89.567 &  66.777 \cr
-25 &  99.998 &  99.980 &  99.843 &  99.488 &  97.270 &  89.139 &  65.866 \cr
-26 &  99.998 &  99.978 &  99.834 &  99.457 &  97.125 &  88.714 &  64.982 \cr
-27 &  99.997 &  99.975 &  99.825 &  99.424 &  96.977 &  88.289 &  64.124 \cr
-28 &  99.997 &  99.972 &  99.815 &  99.391 &  96.827 &  87.867 &  63.290 \cr
-29 &  99.996 &  99.970 &  99.805 &  99.357 &  96.675 &  87.446 &  62.482 \cr
-30 &  99.996 &  99.967 &  99.795 &  99.322 &  96.522 &  87.028 &  61.696 \cr
-31 &  99.995 &  99.964 &  99.785 &  99.286 &  96.366 &  86.611 &  60.933 \cr
-32 &  99.995 &  99.961 &  99.774 &  99.249 &  96.209 &  86.197 &  60.192 \cr
-33 &  99.994 &  99.957 &  99.763 &  99.212 &  96.050 &  85.784 &  59.472 \cr
-34 &  99.994 &  99.954 &  99.752 &  99.173 &  95.890 &  85.374 &  58.772 \cr
-35 &  99.993 &  99.950 &  99.741 &  99.134 &  95.728 &  84.966 &  58.092 \cr
-36 &  99.993 &  99.947 &  99.729 &  99.094 &  95.565 &  84.560 &  57.431 \cr
+1   & 100.000 & 100.000 &  99.996 &  99.989 &  99.934 &  99.575 &  98.034 \cr
+2   & 100.000 & 100.000 &  99.992 &  99.978 &  99.863 &  99.148 &  96.134 \cr
+3   & 100.000 & 100.000 &  99.987 &  99.966 &  99.788 &  98.718 &  94.296 \cr
+4   & 100.000 & 100.000 &  99.983 &  99.953 &  99.709 &  98.286 &  92.518 \cr
+5   & 100.000 & 100.000 &  99.978 &  99.939 &  99.626 &  97.853 &  90.798 \cr
+6   & 100.000 & 100.000 &  99.973 &  99.925 &  99.539 &  97.418 &  89.134 \cr
+7   & 100.000 & 100.000 &  99.968 &  99.909 &  99.448 &  96.981 &  87.525 \cr
+8   & 100.000 & 100.000 &  99.963 &  99.893 &  99.353 &  96.544 &  85.967 \cr
+9   & 100.000 & 100.000 &  99.957 &  99.876 &  99.255 &  96.106 &  84.460 \cr
+10  & 100.000 & 100.000 &  99.952 &  99.858 &  99.153 &  95.668 &  83.000 \cr
+11  & 100.000 & 100.000 &  99.946 &  99.840 &  99.048 &  95.229 &  81.588 \cr
+12  & 100.000 & 100.000 &  99.940 &  99.820 &  98.940 &  94.790 &  80.220 \cr
+13  & 100.000 &  99.999 &  99.934 &  99.800 &  98.828 &  94.351 &  78.896 \cr
+14  & 100.000 &  99.998 &  99.928 &  99.778 &  98.714 &  93.912 &  77.613 \cr
+15  & 100.000 &  99.997 &  99.921 &  99.756 &  98.596 &  93.474 &  76.370 \cr
 \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
+169 &  99.213 &  97.964 &  95.345 &  88.888 &  72.479 &  50.213 &  28.155 \cr
+170 &  99.200 &  97.936 &  95.292 &  88.793 &  72.333 &  50.062 &  28.073 \cr
+171 &  99.187 &  97.908 &  95.240 &  88.698 &  72.188 &  49.912 &  \underline{27.992} \cr
+172 &  99.173 &  97.880 &  95.187 &  88.604 &  72.043 &  49.764 &  27.911 \cr
+173 &  99.159 &  97.851 &  95.134 &  88.509 &  71.899 &  49.616 &  27.832 \cr
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
+308 &  95.906 &  92.251 &  86.516 &  76.085 &  56.684 &  35.993 &  20.548 \cr
+309 &  95.871 &  92.198 &  86.445 &  75.999 &  56.596 &  35.924 &  20.511 \cr
+310 &  95.837 &  92.145 &  86.375 &  75.913 &  \underline{56.509} &  35.855 &  20.474 \cr
+311 &  95.801 &  92.093 &  86.304 &  75.828 &  56.423 &  35.787 &  20.437 \cr
+312 &  95.766 &  92.040 &  86.234 &  75.742 &  56.336 &  35.719 &  20.400 \cr
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
+358 &  93.986 &  89.478 &  82.955 &  71.932 &  52.638 &  32.889 &  18.868 \cr
+359 &  93.944 &  89.419 &  82.883 &  71.851 &  52.563 &  32.833 &  18.838 \cr
+360 &  93.902 &  89.361 &  82.812 &  71.771 &  52.488 &  32.778 &  18.808 \cr
 \end{tabular}
 }
 \caption{Survival functions table}
@@ -881,7 +871,7 @@ Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
 \end{table}
 
 %---------------------------------------------------------------------------
-\subsection{Creating borrowers correlation matrix}
+\subsection{Creating the borrowers correlation matrix}
 
 We use section \ref{tcorrel} to create the borrowers correlation matrix. In 
 this example, the debtors are sorted by sector and therefore no reorder is 
@@ -911,10 +901,10 @@ The copulas implemented by CreditCruncher, gaussian and T-Student,
 requires the same covariance matrix, $\Sigma'$. We compute this matrix
 following the steps $1$ and $2$ from appendices \ref{ap:gaussiancopu} 
 and \ref{ap:tstudentcopu}.
+\newline
 
-\paragraph{Step 1.} We create the covariance matrix $\Sigma'$ mapping 
-$\Sigma$ component by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ 
-transformation):
+We create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
+by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
 
 {\small
 \begin{displaymath}
@@ -935,7 +925,7 @@ transformation):
 \end{displaymath}
 }
 
-\paragraph{Step 2.} We apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
+And then we apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
 
 {\small
@@ -966,7 +956,8 @@ portfolio loss evaluation.
 
 \paragraph{Copula simulation.} To simulate the gaussian copula we follows the 
 steps $3$ to $5$ from appendice \ref{ap:gaussiancopu}. To simulate the multivariate
-$N(0,\Sigma')$ we simulate 9 independents $N(0,1)$ and multiplies with $B$.
+$\vec{Z} \sim N(0,\Sigma')$ we simulate 9 independents $N(0,1)$ and multiplies 
+with $B$.
 
 {\small
 \begin{displaymath}
@@ -1097,9 +1088,6 @@ B9       & $>$ 1000      &  A12  &               &  50\%    &        \cr
 The simulated portfolio loss is the sum of all asset losses, $69.5$ \$ in this 
 Monte Carlo trial. 
 
-%---------------------------------------------------------------------------
-\subsection{Risk computation}
-
 \FloatBarrier
 
 
@@ -1125,32 +1113,67 @@ Monte Carlo trial.
 \appendix
 \section{Appendices}
 
-%---------------------------------------------------------------------------
-\subsection{N(0,1) simulation}
-\label{ap:normsim}
+%...........................................................................
+\subsection{Correlation matrix estimation}
+\label{ap:mcorrel}
 
-In order to simulate $Z \sim N(\mu, \sigma^2)$ values we use the Box-Muller 
-method:
+In this section we expose a simple method to estimate the default times 
+correlation matrix. Supose that we dispose the number of components and the 
+number of components that defaulted for each sector for the last years (eg. 
+1980-2008). 
 
+\begin{center}
+\begin{tabular}[]{ccc}
+\begin{tabular}[]{c|ccc}
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+\hline
+1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \cr
+2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \cr
+3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \cr
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
+T-1      & $a_{K-1,1}$   & $\dots$  & $a_{T-1,m}$   \cr
+T        & $a_{K,1}$   & $\dots$  & $a_{T,m}$   \cr
+\end{tabular}
+& $\qquad$ &
+\begin{tabular}[]{c|ccc}
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+\hline
+1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \cr
+2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \cr
+3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \cr
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
+T-1      & $d_{T-1,1}$   & $\dots$  & $d_{T-1,m}$   \cr
+T        & $d_{T,1}$   & $\dots$  & $d_{T,m}$   \cr
+\end{tabular}
+\end{tabular}
+\end{center}
+
+where $a_{i,j}$ are the number of borrowers in sector $j$ at year $i$ and
+$d_{i,j}$ is the number of borrowers of sector $j$ at year $i$ that defaulted.
+\newline
+
+We use the following definition of correlation:
 \begin{displaymath}
-z = \mu + \sigma\cdot \sqrt{-2 \cdot ln(u_1)} \cdot cos(2 \pi \cdot u_2)
-\qquad u_1, u_2 \sim U[0,1]
+Correl(S_i,S_j) = \frac{P(S_i \cap S_j) - P(S_i) \cdot P(S_j)}{\sqrt{P(S_i) \cdot (1-P(S_i))} \cdot \sqrt{P(S_j) \cdot (1-P(S_j))}}
 \end{displaymath}
 
-Where $u_i$ are generated by a Mersenne Twister random number generator.
-
-%---------------------------------------------------------------------------
-\subsection{$\chi^2(\nu)$ simulation}
-\label{ap:chi2sim}
-
-In order to simulate $Z \sim \chi^2(\nu)$ values we use:
+Where,
 
 \begin{displaymath}
-z = \sum_{i=1}^{\nu} x_i^2
+P(S_i) = \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i}}{a_{t,i}}
 \end{displaymath}
 
-Where $x_i$ are simulated values from independent, normally distributed 
-random variables with mean 0 and variance 1, $X_i \sim N(0,1)$.
+\begin{displaymath}
+P(Si \cap S_j) = \left\{
+\begin{array}{ll}
+\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot d_{t,j}}{a_{t,i} \cdot a_{t,j}} & \textrm{if  } i \neq j \\
+\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot (d_{t,i}-1)}{a_{t,i} \cdot (a_{t,i}-1)} & \textrm{if  } i = j
+\end{array}
+\right.
+\end{displaymath}
+
+You can find more information about correlation matrix estimation on 
+\cite{correlations:ubs} and \cite{correlations:cmetrics}.
 
 %...........................................................................
 \subsection{Gaussian copula simulation}
@@ -1188,8 +1211,7 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \right)
 \end{displaymath}
 
-\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
-is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
+\paragraph{Step 3.} We simulate a $N(0,1)$ $n$ times:
 \begin{displaymath}
 \vec{Y} =
 \left(
@@ -1292,8 +1314,7 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \right)
 \end{displaymath}
 
-\paragraph{Step 3.} We simulate\footnote{The algorithm used to simulate a $N(0,1)$
-is explained in appendix \ref{ap:normsim}} a $N(0,1)$ $n$ times:
+\paragraph{Step 3.} We simulate a $N(0,1)$ $n$ times:
 \begin{displaymath}
 \vec{Y} =
 \left(
@@ -1306,8 +1327,7 @@ y_n
 \qquad y_k \sim N(0,1) \textrm{ independents}
 \end{displaymath}
 
-\paragraph{Step 4.} We simulate\footnote{The algorithm used to simulate a $\chi^2(\nu)$
-is explained in appendix \ref{ap:chi2sim}} a chi-square with $\nu$ degrees of freedom 
+\paragraph{Step 4.} We simulate a chi-square with $\nu$ degrees of freedom 
 independent of $\vec{Y}$:
 \begin{displaymath}
 s \sim \chi^2(\nu)
