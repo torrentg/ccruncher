@@ -672,7 +672,6 @@ with a time resolution of $1$ month. We scale the transition matrix
 to $1$ month doing $T_{\frac{1}{12}} = T_{1}^{\frac{1}{12}}$. Caution, 
 do calculations using absolute values, not percentages. $1$-month 
 transition matrix, $T_{\frac{1}{12}}$:
-
 {\small
 \begin{displaymath}
 %T_{\frac{1}{12}} = 
@@ -699,7 +698,6 @@ values by $0$.
 
 One time we dispose $1$-month transition matrix, we compute the survivals
 values at month $1$ doing ($d$ subindex means default column):
-
 \begin{displaymath}
 S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} = 
 \left( 
@@ -740,7 +738,6 @@ S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} =
 \end{displaymath}
 
 We compute the survivals values at month $2$ doing:
-
 \begin{displaymath}
 S(.,2 \textrm{ months}) = \vec{1} - (T_{1/12}^2)_{.d} = 
 \left( 
@@ -822,7 +819,7 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 \end{displaymath}
 
 If we repeat the same procedure for the $360$ months we obtain the survival
-function exposed at table \ref{example.survivals}.
+functions exposed at table \ref{example.survivals}.
 
 \clearpage 
 
@@ -870,13 +867,14 @@ Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
 \end{center}
 \end{table}
 
+\clearpage 
+
 %---------------------------------------------------------------------------
 \subsection{Creating the borrowers correlation matrix}
 
 We use section \ref{tcorrel} to create the borrowers correlation matrix. In 
 this example, the debtors are sorted by sector and therefore no reorder is 
 required.
-
 \begin{displaymath}
 \Sigma = 
 \left( 
@@ -905,7 +903,6 @@ and \ref{ap:tstudentcopu}.
 
 We create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
 by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
-
 {\small
 \begin{displaymath}
 \Sigma' = 
@@ -927,7 +924,6 @@ by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
 
 And then we apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
-
 {\small
 \begin{displaymath}
 B = 
@@ -958,7 +954,6 @@ portfolio loss evaluation.
 steps $3$ to $5$ from appendice \ref{ap:gaussiancopu}. To simulate the multivariate
 $\vec{Z} \sim N(0,\Sigma')$ we simulate 9 independents $N(0,1)$ and multiplies 
 with $B$.
-
 {\small
 \begin{displaymath}
 \vec{Z} = B \cdot
@@ -1034,12 +1029,11 @@ The first borrower has an initial rating AA and a copula value of $52.75$.
 In table \ref{example.survivals} we search the month where AA is near to 
 $52.75$ and we consider this month, $961$, as the month where the first borrower 
 defaults. 
-
 {\small
-\begin{table}[!hb]
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|}
-Borrower & Rating & $\vec{U}_i$ & Default month     \cr
+Borrower & Rating & $\vec{U}_i$ & Default month \cr
 \hline
 B1       & AA     &  0.5275     &  961      \cr
 B2       & BBB    &  0.4093     &  898      \cr
@@ -1055,30 +1049,30 @@ B9       & AA     &  0.1326     &  $>$ 1000 \cr
 \end{center}
 \end{table}
 }
+\FloatBarrier
 
 \paragraph{Portfolio loss evaluation.} To evaluate the portfolio loss 
 we use the simulated default times and the portfolio composition (tables 
 \ref{example.portfolio} and \ref{example.assets}) as explained in section 
 \ref{sec:portfolioloss}.
-
 {\small
-\begin{table}[!hb]
+\begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|c|c|}
 Borrower & Default month & Asset & Exposed & Recovery & Loss \cr
 \hline
-B1       & 961           &  A1   &               &  80\%    &        \cr
-B2       & 898           &  A2   &               &  75\%    &        \cr
-B2       & 898           &  A3   &               &  75\%    &        \cr
-B3       & $>$ 1000      &  A4   &               &  60\%    &        \cr
-B4       & 310           &  A5   & 70 \$ + 90 \$ &  90\%    &  16 \$ \cr
-B4       & 310           &  A6   & 15 \$         &  90\%    & 1.5 \$ \cr
-B4       & 310           &  A7   &               &  90\%    &        \cr
-B5       & $>$ 1000      &  A8   &               &  30\%    &        \cr
-B6       & $>$ 1000      &  A9   &               &  60\%    &        \cr
-B7       & $>$ 1000      &  A10  &               &  50\%    &        \cr
-B8       & 171           &  A11  & 40 \$ + 90 \$ &  60\%    &  52 \$ \cr
-B9       & $>$ 1000      &  A12  &               &  50\%    &        \cr
+B1       & 961           &  A1   &             &  80\%    &       \cr
+B2       & 898           &  A2   &             &  75\%    &       \cr
+B2       & 898           &  A3   &             &  75\%    &       \cr
+B3       & $>$ 1000      &  A4   &             &  60\%    &       \cr
+B4       & 310           &  A5   & 70\$ + 90\$ &  90\%    &  16\$ \cr
+B4       & 310           &  A6   & 15\$        &  90\%    & 1.5\$ \cr
+B4       & 310           &  A7   &             &  90\%    &       \cr
+B5       & $>$ 1000      &  A8   &             &  30\%    &       \cr
+B6       & $>$ 1000      &  A9   &             &  60\%    &       \cr
+B7       & $>$ 1000      &  A10  &             &  50\%    &       \cr
+B8       & 171           &  A11  & 40\$ + 90\$ &  60\%    &  52\$ \cr
+B9       & $>$ 1000      &  A12  &             &  50\%    &       \cr
 \end{tabular}
 \caption{Portfolio loss evaluation}
 \end{center}
