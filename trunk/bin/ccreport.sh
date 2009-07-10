@@ -29,7 +29,7 @@
 CCRUNCHER=`dirname $0`/..
 progname=ccreport.sh
 numversion="1.4"
-svnversion="R494"
+svnversion="R524"
 retcode=0
 options=""
 
@@ -49,7 +49,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2008 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2009 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
