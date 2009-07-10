@@ -47,7 +47,8 @@
 
 #===========================================================================
 # description
-#   concatenate 2 strings
+#   Internal function
+#   Concatenate 2 strings
 # arguments
 #   a: first string to concatenate
 #   b: second string to concatenate
@@ -60,6 +61,7 @@
 
 #===========================================================================
 # description
+#   Internal function
 #   Computes the standar error of a quantile using the Maritz-Jarrett method
 # arguments
 #   x: vector with values
@@ -100,12 +102,12 @@ ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
   for(i in M:N)
   {
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
-    if (W[i] < 1e-20) { break };
+    if (W[i] < 1e-10) { break };
   }
   for(i in M:1)
   {
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
-    if (W[i] < 1e-20) { break };
+    if (W[i] < 1e-10) { break };
   }
 
   #computing C1 and C2
@@ -118,46 +120,58 @@ ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
 
 #===========================================================================
 # description
+#   Internal function
 #   Compute the mean and standar error for each
 #   Monte Carlo iteration
 # arguments
 #   x: vector with values
-#   breaks: numeric. number of evaluated values
+#   breaks: vector with the indexes where to compute the mean
 # returns
 #   matrix(1,): mean
 #   matrix(2,): standard error of mean
 # example
 #   x <- rnorm(5000)
-#   ccruncher.cmean(x)
+#   breaks <- seq(0,5000,250)
+#   breaks[1] <- 2
+#   ccruncher.cmean(x, breaks)
 #===========================================================================
-ccruncher.cmean <- function(x, breaks=250)
+ccruncher.cmean <- function(x, breaks)
 {
+  #checking parameters
+  if (!is.vector(x) | length(x)<2) {
+    stop("not valid x argument");
+  }
+  if (!is.vector(breaks) | length(breaks)<1) {
+    stop("not valid breaks argument");
+  }
+  if (length(breaks[breaks<2]) > 0) {
+    stop("breaks with a value less than 2");
+  }
+  if (length(breaks[breaks>length(x)]) > 0) {
+    stop("breaks with a value bigger than x length");
+  }
+  aux <- tabulate(breaks);
+  if (length(aux[aux>1])>0) {
+    stop("breaks with repeated values");
+  }
+  sort(breaks);
+
   #initializing values
-  ret <- matrix(NaN, 2, length(x));
-  ret[1,1] <- x[1];
-  ret[2,1] <- 0;
-  aux1 <- x[1];
-  aux2 <- x[1]*x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
+  ret <- matrix(NaN, 2, length(breaks));
+  sum1 <- 0;
+  sum2 <- 0;
 
   #computing values
-  for(i in 2:length(x))
+  for(i in 1:length(breaks))
   {
-    aux1 <- aux1 + x[i];
-    aux2 <- aux2 + x[i]*x[i];
-
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      mu <- aux1/i;
-      stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
-      ret[1,i] <- mu;
-      ret[2,i] <- stddev/sqrt(i);
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    n1 <- ifelse(i==1,1,breaks[i-1]+1);
+    n2 <- breaks[i];
+    sum1 <- sum1 + sum(x[n1:n2]);
+    sum2 <- sum2 + sum(x[n1:n2]^2);
+    mu <- sum1/n2;
+    stddev <- sqrt((sum2-sum1*sum1/n2)/(n2-1));
+    ret[1,i] <- mu;
+    ret[2,i] <- stddev/sqrt(n2);
   }
 
   #returning values
@@ -166,45 +180,58 @@ ccruncher.cmean <- function(x, breaks=250)
 
 #===========================================================================
 # description
+#   Internal function
 #   Compute the standar deviation and standar error for each
 #   Monte Carlo iteration
 # arguments
 #   x: vector with values
-#   breaks: numeric. number of evaluated values
+#   breaks: vector with the indexes where to compute the mean
 # returns
 #   matrix(1,): standard deviation
 #   matrix(2,): standard error of standar deviation
 # example
 #   x <- rnorm(5000)
-#   ccruncher.cstddev(x)
+#   breaks <- seq(0,5000,250)
+#   breaks[1] <- 2
+#   ccruncher.cstddev(x, breaks)
 #===========================================================================
-ccruncher.cstddev <- function(x, breaks=250)
+ccruncher.cstddev <- function(x, breaks)
 {
+  #checking parameters
+  if (!is.vector(x) | length(x)<2) {
+    stop("not valid x argument");
+  }
+  if (!is.vector(breaks) | length(breaks)<1) {
+    stop("not valid breaks argument");
+  }
+  if (length(breaks[breaks<2]) > 0) {
+    stop("breaks with a value less than 2");
+  }
+  if (length(breaks[breaks>length(x)]) > 0) {
+    stop("breaks with a value bigger than x length");
+  }
+  aux <- tabulate(breaks);
+  if (length(aux[aux>1])>0) {
+    stop("breaks with repeated values");
+  }
+  sort(breaks);
+
   #initializing values
-  ret <- matrix(NaN, 2, length(x));
-  ret[1,1] <- 0;
-  ret[2,1] <- 0;
-  aux1 <- x[1];
-  aux2 <- x[1]*x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
+  ret <- matrix(NaN, 2, length(breaks));
+  sum1 <- 0;
+  sum2 <- 0;
 
   #computing values
-  for(i in 2:length(x))
+  for(i in 1:length(breaks))
   {
-    aux1 <- aux1 + x[i];
-    aux2 <- aux2 + x[i]*x[i];
-
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      stddev <- sqrt((aux2-aux1*aux1/i)/(i-1));
-      ret[1,i] <- stddev;
-      ret[2,i] <- stddev/sqrt(2*i);
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    n1 <- ifelse(i==1,1,breaks[i-1]+1);
+    n2 <- breaks[i];
+    sum1 <- sum1 + sum(x[n1:n2]);
+    sum2 <- sum2 + sum(x[n1:n2]^2);
+    mu <- sum1/n2;
+    stddev <- sqrt((sum2-sum1*sum1/n2)/(n2-1));
+    ret[1,i] <- stddev;
+    ret[2,i] <- stddev/sqrt(2*n2);
   }
 
   #returning values
@@ -213,49 +240,59 @@ ccruncher.cstddev <- function(x, breaks=250)
 
 #===========================================================================
 # description
+#   Internal function
 #   Compute the requested quantile and standar error for each
 #   Monte Carlo iteration
 # arguments
 #   x: vector with values
 #   prob: numeric. probability with value in [0,1]
-#   breaks: numeric. number of evaluated values
+#   breaks: vector with the indexes where to compute the mean
 # returns
 #   matrix(1,): prob-quantile
 #   matrix(2,): standard error of prob-quantile
 # example
 #   x <- rnorm(5000)
-#   ccruncher.cquantile(x, 0.01)
+#   breaks <- seq(0,5000,250)
+#   breaks[1] <- 2
+#   ccruncher.cquantile(x, breaks)
 # notes
 #   when length(x) is large, this function is expensive
-#   because involve calls to sort() function. breaks
-#   argument allows you to reduce the number of computations
+#   because involve calls to sort() function
 #===========================================================================
-ccruncher.cquantile <- function(x, prob, breaks=250)
+ccruncher.cquantile <- function(x, prob, breaks)
 {
+  #checking parameters
+  if (!is.vector(x) | length(x)<2) {
+    stop("not valid x argument");
+  }
+  if (!is.vector(breaks) | length(breaks)<1) {
+    stop("not valid breaks argument");
+  }
+  if (length(breaks[breaks<2]) > 0) {
+    stop("breaks with a value less than 2");
+  }
+  if (length(breaks[breaks>length(x)]) > 0) {
+    stop("breaks with a value bigger than x length");
+  }
+  aux <- tabulate(breaks);
+  if (length(aux[aux>1])>0) {
+    stop("breaks with repeated values");
+  }
+  sort(breaks);
+
   #initializing values
-  ret <- matrix(NA, 2, length(x));
-  ret[1,1] <- 0;
-  ret[2,1] <- 0;
-  aux <- vector();
-  aux[1] <- x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
+  ret <- matrix(NaN, 2, length(breaks));
+  sum1 <- 0;
+  sum2 <- 0;
 
   #computing values
-  for(i in 2:length(x))
+  for(i in 1:length(breaks))
   {
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      aux <- c(aux, x[(length(aux)+1):i]);
-      aux <- sort(aux, method="sh");
-
-      ret[1,i] <- quantile(aux[1:i], prob, names=FALSE);
-      ret[2,i] <- ccruncher.quantstderr(aux[1:i], prob, sorted=TRUE);
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    n1 <- ifelse(i==1,1,breaks[i-1]+1);
+    n2 <- breaks[i];
+    x[1:n2] <- sort(x[1:n2]);
+    ret[1,i] <- quantile(x[1:n2], prob, names=FALSE);
+    ret[2,i] <- ccruncher.quantstderr(x[1:n2], prob, sorted=TRUE);
   }
 
   #returning values
@@ -264,52 +301,59 @@ ccruncher.cquantile <- function(x, prob, breaks=250)
 
 #===========================================================================
 # description
+#   Internal function
 #   Compute the requested ES (Expected Shortfall) and standar error for 
 #   each Monte Carlo iteration
 # arguments
 #   x: vector with values
 #   prob: numeric. quantile related to VaR. probability with value in [0,1]
-#   breaks: numeric. number of evaluated values
+#   breaks: vector with the indexes where to compute the mean
 # returns
 #   matrix(1,): prob-es
 #   matrix(2,): standard error of prob-es
 # example
 #   x <- rnorm(5000)
-#   ccruncher.ces(x, 0.01)
+#   breaks <- seq(0,5000,250)
+#   breaks[1] <- 2
+#   ccruncher.ces(x, breaks)
 # notes
 #   when length(x) is large, this function is expensive
-#   because involve calls to sort() function. breaks
-#   argument allows you to reduce the number of computations
+#   because involve calls to sort() function
 #===========================================================================
-ccruncher.ces <- function(x, prob, breaks=250)
+ccruncher.ces <- function(x, prob, breaks)
 {
+  #checking parameters
+  if (!is.vector(x) | length(x)<2) {
+    stop("not valid x argument");
+  }
+  if (!is.vector(breaks) | length(breaks)<1) {
+    stop("not valid breaks argument");
+  }
+  if (length(breaks[breaks<2]) > 0) {
+    stop("breaks with a value less than 2");
+  }
+  if (length(breaks[breaks>length(x)]) > 0) {
+    stop("breaks with a value bigger than x length");
+  }
+  aux <- tabulate(breaks);
+  if (length(aux[aux>1])>0) {
+    stop("breaks with repeated values");
+  }
+  sort(breaks);
+
   #initializing values
-  ret <- matrix(NA, 2, length(x));
-  ret[1,1] <- 0;
-  ret[2,1] <- 0;
-  aux <- vector();
-  aux[1] <- x[1];
-  k <- max(1, as.integer(trunc(length(x)/breaks)));
+  ret <- matrix(NaN, 2, length(breaks));
 
   #computing values
-  for(i in 2:length(x))
+  for(i in 1:length(breaks))
   {
-    if (i%%k == 0 | i >= length(x)-10)
-    {
-      aux <- c(aux, x[(length(aux)+1):i]);
-      aux <- sort(aux, method="sh");
-
-      var <- quantile(aux[1:i], prob, names=FALSE);
-      tmp <- aux[aux >= var];
-
-      ret[1,i] <- mean(tmp);
-      ret[2,i] <- sqrt(var(tmp))/sqrt(length(tmp));
-    }
-    else
-    {
-      ret[1,i] <- ret[1,i-1];
-      ret[2,i] <- ret[2,i-1];
-    }
+    n1 <- ifelse(i==1,1,breaks[i-1]+1);
+    n2 <- breaks[i];
+    x[1:n2] <- sort(x[1:n2]);
+    q <- quantile(x[1:n2], prob, names=FALSE);
+    tmp <- x[1:n2][x[1:n2]>=q];
+    ret[1,i] <- mean(tmp);
+    ret[2,i] <- sqrt(var(tmp))/sqrt(length(tmp));
   }
 
   #returning values
@@ -318,6 +362,7 @@ ccruncher.ces <- function(x, prob, breaks=250)
 
 #===========================================================================
 # description
+#   Internal function
 #   Plot the evolution (convergence) of a statistic
 # arguments
 #   values: matrix(2,n) where matrix(1,)=values and matrix(1,)=stderrs
@@ -326,46 +371,48 @@ ccruncher.ces <- function(x, prob, breaks=250)
 # returns
 #   a graphic
 # example
-#   x <- rnorm(5000)
-#   m <- ccruncher.cmean(x)
-#   ccruncher.cplot(m, 0.99, "mean")
+#   x <- seq(0,5000,250)
+#   x[1] <- 2
+#   data <- rnorm(5000)
+#   y <- ccruncher.cmean(data, x)
+#   ccruncher.cplot(x, y, 0.99, "mean")
 #===========================================================================
-ccruncher.cplot <- function(values, alpha, name="<name>")
+ccruncher.cplot <- function(x, y, alpha, name="<name>")
 {
   #retrieving length
-  n <- length(values[1,]);
+  n <- length(y[1,]);
 
   #computing confidence level
   k <- qnorm((1-alpha)/2);
 
   #finding a pretty yrange
   yrange <- vector(length=2);
-  yrange[1] <- values[1,n] - 7.5*abs(k*values[2,n]);
-  yrange[2] <- values[1,n] + 7.5*abs(k*values[2,n]);
+  yrange[1] <- y[1,n] - 7.5*abs(k*y[2,n]);
+  yrange[2] <- y[1,n] + 7.5*abs(k*y[2,n]);
 
   #plotting statistic evolution
-  plot(values[1,], type='l', ylim=yrange, panel.first = grid(),
+  plot(x, y[1,], type='l', ylim=yrange, panel.first = grid(),
        main=name%&%" convergence",
        xlab="Monte Carlo iteration",
        ylab=name%&%" +/- "%&%(alpha*100)%&%"% confidence bound");
   par(new=TRUE);
 
   #plotting confidence levels bounds
-  lines(values[1,]+k*values[2,], lty=3);
-  lines(values[1,]-k*values[2,], lty=3);
+  lines(x, y[1,]+k*y[2,], lty=3);
+  lines(x, y[1,]-k*y[2,], lty=3);
 
   #horizontal line at last statistic value level
-  abline(values[1,length(values[1,])],0);
+  abline(y[1,length(y[1,])],0);
 }
 
 #===========================================================================
 # description
-#   writes a summary in xml format
+#   Computes risk indicators
 # arguments
 #   x: vector. simulated segment losses
 #   percentiles: vector. VaR percentiles
 # returns
-#   list: risk statitstics
+#   list: risk statistics
 # example
 #   df <- ccruncher.read("data/portfolio.csv")
 #   risk <- ccruncher.summary(df[,1])
@@ -427,7 +474,7 @@ ccruncher.risk <- function(x, percentiles=c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.9
 
 #===========================================================================
 # description
-#   plot some graphics related to ccruncher. These are:
+#   plot some graphics related to ccruncher:
 #     - pdf plot (density)
 #     - cdf plot (cumulative density)
 #     - mean convergence
@@ -439,21 +486,48 @@ ccruncher.risk <- function(x, percentiles=c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.9
 #   var: numeric. VaR level with value in [0,1]
 #   alpha: numeric. confidence level with value in [0,1]
 #   show: string. pdf|cdf|mean|stddev|VaR|ES|all
-#   breaks: numeric. number of evaluated values in plots
+#   xres: numeric. number of evaluated values in plots
 # returns
 #   the requested graphic
 # example
 #   x <- ccruncher.read("data/portfolio.csv")
-#   ccruncher.plot(x, alpha=0.95, var=0.99)
+#   ccruncher.plot(x[,1], alpha=0.95, var=0.99)
 # notes
 #   - confidence level is used to plot the confidence bounds on
 #     convergence graphics.
 #   - caution with convergence plots, can take some time to plot them
 #===========================================================================
-ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
+ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", xres=250)
 {
+  #variables definition
+  plotoptions <- c("all", "pdf", "cdf", "mean", "stddev", "VaR", "ES");
+
+  #checking parameters
+  if (!is.vector(x) | length(x)<2) {
+    stop("not valid x argument");
+  }
+  if (var <= 0 | var >= 1) {
+    stop("var value out of range (0,1)");
+  }
+  if (alpha <= 0 | alpha >= 1) {
+    stop("alpha value out of range (0,1)");
+  }
+  if (length(plotoptions[plotoptions==show]) == 0) {
+    stop("unrecognized show option");
+  }
+  if (xres < 2) {
+    stop("xres out of range");
+  }
+
+  #fixing evaluation points
+  breaks <- seq(0,length(x),trunc(length(x)/xres));
+  breaks[1] <- 2;
+  if (breaks[length(breaks)] != length(x)) breaks <- c(breaks,length(x));
+
+  #multiple plots in the graphics
   if (show == "all") { par(mfrow=c(3,2)); }
 
+  #create the graphic
   if (show == "pdf" || show == "all") {
     aux <- density(x);
     plot(aux, panel.first = grid(),
@@ -467,20 +541,20 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
        xlab="portfolio loss", ylab="probability");
   }
   if (show == "mean" || show == "all") {
-    aux <- ccruncher.cmean(x, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "Mean");
+    y <- ccruncher.cmean(x, breaks);
+    ccruncher.cplot(breaks, y, alpha, "Mean");
   }
   if (show == "stddev" || show == "all") {
-    aux <- ccruncher.cstddev(x, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "StdDev");
+    y <- ccruncher.cstddev(x, breaks);
+    ccruncher.cplot(breaks, y, alpha, "StdDev");
   }
   if (show == "VaR" || show == "all") {
-    aux <- ccruncher.cquantile(x, prob=var, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "VaR("%&%(var*100)%&%"%)");
+    y <- ccruncher.cquantile(x, prob=var, breaks);
+    ccruncher.cplot(breaks, y, alpha, "VaR("%&%(var*100)%&%"%)");
   }
   if (show == "ES" || show == "all") {
-    aux <- ccruncher.ces(x, prob=var, breaks=breaks);
-    ccruncher.cplot(aux, alpha, "ES("%&%(var*100)%&%"%)");
+    y <- ccruncher.ces(x, prob=var, breaks);
+    ccruncher.cplot(breaks, y, alpha, "ES("%&%(var*100)%&%"%)");
   }
 }
 
@@ -488,7 +562,7 @@ ccruncher.plot <- function(x, var=0.99, alpha=0.99, show="pdf", breaks=250)
 # description
 #   reads a ccruncher csv output file
 # arguments
-#   filename: string. ccruncher output filename
+#   filename: string. csv ccruncher output filename
 # returns
 #   a data frame with file content
 # example
@@ -602,6 +676,7 @@ ccruncher.summary <- function(filename, format="plain", alpha=0.99, rdigits=2)
 #   if more than 1 segment -> plots pie chart with expected loss per segment
 # arguments
 #   filename: string. csv ccruncher output filename
+#   rdigits: number of decimal digits
 # returns
 #   the requested graphic
 # example
