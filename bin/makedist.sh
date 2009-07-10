@@ -24,7 +24,7 @@
 #-------------------------------------------------------------
 progname=makedist.sh
 numversion="1.4"
-svnversion="R494"
+svnversion="R524"
 disttype="xxx"
 PACKAGE="ccruncher"
 pathexes=""
@@ -67,7 +67,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2003-2008 Gerard Torrent and licensed
+   $progname is Copyright (C) 2003-2009 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
                http://www.generacio.com/ccruncher
 
