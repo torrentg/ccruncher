@@ -5,12 +5,10 @@ CCRUNCHER TODO
 Current works
 -------------------
   * functional tests (kolmogorov-Smirnof tests, etc.)
-  * add examples in technical document
-  * add info about correlation matrix estimation
+  * in MPI code: do that master sends params to slaves (avoid that slaves access to disk)
 
 Future works
 -------------------
-  * in MPI code: do that master sends params to slaves (avoid that slaves access to disk)
   * multi-thread execution implementation
   * allow stochastic recovery (eg. beta distribution)
   * graphic interface

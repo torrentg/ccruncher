@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ************************************************************** -->
-<!-- read file $CCRUNCHER$/samples/readme.txt                       -->
-<!-- ************************************************************** -->
-
 <ccruncher>
 
-  <!-- ============================================================== -->
-  <!--                       PARAMETERS                               -->
-  <!-- ============================================================== -->
+  <title>sample ccruncher input file</title>
+  <description>
+  <![CDATA[
+    set your additional information here
+  ]]>
+  </description>
+
   <params>
-    <property name="time.begindate" value="01/01/2005"/>
-    <property name="time.steps" value="12"/>
-    <property name="time.steplength" value="1"/>
+    <property name="time.0" value="01/01/2005"/>
+    <property name="time.T" value="01/01/2006"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="gaussian"/>
@@ -21,9 +20,6 @@
     <property name="portfolio.onlyActiveBorrowers" value="true"/>
   </params>
 
-  <!-- ============================================================== -->
-  <!--                       INTERESTS                                -->
-  <!-- ============================================================== -->
   <interests>
     <interest name="spot" date="01/01/2005">
       <rate t="0" r="0.0"/>
@@ -38,17 +34,11 @@
     </interest>
   </interests>
 
-  <!-- ============================================================== -->
-  <!--                           RATINGS                              -->
-  <!-- ============================================================== -->
   <ratings>
     <rating name="A" desc="alive"/>
     <rating name="E" desc="dead"/>
   </ratings>
 
-  <!-- ============================================================== -->
-  <!--                     TRANSITION MATRIX                          -->
-  <!-- ============================================================== -->
   <mtransitions period="12" epsilon="1e-12">
     <transition from="A" to="A" value="0.90"/>
     <transition from="A" to="E" value="0.10"/>
@@ -56,26 +46,17 @@
     <transition from="E" to="E" value="1.00"/>
   </mtransitions>
 
-  <!-- ============================================================== -->
-  <!--                           SECTORS                              -->
-  <!-- ============================================================== -->
   <sectors>
     <sector name="S1" desc="sector 1"/>
     <sector name="S2" desc="sector 2"/>
   </sectors>
 
-  <!-- ============================================================== -->
-  <!--                        CORRELATIONS                            -->
-  <!-- ============================================================== -->
   <mcorrels epsilon="1e-12">
     <sigma sector1="S1" sector2="S1" value="0.10"/>
     <sigma sector1="S1" sector2="S2" value="0.05"/>
     <sigma sector1="S2" sector2="S2" value="0.15"/>
   </mcorrels>
 
-  <!-- ============================================================== -->
-  <!--                       SEGMENTATIONS                            -->
-  <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
     <segmentation name="sector" components="borrower">
@@ -84,15 +65,15 @@
     </segmentation>
   </segmentations>
 
-  <!-- ============================================================== -->
-  <!--                         PORTFOLIO                              -->
-  <!-- ============================================================== -->
   <portfolio>
     <borrower rating="A" sector="S1" name="001" id="001">
       <belongs-to segmentation="sector" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op01">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
+          <values at="01/07/2006" cashflow="3.0" recovery="0.0" />
+          <values at="01/01/2007" cashflow="1.0" recovery="0.0" />
+          <values at="01/07/2007" cashflow="3.0" recovery="0.0" />
         </data>
       </asset>
     </borrower>
