@@ -37,7 +37,7 @@
 % defining some useful values
 %-----------------------------------------------------
 \def\numversion{1.4}
-\def\svnversion{R524}
+\def\svnversion{R527}
 
 %-----------------------------------------------------
 % some format directives
@@ -1107,7 +1107,7 @@ Monte Carlo trial.
 \appendix
 \section{Appendices}
 
-%...........................................................................
+%---------------------------------------------------------------------------
 \subsection{Correlation matrix estimation}
 \label{ap:mcorrel}
 
@@ -1125,8 +1125,8 @@ Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
 2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \cr
 3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \cr
 $\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $a_{K-1,1}$   & $\dots$  & $a_{T-1,m}$   \cr
-T        & $a_{K,1}$   & $\dots$  & $a_{T,m}$   \cr
+T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \cr
+T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \cr
 \end{tabular}
 & $\qquad$ &
 \begin{tabular}[]{c|ccc}
@@ -1136,8 +1136,8 @@ Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
 2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \cr
 3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \cr
 $\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $d_{T-1,1}$   & $\dots$  & $d_{T-1,m}$   \cr
-T        & $d_{T,1}$   & $\dots$  & $d_{T,m}$   \cr
+T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \cr
+T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \cr
 \end{tabular}
 \end{tabular}
 \end{center}
@@ -1158,7 +1158,7 @@ P(S_i) = \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i}}{a_{t,i}}
 \end{displaymath}
 
 \begin{displaymath}
-P(Si \cap S_j) = \left\{
+P(S_i \cap S_j) = \left\{
 \begin{array}{ll}
 \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot d_{t,j}}{a_{t,i} \cdot a_{t,j}} & \textrm{if  } i \neq j \\
 \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot (d_{t,i}-1)}{a_{t,i} \cdot (a_{t,i}-1)} & \textrm{if  } i = j
@@ -1169,7 +1169,89 @@ P(Si \cap S_j) = \left\{
 You can find more information about correlation matrix estimation on 
 \cite{correlations:ubs} and \cite{correlations:cmetrics}.
 
-%...........................................................................
+%---------------------------------------------------------------------------
+\subsection{From transition matrix to survival functions}
+\label{ap:tmatrix}
+The $T$-years transition matrix gives the probability to change from rating $r_i$ 
+to rating $r_j$ in a period of $T$ years.
+
+\begin{displaymath}
+M_T = \left(
+\begin{array}{ccc}
+m_{1,1} & \dots  & m_{1,n} \cr
+\vdots & \ddots & \vdots \cr
+m_{n,1} & \dots  & m_{n,n} 
+\end{array}
+\right)
+\qquad
+m_{i,j} = P(r_i \to r_j;T)
+\end{displaymath}
+
+where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
+borrower with rating $r_i$ change to rating $r_j$ in $T$ years.
+Figure \ref{tmatrix1} shows a transition matrix example where the probability 
+that a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
+\newline
+
+\begin{figure}[!hb]
+\begin{center}
+\begin{tabular}[]{l|rrrrrrrr}
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
+\hline
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
+\end{tabular}
+\caption{$1$-year transition matrix}
+\label{tmatrix1}
+\end{center}
+\end{figure}
+
+Transition matrix can be scaled in time using the following rules:
+
+\begin{equation}
+\label{sttm}
+\begin{array}{l}
+M_{T_1+T_2} = M_{T_1} \cdot M_{T_2} \nonumber \\
+M_{k \cdot T} = M_{T}^k \nonumber \\
+M_{\frac{T}{k}} = \sqrt[k]{M_{T}} \nonumber
+\end{array}
+\end{equation}
+
+The root of a matrix can be computed as:
+
+\begin{displaymath}
+M = P \cdot D \cdot P^{-1}
+\longrightarrow
+M^{\gamma} = P \cdot D^{\gamma} \cdot P^{-1}
+\end{displaymath}
+
+where $P$ is a matrix composed by the eigenvectors of $M$ and $D$ is a diagonal 
+matrix composed by the eigenvalues of $M$. The inverse of a matrix $P$ can be 
+computed using the $LU$ decomposition of $P$ as it is explained in \emph{Numerical 
+Recipes in C}\footnote{http://www.nr.com}:
+
+\begin{displaymath}
+P \cdot P^{-1} = L \cdot U \cdot P^{-1} = Id
+\end{displaymath}
+
+This allows us to compute default probability at any time and at any initial 
+rating (that is, the survival functions), doing:
+
+\begin{displaymath}
+Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
+\end{displaymath}
+
+where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
+matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
+index of default rating, $r_n$.
+
+%---------------------------------------------------------------------------
 \subsection{Gaussian copula simulation}
 \label{ap:gaussiancopu}
 Algorithm to simulate a gaussian copula satisfying correlation matrix $\Sigma$ 
@@ -1272,7 +1354,7 @@ u_n
 \end{displaymath}
 where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 
-%...........................................................................
+%---------------------------------------------------------------------------
 \subsection{t-Student copula simulation}
 \label{ap:tstudentcopu}
 Algorithm to simulate a t-Sudent copula with $\nu$ degrees of freedom ($\nu > 2$) 
@@ -1473,88 +1555,6 @@ Considering this, we can reduce the number of operations from $N^2$ to
 $N \times (M+1)$ where $N$ is the number of borrowers and $M$ the number of 
 sectors. In the $50000$ borrowers example, the operations number reduces from 
 $2500000000$ to only $500000$.
-
-%---------------------------------------------------------------------------
-\subsection{From transition matrix to survival functions}
-\label{ap:tmatrix}
-The $T$-years transition matrix gives the probability to change from rating $r_i$ 
-to rating $r_j$ in a period of $T$ years.
-
-\begin{displaymath}
-M_T = \left(
-\begin{array}{ccc}
-m_{1,1} & \dots  & m_{1,n} \cr
-\vdots & \ddots & \vdots \cr
-m_{n,1} & \dots  & m_{n,n} 
-\end{array}
-\right)
-\qquad
-m_{i,j} = P(r_i \to r_j;T)
-\end{displaymath}
-
-where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
-borrower with rating $r_i$ change to rating $r_j$ in $T$ years.
-Figure \ref{tmatrix1} shows a transition matrix example where the probability 
-that a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
-\newline
-
-\begin{figure}[!hb]
-\begin{center}
-\begin{tabular}[]{l|rrrrrrrr}
-        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
-\hline
-AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
- AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
-  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
-BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
- BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
-  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
-CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
-Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
-\end{tabular}
-\caption{$1$-year transition matrix}
-\label{tmatrix1}
-\end{center}
-\end{figure}
-
-Transition matrix can be scaled in time using the following rules:
-
-\begin{equation}
-\label{sttm}
-\begin{array}{l}
-M_{T_1+T_2} = M_{T_1} \cdot M_{T_2} \nonumber \\
-M_{k \cdot T} = M_{T}^k \nonumber \\
-M_{\frac{T}{k}} = \sqrt[k]{M_{T}} \nonumber
-\end{array}
-\end{equation}
-
-The root of a matrix can be computed as:
-
-\begin{displaymath}
-M = P \cdot D \cdot P^{-1}
-\longrightarrow
-M^{\gamma} = P \cdot D^{\gamma} \cdot P^{-1}
-\end{displaymath}
-
-where $P$ is a matrix composed by the eigenvectors of $M$ and $D$ is a diagonal 
-matrix composed by the eigenvalues of $M$. The inverse of a matrix $P$ can be 
-computed using the $LU$ decomposition of $P$ as it is explained in \emph{Numerical 
-Recipes in C}\footnote{http://www.nr.com}:
-
-\begin{displaymath}
-P \cdot P^{-1} = L \cdot U \cdot P^{-1} = Id
-\end{displaymath}
-
-This allows us to compute default probability at any time and at any initial 
-rating (that is, the survival functions), doing:
-
-\begin{displaymath}
-Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
-\end{displaymath}
-
-where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
-matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
-index of default rating, $r_n$.
 
 
 %===========================================================================
