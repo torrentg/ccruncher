@@ -5,9 +5,6 @@
 #   Use this script to roll creditcruncher versions numbers
 #   Caution: this is a tool for developers
 #
-# repository version:
-#   $Rev$
-#
 # dependences:
 #   shell, svnversion
 #
@@ -165,6 +162,7 @@ if [ "$csvn" = "true" ]; then
   replace "s/\#define\ *SVNVERSION\ *\".*\"/\#define SVNVERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/ccreport.sh
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
+  replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/src2bin.sh
   replace "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
 fi
 
@@ -172,6 +170,7 @@ if [ "$cver" = "true" ]; then
   replace "s/AC_INIT(ccruncher,\(.*\),\ *gerard@mail.generacio.com)/AC_INIT(ccruncher, $gloversion, gerard@mail.generacio.com)/g" $CCRUNCHERPATH/configure.in
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/ccreport.sh
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
+  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/src2bin.sh
   replace "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   echo "you need to run autoconf to take effect some changes";
 fi

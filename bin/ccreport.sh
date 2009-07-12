@@ -5,9 +5,6 @@
 #   Use this script to compute the VaR from a ccruncher
 #   output file
 #
-# repository version:
-#   $Rev$
-#
 # dependencies:
 #   R, xsltproc
 #
