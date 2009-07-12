@@ -30,7 +30,19 @@
     </pre>
 
     <p>
-      <b>Step 2.</b> CCruncher uses a library named <b>expat</b> not included in CreditCruncher 
+      <b>Step 2.</b> CCruncher uses a library named <b>gsl</b> not included in CreditCruncher 
+      distribution packages. Check that you have gsl installed (find file <code>libgsl.so</code> 
+      , usually in folder <code>/usr/lib</code>). In case you don't have 
+      it, install it from <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM 
+      system, install the package named gsl). CCruncher source distribution requires that 
+      you have gsl-devel installed (find file <code>gsl_math.h</code>, usually in folder 
+      <code>/usr/include/gsl</code>). In case you don't have it, install it from 
+      <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM system, install 
+      the package named gsl-devel).
+    </p>
+
+    <p>
+      <b>Step 3.</b> CCruncher uses a library named <b>expat</b> not included in CreditCruncher 
       distribution packages. Check that you have expat installed (find file <code>libexpat.so</code> 
       or <code>libexpat.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
       it, install it from <a href="http://expat.sourceforge.net/">expat site</a> (if you use a RPM 
@@ -42,7 +54,7 @@
     </p>
 
     <p>
-      <b>Step 3.</b> CCruncher uses a library named <b>zlib</b> not included in CreditCruncher 
+      <b>Step 4.</b> CCruncher uses a library named <b>zlib</b> not included in CreditCruncher 
       distribution packages. Check that you have zlib installed (find file <code>libz.so</code>
       or <code>zlib1.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
       it, install it from <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM
@@ -54,14 +66,14 @@
     </p>
 
     <p>
-      <b>Step 4.</b> CCruncher uses a statistical package named <b>R</b> to compute risk 
-      indicators. Install it from <a href="http://www.r-project.org/">http://www.r-project.org/</a>.
+      <b>Step 5.</b> CCruncher uses a statistical package named <b>R</b> to compute risk 
+      indicators. Install it from <a href="http://www.r-project.org/">R project site</a>.
       If you plan to realize the statistical computations with your own tools (eg. Excel) you can
       skip this step. If you use a RPM system, install package R.
     </p>
 
     <p>
-      <b>Step 5.</b> If you have a source distribution, run next commands:
+      <b>Step 6.</b> If you have a source distribution, run next commands:
     </p>
     <pre>
 
@@ -145,7 +157,7 @@
             Copyright &copy; 2004-2009 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 10-Jul-2009
+    				 Last modified: 12-Jul-2009
     			</td>
     		</tr></table>
     	</div></div></div></div></div>

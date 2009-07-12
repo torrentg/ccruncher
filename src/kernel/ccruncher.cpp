@@ -442,12 +442,12 @@ void usage()
   "    0           OK. finished without errors\n"
   "    1           KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher --validate input.xml\n"
-  "    ccruncher --path=20070801 input.xml\n"
-  "    ccruncher -fv --hash=100 --path=data/ samples/test01.xml\n"
-  "    ccruncher -fv --hash=100 --path=data/ samples/test100.xml.gz\n"
+  "    ccruncher --validate samples/sample01.xml\n"
+  "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher -fv --hash=100 --path=data/test01 samples/test01.xml\n"
+  "    ccruncher -fv --hash=100 --path=data/test100 samples/test100.xml.gz\n"
 #ifndef USE_MPI
-  "    ccruncher -fv --hash=100 --ldeftime --path=data/ samples/test04.xml\n"
+  "    ccruncher -fv --hash=100 --ldeftime --path=data/test04 samples/test04.xml\n"
 #endif
   << endl;
 }
