@@ -5,9 +5,6 @@
 #   Converts a ccruncher source distribution to binary 
 #   distribution removing autotools files, src directory, etc.
 #
-# repository version:
-#   $Rev: 485 $
-#
 # dependencies:
 #   shell
 #

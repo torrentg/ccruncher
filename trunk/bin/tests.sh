@@ -4,9 +4,6 @@
 # description:
 #   Executes ccruncher functional tests
 #
-# repository version:
-#   $Rev: 465 $
-#
 # dependencies:
 #   ccruncher, R
 #

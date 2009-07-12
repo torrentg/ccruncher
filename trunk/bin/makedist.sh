@@ -7,9 +7,6 @@
 #     > svn -r xxx cp http://www.generacio.com/svn/ccruncher/trunk \
 #     >  http://www.generacio.com/svn/ccruncher/tags/ccruncher-X.Y
 #
-# repository version:
-#   $Rev$
-#
 # dependencies:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
 #
