@@ -37,7 +37,7 @@
 % defining some useful values
 %-----------------------------------------------------
 \def\numversion{1.4}
-\def\svnversion{R529}
+\def\svnversion{R531}
 
 %-----------------------------------------------------
 % some format directives
@@ -878,11 +878,13 @@ required.
 \begin{displaymath}
 \Sigma = 
 \left( 
-\begin{array}{ccccccccc}
+\begin{array}{cc|cc|ccccc}
  1.00 & 0.50 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
  0.50 & 1.00 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
+\hline
  0.20 & 0.20 & 1.00 & 0.60 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
  0.20 & 0.20 & 0.60 & 1.00 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
+\hline
  0.30 & 0.30 & 0.34 & 0.34 & 1.00 & 0.40 & 0.40 & 0.40 & 0.40 \cr
  0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 1.00 & 0.40 & 0.40 & 0.40 \cr
  0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 1.00 & 0.40 & 0.40 \cr
@@ -1108,68 +1110,6 @@ Monte Carlo trial.
 \section{Appendices}
 
 %---------------------------------------------------------------------------
-\subsection{Correlation matrix estimation}
-\label{ap:mcorrel}
-
-In this section we expose a simple method to estimate the default times 
-correlation matrix. Supose that we dispose the number of components and the 
-number of components that defaulted for each sector for the last years (eg. 
-1980-2008). 
-
-\begin{center}
-\begin{tabular}[]{ccc}
-\begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
-\hline
-1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \cr
-2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \cr
-3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \cr
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \cr
-T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \cr
-\end{tabular}
-& $\qquad$ &
-\begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
-\hline
-1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \cr
-2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \cr
-3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \cr
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \cr
-T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \cr
-\end{tabular}
-\end{tabular}
-\end{center}
-
-where $a_{i,j}$ are the number of borrowers in sector $j$ at year $i$ and
-$d_{i,j}$ is the number of borrowers of sector $j$ at year $i$ that defaulted.
-\newline
-
-We use the following definition of correlation:
-\begin{displaymath}
-Correl(S_i,S_j) = \frac{P(S_i \cap S_j) - P(S_i) \cdot P(S_j)}{\sqrt{P(S_i) \cdot (1-P(S_i))} \cdot \sqrt{P(S_j) \cdot (1-P(S_j))}}
-\end{displaymath}
-
-Where,
-
-\begin{displaymath}
-P(S_i) = \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i}}{a_{t,i}}
-\end{displaymath}
-
-\begin{displaymath}
-P(S_i \cap S_j) = \left\{
-\begin{array}{ll}
-\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot d_{t,j}}{a_{t,i} \cdot a_{t,j}} & \textrm{if  } i \neq j \\
-\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot (d_{t,i}-1)}{a_{t,i} \cdot (a_{t,i}-1)} & \textrm{if  } i = j
-\end{array}
-\right.
-\end{displaymath}
-
-You can find more information about correlation matrix estimation on 
-\cite{correlations:ubs} and \cite{correlations:cmetrics}.
-
-%---------------------------------------------------------------------------
 \subsection{From transition matrix to survival functions}
 \label{ap:tmatrix}
 The $T$-years transition matrix gives the probability to change from rating $r_i$ 
@@ -1250,6 +1190,68 @@ Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
 matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
 index of default rating, $r_n$.
+
+%---------------------------------------------------------------------------
+\subsection{Correlation matrix estimation}
+\label{ap:mcorrel}
+
+In this section we expose a simple method to estimate the default times 
+correlation matrix. Supose that we dispose the number of components and the 
+number of defaulted components for each sector for the last years (eg. 
+1980-2008). 
+
+\begin{center}
+\begin{tabular}[]{ccc}
+\begin{tabular}[]{c|ccc}
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+\hline
+1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \cr
+2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \cr
+3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \cr
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
+T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \cr
+T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \cr
+\end{tabular}
+& $\qquad$ &
+\begin{tabular}[]{c|ccc}
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+\hline
+1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \cr
+2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \cr
+3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \cr
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
+T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \cr
+T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \cr
+\end{tabular}
+\end{tabular}
+\end{center}
+
+where $a_{i,j}$ are the number of borrowers in sector $j$ at year $i$ and
+$d_{i,j}$ is the number of defaulted borrowers of sector $j$ at year $i$.
+\newline
+
+We use the following definition of correlation:
+\begin{displaymath}
+Correl(S_i,S_j) = \frac{P(S_i \cap S_j) - P(S_i) \cdot P(S_j)}{\sqrt{P(S_i) \cdot (1-P(S_i))} \cdot \sqrt{P(S_j) \cdot (1-P(S_j))}}
+\end{displaymath}
+
+Where,
+
+\begin{displaymath}
+P(S_i) = \frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i}}{a_{t,i}}
+\end{displaymath}
+
+\begin{displaymath}
+P(S_i \cap S_j) = \left\{
+\begin{array}{ll}
+\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot d_{t,j}}{a_{t,i} \cdot a_{t,j}} & \textrm{if  } i \neq j \\
+\frac{1}{T} \sum_{t=1}^{T} \frac{d_{t,i} \cdot (d_{t,i}-1)}{a_{t,i} \cdot (a_{t,i}-1)} & \textrm{if  } i = j
+\end{array}
+\right.
+\end{displaymath}
+
+You can find more information about correlation matrix estimation on 
+\cite{correlations:ubs} and \cite{correlations:cmetrics}.
 
 %---------------------------------------------------------------------------
 \subsection{Gaussian copula simulation}
