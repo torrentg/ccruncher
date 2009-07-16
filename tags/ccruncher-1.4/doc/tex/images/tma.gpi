@@ -1,0 +1,50 @@
+#===========================================================================
+#
+# CreditCruncher - A portfolio credit risk valorator
+# Copyright (C) 2004 Gerard Torrent
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#
+# tma.gpi - gnuplot instructions
+# --------------------------------------------------------------------------
+#
+# 2005/04/21 - Gerard Torrent [gerard@mail.generacio.com]
+#   . initial release
+#
+#===========================================================================
+
+reset
+
+set title 'Forward Default Rate'
+set xlabel "time (in years)"
+set ylabel "probability"
+
+set grid
+set xrange [1:25]
+set yrange [0:0.2]
+set key right top
+
+set terminal postscript
+set output 'tma.ps'
+
+plot "tma.dat" using 1:2 with lines title 'AAA', \
+     "tma.dat" using 1:3 with lines title 'AA', \
+     "tma.dat" using 1:4 with lines title 'A', \
+     "tma.dat" using 1:5 with lines title 'BBB', \
+     "tma.dat" using 1:6 with lines title 'BB', \
+     "tma.dat" using 1:7 with lines title 'B', \
+     "tma.dat" using 1:8 with lines title 'CCC', \
+     "tma.dat" using 1:9 with lines title 'Default'

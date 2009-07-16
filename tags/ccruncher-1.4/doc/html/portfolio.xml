@@ -1,0 +1,29 @@
+<ccruncher-report>
+  <segmentation name='portfolio'>
+    <segment name='portfolio'>
+      <size value='20000' />
+      <min value='0' />
+      <max value='46' />
+      <mean value='9.99' stderr='0.04' />
+      <stddev value='6.3' stderr='0.03' />
+      <VaR prob='0.9' value='19' stderr='0.4' />
+      <VaR prob='0.95' value='22' stderr='0.14' />
+      <VaR prob='0.975' value='25' stderr='0.39' />
+      <VaR prob='0.99' value='30' stderr='0.49' />
+      <VaR prob='0.9925' value='31' stderr='0.4' />
+      <VaR prob='0.995' value='32' stderr='0.41' />
+      <VaR prob='0.9975' value='35' stderr='0.74' />
+      <VaR prob='0.999' value='39' stderr='0.99' />
+      <VaR prob='0.9999' value='46' stderr='1.04' />
+      <ES prob='0.9' value='23.38' stderr='0.1' />
+      <ES prob='0.95' value='26.08' stderr='0.13' />
+      <ES prob='0.975' value='29.01' stderr='0.17' />
+      <ES prob='0.99' value='33.51' stderr='0.25' />
+      <ES prob='0.9925' value='34.3' stderr='0.28' />
+      <ES prob='0.995' value='35.14' stderr='0.31' />
+      <ES prob='0.9975' value='38.56' stderr='0.43' />
+      <ES prob='0.999' value='41.65' stderr='0.49' />
+      <ES prob='0.9999' value='46' stderr='0' />
+    </segment>
+  </segmentation>
+</ccruncher-report>
