@@ -54,12 +54,12 @@ class IData : public ExpatHandlers
 
     string title;
     string description;
-    Params *params;
-    Interests *interests;
-    Ratings *ratings;
-    TransitionMatrix *transitions;
-    Survival *survival;
-    Sectors *sectors;
+    Params params;
+    Interests interests;
+    Ratings ratings;
+    TransitionMatrix transitions;
+    Survival survival;
+    Sectors sectors;
     CorrelationMatrix *correlations;
     Segmentations *segmentations;
     Portfolio *portfolio;
@@ -81,17 +81,15 @@ class IData : public ExpatHandlers
     /** get methods */
     string & getTitle();
     string & getDescription();
-    Params & getParams() const;
-    Interests & getInterests() const;
-    Ratings & getRatings() const;
-    TransitionMatrix & getTransitionMatrix() const;
-    Survival & getSurvival() const;
-    Sectors & getSectors() const;
+    const Params & getParams() const;
+    const Interests & getInterests() const;
+    const Ratings & getRatings() const;
+    const TransitionMatrix & getTransitionMatrix() const;
+    const Survival & getSurvival() const;
+    const Sectors & getSectors() const;
     CorrelationMatrix & getCorrelationMatrix() const;
     Segmentations & getSegmentations() const;
     Portfolio & getPortfolio() const;
-    /** set methods */
-    void setSurvival(const Survival &);
     /** has methods */
     bool hasSurvival() const;
     /** ExpatHandlers methods declaration */

@@ -57,8 +57,6 @@ class TransitionMatrix : public ExpatHandlers
     // index of default rating
     int indexdefault;
 
-    // initialize object
-    void init(const Ratings &) throw(Exception);
     // insert a transition value into the matrix
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
@@ -67,20 +65,24 @@ class TransitionMatrix : public ExpatHandlers
 
   public:
 
+    // default constructor
+    TransitionMatrix();
     // constructor
     TransitionMatrix(const Ratings &) throw(Exception);
-    // constructor
+    // copy constructor
     TransitionMatrix(const TransitionMatrix &) throw(Exception);
     // destructor
     ~TransitionMatrix();
 
+    // set ratings
+    void setRatings(const Ratings &);
     // returns n (number of ratings)
     int size() const;
     // returns period that covers this matrix
     int getPeriod() const;
     // returns pointer to matrix values
     double ** getMatrix() const;
-    // returns defaault rating index
+    // returns default rating index
     int getIndexDefault() const;
     // simulate transition with random value val
     int evalue(const int irating, const double val) const;

@@ -73,7 +73,6 @@ void ccruncher::MonteCarlo::reset()
   borrowers = NULL;
 
   copula = NULL;
-  survival = NULL;
   ttd = NULL;
 
   blcopulas = false;
@@ -88,9 +87,10 @@ void ccruncher::MonteCarlo::reset()
 void ccruncher::MonteCarlo::release()
 {
   // deallocating copula
-  if (copula != NULL) { delete copula; copula = NULL; }
-
-  // survival fuction object deallocated by IData (its container)
+  if (copula != NULL) { 
+    delete copula; 
+    copula = NULL; 
+  }
 
   // deallocating workspace array
   if (ttd != NULL) {
@@ -144,8 +144,8 @@ void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw
     // initializing sectors
     initSectors(idata);
 
-    // initializing survival function
-    initTimeToDefault(idata);
+    // initializing survival functions
+    initSurvival(idata);
 
     // initializing copula
     initCopula(idata, idata.getParams().copula_seed);
@@ -294,12 +294,12 @@ void ccruncher::MonteCarlo::initSectors(const IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initTimeToDefault
+// initSurvival
 //===========================================================================
-void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initSurvival(const IData &idata) throw(Exception)
 {
   // doing assertions
-  assert(survival == NULL);
+  assert(survival.size() == 0);
 
   // setting logger header
   Logger::trace("setting survival function", '-');
@@ -307,6 +307,10 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
 
   if (idata.hasSurvival())
   {
+    // setting survival function
+    survival = idata.getSurvival();
+    Logger::trace("survival function", string("user defined"));
+
     // checking that survival function is defined for t <= timeT
     int months = idata.getSurvival().getMinCommonTime();
     Date aux = addMonths(time0, months);
@@ -314,10 +318,6 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     {
       throw Exception("survival function not defined at t=" + Format::date2string(timeT));
     }
-
-    // setting survival function
-    survival = &(idata.getSurvival());
-    Logger::trace("survival function", string("user defined"));
   }
   else
   {
@@ -336,13 +336,10 @@ void ccruncher::MonteCarlo::initTimeToDefault(IData &idata) throw(Exception)
     }
 
     // creating survival function object
-    survival = new Survival(idata.getRatings(), months+1, itime, aux);
+    survival = Survival(idata.getRatings(), months+1, itime, aux);
     Arrays<double>::deallocMatrix(aux, idata.getTransitionMatrix().size());
     Arrays<int>::deallocVector(itime);
     Logger::trace("transition matrix -> survival function", string("computed"));
-
-    // appending survival object to idata (will dealloc survival object)
-    idata.setSurvival(*survival);
   }
 
   // exit function
@@ -841,7 +838,7 @@ Date ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
   double u = getRandom(iborrower);
 
   // simulate time where this borrower defaults (in months)
-  double t = survival->inverse(r1, u);
+  double t = survival.inverse(r1, u);
 
   // return simulated default date
   // TODO: assumed no leap years (this can be improved)

@@ -31,39 +31,16 @@
 #include <cassert>
 
 //===========================================================================
-// private initializator
+// default constructor
 //===========================================================================
-void ccruncher::TransitionMatrix::init(const Ratings &ratings_) throw(Exception)
+ccruncher::TransitionMatrix::TransitionMatrix()
 {
-  period = 0;
+  n = 0;
+  ratings = NULL;
+  period = -1;
   epsilon = -1.0;
-  ratings = (Ratings *) &ratings_;
-
-  n = ratings->size();
-
-  if (n <= 0)
-  {
-    throw Exception("invalid transition matrix dimension (" + Format::int2string(n) + " <= 0)");
-  }
-
-  // initializing matrix
-  matrix = Arrays<double>::allocMatrix(n, n, NAN);
-}
-
-//===========================================================================
-// copy constructor
-//===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
-{
-  period = otm.period;
-  ratings = otm.ratings;
-  indexdefault = otm.indexdefault;
-  epsilon = otm.epsilon;
-  n = otm.n;
-
-  // initializing matrix
-  matrix = Arrays<double>::allocMatrix(n, n);
-  Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
+  indexdefault = -1;
+  matrix = NULL;
 }
 
 //===========================================================================
@@ -71,8 +48,24 @@ ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw
 //===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exception)
 {
-  // seting default values
-  init(ratings_);
+  matrix = NULL;
+  setRatings(ratings_);
+  period = -1;
+  epsilon = -1.0;
+  indexdefault = -1;
+}
+
+//===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
+{
+  matrix = NULL;
+  setRatings(*(otm.ratings));
+  period = otm.period;
+  epsilon = otm.epsilon;
+  indexdefault = otm.indexdefault;
+  Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
 }
 
 //===========================================================================
@@ -81,11 +74,29 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exc
 ccruncher::TransitionMatrix::~TransitionMatrix()
 {
   assert(n >= 0);
-
   if (matrix != NULL) {
     Arrays<double>::deallocMatrix(matrix, n);
     matrix = NULL;
   }
+}
+
+//===========================================================================
+// setRatings
+//===========================================================================
+void ccruncher::TransitionMatrix::setRatings(const Ratings &ratings_)
+{
+  ratings = (Ratings *) &ratings_;
+  n = ratings->size();
+  if (n <= 0)
+  {
+    throw Exception("invalid transition matrix dimension (" + Format::int2string(n) + " <= 0)");
+  }
+  if (matrix != NULL) {
+    Arrays<double>::deallocMatrix(matrix, n);
+    matrix = NULL;    
+  }
+  matrix = Arrays<double>::allocMatrix(n, n, NAN);
+
 }
 
 //===========================================================================
@@ -117,6 +128,9 @@ double ** ccruncher::TransitionMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
+  assert(n >= 0);
+  assert(matrix != NULL);
+
   int row = (*ratings).getIndex(rating1);
   int col = (*ratings).getIndex(rating2);
 

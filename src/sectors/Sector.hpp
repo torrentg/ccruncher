@@ -45,7 +45,7 @@ class Sector : public ExpatHandlers
 
     // sector name
     string name;
-    // sector descriuption
+    // sector description
     string desc;
 
     // default constructor

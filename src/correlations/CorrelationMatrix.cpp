@@ -33,10 +33,9 @@
 void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 {
   epsilon = -1.0;
-  sectors = &sectors_;
+  sectors = sectors_;
 
-  n = (*sectors).size();
-
+  n = sectors.size();
   if (n <= 0)
   {
     throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
@@ -51,8 +50,23 @@ void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Exception)
 {
-  // seting default values
   init(sectors_);
+}
+
+//===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exception)
+{
+  init(x.sectors);
+  epsilon = x.epsilon;
+  for(int i=0; i<n; i++) 
+  {
+    for(int j=0; j<n; j++) 
+    {
+      matrix[i][j] = x.matrix[i][j];
+    }
+  }
 }
 
 //===========================================================================
@@ -85,8 +99,8 @@ double ** ccruncher::CorrelationMatrix::getMatrix() const
 //===========================================================================
 void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
-  int row = (*sectors).getIndex(sector1);
-  int col = (*sectors).getIndex(sector2);
+  int row = sectors.getIndex(sector1);
+  int col = sectors.getIndex(sector2);
 
   // checking index sector
   if (row < 0 || col < 0)
@@ -190,7 +204,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::CorrelationMatrix::getXML(int ilevel) const throw(Exception)
+string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -203,8 +217,8 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) const throw(Exception)
     for(int j=i;j<n;j++)
     {
       ret += spc2 + "<sigma ";
-      ret += "sector1 ='" + (*sectors)[i].name + "' ";
-      ret += "sector2 ='" + (*sectors)[j].name + "' ";
+      ret += "sector1 ='" + sectors[i].name + "' ";
+      ret += "sector2 ='" + sectors[j].name + "' ";
       ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
       ret += "/>\n";
     }

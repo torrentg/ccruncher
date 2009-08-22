@@ -115,7 +115,7 @@ string ccruncher::Params::getCopulaType() const throw(Exception)
 //===========================================================================
 // checks copula type string
 //===========================================================================
-double ccruncher::Params::getCopulaParam() throw(Exception)
+double ccruncher::Params::getCopulaParam() const throw(Exception)
 {
   if (getCopulaType() != "t") {
     throw Exception("copula without params");
