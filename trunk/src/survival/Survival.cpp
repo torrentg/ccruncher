@@ -11,7 +11,6 @@
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
@@ -38,31 +37,22 @@
 #define ISURVFNUMBINS 100 
 
 //===========================================================================
-// private initializator
-//===========================================================================
-void ccruncher::Survival::init(const Ratings &ratings_) throw(Exception)
-{
-  ratings = (Ratings *) &ratings_;
-  epsilon = 1e-12;
-
-  nratings = ratings->size();
-
-  if (nratings <= 0) {
-    throw Exception("invalid number of ratings (" + Format::int2string(nratings) + " <= 0)");
-  }
-  else {
-    ddata = new vector<double>[nratings];
-    idata = Arrays<double>::allocMatrix(nratings, ISURVFNUMBINS+1, 0.0);
-  }
-}
-
-//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Survival::Survival(const Ratings &ratings_) throw(Exception)
 {
-  // posem valors per defecte
-  init(ratings_);
+  epsilon = 1e-12;
+  setRatings(ratings_);
+}
+
+//===========================================================================
+// default constructor
+//===========================================================================
+ccruncher::Survival::Survival()
+{
+  epsilon = 1e-12;
+  ratings = NULL;
+  nratings = 0;
 }
 
 //===========================================================================
@@ -73,8 +63,8 @@ ccruncher::Survival::Survival(const Ratings &ratings_) throw(Exception)
 ccruncher::Survival::Survival(const Ratings &ratings_, int numrows, int *imonths, 
            double **values) throw(Exception)
 {
-  // initializing
-  init(ratings_);
+  epsilon = 1e-12;
+  setRatings(ratings_);
 
   // adding values
   for(int i=0;i<nratings;i++)
@@ -98,12 +88,32 @@ ccruncher::Survival::Survival(const Ratings &ratings_, int numrows, int *imonths
 //===========================================================================
 ccruncher::Survival::~Survival()
 {
-  if (ddata != NULL) {
-    delete [] ddata;
+  // nothing to do
+}
+
+//===========================================================================
+// set ratings
+//===========================================================================
+void ccruncher::Survival::setRatings(const Ratings &ratings_) throw(Exception)
+{
+  ratings = (Ratings *) &ratings_;
+  nratings = ratings->size();
+  if (nratings <= 0) {
+    throw Exception("invalid number of ratings (" + Format::int2string(nratings) + " <= 0)");
   }
-  if (idata != NULL) {
-    Arrays<double>::deallocMatrix(idata, nratings);
+  else {
+    ddata = vector<vector<double> >(nratings);
+    idata = vector<vector<double> >(nratings);
+    idata.insert(idata.begin(), nratings, vector<double>(ISURVFNUMBINS+1, NAN));
   }
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+int ccruncher::Survival::size() const
+{
+  return nratings;
 }
 
 //===========================================================================
@@ -111,6 +121,9 @@ ccruncher::Survival::~Survival()
 //===========================================================================
 void ccruncher::Survival::insertValue(const string &srating, int t, double value) throw(Exception)
 {
+  assert(nratings > 0);
+  assert(ratings != NULL);
+
   int irating = (*ratings).getIndex(srating);
 
   // checking rating index

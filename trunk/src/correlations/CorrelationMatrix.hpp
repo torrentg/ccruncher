@@ -49,7 +49,7 @@ class CorrelationMatrix : public ExpatHandlers
     // epsilon used to compare doubles
     double epsilon;
     // list of sectors
-    Sectors *sectors;
+    Sectors sectors;
     // matrix of values
     double **matrix;
 
@@ -65,6 +65,8 @@ class CorrelationMatrix : public ExpatHandlers
 
     // constructor
     CorrelationMatrix(Sectors &) throw(Exception);
+    // copy constructor
+    CorrelationMatrix(CorrelationMatrix &) throw(Exception);
     // destructor
     ~CorrelationMatrix();
     // matrix size (= number of sector)
@@ -72,7 +74,7 @@ class CorrelationMatrix : public ExpatHandlers
     // returns a pointer to matrix values
     double ** getMatrix() const;
     // serializes object content as xml
-    string getXML(int) const throw(Exception);
+    string getXML(int) throw(Exception);
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

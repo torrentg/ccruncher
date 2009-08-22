@@ -46,9 +46,9 @@ class Survival : public ExpatHandlers
   private:
 
     // survival function for each rating
-    vector<double> *ddata;
+    vector<vector<double> > ddata;
     // inverse survival function values
-    double **idata;
+    vector<vector<double> > idata;
     // number of ratings
     int nratings;
     // pointer to ratings table
@@ -56,8 +56,6 @@ class Survival : public ExpatHandlers
     // epsilon used to compare doubles
     double epsilon;
 
-    // initialize object
-    void init(const Ratings &) throw(Exception);
     // insert a survival value
     void insertValue(const string &r1, int t, double val) throw(Exception);
     // validate object content
@@ -74,6 +72,8 @@ class Survival : public ExpatHandlers
 
   public:
 
+    // defaults constructor
+    Survival();
     // constructor
     Survival(const Ratings &) throw(Exception);
     // constructor
@@ -81,6 +81,10 @@ class Survival : public ExpatHandlers
     // destructor
     ~Survival();
 
+    // returns ratings size
+    int size() const;
+    // set ratings
+    void setRatings(const Ratings &) throw(Exception);
     // evalue survival for irating at t
     double evalue(const int irating, int t) const;
     // evalue inverse survival for irating at t

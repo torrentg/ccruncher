@@ -4,14 +4,29 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * functional tests (kolmogorov-Smirnof tests, etc.)
-  * in MPI code: do that master sends params to slaves (avoid that slaves access to disk)
+  * avoid that MPI slaves access to disk
 
 Future works
 -------------------
+  * improve functional tests
+     - exmaples based on real data
+     - script to run functional tests
+     - improve validations (eg. kolmogorov-Smirnof tests)
+     - improve documentation
+  * in input file add 'include' tag to include another file
+      <include file="file.xml"/>
+  * allow evaluation in multiple time horizons
+      <breaks>
+        <break name="T25Y" at="25Y" method="exp">
+          <segmentations>
+            ..
+          </segmentations>
+        </break>
+      </breaks>
+  * add borrower stochastic recovery (eg. beta distribution)
+  * add asset stochastic exposure
+  * allow ratings evaluated to date previous to T0
+  * add borrower-borrower dependences
   * multi-thread execution implementation
-  * allow stochastic recovery (eg. beta distribution)
   * graphic interface
-  * add pure-risk assets like bank-guarantee
-  * borrower-borrower dependences
 

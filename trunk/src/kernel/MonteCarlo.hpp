@@ -50,8 +50,8 @@ class MonteCarlo
 
   private:
 
-    Ratings *ratings;
-    Sectors *sectors;
+    const Ratings *ratings;
+    const Sectors *sectors;
     vector<Aggregator *> aggregators;
     vector<Borrower *> *borrowers;
 
@@ -70,8 +70,8 @@ class MonteCarlo
     /* antithetic method flag */
     bool antithetic;
 
-    /** transition matrix (size = 1) (used by rating-path method, canbe used by time-to-default method) */
-    Survival *survival;
+    /** survival functions */
+    Survival survival;
     /** copula used to simulate correlations */
     Copula *copula;
     /** simulated time-to-default per borrower (size = N) */
@@ -106,7 +106,7 @@ class MonteCarlo
     void initBorrowers(const IData &) throw(Exception);
     void initRatings(const IData &) throw(Exception);
     void initSectors(const IData &) throw(Exception);
-    void initTimeToDefault(IData &) throw(Exception);
+    void initSurvival(const IData &) throw(Exception);
     void initCopula(const IData &idata, long) throw(Exception);
     void initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(const IData &) throw(Exception);
