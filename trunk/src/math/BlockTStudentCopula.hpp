@@ -66,6 +66,7 @@ class BlockTStudentCopula : public Copula
     void next();
     double get(int);
     void setSeed(long);
+    double getConditionNumber();
 
     BlockTStudentCopula(double **C, int *n, int m, double ndf) throw(Exception);
     BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);

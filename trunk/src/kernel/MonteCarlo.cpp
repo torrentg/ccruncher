@@ -187,7 +187,6 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 
   // max number of iterations
   MAXITERATIONS = idata.getParams().maxiterations;
-  Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
   // printing initial date
   time0 = idata.getParams().time0;
@@ -378,6 +377,7 @@ double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata
 //===========================================================================
 void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exception)
 {
+  Timer timer(true);
   int *tmp = NULL;
 
   // doing assertions
@@ -391,7 +391,6 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
   Logger::trace("copula type", idata.getParams().copula_type);
   Logger::trace("copula dimension", Format::long2string(N));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
-  Logger::trace("elapsed time initializing copula", true);
 
   try
   {
@@ -408,11 +407,15 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
     if (idata.getParams().getCopulaType() == "gaussian")
     {
       copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
+      double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
+      Logger::trace("cholesky condition number", Format::double2string(cnum));
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
       copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size(), ndf);
+      double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
+      Logger::trace("cholesky condition number", Format::double2string(cnum));
     }
     else {
       throw Exception("invalid copula type");
@@ -457,6 +460,7 @@ void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exce
 #endif
 
   // exit function
+  Logger::trace("elapsed time initializing copula", timer);
   Logger::previousIndentLevel();
 }
 
@@ -477,6 +481,7 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
 {
+  Timer timer(true);
   Segmentations &segmentations = idata.getSegmentations();
 
   // assertions
@@ -489,7 +494,6 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
   // setting logger info
   Logger::trace("output data directory", fpath);
   Logger::trace("number of segmentations", Format::int2string(segmentations.size()));
-  Logger::trace("elapsed time initializing aggregators", true);
 
   // allocating and initializing aggregators
   aggregators.clear();
@@ -512,6 +516,7 @@ void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
 #endif
 
   // exit function
+  Logger::trace("elapsed time initializing aggregators", timer);
   Logger::previousIndentLevel();
 }
 
@@ -619,9 +624,9 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     }
 
     // printing traces
-    Logger::trace("elapsed time creating random numbers", Timer::format(timer1.read()));
-    Logger::trace("elapsed time simulating default times", Timer::format(timer2.read()));
-    Logger::trace("elapsed time aggregating data", Timer::format(timer3.read()));
+    Logger::trace("elapsed time creating random numbers", timer1);
+    Logger::trace("elapsed time simulating default times", timer2);
+    Logger::trace("elapsed time aggregating data", timer3);
     Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()+timer3.read()));
   }
   catch(Exception &e)
@@ -656,10 +661,7 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
   int nranks=MPI::COMM_WORLD.Get_size();
   int aggregatorid=0, rankid=0, tagid=0, datalength=0, task=0, nexits=0;
   MPI::Status status;
-  Timer timer;
-
-  // initializing values
-  timer.start();
+  Timer timer(true);
 
   // main master loop
   while(more)
@@ -743,9 +745,6 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
         throw Exception("unexpected MPI tag");
     }
   }
-
-  // printing traces
-  Logger::trace("elapsed time", Timer::format(timer.read()));
 
   // return the number of simulations
   return CONT;

@@ -220,9 +220,17 @@ double ccruncher::BlockTStudentCopula::get(int i)
 
 //===========================================================================
 // Set new seed in the number generator
-// @param x seed to be set
 //===========================================================================
 void ccruncher::BlockTStudentCopula::setSeed(long k)
 {
   random.setSeed(k);
 }
+
+//===========================================================================
+// returns the cholesky matrix condition number
+//===========================================================================
+double ccruncher::BlockTStudentCopula::getConditionNumber()
+{
+  return chol->getConditionNumber();
+}
+

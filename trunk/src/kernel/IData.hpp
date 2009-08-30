@@ -38,6 +38,7 @@
 #include "segmentations/Segmentations.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
+#include "utils/Timer.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -67,6 +68,7 @@ class IData : public ExpatHandlers
     // portfolio can be huge (memory, time, ...)
     bool parse_portfolio;
     bool hasmaintag;
+    Timer timer;
 
     void init();
     void release();

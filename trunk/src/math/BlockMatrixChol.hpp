@@ -51,23 +51,28 @@ class BlockMatrixChol
     double *diag;
     // for each element (0...N), gives his sector (array size = N)
     int *spe; // (Sector Per Element)
+    // condition number of the cholesky matrix
+    double cnum;
 
     // alloc memory, does checks, etc.
-    void init(double **C, int *n, int m) throw(Exception);
+    void init(double **A, int *n, int m) throw(Exception);
     // adapted cholesky algorithm
-    void chold(double **C) throw(Exception);
+    void chold(double **A) throw(Exception);
     // internal function
     double aprod(int row, int col, int order);
+    // computes condition number (2-norm)
+    double cond(double **A, int *n, int m) throw(Exception);
     // dealloc memory
     void reset();
 
 
   public:
 
-    BlockMatrixChol(double **C, int *n, int m) throw(Exception);
+    BlockMatrixChol(double **A, int *n, int m) throw(Exception);
     ~BlockMatrixChol();
 
     int getDim();
+    double getConditionNumber();
     double get(int row, int col);
     void mult(double *x, double *ret);
 

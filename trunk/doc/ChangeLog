@@ -2,6 +2,10 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 1.5 (???. 2009)
+--------------------------
+  * added condition number computation to cholesky matrix
+
 version 1.4 (Jul. 2009)
 --------------------------
   * improved technical document

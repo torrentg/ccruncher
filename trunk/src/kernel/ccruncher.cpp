@@ -300,8 +300,7 @@ int shutdown(int retcode)
 //===========================================================================
 void run(string filename, string path) throw(Exception)
 {
-  Timer timer;
-  timer.start();
+  Timer timer(true);
 
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -356,13 +355,12 @@ void run(string filename, string path) throw(Exception)
 
   // running simulation
   long nsims = simul.execute();
-  double nseconds = timer.stop();
 
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
   Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-  Logger::trace("total elapsed time", Timer::format(nseconds));
+  Logger::trace("total elapsed time", timer);
   Logger::trace("simulations realized", Format::long2string(nsims));
   Logger::previousIndentLevel();
   Logger::addBlankLine();
