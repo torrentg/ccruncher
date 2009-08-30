@@ -46,7 +46,7 @@ class Timer
      //double secs_per_tick;
 
   public:
-     Timer();
+     Timer(bool started=false);
      void start();
      double stop();
      double read();

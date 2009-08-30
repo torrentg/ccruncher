@@ -35,11 +35,12 @@
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter
 //===========================================================================
-ccruncher::Timer::Timer()
+ccruncher::Timer::Timer(bool started)
 {
   running_ = false;
   start_time_ = 0.0;
   total_ = 0.0;
+  if (started) start();
   //secs_per_tick = 1.0 / CLOCKS_PER_SEC;
 }
 

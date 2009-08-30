@@ -21,6 +21,10 @@
 //===========================================================================
 
 #include <cmath>
+#include <vector>
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_linalg.h>
+#include <gsl/gsl_eigen.h>
 #include "math/BlockMatrixChol.hpp"
 #include "utils/Arrays.hpp"
 #include <cassert>
@@ -108,10 +112,10 @@
 
 //===========================================================================
 // Constructor
-// C: matrix with correlations between sectors (simmetric with size = mxm)
+// A: matrix with correlations between sectors (simmetric with size = mxm)
 // n: number of elements in each sector (size = m)
 // m: number of sectors
-// Example: C = { {0.2,0.1}, {0.1, 0.3}}, n={2,3}, m=2
+// Example: A = { {0.2,0.1}, {0.1, 0.3}}, n={2,3}, m=2
 // indicates the following matrix:
 //    1.0 0.2 0.1 0.1 0.1
 //    0.2 1.0 0.1 0.1 0.1
@@ -121,10 +125,10 @@
 // first we asure that input arguments are valids and  don't exist sectors
 // without elements. If exist, they are removed
 //===========================================================================
-ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(Exception)
+ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(Exception)
 {
   // assertions
-  assert(C_ != NULL);
+  assert(A_ != NULL);
   assert(n_ != NULL);
   assert(m_ > 0);
 
@@ -147,8 +151,10 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
 
   if (nm == m_ && m_ > 0)
   {
-    // arguments seems correct
-    init(C_, n_, m_);
+    // perform factorization
+    init(A_, n_, m_);
+    // compute condition number of Cholesky matrix
+    cnum = cond(A_, n_, m_);
   }
   else if (nm == 0 || m_ <= 0)
   {
@@ -156,16 +162,16 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
   }
   else // nm > 0 and exist sector/s with 0 elements
   {
-    double **nC = NULL;
+    double **nA = NULL;
     int *nn = NULL;
 
     try
     {
       // alloc temporal memory
-      nC = Arrays<double>::allocMatrix(nm, nm, 0.0);
+      nA = Arrays<double>::allocMatrix(nm, nm, 0.0);
       nn = Arrays<int>::allocVector(nm, 0);
 
-      // filling C and n without void sectors
+      // filling A and n without void sectors
       for(int i=0,ni=0;i<m_;i++)
       {
         if (n_[i] != 0)
@@ -174,7 +180,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
           {
             if (n_[j] != 0)
             {
-              nC[ni][nj] = C_[i][j];
+              nA[ni][nj] = A_[i][j];
               nj++;
             }
           }
@@ -184,17 +190,19 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
       }
 
       // perform factorization
-      init(nC, nn, nm);
+      init(nA, nn, nm);
+      // compute condition number of Cholesky matrix
+      cnum = cond(nA, nn, nm);
 
       // release temporal memory
-      Arrays<double>::deallocMatrix(nC, nm);
-      nC = NULL;
+      Arrays<double>::deallocMatrix(nA, nm);
+      nA = NULL;
       Arrays<int>::deallocVector(nn);
       nn = NULL;
     }
     catch(Exception &e)
     {
-      if (nC != NULL) Arrays<double>::deallocMatrix(nC, nm);
+      if (nA != NULL) Arrays<double>::deallocMatrix(nA, nm);
       if (nn != NULL) Arrays<int>::deallocVector(nn);
       throw e;
     }
@@ -204,34 +212,34 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **C_, int *n_, int m_) throw(
 //===========================================================================
 // init
 //
-// C: matrix of coeficients
+// A: matrix of coeficients
 // m: number of sectors
 // n: dimension of each sector
 //
-// the input matrix is:
+// means that the input matrix is:
 //
-//   1   C11 ... C11         C1m   ...   C1m
-//   C11  1  ... C11          .           .
+//   1   A11 ... A11         A1m   ...   A1m
+//   A11  1  ... A11          .           .
 //    .   .       .    ...    .           .
 //    .   .       .           .           .
 //    .   .       .           .           .
-//   C11 C11 ...  1          C1m   ...   C1m
+//   A11 A11 ...  1          A1m   ...   A1m
 //         .        .               .
 //         .          .             .
 //         .            .           .
 //         .              .         .
 //         .                .       .
-//   Cm1   ...   Cm1          1  Cmm ... Cmm
-//    .           .          Cmm  1  ... Cmm
+//   Am1   ...   Am1          1  Amm ... Amm
+//    .           .          Amm  1  ... Amm
 //    .           .           .   .       .
 //    .           .    ...    .   .       .
 //    .           .           .   .       .
-//   C11   ...   Cm1         Cmm Cmm ...  1
+//   A11   ...   Am1         Amm Amm ...  1
 //
-// Note: take care, we check that Cij = Cji
+// Note: take care, we check that Aij = Aji
 //
 //===========================================================================
-void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Exception)
+void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Exception)
 {
   // initializations
   N = 0;
@@ -254,10 +262,10 @@ void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Except
     // computing dimension matrix
     N += n[i];
 
-    // checking that Cij = Cji
+    // checking that Aij = Aji
     for(int j=0;j<M;j++)
     {
-      if(fabs(C_[i][j]-C_[j][i]) > EPSILON)
+      if(fabs(A_[i][j]-A_[j][i]) > EPSILON)
       {
         reset();
         throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
@@ -287,7 +295,7 @@ void ccruncher::BlockMatrixChol::init(double **C_, int *n_, int m_) throw(Except
   // call adapted Cholesky algorithm
   try
   {
-    chold(C_);
+    chold(A_);
   }
   catch(Exception &e)
   {
@@ -412,13 +420,13 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
 // adapted cholesky for block matrix (see header of this file)
 // TODO: it is still posible to reduce the number of multiplications
 //===========================================================================
-void ccruncher::BlockMatrixChol::chold(double **C) throw(Exception)
+void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 {
   double sum;
   int iaux, jaux;
 
   // doing assertions
-  assert(C != NULL);
+  assert(A != NULL);
 
   // filling cholesky coeficients
   for(int i=0;i<N;i++)
@@ -452,7 +460,7 @@ void ccruncher::BlockMatrixChol::chold(double **C) throw(Exception)
     if (spe[i] == spe[i+1])
     {
       // retrieving A[i][j] value
-      sum = C[iaux][iaux] - aprod(i, i+1, i);
+      sum = A[iaux][iaux] - aprod(i, i+1, i);
 
       coefs[i][iaux] = sum/diag[i];
     }
@@ -474,7 +482,7 @@ void ccruncher::BlockMatrixChol::chold(double **C) throw(Exception)
       jaux = spe[j];
 
       // retrieving A[i][j] value
-      sum = C[iaux][jaux] - aprod(i, j, i);
+      sum = A[iaux][jaux] - aprod(i, j, i);
 
       coefs[i][jaux] = sum/diag[i];
     }
@@ -511,3 +519,123 @@ double ccruncher::BlockMatrixChol::aprod(int row, int col, int order)
   // return value
   return ret;
 }
+
+//===========================================================================
+// internal function
+// computes cholesky matrix condition number (2-norm)
+//
+// if C is the cholesky decomposition of a matrix A composed by blocks
+// then the condition number of C is computed as follows:
+//   sqrt(max(eig(A)),min(eig(A))
+//
+// the (N_1+N_2+...+N_m) eigenvalues of A are:
+//   * 1-A11 with multiplicity (N1)-1
+//   * 1-A22 with multiplicity (N2)-1
+//   *  ...
+//   * 1-Amm with multiplicity (Nk)-1
+//   * eig1 (see below)
+//   * eig2 (see below)
+//   *  ...
+//   * eigm (see below)
+// where:
+//   * m is the number of blocks
+//   * Ni is the dimension of i-th block
+//   * Aij is the value of the i-j block (note: Aij=Aji)
+//
+// eig_i are the eigenvalues of the following matrix (normal matrix, non composed by blocks):
+//
+//   (1+(N1-1)*A11) (N2*A12)       ... (Nm*A1m)
+//   (N1*A21)       (1+(N2-1)*A22) ... (Nm*A2m)
+//     ...              ...            ...  ...
+//   (N1*Am1)       (N2*Am2)       ... (1+(Nm-1)*A1m)
+//
+// notes: 
+//   * is mandatory that m > 0
+//   * is mandatory that Ni > 0
+//   * is mandatory than Aij = Aji
+//
+//===========================================================================
+double ccruncher::BlockMatrixChol::cond(double **A_, int *n_, int m_) throw(Exception)
+{
+  vector<double> eig = vector<double>();
+
+  // filling direct eigenvalues
+  for(int i=0; i<m_; i++) 
+  {
+    if (1 < n_[i])
+    {
+      double val = 1.0 - A_[i][i];
+      eig.push_back(val);;
+    }
+  }
+
+  // defining variables to perform eigenvalues functions
+  gsl_matrix *K = gsl_matrix_alloc(m_, m_);
+  gsl_vector_complex *vaps = gsl_vector_complex_alloc(m_);
+  gsl_matrix_complex *VAPS = gsl_matrix_complex_alloc(m_, m_);
+  gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(m_, m_);
+
+  // filling deflated matrix
+  for(int i=0; i<m_; i++) 
+  {
+    for(int j=0; j<m_; j++) 
+    {
+      double val = 0.0;
+      if (i == j) 
+      {
+        val = 1.0 + (n_[j]-1)*A_[i][j];
+      }
+      else 
+      {
+        val = n_[j] * A_[i][j];
+      }
+      gsl_matrix_set(K, i, j, val);
+    }
+  }
+
+  // computing eigenvalues for deflated matrix
+  gsl_eigen_nonsymmv_workspace *W1 = gsl_eigen_nonsymmv_alloc(m_);
+  int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, W1);
+  gsl_matrix_free(K);
+  gsl_eigen_nonsymmv_free(W1);
+  gsl_matrix_complex_free(VAPS);
+  gsl_matrix_complex_free(VEPS);
+  if (rc) {
+    gsl_vector_complex_free(vaps);
+    throw Exception("cond: unable to compute eigenvalues: " + string(gsl_strerror(rc)));
+  }
+
+  // retrieving eigenvalues
+  for(int i=0; i<m_; i++) {
+    gsl_complex z = gsl_vector_complex_get(vaps, i);
+    if (fabs(GSL_IMAG(z)) >= EPSILON) {
+      gsl_vector_complex_free(vaps);
+      throw Exception("cond: imaginary eigenvalue computing eigenvalues");
+    }
+    else {
+      double val = GSL_REAL(z);
+      eig.push_back(val);
+    }
+  }
+  gsl_vector_complex_free(vaps);
+
+  // compute condition number
+  double eigmin = +1e100;
+  double eigmax = -1e100;
+  for(int i=0; i<(int)eig.size(); i++) 
+  {
+    double val = std::fabs(eig[i]);
+    if (val < eigmin) eigmin = val;
+    if (eigmax < val) eigmax = val;
+  }
+  return std::sqrt(eigmax/eigmin);
+}
+
+//===========================================================================
+// returns the condition number (2-norm) of the Cholesky matrix
+//===========================================================================
+double ccruncher::BlockMatrixChol:: getConditionNumber()
+{
+  return cnum;
+}
+

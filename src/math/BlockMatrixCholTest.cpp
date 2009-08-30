@@ -28,7 +28,7 @@
 
 //---------------------------------------------------------------------------
 
-#define EPSILON 0.00001
+#define EPSILON 0.0001
 
 //===========================================================================
 // setUp
@@ -47,8 +47,8 @@ void ccruncher_test::BlockMatrixCholTest::tearDown()
 }
 
 //===========================================================================
-// test1. test cholesky decomposition (M=1, N=3)
-//
+// test1. 
+// test cholesky decomposition (M=1, N=3)
 // validated with octave using:
 //    A = [1,0.5,0.5;0.5,1,0.5;0.5,0.5,1]
 //      1.00000  0.50000  0.50000
@@ -58,6 +58,7 @@ void ccruncher_test::BlockMatrixCholTest::tearDown()
 //      1.00000  0.00000  0.00000
 //      0.50000  0.86603  0.00000
 //      0.50000  0.28868  0.81650
+//    c = cond(B)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test1()
 {
@@ -70,12 +71,13 @@ void ccruncher_test::BlockMatrixCholTest::test1()
       0.50000, 0.86603, 0.00000,
       0.50000, 0.28868, 0.81650
   };
-  run(valA, solA, n, 1);
+  double cond = 2.0;
+  run(valA, solA, cond, n, 1);
 }
 
 //===========================================================================
-// test2. test cholesky decomposition (M=3, N=3)
-//
+// test2. 
+// test cholesky decomposition (M=3, N=3)
 // validated with octave using:
 //    A = [1,0.1,0.2;0.1,1,0.3;0.2,0.3,1]
 //      1.00000  0.10000  0.20000
@@ -85,6 +87,7 @@ void ccruncher_test::BlockMatrixCholTest::test1()
 //      1.00000  0.00000  0.00000
 //      0.10000  0.99499  0.00000
 //      0.20000  0.28141  0.93851
+//    c = cond(B)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test2()
 {
@@ -100,12 +103,13 @@ void ccruncher_test::BlockMatrixCholTest::test2()
      0.10000, 0.99499, 0.00000,
      0.20000, 0.28141, 0.93851
   };
-  run(valA, solA, n, 3);
+  double cond = 1.4408;
+  run(valA, solA, cond, n, 3);
 }
 
 //===========================================================================
-// test3. test cholesky decomposition (M=2, N=5)
-//
+// test3. 
+// test cholesky decomposition (M=2, N=5)
 // validated with octave using:
 //    A = [1,0.5,0.5,0.1,0.1;0.5,1,0.5,0.1,0.1;0.5,0.5,1,0.1,0.1;0.1,0.1,0.1,1,0.35;0.1,0.1,0.1,0.35,1]
 //     1.00000  0.50000  0.50000  0.10000  0.10000
@@ -119,6 +123,7 @@ void ccruncher_test::BlockMatrixCholTest::test2()
 //     0.50000  0.28868  0.81650  0.00000  0.00000
 //     0.10000  0.05774  0.04082  0.99247  0.00000
 //     0.10000  0.05774  0.04082  0.33754  0.93331
+//    c = cond(B)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test3()
 {
@@ -134,12 +139,13 @@ void ccruncher_test::BlockMatrixCholTest::test3()
      0.10000, 0.05774, 0.04082, 0.99247, 0.00000,
      0.10000, 0.05774, 0.04082, 0.33754, 0.93331
   };
-  run(valA, solA, n, 2);
+  double cond = 2.0406;
+  run(valA, solA, cond, n, 2);
 }
 
 //===========================================================================
-// test4. test cholesky decomposition (M=4, N=100)
-//
+// test4. 
+// test cholesky decomposition (M=4, N=100)
 // validated checking chol(A)·chol(A)' = A
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test4()
@@ -184,6 +190,7 @@ void ccruncher_test::BlockMatrixCholTest::test5()
   ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4));
 
   // exit function
+  if (chol!= NULL) delete chol;
   Arrays<double>::deallocMatrix(A, 4);
 }
 
@@ -209,11 +216,12 @@ void ccruncher_test::BlockMatrixCholTest::test6()
   };
   int n[] = { 12500, 12500, 12500, 12500 };
   double **A = Arrays<double>::allocMatrix(4,4,valA);
+  double cond = 261.194;
 
   // performing cholesky factorization
   BlockMatrixChol *chol=NULL;
   ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4));
-
+  ASSERT_EQUALS_EPSILON(chol->getConditionNumber(), cond, EPSILON);
   // checking optimized L·x
   double x[50000], y[50000];
   for(int i=0;i<50000;i++) x[i] = 1.0;
@@ -226,8 +234,8 @@ void ccruncher_test::BlockMatrixCholTest::test6()
 }
 
 //===========================================================================
-// test7. test cholesky decomposition (M=4, N=3), sector2 have 0 elements
-//
+// test7. 
+// test cholesky decomposition (M=4, N=3), sector2 have 0 elements
 // validated with octave using:
 //    A = [1,0.1,0.2;0.1,1,0.3;0.2,0.3,1]
 //      1.00000  0.10000  0.20000
@@ -237,6 +245,7 @@ void ccruncher_test::BlockMatrixCholTest::test6()
 //      1.00000  0.00000  0.00000
 //      0.10000  0.99499  0.00000
 //      0.20000  0.28141  0.93851
+//    c = cond(B)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test7()
 {
@@ -254,12 +263,13 @@ void ccruncher_test::BlockMatrixCholTest::test7()
      0.10000, 0.99499, 0.00000,
      0.20000, 0.28141, 0.93851
   };
-  run(valA, solA, n, 4);
+  double cond = 1.4408;
+  run(valA, solA, cond, n, 4);
 }
 
 //===========================================================================
-// test8. test cholesky decomposition (M=1, N=2)
-//
+// test8. 
+// test cholesky decomposition (M=1, N=2)
 // validated with octave using:
 //    A = [1,0.4;0.4,1]
 //      1.00000  0.40000
@@ -267,6 +277,7 @@ void ccruncher_test::BlockMatrixCholTest::test7()
 //    B = chol(A)' (octave & mathematica considerer L'·L instead of L·L')
 //      1.00000  0.00000
 //      0.40000  0.91652
+//    c = cond(B)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test8()
 {
@@ -278,11 +289,14 @@ void ccruncher_test::BlockMatrixCholTest::test8()
       1.00000, 0.00000,
       0.40000, 0.91652
   };
-  run(valA, solA, n, 1);
+  double cond = 1.5275;
+  run(valA, solA, cond, n, 1);
 }
 
 //===========================================================================
-// test9. test cholesky decomposition (M=1, N=1)
+// test9.
+// test cholesky decomposition (M=1, N=1)
+// dim(A)=1 that means that A=1 because diagonal values are 1 allways
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test9()
 {
@@ -293,11 +307,13 @@ void ccruncher_test::BlockMatrixCholTest::test9()
   double solA[] = {
       1.00000
   };
-  run(valA, solA, n, 1);
+  double cond = 1.0;
+  run(valA, solA, cond, n, 1);
 }
 
 //===========================================================================
-// test9. test cholesky decomposition (M=2, various N)
+// test10. 
+// test cholesky decomposition (M=2, various N)
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test10()
 {
@@ -307,77 +323,85 @@ void ccruncher_test::BlockMatrixCholTest::test10()
   };
 
   int n1[] = { 1, 1 }; //A=[1,0.1;0.1,1]
-  double sol1[] = {    //chol(A)'
+  double sol1[] = {    //B=chol(A)'
       1.00000, 0.00000,
       0.10000, 0.99499
   };
-  run(valA, sol1, n1, 2);
+  double cond1 = 1.1055; //c=cond(B)
+  run(valA, sol1, cond1, n1, 2);
 
   int n2[] = { 1, 2 }; //A=[1,0.1,0.1; 0.1,1,0.35; 0.1,0.35,1]
-  double sol2[] = {    //chol(A)'
+  double sol2[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,
    0.10000,   0.99499,   0.00000,
    0.10000,   0.34171,   0.93447
   };
-  run(valA, sol2, n2, 2);
+  double cond2 = 1.4676; //c=cond(B)
+  run(valA, sol2, cond2, n2, 2);
 
   int n3[] = { 1, 3 }; //A=[1,0.1,0.1,0.1; 0.1,1,0.35,0.35; 0.1,0.35,1,0.35; 0.1,0.35,0.35,1]
-  double sol3[] = {    //chol(A)'
+  double sol3[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,
    0.10000,   0.99499,   0.00000,   0.00000,
    0.10000,   0.34171,   0.93447,   0.00000,
    0.10000,   0.34171,   0.23889,   0.90342
   };
-  run(valA, sol3, n3, 2);
+  double cond3 = 1.6364; //c=cond(B)
+  run(valA, sol3, cond3, n3, 2);
 
   int n4[] = { 2, 1 }; //A=[1,0.5,0.1; 0.5,1,0.1; 0.1,0.1,1]
-  double sol4[] = {    //chol(A)'
+  double sol4[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,
    0.10000,   0.05774,   0.99331
   };
-  run(valA, sol4, n4, 2);
+  double cond4 = 1.7534; //c=cond(B)
+  run(valA, sol4, cond4, n4, 2);
 
   int n5[] = { 2, 2 }; //A=[1,0.5,0.1,0.1; 0.5,1,0.1,0.1; 0.1,0.1,1,0.35; 0.1,0.1,0.35,1]
-  double sol5[] = {    //chol(A)'
+  double sol5[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,   0.00000,
    0.10000,   0.05774,   0.99331,   0.00000,
    0.10000,   0.05774,   0.33893,   0.93370
   };
-  run(valA, sol5, n5, 2);
+  double cond5 = 1.8103; //c=cond(B)
+  run(valA, sol5, cond5, n5, 2);
 
   int n6[] = { 2, 3 }; //A=[1,0.5,0.1,0.1,0.1; 0.5,1,0.1,0.1,0.1; 0.1,0.1,1,0.35,0.35; 0.1,0.1,0.35,1,0.35; 0.1,0.1,0.35,0.35,1]
-  double sol6[] = {    //chol(A)'
+  double sol6[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,   0.00000,   0.00000,
    0.10000,   0.05774,   0.99331,   0.00000,   0.00000,
    0.10000,   0.05774,   0.33893,   0.93370,   0.00000,
    0.10000,   0.05774,   0.33893,   0.23754,   0.90298
   };
-  run(valA, sol6, n6, 2);
+  double cond6 = 1.9311; //c=cond(B)
+  run(valA, sol6, cond6, n6, 2);
 
   int n7[] = { 3, 1 }; //A=[1,0.5,0.5,0.1; 0.5,1,0.5,0.1; 0.5,0.5,1,0.1; 0.1,0.1,0.1,1]
-  double sol7[] = {    //chol(A)'
+  double sol7[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,   0.00000,
    0.50000,   0.28868,   0.81650,   0.00000,
    0.10000,   0.05774,   0.04082,   0.99247
   };
-  run(valA, sol7, n7, 2);
+  double cond7 = 2.0145; //c=cond(B)
+  run(valA, sol7, cond7, n7, 2);
 
   int n8[] = { 3, 2 }; //A=[1,0.5,0.5,0.1,0.1; 0.5,1,0.5,0.1,0.1; 0.5,0.5,1,0.1,0.1; 0.1,0.1,0.1,1,0.35; 0.1,0.1,0.1,0.35,1]
-  double sol8[] = {    //chol(A)'
+  double sol8[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,   0.00000,   0.00000,
    0.50000,   0.28868,   0.81650,   0.00000,   0.00000,
    0.10000,   0.05774,   0.04082,   0.99247,   0.00000,
    0.10000,   0.05774,   0.04082,   0.33754,   0.93331
   };
-  run(valA, sol8, n8, 2);
+  double cond8 = 2.0406; //c=cond(B)
+  run(valA, sol8, cond8, n8, 2);
 
   int n9[] = { 3, 3 }; //A=[1,0.5,0.5,0.1,0.1,0.1; 0.5,1,0.5,0.1,0.1,0.1; 0.5,0.5,1,0.1,0.1,0.1; 0.1,0.1,0.1,1,0.35,0.35; 0.1,0.1,0.1,0.35,1,0.35; 0.1,0.1,0.1,0.35,0.35,1]
-  double sol9[] = {    //chol(A)'
+  double sol9[] = {    //B=chol(A)'
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.86603,   0.00000,   0.00000,   0.00000,   0.00000,
    0.50000,   0.28868,   0.81650,   0.00000,   0.00000,   0.00000,
@@ -385,15 +409,38 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.04082,   0.33754,   0.93331,   0.00000,
    0.10000,   0.05774,   0.04082,   0.33754,   0.23686,   0.90275
   };
-  run(valA, sol9, n9, 2);
+  double cond9 = 2.0907; //c=cond(B)
+  run(valA, sol9, cond9, n9, 2);
 
+}
+
+//===========================================================================
+// test11.
+// verify that cholesky decomposition don't fails if some block has 0
+// elements
+//===========================================================================
+void ccruncher_test::BlockMatrixCholTest::test11()
+{
+  double valA[] = {
+      0.40000, 0.10000, 0.20000,
+      0.10000, 0.50000, 0.30000,
+      0.20000, 0.30000, 0.60000
+  }; 
+  int n[] = { 2, 0, 1 }; //A=[1,0.4,0.2; 0.4,1,0.2; 0.2,0.2,1]
+  double solA[] = {      //B=chol(A)'
+     1.00000,  0.00000,  0.00000,
+     0.40000,  0.91652,  0.00000,
+     0.20000,  0.13093,  0.97101
+  };
+  double cond = 1.6054; //c=cond(B)
+  run(valA, solA, cond, n, 3);
 }
 
 //===========================================================================
 //  given a blockmatrix, A, and his cholesky decomposition, L, check that:
 //    L·L' = A
 //===========================================================================
-void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution, int *n, int M)
+void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution, double condnum, int *n, int M)
 {
   int N = 0;
   for(int i=0; i<M; i++) N += n[i];
@@ -403,6 +450,7 @@ void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution,
 
   BlockMatrixChol *chol=NULL;
   ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, M));
+  ASSERT_EQUALS_EPSILON(chol->getConditionNumber(), condnum, EPSILON);
   ASSERT_EQUALS(N, chol->getDim());
 
   // checking cholesky values

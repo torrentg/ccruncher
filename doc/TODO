@@ -4,6 +4,7 @@ CCRUNCHER TODO
 
 Current works
 -------------------
+  * to document cholesky matrix condition number
   * avoid that MPI slaves access to disk
 
 Future works
@@ -27,6 +28,5 @@ Future works
   * add asset stochastic exposure
   * allow ratings evaluated to date previous to T0
   * add borrower-borrower dependences
-  * multi-thread execution implementation
   * graphic interface
 

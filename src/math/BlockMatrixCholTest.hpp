@@ -52,7 +52,8 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
     void test8();
     void test9();
     void test10();
-    void run(double *correls, double *solution, int *n, int M);
+    void test11();
+    void run(double *correls, double *solution, double condnum, int *n, int M);
     void check(double **correls, int *n, int M, BlockMatrixChol *chol);
 
 
@@ -70,6 +71,7 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
       TEST_CASE(test8);
       TEST_CASE(test9);
       TEST_CASE(test10);
+      TEST_CASE(test11);
     }
 
     void setUp();

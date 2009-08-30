@@ -51,12 +51,6 @@ class Logger
     // current indentation level
     static int ilevel;
 
-    // internal status
-    static bool tracetime;
-
-    // internal timer
-    static Timer timer;
-
     // internal columns counter
     static int curcol;
 
@@ -85,9 +79,8 @@ class Logger
     static void append(const string &msg);
     static void trace(const string &msg);
     static void trace(const string &msg, const string &value);
-    static void trace(const string &msg, bool tracetime_);
+    static void trace(const string &msg, Timer &timer);
     static void trace(const string &msg, char c);
-    static void trace(const string &msg, char c, bool tracetime_);
     static void notify();
 
 };

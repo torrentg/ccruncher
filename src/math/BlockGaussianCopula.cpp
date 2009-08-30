@@ -209,9 +209,17 @@ double ccruncher::BlockGaussianCopula::get(int i)
 
 //===========================================================================
 // Set new seed in the number generator
-// @param x seed to be set
 //===========================================================================
 void ccruncher::BlockGaussianCopula::setSeed(long k)
 {
   random.setSeed(k);
 }
+
+//===========================================================================
+// returns the cholesky matrix condition number
+//===========================================================================
+double ccruncher::BlockGaussianCopula::getConditionNumber()
+{
+  return chol->getConditionNumber();
+}
+

@@ -81,6 +81,7 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
   // parsing document
   try
   {
+    timer = Timer(true);
     // gziped file stream, if file isn't a gzip, is like a ifstream
     igzstream xmlstream((const char *) xmlfilename.c_str());
 
@@ -119,6 +120,7 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 //===========================================================================
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
+  Timer timer(true);
   if (isEqual(name_,"ccruncher")) {
     hasmaintag = true;
     return;
@@ -140,7 +142,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag params repeated");
     }
     else {
-      Logger::trace("parsing parameters", true);
+      timer.start();
       eppush(eu, &params, name_, attributes);
     }
   }
@@ -150,7 +152,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag interests repeated");
     }
     else {
-      Logger::trace("parsing interests", true);
+      timer.start();
       eppush(eu, &interests, name_, attributes);
     }
   }
@@ -160,7 +162,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag ratings repeated");
     }
     else {
-      Logger::trace("parsing ratings", true);
+      timer.start();
       eppush(eu, &ratings, name_, attributes);
     }
   }
@@ -173,7 +175,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag transitions repeated");
     }
     else {
-      Logger::trace("parsing transition matrix", true);
+      timer.start();
       transitions.setRatings(ratings);
       eppush(eu, &transitions, name_, attributes);
     }
@@ -181,13 +183,13 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section survival
   else if (isEqual(name_,"survival")) {
     if (ratings.size() == 0) {
-      throw Exception("tag <survivaal> defined before <ratings> tag");
+      throw Exception("tag <survival> defined before <ratings> tag");
     }
     else if (survival.size() != 0) {
       throw Exception("tag survival repeated");
     }
     else {
-      Logger::trace("parsing survival function", true);
+      timer.start();
       survival.setRatings(ratings);
       eppush(eu, &survival, name_, attributes);
     }
@@ -198,7 +200,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag sectors repeated");
     }
      else {
-      Logger::trace("parsing sectors", true);
+      timer.start();
       eppush(eu, &sectors, name_, attributes);
     }
   }
@@ -211,7 +213,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag correlations repeated");
     }
     else {
-      Logger::trace("parsing correlation matrix", true);
+      timer.start();
       correlations = new CorrelationMatrix(sectors);
       eppush(eu, correlations, name_, attributes);
     }
@@ -222,7 +224,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag segmentations repeated");
     }
     else {
-      Logger::trace("parsing segmentations", true);
+      timer.start();
       segmentations = new Segmentations();
       eppush(eu, segmentations, name_, attributes);
     }
@@ -251,7 +253,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       epstop(eu);
     }
     else {
-      Logger::trace("parsing portfolio", true);
+      timer.start();
       portfolio = new Portfolio(ratings, sectors, *segmentations, interests, params.time0, params.timeT);
       eppush(eu, portfolio, name_, attributes);
     }
@@ -294,31 +296,31 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"params")) {
-    // nothing to do
+    Logger::trace("parsing parameters", timer);
   }
   else if (isEqual(name_,"interests")) {
-    // nothing to do
+    Logger::trace("parsing interests", timer);
   }
   else if (isEqual(name_,"ratings")) {
-    // nothing to do
+    Logger::trace("parsing ratings", timer);
   }
   else if (isEqual(name_,"mtransitions")) {
-    // nothing to do
+    Logger::trace("parsing transition matrix", timer);
   }
   else if (isEqual(name_,"survival")) {
-    // nothing to do
+    Logger::trace("parsing survival function", timer);
   }
   else if (isEqual(name_,"sectors")) {
-    // nothing to do
+    Logger::trace("parsing sectors", timer);
   }
   else if (isEqual(name_,"mcorrels")) {
-    // nothing to do
+    Logger::trace("parsing correlation matrix", timer);
   }
   else if (isEqual(name_,"segmentations")) {
-    // nothing to do
+    Logger::trace("parsing segmentations", timer);
   }
   else if (isEqual(name_,"portfolio")) {
-    // nothing to do
+    Logger::trace("parsing portfolio", timer);
   }
   else {
     throw Exception("unexpected tag " + string(name_));

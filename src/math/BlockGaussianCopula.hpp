@@ -64,6 +64,7 @@ class BlockGaussianCopula : public Copula
     void next();
     double get(int);
     void setSeed(long);
+    double getConditionNumber();
 
     BlockGaussianCopula(double **C, int *n, int m) throw(Exception);
     BlockGaussianCopula(const BlockGaussianCopula &) throw(Exception);
