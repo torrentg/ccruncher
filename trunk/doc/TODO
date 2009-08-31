@@ -4,7 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * to document cholesky matrix condition number
   * avoid that MPI slaves access to disk
 
 Future works

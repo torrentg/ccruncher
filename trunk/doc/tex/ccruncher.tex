@@ -1468,7 +1468,7 @@ where $t_\nu(x)$ is the t-Student with $\nu$ degrees of freedom cumulative distr
 function.
 
 %---------------------------------------------------------------------------
-\subsection{Cholesky decomposition for block matrix}
+\subsection{Cholesky decomposition for symmetric block matrix}
 \label{ap:cholblock}
 
 Cholesky algorithm decomposes a symmetric positive definite matrix into a lower
@@ -1480,7 +1480,7 @@ A = U^{\top} \cdot U
 \end{displaymath}
 
 If we have a portfolio of $50000$ borrowers, the correlation matrix size will
-be a $50000 \times 50000$. This requires up to 19 Gb. of RAM memory. The 
+be a $50000 \times 50000$. This requires up to 19 GB of RAM memory. The 
 multiplication of this matrix by a vector implies $2500000000$ multiplications.
 This is far too much. So we adapt the Cholesky algorithm in order to consider that 
 the borrowers' correlation matrix is a block matrix with $1$'s in diagonal. 
@@ -1558,6 +1558,55 @@ $N \times (M+1)$ where $N$ is the number of borrowers and $M$ the number of
 sectors. In the $50000$ borrowers example, the operations number reduces from 
 $2500000000$ to only $500000$.
 
+%---------------------------------------------------------------------------
+\subsection{Condition number for symmetric block matrix}
+\label{ap:condnum}
+
+The condition number of a matrix indicates how far or close is to be a singular 
+matrix. If the condition number number is close to $1$ is said that it is 
+well-conditioned while a matrix with a high condition number is said to be 
+ill-conditioned.
+
+\begin{displaymath}
+\kappa(U) = \|U\|_2 \cdot \|U^{-1}\|_2 
+= \frac{\sigma_{max}(U)}{\sigma_{min}(U)}
+= \sqrt{\frac{\lambda_{max}(A)}{\lambda_{min}(A)}}
+\end{displaymath}
+
+Where $A$ is block matrix with $1$'s in the diagonal, $U$ is the cholesky 
+matrix of $A$, $\sigma_{max}(U)$ and $\sigma_{min}(U)$ are the maximal and
+minimal values of $U$ and $\lambda_{max}(A)$ and $\lambda_{min}(A)$ are 
+the maximal and minimal absolute values of eigenvalues of $A$.
+
+\paragraph{Proposition (unproved).} Let $A$ a symmetric block matrix where 
+$k$ is the number of blocks, $a_{ij}$ are the block values and $n_i$ is 
+the dimension of the $i$-th block. The eigenvalues of this matrix are:
+\begin{displaymath}
+\underbrace{1-a_{11}, \cdots, 1-a_{11}}_{n_1-1},
+\underbrace{1-a_{22}, \cdots, 1-a_{22}}_{n_2-1},  
+\cdots
+\underbrace{1-a_{kk}, \cdots, 1-a_{kk}}_{n_k-1},  
+\lambda_1, \cdots, \lambda_k
+\end{displaymath}
+
+Where $\lambda_i$ are the eigenvalues of the following deflated matrix:
+\begin{displaymath}
+K = \left(
+\begin{array}{cccc}
+1+(n_1-1) \cdot a_{11} & n_2 \cdot a_{12}       & \cdots & n_k \cdot a_{1k}       \cr
+      n_1 \cdot a_{12} & 1+(n_2-1) \cdot a_{22} & \cdots & n_k \cdot a_{2k}       \cr
+\vdots                 & \vdots                 & \ddots & \vdots                 \cr
+n_1 \cdot a_{1k}       & n_2 \cdot a_{2k}       & \cdots & 1+(n_k-1) \cdot a_{kk} \cr
+\end{array}
+\right)
+\end{displaymath}
+
+%internal note: 
+%  K deflated matrix come from eigenvectors related to \lambda_i.
+%  this eigenvectors are of the form (observed with matlab): 
+%  (v_1, ..., v_1, v_2, ..., v2, ..., v_k, ..., v_k)
+%  Matrix K has the same eigenvalues \lambda_i with eigenvectors
+%  (v_1, v_2, ..., v_k)
 
 %===========================================================================
 \newpage
