@@ -132,7 +132,7 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
     }
   }
   else if (isEqual(name_,"sector")) {
-    auxsector.reset();
+    auxsector = Sector();
     eppush(eu, &auxsector, name_, attributes);
   }
   else {
@@ -148,7 +148,7 @@ void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sectors")) {
     validations();
-    auxsector.reset();
+    auxsector = Sector();
   }
   else if (isEqual(name_,"sector")) {
     insertSector(auxsector);

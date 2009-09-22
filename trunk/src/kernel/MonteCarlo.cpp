@@ -479,7 +479,7 @@ void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
 //===========================================================================
 // initAggregators
 //===========================================================================
-void ccruncher::MonteCarlo::initAggregators(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
   Timer timer(true);
   Segmentations &segmentations = idata.getSegmentations();

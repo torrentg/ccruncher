@@ -53,8 +53,6 @@ class CorrelationMatrix : public ExpatHandlers
     // matrix of values
     double **matrix;
 
-    // initialize object
-    void init(Sectors &) throw(Exception);
     // insert a new matrix value
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
@@ -64,11 +62,15 @@ class CorrelationMatrix : public ExpatHandlers
   public:
 
     // constructor
+    CorrelationMatrix();
+    // constructor
     CorrelationMatrix(Sectors &) throw(Exception);
     // copy constructor
     CorrelationMatrix(CorrelationMatrix &) throw(Exception);
     // destructor
     ~CorrelationMatrix();
+    // initialize object
+    void setSectors(Sectors &) throw(Exception);
     // matrix size (= number of sector)
     int size() const;
     // returns a pointer to matrix values

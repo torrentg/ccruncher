@@ -61,8 +61,8 @@ class IData : public ExpatHandlers
     TransitionMatrix transitions;
     Survival survival;
     Sectors sectors;
-    CorrelationMatrix *correlations;
-    Segmentations *segmentations;
+    CorrelationMatrix correlations;
+    Segmentations segmentations;
     Portfolio *portfolio;
 
     // portfolio can be huge (memory, time, ...)
@@ -89,8 +89,8 @@ class IData : public ExpatHandlers
     const TransitionMatrix & getTransitionMatrix() const;
     const Survival & getSurvival() const;
     const Sectors & getSectors() const;
-    CorrelationMatrix & getCorrelationMatrix() const;
-    Segmentations & getSegmentations() const;
+    const CorrelationMatrix & getCorrelationMatrix() const;
+    Segmentations & getSegmentations();
     Portfolio & getPortfolio() const;
     /** has methods */
     bool hasSurvival() const;

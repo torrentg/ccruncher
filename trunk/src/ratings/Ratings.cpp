@@ -132,7 +132,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
     }
   }
   else if (isEqual(name_,"rating")) {
-    auxrating.reset();
+    auxrating = Rating();
     eppush(eu, &auxrating, name_, attributes);
   }
   else {
@@ -148,7 +148,7 @@ void ccruncher::Ratings::epend(ExpatUserData &eu, const char *name_)
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"ratings")) {
     validations();
-    auxrating.reset();
+    auxrating = Rating();
   }
   else if (isEqual(name_,"rating")) {
     insertRating(auxrating);

@@ -28,21 +28,13 @@
 #include "utils/Strings.hpp"
 
 //===========================================================================
-// private initializator
+// default constructor
 //===========================================================================
-void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
+ccruncher::CorrelationMatrix::CorrelationMatrix()
 {
-  epsilon = -1.0;
-  sectors = sectors_;
-
-  n = sectors.size();
-  if (n <= 0)
-  {
-    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
-  }
-
-  // inicializing matrix
-  matrix = Arrays<double>::allocMatrix(n, n, NAN);
+  n = 0;
+  epsilon = 0.0;
+  matrix = NULL;
 }
 
 //===========================================================================
@@ -50,7 +42,9 @@ void ccruncher::CorrelationMatrix::init(Sectors &sectors_) throw(Exception)
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Exception)
 {
-  init(sectors_);
+  matrix = NULL;
+  setSectors(sectors_);
+  epsilon = 0.0;
 }
 
 //===========================================================================
@@ -58,7 +52,8 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Excepti
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exception)
 {
-  init(x.sectors);
+  matrix = NULL;
+  setSectors(x.sectors);
   epsilon = x.epsilon;
   for(int i=0; i<n; i++) 
   {
@@ -75,6 +70,24 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exce
 ccruncher::CorrelationMatrix::~CorrelationMatrix()
 {
   Arrays<double>::deallocMatrix(matrix, n);
+}
+
+//===========================================================================
+// set sectors
+//===========================================================================
+void ccruncher::CorrelationMatrix::setSectors(Sectors &sectors_) throw(Exception)
+{
+  sectors = sectors_;
+  n = sectors.size();
+  if (n <= 0)
+  {
+    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
+  }
+  if (matrix != NULL) 
+  {
+    Arrays<double>::deallocMatrix(matrix, n);
+  }
+  matrix = Arrays<double>::allocMatrix(n, n, NAN);
 }
 
 //===========================================================================

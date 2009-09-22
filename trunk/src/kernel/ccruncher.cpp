@@ -333,7 +333,7 @@ void run(string filename, string path) throw(Exception)
   Logger::previousIndentLevel();
 
   // parsing input file
-  IData idata = IData(filename);
+  IData idata(filename);
 
   // creating simulation object
   MonteCarlo simul;

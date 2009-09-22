@@ -83,7 +83,7 @@ class Asset : public ExpatHandlers
   public:
 
     // constructor
-    Asset(Segmentations &);
+    Asset(Segmentations *);
     // destructor
     ~Asset();
 
@@ -106,8 +106,6 @@ class Asset : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     // given a segmentation returns the segment
     int getSegment(int isegmentation);
-    // reset object content
-    void reset(Segmentations *);
     // free memory allocated by DateValues
     void deleteData();
     // returns minimum event date

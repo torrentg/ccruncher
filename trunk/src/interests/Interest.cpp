@@ -31,34 +31,20 @@
 #define EPSILON 1e-7
 
 //===========================================================================
-// private constructor
+// constructor
 //===========================================================================
 ccruncher::Interest::Interest()
 {
-  reset();
+  name = "UNDEFINED_INTEREST";
+  date0 = Date(1,1,1900);
 }
 
 //===========================================================================
-// private contructor
+// contructor
 //===========================================================================
 ccruncher::Interest::Interest(const string &str)
 {
-  // interest name
   name = str;
-}
-
-//===========================================================================
-// reset
-//===========================================================================
-void ccruncher::Interest::reset()
-{
-  // flushing vector
-  vrates.clear();
-
-  // interest name
-  name = "UNDEFINED_INTEREST";
-
-  // setting an initial date
   date0 = Date(1,1,1900);
 }
 
@@ -218,7 +204,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
   }
   else if (isEqual(name_,"rate")) {
     // setting new handlers
-    auxrate.reset();
+    auxrate = Rate();
     eppush(eu, &auxrate, name_, attributes);
   }
   else {

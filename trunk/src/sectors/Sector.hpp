@@ -52,8 +52,6 @@ class Sector : public ExpatHandlers
     Sector();
     // serialize object constent as xml
     string getXML(int) const throw(Exception);
-    // reset content
-    void reset();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

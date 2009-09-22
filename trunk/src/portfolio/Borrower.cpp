@@ -29,7 +29,7 @@
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interests &interests_,
-               const Date &d1, const Date &d2) : auxasset(segmentations_)
+               const Date &d1, const Date &d2) : auxasset(&segmentations_)
 {
   // setting external objects references
   ratings = &(ratings_);
@@ -138,7 +138,7 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
     insertBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
-    auxasset.reset(segmentations);
+    auxasset = Asset(segmentations);
     eppush(eu, &auxasset, name_, attributes);
   }
   else {
@@ -155,7 +155,7 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   if (isEqual(name_,"borrower")) {
 
     // reseting auxiliar variables (flushing data)
-    auxasset.reset(NULL);
+    auxasset = Asset(NULL);
 
     // filling implicit segment
     try

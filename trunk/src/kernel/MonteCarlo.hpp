@@ -109,7 +109,7 @@ class MonteCarlo
     void initSurvival(const IData &) throw(Exception);
     void initCopula(const IData &idata, long) throw(Exception);
     void initTimeToDefaultArray(int) throw(Exception);
-    void initAggregators(const IData &) throw(Exception);
+    void initAggregators(IData &) throw(Exception);
 
     // Monte Carlo methods
     void randomize();
