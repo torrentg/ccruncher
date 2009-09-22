@@ -38,8 +38,6 @@ void ccruncher::IData::init()
 
    title = "";
    description = "";
-   correlations = NULL;
-   segmentations = NULL;
    portfolio = NULL;
 }
 
@@ -48,12 +46,7 @@ void ccruncher::IData::init()
 //===========================================================================
 void ccruncher::IData::release()
 {
-  // alliberem l'espai alocat
-  if (correlations != NULL) delete correlations;
-  if (segmentations != NULL) delete segmentations;
   if (portfolio != NULL) delete portfolio;
-
-  // setting pointers to NULL
   init();
 }
 
@@ -81,7 +74,6 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
   // parsing document
   try
   {
-    timer = Timer(true);
     // gziped file stream, if file isn't a gzip, is like a ifstream
     igzstream xmlstream((const char *) xmlfilename.c_str());
 
@@ -120,7 +112,6 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
 //===========================================================================
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  Timer timer(true);
   if (isEqual(name_,"ccruncher")) {
     hasmaintag = true;
     return;
@@ -209,24 +200,23 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     if (sectors.size() == 0) {
       throw Exception("tag <mcorrels> defined before <sectors> tag");
     }
-    else if (correlations != NULL) {
+    else if (correlations.size() > 0) {
       throw Exception("tag correlations repeated");
     }
     else {
       timer.start();
-      correlations = new CorrelationMatrix(sectors);
-      eppush(eu, correlations, name_, attributes);
+      correlations.setSectors(sectors);
+      eppush(eu, &correlations, name_, attributes);
     }
   }
   // section segmentations
   else if (isEqual(name_,"segmentations")) {
-    if (segmentations != NULL) {
+    if (segmentations.size() > 0) {
       throw Exception("tag segmentations repeated");
     }
     else {
       timer.start();
-      segmentations = new Segmentations();
-      eppush(eu, segmentations, name_, attributes);
+      eppush(eu, &segmentations, name_, attributes);
     }
   }
   // section portfolio
@@ -240,7 +230,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     else if (sectors.size() == 0) {
       throw Exception("tag <portfolio> defined before <sectors> tag");
     }
-    else if (segmentations == NULL) {
+    else if (segmentations.size() == 0) {
       throw Exception("tag <portfolio> defined before <segmentations> tag");
     }
     if (portfolio != NULL) {
@@ -254,7 +244,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       timer.start();
-      portfolio = new Portfolio(ratings, sectors, *segmentations, interests, params.time0, params.timeT);
+      portfolio = new Portfolio(ratings, sectors, segmentations, interests, params.time0, params.timeT);
       eppush(eu, portfolio, name_, attributes);
     }
   }
@@ -347,10 +337,10 @@ void ccruncher::IData::validate() throw(Exception)
   else if (sectors.size() == 0) {
     throw Exception("sectors section not defined");
   }
-  else if (correlations == NULL) {
+  else if (correlations.size() == 0) {
     throw Exception("correlation matrix section not defined");
   }
-  else if (segmentations == NULL) {
+  else if (segmentations.size() == 0) {
     throw Exception("segmentations section not defined");
   }
   else if (portfolio == NULL && parse_portfolio == true) {
@@ -433,17 +423,17 @@ const Sectors & ccruncher::IData::getSectors() const
 //===========================================================================
 // getCorrelationMatrix
 //===========================================================================
-CorrelationMatrix & ccruncher::IData::getCorrelationMatrix() const
+const CorrelationMatrix & ccruncher::IData::getCorrelationMatrix() const
 {
-  return *correlations;
+  return correlations;
 }
 
 //===========================================================================
 // getSegmentations
 //===========================================================================
-Segmentations & ccruncher::IData::getSegmentations() const
+Segmentations & ccruncher::IData::getSegmentations()
 {
-  return *segmentations;
+  return segmentations;
 }
 
 //===========================================================================

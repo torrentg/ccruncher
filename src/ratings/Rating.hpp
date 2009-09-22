@@ -52,8 +52,6 @@ class Rating : public ExpatHandlers
     Rating();
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // reset object content
-    void reset();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

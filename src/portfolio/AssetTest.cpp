@@ -145,7 +145,7 @@ void ccruncher_test::AssetTest::test1()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   makeAssertions(&asset);
@@ -178,7 +178,7 @@ void ccruncher_test::AssetTest::test2()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -209,7 +209,7 @@ void ccruncher_test::AssetTest::test3()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -237,7 +237,7 @@ void ccruncher_test::AssetTest::test4()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -266,7 +266,7 @@ void ccruncher_test::AssetTest::test5()
   Interests interests = getInterests();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   Date time0 = Date("1/1/2004");
@@ -318,7 +318,7 @@ void ccruncher_test::AssetTest::test6()
   Interests interests = getInterests();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   Date time0 = Date("1/1/2004");
@@ -363,7 +363,7 @@ void ccruncher_test::AssetTest::test7()
   Interests interests = getInterests();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   Date time0 = Date("1/1/2004");
@@ -402,7 +402,7 @@ void ccruncher_test::AssetTest::test8()
   Interests interests = getInterests();
 
   // asset object creation
-  Asset asset(segs);
+  Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   Date time0 = Date("15/1/2004");

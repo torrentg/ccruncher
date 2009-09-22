@@ -131,7 +131,7 @@ void ccruncher::Interests::epstart(ExpatUserData &eu, const char *name_, const c
   }
   else if (isEqual(name_,"interest")) {
     // setting new handlers
-    auxinterest.reset();
+    auxinterest = Interest();
     eppush(eu, &auxinterest, name_, attributes);
   }
   else {
@@ -146,7 +146,7 @@ void ccruncher::Interests::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"interests")) {
-    auxinterest.reset();
+    auxinterest = Interest();
     validate();
   }
   else if (isEqual(name_,"interest")) {
