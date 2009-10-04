@@ -125,9 +125,6 @@ class MonteCarlo
     void printCopulaValues() throw(Exception);
     void printDefaultTimes(Date *) throw(Exception);
 
-    // auxiliary methods
-    double** getBorrowerCorrelationMatrix(const IData &);
-
 
   public:
 
