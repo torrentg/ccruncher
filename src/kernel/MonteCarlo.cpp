@@ -346,33 +346,6 @@ void ccruncher::MonteCarlo::initSurvival(const IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// getBorrowerCorrelationMatrix
-// method not used because can exhaust memory with large portfolios (eg. N=50000)
-//===========================================================================
-double ** ccruncher::MonteCarlo::getBorrowerCorrelationMatrix(const IData &idata)
-{
-  double **ret = Arrays<double>::allocMatrix(N, N, 0.0);
-  double **scorrels = idata.getCorrelationMatrix().getMatrix();
-
-  for (long i=0;i<N;i++)
-  {
-    int sector1 = (*borrowers)[i]->isector;
-    for(int j=0;j<N;j++)
-    {
-      int sector2 = (*borrowers)[j]->isector;
-      if (i == j) {
-        ret[i][j] = 1.0;
-      }
-      else {
-        ret[i][j] = scorrels[sector1][sector2];
-      }
-    }
-  }
-
-  return ret;
-}
-
-//===========================================================================
 // copula construction
 //===========================================================================
 void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exception)
