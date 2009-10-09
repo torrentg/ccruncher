@@ -27,10 +27,10 @@
 
     <p>
       CreditCruncher is a program that uses the Monte Carlo method to compute the 
-      credit risk of large portfolios in which assets are mortgages, loans, bonds, 
+      credit risk of large portfolios of mortgages, loans, bonds, 
       endorsements, or the like (all of them fixed income with a policy buy/sell 
       and hold). Default times are simulated using a copula (gaussian or t-Student), 
-      taking into account the transition matrix (or survival functions) and sectorial 
+      taking into account the transition matrix (or survival functions) and a sectorial 
       correlation matrix.
     </p>
 
@@ -41,35 +41,34 @@
     </table>
 
     <p>
-      CreditCruncher solve the credit portfolio risk valuation doing intensive usage 
-      of numerical computation. This kind of programs are named 
+      CreditCruncher calculates the credit portfolio risk valuation with intensive numerical computation. These kind of programs are called 
       <a href="http://en.wikipedia.org/wiki/Number_crunching">number crunchers</a>.
-      A not very smart mix between the terms 'credit' and 'number cruncher' generates 
-      the name 'credit cruncher'. Of course, CreditCruncher is not related with the recent 
+      The mix between the terms 'credit' and 'number cruncher' generates 
+      the name 'credit cruncher'. CreditCruncher is not related to the recent 
       <a href="http://en.wikipedia.org/wiki/Credit_crunch">credit crunch</a>, but is
       a tool that can aid to control the risks involved in this crisis.
     </p>
 
     <table cellpadding="5" width="100%">
       <tbody><tr><td class="faq_question">
-        3. What is the project maturity ?
+        3. What is the project's maturity ?
       </td></tr></tbody>
     </table>
 
     <p>
       ccruncher-1.4 is a stable version. If you have any bug or suggestion to report, 
-      please send a mail to <a href="mailto:gerard@mail.generacio.com">ccruncher team</a>
+      please send an email to <a href="mailto:gerard@generacio.com">ccruncher team</a>
       or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
     </p>
 
     <table cellpadding="5" width="100%">
       <tbody><tr><td class="faq_question">
-        4. Can I found docs where the CreditCruncher algorithm is explained?
+        4. is there documentation where the CreditCruncher algorithm is explained?
       </td></tr></tbody>
     </table>
 
     <p>
-      Yes. The document is named <i>CreditCruncher - Technical Document</i> and
+      The document that explains the algorithm is called <i>CreditCruncher - Technical Document</i> and
       you can find a link <a href="index.html">here</a>. This document is included
       in all the distributions under the directory <code>docs/</code>. In 
       <a href="http://ercim-news.ercim.org/content/view/606/841/">ERCIM News 78</a>
@@ -78,27 +77,27 @@
 
     <table cellpadding="5" width="100%">
       <tbody><tr><td class="faq_question">
-        5. Windows platform is suported ?
+        5. Is the Windows platform suported ?
       </td></tr></tbody>
     </table>
 
     <p>
-      Yes, but the main stream is in unix environment. If you desire to compile ccruncher
+      Yes, but the main stream is developed for the UNIX environment. If you want to compile ccruncher
       under Windows, read the file docs/README. The repository contains the project
       files for MSVC9 compiler (*.sln, *.vcproj).
     </p>
 
     <table cellpadding="5" width="100%">
       <tbody><tr><td class="faq_question">
-        6. Why input files can be gziped (*.gz) but not ziped (<span style="text-decoration:line-through">*.zip</span>) ?
+        6. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
       </td></tr></tbody>
     </table>
 
     <p>
-      zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
+      The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
       source. You can download a gzip tool for windows from
-      <a href="http://www.7-zip.org/">7-zip</a>. Usually, unix environments
-      have gzip/gunzip commands. You can read more at <a href="http://www.gzip.org/">gzip home</a>.
+      <a href="http://www.7-zip.org/">7-zip</a>. UNIX environments
+      have the gzip/gunzip commands out of the box. You can read more at <a href="http://www.gzip.org/">gzip home</a>.
     </p>
 
     <table cellpadding="5" width="100%">
@@ -109,8 +108,8 @@
 
     <p>
       Yes. It is designed to be very fast. It allows you to evaluate
-      the credit risk of your whole portfolio (there can be more than 50.000 borrowers)
-      each day. If ccruncher sunk your computer, you can execute it on a cluster
+      the credit risk of your whole portfolio 
+      each day and has been tested extensively with a portfolio of over 50.000 borrowers. If ccruncher sinks your computer, you can execute it on a cluster
       enabling the MPI compilation option.
     </p>
 
@@ -119,10 +118,10 @@
     	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
     		<table width="100%"><tr>
     			<td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2009 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+            Copyright &copy; 2004-2009 <a href="mailto:gerard@generacio.com">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 11-Jul-2009
+    				 Last modified: 08-Oct-2009
     			</td>
     		</tr></table>			
     	</div></div></div></div></div>

@@ -67,7 +67,7 @@
     <p>
       The encoding attribute can be one of these values: 
       UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
-      XML is case-sensitive. Title and description tags are optionals. 
+      XML is case-sensitive. Title and description tags are optional. 
       You must define mtransitions or survival, but not both.
     </p>
 
@@ -80,7 +80,7 @@
 
     <p>
       This section shows the properties of the problem that need to
-      be solved. The list can be unordered.
+      be solved. The list can be delivered in any order.
     </p>
 
     <h3>Example</h3>
@@ -111,7 +111,7 @@
         <td class="c1">time.0</td>
         <td class="c2">
           Starting date of the simulation. Initial borrowers ratings, transition matrix 
-          and survival functions are referred to this date. The format of this attribute 
+          and survival functions are relative to this date. The format of this attribute 
           is: DD/MM/YYYY.
         </td>
         <td class="c3"><code>date</code></td>
@@ -128,7 +128,7 @@
         <td class="c1">stopcriteria.maxiterations</td>
         <td class="c2">
           Maximum number of iterations performed by the Monte Carlo algorithm.
-          If 0, this stop criteria is not considered. ccruncher stops when a
+          If it has value 0, this stop criteria is not considered. ccruncher stops when a
           stop criteria is achieved.
         </td>
         <td class="c3"><code>long</code></td>
@@ -137,7 +137,7 @@
         <td class="c1">stopcriteria.maxseconds</td>
         <td class="c2">
           Maximum number of seconds that the current execution can last.
-          If 0, this stop criteria is not considered. ccruncher stops when
+          If it has value 0, this stop criteria is not considered. ccruncher stops when
           a stop criteria is achieved.
         </td>
         <td class="c3"><code>long</code></td>
@@ -145,17 +145,17 @@
       <tr class="b">
         <td class="c1">copula.type</td>
         <td class="c2">
-          Type of copula used to generate correlated variables. Are implemented 
-          two families of copulas. The gaussian copula ('gaussian') and the 
-          t-Student copula ('t(n)' where <i>n > 0</i> is the degree of freedom).
+          Type of copula used to generate correlated variables. 
+          Two families of copulas are implemented: the gaussian copula ('gaussian') and the 
+          t-Student copula ('t(n)' where <i>n > 0</i> is the degrees of freedom).
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
       <tr class="a">
         <td class="c1">copula.seed</td>
         <td class="c2">
-          Seed used to initialize a random number generator. Value 0
-          indicate that a random number based on current time will be used.
+          Seed used to initialize a random number generator. If it has value 0
+          then a random number based on the current time will be used.
           This property is optional. Default value is 0.
         </td>
         <td class="c3"><code>long</code></td>
@@ -163,16 +163,16 @@
       <tr class="b">
         <td class="c1">montecarlo.antithetic</td>
         <td class="c2">
-          Specifies whether to use or not a variance reduction technique 
-          named antithetic. If you have doubts about establishing this 
-          setting then set it to 'false', otherwise set it to 'true'.
+          Specifies whether or not to use a variance reduction technique 
+          named antithetic. If you have doubts about setting this 
+          parameter then set it to 'false', otherwise set it to 'true'.
         </td>
         <td class="c3"><code>boolean</code></td>
       </tr>
       <tr class="a">
         <td class="c1">portfolio.onlyActiveBorrowers</td>
         <td class="c2">
-          If you want to simulate all the borrowers, even borrowers without
+          If you want to simulate all the borrowers, including borrowers without
           risk along the time range, type 'false'. If you want to simulate
           only active borrowers along the simulation period type 'true'. We 
           suggest writing always 'true'.
@@ -250,15 +250,15 @@
         <td class="c2">
           Increment (in months) from the initial date of the interest curve. 
           If a value between two given dates is needed, the value will be 
-          interpolated (linear).
+          linearly interpolated.
         </td>
         <td class="c3"><code>int</code></td>
       </tr>
       <tr class="a">
         <td class="c1">r</td>
         <td class="c2">
-          Interest rate at time t. It is a value between -0.5 and 1.0. (for 
-          example, a rate of 2.5% will be represented as 0.025).
+          Interest rate at time t. It is a value between -0.5 and 1.0. For 
+          example, a rate of 2.5% will be represented as 0.025.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -273,7 +273,7 @@
 
     <p>
       This section shows how to define the ratings. A minimum of two ratings
-      are required (a non-default rating and the default rating).
+      are required: a non-default rating and the default rating.
     </p>
 
     <h3>Example</h3>
@@ -281,10 +281,10 @@
     <pre>
 
   &lt;ratings&gt;
-    &lt;rating name="A" desc="excelent"/&gt;
+    &lt;rating name="A" desc="excellent"/&gt;
     &lt;rating name="B" desc="good"/&gt;
-    &lt;rating name="C" desc="medium"/&gt;
-    &lt;rating name="D" desc="bad"/&gt;
+    &lt;rating name="C" desc="non-investment grade"/&gt;
+    &lt;rating name="D" desc="junk"/&gt;
     &lt;rating name="E" desc="default"/&gt;
   &lt;/ratings&gt;
     </pre>
@@ -300,7 +300,7 @@
       <tr class="a">
         <td class="c1">name</td>
         <td class="c2">
-          Rating identifier. All references to a rating (eg. borrower rating) 
+          Rating identifier. All references to a rating, eg. borrower rating, 
           are made using this field. Includes default rating in this list.
         </td>
         <td class="c3"><code>string</code></td>
@@ -325,7 +325,7 @@
     <p>
       This section shows how to define the transition matrix used by ccruncher. ccruncher always
       checks that the sum of elements of each row is 1.0. Also, ccruncher checks
-      that only one row with all probability concentred in a unique
+      that only one row with all probability concentrated in a unique
       element exists. The number of elements to be established is NxN, where N is the 
       number of ratings.
     </p>
@@ -375,8 +375,8 @@
       <tr class="a">
         <td class="c1">period</td>
         <td class="c2">
-          Number of months covered by the transition matrix. Usually
-          transition matrix cover 1 year, in this case, set 12. 
+          Number of months covered by the transition matrix. Usually the
+          transition matrix covers 1 year, in this case, set 12. 
         </td>
         <td class="c3"><code>int</code></td>
       </tr>
@@ -384,7 +384,7 @@
         <td class="c1">epsilon</td>
         <td class="c2">
           Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near to 0 like 1E-12. This attribute is optional.
+          It must be a value near 0, like 1E-12. This attribute is optional.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -401,23 +401,23 @@
       <tr class="a">
         <td class="c1">from</td>
         <td class="c2">
-          Initial rating. This value must be a rating identifier (see name
-          attribute in the rating tag)
+          Initial rating. This value must be a rating identifier, see name
+          attribute in the rating tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
       <tr class="b">
         <td class="c1">to</td>
         <td class="c2">
-          Final rating. This value must be a rating identifier (see name 
-          attribute in the rating tag).
+          Final rating. This value must be a rating identifier, see name 
+          attribute in the rating tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
         <td class="c2">
-          Probability for rating migration (a value between 0 and 1)
+          Probability for rating migration and can have a value between 0 and 1.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -432,10 +432,10 @@
 
     <p>
       This section contains the survival function for each rating. If this 
-      section is non informed, the survival function will be computed using 
-      transition matrix. You don't need to fill all time values. Survival 
-      function is monotone decreasing and has a value of 1 when time is 0 
-      for all ratings distincts than default. The survival function of default 
+      section is non provided, the survival function will be computed using 
+      the transition matrix. You don't need to fill all time values. The survival 
+      function is monotonously decreasing and has a value of 1 when time is 0 
+      for all ratings other than default. The survival function of the default 
       rating is always 0.
     </p>
 
@@ -471,7 +471,7 @@
         <td class="c1">epsilon</td>
         <td class="c2">
           Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near to 0 like 1E-12. This attribute is optional.
+          It must be a value near 0, like 1E-12. This attribute is optional.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -488,15 +488,15 @@
       <tr class="a">
         <td class="c1">rating</td>
         <td class="c2">
-         This value must be a rating identifier (see name attribute in the 
-         rating tag)
+         This value must be a rating identifier, see name attribute in the 
+         rating tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
-          Time (in months) from begin date.
+          Time (in months) from starting date.
         </td>
         <td class="c3"><code>int</code></td>
       </tr>
@@ -544,8 +544,8 @@
       <tr class="a">
         <td class="c1">name</td>
         <td class="c2">
-          Sector identifier. All references to a sector (eg. borrower 
-          sector) are made using this field.
+          Sector identifier. All references to a sector, eg. borrower 
+          sector, are made using this field.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -568,9 +568,9 @@
 
     <p>
       This section shows how to define the correlation matrix between sectors.
-      The correlation matrix must be simmetric. You only need to set up the 
-      upper triangle's elements. ccruncher checks that all the elements are in 
-      [-1.0+epsilon, +1.0-epsilon]. The number of elements to set up is 
+      The correlation matrix must be symmetric. You only need to set up the 
+      upper triangle elements. ccruncher checks that all the elements are in 
+      the range [-1.0+epsilon, +1.0-epsilon]. The number of elements to set up is 
       (numsectors+1) x numsectors / 2.
     </p>
 
@@ -597,7 +597,7 @@
         <td class="c1">epsilon</td>
         <td class="c2">
           Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near to 0 like 1E-12. This attribute is optional.
+          It must be a value near 0, like 1E-12. This attribute is optional.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -615,7 +615,7 @@
         <td class="c1">sector1</td>
         <td class="c2">
           First sector involved in correlation value.
-          This value must be a sector identifier (see name attribute in sector tag)
+          This value must be a sector identifier, see name attribute in sector tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -623,7 +623,7 @@
         <td class="c1">sector2</td>
         <td class="c2">
           second sector involved in correlation value.
-          This value must be a sector identifier (see name attribute in sector tag)
+          This value must be a sector identifier, see name attribute in sector tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -631,8 +631,8 @@
         <td class="c1">value</td>
         <td class="c2">
           Correlation of defaults times between sector1 and sector2.
-          Correlation(defaults(S1), defaults(S2)). Usually this value is more
-          close to 0 than to 1 or -1.
+          Correlation(defaults(S1), defaults(S2)). In practice this value is
+          closer to 0 than it is to 1 or -1.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -646,20 +646,20 @@
     <h1>Section Segmentations</h1>
 
     <p>
-      This section shows how to define segmentations. Segmentations
+      This section shows how to define portfolio segmentations. Segmentations
       allow you to analyze your portfolio's risk according to a hierarchical organization
-      or another type of segmentation. A segmentation is composed by segments.
+      or another type of segmentation. A segmentation is composed of segments.
       There are 2 types of segmentations depending on the class of elements 
-      which a segmentation contains; borrower segmentations (eg. sector, borrower size, initial
+      which a segmentation contains: borrower segmentations (eg. sector, borrower size, initial
       rating, etc.) and asset segmentations (eg. products, branch where the
-      contract is made, etc.). All segmentations must be complete (one 
-      element only belongs to one segment and the union of all segments gives the whole
-      portfolio). Every segmentation must have a segment named 'rest' defined (in a
-      implicit way). If a borrower (or an asset)
-      belongs nowhere, then it belongs to the 'rest' segment. Finally, there are 2
-      special segmentations, 'borrower' (one segment per borrower) and 'asset'
+      contract is made, etc.). All segmentations must be complete, so that an 
+      element belongs to only one segment and the union of all segments gives the whole
+      portfolio. Every segmentation must have a segment named 'rest' defined in an
+      implicit way. If a borrower (or an asset)
+      does not belong to any segment, then it belongs to the 'rest' segment. Finally, there are 2
+      special segmentations: 'borrower' (one segment per borrower) and 'asset'
       (one segment per asset), in these cases you don't need to specify all the segments,
-      these are defined in a implicit way. 
+      these are defined implicitly. 
     </p>
 
     <h3>Example</h3>
@@ -705,7 +705,7 @@
       <tr class="a">
         <td class="c1">name</td>
         <td class="c2">
-          Segmentation identifier. All references to a segmentation (eg. belongs-to tag)
+          Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
           are made using this field.
         </td>
         <td class="c3"><code>string</code></td>
@@ -732,11 +732,11 @@
         <td class="c1">name</td>
         <td class="c2">
           Segment name. Different segmentations can have segments with
-          the same name. All references to a segment (eg. belongs-to tag)
-          are made using this field (always in conjunction with the segmentation). 
+          the same name. All references to a segment, eg. belongs-to tag,
+          are made using this field and always in conjunction with the segmentation. 
           If a segmentation doesn't have any segments, all the elements belong to
           the 'rest' segment. The 'borrower' and 'asset' segmentations allow
-          the to define the '*' segment. The '*' segment contains a implicit 
+          defining the '*' segment. The '*' segment contains an implicit 
           definition of a segment to every asset and borrower.
         </td>
         <td class="c3"><code>string</code></td>
@@ -752,7 +752,7 @@
 
     <p>
       This section shows how to define the portfolio. For each defined asset 
-      indicate all the remaining events from initial date.
+      define all the remaining events from the starting date.
     </p>
 
     <h3>Example</h3>
@@ -806,10 +806,10 @@
     </pre>
 
     <p>
-      Look how the borrower haven't a 'belongs-to segmentation=borrower defined.
-      This is done implicitly (the same occurs with 'asset').
+      Note how the borrower does not have any 'belongs-to segmentation=borrower' defined.
+      This definition is made implicitly and the same is done for 'asset'.
       If you try to assign a borrower to a segmentation of asset components 
-      (or viceversa), the input file will be rejected.
+      or vice versa, the input file will be rejected.
     </p>
 
     <h3>Borrower Attributes</h3>
@@ -823,8 +823,8 @@
       <tr class="a">
         <td class="c1">rating</td>
         <td class="c2">
-          Initial borrower rating at time t0 (see time.begindate at params section).
-          This value must be a rating identifier (see name attribute in rating tag).
+          Initial borrower rating at time t0, see time.begindate at params section.
+          This value must be a rating identifier, see name attribute in rating tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -832,15 +832,15 @@
         <td class="c1">sector</td>
         <td class="c2">
           Sector where this borrower is included.
-          This value must be a sector identifier (see name attribute in sector tag).
+          This value must be a sector identifier, see name attribute in sector tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
       <tr class="a">
         <td class="c1">name</td>
         <td class="c2">
-          A descriptive name of the borrower. Doesn't need to be unique. Currently
-          not used. Can be used in reports.
+          A descriptive name of the borrower. This name does not have to be unique. Currently
+          this field is not used, but can be used in reports.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -865,7 +865,7 @@
         <td class="c1">segmentation</td>
         <td class="c2">
           Segmentation identifier.
-          This value must be a segmentation identifier (see name attribute in segmentation tag).
+          This value must be a segmentation identifier, see name attribute in segmentation tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -873,7 +873,7 @@
         <td class="c1">segment</td>
         <td class="c2">
           Segment identifier.
-          This value must be a segment identifier (see name attribute in segment tag).
+          This value must be a segment identifier, see name attribute in segment tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -890,8 +890,8 @@
       <tr class="a">
         <td class="c1">name</td>
         <td class="c2">
-          A descriptive name of the asset. Doesn't need to be unique. Currently
-          not used. Can be used in reports.
+          A descriptive name of the asset. This name does not have to be unique. Currently
+          this field is not used, but can be used in reports.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -905,8 +905,8 @@
       <tr class="a">
         <td class="c1">date</td>
         <td class="c2">
-          Date (in format DD/MM/YYYY) from wich there is credit risk (eg. bond
-          buy date or loan signature).
+          Date (in format DD/MM/YYYY) from wich there is credit risk, eg. bond
+          buy date or loan signature.
         </td>
         <td class="c3"><code>date</code></td>
       </tr>
@@ -923,7 +923,7 @@
       <tr class="a">
         <td class="c1">at</td>
         <td class="c2">
-          Date (in format DD/MM/YYYY) where the values take place 
+          Date (in format DD/MM/YYYY) where the values take place.
         </td>
         <td class="c3"><code>date</code></td>
       </tr>
@@ -931,15 +931,15 @@
         <td class="c1">cashflow</td>
         <td class="c2">
           Cashflow at date "at". Positive values = borrower pays, negative
-          values = borrower receive money
+          values = borrower receive money.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
       <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
-          Recovery at date "at" in case of default. Positive values = borrower
-          pays, negative values = borrower earns
+          Recovery at date "at" in case of default. Positive values mean that the borrower
+          pays, negative values mean that the borrower earns.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -950,10 +950,10 @@
       <div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
         <table width="100%"><tr>
           <td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2009 <a href="mailto:gerard@mail.generacio.com">Gerard Torrent</a>
+            Copyright &copy; 2004-2009 <a href="mailto:gerard@generacio.com">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 10-Jul-2009
+            Last modified: 08-Oct-2009
           </td>
         </tr></table>
       </div></div></div></div></div>
