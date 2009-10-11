@@ -63,6 +63,21 @@ h1 {
 	background: url("h1bg.png") 0px 5px no-repeat;
 }
 
+h2 {
+	font-size: 12pt;
+	font-style:italic;
+	font-weight: bold;
+	color: #005080;
+	margin-left: 0px;
+}
+
+h3 {
+	font-size: 10pt;
+	font-weight: bold;
+	color: black;
+	margin-left: 0px;
+}
+
 p {
 	text-align: justify;
 }
@@ -84,8 +99,10 @@ tr.odd, tr.b {
 }
 
 pre {
+	font-size: 8pt;
 	font-family: monospace;
 	margin: 0;
 	color: black;
 	background-color: #ddd;
 }
+

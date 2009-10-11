@@ -261,7 +261,7 @@ void ccruncher::Survival::validate() throw(Exception)
     }
   }
 
-  // checking monotonicity
+  // checking monotonic decreasing
   for (int i=0;i<nratings-1;i++)
   {
     double pvalue = 2.0;
@@ -276,7 +276,7 @@ void ccruncher::Survival::validate() throw(Exception)
         }
         else
         {
-          string msg = "rating " + (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
+          string msg = "survival function of rating " + (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
           throw Exception(msg);
         }
       }
