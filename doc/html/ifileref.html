@@ -56,7 +56,6 @@
     <a href="#interests">&lt;interests&gt;</a>      ...      <a href="#interests">&lt;/interests&gt;</a>
     <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
     <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
-    <a href="#survival">&lt;survival&gt;</a>       ...       <a href="#survival">&lt;/survival&gt;</a>
     <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
     <a href="#mcorrels">&lt;mcorrels&gt;</a>       ...       <a href="#mcorrels">&lt;/mcorrels&gt;</a>
     <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
@@ -68,15 +67,19 @@
       The encoding attribute can be one of these values: 
       UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
       XML is case-sensitive. Title and description tags are optional. 
-      You must define mtransitions or survival, but not both.
+    </p>
+
+    <p>
+      Some configuration options are not widely used and their description 
+      can caused confusion. For this reason these options are described as
+      <a href="#notes">additional notes</a>.
     </p>
 
 <!-- ==================================================== -->
 <!--    params section                                    -->
 <!-- ==================================================== -->
-    <br/>
     <a name="params"></a>
-    <h1>Section Params</h1>
+    <h2>Section Params</h2>
 
     <p>
       This section shows the properties of the problem that need to
@@ -88,13 +91,13 @@
     <pre>
 
   &lt;params&gt;
-    &lt;property name="time.0" value="18/02/2003"/&gt;
-    &lt;property name="time.T" value="01/06/2010"/&gt;
-    &lt;property name="stopcriteria.maxiterations" value="3000"/&gt;
-    &lt;property name="stopcriteria.maxseconds" value="30000000"/&gt;
-    &lt;property name="copula.type" value="gaussian"/&gt;
-    &lt;property name="copula.seed" value="387650932874"/&gt;
-    &lt;property name="montecarlo.antithetic" value="false"/&gt;
+    &lt;property name="time.0" value="18/10/2009"/&gt;
+    &lt;property name="time.T" value="15/07/2015"/&gt;
+    &lt;property name="stopcriteria.maxiterations" value="30000"/&gt;
+    &lt;property name="stopcriteria.maxseconds" value="3600"/&gt;
+    &lt;property name="copula.type" value="t(5)"/&gt;
+    &lt;property name="copula.seed" value="0"/&gt;
+    &lt;property name="montecarlo.antithetic" value="true"/&gt;
     &lt;property name="portfolio.onlyActiveBorrowers" value="true"/&gt;
   &lt;/params&gt;
     </pre>
@@ -184,9 +187,8 @@
 <!-- ==================================================== -->
 <!--    interests section                                 -->
 <!-- ==================================================== -->
-    <br/>
     <a name="interests"></a>
-    <h1>Section Interests</h1>
+    <h2>Section Interests</h2>
 
     <p>
       This section shows how to define the interest rates curves used to 
@@ -267,9 +269,8 @@
 <!-- ==================================================== -->
 <!--    ratings section                                   -->
 <!-- ==================================================== -->
-    <br/>
     <a name="ratings"></a>
-    <h1>Section Ratings</h1>
+    <h2>Section Ratings</h2>
 
     <p>
       This section shows how to define the ratings. A minimum of two ratings
@@ -281,11 +282,14 @@
     <pre>
 
   &lt;ratings&gt;
-    &lt;rating name="A" desc="excellent"/&gt;
-    &lt;rating name="B" desc="good"/&gt;
-    &lt;rating name="C" desc="non-investment grade"/&gt;
-    &lt;rating name="D" desc="junk"/&gt;
-    &lt;rating name="E" desc="default"/&gt;
+    &lt;rating name="AAA" desc="prime"/&gt;
+    &lt;rating name="AA" desc="high grade"/&gt;
+    &lt;rating name="A" desc="upper medium grade"/&gt;
+    &lt;rating name="BBB" desc="lower medium grade"/&gt;
+    &lt;rating name="BB" desc="non investment grade speculative"/&gt;
+    &lt;rating name="B" desc="highly speculative"/&gt;
+    &lt;rating name="CCC" desc="extremely speculative"/&gt;
+    &lt;rating name="D" desc="in default"/&gt;
   &lt;/ratings&gt;
     </pre>
 
@@ -318,51 +322,95 @@
 <!-- ==================================================== -->
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
-    <br/>
     <a name="mtransitions"></a>
-    <h1>Section Transition Matrix</h1>
+    <h2>Section Transition Matrix</h2>
 
     <p>
-      This section shows how to define the transition matrix used by ccruncher. ccruncher always
+      This section shows how to define the transition matrix. ccruncher always
       checks that the sum of elements of each row is 1.0. Also, ccruncher checks
       that only one row with all probability concentrated in a unique
       element exists. The number of elements to be established is NxN, where N is the 
-      number of ratings.
-    </p>
+      number of ratings. Alternatively, you can define the survival functions instead 
+	  of transition matrix. See <a href="#notes">additional notes</a> for more info.
+	</p>
 
     <h3>Example</h3>
 
     <pre>
 
   &lt;mtransitions period="12" epsilon="1e-12"&gt;
-    &lt;transition from="A" to="A" value="0.80"/&gt;
-    &lt;transition from="A" to="B" value="0.10"/&gt;
-    &lt;transition from="A" to="C" value="0.07"/&gt;
-    &lt;transition from="A" to="D" value="0.02"/&gt;
-    &lt;transition from="A" to="E" value="0.01"/&gt;
-    &lt;transition from="B" to="A" value="0.05"/&gt;
-    &lt;transition from="B" to="B" value="0.75"/&gt;
-    &lt;transition from="B" to="C" value="0.10"/&gt;
-    &lt;transition from="B" to="D" value="0.07"/&gt;
-    &lt;transition from="B" to="E" value="0.03"/&gt;
-    &lt;transition from="C" to="A" value="0.03"/&gt;
-    &lt;transition from="C" to="B" value="0.07"/&gt;
-    &lt;transition from="C" to="C" value="0.70"/&gt;
-    &lt;transition from="C" to="D" value="0.14"/&gt;
-    &lt;transition from="C" to="E" value="0.06"/&gt;
-    &lt;transition from="D" to="A" value="0.05"/&gt;
-    &lt;transition from="D" to="B" value="0.05"/&gt;
-    &lt;transition from="D" to="C" value="0.15"/&gt;
-    &lt;transition from="D" to="D" value="0.60"/&gt;
-    &lt;transition from="D" to="E" value="0.15"/&gt;
-    &lt;transition from="E" to="A" value="0.00"/&gt;
-    &lt;transition from="E" to="B" value="0.00"/&gt;
-    &lt;transition from="E" to="C" value="0.00"/&gt;
-    &lt;transition from="E" to="D" value="0.00"/&gt;
-    &lt;transition from="E" to="E" value="1.00"/&gt;
+    &lt;transition from="AAA" to="AAA" value="0.9283" /&gt;
+    &lt;transition from="AAA" to="AA" value="0.065" /&gt;
+    &lt;transition from="AAA" to="A" value="0.0056" /&gt;
+    &lt;transition from="AAA" to="BBB" value="0.0006" /&gt;
+    &lt;transition from="AAA" to="BB" value="0.0005" /&gt;
+    &lt;transition from="AAA" to="B" value="0.0" /&gt;
+    &lt;transition from="AAA" to="CCC" value="0.0" /&gt;
+    &lt;transition from="AAA" to="D" value="0.0" /&gt;
+    &lt;transition from="AA" to="AAA" value="0.0063" /&gt;
+    &lt;transition from="AA" to="AA" value="0.9187" /&gt;
+    &lt;transition from="AA" to="A" value="0.0664" /&gt;
+    &lt;transition from="AA" to="BBB" value="0.0065" /&gt;
+    &lt;transition from="AA" to="BB" value="0.0006" /&gt;
+    &lt;transition from="AA" to="B" value="0.0011" /&gt;
+    &lt;transition from="AA" to="CCC" value="0.0004" /&gt;
+    &lt;transition from="AA" to="D" value="0.0" /&gt;
+    &lt;transition from="A" to="AAA" value="0.0008" /&gt;
+    &lt;transition from="A" to="AA" value="0.0226" /&gt;
+    &lt;transition from="A" to="A" value="0.9165" /&gt;
+    &lt;transition from="A" to="BBB" value="0.0511" /&gt;
+    &lt;transition from="A" to="BB" value="0.0061" /&gt;
+    &lt;transition from="A" to="B" value="0.0023" /&gt;
+    &lt;transition from="A" to="CCC" value="0.0002" /&gt;
+    &lt;transition from="A" to="D" value="0.0004" /&gt;
+    &lt;transition from="BBB" to="AAA" value="0.0005" /&gt;
+    &lt;transition from="BBB" to="AA" value="0.0027" /&gt;
+    &lt;transition from="BBB" to="A" value="0.0584" /&gt;
+    &lt;transition from="BBB" to="BBB" value="0.8776" /&gt;
+    &lt;transition from="BBB" to="BB" value="0.0474" /&gt;
+    &lt;transition from="BBB" to="B" value="0.0098" /&gt;
+    &lt;transition from="BBB" to="CCC" value="0.0015" /&gt;
+    &lt;transition from="BBB" to="D" value="0.0021" /&gt;
+    &lt;transition from="BB" to="AAA" value="0.0004" /&gt;
+    &lt;transition from="BB" to="AA" value="0.0011" /&gt;
+    &lt;transition from="BB" to="A" value="0.0064" /&gt;
+    &lt;transition from="BB" to="BBB" value="0.0785" /&gt;
+    &lt;transition from="BB" to="BB" value="0.8113" /&gt;
+    &lt;transition from="BB" to="B" value="0.0827" /&gt;
+    &lt;transition from="BB" to="CCC" value="0.0089" /&gt;
+    &lt;transition from="BB" to="D" value="0.0107" /&gt;
+    &lt;transition from="B" to="AAA" value="0.0" /&gt;
+    &lt;transition from="B" to="AA" value="0.0011" /&gt;
+    &lt;transition from="B" to="A" value="0.003" /&gt;
+    &lt;transition from="B" to="BBB" value="0.0042" /&gt;
+    &lt;transition from="B" to="BB" value="0.0675" /&gt;
+    &lt;transition from="B" to="B" value="0.8308" /&gt;
+    &lt;transition from="B" to="CCC" value="0.0386" /&gt;
+    &lt;transition from="B" to="D" value="0.0548" /&gt;
+    &lt;transition from="CCC" to="AAA" value="0.0019" /&gt;
+    &lt;transition from="CCC" to="AA" value="0.0" /&gt;
+    &lt;transition from="CCC" to="A" value="0.0038" /&gt;
+    &lt;transition from="CCC" to="BBB" value="0.0075" /&gt;
+    &lt;transition from="CCC" to="BB" value="0.0244" /&gt;
+    &lt;transition from="CCC" to="B" value="0.1203" /&gt;
+    &lt;transition from="CCC" to="CCC" value="0.6071" /&gt;
+    &lt;transition from="CCC" to="D" value="0.235" /&gt;
+    &lt;transition from="D" to="AAA" value="0.0" /&gt;
+    &lt;transition from="D" to="AA" value="0.0" /&gt;
+    &lt;transition from="D" to="A" value="0.0" /&gt;
+    &lt;transition from="D" to="BBB" value="0.0" /&gt;
+    &lt;transition from="D" to="BB" value="0.0" /&gt;
+    &lt;transition from="D" to="B" value="0.0" /&gt;
+    &lt;transition from="D" to="CCC" value="0.0" /&gt;
+    &lt;transition from="D" to="D" value="1.0" /&gt;
   &lt;/mtransitions&gt;
-  
     </pre>
+
+	<p>
+	  The above matrix is the S&amp;P 1-year transition matrix which is adjusted 
+	  for unrated bonds and covers the period between 01-Jan-1981 and 31-Dec-1998.
+	  It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>.
+	</p>
 
     <h3>MTransitions Attributes</h3>
 
@@ -424,99 +472,10 @@
     </table>
 
 <!-- ==================================================== -->
-<!--    survival section                                  -->
-<!-- ==================================================== -->
-    <br/>
-    <a name="survival"></a>
-    <h1>Section Survival Function</h1>
-
-    <p>
-      This section contains the survival function for each rating. If this 
-      section is non provided, the survival function will be computed using 
-      the transition matrix. You don't need to fill all time values. The survival 
-      function is monotonously decreasing and has a value of 1 when time is 0 
-      for all ratings other than default. The survival function of the default 
-      rating is always 0.
-    </p>
-
-    <h3>Example</h3>
-
-    <pre>
-
-  &lt;survival epsilon="1e-12"&gt;
-    &lt;svalue rating="A" t="0" value="1.0"/&gt;
-    &lt;svalue rating="B" t="0" value="1.0"/&gt;
-    &lt;svalue rating="C" t="0" value="1.0"/&gt;
-    &lt;svalue rating="D" t="0" value="1.0"/&gt;
-    &lt;svalue rating="E" t="0" value="0.0"/&gt;
-
-    &lt;svalue rating="A" t="6" value="0.999621298"/&gt;
-    &lt;svalue rating="B" t="6" value="0.925452791"/&gt;
-    &lt;svalue rating="C" t="6" value="0.879896024"/&gt;
-    &lt;svalue rating="D" t="6" value="0.789845972"/&gt;
-    &lt;svalue rating="E" t="6" value="0.0"/&gt;
-    ...
-  &lt;/survival&gt;
-    </pre>
-
-    <h3>Survival Attributes</h3>
-
-    <table cellpadding="3">
-      <tr class="b">
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <tr class="a">
-        <td class="c1">epsilon</td>
-        <td class="c2">
-          Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near 0, like 1E-12. This attribute is optional.
-        </td>
-        <td class="c3"><code>double</code></td>
-      </tr>
-    </table>
-
-    <h3>Svalue Attributes</h3>
-
-    <table cellpadding="3">
-      <tr class="b">
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <tr class="a">
-        <td class="c1">rating</td>
-        <td class="c2">
-         This value must be a rating identifier, see name attribute in the 
-         rating tag.
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
-      <tr class="b">
-        <td class="c1">t</td>
-        <td class="c2">
-          Time (in months) from starting date.
-        </td>
-        <td class="c3"><code>int</code></td>
-      </tr>
-      <tr class="a">
-        <td class="c1">value</td>
-        <td class="c2">
-          Probability that a borrower with initial rating <i>rating</i> 
-          survives (non-defaulted) at time <i>t</i>. It is a value between 
-          0 and 1.
-        </td>
-        <td class="c3"><code>double</code></td>
-      </tr>
-    </table>
-
-<!-- ==================================================== -->
 <!--    sectors section                                   -->
 <!-- ==================================================== -->
-    <br/>
     <a name="sectors"></a>
-    <h1>Section Sectors</h1>
+    <h2>Section Sectors</h2>
 
     <p>
       This section shows how to define the sectors. A minimum of one sector
@@ -562,9 +521,8 @@
 <!-- ==================================================== -->
 <!--    correlations section                              -->
 <!-- ==================================================== -->
-    <br/>
     <a name="mcorrels"></a>
-    <h1>Section Correlations</h1>
+    <h2>Section Correlations</h2>
 
     <p>
       This section shows how to define the correlation matrix between sectors.
@@ -641,9 +599,8 @@
 <!-- ==================================================== -->
 <!--    segmentations section                             -->
 <!-- ==================================================== -->
-    <br/>
     <a name="segmentations"></a>
-    <h1>Section Segmentations</h1>
+    <h2>Section Segmentations</h2>
 
     <p>
       This section shows how to define portfolio segmentations. Segmentations
@@ -746,9 +703,8 @@
 <!-- ==================================================== -->
 <!--    portfolio section                                 -->
 <!-- ==================================================== -->
-    <br/>
     <a name="portfolio"></a>
-    <h1>Section Portfolio</h1>
+    <h2>Section Portfolio</h2>
 
     <p>
       This section shows how to define the portfolio. For each defined asset 
@@ -760,49 +716,77 @@
     <pre>
 
   &lt;portfolio&gt;
-    &lt;borrower rating="A" sector="S1" name="Repsol" id="000001"&gt;
+    &lt;borrower rating="A" sector="S1" name="Diria" id="000001"&gt;
       &lt;belongs-to segmentation="sector" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op1" date="01/01/2001"&gt;
+      &lt;asset name="bond" id="op1" date="01/01/2005"&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;belongs-to segmentation="office" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values at="01/06/2002" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2003" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2003" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2004" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2004" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/06/2005" cashflow="100.0" recovery="1600.0" /&gt;
+          &lt;values at="01/06/2006" cashflow="100.0" recovery="1520.0" /&gt;
+          &lt;values at="01/06/2007" cashflow="100.0" recovery="1440.0" /&gt;
+          &lt;values at="01/06/2008" cashflow="100.0" recovery="1360.0" /&gt;
+          &lt;values at="01/06/2009" cashflow="100.0" recovery="1280.0" /&gt;
+          &lt;values at="01/06/2010" cashflow="100.0" recovery="1200.0" /&gt;
+          &lt;values at="01/06/2011" cashflow="100.0" recovery="1120.0" /&gt;
+          &lt;values at="01/06/2012" cashflow="100.0" recovery="1040.0" /&gt;
+          &lt;values at="01/06/2013" cashflow="100.0" recovery="960.0" /&gt;
+          &lt;values at="01/06/2014" cashflow="1100.0" recovery="880.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-      &lt;asset name="bond" id="op2" date="01/06/1999"&gt;
+      &lt;asset name="bond" id="op2" date="01/06/2008"&gt;
         &lt;belongs-to segmentation="office" segment="0004"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/07/2009" cashflow="480.0" recovery="3300.0" /&gt;
+          &lt;values at="01/07/2011" cashflow="480.0" recovery="2940.0" /&gt;
+          &lt;values at="01/07/2013" cashflow="480.0" recovery="2580.0" /&gt;
+          &lt;values at="01/07/2015" cashflow="480.0" recovery="2220.0" /&gt;
+          &lt;values at="01/07/2017" cashflow="2480.0" recovery="1860.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/borrower&gt;
-    &lt;borrower rating="B" sector="S2" name="ATT" id="000002"&gt;
+    &lt;borrower rating="B" sector="S2" name="Gixirre" id="000002"&gt;
       &lt;belongs-to segmentation="sector" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="big"/&gt;
-      &lt;asset name="bond" id="op3" date="01/06/1999"&gt;
+      &lt;asset name="bond" id="op3" date="01/06/2003"&gt;
         &lt;belongs-to segmentation="office" segment="0003"/&gt;
         &lt;belongs-to segmentation="product" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2000" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/06/2001" cashflow="10.0" recovery="2000.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="10.0" recovery="2000.0" /&gt;
+          &lt;values at="01/01/2005" cashflow="150.0" recovery="700.0" /&gt;
+          &lt;values at="01/06/2007" cashflow="150.0" recovery="640.0" /&gt;
+          &lt;values at="01/01/2009" cashflow="150.0" recovery="580.0" /&gt;
+          &lt;values at="01/06/2011" cashflow="150.0" recovery="520.0" /&gt;
+          &lt;values at="01/01/2013" cashflow="1150.0" recovery="460.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/borrower&gt;
+    &lt;borrower rating="CCC" sector="S2" name="Altleopard" id="000003"&gt;
+      &lt;belongs-to segmentation="sector" segment="S2"/&gt;
+      &lt;belongs-to segmentation="size" segment="medium"/&gt;
+      &lt;asset name="bond" id="op4" date="01/01/1999"&gt;
+        &lt;belongs-to segmentation="office" segment="0003"/&gt;
+        &lt;belongs-to segmentation="product" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" cashflow="100.0" recovery="600.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="100.0" recovery="575.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="100.0" recovery="550.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="100.0" recovery="525.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="100.0" recovery="500.0" /&gt;
+          &lt;values at="01/01/2005" cashflow="100.0" recovery="475.0" /&gt;
+          &lt;values at="01/01/2006" cashflow="100.0" recovery="450.0" /&gt;
+          &lt;values at="01/01/2007" cashflow="100.0" recovery="425.0" /&gt;
+          &lt;values at="01/01/2008" cashflow="100.0" recovery="400.0" /&gt;
+          &lt;values at="01/01/2009" cashflow="100.0" recovery="375.0" /&gt;
+          &lt;values at="01/01/2010" cashflow="100.0" recovery="350.0" /&gt;
+          &lt;values at="01/01/2011" cashflow="100.0" recovery="325.0" /&gt;
+          &lt;values at="01/01/2012" cashflow="100.0" recovery="300.0" /&gt;
+          &lt;values at="01/01/2013" cashflow="1100.0" recovery="275.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/borrower&gt;
   &lt;/portfolio&gt;
-
     </pre>
 
     <p>
@@ -945,6 +929,113 @@
       </tr>
     </table>
 
+<!-- ==================================================== -->
+<!--    Notes                                             -->
+<!-- ==================================================== -->
+	<br/>
+    <a name="notes"></a>
+    <h1>Additional Notes</h1>
+
+<!-- ==================================================== -->
+<!--    survival section                                  -->
+<!-- ==================================================== -->
+    <a name="survival"></a>
+    <h2>Section Survival Function</h2>
+
+	<p>
+	  The survival data is often not available, and where it is available, it 
+	  is often inconsistent or not representative. For this reason it is better
+	  to work with the transition matrix. Ccruncher will take care to convert the
+	  transition matrix in the corresponding survival functions. This implies the 
+	  assumptions that the rating transitions follow a Markov model. Sometimes 
+	  this asumption is not acceptable because we desire that transition 
+	  probabilities changes over the time or we desire to do stress tests over 
+	  the default probabilites. In these cases it may be desirable to define the 
+	  survival functions explicitely.
+	</p>
+
+    <p>
+      You must define mtransitions or survival, but not both.
+      This section contains the survival function for each rating. If this 
+      section is non provided, the survival function will be computed using 
+      the transition matrix. You don't need to fill all time values. The survival 
+      function is monotonously decreasing and has a value of 1 when time is 0 
+      for all ratings other than default. The survival function of the default 
+      rating is always 0.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;survival epsilon="1e-12"&gt;
+    &lt;svalue rating="A" t="0" value="1.0"/&gt;
+    &lt;svalue rating="B" t="0" value="1.0"/&gt;
+    &lt;svalue rating="C" t="0" value="1.0"/&gt;
+    &lt;svalue rating="D" t="0" value="1.0"/&gt;
+    &lt;svalue rating="E" t="0" value="0.0"/&gt;
+
+    &lt;svalue rating="A" t="6" value="0.999621298"/&gt;
+    &lt;svalue rating="B" t="6" value="0.925452791"/&gt;
+    &lt;svalue rating="C" t="6" value="0.879896024"/&gt;
+    &lt;svalue rating="D" t="6" value="0.789845972"/&gt;
+    &lt;svalue rating="E" t="6" value="0.0"/&gt;
+    ...
+  &lt;/survival&gt;
+    </pre>
+
+    <h3>Survival Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">epsilon</td>
+        <td class="c2">
+          Value used as threshold to determine if a value is equal to 0.0 or not. 
+          It must be a value near 0, like 1E-12. This attribute is optional.
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
+    <h3>Svalue Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">rating</td>
+        <td class="c2">
+         This value must be a rating identifier, see name attribute in the 
+         rating tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">t</td>
+        <td class="c2">
+          Time (in months) from starting date.
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">value</td>
+        <td class="c2">
+          Probability that a borrower with initial rating <i>rating</i> 
+          survives (non-defaulted) at time <i>t</i>. It is a value between 
+          0 and 1.
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
     <br />
     <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
       <div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
@@ -953,7 +1044,7 @@
             Copyright &copy; 2004-2009 <a href="mailto:gerard@generacio.com">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 08-Oct-2009
+            Last modified: 11-Oct-2009
           </td>
         </tr></table>
       </div></div></div></div></div>

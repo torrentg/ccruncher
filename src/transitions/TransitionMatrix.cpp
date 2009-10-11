@@ -266,23 +266,19 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     throw Exception("default rating not found");
   }
 
-  // checking property 4 (all rating can be defaulted)
+  // checking that all rating can be defaulted
   for (int i=0;i<n;i++)
   {
-    bool bcon=false;
+    double sum = 0.0;
 
     for (int j=0;j<n;j++)
     {
-      if (matrix[i][j] > epsilon && matrix[j][indexdefault] > epsilon)
-      {
-        bcon = true;
-        break;
-      }
+      sum += matrix[i][j]*matrix[j][indexdefault];
     }
 
-    if (bcon == false)
+    if (fabs(sum) <= epsilon)
     {
-      throw Exception("transition matrix: property 4 not satisfied");
+      throw Exception("invalid transition matrix: exist an inmortal rating");
     }
   }
 }
