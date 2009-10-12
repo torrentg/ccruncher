@@ -32,7 +32,7 @@
 #include "utils/Date.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
-#include "interests/Interests.hpp"
+#include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "portfolio/Borrower.hpp"
 
@@ -54,7 +54,7 @@ class Portfolio : public ExpatHandlers
     const Ratings *ratings;
     const Sectors *sectors;
     Segmentations *segmentations;
-    const Interests *interests;
+    const Interest *interest;
     Date date1;
     Date date2;
     Borrower *auxborrower;
@@ -66,7 +66,7 @@ class Portfolio : public ExpatHandlers
 
   public:
 
-    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interests &, const Date &date1, const Date &date2);
+    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
     ~Portfolio();
 
     vector<Borrower *> &getBorrowers();

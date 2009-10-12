@@ -28,14 +28,14 @@
 // constructor
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
-               Segmentations &segmentations_, const Interests &interests_,
+               Segmentations &segmentations_, const Interest &interest_,
                const Date &d1, const Date &d2) : auxasset(&segmentations_)
 {
   // setting external objects references
   ratings = &(ratings_);
   sectors = &(sectors_);
   segmentations = &(segmentations_);
-  interests = &(interests_);
+  interest = &(interest_);
   date1 = d1;
   date2 = d2;
   hkey = 0UL;
@@ -85,7 +85,7 @@ void ccruncher::Borrower::insertAsset(Asset &val) throw(Exception)
 
   try
   {
-    val.precomputeLosses(date1, date2, *interests);
+    val.precomputeLosses(date1, date2, *interest);
     val.deleteData();
     vassets.push_back(val);
   }

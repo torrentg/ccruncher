@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include <string>
 #include "params/Params.hpp"
-#include "interests/Interests.hpp"
+#include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
 #include "portfolio/Portfolio.hpp"
@@ -56,7 +56,7 @@ class IData : public ExpatHandlers
     string title;
     string description;
     Params params;
-    Interests interests;
+    Interest interest;
     Ratings ratings;
     TransitionMatrix transitions;
     Survival survival;
@@ -84,7 +84,7 @@ class IData : public ExpatHandlers
     string & getTitle();
     string & getDescription();
     const Params & getParams() const;
-    const Interests & getInterests() const;
+    const Interest & getInterest() const;
     const Ratings & getRatings() const;
     const TransitionMatrix & getTransitionMatrix() const;
     const Survival & getSurvival() const;

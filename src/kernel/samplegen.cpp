@@ -204,11 +204,13 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   cout << "<?xml version='1.0' encoding='UTF-8'?>\n";
   cout << "<ccruncher>\n";
   cout << idata.getParams().getXML(2);
-  cout << idata.getInterests().getXML(2);
+  cout << idata.getInterest().getXML(2);
   cout << idata.getRatings().getXML(2);
-  cout << idata.getTransitionMatrix().getXML(2);
   if (idata.hasSurvival()) {
     cout << idata.getSurvival().getXML(2);
+  }
+  else {
+    cout << idata.getTransitionMatrix().getXML(2);
   }
   cout << idata.getSectors().getXML(2);
   cout << idata.getCorrelationMatrix().getXML(2);

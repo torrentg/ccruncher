@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
 #include "segmentations/Segmentations.hpp"
-#include "interests/Interests.hpp"
+#include "interests/Interest.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ class AssetTest : public TestFixture<AssetTest>
   private:
 
     Segmentations getSegmentations();
-    Interests getInterests();
+    Interest getInterest();
     void makeAssertions(Asset *asset);
 
     void test1(void);

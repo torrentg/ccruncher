@@ -32,7 +32,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Borrower.cpp\
     ../src/params/Params.cpp\
-    ../src/interests/Interests.cpp\
     ../src/interests/Interest.cpp\
     ../src/interests/Rate.cpp\
     ../src/ratings/Rating.cpp\
@@ -72,7 +71,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Borrower.hpp\
     ../src/params/Params.hpp\
-    ../src/interests/Interests.hpp\
     ../src/interests/Interest.hpp\
     ../src/interests/Rate.hpp\
     ../src/ratings/Rating.hpp\
@@ -137,7 +135,6 @@ tests_SOURCES = \
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
     ../src/interests/InterestTest.cpp\
-    ../src/interests/InterestsTest.cpp\
     ../src/segmentations/SegmentationTest.cpp\
     ../src/segmentations/SegmentationsTest.cpp\
     ../src/kernel/IDataTest.cpp\
@@ -181,7 +178,6 @@ tests_SOURCES = \
     ../src/portfolio/Borrower.cpp\
     ../src/interests/Rate.cpp\
     ../src/interests/Interest.cpp\
-    ../src/interests/Interests.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
     ../src/segmentations/Segment.cpp\
@@ -205,7 +201,6 @@ tests_SOURCES = \
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
     ../src/interests/InterestTest.hpp\
-    ../src/interests/InterestsTest.hpp\
     ../src/segmentations/SegmentationTest.hpp\
     ../src/segmentations/SegmentationsTest.hpp\
     ../src/kernel/IDataTest.hpp\
@@ -249,7 +244,6 @@ tests_SOURCES = \
     ../src/portfolio/Borrower.hpp\
     ../src/interests/Rate.hpp\
     ../src/interests/Interest.hpp\
-    ../src/interests/Interests.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/segmentations/Segment.hpp\
@@ -273,7 +267,6 @@ tests_LDFLAGS =
 #    ../src/portfolio/Portfolio.cpp\
 #    ../src/portfolio/Borrower.cpp\
 #    ../src/params/Params.cpp\
-#    ../src/interests/Interests.cpp\
 #    ../src/interests/Interest.cpp\
 #    ../src/interests/Rate.cpp\
 #    ../src/ratings/Rating.cpp\
@@ -313,7 +306,6 @@ tests_LDFLAGS =
 #    ../src/portfolio/Portfolio.hpp\
 #    ../src/portfolio/Borrower.hpp\
 #    ../src/params/Params.hpp\
-#    ../src/interests/Interests.hpp\
 #    ../src/interests/Interest.hpp\
 #    ../src/interests/Rate.hpp\
 #    ../src/ratings/Rating.hpp\

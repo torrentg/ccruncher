@@ -53,7 +53,7 @@
     &lt;title&gt;<i>your title here</i>&lt;/title&gt;
     &lt;description&gt;<i>your description here</i>&lt;/description&gt;
     <a href="#params">&lt;params&gt;</a>         ...         <a href="#params">&lt;/params&gt;</a>
-    <a href="#interests">&lt;interests&gt;</a>      ...      <a href="#interests">&lt;/interests&gt;</a>
+    <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
     <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
     <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
     <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
@@ -185,33 +185,31 @@
     </table>
 
 <!-- ==================================================== -->
-<!--    interests section                                 -->
+<!--    interest section                                 -->
 <!-- ==================================================== -->
-    <a name="interests"></a>
-    <h2>Section Interests</h2>
+    <a name="interest"></a>
+    <h2>Section Interest</h2>
 
     <p>
-      This section shows how to define the interest rates curves used to 
-      compute the Current Net Value. The curve named 'spot' is required.
+      This section shows how to define the interest rates curve used to 
+      compute the Current Net Value of simulated losses.
     </p>
 
     <h3>Example</h3>
 
     <pre>
 
-  &lt;interests&gt;
-    &lt;interest name="spot" date="18/11/2004"&gt;
-      &lt;rate t="0" r="0.0"/&gt;
-      &lt;rate t="1" r="0.04"/&gt;
-      &lt;rate t="2" r="0.041"/&gt;
-      &lt;rate t="3" r="0.045"/&gt;
-      &lt;rate t="6" r="0.0455"/&gt;
-      &lt;rate t="12" r="0.048"/&gt;
-      &lt;rate t="24" r="0.049"/&gt;
-      &lt;rate t="60" r="0.05"/&gt;
-      &lt;rate t="120" r="0.052"/&gt;
-    &lt;/interest&gt;
-  &lt;/interests&gt;
+  &lt;interest date="18/10/2009"&gt;
+    &lt;rate t="0" r="0.0"/&gt;
+    &lt;rate t="1" r="0.04"/&gt;
+    &lt;rate t="2" r="0.041"/&gt;
+    &lt;rate t="3" r="0.045"/&gt;
+    &lt;rate t="6" r="0.0455"/&gt;
+    &lt;rate t="12" r="0.048"/&gt;
+    &lt;rate t="24" r="0.049"/&gt;
+    &lt;rate t="60" r="0.05"/&gt;
+    &lt;rate t="120" r="0.052"/&gt;
+  &lt;/interest&gt;
     </pre>
 
     <h3>Interest attributes</h3>
@@ -223,13 +221,6 @@
         <th>Type</th>
       </tr>
       <tr class="b">
-        <td class="c1">name</td>
-        <td class="c2">
-          Name of the interest rate type
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
-      <tr class="a">
         <td class="c1">date</td>
         <td class="c2">
           Initial date of the interest curve. Usually this value matches 

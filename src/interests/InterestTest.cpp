@@ -66,7 +66,7 @@ void ccruncher_test::InterestTest::test1()
     0.908578};
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <interest name='discount' date='18/02/2003'>\n\
+      <interest date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.04'/>\n\
         <rate t='2' r='0.041'/>\n\
@@ -85,7 +85,6 @@ void ccruncher_test::InterestTest::test1()
   Interest iobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
-  ASSERT("discount" == iobj.getName());
   ASSERT(Date("18/02/2003") == iobj.getDate0());
 
   Date date0 = Date("18/02/2003");

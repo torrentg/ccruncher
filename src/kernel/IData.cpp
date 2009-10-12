@@ -137,14 +137,14 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &params, name_, attributes);
     }
   }
-  // section interests
-  else if (isEqual(name_,"interests")) {
-    if (interests.size() != 0) {
-      throw Exception("tag interests repeated");
+  // section interest
+  else if (isEqual(name_,"interest")) {
+    if (interest.size() != 0) {
+      throw Exception("tag interest repeated");
     }
     else {
       timer.start();
-      eppush(eu, &interests, name_, attributes);
+      eppush(eu, &interest, name_, attributes);
     }
   }
   // section ratings
@@ -221,8 +221,8 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   // section portfolio
   else if (isEqual(name_,"portfolio")) {
-    if (interests.size() == 0) {
-      throw Exception("tag <portfolio> defined before <interests> tag");
+    if (interest.size() == 0) {
+      throw Exception("tag <portfolio> defined before <interest> tag");
     }
     else if (ratings.size() == 0) {
       throw Exception("tag <portfolio> defined before <ratings> tag");
@@ -244,7 +244,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
     else {
       timer.start();
-      portfolio = new Portfolio(ratings, sectors, segmentations, interests, params.time0, params.timeT);
+      portfolio = new Portfolio(ratings, sectors, segmentations, interest, params.time0, params.timeT);
       eppush(eu, portfolio, name_, attributes);
     }
   }
@@ -288,8 +288,8 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"params")) {
     Logger::trace("parsing parameters", timer);
   }
-  else if (isEqual(name_,"interests")) {
-    Logger::trace("parsing interests", timer);
+  else if (isEqual(name_,"interest")) {
+    Logger::trace("parsing interest", timer);
   }
   else if (isEqual(name_,"ratings")) {
     Logger::trace("parsing ratings", timer);
@@ -325,8 +325,8 @@ void ccruncher::IData::validate() throw(Exception)
   if (params.maxiterations < 0) {
     throw Exception("params section not defined");
   }
-  else if (interests.size() == 0) {
-    throw Exception("interests section not defined");
+  else if (interest.size() == 0) {
+    throw Exception("interest section not defined");
   }
   else if (ratings.size() == 0) {
     throw Exception("ratings section not defined");
@@ -381,11 +381,11 @@ const Params & ccruncher::IData::getParams() const
 }
 
 //===========================================================================
-// getInterests
+// getInterest
 //===========================================================================
-const Interests & ccruncher::IData::getInterests() const
+const Interest & ccruncher::IData::getInterest() const
 {
-  return interests;
+  return interest;
 }
 
 //===========================================================================
