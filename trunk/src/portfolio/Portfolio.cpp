@@ -29,7 +29,7 @@
 // constructor
 //===========================================================================
 ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
-             Segmentations &segmentations_, const Interests &interests_, 
+             Segmentations &segmentations_, const Interest &interest_, 
              const Date &date1_, const Date &date2_)
 {
   auxborrower = NULL;
@@ -38,7 +38,7 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_
   ratings = &ratings_;
   sectors = &sectors_;
   segmentations = &segmentations_;
-  interests = &interests_;
+  interest = &interest_;
   date1 = date1_;
   date2 = date2_;
 }
@@ -143,7 +143,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     }
   }
   else if (isEqual(name_,"borrower")) {
-    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interests, date1, date2);
+    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interest, date1, date2);
     eppush(eu, auxborrower, name_, attributes);
   }
   else {

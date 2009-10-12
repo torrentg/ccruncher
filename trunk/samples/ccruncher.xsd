@@ -46,25 +46,20 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="interests" minOccurs="1" maxOccurs="1">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="interest" minOccurs="1" maxOccurs="unbounded">
-							<xsd:complexType>
-								<xsd:sequence>
-									<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
-										<xsd:complexType>
-											<xsd:attribute name="t" type="xsd:nonNegativeInteger" use="required"/>
-											<xsd:attribute name="r" type="xsd:double" use="required"/>
-										</xsd:complexType>
-									</xsd:element>
-								</xsd:sequence>
-								<xsd:attribute name="name" type="xsd:string" use="required"/>
-								<xsd:attribute name="date" type="myDate" use="required"/>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
+				<xsd:element name="interest" minOccurs="1" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="t" type="xsd:nonNegativeInteger" use="required"/>
+									<xsd:attribute name="r" type="xsd:double" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="name" type="xsd:string" use="required"/>
+						<xsd:attribute name="date" type="myDate" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
 			</xsd:element>
 			<xsd:element name="ratings" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>

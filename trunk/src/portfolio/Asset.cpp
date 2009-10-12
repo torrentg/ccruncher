@@ -72,7 +72,7 @@ string ccruncher::Asset::getName(void) const
 //===========================================================================
 // get recovery obtained at date d
 //===========================================================================
-double ccruncher::Asset::getRecovery(Date d, const Interest &spot, Date c)
+double ccruncher::Asset::getRecovery(Date d, const Interest &interest, Date c)
 {
   int n = (int) data.size();
 
@@ -85,7 +85,7 @@ double ccruncher::Asset::getRecovery(Date d, const Interest &spot, Date c)
   {
     if (d <= data[i].date)
     {
-      double ufactor =  spot.getUpsilon(data[i].date, c);
+      double ufactor =  interest.getUpsilon(data[i].date, c);
       return ufactor*data[i].recovery;
     }
   }
@@ -97,7 +97,7 @@ double ccruncher::Asset::getRecovery(Date d, const Interest &spot, Date c)
 // getCashflowSum
 // t0: date where cashflow is computed its actual value
 //===========================================================================
-double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
+double ccruncher::Asset::getCashflowSum(Date d, const Interest &interest, Date c)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -111,12 +111,12 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
   {
     if (d <= data[i].date)
     {
-      double ufactor =  spot.getUpsilon(data[i].date, c);
+      double ufactor =  interest.getUpsilon(data[i].date, c);
       ret += ufactor * data[i].cashflow;
     }
   }
 
-  ret -= getRecovery(d, spot, c);
+  ret -= getRecovery(d, interest, c);
 
   return ret;
 }
@@ -124,10 +124,8 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &spot, Date c)
 //===========================================================================
 // precomputeLosses
 //===========================================================================
-void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interests &interests)
+void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interest &interest)
 {
-  Interest &spot = ((Interests&)interests)["spot"];
-
   // counting ptimes-plosses size
   bool hasd2 = false;
   int num = 0;
@@ -160,14 +158,14 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
       ptimes.push_back(data[i].date);
-      plosses.push_back(getCashflowSum(data[i].date, spot, d1));
+      plosses.push_back(getCashflowSum(data[i].date, interest, d1));
       cont++;
     }
   }
   if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
   {
       ptimes.push_back(d2);
-      plosses.push_back(getCashflowSum(d2, spot, d1));
+      plosses.push_back(getCashflowSum(d2, interest, d1));
       cont++;    
   }
   assert(num == cont);

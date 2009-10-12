@@ -30,7 +30,7 @@
 #include <MiniCppUnit.hxx>
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
-#include "interests/Interests.hpp"
+#include "interests/Interest.hpp"
 #include "utils/Date.hpp"
 #include "segmentations/Segmentations.hpp"
 
@@ -49,7 +49,7 @@ class BorrowerTest : public TestFixture<BorrowerTest>
     Ratings getRatings();
     Sectors getSectors();
     Segmentations getSegmentations();
-    Interests getInterests();
+    Interest getInterest();
 
     void test1(void);
     void test2(void);

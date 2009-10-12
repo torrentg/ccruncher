@@ -217,14 +217,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\interests\Interests.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\interests\Interests.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\interests\Rate.cpp"
 					>
 				</File>

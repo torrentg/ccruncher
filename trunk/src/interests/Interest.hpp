@@ -45,8 +45,6 @@ class Interest : public ExpatHandlers
 
   private:
 
-    // interest name
-    string name;
     // date where interest curve is defined
     Date date0;
     // rate values
@@ -71,20 +69,18 @@ class Interest : public ExpatHandlers
     // default constructor
     Interest();
     // constructor
-    Interest(const string &);
+    Interest(const Date &);
     // destructor
     ~Interest();
 
-    // returns curve name
-    string getName() const;
+    // numbers of rates
+    int size() const;
     // returns initial date
     Date getDate0() const;
     // returns upsilon value
     double getUpsilon(const Date &date1, const Date &date2) const;
     // seriealize object content as xml
     string getXML(int) const throw(Exception);
-    // reset object content
-    void reset();
 
     /** ExpatHandlers methods declaration */
     void epstart(ExpatUserData &, const char *, const char **);

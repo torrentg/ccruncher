@@ -34,7 +34,7 @@
 #include "utils/ExpatHandlers.hpp"
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
-#include "interests/Interests.hpp"
+#include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class Borrower : public ExpatHandlers
     const Ratings *ratings;
     const Sectors *sectors;
     Segmentations *segmentations;
-    const Interests *interests;
+    const Interest *interest;
     Date date1;
     Date date2;
     Asset auxasset;
@@ -73,7 +73,7 @@ class Borrower : public ExpatHandlers
     string name;
     unsigned long hkey;
 
-    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interests &, const Date &d1, const Date &d2);
+    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     ~Borrower();
 
     vector<Asset> & getAssets();

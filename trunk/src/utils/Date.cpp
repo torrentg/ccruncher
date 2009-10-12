@@ -61,7 +61,7 @@
 #include <cassert>
 
 //===========================================================================
-// Constructor. constructs a new object initialized to 1 Jan 4713BC
+// Constructor. constructs a new object initialized to current date
 //===========================================================================
 ccruncher::Date::Date()
 {

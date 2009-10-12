@@ -35,17 +35,15 @@
 //===========================================================================
 ccruncher::Interest::Interest()
 {
-  name = "UNDEFINED_INTEREST";
-  date0 = Date(1,1,1900);
+  date0 = Date();
 }
 
 //===========================================================================
 // contructor
 //===========================================================================
-ccruncher::Interest::Interest(const string &str)
+ccruncher::Interest::Interest(const Date &d)
 {
-  name = str;
-  date0 = Date(1,1,1900);
+  date0 = d;
 }
 
 //===========================================================================
@@ -53,15 +51,15 @@ ccruncher::Interest::Interest(const string &str)
 //===========================================================================
 ccruncher::Interest::~Interest()
 {
-  // atention at vrates allocation
+  // nothing to do
 }
 
 //===========================================================================
-// return interest name
+// returns the numbers of rates
 //===========================================================================
-string ccruncher::Interest::getName() const
+int ccruncher::Interest::size() const
 {
-  return name;
+  return (int) vrates.size();
 }
 
 //===========================================================================
@@ -188,15 +186,14 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"interest")) {
-    if (getNumAttributes(attributes) != 2) {
+    if (getNumAttributes(attributes) != 1) {
       throw Exception("incorrect number of attributes");
     }
     else
     {
       // getting attributes
-      name = getStringAttribute(attributes, "name", "");
       date0 = getDateAttribute(attributes, "date", Date(1,1,1900));
-      if (name == "" || date0 == Date(1,1,1900))
+      if (date0 == Date(1,1,1900))
       {
         throw Exception("invalid attributes values at <interest>");
       }
@@ -237,7 +234,7 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interest name='" + name + "' date='" + Format::date2string(date0) + "'>\n";
+  ret += spc + "<interest date='" + Format::date2string(date0) + "'>\n";
 
   for (unsigned int i=0;i<vrates.size();i++)
   {

@@ -26,7 +26,7 @@
 <!--                        creditcruncher                          -->
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
-    (title?, description?, params, interests, ratings, mtransitions, 
+    (title?, description?, params, interest, ratings, mtransitions, 
      survival?, sectors, mcorrels, segmentations, portfolio)
 )>
 
@@ -44,12 +44,8 @@
 )>
 
 <!-- .............................................................. -->
-<!--                          interests                             -->
+<!--                          interest                              -->
 <!-- .............................................................. -->
-<!ELEMENT interests (
-    interest+
-)>
-
 <!ELEMENT interest (
     rate+
 )>

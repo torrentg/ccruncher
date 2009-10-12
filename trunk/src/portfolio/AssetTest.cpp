@@ -89,13 +89,12 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
 }
 
 //===========================================================================
-// getInterests
+// getInterest
 //===========================================================================
-Interests ccruncher_test::AssetTest::getInterests()
+Interest ccruncher_test::AssetTest::getInterest()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <interests>\n\
-      <interest name='spot' date='18/02/2003'>\n\
+      <interest date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.0'/>\n\
         <rate t='2' r='0.0'/>\n\
@@ -105,14 +104,13 @@ Interests ccruncher_test::AssetTest::getInterests()
         <rate t='24' r='0.0'/>\n\
         <rate t='60' r='0.0'/>\n\
         <rate t='120' r='0.0'/>\n\
-      </interest>\n\
-    </interests>";
+      </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
   // segmentation object creation
-  Interests ret;
+  Interest ret;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
 
   return ret;
@@ -263,7 +261,7 @@ void ccruncher_test::AssetTest::test5()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interests interests = getInterests();
+  Interest interest = getInterest();
 
   // asset object creation
   Asset asset(&segs);
@@ -271,7 +269,7 @@ void ccruncher_test::AssetTest::test5()
 
   Date time0 = Date("1/1/2004");
   Date timeT = Date("1/7/2011");
-  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interest));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2004")), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/07/2004")), EPSILON);
@@ -315,7 +313,7 @@ void ccruncher_test::AssetTest::test6()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interests interests = getInterests();
+  Interest interest = getInterest();
 
   // asset object creation
   Asset asset(&segs);
@@ -323,7 +321,7 @@ void ccruncher_test::AssetTest::test6()
 
   Date time0 = Date("1/1/2004");
   Date timeT = Date("1/7/2011");
-  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interest));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2000")), EPSILON);
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2005")), EPSILON);
@@ -360,7 +358,7 @@ void ccruncher_test::AssetTest::test7()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interests interests = getInterests();
+  Interest interest = getInterest();
 
   // asset object creation
   Asset asset(&segs);
@@ -368,7 +366,7 @@ void ccruncher_test::AssetTest::test7()
 
   Date time0 = Date("1/1/2004");
   Date timeT = Date("1/1/2012");
-  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interest));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("01/01/2004")), EPSILON);
   ASSERT_EQUALS_EPSILON(2000.0, asset.getLoss(Date("01/01/2006")), EPSILON);
@@ -399,7 +397,7 @@ void ccruncher_test::AssetTest::test8()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interests interests = getInterests();
+  Interest interest = getInterest();
 
   // asset object creation
   Asset asset(&segs);
@@ -407,7 +405,7 @@ void ccruncher_test::AssetTest::test8()
 
   Date time0 = Date("15/1/2004");
   Date timeT = Date("15/1/2011");
-  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interests));
+  ASSERT_NO_THROW(asset.precomputeLosses(time0, timeT, interest));
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getLoss(Date("15/01/2004")), EPSILON);
   ASSERT_EQUALS_EPSILON(1000.0, asset.getLoss(Date("15/01/2005")), EPSILON);
@@ -424,7 +422,7 @@ void ccruncher_test::AssetTest::test8()
 //===========================================================================
 void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 {
-  Interests interests = getInterests();
+  Interest interest = getInterest();
 
   ASSERT(asset->belongsTo(0, 0)); // portfolio-rest
   ASSERT(asset->belongsTo(2, 1)); // asset-op1
@@ -464,7 +462,7 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 
   Date time0 = Date("1/1/1999");
   Date timeT = Date("1/1/2010");
-  ASSERT_NO_THROW(asset->precomputeLosses(time0, timeT, interests));
+  ASSERT_NO_THROW(asset->precomputeLosses(time0, timeT, interest));
 
   ASSERT_EQUALS_EPSILON(0.0, asset->getLoss(Date("01/01/1995")), EPSILON);
   ASSERT_EQUALS_EPSILON(120.0, asset->getLoss(Date("01/01/1999")), EPSILON);

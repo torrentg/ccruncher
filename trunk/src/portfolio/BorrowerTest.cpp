@@ -129,13 +129,12 @@ Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 }
 
 //===========================================================================
-// getInterests
+// getInterest
 //===========================================================================
-Interests ccruncher_test::BorrowerTest::getInterests()
+Interest ccruncher_test::BorrowerTest::getInterest()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <interests>\n\
-      <interest name='spot' date='18/02/2003'>\n\
+      <interest date='18/02/2003'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.0'/>\n\
         <rate t='2' r='0.0'/>\n\
@@ -145,14 +144,13 @@ Interests ccruncher_test::BorrowerTest::getInterests()
         <rate t='24' r='0.0'/>\n\
         <rate t='60' r='0.0'/>\n\
         <rate t='120' r='0.0'/>\n\
-      </interest>\n\
-    </interests>";
+      </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // segmentation object creation
-  Interests ret;
+  // interest object creation
+  Interest ret;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
 
   return ret;
@@ -201,8 +199,8 @@ void ccruncher_test::BorrowerTest::test1()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interests interests = getInterests();
-  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest();
+  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
 
@@ -260,8 +258,8 @@ void ccruncher_test::BorrowerTest::test2()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interests interests = getInterests();
-  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest();
+  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }
 
@@ -302,7 +300,7 @@ void ccruncher_test::BorrowerTest::test3()
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interests interests = getInterests();
-  Borrower borrower(ratings, sectors, segmentations, interests, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest();
+  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }

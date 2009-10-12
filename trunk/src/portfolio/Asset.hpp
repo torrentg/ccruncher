@@ -29,7 +29,6 @@
 #include <map>
 #include <vector>
 #include "interests/Interest.hpp"
-#include "interests/Interests.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
@@ -97,7 +96,7 @@ class Asset : public ExpatHandlers
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precompute losses
-    void precomputeLosses(const Date &d1, const Date &d2, const Interests &interests);
+    void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
     // returns precomputed loss at requested time node index
     double getLoss(const Date &at);
     // returns a pointer to cashflow
