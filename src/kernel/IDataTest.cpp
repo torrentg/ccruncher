@@ -72,11 +72,11 @@ void ccruncher_test::IDataTest::test1()
       <rate t='120' r='0.052'/>\n\
     </interest>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='B' desc='good'/>\n\
+      <rating name='D' desc='bad'/>\n\
+      <rating name='C' desc='very bad'/>\n\
+      <rating name='E' desc='default'/>\n\
     </ratings>\n\
     <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
@@ -105,7 +105,7 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </mtransitions>\n\
-    <survival epsilon='1e-12'>\n\
+    <survival>\n\
       <svalue rating='A' t='0' value='1.0'/>\n\
       <svalue rating='B' t='0' value='1.0'/>\n\
       <svalue rating='C' t='0' value='1.0'/>\n\
@@ -116,7 +116,7 @@ void ccruncher_test::IDataTest::test1()
       <sector name='S1' desc='calzado'/>\n\
       <sector name='S2' desc='otros sectores'/>\n\
     </sectors>\n\
-    <mcorrels epsilon='1e-12'>\n\
+    <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\

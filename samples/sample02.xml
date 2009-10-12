@@ -136,7 +136,7 @@
   <!--                    SURVIVAL FUNCTION                           -->
   <!-- ============================================================== -->
 <!--
-  <survival epsilon="1e-12">
+  <survival>
 
     <svalue rating="AAA" t="0" value="1"/>
     <svalue rating="AAA" t="12" value="1"/>
@@ -567,7 +567,7 @@
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <mcorrels epsilon="1e-12">
+  <mcorrels>
     <sigma sector1="S1" sector2="S1" value="0.2"/>
     <sigma sector1="S1" sector2="S2" value="0.1"/> 
     <sigma sector1="S2" sector2="S2" value="0.25"/> 

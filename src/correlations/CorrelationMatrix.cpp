@@ -27,13 +27,14 @@
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 
+#define EPSILON 1e-12
+
 //===========================================================================
 // default constructor
 //===========================================================================
 ccruncher::CorrelationMatrix::CorrelationMatrix()
 {
   n = 0;
-  epsilon = 0.0;
   matrix = NULL;
 }
 
@@ -44,7 +45,6 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Excepti
 {
   matrix = NULL;
   setSectors(sectors_);
-  epsilon = 0.0;
 }
 
 //===========================================================================
@@ -54,7 +54,6 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exce
 {
   matrix = NULL;
   setSectors(x.sectors);
-  epsilon = x.epsilon;
   for(int i=0; i<n; i++) 
   {
     for(int j=0; j<n; j++) 
@@ -123,7 +122,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   }
 
   // checking value
-  if (value <= -(1.0+epsilon) || (1.0+epsilon) <= value )
+  if (value <= -(1.0+EPSILON) || (1.0+EPSILON) <= value )
   {
     string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
                  Format::double2string(value);
@@ -149,14 +148,8 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mcorrels")) {
-    if (1 < getNumAttributes(attributes)) {
-      throw Exception("invalid number of attributes in tag mcorrels");
-    }
-    else {
-      epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
-      if (epsilon < 0.0 || epsilon > 1.0) {
-        throw Exception("invalid attribute at <mcorrels>");
-      }
+    if (getNumAttributes(attributes) != 0) {
+      throw Exception("attributes not allowed in tag mcorrels");
     }
   }
   else if (isEqual(name,"sigma")) {
@@ -223,7 +216,7 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mcorrels epsilon='" + Format::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<mcorrels>\n";
 
   for(int i=0;i<n;i++)
   {

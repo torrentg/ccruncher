@@ -35,13 +35,13 @@
   require more precision (eg. ISURVFNUMBINS=1000).
 */
 #define ISURVFNUMBINS 100 
+#define EPSILON 1e-12
 
 //===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Survival::Survival(const Ratings &ratings_) throw(Exception)
 {
-  epsilon = 1e-12;
   setRatings(ratings_);
 }
 
@@ -50,7 +50,6 @@ ccruncher::Survival::Survival(const Ratings &ratings_) throw(Exception)
 //===========================================================================
 ccruncher::Survival::Survival()
 {
-  epsilon = 1e-12;
   ratings = NULL;
   nratings = 0;
 }
@@ -63,7 +62,6 @@ ccruncher::Survival::Survival()
 ccruncher::Survival::Survival(const Ratings &ratings_, int numrows, int *imonths, 
            double **values) throw(Exception)
 {
-  epsilon = 1e-12;
   setRatings(ratings_);
 
   // adding values
@@ -140,7 +138,7 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   }
 
   // validating value
-  if (value < -epsilon || value-1.0 > epsilon)
+  if (value < -EPSILON || value-1.0 > EPSILON)
   {
     string msg = "survival value[" + srating + "][" + Format::int2string(t) + 
                  "] out of range: " + Format::double2string(value);
@@ -174,12 +172,8 @@ void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const cha
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"survival")) {
-    if (getNumAttributes(attributes) < 1 || getNumAttributes(attributes) > 2) {
-      throw Exception("invalid number of attributes in tag survival");
-    }
-    else {
-      epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
-      epsilon = fabs(epsilon);
+    if (getNumAttributes(attributes) != 0) {
+      throw Exception("attributes not allowed in tag survival");
     }
   }
   else if (isEqual(name,"svalue")) {
@@ -242,7 +236,7 @@ void ccruncher::Survival::validate() throw(Exception)
     {
       ddata[i][0] = 1.0;
     }
-    if (fabs(ddata[i][0]-1.0) > epsilon)
+    if (fabs(ddata[i][0]-1.0) > EPSILON)
     {
       string msg = "rating " + (*ratings)[i].name + " have a survival value distinct that 1 at t=0";
       throw Exception(msg);
@@ -255,7 +249,7 @@ void ccruncher::Survival::validate() throw(Exception)
     if (isnan(ddata[nratings-1][j])) {
       ddata[nratings-1][0] = 0.0;
     }
-    if (fabs(ddata[nratings-1][j]) > epsilon)
+    if (fabs(ddata[nratings-1][j]) > EPSILON)
     {
       throw Exception("default rating have a survival value distinct that 0");
     }
@@ -389,17 +383,17 @@ double ccruncher::Survival::inverse1(const int irating, double val) const
 {
   assert(irating < nratings);
   assert(irating >= 0);
-  assert(val-1.0 < epsilon);
-  assert(val > -epsilon);
+  assert(val-1.0 < EPSILON);
+  assert(val > -EPSILON);
 
   // if default rating
   if (irating == nratings-1) {
-    assert(fabs(val) < epsilon);
+    assert(fabs(val) < EPSILON);
     return 0.0;
   }
 
   // if sure -> t=0
-  if (val > 1.0 - epsilon) {
+  if (val > 1.0 - EPSILON) {
     return 0.0;
   }
 
@@ -448,7 +442,7 @@ double ccruncher::Survival::inverse(const int irating, double val) const
   }
 
   // if val=0 => non-default
-  if (val <= epsilon) {
+  if (val <= EPSILON) {
     return ddata[irating].size()+11.0;
   }
 
@@ -482,7 +476,7 @@ string ccruncher::Survival::getXML(int ilevel) const throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<survival epsilon='" + Format::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<survival>\n";
 
   for(int i=0;i<nratings;i++)
   {

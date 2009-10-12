@@ -137,7 +137,7 @@
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <mcorrels epsilon="1e-12">
+  <mcorrels>
 
     <sigma sector1="tech" sector2="tech" value="0.2"/>
     <sigma sector1="tech" sector2="util" value="0.01"/>

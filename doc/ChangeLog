@@ -8,6 +8,8 @@ version 1.5 (???. 2009)
   * changed interest tag in input file
   * updated html documentation
   * removed epsilon attribute from mtransitions tag
+  * removed epsilon attribute from mcorrels tag
+  * removed epsilon attribute from survival tag
 
 version 1.4 (Jul. 2009)
 --------------------------

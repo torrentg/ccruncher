@@ -64,7 +64,7 @@
 			<xsd:element name="ratings" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="rating" minOccurs="2" maxOccurs="unbounded">
+						<xsd:element name="rating" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
 								<xsd:attribute name="desc" type="xsd:string" use="required"/>
@@ -76,7 +76,7 @@
 			<xsd:element name="mtransitions" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="transition" minOccurs="4" maxOccurs="unbounded">
+						<xsd:element name="transition" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="from" type="xsd:string" use="required"/>
 								<xsd:attribute name="to" type="xsd:string" use="required"/>
@@ -98,7 +98,6 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="epsilon" type="xsd:double" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="sectors" minOccurs="1" maxOccurs="1">
@@ -124,7 +123,6 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="epsilon" type="xsd:double" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="segmentations" minOccurs="1" maxOccurs="1">
