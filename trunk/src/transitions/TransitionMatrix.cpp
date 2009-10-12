@@ -30,6 +30,8 @@
 #include "math/PowMatrix.hpp"
 #include <cassert>
 
+#define EPSILON 1e-12
+
 //===========================================================================
 // default constructor
 //===========================================================================
@@ -38,7 +40,6 @@ ccruncher::TransitionMatrix::TransitionMatrix()
   n = 0;
   ratings = NULL;
   period = -1;
-  epsilon = -1.0;
   indexdefault = -1;
   matrix = NULL;
 }
@@ -51,7 +52,6 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exc
   matrix = NULL;
   setRatings(ratings_);
   period = -1;
-  epsilon = -1.0;
   indexdefault = -1;
 }
 
@@ -63,7 +63,6 @@ ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw
   matrix = NULL;
   setRatings(*(otm.ratings));
   period = otm.period;
-  epsilon = otm.epsilon;
   indexdefault = otm.indexdefault;
   Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
 }
@@ -141,7 +140,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   }
 
   // validating value
-  if (value < -epsilon || value > (1.0 + epsilon))
+  if (value < -EPSILON || value > (1.0+EPSILON))
   {
     string msg = " transition value[" + rating1 + "][" + rating2 + "] out of range: " + 
                  Format::double2string(value);
@@ -166,14 +165,13 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mtransitions")) {
-    if (getNumAttributes(attributes) < 1 || 2 < getNumAttributes(attributes)) {
+    if (getNumAttributes(attributes) != 1) {
       throw Exception("invalid number of attributes in tag mtransitions");
     }
     else {
       period = getIntAttribute(attributes, "period", INT_MAX);
-      epsilon = getDoubleAttribute(attributes, "epsilon", 1e-12);
-      if (period == INT_MAX || epsilon < 0.0 || epsilon > 1.0) {
-        throw Exception("invalid attributes at <mtransitions>");
+      if (period == INT_MAX) {
+        throw Exception("invalid period at <mtransitions>");
       }
     }
   }
@@ -238,7 +236,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
       sum += matrix[i][j];
     }
 
-    if (sum < (1.0-epsilon) || sum > (1.0+epsilon))
+    if (sum < (1.0-EPSILON) || sum > (1.0+EPSILON))
     {
       throw Exception("transition matrix row " + Format::int2string(i+1) + " don't sums 1");
     }
@@ -249,7 +247,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
   for (int i=0;i<n;i++)
   {
-    if (matrix[i][i] > (1.0-epsilon) && matrix[i][i] < (1.0+epsilon))
+    if (matrix[i][i] > (1.0-EPSILON) && matrix[i][i] < (1.0+EPSILON))
     {
       if (indexdefault < 0)
       {
@@ -276,7 +274,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
       sum += matrix[i][j]*matrix[j][indexdefault];
     }
 
-    if (fabs(sum) <= epsilon)
+    if (fabs(sum) <= EPSILON)
     {
       throw Exception("invalid transition matrix: exist an inmortal rating");
     }
@@ -323,8 +321,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mtransitions period='" + Format::int2string(period) + "' ";
-  ret += "epsilon='" + Format::double2string(epsilon) + "'>\n";
+  ret += spc1 + "<mtransitions period='" + Format::int2string(period) + "' >\n";
 
   for(int i=0;i<n;i++)
   {

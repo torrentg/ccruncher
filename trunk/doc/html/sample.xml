@@ -50,7 +50,7 @@
 	S&amp;P 1-year transition matrix adjusted for unrated bonds 
 	covering the period between 01-Jan-1981 and 31-Dec-1998 
   -->
-  <mtransitions period="12" epsilon="1e-12">
+  <mtransitions period="12">
     <transition from="AAA" to="AAA" value="0.9283" />
     <transition from="AAA" to="AA" value="0.065" />
     <transition from="AAA" to="A" value="0.0056" />

@@ -72,7 +72,7 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 void ccruncher_test::TransitionMatrixTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -154,7 +154,7 @@ void ccruncher_test::TransitionMatrixTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.90'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -200,7 +200,7 @@ void ccruncher_test::TransitionMatrixTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='K' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -246,7 +246,7 @@ void ccruncher_test::TransitionMatrixTest::test4()
 {
   // non valid transition matrix (default element not defined)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -292,7 +292,7 @@ void ccruncher_test::TransitionMatrixTest::test5()
 {
   // non valid transition matrix (property 4 not acomplished)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.10'/>\n\

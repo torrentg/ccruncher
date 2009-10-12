@@ -7,6 +7,7 @@ version 1.5 (???. 2009)
   * added condition number computation to cholesky matrix
   * changed interest tag in input file
   * updated html documentation
+  * removed epsilon attribute from mtransitions tag
 
 version 1.4 (Jul. 2009)
 --------------------------
