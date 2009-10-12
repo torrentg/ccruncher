@@ -50,8 +50,6 @@ class TransitionMatrix : public ExpatHandlers
     int period;
     // matrix values
     double **matrix;
-    // epsilon value used to compare doubles
-    double epsilon;
     // list of ratings
     Ratings *ratings;
     // index of default rating

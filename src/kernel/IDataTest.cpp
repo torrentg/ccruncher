@@ -78,7 +78,7 @@ void ccruncher_test::IDataTest::test1()
       <rating name='C' desc='regular'/>\n\
       <rating name='E' desc='fallido'/>\n\
     </ratings>\n\
-    <mtransitions period='12' epsilon='1e-12'>\n\
+    <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\

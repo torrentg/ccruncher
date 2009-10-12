@@ -85,7 +85,6 @@
 						</xsd:element>
 					</xsd:sequence>
 					<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
-					<xsd:attribute name="epsilon" type="xsd:double" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="survival" minOccurs="0" maxOccurs="1">

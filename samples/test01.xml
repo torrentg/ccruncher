@@ -92,7 +92,7 @@ How to check results?
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
-  <mtransitions period="12" epsilon="1e-12">
+  <mtransitions period="12">
     <transition from="A" to="A" value="0.90"/>
     <transition from="A" to="E" value="0.10"/>
     <transition from="E" to="A" value="0.00"/>

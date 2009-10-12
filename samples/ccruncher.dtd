@@ -85,7 +85,6 @@
 )>
 <!ATTLIST mtransitions
     period CDATA #REQUIRED
-    epsilon CDATA #REQUIRED
 >
 
 <!ELEMENT transition
