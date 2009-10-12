@@ -72,7 +72,7 @@ Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 void ccruncher_test::CorrelationMatrixTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels epsilon='1e-12'>\n\
+    <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
@@ -112,7 +112,7 @@ void ccruncher_test::CorrelationMatrixTest::test2()
 {
   // non valid xml (undefined sector S4)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels epsilon='1e-12'>\n\
+    <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S4' value='0.3'/>\n\
@@ -136,7 +136,7 @@ void ccruncher_test::CorrelationMatrixTest::test3()
 {
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels epsilon='1e-12'>\n\
+    <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
     </mcorrels>";
@@ -159,7 +159,7 @@ void ccruncher_test::CorrelationMatrixTest::test4()
 {
   // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels epsilon='1e-12'>\n\
+    <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='1.1'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\

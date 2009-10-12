@@ -53,8 +53,6 @@ class Survival : public ExpatHandlers
     int nratings;
     // pointer to ratings table
     Ratings *ratings;
-    // epsilon used to compare doubles
-    double epsilon;
 
     // insert a survival value
     void insertValue(const string &r1, int t, double val) throw(Exception);

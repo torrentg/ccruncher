@@ -71,7 +71,7 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 void ccruncher_test::SurvivalTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival epsilon='1e-12'>\n\
+    <survival>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
@@ -113,7 +113,7 @@ void ccruncher_test::SurvivalTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival epsilon='1e-12'>\n\
+    <survival>\n\
       <svalue rating='A' t='0' value='0.98'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
@@ -138,7 +138,7 @@ void ccruncher_test::SurvivalTest::test3()
 {
   // non valid survival function, non monotone
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival epsilon='1e-12'>\n\
+    <survival>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.75'/>\n\
@@ -163,7 +163,7 @@ void ccruncher_test::SurvivalTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival epsilon='1e-12'>\n\
+    <survival>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='-0.50'/>\n\
       <svalue rating='A' t='3' value='-0.75'/>\n\

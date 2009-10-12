@@ -102,9 +102,6 @@
 <!ELEMENT survival (
     svalue+
 )>
-<!ATTLIST survival
-    epsilon CDATA #REQUIRED
->
 
 <!ELEMENT svalue
     EMPTY
@@ -136,9 +133,6 @@
 <!ELEMENT mcorrels (
     sigma+
 )>
-<!ATTLIST mcorrels
-    epsilon CDATA #REQUIRED
->
 
 <!ELEMENT sigma
     EMPTY

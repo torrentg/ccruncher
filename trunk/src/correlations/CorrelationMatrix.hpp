@@ -46,8 +46,6 @@ class CorrelationMatrix : public ExpatHandlers
 
     // nxn = matrix size (n = number of sectors)
     int n;
-    // epsilon used to compare doubles
-    double epsilon;
     // list of sectors
     Sectors sectors;
     // matrix of values

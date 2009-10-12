@@ -511,7 +511,7 @@
       This section shows how to define the correlation matrix between sectors.
       The correlation matrix must be symmetric. You only need to set up the 
       upper triangle elements. ccruncher checks that all the elements are in 
-      the range [-1.0+epsilon, +1.0-epsilon]. The number of elements to set up is 
+      the range [-1,+1]. The number of elements to set up is 
       (numsectors+1) x numsectors / 2.
     </p>
 
@@ -519,30 +519,12 @@
 
     <pre>
 
-  &lt;mcorrels epsilon="1e-12"&gt;
+  &lt;mcorrels&gt;
     &lt;sigma sector1="S1" sector2="S1" value="0.2"/&gt;
     &lt;sigma sector1="S1" sector2="S2" value="0.1"/&gt;
     &lt;sigma sector1="S2" sector2="S2" value="0.25"/&gt;
   &lt;/mcorrels&gt;
     </pre>
-
-    <h3>MCorrels Attributes</h3>
-
-    <table cellpadding="3">
-      <tr class="b">
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <tr class="a">
-        <td class="c1">epsilon</td>
-        <td class="c2">
-          Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near 0, like 1E-12. This attribute is optional.
-        </td>
-        <td class="c3"><code>double</code></td>
-      </tr>
-    </table>
 
     <h3>Sigma Attributes</h3>
 
@@ -951,7 +933,7 @@
 
     <pre>
 
-  &lt;survival epsilon="1e-12"&gt;
+  &lt;survival&gt;
     &lt;svalue rating="A" t="0" value="1.0"/&gt;
     &lt;svalue rating="B" t="0" value="1.0"/&gt;
     &lt;svalue rating="C" t="0" value="1.0"/&gt;
@@ -966,24 +948,6 @@
     ...
   &lt;/survival&gt;
     </pre>
-
-    <h3>Survival Attributes</h3>
-
-    <table cellpadding="3">
-      <tr class="b">
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <tr class="a">
-        <td class="c1">epsilon</td>
-        <td class="c2">
-          Value used as threshold to determine if a value is equal to 0.0 or not. 
-          It must be a value near 0, like 1E-12. This attribute is optional.
-        </td>
-        <td class="c3"><code>double</code></td>
-      </tr>
-    </table>
 
     <h3>Svalue Attributes</h3>
 
