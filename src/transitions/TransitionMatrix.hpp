@@ -30,6 +30,7 @@
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
+#include "survival/Survival.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -54,11 +55,15 @@ class TransitionMatrix : public ExpatHandlers
     Ratings *ratings;
     // index of default rating
     int indexdefault;
+    // regularization error
+    double rerror;
 
     // insert a transition value into the matrix
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
+    // computes Cumulated Default Forward Rate
+    void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
 
 
   public:
@@ -71,6 +76,8 @@ class TransitionMatrix : public ExpatHandlers
     TransitionMatrix(const TransitionMatrix &) throw(Exception);
     // destructor
     ~TransitionMatrix();
+    // assignement operator
+    TransitionMatrix& operator = (const TransitionMatrix &other);
 
     // set ratings
     void setRatings(const Ratings &);
@@ -91,23 +98,16 @@ class TransitionMatrix : public ExpatHandlers
     void epstart(ExpatUserData &, const char *, const char **);
     void epend(ExpatUserData &, const char *);
 
+    // regularize the transition matrix
+    void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
-    friend TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
-    // computes Cumulated Default Forward Rate
-    friend void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+    TransitionMatrix scale(int t) const throw(Exception);
     // computes survival function related to this transition matrix
-    friend void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
+    Survival getSurvival(int steplength, int numrows) const throw(Exception);
+    // regularization error (|non_regularized| - |regularized|)
+    double getRegularizationError() const;
 
 };
-
-//---------------------------------------------------------------------------
-
-  // returns equivalent transition matrix that covers t months
-  TransitionMatrix * translate(const TransitionMatrix &tm, int t) throw(Exception);
-  // computes Cumulated Default Forward Rate
-  void cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
-  // computes survival function related to this transition matrix
-  void survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception);
 
 //---------------------------------------------------------------------------
 

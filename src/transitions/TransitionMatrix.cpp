@@ -30,7 +30,7 @@
 #include "math/PowMatrix.hpp"
 #include <cassert>
 
-#define EPSILON 1e-12
+#define EPSILON 1e-14
 
 //===========================================================================
 // default constructor
@@ -42,6 +42,7 @@ ccruncher::TransitionMatrix::TransitionMatrix()
   period = -1;
   indexdefault = -1;
   matrix = NULL;
+  rerror = 0.0;
 }
 
 //===========================================================================
@@ -53,6 +54,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exc
   setRatings(ratings_);
   period = -1;
   indexdefault = -1;
+  rerror = 0.0;
 }
 
 //===========================================================================
@@ -65,6 +67,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw
   period = otm.period;
   indexdefault = otm.indexdefault;
   Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
+  rerror = 0.0;
 }
 
 //===========================================================================
@@ -77,6 +80,24 @@ ccruncher::TransitionMatrix::~TransitionMatrix()
     Arrays<double>::deallocMatrix(matrix, n);
     matrix = NULL;
   }
+}
+
+//===========================================================================
+// assignement operator
+//===========================================================================
+TransitionMatrix& ccruncher::TransitionMatrix::operator = (const TransitionMatrix &otm)
+{
+  if (this != &otm) // protect against invalid self-assignment
+  {
+    matrix = NULL;
+    setRatings(*(otm.ratings));
+    period = otm.period;
+    indexdefault = otm.indexdefault;
+    Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
+  }
+
+  // by convention, always return *this
+  return *this;
 }
 
 //===========================================================================
@@ -341,27 +362,85 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
 }
 
 //===========================================================================
+// regularize the transition matrix using QOM (Quasi Optimizacion of the root Matrix)
+// algorithm extracted from paper:
+// title = 'Regularization Algorithms for Transition Matrices'
+// authors = Alezander Kreinin, Marina Sidelnikova
+// editor = Algo Research Quarterly, Vol. 4, Nos. 1/2, March/June 2001
+//===========================================================================
+void ccruncher::TransitionMatrix::regularize() throw(Exception)
+{
+
+  // computes the regularization error (sub-inf matrix norm)
+  // note: regularized matrix has sub-inf norm = 1
+  rerror = 0.0;
+  for(int i=0; i<n; i++)
+  {
+    double sum = 0.0;
+    for(int j=0; j<n; j++)
+    {
+      sum += abs(matrix[i][j]);
+    }
+    if (sum-1.0 > rerror)
+    {
+      rerror = sum-1.0;
+    }
+  }
+
+  // matrix regularization
+  for(int i=0; i<n; i++)
+  {
+    bool stop = false;
+    while(!stop)
+    {
+      // step 1. find the row projection on the hyperplane
+      double lambda = 0.0;
+      for(int j=0; j<n; j++)
+      {
+        lambda += matrix[i][j];
+      }
+      lambda = (lambda-1.0)/(double)(n);
+      for(int j=0; j<n; j++)
+      {
+        if (fabs(matrix[i][j]) > EPSILON)
+        {
+          matrix[i][j] -= lambda;
+        }
+      }
+
+      // step 2 + step 3'. checking termination criteria
+      stop = true;
+      for(int j=0; j<n; j++)
+      {
+        if (matrix[i][j] < -EPSILON)
+        {
+          matrix[i][j] = 0.0;
+          stop = false;
+        }
+      }
+    }
+  }
+}
+
+//===========================================================================
 // given the transition matrix for time T1, compute the transition
 // matrix for a new time, t
-// @param otm transition matrix
 // @param t period (in months) of the new transition matrix
 // @return transition matrix for period t
 //===========================================================================
-TransitionMatrix * ccruncher::translate(const TransitionMatrix &otm, int t) throw(Exception)
+TransitionMatrix ccruncher::TransitionMatrix::scale(int t) const throw(Exception)
 {
-  TransitionMatrix *ret = new TransitionMatrix(otm);
-
-  PowMatrix::pow(otm.getMatrix(), double(t)/double(otm.getPeriod()), otm.size(), ret->matrix);
-
-  ret->period = t;
-
+  TransitionMatrix ret(*this);
+  PowMatrix::pow(getMatrix(), double(t)/double(getPeriod()), size(), ret.matrix);
+  ret.period = t;
+  ret.regularize();
   return ret;
 }
 
 //===========================================================================
-// Given a transition matrix return the Cumulated Forward Default Rate in ret
+// Given a transition matrix return the Cumulated Forward Default Rate
 //===========================================================================
-void ccruncher::cdfr(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
+void ccruncher::TransitionMatrix::cdfr(int steplength, int numrows, double **ret) const throw(Exception)
 {
   // making assertions
   assert(numrows >= 0);
@@ -369,11 +448,9 @@ void ccruncher::cdfr(const TransitionMatrix &tm, int steplength, int numrows, do
   assert(steplength >= 0);
   assert(steplength < 15000);
 
-  int n = tm.n;
-
   // building 1-year transition matrix
-  TransitionMatrix *tmone = translate(tm, steplength);
-  double **one = tmone->getMatrix();
+  TransitionMatrix tmone = scale(steplength);
+  double **one = tmone.getMatrix();
 
   // building Id-matrix of size nxn
   double **aux = Arrays<double>::allocMatrix(n, n, 0.0);
@@ -407,28 +484,46 @@ void ccruncher::cdfr(const TransitionMatrix &tm, int steplength, int numrows, do
   // exit function
   Arrays<double>::deallocMatrix(aux, n);
   Arrays<double>::deallocMatrix(tmp, n);
-  delete tmone;    //Arrays<double>::deallocMatrix(one, n);
 }
 
 //===========================================================================
-// Given a transition matrix return the Survival Function  in ret
-// ret[i][j] = 1-CDFR[i][j]
+// returns the Survival Function (1-CDFR[i][j])
 //===========================================================================
-void ccruncher::survival(const TransitionMatrix &tm, int steplength, int numrows, double **ret) throw(Exception)
+Survival ccruncher::TransitionMatrix::getSurvival(int steplength, int numrows) const throw(Exception)
 {
-  int n = tm.n;
+  // memory allocation
+  double **aux = Arrays<double>::allocMatrix(n, numrows);
+  int *itime = Arrays<int>::allocVector(numrows);
+  for (int i=0;i<numrows;i++) {
+    itime[i] = i;
+  }
 
   // computing CDFR
-  cdfr(tm, steplength, numrows, ret);
+  cdfr(steplength, numrows, aux);
 
   // building survival function
   for(int i=0;i<n;i++)
   {
     for(int j=0;j<numrows;j++)
     {
-      ret[i][j] = 1.0 - ret[i][j];
-      if (ret[i][j] < 0.0) ret[i][j] = 0.0;
-      if (ret[i][j] > 1.0) ret[i][j] = 1.0;
+      aux[i][j] = 1.0 - aux[i][j];
+      if (aux[i][j] < 0.0) aux[i][j] = 0.0;
+      if (aux[i][j] > 1.0) aux[i][j] = 1.0;
     }
   }
+
+  // creating survival function object
+  Survival ret(*ratings, numrows, itime, aux);
+  Arrays<double>::deallocMatrix(aux, n);
+  Arrays<int>::deallocVector(itime);
+  return ret; 
 }
+
+//===========================================================================
+// returns the regularization error (|non_regularized| - |regularized|)
+//===========================================================================
+double  ccruncher::TransitionMatrix::getRegularizationError() const
+{
+  return rerror;
+}
+

@@ -26,7 +26,7 @@
 
 //---------------------------------------------------------------------------
 
-#define EPSILON 1E-14
+#define EPSILON 1E-5
 
 //===========================================================================
 // setUp
@@ -99,12 +99,28 @@ void ccruncher_test::TransitionMatrixTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </mtransitions>";
-  double vmatrix[] = {
+  double vmatrix12[] = {
     0.80, 0.10, 0.07, 0.02, 0.01,
     0.05, 0.75, 0.10, 0.07, 0.03,
     0.03, 0.07, 0.70, 0.14, 0.06,
     0.05, 0.05, 0.15, 0.60, 0.15,
     0.00, 0.00, 0.00, 0.00, 1.00
+  };
+  /*
+    computed with octave:
+    A=[ 0.80, 0.10, 0.07, 0.02, 0.01;
+        0.05, 0.75, 0.10, 0.07, 0.03;
+        0.03, 0.07, 0.70, 0.14, 0.06;
+        0.05, 0.05, 0.15, 0.60, 0.15;
+        0.00, 0.00, 0.00, 0.00, 1.00]
+    A^(1/12)
+  */
+  double vmatrix1[] = {
+   0.98114,  0.01026,  0.00691,  0.00118,  0.00051,
+   0.00491,  0.97536,  0.01037,  0.00739,  0.00197,
+   0.00257,  0.00728,  0.96840,  0.01729,  0.00445,
+   0.00543,  0.00493,  0.01835,  0.95611,  0.01518,
+   0.00000,  0.00000,  0.00000,  0.00000,  1.00000
   };
 
   // creating xml
@@ -125,26 +141,37 @@ void ccruncher_test::TransitionMatrixTest::test1()
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], matrix[i][j], EPSILON);
     }
   }
 
   // testing index default (internal indexation, begins with 0)
   ASSERT(4 == trm.getIndexDefault());
 
-  // testing function translate()
-  TransitionMatrix *aux = translate(trm, 12);
-  matrix = aux->getMatrix();
+  // testing scale method
+  TransitionMatrix aux = trm.scale(12);
+  matrix = aux.getMatrix();
 
   for(int i=0;i<5;i++)
   {
     for(int j=0;j<5;j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], matrix[i][j], EPSILON);
     }
   }
 
-  delete aux;
+  // testing scale method
+  aux = trm.scale(1);
+  matrix = aux.getMatrix();
+
+  for(int i=0;i<5;i++)
+  {
+    for(int j=0;j<5;j++)
+    {
+      ASSERT_EQUALS_EPSILON(vmatrix1[j+i*5], matrix[i][j], EPSILON);
+    }
+  }
+
 }
 
 //===========================================================================

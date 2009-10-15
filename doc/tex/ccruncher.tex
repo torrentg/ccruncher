@@ -111,12 +111,10 @@ This section explains the input parameters required by CCruncher.
 \subsection{Ratings and Survival Functions}
 A rating tells a lender or investor the probability of the subject being 
 able to pay back a loan. A poor rating indicates a high risk of defaulting.
-Every rating has a survival function associated. This function\footnote{
-Appendix \ref{ap:tmatrix} shows how to determine the survival functions 
-using the transition matrix.} indicates the probability that a borrower with 
-initial rating $X$ be non-defaulted at time $t$. The creation of a rating 
-system and the construction of the survival functions are outside the scope 
-of this paper.
+Every rating has a survival function associated. This function indicates 
+the probability that a borrower with initial rating $X$ be non-defaulted at 
+time $t$. The creation of a rating system and the construction of the 
+survival functions are outside the scope of this paper.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -126,6 +124,12 @@ of this paper.
 \end{center}
 \end{figure}
 \FloatBarrier
+
+The survival data is often not available, and where it is available, it is 
+often inconsistent or not representative. For this reason it is better to work 
+with the transition matrix assuming that the rating transitions follow a Markov 
+model. Appendix \ref{ap:tmatrix} shows how to determine the survival functions 
+using the transition matrix.
 
 %---------------------------------------------------------------------------
 \subsection{Sectors and Correlations}
