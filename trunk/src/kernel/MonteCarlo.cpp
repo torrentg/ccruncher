@@ -327,18 +327,11 @@ void ccruncher::MonteCarlo::initSurvival(const IData &idata) throw(Exception)
 
     // computing survival function using transition matrix
     int months = (int) ceil(time0.getMonthsTo(timeT));
-    double **aux = Arrays<double>::allocMatrix(idata.getTransitionMatrix().size(), months+1);
-    ccruncher::survival(idata.getTransitionMatrix(), 1, months+1, aux);
-    int *itime = Arrays<int>::allocVector(months+1);
-    for (int i=0;i<=months;i++) {
-      itime[i] = i;
-    }
-
-    // creating survival function object
-    survival = Survival(idata.getRatings(), months+1, itime, aux);
-    Arrays<double>::deallocMatrix(aux, idata.getTransitionMatrix().size());
-    Arrays<int>::deallocVector(itime);
+    survival = idata.getTransitionMatrix().getSurvival(1, months+1);
     Logger::trace("transition matrix -> survival function", string("computed"));
+    TransitionMatrix tm1 = idata.getTransitionMatrix().scale(1);
+    double rerror = tm1.getRegularizationError();
+    Logger::trace("regularization error", Format::double2string(rerror));
   }
 
   // exit function
