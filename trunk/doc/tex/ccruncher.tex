@@ -1133,8 +1133,8 @@ m_{i,j} = P(r_i \to r_j;T)
 
 where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
 borrower with rating $r_i$ change to rating $r_j$ in $T$ years.
-Figure \ref{tmatrix1} shows a transition matrix example where the probability 
-that a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
+Figure \ref{tmatrix1} shows a transition matrix where the probability that 
+a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
 \newline
 
 \begin{figure}[!hb]
@@ -1184,8 +1184,13 @@ Recipes in C}\footnote{http://www.nr.com}:
 P \cdot P^{-1} = L \cdot U \cdot P^{-1} = Id
 \end{displaymath}
 
-This allows us to compute default probability at any time and at any initial 
-rating (that is, the survival functions), doing:
+Sometimes, the scaled transition matrix don't satisfy the Markov conditions
+(row sum equal to $1$ and all elements non-negatives). In this cases we need
+to transform this matrix to the close Markov matrix. This process is named 
+regularization and is explained in appendix \ref{ap:regularization}.
+
+So, we can compute default probability at any time and at any initial 
+rating (in other words, the survival functions), doing:
 
 \begin{displaymath}
 Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
@@ -1194,6 +1199,34 @@ Survival(r_i, t) = 1 - \left( M_t \right)_{i, n}
 where $r_i$ is the initial rating, $t$ is the time, $M_t$ is the transition 
 matrix for time $t$ (scaled from $M_T$ using (\ref{sttm})) and $n$ is the 
 index of default rating, $r_n$.
+
+%---------------------------------------------------------------------------
+\subsection{Transition matrix regularization}
+\label{ap:regularization}
+The algorithm described here is extracted from \cite{trans:regularization}.
+The QOM (Quasi-Optimization of the root Matrix) algorithm regularize a 
+transition matrix, $m_i{j}$, of dimension $n$ row-by-row. The steps to 
+regularize the $i$-th row are:
+
+\paragraph{Step 1.} Compute the difference betwen $1$ and the row sum. 
+Divide by $n$ and substract this value from all non-zero components:
+\begin{displaymath}
+m_{ij} \ne 0 
+\Longrightarrow 
+m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{j=1}^{n} m_{ij} - 1\right)
+\end{displaymath}
+
+\paragraph{Step 2.} If all the row elements are non-negative then stop, 
+the row is regularized.
+
+\paragraph{Step 3'.} Fix any negative row element to zero and go to step 1.
+\newline
+
+The iterative algorithm stops after $m$ steps where $m \le n$ (Merkoulovitch 2000).
+\newline
+
+Apply the previous algorithm for every row. The final matrix is a regularized
+matrix.
 
 %---------------------------------------------------------------------------
 \subsection{Correlation matrix estimation}
