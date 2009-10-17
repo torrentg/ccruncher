@@ -23,6 +23,7 @@
 #include "transitions/TransitionMatrix.hpp"
 #include "transitions/TransitionMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"
+#include "utils/Arrays.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -51,11 +52,11 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='B' desc='good'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -314,46 +315,112 @@ void ccruncher_test::TransitionMatrixTest::test4()
 
 //===========================================================================
 // test5
+// checks matrix regularization
+// case extracted from paper: Regularization Algorithms for Transition Matrices
+// from Alexander Kreinin and Marina Sidelnikova
+//
+// matlab code:
+//
+// A=[
+// 0.8973, 0.0976, 0.0048, 0.0000, 0.0003, 0.0000, 0.0000, 0.0000;
+// 0.0092, 0.8887, 0.0964, 0.0036, 0.0015, 0.0002, 0.0000, 0.0004;
+// 0.0008, 0.0224, 0.9059, 0.0609, 0.0077, 0.0021, 0.0000, 0.0002;
+// 0.0008, 0.0037, 0.0602, 0.8545, 0.0648, 0.0130, 0.0011, 0.0019;
+// 0.0003, 0.0008, 0.0046, 0.0402, 0.8566, 0.0788, 0.0047, 0.0140;
+// 0.0001, 0.0004, 0.0016, 0.0053, 0.0586, 0.8406, 0.0274, 0.0660;
+// 0.0000, 0.0000, 0.0000, 0.0100, 0.0279, 0.0538, 0.6548, 0.2535;
+// 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1.0000;
+// ]
+// B=A^0.5;
+// %7-th row regularization
+// for i=1:8
+//   lambda=(sum(B(7,:))-1)/8;
+//   for j=1:8
+//     if (B(7,j) ~= 0)
+//       B(7,j) = B(7,j)-lambda;
+//     end
+//     if (B(7,j) < 0)
+//       B(7,j) = 0;
+//     end
+//   end
+// end
+//
 //===========================================================================
 void ccruncher_test::TransitionMatrixTest::test5()
 {
-  // non valid transition matrix (property 4 not acomplished)
+  // Moody's ratings
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12'>\n\
-      <transition from='A' to='A' value='0.80'/>\n\
-      <transition from='A' to='B' value='0.10'/>\n\
-      <transition from='A' to='C' value='0.10'/>\n\
-      <transition from='A' to='D' value='0.00'/>\n\
-      <transition from='A' to='E' value='0.00'/>\n\
-      <transition from='B' to='A' value='0.10'/>\n\
-      <transition from='B' to='B' value='0.80'/>\n\
-      <transition from='B' to='C' value='0.10'/>\n\
-      <transition from='B' to='D' value='0.00'/>\n\
-      <transition from='B' to='E' value='0.00'/>\n\
-      <transition from='C' to='A' value='0.10'/>\n\
-      <transition from='C' to='B' value='0.10'/>\n\
-      <transition from='C' to='C' value='0.80'/>\n\
-      <transition from='C' to='D' value='0.00'/>\n\
-      <transition from='C' to='E' value='0.00'/>\n\
-      <transition from='D' to='A' value='0.00'/>\n\
-      <transition from='D' to='B' value='0.00'/>\n\
-      <transition from='D' to='C' value='0.00'/>\n\
-      <transition from='D' to='D' value='0.80'/>\n\
-      <transition from='D' to='E' value='0.20'/>\n\
-      <transition from='E' to='A' value='0.00'/>\n\
-      <transition from='E' to='B' value='0.00'/>\n\
-      <transition from='E' to='C' value='0.00'/>\n\
-      <transition from='E' to='D' value='0.00'/>\n\
-      <transition from='E' to='E' value='1.00'/>\n\
-    </mtransitions>";
+    <ratings>\n\
+      <rating name='Aaa' desc='AAA'/>\n\
+      <rating name='Aa'  desc='AA'/>\n\
+      <rating name='A'   desc='A'/>\n\
+      <rating name='Baa' desc='BBB'/>\n\
+      <rating name='Ba'  desc='BB'/>\n\
+      <rating name='B'   desc='B'/>\n\
+      <rating name='C'   desc='C'/>\n\
+      <rating name='D'   desc='defaulted'/>\n\
+    </ratings>";
 
   // creating xml
   ExpatParser xmlparser;
+  Ratings ratings;
+  xmlparser.parse(xmlcontent, &ratings);
 
-  // ratings list creation
-  Ratings ratings = getRatings();
+  // Moody's transition matrix (1-year)
+  double vmatrix12[] = {
+    0.8973, 0.0976, 0.0048, 0.0000, 0.0003, 0.0000, 0.0000, 0.0000,
+    0.0092, 0.8887, 0.0964, 0.0036, 0.0015, 0.0002, 0.0000, 0.0004,
+    0.0008, 0.0224, 0.9059, 0.0609, 0.0077, 0.0021, 0.0000, 0.0002,
+    0.0008, 0.0037, 0.0602, 0.8545, 0.0648, 0.0130, 0.0011, 0.0019,
+    0.0003, 0.0008, 0.0046, 0.0402, 0.8566, 0.0788, 0.0047, 0.0140,
+    0.0001, 0.0004, 0.0016, 0.0053, 0.0586, 0.8406, 0.0274, 0.0660,
+    0.0000, 0.0000, 0.0000, 0.0100, 0.0279, 0.0538, 0.6548, 0.2535,
+    0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1.0000
+  };
+  // Moody's transition matrix (6-months, regularized)
+  double QOM[] = {
+   0.94711,  0.05164,  0.00113,  0.00000,  0.00012,  0.00000,  0.00000,  0.00000,
+   0.00486,  0.94226,  0.05090,  0.00104,  0.00069,  0.00006,  0.00000,  0.00020,
+   0.00038,  0.01179,  0.95092,  0.03244,  0.00348,  0.00093,  0.00000,  0.00006,
+   0.00041,  0.00176,  0.03203,  0.92341,  0.03490,  0.00623,  0.00053,  0.00073,
+   0.00015,  0.00039,  0.00206,  0.02166,  0.92436,  0.04271,  0.00231,  0.00636,
+   0.00005,  0.00020,  0.00078,  0.00245,  0.03166,  0.91583,  0.01584,  0.03319,
+   0.00000,  0.00000,  0.00000,  0.00551,  0.01539,  0.03076,  0.80884,  0.13949,
+   0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  1.00000
+  };
 
-  // transition matrix creation
-  TransitionMatrix trm(ratings);
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &trm));
+  double **matrix=NULL;
+  double **values = Arrays<double>::allocMatrix(8, 8);
+  for(int i=0; i<8; i++)
+  {
+    for(int j=0; j<8; j++) 
+    {
+      values[i][j] = vmatrix12[j+i*8];
+    }
+  }
+
+  // transition matrix creation (1-year)
+  TransitionMatrix t12(ratings, values, 12);
+  Arrays<double>::deallocMatrix(values, 8);
+  ASSERT(t12.size() == 8);
+  matrix = t12.getMatrix();
+  for(int i=0;i<8;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*8], matrix[i][j], EPSILON);
+    }
+  }
+
+  // regularized transition matrix (6-months)
+  TransitionMatrix t6 = t12.scale(6);
+  ASSERT(t6.size() == 8);
+  matrix = t6.getMatrix();
+  for(int i=0;i<8;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      ASSERT_EQUALS_EPSILON(QOM[j+i*8], matrix[i][j], EPSILON);
+    }
+  }
 }

@@ -47,11 +47,11 @@ void ccruncher_test::RatingsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='B' desc='good'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -75,11 +75,11 @@ void ccruncher_test::RatingsTest::test1()
   ASSERT(3 == ratings.getIndex("C"));
   ASSERT(4 == ratings.getIndex("E"));
 
-  ASSERT("muy bueno" == ratings[0].desc);
-  ASSERT("bueno" == ratings[1].desc);
-  ASSERT("malo" == ratings[2].desc);
-  ASSERT("regular" == ratings[3].desc);
-  ASSERT("fallido" == ratings[4].desc);
+  ASSERT("very good" == ratings[0].desc);
+  ASSERT("good" == ratings[1].desc);
+  ASSERT("very bad" == ratings[2].desc);
+  ASSERT("bad" == ratings[3].desc);
+  ASSERT("defaulted" == ratings[4].desc);
 }
 
 //===========================================================================
@@ -90,11 +90,11 @@ void ccruncher_test::RatingsTest::test2()
   // note that ratings are incorrect (A is a name repeated)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='A' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='A' desc='good'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -113,11 +113,11 @@ void ccruncher_test::RatingsTest::test3()
   // note that ratings are incorrect (descriptions repeated)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='muy bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='B' desc='very good'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -136,11 +136,11 @@ void ccruncher_test::RatingsTest::test4()
   // note that xml are not valid (ratong tag)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <ratong name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <ratong name='A' desc='very good'/>\n\
+      <rating name='B' desc='good'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
