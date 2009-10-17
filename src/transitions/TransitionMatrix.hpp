@@ -72,6 +72,8 @@ class TransitionMatrix : public ExpatHandlers
     TransitionMatrix();
     // constructor
     TransitionMatrix(const Ratings &) throw(Exception);
+    // constructor
+    TransitionMatrix(const Ratings &, double **, int) throw(Exception);
     // copy constructor
     TransitionMatrix(const TransitionMatrix &) throw(Exception);
     // destructor

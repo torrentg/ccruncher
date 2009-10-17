@@ -1205,7 +1205,7 @@ index of default rating, $r_n$.
 \label{ap:regularization}
 The algorithm described here is extracted from \cite{trans:regularization}.
 The QOM (Quasi-Optimization of the root Matrix) algorithm regularize a 
-transition matrix, $m_i{j}$, of dimension $n$ row-by-row. The steps to 
+transition matrix, $m_{ij}$, of dimension $n$ row-by-row. The steps to 
 regularize the $i$-th row are:
 
 \paragraph{Step 1.} Compute the difference betwen $1$ and the row sum. 
@@ -1216,8 +1216,8 @@ m_{ij} \ne 0
 m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{j=1}^{n} m_{ij} - 1\right)
 \end{displaymath}
 
-\paragraph{Step 2.} If all the row elements are non-negative then stop, 
-the row is regularized.
+\paragraph{Step 2.} If all the row elements are non-negative and sums $1$ 
+then stop, the row is regularized.
 
 \paragraph{Step 3'.} Fix any negative row element to zero and go to step 1.
 \newline

@@ -58,6 +58,19 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exc
 }
 
 //===========================================================================
+// constructor
+//===========================================================================
+ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_, double ** matrix_, int period_) throw(Exception)
+{
+  matrix = NULL;
+  setRatings(ratings_);
+  period = period_;
+  Arrays<double>::copyMatrix(matrix_, n, n, matrix);
+  rerror = 0.0;
+  validate();
+}
+
+//===========================================================================
 // copy constructor
 //===========================================================================
 ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
@@ -116,7 +129,6 @@ void ccruncher::TransitionMatrix::setRatings(const Ratings &ratings_)
     matrix = NULL;    
   }
   matrix = Arrays<double>::allocMatrix(n, n, NAN);
-
 }
 
 //===========================================================================
@@ -285,21 +297,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     throw Exception("default rating not found");
   }
 
-  // checking that all rating can be defaulted
-  for (int i=0;i<n;i++)
-  {
-    double sum = 0.0;
-
-    for (int j=0;j<n;j++)
-    {
-      sum += matrix[i][j]*matrix[j][indexdefault];
-    }
-
-    if (fabs(sum) <= EPSILON)
-    {
-      throw Exception("invalid transition matrix: exist an inmortal rating");
-    }
-  }
+  // TODO: check that any rating can be defaulted
 }
 
 //===========================================================================
@@ -391,10 +389,11 @@ void ccruncher::TransitionMatrix::regularize() throw(Exception)
   for(int i=0; i<n; i++)
   {
     bool stop = false;
-    while(!stop)
+    double lambda = 0.0;
+    while(!stop || fabs(lambda)>1e-14)
     {
       // step 1. find the row projection on the hyperplane
-      double lambda = 0.0;
+      lambda = 0.0;
       for(int j=0; j<n; j++)
       {
         lambda += matrix[i][j];
@@ -402,7 +401,7 @@ void ccruncher::TransitionMatrix::regularize() throw(Exception)
       lambda = (lambda-1.0)/(double)(n);
       for(int j=0; j<n; j++)
       {
-        if (fabs(matrix[i][j]) > EPSILON)
+        if (matrix[i][j] != 0.0)
         {
           matrix[i][j] -= lambda;
         }
@@ -412,7 +411,7 @@ void ccruncher::TransitionMatrix::regularize() throw(Exception)
       stop = true;
       for(int j=0; j<n; j++)
       {
-        if (matrix[i][j] < -EPSILON)
+        if (matrix[i][j] < 0.0) 
         {
           matrix[i][j] = 0.0;
           stop = false;

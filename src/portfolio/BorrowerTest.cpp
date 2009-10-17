@@ -47,11 +47,11 @@ Ratings ccruncher_test::BorrowerTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='muy bueno'/>\n\
-      <rating name='B' desc='bueno'/>\n\
-      <rating name='D' desc='malo'/>\n\
-      <rating name='C' desc='regular'/>\n\
-      <rating name='E' desc='fallido'/>\n\
+      <rating name='A' desc='very good'/>\n\
+      <rating name='B' desc='good'/>\n\
+      <rating name='C' desc='bad'/>\n\
+      <rating name='D' desc='very bad'/>\n\
+      <rating name='E' desc='defaulted'/>\n\
     </ratings>";
 
   // creating xml
