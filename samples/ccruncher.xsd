@@ -34,7 +34,7 @@
 		<xsd:sequence>
 			<xsd:element name="title" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-			<xsd:element name="params" minOccurs="1" maxOccurs="1">
+			<xsd:element name="parameters" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="property" minOccurs="9" maxOccurs="9">

@@ -13,7 +13,7 @@
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
-  <params>
+  <parameters>
     <property name="time.0" value="18/02/2003"/>
     <property name="time.T" value="18/02/2005"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
@@ -22,7 +22,7 @@
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveBorrowers" value="true"/>
-  </params>
+  </parameters>
 
   <!-- ============================================================== -->
   <!--                       INTEREST                                 -->

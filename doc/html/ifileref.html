@@ -52,7 +52,7 @@
   &lt;ccruncher&gt;
     &lt;title&gt;<i>your simulation title here</i>&lt;/title&gt;
     &lt;description&gt;<i>your simulation description here</i>&lt;/description&gt;
-    <a href="#params">&lt;params&gt;</a>         ...         <a href="#params">&lt;/params&gt;</a>
+    <a href="#parameters">&lt;paramaters&gt;</a>     ...     <a href="#parameters">&lt;/parameters&gt;</a>
     <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
     <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
     <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
@@ -76,10 +76,10 @@
     </p>
 
 <!-- ==================================================== -->
-<!--    params section                                    -->
+<!--    parameters section                                -->
 <!-- ==================================================== -->
-    <a name="params"></a>
-    <h2>Section Params</h2>
+    <a name="parameters"></a>
+    <h2>Section Parameters</h2>
 
     <p>
       This section shows the properties of the problem that needs to
@@ -90,7 +90,7 @@
 
     <pre>
 
-  &lt;params&gt;
+  &lt;parameters&gt;
     &lt;property name="time.0" value="18/10/2009"/&gt;
     &lt;property name="time.T" value="15/07/2015"/&gt;
     &lt;property name="stopcriteria.maxiterations" value="30000"/&gt;
@@ -99,7 +99,7 @@
     &lt;property name="copula.seed" value="0"/&gt;
     &lt;property name="montecarlo.antithetic" value="true"/&gt;
     &lt;property name="portfolio.onlyActiveBorrowers" value="true"/&gt;
-  &lt;/params&gt;
+  &lt;/parameters&gt;
     </pre>
 
     <h3>Property Attributes</h3>
@@ -777,8 +777,8 @@
         <td class="c1">rating</td>
         <td class="c2">
           Initial borrower credit rating at time t0, see attribute <i>time.0</i> at the 
-          <a href="#params">params</a> section. This value must be a credit rating identifier, 
-          see name attribute in rating tag.
+          <a href="#parameters">parameters</a> section. This value must be a credit rating 
+          identifier, see name attribute in rating tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -996,7 +996,7 @@
             Copyright &copy; 2004-2009 <a href="mailto:gerard@generacio.com">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 18-Oct-2009
+            Last modified: 19-Oct-2009
           </td>
         </tr></table>
       </div></div></div></div></div>

@@ -26,7 +26,7 @@
 <!--                        creditcruncher                          -->
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
-    (title?, description?, params, interest, ratings, mtransitions, 
+    (title?, description?, parameters, interest, ratings, mtransitions, 
      survival?, sectors, mcorrels, segmentations, portfolio)
 )>
 
@@ -37,9 +37,9 @@
 <!ELEMENT description (#PCDATA)>
 
 <!-- .............................................................. -->
-<!--                           params                               -->
+<!--                           parameters                           -->
 <!-- .............................................................. -->
-<!ELEMENT params (
+<!ELEMENT parameters (
     property+
 )>
 

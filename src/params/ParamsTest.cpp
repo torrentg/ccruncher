@@ -46,7 +46,7 @@ void ccruncher_test::ParamsTest::tearDown()
 void ccruncher_test::ParamsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <params>\n\
+    <parameters>\n\
       <property name='time.0' value='18/02/2003'/>\n\
       <property name='time.T' value='18/02/2008'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
@@ -54,7 +54,7 @@ void ccruncher_test::ParamsTest::test1()
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-    </params>";
+    </parameters>";
 
   ExpatParser xmlparser;
   Params params;
@@ -77,7 +77,7 @@ void ccruncher_test::ParamsTest::test1()
 void ccruncher_test::ParamsTest::test2()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <params>\n\
+    <parameters>\n\
       <property name='time.0' value='18/02/2003'/>\n\
       <property name='time.T' value='21/03/2001'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
@@ -85,7 +85,7 @@ void ccruncher_test::ParamsTest::test2()
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-    </params>";
+    </parameters>";
 
   ExpatParser xmlparser;
   Params params;
@@ -99,7 +99,7 @@ void ccruncher_test::ParamsTest::test2()
 void ccruncher_test::ParamsTest::test3()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <params>\n\
+    <parameters>\n\
       <property name='time.0' value='18/02/2003'/>\n\
       <property name='time.T' value='12/08/2010'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
@@ -107,7 +107,7 @@ void ccruncher_test::ParamsTest::test3()
       <property name='copula.type' value='t(3)'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-    </params>";
+    </parameters>";
 
   ExpatParser xmlparser;
   Params params;

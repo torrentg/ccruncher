@@ -9,7 +9,7 @@
   ]]>
   </description>
 
-  <params>
+  <parameters>
     <property name="time.0" value="18/10/2009"/>
     <property name="time.T" value="15/07/2015"/>
     <property name="stopcriteria.maxiterations" value="30000"/>
@@ -18,7 +18,7 @@
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="true"/>
     <property name="portfolio.onlyActiveBorrowers" value="true"/>
-  </params>
+  </parameters>
 
   <interest date="18/10/2009">
     <rate t="0" r="0.0"/>

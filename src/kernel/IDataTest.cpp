@@ -51,7 +51,7 @@ void ccruncher_test::IDataTest::test1()
   <ccruncher>\n\
     <title>set your title here</title>\n\
     <description><![CDATA[set your description here]]></description>\n\
-    <params>\n\
+    <parameters>\n\
       <property name='time.0' value='18/02/2003'/>\n\
       <property name='time.T' value='18/02/2005'/>\n\
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
@@ -59,7 +59,7 @@ void ccruncher_test::IDataTest::test1()
       <property name='copula.type' value='gaussian'/>\n\
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
-    </params>\n\
+    </parameters>\n\
     <interest date='18/02/2003'>\n\
       <rate t='0' r='0.0'/>\n\
       <rate t='1' r='0.04'/>\n\
