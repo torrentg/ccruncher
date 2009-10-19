@@ -45,7 +45,7 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
     }
     else {
       name = getStringAttribute(attributes, "name", "");
-      desc = getStringAttribute(attributes, "desc", "_UNDEF_");
+      desc = getStringAttribute(attributes, "description", "_UNDEF_");
 
       if (name == "" || desc == "_UNDEF_")
       {
@@ -81,7 +81,7 @@ string ccruncher::Rating::getXML(int ilevel) const throw(Exception)
 
   ret += "<rating ";
   ret += "name='" + name + "' ";
-  ret += "desc='" + desc + "'";
+  ret += "description='" + desc + "'";
   ret += "/>\n";
 
   return ret;

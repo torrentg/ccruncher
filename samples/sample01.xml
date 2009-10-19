@@ -35,14 +35,14 @@
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name='AAA' desc='AAA'/>
-    <rating name='AA' desc='AA'/>
-    <rating name='A' desc='A'/>
-    <rating name='BBB' desc='BBB'/>
-    <rating name='BB' desc='BB'/>
-    <rating name='B' desc='B'/>
-    <rating name='CCC' desc='CCC'/>
-    <rating name='Default' desc='Default'/>
+    <rating name='AAA' description='AAA'/>
+    <rating name='AA' description='AA'/>
+    <rating name='A' description='A'/>
+    <rating name='BBB' description='BBB'/>
+    <rating name='BB' description='BB'/>
+    <rating name='B' description='B'/>
+    <rating name='CCC' description='CCC'/>
+    <rating name='Default' description='Default'/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -128,10 +128,10 @@
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="tech" desc="technology"/>
-    <sector name="util" desc="utilities"/>
-    <sector name="energ" desc="energy"/>
-    <sector name="bank" desc="banking"/>
+    <sector name="tech" description="technology"/>
+    <sector name="util" description="utilities"/>
+    <sector name="energ" description="energy"/>
+    <sector name="bank" description="banking"/>
   </sectors>
 
   <!-- ============================================================== -->

@@ -47,11 +47,11 @@ Ratings ccruncher_test::BorrowerTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='very good'/>\n\
-      <rating name='B' desc='good'/>\n\
-      <rating name='C' desc='bad'/>\n\
-      <rating name='D' desc='very bad'/>\n\
-      <rating name='E' desc='defaulted'/>\n\
+      <rating name='A' description='very good'/>\n\
+      <rating name='B' description='good'/>\n\
+      <rating name='C' description='bad'/>\n\
+      <rating name='D' description='very bad'/>\n\
+      <rating name='E' description='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -71,8 +71,8 @@ Sectors ccruncher_test::BorrowerTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S2' description='others'/>\n\
     </sectors>";
 
   // creating xml

@@ -36,14 +36,14 @@
 	S&amp;P simplified rating scale
   -->
   <ratings>
-    <rating name="AAA" desc="prime"/>
-    <rating name="AA" desc="high grade"/>
-    <rating name="A" desc="upper medium grade"/>
-    <rating name="BBB" desc="lower medium grade"/>
-    <rating name="BB" desc="non investment grade speculative"/>
-    <rating name="B" desc="highly speculative"/>
-    <rating name="CCC" desc="extremely speculative"/>
-    <rating name="D" desc="in default"/>
+    <rating name="AAA" description="prime"/>
+    <rating name="AA" description="high grade"/>
+    <rating name="A" description="upper medium grade"/>
+    <rating name="BBB" description="lower medium grade"/>
+    <rating name="BB" description="non investment grade speculative"/>
+    <rating name="B" description="highly speculative"/>
+    <rating name="CCC" description="extremely speculative"/>
+    <rating name="D" description="in default"/>
   </ratings>
 
   <!-- 
@@ -118,8 +118,8 @@
   </mtransitions>
 
   <sectors>
-    <sector name="S1" desc="oil and gas"/>
-    <sector name="S2" desc="other sectors"/>
+    <sector name="S1" description="oil and gas"/>
+    <sector name="S2" description="other sectors"/>
   </sectors>
 
   <mcorrels>

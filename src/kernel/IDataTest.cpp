@@ -72,11 +72,11 @@ void ccruncher_test::IDataTest::test1()
       <rate t='120' r='0.052'/>\n\
     </interest>\n\
     <ratings>\n\
-      <rating name='A' desc='very good'/>\n\
-      <rating name='B' desc='good'/>\n\
-      <rating name='D' desc='bad'/>\n\
-      <rating name='C' desc='very bad'/>\n\
-      <rating name='E' desc='default'/>\n\
+      <rating name='A' description='very good'/>\n\
+      <rating name='B' description='good'/>\n\
+      <rating name='D' description='bad'/>\n\
+      <rating name='C' description='very bad'/>\n\
+      <rating name='E' description='default'/>\n\
     </ratings>\n\
     <mtransitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
@@ -113,8 +113,8 @@ void ccruncher_test::IDataTest::test1()
       <svalue rating='E' t='0' value='0.0'/>\n\
     </survival>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S2' description='others'/>\n\
     </sectors>\n\
     <mcorrels>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\

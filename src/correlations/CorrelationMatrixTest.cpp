@@ -52,8 +52,8 @@ Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S2' description='others'/>\n\
     </sectors>";
 
   // creating xml

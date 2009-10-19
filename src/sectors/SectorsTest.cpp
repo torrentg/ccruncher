@@ -47,8 +47,8 @@ void ccruncher_test::SectorsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S2' description='others'/>\n\
     </sectors>";
 
   // creating xml
@@ -66,8 +66,8 @@ void ccruncher_test::SectorsTest::test1()
   ASSERT("S1" == sectors[0].name);
   ASSERT("S2" == sectors[1].name);
 
-  ASSERT("calzado" == sectors[0].desc);
-  ASSERT("otros sectores" == sectors[1].desc);
+  ASSERT("retail" == sectors[0].desc);
+  ASSERT("others" == sectors[1].desc);
 
   ASSERT(sectors[0].name == "S1");
   ASSERT(sectors[1].name == "S2");
@@ -81,8 +81,8 @@ void ccruncher_test::SectorsTest::test2()
   // xml with error (repeated sector)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S1' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S1' description='others'/>\n\
     </sectors>";
 
   // creating xml
@@ -101,8 +101,8 @@ void ccruncher_test::SectorsTest::test3()
   // xml with error (repeated description)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sector name='S2' desc='calzado'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sector name='S2' description='retail'/>\n\
     </sectors>";
 
   // creating xml
@@ -121,8 +121,8 @@ void ccruncher_test::SectorsTest::test4()
   // xml with error (tag sectir)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
-      <sector name='S1' desc='calzado'/>\n\
-      <sectir name='S2' desc='otros sectores'/>\n\
+      <sector name='S1' description='retail'/>\n\
+      <sectir name='S2' description='others'/>\n\
     </sectors>";
 
   // creating xml

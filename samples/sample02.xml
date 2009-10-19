@@ -43,14 +43,14 @@
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="AAA" desc="AAA desc"/>
-    <rating name="AA" desc="AA desc"/>
-    <rating name="A" desc="A desc"/>
-    <rating name="BBB" desc="BBB desc"/>
-    <rating name="BB" desc="BB desc"/>
-    <rating name="B" desc="B desc"/>
-    <rating name="CCC" desc="CCC desc"/>
-    <rating name="Default" desc="Default desc"/>
+    <rating name="AAA" description="AAA desc"/>
+    <rating name="AA" description="AA desc"/>
+    <rating name="A" description="A desc"/>
+    <rating name="BBB" description="BBB desc"/>
+    <rating name="BB" description="BB desc"/>
+    <rating name="B" description="B desc"/>
+    <rating name="CCC" description="CCC desc"/>
+    <rating name="Default" description="Default desc"/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -560,8 +560,8 @@
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" desc="oil and gas"/>
-    <sector name="S2" desc="other sectors"/>
+    <sector name="S1" description="oil and gas"/>
+    <sector name="S2" description="other sectors"/>
   </sectors>
 
   <!-- ============================================================== -->
