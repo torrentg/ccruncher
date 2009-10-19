@@ -128,9 +128,9 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     // nothing to do (see epdata method)
   }
   // section params
-  else if (isEqual(name_,"params")) {
+  else if (isEqual(name_,"parameters")) {
     if (params.maxiterations >= 0) {
-      throw Exception("tag params repeated");
+      throw Exception("tag parameters repeated");
     }
     else {
       timer.start();
@@ -285,7 +285,7 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"description")) {
     // nothing to do
   }
-  else if (isEqual(name_,"params")) {
+  else if (isEqual(name_,"parameters")) {
     Logger::trace("parsing parameters", timer);
   }
   else if (isEqual(name_,"interest")) {
@@ -323,7 +323,7 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 void ccruncher::IData::validate() throw(Exception)
 {
   if (params.maxiterations < 0) {
-    throw Exception("params section not defined");
+    throw Exception("parameters section not defined");
   }
   else if (interest.size() == 0) {
     throw Exception("interest section not defined");

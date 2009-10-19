@@ -5,13 +5,14 @@ CCRUNCHER CHANGELOG
 version 1.5 (???. 2009)
 --------------------------
   * added condition number computation to cholesky matrix
-  * changed interest tag in input file
   * updated html documentation
-  * removed epsilon attribute from mtransitions tag
-  * removed epsilon attribute from mcorrels tag
-  * removed epsilon attribute from survival tag
   * added transition matrix regularization 
-  * in xml input file, changed desc tag to decription tag
+  * in xml input file, removed interests tag
+  * in xml input file, removed epsilon attribute from mtransitions tag
+  * in xml input file, removed epsilon attribute from mcorrels tag
+  * in xml input file, removed epsilon attribute from survival tag
+  * in xml input file, attribute desc renamed to decription
+  * in xml input file, tag params renamed to parameters
 
 version 1.4 (Jul. 2009)
 --------------------------

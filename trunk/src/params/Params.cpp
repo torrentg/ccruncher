@@ -62,10 +62,10 @@ ccruncher::Params::~Params()
 //===========================================================================
 void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char **atrs)
 {
-  if (isEqual(name,"params")) {
+  if (isEqual(name,"parameters")) {
     // checking that don't have attributes
     if (getNumAttributes(atrs) > 0) {
-      throw Exception("attributes are not allowed in tag params");
+      throw Exception("attributes are not allowed in tag parameters");
     }
   }
   else if (isEqual(name,"property")) {
@@ -82,7 +82,7 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
 void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name,"params")) {
+  if (isEqual(name,"parameters")) {
     validate();
   }
   else if (isEqual(name,"property")) {
@@ -265,7 +265,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<params>\n";
+  ret += spc1 + "<parameters>\n";
   ret += spc2 + "<property name='time.0' value='" + Format::date2string(time0) + "'/>\n";
   ret += spc2 + "<property name='time.T' value='" + Format::date2string(timeT) + "'/>\n";
   ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::long2string(maxiterations) + "'/>\n";
@@ -274,7 +274,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::bool2string(onlyactive) + "'/>\n";
-  ret += spc1 + "</params>\n";
+  ret += spc1 + "</parameters>\n";
 
   return ret;
 }

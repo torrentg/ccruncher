@@ -55,7 +55,7 @@ How to check results?
   <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
-  <params>
+  <parameters>
     <property name="time.0" value="01/01/2005"/>
     <property name="time.T" value="01/01/2006"/>
     <property name="stopcriteria.maxiterations" value="20000"/>
@@ -64,7 +64,7 @@ How to check results?
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
     <property name="portfolio.onlyActiveBorrowers" value="true"/>
-  </params>
+  </parameters>
 
   <!-- ============================================================== -->
   <!--                       INTEREST                                 -->
