@@ -85,8 +85,8 @@ How to check results?
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="A" desc="alive"/>
-    <rating name="E" desc="death"/>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="death"/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -103,7 +103,7 @@ How to check results?
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" desc="unique sector"/>
+    <sector name="S1" description="unique sector"/>
   </sectors>
 
   <!-- ============================================================== -->

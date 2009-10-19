@@ -11,6 +11,7 @@ version 1.5 (???. 2009)
   * removed epsilon attribute from mcorrels tag
   * removed epsilon attribute from survival tag
   * added transition matrix regularization 
+  * in xml input file, changed desc tag to decription tag
 
 version 1.4 (Jul. 2009)
 --------------------------

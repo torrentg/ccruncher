@@ -74,7 +74,7 @@
 >
 <!ATTLIST rating 
     name ID #REQUIRED
-    desc CDATA #REQUIRED
+    description CDATA #REQUIRED
 >
 
 <!-- .............................................................. -->
@@ -124,7 +124,7 @@
 >
 <!ATTLIST sector
     name ID #REQUIRED
-    desc CDATA #REQUIRED
+    description CDATA #REQUIRED
 >
 
 <!-- .............................................................. -->

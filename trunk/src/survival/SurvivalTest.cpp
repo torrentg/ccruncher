@@ -53,8 +53,8 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='rating1'/>\n\
-      <rating name='E' desc='default'/>\n\
+      <rating name='A' description='rating1'/>\n\
+      <rating name='E' description='default'/>\n\
     </ratings>";
 
   // creating xml

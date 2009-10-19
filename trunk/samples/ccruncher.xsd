@@ -67,7 +67,7 @@
 						<xsd:element name="rating" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
-								<xsd:attribute name="desc" type="xsd:string" use="required"/>
+								<xsd:attribute name="description" type="xsd:string" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -106,7 +106,7 @@
 						<xsd:element name="sector" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
-								<xsd:attribute name="desc" type="xsd:string" use="required"/>
+								<xsd:attribute name="description" type="xsd:string" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>

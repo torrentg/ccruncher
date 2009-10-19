@@ -67,8 +67,8 @@ Expected Results:
   <!--                           RATINGS                              -->
   <!-- ============================================================== -->
   <ratings>
-    <rating name="A" desc="alive"/>
-    <rating name="E" desc="dead"/>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="dead"/>
   </ratings>
 
   <!-- ============================================================== -->
@@ -85,8 +85,8 @@ Expected Results:
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" desc="sector 1"/>
-    <sector name="S2" desc="sector 2"/>
+    <sector name="S1" description="sector 1"/>
+    <sector name="S2" description="sector 2"/>
   </sectors>
 
   <!-- ============================================================== -->

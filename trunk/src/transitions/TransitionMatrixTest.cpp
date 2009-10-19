@@ -52,11 +52,11 @@ Ratings ccruncher_test::TransitionMatrixTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='A' desc='very good'/>\n\
-      <rating name='B' desc='good'/>\n\
-      <rating name='C' desc='bad'/>\n\
-      <rating name='D' desc='very bad'/>\n\
-      <rating name='E' desc='defaulted'/>\n\
+      <rating name='A' description='very good'/>\n\
+      <rating name='B' description='good'/>\n\
+      <rating name='C' description='bad'/>\n\
+      <rating name='D' description='very bad'/>\n\
+      <rating name='E' description='defaulted'/>\n\
     </ratings>";
 
   // creating xml
@@ -351,14 +351,14 @@ void ccruncher_test::TransitionMatrixTest::test5()
   // Moody's ratings
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
-      <rating name='Aaa' desc='AAA'/>\n\
-      <rating name='Aa'  desc='AA'/>\n\
-      <rating name='A'   desc='A'/>\n\
-      <rating name='Baa' desc='BBB'/>\n\
-      <rating name='Ba'  desc='BB'/>\n\
-      <rating name='B'   desc='B'/>\n\
-      <rating name='C'   desc='C'/>\n\
-      <rating name='D'   desc='defaulted'/>\n\
+      <rating name='Aaa' description='AAA'/>\n\
+      <rating name='Aa'  description='AA'/>\n\
+      <rating name='A'   description='A'/>\n\
+      <rating name='Baa' description='BBB'/>\n\
+      <rating name='Ba'  description='BB'/>\n\
+      <rating name='B'   description='B'/>\n\
+      <rating name='C'   description='C'/>\n\
+      <rating name='D'   description='defaulted'/>\n\
     </ratings>";
 
   // creating xml
