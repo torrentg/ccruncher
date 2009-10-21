@@ -26,6 +26,7 @@
 #include <gsl/gsl_cdf.h>
 #include "math/BlockGaussianCopula.hpp"
 #include "utils/Arrays.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -34,15 +35,14 @@
 #endif
 
 //===========================================================================
-// init
+// reset
 //===========================================================================
-void ccruncher::BlockGaussianCopula::init()
+void ccruncher::BlockGaussianCopula::reset()
 {
-  owner = false;
+  n = 0;
+  m = 0;
   aux1 = NULL;
   aux2 = NULL;
-  chol = NULL;
-  correls = NULL;
 }
 
 //===========================================================================
@@ -50,18 +50,6 @@ void ccruncher::BlockGaussianCopula::init()
 //===========================================================================
 void ccruncher::BlockGaussianCopula::finalize()
 {
-  if (owner)
-  {
-    if (chol != NULL) {
-      delete chol;
-      chol = NULL;
-    }
-    if (correls != NULL) {
-      Arrays<double>::deallocMatrix(correls, m);
-      correls = NULL;
-    }
-  }
-
   if (aux1 != NULL) {
     Arrays<double>::deallocVector(aux1);
     aux1 = NULL;
@@ -78,16 +66,12 @@ void ccruncher::BlockGaussianCopula::finalize()
 //===========================================================================
 ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x) throw(Exception) : Copula()
 {
-  init();
+  reset();
   n = x.n;
   m = x.m;
+  chol = BlockMatrixChol(x.chol);
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
-
-  // definim sigmas
-  owner = false;
-  chol = x.chol;
-  correls = x.correls;
   next();
 }
 
@@ -99,9 +83,11 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
 //===========================================================================
 ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_) throw(Exception)
 {
-  // basic initializations
-  init();
-  owner = true;
+  assert(C_ != NULL);
+  assert(n_ != NULL);
+  assert(m_ > 0);
+  double **correls = NULL;
+  reset();
   m = m_;
 
   try
@@ -119,10 +105,11 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
     }
 
     // computing cholesky factorization
-    chol = new BlockMatrixChol(correls, n_, m_);
+    chol = BlockMatrixChol(correls, n_, m_);
+    Arrays<double>::deallocMatrix(correls, m_);
 
     // allocating mem for temp arrays
-    n = chol->getDim();
+    n = chol.getDim();
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
 
@@ -131,6 +118,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
   }
   catch(Exception &e)
   {
+    Arrays<double>::deallocMatrix(correls, m_);
     finalize();
     throw e;
   }
@@ -173,7 +161,7 @@ void ccruncher::BlockGaussianCopula::randNm()
     aux1[i] = random.nextGaussian();
   }
 
-  chol->mult(aux1, aux2);
+  chol.mult(aux1, aux2);
 }
 
 //===========================================================================
@@ -220,6 +208,6 @@ void ccruncher::BlockGaussianCopula::setSeed(long k)
 //===========================================================================
 double ccruncher::BlockGaussianCopula::getConditionNumber()
 {
-  return chol->getConditionNumber();
+  return chol.getConditionNumber();
 }
 

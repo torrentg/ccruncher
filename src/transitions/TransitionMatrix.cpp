@@ -102,7 +102,10 @@ TransitionMatrix& ccruncher::TransitionMatrix::operator = (const TransitionMatri
 {
   if (this != &otm) // protect against invalid self-assignment
   {
-    matrix = NULL;
+    if (matrix != NULL) {
+      Arrays<double>::deallocMatrix(matrix, n);
+      matrix = NULL;
+    }
     setRatings(*(otm.ratings));
     period = otm.period;
     indexdefault = otm.indexdefault;

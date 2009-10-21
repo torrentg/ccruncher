@@ -68,8 +68,14 @@ class BlockMatrixChol
 
   public:
 
+    // constructors
+    BlockMatrixChol();
+    BlockMatrixChol(const BlockMatrixChol &x);
     BlockMatrixChol(double **A, int *n, int m) throw(Exception);
+    // destructor
     ~BlockMatrixChol();
+    // assignement operator
+    BlockMatrixChol& operator = (const BlockMatrixChol &x);
 
     int getDim();
     double getConditionNumber();

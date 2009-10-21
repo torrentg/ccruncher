@@ -694,10 +694,10 @@ transition matrix, $T_{\frac{1}{12}}$:
 \end{displaymath}
 }
 
-Note negative values in the computed $1$-month transition matrix. Something wrong happens 
-because transition matrix values are probabilities. The cause is that the original matrix 
-$T_1$ is not a regular Markov matrix. In this cases CreditCruncher replace negative 
-values by $0$.
+Note negative values in the computed $1$-month transition matrix. The cause is that 
+the original matrix $T_1$ is not a regular Markov matrix. In these cases ccruncher 
+regularizes the matrix applying the algorithm described in appendix \ref{ap:regularization}.
+To simplify this example we replace negative values by $0$.
 \newline
 
 One time we dispose $1$-month transition matrix, we compute the survivals
@@ -1188,6 +1188,7 @@ Sometimes, the scaled transition matrix don't satisfy the Markov conditions
 (row sum equal to $1$ and all elements non-negatives). In this cases we need
 to transform this matrix to the close Markov matrix. This process is named 
 regularization and is explained in appendix \ref{ap:regularization}.
+\newline
 
 So, we can compute default probability at any time and at any initial 
 rating (in other words, the survival functions), doing:

@@ -445,6 +445,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\utils\LookupTable.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\utils\LookupTable.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\utils\ccmpi.h"
 					>
 				</File>
