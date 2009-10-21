@@ -29,6 +29,7 @@
 #include "math/Random.hpp"
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
+#include "utils/LookupTable.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -46,18 +47,18 @@ class BlockTStudentCopula : public Copula
     int n;
     int m;
     double ndf;
-    BlockMatrixChol *chol;
-    double **correls;
+    BlockMatrixChol chol;
     double *aux1;
     double *aux2;
-    bool owner;
 
     Random random;
+    LookupTable lut;
 
-    void init();
+    void reset();
     void finalize();
     double transform(double val);
     void randNm();
+    void initLUT() throw(Exception);
 
 
   public:

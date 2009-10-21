@@ -58,6 +58,7 @@ ccruncher_SOURCES = \
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Arrays.cpp\
+    ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
@@ -98,6 +99,7 @@ ccruncher_SOURCES = \
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Arrays.hpp\
+    ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\
@@ -119,6 +121,7 @@ tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
     ../deps/gzstream-1.5/gzstream.cpp\
     ../src/utils/ArraysTest.cpp\
+    ../src/utils/LookupTableTest.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
@@ -147,6 +150,7 @@ tests_SOURCES = \
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/utils/Arrays.cpp\
+    ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Parser.cpp\
@@ -184,6 +188,7 @@ tests_SOURCES = \
     ../src/survival/Survival.cpp\
     \
     ../src/utils/ArraysTest.hpp\
+    ../src/utils/LookupTableTest.hpp\
     ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
     ../src/utils/DateTest.hpp\
@@ -213,6 +218,7 @@ tests_SOURCES = \
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/utils/Arrays.hpp\
+    ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Parser.hpp\
@@ -293,6 +299,7 @@ tests_LDFLAGS =
 #    ../src/utils/Date.cpp\
 #    ../src/utils/Timer.cpp\
 #    ../src/utils/Arrays.cpp\
+#    ../src/utils/LookupTable.cpp\
 #    ../src/utils/Strings.cpp\
 #    ../src/utils/ExpatParser.cpp\
 #    ../src/utils/ExpatUserData.cpp\
@@ -333,6 +340,7 @@ tests_LDFLAGS =
 #    ../src/utils/Date.hpp\
 #    ../src/utils/Timer.hpp\
 #    ../src/utils/Arrays.hpp\
+#    ../src/utils/LookupTable.hpp\
 #    ../src/utils/Strings.hpp\
 #    ../src/utils/ExpatParser.hpp\
 #    ../src/utils/ExpatUserData.hpp\

@@ -26,6 +26,7 @@
 #include <gsl/gsl_cdf.h>
 #include "math/BlockTStudentCopula.hpp"
 #include "utils/Arrays.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -33,17 +34,18 @@
 #define M_PI 3.141592653589793238462643383279502884197196
 #endif
 
+#define LUTSIZE 1001
+
 //===========================================================================
-// init
+// reset
 //===========================================================================
-void ccruncher::BlockTStudentCopula::init()
+void ccruncher::BlockTStudentCopula::reset()
 {
-  owner = false;
+  n = 0;
+  m = 0;
+  ndf = -1.0;
   aux1 = NULL;
   aux2 = NULL;
-  chol = NULL;
-  correls = NULL;
-  ndf = -1.0;
 }
 
 //===========================================================================
@@ -51,18 +53,6 @@ void ccruncher::BlockTStudentCopula::init()
 //===========================================================================
 void ccruncher::BlockTStudentCopula::finalize()
 {
-  if (owner)
-  {
-    if (chol != NULL) {
-      delete chol;
-      chol = NULL;
-    }
-    if (correls != NULL) {
-      Arrays<double>::deallocMatrix(correls, m);
-      correls = NULL;
-    }
-  }
-
   if (aux1 != NULL) {
     Arrays<double>::deallocVector(aux1);
     aux1 = NULL;
@@ -79,17 +69,13 @@ void ccruncher::BlockTStudentCopula::finalize()
 //===========================================================================
 ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x) throw(Exception) : Copula()
 {
-  init();
+  reset();
   n = x.n;
   m = x.m;
   ndf = x.ndf;
+  chol = BlockMatrixChol(x.chol);
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
-
-  // definim sigmas
-  owner = false;
-  chol = x.chol;
-  correls = x.correls;
   next();
 }
 
@@ -101,9 +87,11 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 //===========================================================================
 ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception)
 {
-  // basic initializations
-  init();
-  owner = true;
+  assert(C_ != NULL);
+  assert(n_ != NULL);
+  assert(m_ > 0);
+  double **correls = NULL;
+  reset();
   m = m_;
 
   if (ndf_ <= 0.0) {
@@ -126,18 +114,23 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
     }
 
     // computing cholesky factorization
-    chol = new BlockMatrixChol(correls, n_, m_);
+    chol = BlockMatrixChol(correls, n_, m_);
+    Arrays<double>::deallocMatrix(correls, m_);
 
     // allocating mem for temp arrays
-    n = chol->getDim();
+    n = chol.getDim();
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
+
+    // creating lookuptable to speedup t-student CDF
+    initLUT();
 
     // preparing to receive the first get()
     next();
   }
   catch(Exception &e)
   {
+    Arrays<double>::deallocMatrix(correls, m_);
     finalize();
     throw e;
   }
@@ -149,6 +142,30 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
 ccruncher::BlockTStudentCopula::~BlockTStudentCopula()
 {
   finalize();
+}
+
+//===========================================================================
+// initLUT
+// t-student and gaussian CDF are symmetric respect to 0.0
+// lut contains CDF t-student evaluated between 0.0 and x where tcdf(x)>0.99999
+//===========================================================================
+void ccruncher::BlockTStudentCopula::initLUT() throw(Exception)
+{
+/*
+  double minv = 0.0;
+  double maxv = gsl_cdf_tdist_Pinv (0.99999, cdf);
+  vector<double> vals;
+  double steplength = (maxv-minv)/(double)(LUTSIZE-1);
+
+  for(int i=0; i<LUTSIZE-1; i++)
+  {
+    double x = (double)(i)*steplength;
+    double val = gsl_cdf_tdist_P(x, ndf);
+    values.push_back(val);
+  }
+
+  lut = LookupTable(minv, maxv, values);
+*/
 }
 
 //===========================================================================
@@ -180,7 +197,7 @@ void ccruncher::BlockTStudentCopula::randNm()
     aux1[i] = random.nextGaussian();
   }
 
-  chol->mult(aux1, aux2);
+  chol.mult(aux1, aux2);
 }
 
 //===========================================================================
@@ -231,6 +248,6 @@ void ccruncher::BlockTStudentCopula::setSeed(long k)
 //===========================================================================
 double ccruncher::BlockTStudentCopula::getConditionNumber()
 {
-  return chol->getConditionNumber();
+  return chol.getConditionNumber();
 }
 

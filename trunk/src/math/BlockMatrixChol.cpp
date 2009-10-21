@@ -111,6 +111,50 @@
 //===========================================================================
 
 //===========================================================================
+// Default constructor
+//===========================================================================
+ccruncher::BlockMatrixChol::BlockMatrixChol()
+{
+  M = 0;
+  N = 0;
+  n = NULL;
+  coefs = NULL;
+  diag = NULL;
+  spe = NULL;
+  cnum = 0.0;
+}
+
+//===========================================================================
+// Copy constructor
+//===========================================================================
+ccruncher::BlockMatrixChol::BlockMatrixChol(const BlockMatrixChol &x)
+{
+  M = 0;
+  N = 0;
+  n = NULL;
+  coefs = NULL;
+  diag = NULL;
+  spe = NULL;
+  cnum = 0.0;
+  *this = x;
+}
+
+//===========================================================================
+// assignement operator
+//===========================================================================
+BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &x)
+{
+  reset();
+  M = x.M;
+  N = x.N;
+  n = Arrays<int>::allocVector(M, x.n);
+  coefs = Arrays<double>::allocMatrix(N, M, x.coefs);
+  diag = Arrays<double>::allocVector(N, x.diag);
+  spe = Arrays<int>::allocVector(N, x.spe);
+  cnum = x.cnum;
+}
+
+//===========================================================================
 // Constructor
 // A: matrix with correlations between sectors (simmetric with size = mxm)
 // n: number of elements in each sector (size = m)
@@ -340,6 +384,11 @@ void ccruncher::BlockMatrixChol::reset()
     Arrays<int>::deallocVector(spe);
     spe = NULL;
   }
+
+  // rest of values
+  M = 0;
+  N = 0;
+  cnum = 0.0;
 }
 
 //===========================================================================

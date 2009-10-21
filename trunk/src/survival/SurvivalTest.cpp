@@ -224,19 +224,12 @@ void ccruncher_test::SurvivalTest::test6()
   double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 12};
   int ivalues[] = {0, 0};
-  double **id = Arrays<double>::allocMatrix(2,2,0.0);
 
   // ratings list creation
   Ratings ratings = getRatings();
 
   // survival function creation
   Survival sf(ratings, 2, (int *) imonths, (double**) mvalues);
-
-  // creating Id matrix 2x2
-  id[0][0] = 1.0;
-  id[0][1] = 0.0;
-  id[1][0] = 0.0;
-  id[1][1] = 1.0;
 
   // creating randomizer
   Random random;
