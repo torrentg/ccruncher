@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue Oct 20 07:52:18 CEST 2009"
+#define BUILD_DATE "Sat Oct 31 12:37:13 CET 2009"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -134,7 +134,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -155,7 +155,7 @@
 #define PACKAGE_VERSION "1.5"
 
 /* Profiler instructions are added when this is defined. */
-/* #undef PROFILER */
+#define PROFILER 1
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
