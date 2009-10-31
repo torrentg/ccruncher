@@ -34,6 +34,8 @@
 #define M_PI 3.141592653589793238462643383279502884197196
 #endif
 
+#define LUTSIZE 10001
+
 //===========================================================================
 // reset
 //===========================================================================
@@ -43,6 +45,7 @@ void ccruncher::BlockGaussianCopula::reset()
   m = 0;
   aux1 = NULL;
   aux2 = NULL;
+  lut = LookupTable();
 }
 
 //===========================================================================
@@ -72,6 +75,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
   chol = BlockMatrixChol(x.chol);
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
+  lut = x.lut;
   next();
 }
 
@@ -113,6 +117,9 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
 
+    // creating lookuptable to speedup gaussian CDF
+    //initLUT();
+
     // preparing to receive the first get()
     next();
   }
@@ -130,6 +137,31 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
 ccruncher::BlockGaussianCopula::~BlockGaussianCopula()
 {
   finalize();
+}
+
+//===========================================================================
+// initLUT
+// t-student and gaussian CDF are symmetric respect to 0.0
+// lut contains CDF gaussian evaluated between 0.0 and x where cdf(x)>0.9999
+//===========================================================================
+void ccruncher::BlockGaussianCopula::initLUT() throw(Exception)
+{
+  double minv = 0.0;
+  double maxv = gsl_cdf_ugaussian_Pinv(0.9999);
+  vector<double> values;
+  double steplength = (maxv-minv)/(double)(LUTSIZE-1);
+
+  for(int i=0; i<LUTSIZE; i++)
+  {
+    double x = (double)(i)*steplength;
+    double val = gsl_cdf_ugaussian_P(x);
+    values.push_back(val);
+  }
+  
+  maxv += steplength;
+  values.push_back(1.0);
+
+  lut = LookupTable(minv, maxv, values);
 }
 
 //===========================================================================
@@ -177,6 +209,11 @@ void ccruncher::BlockGaussianCopula::next()
   for(int i=0;i<n;i++)
   {
     aux1[i] = gsl_cdf_ugaussian_P(aux2[i]);
+    // gaussian lut covers only positive values
+    // negative values are computed as 1-lut(abs(x))
+    //double x = factor*aux2[i];
+    //double y = lut.evalue(abs(x));
+    //aux1[i] = (x<0.0?1.0-y:y);
   }
 }
 

@@ -57,6 +57,8 @@ class BlockGaussianCopula : public Copula
     void finalize();
     double transform(double val);
     void randNm();
+    void initLUT() throw(Exception);
+
 
   public:
 

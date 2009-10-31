@@ -34,7 +34,7 @@
 #define M_PI 3.141592653589793238462643383279502884197196
 #endif
 
-#define LUTSIZE 1001
+#define LUTSIZE 10001
 
 //===========================================================================
 // reset
@@ -46,6 +46,7 @@ void ccruncher::BlockTStudentCopula::reset()
   ndf = -1.0;
   aux1 = NULL;
   aux2 = NULL;
+  lut = LookupTable();
 }
 
 //===========================================================================
@@ -76,6 +77,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
   chol = BlockMatrixChol(x.chol);
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
+  lut = x.lut;
   next();
 }
 
@@ -147,25 +149,27 @@ ccruncher::BlockTStudentCopula::~BlockTStudentCopula()
 //===========================================================================
 // initLUT
 // t-student and gaussian CDF are symmetric respect to 0.0
-// lut contains CDF t-student evaluated between 0.0 and x where tcdf(x)>0.99999
+// lut contains CDF t-student evaluated between 0.0 and x where cdf(x)>0.9999
 //===========================================================================
 void ccruncher::BlockTStudentCopula::initLUT() throw(Exception)
 {
-/*
   double minv = 0.0;
-  double maxv = gsl_cdf_tdist_Pinv (0.99999, cdf);
-  vector<double> vals;
+  double maxv = gsl_cdf_tdist_Pinv(0.9999, ndf);
+  vector<double> values;
   double steplength = (maxv-minv)/(double)(LUTSIZE-1);
 
-  for(int i=0; i<LUTSIZE-1; i++)
+  for(int i=0; i<LUTSIZE; i++)
   {
     double x = (double)(i)*steplength;
     double val = gsl_cdf_tdist_P(x, ndf);
     values.push_back(val);
+    //double gsl_ran_tdist_pdf (double x, double nu)
   }
+  
+  maxv += steplength;
+  values.push_back(1.0);
 
   lut = LookupTable(minv, maxv, values);
-*/
 }
 
 //===========================================================================
@@ -216,7 +220,12 @@ void ccruncher::BlockTStudentCopula::next()
   // puting in aux1 the copula
   for(int i=0;i<n;i++)
   {
-    aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], ndf);
+    //aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], ndf);
+    // t-student lut covers only positive values
+    // negative values are computed as 1-lut(abs(x))
+    double x = factor*aux2[i];
+    double y = lut.evalue(abs(x));
+    aux1[i] = (x<0.0?1.0-y:y);
   }
 }
 
