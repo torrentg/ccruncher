@@ -26,7 +26,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <string>
 #include <vector>
+#include <map>
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
@@ -59,7 +61,10 @@ class Portfolio : public ExpatHandlers
     Date date2;
     Borrower *auxborrower;
 
-    void insertBorrower(Borrower &) throw(Exception);
+    map<string,bool> idborrowers;
+    map<string,bool> idassets;
+
+    void insertBorrower(Borrower *) throw(Exception);
     void validations() throw(Exception);
     void mtlp(unsigned int);
 

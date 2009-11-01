@@ -14,6 +14,7 @@ version 1.5 (???. 2009)
   * in xml input file, attribute desc renamed to decription
   * in xml input file, tag params renamed to parameters
   * speed up cdf t-student using a lookup table
+  * speed up portfolio parsing
 
 version 1.4 (Jul. 2009)
 --------------------------
