@@ -70,9 +70,9 @@ class Asset : public ExpatHandlers
     bool have_data;
 
     // returns recovery at given date
-    double getRecovery(Date d, const Interest &, Date c);
+    double getRecovery(Date d);
     // returns cashflow sum from given date
-    double getCashflowSum(Date d, const Interest &, Date c);
+    double getCashflowSum(Date d);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // insert a segmentation-segment relation
@@ -85,9 +85,6 @@ class Asset : public ExpatHandlers
     Asset(Segmentations *);
     // destructor
     ~Asset();
-
-    // hash key (to speed up equals by id)
-    unsigned long hkey;
 
     // return asset id
     string getId(void) const;

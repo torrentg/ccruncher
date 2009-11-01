@@ -71,7 +71,6 @@ class Borrower : public ExpatHandlers
     int isector;
     string id;
     string name;
-    unsigned long hkey;
 
     Borrower(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     ~Borrower();

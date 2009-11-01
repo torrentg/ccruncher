@@ -66,57 +66,44 @@ vector<Borrower *> & ccruncher::Portfolio::getBorrowers()
 //===========================================================================
 // inserting a borrower into list
 //===========================================================================
-void ccruncher::Portfolio::insertBorrower(Borrower &val) throw(Exception)
+void ccruncher::Portfolio::insertBorrower(Borrower *val) throw(Exception)
 {
-  unsigned int vcs = vborrowers.size();
-  unsigned long chkey = val.hkey;
-  Borrower *curr = NULL;
-
-  // checking coherence
-  for (unsigned int i=0;i<vcs;i++)
+  // checking if borrower id is previously defined
+  if(idborrowers.find(val->id) != idborrowers.end())
   {
-    curr = vborrowers[i];
+    string msg = "borrower id " + val->id + " repeated";
+    delete val;
+    throw Exception(msg);
+  }
+  else
+  {
+    idborrowers[val->id] = true;
+  }
 
-    if (curr->hkey == chkey) // checking borrower id uniqueness
+  // checking if assets id are previously defined
+  for(int i=0; i<(int)val->getAssets().size(); i++)
+  {
+    string id = val->getAssets()[i].getId();
+    if (idassets.find(id) != idassets.end())
     {
-      // resolving hash key collision
-      if (curr->id == val.id)
-      {
-        string msg = "borrower id " + val.id + " repeated";
-        delete &val;
-        throw Exception(msg);
-      }
+       string msg = "asset id " + id + " repeated";
+       delete val;
+       throw Exception(msg);
     }
-    else // checking asset id uniqueness
+    else 
     {
-      vector<Asset> &currassets = curr->getAssets();
-      for(unsigned int j=0; j<currassets.size(); j++)
-      {
-        for(unsigned int k=0; k<val.getAssets().size(); k++)
-        {
-          if (currassets[j].hkey == val.getAssets()[k].hkey)
-          {
-            // resolving hash key collision
-            if (currassets[j].getId() == val.getAssets()[k].getId())
-            {
-              string msg = "borrowers " + curr->name + " and " + val.name + 
-                            " have a asset with same id (" + val.getAssets()[k].getId() + ")";
-              delete &val;
-              throw Exception(msg);
-            }
-          }
-        }
-      }
+      idassets[id] = true;
     }
   }
 
+  // inserting borrower in portfolio
   try
   {
-    vborrowers.push_back(&val);
+    vborrowers.push_back(val);
   }
   catch(std::exception &e)
   {
-    delete &val;
+    delete val;
     throw Exception(e);
   }
 }
@@ -158,14 +145,12 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"portfolio")) {
-    // cleaning temp objects
     auxborrower = NULL;
-    // checking coherence
     validations();
   }
   else if (isEqual(name_,"borrower")) {
     assert(auxborrower != NULL);
-    insertBorrower(*auxborrower);
+    insertBorrower(auxborrower);
     auxborrower = NULL;
   }
   else {

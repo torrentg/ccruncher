@@ -38,7 +38,6 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   interest = &(interest_);
   date1 = d1;
   date2 = d2;
-  hkey = 0UL;
 
   // cleaning containers
   vassets.clear();
@@ -119,9 +118,6 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
       if (id == "" || name == "" || irating < 0 || isector < 0) {
         throw Exception("invalid attributes at <borrower>");
       }
-
-      // computing hash key
-      hkey = Utils::hash(id);
     }
   }
   else if (isEqual(name_,"belongs-to")) {

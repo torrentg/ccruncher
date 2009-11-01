@@ -40,7 +40,6 @@ ccruncher::Asset::Asset(Segmentations *segs) : ptimes(0) , plosses(0)
   have_data = false;
   mindate = Date(1,1,1);
   maxdate = Date(1,1,1);
-  hkey = 0UL;
   plosses.clear();
   ptimes.clear();
 }
@@ -72,7 +71,7 @@ string ccruncher::Asset::getName(void) const
 //===========================================================================
 // get recovery obtained at date d
 //===========================================================================
-double ccruncher::Asset::getRecovery(Date d, const Interest &interest, Date c)
+double ccruncher::Asset::getRecovery(Date d)
 {
   int n = (int) data.size();
 
@@ -85,8 +84,7 @@ double ccruncher::Asset::getRecovery(Date d, const Interest &interest, Date c)
   {
     if (d <= data[i].date)
     {
-      double ufactor =  interest.getUpsilon(data[i].date, c);
-      return ufactor*data[i].recovery;
+      return data[i].recovery;
     }
   }
 
@@ -97,7 +95,7 @@ double ccruncher::Asset::getRecovery(Date d, const Interest &interest, Date c)
 // getCashflowSum
 // t0: date where cashflow is computed its actual value
 //===========================================================================
-double ccruncher::Asset::getCashflowSum(Date d, const Interest &interest, Date c)
+double ccruncher::Asset::getCashflowSum(Date d)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -111,12 +109,11 @@ double ccruncher::Asset::getCashflowSum(Date d, const Interest &interest, Date c
   {
     if (d <= data[i].date)
     {
-      double ufactor =  interest.getUpsilon(data[i].date, c);
-      ret += ufactor * data[i].cashflow;
+      ret += data[i].cashflow;
     }
   }
 
-  ret -= getRecovery(d, interest, c);
+  ret -= getRecovery(d);
 
   return ret;
 }
@@ -151,6 +148,17 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   ptimes.reserve(num);
   plosses.reserve(num);
 
+  // computing cashflow/recoveries Current Net Value
+  for (int i=0; i<(int)data.size(); i++) 
+  {
+    if (d1 <= data[i].date && data[i].date <= d2) 
+    {
+      double ufactor =  interest.getUpsilon(data[i].date, d1);
+      data[i].cashflow *= ufactor;
+      data[i].recovery *= ufactor;
+    }
+  }
+
   // precomputing losses (d1 <= t <= d2)
   int cont = 0;
   for (int i=0; i<(int)data.size(); i++) 
@@ -158,14 +166,14 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
       ptimes.push_back(data[i].date);
-      plosses.push_back(getCashflowSum(data[i].date, interest, d1));
+      plosses.push_back(getCashflowSum(data[i].date));
       cont++;
     }
   }
   if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
   {
       ptimes.push_back(d2);
-      plosses.push_back(getCashflowSum(d2, interest, d1));
+      plosses.push_back(getCashflowSum(d2));
       cont++;    
   }
   assert(num == cont);
@@ -216,8 +224,6 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       {
         throw Exception("invalid attributes at <asset>");
       }
-      // computing hash key
-      hkey = Utils::hash(id);
     }
   }
   else if (isEqual(name_,"belongs-to")) {
