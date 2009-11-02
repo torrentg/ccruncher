@@ -53,13 +53,13 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='borrower' components='borrower'>\n\
+    <segmentation name='borrowers' components='borrower'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='asset' components='asset'>\n\
+    <segmentation name='assets' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sector' components='borrower'>\n\
+    <segmentation name='sectors' components='borrower'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
@@ -67,10 +67,10 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
-    <segmentation name='product' components='asset'>\n\
+    <segmentation name='products' components='asset'>\n\
       <segment name='bond'/>\n\
     </segmentation>\n\
-    <segmentation name='office' components='asset'>\n\
+    <segmentation name='offices' components='asset'>\n\
       <segment name='0001'/>\n\
       <segment name='0002'/>\n\
       <segment name='0003'/>\n\
@@ -123,8 +123,8 @@ void ccruncher_test::AssetTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
-        <belongs-to segmentation='product' segment='bond'/>\n\
-        <belongs-to segmentation='office' segment='0001'/>\n\
+        <belongs-to segmentation='products' segment='bond'/>\n\
+        <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\

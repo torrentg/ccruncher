@@ -284,17 +284,17 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     // filling implicit segment
     try
     {
-      if ((*segmentations)["asset"].components == asset)
+      if ((*segmentations)["assets"].components == asset)
       {
-        segmentations->addSegment("asset", id);
-        int isegmentation = (*segmentations)["asset"].order;
-        int isegment = (*segmentations)["asset"][id].order;
+        segmentations->addSegment("assets", id);
+        int isegmentation = (*segmentations)["assets"].order;
+        int isegment = (*segmentations)["assets"][id].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
     catch(...)
     {
-      // segmentation 'asset' not defined
+      // segmentation 'assets' not defined
     }
 
     // filling implicit segment
