@@ -115,7 +115,7 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
   // checking for patterns
   if (val.name == "*")
   {
-    if (name != "borrower" && name != "asset")
+    if (name != "borrowers" && name != "assets")
     {
       throw Exception("invalid segment name '*'");
     }
@@ -233,7 +233,7 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   {
     // nothing to do
   }
-  else if (name == "borrower" || name == "asset")
+  else if (name == "borrowers" || name == "assets")
   {
     ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
   }

@@ -156,16 +156,16 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
     // filling implicit segment
     try
     {
-      if ((*segmentations)["borrower"].components == borrower) {
-        segmentations->addSegment("borrower", id);
-        int isegmentation = (*segmentations)["borrower"].order;
-        int isegment = (*segmentations)["borrower"][id].order;
+      if ((*segmentations)["borrowers"].components == borrower) {
+        segmentations->addSegment("borrowers", id);
+        int isegmentation = (*segmentations)["borrowers"].order;
+        int isegment = (*segmentations)["borrowers"][id].order;
         insertBelongsTo(isegmentation, isegment);
       }
     }
     catch(...)
     {
-      // segmentation 'borrower' not found
+      // segmentation 'borrowers' not found
     }
 
     // filling implicit segment

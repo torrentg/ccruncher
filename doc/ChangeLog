@@ -13,6 +13,7 @@ version 1.5 (???. 2009)
   * in xml input file, removed epsilon attribute from survival tag
   * in xml input file, attribute desc renamed to decription
   * in xml input file, tag params renamed to parameters
+  * in xml input file, renamed implicit segmentations
   * speed up cdf t-student using a lookup table
   * speed up portfolio parsing
 

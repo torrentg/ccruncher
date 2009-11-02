@@ -123,13 +123,13 @@ void ccruncher_test::IDataTest::test1()
     </mcorrels>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
-      <segmentation name='borrower' components='borrower'>\n\
+      <segmentation name='borrowers' components='borrower'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
-      <segmentation name='asset' components='asset'>\n\
+      <segmentation name='assets' components='asset'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
-      <segmentation name='sector' components='borrower'>\n\
+      <segmentation name='sectors' components='borrower'>\n\
         <segment name='S1'/>\n\
         <segment name='S2'/>\n\
       </segmentation>\n\
@@ -137,10 +137,10 @@ void ccruncher_test::IDataTest::test1()
         <segment name='big'/>\n\
         <segment name='medium'/>\n\
       </segmentation>\n\
-      <segmentation name='product' components='asset'>\n\
+      <segmentation name='products' components='asset'>\n\
         <segment name='bond'/>\n\
       </segmentation>\n\
-      <segmentation name='office' components='asset'>\n\
+      <segmentation name='offices' components='asset'>\n\
         <segment name='0001'/>\n\
         <segment name='0002'/>\n\
         <segment name='0003'/>\n\
@@ -150,8 +150,8 @@ void ccruncher_test::IDataTest::test1()
     <portfolio>\n\
       <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
         <asset name='generic' id='op1' date='01/01/1999'>\n\
-          <belongs-to segmentation='product' segment='bond'/>\n\
-          <belongs-to segmentation='office' segment='0001'/>\n\
+          <belongs-to segmentation='products' segment='bond'/>\n\
+          <belongs-to segmentation='offices' segment='0001'/>\n\
           <data>\n\
             <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
             <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -162,8 +162,8 @@ void ccruncher_test::IDataTest::test1()
           </data>\n\
         </asset>\n\
         <asset name='generic' id='op2' date='01/01/2000'>\n\
-          <belongs-to segmentation='product' segment='bond'/>\n\
-          <belongs-to segmentation='office' segment='0001'/>\n\
+          <belongs-to segmentation='products' segment='bond'/>\n\
+          <belongs-to segmentation='offices' segment='0001'/>\n\
           <data>\n\
             <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
             <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\

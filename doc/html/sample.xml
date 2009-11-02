@@ -130,13 +130,13 @@
 
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-    <segmentation name="borrower" components="borrower">
+    <segmentation name="borrowers" components="borrower">
       <segment name="*"/>
     </segmentation>
-    <segmentation name="asset" components="asset">
+    <segmentation name="assets" components="asset">
       <segment name="*"/>
     </segmentation>
-    <segmentation name="sector" components="borrower">
+    <segmentation name="sectors" components="borrower">
       <segment name="S1"/>
       <segment name="S2"/>
     </segmentation>
@@ -144,10 +144,10 @@
       <segment name="big"/>
       <segment name="medium"/>
     </segmentation>
-    <segmentation name="product" components="asset">
+    <segmentation name="products" components="asset">
       <segment name="bond"/>
     </segmentation>
-    <segmentation name="office" components="asset">
+    <segmentation name="offices" components="asset">
       <segment name="0001"/>
       <segment name="0002"/>
       <segment name="0003"/>
@@ -157,11 +157,11 @@
 
   <portfolio>
     <borrower rating="A" sector="S1" name="Diria" id="000001">
-      <belongs-to segmentation="sector" segment="S1"/>
+      <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
       <asset name="bond" id="op1" date="01/01/2005">
-        <belongs-to segmentation="product" segment="bond"/>
-        <belongs-to segmentation="office" segment="0001"/>
+        <belongs-to segmentation="products" segment="bond"/>
+        <belongs-to segmentation="offices" segment="0001"/>
 		<!--
 			bond with anual cupons at 10% with a recovery rate of 80%
 		-->
@@ -179,8 +179,8 @@
         </data>
       </asset>
       <asset name="bond" id="op2" date="01/06/2008">
-        <belongs-to segmentation="office" segment="0004"/>
-        <belongs-to segmentation="product" segment="bond"/>
+        <belongs-to segmentation="offices" segment="0004"/>
+        <belongs-to segmentation="products" segment="bond"/>
 		<!--
 			bond with bianual cupons at 12% with a recovery rate of 75%
 		-->
@@ -194,11 +194,11 @@
       </asset>
     </borrower>
     <borrower rating="B" sector="S2" name="Gixirre" id="000002">
-      <belongs-to segmentation="sector" segment="S2"/>
+      <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="big"/>
       <asset name="bond" id="op3" date="01/06/2003">
-        <belongs-to segmentation="office" segment="0003"/>
-        <belongs-to segmentation="product" segment="bond"/>
+        <belongs-to segmentation="offices" segment="0003"/>
+        <belongs-to segmentation="products" segment="bond"/>
 		<!--
 			bond with bianual cupons at 7.5% with a recovery rate of 40%
 		-->
@@ -212,11 +212,11 @@
       </asset>
     </borrower>
     <borrower rating="CCC" sector="S2" name="Altleopard" id="000003">
-      <belongs-to segmentation="sector" segment="S2"/>
+      <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="medium"/>
       <asset name="bond" id="op4" date="01/01/1999">
-        <belongs-to segmentation="office" segment="0003"/>
-        <belongs-to segmentation="product" segment="bond"/>
+        <belongs-to segmentation="offices" segment="0003"/>
+        <belongs-to segmentation="products" segment="bond"/>
 		<!--
 			bond with anual cupons at 10% with a recovery rate of 25%
 		-->
