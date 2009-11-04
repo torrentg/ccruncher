@@ -1604,21 +1604,27 @@ The condition number of a matrix indicates how far or close is to be a singular
 matrix. If the condition number number is close to $1$ is said that it is 
 well-conditioned while a matrix with a high condition number is said to be 
 ill-conditioned.
+\newline
+
+Given a symmetric block matrix withs $1$'s in the diagonal, $\Sigma$, we desire 
+to obtain the condition number of the cholesky decomposition matrix, $B$.
+Using condition number definition and its properties we have that:
 
 \begin{displaymath}
-\kappa(U) = \|U\|_2 \cdot \|U^{-1}\|_2 
-= \frac{\sigma_{max}(U)}{\sigma_{min}(U)}
-= \sqrt{\frac{\lambda_{max}(A)}{\lambda_{min}(A)}}
+\kappa(B) = \|B\|_2 \cdot \|B^{-1}\|_2 
+= \frac{\sigma_{max}(B)}{\sigma_{min}(B)}
+= \sqrt{\frac{\lambda_{max}(\Sigma)}{\lambda_{min}(\Sigma)}}
 \end{displaymath}
 
-Where $A$ is block matrix with $1$'s in the diagonal, $U$ is the cholesky 
-matrix of $A$, $\sigma_{max}(U)$ and $\sigma_{min}(U)$ are the maximal and
-minimal values of $U$ and $\lambda_{max}(A)$ and $\lambda_{min}(A)$ are 
-the maximal and minimal absolute values of eigenvalues of $A$.
+Where $\sigma_{max}(B)$ and $\sigma_{min}(B)$ are the maximal and minimal singular 
+values of $B$ and $\lambda_{max}(\Sigma)$ and $\lambda_{min}(\Sigma)$ 
+are the maximal and minimal absolute values of eigenvalues of $\Sigma$.
+The eigenvalues of $\Sigma$ can be computed using the following proposition.
 
-\paragraph{Proposition (unproved).} Let $A$ a symmetric block matrix where 
-$k$ is the number of blocks, $a_{ij}$ are the block values and $n_i$ is 
-the dimension of the $i$-th block. The eigenvalues of this matrix are:
+\paragraph{Proposition (unproved).} Let $\Sigma$ a symmetric block matrix with 
+$1$'s in the diagonal where $k$ is the number of blocks, $a_{ij}$ are the block 
+values and $n_i$ is the dimension of the $i$-th block. Then, the eigenvalues 
+of $\Sigma$ are:
 \begin{displaymath}
 \underbrace{1-a_{11}, \cdots, 1-a_{11}}_{n_1-1},
 \underbrace{1-a_{22}, \cdots, 1-a_{22}}_{n_2-1},  
