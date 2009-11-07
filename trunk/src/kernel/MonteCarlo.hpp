@@ -102,12 +102,12 @@ class MonteCarlo
     void release();
 
     // init methods
-    void initParams(const IData &) throw(Exception);
-    void initBorrowers(const IData &) throw(Exception);
-    void initRatings(const IData &) throw(Exception);
-    void initSectors(const IData &) throw(Exception);
-    void initSurvival(const IData &) throw(Exception);
-    void initCopula(const IData &idata, long) throw(Exception);
+    void initParams(IData &) throw(Exception);
+    void initBorrowers(IData &) throw(Exception);
+    void initRatings(IData &) throw(Exception);
+    void initSectors(IData &) throw(Exception);
+    void initSurvival(IData &) throw(Exception);
+    void initCopula(IData &idata, long) throw(Exception);
     void initTimeToDefaultArray(int) throw(Exception);
     void initAggregators(IData &) throw(Exception);
 
