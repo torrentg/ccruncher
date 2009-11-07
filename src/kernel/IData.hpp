@@ -83,15 +83,15 @@ class IData : public ExpatHandlers
     /** get methods */
     string & getTitle();
     string & getDescription();
-    const Params & getParams() const;
-    const Interest & getInterest() const;
-    const Ratings & getRatings() const;
-    const TransitionMatrix & getTransitionMatrix() const;
-    const Survival & getSurvival() const;
-    const Sectors & getSectors() const;
-    const CorrelationMatrix & getCorrelationMatrix() const;
+    Params & getParams();
+    Interest & getInterest();
+    Ratings & getRatings();
+    TransitionMatrix & getTransitionMatrix();
+    Survival & getSurvival();
+    Sectors & getSectors();
+    CorrelationMatrix & getCorrelationMatrix();
     Segmentations & getSegmentations();
-    Portfolio & getPortfolio() const;
+    Portfolio & getPortfolio();
     /** has methods */
     bool hasSurvival() const;
     /** ExpatHandlers methods declaration */

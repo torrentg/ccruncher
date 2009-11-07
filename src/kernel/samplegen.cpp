@@ -199,7 +199,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   File::checkFile(filename, "r");
 
   // parsing input file
-  IData idata = IData(filename, false);
+  IData idata(filename, false);
 
   cout << "<?xml version='1.0' encoding='UTF-8'?>\n";
   cout << "<ccruncher>\n";

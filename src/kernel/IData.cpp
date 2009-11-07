@@ -359,7 +359,7 @@ ccruncher::IData::~IData()
 //===========================================================================
 // getTitle
 //===========================================================================
-string & ccruncher::IData::getTitle() 
+string & ccruncher::IData::getTitle()
 {
   return title;
 }
@@ -367,7 +367,7 @@ string & ccruncher::IData::getTitle()
 //===========================================================================
 // getDescription
 //===========================================================================
-string & ccruncher::IData::getDescription() 
+string & ccruncher::IData::getDescription()
 {
   return description;
 }
@@ -375,7 +375,7 @@ string & ccruncher::IData::getDescription()
 //===========================================================================
 // getParams
 //===========================================================================
-const Params & ccruncher::IData::getParams() const
+Params & ccruncher::IData::getParams()
 {
   return params;
 }
@@ -383,7 +383,7 @@ const Params & ccruncher::IData::getParams() const
 //===========================================================================
 // getInterest
 //===========================================================================
-const Interest & ccruncher::IData::getInterest() const
+Interest & ccruncher::IData::getInterest()
 {
   return interest;
 }
@@ -391,7 +391,7 @@ const Interest & ccruncher::IData::getInterest() const
 //===========================================================================
 // getRatings
 //===========================================================================
-const Ratings & ccruncher::IData::getRatings() const
+Ratings & ccruncher::IData::getRatings()
 {
   return ratings;
 }
@@ -399,7 +399,7 @@ const Ratings & ccruncher::IData::getRatings() const
 //===========================================================================
 // getTransitionMatrix
 //===========================================================================
-const TransitionMatrix & ccruncher::IData::getTransitionMatrix() const
+TransitionMatrix & ccruncher::IData::getTransitionMatrix()
 {
   return transitions;
 }
@@ -407,7 +407,7 @@ const TransitionMatrix & ccruncher::IData::getTransitionMatrix() const
 //===========================================================================
 // getSurvival
 //===========================================================================
-const Survival & ccruncher::IData::getSurvival() const
+Survival & ccruncher::IData::getSurvival()
 {
   return survival;
 }
@@ -415,7 +415,7 @@ const Survival & ccruncher::IData::getSurvival() const
 //===========================================================================
 // getSectors
 //===========================================================================
-const Sectors & ccruncher::IData::getSectors() const
+Sectors & ccruncher::IData::getSectors()
 {
   return sectors;
 }
@@ -423,7 +423,7 @@ const Sectors & ccruncher::IData::getSectors() const
 //===========================================================================
 // getCorrelationMatrix
 //===========================================================================
-const CorrelationMatrix & ccruncher::IData::getCorrelationMatrix() const
+CorrelationMatrix & ccruncher::IData::getCorrelationMatrix()
 {
   return correlations;
 }
@@ -439,7 +439,7 @@ Segmentations & ccruncher::IData::getSegmentations()
 //===========================================================================
 // getPortfolio
 //===========================================================================
-Portfolio & ccruncher::IData::getPortfolio() const
+Portfolio & ccruncher::IData::getPortfolio()
 {
   return *portfolio;
 }

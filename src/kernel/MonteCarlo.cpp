@@ -175,7 +175,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw
 //===========================================================================
 // initParams
 //===========================================================================
-void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting parameters", '-');
@@ -210,7 +210,7 @@ void ccruncher::MonteCarlo::initParams(const IData &idata) throw(Exception)
 //===========================================================================
 // initBorrowers
 //===========================================================================
-void ccruncher::MonteCarlo::initBorrowers(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting borrowers to simulate", '-');
@@ -257,7 +257,7 @@ void ccruncher::MonteCarlo::initBorrowers(const IData &idata) throw(Exception)
 //===========================================================================
 // initRatings
 //===========================================================================
-void ccruncher::MonteCarlo::initRatings(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initRatings(IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting ratings", '-');
@@ -276,7 +276,7 @@ void ccruncher::MonteCarlo::initRatings(const IData &idata) throw(Exception)
 //===========================================================================
 // initSectors
 //===========================================================================
-void ccruncher::MonteCarlo::initSectors(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initSectors(IData &idata) throw(Exception)
 {
   // setting logger header
   Logger::trace("setting sectors", '-');
@@ -295,7 +295,7 @@ void ccruncher::MonteCarlo::initSectors(const IData &idata) throw(Exception)
 //===========================================================================
 // initSurvival
 //===========================================================================
-void ccruncher::MonteCarlo::initSurvival(const IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 {
   // doing assertions
   assert(survival.size() == 0);
@@ -341,7 +341,7 @@ void ccruncher::MonteCarlo::initSurvival(const IData &idata) throw(Exception)
 //===========================================================================
 // copula construction
 //===========================================================================
-void ccruncher::MonteCarlo::initCopula(const IData &idata, long seed) throw(Exception)
+void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
 {
   Timer timer(true);
   int *tmp = NULL;
