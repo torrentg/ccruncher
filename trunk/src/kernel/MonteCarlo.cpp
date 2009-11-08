@@ -187,6 +187,7 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 
   // max number of iterations
   MAXITERATIONS = idata.getParams().maxiterations;
+  Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
 
   // printing initial date
   time0 = idata.getParams().time0;
