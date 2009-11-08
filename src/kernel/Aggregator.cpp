@@ -115,9 +115,8 @@ void ccruncher::Aggregator::append1(Date *defaulttimes)
   // filling values
   for(unsigned int i=0; i<numborrowers; i++)
   {
-    Borrower *borrower = borrowers[i];
-    int isegment = borrower->getSegment(isegmentation);
-    vector<Asset> &assets = borrower->getAssets();
+    int isegment = borrowers[i]->getSegment(isegmentation);
+    vector<Asset> &assets = borrowers[i]->getAssets();
     for(unsigned int j=0; j<assets.size(); j++) 
     {
       CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i]);
@@ -137,15 +136,15 @@ void ccruncher::Aggregator::append2(Date *defaulttimes)
 {
   // initializing values
   int isegmentation = segmentation.order;
-  for(unsigned int i=0; i<numsegments; i++) {
+  for(unsigned int i=0; i<numsegments; i++) 
+  {
     CVALUES(i,icont) = 0.0;
   }
 
   // filling values
   for(unsigned int i=0; i<numborrowers; i++)
   {
-    Borrower *borrower = borrowers[i];
-    vector<Asset> &assets = borrower->getAssets();
+    vector<Asset> &assets = borrowers[i]->getAssets();
     for(unsigned int j=0; j<assets.size(); j++) 
     {
       int isegment = assets[j].getSegment(isegmentation);
