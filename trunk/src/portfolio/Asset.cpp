@@ -184,17 +184,19 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
 //===========================================================================
 double ccruncher::Asset::getLoss(const Date &at)
 {
-  if (at < mindate || maxdate < at || ptimes.size()==0)
+  int length = (int) ptimes.size();
+
+  if (at < mindate || maxdate < at || length == 0)
   {
     return 0.0;
   }
-  if (ptimes[ptimes.size()-1] < at)
+  if (ptimes[length-1] < at)
   {
     return 0.0;
   }
   else 
   {
-    for(int i=0; i<(int)ptimes.size(); i++) 
+    for(int i=0; i<length; i++) 
     {
       if (at <= ptimes[i]) 
       {

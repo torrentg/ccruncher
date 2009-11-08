@@ -165,7 +165,7 @@ dnl completing config.h.in
 dnl -------------------------------------------------------------
 AH_BOTTOM([
 /* Aggregator buffer size (in bytes) */
-#define CCMAXBUFSIZE 1024*1024
+#define CCMAXBUFSIZE 40*1024*1024
 
 /* flush results time (to disk or to master) */
 #define CCEFLUSHSECS 30.0
