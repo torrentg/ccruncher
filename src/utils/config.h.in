@@ -49,11 +49,20 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #undef HAVE_GETTIMEOFDAY
 
+/* Define to 1 if you have the <gsl/gsl_math.h> header file. */
+#undef HAVE_GSL_GSL_MATH_H
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
 /* Define to 1 if you have the `expat' library (-lexpat). */
 #undef HAVE_LIBEXPAT
+
+/* Define to 1 if you have the `gsl' library (-lgsl). */
+#undef HAVE_LIBGSL
+
+/* Define to 1 if you have the `gslcblas' library (-lgslcblas). */
+#undef HAVE_LIBGSLCBLAS
 
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
@@ -193,7 +202,7 @@
 
 
 /* Aggregator buffer size (in bytes) */
-#define CCMAXBUFSIZE 1024*1024
+#define CCMAXBUFSIZE 40*1024*1024
 
 /* flush results time (to disk or to master) */
 #define CCEFLUSHSECS 30.0

@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Nov  7 11:36:58 CET 2009"
+#define BUILD_DATE "Sat Nov  7 17:41:17 CET 2009"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -50,11 +50,20 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #define HAVE_GETTIMEOFDAY 1
 
+/* Define to 1 if you have the <gsl/gsl_math.h> header file. */
+#define HAVE_GSL_GSL_MATH_H 1
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `expat' library (-lexpat). */
 #define HAVE_LIBEXPAT 1
+
+/* Define to 1 if you have the `gsl' library (-lgsl). */
+#define HAVE_LIBGSL 1
+
+/* Define to 1 if you have the `gslcblas' library (-lgslcblas). */
+#define HAVE_LIBGSLCBLAS 1
 
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
@@ -194,7 +203,7 @@
 
 
 /* Aggregator buffer size (in bytes) */
-#define CCMAXBUFSIZE 1024*1024
+#define CCMAXBUFSIZE 40*1024*1024
 
 /* flush results time (to disk or to master) */
 #define CCEFLUSHSECS 30.0
