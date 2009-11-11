@@ -106,3 +106,7 @@ pre {
 	background-color: #ddd;
 }
 
+code {
+	font-size: 8pt;
+	font-family: monospace;
+}

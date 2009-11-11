@@ -5,8 +5,11 @@ CCRUNCHER CHANGELOG
 version 1.5 (???. 2009)
 --------------------------
   * added condition number computation to cholesky matrix
-  * updated html documentation
   * added transition matrix regularization 
+  * updated html documentation
+  * speed up cdf t-student using a lookup table
+  * speed up portfolio parsing
+  * speed up portfolio aggregation
   * in xml input file, removed interests tag
   * in xml input file, removed epsilon attribute from mtransitions tag
   * in xml input file, removed epsilon attribute from mcorrels tag
@@ -14,8 +17,6 @@ version 1.5 (???. 2009)
   * in xml input file, attribute desc renamed to decription
   * in xml input file, tag params renamed to parameters
   * in xml input file, renamed implicit segmentations
-  * speed up cdf t-student using a lookup table
-  * speed up portfolio parsing
 
 version 1.4 (Jul. 2009)
 --------------------------
