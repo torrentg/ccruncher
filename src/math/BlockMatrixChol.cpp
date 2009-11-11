@@ -152,6 +152,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   diag = Arrays<double>::allocVector(N, x.diag);
   spe = Arrays<int>::allocVector(N, x.spe);
   cnum = x.cnum;
+  return *this;
 }
 
 //===========================================================================
