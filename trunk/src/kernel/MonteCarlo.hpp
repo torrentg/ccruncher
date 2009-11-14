@@ -99,7 +99,6 @@ class MonteCarlo
     // internal methods
     void reset();
     void alloc(int) throw(Exception);
-    void release();
 
     // init methods
     void initParams(IData &) throw(Exception);
@@ -136,6 +135,7 @@ class MonteCarlo
     void initialize(IData &, bool only_validation=false) throw(Exception);
     long execute() throw(Exception);
     void setAdditionalOutput(bool copulas, bool deftimes);
+    void release();
 
 };
 

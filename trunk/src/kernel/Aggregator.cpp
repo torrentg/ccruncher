@@ -62,6 +62,7 @@ ccruncher::Aggregator::~Aggregator()
 {
   try
   {
+    flush();
     fout.close();
   }
   catch(...)

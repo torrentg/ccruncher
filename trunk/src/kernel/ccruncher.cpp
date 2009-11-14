@@ -29,6 +29,7 @@
 
 #include <cerrno>
 #include <iostream>
+#include <csignal>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
@@ -49,6 +50,7 @@ void version();
 void copyright();
 void setnice(int) throw(Exception);
 void run(string, string) throw(Exception);
+void catchsignal(int signal);
 
 //---------------------------------------------------------------------------
 
@@ -59,10 +61,23 @@ bool bverbose = false;
 bool bforce = false;
 int inice = -999;
 int ihash = 0;
+MonteCarlo *mcref = NULL;
 #ifndef USE_MPI
 bool blcopulas = false;
 bool bldeftime = false;
 #endif
+
+//===========================================================================
+// catchsignal
+//===========================================================================
+void catchsignal(int signal)
+{
+  // flush files before close
+  if (mcref != NULL) {
+    mcref->release();
+  }
+  exit(1);
+} 
 
 //===========================================================================
 // main
@@ -352,6 +367,12 @@ void run(string filename, string path) throw(Exception)
     Logger::addBlankLine();
     return;
   }
+
+  // setting interruptions handlers
+  mcref = &simul;
+  signal(SIGINT, catchsignal);
+  signal(SIGABRT, catchsignal);
+  signal(SIGTERM, catchsignal);
 
   // running simulation
   long nsims = simul.execute();
