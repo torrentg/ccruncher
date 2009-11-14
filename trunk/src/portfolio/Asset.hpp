@@ -68,6 +68,8 @@ class Asset : public ExpatHandlers
     vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
+    // last computed loss
+    double loss;
 
     // returns recovery at given date
     double getRecovery(Date d);
@@ -95,7 +97,7 @@ class Asset : public ExpatHandlers
     // precompute losses
     void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
     // returns precomputed loss at requested time node index
-    double getLoss(const Date &at);
+    double getLoss(const Date &at, bool force=true);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment

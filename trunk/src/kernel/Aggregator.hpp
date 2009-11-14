@@ -79,8 +79,8 @@ class Aggregator
 
     // internal functions
     bool hasRestSegment();
-    void append1(Date *defaulttimes);
-    void append2(Date *defaulttimes);
+    void append1(Date *defaulttimes, bool force);
+    void append2(Date *defaulttimes, bool force);
 
 
   public:
@@ -91,7 +91,7 @@ class Aggregator
 
     // other methods
     void setOutputProperties(const string &filename, bool force) throw(Exception);
-    bool append(Date *defaulttimes) throw(Exception);
+    bool append(Date *defaulttimes, bool force=true) throw(Exception);
     long appendRawData(double *data, int datasize) throw(Exception);
     bool flush() throw(Exception);
     long getBufferSize();
