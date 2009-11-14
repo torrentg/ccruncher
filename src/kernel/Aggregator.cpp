@@ -74,18 +74,18 @@ ccruncher::Aggregator::~Aggregator()
 // append
 // input vector has length numborrowers with the index time (in months) where borrower defaults
 //===========================================================================
-bool ccruncher::Aggregator::append(Date *defaulttimes) throw(Exception)
+bool ccruncher::Aggregator::append(Date *defaulttimes, bool force) throw(Exception)
 {
   assert(defaulttimes != NULL);
   assert(segmentation.components==borrower || segmentation.components==asset);
 
   if (segmentation.components == borrower)
   {
-    append1(defaulttimes);
+    append1(defaulttimes, force);
   }
   else 
   {
-    append2(defaulttimes);
+    append2(defaulttimes, force);
   }
 
   // flushing if buffer is full
@@ -103,7 +103,7 @@ bool ccruncher::Aggregator::append(Date *defaulttimes) throw(Exception)
 // append1
 // when segmentation components are borrowers
 //===========================================================================
-void ccruncher::Aggregator::append1(Date *defaulttimes)
+void ccruncher::Aggregator::append1(Date *defaulttimes, bool force)
 {
   // initializing values
   int isegmentation = segmentation.order;
@@ -119,7 +119,7 @@ void ccruncher::Aggregator::append1(Date *defaulttimes)
     vector<Asset> &assets = borrowers[i]->getAssets();
     for(unsigned int j=0; j<assets.size(); j++) 
     {
-      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i]);
+      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i], force);
     }
   }
 
@@ -132,7 +132,7 @@ void ccruncher::Aggregator::append1(Date *defaulttimes)
 // append2
 // when segmentation components are assets
 //===========================================================================
-void ccruncher::Aggregator::append2(Date *defaulttimes)
+void ccruncher::Aggregator::append2(Date *defaulttimes, bool force)
 {
   // initializing values
   int isegmentation = segmentation.order;
@@ -148,7 +148,7 @@ void ccruncher::Aggregator::append2(Date *defaulttimes)
     for(unsigned int j=0; j<assets.size(); j++) 
     {
       int isegment = assets[j].getSegment(isegmentation);
-      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i]);
+      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i], force);
     }
   }
 

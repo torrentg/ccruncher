@@ -824,7 +824,7 @@ bool ccruncher::MonteCarlo::evalue() throw(Exception)
   // adding current simulation to each aggregator
   for(unsigned int i=0;i<aggregators.size();i++)
   {
-    if (aggregators[i]->append(ttd) == false)
+    if (aggregators[i]->append(ttd,(i==0)) == false)
     {
       ret = false;
     }

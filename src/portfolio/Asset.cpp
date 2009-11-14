@@ -42,6 +42,7 @@ ccruncher::Asset::Asset(Segmentations *segs) : ptimes(0) , plosses(0)
   maxdate = Date(1,1,1);
   plosses.clear();
   ptimes.clear();
+  loss = 0.0;
 }
 
 //===========================================================================
@@ -181,18 +182,23 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
 
 //===========================================================================
 // getLoss
+// force=true --> loss is computed and stored in variable loss, return loss
+// force=false -> returns loss variable value
 //===========================================================================
-double ccruncher::Asset::getLoss(const Date &at)
+double ccruncher::Asset::getLoss(const Date &at, bool force)
 {
+  if (!force) return loss;
+  else loss = 0.0;
+
   int length = (int) ptimes.size();
 
   if (at < mindate || maxdate < at || length == 0)
   {
-    return 0.0;
+    loss = 0.0;
   }
-  if (ptimes[length-1] < at)
+  else if (ptimes[length-1] < at)
   {
-    return 0.0;
+    loss = 0.0;
   }
   else 
   {
@@ -200,12 +206,12 @@ double ccruncher::Asset::getLoss(const Date &at)
     {
       if (at <= ptimes[i]) 
       {
-        return plosses[i];
+        loss = plosses[i];
+        break;
       }
     }
   }
-  assert(false);
-  return 0.0;
+  return loss;
 }
 
 //===========================================================================
