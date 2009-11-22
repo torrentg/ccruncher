@@ -61,7 +61,7 @@ class Segmentations : public ExpatHandlers
     // destructor
     ~Segmentations();
 
-    // return the number of segments
+    // return the number of segmentations
     int size() const;
     // [] operator
     Segmentation& operator [] (int i);
