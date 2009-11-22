@@ -50,7 +50,7 @@ class Borrower : public ExpatHandlers
 
   private:
 
-    map<int,int> belongsto;
+    vector<int> vsegments;
     vector<Asset> vassets;
 
     const Ratings *ratings;

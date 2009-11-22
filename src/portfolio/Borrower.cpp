@@ -29,7 +29,7 @@
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interest &interest_,
-               const Date &d1, const Date &d2) : auxasset(&segmentations_)
+               const Date &d1, const Date &d2) : vsegments(0), auxasset(&segmentations_)
 {
   // setting external objects references
   ratings = &(ratings_);
@@ -41,7 +41,7 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
 
   // cleaning containers
   vassets.clear();
-  belongsto.clear();
+  vsegments = vector<int>(segmentations_.size(), 0);
 
   // setting default values
   irating = -1;
@@ -151,7 +151,7 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   if (isEqual(name_,"borrower")) {
 
     // reseting auxiliar variables (flushing data)
-    auxasset = Asset(NULL);
+    auxasset = Asset(segmentations);
 
     // filling implicit segment
     try
@@ -266,21 +266,15 @@ void ccruncher::Borrower::addBelongsTo(int isegmentation, int isegment) throw(Ex
 void ccruncher::Borrower::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
+  assert(isegmentation < (int)vsegments.size());
   assert(isegment >= 0);
 
-  if (getSegment(isegmentation) > 0)
+  if (vsegments[isegmentation] > 0)
   {
     throw Exception("trying to reinsert a defined segmentation");
   }
 
-  if (isegment > 0)
-  {
-    belongsto[isegmentation] = isegment;
-  }
-  else
-  {
-    // isegment=0 (rest segment) is the default segment, not inserted
-  }
+  vsegments[isegmentation] = isegment;
 }
 
 //===========================================================================
@@ -288,7 +282,7 @@ void ccruncher::Borrower::insertBelongsTo(int isegmentation, int isegment) throw
 //===========================================================================
 bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 {
-  return ((getSegment(isegmentation)==isegment)?true:false);
+  return (vsegments[isegmentation]==isegment);
 }
 
 //===========================================================================
@@ -296,17 +290,9 @@ bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 //===========================================================================
 int ccruncher::Borrower::getSegment(int isegmentation)
 {
-  map<int,int>::iterator pos = belongsto.find(isegmentation);
-
-  if (pos != belongsto.end())
-  {
-    return pos->second;
-  }
-  else
-  {
-    // by default belongs to segment 'rest' (0)
-    return 0;
-  }
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int)vsegments.size());
+  return vsegments[isegmentation];
 }
 
 //===========================================================================

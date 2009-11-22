@@ -30,13 +30,14 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs) : ptimes(0) , plosses(0)
+ccruncher::Asset::Asset(Segmentations *segs) : vsegments(0), ptimes(0), plosses(0)
 {
+  assert(segs != NULL);
   id = "NON_ASSIGNED";
   name = "NO_NAME";
   segmentations = segs;
   data.clear();
-  belongsto.clear();
+  vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   mindate = Date(1,1,1);
   maxdate = Date(1,1,1);
@@ -385,21 +386,15 @@ void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Excep
 void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
+  assert(isegmentation < (int) vsegments.size());
   assert(isegment >= 0);
 
-  if (getSegment(isegmentation) > 0)
+  if (vsegments[isegmentation] > 0)
   {
     throw Exception("trying to reinsert a defined segmentation");
   }
 
-  if (isegment > 0)
-  {
-    belongsto[isegmentation] = isegment;
-  }
-  else
-  {
-    // isegment=0 (rest segment) is the default segment, not inserted
-  }
+  vsegments[isegmentation] = isegment;
 }
 
 //===========================================================================
@@ -407,7 +402,7 @@ void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Ex
 //===========================================================================
 bool ccruncher::Asset::belongsTo(int isegmentation, int isegment)
 {
-  return ((getSegment(isegmentation)==isegment)?true:false);
+  return (vsegments[isegmentation]==isegment);
 }
 
 //===========================================================================
@@ -415,17 +410,9 @@ bool ccruncher::Asset::belongsTo(int isegmentation, int isegment)
 //===========================================================================
 int ccruncher::Asset::getSegment(int isegmentation)
 {
-  map<int,int>::iterator pos = belongsto.find(isegmentation);
-
-  if (pos != belongsto.end())
-  {
-    return pos->second;
-  }
-  else
-  {
-    // by default belongs to segment 'rest' (0)
-    return 0;
-  }
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int) vsegments.size());
+  return vsegments[isegmentation];
 }
 
 //===========================================================================

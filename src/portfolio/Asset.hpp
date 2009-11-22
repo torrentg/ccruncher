@@ -57,7 +57,7 @@ class Asset : public ExpatHandlers
     // maximum event date
     Date maxdate;
     // segmentation-segment relations
-    map<int,int> belongsto;
+    vector<int> vsegments;
     // cashflow values
     vector<DateValues> data;
     // pointer to segmentations list
