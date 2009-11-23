@@ -59,14 +59,6 @@ ccruncher::Borrower::~Borrower()
 }
 
 //===========================================================================
-// getAssets
-//===========================================================================
-vector<Asset> & ccruncher::Borrower::getAssets()
-{
-  return vassets;
-}
-
-//===========================================================================
 // insert an asset into list
 //===========================================================================
 void ccruncher::Borrower::insertAsset(Asset &val) throw(Exception)
@@ -283,16 +275,6 @@ void ccruncher::Borrower::insertBelongsTo(int isegmentation, int isegment) throw
 bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 {
   return (vsegments[isegmentation]==isegment);
-}
-
-//===========================================================================
-// getSegment
-//===========================================================================
-int ccruncher::Borrower::getSegment(int isegmentation)
-{
-  assert(isegmentation >= 0);
-  assert(isegmentation < (int)vsegments.size());
-  return vsegments[isegmentation];
 }
 
 //===========================================================================

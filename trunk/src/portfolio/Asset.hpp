@@ -34,6 +34,7 @@
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "portfolio/DateValues.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -116,6 +117,52 @@ class Asset : public ExpatHandlers
     void epend(ExpatUserData &, const char *);
 
 };
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// getSegment
+//===========================================================================
+inline int ccruncher::Asset::getSegment(int isegmentation)
+{
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int) vsegments.size());
+  return vsegments[isegmentation];
+}
+
+//===========================================================================
+// getLoss
+// force=true --> loss is computed and stored in variable loss, return loss
+// force=false -> returns loss variable value
+//===========================================================================
+inline double ccruncher::Asset::getLoss(const Date &at, bool force)
+{
+  if (!force) return loss;
+  else loss = 0.0;
+
+  int length = (int) ptimes.size();
+
+  if (at < mindate || maxdate < at || length == 0)
+  {
+    loss = 0.0;
+  }
+  else if (ptimes[length-1] < at)
+  {
+    loss = 0.0;
+  }
+  else 
+  {
+    for(int i=0; i<length; i++) 
+    {
+      if (at <= ptimes[i]) 
+      {
+        loss = plosses[i];
+        break;
+      }
+    }
+  }
+  return loss;
+}
 
 //---------------------------------------------------------------------------
 
