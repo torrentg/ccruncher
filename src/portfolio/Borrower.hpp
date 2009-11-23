@@ -36,6 +36,7 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -94,6 +95,24 @@ class Borrower : public ExpatHandlers
 
 // comparation operator
 bool operator <  (const Borrower&, const Borrower&);
+
+//===========================================================================
+// getAssets
+//===========================================================================
+inline vector<Asset> & ccruncher::Borrower::getAssets()
+{
+  return vassets;
+}
+
+//===========================================================================
+// getSegment
+//===========================================================================
+inline int ccruncher::Borrower::getSegment(int isegmentation)
+{
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int)vsegments.size());
+  return vsegments[isegmentation];
+}
 
 //---------------------------------------------------------------------------
 
