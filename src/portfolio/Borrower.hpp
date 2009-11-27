@@ -60,8 +60,8 @@ class Borrower : public ExpatHandlers
     const Interest *interest;
     Date date1;
     Date date2;
-    Asset auxasset;
-
+    Asset *auxasset;
+    
     void insertAsset(Asset &) throw(Exception);
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 

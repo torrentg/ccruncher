@@ -29,7 +29,7 @@
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interest &interest_,
-               const Date &d1, const Date &d2) : vsegments(0), auxasset(&segmentations_)
+               const Date &d1, const Date &d2) : vsegments(0)
 {
   // setting external objects references
   ratings = &(ratings_);
@@ -38,6 +38,7 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   interest = &(interest_);
   date1 = d1;
   date2 = d2;
+  auxasset = NULL;
 
   // cleaning containers
   vassets.clear();
@@ -56,6 +57,10 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
 ccruncher::Borrower::~Borrower()
 {
   // nothing to do
+  if (auxasset != NULL) {
+    delete auxasset;
+    auxasset = NULL;
+  }
 }
 
 //===========================================================================
@@ -126,8 +131,8 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
     insertBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
-    auxasset = Asset(segmentations);
-    eppush(eu, &auxasset, name_, attributes);
+    auxasset = new Asset(segmentations);
+    eppush(eu, auxasset, name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -143,7 +148,13 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   if (isEqual(name_,"borrower")) {
 
     // reseting auxiliar variables (flushing data)
-    auxasset = Asset(segmentations);
+    if (auxasset != NULL) {
+      delete auxasset;
+      auxasset = NULL;
+    }
+
+    // shrinking memory
+    vector<Asset>(vassets.begin(),vassets.end()).swap(vassets);
 
     // filling implicit segment
     try
@@ -179,7 +190,7 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"asset")) {
-    insertAsset(auxasset);
+    insertAsset(*auxasset);
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
