@@ -49,6 +49,10 @@ class Asset : public ExpatHandlers
 
   private:
 
+    // segmentation-segment relations
+    vector<int> vsegments;
+    // last computed loss
+    double loss;
     // asset identifier
     string id;
     // asset name
@@ -57,8 +61,6 @@ class Asset : public ExpatHandlers
     Date mindate;
     // maximum event date
     Date maxdate;
-    // segmentation-segment relations
-    vector<int> vsegments;
     // cashflow values
     vector<DateValues> data;
     // pointer to segmentations list
@@ -69,8 +71,6 @@ class Asset : public ExpatHandlers
     vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
-    // last computed loss
-    double loss;
 
     // returns recovery at given date
     double getRecovery(Date d);

@@ -386,7 +386,8 @@ void ccruncher::Asset::deleteData()
 {
   data.clear();
   // incredible but true, this shrink memory
-  std::vector<DateValues>(data.begin(), data.end()).swap(data);
+  //std::vector<DateValues>(data.begin(), data.end()).swap(data);
+  std::vector<DateValues>(0).swap(data);
 }
 
 //===========================================================================
