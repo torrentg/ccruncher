@@ -51,38 +51,58 @@ class Borrower : public ExpatHandlers
 
   private:
 
+    // segmentation-segment relations
     vector<int> vsegments;
+    // borrower assets list
     vector<Asset> vassets;
-
+    // pointer to ratings object (used by parser)
     const Ratings *ratings;
+    // pointer to sectors object (used by parser)
     const Sectors *sectors;
+    // pointer to segmentations object (used by parser)
     Segmentations *segmentations;
+    // pointer to interest object (used by parser)
     const Interest *interest;
+    // initial simulation date
     Date date1;
+    // ending simulation date
     Date date2;
+    // auxiliar asset (used by parser)
     Asset *auxasset;
-    
+
+    // insert a asset    
     void insertAsset(Asset &) throw(Exception);
+    // insert a segmentation-segment relation
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
 
   public:
 
+    // borrower rating
     int irating;
+    // borrower sector
     int isector;
+    // borrower identifier
     string id;
+    // borrower name
     string name;
 
+    // constructor
     Borrower(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
+    // destructor
     ~Borrower();
 
+    // return the asset list
     vector<Asset> & getAssets();
+    // indicates if this borrower has cashflows in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
-
+    // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
+    // check if belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment);
+    // given a segmentation returns the segment
     int getSegment(int isegmentation);
-
+    // check if a borrower is less than other (based on rating)
     static bool less(const Borrower *left, const Borrower *right);
 
     /** ExpatHandlers methods declaration */
