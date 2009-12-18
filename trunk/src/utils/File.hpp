@@ -45,14 +45,19 @@ class File
     // non-instantiable class
     File() {};
 
-
   public:
 
+    // normalize path
     static string normalizePath(const string &) throw(Exception);
+    // returns working directory
     static string getWorkDir() throw(Exception);
+    // indicates if exist a directory
     static bool existDir(const string &);
+    // create a directory
     static void makeDir(const string &) throw(Exception);
+    // indicates if a path is absolute
     static bool isAbsolutePath(const string &);
+    // check file status
     static void checkFile(const string &pathname, const string &smode) throw(Exception);
 
 };

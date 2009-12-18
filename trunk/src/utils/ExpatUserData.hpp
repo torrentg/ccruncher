@@ -50,18 +50,17 @@ class ExpatUserData
 
   private:
 
-    /** internal class */
+    // internal class
     class ExpatUserDataToken
     {
       public:
 
-        /** token name related to handler */
+        // token name related to handler
         string name;
-
-        /** pointer to class handlers container */
+        // pointer to class handlers container
         ExpatHandlers *handlers;
 
-        /** constructor */
+        // constructor
         ExpatUserDataToken(string &n, ExpatHandlers *h)
         {
           name = n;
@@ -69,40 +68,30 @@ class ExpatUserData
         }
     };
 
-
   private:
 
-    /** expat xml parser */
+    // expat xml parser
     XML_Parser xmlparser;
-
-    /** stack of handlers */
+    // stack of handlers
     stack<ExpatUserDataToken> pila;
-
 
   public:
 
-    /** void constructor */
+    // void constructor
     ExpatUserData();
-
-    /** contructor */
+    // contructor
     ExpatUserData(XML_Parser xmlparser_);
-
-    /** destructor */
+    // destructor
     ~ExpatUserData();
-
-    /** returns parser */
+    // returns parser
     XML_Parser getParser();
-
-    /** returns current handlers */
+    // returns current handlers
     ExpatHandlers* getCurrentHandlers();
-
-    /** returns current name */
+    // returns current name
     string & getCurrentName();
-
-    /** removeCurrentHandlers */
+    // removeCurrentHandlers
     void removeCurrentHandlers();
-
-    /** setCurrentHandlers */
+    // setCurrentHandlers
     void setCurrentHandlers(string name, ExpatHandlers *eh);
 
 };

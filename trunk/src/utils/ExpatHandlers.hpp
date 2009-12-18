@@ -41,32 +41,46 @@ class ExpatUserData; // defined in file ExpatUserData.hpp
 
 class ExpatHandlers
 {
+
   private:
 
+    // returns the value of the given attribute
     char * getAttributeValue(const char **atts, const string &attname) const;
-
 
   protected:
 
+    // removes current handlers from stack
     void epback(ExpatUserData &eud);
+    // push handlers to stack
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
+    // stops the parser
     void epstop(ExpatUserData &eud);
-
+    // string comparison
     bool isEqual(const char *, const string &);
+    // returns the number of attributes
     int getNumAttributes(const char **atts);
+    // returns attribute value as string
     string getStringAttribute(const char **atts, const string &attname, const string &defval);
+    // returns attribute value as int
     int getIntAttribute(const char **atts, const string &attname, const int &defval);
+    // returns attribute value as long
     long getLongAttribute(const char **atts, const string &attname, const long &defval);
+    // returns attribute value as double
     double getDoubleAttribute(const char **atts, const string &attname, const double &defval);
+    // returns attribute value as date
     Date getDateAttribute(const char **atts, const string &attname, const Date &defval);
+    // returns attribute value as boolean
     bool getBooleanAttribute(const char **atts, const string &attname, const bool &defval);
-
 
   public:
 
+    // destructor
     virtual ~ExpatHandlers();
+    // handler for open tag
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
+    // handler for closed tag
     virtual void epend(ExpatUserData &eud, const char *name) = 0;
+    // handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
 
 };

@@ -53,14 +53,7 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Excepti
 ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exception)
 {
   matrix = NULL;
-  setSectors(x.sectors);
-  for(int i=0; i<n; i++) 
-  {
-    for(int j=0; j<n; j++) 
-    {
-      matrix[i][j] = x.matrix[i][j];
-    }
-  }
+  *this = x;
 }
 
 //===========================================================================
@@ -72,9 +65,34 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 }
 
 //===========================================================================
+// assignement operator
+//===========================================================================
+CorrelationMatrix& ccruncher::CorrelationMatrix::operator = (const CorrelationMatrix &x)
+{
+  n = x.n;
+
+  if (n == 0) 
+  {
+    matrix = NULL;
+    return *this;
+  }
+  else
+  {
+    setSectors(x.sectors);
+    for(int i=0; i<n; i++) 
+    {
+      for(int j=0; j<n; j++) 
+      {
+        matrix[i][j] = x.matrix[i][j];
+      }
+    }
+  }
+}
+
+//===========================================================================
 // set sectors
 //===========================================================================
-void ccruncher::CorrelationMatrix::setSectors(Sectors &sectors_) throw(Exception)
+void ccruncher::CorrelationMatrix::setSectors(const Sectors &sectors_) throw(Exception)
 {
   sectors = sectors_;
   n = sectors.size();

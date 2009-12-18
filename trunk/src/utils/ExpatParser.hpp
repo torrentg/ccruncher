@@ -43,39 +43,33 @@ class ExpatParser
 
   private:
 
-    /** parser expat object */
+    // parser expat object
     XML_Parser xmlparser;
-
-    /** user data */
+    // user data
     ExpatUserData userdata;
-
-    /** current tag (internal use) */
+    // current tag (internal use)
     static const char *current_tag;
 
-    /** startElement function catcher */
+  private:
+  
+    // startElement function catcher
     static void startElement(void *ud, const char *name, const char **atts);
-
-    /** endElement function catcher */
+    // endElement function catcher
     static void endElement(void *ud, const char *name);
-
-    /** characterData Handler function */
+    // characterData Handler function
     static void characterData(void *ud, const char *s, int len) throw(Exception);
 
   public:
 
-    /** constructor (xml=string) */
+    // constructor
     ExpatParser();
-
-    /** destructor */
+    // destructor
     ~ExpatParser();
-
-    /** parse xml */
+    // parse xml
     void parse(string xmlcontent, ExpatHandlers *eh) throw(Exception);
-
-    /** parse xml */
+    // parse xml
     void parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception);
-
-    /** returns main object */
+    // returns main object
     void * getObject();
 
 };

@@ -43,7 +43,6 @@ class PowMatrix
     // non-instantiable class
     PowMatrix() {};
 
-
   public:
 
     // matrix pow function

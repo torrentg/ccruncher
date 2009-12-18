@@ -42,26 +42,37 @@ class Exception : public std::exception
 
   private:
 
+    // retrieves stack trace
     std::string retrieveStackTrace();
 
   protected:
 
+    // stack trace info
     std::string stacktrace;
+    // exception message
     std::string msg;
 
   public:
 
+    // constructor
     Exception(const std::string&);
+    // constructor
     Exception(const ccruncher::Exception &);
+    // constructor
     Exception(const std::exception &);
+    // constructor
     Exception(const ccruncher::Exception &, const std::string&);
+    // constructor
     Exception(const std::exception &, const std::string&);
+    // constructor
     Exception(const char *);
-
+    // destructor
     ~Exception() throw ();
-
+    // returns exception message
     const char * what() const throw();
+    // returns exception message
     std::string toString() const;
+    // returns stack trace
     std::string getStackTrace() const;
 
 };

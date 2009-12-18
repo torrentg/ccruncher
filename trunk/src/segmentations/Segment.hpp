@@ -47,6 +47,8 @@ class Segment
     // segment name
     string name;
 
+  public:
+  
     // constructor
     Segment();
     // destructor

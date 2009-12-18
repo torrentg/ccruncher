@@ -54,6 +54,8 @@ class BlockMatrixChol
     // condition number of the cholesky matrix
     double cnum;
 
+  private:
+  
     // alloc memory, does checks, etc.
     void init(double **A, int *n, int m) throw(Exception);
     // adapted cholesky algorithm
@@ -65,21 +67,25 @@ class BlockMatrixChol
     // dealloc memory
     void reset();
 
-
   public:
 
-    // constructors
+    // default constructor
     BlockMatrixChol();
+    // copy constructor
     BlockMatrixChol(const BlockMatrixChol &x);
+    // constructor
     BlockMatrixChol(double **A, int *n, int m) throw(Exception);
     // destructor
     ~BlockMatrixChol();
     // assignement operator
     BlockMatrixChol& operator = (const BlockMatrixChol &x);
-
+    // returns matrix dimension (N)
     int getDim();
+    // returns matrix condition number
     double getConditionNumber();
+    // returns matrix element
     double get(int row, int col);
+    // multiplies this matrix by a vector
     void mult(double *x, double *ret);
 
 };

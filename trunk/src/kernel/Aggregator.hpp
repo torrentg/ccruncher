@@ -57,7 +57,6 @@ class Aggregator
     vector<Borrower *> &borrowers;
     // output file stream
     ofstream fout;
-
     // number of borrowers considered
     long numborrowers;
     // number of segments
@@ -66,34 +65,39 @@ class Aggregator
     long cont;
     // buffer counter
     long icont;
-
     // cumulated values (size = numsegments x buffersize)
     vector<double> cvalues;
     // number of rows in buffer (1 row = numsegments values)
     int bufferrows;
-
     // indicates if rest segment has borrowers/assets
     bool printRestSegment;
     // internal timer (control time from last flush)
     Timer timer;
 
-    // internal functions
+  private:
+  
+    // indicates if this segmentation has the 'rest' segment
     bool hasRestSegment();
+    // appends borrowers
     void append1(Date *defaulttimes, bool force);
+    // append assets
     void append2(Date *defaulttimes, bool force);
-
 
   public:
 
-    // constructors & destructors
+    // constructor
     Aggregator(int, Segmentation&, vector<Borrower *> &, long);
+    // destructor
     ~Aggregator();
-
-    // other methods
+    // set properties
     void setOutputProperties(const string &filename, bool force) throw(Exception);
+    // append data to aggregator
     bool append(Date *defaulttimes, bool force=true) throw(Exception);
+    // append raw data
     long appendRawData(double *data, int datasize) throw(Exception);
+    // flush data to disk
     bool flush() throw(Exception);
+    // returns buffer size
     long getBufferSize();
 
 };

@@ -74,7 +74,6 @@ ccruncher::Survival::Survival(const Ratings &ratings_, int numrows, int *imonths
     }
   }
 
-  // final tasks
   validate();
   fillHoles();
   computeInvTable();
@@ -95,10 +94,12 @@ void ccruncher::Survival::setRatings(const Ratings &ratings_) throw(Exception)
 {
   ratings = (Ratings *) &ratings_;
   nratings = ratings->size();
-  if (nratings <= 0) {
+  if (nratings <= 0) 
+  {
     throw Exception("invalid number of ratings (" + Format::int2string(nratings) + " <= 0)");
   }
-  else {
+  else 
+  {
     ddata = vector<vector<double> >(nratings);
     idata = vector<vector<double> >(nratings);
     idata.insert(idata.begin(), nratings, vector<double>(ISURVFNUMBINS+1, NAN));
@@ -245,7 +246,8 @@ void ccruncher::Survival::validate() throw(Exception)
   // checking default rating survival function values (always 0)
   for (unsigned int j=0;j<ddata[nratings-1].size();j++)
   {
-    if (isnan(ddata[nratings-1][j])) {
+    if (isnan(ddata[nratings-1][j])) 
+    {
       ddata[nratings-1][0] = 0.0;
     }
     if (fabs(ddata[nratings-1][j]) > EPSILON)

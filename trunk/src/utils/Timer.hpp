@@ -37,23 +37,39 @@ namespace ccruncher {
 
 class Timer
 {
+
   private:
 
+     // flag indicating if the timer is running
      bool running_;
+     // start time (if running)
      double start_time_;
+     // acumulated time
      double total_;
-     double seconds();
      //double secs_per_tick;
 
+  private:
+  
+     // number of seconds
+     double seconds();
+
   public:
+  
+     // constructor
      Timer(bool started=false);
+     // starts the timer
      void start();
+     // stops the timer
      double stop();
+     // returns the elapsed time
      double read();
+     // resume timer
      void resume();
-     int running();
+     // reset the timer
      void reset();
+     // format seconds in format hh:mm:ss.mmm
      static string format(double seconds_);
+     
 };
 
 //---------------------------------------------------------------------------

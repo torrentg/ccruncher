@@ -41,11 +41,18 @@ class DateValues
 
   public:
 
+    // date where values take place
     Date date;
+    // cashflow value
     double cashflow;
+    // recovery value
     double recovery;
 
+  public:
+  
+    // default constructor
     DateValues();
+    // constructor
     DateValues(Date date, double cashflow, double recovery);
 
 };

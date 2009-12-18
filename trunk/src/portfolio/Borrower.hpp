@@ -70,11 +70,12 @@ class Borrower : public ExpatHandlers
     // auxiliar asset (used by parser)
     Asset *auxasset;
 
+  private: 
+  
     // insert a asset    
     void insertAsset(Asset &) throw(Exception);
     // insert a segmentation-segment relation
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
-
 
   public:
 
@@ -87,11 +88,12 @@ class Borrower : public ExpatHandlers
     // borrower name
     string name;
 
+  public:
+  
     // constructor
     Borrower(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     // destructor
     ~Borrower();
-
     // return the asset list
     vector<Asset> & getAssets();
     // indicates if this borrower has cashflows in date1-date2
@@ -104,9 +106,9 @@ class Borrower : public ExpatHandlers
     int getSegment(int isegmentation);
     // check if a borrower is less than other (based on rating)
     static bool less(const Borrower *left, const Borrower *right);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

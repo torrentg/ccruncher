@@ -54,6 +54,8 @@ class Survival : public ExpatHandlers
     // pointer to ratings table
     Ratings *ratings;
 
+  private:
+  
     // insert a survival value
     void insertValue(const string &r1, int t, double val) throw(Exception);
     // validate object content
@@ -67,7 +69,6 @@ class Survival : public ExpatHandlers
     // inverse function
     double inverse1(const int irating, double val) const;
 
-
   public:
 
     // defaults constructor
@@ -78,7 +79,6 @@ class Survival : public ExpatHandlers
     Survival(const Ratings &, int, int *, double**) throw(Exception);
     // destructor
     ~Survival();
-
     // returns ratings size
     int size() const;
     // set ratings
@@ -91,9 +91,9 @@ class Survival : public ExpatHandlers
     int getMinCommonTime() const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

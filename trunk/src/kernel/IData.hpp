@@ -53,50 +53,81 @@ class IData : public ExpatHandlers
 
   private:
 
+    // simulation title
     string title;
+    // simulation description
     string description;
+    // simulation parameters
     Params params;
+    // simulation yield interest
     Interest interest;
+    // simulation ratings
     Ratings ratings;
+    // simulation transition matrix
     TransitionMatrix transitions;
+    // simulation survival functinos
     Survival survival;
+    // simulation sectors
     Sectors sectors;
+    // simulation correlations
     CorrelationMatrix correlations;
+    // simulation segmentations
     Segmentations segmentations;
+    // simulation portfolio
     Portfolio *portfolio;
-
-    // portfolio can be huge (memory, time, ...)
+    // indicates if portfolio will be parsed or not
     bool parse_portfolio;
+    // indicates if root tag exists
     bool hasmaintag;
+    // timer used to determine parsing times
     Timer timer;
 
+  private:
+  
+    // intialize class
     void init();
+    // dealloc memory
     void release();
+    // validate simulation data
     void validate() throw(Exception);
 
   public:
 
+    // default constructor
     IData();
+    // constructor
     IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
+    // destructor
     ~IData();
-
-    /** get methods */
+    // returns simulation title
     string & getTitle();
+    // returns simulation description
     string & getDescription();
+    // returns simulation params
     Params & getParams();
+    // returns simulation yield interest
     Interest & getInterest();
+    // returns simulation ratings
     Ratings & getRatings();
+    // returns simulation transition matrix
     TransitionMatrix & getTransitionMatrix();
+    // returns simulation survival functions
     Survival & getSurvival();
+    // returns simulation sectors
     Sectors & getSectors();
+    // returns simulation correlation matrix
     CorrelationMatrix & getCorrelationMatrix();
+    // returns simulation correlations
     Segmentations & getSegmentations();
+    // returns simulation portfolio
     Portfolio & getPortfolio();
-    /** has methods */
+    // indicates if survival tag is defined
     bool hasSurvival() const;
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
+    // ExpatHandlers method
     void epdata(ExpatUserData &eu, const char *name_, const char *data, int len);
 
 };
