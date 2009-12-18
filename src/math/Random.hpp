@@ -43,18 +43,19 @@ class Random
     // RNG object
     gsl_rng *rng;
 
+  private:
+  
     // RNG initialization
     void init();
 
-
   public:
 
-    // constructors
+    // default constructor
     Random();
+    // constructor
     Random(long seed);
     // destructor
     ~Random();
-
     // set RNG seed
     void setSeed(long);
     // returns N(0,1)

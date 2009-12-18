@@ -50,11 +50,12 @@ class Ratings : public ExpatHandlers
     // auxiliary variable (used by parser)
     Rating auxrating;
 
+  private:
+  
     // insert a rating in the list
     void insertRating(const Rating &) throw(Exception);
     // validate object content
     void validations() throw(Exception);
-
 
   public:
 
@@ -62,7 +63,6 @@ class Ratings : public ExpatHandlers
     Ratings();
     // destructor
     ~Ratings();
-
     // return the number of ratings
     int size() const;
     // return the index of the rating
@@ -73,9 +73,9 @@ class Ratings : public ExpatHandlers
     Rating& operator [] (const string &name) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

@@ -46,7 +46,6 @@ class Arrays
     // non-instantiable class
     Arrays() {};
 
-
   public:
 
     // alloc/dealloc array methods

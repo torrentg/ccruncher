@@ -46,19 +46,27 @@ class Parser
     // non-instantiable class
     Parser() {};
 
-
   public:
 
+    // convert string to int
     static int intValue(const string &) throw(Exception);
+    // convert string to long
     static long longValue(const string &) throw(Exception);
+    // convert string to double
     static double doubleValue(const string &) throw(Exception);
+    // convert string to date
     static Date dateValue(const string &) throw(Exception);
+    // convert string to bool
     static bool boolValue(const string &) throw(Exception);
-
+    // convert string to int
     static int intValue(const char *) throw(Exception);
+    // convert string to long
     static long longValue(const char *) throw(Exception);
+    // convert string to double
     static double doubleValue(const char *) throw(Exception);
+    // convert string to date
     static Date dateValue(const char *) throw(Exception);
+    // convert string to bool
     static bool boolValue(const char *) throw(Exception);
 
 };

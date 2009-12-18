@@ -44,16 +44,23 @@ class Strings
     // non-instantiable class
     Strings() {};
 
-
   public:
 
+    // tokenize a string
     static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
+    // right trim
     static string rtrim(string s);
+    // left trim
     static string ltrim(string s);
+    // trim
     static string trim(string s);
+    // converts to upper case
     static string uppercase(string str);
+    // converts to lower case
     static string lowercase(string str);
+    // creates a filler with the given char
     static string filler(int, char);
+    // returns a blank string with the given length
     static string blanks(int);
 };
 

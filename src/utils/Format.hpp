@@ -45,13 +45,17 @@ class Format
     // non-instantiable class
     Format() {};
 
-
   public:
 
+    // converts int to string
     static string int2string(const int val);
+    // converts long to string
     static string long2string(const long val);
+    // converts double to string
     static string double2string(const double val);
+    // converts date to string
     static string date2string(const ccruncher::Date &val);
+    // converts boolean to string
     static string bool2string(const bool &val);
 
 };

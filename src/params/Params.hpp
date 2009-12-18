@@ -52,7 +52,6 @@ class Params : public ExpatHandlers
     // validate object content
     void validate(void) const throw(Exception);
 
-
   public:
 
     // time.0 param value
@@ -72,20 +71,21 @@ class Params : public ExpatHandlers
     // portfolio.onlyActiveClients param value
     bool onlyactive;
 
+  public:
+  
     // constructor
     Params();
     // destructor
     ~Params();
-
     // returns copula type as string (gaussian or t)
     string getCopulaType() const throw(Exception);
     // returns copula param (if exists)
     double getCopulaParam() const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

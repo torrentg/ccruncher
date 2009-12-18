@@ -72,6 +72,8 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
 
+  private:
+  
     // returns recovery at given date
     double getRecovery(Date d);
     // returns cashflow sum from given date
@@ -81,14 +83,12 @@ class Asset : public ExpatHandlers
     // insert a segmentation-segment relation
     void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
-
   public:
 
     // constructor
     Asset(Segmentations *);
     // destructor
     ~Asset();
-
     // return asset id
     string getId(void) const;
     // returns asset name
@@ -111,9 +111,9 @@ class Asset : public ExpatHandlers
     Date getMinDate();
     // returns maximum event date
     Date getMaxDate();
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

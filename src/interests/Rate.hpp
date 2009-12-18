@@ -47,13 +47,15 @@ class Rate : public ExpatHandlers
     // yearly rate value (0.025 -> 2.5% per year)
     double r;
 
+  public:
+  
     // default constructor
     Rate();
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

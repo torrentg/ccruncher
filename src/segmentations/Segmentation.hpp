@@ -57,9 +57,10 @@ class Segmentation : public ExpatHandlers
     // if generic pattern (eg: *) -> modificable=true, false otherwise
     bool modificable;
 
+  private:
+  
     // inserts a segment into the list
     void insertSegment(const Segment &) throw(Exception);
-
 
   public:
 
@@ -70,11 +71,12 @@ class Segmentation : public ExpatHandlers
     // type of components (borrowers/assets)
     components_t components;
 
+  public:
+  
     // constructor
     Segmentation();
     // destructor
     ~Segmentation();
-
     // return the number of segments
     int size() const;
     // [] operator
@@ -87,9 +89,9 @@ class Segmentation : public ExpatHandlers
     string getXML(int) const throw(Exception);
     // reset object content
     void reset();
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

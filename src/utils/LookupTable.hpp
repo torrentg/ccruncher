@@ -42,19 +42,28 @@ class LookupTable
 
   private:
 
+    // minimum x value
     double xmin;
+    // maximum x value
     double xmax;
+    // number of steps
     double steplength;
+    // array of values
     vector<double> values;
+    // array of slopes
     vector<double> slope;
-
 
   public:
 
+    // default constructor
     LookupTable();
+    // constructor
     LookupTable(double minv, double maxv, const vector<double> &vals) throw(Exception);
+    // lookup table initialization
     void init(double minv, double maxv, const vector<double> &vals) throw(Exception);
+    // number of steps
     int size() const;
+    // evalue the function at x value
     double evalue(double x) const;
 
 };

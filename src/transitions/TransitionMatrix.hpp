@@ -58,13 +58,14 @@ class TransitionMatrix : public ExpatHandlers
     // regularization error
     double rerror;
 
+  private:
+
     // insert a transition value into the matrix
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
     // computes Cumulated Default Forward Rate
     void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
-
 
   public:
 
@@ -80,7 +81,6 @@ class TransitionMatrix : public ExpatHandlers
     ~TransitionMatrix();
     // assignement operator
     TransitionMatrix& operator = (const TransitionMatrix &other);
-
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)
@@ -95,11 +95,6 @@ class TransitionMatrix : public ExpatHandlers
     int evalue(const int irating, const double val) const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
-    void epstart(ExpatUserData &, const char *, const char **);
-    void epend(ExpatUserData &, const char *);
-
     // regularize the transition matrix
     void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
@@ -108,6 +103,10 @@ class TransitionMatrix : public ExpatHandlers
     Survival getSurvival(int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
+    // ExpatHandler method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandler method
+    void epend(ExpatUserData &, const char *);
 
 };
 

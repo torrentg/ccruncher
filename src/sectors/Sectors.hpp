@@ -49,11 +49,12 @@ class Sectors : public ExpatHandlers
     // auxiliary variable (used by parser)
     Sector auxsector;
 
+  private:
+  
     // add a sector to list
     void insertSector(const Sector &) throw(Exception);
     // validate list
     void validations() throw(Exception);
-
 
   public:
 
@@ -61,7 +62,6 @@ class Sectors : public ExpatHandlers
     Sectors();
     // destructor
     ~Sectors();
-
     // return the number of sectors
     int size() const;
     // return the index of the sector
@@ -72,9 +72,9 @@ class Sectors : public ExpatHandlers
     Sector& operator [] (const string &name) throw(Exception);
     // returns object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

@@ -48,13 +48,15 @@ class Sector : public ExpatHandlers
     // sector description
     string desc;
 
+  public:
+  
     // default constructor
     Sector();
     // serialize object constent as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

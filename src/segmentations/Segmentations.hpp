@@ -48,11 +48,12 @@ class Segmentations : public ExpatHandlers
     // auxiliary variable (used by parser)
     Segmentation auxsegmentation;
 
+  private:
+  
     // insert a segmentation to list
     void insertSegmentation(Segmentation &) throw(Exception);
     // validate object content
     void validate() throw(Exception);
-
 
   public:
 
@@ -60,7 +61,6 @@ class Segmentations : public ExpatHandlers
     Segmentations();
     // destructor
     ~Segmentations();
-
     // return the number of segmentations
     int size() const;
     // [] operator
@@ -71,9 +71,9 @@ class Segmentations : public ExpatHandlers
     void addSegment(const string segmentation, const string segment) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };

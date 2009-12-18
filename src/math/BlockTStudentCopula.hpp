@@ -42,36 +42,57 @@ namespace ccruncher {
 
 class BlockTStudentCopula : public Copula
 {
+
   private:
 
+    // number of elements
     int n;
+    // number of sectors
     int m;
+    // number of degrees of freedom
     double ndf;
+    // cholesky matrix
     BlockMatrixChol chol;
+    // internal buffer
     double *aux1;
+    // internal buffer
     double *aux2;
-
+    // random number generator
     Random random;
+    // lookup table
     LookupTable lut;
 
-    void reset();
-    void finalize();
-    double transform(double val);
-    void randNm();
-    void initLUT() throw(Exception);
+  private:
 
+    // reset member values
+    void reset();
+    // dealloc buffers
+    void finalize();
+    // transform correlation
+    double transform(double val);
+    // generates correlated normal numbers
+    void randNm();
+    // initialize the lookup table
+    void initLUT() throw(Exception);
 
   public:
 
-    int size();
-    void next();
-    double get(int);
-    void setSeed(long);
-    double getConditionNumber();
-
+    // constructor
     BlockTStudentCopula(double **C, int *n, int m, double ndf) throw(Exception);
+    // copy constructor
     BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);
+    // destructor
     ~BlockTStudentCopula();
+    // returns the copula size (n)
+    int size();
+    // simulates a copula realization
+    void next();
+    // returns i-th component
+    double get(int);
+    // random number generator seed
+    void setSeed(long);
+    // returns the cholesky condition number
+    double getConditionNumber();
 
 };
 

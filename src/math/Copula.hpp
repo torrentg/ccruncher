@@ -38,12 +38,17 @@ class Copula
 
   public:
 
+    // copula size
     virtual int size() = 0;
+    // simulates a copula realization
     virtual void next() = 0;
+    // returns i-th component
     virtual double get(int) = 0;
+    // random number generator seed
     virtual void setSeed(long) = 0;
-
+    // destructor
     virtual ~Copula() {};
+
 };
 
 //---------------------------------------------------------------------------

@@ -52,6 +52,8 @@ class Interest : public ExpatHandlers
     // auxiliary variable (used by parser)
     Rate auxrate;
 
+  private:
+
     // insert a rate to list
     void insertRate(Rate &) throw(Exception);
     // given a time, returns the rate (interpolated)
@@ -63,7 +65,6 @@ class Interest : public ExpatHandlers
     // returns upsilon function value
     double getUpsilon(const double r, const double t) const;
 
-
   public:
 
     // default constructor
@@ -72,18 +73,17 @@ class Interest : public ExpatHandlers
     Interest(const Date &);
     // destructor
     ~Interest();
-
     // numbers of rates
     int size() const;
     // returns initial date
     Date getDate0() const;
     // returns upsilon value
     double getUpsilon(const Date &date1, const Date &date2) const;
-    // seriealize object content as xml
+    // serialize object content as xml
     string getXML(int) const throw(Exception);
-
-    /** ExpatHandlers methods declaration */
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };
