@@ -27,7 +27,7 @@
 #endif
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "utils/config.h"
 #endif
 
 #ifdef __GNUC__
