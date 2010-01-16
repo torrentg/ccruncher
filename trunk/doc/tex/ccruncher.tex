@@ -575,7 +575,7 @@ In CCruncher the master sends the RNG seed to each slave
 ($seed_i = seed + i \cdot 30001$) and waits for results (the simulated values of
 the portfolio loss) from slaves that store them in a file. When one of the two stop 
 criteria is achieved (maximum execution time exceded or maximum number of 
-simulations reached) the master sends a stop signal to the slaves and leaves.
+simulations) the master sends a stop signal to the slaves and leaves.
 
 
 %===========================================================================
@@ -652,7 +652,7 @@ Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0
 \end{center}
 \end{table}
 
-The default times sectorial correlations are:
+The sectorial default times correlations are:
 
 \begin{table}[!hb]
 \begin{center}
@@ -700,8 +700,8 @@ regularizes the matrix applying the algorithm described in appendix \ref{ap:regu
 To simplify this example we replace negative values by $0$.
 \newline
 
-One time we dispose $1$-month transition matrix, we compute the survivals
-values at month $1$ doing ($d$ subindex means default column):
+We compute the survivals values at month $1$ using the $1$-month transition matrix 
+($d$ subindex means default column):
 \begin{displaymath}
 S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} = 
 \left( 
@@ -822,7 +822,7 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 \right)
 \end{displaymath}
 
-If we repeat the same procedure for the $360$ months we obtain the survival
+We repeat the same procedure for the $360$ months to obtain the survival
 functions exposed at table \ref{example.survivals}.
 
 \clearpage 
