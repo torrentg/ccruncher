@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CreditCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2009 Gerard Torrent
+// Copyright (C) 2004-2010 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -477,7 +477,7 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "   ccruncher is Copyright (C) 2003-2009 Gerard Torrent and licensed\n"
+  "   ccruncher is Copyright (C) 2003-2010 Gerard Torrent and licensed\n"
   "     under the GNU General Public License, version 2. more info at\n"
   "               http://www.generacio.com/ccruncher\n"
   << endl;
