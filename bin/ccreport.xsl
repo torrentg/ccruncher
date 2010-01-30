@@ -4,7 +4,7 @@
 ===========================================================================
 #
 # CreditCruncher - A portfolio credit risk valorator
-# Copyright (C) 2008-2009 Gerard Torrent
+# Copyright (C) 2008-2010 Gerard Torrent
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
