@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 1.5 (???. 2009)
+version 1.5 (???. 2010)
 --------------------------
   * added condition number computation to cholesky matrix
   * added transition matrix regularization 
@@ -17,6 +17,7 @@ version 1.5 (???. 2009)
   * in xml input file, attribute desc renamed to decription
   * in xml input file, tag params renamed to parameters
   * in xml input file, renamed implicit segmentations
+  * improved code related with segmentations
 
 version 1.4 (Jul. 2009)
 --------------------------

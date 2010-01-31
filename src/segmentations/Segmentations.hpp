@@ -51,7 +51,7 @@ class Segmentations : public ExpatHandlers
   private:
   
     // insert a segmentation to list
-    void insertSegmentation(Segmentation &) throw(Exception);
+    int insertSegmentation(Segmentation &) throw(Exception);
     // validate object content
     void validate() throw(Exception);
 
@@ -65,10 +65,8 @@ class Segmentations : public ExpatHandlers
     int size() const;
     // [] operator
     Segmentation& operator [] (int i);
-    // [] operator
-    Segmentation& operator [] (const string &name) throw(Exception);
-    // add a segmentation-segment
-    void addSegment(const string segmentation, const string segment) throw(Exception);
+    // return the index of the given segmentation
+    int indexOf(const string &sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
     // ExpatHandlers method

@@ -124,7 +124,7 @@ void ccruncher_test::AssetTest::test1()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
-        <belongs-to segmentation='offices' segment='0001'/>\n\
+        <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
           <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
@@ -427,7 +427,7 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
   ASSERT(asset->belongsTo(0, 0)); // portfolio-rest
   ASSERT(asset->belongsTo(2, 1)); // asset-op1
   ASSERT(asset->belongsTo(5, 1)); // product-bond
-  ASSERT(asset->belongsTo(6, 1)); // office-0001
+  ASSERT(asset->belongsTo(6, 3)); // office-0003
 
   vector <DateValues> &data = asset->getData();
   ASSERT_EQUALS(7, (int) data.size()); // num events

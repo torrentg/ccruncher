@@ -80,8 +80,6 @@ class Asset : public ExpatHandlers
     double getCashflowSum(Date d);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
-    // insert a segmentation-segment relation
-    void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
   public:
 

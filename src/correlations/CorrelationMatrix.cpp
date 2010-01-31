@@ -65,7 +65,7 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 }
 
 //===========================================================================
-// assignement operator
+// assignment operator
 //===========================================================================
 CorrelationMatrix& ccruncher::CorrelationMatrix::operator = (const CorrelationMatrix &x)
 {
@@ -87,6 +87,8 @@ CorrelationMatrix& ccruncher::CorrelationMatrix::operator = (const CorrelationMa
       }
     }
   }
+
+  return *this;
 }
 
 //===========================================================================

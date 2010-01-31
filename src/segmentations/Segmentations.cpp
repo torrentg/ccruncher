@@ -61,19 +61,19 @@ Segmentation& ccruncher::Segmentations::operator []  (int i)
 }
 
 //===========================================================================
-// [] operator. returns element by name
+// return the index of the given segmentation
 //===========================================================================
-Segmentation& ccruncher::Segmentations::operator []  (const string &name) throw(Exception)
+int ccruncher::Segmentations::indexOf(const string &sname) throw(Exception)
 {
   for (unsigned int i=0;i<vsegmentations.size();i++)
   {
-    if (vsegmentations[i].name == name)
+    if (vsegmentations[i].name == sname)
     {
-      return vsegmentations[i];
+      return (int)i;
     }
   }
 
-  throw Exception("segmentation " + name + " not found");
+  throw Exception("segmentation " + sname + " not found");
 }
 
 //===========================================================================
@@ -90,7 +90,7 @@ void ccruncher::Segmentations::validate() throw(Exception)
 //===========================================================================
 // insert a new segmentation in list
 //===========================================================================
-void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
+int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
   // checking coherence
   for (unsigned int i=0;i<vsegmentations.size();i++)
@@ -101,10 +101,20 @@ void ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Excep
     }
   }
 
+  // checking special segmentations
+  if (val.name == "borrowers" && val.components != borrower)
+  {
+    throw Exception("segmentation 'borrowers' needs components of type borrower");
+  }
+  if (val.name == "assets" && val.components != asset)
+  {
+    throw Exception("segmentation 'assets' needs components of type asset");
+  }
+
   try
   {
-    val.order = vsegmentations.size();
     vsegmentations.push_back(val);
+    return vsegmentations.size()-1;
   }
   catch(std::exception &e)
   {
@@ -147,14 +157,6 @@ void ccruncher::Segmentations::epend(ExpatUserData &eu, const char *name_)
   else {
     throw Exception("unexpected end tag " + string(name_));
   }
-}
-
-//===========================================================================
-// addSegment
-//===========================================================================
-void ccruncher::Segmentations::addSegment(const string segmentation, const string segment) throw(Exception)
-{
-  (*this)[segmentation].addSegment(segment);
 }
 
 //===========================================================================

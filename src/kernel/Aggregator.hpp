@@ -49,8 +49,8 @@ class Aggregator
 
   private:
 
-    // aggregator identifier
-    int iaggregator;
+    // segmentation index
+    int isegmentation;
     // segmentation object
     Segmentation &segmentation;
     // borrowers list
@@ -78,10 +78,6 @@ class Aggregator
   
     // indicates if this segmentation has the 'rest' segment
     bool hasRestSegment();
-    // appends borrowers
-    void append1(Date *defaulttimes, bool force);
-    // append assets
-    void append2(Date *defaulttimes, bool force);
 
   public:
 
