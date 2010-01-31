@@ -8,6 +8,7 @@ Current works
 
 Future works
 -------------------
+  * Multi-thread support
   * improve functional tests
      - exmaples based on real data
      - script to run functional tests

@@ -125,10 +125,10 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
       throw Exception("invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = (*segmentations)[ssegmentation].order;
-    int isegment = (*segmentations)[ssegmentation][ssegment].order;
+    int isegmentation = (*segmentations).indexOf(ssegmentation);
+    int isegment = (*segmentations)[isegmentation].indexOf(ssegment);
 
-    insertBelongsTo(isegmentation, isegment);
+    addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
     auxasset = new Asset(segmentations);
@@ -147,50 +147,37 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"borrower")) {
 
-    // reseting auxiliar variables (flushing data)
-    if (auxasset != NULL) {
-      delete auxasset;
-      auxasset = NULL;
-    }
+    assert(auxasset == NULL);
 
     // shrinking memory
     vector<Asset>(vassets.begin(),vassets.end()).swap(vassets);
 
     // filling implicit segment
-    try
-    {
-      if ((*segmentations)["borrowers"].components == borrower) {
-        segmentations->addSegment("borrowers", id);
-        int isegmentation = (*segmentations)["borrowers"].order;
-        int isegment = (*segmentations)["borrowers"][id].order;
-        insertBelongsTo(isegmentation, isegment);
-      }
-    }
-    catch(...)
-    {
+    try {
+      int isegmentation = (*segmentations).indexOf("borrowers");
+      int isegment = (*segmentations)[isegmentation].addSegment(id);
+      addBelongsTo(isegmentation, isegment);
+    } 
+    catch(...) {
       // segmentation 'borrowers' not found
     }
 
-    // filling implicit segment
-    try
-    {
-      if ((*segmentations)["portfolio"].components == borrower) {
-        int isegmentation = (*segmentations)["portfolio"].order;
-        int isegment = (*segmentations)["portfolio"]["rest"].order;
-        insertBelongsTo(isegmentation, isegment);
+    // important: coding borrower-segments as asset-segments
+    for (int i=0; i<(int)segmentations->size(); i++) {
+      if ((*segmentations)[i].components == borrower) {
+        for(int j=0; j<(int)vassets.size(); j++) {
+          vassets[j].addBelongsTo(i, vsegments[i]);
+        }
       }
     }
-    catch(...)
-    {
-      // segmentation 'portfolio' not found
-    }
-
   }
   else if (isEqual(name_,"belongs-to")) {
     // nothing to do
   }
   else if (isEqual(name_,"asset")) {
     insertAsset(*auxasset);
+    delete auxasset;
+    auxasset = NULL;
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -259,14 +246,6 @@ bool ccruncher::operator < (const Borrower &x1, const Borrower &x2)
 // addBelongsTo
 //===========================================================================
 void ccruncher::Borrower::addBelongsTo(int isegmentation, int isegment) throw(Exception)
-{
-  insertBelongsTo(isegmentation, isegment);
-}
-
-//===========================================================================
-// insertBelongsTo
-//===========================================================================
-void ccruncher::Borrower::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
   assert(isegmentation < (int)vsegments.size());

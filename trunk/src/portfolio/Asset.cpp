@@ -209,10 +209,10 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = (*segmentations)[ssegmentation].order;
-    int isegment = (*segmentations)[ssegmentation][ssegment].order;
+    int isegmentation = (*segmentations).indexOf(ssegmentation);
+    int isegment = (*segmentations)[isegmentation].indexOf(ssegment);
 
-    insertBelongsTo(isegmentation, isegment);
+    addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"data")) {
     if (getNumAttributes(attributes) != 0) {
@@ -257,34 +257,13 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     sort(data.begin(), data.end());
 
     // filling implicit segment
-    try
-    {
-      if ((*segmentations)["assets"].components == asset)
-      {
-        segmentations->addSegment("assets", id);
-        int isegmentation = (*segmentations)["assets"].order;
-        int isegment = (*segmentations)["assets"][id].order;
-        insertBelongsTo(isegmentation, isegment);
-      }
+    try {
+      int isegmentation = (*segmentations).indexOf("assets");
+      int isegment = (*segmentations)[isegmentation].addSegment(id);
+      addBelongsTo(isegmentation, isegment);
     }
-    catch(...)
-    {
+    catch(...) {
       // segmentation 'assets' not defined
-    }
-
-    // filling implicit segment
-    try
-    {
-      if ((*segmentations)["portfolio"].components == asset)
-      {
-        int isegmentation = (*segmentations)["portfolio"].order;
-        int isegment = (*segmentations)["portfolio"]["rest"].order;
-        insertBelongsTo(isegmentation, isegment);
-      }
-    }
-    catch(...)
-    {
-      // segmentation 'portfolio' not found
     }
   }
   else if (isEqual(name_,"belongs-to")) {
@@ -342,14 +321,6 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 // addBelongsTo
 //===========================================================================
 void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
-{
-  insertBelongsTo(isegmentation, isegment);
-}
-
-//===========================================================================
-// insertBelongsTo
-//===========================================================================
-void ccruncher::Asset::insertBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
   assert(isegmentation < (int) vsegments.size());

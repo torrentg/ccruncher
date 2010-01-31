@@ -52,7 +52,7 @@ int ccruncher::Segmentation::size() const
 //===========================================================================
 // [] operator
 //===========================================================================
-Segment& ccruncher::Segmentation::operator []  (int i)
+string& ccruncher::Segmentation::operator []  (int i)
 {
   // assertions
   assert(i >= 0 && i < (int) vsegments.size());
@@ -62,15 +62,15 @@ Segment& ccruncher::Segmentation::operator []  (int i)
 }
 
 //===========================================================================
-// [] operator. returns segment by name
+// return the index of the given segment
 //===========================================================================
-Segment& ccruncher::Segmentation::operator []  (const string &sname) throw(Exception)
+int ccruncher::Segmentation::indexOf(const string &sname) throw(Exception)
 {
   for (unsigned int i=0;i<vsegments.size();i++)
   {
-    if (vsegments[i].name == sname)
+    if (vsegments[i] == sname)
     {
-      return vsegments[i];
+      return (int)i;
     }
   }
 
@@ -83,22 +83,18 @@ Segment& ccruncher::Segmentation::operator []  (const string &sname) throw(Excep
 void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
+  insertSegment("rest"); // adding catcher segment
   modificable = false;
-  order = -1;
   name = "";
   components = borrower;
-
-  // adding catcher segment
-  Segment catcher = Segment(0, "rest");
-  insertSegment(catcher);
 }
 
 //===========================================================================
 // insertSegment
 //===========================================================================
-void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
+int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
 {
-  if (val.name == "")
+  if (sname == "")
   {
     throw Exception("trying to insert a segment with invalid name (void name)");
   }
@@ -106,14 +102,14 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
   // checking coherence
   for (unsigned int i=0;i<vsegments.size();i++)
   {
-    if (vsegments[i].name == val.name)
+    if (vsegments[i] == sname)
     {
-      throw Exception("segment " + vsegments[i].name + " repeated");
+      throw Exception("segment " + vsegments[i] + " repeated");
     }
   }
 
   // checking for patterns
-  if (val.name == "*")
+  if (sname == "*")
   {
     if (name != "borrowers" && name != "assets")
     {
@@ -122,14 +118,15 @@ void ccruncher::Segmentation::insertSegment(const Segment &val) throw(Exception)
     else
     {
       modificable = true;
-      return;
+      return -1;
     }
   }
 
   // inserting value
   try
   {
-    vsegments.push_back(val);
+    vsegments.push_back(sname);
+    return vsegments.size()-1;
   }
   catch(std::exception &e)
   {
@@ -175,8 +172,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
       throw Exception("tag <segment> with invalid name attribute");
     }
     else {
-      Segment aux(vsegments.size(), sname);
-      insertSegment(aux);
+      insertSegment(sname);
     }
   }
   else {
@@ -204,7 +200,7 @@ void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // addSegment
 //===========================================================================
-void ccruncher::Segmentation::addSegment(const string segname) throw(Exception)
+int ccruncher::Segmentation::addSegment(const string &sname) throw(Exception)
 {
   if (modificable == false)
   {
@@ -212,8 +208,7 @@ void ccruncher::Segmentation::addSegment(const string segname) throw(Exception)
   }
   else
   {
-    Segment aux = Segment(vsegments.size(), segname);
-    insertSegment(aux);
+    return insertSegment(sname);
   }
 }
 
@@ -241,9 +236,9 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   {
     for (unsigned int i=0;i<vsegments.size();i++)
     {
-      if (vsegments[i].name != "rest")
+      if (vsegments[i] != "rest")
       {
-        ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i].name + "'/>\n";
+        ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i] + "'/>\n";
       }
     }
   }

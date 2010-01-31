@@ -397,14 +397,6 @@
 				Name="segmentations"
 				>
 				<File
-					RelativePath="src\segmentations\Segment.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\segmentations\Segment.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\segmentations\Segmentation.cpp"
 					>
 				</File>

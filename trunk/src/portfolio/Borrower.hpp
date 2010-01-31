@@ -74,8 +74,6 @@ class Borrower : public ExpatHandlers
   
     // insert a asset    
     void insertAsset(Asset &) throw(Exception);
-    // insert a segmentation-segment relation
-    void insertBelongsTo(int isegmentation, int tsegment) throw(Exception);
 
   public:
 

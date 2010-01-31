@@ -32,14 +32,17 @@
 #define CVALUES(segment,simulation) cvalues[segment+simulation*numsegments]
 
 //===========================================================================
-// void constructor
+// constructor
+// note: we don't diferentiate between asset-segmentations or borrower-segmentations
+// because borrower segments has been recoded as asset segments (see Borrower code)
+// note: all segmentations are treated as asset-segmentations
 //===========================================================================
-ccruncher::Aggregator::Aggregator(int id, Segmentation &segmentation_, 
+ccruncher::Aggregator::Aggregator(int isegmentation_, Segmentation &segmentation_, 
   vector<Borrower *> &borrowers_, long n) : segmentation(segmentation_), 
   borrowers(borrowers_)
 {
-  assert(id >= 0);
-  iaggregator = id;
+  assert(isegmentation_ >= 0);
+  isegmentation = isegmentation_;
   assert(n >= 0);
   numborrowers = n;
   numsegments = segmentation.size();
@@ -78,65 +81,8 @@ ccruncher::Aggregator::~Aggregator()
 bool ccruncher::Aggregator::append(Date *defaulttimes, bool force) throw(Exception)
 {
   assert(defaulttimes != NULL);
-  assert(segmentation.components==borrower || segmentation.components==asset);
 
-  if (segmentation.components == borrower)
-  {
-    append1(defaulttimes, force);
-  }
-  else 
-  {
-    append2(defaulttimes, force);
-  }
-
-  // flushing if buffer is full
-  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
-  {
-    return flush();
-  }
-  else
-  {
-    return true;
-  }
-}
-
-//===========================================================================
-// append1
-// when segmentation components are borrowers
-//===========================================================================
-void ccruncher::Aggregator::append1(Date *defaulttimes, bool force)
-{
   // initializing values
-  int isegmentation = segmentation.order;
-  for(unsigned int i=0; i<numsegments; i++) 
-  {
-    CVALUES(i,icont) = 0.0;
-  }
-
-  // filling values
-  for(unsigned int i=0; i<numborrowers; i++)
-  {
-    int isegment = borrowers[i]->getSegment(isegmentation);
-    vector<Asset> &assets = borrowers[i]->getAssets();
-    for(int j=(int)assets.size()-1; j>=0; j--) 
-    {
-      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i], force);
-    }
-  }
-
-  // incrementing counters
-  icont++;
-  cont++;
-}
-
-//===========================================================================
-// append2
-// when segmentation components are assets
-//===========================================================================
-void ccruncher::Aggregator::append2(Date *defaulttimes, bool force)
-{
-  // initializing values
-  int isegmentation = segmentation.order;
   for(unsigned int i=0; i<numsegments; i++) 
   {
     CVALUES(i,icont) = 0.0;
@@ -156,6 +102,16 @@ void ccruncher::Aggregator::append2(Date *defaulttimes, bool force)
   // incrementing counters
   icont++;
   cont++;
+
+  // flushing if buffer is full
+  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
+  {
+    return flush();
+  }
+  else
+  {
+    return true;
+  }
 }
 
 //===========================================================================
@@ -212,7 +168,7 @@ bool ccruncher::Aggregator::flush() throw(Exception)
     int task=0;
 
     // sending info
-    MPI::COMM_WORLD.Send(&iaggregator, 1, MPI::INT, 0, MPI_TAG_INFO);
+    MPI::COMM_WORLD.Send(&isegmentation, 1, MPI::INT, 0, MPI_TAG_INFO);
     // sending data
     MPI::COMM_WORLD.Send(&(cvalues[0]), icont*numsegments, MPI::DOUBLE, 0, MPI_TAG_DATA);
     // receiving task
@@ -284,7 +240,7 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
     {
       for(int i=(printRestSegment?0:1); i<numsegments; i++)
       {
-        fout << "\"" << segmentation[i].name << "\"" << (i<numsegments-1?", ":"");
+        fout << "\"" << segmentation[i] << "\"" << (i<numsegments-1?", ":"");
       }
     }
     fout << endl;
@@ -301,29 +257,14 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
 //===========================================================================
 bool ccruncher::Aggregator::hasRestSegment()
 {
-  int isegmentation = segmentation.order;
-
-  if (segmentation.components == borrower)
+  for(unsigned int i=0; i<numborrowers; i++)
   {
-    for(unsigned int i=0; i<numborrowers; i++)
+    vector<Asset> &assets = borrowers[i]->getAssets();
+    for(unsigned int j=0; j<assets.size(); j++) 
     {
-      if (borrowers[i]->getSegment(isegmentation) == 0) 
+      if (assets[j].getSegment(isegmentation) == 0) 
       {
         return true;
-      }
-    }
-  }
-  else 
-  {
-    for(unsigned int i=0; i<numborrowers; i++)
-    {
-      vector<Asset> &assets = borrowers[i]->getAssets();
-      for(unsigned int j=0; j<assets.size(); j++) 
-      {
-        if (assets[j].getSegment(isegmentation) == 0) 
-        {
-          return true;
-        }
       }
     }
   }
@@ -339,3 +280,4 @@ long ccruncher::Aggregator::getBufferSize()
 {
   return bufferrows*numsegments*sizeof(double);
 }
+

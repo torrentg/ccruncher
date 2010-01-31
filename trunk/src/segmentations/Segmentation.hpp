@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "segmentations/Segment.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -53,19 +52,17 @@ class Segmentation : public ExpatHandlers
   private:
 
     // list of segments
-    vector<Segment> vsegments;
+    vector<string> vsegments;
     // if generic pattern (eg: *) -> modificable=true, false otherwise
     bool modificable;
 
   private:
   
     // inserts a segment into the list
-    void insertSegment(const Segment &) throw(Exception);
+    int insertSegment(const string &) throw(Exception);
 
   public:
 
-    // segmentation order
-    int order;
     // segmentation name
     string name;
     // type of components (borrowers/assets)
@@ -80,11 +77,11 @@ class Segmentation : public ExpatHandlers
     // return the number of segments
     int size() const;
     // [] operator
-    Segment& operator [] (int i);
-    // [] operator
-    Segment& operator [] (const string &sname) throw(Exception);
+    string& operator [] (int i);
+    // return the index of the given segment
+    int indexOf(const string &sname) throw(Exception);
     // add a segment to list
-    void addSegment(const string segname) throw(Exception);
+    int addSegment(const string &sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
     // reset object content

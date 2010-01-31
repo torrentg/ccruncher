@@ -49,7 +49,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/DateValues.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
-    ../src/segmentations/Segment.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
     ../src/utils/Parser.cpp\
@@ -90,7 +89,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/DateValues.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
-    ../src/segmentations/Segment.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
     ../src/utils/Parser.hpp\
@@ -183,7 +181,6 @@ tests_SOURCES = \
     ../src/interests/Interest.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
-    ../src/segmentations/Segment.cpp\
     ../src/survival/Survival.cpp\
     \
     ../src/utils/ArraysTest.hpp\
@@ -251,7 +248,6 @@ tests_SOURCES = \
     ../src/interests/Interest.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
-    ../src/segmentations/Segment.hpp\
     ../src/survival/Survival.hpp\
     ../src/utils/ccmpi.h\
     ../src/utils/config.h
@@ -290,7 +286,6 @@ samplegen_SOURCES = \
     ../src/portfolio/DateValues.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
-    ../src/segmentations/Segment.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
     ../src/utils/Parser.cpp\
@@ -331,7 +326,6 @@ samplegen_SOURCES = \
     ../src/portfolio/DateValues.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
-    ../src/segmentations/Segment.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
     ../src/utils/Parser.hpp\

@@ -467,7 +467,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   for(int i=0;i<segmentations.size();i++)
   {
     string filename = File::normalizePath(fpath) + segmentations[i].name + ".csv";
-    Aggregator *aggregator = new Aggregator(aggregators.size(), segmentations[i], *borrowers, N);
+    Aggregator *aggregator = new Aggregator(i, segmentations[i], *borrowers, N);
     aggregator->setOutputProperties(filename, bforce);
     aggregators.push_back(aggregator);
   }
