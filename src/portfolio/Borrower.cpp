@@ -38,7 +38,6 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   interest = &(interest_);
   date1 = d1;
   date2 = d2;
-  auxasset = NULL;
 
   // cleaning containers
   vassets.clear();
@@ -57,33 +56,31 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
 ccruncher::Borrower::~Borrower()
 {
   // nothing to do
-  if (auxasset != NULL) {
-    delete auxasset;
-    auxasset = NULL;
-  }
 }
 
 //===========================================================================
-// insert an asset into list
+// check last asset
 //===========================================================================
-void ccruncher::Borrower::insertAsset(Asset &val) throw(Exception)
+void ccruncher::Borrower::prepareLastAsset() throw(Exception)
 {
+  int ila = vassets.size()-1;
+
   // checking coherence
-  for (unsigned int i=0;i<vassets.size();i++)
+  for (unsigned int i=0;i<ila;i++)
   {
     Asset aux = vassets[i];
 
-    if (aux.getId() == val.getId())
+    if (vassets[i].getId() == vassets[ila].getId())
     {
-      throw Exception("asset identifier " + val.getId() + " repeated");
+      throw Exception("asset identifier " + vassets[ila].getId() + " repeated");
     }
   }
 
+  // preparing asset
   try
   {
-    val.precomputeLosses(date1, date2, *interest);
-    val.deleteData();
-    vassets.push_back(val);
+    vassets[ila].precomputeLosses(date1, date2, *interest);
+    vassets[ila].deleteData();
   }
   catch(std::exception &e)
   {
@@ -131,8 +128,8 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
     addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
-    auxasset = new Asset(segmentations);
-    eppush(eu, auxasset, name_, attributes);
+    vassets.push_back(Asset(segmentations));
+    eppush(eu, &vassets[vassets.size()-1], name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -146,8 +143,6 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"borrower")) {
-
-    assert(auxasset == NULL);
 
     // shrinking memory
     vector<Asset>(vassets.begin(),vassets.end()).swap(vassets);
@@ -175,9 +170,7 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"asset")) {
-    insertAsset(*auxasset);
-    delete auxasset;
-    auxasset = NULL;
+    prepareLastAsset();
   }
   else {
     throw Exception("unexpected end tag " + string(name_));

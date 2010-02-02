@@ -67,13 +67,11 @@ class Borrower : public ExpatHandlers
     Date date1;
     // ending simulation date
     Date date2;
-    // auxiliar asset (used by parser)
-    Asset *auxasset;
 
   private: 
   
     // insert a asset    
-    void insertAsset(Asset &) throw(Exception);
+    void prepareLastAsset() throw(Exception);
 
   public:
 
