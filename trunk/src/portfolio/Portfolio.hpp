@@ -78,8 +78,6 @@ class Portfolio : public ExpatHandlers
     void insertBorrower(Borrower *) throw(Exception);
     // validate portfolio
     void validations() throw(Exception);
-    // move the i-th borrower to the last position in the list
-    void mtlp(unsigned int);
 
   public:
 
@@ -89,10 +87,6 @@ class Portfolio : public ExpatHandlers
     ~Portfolio();
     // returns the borrowers list
     vector<Borrower *> &getBorrowers();
-    // returns the number of active borrowers
-    int getNumActiveBorrowers(const Date &, const Date &) throw(Exception);
-    // sort the borrower list (by sector and rating)
-    void sortBorrowers(const Date &from, const Date &to, bool onlyactive) throw(Exception);
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
     // ExpatHandlers method

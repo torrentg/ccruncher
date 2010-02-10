@@ -69,9 +69,9 @@ void ccruncher_test::SegmentationTest::test1()
 
   ASSERT(5 == sobj.size());
 
-  ASSERT(0 == sobj.indexOf("rest"));
-  ASSERT(1 == sobj.indexOf("0001"));
-  ASSERT(2 == sobj.indexOf("0002"));
-  ASSERT(3 == sobj.indexOf("0003"));
-  ASSERT(4 == sobj.indexOf("0004"));
+  ASSERT(0 == sobj.indexOfSegment("rest"));
+  ASSERT(1 == sobj.indexOfSegment("0001"));
+  ASSERT(2 == sobj.indexOfSegment("0002"));
+  ASSERT(3 == sobj.indexOfSegment("0003"));
+  ASSERT(4 == sobj.indexOfSegment("0004"));
 }

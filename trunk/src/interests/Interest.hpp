@@ -60,8 +60,6 @@ class Interest : public ExpatHandlers
     double getValue(const double) const;
     // transforms from date to index
     double date2idx(const Date &date1) const;
-    // transforms from index to date
-    Date idx2date(int t) const;
     // returns upsilon function value
     double getUpsilon(const double r, const double t) const;
 

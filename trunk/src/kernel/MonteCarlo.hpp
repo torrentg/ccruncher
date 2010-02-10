@@ -29,11 +29,10 @@
 #include <vector>
 #include "kernel/IData.hpp"
 #include "kernel/Aggregator.hpp"
-#include "ratings/Ratings.hpp"
-#include "transitions/TransitionMatrix.hpp"
-#include "sectors/Sectors.hpp"
+#include "kernel/SimulatedData.hpp"
 #include "math/Copula.hpp"
 #include "portfolio/Borrower.hpp"
+#include "portfolio/Asset.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
@@ -50,22 +49,16 @@ class MonteCarlo
 
   private:
 
-    // list of ratings
-    const Ratings *ratings;
-    // list of sectors
-    const Sectors *sectors;
-    // list of borrowers
-    vector<Borrower *> *borrowers;
+    // list of simulated borrowers
+    vector<SimulatedBorrower> borrowers;
+    // list of simulated assets
+    vector<SimulatedAsset> assets;
     // list of aggregators
     vector<Aggregator *> aggregators;
     // maximum number of iterations
-    long MAXITERATIONS;
+    long maxiterations;
     // maximum execution time
-    long MAXSECONDS;
-    // number of borrowers (taking into account onlyActiveBorrowers flag)
-    long N;
-    // iterations counter
-    long CONT;
+    long maxseconds;
     // initial date
     Date time0;
     // date where risk is computed
@@ -76,8 +69,6 @@ class MonteCarlo
     Survival survival;
     // copula used to simulate correlations
     Copula *copula;
-    // simulated time-to-default per borrower (size = N)
-    Date *ttd;
     // management flag for antithetic method (default=false)
     bool reversed;
     // hash (0=non show hashes) (default=0)
@@ -86,37 +77,29 @@ class MonteCarlo
     string fpath;
     // force file overwriting flag
     bool bforce;
-    // list simulated copula values flag
+    // trace simulated copula values flag
     bool blcopulas;
-    // list simulated default times
+    // trace simulated default times
     bool bldeftime;
     // file where copula values are stored (if blcopulas flag is set)
     ofstream fcopulas;
     // file where default times are stored (if bldeftime flag is set)
     ofstream fdeftime;
-    // maximum number of segments in a aggregator * sizeof(double)
+    // maximum aggregator buffer size (used by MPI code)
     long ccmaxbufsize;
 
   private:
   
-    // internal members
-    void reset();
-    // alloc memory
-    void alloc(int) throw(Exception);
     // initialize params
     void initParams(IData &) throw(Exception);
     // initialize borrowers
     void initBorrowers(IData &) throw(Exception);
-    // initialize ratings
-    void initRatings(IData &) throw(Exception);
-    // initialize sectors
-    void initSectors(IData &) throw(Exception);
+    // initialize assets
+    void initAssets(IData &) throw(Exception);
     // initialize survival functions
     void initSurvival(IData &) throw(Exception);
     // initialize copula
     void initCopula(IData &idata, long) throw(Exception);
-    // initialize buffers
-    void initTimeToDefaultArray(int) throw(Exception);
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // generate random numbers (Monte Carlo)
@@ -124,7 +107,9 @@ class MonteCarlo
     // simulate default times
     void simulate();
     // evalue portfolio
-    bool evalue() throw(Exception);
+    void evalue();
+    // aggregate value
+    bool aggregate() throw(Exception);
     // simulate default time
     Date simTimeToDefault(int iborrower);
     // returns the copula value
@@ -138,11 +123,11 @@ class MonteCarlo
     // prints current copula values
     void printCopulaValues() throw(Exception);
     // prints current default times
-    void printDefaultTimes(Date *) throw(Exception);
+    void printDefaultTimes() throw(Exception);
 
   public:
 
-    // default constructor
+    // constructor
     MonteCarlo();
     // destructor
     ~MonteCarlo();

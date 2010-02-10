@@ -256,6 +256,14 @@
 					RelativePath="src\kernel\MonteCarlo.hpp"
 					>
 				</File>
+				<File
+					RelativePath="src\kernel\SimulatedData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\kernel\SimulatedData.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="math"

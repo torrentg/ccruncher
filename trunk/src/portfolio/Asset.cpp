@@ -30,20 +30,16 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs) : vsegments(0), ptimes(0), plosses(0)
+ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data(), ptimes(), plosses()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
   name = "NO_NAME";
   segmentations = segs;
-  data.clear();
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
-  mindate = Date(1,1,1);
-  maxdate = Date(1,1,1);
-  plosses.clear();
-  ptimes.clear();
-  loss = 0.0;
+  date = Date(1,1,1);
+  lastdate = Date(1,1,1);
 }
 
 //===========================================================================
@@ -71,13 +67,13 @@ string ccruncher::Asset::getName(void) const
 }
 
 //===========================================================================
-// get recovery obtained at date d
+// get recovery at date d
 //===========================================================================
 double ccruncher::Asset::getRecovery(Date d)
 {
   int n = (int) data.size();
 
-  if (d < mindate)
+  if (d < date)
   {
     return 0.0;
   }
@@ -95,14 +91,13 @@ double ccruncher::Asset::getRecovery(Date d)
 
 //===========================================================================
 // getCashflowSum
-// t0: date where cashflow is computed its actual value
 //===========================================================================
 double ccruncher::Asset::getCashflowSum(Date d)
 {
   int n = (int) data.size();
   double ret = 0.0;
 
-  if (d < mindate)
+  if (d < date)
   {
     return 0.0;
   }
@@ -125,30 +120,11 @@ double ccruncher::Asset::getCashflowSum(Date d)
 //===========================================================================
 void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interest &interest)
 {
-  // counting ptimes-plosses size
-  bool hasd2 = false;
-  int num = 0;
-  for (int i=0; i<(int)data.size(); i++) 
-  {
-    if (d1 <= data[i].date && data[i].date <= d2) 
-    {
-      num++;
-    }
-    if (data[i].date == d2) 
-    {
-      hasd2 = true;
-    }
-  }
-  if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
-  {
-    num++;
-  }
-
   // allocating & initializing memory
   ptimes.clear();
   plosses.clear();
-  ptimes.reserve(num);
-  plosses.reserve(num);
+  ptimes.reserve(data.size()+2);
+  plosses.reserve(data.size()+2);
 
   // computing cashflow/recoveries Current Net Value
   for (int i=0; i<(int)data.size(); i++) 
@@ -162,23 +138,34 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   }
 
   // precomputing losses (d1 <= t <= d2)
-  int cont = 0;
   for (int i=0; i<(int)data.size(); i++) 
   {
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
       ptimes.push_back(data[i].date);
       plosses.push_back(getCashflowSum(data[i].date));
-      cont++;
     }
   }
-  if (!hasd2 && mindate <= d2 && d2 <= maxdate) 
+  
+  // adding minimum event date
+  Date mindate = max(date, d1);
+  if (mindate < ptimes.front())
   {
-      ptimes.push_back(d2);
-      plosses.push_back(getCashflowSum(d2));
-      cont++;    
+    ptimes.insert(ptimes.begin(), mindate);
+    plosses.insert(plosses.begin(), getCashflowSum(mindate));
   }
-  assert(num == cont);
+  
+  // adding maximum event date
+  Date maxdate = min(data.back().date, d2);
+  if (ptimes.back() < maxdate)
+  {
+    ptimes.push_back(maxdate);
+    plosses.push_back(getCashflowSum(maxdate));
+  }
+
+  // deallocating unused memory  
+  vector<Date>(ptimes).swap(ptimes);
+  vector<double>(plosses).swap(plosses);
 }
 
 //===========================================================================
@@ -194,8 +181,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     else {
       id = getStringAttribute(attributes, "id", "");
       name = getStringAttribute(attributes, "name", "");
-      mindate = getDateAttribute(attributes, "date", Date(1,1,1));
-      if (id == "" || name == "" || mindate == Date(1,1,1))
+      date = getDateAttribute(attributes, "date", Date(1,1,1));
+      if (id == "" || name == "" || date == Date(1,1,1))
       {
         throw Exception("invalid attributes at <asset>");
       }
@@ -209,8 +196,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = (*segmentations).indexOf(ssegmentation);
-    int isegment = (*segmentations)[isegmentation].indexOf(ssegment);
+    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
@@ -255,11 +242,12 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 
     // sorting events by date
     sort(data.begin(), data.end());
+    lastdate = data.end()->date;
 
     // filling implicit segment
     try {
-      int isegmentation = (*segmentations).indexOf("assets");
-      int isegment = (*segmentations)[isegmentation].addSegment(id);
+      int isegmentation = segmentations->indexOfSegmentation("assets");
+      int isegment = segmentations->getSegmentation(isegmentation).addSegment(id);
       addBelongsTo(isegmentation, isegment);
     }
     catch(...) {
@@ -286,7 +274,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
 {
   // checking if date is previous to creation date
-  if (val.date < mindate)
+  if (val.date < date)
   {
     throw Exception("trying to insert an event with date previous to asset creation date");
   }
@@ -298,12 +286,6 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
     {
       throw Exception("trying to insert an existent date");
     }
-  }
-
-  // filling maxdate
-  if (maxdate < val.date)
-  {
-    maxdate = val.date;
   }
 
   // inserting date-values
@@ -363,17 +345,43 @@ void ccruncher::Asset::deleteData()
 
 //===========================================================================
 // getMinDate
+// be sure that precomputeLosses is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMinDate()
 {
-  return mindate;
+  return ptimes.front();
 }
 
 //===========================================================================
 // getMaxDate
+// be sure that precomputeLosses is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMaxDate()
 {
-  return maxdate;
+  return ptimes.back();
 }
 
+//===========================================================================
+// isActive
+// be sure that precomputeLosses is called before the execution of this method
+//===========================================================================
+bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exception)
+{
+  if (from <= date && date <= to)
+  {
+    return true;
+  }
+  else if (from <= lastdate && lastdate <= to)
+  {
+    return true;
+  }
+  else if (date <= from && to <= lastdate)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+        
