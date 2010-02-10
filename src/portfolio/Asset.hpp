@@ -51,16 +51,14 @@ class Asset : public ExpatHandlers
 
     // segmentation-segment relations
     vector<int> vsegments;
-    // last computed loss
-    double loss;
     // asset identifier
     string id;
     // asset name
     string name;
-    // minimum event date (= creation date)
-    Date mindate;
-    // maximum event date
-    Date maxdate;
+    // asset creation date
+    Date date;
+    // last asset date
+    Date lastdate;
     // cashflow values
     vector<DateValues> data;
     // pointer to segmentations list
@@ -95,8 +93,8 @@ class Asset : public ExpatHandlers
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precompute losses
     void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
-    // returns precomputed loss at requested time node index
-    double getLoss(const Date &at, bool force=true);
+    // returns loss at the given default time
+    double getLoss(const Date &at);
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment
@@ -105,9 +103,11 @@ class Asset : public ExpatHandlers
     int getSegment(int isegmentation);
     // free memory allocated by DateValues
     void deleteData();
-    // returns minimum event date
+    // indicates if this borrower has cashflows in date1-date2
+    bool isActive(const Date &, const Date &) throw(Exception);
+    // returns minimum event date (restricted to precomputed events)
     Date getMinDate();
-    // returns maximum event date
+    // returns maximum event date (restricted to precomputed events)
     Date getMaxDate();
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
@@ -130,23 +130,14 @@ inline int ccruncher::Asset::getSegment(int isegmentation)
 
 //===========================================================================
 // getLoss
-// force=true --> loss is computed and stored in variable loss, return loss
-// force=false -> returns loss variable value
 //===========================================================================
-inline double ccruncher::Asset::getLoss(const Date &at, bool force)
+inline double ccruncher::Asset::getLoss(const Date &at)
 {
-  if (!force) return loss;
-  else loss = 0.0;
-
   int length = (int) ptimes.size();
 
-  if (at < mindate || maxdate < at || length == 0)
+  if (length == 0 || at < ptimes.front() || ptimes.back() < at)
   {
-    loss = 0.0;
-  }
-  else if (ptimes[length-1] < at)
-  {
-    loss = 0.0;
+    return 0.0;
   }
   else 
   {
@@ -154,12 +145,13 @@ inline double ccruncher::Asset::getLoss(const Date &at, bool force)
     {
       if (at <= ptimes[i]) 
       {
-        loss = plosses[i];
-        break;
+        return plosses[i];
       }
     }
   }
-  return loss;
+  
+  assert(false);
+  return 0.0;
 }
 
 //---------------------------------------------------------------------------

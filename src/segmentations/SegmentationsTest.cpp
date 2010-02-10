@@ -85,5 +85,5 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
   ASSERT(7 == sobj.size());
-  ASSERT(0 == sobj.indexOf("portfolio"));
+  ASSERT(0 == sobj.indexOfSegmentation("portfolio"));
 }

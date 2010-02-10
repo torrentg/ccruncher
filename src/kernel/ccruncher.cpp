@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
+                  "ccruncher version and arguments at gerard@generacio.com\n" << endl;
           return shutdown(1);
     }
   }
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gerard@mail.generacio.com\n" << endl;
+            "ccruncher version and arguments at gerard@generacio.com\n" << endl;
     return shutdown(1);
   }
 

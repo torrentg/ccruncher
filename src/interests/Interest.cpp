@@ -105,14 +105,6 @@ double ccruncher::Interest::getValue(const double t) const
 }
 
 //===========================================================================
-// returns date at month t
-//===========================================================================
-Date ccruncher::Interest::idx2date(int t) const
-{
-  return addMonths(date0, t);
-}
-
-//===========================================================================
 // returns index of date date1
 //===========================================================================
 inline double ccruncher::Interest::date2idx(const Date &date1) const

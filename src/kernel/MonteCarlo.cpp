@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <algorithm>
 #include "kernel/MonteCarlo.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
@@ -38,10 +39,19 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo()
+ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators()
 {
-  // setting default values
-  reset();
+  maxseconds = 0L;
+  maxiterations = 0L;
+  antithetic = false;
+  reversed = false;
+  hash = 0;
+  fpath = "path not set";
+  bforce = false;
+  copula = NULL;
+  blcopulas = false;
+  bldeftime = false;
+  ccmaxbufsize = CCMAXBUFSIZE;
 }
 
 //===========================================================================
@@ -53,35 +63,6 @@ ccruncher::MonteCarlo::~MonteCarlo()
 }
 
 //===========================================================================
-// reset
-//===========================================================================
-void ccruncher::MonteCarlo::reset()
-{
-  MAXSECONDS = 0L;
-  MAXITERATIONS = 0L;
-  N = 0L;
-  CONT = 0L;
-  antithetic = false;
-  reversed = false;
-
-  hash = 0;
-  fpath = "path not set";
-  bforce = false;
-
-  ratings = NULL;
-  sectors = NULL;
-  borrowers = NULL;
-
-  copula = NULL;
-  ttd = NULL;
-
-  blcopulas = false;
-  bldeftime = false;
-
-  ccmaxbufsize = CCMAXBUFSIZE;
-}
-
-//===========================================================================
 // release
 //===========================================================================
 void ccruncher::MonteCarlo::release()
@@ -90,12 +71,6 @@ void ccruncher::MonteCarlo::release()
   if (copula != NULL) { 
     delete copula; 
     copula = NULL; 
-  }
-
-  // deallocating workspace array
-  if (ttd != NULL) {
-    Arrays<Date>::deallocVector(ttd);
-    ttd = NULL;
   }
 
   // dropping aggregators elements
@@ -117,7 +92,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw(Exception)
 {
-  if (MAXITERATIONS != 0L)
+  if (maxiterations != 0L)
   {
     throw Exception("Monte Carlo reinitialization not allowed");
   }
@@ -138,20 +113,14 @@ void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw
     // initializing borrowers
     initBorrowers(idata);
 
-    // initializing ratings and transition matrix
-    initRatings(idata);
-
-    // initializing sectors
-    initSectors(idata);
+    // initializing assets
+    initAssets(idata);
 
     // initializing survival functions
     initSurvival(idata);
 
     // initializing copula
     initCopula(idata, idata.getParams().copula_seed);
-
-    // ratings paths allocation
-    initTimeToDefaultArray(N);
 
     if (!only_validation)
     {
@@ -182,12 +151,12 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
   Logger::newIndentLevel();
 
   // max number of seconds
-  MAXSECONDS = idata.getParams().maxseconds;
-  Logger::trace("maximum execution time (in seconds)", Format::long2string(MAXSECONDS));
+  maxseconds = idata.getParams().maxseconds;
+  Logger::trace("maximum execution time (in seconds)", Format::long2string(maxseconds));
 
   // max number of iterations
-  MAXITERATIONS = idata.getParams().maxiterations;
-  Logger::trace("maximum number of iterations", Format::long2string(MAXITERATIONS));
+  maxiterations = idata.getParams().maxiterations;
+  Logger::trace("maximum number of iterations", Format::long2string(maxiterations));
 
   // printing initial date
   time0 = idata.getParams().time0;
@@ -199,9 +168,6 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
   Logger::trace("antithetic mode", Format::bool2string(antithetic));
-
-  // initializing internal variables
-  CONT = 0L;
   reversed = false;
 
   // exit function
@@ -213,6 +179,9 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
 {
+  // doing assertions
+  assert(borrowers.size() == 0);
+
   // setting logger header
   Logger::trace("setting borrowers to simulate", '-');
   Logger::newIndentLevel();
@@ -221,73 +190,79 @@ void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
   Logger::trace("simulate only active borrowers", Format::bool2string(idata.getParams().onlyactive));
   Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
 
-  // sorting borrowers by sector and rating
+  // determining the borrowers to simulate
   bool onlyactive = idata.getParams().onlyactive;
-  idata.getPortfolio().sortBorrowers(time0, timeT, onlyactive);
-
-  // fixing number of borrowers
-  if (idata.getParams().onlyactive)
+  vector<Borrower *> &vborrowers = idata.getPortfolio().getBorrowers();
+  borrowers.reserve(vborrowers.size());
+  for(unsigned int i=0; i<vborrowers.size(); i++)
   {
-    N = idata.getPortfolio().getNumActiveBorrowers(time0, timeT);
+    if (onlyactive)
+    {
+      if (vborrowers[i]->isActive(time0, timeT)) 
+      {
+        borrowers.push_back(SimulatedBorrower(vborrowers[i]));
+      }
+    }
+    else
+    {
+      borrowers.push_back(SimulatedBorrower(vborrowers[i]));
+    }
   }
-  else
-  {
-    N = idata.getPortfolio().getBorrowers().size();
-  }
-
-  Logger::trace("number of simulated borrowers", Format::long2string(N));
+  
+  // important: sorting borrowers list by sector and rating
+  sort(borrowers.begin(), borrowers.end());
+  Logger::trace("number of simulated borrowers", Format::long2string((long)borrowers.size()));
 
   // checking that exist borrowers to simulate
-  if (N == 0)
+  if (borrowers.size() == 0)
   {
     throw Exception("error initializing borrowers: 0 borrowers to simulate");
   }
 
-  // setting borrowers object
-  borrowers = &(idata.getPortfolio().getBorrowers());
+  // exit function
+  Logger::previousIndentLevel();
+}
+
+//===========================================================================
+// initAssets
+//===========================================================================
+void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
+{
+  // doing assertions
+  assert(assets.size() == 0);
+
+  // setting logger header
+  Logger::trace("setting assets to simulate", '-');
+  Logger::newIndentLevel();
 
   // note: this is the place where it must have the asset losses precomputation.
   // Asset losses has been moved to Borrower:insertAsset() with the purpose of 
   // being able flush memory on asset events just after precomputation because 
   // in massive portfolios memory can be exhausted
 
-  // exit function
-  Logger::previousIndentLevel();
-}
+  // determining the assets to simulate
+  long numassets = 0L;
+  assets.reserve(4*borrowers.size());
+  for(unsigned int i=0; i<borrowers.size(); i++)
+  {
+    vector<Asset*> &vassets = borrowers[i].ref->getAssets();
+    for(unsigned int j=0; j<vassets.size(); j++)
+    {
+      numassets++;
+      if (vassets[j]->isActive(time0, timeT)) 
+      {
+        assets.push_back(SimulatedAsset(vassets[j], i));
+      }
+    }
+  }
+  Logger::trace("number of initial assets", Format::long2string(numassets));
+  Logger::trace("number of simulated assets", Format::long2string((long)assets.size()));
 
-//===========================================================================
-// initRatings
-//===========================================================================
-void ccruncher::MonteCarlo::initRatings(IData &idata) throw(Exception)
-{
-  // setting logger header
-  Logger::trace("setting ratings", '-');
-  Logger::newIndentLevel();
-
-  // setting logger info
-  Logger::trace("number of ratings", Format::int2string(idata.getRatings().size()));
-
-  // fixing ratings
-  ratings = &(idata.getRatings());
-
-  // exit function
-  Logger::previousIndentLevel();
-}
-
-//===========================================================================
-// initSectors
-//===========================================================================
-void ccruncher::MonteCarlo::initSectors(IData &idata) throw(Exception)
-{
-  // setting logger header
-  Logger::trace("setting sectors", '-');
-  Logger::newIndentLevel();
-
-  // setting logger info
-  Logger::trace("number of sectors", Format::int2string(idata.getSectors().size()));
-
-  // fixing ratings
-  sectors = &(idata.getSectors());
+  // checking that exist assets to simulate
+  if (assets.size() == 0)
+  {
+    throw Exception("error initializing assets: 0 assets to simulate");
+  }
 
   // exit function
   Logger::previousIndentLevel();
@@ -304,6 +279,9 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
   // setting logger header
   Logger::trace("setting survival function", '-');
   Logger::newIndentLevel();
+
+  // setting logger info
+  Logger::trace("number of ratings", Format::int2string(idata.getRatings().size()));
 
   if (idata.hasSurvival())
   {
@@ -345,7 +323,6 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
 {
   Timer timer(true);
-  int *tmp = NULL;
 
   // doing assertions
   assert(copula == NULL);
@@ -355,51 +332,44 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
+  Logger::trace("number of sectors", Format::int2string(idata.getSectors().size()));
+
+  // setting logger info
   Logger::trace("copula type", idata.getParams().copula_type);
-  Logger::trace("copula dimension", Format::long2string(N));
+  Logger::trace("copula dimension", Format::long2string(borrowers.size()));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
 
   try
   {
-    // allocating temporal memory
-    tmp = Arrays<int>::allocVector(idata.getCorrelationMatrix().size(),0);
+    vector<int> tmp(idata.getCorrelationMatrix().size(),0);
 
     // computing the number of borrowers in each sector
-    for(long i=0; i<N; i++)
+    for(unsigned int i=0; i<borrowers.size(); i++)
     {
-      tmp[(*borrowers)[i]->isector]++;
+      tmp[borrowers[i].ref->isector]++;
     }
 
     // creating the copula object
     if (idata.getParams().getCopulaType() == "gaussian")
     {
-      copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size());
+      copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size());
       double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::double2string(cnum));
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
-      copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), tmp, idata.getCorrelationMatrix().size(), ndf);
+      copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size(), ndf);
       double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::double2string(cnum));
     }
-    else {
+    else 
+    {
       throw Exception("invalid copula type");
     }
-
-    // releasing temporal memory
-    Arrays<int>::deallocVector(tmp);
-    tmp = NULL;
   }
   catch(std::exception &e)
   {
-    if (tmp != NULL)
-    {
-      Arrays<int>::deallocVector(tmp);
-      tmp = NULL;
-    }
-
     // copula deallocated by release method
     throw Exception(e, "error ocurred while initializing copula");
   }
@@ -420,8 +390,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
 
   // seeding random number generators
 #ifdef USE_MPI
-  // caution: cluster limited to 30000 nodes ;)
-  copula->setSeed(seed+30001L*MPI::COMM_WORLD.Get_rank());
+  copula->setSeed(seed+MPI::COMM_WORLD.Get_rank());
 #else
   copula->setSeed(seed);
 #endif
@@ -429,18 +398,6 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   // exit function
   Logger::trace("elapsed time initializing copula", timer);
   Logger::previousIndentLevel();
-}
-
-//===========================================================================
-// initTimeToDefaultArray
-//===========================================================================
-void ccruncher::MonteCarlo::initTimeToDefaultArray(int n) throw(Exception)
-{
-  // doing assertions
-  assert(ttd == NULL);
-
-  // allocating space
-  ttd = Arrays<Date>::allocVector(n);
 }
 
 //===========================================================================
@@ -453,6 +410,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
+  assert(aggregators.size() == 0); 
 
   // setting logger header
   Logger::trace("initializing aggregators", '-');
@@ -466,8 +424,8 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   aggregators.clear();
   for(int i=0;i<segmentations.size();i++)
   {
-    string filename = File::normalizePath(fpath) + segmentations[i].name + ".csv";
-    Aggregator *aggregator = new Aggregator(i, segmentations[i], *borrowers, N);
+    string filename = File::normalizePath(fpath) + segmentations.getSegmentation(i).name + ".csv";
+    Aggregator *aggregator = new Aggregator(i, segmentations.getSegmentation(i), assets);
     aggregator->setOutputProperties(filename, bforce);
     aggregators.push_back(aggregator);
   }
@@ -492,7 +450,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 long ccruncher::MonteCarlo::execute() throw(Exception)
 {
-  long ret;
+  long numiterations;
 
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
@@ -505,20 +463,18 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
 #ifdef USE_MPI
   if (Utils::isMaster())
   {
-    ret =executeCollector();
+    numiterations =executeCollector();
   }
   else
-  {
-    ret = executeWorker();
-  }
-#else
-  ret = executeWorker();
 #endif
+  {
+    numiterations = executeWorker();
+  }
 
   // exit function
   Logger::addBlankLine();
   Logger::previousIndentLevel();
-  return ret;
+  return numiterations;
 }
 
 //===========================================================================
@@ -526,15 +482,16 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
 //===========================================================================
 long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 {
+  long numiterations = 0L;
   bool aux=false, moreiterations=true;
-  Timer timer1, timer2, timer3;
+  Timer timer(true), timer1, timer2, timer3, timer4;
 
 #ifdef USE_MPI
   if (!Utils::isMaster()) {
     // disabling max time criteria for slaves
-    MAXSECONDS = 0L;
+    maxseconds = 0L;
     // disabling max itaration criteria for slaves
-    MAXITERATIONS = 0L;
+    maxiterations = 0L;
   }
 #endif
 
@@ -554,14 +511,19 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 
       // portfolio evaluation
       timer3.resume();
-      aux = evalue();
+      evalue();
       timer3.stop();
 
+      // aggregation of values
+      timer4.resume();
+      aux = aggregate();
+      timer4.stop();
+
       // counter increment
-      CONT++;
+      numiterations++;
 
       // printing hashes
-      if (hash > 0 && CONT%hash == 0)
+      if (hash > 0 && numiterations%hash == 0)
       {
         Logger::append(".");
       }
@@ -573,13 +535,13 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
       }
 
       // checking stop criteria
-      if (MAXITERATIONS > 0L && CONT >= MAXITERATIONS)
+      if (maxiterations > 0L && numiterations >= maxiterations)
       {
         moreiterations = false;
       }
 
       // checking stop criteria
-      if (MAXSECONDS > 0L && (timer1.read()+timer2.read())> MAXSECONDS)
+      if (maxseconds > 0L && timer.read() >  maxseconds)
       {
         moreiterations = false;
       }
@@ -593,8 +555,9 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     // printing traces
     Logger::trace("elapsed time creating random numbers", timer1);
     Logger::trace("elapsed time simulating default times", timer2);
-    Logger::trace("elapsed time aggregating data", timer3);
-    Logger::trace("total simulation time", Timer::format(timer1.read()+timer2.read()+timer3.read()));
+    Logger::trace("elapsed time evaluating portfolio", timer3);
+    Logger::trace("elapsed time aggregating values", timer4);
+    Logger::trace("total simulation time", Timer::format(timer.read()));
   }
   catch(Exception &e)
   {
@@ -607,7 +570,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 #endif
 
   // exit function
-  return(CONT);
+  return(numiterations);
 }
 
 //===========================================================================
@@ -623,6 +586,7 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
 long ccruncher::MonteCarlo::executeCollector() throw(Exception)
 {
 #ifdef USE_MPI
+  long numiterations = 0L;
   bool more=true, moreiterations=true;
   double data[ccmaxbufsize];
   int nranks=MPI::COMM_WORLD.Get_size();
@@ -680,9 +644,9 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
             for(int i=0;i<numsims;i++)
             {
               // counter increment
-              CONT++;
+              numiterations++;
               // printing hashes
-              if (hash > 0 && CONT%hash == 0)
+              if (hash > 0 && numiterations%hash == 0)
               {
                 Logger::append(".");
               }
@@ -690,12 +654,12 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
           }
 
           // checking stop criteria
-          if (MAXITERATIONS > 0L && CONT >= MAXITERATIONS) {
+          if (maxiterations > 0L && numiterations >= maxiterations) {
             moreiterations = false;
           }
 
           // checking stop criteria
-          if (MAXSECONDS > 0L && timer.read() >  MAXSECONDS) {
+          if (maxseconds > 0L && timer.read() >  maxseconds) {
             moreiterations = false;
           }
 
@@ -714,7 +678,7 @@ long ccruncher::MonteCarlo::executeCollector() throw(Exception)
   }
 
   // return the number of simulations
-  return CONT;
+  return numiterations;
 #else
   return 0L;
 #endif
@@ -757,15 +721,15 @@ void ccruncher::MonteCarlo::randomize()
 void ccruncher::MonteCarlo::simulate()
 {
   // simulates default times
-  for (long i=0; i<N; i++) 
+  for (unsigned int i=0; i<borrowers.size(); i++) 
   {
-    ttd[i] = simTimeToDefault(i);
+    borrowers[i].dtime = simTimeToDefault(i);
   }
 
   // trace default times
   if (bldeftime) 
   {
-    printDefaultTimes(ttd);
+    printDefaultTimes();
   }
 }
 
@@ -779,11 +743,11 @@ double ccruncher::MonteCarlo::getRandom(int iborrower)
   {
     if (reversed)
     {
-      return copula->get(iborrower);
+      return 1.0 - copula->get(iborrower);
     }
     else
     {
-      return 1.0 - copula->get(iborrower);
+      return copula->get(iborrower);
     }
   }
   else
@@ -798,13 +762,13 @@ double ccruncher::MonteCarlo::getRandom(int iborrower)
 Date ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
 {
   // rating at t0 is initial rating
-  int r1 = (*borrowers)[iborrower]->irating;
+  int r = borrowers[iborrower].irating;
 
   // getting random number U[0,1] (correlated with rest of borrowers...)
   double u = getRandom(iborrower);
 
   // simulate time where this borrower defaults (in months)
-  double t = survival.inverse(r1, u);
+  double t = survival.inverse(r, u);
 
   // return simulated default date
   // TODO: assumed no leap years (this can be improved)
@@ -812,25 +776,42 @@ Date ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
 }
 
 //===========================================================================
-// portfolio evaluation using current copula
-// @exception if error
-// return true=all ok, continue
-// return false=stop montecarlo, someone order you (the master)
+// portfolio evaluation using simulated default times
 //===========================================================================
-bool ccruncher::MonteCarlo::evalue() throw(Exception)
+void ccruncher::MonteCarlo::evalue()
+{
+  for(unsigned int i=0; i<assets.size(); i++)
+  {
+    Date t = borrowers[assets[i].iborrower].dtime;
+    
+    if (assets[i].mindate <= t && t <= assets[i].maxdate)
+    {
+      assets[i].loss = assets[i].ref->getLoss(t);
+    }
+    else
+    {
+      assets[i].loss = 0.0;
+    }
+  }
+}
+
+//===========================================================================
+// aggregate simulated losses
+// return true=all ok, continue
+// return false=stop montecarlo
+//===========================================================================
+bool ccruncher::MonteCarlo::aggregate() throw(Exception)
 {
   bool ret=true;
 
-  // adding current simulation to each aggregator
   for(unsigned int i=0;i<aggregators.size();i++)
   {
-    if (aggregators[i]->append(ttd,(i==0)) == false)
+    if (aggregators[i]->append(assets) == false)
     {
       ret = false;
     }
   }
 
-  // exit function
   return ret;
 }
 
@@ -877,9 +858,9 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     try
     {
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
-      for(long i=0; i<N; i++)
+      for(unsigned int i=0; i<borrowers.size(); i++)
       {
-        fcopulas << "\"" << (*borrowers)[i]->name << "\"" << (i!=N-1?", ":"");
+        fcopulas << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
       }
       fcopulas << endl;
     }
@@ -896,9 +877,9 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
     try
     {
       fdeftime.open(filename.c_str(), ios::out|ios::trunc);
-      for(long i=0; i<N; i++)
+      for(unsigned int i=0; i<borrowers.size(); i++)
       {
-        fdeftime << "\"" << (*borrowers)[i]->name << "\"" << (i!=N-1?", ":"");
+        fdeftime << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
       }
       fdeftime << endl;
     }
@@ -916,9 +897,9 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
 void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 {
 #ifndef USE_MPI
-  for(long i=0; i<N; i++) 
+  for(unsigned int i=0; i<borrowers.size(); i++) 
   {
-    fcopulas << getRandom(i) << (i!=N-1?", ":"");
+    fcopulas << getRandom(i) << (i!=borrowers.size()-1?", ":"");
   }
   fcopulas << "\n";
 #endif
@@ -927,12 +908,12 @@ void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 //===========================================================================
 // printDefaultTimes
 //===========================================================================
-void ccruncher::MonteCarlo::printDefaultTimes(Date *values) throw(Exception)
+void ccruncher::MonteCarlo::printDefaultTimes() throw(Exception)
 {
 #ifndef USE_MPI
-  for(long i=0; i<N; i++) 
+  for(unsigned int i=0; i<borrowers.size(); i++) 
   {
-    fdeftime << values[i] << (i!=N-1?", ":"");
+    fdeftime << borrowers[i].dtime << (i!=borrowers.size()-1?", ":"");
   }
   fdeftime << "\n";
 #endif

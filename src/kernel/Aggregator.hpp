@@ -30,6 +30,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "kernel/SimulatedData.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
@@ -53,8 +54,8 @@ class Aggregator
     int isegmentation;
     // segmentation object
     Segmentation &segmentation;
-    // borrowers list
-    vector<Borrower *> &borrowers;
+    // segment by each simulated asset
+    vector<int> isegments;
     // output file stream
     ofstream fout;
     // number of borrowers considered
@@ -74,21 +75,16 @@ class Aggregator
     // internal timer (control time from last flush)
     Timer timer;
 
-  private:
-  
-    // indicates if this segmentation has the 'rest' segment
-    bool hasRestSegment();
-
   public:
 
     // constructor
-    Aggregator(int, Segmentation&, vector<Borrower *> &, long);
+    Aggregator(int, Segmentation&, vector<SimulatedAsset> &);
     // destructor
     ~Aggregator();
     // set properties
     void setOutputProperties(const string &filename, bool force) throw(Exception);
     // append data to aggregator
-    bool append(Date *defaulttimes, bool force=true) throw(Exception);
+    bool append(vector<SimulatedAsset> &assets) throw(Exception);
     // append raw data
     long appendRawData(double *data, int datasize) throw(Exception);
     // flush data to disk

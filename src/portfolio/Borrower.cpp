@@ -29,7 +29,7 @@
 //===========================================================================
 ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interest &interest_,
-               const Date &d1, const Date &d2) : vsegments(0)
+               const Date &d1, const Date &d2) : vsegments(), vassets()
 {
   // setting external objects references
   ratings = &(ratings_);
@@ -39,11 +39,8 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   date1 = d1;
   date2 = d2;
 
-  // cleaning containers
-  vassets.clear();
-  vsegments = vector<int>(segmentations_.size(), 0);
-
   // setting default values
+  vsegments = vector<int>(segmentations_.size(), 0);
   irating = -1;
   isector = -1;
   id = "NON_ID";
@@ -55,7 +52,11 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
 //===========================================================================
 ccruncher::Borrower::~Borrower()
 {
-  // nothing to do
+  for(unsigned int i=0; i<vassets.size(); i++)
+  {
+    delete vassets[i];
+  }
+  vassets.clear();
 }
 
 //===========================================================================
@@ -66,21 +67,19 @@ void ccruncher::Borrower::prepareLastAsset() throw(Exception)
   int ila = vassets.size()-1;
 
   // checking coherence
-  for (unsigned int i=0;i<ila;i++)
+  for (int i=0;i<ila;i++)
   {
-    Asset aux = vassets[i];
-
-    if (vassets[i].getId() == vassets[ila].getId())
+    if (vassets[i]->getId() == vassets[ila]->getId())
     {
-      throw Exception("asset identifier " + vassets[ila].getId() + " repeated");
+      throw Exception("asset identifier " + vassets[ila]->getId() + " repeated");
     }
   }
 
   // preparing asset
   try
   {
-    vassets[ila].precomputeLosses(date1, date2, *interest);
-    vassets[ila].deleteData();
+    vassets[ila]->precomputeLosses(date1, date2, *interest);
+    vassets[ila]->deleteData();
   }
   catch(std::exception &e)
   {
@@ -105,8 +104,8 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
       string strsector= getStringAttribute(attributes, "sector", "");
 
       // retrieving indexes
-      irating = (*ratings).getIndex(strrating);
-      isector = (*sectors).getIndex(strsector);
+      irating = ratings->getIndex(strrating);
+      isector = sectors->getIndex(strsector);
 
       // doing some checks
       if (id == "" || name == "" || irating < 0 || isector < 0) {
@@ -122,14 +121,15 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
       throw Exception("invalid attributes at <belongs-to> tag");
     }
 
-    int isegmentation = (*segmentations).indexOf(ssegmentation);
-    int isegment = (*segmentations)[isegmentation].indexOf(ssegment);
+    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
-    vassets.push_back(Asset(segmentations));
-    eppush(eu, &vassets[vassets.size()-1], name_, attributes);
+    Asset *asset = new Asset(segmentations);
+    vassets.push_back(asset);
+    eppush(eu, asset, name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -145,12 +145,12 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   if (isEqual(name_,"borrower")) {
 
     // shrinking memory
-    vector<Asset>(vassets.begin(),vassets.end()).swap(vassets);
+    vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
     // filling implicit segment
     try {
-      int isegmentation = (*segmentations).indexOf("borrowers");
-      int isegment = (*segmentations)[isegmentation].addSegment(id);
+      int isegmentation = segmentations->indexOfSegmentation("borrowers");
+      int isegment = segmentations->getSegmentation(isegmentation).addSegment(id);
       addBelongsTo(isegmentation, isegment);
     } 
     catch(...) {
@@ -159,9 +159,9 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 
     // important: coding borrower-segments as asset-segments
     for (int i=0; i<(int)segmentations->size(); i++) {
-      if ((*segmentations)[i].components == borrower) {
+      if (segmentations->getSegmentation(i).components == borrower) {
         for(int j=0; j<(int)vassets.size(); j++) {
-          vassets[j].addBelongsTo(i, vsegments[i]);
+          vassets[j]->addBelongsTo(i, vsegments[i]);
         }
       }
     }
@@ -184,55 +184,13 @@ bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Excep
 {
   for(unsigned int i=0;i<vassets.size();i++)
   {
-    Date dmin = vassets[i].getMinDate();
-    Date dmax = vassets[i].getMaxDate();
-
-    if (from <= dmin && dmin <= to)
-    {
-      return true;
-    }
-    else if (from <= dmax && dmax <= to)
-    {
-      return true;
-    }
-    else if (dmin <= from && to <= dmax)
+    if (vassets[i]->isActive(from,to))
     {
       return true;
     }
   }
 
   return false;
-}
-
-//===========================================================================
-// comparation operator (used by sort function)
-// used to group borrowers by sector and rating
-//===========================================================================
-bool ccruncher::operator < (const Borrower &x1, const Borrower &x2)
-{
-  if (x1.isector < x2.isector)
-  {
-    return true;
-  }
-  else if (x1.isector == x2.isector)
-  {
-    if (x1.irating < x2.irating)
-    {
-      return true;
-    }
-    else if (x1.irating == x2.irating)
-    {
-      return false;
-    }
-    else
-    {
-      return false;
-    }
-  }
-  else
-  {
-    return false;
-  }
 }
 
 //===========================================================================
@@ -261,9 +219,20 @@ bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 }
 
 //===========================================================================
-// less (used for sorting pointer borrowers)
+// getAssets
 //===========================================================================
-bool ccruncher::Borrower::less(const Borrower *left, const Borrower *right)
+vector<Asset *> & ccruncher::Borrower::getAssets()
 {
-  return *left < *right;
+  return vassets;
 }
+
+//===========================================================================
+// getSegment
+//===========================================================================
+int ccruncher::Borrower::getSegment(int isegmentation)
+{
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int)vsegments.size());
+  return vsegments[isegmentation];
+}
+      

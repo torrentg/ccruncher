@@ -64,9 +64,9 @@ class Segmentations : public ExpatHandlers
     // return the number of segmentations
     int size() const;
     // [] operator
-    Segmentation& operator [] (int i);
+    Segmentation& getSegmentation(int i);
     // return the index of the given segmentation
-    int indexOf(const string &sname) throw(Exception);
+    int indexOfSegmentation(const string &sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
     // ExpatHandlers method

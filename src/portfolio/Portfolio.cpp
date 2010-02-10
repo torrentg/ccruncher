@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <algorithm>
 #include "portfolio/Portfolio.hpp"
 #include <cassert>
 
@@ -83,7 +82,7 @@ void ccruncher::Portfolio::insertBorrower(Borrower *val) throw(Exception)
   // checking if assets id are previously defined
   for(int i=0; i<(int)val->getAssets().size(); i++)
   {
-    string id = val->getAssets()[i].getId();
+    string id = val->getAssets()[i]->getId();
     if (idassets.find(id) != idassets.end())
     {
        string msg = "asset id " + id + " repeated";
@@ -156,62 +155,5 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
   else {
     throw Exception("unexpected end tag " + string(name_));
   }
-}
-
-//===========================================================================
-// getNumActiveBorrowers
-//===========================================================================
-int ccruncher::Portfolio::getNumActiveBorrowers(const Date &from, const Date &to) throw(Exception)
-{
-  int ret = 0;
-
-  for (int i=vborrowers.size()-1;i>=0;i--)
-  {
-    if (vborrowers[i]->isActive(from, to))
-    {
-      ret++;
-    }
-  }
-
-  return ret;
-}
-
-//===========================================================================
-// sortBorrowers
-//===========================================================================
-void ccruncher::Portfolio::sortBorrowers(const Date &from, const Date &to, bool onlyactive) throw(Exception)
-{
-  // sorting borrower by sector and rating
-  sort(vborrowers.begin(), vborrowers.end(), Borrower::less);
-
-  if (onlyactive == true)
-  {
-    // we move non-active borrowers to last position of array
-    for(unsigned int cont=0,i=0;cont<vborrowers.size();cont++)
-    {
-      if (!(*vborrowers[i]).isActive(from,to))
-      {
-        mtlp(i);
-        i--;
-      }
-
-      i++;
-    }
-  }
-}
-
-//===========================================================================
-// mtlp. move to last position
-//===========================================================================
-void ccruncher::Portfolio::mtlp(unsigned int pos)
-{
-  Borrower *p = vborrowers[pos];
-
-  for(unsigned int i=pos;i<vborrowers.size()-1;i++)
-  {
-    vborrowers[i] = vborrowers[i+1];
-  }
-
-  vborrowers[vborrowers.size()-1] = p;
 }
 

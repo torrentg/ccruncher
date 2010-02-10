@@ -214,11 +214,11 @@ void ccruncher_test::BorrowerTest::test1()
   ASSERT(borrower.belongsTo(3, 2));
   ASSERT(borrower.belongsTo(4, 1));
 
-  vector<Asset> &assets = borrower.getAssets();
+  vector<Asset*> &assets = borrower.getAssets();
 
   ASSERT(2 == assets.size());
-  ASSERT(assets[0].getId() == "op1");
-  ASSERT(assets[1].getId() == "op2");
+  ASSERT(assets[0]->getId() == "op1");
+  ASSERT(assets[1]->getId() == "op2");
 }
 
 //===========================================================================

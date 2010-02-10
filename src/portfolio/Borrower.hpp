@@ -54,7 +54,7 @@ class Borrower : public ExpatHandlers
     // segmentation-segment relations
     vector<int> vsegments;
     // borrower assets list
-    vector<Asset> vassets;
+    vector<Asset *> vassets;
     // pointer to ratings object (used by parser)
     const Ratings *ratings;
     // pointer to sectors object (used by parser)
@@ -91,7 +91,7 @@ class Borrower : public ExpatHandlers
     // destructor
     ~Borrower();
     // return the asset list
-    vector<Asset> & getAssets();
+    vector<Asset *> & getAssets();
     // indicates if this borrower has cashflows in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // add a segmentation-segment relation
@@ -100,37 +100,12 @@ class Borrower : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     // given a segmentation returns the segment
     int getSegment(int isegmentation);
-    // check if a borrower is less than other (based on rating)
-    static bool less(const Borrower *left, const Borrower *right);
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
     // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
 };
-
-//---------------------------------------------------------------------------
-
-// comparation operator
-bool operator <  (const Borrower&, const Borrower&);
-
-//===========================================================================
-// getAssets
-//===========================================================================
-inline vector<Asset> & ccruncher::Borrower::getAssets()
-{
-  return vassets;
-}
-
-//===========================================================================
-// getSegment
-//===========================================================================
-inline int ccruncher::Borrower::getSegment(int isegmentation)
-{
-  assert(isegmentation >= 0);
-  assert(isegmentation < (int)vsegments.size());
-  return vsegments[isegmentation];
-}
 
 //---------------------------------------------------------------------------
 

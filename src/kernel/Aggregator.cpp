@@ -35,18 +35,24 @@
 // constructor
 // note: we don't diferentiate between asset-segmentations or borrower-segmentations
 // because borrower segments has been recoded as asset segments (see Borrower code)
-// note: all segmentations are treated as asset-segmentations
 //===========================================================================
 ccruncher::Aggregator::Aggregator(int isegmentation_, Segmentation &segmentation_, 
-  vector<Borrower *> &borrowers_, long n) : segmentation(segmentation_), 
-  borrowers(borrowers_)
+  vector<SimulatedAsset> &assets) : segmentation(segmentation_), isegments(0)
 {
   assert(isegmentation_ >= 0);
   isegmentation = isegmentation_;
-  assert(n >= 0);
-  numborrowers = n;
   numsegments = segmentation.size();
-  printRestSegment = hasRestSegment();
+  printRestSegment = false;
+  isegments.assign(assets.size(), 0);
+  
+  for(unsigned int i=0; i<assets.size(); i++)
+  {
+    isegments[i] = assets[i].ref->getSegment(isegmentation);
+    if (isegments[i] == 0) 
+    {
+      printRestSegment = true;
+    }
+  }
 
   bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
   if (bufferrows <= 0) bufferrows = 1;
@@ -78,9 +84,9 @@ ccruncher::Aggregator::~Aggregator()
 // append
 // input vector has length numborrowers with the index time (in months) where borrower defaults
 //===========================================================================
-bool ccruncher::Aggregator::append(Date *defaulttimes, bool force) throw(Exception)
+bool ccruncher::Aggregator::append(vector<SimulatedAsset> &assets) throw(Exception)
 {
-  assert(defaulttimes != NULL);
+  assert(assets.size() == isegments.size());
 
   // initializing values
   for(unsigned int i=0; i<numsegments; i++) 
@@ -89,14 +95,9 @@ bool ccruncher::Aggregator::append(Date *defaulttimes, bool force) throw(Excepti
   }
 
   // filling values
-  for(unsigned int i=0; i<numborrowers; i++)
+  for(unsigned int i=0; i<assets.size(); i++)
   {
-    vector<Asset> &assets = borrowers[i]->getAssets();
-    for(int j=(int)assets.size()-1; j>=0; j--) 
-    {
-      int isegment = assets[j].getSegment(isegmentation);
-      CVALUES(isegment,icont) += assets[j].getLoss(defaulttimes[i], force);
-    }
+    CVALUES(isegments[i],icont) += assets[i].loss;
   }
 
   // incrementing counters
@@ -240,7 +241,7 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
     {
       for(int i=(printRestSegment?0:1); i<numsegments; i++)
       {
-        fout << "\"" << segmentation[i] << "\"" << (i<numsegments-1?", ":"");
+        fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
       }
     }
     fout << endl;
@@ -249,27 +250,6 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
   {
     throw Exception("error opening file " + filename);
   }
-}
-
-//===========================================================================
-// hasRestSegment
-// if exist a borrower/asset in the rest segment returns true, false otherwise
-//===========================================================================
-bool ccruncher::Aggregator::hasRestSegment()
-{
-  for(unsigned int i=0; i<numborrowers; i++)
-  {
-    vector<Asset> &assets = borrowers[i]->getAssets();
-    for(unsigned int j=0; j<assets.size(); j++) 
-    {
-      if (assets[j].getSegment(isegmentation) == 0) 
-      {
-        return true;
-      }
-    }
-  }
-
-  return false;
 }
 
 //===========================================================================
