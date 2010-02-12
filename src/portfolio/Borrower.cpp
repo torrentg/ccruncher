@@ -92,7 +92,25 @@ void ccruncher::Borrower::prepareLastAsset() throw(Exception)
 //===========================================================================
 void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"borrower")) {
+  if (isEqual(name_,"asset")) {
+    Asset *asset = new Asset(segmentations);
+    vassets.push_back(asset);
+    eppush(eu, asset, name_, attributes);
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    string ssegmentation = getStringAttribute(attributes, "segmentation", "");
+    string ssegment = getStringAttribute(attributes, "segment", "");
+
+    if (ssegmentation == "" || ssegment == "") {
+      throw Exception("invalid attributes at <belongs-to> tag");
+    }
+
+    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
+
+    addBelongsTo(isegmentation, isegment);
+  }
+  else if (isEqual(name_,"borrower")) {
     if (getNumAttributes(attributes) != 4) {
       throw Exception("incorrect number of attributes in tag borrower");
     }
@@ -113,24 +131,6 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
       }
     }
   }
-  else if (isEqual(name_,"belongs-to")) {
-    string ssegmentation = getStringAttribute(attributes, "segmentation", "");
-    string ssegment = getStringAttribute(attributes, "segment", "");
-
-    if (ssegmentation == "" || ssegment == "") {
-      throw Exception("invalid attributes at <belongs-to> tag");
-    }
-
-    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
-    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
-
-    addBelongsTo(isegmentation, isegment);
-  }
-  else if (isEqual(name_,"asset")) {
-    Asset *asset = new Asset(segmentations);
-    vassets.push_back(asset);
-    eppush(eu, asset, name_, attributes);
-  }
   else {
     throw Exception("unexpected tag " + string(name_));
   }
@@ -142,7 +142,13 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
 void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name_,"borrower")) {
+  if (isEqual(name_,"asset")) {
+    prepareLastAsset();
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"borrower")) {
 
     // shrinking memory
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
@@ -165,12 +171,6 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
         }
       }
     }
-  }
-  else if (isEqual(name_,"belongs-to")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"asset")) {
-    prepareLastAsset();
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
