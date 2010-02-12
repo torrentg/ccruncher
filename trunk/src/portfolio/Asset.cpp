@@ -174,18 +174,17 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name_,"asset")) {
-    if (getNumAttributes(attributes) != 3) {
-      throw Exception("incorrect number of attributes in tag asset");
+  if (isEqual(name_,"values") && have_data == true) {
+    Date at = getDateAttribute(attributes, "at", Date(1,1,1));
+    double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
+    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
+
+    if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
+      throw Exception("invalid attributes at <values>");
     }
     else {
-      id = getStringAttribute(attributes, "id", "");
-      name = getStringAttribute(attributes, "name", "");
-      date = getDateAttribute(attributes, "date", Date(1,1,1));
-      if (id == "" || name == "" || date == Date(1,1,1))
-      {
-        throw Exception("invalid attributes at <asset>");
-      }
+      DateValues aux(at, cashflow, recovery);
+      insertDateValues(aux);
     }
   }
   else if (isEqual(name_,"belongs-to")) {
@@ -201,25 +200,26 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 
     addBelongsTo(isegmentation, isegment);
   }
+  else if (isEqual(name_,"asset")) {
+    if (getNumAttributes(attributes) != 3) {
+      throw Exception("incorrect number of attributes in tag asset");
+    }
+    else {
+      id = getStringAttribute(attributes, "id", "");
+      name = getStringAttribute(attributes, "name", "");
+      date = getDateAttribute(attributes, "date", Date(1,1,1));
+      if (id == "" || name == "" || date == Date(1,1,1))
+      {
+        throw Exception("invalid attributes at <asset>");
+      }
+    }
+  }
   else if (isEqual(name_,"data")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes are not allowed in tag data");
     }
     else {
       have_data = true;
-    }
-  }
-  else if (isEqual(name_,"values") && have_data == true) {
-    Date at = getDateAttribute(attributes, "at", Date(1,1,1));
-    double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
-    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
-
-    if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
-      throw Exception("invalid attributes at <values>");
-    }
-    else {
-      DateValues aux(at, cashflow, recovery);
-      insertDateValues(aux);
     }
   }
   else {
@@ -233,7 +233,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name_,"asset")) {
+  if (isEqual(name_,"values")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"belongs-to")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"asset")) {
 
     // checking data size
     if (data.size() == 0) {
@@ -254,13 +260,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
       // segmentation 'assets' not defined
     }
   }
-  else if (isEqual(name_,"belongs-to")) {
-    // nothing to do
-  }
   else if (isEqual(name_,"data")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"values")) {
     // nothing to do
   }
   else {
