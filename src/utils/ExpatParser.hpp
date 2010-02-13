@@ -66,7 +66,7 @@ class ExpatParser
     // destructor
     ~ExpatParser();
     // parse xml
-    void parse(string xmlcontent, ExpatHandlers *eh) throw(Exception);
+    void parse(const string &xmlcontent, ExpatHandlers *eh) throw(Exception);
     // parse xml
     void parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception);
     // returns main object

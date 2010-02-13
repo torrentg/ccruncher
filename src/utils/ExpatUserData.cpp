@@ -60,8 +60,7 @@ XML_Parser ccruncher::ExpatUserData::getParser()
 //===========================================================================
 ExpatHandlers* ccruncher::ExpatUserData::getCurrentHandlers()
 {
-  ExpatUserData::ExpatUserDataToken &aux = pila.top();
-  return aux.handlers;
+  return pila.top().handlers;
 }
 
 //===========================================================================
@@ -69,8 +68,7 @@ ExpatHandlers* ccruncher::ExpatUserData::getCurrentHandlers()
 //===========================================================================
 string& ccruncher::ExpatUserData::getCurrentName()
 {
-  ExpatUserData::ExpatUserDataToken &aux = pila.top();
-  return aux.name;
+  return pila.top().name;
 }
 
 //===========================================================================
@@ -86,6 +84,5 @@ void ccruncher::ExpatUserData::removeCurrentHandlers()
 //===========================================================================
 void ccruncher::ExpatUserData::setCurrentHandlers(const string &name, ExpatHandlers *eh)
 {
-  ExpatUserDataToken eudt(name, eh);
-  pila.push(eudt);
+  pila.push(ExpatUserDataToken(name, eh));
 }

@@ -86,7 +86,7 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
   long ret = strtol(pnum, &pstr, 10); //atol(str.c_str());
 
   // checking that is a long
-  if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
+  if (errno != 0 || pstr == pnum || pstr != pnum+strlen(pnum))
   {
     throw Exception("error parsing long value " + string(pnum) + ": not a number");
   }
@@ -106,11 +106,20 @@ double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 
 //===========================================================================
 // parse a double
+// if numbers ends with '%' returns the number divided by 100
 //===========================================================================
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
   char *pstr = NULL;
+  int l = strlen(pnum);
+  bool isPercentage = false;
 
+  // checking percentage sign
+  if (l > 0 && pnum[l-1] == '%') 
+  {
+    isPercentage = true;
+  }
+  
   // initializing numerical error status
   errno = 0;
 
@@ -118,12 +127,16 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   double ret = strtod(pnum, &pstr); //atof(str.c_str());
 
   // checking that is a double
-  if (errno != 0 || pstr != pnum + strlen(pnum) || strlen(pnum) == 0)
+  if (errno != 0 || pstr == pnum || pstr != pnum+(l-(isPercentage?1:0)))
   {
     throw Exception("error parsing double value " + string(pnum) + ": not a number");
   }
   else
   {
+    if (isPercentage)
+    {
+      ret /= 100.0;
+    }
     return ret;
   }
 }

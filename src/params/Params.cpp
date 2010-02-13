@@ -139,7 +139,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 {
   assert(eu.getCurrentHandlers() != NULL);
   // reading attribute name
-  string name = getStringAttribute(attributes,"name", "");
+  string name = getStringAttribute(attributes, "name", "");
 
   if (name == "time.0")
   {

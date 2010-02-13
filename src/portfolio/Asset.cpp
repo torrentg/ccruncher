@@ -149,7 +149,7 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   
   // adding minimum event date
   Date mindate = max(date, d1);
-  if (mindate < ptimes.front())
+  if (ptimes.size() == 0 || mindate < ptimes.front())
   {
     ptimes.insert(ptimes.begin(), mindate);
     plosses.insert(plosses.begin(), getCashflowSum(mindate));
@@ -363,7 +363,6 @@ Date ccruncher::Asset::getMaxDate()
 
 //===========================================================================
 // isActive
-// be sure that precomputeLosses is called before the execution of this method
 //===========================================================================
 bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exception)
 {
