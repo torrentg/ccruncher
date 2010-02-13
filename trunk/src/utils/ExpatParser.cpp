@@ -129,7 +129,7 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) th
 //===========================================================================
 // parse
 //===========================================================================
-void ccruncher::ExpatParser::parse(string xmlcontent, ExpatHandlers *eh) throw(Exception)
+void ccruncher::ExpatParser::parse(const string &xmlcontent, ExpatHandlers *eh) throw(Exception)
 {
   istringstream iss (xmlcontent, istringstream::in);
   parse(iss, eh);

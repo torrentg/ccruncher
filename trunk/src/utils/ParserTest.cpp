@@ -91,6 +91,23 @@ void ccruncher_test::ParserTest::test_double(void)
   ASSERT_EQUALS_EPSILON(0.9, Parser::doubleValue(".9"), EPSILON);
   ASSERT_EQUALS_EPSILON(0.1, Parser::doubleValue("+.10"), EPSILON);
   ASSERT_EQUALS_EPSILON(-0.11, Parser::doubleValue("-.11"), EPSILON);
+
+  ASSERT_EQUALS_EPSILON(1.0/100.0, Parser::doubleValue("1%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(2.0/100.0, Parser::doubleValue("+2%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(-3.0/100.0, Parser::doubleValue("-3%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(4.5/100.0, Parser::doubleValue("4.5%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(4.0/100.0, Parser::doubleValue("4.%"), EPSILON);
+  ASSERT_THROW(Parser::doubleValue(" 6% "));
+  ASSERT_THROW(Parser::doubleValue(" 6 % "));
+  ASSERT_THROW(Parser::doubleValue("6 %"));
+  ASSERT_THROW(Parser::doubleValue("%"));
+  ASSERT_THROW(Parser::doubleValue("6%6"));
+  ASSERT_EQUALS_EPSILON(-10.12345365457657886789699/100.0, Parser::doubleValue("-10.12345365457657886789699%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(-12343246556457666756876867968907609.12/100.0, Parser::doubleValue("-12343246556457666756876867968907609.12%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.9/100.0, Parser::doubleValue(".9%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.1/100.0, Parser::doubleValue("+.10%"), EPSILON);
+  ASSERT_EQUALS_EPSILON(-0.11/100.0, Parser::doubleValue("-.11%"), EPSILON);
+  
 }
 
 //===========================================================================
