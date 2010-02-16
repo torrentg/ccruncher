@@ -239,8 +239,8 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"belongs-to")) {
     // nothing to do
   }
-  else if (isEqual(name_,"asset")) {
-
+  else if (isEqual(name_,"asset")) 
+  {
     // checking data size
     if (data.size() == 0) {
       throw Exception("asset without data");
@@ -248,7 +248,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 
     // sorting events by date
     sort(data.begin(), data.end());
-    lastdate = data.end()->date;
+    lastdate = data.back().date;
 
     // filling implicit segment
     try {

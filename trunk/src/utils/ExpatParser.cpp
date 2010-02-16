@@ -40,6 +40,7 @@
 //===========================================================================
 // static variable definition
 //===========================================================================
+//TODO: declare this variable as non-static
 const char *ccruncher::ExpatParser::current_tag = NULL;
 
 //===========================================================================
@@ -47,6 +48,28 @@ const char *ccruncher::ExpatParser::current_tag = NULL;
 //===========================================================================
 ccruncher::ExpatParser::ExpatParser()
 {
+  xmlparser = NULL;
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+ccruncher::ExpatParser::~ExpatParser()
+{
+  if (xmlparser != NULL) {
+    XML_ParserFree(xmlparser);
+  }
+}
+
+//===========================================================================
+// reset
+//===========================================================================
+void ccruncher::ExpatParser::reset()
+{
+  if (xmlparser != NULL) {
+    XML_ParserFree(xmlparser);
+  }
+
   // creating parser object
   xmlparser = XML_ParserCreate(NULL);
   assert(xmlparser != NULL);
@@ -66,15 +89,8 @@ ccruncher::ExpatParser::ExpatParser()
 }
 
 //===========================================================================
-// destructor
-//===========================================================================
-ccruncher::ExpatParser::~ExpatParser()
-{
-  XML_ParserFree(xmlparser);
-}
-
-//===========================================================================
 // startElement
+//TODO: avoid usage of static variables
 //===========================================================================
 void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
@@ -91,6 +107,7 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 
 //===========================================================================
 // endElement
+//TODO: avoid usage of static variables
 //===========================================================================
 void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
@@ -118,6 +135,7 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 
 //===========================================================================
 // characterData
+//TODO: avoid usage of static variables
 //===========================================================================
 void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
 {
@@ -145,6 +163,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   int done;
 
   // pushing handlers to stack
+  reset();
   userdata.setCurrentHandlers("", eh);
 
   // parsing doc
