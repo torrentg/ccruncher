@@ -20,61 +20,54 @@
 //
 //===========================================================================
 
-#ifndef _ExpatParser_
-#define _ExpatParser_
+#ifndef _SimulatedDataTest_
+#define _SimulatedDataTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <expat.h>
-#include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
+#include <vector>
+#include <MiniCppUnit.hxx>
+#include "ratings/Ratings.hpp"
+#include "sectors/Sectors.hpp"
+#include "interests/Interest.hpp"
+#include "portfolio/Borrower.hpp"
+#include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class ExpatParser
+class SimulatedDataTest : public TestFixture<SimulatedDataTest>
 {
 
   private:
 
-    // parser expat object
-    XML_Parser xmlparser;
-    // user data
-    ExpatUserData userdata;
-    // current tag (internal use)
-    static const char *current_tag;
+    Ratings getRatings();
+    Sectors getSectors();
+    Segmentations getSegmentations();
+    Interest getInterest();
+    vector<Borrower*> getBorrowers();
+    
+    void test1(void);
 
-  private:
-  
-    // startElement function catcher
-    static void startElement(void *ud, const char *name, const char **atts);
-    // endElement function catcher
-    static void endElement(void *ud, const char *name);
-    // characterData Handler function
-    static void characterData(void *ud, const char *s, int len) throw(Exception);
-    // reset internal variables
-    void reset();
 
   public:
 
-    // constructor
-    ExpatParser();
-    // destructor
-    ~ExpatParser();
-    // parse xml
-    void parse(const string &xmlcontent, ExpatHandlers *eh) throw(Exception);
-    // parse xml
-    void parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception);
-    // returns main object
-    void * getObject();
+    TEST_FIXTURE(SimulatedDataTest)
+    {
+      TEST_CASE(test1);
+    }
+
+    void setUp();
+    void tearDown();
 
 };
+
+REGISTER_FIXTURE(SimulatedDataTest);
 
 //---------------------------------------------------------------------------
 

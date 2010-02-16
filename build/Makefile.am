@@ -140,6 +140,7 @@ tests_SOURCES = \
     ../src/segmentations/SegmentationTest.cpp\
     ../src/segmentations/SegmentationsTest.cpp\
     ../src/kernel/IDataTest.cpp\
+    ../src/kernel/SimulatedDataTest.cpp\
     ../src/params/ParamsTest.cpp\
     ../src/portfolio/BorrowerTest.cpp\
     ../src/ratings/RatingsTest.cpp\
@@ -208,6 +209,7 @@ tests_SOURCES = \
     ../src/segmentations/SegmentationTest.hpp\
     ../src/segmentations/SegmentationsTest.hpp\
     ../src/kernel/IDataTest.hpp\
+    ../src/kernel/SimulatedDataTest.hpp\
     ../src/params/ParamsTest.hpp\
     ../src/portfolio/BorrowerTest.hpp\
     ../src/ratings/RatingsTest.hpp\
