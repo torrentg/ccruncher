@@ -52,12 +52,12 @@
 							<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
 								<xsd:complexType>
 									<xsd:attribute name="t" type="xsd:nonNegativeInteger" use="required"/>
-									<xsd:attribute name="r" type="xsd:double" use="required"/>
+									<xsd:attribute name="r" type="double" use="required"/>
 								</xsd:complexType>
 							</xsd:element>
 						</xsd:sequence>
 						<xsd:attribute name="name" type="xsd:string" use="required"/>
-						<xsd:attribute name="date" type="myDate" use="required"/>
+						<xsd:attribute name="date" type="date" use="required"/>
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:element>
@@ -80,7 +80,7 @@
 							<xsd:complexType>
 								<xsd:attribute name="from" type="xsd:string" use="required"/>
 								<xsd:attribute name="to" type="xsd:string" use="required"/>
-								<xsd:attribute name="value" type="xsd:double" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -94,7 +94,7 @@
 							<xsd:complexType>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
 								<xsd:attribute name="t" type="xsd:positiveInteger" use="required"/>
-								<xsd:attribute name="value" type="xsd:double" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -119,7 +119,7 @@
 							<xsd:complexType>
 								<xsd:attribute name="sector1" type="xsd:string" use="required"/>
 								<xsd:attribute name="sector2" type="xsd:string" use="required"/>
-								<xsd:attribute name="value" type="xsd:double" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -170,9 +170,9 @@
 														<xsd:sequence>
 															<xsd:element name="values" minOccurs="1" maxOccurs="unbounded">
 																<xsd:complexType>
-																	<xsd:attribute name="at" type="myDate" use="required"/>
+																	<xsd:attribute name="at" type="date" use="required"/>
 																	<xsd:attribute name="cashflow" type="xsd:double" use="required"/>
-																	<xsd:attribute name="recovery" type="xsd:double" use="required"/>
+																	<xsd:attribute name="recovery" type="double" use="required"/>
 																</xsd:complexType>
 															</xsd:element>
 														</xsd:sequence>
@@ -181,7 +181,7 @@
 											</xsd:sequence>
 											<xsd:attribute name="name" type="xsd:string" use="required"/>
 											<xsd:attribute name="id" type="xsd:string" use="required"/>
-											<xsd:attribute name="date" type="myDate" use="required"/>
+											<xsd:attribute name="date" type="date" use="required"/>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
@@ -198,6 +198,11 @@
 	</xsd:complexType>
 
 	<xsd:simpleType name="propertyType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of property names.
+      </xsd:documentation>
+    </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="time.0"/>
 			<xsd:enumeration value="time.T"/>
@@ -211,13 +216,25 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="componentsType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of types of components.
+        allowed values: asset, borrower
+      </xsd:documentation>
+    </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="asset"/>
 			<xsd:enumeration value="borrower"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	
-	<xsd:simpleType name="myDate">
+	<xsd:simpleType name="date">
+    <xsd:annotation>
+      <xsd:documentation>
+        date in the format DD/MM/YYYY.
+        e.g. 1/1/2003, 25/07/1945, 12/3/2007
+      </xsd:documentation>
+    </xsd:annotation>
 		<xsd:union memberTypes="xsd:date">
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">
@@ -227,4 +244,18 @@
 		</xsd:union>
 	</xsd:simpleType>
 	
+	<xsd:simpleType name="double">
+    <xsd:annotation>
+      <xsd:documentation>
+        double that can be followed by the percentage sign.
+        exponential notation not supported.
+        e.g. 2, 2.1, 2., .2, +2, -2.1, +4.5%, -.45%
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[+\-]?([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)%?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+	
 </xsd:schema>
+
