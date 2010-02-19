@@ -37,7 +37,7 @@
 			<xsd:element name="parameters" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="property" minOccurs="9" maxOccurs="9">
+						<xsd:element name="property" minOccurs="8" maxOccurs="8">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="propertyType" use="required"/>
 								<xsd:attribute name="value" type="xsd:string" use="required"/>
