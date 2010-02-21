@@ -10,7 +10,7 @@ body {
 }
 
 #main-container {
-	width: 650px;
+	width: 800px;
 	margin: 0 auto;
 	clear: both;
 	padding-top: 10px;
@@ -24,7 +24,7 @@ body {
 	margin-left: 0px;
 	background: url("header.jpg") repeat-x 0 0;
 	height: 100px;
-	width: 650px;
+	width: 800px;
 }
 
 #right-menu {

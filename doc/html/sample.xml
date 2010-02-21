@@ -21,15 +21,15 @@
   </parameters>
 
   <interest date="18/10/2009">
-    <rate t="0" r="0.0"/>
-    <rate t="1" r="0.04"/>
-    <rate t="2" r="0.041"/>
-    <rate t="3" r="0.045"/>
-    <rate t="6" r="0.0455"/>
-    <rate t="12" r="0.048"/>
-    <rate t="24" r="0.049"/>
-    <rate t="60" r="0.05"/>
-    <rate t="120" r="0.052"/>
+    <rate t="0" r="0.0%"/>
+    <rate t="1" r="4.0%"/>
+    <rate t="2" r="4.1%"/>
+    <rate t="3" r="4.5%"/>
+    <rate t="6" r="4.55%"/>
+    <rate t="12" r="4.8%"/>
+    <rate t="24" r="4.9%"/>
+    <rate t="60" r="5.0%"/>
+    <rate t="120" r="5.2%"/>
   </interest>
 
   <!-- 
@@ -51,70 +51,70 @@
 	covering the period between 01-Jan-1981 and 31-Dec-1998 
   -->
   <mtransitions period="12">
-    <transition from="AAA" to="AAA" value="0.9283" />
-    <transition from="AAA" to="AA" value="0.065" />
-    <transition from="AAA" to="A" value="0.0056" />
-    <transition from="AAA" to="BBB" value="0.0006" />
-    <transition from="AAA" to="BB" value="0.0005" />
-    <transition from="AAA" to="B" value="0.0" />
-    <transition from="AAA" to="CCC" value="0.0" />
-    <transition from="AAA" to="D" value="0.0" />
-    <transition from="AA" to="AAA" value="0.0063" />
-    <transition from="AA" to="AA" value="0.9187" />
-    <transition from="AA" to="A" value="0.0664" />
-    <transition from="AA" to="BBB" value="0.0065" />
-    <transition from="AA" to="BB" value="0.0006" />
-    <transition from="AA" to="B" value="0.0011" />
-    <transition from="AA" to="CCC" value="0.0004" />
-    <transition from="AA" to="D" value="0.0" />
-    <transition from="A" to="AAA" value="0.0008" />
-    <transition from="A" to="AA" value="0.0226" />
-    <transition from="A" to="A" value="0.9165" />
-    <transition from="A" to="BBB" value="0.0511" />
-    <transition from="A" to="BB" value="0.0061" />
-    <transition from="A" to="B" value="0.0023" />
-    <transition from="A" to="CCC" value="0.0002" />
-    <transition from="A" to="D" value="0.0004" />
-    <transition from="BBB" to="AAA" value="0.0005" />
-    <transition from="BBB" to="AA" value="0.0027" />
-    <transition from="BBB" to="A" value="0.0584" />
-    <transition from="BBB" to="BBB" value="0.8776" />
-    <transition from="BBB" to="BB" value="0.0474" />
-    <transition from="BBB" to="B" value="0.0098" />
-    <transition from="BBB" to="CCC" value="0.0015" />
-    <transition from="BBB" to="D" value="0.0021" />
-    <transition from="BB" to="AAA" value="0.0004" />
-    <transition from="BB" to="AA" value="0.0011" />
-    <transition from="BB" to="A" value="0.0064" />
-    <transition from="BB" to="BBB" value="0.0785" />
-    <transition from="BB" to="BB" value="0.8113" />
-    <transition from="BB" to="B" value="0.0827" />
-    <transition from="BB" to="CCC" value="0.0089" />
-    <transition from="BB" to="D" value="0.0107" />
-    <transition from="B" to="AAA" value="0.0" />
-    <transition from="B" to="AA" value="0.0011" />
-    <transition from="B" to="A" value="0.003" />
-    <transition from="B" to="BBB" value="0.0042" />
-    <transition from="B" to="BB" value="0.0675" />
-    <transition from="B" to="B" value="0.8308" />
-    <transition from="B" to="CCC" value="0.0386" />
-    <transition from="B" to="D" value="0.0548" />
-    <transition from="CCC" to="AAA" value="0.0019" />
-    <transition from="CCC" to="AA" value="0.0" />
-    <transition from="CCC" to="A" value="0.0038" />
-    <transition from="CCC" to="BBB" value="0.0075" />
-    <transition from="CCC" to="BB" value="0.0244" />
-    <transition from="CCC" to="B" value="0.1203" />
-    <transition from="CCC" to="CCC" value="0.6071" />
-    <transition from="CCC" to="D" value="0.235" />
-    <transition from="D" to="AAA" value="0.0" />
-    <transition from="D" to="AA" value="0.0" />
-    <transition from="D" to="A" value="0.0" />
-    <transition from="D" to="BBB" value="0.0" />
-    <transition from="D" to="BB" value="0.0" />
-    <transition from="D" to="B" value="0.0" />
-    <transition from="D" to="CCC" value="0.0" />
-    <transition from="D" to="D" value="1.0" />
+    <transition from="AAA" to="AAA" value="92.83%" />
+    <transition from="AAA" to="AA" value="6.5%" />
+    <transition from="AAA" to="A" value="0.56%" />
+    <transition from="AAA" to="BBB" value="0.06%" />
+    <transition from="AAA" to="BB" value="0.05%" />
+    <transition from="AAA" to="B" value="0.0%" />
+    <transition from="AAA" to="CCC" value="0.0%" />
+    <transition from="AAA" to="D" value="0.0%" />
+    <transition from="AA" to="AAA" value="0.63%" />
+    <transition from="AA" to="AA" value="91.87%" />
+    <transition from="AA" to="A" value="6.64%" />
+    <transition from="AA" to="BBB" value="0.65%" />
+    <transition from="AA" to="BB" value="0.06%" />
+    <transition from="AA" to="B" value="0.11%" />
+    <transition from="AA" to="CCC" value="0.04%" />
+    <transition from="AA" to="D" value="0.0%" />
+    <transition from="A" to="AAA" value="0.08%" />
+    <transition from="A" to="AA" value="2.26%" />
+    <transition from="A" to="A" value="91.65%" />
+    <transition from="A" to="BBB" value="5.11%" />
+    <transition from="A" to="BB" value="0.61%" />
+    <transition from="A" to="B" value="0.23%" />
+    <transition from="A" to="CCC" value="0.02%" />
+    <transition from="A" to="D" value="0.04%" />
+    <transition from="BBB" to="AAA" value="0.05%" />
+    <transition from="BBB" to="AA" value="0.27%" />
+    <transition from="BBB" to="A" value="5.84%" />
+    <transition from="BBB" to="BBB" value="87.76%" />
+    <transition from="BBB" to="BB" value="4.74%" />
+    <transition from="BBB" to="B" value="0.98%" />
+    <transition from="BBB" to="CCC" value="0.15%" />
+    <transition from="BBB" to="D" value="0.21%" />
+    <transition from="BB" to="AAA" value="0.04%" />
+    <transition from="BB" to="AA" value="0.11%" />
+    <transition from="BB" to="A" value="0.64%" />
+    <transition from="BB" to="BBB" value="7.85%" />
+    <transition from="BB" to="BB" value="81.13%" />
+    <transition from="BB" to="B" value="8.27%" />
+    <transition from="BB" to="CCC" value="0.89%" />
+    <transition from="BB" to="D" value="1.07%" />
+    <transition from="B" to="AAA" value="0.0%" />
+    <transition from="B" to="AA" value="0.11%" />
+    <transition from="B" to="A" value="0.3%" />
+    <transition from="B" to="BBB" value="0.42%" />
+    <transition from="B" to="BB" value="6.75%" />
+    <transition from="B" to="B" value="83.08%" />
+    <transition from="B" to="CCC" value="3.86%" />
+    <transition from="B" to="D" value="5.48%" />
+    <transition from="CCC" to="AAA" value="0.19%" />
+    <transition from="CCC" to="AA" value="0.0%" />
+    <transition from="CCC" to="A" value="0.38%" />
+    <transition from="CCC" to="BBB" value="0.75%" />
+    <transition from="CCC" to="BB" value="2.44%" />
+    <transition from="CCC" to="B" value="12.03%" />
+    <transition from="CCC" to="CCC" value="60.71%" />
+    <transition from="CCC" to="D" value="23.5%" />
+    <transition from="D" to="AAA" value="0.0%" />
+    <transition from="D" to="AA" value="0.0%" />
+    <transition from="D" to="A" value="0.0%" />
+    <transition from="D" to="BBB" value="0.0%" />
+    <transition from="D" to="BB" value="0.0%" />
+    <transition from="D" to="B" value="0.0%" />
+    <transition from="D" to="CCC" value="0.0%" />
+    <transition from="D" to="D" value="100%" />
   </mtransitions>
 
   <sectors>
@@ -166,16 +166,16 @@
 			bond with anual cupons at 10% with a recovery rate of 80%
 		-->
         <data>
-          <values at="01/06/2005" cashflow="100.0" recovery="1600.0" />
-          <values at="01/06/2006" cashflow="100.0" recovery="1520.0" />
-          <values at="01/06/2007" cashflow="100.0" recovery="1440.0" />
-          <values at="01/06/2008" cashflow="100.0" recovery="1360.0" />
-          <values at="01/06/2009" cashflow="100.0" recovery="1280.0" />
-          <values at="01/06/2010" cashflow="100.0" recovery="1200.0" />
-          <values at="01/06/2011" cashflow="100.0" recovery="1120.0" />
-          <values at="01/06/2012" cashflow="100.0" recovery="1040.0" />
-          <values at="01/06/2013" cashflow="100.0" recovery="960.0" />
-          <values at="01/06/2014" cashflow="1100.0" recovery="880.0" />
+          <values at="01/06/2005" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2006" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2007" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2008" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2009" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2010" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2011" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2012" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2013" cashflow="100.0" recovery="80%" />
+          <values at="01/06/2014" cashflow="1100.0" recovery="80%" />
         </data>
       </asset>
       <asset name="bond" id="op2" date="01/06/2008">
@@ -185,11 +185,11 @@
 			bond with bianual cupons at 12% with a recovery rate of 75%
 		-->
         <data>
-          <values at="01/07/2009" cashflow="480.0" recovery="3300.0" />
-          <values at="01/07/2011" cashflow="480.0" recovery="2940.0" />
-          <values at="01/07/2013" cashflow="480.0" recovery="2580.0" />
-          <values at="01/07/2015" cashflow="480.0" recovery="2220.0" />
-          <values at="01/07/2017" cashflow="2480.0" recovery="1860.0" />
+          <values at="01/07/2009" cashflow="480.0" recovery="75%" />
+          <values at="01/07/2011" cashflow="480.0" recovery="70%" />
+          <values at="01/07/2013" cashflow="480.0" recovery="65%" />
+          <values at="01/07/2015" cashflow="480.0" recovery="60%" />
+          <values at="01/07/2017" cashflow="2480.0" recovery="55%" />
         </data>
       </asset>
     </borrower>
@@ -203,11 +203,11 @@
 			bond with bianual cupons at 7.5% with a recovery rate of 40%
 		-->
         <data>
-          <values at="01/01/2005" cashflow="150.0" recovery="700.0" />
-          <values at="01/06/2007" cashflow="150.0" recovery="640.0" />
-          <values at="01/01/2009" cashflow="150.0" recovery="580.0" />
-          <values at="01/06/2011" cashflow="150.0" recovery="520.0" />
-          <values at="01/01/2013" cashflow="1150.0" recovery="460.0" />
+          <values at="01/01/2005" cashflow="150.0" recovery="20%" />
+          <values at="01/06/2007" cashflow="150.0" recovery="20%" />
+          <values at="01/01/2009" cashflow="150.0" recovery="20%" />
+          <values at="01/06/2011" cashflow="150.0" recovery="20%" />
+          <values at="01/01/2013" cashflow="1150.0" recovery="20%" />
         </data>
       </asset>
     </borrower>
@@ -221,20 +221,20 @@
 			bond with anual cupons at 10% with a recovery rate of 25%
 		-->
         <data>
-          <values at="01/01/2000" cashflow="100.0" recovery="600.0" />
-          <values at="01/01/2001" cashflow="100.0" recovery="575.0" />
-          <values at="01/01/2002" cashflow="100.0" recovery="550.0" />
-          <values at="01/01/2003" cashflow="100.0" recovery="525.0" />
-          <values at="01/01/2004" cashflow="100.0" recovery="500.0" />
-          <values at="01/01/2005" cashflow="100.0" recovery="475.0" />
-          <values at="01/01/2006" cashflow="100.0" recovery="450.0" />
-          <values at="01/01/2007" cashflow="100.0" recovery="425.0" />
-          <values at="01/01/2008" cashflow="100.0" recovery="400.0" />
-          <values at="01/01/2009" cashflow="100.0" recovery="375.0" />
-          <values at="01/01/2010" cashflow="100.0" recovery="350.0" />
-          <values at="01/01/2011" cashflow="100.0" recovery="325.0" />
-          <values at="01/01/2012" cashflow="100.0" recovery="300.0" />
-          <values at="01/01/2013" cashflow="1100.0" recovery="275.0" />
+          <values at="01/01/2000" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2001" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2002" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2003" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2004" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2005" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2006" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2007" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2008" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2009" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2010" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2011" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2012" cashflow="100.0" recovery="50%" />
+          <values at="01/01/2013" cashflow="1100.0" recovery="50%" />
         </data>
       </asset>
     </borrower>
