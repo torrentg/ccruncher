@@ -120,7 +120,7 @@ Notes for Windows developers (MSVC9)
    (eg. http://tortoisesvn.tigris.org/)
 
 2. retrieve repository content
-   (checkout from http://www.generacio.com/svn/ccruncher/trunk/)
+   (checkout from http://www.ccruncher.net/svn/trunk/)
 
 3. download expat package from http://expat.sourceforge.net/
    and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
@@ -149,7 +149,7 @@ Notes for Windows developers (cygwin)
 -------------------------------------
 
 1. retrieve repository content
-   (checkout from http://www.generacio.com/svn/ccruncher/trunk/)
+   (checkout from http://www.ccruncher.net/svn/trunk/)
 
 2. install gcc, aclocal, autoconf, automake, expat, gsl and zlib
    cygwin packages
@@ -179,7 +179,7 @@ Developers tips & tricks
 --------------------------------
 
 1. download CCruncher sources from subversion repositori
-     svn checkout http://www.generacio.com/svn/ccruncher/trunk/ ccruncher 
+     svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
 
 2. install required libraries (explained before)
 
@@ -233,11 +233,11 @@ Developers tips & tricks
       $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 12. create a tag in subversion repository
-      svn cp http://www.generacio.com/svn/ccruncher/trunk/ \
-             http://www.generacio.com/svn/ccruncher/tags/ccruncher-x.y/ \
+      svn cp http://www.ccruncher.net/svn/trunk/ \
+             http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"
 
 
 CCruncher Team
-http://www.generacio.com/ccruncher/
+http://www.ccruncher.net
 

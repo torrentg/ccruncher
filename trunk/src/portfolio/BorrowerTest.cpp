@@ -170,24 +170,24 @@ void ccruncher_test::BorrowerTest::test1()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2' date='01/01/2000'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -231,22 +231,22 @@ void ccruncher_test::BorrowerTest::test2()
     <borrower rating='K' sector='S2' name='Borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -273,22 +273,22 @@ void ccruncher_test::BorrowerTest::test3()
     <borrower rating='A' sector='S2' name='borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2000' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2001' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/01/2002' cashflow='10.0' recovery='450.0' />\n\
-          <values at='01/07/2002' cashflow='510.0' recovery='450.0' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset name='generic' id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2001' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2002' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/01/2003' cashflow='15.0' recovery='400.0' />\n\
-          <values at='01/07/2003' cashflow='515.0' recovery='400.0' />\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";

@@ -72,12 +72,12 @@ class Asset : public ExpatHandlers
 
   private:
   
-    // returns recovery at given date
-    double getRecovery(Date d);
-    // returns cashflow sum from given date
-    double getCashflowSum(Date d);
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
+    // returns recovery at given date
+    double getRecovery(Date d);
+    // returns loss at given date
+    double getLossX(Date d);
 
   public:
 

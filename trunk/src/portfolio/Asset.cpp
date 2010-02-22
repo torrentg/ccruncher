@@ -90,9 +90,9 @@ double ccruncher::Asset::getRecovery(Date d)
 }
 
 //===========================================================================
-// getCashflowSum
+// getLossX
 //===========================================================================
-double ccruncher::Asset::getCashflowSum(Date d)
+double ccruncher::Asset::getLossX(Date d)
 {
   int n = (int) data.size();
   double ret = 0.0;
@@ -110,7 +110,7 @@ double ccruncher::Asset::getCashflowSum(Date d)
     }
   }
 
-  ret -= getRecovery(d);
+  ret *= (1.0 - getRecovery(d));
 
   return ret;
 }
@@ -133,7 +133,6 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
     {
       double ufactor =  interest.getUpsilon(data[i].date, d1);
       data[i].cashflow *= ufactor;
-      data[i].recovery *= ufactor;
     }
   }
 
@@ -143,7 +142,7 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
       ptimes.push_back(data[i].date);
-      plosses.push_back(getCashflowSum(data[i].date));
+      plosses.push_back(getLossX(data[i].date));
     }
   }
   
@@ -152,7 +151,7 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   if (ptimes.size() == 0 || mindate < ptimes.front())
   {
     ptimes.insert(ptimes.begin(), mindate);
-    plosses.insert(plosses.begin(), getCashflowSum(mindate));
+    plosses.insert(plosses.begin(), getLossX(mindate));
   }
   
   // adding maximum event date
@@ -160,7 +159,7 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   if (ptimes.back() < maxdate)
   {
     ptimes.push_back(maxdate);
-    plosses.push_back(getCashflowSum(maxdate));
+    plosses.push_back(getLossX(maxdate));
   }
 
   // deallocating unused memory  
@@ -181,6 +180,9 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 
     if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
+    }
+    else if (recovery < 0.0 || 1.0 < recovery) {
+      throw Exception("recovery value out of range [0%,100%]");
     }
     else {
       DateValues aux(at, cashflow, recovery);

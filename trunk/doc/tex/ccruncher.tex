@@ -168,8 +168,8 @@ the correlation matrix based on the historical information about defaults.
 Portfolio is composed by borrowers. Each borrower has an initial rating and 
 belongs to a sector. Each borrower have one or more assets. Each asset
 is defined by its addition date in the portfolio, expected cashflow and 
-forecasted recovery at certain dates. Figure \ref{portfolio} shows the 
-structure of a portfolio.
+recovery at certain dates. Figure \ref{portfolio} shows the structure of 
+a portfolio.
 \newline
 
 \emph{Cashflow} indicates the cash given to the borrower (negative amounts) and the
@@ -184,20 +184,17 @@ cash received from the borrower (positive amounts) at each date (see figure \ref
 \end{figure}
 \FloatBarrier
 
-\emph{Recovery} indicates the expected cash recovered (after taking legal action against 
-the borrower) if the borrower defaults at a certain date (see figure \ref{recovery}).
-
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[width=7cm, angle=0]{./images/recovery.eps}
-\caption{Asset recovery example}
-\label{recovery}
-\end{center}
-\end{figure}
-\FloatBarrier
+\emph{Recovery} is a ratio that indicates the portion of loss that will be recovered
+in case of default at a fixed time. These values takes into account guarantees, the 
+cost to take legal actions, recovery rate based on historical data, etc.
+\newline
 
 If a borrower defaults, the loss due to this default is the sum of all remaining
-cashflows at default time minus the recovery at default time.
+cashflows at default time (\emph{exposure}) weighted by recovery rate at default time.
+
+\begin{displaymath}
+\mathrm{loss}_{t} = (1 - \mathrm{recovery}_t) \cdot \sum_{i \ge t}^{N} \mathrm{cashflow}_{i}
+\end{displaymath}
 
 \begin{figure}[!hbt]
 \begin{center}

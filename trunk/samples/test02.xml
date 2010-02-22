@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
 <ccruncher>
 
   <title>test02</title>
@@ -69,15 +69,15 @@ How to check results?
   <!--                       INTEREST                                 -->
   <!-- ============================================================== -->
   <interest date="01/01/2005">
-    <rate t="0" r="0.0"/>
-    <rate t="1" r="0.0"/>
-    <rate t="2" r="0.0"/>
-    <rate t="3" r="0.0"/>
-    <rate t="6" r="0.0"/>
-    <rate t="12" r="0.0"/>
-    <rate t="24" r="0.0"/>
-    <rate t="60" r="0.0"/>
-    <rate t="120" r="0.0"/>
+    <rate t="0" r="0%"/>
+    <rate t="1" r="0%"/>
+    <rate t="2" r="0%"/>
+    <rate t="3" r="0%"/>
+    <rate t="6" r="0%"/>
+    <rate t="12" r="0%"/>
+    <rate t="24" r="0%"/>
+    <rate t="60" r="0%"/>
+    <rate t="120" r="0%"/>
   </interest>
 
   <!-- ============================================================== -->
@@ -92,10 +92,10 @@ How to check results?
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
   <mtransitions period="12">
-    <transition from="A" to="A" value="0.90"/>
-    <transition from="A" to="E" value="0.10"/>
-    <transition from="E" to="A" value="0.00"/>
-    <transition from="E" to="E" value="1.00"/>
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
   </mtransitions>
 
   <!-- ============================================================== -->
@@ -109,7 +109,7 @@ How to check results?
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <mcorrels>
-    <sigma sector1="S1" sector2="S1" value="0.0"/>
+    <sigma sector1="S1" sector2="S1" value="0%"/>
   </mcorrels>
 
   <!-- ============================================================== -->
@@ -133,7 +133,7 @@ How to check results?
     <borrower rating="A" sector="S1" name="002" id="002">
       <asset name="generic" id="op2" date="01/01/2005">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
+          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
         </data>
       </asset>
     </borrower>
