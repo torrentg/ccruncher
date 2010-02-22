@@ -4,8 +4,8 @@
 # description: 
 #   Create a CreditCruncher distribution package
 #   Command to create the tag in the repo:
-#     > svn -r xxx cp http://www.generacio.com/svn/ccruncher/trunk \
-#     >  http://www.generacio.com/svn/ccruncher/tags/ccruncher-X.Y
+#     > svn -r xxx cp http://www.ccruncher.net/svn/trunk \
+#     >  http://www.ccruncher.net/svn/tags/ccruncher-X.Y
 #
 # dependencies:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
@@ -66,7 +66,7 @@ copyright() {
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
-               http://www.generacio.com/ccruncher
+                   http://www.ccruncher.net
 
 _EOF_
 
@@ -91,7 +91,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gtorrent@ccruncher.net";
          exit 1;;
     esac
   done
@@ -114,7 +114,7 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  svn export http://www.generacio.com/svn/ccruncher/trunk;
+  svn export http://www.ccruncher.net/svn/trunk;
   chmod -R +w trunk
   mv trunk $1;
 
@@ -275,7 +275,7 @@ case $disttype in
          echo "use -h option for more information";
          exit 1;;
       *) echo "unexpected error. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gtorrent@ccruncher.net";
          exit 1;;
 
 esac

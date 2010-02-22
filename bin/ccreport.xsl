@@ -108,7 +108,7 @@ table.its tr.odd {
 			<xsl:apply-templates/>
 			<div class="gray-bar">
 				<span class="little" style="text-align:center;">
-					risk computed by <a href="http://www.generacio.com/ccruncher/">ccruncher</a>
+					risk computed by <a href="http://www.ccruncher.net">ccruncher</a>
 				</span>
 			</div>
 		</div>

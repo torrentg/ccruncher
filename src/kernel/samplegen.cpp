@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "generator version and arguments at gerard@mail.generacio.com\n";
+                  "generator version and arguments at gtorrent@ccruncher.net\n";
           return 1;
     }
   }
@@ -360,6 +360,6 @@ void copyright()
   cout << "\n"
   "  generator is Copyright (C) 2003-2010 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
-  "  more info at http://www.generacio.com/ccruncher\n"
+  "  more info at http://www.ccruncher.net\n"
   << endl;
 }

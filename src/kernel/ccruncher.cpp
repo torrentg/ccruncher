@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gerard@generacio.com\n" << endl;
+                  "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
           return shutdown(1);
     }
   }
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gerard@generacio.com\n" << endl;
+            "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
     return shutdown(1);
   }
 
@@ -434,7 +434,7 @@ void usage()
   "  description:\n"
   "    ccruncher is a tool used to evalute VAR (value at risk)\n"
   "    of a pure credit portfolio using Monte Carlo simulation.\n"
-  "    more info at http://www.generacio.com/ccruncher\n"
+  "    more info at http://www.ccruncher.net\n"
   "  arguments:\n"
   "    file        xml file containing the problem to be solved. This\n"
   "                file can be gziped (caution, zip format not suported)\n"
@@ -479,7 +479,7 @@ void copyright()
   cout << "\n"
   "   ccruncher is Copyright (C) 2003-2010 Gerard Torrent and licensed\n"
   "     under the GNU General Public License, version 2. more info at\n"
-  "               http://www.generacio.com/ccruncher\n"
+  "                   http://www.ccruncher.net\n"
   << endl;
 }
 

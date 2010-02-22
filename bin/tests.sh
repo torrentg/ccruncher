@@ -47,7 +47,7 @@ copyright() {
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
-               http://www.generacio.com/ccruncher
+                   http://www.ccruncher.net
 
 _EOF_
 
@@ -66,7 +66,7 @@ usage() {
     files generates by ccruncher using R. The report is 
     stored in an html file in the same directory where output
     data file resides.
-    more info at http://www.generacio.com/ccruncher
+    more info at http://www.ccruncher.net
   arguments:
     file     ccruncher output data file
   options
@@ -98,7 +98,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information";
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gtorrent@ccruncher.net";
          exit 1;;
     esac
   done

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ccruncher
-	xmlns="http://www.generacio.com/ccruncher"
+	xmlns="http://www.ccruncher.net"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.generacio.com/ccruncher ccruncher.xsd">
+	xsi:schemaLocation="http://www.ccruncher.net ccruncher.xsd">
 
   <title>test01</title>
   <description>
@@ -70,15 +70,15 @@ How to check results?
   <!--                       INTEREST                                 -->
   <!-- ============================================================== -->
   <interest date="01/01/2005">
-    <rate t="0" r="0.0"/>
-    <rate t="1" r="0.0"/>
-    <rate t="2" r="0.0"/>
-    <rate t="3" r="0.0"/>
-    <rate t="6" r="0.0"/>
-    <rate t="12" r="0.0"/>
-    <rate t="24" r="0.0"/>
-    <rate t="60" r="0.0"/>
-    <rate t="120" r="0.0"/>
+    <rate t="0" r="0%"/>
+    <rate t="1" r="0%"/>
+    <rate t="2" r="0%"/>
+    <rate t="3" r="0%"/>
+    <rate t="6" r="0%"/>
+    <rate t="12" r="0%"/>
+    <rate t="24" r="0%"/>
+    <rate t="60" r="0%"/>
+    <rate t="120" r="0%"/>
   </interest>
 
   <!-- ============================================================== -->
@@ -93,10 +93,10 @@ How to check results?
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
   <mtransitions period="12">
-    <transition from="A" to="A" value="0.90"/>
-    <transition from="A" to="E" value="0.10"/>
-    <transition from="E" to="A" value="0.00"/>
-    <transition from="E" to="E" value="1.00"/>
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
   </mtransitions>
 
   <!-- ============================================================== -->
@@ -110,7 +110,7 @@ How to check results?
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <mcorrels>
-    <sigma sector1="S1" sector2="S1" value="0.0"/>
+    <sigma sector1="S1" sector2="S1" value="0%"/>
   </mcorrels>
 
   <!-- ============================================================== -->
@@ -131,7 +131,7 @@ How to check results?
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
-          <values at="01/01/2007" cashflow="1.0" recovery="0.0" />
+          <values at="01/01/2007" cashflow="1.0" recovery="0%" />
         </data>
       </asset>
     </borrower>

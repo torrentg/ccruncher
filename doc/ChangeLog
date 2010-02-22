@@ -17,7 +17,10 @@ version 1.5 (???. 2010)
   * in xml input file, attribute desc renamed to decription
   * in xml input file, tag params renamed to parameters
   * in xml input file, renamed implicit segmentations
+  * in xml file, added support for percentages
+  * recovery expressed as percentage
   * code refactoring
+  * changed site look & feel
 
 version 1.4 (Jul. 2009)
 --------------------------

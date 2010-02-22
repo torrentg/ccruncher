@@ -11,5 +11,5 @@ You can run any file tipying next commands on a console:
 The ouput will be written in files located at data directory
 
 The CCruncher Team
-http://www.generacio.com/ccruncher/
+http://www.ccruncher.net
 

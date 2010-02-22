@@ -168,7 +168,7 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
     <borrower rating='C' sector='S1' name='Borrower1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -177,7 +177,7 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
     <borrower rating='D' sector='S2' name='Borrower2' id='cif2'>\n\
       <asset name='generic' id='op2' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -186,7 +186,7 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
     <borrower rating='A' sector='S1' name='Borrower3' id='cif3'>\n\
       <asset name='generic' id='op3' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -195,7 +195,7 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
     <borrower rating='B' sector='S1' name='Borrower4' id='cif4'>\n\
       <asset name='generic' id='op4' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";
@@ -204,7 +204,7 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
     <borrower rating='A' sector='S2' name='Borrower5' id='cif5'>\n\
       <asset name='generic' id='op5' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='450.0' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </borrower>";

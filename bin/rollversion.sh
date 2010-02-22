@@ -60,7 +60,7 @@ copyright() {
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
      under the GNU General Public License, version 2. more info at
-               http://www.generacio.com/ccruncher
+                   http://www.ccruncher.net
 
 _EOF_
 
@@ -84,7 +84,7 @@ readconf() {
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
       *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gerard@mail.generacio.com";
+         echo "$progname version and arguments at gtorrent@ccruncher.net";
          exit 1;;
     esac
   done
@@ -167,7 +167,7 @@ if [ "$csvn" = "true" ]; then
 fi
 
 if [ "$cver" = "true" ]; then
-  replace "s/AC_INIT(ccruncher,\(.*\),\ *gerard@mail.generacio.com)/AC_INIT(ccruncher, $gloversion, gerard@mail.generacio.com)/g" $CCRUNCHERPATH/configure.in
+  replace "s/AC_INIT(ccruncher,\(.*\),\ *gtorrent@ccruncher.net)/AC_INIT(ccruncher, $gloversion, gtorrent@ccruncher.net)/g" $CCRUNCHERPATH/configure.in
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/ccreport.sh
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/src2bin.sh

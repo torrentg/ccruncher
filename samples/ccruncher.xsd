@@ -2,15 +2,15 @@
 
 <xsd:schema 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://www.generacio.com/ccruncher"
-	targetNamespace="http://www.generacio.com/ccruncher"
+	xmlns="http://www.ccruncher.net"
+	targetNamespace="http://www.ccruncher.net"
 	elementFormDefault="qualified">
 	
 	<!--
 		  if you desire debug your xml add these lines to main tag:
-		  xmlns="http://www.generacio.com/ccruncher"
+		  xmlns="http://www.ccruncher.net"
 		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		  xsi:schemaLocation="http://www.generacio.com/ccruncher ccruncher.xsd"
+		  xsi:schemaLocation="http://www.ccruncher.net ccruncher.xsd"
 		
 		  other way to do the same is:
 		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
