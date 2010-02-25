@@ -51,7 +51,7 @@
 %-----------------------------------------------------
 \begin{document}
 
-\title{CreditCruncher - Technical Document}
+\title{CCruncher - Technical Document}
 \author{Gerard Torrent Gironella\\\\Version \numversion\ -\ \svnversion}
 \date{}
 \maketitle
@@ -185,12 +185,12 @@ cash received from the borrower (positive amounts) at each date (see figure \ref
 \FloatBarrier
 
 \emph{Recovery} is a ratio that indicates the portion of loss that will be recovered
-in case of default at a fixed time. These values takes into account guarantees, the 
+in case of default at a fixed time. This value takes into account guarantees, the 
 cost to take legal actions, recovery rate based on historical data, etc.
 \newline
 
-If a borrower defaults, the loss due to this default is the sum of all remaining
-cashflows at default time (\emph{exposure}) weighted by recovery rate at default time.
+If a borrower defaults, the loss is the sum of all remaining cashflows at default time 
+(\emph{exposure}) weighted by recovery rate at default time.
 
 \begin{displaymath}
 \mathrm{loss}_{t} = (1 - \mathrm{recovery}_t) \cdot \sum_{i \ge t}^{N} \mathrm{cashflow}_{i}
@@ -347,26 +347,20 @@ Figure \ref{simttd} shows this in a graphic manner.
 \label{sec:portfolioloss}
 At this point, given any borrower, we have a simulated default time. The loss
 caused by this borrower is the sum of all remaining cashflows at default time 
-minus the recovery at default default time. To obtain the simulated 
-value of the portfolio loss we sum all losses and we keep this value 
-in a list. Afterwards we will use this list to compute risk.
-\newline
+weighted by recovery at default default time. To obtain the simulated 
+value of the portfolio loss we sum all borrower losses.
 
-%TODO: add a graphic
+\begin{displaymath}
+\mathrm{PortfolioLoss} = \sum_{i=1}^N \mathrm{BorrowerLoss}_i
+\end{displaymath}
 
-We consider the recovery at default time as the closest asset recovery by right.
-Figure \ref{recoverymapping} shows distinct default times and its recovery 
-values (bolded lines) using recoveries defined in figure \ref{recovery} 
-(grayed lines).
+Where $N$ is the number of borrowers in the portfolio. For each of them we 
+use the simulated default time, $t_i$, described in the previous section to 
+compute the borrower loss.
 
-\begin{figure}[!hbtp]
-\begin{center}
-\includegraphics[width=12cm, angle=0]{./images/recoverymapping.eps}
-\caption{Asset recoveries in distinct default times}
-\label{recoverymapping}
-\end{center}
-\end{figure}
-\FloatBarrier
+\begin{displaymath}
+\mathrm{BorrowerLoss}_{i} = (1 - \mathrm{recovery}_{t_i}^i) \cdot \sum_{j \ge {t_i}}^{E^i} \mathrm{cashflow}_{j}^i
+\end{displaymath}
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
@@ -898,10 +892,9 @@ required.
 %---------------------------------------------------------------------------
 \subsection{Copula initialization}
 
-The copulas implemented by CreditCruncher, gaussian and T-Student, 
-requires the same covariance matrix, $\Sigma'$. We compute this matrix
-following the steps $1$ and $2$ from appendices \ref{ap:gaussiancopu} 
-and \ref{ap:tstudentcopu}.
+The implemented copulas, gaussian and T-Student, requires the same covariance 
+matrix, $\Sigma'$. We compute this matrix following the steps $1$ and $2$ from 
+appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu}.
 \newline
 
 We create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
@@ -1392,7 +1385,7 @@ u_n
 where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 
 %---------------------------------------------------------------------------
-\subsection{t-Student copula simulation}
+\subsection{T-Student copula simulation}
 \label{ap:tstudentcopu}
 Algorithm to simulate a t-Sudent copula with $\nu$ degrees of freedom ($\nu > 2$) 
 satisfying correlation matrix $\Sigma$ \cite{copu:pricing}:
