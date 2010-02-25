@@ -67,15 +67,15 @@ Installation from source package
 --------------------------------
 
 1. uncompress package
-     tar -xvzf ccruncher-X.Y_src.tgz
+     > tar -xvzf ccruncher-X.Y_src.tgz
 
 2. install required libraries (explained before)
 
 3. execute commands (read INSTALL file):
-     cd ccruncher-X.Y
-     ./configure
-     make
-     bin/src2bin.sh
+     > cd ccruncher-X.Y
+     > configure
+     > make
+     > bin/src2bin.sh
 
    supported ./configure options:
      --enable-debug:    add debug instructions
@@ -87,7 +87,7 @@ Installation from binary package
 --------------------------------
 
 1. uncompress package
-     tar -xvzf ccruncher-X.Y_bin.tgz
+     > tar -xvzf ccruncher-X.Y_bin.tgz
 
 2. install required libraries (explained before)
 
@@ -96,15 +96,16 @@ Using CCruncher
 --------------------------------
 
 1. create your input file. Read documentation to perform this step.
-   use any file in samples directory as template.
+   Use any file in samples directory as template.
 
 2. run CCruncher
-     $CCRUNCHER/bin/ccruncher --help
-     $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data samples/test01.xml
+     > $CCRUNCHER/bin/ccruncher --help
+     > $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data samples/test01.xml
 
 3. compute risk indicators typing:
-     $CCRUNCHER/bin/ccreport.sh data/portfolio.csv
-     firefox data/portfolio.html
+     > $CCRUNCHER/bin/ccreport.sh data/portfolio.csv
+     > firefox data/portfolio.html
+   
    or open a R console and type:
      > source("$CCRUNCHER/bin/ccreport.R")
      > ccruncher.summary("$CCRUNCHER/data/portfolio.csv")
@@ -160,7 +161,7 @@ Notes for Windows developers (cygwin)
      > aclocal
      > autoconf
      > automake -a -v -c -f
-     > ./configure
+     > configure
      > make
 
 
@@ -179,61 +180,61 @@ Developers tips & tricks
 --------------------------------
 
 1. download CCruncher sources from subversion repositori
-     svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
+     > svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
 
 2. install required libraries (explained before)
 
 3. create auto-files (run only 1 time)
-     autoscan (produces configure.in)
-     autoheader (produces config.h.in)
+     > autoscan (produces configure.in)
+     > autoheader (produces config.h.in)
 
 4. create ./configure script
-     aclocal
-     autoconf
-     automake -avcf    (--help --warnings=all)
+     > aclocal
+     > autoconf
+     > automake -avcf    (--help --warnings=all)
 
 5. compile project in debug mode
-     ./configure --enable-debug --enable-profiler
-     make
-     make check
+     > configure --enable-debug --enable-profiler
+     > make
+     > make check
    or compile project enabling MPI
-     ./configure --prefix=$PWD --enable-debug --enable-profiler --enable-mpi
-     make
-     make check
+     > configure --enable-debug --enable-profiler --enable-mpi
+     > make
+     > make check
 
 6. executing test suite
-     build/tests
+     > build/tests
 
 7. checking memory leaks
      don't enable profiler because can cause problems to valgrind
-     valgrind --tool=memcheck --leak-check=yes <progname>
+     > valgrind --tool=memcheck --leak-check=yes <progname>
 
-8. profiling executable (only if ./configure called with option --enable-profiler)
-     ./path/progname (-> writes gmon.out because we compiled with -pg flag)
-     gprof ./path/progname gmon.out
+8. profiling executable (only if configure is called with option --enable-profiler)
+     ccruncher writes gmon.out because we compiled with -pg flag
+     > gprof bin/ccruncher gmon.out
 
 9. debuging executable
-     gdb ./path/progname
-       > help
-       > set args arg1 arg2 arg3 ... argn
-       > run
-       > backtrace
-       > quit
+     > gdb ./path/progname
+       >> help
+       >> set args arg1 arg2 arg3 ... argn
+       >> run
+       >> backtrace
+       >> quit
 
 10. creating pdf documentation
-      $CCRUNCHER/doc/tex/make
-      $CCRUNCHER/doc/tex/make install
+      > $CCRUNCHER/doc/tex/make
+      > $CCRUNCHER/doc/tex/make install
 
 11. making source distribution package
-      make distcheck
-      make dist
+      > make distcheck
+      > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
-      $CCRUNCHER/bin/makedist.sh -s
-      $CCRUNCHER/bin/makedist.sh -l
-      $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
+      > $CCRUNCHER/bin/makedist.sh -s
+      > $CCRUNCHER/bin/makedist.sh -l
+      > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 12. create a tag in subversion repository
-      svn cp http://www.ccruncher.net/svn/trunk/ \
+      > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"
 

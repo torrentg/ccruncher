@@ -10,10 +10,10 @@ Future works
 -------------------
   * Multi-thread support
   * improve functional tests
-     - exmaples based on real data
+     - examples based on real data
      - script to run functional tests
      - improve validations (eg. kolmogorov-Smirnof tests)
-     - improve documentation
+     - improve documentation adding tests section
   * in input file add 'include' tag to include another file
       <include file="file.xml"/>
   * allow evaluation in multiple time horizons

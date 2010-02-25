@@ -6,7 +6,6 @@ version 1.5 (???. 2010)
 --------------------------
   * added condition number computation to cholesky matrix
   * added transition matrix regularization 
-  * updated html documentation
   * speed up cdf t-student using a lookup table
   * speed up portfolio parsing
   * speed up portfolio aggregation
