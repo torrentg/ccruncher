@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Feb 26 07:30:32 CET 2010"
+#define BUILD_DATE "Fri Feb 26 23:00:13 CET 2010"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -209,7 +209,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R529"
+#define SVNVERSION "R586"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
