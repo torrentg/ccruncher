@@ -38,7 +38,7 @@ How to check results?
   > #observed frequencies (number of 0's and 1's)
   > obs <- tabulate(x[,1]+1, 101)
   > #theoretical probabilities
-  > prob <- round(dbinom(0:100, 100, 0.1))
+  > prob <- dbinom(0:100, 100, 0.1)
   > #chi square test (if p-value > 0.05 means that is true)
   > cst <- chisq.test(obs, p=prob)
   > #if p-value > 0.05 than distribution is correct
