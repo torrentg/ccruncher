@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue Feb 16 07:40:06 CET 2010"
+#define BUILD_DATE "Fri Feb 26 07:30:32 CET 2010"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -149,7 +149,7 @@
 #define PACKAGE "ccruncher"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "gerard@mail.generacio.com"
+#define PACKAGE_BUGREPORT "gtorrent@ccruncher.net"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "ccruncher"
