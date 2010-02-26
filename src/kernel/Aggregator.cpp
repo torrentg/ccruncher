@@ -89,7 +89,7 @@ bool ccruncher::Aggregator::append(vector<SimulatedAsset> &assets) throw(Excepti
   assert(assets.size() == isegments.size());
 
   // initializing values
-  for(unsigned int i=0; i<numsegments; i++) 
+  for(int i=0; i<numsegments; i++) 
   {
     CVALUES(i,icont) = 0.0;
   }
