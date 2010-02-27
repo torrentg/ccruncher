@@ -1,0 +1,33 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+  * in input file add 'include' tag to include another file
+      <include file="file.xml"/>
+    useful to do multiple tests with big portfolios
+  * multi-thread support
+  * remove MPI support
+
+Future works
+-------------------
+  * improve functional tests
+     - examples based on real data
+     - script to run functional tests
+     - improve validations (eg. kolmogorov-Smirnof tests)
+     - improve documentation adding tests section
+  * allow evaluation in multiple time horizons
+      <breaks>
+        <break name="T25Y" at="25Y" method="exp">
+          <segmentations>
+            ..
+          </segmentations>
+        </break>
+      </breaks>
+  * add borrower stochastic recovery (eg. beta distribution)
+  * add asset stochastic exposure
+  * allow ratings evaluated to date previous to T0
+  * add borrower-borrower dependences
+  * graphic interface
+

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <property name="time.0" value="01/07/2004"/>
+    <property name="time.T" value="01/01/2012"/>
+    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="stopcriteria.maxseconds" value="30000000"/>
+    <property name="copula.type" value="gaussian"/>
+    <property name="copula.seed" value="0"/>
+    <property name="montecarlo.antithetic" value="false"/>
+    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                       INTEREST                                 -->
+  <!-- ============================================================== -->
+  <interest date='18/11/2004'>
+    <rate t='0' r='0%'/>
+    <rate t='1' r='4%'/>
+    <rate t='2' r='4.1%'/>
+    <rate t='3' r='4.5%'/>
+    <rate t='6' r='4.55%'/>
+    <rate t='12' r='4.8%'/>
+    <rate t='24' r='4.9%'/>
+    <rate t='60' r='5%'/>
+    <rate t='120' r='5.2%'/>
+  </interest>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name='AAA' description='AAA'/>
+    <rating name='AA' description='AA'/>
+    <rating name='A' description='A'/>
+    <rating name='BBB' description='BBB'/>
+    <rating name='BB' description='BB'/>
+    <rating name='B' description='B'/>
+    <rating name='CCC' description='CCC'/>
+    <rating name='Default' description='Default'/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <mtransitions period="12">
+
+    <transition from="AAA" to="AAA" value="90.81%"/>
+    <transition from="AAA" to="AA" value="8.33%"/>
+    <transition from="AAA" to="A" value="0.68%"/>
+    <transition from="AAA" to="BBB" value="0.06%"/>
+    <transition from="AAA" to="BB" value="0.12%"/>
+    <transition from="AAA" to="B" value="0.0%"/>
+    <transition from="AAA" to="CCC" value="0.0%"/>
+    <transition from="AAA" to="Default" value="0.0%"/>
+
+    <transition from="AA" to="AAA" value="0.70%"/>
+    <transition from="AA" to="AA" value="90.65%"/>
+    <transition from="AA" to="A" value="7.79%"/>
+    <transition from="AA" to="BBB" value="0.64%"/>
+    <transition from="AA" to="BB" value="0.06%"/>
+    <transition from="AA" to="B" value="0.14%"/>
+    <transition from="AA" to="CCC" value="0.02%"/>
+    <transition from="AA" to="Default" value="0.0%"/>
+
+    <transition from="A" to="AAA" value="0.09%"/>
+    <transition from="A" to="AA" value="2.27%"/>
+    <transition from="A" to="A" value="91.05%"/>
+    <transition from="A" to="BBB" value="5.52%"/>
+    <transition from="A" to="BB" value="0.74%"/>
+    <transition from="A" to="B" value="0.26%"/>
+    <transition from="A" to="CCC" value="0.01%"/>
+    <transition from="A" to="Default" value="0.06%"/>
+
+    <transition from="BBB" to="AAA" value="0.02%"/>
+    <transition from="BBB" to="AA" value="0.33%"/>
+    <transition from="BBB" to="A" value="5.95%"/>
+    <transition from="BBB" to="BBB" value="86.93%"/>
+    <transition from="BBB" to="BB" value="5.30%"/>
+    <transition from="BBB" to="B" value="1.17%"/>
+    <transition from="BBB" to="CCC" value="0.12%"/>
+    <transition from="BBB" to="Default" value="0.18%"/>
+
+    <transition from="BB" to="AAA" value="0.03%"/>
+    <transition from="BB" to="AA" value="0.14%"/>
+    <transition from="BB" to="A" value="0.67%"/>
+    <transition from="BB" to="BBB" value="7.73%"/>
+    <transition from="BB" to="BB" value="80.53%"/>
+    <transition from="BB" to="B" value="8.84%"/>
+    <transition from="BB" to="CCC" value="1.0%"/>
+    <transition from="BB" to="Default" value="1.06%"/>
+
+    <transition from="B" to="AAA" value="0.0%"/>
+    <transition from="B" to="AA" value="0.11%"/>
+    <transition from="B" to="A" value="0.24%"/>
+    <transition from="B" to="BBB" value="0.43%"/>
+    <transition from="B" to="BB" value="6.48%"/>
+    <transition from="B" to="B" value="83.46%"/>
+    <transition from="B" to="CCC" value="4.07%"/>
+    <transition from="B" to="Default" value="5.21%"/>
+
+    <transition from="CCC" to="AAA" value="0.22%"/>
+    <transition from="CCC" to="AA" value="0.0%"/>
+    <transition from="CCC" to="A" value="0.22%"/>
+    <transition from="CCC" to="BBB" value="1.30%"/>
+    <transition from="CCC" to="BB" value="2.38%"/>
+    <transition from="CCC" to="B" value="11.24%"/>
+    <transition from="CCC" to="CCC" value="64.86%"/>
+    <transition from="CCC" to="Default" value="19.78%"/>
+
+    <transition from="Default" to="AAA" value="0.0%"/>
+    <transition from="Default" to="AA" value="0.0%"/>
+    <transition from="Default" to="A" value="0.0%"/>
+    <transition from="Default" to="BBB" value="0.0%"/>
+    <transition from="Default" to="BB" value="0.0%"/>
+    <transition from="Default" to="B" value="0.0%"/>
+    <transition from="Default" to="CCC" value="0.0%"/>
+    <transition from="Default" to="Default" value="100.0%"/>
+
+  </mtransitions>
+
+  <!-- ============================================================== -->
+  <!--                           SECTORS                              -->
+  <!-- ============================================================== -->
+  <sectors>
+    <sector name="tech" description="technology"/>
+    <sector name="util" description="utilities"/>
+    <sector name="energ" description="energy"/>
+    <sector name="bank" description="banking"/>
+  </sectors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <mcorrels>
+
+    <sigma sector1="tech" sector2="tech" value="20%"/>
+    <sigma sector1="tech" sector2="util" value="1%"/>
+    <sigma sector1="tech" sector2="energ" value="2%"/>
+    <sigma sector1="tech" sector2="bank" value="-3%"/>
+
+    <sigma sector1="util" sector2="util" value="35%"/>
+    <sigma sector1="util" sector2="energ" value="-4%"/>
+    <sigma sector1="util" sector2="bank" value="-1%"/>
+
+    <sigma sector1="energ" sector2="energ" value="20%"/>
+    <sigma sector1="energ" sector2="bank" value="-6%"/>
+
+    <sigma sector1="bank" sector2="bank" value="40%"/>
+
+  </mcorrels>
+
+  <!-- ============================================================== -->
+  <!--                SEGMENTATIONS/AGGREGATORS                       -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <borrower rating="A" sector="bank" name="BenderBank" id="001">
+      <asset name="generic" id="op1" date="15/01/2005">
+        <data>
+          <values at="15/01/2005" cashflow="-4000.0" recovery="50%" />
+          <values at="15/01/2006" cashflow="+1000.0" recovery="50%" />
+          <values at="15/01/2007" cashflow="+1000.0" recovery="50%" />
+          <values at="15/01/2008" cashflow="+1000.0" recovery="50%" />
+          <values at="15/01/2009" cashflow="+1000.0" recovery="50%" />
+          <values at="15/01/2010" cashflow="+1000.0" recovery="50%" />
+        </data>
+      </asset>
+    </borrower>
+  </portfolio>
+
+</ccruncher>
