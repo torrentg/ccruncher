@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 1.5 (???. 2010)
+version 1.5 (Feb. 2010)
 --------------------------
   * added condition number computation to cholesky matrix
   * added transition matrix regularization 

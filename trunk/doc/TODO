@@ -4,18 +4,19 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * avoid that MPI slaves access to disk
+  * in input file add 'include' tag to include another file
+      <include file="file.xml"/>
+    useful to do multiple tests with big portfolios
+  * multi-thread support
+  * remove MPI support
 
 Future works
 -------------------
-  * Multi-thread support
   * improve functional tests
      - examples based on real data
      - script to run functional tests
      - improve validations (eg. kolmogorov-Smirnof tests)
      - improve documentation adding tests section
-  * in input file add 'include' tag to include another file
-      <include file="file.xml"/>
   * allow evaluation in multiple time horizons
       <breaks>
         <break name="T25Y" at="25Y" method="exp">
