@@ -4,9 +4,8 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * in input file add 'include' tag to include another file
-      <include file="file.xml"/>
-    useful to do multiple tests with big portfolios
+  * set methods epstart, epstop, etc. protected
+  * beautify html printing output
   * multi-thread support
   * remove MPI support
 

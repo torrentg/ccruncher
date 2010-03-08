@@ -2,6 +2,11 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 1.6 (???. 2010)
+--------------------------
+  * removed --validate option
+  * portfolio file can be referenced in input file
+
 version 1.5 (Feb. 2010)
 --------------------------
   * added condition number computation to cholesky matrix

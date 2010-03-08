@@ -90,7 +90,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw(Exception)
+void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
   if (maxiterations != 0L)
   {
@@ -122,14 +122,11 @@ void ccruncher::MonteCarlo::initialize(IData &idata, bool only_validation) throw
     // initializing copula
     initCopula(idata, idata.getParams().copula_seed);
 
-    if (!only_validation)
-    {
-      // initializing aggregators
-      initAggregators(idata);
+    // initializing aggregators
+    initAggregators(idata);
 
-      // initializes debug bulk files 
-      initAdditionalOutput();
-    }
+    // initializes debug bulk files 
+    initAdditionalOutput();
 
     // exit function
     Logger::previousIndentLevel();

@@ -53,6 +53,8 @@ class IData : public ExpatHandlers
 
   private:
 
+    // configuration filename
+    string filename;
     // simulation title
     string title;
     // simulation description
@@ -75,8 +77,6 @@ class IData : public ExpatHandlers
     Segmentations segmentations;
     // simulation portfolio
     Portfolio *portfolio;
-    // indicates if portfolio will be parsed or not
-    bool parse_portfolio;
     // indicates if root tag exists
     bool hasmaintag;
     // timer used to determine parsing times
@@ -90,13 +90,15 @@ class IData : public ExpatHandlers
     void release();
     // validate simulation data
     void validate() throw(Exception);
+    // parse portfolio
+    void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
 
   public:
 
     // default constructor
     IData();
     // constructor
-    IData(const string &xmlfilename, bool _parse_portfolio = true) throw(Exception);
+    IData(const string &xmlfilename) throw(Exception);
     // destructor
     ~IData();
     // returns simulation title
@@ -128,7 +130,7 @@ class IData : public ExpatHandlers
     // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
     // ExpatHandlers method
-    void epdata(ExpatUserData &eu, const char *name_, const char *data, int len);
+    void epdata(ExpatUserData &, const char *, const char *, int);
 
 };
 

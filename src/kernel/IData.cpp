@@ -24,6 +24,7 @@
 #include <iostream>
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
+#include "utils/File.hpp"
 #include "utils/ExpatParser.hpp"
 #include <gzstream.h>
 #include <cassert>
@@ -33,9 +34,7 @@
 //===========================================================================
 void ccruncher::IData::init()
 {
-   parse_portfolio = true;
    hasmaintag = false;
-
    title = "";
    description = "";
    portfolio = NULL;
@@ -52,6 +51,7 @@ void ccruncher::IData::release()
 
 //===========================================================================
 // constructor
+// used to do tests
 //===========================================================================
 ccruncher::IData::IData()
 {
@@ -61,23 +61,18 @@ ccruncher::IData::IData()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
 {
-  ExpatParser parser;
-
   // initializing content
+  filename = xmlfilename;
   init();
-
-  // setting parse_portfolio value
-  parse_portfolio = _parse_portfolio;
 
   // parsing document
   try
   {
     // gziped file stream, if file isn't a gzip, is like a ifstream
     igzstream xmlstream((const char *) xmlfilename.c_str());
-
-    if (!xmlstream.good())
+    if (xmlstream.peek() == EOF)
     {
       throw Exception("can't open file " + xmlfilename);
     }
@@ -89,16 +84,12 @@ ccruncher::IData::IData(const string &xmlfilename, bool _parse_portfolio) throw(
       Logger::newIndentLevel();
 
       // parsing
+      ExpatParser parser;
       parser.parse(xmlstream, this);
 
       // exit function
       Logger::previousIndentLevel();
     }
-  }
-  catch(Exception &e)
-  {
-    release();
-    throw e;
   }
   catch(std::exception &e)
   {
@@ -233,19 +224,11 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     else if (segmentations.size() == 0) {
       throw Exception("tag <portfolio> defined before <segmentations> tag");
     }
-    if (portfolio != NULL) {
+    else if (portfolio != NULL) {
       throw Exception("tag portfolio repeated");
     }
-    if (parse_portfolio == false) {
-      // checking current content
-      validate();
-      // stops parsing
-      epstop(eu);
-    }
     else {
-      timer.start();
-      portfolio = new Portfolio(ratings, sectors, segmentations, interest, params.time0, params.timeT);
-      eppush(eu, portfolio, name_, attributes);
+      parsePortfolio(eu, name_, attributes);
     }
   }
   // default catcher
@@ -318,6 +301,44 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 }
 
 //===========================================================================
+// parsePortfolio
+//===========================================================================
+void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
+{
+  timer.start();
+  portfolio = new Portfolio(ratings, sectors, segmentations, interest, params.time0, params.timeT);
+  string ref = getStringAttribute(attributes, "include", "");
+
+  if (ref == "")
+  {
+    eppush(eu, portfolio, name_, attributes);
+  }
+  else
+  {
+    try
+    {
+      string path = File::dirname(filename);
+      string filename = File::filepath(path, ref);
+      igzstream xmlstream((const char *) filename.c_str());
+      if (xmlstream.peek() == EOF)
+      {
+        throw Exception("can't open file " + filename);
+      }
+      else
+      {
+        ExpatParser parser;
+        parser.parse(xmlstream, portfolio);
+      }
+    }
+    catch(std::exception &e)
+    {
+      release();
+      throw Exception(e);
+    }
+  }
+}
+
+//===========================================================================
 // validate
 //===========================================================================
 void ccruncher::IData::validate() throw(Exception)
@@ -343,7 +364,7 @@ void ccruncher::IData::validate() throw(Exception)
   else if (segmentations.size() == 0) {
     throw Exception("segmentations section not defined");
   }
-  else if (portfolio == NULL && parse_portfolio == true) {
+  else if (portfolio == NULL) {
     throw Exception("portfolio section not defined");
   }
 }
