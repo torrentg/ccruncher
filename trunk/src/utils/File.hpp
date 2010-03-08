@@ -59,7 +59,13 @@ class File
     static bool isAbsolutePath(const string &);
     // check file status
     static void checkFile(const string &pathname, const string &smode) throw(Exception);
-
+    // directory part of a filepath
+    static string dirname(const string &pathname);
+    // file part of a filepath
+    static string filename(const string &pathname);
+    // create a file path using path and a file name
+    static string filepath(const string &path, const string &name);
+    
 };
 
 //---------------------------------------------------------------------------

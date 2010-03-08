@@ -136,7 +136,7 @@ class MonteCarlo
     // set hash value (mark every num values)
     void setHash(int num);
     // initiliaze this class
-    void initialize(IData &, bool only_validation=false) throw(Exception);
+    void initialize(IData &) throw(Exception);
     // execute Monte Carlo
     long execute() throw(Exception);
     // enables trace outputs

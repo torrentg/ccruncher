@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <locale>
+#include <libgen.h>
 #endif
 #include <cstdio>
 #include <cerrno>
@@ -235,5 +236,59 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   {
     throw Exception("file " + pathname + " fails " + smode + " check");
   }
+}
+
+//===========================================================================
+// dirname
+// given a filepath returns the directory part
+//===========================================================================
+string ccruncher::File::dirname(const string &pathname)
+{
+#ifdef _MSC_VER
+  char buf[_MAX_PATH];
+  char drive[_MAX_DRIVE];
+  char dir[_MAX_DIR];
+  char fname[_MAX_FNAME];
+  char ext[_MAX_EXT];
+  _splitpath(pathname.c_str(), drive, dir, fname, ext);
+  sprintf(buf, "%s%s", drive, dir);
+  return string(buf);
+#else
+  return string(::dirname((char*)pathname.c_str()));
+#endif
+}
+
+//===========================================================================
+// basename
+// given a filepath returns the filename part
+//===========================================================================
+string ccruncher::File::filename(const string &pathname)
+{
+#ifdef _MSC_VER
+  char buf[_MAX_PATH];
+  char drive[_MAX_DRIVE];
+  char dir[_MAX_DIR];
+  char fname[_MAX_FNAME];
+  char ext[_MAX_EXT];
+  _splitpath(pathname.c_str(), drive, dir, fname, ext);
+  sprintf(buf, "%s%s", fname, ext);
+  return string(buf);
+#else
+  return string(::basename((char*)pathname.c_str()));
+#endif
+}
+
+//===========================================================================
+// filepath
+// create a file path using path and a file name
+//===========================================================================
+string ccruncher::File::filepath(const string &path, const string &name)
+{
+  string ret = ((path=="." || path=="."+PATHSEPARATOR)?"":path);
+  if (ret.length() > 0 && ret.substr(ret.length()-1,1) != PATHSEPARATOR) {
+    ret += PATHSEPARATOR;
+  }
+  ret += name;
+  return ret;
 }
 

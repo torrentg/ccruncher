@@ -56,7 +56,6 @@ void catchsignal(int signal);
 
 string sfilename = "";
 string spath = "";
-bool bvalidate = false;
 bool bverbose = false;
 bool bforce = false;
 int inice = -999;
@@ -95,7 +94,6 @@ int main(int argc, char *argv[])
       { "path",         1,  NULL,  302 },
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
-      { "validate",     0,  NULL,  305 },
 #ifndef USE_MPI
       { "lcopulas",     0,  NULL,  306 },
       { "ldeftime",     0,  NULL,  307 },
@@ -183,10 +181,6 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 305: // --validate (validate input file)
-          bvalidate = true;
-          break;
-
 #ifndef USE_MPI
       case 306: // --lcopulas (list copula values)
           blcopulas = true;
@@ -223,7 +217,7 @@ int main(int argc, char *argv[])
   }
 
   // checking arguments consistency
-  if (spath == "" && !bvalidate)
+  if (spath == "")
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
@@ -321,7 +315,7 @@ void run(string filename, string path) throw(Exception)
   File::checkFile(filename, "r");
 
   // checking output directory
-  if (bvalidate == false && !File::existDir(path))
+  if (!File::existDir(path))
   {
     if (bforce == false)
     {
@@ -359,14 +353,7 @@ void run(string filename, string path) throw(Exception)
 #endif
 
   // initializing simulation
-  simul.initialize(idata, bvalidate);
-
-  // validate file and exit
-  if (bvalidate == true)
-  {
-    Logger::addBlankLine();
-    return;
-  }
+  simul.initialize(idata);
 
   // setting interruptions handlers
   mcref = &simul;
@@ -444,7 +431,6 @@ void usage()
   "    --path=dir  directory where output files will be placed (required)\n"
   "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
-  "    --validate  validates input file and exits\n"
 #ifndef USE_MPI
   "    --lcopulas  list simulated copula values\n"
   "                for depuration and validation purposes only.\n"
@@ -461,7 +447,6 @@ void usage()
   "    0           OK. finished without errors\n"
   "    1           KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher --validate samples/sample01.xml\n"
   "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/test01 samples/test01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/test100 samples/test100.xml.gz\n"

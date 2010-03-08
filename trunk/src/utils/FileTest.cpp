@@ -67,4 +67,23 @@ void ccruncher_test::FileTest::test1(void)
   ASSERT_THROW(File::checkFile("/etc/passwd", "w"));
   ASSERT_THROW(File::checkFile("/etc/passwd", "rw"));
   ASSERT_THROW(File::checkFile("/etc/passwd", "falsemode"));
+  
+  ASSERT_EQUALS("/etc", File::dirname("/etc/passwd"));
+  ASSERT_EQUALS("/", File::dirname("/etc/"));
+  ASSERT_EQUALS(".", File::dirname("readme.txt"));
+  ASSERT_EQUALS("..", File::dirname("../readme.txt"));
+
+  ASSERT_EQUALS("passwd", File::filename("/etc/passwd"));
+  ASSERT_EQUALS("etc", File::filename("/etc/"));
+  ASSERT_EQUALS("readme.txt", File::filename("readme.txt"));
+  ASSERT_EQUALS("readme.txt", File::filename("../readme.txt"));
+
+  ASSERT_EQUALS("readme.txt", File::filepath("","readme.txt"));
+  ASSERT_EQUALS("readme.txt", File::filepath(".","readme.txt"));
+  ASSERT_EQUALS("readme.txt", File::filepath("./","readme.txt"));
+  ASSERT_EQUALS("../readme.txt", File::filepath("..","readme.txt"));
+  ASSERT_EQUALS("../readme.txt", File::filepath("../","readme.txt"));
+  ASSERT_EQUALS("/etc/passwd", File::filepath("/etc","passwd"));
+  ASSERT_EQUALS("/etc/passwd", File::filepath("/etc/","passwd"));
 }
+
