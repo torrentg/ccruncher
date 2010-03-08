@@ -171,6 +171,9 @@
 <!ELEMENT portfolio (
     borrower+
 )>
+<!ATTLIST portfolio
+    include CDATA #IMPLIED
+>
 
 <!ELEMENT borrower (
     (belongs-to*, asset*)
