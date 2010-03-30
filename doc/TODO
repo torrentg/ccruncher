@@ -5,6 +5,8 @@ CCRUNCHER TODO
 Current works
 -------------------
   * set methods epstart, epstop, etc. protected
+      - see: http://www.cprogramming.com/tutorial/friends.html
+      - see: http://www.cplusplus.com/doc/tutorial/inheritance/
   * beautify html printing output
   * multi-thread support
   * remove MPI support
