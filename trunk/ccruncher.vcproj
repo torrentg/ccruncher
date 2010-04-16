@@ -517,6 +517,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\utils\Thread.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\utils\Thread.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\utils\Logger.cpp"
 					>
 				</File>
