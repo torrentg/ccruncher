@@ -64,6 +64,7 @@ ccruncher_SOURCES = \
     ../src/utils/ExpatHandlers.cpp\
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
+    ../src/utils/Thread.cpp\
     \
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulatedData.hpp\
@@ -105,6 +106,7 @@ ccruncher_SOURCES = \
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
+    ../src/utils/Thread.hpp\
     ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
@@ -163,6 +165,7 @@ tests_SOURCES = \
     ../src/utils/ExpatHandlers.cpp\
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
+    ../src/utils/Thread.cpp\
     ../src/math/Random.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
@@ -232,6 +235,7 @@ tests_SOURCES = \
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
+    ../src/utils/Thread.hpp\
     ../src/math/Random.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
@@ -307,6 +311,7 @@ samplegen_SOURCES = \
     ../src/utils/ExpatHandlers.cpp\
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
+    ../src/utils/Thread.cpp\
     \
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulatedData.hpp\
@@ -348,6 +353,7 @@ samplegen_SOURCES = \
     ../src/utils/ExpatHandlers.hpp\
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
+    ../src/utils/Thread.hpp\
     ../src/utils/ccmpi.h\
     ../src/utils/config.h
 

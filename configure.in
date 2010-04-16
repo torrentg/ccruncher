@@ -44,6 +44,8 @@ AC_CHECK_LIB([gslcblas],[cblas_dgemm],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
 AC_CHECK_LIB([gsl], [gsl_rng_alloc],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
+AC_CHECK_LIB([pthread], [pthread_create],,
+    [AC_MSG_ERROR([cannot find the pthread library]) ])
 
 dnl -------------------------------------------------------------
 dnl checks for header
@@ -54,6 +56,8 @@ AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
 AC_CHECK_HEADERS([float.h malloc.h])
+AC_CHECK_HEADERS([pthread.h])
+AC_CHECK_HEADERS([sys/time.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
@@ -145,10 +149,11 @@ fi
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
+CXXFLAGS="$CXXFLAGS -pthread"
 AC_SUBST(CXXFLAGS)
 
 dnl -------------------------------------------------------------
-dnl defining include directories
+dnl setting preprocessor options
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
          ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])

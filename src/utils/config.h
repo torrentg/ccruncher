@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Feb 26 23:00:13 CET 2010"
+#define BUILD_DATE "Fri Apr 16 18:16:04 CEST 2010"
 
 /* build host name */
-#define BUILD_HOST "fobos.generacio.com"
+#define BUILD_HOST "imd1.imagina.local"
 
 /* build user */
-#define BUILD_USER "gerard"
+#define BUILD_USER "gtorrent"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -68,6 +68,9 @@
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
 
+/* Define to 1 if you have the `pthread' library (-lpthread). */
+#define HAVE_LIBPTHREAD 1
+
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
 
@@ -91,6 +94,9 @@
 
 /* Define to 1 if you have the `pow' function. */
 #define HAVE_POW 1
+
+/* Define to 1 if you have the <pthread.h> header file. */
+#define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `sqrt' function. */
 #define HAVE_SQRT 1
