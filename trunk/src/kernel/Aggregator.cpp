@@ -26,7 +26,6 @@
 #include "utils/File.hpp"
 #include "utils/Format.hpp"
 #include "kernel/Aggregator.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
 
 #define CVALUES(segment,simulation) cvalues[segment+simulation*numsegments]
@@ -163,55 +162,33 @@ bool ccruncher::Aggregator::flush() throw(Exception)
     return true;
   }
 
-#ifdef USE_MPI
-  if (!Utils::isMaster())
+  // printing buffer content (cvalues)
+  try
   {
-    int task=0;
-
-    // sending info
-    MPI::COMM_WORLD.Send(&isegmentation, 1, MPI::INT, 0, MPI_TAG_INFO);
-    // sending data
-    MPI::COMM_WORLD.Send(&(cvalues[0]), icont*numsegments, MPI::DOUBLE, 0, MPI_TAG_DATA);
-    // receiving task
-    MPI::COMM_WORLD.Recv(&task, 1, MPI::INT, 0, MPI_TAG_TASK);
-    // reseting timer
-    timer.start();
+    for(long i=0; i<icont; i++)
+    {
+      // printing simulation counter
+      // fout << (cont-icont+i+1) << ", ";
+      for (long j=(printRestSegment?0:1); j<numsegments; j++)
+      {
+        // printing simulated value
+        fout << CVALUES(j,i) << (j<numsegments-1?", ":"");
+      }
+      fout << "\n"; //don't use endl because force to flush in disk
+    }
     // reseting buffer counter
     icont = 0;
-    // return function
-    return (task==MPI_VAL_WORK?true:false);
   }
-  else
-#endif
+  catch(Exception e)
   {
-    // printing buffer content (cvalues)
-    try
-    {
-      for(long i=0; i<icont; i++)
-      {
-        // printing simulation counter
-        // fout << (cont-icont+i+1) << ", ";
-        for (long j=(printRestSegment?0:1); j<numsegments; j++)
-        {
-          // printing simulated value
-          fout << CVALUES(j,i) << (j<numsegments-1?", ":"");
-        }
-        fout << "\n"; //don't use endl because force to flush in disk
-      }
-      // reseting buffer counter
-      icont = 0;
-    }
-    catch(Exception e)
-    {
-      throw Exception(e, "error flushing content for aggregator " + segmentation.name);
-    }
-
-    // reseting timer
-    timer.start();
-
-    // exit function
-    return true;
+    throw Exception(e, "error flushing content for aggregator " + segmentation.name);
   }
+
+  // reseting timer
+  timer.start();
+
+  // exit function
+  return true;
 }
 
 //===========================================================================
@@ -219,10 +196,6 @@ bool ccruncher::Aggregator::flush() throw(Exception)
 //===========================================================================
 void ccruncher::Aggregator::setOutputProperties(const string &filename, bool force) throw(Exception)
 {
-  if (!Utils::isMaster()) 
-  {
-    return;
-  }
   if (force == false && access(filename.c_str(), W_OK) == 0)
   {
     throw Exception("file " + filename + " already exist");

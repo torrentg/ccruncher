@@ -33,7 +33,6 @@
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
 
 //===========================================================================
@@ -51,7 +50,6 @@ ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators()
   copula = NULL;
   blcopulas = false;
   bldeftime = false;
-  ccmaxbufsize = CCMAXBUFSIZE;
 }
 
 //===========================================================================
@@ -374,23 +372,13 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   // if no seed is given /dev/urandom or time() will be used
   if (seed == 0L)
   {
-    if (Utils::isMaster())
-    {
-      // use a seed based on clock
-      seed = Utils::trand();
-    }
-#ifdef USE_MPI
-    // all nodes knows the same seed
-    MPI::COMM_WORLD.Bcast(&seed, 1, MPI::LONG, 0);
-#endif
+    // use a seed based on clock
+    seed = Utils::trand();
   }
 
   // seeding random number generators
-#ifdef USE_MPI
-  copula->setSeed(seed+MPI::COMM_WORLD.Get_rank());
-#else
+  //TODO: threads requires distinct seed
   copula->setSeed(seed);
-#endif
 
   // exit function
   Logger::trace("elapsed time initializing copula", timer);
@@ -427,16 +415,6 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
     aggregators.push_back(aggregator);
   }
 
-#ifdef USE_MPI
-  ccmaxbufsize = CCMAXBUFSIZE;
-  for(unsigned int i=0; i<aggregators.size(); i++) {
-    long numbytes = aggregators[i]->getBufferSize();
-    if (numbytes > ccmaxbufsize) {
-      ccmaxbufsize = numbytes;
-    }
-  }
-#endif
-
   // exit function
   Logger::trace("elapsed time initializing aggregators", timer);
   Logger::previousIndentLevel();
@@ -457,16 +435,8 @@ long ccruncher::MonteCarlo::execute() throw(Exception)
   Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::int2string(hash) + " simulations per hash]"), '*');
   Logger::newIndentLevel();
 
-#ifdef USE_MPI
-  if (Utils::isMaster())
-  {
-    numiterations =executeCollector();
-  }
-  else
-#endif
-  {
-    numiterations = executeWorker();
-  }
+  //TODO: implement threads here
+  numiterations = executeWorker();
 
   // exit function
   Logger::addBlankLine();
@@ -482,15 +452,6 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
   long numiterations = 0L;
   bool aux=false, moreiterations=true;
   Timer timer(true), timer1, timer2, timer3, timer4;
-
-#ifdef USE_MPI
-  if (!Utils::isMaster()) {
-    // disabling max time criteria for slaves
-    maxseconds = 0L;
-    // disabling max itaration criteria for slaves
-    maxiterations = 0L;
-  }
-#endif
 
   try
   {
@@ -545,7 +506,8 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     }
 
     // flushing aggregators
-    for(unsigned int i=0;i<aggregators.size();i++) {
+    for(unsigned int i=0;i<aggregators.size();i++) 
+    {
       aggregators[i]->flush();
     }
 
@@ -561,124 +523,8 @@ long ccruncher::MonteCarlo::executeWorker() throw(Exception)
     throw Exception(e, "error ocurred while executing Monte Carlo");
   }
 
-#ifdef USE_MPI
-  // notify exit to master
-  MPI::COMM_WORLD.Send(NULL, 0, MPI::INT, 0, MPI_TAG_EXIT);
-#endif
-
   // exit function
   return(numiterations);
-}
-
-//===========================================================================
-// executeCollector
-// only used in MPI mode. this method is executed by master node
-// mpi message flow (data transfer):
-//   worker send MPI_TAG_INFO msg
-//   worker send MPI_TAG_DATA msg
-//   master send MPI_TAG_TASK msg
-// mpi message flow (exit notification):
-//   worker send MPI_TAG_EXIT
-//===========================================================================
-long ccruncher::MonteCarlo::executeCollector() throw(Exception)
-{
-#ifdef USE_MPI
-  long numiterations = 0L;
-  bool more=true, moreiterations=true;
-  double data[ccmaxbufsize];
-  int nranks=MPI::COMM_WORLD.Get_size();
-  int aggregatorid=0, rankid=0, tagid=0, datalength=0, task=0, nexits=0;
-  MPI::Status status;
-  Timer timer(true);
-
-  // main master loop
-  while(more)
-  {
-    // awaiting for a slave request
-    MPI::COMM_WORLD.Probe(MPI::ANY_SOURCE, MPI::ANY_TAG, status);
-    // retrieving rank
-    rankid = status.Get_source();
-    // retrieving tag
-    tagid = status.Get_tag();
-
-    switch(tagid)
-    {
-      // message EXIT sequence
-      case MPI_TAG_EXIT:
-        {
-          // receiving exit tag
-          MPI::COMM_WORLD.Recv(NULL, 0, MPI::INT, rankid, MPI_TAG_EXIT);
-
-          // updating counter
-          nexits++;
-
-          // cheking that all ranks have finished
-          if (nexits == nranks-1) {
-            more = false;
-          }
-
-          // finish sequence EXIT
-          break;
-        }
-
-      // message DATA sequence
-      case MPI_TAG_INFO:
-        {
-          // receiving data
-          MPI::COMM_WORLD.Recv(&aggregatorid, 1, MPI::INT, rankid, MPI_TAG_INFO);
-          // awaiting for data
-          MPI::COMM_WORLD.Probe(rankid, MPI_TAG_DATA, status);
-          // retrieving data size
-          datalength = status.Get_count(MPI::DOUBLE);
-          // receiving data
-          MPI::COMM_WORLD.Recv(&data, datalength, MPI::DOUBLE, rankid, MPI_TAG_DATA);
-          // aggregating data
-          long numsims = aggregators[aggregatorid]->appendRawData(data, datalength);
-
-          // updating simulations counter
-          if (aggregatorid == 0)
-          {
-            for(int i=0;i<numsims;i++)
-            {
-              // counter increment
-              numiterations++;
-              // printing hashes
-              if (hash > 0 && numiterations%hash == 0)
-              {
-                Logger::append(".");
-              }
-            }
-          }
-
-          // checking stop criteria
-          if (maxiterations > 0L && numiterations >= maxiterations) {
-            moreiterations = false;
-          }
-
-          // checking stop criteria
-          if (maxseconds > 0L && timer.read() >  maxseconds) {
-            moreiterations = false;
-          }
-
-          // sending new task to slave
-          task = (moreiterations?MPI_VAL_WORK:MPI_VAL_STOP);
-          MPI::COMM_WORLD.Send(&task, 1, MPI::INT, rankid, MPI_TAG_TASK);
-
-          // finish sequence DATA
-          break;
-       }
-
-      // other messages cause errors
-      default:
-        throw Exception("unexpected MPI tag");
-    }
-  }
-
-  // return the number of simulations
-  return numiterations;
-#else
-  return 0L;
-#endif
 }
 
 //===========================================================================
@@ -844,7 +690,6 @@ void ccruncher::MonteCarlo::setAdditionalOutput(bool copulas, bool deftimes)
 //===========================================================================
 void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
 {
-#ifndef USE_MPI
   assert(fpath != "" && fpath != "path not set"); 
   string dirpath = File::normalizePath(fpath);
   
@@ -885,7 +730,6 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
       throw Exception("error writing file " + filename);
     }
   }
-#endif
 }
 
 //===========================================================================
@@ -893,13 +737,11 @@ void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 {
-#ifndef USE_MPI
   for(unsigned int i=0; i<borrowers.size(); i++) 
   {
     fcopulas << getRandom(i) << (i!=borrowers.size()-1?", ":"");
   }
   fcopulas << "\n";
-#endif
 }
 
 //===========================================================================
@@ -907,12 +749,10 @@ void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::printDefaultTimes() throw(Exception)
 {
-#ifndef USE_MPI
   for(unsigned int i=0; i<borrowers.size(); i++) 
   {
     fdeftime << borrowers[i].dtime << (i!=borrowers.size()-1?", ":"");
   }
   fdeftime << "\n";
-#endif
 }
 

@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Apr 16 18:16:04 CEST 2010"
+#define BUILD_DATE "Fri Apr 23 17:15:16 CEST 2010"
 
 /* build host name */
 #define BUILD_HOST "imd1.imagina.local"
@@ -86,9 +86,6 @@
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
 
-/* Define to 1 if you have the <mpi.h> header file. */
-/* #undef HAVE_MPI_H */
-
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
 
@@ -149,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-#define NDEBUG 1
+/* #undef NDEBUG */
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -188,9 +185,6 @@
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 /* #undef TM_IN_SYS_TIME */
-
-/* Add parallel instructions to code. */
-/* #undef USE_MPI */
 
 /* Version number of package */
 #define VERSION "1.5"

@@ -453,10 +453,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\utils\ccmpi.h"
-					>
-				</File>
-				<File
 					RelativePath="src\utils\config.h"
 					>
 				</File>

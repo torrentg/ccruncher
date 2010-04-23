@@ -97,22 +97,6 @@
 &nbsp;&nbsp;bin/src2bin.sh    # install and clean
     </pre>
 
-    <p>
-      If you want to create a MPI version to run ccruncher in a cluster, then type:
-    </p>
-    <pre>
-
-&nbsp;&nbsp;export PATH=$PATH:<i>path_to_your_mpi_execs</i>
-&nbsp;&nbsp;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<i>path_to_your_mpi_libs</i>
-&nbsp;&nbsp;export LIBRARY_PATH=$LIBRARY_PATH:<i>path_to_your_mpi_libs</i>
-&nbsp;&nbsp;export C_INCLUDE_PATH=$C_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
-&nbsp;&nbsp;export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:<i>path_to_your_mpi_headers</i>
-
-&nbsp;&nbsp;configure --enable-mpi     # prepare compilation
-&nbsp;&nbsp;make                       # compile ccruncher
-&nbsp;&nbsp;bin/src2bin.sh             # install and clean
-    </pre>
-
     <br/>
     <h1>Getting Started - Usage</h1>
 
@@ -173,7 +157,7 @@
             Copyright &copy; 2004-2010 <a href="mailto:gtorrent@ccruncher.net">Gerard Torrent</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 26-Feb-2010
+    				 Last modified: 23-Apr-2010
     			</td>
     		</tr></table>
     	</div></div></div></div></div>

@@ -20,11 +20,9 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include <cstdio>
 #include <ctime>
 #include "utils/Utils.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
 
 #ifdef _MSC_VER
@@ -32,62 +30,6 @@
 #else
 #include <sys/time.h>
 #endif
-
-// --------------------------------------------------------------------------
-
-ofstream *ccruncher::Utils::nullstream = NULL;
-int ccruncher::Utils::rankid = -1;
-
-//===========================================================================
-// isMaster
-//===========================================================================
-bool ccruncher::Utils::isMaster()
-{
-#ifdef USE_MPI
-  // if rankid uninitialized
-  if (rankid < 0)
-  {
-    rankid = MPI::COMM_WORLD.Get_rank();
-  }
-
-  if (rankid > 0)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-#else
-  return true;
-#endif
-}
-
-//===========================================================================
-// setSilentMode. Send cout and cerr to /dev/null (oblivion)
-//===========================================================================
-void ccruncher::Utils::setSilentMode() throw(Exception)
-{
-  if (nullstream == NULL)
-  {
-    nullstream = new ofstream("/dev/null");
-  }
-
-  if (!nullstream->good())
-  {
-    throw Exception("problems removing output on slaves nodes");
-  }
-  else
-  {
-    // closing C++ streams
-    cout.rdbuf(nullstream->rdbuf());
-    cerr.rdbuf(nullstream->rdbuf());
-
-    // closing C streams (used by getop)
-    freopen("/dev/null", "w", stdout);
-    freopen("/dev/null", "w", stderr);
-  }
-}
 
 //===========================================================================
 // create a hash using ELF hash algorithm
@@ -158,13 +100,6 @@ string ccruncher::Utils::getCompilationOptions()
   ret += "[disabled] | ";
 #endif
 
-  // MPI option
-  ret += "MPI";
-#ifdef USE_MPI
-  ret += "[enabled]";
-#else
-  ret += "[disabled]";
-#endif
-
   return ret;
 }
+

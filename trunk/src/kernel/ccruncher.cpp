@@ -38,13 +38,10 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-#include "utils/ccmpi.h"
 #include <cassert>
 
 //---------------------------------------------------------------------------
 
-void startup(int argc, char *argv[]) throw(Exception);
-int shutdown(int retcode);
 void usage();
 void version();
 void copyright();
@@ -61,10 +58,8 @@ bool bforce = false;
 int inice = -999;
 int ihash = 0;
 MonteCarlo *mcref = NULL;
-#ifndef USE_MPI
 bool blcopulas = false;
 bool bldeftime = false;
-#endif
 
 //===========================================================================
 // catchsignal
@@ -94,28 +89,10 @@ int main(int argc, char *argv[])
       { "path",         1,  NULL,  302 },
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
-#ifndef USE_MPI
       { "lcopulas",     0,  NULL,  306 },
       { "ldeftime",     0,  NULL,  307 },
-#endif
       { NULL,           0,  NULL,   0  }
   };
-
-  // initialization routines
-  try
-  {
-    startup(argc, argv);
-  }
-  catch(Exception &e)
-  {
-    cerr << e << endl;
-    return shutdown(1);
-  }
-  catch(...)
-  {
-    cerr << "unknow error" << endl;
-    return shutdown(1);
-  }
 
   // parsing options
   while (1)
@@ -133,11 +110,11 @@ int main(int argc, char *argv[])
       case '?': // invalid option
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
-          return shutdown(1);
+          return 1;
 
       case 'h': // -h or --help (show help and exit)
           usage();
-          return shutdown(0);
+          return 0;
 
       case 'v': // -v (be verbose)
           bverbose = true;
@@ -149,7 +126,7 @@ int main(int argc, char *argv[])
 
       case 301: // --version (show version and exit)
           version();
-          return shutdown(0);
+          return 0;
 
       case 302: // --path=dir (set output files path)
           spath = string(optarg);
@@ -164,7 +141,7 @@ int main(int argc, char *argv[])
           catch(Exception &e)
           {
             cerr << "invalid nice value" << endl;
-            return shutdown(1);
+            return 1;
           }
           break;
 
@@ -177,11 +154,10 @@ int main(int argc, char *argv[])
           catch(Exception &e)
           {
             cerr << "invalid hash value" << endl;
-            return shutdown(1);
+            return 1;
           }
           break;
 
-#ifndef USE_MPI
       case 306: // --lcopulas (list copula values)
           blcopulas = true;
           break;
@@ -189,12 +165,11 @@ int main(int argc, char *argv[])
       case 307: // --ldeftime (list default times)
           bldeftime = true;
           break;
-#endif
 
       default: // unexpected error
           cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
                   "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
-          return shutdown(1);
+          return 1;
     }
   }
 
@@ -203,13 +178,13 @@ int main(int argc, char *argv[])
   {
     cerr << "xml input file not specified" << endl;
     cerr << "use --help option for more information" << endl;
-    return shutdown(1);
+    return 1;
   }
   else if (argc - optind > 1)
   {
     cerr << "last argument will be the xml input file" << endl;
     cerr << "use --help option for more information" << endl;
-    return shutdown(1);
+    return 1;
   }
   else
   {
@@ -221,7 +196,7 @@ int main(int argc, char *argv[])
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
-    return shutdown(1);
+    return 1;
   }
 
   // license info
@@ -243,65 +218,17 @@ int main(int argc, char *argv[])
   catch(Exception &e)
   {
     cerr << endl << e << endl;
-    return shutdown(1);
+    return 1;
   }
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
             "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
-    return shutdown(1);
+    return 1;
   }
 
   // exit function
-  return shutdown(0);
-}
-
-//===========================================================================
-// startup
-//===========================================================================
-void startup(int argc, char *argv[]) throw(Exception)
-{
-#ifdef USE_MPI
-  // start up MPI
-  MPI::Init(argc, argv);
-
-  // setting slaves output to /dev/null
-  if (!Utils::isMaster())
-  {
-    Utils::setSilentMode();
-  }
-
-  // checking number of nodes (minimum required = 2 nodes)
-  if (MPI::COMM_WORLD.Get_size() <= 1)
-  {
-    throw Exception("needed more than 1 cluster node to run ccruncher");
-  }
-#else
-  // nothing to do
-  assert(argc > 0);
-  assert(argv != NULL);
-#endif
-}
-
-//===========================================================================
-// shutdown
-//===========================================================================
-int shutdown(int retcode)
-{
-#ifdef USE_MPI
-  try {
-    // shutdown MPI
-    MPI::Finalize();
-  }
-  catch(...) {
-    // nothing to do
-  }
-#else
-  // nothing to do
-#endif
-
-  // allways returns the same code
-  return retcode;
+  return 0;
 }
 
 //===========================================================================
@@ -336,9 +263,6 @@ void run(string filename, string path) throw(Exception)
   Logger::trace("ccruncher version", string(VERSION)+" ("+string(SVNVERSION)+")");
   Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("input file", filename);
-#ifdef USE_MPI
-  Logger::trace("number of nodes in cluster", Format::int2string(MPI::COMM_WORLD.Get_size()));
-#endif
   Logger::previousIndentLevel();
 
   // parsing input file
@@ -348,9 +272,7 @@ void run(string filename, string path) throw(Exception)
   MonteCarlo simul;
   simul.setFilePath(path, bforce);
   simul.setHash(ihash);
-#ifndef USE_MPI
   simul.setAdditionalOutput(blcopulas, bldeftime);
-#endif
 
   // initializing simulation
   simul.initialize(idata);
@@ -431,7 +353,6 @@ void usage()
   "    --path=dir  directory where output files will be placed (required)\n"
   "    --nice=num  set nice priority to num\n"
   "    --hash=num  print '.' for each num simulations (default=0)\n"
-#ifndef USE_MPI
   "    --lcopulas  list simulated copula values\n"
   "                for depuration and validation purposes only.\n"
   "                use with care. time and disk consuming option.\n"
@@ -440,7 +361,6 @@ void usage()
   "                for depuration and validation purposes only.\n"
   "                use with care. time and disk consuming option.\n"
   "                creates the file deftimes.csv\n"
-#endif
   "    --help -h   show this message and exit\n"
   "    --version   show version and exit\n"
   "  return codes:\n"
@@ -450,9 +370,7 @@ void usage()
   "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/test01 samples/test01.xml\n"
   "    ccruncher -fv --hash=100 --path=data/test100 samples/test100.xml.gz\n"
-#ifndef USE_MPI
   "    ccruncher -fv --hash=100 --ldeftime --path=data/test04 samples/test04.xml\n"
-#endif
   << endl;
 }
 
