@@ -44,8 +44,6 @@ class Utils
 
     // pointer to /dev/null
     static ofstream *nullstream;
-    // mpi rank id
-    static int rankid;
 
   private:
   
@@ -54,10 +52,6 @@ class Utils
 
   public:
 
-    // indicates if current instance is the master
-    static bool isMaster();
-    // siletiates output
-    static void setSilentMode() throw(Exception);
     // elf hash algorithm
     static unsigned long hash(const string &str);
     // returns current timestamp in format dd/mm/yyyy hh:mm:ss

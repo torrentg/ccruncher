@@ -85,8 +85,6 @@ class MonteCarlo
     ofstream fcopulas;
     // file where default times are stored (if bldeftime flag is set)
     ofstream fdeftime;
-    // maximum aggregator buffer size (used by MPI code)
-    long ccmaxbufsize;
 
   private:
   
@@ -116,8 +114,6 @@ class MonteCarlo
     double getRandom(int iborrower);
     // runs Monte Carlo as slave
     long executeWorker() throw(Exception);
-    // runs Monte Carlo as master
-    long executeCollector() throw(Exception);
     // initialize traces outputs
     void initAdditionalOutput() throw(Exception);
     // prints current copula values

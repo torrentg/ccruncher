@@ -318,11 +318,11 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
     try
     {
       string path = File::dirname(filename);
-      string filename = File::filepath(path, ref);
-      igzstream xmlstream((const char *) filename.c_str());
+      string filepath = File::filepath(path, ref);
+      igzstream xmlstream((const char *) filepath.c_str());
       if (xmlstream.peek() == EOF)
       {
-        throw Exception("can't open file " + filename);
+        throw Exception("can't open file " + filepath);
       }
       else
       {

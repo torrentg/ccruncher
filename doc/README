@@ -54,11 +54,7 @@ Required libraries installation
    package from http://www.gnu.org/software/gsl/ and install it. 
    Also you can install from gsl and gsl-devel rpm packages.
 
-4. if you are compiling a ccruncher MPI executable, check
-   that you have a valid MPI installation (you need mpi.h,
-   mpic++ wrapper, mpi link library, etc.)
-
-5. CCruncher use a statistical package named R to compute
+4. CCruncher use a statistical package named R to compute
    risk indicators. Install it from http://www.r-project.org/
    or install from R rpm package.
 
@@ -80,7 +76,6 @@ Installation from source package
    supported ./configure options:
      --enable-debug:    add debug instructions
      --enable-profiler: add profiler instructions
-     --enable-mpi:      add mpi instructions
 
 
 Installation from binary package
@@ -165,17 +160,6 @@ Notes for Windows developers (cygwin)
      > make
 
 
-Notes on MPI version
---------------------------------
-
-1. check that your mpi environment is enabled
-     > export PATH=$PATH:/usr/share/openmpi/1.2.4-gcc/bin64/
-     > export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64/openmpi/1.2.4-gcc/
-     > export LIBRARY_PATH=$LIBRARY_PATH:/usr/lib64/openmpi/1.2.4-gcc/
-     > export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/openmpi/1.2.4-gcc/
-     > export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/usr/include/openmpi/1.2.4-gcc/
-
-
 Developers tips & tricks
 --------------------------------
 
@@ -195,10 +179,6 @@ Developers tips & tricks
 
 5. compile project in debug mode
      > configure --enable-debug --enable-profiler
-     > make
-     > make check
-   or compile project enabling MPI
-     > configure --enable-debug --enable-profiler --enable-mpi
      > make
      > make check
 

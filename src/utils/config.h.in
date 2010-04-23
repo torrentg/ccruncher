@@ -85,9 +85,6 @@
 /* Define to 1 if you have the `mkdir' function. */
 #undef HAVE_MKDIR
 
-/* Define to 1 if you have the <mpi.h> header file. */
-#undef HAVE_MPI_H
-
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 
@@ -187,9 +184,6 @@
 
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
-
-/* Add parallel instructions to code. */
-#undef USE_MPI
 
 /* Version number of package */
 #undef VERSION
