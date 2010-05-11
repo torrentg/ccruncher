@@ -81,6 +81,8 @@ class BlockGaussianCopula : public Copula
     BlockGaussianCopula(const BlockGaussianCopula &) throw(Exception);
     // destructor
     ~BlockGaussianCopula();
+    // clone
+    Copula* clone();
     // returns the copula size (n)
     int size();
     // simulates a copula realization

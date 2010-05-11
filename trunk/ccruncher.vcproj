@@ -257,6 +257,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\kernel\SimulationThread.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\kernel\SimulationThread.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\kernel\SimulatedData.cpp"
 					>
 				</File>

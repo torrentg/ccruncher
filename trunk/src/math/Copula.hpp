@@ -46,6 +46,8 @@ class Copula
     virtual double get(int) = 0;
     // random number generator seed
     virtual void setSeed(long) = 0;
+    // object replication
+    virtual Copula* clone() = 0;
     // destructor
     virtual ~Copula() {};
 

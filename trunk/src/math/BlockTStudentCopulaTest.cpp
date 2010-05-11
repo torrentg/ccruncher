@@ -73,6 +73,11 @@ void ccruncher_test::BlockTStudentCopulaTest::test1()
   // checking invalid degree of freedom
   ASSERT_THROW(BlockTStudentCopula(correls, n, 3, -1));
 
+  // checks copula clone method
+  BlockTStudentCopula *clonedCopula = (BlockTStudentCopula*) copula.clone();
+  testCopula(*clonedCopula, sigmas, n, 3);
+  delete clonedCopula;
+
   // exit function
   Arrays<double>::deallocMatrix(correls, 3);
 }

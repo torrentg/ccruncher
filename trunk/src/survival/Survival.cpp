@@ -101,8 +101,10 @@ void ccruncher::Survival::setRatings(const Ratings &ratings_) throw(Exception)
   else 
   {
     ddata = vector<vector<double> >(nratings);
-    idata = vector<vector<double> >(nratings);
-    idata.insert(idata.begin(), nratings, vector<double>(ISURVFNUMBINS+1, NAN));
+    //TODO: review idata allocation
+    //idata = vector<vector<double> >(nratings);
+    //idata.insert(idata.begin(), nratings, vector<double>(ISURVFNUMBINS+1, NAN));
+    idata.assign(nratings, vector<double>(ISURVFNUMBINS+1, NAN));
   }
 }
 

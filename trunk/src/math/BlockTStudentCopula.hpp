@@ -83,6 +83,8 @@ class BlockTStudentCopula : public Copula
     BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);
     // destructor
     ~BlockTStudentCopula();
+    // clone
+    Copula* clone();
     // returns the copula size (n)
     int size();
     // simulates a copula realization

@@ -68,6 +68,11 @@ void ccruncher_test::BlockGaussianCopulaTest::test1()
 
   // testing copula
   testCopula(copula, sigmas, n, 3);
+  
+  // checks copula clone method
+  BlockGaussianCopula *clonedCopula = (BlockGaussianCopula*) copula.clone();
+  testCopula(*clonedCopula, sigmas, n, 3);
+  delete clonedCopula;
 
   // exit function
   Arrays<double>::deallocMatrix(correls, 3);

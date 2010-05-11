@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Apr 23 17:15:16 CEST 2010"
+#define BUILD_DATE "Sun May  9 08:53:42 CEST 2010"
 
 /* build host name */
-#define BUILD_HOST "imd1.imagina.local"
+#define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "gtorrent"
+#define BUILD_USER "gerard"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -209,7 +209,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R586"
+#define SVN_VERSION "R586"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

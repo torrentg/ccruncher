@@ -391,7 +391,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
 void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
   Timer timer(true);
-  Segmentations &segmentations = idata.getSegmentations();
+  segmentations = &(idata.getSegmentations());
 
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
@@ -403,14 +403,14 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", fpath);
-  Logger::trace("number of segmentations", Format::int2string(segmentations.size()));
+  Logger::trace("number of segmentations", Format::int2string(segmentations->size()));
 
   // allocating and initializing aggregators
   aggregators.clear();
-  for(int i=0;i<segmentations.size();i++)
+  for(int i=0;i<segmentations->size();i++)
   {
-    string filename = File::normalizePath(fpath) + segmentations.getSegmentation(i).name + ".csv";
-    Aggregator *aggregator = new Aggregator(i, segmentations.getSegmentation(i), assets);
+    string filename = File::normalizePath(fpath) + segmentations->getSegmentation(i).name + ".csv";
+    Aggregator *aggregator = new Aggregator(i, segmentations->getSegmentation(i), assets);
     aggregator->setOutputProperties(filename, bforce);
     aggregators.push_back(aggregator);
   }
