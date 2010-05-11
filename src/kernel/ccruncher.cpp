@@ -260,7 +260,7 @@ void run(string filename, string path) throw(Exception)
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
-  Logger::trace("ccruncher version", string(VERSION)+" ("+string(SVNVERSION)+")");
+  Logger::trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
   Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("input file", filename);
   Logger::previousIndentLevel();
@@ -327,7 +327,7 @@ void setnice(int niceval) throw(Exception)
 //===========================================================================
 void version()
 {
-  cout << "ccruncher-" << VERSION << " (" << SVNVERSION << ")" << endl;
+  cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
   cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
   cout << "build options: " << Utils::getCompilationOptions() << endl;
 }

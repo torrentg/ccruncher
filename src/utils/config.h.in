@@ -208,7 +208,7 @@
 #define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
-#define SVNVERSION "R586"
+#define SVN_VERSION "R586"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER

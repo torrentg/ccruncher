@@ -140,6 +140,14 @@ ccruncher::BlockGaussianCopula::~BlockGaussianCopula()
 }
 
 //===========================================================================
+// clone
+//===========================================================================
+Copula* ccruncher::BlockGaussianCopula::clone()
+{
+  return new BlockGaussianCopula(*this);
+}
+
+//===========================================================================
 // initLUT
 // t-student and gaussian CDF are symmetric respect to 0.0
 // lut contains CDF gaussian evaluated between 0.0 and x where cdf(x)>0.9999

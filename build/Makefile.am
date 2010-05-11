@@ -26,6 +26,7 @@ ccruncher_SOURCES = \
     ../deps/gzstream-1.5/gzstream.cpp\
     ../src/kernel/ccruncher.cpp\
     ../src/kernel/MonteCarlo.cpp\
+    ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
@@ -67,6 +68,7 @@ ccruncher_SOURCES = \
     ../src/utils/Thread.cpp\
     \
     ../src/kernel/MonteCarlo.hpp\
+    ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
@@ -172,6 +174,7 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/kernel/MonteCarlo.cpp\
+    ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
@@ -242,6 +245,7 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/kernel/MonteCarlo.hpp\
+    ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
@@ -273,6 +277,7 @@ samplegen_SOURCES = \
     ../deps/gzstream-1.5/gzstream.cpp\
     ../src/kernel/samplegen.cpp\
     ../src/kernel/MonteCarlo.cpp\
+    ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
@@ -314,6 +319,7 @@ samplegen_SOURCES = \
     ../src/utils/Thread.cpp\
     \
     ../src/kernel/MonteCarlo.hpp\
+    ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
