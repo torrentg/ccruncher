@@ -46,7 +46,7 @@ void usage();
 void version();
 void copyright();
 void setnice(int) throw(Exception);
-void run(string, string) throw(Exception);
+void run(string, string, int) throw(Exception);
 void catchsignal(int signal);
 
 //---------------------------------------------------------------------------
@@ -57,9 +57,8 @@ bool bverbose = false;
 bool bforce = false;
 int inice = -999;
 int ihash = 0;
+int ithreads = 1;
 MonteCarlo *mcref = NULL;
-bool blcopulas = false;
-bool bldeftime = false;
 
 //===========================================================================
 // catchsignal
@@ -89,8 +88,7 @@ int main(int argc, char *argv[])
       { "path",         1,  NULL,  302 },
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
-      { "lcopulas",     0,  NULL,  306 },
-      { "ldeftime",     0,  NULL,  307 },
+      { "threads",      1,  NULL,  305 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -158,17 +156,24 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 306: // --lcopulas (list copula values)
-          blcopulas = true;
-          break;
-
-      case 307: // --ldeftime (list default times)
-          bldeftime = true;
+      case 305: // --threads=val (set number of threads)
+          try
+          {
+            string sthreads = string(optarg);
+            ithreads = Parser::intValue(sthreads);
+            if (ithreads <= 0) throw Exception();
+          }
+          catch(Exception &e)
+          {
+            cerr << "invalid threads value" << endl;
+            return 1;
+          }
           break;
 
       default: // unexpected error
-          cerr << "unexpected error parsing arguments. Please report this bug sending input file, \n"
-                  "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
+          cerr << 
+                  "unexpected error parsing arguments. Please report this bug sending input\n"
+                  "file, ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
           return 1;
     }
   }
@@ -213,7 +218,7 @@ int main(int argc, char *argv[])
     }
 
     // running simulation
-    run(sfilename, spath);
+    run(sfilename, spath, ithreads);
   }
   catch(Exception &e)
   {
@@ -234,7 +239,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, string path) throw(Exception)
+void run(string filename, string path, int nthreads) throw(Exception)
 {
   Timer timer(true);
 
@@ -269,22 +274,21 @@ void run(string filename, string path) throw(Exception)
   IData idata(filename);
 
   // creating simulation object
-  MonteCarlo simul;
-  simul.setFilePath(path, bforce);
-  simul.setHash(ihash);
-  simul.setAdditionalOutput(blcopulas, bldeftime);
+  MonteCarlo montecarlo;
+  montecarlo.setFilePath(path, bforce);
+  montecarlo.setHash(ihash);
 
   // initializing simulation
-  simul.initialize(idata);
+  montecarlo.initialize(idata);
 
   // setting interruptions handlers
-  mcref = &simul;
+  mcref = &montecarlo;
   signal(SIGINT, catchsignal);
   signal(SIGABRT, catchsignal);
   signal(SIGTERM, catchsignal);
 
   // running simulation
-  long nsims = simul.execute();
+  long nsims = montecarlo.execute(nthreads);
 
   // tracing some execution info
   Logger::trace("general information", '*');
@@ -341,36 +345,27 @@ void usage()
   "  usage:\n"
   "    ccruncher [options] <file>\n"
   "  description:\n"
-  "    ccruncher is a tool used to evalute VAR (value at risk)\n"
-  "    of a pure credit portfolio using Monte Carlo simulation.\n"
-  "    more info at http://www.ccruncher.net\n"
+  "    ccruncher is a tool used to simulate a portfolio of credits using\n"
+  "    the Monte Carlo method. More info at http://www.ccruncher.net\n"
   "  arguments:\n"
-  "    file        xml file containing the problem to be solved. This\n"
-  "                file can be gziped (caution, zip format not suported)\n"
+  "    file           xml file containing the problem to be solved. This\n"
+  "                   file can be gziped (caution, zip format not suported)\n"
   "  options:\n"
-  "    -f          force output files overwrite\n"
-  "    -v          be verbose\n"
-  "    --path=dir  directory where output files will be placed (required)\n"
-  "    --nice=num  set nice priority to num\n"
-  "    --hash=num  print '.' for each num simulations (default=0)\n"
-  "    --lcopulas  list simulated copula values\n"
-  "                for depuration and validation purposes only.\n"
-  "                use with care. time and disk consuming option.\n"
-  "                creates the file copula.csv\n"
-  "    --ldeftime  list simulated borrower default times\n"
-  "                for depuration and validation purposes only.\n"
-  "                use with care. time and disk consuming option.\n"
-  "                creates the file deftimes.csv\n"
-  "    --help -h   show this message and exit\n"
-  "    --version   show version and exit\n"
+  "    -f             force output files overwrite\n"
+  "    -v             be verbose\n"
+  "    --path=dir     directory where output files will be placed (required)\n"
+  "    --nice=num     set nice priority to num (optional)\n"
+  "    --threads=num  number of threads (default=1)\n"
+  "    --hash=num     print '.' for each num simulations (default=0)\n"
+  "    --help -h      show this message and exit\n"
+  "    --version      show version and exit\n"
   "  return codes:\n"
-  "    0           OK. finished without errors\n"
-  "    1           KO. finished with errors\n"
+  "    0              OK. finished without errors\n"
+  "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
-  "    ccruncher -fv --hash=100 --path=data/test01 samples/test01.xml\n"
-  "    ccruncher -fv --hash=100 --path=data/test100 samples/test100.xml.gz\n"
-  "    ccruncher -fv --hash=100 --ldeftime --path=data/test04 samples/test04.xml\n"
+  "    ccruncher -f --path=data/samele01 samples/sample01.xml\n"
+  "    ccruncher -fv --hash=100 --threads=4 --path=data/ test01.xml\n"
+  "    ccruncher -fv --hash=100 --threads=4 --path=data/ test100.xml.gz\n"
   << endl;
 }
 

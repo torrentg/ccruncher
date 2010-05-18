@@ -54,6 +54,8 @@ class Exception : public std::exception
 
   public:
 
+    // default constructor
+    Exception();
     // constructor
     Exception(const std::string&);
     // constructor

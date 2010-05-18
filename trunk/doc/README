@@ -141,25 +141,6 @@ Microsoft Visual C++ versions:
  - MSVC9: works. see current file project
 
 
-Notes for Windows developers (cygwin)
--------------------------------------
-
-1. retrieve repository content
-   (checkout from http://www.ccruncher.net/svn/trunk/)
-
-2. install gcc, aclocal, autoconf, automake, expat, gsl and zlib
-   cygwin packages
-
-3. open a cygwin console
-
-4. execute next commands:
-     > aclocal
-     > autoconf
-     > automake -a -v -c -f
-     > configure
-     > make
-
-
 Developers tips & tricks
 --------------------------------
 

@@ -32,9 +32,7 @@
 #include <fstream>
 #include "kernel/SimulatedData.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Date.hpp"
 #include "utils/Timer.hpp"
-#include "portfolio/Borrower.hpp"
 #include "segmentations/Segmentation.hpp"
 
 //---------------------------------------------------------------------------
@@ -50,27 +48,21 @@ class Aggregator
 
   private:
 
-    // segmentation index
-    int isegmentation;
     // segmentation object
     Segmentation &segmentation;
-    // segment by each simulated asset
-    vector<int> isegments;
     // output file stream
     ofstream fout;
-    // number of borrowers considered
-    long numborrowers;
     // number of segments
-    long numsegments;
+    int numsegments;
     // number of simulations
-    long cont;
+    int cont;
     // buffer counter
-    long icont;
-    // cumulated values (size = numsegments x buffersize)
-    vector<double> cvalues;
-    // number of rows in buffer (1 row = numsegments values)
+    int icont;
+    // buffer of simulated values (size = numsegments x buffersize)
+    vector<double> buffer;
+    // number of rows in buffer
     int bufferrows;
-    // indicates if rest segment has borrowers/assets
+    // indicates if rest segment is used
     bool printRestSegment;
     // internal timer (control time from last flush)
     Timer timer;
@@ -78,19 +70,13 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(int, Segmentation&, vector<SimulatedAsset> &);
+    Aggregator(vector<SimulatedAsset> &, int, Segmentation &, const string &, bool) throw(Exception);
     // destructor
     ~Aggregator();
-    // set properties
-    void setOutputProperties(const string &filename, bool force) throw(Exception);
     // append data to aggregator
-    bool append(vector<SimulatedAsset> &assets) throw(Exception);
-    // append raw data
-    long appendRawData(double *data, int datasize) throw(Exception);
+    bool append(vector<double> &) throw(Exception);
     // flush data to disk
     bool flush() throw(Exception);
-    // returns buffer size
-    long getBufferSize();
 
 };
 

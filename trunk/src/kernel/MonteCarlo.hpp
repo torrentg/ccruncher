@@ -27,14 +27,15 @@
 
 #include "utils/config.h"
 #include <vector>
+#include <pthread.h>
 #include "kernel/IData.hpp"
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
+#include "kernel/SimulationThread.hpp"
 #include "survival/Survival.hpp"
 #include "math/Copula.hpp"
-#include "portfolio/Borrower.hpp"
-#include "portfolio/Asset.hpp"
 #include "utils/Date.hpp"
+#include "utils/Timer.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -42,6 +43,11 @@
 using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
+
+//---------------------------------------------------------------------------
+
+// forward declaration
+class SimulationThread;
 
 //---------------------------------------------------------------------------
 
@@ -74,20 +80,22 @@ class MonteCarlo
     bool antithetic;
     // management flag for antithetic method (default=false)
     bool reversed;
+    // rng seed
+    long seed;
     // hash (0=non show hashes) (default=0)
     int hash;
     // directory for output files
     string fpath;
     // force file overwriting flag
     bool bforce;
-    // trace simulated copula values flag
-    bool blcopulas;
-    // trace simulated default times
-    bool bldeftime;
-    // file where copula values are stored (if blcopulas flag is set)
-    ofstream fcopulas;
-    // file where default times are stored (if bldeftime flag is set)
-    ofstream fdeftime;
+    // time account
+    Timer timer;
+    // simulation threads
+    vector<SimulationThread*> threads;
+    // number of iterations done
+    long numiterations;
+    // ensures data consistence
+    pthread_mutex_t mutex;
 
   private:
   
@@ -103,26 +111,8 @@ class MonteCarlo
     void initCopula(IData &idata, long) throw(Exception);
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
-    // generate random numbers (Monte Carlo)
-    void randomize();
-    // simulate default times
-    void simulate();
-    // evalue portfolio
-    void evalue();
-    // aggregate value
-    bool aggregate() throw(Exception);
-    // simulate default time
-    Date simTimeToDefault(int iborrower);
-    // returns the copula value
-    double getRandom(int iborrower);
-    // runs Monte Carlo as slave
-    long executeWorker() throw(Exception);
-    // initialize traces outputs
-    void initAdditionalOutput() throw(Exception);
-    // prints current copula values
-    void printCopulaValues() throw(Exception);
-    // prints current default times
-    void printDefaultTimes() throw(Exception);
+    // append simulation result
+    bool append(vector<vector<double> > &);
 
   public:
 
@@ -137,9 +127,7 @@ class MonteCarlo
     // initiliaze this class
     void initialize(IData &) throw(Exception);
     // execute Monte Carlo
-    long execute() throw(Exception);
-    // enables trace outputs
-    void setAdditionalOutput(bool copulas, bool deftimes);
+    long execute(int) throw(Exception);
     // deallocate memory
     void release();
     

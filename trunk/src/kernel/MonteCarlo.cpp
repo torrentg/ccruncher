@@ -28,28 +28,28 @@
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockTStudentCopula.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Arrays.hpp"
-#include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
 #include <cassert>
 
+#define MAX_NUM_THREADS 16
+
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators()
+ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators(), threads(0)
 {
   maxseconds = 0L;
+  numiterations = 0L;
   maxiterations = 0L;
   antithetic = false;
   reversed = false;
+  seed = 0L;
   hash = 0;
   fpath = "path not set";
   bforce = false;
   copula = NULL;
-  blcopulas = false;
-  bldeftime = false;
 }
 
 //===========================================================================
@@ -65,6 +65,17 @@ ccruncher::MonteCarlo::~MonteCarlo()
 //===========================================================================
 void ccruncher::MonteCarlo::release()
 {
+  // removing threads
+  for(unsigned int i=0; i<threads.size(); i++) {
+    if (threads[i] != NULL) {
+      threads[i]->cancel();
+      delete threads[i];
+      threads[i] = NULL;
+    }
+  }
+  threads.clear();
+  pthread_mutex_destroy(&mutex);
+
   // deallocating copula
   if (copula != NULL) { 
     delete copula; 
@@ -79,10 +90,6 @@ void ccruncher::MonteCarlo::release()
     }
   }
   aggregators.clear();
-
-  // closing files
-  if (blcopulas) fcopulas.close();
-  if (bldeftime) fdeftime.close();
 }
 
 //===========================================================================
@@ -122,9 +129,6 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 
     // initializing aggregators
     initAggregators(idata);
-
-    // initializes debug bulk files 
-    initAdditionalOutput();
 
     // exit function
     Logger::previousIndentLevel();
@@ -315,9 +319,9 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 //===========================================================================
 // copula construction
 //===========================================================================
-void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
+void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception)
 {
-  Timer timer(true);
+  timer.start();
 
   // doing assertions
   assert(copula == NULL);
@@ -332,7 +336,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   // setting logger info
   Logger::trace("copula type", idata.getParams().copula_type);
   Logger::trace("copula dimension", Format::long2string(borrowers.size()));
-  Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed));
+  Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed_));
 
   try
   {
@@ -370,6 +374,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   }
 
   // if no seed is given /dev/urandom or time() will be used
+  seed = seed_;
   if (seed == 0L)
   {
     // use a seed based on clock
@@ -377,7 +382,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
   }
 
   // seeding random number generators
-  //TODO: threads requires distinct seed
+  // see SimulationThread constructor
   copula->setSeed(seed);
 
   // exit function
@@ -390,7 +395,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
-  Timer timer(true);
+  timer.start();
   segmentations = &(idata.getSegmentations());
 
   // assertions
@@ -407,11 +412,10 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // allocating and initializing aggregators
   aggregators.clear();
-  for(int i=0;i<segmentations->size();i++)
+  for(int i=0; i<segmentations->size(); i++)
   {
     string filename = File::normalizePath(fpath) + segmentations->getSegmentation(i).name + ".csv";
-    Aggregator *aggregator = new Aggregator(i, segmentations->getSegmentation(i), assets);
-    aggregator->setOutputProperties(filename, bforce);
+    Aggregator *aggregator = new Aggregator(assets, i, segmentations->getSegmentation(i), filename, bforce);
     aggregators.push_back(aggregator);
   }
 
@@ -423,239 +427,99 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 // execute
 //===========================================================================
-long ccruncher::MonteCarlo::execute() throw(Exception)
+long ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 {
-  long numiterations;
-
   // assertions
+  assert(1 <= numthreads && numthreads <= MAX_NUM_THREADS); 
   assert(fpath != "" && fpath != "path not set"); 
+
+  if (numthreads <= 0 || MAX_NUM_THREADS < numthreads)
+  {
+    throw Exception("invalid number of threads");
+  }
 
   // setting logger header
   Logger::addBlankLine();
   Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::int2string(hash) + " simulations per hash]"), '*');
   Logger::newIndentLevel();
 
-  //TODO: implement threads here
-  numiterations = executeWorker();
+  // creating and launching simulation threads
+  timer.start();
+  numiterations = 0L;
+  pthread_mutex_init(&mutex, NULL);
+  threads.assign(numthreads, NULL);
+  for(int i=0; i<numthreads; i++)
+  {
+    threads[i] = new SimulationThread(*this, seed+i);
+    threads[i]->start(); // to avoid threads use run()
+  }
+
+  // awaiting threads
+  for(int i=0; i<numthreads; i++)
+  {
+    threads[i]->wait();
+  }
+
+  // flushing aggregators
+  for(unsigned int i=0; i<aggregators.size(); i++) 
+  {
+    aggregators[i]->flush();
+  }
 
   // exit function
+  Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();
   return numiterations;
 }
 
 //===========================================================================
-// executeWorker
+// append a simulation result
 //===========================================================================
-long ccruncher::MonteCarlo::executeWorker() throw(Exception)
+bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
 {
-  long numiterations = 0L;
-  bool aux=false, moreiterations=true;
-  Timer timer(true), timer1, timer2, timer3, timer4;
+  assert(losses.size() == aggregators.size());
+  pthread_mutex_lock(&mutex);
+  bool more = true;
 
   try
   {
-    while(moreiterations)
+    // aggregating simulation result
+    for(unsigned int i=0; i<aggregators.size(); i++) 
     {
-      // generating random numbers
-      timer1.resume();
-      randomize();
-      timer1.stop();
-
-      // simulating default time for each borrower
-      timer2.resume();
-      simulate();
-      timer2.stop();
-
-      // portfolio evaluation
-      timer3.resume();
-      evalue();
-      timer3.stop();
-
-      // aggregation of values
-      timer4.resume();
-      aux = aggregate();
-      timer4.stop();
-
-      // counter increment
-      numiterations++;
-
-      // printing hashes
-      if (hash > 0 && numiterations%hash == 0)
-      {
-        Logger::append(".");
-      }
-
-      // checking stop criteria
-      if (aux == false)
-      {
-        moreiterations = false;
-      }
-
-      // checking stop criteria
-      if (maxiterations > 0L && numiterations >= maxiterations)
-      {
-        moreiterations = false;
-      }
-
-      // checking stop criteria
-      if (maxseconds > 0L && timer.read() >  maxseconds)
-      {
-        moreiterations = false;
-      }
+      aggregators[i]->append(losses[i]);
     }
 
-    // flushing aggregators
-    for(unsigned int i=0;i<aggregators.size();i++) 
+    // counter increment
+    numiterations++;
+
+    // printing hashes
+    if (hash > 0 && numiterations%hash == 0)
     {
-      aggregators[i]->flush();
+      Logger::append(".");
     }
 
-    // printing traces
-    Logger::trace("elapsed time creating random numbers", timer1);
-    Logger::trace("elapsed time simulating default times", timer2);
-    Logger::trace("elapsed time evaluating portfolio", timer3);
-    Logger::trace("elapsed time aggregating values", timer4);
-    Logger::trace("total simulation time", Timer::format(timer.read()));
+    // checking stop criteria
+    if (maxiterations > 0L && numiterations >= maxiterations)
+    {
+      more = false;
+    }
+
+    // checking stop criteria
+    if (maxseconds > 0L && timer.read() >  maxseconds)
+    {
+      more = false;
+    }
   }
   catch(Exception &e)
   {
+    pthread_mutex_unlock(&mutex);
     throw Exception(e, "error ocurred while executing Monte Carlo");
   }
 
   // exit function
-  return(numiterations);
-}
-
-//===========================================================================
-// generate random numbers
-//===========================================================================
-void ccruncher::MonteCarlo::randomize()
-{
-  // generate a new realization for each copula
-  if (!antithetic)
-  {
-    copula->next();
-  }
-  else // antithetic == true
-  {
-    if (!reversed)
-    {
-      copula->next();
-      reversed = true;
-    }
-    else
-    {
-      reversed = false;
-    }
-  }
-
-  // trace copula values
-  if (blcopulas) 
-  {
-    printCopulaValues();
-  }
-}
-
-//===========================================================================
-// simulate time-to-default for each borrower
-// put result in rpaths[iborrower]
-//===========================================================================
-void ccruncher::MonteCarlo::simulate()
-{
-  // simulates default times
-  for (unsigned int i=0; i<borrowers.size(); i++) 
-  {
-    borrowers[i].dtime = simTimeToDefault(i);
-  }
-
-  // trace default times
-  if (bldeftime) 
-  {
-    printDefaultTimes();
-  }
-}
-
-//===========================================================================
-// getRandom. Returns requested copula value
-// encapsules antithetic management
-//===========================================================================
-double ccruncher::MonteCarlo::getRandom(int iborrower)
-{
-  if (antithetic)
-  {
-    if (reversed)
-    {
-      return 1.0 - copula->get(iborrower);
-    }
-    else
-    {
-      return copula->get(iborrower);
-    }
-  }
-  else
-  {
-    return copula->get(iborrower);
-  }
-}
-
-//===========================================================================
-// given a borrower, simule time to default
-//===========================================================================
-Date ccruncher::MonteCarlo::simTimeToDefault(int iborrower)
-{
-  // rating at t0 is initial rating
-  int r = borrowers[iborrower].irating;
-
-  // getting random number U[0,1] (correlated with rest of borrowers...)
-  double u = getRandom(iborrower);
-
-  // simulate time where this borrower defaults (in months)
-  double t = survival.inverse(r, u);
-
-  // return simulated default date
-  // TODO: assumed no leap years (this can be improved)
-  return time0 + (long)(t*365.0/12.0);
-}
-
-//===========================================================================
-// portfolio evaluation using simulated default times
-//===========================================================================
-void ccruncher::MonteCarlo::evalue()
-{
-  for(unsigned int i=0; i<assets.size(); i++)
-  {
-    Date t = borrowers[assets[i].iborrower].dtime;
-    
-    if (assets[i].mindate <= t && t <= assets[i].maxdate)
-    {
-      assets[i].loss = assets[i].ref->getLoss(t);
-    }
-    else
-    {
-      assets[i].loss = 0.0;
-    }
-  }
-}
-
-//===========================================================================
-// aggregate simulated losses
-// return true=all ok, continue
-// return false=stop montecarlo
-//===========================================================================
-bool ccruncher::MonteCarlo::aggregate() throw(Exception)
-{
-  bool ret=true;
-
-  for(unsigned int i=0;i<aggregators.size();i++)
-  {
-    if (aggregators[i]->append(assets) == false)
-    {
-      ret = false;
-    }
-  }
-
-  return ret;
+  pthread_mutex_unlock(&mutex);
+  return(more);
 }
 
 //===========================================================================
@@ -674,85 +538,5 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
 {
   fpath = path;
   bforce = force;
-}
-
-//===========================================================================
-// setAdditionalOutput
-//===========================================================================
-void ccruncher::MonteCarlo::setAdditionalOutput(bool copulas, bool deftimes)
-{
-  blcopulas = copulas;
-  bldeftime = deftimes;
-}
-
-//===========================================================================
-// initAdditionalOutput
-//===========================================================================
-void ccruncher::MonteCarlo::initAdditionalOutput() throw(Exception)
-{
-  assert(fpath != "" && fpath != "path not set"); 
-  string dirpath = File::normalizePath(fpath);
-  
-  // initializes copula values file
-  if (blcopulas)
-  {
-    string filename = dirpath + "copula.csv";
-    try
-    {
-      fcopulas.open(filename.c_str(), ios::out|ios::trunc);
-      for(unsigned int i=0; i<borrowers.size(); i++)
-      {
-        fcopulas << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
-      }
-      fcopulas << endl;
-    }
-    catch(...)
-    {
-      throw Exception("error writing file " + filename);
-    }
-  }
-
-  // initializes simulated default times file
-  if (bldeftime)
-  {
-    string filename = dirpath + "deftimes.csv";
-    try
-    {
-      fdeftime.open(filename.c_str(), ios::out|ios::trunc);
-      for(unsigned int i=0; i<borrowers.size(); i++)
-      {
-        fdeftime << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
-      }
-      fdeftime << endl;
-    }
-    catch(...)
-    {
-      throw Exception("error writing file " + filename);
-    }
-  }
-}
-
-//===========================================================================
-// printCopulaValues
-//===========================================================================
-void ccruncher::MonteCarlo::printCopulaValues() throw(Exception)
-{
-  for(unsigned int i=0; i<borrowers.size(); i++) 
-  {
-    fcopulas << getRandom(i) << (i!=borrowers.size()-1?", ":"");
-  }
-  fcopulas << "\n";
-}
-
-//===========================================================================
-// printDefaultTimes
-//===========================================================================
-void ccruncher::MonteCarlo::printDefaultTimes() throw(Exception)
-{
-  for(unsigned int i=0; i<borrowers.size(); i++) 
-  {
-    fdeftime << borrowers[i].dtime << (i!=borrowers.size()-1?", ":"");
-  }
-  fdeftime << "\n";
 }
 
