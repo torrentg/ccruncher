@@ -36,8 +36,6 @@
 using namespace std;
 namespace ccruncher {
 
-class ExpatHandlers; // defined in file ExpatHandlers.hpp
-
 //---------------------------------------------------------------------------
 
 // forward declaration

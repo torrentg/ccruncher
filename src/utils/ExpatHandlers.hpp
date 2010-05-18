@@ -35,7 +35,10 @@ using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
 
-class ExpatUserData; // defined in file ExpatUserData.hpp
+//---------------------------------------------------------------------------
+
+// forward declaration
+class ExpatUserData;
 
 //---------------------------------------------------------------------------
 

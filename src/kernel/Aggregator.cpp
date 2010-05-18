@@ -20,182 +20,39 @@
 //
 //===========================================================================
 
-#include <cmath>
-#include "utils/Arrays.hpp"
-#include "utils/Utils.hpp"
-#include "utils/File.hpp"
-#include "utils/Format.hpp"
 #include "kernel/Aggregator.hpp"
 #include <cassert>
-
-#define CVALUES(segment,simulation) cvalues[segment+simulation*numsegments]
 
 //===========================================================================
 // constructor
 // note: we don't diferentiate between asset-segmentations or borrower-segmentations
 // because borrower segments has been recoded as asset segments (see Borrower code)
 //===========================================================================
-ccruncher::Aggregator::Aggregator(int isegmentation_, Segmentation &segmentation_, 
-  vector<SimulatedAsset> &assets) : segmentation(segmentation_), isegments(0)
+ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentation, 
+    Segmentation &segmentation_, const string &filename, bool force) 
+    throw(Exception) : segmentation(segmentation_), buffer(0)
 {
-  assert(isegmentation_ >= 0);
-  isegmentation = isegmentation_;
+  // initialization
   numsegments = segmentation.size();
-  printRestSegment = false;
-  isegments.assign(assets.size(), 0);
-  
-  for(unsigned int i=0; i<assets.size(); i++)
-  {
-    isegments[i] = assets[i].ref->getSegment(isegmentation);
-    if (isegments[i] == 0) 
-    {
-      printRestSegment = true;
-    }
-  }
-
-  bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
-  if (bufferrows <= 0) bufferrows = 1;
-  cvalues.reserve(bufferrows*numsegments);
-  cvalues.assign(bufferrows*numsegments, 0.0);
-
   cont = 0L;
   icont = 0L;
   timer.resume();
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Aggregator::~Aggregator()
-{
-  try
-  {
-    flush();
-    fout.close();
-  }
-  catch(...)
-  {
-    throw Exception("error closing file for aggregator " + segmentation.name);
-  }
-}
-
-//===========================================================================
-// append
-// input vector has length numborrowers with the index time (in months) where borrower defaults
-//===========================================================================
-bool ccruncher::Aggregator::append(vector<SimulatedAsset> &assets) throw(Exception)
-{
-  assert(assets.size() == isegments.size());
-
-  // initializing values
-  for(int i=0; i<numsegments; i++) 
-  {
-    CVALUES(i,icont) = 0.0;
-  }
-
-  // filling values
+  printRestSegment = false;
   for(unsigned int i=0; i<assets.size(); i++)
   {
-    CVALUES(isegments[i],icont) += assets[i].loss;
-  }
-
-  // incrementing counters
-  icont++;
-  cont++;
-
-  // flushing if buffer is full
-  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
-  {
-    return flush();
-  }
-  else
-  {
-    return true;
-  }
-}
-
-//===========================================================================
-// appendRawData
-// returns the number of simulations added
-//===========================================================================
-long ccruncher::Aggregator::appendRawData(double *data, int datasize) throw(Exception)
-{
-  long numsims = 0L;
-  assert(data != NULL);
-  assert(datasize >= 0);
-  
-  //checking if datasize is multiple of numsegments
-  if (datasize % numsegments != 0)
-  {
-    throw Exception("trying to append invalid raw data in " + segmentation.name);
-  }
-
-  // appending data
-  numsims = datasize/numsegments;
-  for(int i=0; i<numsims; i++)
-  {
-    for(int j=0; j<numsegments; j++)
+    if (assets[i].ref->getSegment(isegmentation) == 0) 
     {
-      CVALUES(j,icont) = data[j+i*numsegments];
-    }
-    icont++;
-    cont++;
-    // flushing if buffer is full
-    if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
-    {
-      flush();
+      printRestSegment = true;
+      break;
     }
   }
 
-  // exit function
-  return numsims;
-}
+  // buffer creation
+  bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
+  if (bufferrows <= 0) bufferrows = 1;
+  buffer.assign(bufferrows*numsegments, 0.0);
 
-//===========================================================================
-// print
-//===========================================================================
-bool ccruncher::Aggregator::flush() throw(Exception)
-{
-  // if haven't values, exits
-  if (icont <= 0)
-  {
-    return true;
-  }
-
-  // printing buffer content (cvalues)
-  try
-  {
-    for(long i=0; i<icont; i++)
-    {
-      // printing simulation counter
-      // fout << (cont-icont+i+1) << ", ";
-      for (long j=(printRestSegment?0:1); j<numsegments; j++)
-      {
-        // printing simulated value
-        fout << CVALUES(j,i) << (j<numsegments-1?", ":"");
-      }
-      fout << "\n"; //don't use endl because force to flush in disk
-    }
-    // reseting buffer counter
-    icont = 0;
-  }
-  catch(Exception e)
-  {
-    throw Exception(e, "error flushing content for aggregator " + segmentation.name);
-  }
-
-  // reseting timer
-  timer.start();
-
-  // exit function
-  return true;
-}
-
-//===========================================================================
-// setOutputProperties
-//===========================================================================
-void ccruncher::Aggregator::setOutputProperties(const string &filename, bool force) throw(Exception)
-{
+  // file creation
   if (force == false && access(filename.c_str(), W_OK) == 0)
   {
     throw Exception("file " + filename + " already exist");
@@ -223,14 +80,92 @@ void ccruncher::Aggregator::setOutputProperties(const string &filename, bool for
   {
     throw Exception("error opening file " + filename);
   }
+
 }
 
 //===========================================================================
-// getBufferSize
-// returns buffersize in bytes
+// destructor
 //===========================================================================
-long ccruncher::Aggregator::getBufferSize()
+ccruncher::Aggregator::~Aggregator()
 {
-  return bufferrows*numsegments*sizeof(double);
+  try
+  {
+    flush();
+    fout.close();
+  }
+  catch(...)
+  {
+    throw Exception("error closing file for aggregator " + segmentation.name);
+  }
+}
+
+//===========================================================================
+// append
+//===========================================================================
+bool ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
+{
+  assert((int)losses.size() == numsegments);
+
+  // filling values
+  double *p = &buffer[icont*numsegments];
+  for(int i=0; i<numsegments; i++)
+  {
+    p[i] = losses[i];
+  }
+
+  // incrementing counters
+  icont++;
+  cont++;
+
+  // flushing if buffer is full
+  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
+  {
+    return flush();
+  }
+  else
+  {
+    return true;
+  }
+}
+
+//===========================================================================
+// print
+//===========================================================================
+bool ccruncher::Aggregator::flush() throw(Exception)
+{
+  // if haven't values, exits
+  if (icont <= 0)
+  {
+    return true;
+  }
+
+  // printing buffer content
+  try
+  {
+    for(int i=0; i<icont; i++)
+    {
+      // printing simulation counter
+      double *p = &buffer[i*numsegments];
+      
+      for (int j=(printRestSegment?0:1); j<numsegments-1; j++)
+      {
+        // printing simulated value
+        fout << p[j] << ", ";
+      }
+      fout << p[numsegments-1] << "\n"; // endl not used because force to flush in disk
+    }
+    // reseting buffer counter
+    icont = 0;
+  }
+  catch(Exception e)
+  {
+    throw Exception(e, "error flushing content for aggregator " + segmentation.name);
+  }
+
+  // reseting timer
+  timer.start();
+
+  // exit function
+  return true;
 }
 

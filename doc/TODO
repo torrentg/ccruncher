@@ -8,7 +8,7 @@ Current works
       - see: http://www.cprogramming.com/tutorial/friends.html
       - see: http://www.cplusplus.com/doc/tutorial/inheritance/
   * beautify html printing output
-  * add multi-thread support
+  * rename longs to ints
 
 Future works
 -------------------

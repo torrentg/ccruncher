@@ -21,8 +21,6 @@
 //===========================================================================
 
 #include "kernel/SimulationThread.hpp"
-#include "math/BlockGaussianCopula.hpp"
-#include "math/BlockTStudentCopula.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -44,7 +42,8 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, long seed) : Threa
   isegments.assign(numsegmentations, vector<int>(assets.size()));
   for(int isegmentation=0; isegmentation<numsegmentations; isegmentation++)
   {
-    losses.push_back(vector<double>(montecarlo.segmentations->getSegmentation(isegmentation).size(), 0.0));
+    losses[isegmentation] = vector<double>(montecarlo.segmentations->getSegmentation(isegmentation).size(), 0.0);
+    
     for(unsigned int i=0; i<assets.size(); i++)
     {
 	  isegments[isegmentation][i] = assets[i].ref->getSegment(isegmentation);
@@ -85,7 +84,7 @@ void ccruncher::SimulationThread::run()
       aggregate();
 
       // data transfer
-      more = notify();
+      more = montecarlo.append(losses);
     }
 }
 
@@ -196,20 +195,16 @@ void ccruncher::SimulationThread::aggregate()
 {
   for(int isegmentation=0; isegmentation<numsegmentations; isegmentation++)
   {
+    for(unsigned int i=0; i<losses[isegmentation].size(); i++)
+    {
+	  losses[isegmentation][i] = 0.0;
+    }
+        
     for(unsigned int i=0; i<assets.size(); i++)
     {
       int isegment = isegments[isegmentation][i];
 	  losses[isegmentation][isegment] += assets[i].loss;
     }
   }
-}
-
-//===========================================================================
-// notify simulation results
-// if returns true continue simulating, oherwise stop
-//===========================================================================
-bool ccruncher::SimulationThread::notify()
-{
-  return true;
 }
 

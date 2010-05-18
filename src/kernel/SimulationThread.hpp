@@ -43,6 +43,11 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+// forward declaration
+class MonteCarlo;
+
+//---------------------------------------------------------------------------
+
 class SimulationThread : public Thread
 {
 
@@ -83,8 +88,6 @@ class SimulationThread : public Thread
     void evalue();
     // aggregate value
     void aggregate();
-    // transfer data
-    bool notify();
     // simulate default time
     Date simTimeToDefault(int iborrower);
     // returns the copula value

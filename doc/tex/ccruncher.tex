@@ -562,11 +562,11 @@ and there is no essential dependency (or communication) between those parallel
 tasks.
 \newline
 
-In CCruncher the master sends the RNG seed to each slave 
-($seed_i = seed + i \cdot 30001$) and waits for results (the simulated values of
-the portfolio loss) from slaves that store them in a file. When one of the two stop 
-criteria is achieved (maximum execution time exceded or maximum number of 
-simulations) the master sends a stop signal to the slaves and leaves.
+In CCruncher the master sends a distinct seed to each slave to initialize its RNG 
+and waits for results (the simulated values of the portfolio loss) from slaves that 
+store them in a file. When one of the two stop criteria is achieved (maximum execution 
+time exceded or maximum number of simulations) the master sends a stop signal to the 
+slaves and leaves.
 
 
 %===========================================================================

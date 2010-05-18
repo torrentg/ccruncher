@@ -289,13 +289,13 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
 
   curr.date = issuedate;
   curr.cashflow = -nominal;
-  curr.recovery = pctrecv*nominal;
+  curr.recovery = pctrecv;
   events.push_back(curr);
 
   for(int i=1; i<term; i++) {
     curr.date = addMonths(issuedate, i);
     curr.cashflow = nominal*rent/(double)(term);
-    curr.recovery = pctrecv*nominal;
+    curr.recovery = pctrecv;
     events.push_back(curr);
   }
 
@@ -306,7 +306,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
     ret += spc2;
     ret += "<values at='" + Format::date2string(events[i].date) + "' ";
     ret += "cashflow='" + Format::double2string(events[i].cashflow) + "' ";
-    ret += "recovery='" + Format::double2string(events[i].recovery) + "' ";
+    ret += "recovery='" + Format::double2string(events[i].recovery*100.0) + "%' ";
     ret += "/>\n";
   }
 
