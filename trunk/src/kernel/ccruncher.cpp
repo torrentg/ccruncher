@@ -288,14 +288,14 @@ void run(string filename, string path, int nthreads) throw(Exception)
   signal(SIGTERM, catchsignal);
 
   // running simulation
-  long nsims = montecarlo.execute(nthreads);
+  int nsims = montecarlo.execute(nthreads);
 
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
   Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("total elapsed time", timer);
-  Logger::trace("simulations realized", Format::long2string(nsims));
+  Logger::trace("simulations realized", Format::toString(nsims));
   Logger::previousIndentLevel();
   Logger::addBlankLine();
 }
@@ -308,14 +308,14 @@ void setnice(int niceval) throw(Exception)
 #if !defined(_MSC_VER) && !defined(__CYGWIN__) 
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
-    throw Exception("nice value out of range [" + Format::int2string(PRIO_MIN) +
-                    ".." + Format::int2string(PRIO_MAX) + "]");
+    throw Exception("nice value out of range [" + Format::toString(PRIO_MIN) +
+                    ".." + Format::toString(PRIO_MAX) + "]");
   }
   else
   {
     if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
     {
-      string msg = Format::int2string(errno);
+      string msg = Format::toString(errno);
       msg = (errno==ESRCH?"ESRCH":msg);
       msg = (errno==EINVAL?"EINVAL":msg);
       msg = (errno==EPERM?"EPERM":msg);

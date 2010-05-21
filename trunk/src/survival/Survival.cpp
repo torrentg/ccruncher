@@ -96,7 +96,7 @@ void ccruncher::Survival::setRatings(const Ratings &ratings_) throw(Exception)
   nratings = ratings->size();
   if (nratings <= 0) 
   {
-    throw Exception("invalid number of ratings (" + Format::int2string(nratings) + " <= 0)");
+    throw Exception("invalid number of ratings (" + Format::toString(nratings) + " <= 0)");
   }
   else 
   {
@@ -135,22 +135,22 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
   // validating time
   if (t < 0)
   {
-    string msg = "survival value[" + srating + "][" + Format::int2string(t) + "] has time < 0";
+    string msg = "survival value[" + srating + "][" + Format::toString(t) + "] has time < 0";
     throw Exception(msg);
   }
 
   // validating value
   if (value < -EPSILON || value-1.0 > EPSILON)
   {
-    string msg = "survival value[" + srating + "][" + Format::int2string(t) + 
-                 "] out of range: " + Format::double2string(value);
+    string msg = "survival value[" + srating + "][" + Format::toString(t) + 
+                 "] out of range: " + Format::toString(value);
     throw Exception(msg);
   }
 
   // checking that is not previously defined
   if ((int) ddata[irating].size() >= t+1 && !isnan(ddata[irating][t]))
   {
-    string msg = "survival value[" + srating + "][" + Format::int2string(t) + "] redefined";
+    string msg = "survival value[" + srating + "][" + Format::toString(t) + "] redefined";
     throw Exception(msg);
   }
 
@@ -273,7 +273,7 @@ void ccruncher::Survival::validate() throw(Exception)
         }
         else
         {
-          string msg = "survival function of rating " + (*ratings)[i].name + " is not monotone at t=" + Format::int2string(j);
+          string msg = "survival function of rating " + (*ratings)[i].name + " is not monotone at t=" + Format::toString(j);
           throw Exception(msg);
         }
       }
@@ -487,8 +487,8 @@ string ccruncher::Survival::getXML(int ilevel) const throw(Exception)
     {
       ret += spc2 + "<svalue ";
       ret += "rating='" + (*ratings)[i].name + "' ";
-      ret += "t='" + Format::int2string(j) + "' ";
-      ret += "value ='" + Format::double2string(ddata[i][j]) + "'";
+      ret += "t='" + Format::toString(j) + "' ";
+      ret += "value ='" + Format::toString(ddata[i][j]) + "'";
       ret += "/>\n";
     }
   }

@@ -64,7 +64,7 @@ double ccruncher::fpow(double x, double y) throw(Exception)
       }
       else
       {
-        throw Exception("unable to pow this negative number: " + Format::double2string(x) + "^" + Format::double2string(y));
+        throw Exception("unable to pow this negative number: " + Format::toString(x) + "^" + Format::toString(y));
       }
     }
   }

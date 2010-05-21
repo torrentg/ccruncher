@@ -59,9 +59,9 @@ class Params : public ExpatHandlers
     // time.T param value
     Date timeT;
     // stopcriteria.maxiterations param value
-    long maxiterations;
+    int maxiterations;
     // stopcriteria.maxseconds param value
-    long maxseconds;
+    int maxseconds;
     // copula.type param value
     string copula_type; // gaussian, t(4)
     // copula.seed param value

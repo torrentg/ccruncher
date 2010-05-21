@@ -63,7 +63,7 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
       }
       else if (r < -0.5 || 1.0 < r)
       {
-        throw Exception("rate value " + Format::double2string(r) + " out of range [-0.5, +1.0]");
+        throw Exception("rate value " + Format::toString(r) + " out of range [-0.5, +1.0]");
       }
     }
   }
@@ -94,8 +94,8 @@ string ccruncher::Rate::getXML(int ilevel) const throw(Exception)
   string ret = Strings::blanks(ilevel);
 
   ret += "<rate ";
-  ret += "t='" + Format::double2string(t) + "' ";
-  ret += "r='" + Format::double2string(r) + "'";
+  ret += "t='" + Format::toString(t) + "' ";
+  ret += "r='" + Format::toString(r) + "'";
   ret += "/>\n";
 
   return ret;

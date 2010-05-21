@@ -125,7 +125,7 @@ void ccruncher::TransitionMatrix::setRatings(const Ratings &ratings_)
   n = ratings->size();
   if (n <= 0)
   {
-    throw Exception("invalid transition matrix dimension (" + Format::int2string(n) + " <= 0)");
+    throw Exception("invalid transition matrix dimension (" + Format::toString(n) + " <= 0)");
   }
   if (matrix != NULL) {
     Arrays<double>::deallocMatrix(matrix, n);
@@ -179,7 +179,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
   if (value < -EPSILON || value > (1.0+EPSILON))
   {
     string msg = " transition value[" + rating1 + "][" + rating2 + "] out of range: " + 
-                 Format::double2string(value);
+                 Format::toString(value);
     throw Exception(msg);
   }
 
@@ -257,7 +257,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
     {
       if (matrix[i][j] == NAN)
       {
-        throw Exception("transition matrix have an undefined element [" + Format::int2string(i+1) + "][" + Format::int2string(j+1) + "]");
+        throw Exception("transition matrix have an undefined element [" + Format::toString(i+1) + "][" + Format::toString(j+1) + "]");
       }
     }
   }
@@ -274,7 +274,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-EPSILON) || sum > (1.0+EPSILON))
     {
-      throw Exception("transition matrix row " + Format::int2string(i+1) + " don't sums 1");
+      throw Exception("transition matrix row " + Format::toString(i+1) + " don't sums 1");
     }
   }
 
@@ -343,7 +343,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mtransitions period='" + Format::int2string(period) + "' >\n";
+  ret += spc1 + "<mtransitions period='" + Format::toString(period) + "' >\n";
 
   for(int i=0;i<n;i++)
   {
@@ -352,7 +352,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
       ret += spc2 + "<transition ";
       ret += "from ='" + (*ratings)[i].name + "' ";
       ret += "to ='" + (*ratings)[j].name + "' ";
-      ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
+      ret += "value ='" + Format::toString(matrix[i][j]) + "'";
       ret += "/>\n";
     }
   }
