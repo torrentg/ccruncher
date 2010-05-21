@@ -161,7 +161,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "stopcriteria.maxiterations")
   {
-    long aux = getLongAttribute(attributes, "value", -1L);
+    int aux = getIntAttribute(attributes, "value", -1L);
     if (maxiterations >= 0L || aux < 0L) {
       throw Exception("invalid stopcriteria.maxiterations");
     } else {
@@ -170,7 +170,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "stopcriteria.maxseconds")
   {
-    long aux = getLongAttribute(attributes, "value", -1L);
+    int aux = getIntAttribute(attributes, "value", -1L);
     if (maxseconds >= 0L || aux < 0L) {
       throw Exception("invalid stopcriteria.maxseconds");
     } else {
@@ -266,14 +266,14 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   string ret = "";
 
   ret += spc1 + "<parameters>\n";
-  ret += spc2 + "<property name='time.0' value='" + Format::date2string(time0) + "'/>\n";
-  ret += spc2 + "<property name='time.T' value='" + Format::date2string(timeT) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::long2string(maxiterations) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::long2string(maxseconds) + "'/>\n";
+  ret += spc2 + "<property name='time.0' value='" + Format::toString(time0) + "'/>\n";
+  ret += spc2 + "<property name='time.T' value='" + Format::toString(timeT) + "'/>\n";
+  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::toString(maxiterations) + "'/>\n";
+  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
-  ret += spc2 + "<property name='copula.seed' value='" + Format::long2string(copula_seed) + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::bool2string(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::bool2string(onlyactive) + "'/>\n";
+  ret += spc2 + "<property name='copula.seed' value='" + Format::toString(copula_seed) + "'/>\n";
+  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
+  ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::toString(onlyactive) + "'/>\n";
   ret += spc1 + "</parameters>\n";
 
   return ret;

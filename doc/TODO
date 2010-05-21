@@ -9,6 +9,7 @@ Current works
       - see: http://www.cplusplus.com/doc/tutorial/inheritance/
   * beautify html printing output
   * rename longs to ints
+  * try to inline xmlparser functions
 
 Future works
 -------------------

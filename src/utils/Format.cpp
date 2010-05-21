@@ -25,9 +25,9 @@
 #include "utils/Format.hpp"
 
 //===========================================================================
-// int2string
+// int
 //===========================================================================
-string ccruncher::Format::int2string(const int val)
+string ccruncher::Format::toString(const int val)
 {
   ostringstream oss;
   oss << val;
@@ -35,9 +35,9 @@ string ccruncher::Format::int2string(const int val)
 }
 
 //===========================================================================
-// long2string
+// long
 //===========================================================================
-string ccruncher::Format::long2string(const long val)
+string ccruncher::Format::toString(const long val)
 {
   ostringstream oss;
   oss << val;
@@ -45,9 +45,9 @@ string ccruncher::Format::long2string(const long val)
 }
 
 //===========================================================================
-// double2string
+// double
 //===========================================================================
-string ccruncher::Format::double2string(const double val)
+string ccruncher::Format::toString(const double val)
 {
   ostringstream oss;
   oss << val;
@@ -55,9 +55,9 @@ string ccruncher::Format::double2string(const double val)
 }
 
 //===========================================================================
-// date2string
+// date
 //===========================================================================
-string ccruncher::Format::date2string(const ccruncher::Date &val)
+string ccruncher::Format::toString(const ccruncher::Date &val)
 {
   ostringstream oss;
   oss << val;
@@ -65,11 +65,32 @@ string ccruncher::Format::date2string(const ccruncher::Date &val)
 }
 
 //===========================================================================
-// bool2string
+// bool
 //===========================================================================
-string ccruncher::Format::bool2string(const bool &val)
+string ccruncher::Format::toString(const bool &val)
 {
   ostringstream oss;
   oss << (val?"true":"false");
   return oss.str();
 }
+
+//===========================================================================
+// unsigned int
+//===========================================================================
+string ccruncher::Format::toString(const unsigned int &val)
+{
+  ostringstream oss;
+  oss << val;
+  return oss.str();
+}
+
+//===========================================================================
+// size_t
+//===========================================================================
+string ccruncher::Format::toString(const size_t &val)
+{
+  ostringstream oss;
+  oss << (int)val;
+  return oss.str();
+}
+

@@ -65,9 +65,9 @@ class MonteCarlo
     // list of segmentations
     Segmentations *segmentations;
     // maximum number of iterations
-    long maxiterations;
+    int maxiterations;
     // maximum execution time
-    long maxseconds;
+    int maxseconds;
     // initial date
     Date time0;
     // date where risk is computed
@@ -93,7 +93,7 @@ class MonteCarlo
     // simulation threads
     vector<SimulationThread*> threads;
     // number of iterations done
-    long numiterations;
+    int numiterations;
     // ensures data consistence
     pthread_mutex_t mutex;
 
@@ -127,7 +127,7 @@ class MonteCarlo
     // initiliaze this class
     void initialize(IData &) throw(Exception);
     // execute Monte Carlo
-    long execute(int) throw(Exception);
+    int execute(int) throw(Exception);
     // deallocate memory
     void release();
     

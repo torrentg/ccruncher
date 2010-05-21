@@ -144,7 +144,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 {
   if (val.t < 0.0)
   {
-    throw Exception("rate with invalid time: " + Format::double2string(val.t) + " < 0");
+    throw Exception("rate with invalid time: " + Format::toString(val.t) + " < 0");
   }
 
   // checking consistency
@@ -155,7 +155,7 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
     if (fabs(aux.t-val.t) < EPSILON)
     {
       string msg = "rate time ";
-      msg += Format::double2string(val.t);
+      msg += Format::toString(val.t);
       msg += " repeated";
       throw Exception(msg);
     }
@@ -226,7 +226,7 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<interest date='" + Format::date2string(date0) + "'>\n";
+  ret += spc + "<interest date='" + Format::toString(date0) + "'>\n";
 
   for (unsigned int i=0;i<vrates.size();i++)
   {

@@ -20,8 +20,11 @@
 //
 //===========================================================================
 
+#include <vector>
 #include "utils/Format.hpp"
 #include "utils/FormatTest.hpp"
+
+using namespace std;
 
 //---------------------------------------------------------------------------
 
@@ -49,11 +52,16 @@ void ccruncher_test::FormatTest::tearDown()
 void ccruncher_test::FormatTest::test_toString(void)
 {
   Date date1 = Date("1/1/2005");
+  vector<int> v;
+  unsigned int a = 3;
 
-  ASSERT("35" == Format::int2string(35));
-  ASSERT("50000" == Format::long2string(50000));
-  ASSERT("3.1415" == Format::double2string(3.1415));
-  ASSERT("01/01/2005" == Format::date2string(date1));
-  ASSERT("true" == Format::bool2string(true));
-  ASSERT("false" == Format::bool2string(false));
+  ASSERT("35" == Format::toString(35));
+  ASSERT("50000" == Format::toString(50000));
+  ASSERT("3.1415" == Format::toString(3.1415));
+  ASSERT("01/01/2005" == Format::toString(date1));
+  ASSERT("true" == Format::toString(true));
+  ASSERT("false" == Format::toString(false));
+  ASSERT("0" == Format::toString(v.size()));
+  ASSERT("3" == Format::toString(a));
 }
+

@@ -200,7 +200,7 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
   // checking creation
   if (aux != 0)
   {
-    string code = "[" + Format::int2string(errno) + "]";
+    string code = "[" + Format::toString(errno) + "]";
     code = (errno==EACCES?"[EACCES]":code);
     code = (errno==EEXIST?"[EEXIST]":code);
     code = (errno==EMLINK?"[EMLINK]":code);

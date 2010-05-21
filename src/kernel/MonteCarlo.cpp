@@ -40,9 +40,9 @@
 //===========================================================================
 ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators(), threads(0)
 {
-  maxseconds = 0L;
-  numiterations = 0L;
-  maxiterations = 0L;
+  maxseconds = 0;
+  numiterations = 0;
+  maxiterations = 0;
   antithetic = false;
   reversed = false;
   seed = 0L;
@@ -97,7 +97,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
-  if (maxiterations != 0L)
+  if (maxiterations != 0)
   {
     throw Exception("Monte Carlo reinitialization not allowed");
   }
@@ -151,22 +151,22 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 
   // max number of seconds
   maxseconds = idata.getParams().maxseconds;
-  Logger::trace("maximum execution time (in seconds)", Format::long2string(maxseconds));
+  Logger::trace("maximum execution time (in seconds)", Format::toString(maxseconds));
 
   // max number of iterations
   maxiterations = idata.getParams().maxiterations;
-  Logger::trace("maximum number of iterations", Format::long2string(maxiterations));
+  Logger::trace("maximum number of iterations", Format::toString(maxiterations));
 
   // printing initial date
   time0 = idata.getParams().time0;
-  Logger::trace("initial date", Format::date2string(time0));
+  Logger::trace("initial date", Format::toString(time0));
   // printing end date
   timeT = idata.getParams().timeT;
-  Logger::trace("end date", Format::date2string(timeT));
+  Logger::trace("end date", Format::toString(timeT));
 
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
-  Logger::trace("antithetic mode", Format::bool2string(antithetic));
+  Logger::trace("antithetic mode", Format::toString(antithetic));
   reversed = false;
 
   // exit function
@@ -186,8 +186,8 @@ void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active borrowers", Format::bool2string(idata.getParams().onlyactive));
-  Logger::trace("number of initial borrowers", Format::long2string(idata.getPortfolio().getBorrowers().size()));
+  Logger::trace("simulate only active borrowers", Format::toString(idata.getParams().onlyactive));
+  Logger::trace("number of initial borrowers", Format::toString(idata.getPortfolio().getBorrowers().size()));
 
   // determining the borrowers to simulate
   bool onlyactive = idata.getParams().onlyactive;
@@ -210,7 +210,7 @@ void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
   
   // important: sorting borrowers list by sector and rating
   sort(borrowers.begin(), borrowers.end());
-  Logger::trace("number of simulated borrowers", Format::long2string((long)borrowers.size()));
+  Logger::trace("number of simulated borrowers", Format::toString(borrowers.size()));
 
   // checking that exist borrowers to simulate
   if (borrowers.size() == 0)
@@ -254,8 +254,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       }
     }
   }
-  Logger::trace("number of initial assets", Format::long2string(numassets));
-  Logger::trace("number of simulated assets", Format::long2string((long)assets.size()));
+  Logger::trace("number of initial assets", Format::toString(numassets));
+  Logger::trace("number of simulated assets", Format::toString(assets.size()));
 
   // checking that exist assets to simulate
   if (assets.size() == 0)
@@ -280,7 +280,7 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of ratings", Format::int2string(idata.getRatings().size()));
+  Logger::trace("number of ratings", Format::toString(idata.getRatings().size()));
 
   if (idata.hasSurvival())
   {
@@ -293,15 +293,15 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
     Date aux = addMonths(time0, months);
     if (aux < timeT)
     {
-      throw Exception("survival function not defined at t=" + Format::date2string(timeT));
+      throw Exception("survival function not defined at t=" + Format::toString(timeT));
     }
   }
   else
   {
     // setting logger info
-    string sval = Format::int2string(idata.getTransitionMatrix().size());
+    string sval = Format::toString(idata.getTransitionMatrix().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("transition matrix period (in months)", Format::int2string(idata.getTransitionMatrix().getPeriod()));
+    Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
     int months = (int) ceil(time0.getMonthsTo(timeT));
@@ -309,7 +309,7 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
     Logger::trace("transition matrix -> survival function", string("computed"));
     TransitionMatrix tm1 = idata.getTransitionMatrix().scale(1);
     double rerror = tm1.getRegularizationError();
-    Logger::trace("regularization error", Format::double2string(rerror));
+    Logger::trace("regularization error", Format::toString(rerror));
   }
 
   // exit function
@@ -331,12 +331,12 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("number of sectors", Format::int2string(idata.getSectors().size()));
+  Logger::trace("number of sectors", Format::toString(idata.getSectors().size()));
 
   // setting logger info
   Logger::trace("copula type", idata.getParams().copula_type);
-  Logger::trace("copula dimension", Format::long2string(borrowers.size()));
-  Logger::trace("seed used to initialize randomizer (0=none)", Format::long2string(seed_));
+  Logger::trace("copula dimension", Format::toString(borrowers.size()));
+  Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed_));
 
   try
   {
@@ -353,14 +353,14 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
     {
       copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size());
       double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
-      Logger::trace("cholesky condition number", Format::double2string(cnum));
+      Logger::trace("cholesky condition number", Format::toString(cnum));
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
       copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size(), ndf);
       double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
-      Logger::trace("cholesky condition number", Format::double2string(cnum));
+      Logger::trace("cholesky condition number", Format::toString(cnum));
     }
     else 
     {
@@ -408,7 +408,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", fpath);
-  Logger::trace("number of segmentations", Format::int2string(segmentations->size()));
+  Logger::trace("number of segmentations", Format::toString(segmentations->size()));
 
   // allocating and initializing aggregators
   aggregators.clear();
@@ -427,7 +427,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 // execute
 //===========================================================================
-long ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
+int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 {
   // assertions
   assert(1 <= numthreads && numthreads <= MAX_NUM_THREADS); 
@@ -440,12 +440,12 @@ long ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 
   // setting logger header
   Logger::addBlankLine();
-  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::int2string(hash) + " simulations per hash]"), '*');
+  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::toString(hash) + " simulations per hash]"), '*');
   Logger::newIndentLevel();
 
   // creating and launching simulation threads
   timer.start();
-  numiterations = 0L;
+  numiterations = 0;
   pthread_mutex_init(&mutex, NULL);
   threads.assign(numthreads, NULL);
   for(int i=0; i<numthreads; i++)
@@ -500,13 +500,13 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
     }
 
     // checking stop criteria
-    if (maxiterations > 0L && numiterations >= maxiterations)
+    if (maxiterations > 0 && numiterations >= maxiterations)
     {
       more = false;
     }
 
     // checking stop criteria
-    if (maxseconds > 0L && timer.read() >  maxseconds)
+    if (maxseconds > 0 && timer.read() >  maxseconds)
     {
       more = false;
     }

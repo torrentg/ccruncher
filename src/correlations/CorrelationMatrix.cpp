@@ -100,7 +100,7 @@ void ccruncher::CorrelationMatrix::setSectors(const Sectors &sectors_) throw(Exc
   n = sectors.size();
   if (n <= 0)
   {
-    throw Exception("invalid matrix dimension ("+Format::int2string(n)+" <= 0)");
+    throw Exception("invalid matrix dimension ("+Format::toString(n)+" <= 0)");
   }
   if (matrix != NULL) 
   {
@@ -145,7 +145,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
   if (value <= -(1.0+EPSILON) || (1.0+EPSILON) <= value )
   {
     string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
-                 Format::double2string(value);
+                 Format::toString(value);
     throw Exception(msg);
   }
 
@@ -219,8 +219,8 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "non defined correlation element [" + Format::int2string(i+1) + 
-                     "][" + Format::int2string(j+1) + "]";
+        string msg = "non defined correlation element [" + Format::toString(i+1) + 
+                     "][" + Format::toString(j+1) + "]";
         throw Exception(msg);
       }
     }
@@ -245,7 +245,7 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
       ret += spc2 + "<sigma ";
       ret += "sector1 ='" + sectors[i].name + "' ";
       ret += "sector2 ='" + sectors[j].name + "' ";
-      ret += "value ='" + Format::double2string(matrix[i][j]) + "'";
+      ret += "value ='" + Format::toString(matrix[i][j]) + "'";
       ret += "/>\n";
     }
   }

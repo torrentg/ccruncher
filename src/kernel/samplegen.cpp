@@ -239,15 +239,15 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
     cout << spc2 + "<borrower ";
     cout << "rating='" + idata.getRatings()[rand()%(nratings-1)].name + "' ";
     cout << "sector='" + idata.getSectors()[rand()%(nsectors)].name + "' ";
-    cout << "name='borrower" + Format::int2string(i) + "' ";
-    cout << "id='" + Format::int2string(i) + "'>\n";
+    cout << "name='borrower" + Format::toString(i) + "' ";
+    cout << "id='" + Format::toString(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
     {
       cout << spc3;
       cout << "<asset name='bond' ";
-      cout << "id='" + Format::int2string(i) + "-" + Format::int2string(j) + "' ";
-      cout << "date='" + Format::date2string(date1) + "'>\n";
+      cout << "id='" + Format::toString(i) + "-" + Format::toString(j) + "' ";
+      cout << "date='" + Format::toString(date1) + "'>\n";
 
       cout << getXMLData(ilevel+6, date1, 120, getNominal(), 0.70, 1.6);
 
@@ -304,9 +304,9 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   for(unsigned int i=0;i<events.size();i++)
   {
     ret += spc2;
-    ret += "<values at='" + Format::date2string(events[i].date) + "' ";
-    ret += "cashflow='" + Format::double2string(events[i].cashflow) + "' ";
-    ret += "recovery='" + Format::double2string(events[i].recovery*100.0) + "%' ";
+    ret += "<values at='" + Format::toString(events[i].date) + "' ";
+    ret += "cashflow='" + Format::toString(events[i].cashflow) + "' ";
+    ret += "recovery='" + Format::toString(events[i].recovery*100.0) + "%' ";
     ret += "/>\n";
   }
 
