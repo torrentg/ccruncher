@@ -57,6 +57,13 @@ class Ratings : public ExpatHandlers
     // validate object content
     void validations() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // constructor
@@ -73,10 +80,6 @@ class Ratings : public ExpatHandlers
     Rating& operator [] (const string &name) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

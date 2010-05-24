@@ -69,6 +69,13 @@ class Survival : public ExpatHandlers
     // inverse function
     double inverse1(const int irating, double val) const;
 
+  protected:
+
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // defaults constructor
@@ -91,10 +98,6 @@ class Survival : public ExpatHandlers
     int getMinCommonTime() const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

@@ -40,6 +40,13 @@ namespace ccruncher {
 class Rate : public ExpatHandlers
 {
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // time (in months)
@@ -53,10 +60,6 @@ class Rate : public ExpatHandlers
     Rate();
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

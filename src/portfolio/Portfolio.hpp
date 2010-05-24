@@ -79,6 +79,13 @@ class Portfolio : public ExpatHandlers
     // validate portfolio
     void validations() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // constructor
@@ -87,10 +94,6 @@ class Portfolio : public ExpatHandlers
     ~Portfolio();
     // returns the borrowers list
     vector<Borrower *> &getBorrowers();
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

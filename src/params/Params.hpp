@@ -71,6 +71,13 @@ class Params : public ExpatHandlers
     // portfolio.onlyActiveClients param value
     bool onlyactive;
 
+  protected:
+
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+  
   public:
   
     // constructor
@@ -83,10 +90,6 @@ class Params : public ExpatHandlers
     double getCopulaParam() const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

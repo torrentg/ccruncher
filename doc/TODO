@@ -4,12 +4,8 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * set methods epstart, epstop, etc. protected
-      - see: http://www.cprogramming.com/tutorial/friends.html
-      - see: http://www.cplusplus.com/doc/tutorial/inheritance/
+  * add borrower stochastic recovery (eg. beta distribution)
   * beautify html printing output
-  * rename longs to ints
-  * try to inline xmlparser functions
 
 Future works
 -------------------
@@ -26,7 +22,6 @@ Future works
           </segmentations>
         </break>
       </breaks>
-  * add borrower stochastic recovery (eg. beta distribution)
   * add asset stochastic exposure
   * allow ratings evaluated to date previous to T0
   * add borrower-borrower dependences

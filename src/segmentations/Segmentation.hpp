@@ -61,6 +61,13 @@ class Segmentation : public ExpatHandlers
     // inserts a segment into the list
     int insertSegment(const string &) throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // segmentation name
@@ -86,10 +93,6 @@ class Segmentation : public ExpatHandlers
     string getXML(int) const throw(Exception);
     // reset object content
     void reset();
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

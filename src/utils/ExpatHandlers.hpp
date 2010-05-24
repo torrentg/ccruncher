@@ -75,16 +75,24 @@ class ExpatHandlers
     // returns attribute value as boolean
     bool getBooleanAttribute(const char **atts, const string &attname, const bool &defval);
 
-  public:
-
-    // destructor
-    virtual ~ExpatHandlers();
+  protected:
+  
     // handler for open tag
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
     // handler for closed tag
     virtual void epend(ExpatUserData &eud, const char *name) = 0;
     // handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
+
+  public:
+
+    // destructor
+    virtual ~ExpatHandlers();
+    
+  public:
+  
+    // friend class
+    friend class ExpatParser;
 
 };
 

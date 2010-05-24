@@ -72,13 +72,12 @@ string ccruncher::Utils::getCompilationOptions()
   ret += "[enabled] | ";
 #endif
 
-
   // profiler option
   ret += "profiler";
 #ifdef PROFILER
-  ret += "[enabled] | ";
+  ret += "[enabled] ";
 #else
-  ret += "[disabled] | ";
+  ret += "[disabled] ";
 #endif
 
   return ret;

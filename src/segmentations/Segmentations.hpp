@@ -55,6 +55,13 @@ class Segmentations : public ExpatHandlers
     // validate object content
     void validate() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+  
   public:
 
     // constructor
@@ -69,10 +76,6 @@ class Segmentations : public ExpatHandlers
     int indexOfSegmentation(const string &sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

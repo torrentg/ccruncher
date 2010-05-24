@@ -79,6 +79,13 @@ class Asset : public ExpatHandlers
     // returns loss at given date
     double getLossX(Date d);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // constructor
@@ -109,10 +116,6 @@ class Asset : public ExpatHandlers
     Date getMinDate();
     // returns maximum event date (restricted to precomputed events)
     Date getMaxDate();
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 
