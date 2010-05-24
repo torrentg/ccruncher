@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
   };
 
   string sfilename = "";
-  long nborrowers = 0L;
-  long nassets = 0L;
+  int nborrowers = 0;
+  int nassets = 0;
 
   // parsing options
   while (1)
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
           try
           {
             string sborrowers = string(optarg);
-            nborrowers = Parser::longValue(sborrowers);
+            nborrowers = Parser::intValue(sborrowers);
           }
           catch(Exception &e)
           {
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
           try
           {
             string sassets = string(optarg);
-            nassets = Parser::longValue(sassets);
+            nassets = Parser::intValue(sassets);
           }
           catch(Exception &e)
           {

@@ -52,8 +52,6 @@ class Utils
 
   public:
 
-    // elf hash algorithm
-    static unsigned long hash(const string &str);
     // returns current timestamp in format dd/mm/yyyy hh:mm:ss
     static string timestamp();
     // returns compilation options

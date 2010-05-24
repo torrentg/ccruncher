@@ -58,7 +58,7 @@ void ccruncher_test::TimerTest::test1()
   timer.start();
 
   // making some stuff
-  for(long i=0;i<NUMOPS;i++)
+  for(int i=0;i<NUMOPS;i++)
   {
     x = cos(x);
   }
@@ -72,7 +72,7 @@ void ccruncher_test::TimerTest::test1()
   timer.resume();
 
   // making more stuff
-  for(long i=0;i<NUMOPS;i++) {
+  for(int i=0;i<NUMOPS;i++) {
     x = cos(x);
   }
 

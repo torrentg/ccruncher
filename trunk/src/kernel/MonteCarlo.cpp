@@ -240,7 +240,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
-  long numassets = 0L;
+  int numassets = 0;
   assets.reserve(4*borrowers.size());
   for(unsigned int i=0; i<borrowers.size(); i++)
   {
