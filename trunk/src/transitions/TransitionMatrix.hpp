@@ -67,6 +67,13 @@ class TransitionMatrix : public ExpatHandlers
     // computes Cumulated Default Forward Rate
     void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
 
+  protected:
+
+    // ExpatHandler method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandler method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // default constructor
@@ -103,10 +110,6 @@ class TransitionMatrix : public ExpatHandlers
     Survival getSurvival(int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
-    // ExpatHandler method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
-    void epend(ExpatUserData &, const char *);
 
 };
 

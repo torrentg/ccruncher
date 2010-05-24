@@ -93,6 +93,15 @@ class IData : public ExpatHandlers
     // parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+    // ExpatHandlers method
+    void epdata(ExpatUserData &, const char *, const char *, int);
+
   public:
 
     // default constructor
@@ -125,12 +134,6 @@ class IData : public ExpatHandlers
     Portfolio & getPortfolio();
     // indicates if survival tag is defined
     bool hasSurvival() const;
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
-    // ExpatHandlers method
-    void epdata(ExpatUserData &, const char *, const char *, int);
 
 };
 

@@ -56,6 +56,13 @@ class Sectors : public ExpatHandlers
     // validate list
     void validations() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+  
   public:
 
     // default constructor
@@ -72,10 +79,6 @@ class Sectors : public ExpatHandlers
     Sector& operator [] (const string &name) throw(Exception);
     // returns object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

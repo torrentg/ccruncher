@@ -73,6 +73,13 @@ class Borrower : public ExpatHandlers
     // insert a asset    
     void prepareLastAsset() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // borrower rating
@@ -100,10 +107,6 @@ class Borrower : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     // given a segmentation returns the segment
     int getSegment(int isegmentation);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

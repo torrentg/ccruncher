@@ -63,6 +63,13 @@ class Interest : public ExpatHandlers
     // returns upsilon function value
     double getUpsilon(const double r, const double t) const;
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // default constructor
@@ -79,10 +86,6 @@ class Interest : public ExpatHandlers
     double getUpsilon(const Date &date1, const Date &date2) const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

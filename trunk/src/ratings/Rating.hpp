@@ -48,16 +48,19 @@ class Rating : public ExpatHandlers
     // rating description
     string desc;
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+
   public:
 
     // rating constructor
     Rating();
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
 };
 

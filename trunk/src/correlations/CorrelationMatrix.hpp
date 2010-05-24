@@ -58,6 +58,13 @@ class CorrelationMatrix : public ExpatHandlers
     // validate object content
     void validate(void) throw(Exception);
 
+  protected:
+  
+    // ExpatHandler method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandler method
+    void epend(ExpatUserData &, const char *);
+  
   public:
 
     // constructor
@@ -78,10 +85,6 @@ class CorrelationMatrix : public ExpatHandlers
     double ** getMatrix() const;
     // serializes object content as xml
     string getXML(int) throw(Exception);
-    // ExpatHandler method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
-    void epend(ExpatUserData &, const char *);
 
 };
 
