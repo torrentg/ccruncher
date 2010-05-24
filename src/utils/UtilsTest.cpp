@@ -47,11 +47,6 @@ void ccruncher_test::UtilsTest::tearDown()
 //===========================================================================
 void ccruncher_test::UtilsTest::test1(void)
 {
-  // hash function
-  ASSERT(Utils::hash("ccruncher") == 163903330UL);
-  ASSERT(Utils::hash("client1") == 170902801UL);
-  ASSERT(Utils::hash("client2") == 170902802UL);
-
   // testing timestamp function
   ASSERT(Utils::timestamp().size() == 19);
 

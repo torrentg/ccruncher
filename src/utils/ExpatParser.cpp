@@ -179,10 +179,10 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
       if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
       {
         char aux[512];
-        sprintf(aux, "%s at line %ld column %ld",
+        sprintf(aux, "%s at line %d column %d",
                      XML_ErrorString(XML_GetErrorCode(xmlparser)),
-                     (long) XML_GetCurrentLineNumber(xmlparser),
-                     (long) XML_GetCurrentColumnNumber(xmlparser));
+                     (int) XML_GetCurrentLineNumber(xmlparser),
+                     (int) XML_GetCurrentColumnNumber(xmlparser));
         throw Exception(string(aux));
       }
     } while(!done);
@@ -196,27 +196,27 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
     // unknow exception
     else {
       char aux[512];
-      sprintf(aux, "error at line %ld column %ld",
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
+      sprintf(aux, "error at line %d column %d",
+                 (int) XML_GetCurrentLineNumber(xmlparser),
+                 (int) XML_GetCurrentColumnNumber(xmlparser));
       throw Exception(string(aux));
     }
   }
   catch(Exception &e)
   {
     char aux[512];
-    sprintf(aux, "%s at line %ld column %ld",
+    sprintf(aux, "%s at line %d column %d",
                  e.what(),
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
+                 (int) XML_GetCurrentLineNumber(xmlparser),
+                 (int) XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(string(aux));
   }
   catch(...)
   {
     char aux[512];
-    sprintf(aux, "error at line %ld column %ld",
-                 (long) XML_GetCurrentLineNumber(xmlparser),
-                 (long) XML_GetCurrentColumnNumber(xmlparser));
+    sprintf(aux, "error at line %d column %d",
+                 (int) XML_GetCurrentLineNumber(xmlparser),
+                 (int) XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(string(aux));
   }
 }

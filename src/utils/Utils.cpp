@@ -32,25 +32,6 @@
 #endif
 
 //===========================================================================
-// create a hash using ELF hash algorithm
-// extracted from "Hashing Rehashed." Andrew Binstock, Dr. Dobb's Journal, APR96
-//===========================================================================
-unsigned long ccruncher::Utils::hash(const string &str)
-{
-  unsigned long h=0, g;
-  const unsigned char *name = (const unsigned char *)(str.c_str());
-
-  while ( *name )
-  {
-    h = ( h << 4 ) + *name++;
-    if ( (g = h & 0xF0000000) )
-      h ^= g >> 24;
-    h &= ~g;
-  }
-  return h;
-}
-
-//===========================================================================
 // return the current timestamp in format dd/mm/yyyy hh:mm:ss
 //===========================================================================
 string ccruncher::Utils::timestamp()
