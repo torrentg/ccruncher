@@ -26,7 +26,7 @@
 #include <cassert>
 
 //===========================================================================
-// constructor
+// default constructor
 //===========================================================================
 ccruncher::Random::Random()
 {
@@ -90,6 +90,16 @@ double ccruncher::Random::nextChisq(double nu)
 {
   assert(nu > 0.0);
   return gsl_ran_chisq(rng, nu);
+}
+
+//===========================================================================
+// nextBeta
+//===========================================================================
+double ccruncher::Random::nextBeta(double a, double b)
+{
+  assert(a > 0.0);
+  assert(b > 0.0);
+  return gsl_ran_beta(rng, a, b);
 }
 
 //===========================================================================

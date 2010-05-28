@@ -64,6 +64,8 @@ class Random
     double nextGaussian(double mu, double sigma);
     // returns T(nu)
     double nextChisq(double nu);
+    // returns Beta(a,b)
+    double nextBeta(double a, double b);
     // returns Unif(a,b)
     double nextUnif(double a, double b);
 
