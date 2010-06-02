@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <cmath>
 #include <map>
 #include <vector>
 #include "interests/Interest.hpp"
@@ -69,6 +70,8 @@ class Asset : public ExpatHandlers
     vector<double> plosses;
     // auxiliary variable (used by parser)
     bool have_data;
+    // default recovery
+    double drecovery;
 
   private:
   
@@ -89,7 +92,7 @@ class Asset : public ExpatHandlers
   public:
 
     // constructor
-    Asset(Segmentations *);
+    Asset(Segmentations *, double recovery=NAN);
     // destructor
     ~Asset();
     // return asset id
@@ -101,21 +104,23 @@ class Asset : public ExpatHandlers
     // precompute losses
     void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
     // returns loss at the given default time
-    double getLoss(const Date &at);
+    double getLoss(const Date &at) const;
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment
-    bool belongsTo(int isegmentation, int isegment);
+    bool belongsTo(int isegmentation, int isegment) const;
     // given a segmentation returns the segment
-    int getSegment(int isegmentation);
+    int getSegment(int isegmentation) const;
     // free memory allocated by DateValues
     void deleteData();
     // indicates if this borrower has cashflows in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // returns minimum event date (restricted to precomputed events)
-    Date getMinDate();
+    Date getMinDate() const;
     // returns maximum event date (restricted to precomputed events)
-    Date getMaxDate();
+    Date getMaxDate() const;
+    // returns default recovery
+    double getRecovery() const;
 
 };
 
@@ -124,7 +129,7 @@ class Asset : public ExpatHandlers
 //===========================================================================
 // getSegment
 //===========================================================================
-inline int ccruncher::Asset::getSegment(int isegmentation)
+inline int ccruncher::Asset::getSegment(int isegmentation) const
 {
   assert(isegmentation >= 0);
   assert(isegmentation < (int) vsegments.size());
@@ -134,7 +139,7 @@ inline int ccruncher::Asset::getSegment(int isegmentation)
 //===========================================================================
 // getLoss
 //===========================================================================
-inline double ccruncher::Asset::getLoss(const Date &at)
+inline double ccruncher::Asset::getLoss(const Date &at) const
 {
   int length = (int) ptimes.size();
 

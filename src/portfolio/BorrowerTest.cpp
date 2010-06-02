@@ -24,6 +24,8 @@
 #include "portfolio/BorrowerTest.hpp"
 #include "utils/ExpatParser.hpp"
 
+#define EPSILON 0.000001
+
 //===========================================================================
 // setUp
 //===========================================================================
@@ -209,6 +211,7 @@ void ccruncher_test::BorrowerTest::test1()
   ASSERT(borrower.name == "Borrower1");
   ASSERT(borrower.irating == 0);
   ASSERT(borrower.isector == 1);
+  ASSERT(isnan(borrower.recovery));
 
   ASSERT(borrower.belongsTo(1, 1));
   ASSERT(borrower.belongsTo(3, 2));
@@ -304,3 +307,50 @@ void ccruncher_test::BorrowerTest::test3()
   Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
 }
+
+//===========================================================================
+// test4
+//===========================================================================
+void ccruncher_test::BorrowerTest::test4()
+{
+  // checks that borrower recovery works
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <borrower rating='A' sector='S2' name='borrower1' id='cif1' recovery='50%'>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
+        <data>\n\
+          <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2000' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2002' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/07/2002' cashflow='510.0' recovery='80%' />\n\
+        </data>\n\
+      </asset>\n\
+      <asset name='generic' id='op2' date='01/01/2000'>\n\
+        <data>\n\
+          <values at='01/01/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2001' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2002' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/01/2003' cashflow='15.0' recovery='70%' />\n\
+          <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
+        </data>\n\
+      </asset>\n\
+    </borrower>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // borrower creation
+  Ratings ratings = getRatings();
+  Sectors sectors = getSectors();
+  Segmentations segmentations = getSegmentations();
+  Interest interest = getInterest();
+  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
+
+  // assertions
+  ASSERT_EQUALS_EPSILON(borrower.recovery, 0.5, EPSILON);
+}
+

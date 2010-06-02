@@ -170,7 +170,7 @@
 																<xsd:complexType>
 																	<xsd:attribute name="at" type="date" use="required"/>
 																	<xsd:attribute name="cashflow" type="xsd:double" use="required"/>
-																	<xsd:attribute name="recovery" type="double" use="required"/>
+																	<xsd:attribute name="recovery" type="double" use="optional"/>
 																</xsd:complexType>
 															</xsd:element>
 														</xsd:sequence>
@@ -180,6 +180,7 @@
 											<xsd:attribute name="name" type="xsd:string" use="required"/>
 											<xsd:attribute name="id" type="xsd:string" use="required"/>
 											<xsd:attribute name="date" type="date" use="required"/>
+											<xsd:attribute name="recovery" type="double" use="optional"/>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
@@ -187,6 +188,7 @@
 								<xsd:attribute name="id" type="xsd:string" use="required"/>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
 								<xsd:attribute name="sector" type="xsd:string" use="required"/>
+								<xsd:attribute name="recovery" type="double" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>

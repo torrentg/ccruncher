@@ -11,6 +11,7 @@ version 1.6 (???. 2010)
   * documentation updated
   * removed MPI support
   * added multi-thread support
+  * added default recovery for borrowers and assets
 
 version 1.5 (Feb. 2010)
 --------------------------

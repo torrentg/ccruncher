@@ -30,7 +30,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data(), ptimes(), plosses()
+ccruncher::Asset::Asset(Segmentations *segs, double drecovery_) : vsegments(), data(), ptimes(), plosses()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
@@ -40,6 +40,7 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data(), ptimes(), pl
   have_data = false;
   date = Date(1,1,1);
   lastdate = Date(1,1,1);
+  drecovery = drecovery_;
 }
 
 //===========================================================================
@@ -173,10 +174,14 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name_,"values") && have_data == true) {
+  if (isEqual(name_,"values") && have_data == true) 
+  {
     Date at = getDateAttribute(attributes, "at", Date(1,1,1));
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
-    double recovery = getDoubleAttribute(attributes, "recovery", NAN);
+    double recovery = drecovery;
+    if (getAttributeValue(attributes, "recovery") != NULL) {
+      recovery = getDoubleAttribute(attributes, "recovery", NAN);
+    }
 
     if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
@@ -203,17 +208,18 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"asset")) {
-    if (getNumAttributes(attributes) != 3) {
-      throw Exception("incorrect number of attributes in tag asset");
-    }
-    else {
-      id = getStringAttribute(attributes, "id", "");
-      name = getStringAttribute(attributes, "name", "");
-      date = getDateAttribute(attributes, "date", Date(1,1,1));
-      if (id == "" || name == "" || date == Date(1,1,1))
-      {
-        throw Exception("invalid attributes at <asset>");
+    id = getStringAttribute(attributes, "id", "");
+    name = getStringAttribute(attributes, "name", "");
+    date = getDateAttribute(attributes, "date", Date(1,1,1));
+    if (getAttributeValue(attributes, "recovery") != NULL) {
+      drecovery = getDoubleAttribute(attributes, "recovery", NAN);
+      if (drecovery < 0.0 || 1.0 < drecovery) {
+        throw Exception("recovery value out of range [0%,100%]");
       }
+    }
+    if (id == "" || name == "" || date == Date(1,1,1))
+    {
+      throw Exception("invalid attributes at <asset>");
     }
   }
   else if (isEqual(name_,"data")) {
@@ -321,7 +327,7 @@ void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Excep
 //===========================================================================
 // belongsTo
 //===========================================================================
-bool ccruncher::Asset::belongsTo(int isegmentation, int isegment)
+bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 {
   return (vsegments[isegmentation]==isegment);
 }
@@ -349,7 +355,7 @@ void ccruncher::Asset::deleteData()
 // getMinDate
 // be sure that precomputeLosses is called before the execution of this method
 //===========================================================================
-Date ccruncher::Asset::getMinDate()
+Date ccruncher::Asset::getMinDate() const
 {
   return ptimes.front();
 }
@@ -358,7 +364,7 @@ Date ccruncher::Asset::getMinDate()
 // getMaxDate
 // be sure that precomputeLosses is called before the execution of this method
 //===========================================================================
-Date ccruncher::Asset::getMaxDate()
+Date ccruncher::Asset::getMaxDate() const
 {
   return ptimes.back();
 }
@@ -385,4 +391,12 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
     return false;
   }
 }
-        
+ 
+//===========================================================================
+// getRecovery
+//===========================================================================
+double ccruncher::Asset::getRecovery() const
+{
+  return drecovery;
+}
+       

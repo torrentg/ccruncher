@@ -54,6 +54,7 @@ class BorrowerTest : public TestFixture<BorrowerTest>
     void test1(void);
     void test2(void);
     void test3(void);
+    void test4(void);
 
 
   public:
@@ -63,6 +64,7 @@ class BorrowerTest : public TestFixture<BorrowerTest>
       TEST_CASE(test1);
       TEST_CASE(test2);
       TEST_CASE(test3);
+      TEST_CASE(test4);
     }
 
     void setUp();

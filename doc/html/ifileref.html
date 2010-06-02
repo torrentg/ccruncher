@@ -692,20 +692,20 @@
     &lt;borrower rating="A" sector="S1" name="Diria" id="000001"&gt;
       &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op1" date="01/01/2005"&gt;
+      &lt;asset name="bond" id="op1" date="01/01/2005" recovery="80%"&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;belongs-to segmentation="offices" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values at="01/06/2005" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2006" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2007" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2008" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2009" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2010" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2011" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2012" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2013" cashflow="100.0" recovery="80%" /&gt;
-          &lt;values at="01/06/2014" cashflow="1100.0" recovery="80%" /&gt;
+          &lt;values at="01/06/2005" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2006" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2007" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2008" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2009" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2010" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2011" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2012" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2013" cashflow="100.0" /&gt;
+          &lt;values at="01/06/2014" cashflow="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset name="bond" id="op2" date="01/06/2008"&gt;
@@ -720,42 +720,42 @@
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/borrower&gt;
-    &lt;borrower rating="B" sector="S2" name="Gixirre" id="000002"&gt;
+    &lt;borrower rating="B" sector="S2" name="Gixirre" id="000002" recovery="20%"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="big"/&gt;
       &lt;asset name="bond" id="op3" date="01/06/2003"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2005" cashflow="150.0" recovery="20%" /&gt;
-          &lt;values at="01/06/2007" cashflow="150.0" recovery="20%" /&gt;
-          &lt;values at="01/01/2009" cashflow="150.0" recovery="20%" /&gt;
-          &lt;values at="01/06/2011" cashflow="150.0" recovery="20%" /&gt;
-          &lt;values at="01/01/2013" cashflow="1150.0" recovery="20%" /&gt;
+          &lt;values at="01/01/2005" cashflow="150.0" /&gt;
+          &lt;values at="01/06/2007" cashflow="150.0" /&gt;
+          &lt;values at="01/01/2009" cashflow="150.0" /&gt;
+          &lt;values at="01/06/2011" cashflow="150.0" /&gt;
+          &lt;values at="01/01/2013" cashflow="1150.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/borrower&gt;
     &lt;borrower rating="CCC" sector="S2" name="Altleopard" id="000003"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op4" date="01/01/1999"&gt;
+      &lt;asset name="bond" id="op4" date="01/01/1999" recovery="50%"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2001" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2002" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2003" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2004" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2005" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2006" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2007" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2008" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2009" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2010" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2011" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2012" cashflow="100.0" recovery="50%" /&gt;
-          &lt;values at="01/01/2013" cashflow="1100.0" recovery="50%" /&gt;
+          &lt;values at="01/01/2000" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2001" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2002" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2003" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2004" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2005" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2006" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2007" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2008" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2009" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2010" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2011" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2012" cashflow="100.0" /&gt;
+          &lt;values at="01/01/2013" cashflow="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/borrower&gt;
@@ -830,6 +830,15 @@
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
+      <tr class="a">
+        <td class="c1">recovery</td>
+        <td class="c2">
+          Default recovery value used in case of absence of recovery in the description of assets.
+          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          This attribute is optional.
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
     </table>
 
     <h3>Belongs-To Attributes</h3>
@@ -888,6 +897,15 @@
           buy date or loan signature.
         </td>
         <td class="c3"><code>date</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">recovery</td>
+        <td class="c2">
+          Default recovery value used in case of absence of recovery in the description of assets.
+          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          This attribute is optional.
+        </td>
+        <td class="c3"><code>double</code></td>
       </tr>
     </table>
 
@@ -1024,7 +1042,7 @@
             Copyright &copy; 2004-2010 <a href="mailto:gtorrent@ccruncher.net">Gerard Torrent</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 21-May-2010
+            Last modified: 02-Jun-2010
           </td>
         </tr></table>
       </div></div></div></div></div>

@@ -45,11 +45,6 @@ class ExpatUserData;
 class ExpatHandlers
 {
 
-  private:
-
-    // returns the value of the given attribute
-    char * getAttributeValue(const char **atts, const string &attname) const;
-
   protected:
 
     // removes current handlers from stack
@@ -58,6 +53,8 @@ class ExpatHandlers
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
     // stops the parser
     void epstop(ExpatUserData &eud);
+    // returns the value of the given attribute
+    char * getAttributeValue(const char **atts, const string &attname) const;
     // string comparison
     bool isEqual(const char *, const string &);
     // returns the number of attributes

@@ -90,6 +90,8 @@ class Borrower : public ExpatHandlers
     string id;
     // borrower name
     string name;
+    // default recovery
+    double recovery;
 
   public:
   

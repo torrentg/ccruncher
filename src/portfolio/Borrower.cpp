@@ -22,6 +22,7 @@
 
 #include "portfolio/Borrower.hpp"
 #include "utils/Utils.hpp"
+#include <cmath>
 #include <cassert>
 
 //===========================================================================
@@ -45,6 +46,7 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   isector = -1;
   id = "NON_ID";
   name = "NO_NAME";
+  recovery = NAN;
 }
 
 //===========================================================================
@@ -93,7 +95,7 @@ void ccruncher::Borrower::prepareLastAsset() throw(Exception)
 void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset")) {
-    Asset *asset = new Asset(segmentations);
+    Asset *asset = new Asset(segmentations, recovery);
     vassets.push_back(asset);
     eppush(eu, asset, name_, attributes);
   }
@@ -111,24 +113,25 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
     addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"borrower")) {
-    if (getNumAttributes(attributes) != 4) {
-      throw Exception("incorrect number of attributes in tag borrower");
-    }
-    else {
-      // reading atributes
-      id = getStringAttribute(attributes, "id", "");
-      name = getStringAttribute(attributes, "name", "");
-      string strrating = getStringAttribute(attributes, "rating", "");
-      string strsector= getStringAttribute(attributes, "sector", "");
-
-      // retrieving indexes
-      irating = ratings->getIndex(strrating);
-      isector = sectors->getIndex(strsector);
-
-      // doing some checks
-      if (id == "" || name == "" || irating < 0 || isector < 0) {
-        throw Exception("invalid attributes at <borrower>");
+    // reading atributes
+    id = getStringAttribute(attributes, "id", "");
+    name = getStringAttribute(attributes, "name", "");
+    string strrating = getStringAttribute(attributes, "rating", "");
+    string strsector= getStringAttribute(attributes, "sector", "");
+    if (getAttributeValue(attributes, "recovery") != NULL) {
+      recovery = getDoubleAttribute(attributes, "recovery", NAN);
+      if (recovery < 0.0 || 1.0 < recovery) {
+        throw Exception("recovery value out of range [0%,100%]");
       }
+    }
+
+    // retrieving indexes
+    irating = ratings->getIndex(strrating);
+    isector = sectors->getIndex(strsector);
+
+    // doing some checks
+    if (id == "" || name == "" || irating < 0 || isector < 0) {
+      throw Exception("invalid attributes at <borrower>");
     }
   }
   else {
