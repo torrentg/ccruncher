@@ -183,6 +183,7 @@
     name CDATA #REQUIRED
     rating IDREF #REQUIRED
     sector IDREF #REQUIRED
+    recovery CDATA #IMPLIED
 >
 
 <!ELEMENT asset (
@@ -192,6 +193,7 @@
     id CDATA #REQUIRED
     name CDATA #REQUIRED
     date CDATA #REQUIRED
+    recovery CDATA #IMPLIED
 >
 
 <!ELEMENT belongs-to
@@ -212,5 +214,5 @@
 <!ATTLIST values
     at CDATA #REQUIRED
     cashflow CDATA #REQUIRED
-    recovery CDATA #REQUIRED
+    recovery CDATA #IMPLIED
 >
