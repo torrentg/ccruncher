@@ -49,6 +49,7 @@ ccruncher_SOURCES = \
     ../src/math/BlockTStudentCopula.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
+    ../src/portfolio/Recovery.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
@@ -92,6 +93,7 @@ ccruncher_SOURCES = \
     ../src/math/BlockTStudentCopula.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
+    ../src/portfolio/Recovery.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
@@ -153,6 +155,7 @@ tests_SOURCES = \
     ../src/survival/SurvivalTest.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
+    ../src/portfolio/Recovery.cpp\
     ../src/utils/Arrays.cpp\
     ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
@@ -224,6 +227,7 @@ tests_SOURCES = \
     ../src/survival/SurvivalTest.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
+    ../src/portfolio/Recovery.hpp\
     ../src/utils/Arrays.hpp\
     ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
@@ -300,6 +304,7 @@ samplegen_SOURCES = \
     ../src/math/BlockTStudentCopula.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
+    ../src/portfolio/Recovery.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
@@ -343,6 +348,7 @@ samplegen_SOURCES = \
     ../src/math/BlockTStudentCopula.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
+    ../src/portfolio/Recovery.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
