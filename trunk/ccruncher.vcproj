@@ -361,6 +361,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\portfolio\Recovery.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\portfolio\Recovery.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\portfolio\Portfolio.cpp"
 					>
 				</File>
