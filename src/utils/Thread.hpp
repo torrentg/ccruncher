@@ -67,7 +67,7 @@ class Thread
     // constructor
     Thread();
     // destructor
-    ~Thread();
+    virtual ~Thread();
     // executes main procedure as a thread
     virtual void run() = 0;
     // starts the thread
