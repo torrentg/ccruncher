@@ -255,7 +255,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
   {
     for (int j=0;j<n;j++)
     {
-      if (matrix[i][j] == NAN)
+      if (isnan(matrix[i][j]))
       {
         throw Exception("transition matrix have an undefined element [" + Format::toString(i+1) + "][" + Format::toString(j+1) + "]");
       }
