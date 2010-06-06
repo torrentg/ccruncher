@@ -53,6 +53,7 @@
 //===========================================================================
 
 #include <cstdio>
+#include <cstring>
 #include <ctime>
 #include <vector>
 #include "utils/Date.hpp"
@@ -117,29 +118,40 @@ ccruncher::Date::Date( const time_t tSysTime )
 //===========================================================================
 ccruncher::Date::Date(const string &str) throw(Exception)
 {
+  parse(str.c_str());
+}
+
+//===========================================================================
+// Constructor from string (format string = dd/mm/yyyy)
+//===========================================================================
+ccruncher::Date::Date(const char *str) throw(Exception)
+{
+  parse(str);
+}
+
+//===========================================================================
+// Constructor from string (format string = dd/mm/yyyy)
+//===========================================================================
+void ccruncher::Date::parse(const char *str) throw(Exception)
+{
   int d, m, y;
-  vector<string> tokens;
-  Strings::tokenize(str, tokens, "/");
+  char buf[10];
 
-  if (tokens.size() != 3)
+  int l = strlen(str);
+  if (l < 8 || 10 < l)
   {
-    throw Exception("invalid date: " + str + " (num tokens distinct than 3)");
+    throw Exception("invalid date: " + string(str) + " (non valid format)");
   }
 
-  try
+  int rc = sscanf(str, "%d/%d/%d%s", &d, &m, &y);
+  if (rc != 3)
   {
-    d = (char) Parser::intValue(tokens[0]);
-    m = (char) Parser::intValue(tokens[1]);
-    y = Parser::intValue(tokens[2]);
-  }
-  catch(Exception &e)
-  {
-    throw Exception(e, "invalid date: " + str + " (non valid values)");
+    throw Exception("invalid date: " + string(str) + " (non valid format)");
   }
 
   if (!valid(d, m, y))
   {
-    throw Exception("invalid Date: " + str + " (non valid date)");
+    throw Exception("invalid Date: " + string(str) + " (non valid date)");
   }
   else
   {
