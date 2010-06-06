@@ -81,6 +81,7 @@ class Date
 
     static long YmdToJd(const int iYear, const int iMonth, const int iDay);
     static void JdToYmd(const long lJD, int *piYear, int *piMonth, int *piDay);
+    void parse(const char *) throw(Exception);
 
 
   public:
@@ -90,6 +91,7 @@ class Date
     Date(const int iDay, const int iMonth, const int iYear) throw(Exception);
     explicit Date(const time_t tSysTime);
     Date(const string &str) throw(Exception);
+    Date(const char *str) throw(Exception);
 
     string toString() const;
     static bool valid(const int d, const int m, const int y);
