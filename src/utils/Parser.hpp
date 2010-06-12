@@ -38,6 +38,16 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+enum DistributionType
+{ 
+  Fixed,
+  Gaussian,
+  TStudent,
+  Beta
+};
+
+//---------------------------------------------------------------------------
+
 class Parser
 {
 
@@ -68,6 +78,10 @@ class Parser
     static Date dateValue(const char *) throw(Exception);
     // convert string to bool
     static bool boolValue(const char *) throw(Exception);
+    // parse a distribution
+    static DistributionType parseDistribution(const char *, double *) throw(Exception);
+    // parse a distribution
+    static DistributionType parseDistribution(const char *, double *, double *) throw(Exception);
 
 };
 

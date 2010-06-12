@@ -143,7 +143,7 @@ void ccruncher::Date::parse(const char *str) throw(Exception)
     throw Exception("invalid date: " + string(str) + " (non valid format)");
   }
 
-  int rc = sscanf(str, "%d/%d/%d%s", &d, &m, &y);
+  int rc = sscanf(str, "%d/%d/%d%s", &d, &m, &y, buf);
   if (rc != 3)
   {
     throw Exception("invalid date: " + string(str) + " (non valid format)");

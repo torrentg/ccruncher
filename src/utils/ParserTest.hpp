@@ -45,6 +45,7 @@ class ParserTest : public TestFixture<ParserTest>
     void test_double(void);
     void test_date(void);
     void test_bool(void);
+    void test_distribution(void);
 
 
   public:
@@ -56,6 +57,7 @@ class ParserTest : public TestFixture<ParserTest>
       TEST_CASE(test_double);
       TEST_CASE(test_date);
       TEST_CASE(test_bool);
+      TEST_CASE(test_distribution);
     }
 
     void setUp();
