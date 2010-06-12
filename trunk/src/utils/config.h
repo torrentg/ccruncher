@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Jun  4 16:16:00 CEST 2010"
+#define BUILD_DATE "Fri Jun  4 21:25:48 CEST 2010"
 
 /* build host name */
-#define BUILD_HOST "imd1.imagina.local"
+#define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "gtorrent"
+#define BUILD_USER "gerard"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
