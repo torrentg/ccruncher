@@ -4,12 +4,12 @@ CCRUNCHER CHANGELOG
 
 version 1.6 (???. 2010)
 --------------------------
-  * removed options validate, lcopulas and ldeftime
-  * portfolio file can be referenced in input file
-  * documentation updated
-  * removed MPI support
   * added multi-thread support
+  * removed MPI support
+  * portfolio file can be referenced in input file
   * added default recovery for borrowers and assets
+  * removed options validate, lcopulas and ldeftime
+  * documentation updated
 
 version 1.5 (Feb. 2010)
 --------------------------

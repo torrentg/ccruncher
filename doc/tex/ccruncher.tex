@@ -109,9 +109,9 @@ This section explains the input parameters required by CCruncher.
 
 %---------------------------------------------------------------------------
 \subsection{Ratings and Survival Functions}
-A rating tells a lender or investor the probability of the subject being 
-able to pay back a loan. A poor rating indicates a high risk of defaulting.
-Every rating has a survival function associated. This function indicates 
+A credit rating estimates the probability of an individual or corporation 
+to pay back a loan. A poor rating indicates a high risk of defaulting.
+Each rating has a survival function associated. This function indicates 
 the probability that a borrower with initial rating $X$ be non-defaulted at 
 time $t$. The creation of a rating system and the construction of the 
 survival functions are outside the scope of this paper.
@@ -134,9 +134,9 @@ using the transition matrix.
 %---------------------------------------------------------------------------
 \subsection{Sectors and Correlations}
 \label{sectors}
-The risk of a credit portfolio depends crucially on default correlations between 
+The risk of a credit portfolio depends crucially on correlations between 
 economic sectors. These sectors are groupings of companies that react similarly to 
-given economic conditions. Example of sectors: energy, financial, technology, 
+economic conditions. Example of sectors: energy, financial, technology, 
 media and entertainment, utilities, health care, etc. Default correlations between 
 sectors measures the defaults times dependence between the defined sectors. This 
 can be expressed in tabular form:
@@ -160,16 +160,15 @@ same sector (values distinct than $1$) while elements outside diagonal are
 default time correlations between elements of distinct sectors.
 \newline
 
-Appendice \ref{ap:mcorrel} expose a simple method to obtain an estimation of
+Appendice \ref{ap:mcorrel} exposes a simple method to obtain an estimation of
 the correlation matrix based on the historical information about defaults.
 
 %---------------------------------------------------------------------------
 \subsection{Portfolio}
-Portfolio is composed by borrowers. Each borrower has an initial rating and 
-belongs to a sector. Each borrower have one or more assets. Each asset
-is defined by its addition date in the portfolio, expected cashflow and 
-recovery at certain dates. Figure \ref{portfolio} shows the structure of 
-a portfolio.
+Portfolio is composed by borrowers. Each borrower has an initial rating, 
+belongs to a sector and has one or more assets. Each asset
+is defined by its creation date, expected cashflow and recovery at certain 
+dates. Figure \ref{portfolio} shows the structure of a portfolio.
 \newline
 
 \emph{Cashflow} indicates the cash given to the borrower (negative amounts) and the
@@ -223,7 +222,7 @@ This section explains how CCruncher computes the credit risk of a portfolio.
 \subsection{Borrowers correlation matrix}
 \label{tcorrel}
 We need to translate from default correlations between sectors to default 
-correlations between borrowers. Let us suppose that we have $n$ borrowers and $m$ 
+correlations between borrowers. Suppose we have $n$ borrowers and $m$ 
 sectors. Each borrower belongs to a sector. Correlations between sectors are 
 known (see section \ref{sectors}):
 
@@ -241,8 +240,8 @@ $Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
 \end{tabular}
 \end{center}
 
-We sort the borrowers so that we find those of sector $1$ at the beginning and
-those of sector $m$ at the end. Then we create the borrowers correlation matrix 
+Sort the borrowers so that whose find those who belong to sector $1$ are at the beginning 
+and those of sector $m$ at the end. Then create the borrowers correlation matrix 
 taking as correlation between two borrowers the correlation between their sectors
 (see figure \ref{borrowercorrel}).
 
@@ -276,7 +275,7 @@ taking as correlation between two borrowers the correlation between their sector
 
 Observe that this is a correlation matrix (symmetric, $|\rho_{i,j}| \leq 1$, 
 $|\rho_{i,i}| = 1$) composed by blocks. This matrix will be decomposed using 
-the Cholesky algorithm, so it must be definite positive.
+the Cholesky algorithm, so it must be positive definite.
 
 %---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
@@ -284,8 +283,8 @@ the Cholesky algorithm, so it must be definite positive.
 Monte Carlo methods are a class of computational algorithms for 
 simulating the behavior of various physical and mathematical systems. 
 Each simulation consists of computing a random default time for each borrower and
-then calculate the loss of the portfolio. We need that default times fulfill two 
-conditions: the borrower's survival functions and the borrower's correlation matrix. 
+then calculate the loss of the portfolio. It is required that default times fulfills 
+two conditions: the borrower's survival functions and the borrower's correlation matrix. 
 This is achieved by simulating a copula. 
 
 %...........................................................................
@@ -316,7 +315,7 @@ Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \cr
 \end{displaymath}
 
 There are implemented two copula generators, the gaussian and the t-Student
-copulas. Apendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu} describes the 
+copulas. Appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu} describe the 
 algorithms used to generate them.
 \newline
 
@@ -345,10 +344,10 @@ Figure \ref{simttd} shows this in a graphic manner.
 %...........................................................................
 \subsubsection{Portfolio loss evaluation}
 \label{sec:portfolioloss}
-At this point, given any borrower, we have a simulated default time. The loss
-caused by this borrower is the sum of all remaining cashflows at default time 
-weighted by recovery at default default time. To obtain the simulated 
-value of the portfolio loss we sum all borrower losses.
+At this point, all borrowers have a simulated default time. The loss
+caused by any borrower is the sum of all remaining cashflows at default time 
+weighted by recovery at default default time. To get the simulated 
+value of the portfolio loss add up all borrowers losses.
 
 \begin{displaymath}
 \mathrm{PortfolioLoss} = \sum_{i=1}^N \mathrm{BorrowerLoss}_i
@@ -383,7 +382,7 @@ computations described below.
 
 %...........................................................................
 \subsubsection{Expected Loss}
-Expected Loss is mean of the portfolio loss distribution.
+Expected Loss is the mean of the portfolio loss distribution.
 Central Limit Theorem \cite{stats:schaum} grants that:
 
 \begin{displaymath}
@@ -440,7 +439,7 @@ where,
 \item $x_{k:N}$ is the $k$-th element of ascendent sorted values
 \end{itemize}
 
-We determine $\textrm{stderr}(q_{\beta})$ using Maritz-Jarret method described
+Determine $\textrm{stderr}(q_{\beta})$ using Maritz-Jarret method described
 in \cite{quant:algor}.
 
 \begin{eqnarray}
@@ -480,7 +479,7 @@ $\widehat{ES_{\beta}}$ is the ES estimator and $\textrm{stderr}(ES_{\beta})$
 is the estimation of the standard error.
 \newline
 
-We select the simulation portfolio loss values ($x_1, ..., x_N$) that are bigger 
+Select the simulation portfolio loss values ($x_1, ..., x_N$) that are bigger 
 than $VAR_{\beta}$.
 
 \begin{displaymath}
@@ -500,7 +499,7 @@ Then,
 
 %...........................................................................
 \subsubsection{Economic Capital}
-We can compute the Economic Capital at confidence level $\beta$ as:
+Compute the Economic Capital at confidence level $\beta$ as:
 
 \begin{displaymath}
 \textrm{Economic Capital} = VAR_{\beta} - \textrm{Expected Loss}
@@ -528,8 +527,8 @@ up to this moment with the purpose of simplifying the content.
 CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
 the same execution) the simulation of subportfolios by defining one or more 
 aggregators. Consequently you can determine which are the borrowers (or products 
-or branches or regions or assets, etc.) that increase the risk of your portfolio. 
-Every subportfolio has its own list of simulated values that can be processed to 
+or branches or regions or assets, etc.) that increase the risk of the portfolio. 
+Each subportfolio has its own list of simulated values that can be processed to 
 obtain the risk indicators for this subportfolio.
 
 %---------------------------------------------------------------------------
@@ -548,7 +547,7 @@ value decreases along the time is given by the compound interest formula:
 The random number generation using a copula is time expensive. Gaussian and 
 t-Student copula are symmetric, that means that $(u_1, u_2, \cdots, u_n)$ is 
 equiprobable to $(1-u_1, 1-u_2, \cdots, 1-u_n)$. In CCruncher's antithetic mode, 
-each copula generation is used $2$ times, $(u_1, u_2, \cdots, u_n)$ and 
+each copula generation is used twice, $(u_1, u_2, \cdots, u_n)$ and 
 $(1-u_1, 1-u_2, \cdots, 1-u_n)$, reducing to the half the number of generated
 copulas.
 
@@ -572,7 +571,7 @@ slaves and leaves.
 %===========================================================================
 \section{Numerical example}
 
-Lets go to compute the credit risk at $T=30$ years for the following portfolio.
+Let's go to compute the credit risk at $T=30$ years for the following portfolio.
 
 \begin{table}[!hb]
 \begin{center}
@@ -621,7 +620,7 @@ Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \
 \end{table}
 }
 
-In this example we supose that we don't dispose of survival functions but we have the 
+This example assumes that there are no survival functions but we have the 
 $1$-year transition matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
 
 \begin{table}[!hb]
@@ -662,7 +661,7 @@ Services       &    $0.30$    &     $0.34$     &   $0.40$
 %---------------------------------------------------------------------------
 \subsection{Obtaining the survival functions}
 
-We use appendix \ref{ap:tmatrix} to compute the survivals functions 
+Appendix \ref{ap:tmatrix} is used to compute the survival functions 
 with a time resolution of $1$ month. We scale the transition matrix 
 to $1$ month doing $T_{\frac{1}{12}} = T_{1}^{\frac{1}{12}}$. Caution, 
 do calculations using absolute values, not percentages. $1$-month 
@@ -688,10 +687,10 @@ transition matrix, $T_{\frac{1}{12}}$:
 Note negative values in the computed $1$-month transition matrix. The cause is that 
 the original matrix $T_1$ is not a regular Markov matrix. In these cases ccruncher 
 regularizes the matrix applying the algorithm described in appendix \ref{ap:regularization}.
-To simplify this example we replace negative values by $0$.
+To simplify this example negative values are replaced by $0$.
 \newline
 
-We compute the survivals values at month $1$ using the $1$-month transition matrix 
+Compute the survivals values at month $1$ using the $1$-month transition matrix 
 ($d$ subindex means default column):
 \begin{displaymath}
 S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} = 
@@ -732,7 +731,7 @@ S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} =
 \right)
 \end{displaymath}
 
-We compute the survivals values at month $2$ doing:
+Compute the survivals values at month $2$:
 \begin{displaymath}
 S(.,2 \textrm{ months}) = \vec{1} - (T_{1/12}^2)_{.d} = 
 \left( 
@@ -772,7 +771,7 @@ S(.,2 \textrm{ months}) = \vec{1} - (T_{1/12}^2)_{.d} =
 \right)
 \end{displaymath}
 
-We compute the survivals values at month $3$ doing:
+Compute the survivals values at month $3$:
 
 \begin{displaymath}
 S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} = 
@@ -813,7 +812,7 @@ S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} =
 \right)
 \end{displaymath}
 
-We repeat the same procedure for the $360$ months to obtain the survival
+Repeat the same procedure for the $360$ months to obtain the survival
 functions exposed at table \ref{example.survivals}.
 
 \clearpage 
@@ -867,7 +866,7 @@ Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
 %---------------------------------------------------------------------------
 \subsection{Creating the borrowers correlation matrix}
 
-We use section \ref{tcorrel} to create the borrowers correlation matrix. In 
+Use section \ref{tcorrel} to create the borrowers correlation matrix. In 
 this example, the debtors are sorted by sector and therefore no reorder is 
 required.
 \begin{displaymath}
@@ -893,11 +892,11 @@ required.
 \subsection{Copula initialization}
 
 The implemented copulas, gaussian and T-Student, requires the same covariance 
-matrix, $\Sigma'$. We compute this matrix following the steps $1$ and $2$ from 
+matrix, $\Sigma'$. Compute this matrix following the steps $1$ and $2$ from 
 appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu}.
 \newline
 
-We create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
+Create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
 by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
 {\small
 \begin{displaymath}
@@ -918,7 +917,7 @@ by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
 \end{displaymath}
 }
 
-And then we apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
+And then apply Cholesky to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
 {\small
 \begin{displaymath}
@@ -942,13 +941,13 @@ B =
 %---------------------------------------------------------------------------
 \subsection{Monte Carlo simulation}
 
-In this example we use a gaussian copula. Each Monte Carlo trial consist of 
+In this example a gaussian copula is used. Each Monte Carlo trial consist of 
 three parts, the copula simulation, the default times simulation and the
 portfolio loss evaluation.
 
 \paragraph{Copula simulation.} To simulate the gaussian copula we follows the 
 steps $3$ to $5$ from appendice \ref{ap:gaussiancopu}. To simulate the multivariate
-$\vec{Z} \sim N(0,\Sigma')$ we simulate 9 independents $N(0,1)$ and multiplies 
+$\vec{Z} \sim N(0,\Sigma')$ simulate 9 independents $N(0,1)$ and multiplies 
 with $B$.
 {\small
 \begin{displaymath}
@@ -983,7 +982,7 @@ with $B$.
 \end{displaymath}
 }
 
-Finally we obtain the copula $\vec{U}$ doing:
+Finally, obtain the copula $\vec{U}$ doing:
 {\small
 \begin{displaymath}
 \vec{U} 
@@ -1019,11 +1018,11 @@ Finally we obtain the copula $\vec{U}$ doing:
 }
 where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 
-\paragraph{Default times simulation.} To simulate the default time we use the 
+\paragraph{Default times simulation.} To simulate the default time use the 
 inverse of survivals functions as explained in section \ref{sec:deftimessim}.
 The first borrower has an initial rating AA and a copula value of $52.75$. 
-In table \ref{example.survivals} we search the month where AA is near to 
-$52.75$ and we consider this month, $961$, as the month where the first borrower 
+In table \ref{example.survivals} search the month where AA is near to 
+$52.75$ and consider this month, $961$, as the month where the first borrower 
 defaults. 
 {\small
 \begin{table}[!hbt]
@@ -1048,7 +1047,7 @@ B9       & AA     &  0.1326     &  $>$ 1000 \cr
 \FloatBarrier
 
 \paragraph{Portfolio loss evaluation.} To evaluate the portfolio loss 
-we use the simulated default times and the portfolio composition (tables 
+we use the simulated default times and the portfolio composition (table 
 \ref{example.portfolio} and \ref{example.assets}) as explained in section 
 \ref{sec:portfolioloss}.
 {\small
@@ -1207,10 +1206,10 @@ m_{ij} \ne 0
 m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{j=1}^{n} m_{ij} - 1\right)
 \end{displaymath}
 
-\paragraph{Step 2.} If all the row elements are non-negative and sums $1$ 
+\paragraph{Step 2.} If all the row elements are non-negative and sum $1$ 
 then stop, the row is regularized.
 
-\paragraph{Step 3'.} Fix any negative row element to zero and go to step 1.
+\paragraph{Step 3.} Fix any negative row element to zero and go to step 1.
 \newline
 
 The iterative algorithm stops after $m$ steps where $m \le n$ (Merkoulovitch 2000).
@@ -1546,7 +1545,7 @@ U = \left(
 \right)
 \end{displaymath}
 
-We can see that $U$ have repeated elements that can be kept in RAM memory in 
+We can see that $U$ has repeated elements that can be kept in RAM memory in 
 this way:
 
 \begin{displaymath}
@@ -1570,7 +1569,7 @@ the memory required to store a $50000 \times 50000$ borrowers correlation matrix
 is only $4.2$ Mb.
 \newline
 
-We use the fact that matrix $U$ have repeated elements to reduce the number of 
+We use the fact that matrix $U$ has repeated elements to reduce the number of 
 operations required to multiply $U$ by a vector. Let see an example:
 
 \begin{displaymath}
