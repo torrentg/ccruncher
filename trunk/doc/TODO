@@ -4,16 +4,17 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * add borrower stochastic recovery (eg. beta distribution)
-  * beautify html printing output
+  * add stochastic recovery
 
 Future works
 -------------------
+  * add stochastic exposure
   * improve functional tests
      - examples based on real data
      - script to run functional tests
      - improve validations (eg. kolmogorov-Smirnof tests)
      - improve documentation adding tests section
+  * beautify html printing output
   * allow evaluation in multiple time horizons
       <breaks>
         <break name="T25Y" at="25Y" method="exp">
@@ -22,7 +23,6 @@ Future works
           </segmentations>
         </break>
       </breaks>
-  * add asset stochastic exposure
   * allow ratings evaluated to date previous to T0
   * add borrower-borrower dependences
   * graphic interface
