@@ -268,6 +268,7 @@ void run(string filename, string path, int nthreads) throw(Exception)
   Logger::trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
   Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("input file", filename);
+  Logger::trace("number of threads", Format::toString(nthreads));
   Logger::previousIndentLevel();
 
   // parsing input file
@@ -376,7 +377,7 @@ void copyright()
 {
   cout << "\n"
   "   ccruncher is Copyright (C) 2003-2010 Gerard Torrent and licensed\n"
-  "     under the GNU General Public License, version 2. more info at\n"
+  "     under the GNU General Public License, version 2. More info at\n"
   "                   http://www.ccruncher.net\n"
   << endl;
 }

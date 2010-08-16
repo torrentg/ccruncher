@@ -109,7 +109,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
   try
   {
     Logger::addBlankLine();
-    Logger::trace("initialing procedure", '*');
+    Logger::trace("initializing procedure", '*');
     Logger::newIndentLevel();
 
     // initializing parameters
