@@ -360,6 +360,6 @@ void copyright()
   cout << "\n"
   "  generator is Copyright (C) 2003-2010 Gerard Torrent\n"
   "  and licensed under the GNU General Public License, version 2.\n"
-  "  more info at http://www.ccruncher.net\n"
+  "  More info at http://www.ccruncher.net\n"
   << endl;
 }
