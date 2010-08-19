@@ -59,8 +59,11 @@ class Format
     static string toString(const bool val);
     // converts unsigned int to string
     static string toString(const unsigned int val);
+#ifndef size_t
+    // condition set to avoid overloaded function redefinition
     // converts size_t to string
-    //static string toString(const size_t val);
+    static string toString(const size_t val);
+#endif
 
 };
 
