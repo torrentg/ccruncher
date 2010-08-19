@@ -84,14 +84,15 @@ string ccruncher::Format::toString(const unsigned int val)
   return oss.str();
 }
 
+#ifndef size_t
 //===========================================================================
 // size_t
 //===========================================================================
-/*
 string ccruncher::Format::toString(const size_t val)
 {
   ostringstream oss;
   oss << (int)val;
   return oss.str();
 }
-*/
+#endif
+
