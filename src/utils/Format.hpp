@@ -56,11 +56,11 @@ class Format
     // converts date to string
     static string toString(const ccruncher::Date &val);
     // converts boolean to string
-    static string toString(const bool &val);
+    static string toString(const bool val);
     // converts unsigned int to string
-    static string toString(const unsigned int &val);
+    static string toString(const unsigned int val);
     // converts size_t to string
-    static string toString(const size_t &val);
+    //static string toString(const size_t val);
 
 };
 

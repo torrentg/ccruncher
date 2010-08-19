@@ -67,7 +67,7 @@ string ccruncher::Format::toString(const ccruncher::Date &val)
 //===========================================================================
 // bool
 //===========================================================================
-string ccruncher::Format::toString(const bool &val)
+string ccruncher::Format::toString(const bool val)
 {
   ostringstream oss;
   oss << (val?"true":"false");
@@ -77,7 +77,7 @@ string ccruncher::Format::toString(const bool &val)
 //===========================================================================
 // unsigned int
 //===========================================================================
-string ccruncher::Format::toString(const unsigned int &val)
+string ccruncher::Format::toString(const unsigned int val)
 {
   ostringstream oss;
   oss << val;
@@ -87,10 +87,11 @@ string ccruncher::Format::toString(const unsigned int &val)
 //===========================================================================
 // size_t
 //===========================================================================
-string ccruncher::Format::toString(const size_t &val)
+/*
+string ccruncher::Format::toString(const size_t val)
 {
   ostringstream oss;
   oss << (int)val;
   return oss.str();
 }
-
+*/
