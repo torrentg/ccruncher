@@ -32,6 +32,7 @@
 #include "kernel/SimulatedData.hpp"
 #include "math/Copula.hpp"
 #include "utils/Date.hpp"
+#include "utils/Timer.hpp"
 #include "utils/Thread.hpp"
 #include "utils/Exception.hpp"
 
@@ -77,6 +78,12 @@ class SimulationThread : public Thread
     vector<vector<int> > isegments;
     // asset loss values by segmentation
     vector<vector<double> > losses;
+    // elapsed time creating random numbers
+    Timer timer1;
+    // ellapsed time simulating default times
+    Timer timer2;
+    // ellapsed time evaluating portfolio
+    Timer timer3;
 
   private:
   
@@ -101,6 +108,12 @@ class SimulationThread : public Thread
     ~SimulationThread();
     // thread main function
     void run();
+    // returns ellapsed time creating random numbers
+    double getEllapsedTime1();
+    // returns ellapsed time simulating default times
+    double getEllapsedTime2();
+    // returns ellapsed time evaluating portfolio
+    double getEllapsedTime3();
 
 };
 
