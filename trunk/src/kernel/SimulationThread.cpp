@@ -68,20 +68,27 @@ ccruncher::SimulationThread::~SimulationThread()
 void ccruncher::SimulationThread::run()
 {
   bool more = true;
+  timer1.reset();
+  timer2.reset();
+  timer3.reset();
   
   while(more)
   {
       // generating random numbers
+      timer1.resume();
       randomize();
+      timer1.stop();
 
       // simulating default time for each borrower
+      timer2.resume();
       simulate();
+      timer2.stop();
 
       // portfolio evaluation
+      timer3.resume();
       evalue();
-
-      // aggregation of values
       aggregate();
+      timer3.stop();
 
       // data transfer
       more = montecarlo.append(losses);
@@ -206,5 +213,29 @@ void ccruncher::SimulationThread::aggregate()
 	  losses[isegmentation][isegment] += assets[i].loss;
     }
   }
+}
+
+//===========================================================================
+// returns ellapsed time creating random numbers
+//===========================================================================
+double ccruncher::SimulationThread::getEllapsedTime1()
+{
+  return timer1.read();
+}
+
+//===========================================================================
+// returns ellapsed time simulating default times
+//===========================================================================
+double ccruncher::SimulationThread::getEllapsedTime2()
+{
+  return timer2.read();
+}
+
+//===========================================================================
+// returns ellapsed time evaluating portfolio
+//===========================================================================
+double ccruncher::SimulationThread::getEllapsedTime3()
+{
+  return timer3.read();
 }
 

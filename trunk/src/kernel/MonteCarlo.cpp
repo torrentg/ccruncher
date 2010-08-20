@@ -429,6 +429,10 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 {
+  double etime1=0.0; // ellapsed time generating random numbers
+  double etime2=0.0; // ellapsed time simulating default times
+  double etime3=0.0; // ellapsed time evaluating portfolio
+
   // assertions
   assert(1 <= numthreads && numthreads <= MAX_NUM_THREADS); 
   assert(fpath != "" && fpath != "path not set"); 
@@ -445,7 +449,9 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 
   // creating and launching simulation threads
   timer.start();
+  nfthreads = numthreads;
   numiterations = 0;
+  timer4.reset();
   pthread_mutex_init(&mutex, NULL);
   threads.assign(numthreads, NULL);
   for(int i=0; i<numthreads; i++)
@@ -458,15 +464,24 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   for(int i=0; i<numthreads; i++)
   {
     threads[i]->wait();
+    etime1 += threads[i]->getEllapsedTime1();
+    etime2 += threads[i]->getEllapsedTime2();
+    etime3 += threads[i]->getEllapsedTime3();
   }
 
   // flushing aggregators
   for(unsigned int i=0; i<aggregators.size(); i++) 
   {
+    timer4.resume();
     aggregators[i]->flush();
+    timer4.stop();
   }
 
   // exit function
+  Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
+  Logger::trace("elapsed time simulating default times", Timer::format(etime2/numthreads));
+  Logger::trace("elapsed time evaluating portfolio", Timer::format(etime3/numthreads));
+  Logger::trace("elapsed time aggregating values", timer4);
   Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();
@@ -480,6 +495,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
+  timer4.resume();
   bool more = true;
 
   try
@@ -500,24 +516,27 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
     }
 
     // checking stop criteria
-    if (maxiterations > 0 && numiterations >= maxiterations)
+    if (maxiterations > 0 && numiterations > maxiterations-nfthreads)
     {
       more = false;
+      nfthreads--;
     }
-
     // checking stop criteria
-    if (maxseconds > 0 && timer.read() >  maxseconds)
+    else if (maxseconds > 0 && timer.read() >  maxseconds)
     {
       more = false;
+      nfthreads--;
     }
   }
   catch(Exception &e)
   {
     pthread_mutex_unlock(&mutex);
+    timer4.stop();
     throw Exception(e, "error ocurred while executing Monte Carlo");
   }
 
   // exit function
+  timer4.stop();
   pthread_mutex_unlock(&mutex);
   return(more);
 }

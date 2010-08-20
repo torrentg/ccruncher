@@ -90,10 +90,14 @@ class MonteCarlo
     bool bforce;
     // time account
     Timer timer;
+    // ellapsed time writting data to disk
+    Timer timer4;
     // simulation threads
     vector<SimulationThread*> threads;
     // number of iterations done
     int numiterations;
+    // number of finished threads
+    int nfthreads;
     // ensures data consistence
     pthread_mutex_t mutex;
 
