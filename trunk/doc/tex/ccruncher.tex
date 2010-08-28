@@ -44,7 +44,7 @@
 %-----------------------------------------------------
 \sloppy
 \pagestyle{fancy}
-\setlength\parindent{0ex}
+\setlength{\parindent}{0ex}
 
 %-----------------------------------------------------
 % finally, the doc begins here
@@ -141,11 +141,11 @@ can be expressed in tabular form:
 \begin{center}
 \begin{tabular}[]{cc}
 \begin{tabular}[]{c|ccc}
-             & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+             & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
 \hline
-$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \cr
-$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \cr
-$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
+$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \\
+$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \\
+$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \\
 \end{tabular}
 &
 \qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
@@ -226,11 +226,11 @@ known (see section \ref{sectors}):
 \begin{center}
 \begin{tabular}[]{cc}
 \begin{tabular}[]{c|ccc}
-             & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+             & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
 \hline
-$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \cr
-$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \cr
-$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \cr
+$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \\
+$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \\
+$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \\
 \end{tabular}
 &
 \qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
@@ -248,21 +248,22 @@ taking as correlation between two borrowers the correlation between their sector
 \Sigma=
 \left(
 \begin{array}{ccccccccccc}
-1           & \dots    & \rho_{1,1}  &          & \rho_{1,k}  & \dots   & \rho_{1,k}  &         & \rho_{1,m}  & \dots      & \rho_{1,m}  \cr
-\vdots      & \ddots   & \vdots      &          & \vdots      &         & \vdots      &         & \vdots      &            & \vdots      \cr
-\rho_{1,1}  & \dots    & 1           &          & \rho_{1,k}  & \dots   & \rho_{1,k}  &         & \rho_{1,m}  & \dots      & \rho_{1,m}  \cr
+1           & \dots    & \rho_{1,1}  &          & \rho_{1,k}  & \dots   & \rho_{1,k}  &         & \rho_{1,m}  & \dots      & \rho_{1,m}  \\
+\vdots      & \ddots   & \vdots      &          & \vdots      &         & \vdots      &         & \vdots      &            & \vdots      \\
+\rho_{1,1}  & \dots    & 1           &          & \rho_{1,k}  & \dots   & \rho_{1,k}  &         & \rho_{1,m}  & \dots      & \rho_{1,m}  \\
 
-            &          &             & \ddots   &             &         &             &         &             &            &             \cr
+            &          &             & \ddots   &             &         &             &         &             &            &             \\
 
-\rho_{1,k}  & \dots    & \rho_{1,k}  &          & 1           & \dots   & \rho_{k,k}  &         & \rho_{k,m}  & \dots      & \rho_{k,m}  \cr
-\vdots      & \ddots   & \vdots      &          & \vdots      & \ddots  & \vdots      &         & \vdots      &            & \vdots      \cr
-\rho_{1,k}  & \dots    & \rho_{1, }  &          & \rho_{k,k}  & \dots   & 1           &         & \rho_{k,m}  & \dots      & \rho_{k,m}  \cr
+\rho_{1,k}  & \dots    & \rho_{1,k}  &          & 1           & \dots   & \rho_{k,k}  &         & \rho_{k,m}  & \dots      & \rho_{k,m}  \\
+\vdots      & \ddots   & \vdots      &          & \vdots      & \ddots  & \vdots      &         & \vdots      &            & \vdots      \\
+\rho_{1,k}  & \dots    & \rho_{1, }  &          & \rho_{k,k}  & \dots   & 1           &         & \rho_{k,m}  & \dots      & \rho_{k,m}  \\
 
-            &          &             &          &             &         &             & \ddots  &             &            &             \cr
+            &          &             &          &             &         &             & \ddots  &             &            &             \\
 
-\rho_{1,m}  & \dots    & \rho_{1,m}  &          & \rho_{k,m}  & \dots   & \rho_{k,m}  &         & 1           & \dots      & \rho_{m,m}  \cr
-\vdots      & \ddots   & \vdots      &          & \vdots      & \ddots  & \vdots      &         & \vdots      & \ddots     & \vdots      \cr
-\rho_{1,m}  & \dots    & \rho_{1,m}  &          & \rho_{k,m}  & \dots   & \rho_{k,m}  &         & \rho_{m,m}  & \dots      & 1           \end{array}
+\rho_{1,m}  & \dots    & \rho_{1,m}  &          & \rho_{k,m}  & \dots   & \rho_{k,m}  &         & 1           & \dots      & \rho_{m,m}  \\
+\vdots      & \ddots   & \vdots      &          & \vdots      & \ddots  & \vdots      &         & \vdots      & \ddots     & \vdots      \\
+\rho_{1,m}  & \dots    & \rho_{1,m}  &          & \rho_{k,m}  & \dots   & \rho_{k,m}  &         & \rho_{m,m}  & \dots      & 1           \\
+\end{array}
 \right)
 \end{array}
 \end{displaymath}
@@ -294,19 +295,19 @@ matrix, $\Sigma$ (see figure \ref{borrowercorrel}).
 \begin{displaymath}
 \begin{array}{ccc}
 \begin{array}{|c|c|c|c|}
-u_{11} & u_{12} & \dots  & u_{1n} \cr
-u_{21} & u_{22} & \dots  & u_{2n} \cr
-\vdots & \vdots & \vdots & \vdots \cr
-u_{k1} & u_{k2} & \dots  & u_{kn} \cr
+u_{11} & u_{12} & \dots  & u_{1n} \\
+u_{21} & u_{22} & \dots  & u_{2n} \\
+\vdots & \vdots & \vdots & \vdots \\
+u_{k1} & u_{k2} & \dots  & u_{kn} \\
 \end{array}
 &
 \qquad
 &
 \begin{array}{c}
-n \textrm{ number of borrowers} \cr
-k \textrm{ number of simulations} \cr
-u_{.i} \sim U[0,1] \cr
-Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \cr
+n \textrm{ number of borrowers}    \\
+k \textrm{ number of simulations}  \\
+u_{.i} \sim U[0,1]                 \\
+Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \\
 \end{array}
 \end{array}
 \end{displaymath}
@@ -319,7 +320,7 @@ algorithms used to generate them.
 Exists evidences \cite{copu:selecting} in favor of the t-Student copula. 
 In comparison with the t-Student copula, gaussian copula underestimates the probability 
 of joint extreme downward movements. Moreover gaussian copula is too optimistic on 
-diversiﬁcation benefits.
+diversification benefits.
 
 %...........................................................................
 \subsubsection{Default times simulation}
@@ -573,17 +574,17 @@ Let's go to compute the credit risk at $T=30$ years for the following portfolio.
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{c|l|c|c|c|l}
-Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \cr
+Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \\
 \hline
-B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \cr
-B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \cr
-B3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \cr
-B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5, A6, A7 \cr
-B5  & White \& Rebolan     & B      & Services       & 30\%     & A8         \cr
-B6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \cr
-B7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \cr
-B8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \cr
-B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \cr
+B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \\
+B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \\
+B3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \\
+B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5, A6, A7 \\
+B5  & White \& Rebolan     & B      & Services       & 30\%     & A8         \\
+B6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \\
+B7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \\
+B8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \\
+B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \\
 \end{tabular}
 \caption{Portfolio composition}
 \label{example.portfolio}
@@ -596,20 +597,20 @@ The following table list the assets events in months from current date.
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{c|c|c|c|c|c|c|c|c|c|c|c|c}
-Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \cr
+Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \\
 \hline
-6     & 10\$&     &     &     &100\$&     &     &     &     &     &     & 70\$ \cr
-12    &     & 50\$&     &     &     & 20\$& 80\$&     & 20\$&     &     &      \cr
-36    &     &     &     &     &     &     &     &     &     &     & 30\$&      \cr
-60    &     & 30\$&     &     & 10\$&     & 20\$& 80\$&     &     &     &      \cr
-90    &     &     &     &     &     & 30\$&     &     &     &     &     &      \cr
-120   & 15\$&     & 40\$&     & 30\$&     &     &     &     &     &     &      \cr
-180   &     &     &     &     & 40\$& 70\$&     &     &     &     &     &      \cr
-216   &     & 10\$&     &     & 50\$&     &     &     &     &     &     & 80\$ \cr
-240   &     &     &     &100\$&     &     &     &     &     &     &     &      \cr
-312   &100\$&     & 40\$&     & 70\$&     &     &     & 70\$&     &     &      \cr
-360   &     &     &     &     &     & 15\$&     &     &     &     & 40\$&      \cr
-384   & 90\$&     &     &     & 90\$&     &     &     &     &100\$& 90\$&             
+6     & 10\$&     &     &     &100\$&     &     &     &     &     &     & 70\$ \\
+12    &     & 50\$&     &     &     & 20\$& 80\$&     & 20\$&     &     &      \\
+36    &     &     &     &     &     &     &     &     &     &     & 30\$&      \\
+60    &     & 30\$&     &     & 10\$&     & 20\$& 80\$&     &     &     &      \\
+90    &     &     &     &     &     & 30\$&     &     &     &     &     &      \\
+120   & 15\$&     & 40\$&     & 30\$&     &     &     &     &     &     &      \\
+180   &     &     &     &     & 40\$& 70\$&     &     &     &     &     &      \\
+216   &     & 10\$&     &     & 50\$&     &     &     &     &     &     & 80\$ \\
+240   &     &     &     &100\$&     &     &     &     &     &     &     &      \\
+312   &100\$&     & 40\$&     & 70\$&     &     &     & 70\$&     &     &      \\
+360   &     &     &     &     &     & 15\$&     &     &     &     & 40\$&      \\
+384   & 90\$&     &     &     & 90\$&     &     &     &     &100\$& 90\$&      \\       
 \end{tabular}
 \caption{Assets events}
 \label{example.assets}
@@ -623,16 +624,16 @@ $1$-year transition matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{l|rrrrrrrr}
-        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \\
 \hline
-AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
- AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
-  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
-BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
- BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
-  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
-CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
-Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \\
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \\
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \\
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \\
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \\
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \\
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \\
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$ \\
 \end{tabular}
 \caption{$1$-year transition matrix}
 \label{example.tmatrix}
@@ -644,11 +645,11 @@ The sectorial default times correlations are:
 \begin{table}[!hb]
 \begin{center}
 \begin{tabular}[]{c|ccc}
-               & Construction & Consumer goods & Services \cr
+               & Construction & Consumer goods & Services \\
 \hline
-Construction   &    $0.50$    &     $0.20$     &   $0.30$ \cr
-Consumer goods &    $0.20$    &     $0.60$     &   $0.34$ \cr
-Services       &    $0.30$    &     $0.34$     &   $0.40$ 
+Construction   &    $0.50$    &     $0.20$     &   $0.30$ \\
+Consumer goods &    $0.20$    &     $0.60$     &   $0.34$ \\
+Services       &    $0.30$    &     $0.34$     &   $0.40$ \\
 \end{tabular}
 \caption{Sector correlation matrix}
 \label{example.scorrels}
@@ -668,14 +669,14 @@ transition matrix, $T_{\frac{1}{12}}$:
 %T_{\frac{1}{12}} = 
 \left( 
 \begin{array}{cccccccc}
-    99.1972  &   0.7588  &   0.0320  &   0.0020  &   0.0112  &  -0.0011  &  -0.0001  &   0.0000  \cr
-     0.0635  &  99.1745  &   0.7083  &   0.0392  &   0.0015  &   0.0120  &   0.0018  &  -0.0007  \cr
-     0.0074  &   0.2057  &  99.1980  &   0.5102  &   0.0557  &   0.0189  &  -0.0001  &   0.0042  \cr
-     0.0015  &   0.0239  &   0.5507  &  98.8021  &   0.5164  &   0.0871  &   0.0077  &   0.0107  \cr
-     0.0027  &   0.0113  &   0.0396  &   0.7581  &  98.1558  &   0.8774  &   0.0889  &   0.0664  \cr
-    -0.0007  &   0.0098  &   0.0196  &   0.0111  &   0.6447  &  98.4443  &   0.4463  &   0.4249  \cr
-     0.0233  &  -0.0023  &   0.0170  &   0.1287  &   0.2166  &   1.2298  &  96.4213  &   1.9657  \cr
-     0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  & 100.0000 
+    99.1972  &   0.7588  &   0.0320  &   0.0020  &   0.0112  &  -0.0011  &  -0.0001  &   0.0000  \\
+     0.0635  &  99.1745  &   0.7083  &   0.0392  &   0.0015  &   0.0120  &   0.0018  &  -0.0007  \\
+     0.0074  &   0.2057  &  99.1980  &   0.5102  &   0.0557  &   0.0189  &  -0.0001  &   0.0042  \\
+     0.0015  &   0.0239  &   0.5507  &  98.8021  &   0.5164  &   0.0871  &   0.0077  &   0.0107  \\
+     0.0027  &   0.0113  &   0.0396  &   0.7581  &  98.1558  &   0.8774  &   0.0889  &   0.0664  \\
+    -0.0007  &   0.0098  &   0.0196  &   0.0111  &   0.6447  &  98.4443  &   0.4463  &   0.4249  \\
+     0.0233  &  -0.0023  &   0.0170  &   0.1287  &   0.2166  &   1.2298  &  96.4213  &   1.9657  \\
+     0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  &   0.0000  & 100.0000  \\
 \end{array}
 \right)
 \end{displaymath}
@@ -693,37 +694,37 @@ Compute the survivals values at month $1$ using the $1$-month transition matrix
 S(.,1 \textrm{ month}) = \vec{1} - (T_{1/12})_{.d} = 
 \left( 
 \begin{array}{c}
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
 \end{array}
 \right)
  - 
 \left( 
 \begin{array}{c}
- 0.0000 \cr
- 0.0000 \cr
- 0.0042 \cr
- 0.0107 \cr
- 0.0664 \cr
- 0.4249 \cr
- 1.9657
+ 0.0000 \\
+ 0.0000 \\
+ 0.0042 \\
+ 0.0107 \\
+ 0.0664 \\
+ 0.4249 \\
+ 1.9657 \\
 \end{array}
 \right)
 =
 \left( 
 \begin{array}{c}
- 100.000 \cr
- 100.000 \cr
-  99.996 \cr
-  99.989 \cr
-  99.934 \cr
-  99.975 \cr
-  98.034 
+ 100.000 \\
+ 100.000 \\
+  99.996 \\
+  99.989 \\
+  99.934 \\
+  99.975 \\
+  98.034 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -733,37 +734,37 @@ Compute the survivals values at month $2$:
 S(.,2 \textrm{ months}) = \vec{1} - (T_{1/12}^2)_{.d} = 
 \left( 
 \begin{array}{c}
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
 \end{array}
 \right)
  - 
 \left( 
 \begin{array}{c}
- 0.0000 \cr
- 0.0000 \cr
- 0.0084 \cr
- 0.0221 \cr
- 0.1372 \cr
- 0.8524 \cr
- 3.8664
+ 0.0000 \\
+ 0.0000 \\
+ 0.0084 \\
+ 0.0221 \\
+ 0.1372 \\
+ 0.8524 \\
+ 3.8664 \\
 \end{array}
 \right)
 =
 \left( 
 \begin{array}{c}
- 100.000 \cr
- 100.000 \cr
-  99.992 \cr
-  99.978 \cr
-  99.863 \cr
-  99.148 \cr
-  96.134 
+ 100.000 \\
+ 100.000 \\
+  99.992 \\
+  99.978 \\
+  99.863 \\
+  99.148 \\
+  96.134 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -774,37 +775,37 @@ Compute the survivals values at month $3$:
 S(.,3 \textrm{ months}) = \vec{1} - (T_{1/12}^3)_{.d} = 
 \left( 
 \begin{array}{c}
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100 \cr
- 100
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
+ 100 \\
 \end{array}
 \right)
  - 
 \left( 
 \begin{array}{c}
- 0.0000 \cr
- 0.0000 \cr
- 0.0129 \cr
- 0.0342 \cr
- 0.2122 \cr
- 1.2821 \cr
- 5.7045
+ 0.0000 \\
+ 0.0000 \\
+ 0.0129 \\
+ 0.0342 \\
+ 0.2122 \\
+ 1.2821 \\
+ 5.7045 \\
 \end{array}
 \right)
 =
 \left( 
 \begin{array}{c}
- 100.000 \cr
- 100.000 \cr
-  99.987 \cr
-  99.966 \cr
-  99.788 \cr
-  98.718 \cr
-  94.296 
+ 100.000 \\
+ 100.000 \\
+  99.987 \\
+  99.966 \\
+  99.788 \\
+  98.718 \\
+  94.296 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -818,39 +819,39 @@ functions exposed at table \ref{example.survivals}.
 \begin{center}
 {\small
 \begin{tabular}[]{c|rrrrrrrr}
-Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \cr
+Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \\
 \hline
-1   & 100.000 & 100.000 &  99.996 &  99.989 &  99.934 &  99.575 &  98.034 \cr
-2   & 100.000 & 100.000 &  99.992 &  99.978 &  99.863 &  99.148 &  96.134 \cr
-3   & 100.000 & 100.000 &  99.987 &  99.966 &  99.788 &  98.718 &  94.296 \cr
-4   & 100.000 & 100.000 &  99.983 &  99.953 &  99.709 &  98.286 &  92.518 \cr
-5   & 100.000 & 100.000 &  99.978 &  99.939 &  99.626 &  97.853 &  90.798 \cr
-6   & 100.000 & 100.000 &  99.973 &  99.925 &  99.539 &  97.418 &  89.134 \cr
-7   & 100.000 & 100.000 &  99.968 &  99.909 &  99.448 &  96.981 &  87.525 \cr
-8   & 100.000 & 100.000 &  99.963 &  99.893 &  99.353 &  96.544 &  85.967 \cr
-9   & 100.000 & 100.000 &  99.957 &  99.876 &  99.255 &  96.106 &  84.460 \cr
-10  & 100.000 & 100.000 &  99.952 &  99.858 &  99.153 &  95.668 &  83.000 \cr
-11  & 100.000 & 100.000 &  99.946 &  99.840 &  99.048 &  95.229 &  81.588 \cr
-12  & 100.000 & 100.000 &  99.940 &  99.820 &  98.940 &  94.790 &  80.220 \cr
-13  & 100.000 &  99.999 &  99.934 &  99.800 &  98.828 &  94.351 &  78.896 \cr
-14  & 100.000 &  99.998 &  99.928 &  99.778 &  98.714 &  93.912 &  77.613 \cr
-15  & 100.000 &  99.997 &  99.921 &  99.756 &  98.596 &  93.474 &  76.370 \cr
-\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
-169 &  99.213 &  97.964 &  95.345 &  88.888 &  72.479 &  50.213 &  28.155 \cr
-170 &  99.200 &  97.936 &  95.292 &  88.793 &  72.333 &  50.062 &  28.073 \cr
-171 &  99.187 &  97.908 &  95.240 &  88.698 &  72.188 &  49.912 &  \underline{27.992} \cr
-172 &  99.173 &  97.880 &  95.187 &  88.604 &  72.043 &  49.764 &  27.911 \cr
-173 &  99.159 &  97.851 &  95.134 &  88.509 &  71.899 &  49.616 &  27.832 \cr
-\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
-308 &  95.906 &  92.251 &  86.516 &  76.085 &  56.684 &  35.993 &  20.548 \cr
-309 &  95.871 &  92.198 &  86.445 &  75.999 &  56.596 &  35.924 &  20.511 \cr
-310 &  95.837 &  92.145 &  86.375 &  75.913 &  \underline{56.509} &  35.855 &  20.474 \cr
-311 &  95.801 &  92.093 &  86.304 &  75.828 &  56.423 &  35.787 &  20.437 \cr
-312 &  95.766 &  92.040 &  86.234 &  75.742 &  56.336 &  35.719 &  20.400 \cr
-\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \cr
-358 &  93.986 &  89.478 &  82.955 &  71.932 &  52.638 &  32.889 &  18.868 \cr
-359 &  93.944 &  89.419 &  82.883 &  71.851 &  52.563 &  32.833 &  18.838 \cr
-360 &  93.902 &  89.361 &  82.812 &  71.771 &  52.488 &  32.778 &  18.808 \cr
+1   & 100.000 & 100.000 &  99.996 &  99.989 &  99.934 &  99.575 &  98.034 \\
+2   & 100.000 & 100.000 &  99.992 &  99.978 &  99.863 &  99.148 &  96.134 \\
+3   & 100.000 & 100.000 &  99.987 &  99.966 &  99.788 &  98.718 &  94.296 \\
+4   & 100.000 & 100.000 &  99.983 &  99.953 &  99.709 &  98.286 &  92.518 \\
+5   & 100.000 & 100.000 &  99.978 &  99.939 &  99.626 &  97.853 &  90.798 \\
+6   & 100.000 & 100.000 &  99.973 &  99.925 &  99.539 &  97.418 &  89.134 \\
+7   & 100.000 & 100.000 &  99.968 &  99.909 &  99.448 &  96.981 &  87.525 \\
+8   & 100.000 & 100.000 &  99.963 &  99.893 &  99.353 &  96.544 &  85.967 \\
+9   & 100.000 & 100.000 &  99.957 &  99.876 &  99.255 &  96.106 &  84.460 \\
+10  & 100.000 & 100.000 &  99.952 &  99.858 &  99.153 &  95.668 &  83.000 \\
+11  & 100.000 & 100.000 &  99.946 &  99.840 &  99.048 &  95.229 &  81.588 \\
+12  & 100.000 & 100.000 &  99.940 &  99.820 &  98.940 &  94.790 &  80.220 \\
+13  & 100.000 &  99.999 &  99.934 &  99.800 &  98.828 &  94.351 &  78.896 \\
+14  & 100.000 &  99.998 &  99.928 &  99.778 &  98.714 &  93.912 &  77.613 \\
+15  & 100.000 &  99.997 &  99.921 &  99.756 &  98.596 &  93.474 &  76.370 \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+169 &  99.213 &  97.964 &  95.345 &  88.888 &  72.479 &  50.213 &  28.155 \\
+170 &  99.200 &  97.936 &  95.292 &  88.793 &  72.333 &  50.062 &  28.073 \\
+171 &  99.187 &  97.908 &  95.240 &  88.698 &  72.188 &  49.912 &  \underline{27.992} \\
+172 &  99.173 &  97.880 &  95.187 &  88.604 &  72.043 &  49.764 &  27.911 \\
+173 &  99.159 &  97.851 &  95.134 &  88.509 &  71.899 &  49.616 &  27.832 \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+308 &  95.906 &  92.251 &  86.516 &  76.085 &  56.684 &  35.993 &  20.548 \\
+309 &  95.871 &  92.198 &  86.445 &  75.999 &  56.596 &  35.924 &  20.511 \\
+310 &  95.837 &  92.145 &  86.375 &  75.913 &  \underline{56.509} &  35.855 &  20.474 \\
+311 &  95.801 &  92.093 &  86.304 &  75.828 &  56.423 &  35.787 &  20.437 \\
+312 &  95.766 &  92.040 &  86.234 &  75.742 &  56.336 &  35.719 &  20.400 \\
+\ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots & \ldots \\
+358 &  93.986 &  89.478 &  82.955 &  71.932 &  52.638 &  32.889 &  18.868 \\
+359 &  93.944 &  89.419 &  82.883 &  71.851 &  52.563 &  32.833 &  18.838 \\
+360 &  93.902 &  89.361 &  82.812 &  71.771 &  52.488 &  32.778 &  18.808 \\
 \end{tabular}
 }
 \caption{Survival functions table}
@@ -870,17 +871,17 @@ required.
 \Sigma = 
 \left( 
 \begin{array}{cc|cc|ccccc}
- 1.00 & 0.50 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
- 0.50 & 1.00 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \cr
+ 1.00 & 0.50 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \\
+ 0.50 & 1.00 & 0.20 & 0.20 & 0.30 & 0.30 & 0.30 & 0.30 & 0.30 \\
 \hline
- 0.20 & 0.20 & 1.00 & 0.60 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
- 0.20 & 0.20 & 0.60 & 1.00 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \cr
+ 0.20 & 0.20 & 1.00 & 0.60 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \\
+ 0.20 & 0.20 & 0.60 & 1.00 & 0.34 & 0.34 & 0.34 & 0.34 & 0.34 \\
 \hline
- 0.30 & 0.30 & 0.34 & 0.34 & 1.00 & 0.40 & 0.40 & 0.40 & 0.40 \cr
- 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 1.00 & 0.40 & 0.40 & 0.40 \cr
- 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 1.00 & 0.40 & 0.40 \cr
- 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 1.00 & 0.40 \cr
- 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 0.40 & 1.00 \cr
+ 0.30 & 0.30 & 0.34 & 0.34 & 1.00 & 0.40 & 0.40 & 0.40 & 0.40 \\
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 1.00 & 0.40 & 0.40 & 0.40 \\
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 1.00 & 0.40 & 0.40 \\
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 1.00 & 0.40 \\
+ 0.30 & 0.30 & 0.34 & 0.34 & 0.40 & 0.40 & 0.40 & 0.40 & 1.00 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -900,15 +901,15 @@ by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
 \Sigma' = 
 \left( 
 \begin{array}{ccccccccc}
-   1.0000 & 0.5176 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
-   0.5176 & 1.0000 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \cr
-   0.2091 & 0.2091 & 1.0000 & 0.6180 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \cr
-   0.2091 & 0.2091 & 0.6180 & 1.0000 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \cr
-   0.3129 & 0.3129 & 0.3542 & 0.3542 & 1.0000 & 0.4158 & 0.4158 & 0.4158 & 0.4158 \cr
-   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 1.0000 & 0.4158 & 0.4158 & 0.4158 \cr
-   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 1.0000 & 0.4158 & 0.4158 \cr
-   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 1.0000 & 0.4158 \cr
-   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 0.4158 & 1.0000 \cr
+   1.0000 & 0.5176 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \\
+   0.5176 & 1.0000 & 0.2091 & 0.2091 & 0.3129 & 0.3129 & 0.3129 & 0.3129 & 0.3129 \\
+   0.2091 & 0.2091 & 1.0000 & 0.6180 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \\
+   0.2091 & 0.2091 & 0.6180 & 1.0000 & 0.3542 & 0.3542 & 0.3542 & 0.3542 & 0.3542 \\
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 1.0000 & 0.4158 & 0.4158 & 0.4158 & 0.4158 \\
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 1.0000 & 0.4158 & 0.4158 & 0.4158 \\
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 1.0000 & 0.4158 & 0.4158 \\
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 1.0000 & 0.4158 \\
+   0.3129 & 0.3129 & 0.3542 & 0.3542 & 0.4158 & 0.4158 & 0.4158 & 0.4158 & 1.0000 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -921,15 +922,15 @@ where:
 B = 
 \left(
 \begin{array}{ccccccccc}
-   1.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.5176 & 0.8556 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.2091 & 0.1179 & 0.9708 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.2091 & 0.1179 & 0.5773 & 0.7805 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.8806 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.8534 & 0.0000 & 0.0000 & 0.0000 \cr
-   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.8365 & 0.0000 & 0.0000 \cr
-   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.8250 & 0.0000 \cr
-   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.1170 & 0.8167 \cr
+   1.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+   0.5176 & 0.8556 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+   0.2091 & 0.1179 & 0.9708 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+   0.2091 & 0.1179 & 0.5773 & 0.7805 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.8806 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.8534 & 0.0000 & 0.0000 & 0.0000 \\
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.8365 & 0.0000 & 0.0000 \\
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.8250 & 0.0000 \\
+   0.3129 & 0.1764 & 0.2760 & 0.1392 & 0.2172 & 0.1688 & 0.1382 & 0.1170 & 0.8167 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -951,29 +952,29 @@ with $B$.
 \vec{Z} = B \cdot
 \left(
 \begin{array}{c}
-  +0.0689 \cr
-  -0.3096 \cr
-  -0.2790 \cr
-  +0.4435 \cr
-  -1.2855 \cr
-  -0.8553 \cr
-  -0.6456 \cr
-  -0.0275 \cr
-  -0.6733 \cr
+  +0.0689 \\
+  -0.3096 \\
+  -0.2790 \\
+  +0.4435 \\
+  -1.2855 \\
+  -0.8553 \\
+  -0.6456 \\
+  -0.0275 \\
+  -0.6733 \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-  +0.0689 \cr
-  -0.2292 \cr
-  -0.2929 \cr
-  +0.1630 \cr
-  -1.1803 \cr
-  -1.0575 \cr
-  -1.0120 \cr
-  -0.5839 \cr
-  -1.1143 \cr
+  +0.0689 \\
+  -0.2292 \\
+  -0.2929 \\
+  +0.1630 \\
+  -1.1803 \\
+  -1.0575 \\
+  -1.0120 \\
+  -0.5839 \\
+  -1.1143 \\
 \end{array}
 \right) 
 \end{displaymath}
@@ -986,29 +987,29 @@ Finally, obtain the copula $\vec{U}$ doing:
 =
 \left(
 \begin{array}{c}
-\Phi(+0.0689) \cr
-\Phi(-0.2292) \cr
-\Phi(-0.2929) \cr
-\Phi(+0.1630) \cr
-\Phi(-1.1803) \cr
-\Phi(-1.0575) \cr
-\Phi(-1.0120) \cr
-\Phi(-0.5839) \cr
-\Phi(-1.1143) \cr
+\Phi(+0.0689) \\
+\Phi(-0.2292) \\
+\Phi(-0.2929) \\
+\Phi(+0.1630) \\
+\Phi(-1.1803) \\
+\Phi(-1.0575) \\
+\Phi(-1.0120) \\
+\Phi(-0.5839) \\
+\Phi(-1.1143) \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-   0.5275 \cr
-   0.4093 \cr
-   0.3848 \cr
-   0.5647 \cr
-   0.1189 \cr
-   0.1452 \cr
-   0.1558 \cr
-   0.2797 \cr
-   0.1326 \cr
+   0.5275 \\
+   0.4093 \\
+   0.3848 \\
+   0.5647 \\
+   0.1189 \\
+   0.1452 \\
+   0.1558 \\
+   0.2797 \\
+   0.1326 \\
 \end{array}
 \right) 
 \end{displaymath}
@@ -1025,17 +1026,17 @@ defaults.
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|}
-Borrower & Rating & $\vec{U}_i$ & Default month \cr
+Borrower & Rating & $\vec{U}_i$ & Default month \\
 \hline
-B1       & AA     &  0.5275     &  961      \cr
-B2       & BBB    &  0.4093     &  898      \cr
-B3       & AA     &  0.3848     &  $>$ 1000 \cr
-B4       & BB     &  0.5647     &  310      \cr
-B5       & B      &  0.1189     &  $>$ 1000 \cr
-B6       & BBB    &  0.1452     &  $>$ 1000 \cr
-B7       & AAA    &  0.1558     &  $>$ 1000 \cr
-B8       & CCC    &  0.2797     &  171      \cr
-B9       & AA     &  0.1326     &  $>$ 1000 \cr
+B1       & AA     &  0.5275     &  961      \\
+B2       & BBB    &  0.4093     &  898      \\
+B3       & AA     &  0.3848     &  $>$ 1000 \\
+B4       & BB     &  0.5647     &  310      \\
+B5       & B      &  0.1189     &  $>$ 1000 \\
+B6       & BBB    &  0.1452     &  $>$ 1000 \\
+B7       & AAA    &  0.1558     &  $>$ 1000 \\
+B8       & CCC    &  0.2797     &  171      \\
+B9       & AA     &  0.1326     &  $>$ 1000 \\
 \end{tabular}
 \caption{Simulated default times}
 \end{center}
@@ -1051,20 +1052,20 @@ we use the simulated default times and the portfolio composition (table
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|c|c|}
-Borrower & Default month & Asset & Exposed & Recovery & Loss \cr
+Borrower & Default month & Asset & Exposed & Recovery & Loss \\
 \hline
-B1       & 961           &  A1   &             &  80\%    &       \cr
-B2       & 898           &  A2   &             &  75\%    &       \cr
-B2       & 898           &  A3   &             &  75\%    &       \cr
-B3       & $>$ 1000      &  A4   &             &  60\%    &       \cr
-B4       & 310           &  A5   & 70\$ + 90\$ &  90\%    &  16\$ \cr
-B4       & 310           &  A6   & 15\$        &  90\%    & 1.5\$ \cr
-B4       & 310           &  A7   &             &  90\%    &       \cr
-B5       & $>$ 1000      &  A8   &             &  30\%    &       \cr
-B6       & $>$ 1000      &  A9   &             &  60\%    &       \cr
-B7       & $>$ 1000      &  A10  &             &  50\%    &       \cr
-B8       & 171           &  A11  & 40\$ + 90\$ &  60\%    &  52\$ \cr
-B9       & $>$ 1000      &  A12  &             &  50\%    &       \cr
+B1       & 961           &  A1   &             &  80\%    &       \\
+B2       & 898           &  A2   &             &  75\%    &       \\
+B2       & 898           &  A3   &             &  75\%    &       \\
+B3       & $>$ 1000      &  A4   &             &  60\%    &       \\
+B4       & 310           &  A5   & 70\$ + 90\$ &  90\%    &  16\$ \\
+B4       & 310           &  A6   & 15\$        &  90\%    & 1.5\$ \\
+B4       & 310           &  A7   &             &  90\%    &       \\
+B5       & $>$ 1000      &  A8   &             &  30\%    &       \\
+B6       & $>$ 1000      &  A9   &             &  60\%    &       \\
+B7       & $>$ 1000      &  A10  &             &  50\%    &       \\
+B8       & 171           &  A11  & 40\$ + 90\$ &  60\%    &  52\$ \\
+B9       & $>$ 1000      &  A12  &             &  50\%    &       \\
 \end{tabular}
 \caption{Portfolio loss evaluation}
 \end{center}
@@ -1108,9 +1109,9 @@ to rating $r_j$ in a period of $T$ years.
 \begin{displaymath}
 M_T = \left(
 \begin{array}{ccc}
-m_{1,1} & \dots  & m_{1,n} \cr
-\vdots & \ddots & \vdots \cr
-m_{n,1} & \dots  & m_{n,n} 
+m_{1,1} & \dots  & m_{1,n} \\
+\vdots & \ddots & \vdots   \\
+m_{n,1} & \dots  & m_{n,n} \\
 \end{array}
 \right)
 \qquad
@@ -1126,16 +1127,16 @@ a borrower with rating $AA$ changes to rating $B$ in $1$ year is $0.14\%$.
 \begin{figure}[!hb]
 \begin{center}
 \begin{tabular}[]{l|rrrrrrrr}
-        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \cr
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \\
 \hline
-AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \cr
- AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \cr
-  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \cr
-BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \cr
- BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \cr
-  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \cr
-CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \cr
-Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \\
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \\
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \\
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \\
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \\
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \\
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \\
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$ \\
 \end{tabular}
 \caption{$1$-year transition matrix}
 \label{tmatrix1}
@@ -1227,25 +1228,25 @@ number of defaulted components for each sector for the last years (eg.
 \begin{center}
 \begin{tabular}[]{ccc}
 \begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
 \hline
-1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \cr
-2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \cr
-3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \cr
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \cr
-T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \cr
+1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \\
+2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \\
+3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \\
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \\
+T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \\
+T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \\
 \end{tabular}
 & $\qquad$ &
 \begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \cr
+Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
 \hline
-1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \cr
-2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \cr
-3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \cr
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \cr
-T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \cr
-T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \cr
+1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \\
+2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \\
+3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \\
+$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \\
+T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \\
+T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \\
 \end{tabular}
 \end{tabular}
 \end{center}
@@ -1288,10 +1289,10 @@ $\Sigma$ component, $\rho$, to $2 sin(\frac{\pi}{6} \rho)$:
 \begin{displaymath}
 \Sigma' = \left( 
 \begin{array}{cccc}
-1                              & 2 sin(\frac{\pi}{6} \rho_{12}) & \ldots & 2 sin(\frac{\pi}{6} \rho_{1n}) \cr
-2 sin(\frac{\pi}{6} \rho_{12}) & 1                              & \ldots & 2 sin(\frac{\pi}{6} \rho_{2n}) \cr
-\vdots                         & \vdots                         & \ddots & \vdots \cr
-2 sin(\frac{\pi}{6} \rho_{1n}) & 2 sin(\frac{\pi}{6} \rho_{2n}) & \ldots & 1
+1                              & 2 sin(\frac{\pi}{6} \rho_{12}) & \ldots & 2 sin(\frac{\pi}{6} \rho_{1n}) \\
+2 sin(\frac{\pi}{6} \rho_{12}) & 1                              & \ldots & 2 sin(\frac{\pi}{6} \rho_{2n}) \\
+\vdots                         & \vdots                         & \ddots & \vdots                         \\
+2 sin(\frac{\pi}{6} \rho_{1n}) & 2 sin(\frac{\pi}{6} \rho_{2n}) & \ldots & 1                              \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1303,10 +1304,10 @@ where:
 B = 
 \left(
 \begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
+b_{11}   & 0        & \ldots & 0       \\
+b_{21}   & b_{22}   & \ldots & 0       \\
+\vdots  & \vdots  & \ddots & \vdots    \\
+b_{n1}   & b_{n2}   & \ldots & b_{nn}  \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1316,9 +1317,9 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \vec{Y} =
 \left(
 \begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
+y_1    \\
+\vdots \\
+y_n    \\
 \end{array}
 \right) 
 \qquad y_k \sim N(0,1) \textrm{ independents}
@@ -1331,25 +1332,25 @@ B \cdot \vec{Y}
 =
 \left(
 \begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
+b_{11}   & 0        & \ldots & 0       \\
+b_{21}   & b_{22}   & \ldots & 0       \\
+\vdots  & \vdots  & \ddots & \vdots    \\
+b_{n1}   & b_{n2}   & \ldots & b_{nn}  \\
 \end{array}
 \right)
 \left(
 \begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
+y_1    \\
+\vdots \\
+y_n    \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-z_1 \cr
-\vdots \cr
-z_n
+z_1    \\
+\vdots \\
+z_n    \\
 \end{array}
 \right) 
 = 
@@ -1360,17 +1361,17 @@ z_n
 \begin{displaymath}
 \left(
 \begin{array}{c}
-\Phi(z_1) \cr
-\vdots \cr
-\Phi(z_n)
+\Phi(z_1) \\
+\vdots    \\
+\Phi(z_n) \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-u_1 \cr
-\vdots \cr
-u_n
+u_1    \\
+\vdots \\
+u_n    \\
 \end{array}
 \right) 
 =
@@ -1389,10 +1390,10 @@ each $\Sigma$ component, $\rho$, to $f(\rho)$:
 \begin{displaymath}
 \Sigma' = \left( 
 \begin{array}{cccc}
-1            & f(\rho_{12}) & \ldots & f(\rho_{1n})\cr
-f(\rho_{12}) & 1            & \ldots & f(\rho_{2n})\cr
-\vdots       & \vdots       & \ddots & \vdots   \cr
-f(\rho_{1n}) & f(\rho_{2n}) & \ldots & 1
+1            & f(\rho_{12}) & \ldots & f(\rho_{1n})\\
+f(\rho_{12}) & 1            & \ldots & f(\rho_{2n})\\
+\vdots       & \vdots       & \ddots & \vdots      \\
+f(\rho_{1n}) & f(\rho_{2n}) & \ldots & 1           \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1491,10 +1492,10 @@ where:
 B = 
 \left(
 \begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
+b_{11}   & 0        & \ldots & 0       \\
+b_{21}   & b_{22}   & \ldots & 0       \\
+\vdots  & \vdots  & \ddots & \vdots    \\
+b_{n1}   & b_{n2}   & \ldots & b_{nn}  \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1504,9 +1505,9 @@ b_{n1}   & b_{n2}   & \ldots & b_{nn}
 \vec{Y} =
 \left(
 \begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
+y_1    \\
+\vdots \\
+y_n    \\
 \end{array}
 \right) 
 \qquad y_k \sim N(0,1) \textrm{ independents}
@@ -1526,25 +1527,25 @@ $\vec{Z} \sim \frac{\sqrt{\nu}}{\sqrt{\chi^2(\nu)}} \cdot N(\vec{0}, \Sigma')$, 
 \frac{\sqrt{\nu}}{\sqrt{s}} \cdot 
 \left(
 \begin{array}{cccc}
-b_{11}   & 0        & \ldots & 0       \cr
-b_{21}   & b_{22}   & \ldots & 0       \cr
-\vdots  & \vdots  & \ddots & \vdots \cr
-b_{n1}   & b_{n2}   & \ldots & b_{nn}
+b_{11}   & 0        & \ldots & 0       \\
+b_{21}   & b_{22}   & \ldots & 0       \\
+\vdots  & \vdots  & \ddots & \vdots    \\
+b_{n1}   & b_{n2}   & \ldots & b_{nn}  \\
 \end{array}
 \right)
 \left(
 \begin{array}{c}
-y_1 \cr
-\vdots \cr
-y_n
+y_1    \\
+\vdots \\
+y_n    \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-z_1 \cr
-\vdots \cr
-z_n
+z_1    \\
+\vdots \\
+z_n    \\
 \end{array}
 \right) 
 = 
@@ -1555,17 +1556,17 @@ z_n
 \begin{displaymath}
 \left(
 \begin{array}{c}
-t_\nu(z_1) \cr
-\vdots \cr
-t_\nu(z_n)
+t_\nu(z_1) \\
+\vdots     \\
+t_\nu(z_n) \\
 \end{array}
 \right) 
 =
 \left(
 \begin{array}{c}
-u_1 \cr
-\vdots \cr
-u_n
+u_1    \\
+\vdots \\
+u_n    \\
 \end{array}
 \right) 
 =
@@ -1596,14 +1597,14 @@ For instance:
 \begin{displaymath}
 A = \left(
 \begin{array}{cccc|ccc}
-1   & 0.5 & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
-0.5 & 1   & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \cr
-0.5 & 0.5 & 1   & 0.5 & 0.1 & 0.1 & 0.1 \cr
-0.5 & 0.5 & 0.5 & 1   & 0.1 & 0.1 & 0.1 \cr
+1   & 0.5 & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \\
+0.5 & 1   & 0.5 & 0.5 & 0.1 & 0.1 & 0.1 \\
+0.5 & 0.5 & 1   & 0.5 & 0.1 & 0.1 & 0.1 \\
+0.5 & 0.5 & 0.5 & 1   & 0.1 & 0.1 & 0.1 \\
 \hline
-0.1 & 0.1 & 0.1 & 0.1 & 1   & 0.3 & 0.3 \cr
-0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 1   & 0.3 \cr
-0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 0.3 & 1
+0.1 & 0.1 & 0.1 & 0.1 & 1   & 0.3 & 0.3 \\
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 1   & 0.3 \\
+0.1 & 0.1 & 0.1 & 0.1 & 0.3 & 0.3 & 1   \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1613,14 +1614,14 @@ We decompose the previous matrix using the standard Cholesky decomposition:
 \begin{displaymath}
 U = \left(
 \begin{array}{cccc|ccc}
- 1.00000 & 0.50000 & 0.50000 & 0.50000 & 0.10000 & 0.10000 & 0.10000 \cr
- 0       & 0.86603 & 0.28868 & 0.28868 & 0.05774 & 0.05774 & 0.05774 \cr
- 0       & 0       & 0.81650 & 0.20412 & 0.04082 & 0.04082 & 0.04082 \cr
- 0       & 0       & 0       & 0.79057 & 0.03162 & 0.03162 & 0.03162 \cr
+ 1.00000 & 0.50000 & 0.50000 & 0.50000 & 0.10000 & 0.10000 & 0.10000 \\
+ 0       & 0.86603 & 0.28868 & 0.28868 & 0.05774 & 0.05774 & 0.05774 \\
+ 0       & 0       & 0.81650 & 0.20412 & 0.04082 & 0.04082 & 0.04082 \\
+ 0       & 0       & 0       & 0.79057 & 0.03162 & 0.03162 & 0.03162 \\
 \hline
- 0       & 0       & 0       & 0       & 0.99197 & 0.28630 & 0.28630 \cr
- 0       & 0       & 0       & 0       & 0       & 0.94975 & 0.21272 \cr
- 0       & 0       & 0       & 0       & 0       & 0       & 0.92563
+ 0       & 0       & 0       & 0       & 0.99197 & 0.28630 & 0.28630 \\
+ 0       & 0       & 0       & 0       & 0       & 0.94975 & 0.21272 \\
+ 0       & 0       & 0       & 0       & 0       & 0       & 0.92563 \\
 \end{array}
 \right)
 \end{displaymath}
@@ -1631,13 +1632,13 @@ this way:
 \begin{displaymath}
 U = \left|
 \begin{array}{c|cc}
- 1.00000 & 0.50000 & 0.10000 \cr
- 0.86603 & 0.28868 & 0.05774 \cr
- 0.81650 & 0.20412 & 0.04082 \cr
- 0.79057 & 0       & 0.03162 \cr
- 0.99197 & 0       & 0.28630 \cr
- 0.94975 & 0       & 0.21272 \cr
- 0.92563 & 0       & 0
+ 1.00000 & 0.50000 & 0.10000 \\
+ 0.86603 & 0.28868 & 0.05774 \\
+ 0.81650 & 0.20412 & 0.04082 \\
+ 0.79057 & 0       & 0.03162 \\
+ 0.99197 & 0       & 0.28630 \\
+ 0.94975 & 0       & 0.21272 \\
+ 0.92563 & 0       & 0       \\
 \end{array}
 \right|
 \end{displaymath}
@@ -1654,9 +1655,9 @@ operations required to multiply $U$ by a vector. Let see an example:
 
 \begin{displaymath}
 \begin{array}{rcl}
-(U \cdot x)_2 & = & 0.0 \cdot x_1 + 0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 + \cr
-              &   & 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7 \cr
-              & = & 0.86603 \cdot x_2 + 0.28868 \cdot (x_3 + x_4) + 0.05774 \cdot (x_5 + x_6 + x_7)
+(U \cdot x)_2 & = & 0.0 \cdot x_1 + 0.86603 \cdot x_2 + 0.28868 \cdot x_3 + 0.28868 \cdot x_4 +     \\
+              &   & 0.05774 \cdot x_5 + 0.05774 \cdot x_6 + 0.05774 \cdot x_7                       \\
+              & = & 0.86603 \cdot x_2 + 0.28868 \cdot (x_3 + x_4) + 0.05774 \cdot (x_5 + x_6 + x_7) \\
 \end{array}
 \end{displaymath}
 
@@ -1706,10 +1707,10 @@ Where $\lambda_i$ are the eigenvalues of the following deflated matrix:
 \begin{displaymath}
 K = \left(
 \begin{array}{cccc}
-1+(n_1-1) \cdot a_{11} & n_2 \cdot a_{12}       & \cdots & n_k \cdot a_{1k}       \cr
-      n_1 \cdot a_{12} & 1+(n_2-1) \cdot a_{22} & \cdots & n_k \cdot a_{2k}       \cr
-\vdots                 & \vdots                 & \ddots & \vdots                 \cr
-n_1 \cdot a_{1k}       & n_2 \cdot a_{2k}       & \cdots & 1+(n_k-1) \cdot a_{kk} \cr
+1+(n_1-1) \cdot a_{11} & n_2 \cdot a_{12}       & \cdots & n_k \cdot a_{1k}       \\
+      n_1 \cdot a_{12} & 1+(n_2-1) \cdot a_{22} & \cdots & n_k \cdot a_{2k}       \\
+\vdots                 & \vdots                 & \ddots & \vdots                 \\
+n_1 \cdot a_{1k}       & n_2 \cdot a_{2k}       & \cdots & 1+(n_k-1) \cdot a_{kk} \\
 \end{array}
 \right)
 \end{displaymath}
