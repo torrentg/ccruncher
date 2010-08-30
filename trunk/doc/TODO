@@ -4,6 +4,14 @@ CCRUNCHER TODO
 
 Current works
 -------------------
+  * review t-Student copula generation
+     - use Monte Carlo to determine normalization coefficients
+     - can be precalculated an aproximated function?
+     - update documentation
+     - update t-student copula tests
+  * improve documentation
+     - explain how to distribute the risk (eg. ES) along segments
+     - see 'introduction to credit risk modeling'
   * add stochastic recovery
 
 Future works

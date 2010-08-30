@@ -46,7 +46,7 @@ copyright() {
   cat << _EOF_
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. more info at
+     under the GNU General Public License, version 2. More info at
                    http://www.ccruncher.net
 
 _EOF_
@@ -65,8 +65,7 @@ usage() {
     $progname computes the credit risk using the output data 
     files generates by ccruncher using R. The report is 
     stored in an html file in the same directory where output
-    data file resides.
-    more info at http://www.ccruncher.net
+    data file resides. More info at http://www.ccruncher.net
   arguments:
     file     ccruncher output data file
   options
