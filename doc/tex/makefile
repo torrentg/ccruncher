@@ -20,12 +20,22 @@
 #
 #***************************************************************************
 
-all:
+all: pdf
+
+pdf:
 	latex ccruncher
 	bibtex ccruncher
 	latex ccruncher
 	latex ccruncher
 	dvipdfm ccruncher
+
+rtf:
+	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
+	latex ccruncher-iso88591
+	bibtex ccruncher-iso88591
+	latex2rtf -Z9 -S -M12 ccruncher-iso88591.tex
+	mv ccruncher-iso88591.rtf ccruncher.rtf
+	rm -f ccruncher-iso88591.tex
 
 clean:
 	rm -f *.aux

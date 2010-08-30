@@ -47,7 +47,7 @@ copyright() {
   cat << _EOF_
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. more info at
+     under the GNU General Public License, version 2. More info at
                   http://www.ccruncher.net
 
 _EOF_

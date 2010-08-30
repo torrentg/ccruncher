@@ -65,7 +65,7 @@ copyright() {
   cat << _EOF_
 
    $progname is Copyright (C) 2003-2010 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. more info at
+     under the GNU General Public License, version 2. More info at
                    http://www.ccruncher.net
 
 _EOF_
@@ -190,7 +190,7 @@ makeBinDist() {
   autoconf;
   automake -avcf;
   ./configure --prefix=$PWD;
-  make;
+  make -j4;
   make install;
   bin/src2bin.sh -y;
 
@@ -223,6 +223,7 @@ makeWinDist() {
   #creating binaries
   cp $pathexes/ccruncher.exe bin/
   cp $pathexes/libexpat.dll bin/
+  cp $pathexes/pthreadVCE2.dll bin/
   cp $pathexes/zlib1.dll bin/
 
   #dropping unused files

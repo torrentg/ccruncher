@@ -53,18 +53,18 @@
 
 \title{CCruncher - Technical Document}
 \author{Gerard Torrent Gironella\\\\Version \numversion\ -\ \svnversion}
-\date{}
+\date{\today}
 \maketitle
 
 
 %===========================================================================
 \begin{abstract}
-The ccruncher goal is to compute the credit risk of a portfolio, where 
-investments are fixed income assets, taking into account default correlations
-between economic sectors. This is done by determining the probability distribution 
-of portfolio loss at time $T$ using the Monte Carlo method and computing the
-usual risk statistics (Expected Loss, Standard Deviation, Value at Risk, Expected 
-Shortfall).
+The CCruncher goal is to compute the credit risk of massive loan portfolios 
+taking into account default correlations between economic sectors. This is done 
+by determining the probability distribution of portfolio loss at time $T$ using 
+the Monte Carlo method and simulating the borrower's default times. Risk is 
+obtained using the usual risk statistics as Expected Loss, Standard Deviation, 
+Value at Risk and Expected Shortfall.
 \newline
 \newline
 \textbf{Keywords}: credit risk, Monte Carlo, survival functions, gaussian copula, 
@@ -139,17 +139,19 @@ sectors measures the defaults times dependence between the defined sectors. This
 can be expressed in tabular form:
 
 \begin{center}
-\begin{tabular}[]{cc}
-\begin{tabular}[]{c|ccc}
-             & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
+\begin{displaymath}
+\begin{array}{cc}
+\begin{array}{c|ccc}
+                    & \mathrm{Sector}_1 & \dots  & \mathrm{Sector}_{m} \\
 \hline
-$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \\
-$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \\
-$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \\
-\end{tabular}
+\mathrm{Sector}_1   & \rho_{1,1}        & \dots  & \rho_{1,m} \\
+\vdots              & \vdots            & \ddots & \vdots     \\
+\mathrm{Sector}_{m} & \rho_{1,m}        & \dots  & \rho_{m,m} \\
+\end{array}
 &
-\qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
-\end{tabular}
+\qquad \rho_{i,j} = \mathrm{Corr}(\mathrm{Sector}_i, \mathrm{Sector}_j)
+\end{array}
+\end{displaymath}
 \end{center}
 
 Note that diagonal elements are default time correlations between members of the 
@@ -157,8 +159,8 @@ same sector (values distinct than $1$) while elements outside diagonal are
 default time correlations between elements of distinct sectors.
 \newline
 
-Appendice \ref{ap:mcorrel} exposes a simple method to obtain an estimation of
-the correlation matrix based on the historical information about defaults.
+Appendix \ref{ap:mcorrel} exposes a simple method to obtain an estimation of
+the correlations table based on the historical information about defaults.
 
 %---------------------------------------------------------------------------
 \subsection{Portfolio}
@@ -224,17 +226,19 @@ sectors. Each borrower belongs to a sector. Correlations between sectors are
 known (see section \ref{sectors}):
 
 \begin{center}
-\begin{tabular}[]{cc}
-\begin{tabular}[]{c|ccc}
-             & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
+\begin{displaymath}
+\begin{array}{cc}
+\begin{array}{c|ccc}
+                    & \mathrm{Sector}_1 & \dots  & \mathrm{Sector}_{m} \\
 \hline
-$Sector_1$   & $\rho_{1,1}$ & $\dots$  & $\rho_{1,m}$ \\
-$\vdots$     & $\vdots$     & $\ddots$ & $\vdots$     \\
-$Sector_{m}$ & $\rho_{1,m}$ & $\dots$  & $\rho_{m,m}$ \\
-\end{tabular}
+\mathrm{Sector}_1   & \rho_{1,1}        & \dots  & \rho_{1,m} \\
+\vdots              & \vdots            & \ddots & \vdots     \\
+\mathrm{Sector}_{m} & \rho_{1,m}        & \dots  & \rho_{m,m} \\
+\end{array}
 &
-\qquad $\rho_{i,j} = Corr(Sector_i, Sector_j)$
-\end{tabular}
+\qquad \rho_{i,j} = \mathrm{Corr}(\mathrm{Sector}_i, \mathrm{Sector}_j)
+\end{array}
+\end{displaymath}
 \end{center}
 
 Sort the borrowers so that whose find those who belong to sector $1$ are at the beginning 
@@ -388,7 +392,7 @@ Central Limit Theorem \cite{stats:schaum} grants that:
 \end{displaymath}
 where $\alpha$ is the error confidence level, $\phi^{-1}$ the N(0,1) inverse 
 cumulative distribution function and $\widehat{\mu}$ and $\widehat{\sigma}$ are 
-the mean and stddev estimators:
+the mean and standard deviation estimators:
 
 \begin{displaymath}
 \widehat{\mu} = \frac{1}{N} \sum_{i=1}^{N} x_i
@@ -434,19 +438,21 @@ is the estimation of the standard error.
 where,
 \begin{itemize}
 \item $k$ fulfills $\frac{k}{N} \leq \beta < \frac{k+1}{N}$
-\item $x_{k:N}$ is the $k$-th element of ascendent sorted values
+\item $x_{k:N}$ is the $k$-th element of ascendant sorted values
 \end{itemize}
 
 Determine $\textrm{stderr}(q_{\beta})$ using Maritz-Jarret method described
 in \cite{quant:algor}.
 
-\begin{eqnarray}
-M   & = & [N \beta + 0.5] \nonumber \\
-a   & = & M - 1 \nonumber \\
-b   & = & N - M \nonumber \\
-W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \nonumber \\
-C_k & = & \sum_{i=1}^{N} W_i \cdot x_i^k \nonumber
-\end{eqnarray}
+\begin{displaymath}
+\begin{array}{rcl}
+M   & = & [N \beta + 0.5]  \\
+a   & = & M - 1            \\
+b   & = & N - M            \\
+W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \\
+C_k & = & \sum_{i=1}^{N} W_i \cdot x_i^k \\
+\end{array}
+\end{displaymath}
 
 where $[x]$ is the integer part of $x$ and $B(a,b,x)$ is the incomplete beta 
 function:
@@ -533,7 +539,7 @@ obtain the risk indicators for this subportfolio.
 \subsection{Yield curve}
 CCruncher can consider that money value decreases along the time following a fixed 
 curve (eg. yield curve). CCruncher allows the input of the yield curve and and takes
-it into account in all its computations. The coeficient that determines the money 
+it into account in all its computations. The coefficient that determines the money 
 value decreases along the time is given by the compound interest formula:
 
 \begin{displaymath}
@@ -562,16 +568,17 @@ tasks.
 In CCruncher the master sends a distinct seed to each slave to initialize its RNG 
 and waits for results (the simulated values of the portfolio loss) from slaves that 
 store them in a file. When one of the two stop criteria is achieved (maximum execution 
-time exceded or maximum number of simulations) the master sends a stop signal to the 
+time exceeded or maximum number of simulations) the master sends a stop signal to the 
 slaves and leaves.
 
 
 %===========================================================================
+\pagebreak
 \section{Numerical example}
 
 Let's go to compute the credit risk at $T=30$ years for the following portfolio.
 
-\begin{table}[!hb]
+\begin{table}[!h]
 \begin{center}
 \begin{tabular}[]{c|l|c|c|c|l}
 Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \\
@@ -594,7 +601,7 @@ B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \\
 The following table list the assets events in months from current date.
 
 {\small
-\begin{table}[!hb]
+\begin{table}[!h]
 \begin{center}
 \begin{tabular}[]{c|c|c|c|c|c|c|c|c|c|c|c|c}
 Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \\
@@ -621,7 +628,7 @@ Month & A1  & A2  & A3  & A4  & A5  & A6  & A7  & A8  & A9  & A10 & A11 & A12  \
 This example assumes that there are no survival functions but we have the 
 $1$-year transition matrix $T_1$ (extracted from \cite{CreditMetrics:Tech_Doc}).
 
-\begin{table}[!hb]
+\begin{table}[!h]
 \begin{center}
 \begin{tabular}[]{l|rrrrrrrr}
         &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \\
@@ -639,12 +646,13 @@ Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0
 \label{example.tmatrix}
 \end{center}
 \end{table}
+\FloatBarrier
 
 The sectorial default times correlations are:
 
-\begin{table}[!hb]
+\begin{table}[!h]
 \begin{center}
-\begin{tabular}[]{c|ccc}
+\begin{tabular}[]{l|ccc}
                & Construction & Consumer goods & Services \\
 \hline
 Construction   &    $0.50$    &     $0.20$     &   $0.30$ \\
@@ -655,6 +663,7 @@ Services       &    $0.30$    &     $0.34$     &   $0.40$ \\
 \label{example.scorrels}
 \end{center}
 \end{table}
+\FloatBarrier
 
 %---------------------------------------------------------------------------
 \subsection{Obtaining the survival functions}
@@ -683,7 +692,7 @@ transition matrix, $T_{\frac{1}{12}}$:
 }
 
 Note negative values in the computed $1$-month transition matrix. The cause is that 
-the original matrix $T_1$ is not a regular Markov matrix. In these cases ccruncher 
+the original matrix $T_1$ is not a regular Markov matrix. In these cases CCruncher 
 regularizes the matrix applying the algorithm described in appendix \ref{ap:regularization}.
 To simplify this example negative values are replaced by $0$.
 \newline
@@ -889,13 +898,13 @@ required.
 %---------------------------------------------------------------------------
 \subsection{Copula initialization}
 
-The implemented copulas, gaussian and T-Student, requires the same covariance 
-matrix, $\Sigma'$. Compute this matrix following the steps $1$ and $2$ from 
-appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu}.
+We simulate the default times using a gaussian copula. We compute the covariance 
+matrix, $\Sigma'$, following the steps $1$ and $2$ from appendix 
+\ref{ap:gaussiancopu}.
 \newline
 
-Create the covariance matrix $\Sigma'$ mapping $\Sigma$ component 
-by component ($2 sin(\rho_{ij} \frac{\pi}{6})$ transformation):
+Create the covariance matrix $\Sigma'$ mapping each $\Sigma$ component, 
+$\rho_{ij}$, to $2 sin(\frac{\pi}{6} \rho_{ij})$:
 {\small
 \begin{displaymath}
 \Sigma' = 
@@ -944,7 +953,7 @@ three parts, the copula simulation, the default times simulation and the
 portfolio loss evaluation.
 
 \paragraph{Copula simulation.} To simulate the gaussian copula we follows the 
-steps $3$ to $5$ from appendice \ref{ap:gaussiancopu}. To simulate the multivariate
+steps $3$ to $5$ from appendix \ref{ap:gaussiancopu}. To simulate the multivariate
 $\vec{Z} \sim N(0,\Sigma')$ simulate 9 independents $N(0,1)$ and multiplies 
 with $B$.
 {\small
@@ -1196,7 +1205,7 @@ The QOM (Quasi-Optimization of the root Matrix) algorithm regularize a
 transition matrix, $m_{ij}$, of dimension $n$ row-by-row. The steps to 
 regularize the $i$-th row are:
 
-\paragraph{Step 1.} Compute the difference betwen $1$ and the row sum. 
+\paragraph{Step 1.} Compute the difference between $1$ and the row sum. 
 Divide by $n$ and substract this value from all non-zero components:
 \begin{displaymath}
 m_{ij} \ne 0 
@@ -1210,11 +1219,9 @@ then stop, the row is regularized.
 \paragraph{Step 3.} Fix any negative row element to zero and go to step 1.
 \newline
 
-The iterative algorithm stops after $m$ steps where $m \le n$ (Merkoulovitch 2000).
-\newline
-
-Apply the previous algorithm for every row. The final matrix is a regularized
-matrix.
+Apply the previous algorithm for every row. The algorithm stops after $m$ 
+steps where $m \le n$ (Merkoulovitch 2000). The final matrix is a regularized
+matrix. 
 
 %---------------------------------------------------------------------------
 \subsection{Correlation matrix estimation}
@@ -1226,36 +1233,38 @@ number of defaulted components for each sector for the last years (eg.
 1980-2008). 
 
 \begin{center}
-\begin{tabular}[]{ccc}
-\begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
+\begin{displaymath}
+\begin{array}{ccc}
+\begin{array}{c|ccc}
+\mathrm{Year}     & \mathrm{Sector}_1   & \dots  & \mathrm{Sector}_{m} \\
 \hline
-1        & $a_{1,1}$    & $\dots$  & $a_{1,m}$    \\
-2        & $a_{2,1}$    & $\dots$  & $a_{2,m}$    \\
-3        & $a_{3,1}$    & $\dots$  & $a_{3,m}$    \\
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \\
-T-1      & $a_{T-1,1}$  & $\dots$  & $a_{T-1,m}$  \\
-T        & $a_{T,1}$    & $\dots$  & $a_{T,m}$    \\
-\end{tabular}
-& $\qquad$ &
-\begin{tabular}[]{c|ccc}
-Year     & $Sector_1$   & $\dots$  & $Sector_{m}$ \\
+1        & a_{1,1}    & \dots  & a_{1,m}    \\
+2        & a_{2,1}    & \dots  & a_{2,m}    \\
+3        & a_{3,1}    & \dots  & a_{3,m}    \\
+\vdots   & \vdots     & \vdots & \vdots     \\
+T-1      & a_{T-1,1}  & \dots  & a_{T-1,m}  \\
+T        & a_{T,1}    & \dots  & a_{T,m}    \\
+\end{array}
+& \qquad &
+\begin{array}{c|ccc}
+\mathrm{Year}     & \mathrm{Sector}_1   & \dots  & \mathrm{Sector}_{m} \\
 \hline
-1        & $d_{1,1}$    & $\dots$  & $d_{1,m}$    \\
-2        & $d_{2,1}$    & $\dots$  & $d_{2,m}$    \\
-3        & $d_{3,1}$    & $\dots$  & $d_{3,m}$    \\
-$\vdots$ & $\vdots$     & $\vdots$ & $\vdots$     \\
-T-1      & $d_{T-1,1}$  & $\dots$  & $d_{T-1,m}$  \\
-T        & $d_{T,1}$    & $\dots$  & $d_{T,m}$    \\
-\end{tabular}
-\end{tabular}
+1        & d_{1,1}    & \dots  & d_{1,m}    \\
+2        & d_{2,1}    & \dots  & d_{2,m}    \\
+3        & d_{3,1}    & \dots  & d_{3,m}    \\
+\vdots   & \vdots     & \vdots & \vdots     \\
+T-1      & d_{T-1,1}  & \dots  & d_{T-1,m}  \\
+T        & d_{T,1}    & \dots  & d_{T,m}    \\
+\end{array}
+\end{array}
+\end{displaymath}
 \end{center}
 
 where $a_{i,j}$ are the number of borrowers in sector $j$ at year $i$ and
 $d_{i,j}$ is the number of defaulted borrowers of sector $j$ at year $i$.
 \newline
 
-We use the following definition of correlation:
+We use the following expression of correlation:
 \begin{displaymath}
 Correl(S_i,S_j) = \frac{P(S_i \cap S_j) - P(S_i) \cdot P(S_j)}{\sqrt{P(S_i) \cdot (1-P(S_i))} \cdot \sqrt{P(S_j) \cdot (1-P(S_j))}}
 \end{displaymath}
@@ -1285,7 +1294,7 @@ Algorithm to simulate a gaussian copula satisfying correlation matrix $\Sigma$
 \cite{copu:wang} \cite{copu:pricing}:
 
 \paragraph{Step 1.} We create the covariance matrix $\Sigma'$ mapping each 
-$\Sigma$ component, $\rho$, to $2 sin(\frac{\pi}{6} \rho)$:
+$\Sigma$ component, $\rho_{ij}$, to $2 sin(\frac{\pi}{6} \rho_{ij})$:
 \begin{displaymath}
 \Sigma' = \left( 
 \begin{array}{cccc}
@@ -1676,8 +1685,8 @@ well-conditioned while a matrix with a high condition number is said to be
 ill-conditioned.
 \newline
 
-Given a symmetric block matrix withs $1$'s in the diagonal, $\Sigma$, we desire 
-to obtain the condition number of the cholesky decomposition matrix, $B$.
+Given a symmetric block matrix with $1$'s in the diagonal, $\Sigma$, we desire 
+to obtain the condition number of the Cholesky decomposition matrix, $B$.
 Using condition number definition and its properties we have that:
 
 \begin{displaymath}
@@ -1715,18 +1724,22 @@ n_1 \cdot a_{1k}       & n_2 \cdot a_{2k}       & \cdots & 1+(n_k-1) \cdot a_{kk
 \right)
 \end{displaymath}
 
-%internal note: 
-%  K deflated matrix come from eigenvectors related to \lambda_i.
-%  this eigenvectors are of the form (observed with matlab): 
-%  (v_1, ..., v_1, v_2, ..., v2, ..., v_k, ..., v_k)
-%  Matrix K has the same eigenvalues \lambda_i with eigenvectors
-%  (v_1, v_2, ..., v_k)
+\begin{comment}
+
+internal note:
+--------------
+  K deflated matrix come from eigenvectors related to \lambda_i.
+  this eigenvectors are of the form (observed with matlab): 
+  (v_1, ..., v_1, v_2, ..., v2, ..., v_k, ..., v_k)
+  Matrix K has the same eigenvalues \lambda_i with eigenvectors
+  (v_1, v_2, ..., v_k)
+
+\end{comment}
 
 %===========================================================================
 \newpage
 \bibliography{refs}
 \bibliographystyle{plain}
-
 
 \end{document}
 
