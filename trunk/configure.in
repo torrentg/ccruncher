@@ -25,6 +25,7 @@ dnl -------------------------------------------------------------
 AC_PROG_CXX
 AC_PROG_CPP
 AC_PROG_INSTALL
+AC_PROG_MAKE_SET
 
 dnl -------------------------------------------------------------
 dnl checks for libraries
@@ -147,11 +148,6 @@ dnl -------------------------------------------------------------
 dnl completing config.h.in
 dnl -------------------------------------------------------------
 AH_BOTTOM([
-/* Aggregator buffer size (in bytes) */
-#define CCMAXBUFSIZE 40*1024*1024
-
-/* flush results time (to disk or to master) */
-#define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
 #define SVN_VERSION "R586"

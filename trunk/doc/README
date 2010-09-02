@@ -127,12 +127,15 @@ Notes for Windows developers (MSVC9)
 5. download gsl package from http://matmidia.org/alexlaier/index.php/goodies/3-stuff/26-gsl-111-port-microsoft-visual-studio-2008-vc90.html
    and unpack at $CCRUNCHER\deps\ directory
 
-6. copy zlib1.dll and libexpat.dll (installed in steps 3 and 4) to
+6. download pthreads-win32 package from http://sourceware.org/pthreads-win32/
+   and unpack at $CCRUNCHER\deps\pthread-win32 directory
+
+7. copy zlib1.dll, libexpat.dll and pthreadVCE2.dll (installed in steps 3, 4 and 6) to
    $CCRUNCHER\bin (required to execute bin\ccruncher.exe)
 
-7. double-click ccruncher.vcproj (opens MSVC9)
+8. double-click ccruncher.vcproj (opens MSVC9)
 
-8. execute compile option
+9. execute compile option
 
 Microsoft Visual C++ versions:
  - MSVC6: don't work at all

@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Jun  4 21:25:48 CEST 2010"
+#define BUILD_DATE "Thu Sep  2 07:57:09 CEST 2010"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -163,6 +163,9 @@
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
 
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
+
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "1.6"
 
@@ -202,11 +205,6 @@
 /* #undef size_t */
 
 
-/* Aggregator buffer size (in bytes) */
-#define CCMAXBUFSIZE 40*1024*1024
-
-/* flush results time (to disk or to master) */
-#define CCEFLUSHSECS 30.0
 
 /* subversion identifier */
 #define SVN_VERSION "R586"
