@@ -124,7 +124,7 @@ Notes for Windows developers (MSVC9)
 4. download zlib package from http://www.zlib.net/
    and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
 
-5. download gsl package from http://matmidia.org/alexlaier/index.php/goodies/3-stuff/26-gsl-111-port-microsoft-visual-studio-2008-vc90.html
+5. download gsl package from http://alexlaier.org/me/index.php?option=com_content&view=article&id=26:gsl-111-port-microsoft-visual-studio-2008-vc90&catid=3:stuff&Itemid=4
    and unpack at $CCRUNCHER\deps\ directory
 
 6. download pthreads-win32 package from http://sourceware.org/pthreads-win32/
