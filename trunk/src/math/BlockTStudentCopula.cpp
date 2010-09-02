@@ -190,11 +190,11 @@ int ccruncher::BlockTStudentCopula::size()
 
 //===========================================================================
 // transform initial correlation to normal correlation
-// observation: 2*sin(1*M_PI/6) = 1 => diagonal values = 1 always
 //===========================================================================
 double ccruncher::BlockTStudentCopula::transform(double val)
 {
-  return 2.0*sin(val*M_PI/6.0);
+  double h = M_PI/6.0 + 1.0/(-0.0562 + 1.3916*ndf + exp(-0.4726*ndf));
+  return sin(h*val)/sin(h);
 }
 
 //===========================================================================
