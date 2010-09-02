@@ -480,8 +480,8 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   // exit function
   Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
   Logger::trace("elapsed time simulating default times", Timer::format(etime2/numthreads));
-  Logger::trace("elapsed time evaluating portfolio", Timer::format(etime3/numthreads));
-  Logger::trace("elapsed time aggregating values", timer4);
+  Logger::trace("elapsed time evaluating segmentations", Timer::format(etime3/numthreads));
+  Logger::trace("elapsed time writing data to disk", timer4);
   Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();

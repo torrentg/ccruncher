@@ -54,18 +54,8 @@ class Aggregator
     ofstream fout;
     // number of segments
     int numsegments;
-    // number of simulations
-    int cont;
-    // buffer counter
-    int icont;
-    // buffer of simulated values (size = numsegments x buffersize)
-    vector<double> buffer;
-    // number of rows in buffer
-    int bufferrows;
     // indicates if rest segment is used
     bool printRestSegment;
-    // internal timer (control time from last flush)
-    Timer timer;
 
   public:
 
@@ -74,9 +64,9 @@ class Aggregator
     // destructor
     ~Aggregator();
     // append data to aggregator
-    bool append(vector<double> &) throw(Exception);
-    // flush data to disk
-    bool flush() throw(Exception);
+    void append(vector<double> &) throw(Exception);
+    // force flush data to disk
+    void flush() throw(Exception);
 
 };
 

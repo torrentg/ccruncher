@@ -30,13 +30,10 @@
 //===========================================================================
 ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentation, 
     Segmentation &segmentation_, const string &filename, bool force) 
-    throw(Exception) : segmentation(segmentation_), buffer(0)
+    throw(Exception) : segmentation(segmentation_)
 {
   // initialization
   numsegments = segmentation.size();
-  cont = 0L;
-  icont = 0L;
-  timer.resume();
   printRestSegment = false;
   for(unsigned int i=0; i<assets.size(); i++)
   {
@@ -46,11 +43,6 @@ ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentat
       break;
     }
   }
-
-  // buffer creation
-  bufferrows = CCMAXBUFSIZE/(numsegments*sizeof(double));
-  if (bufferrows <= 0) bufferrows = 1;
-  buffer.assign(bufferrows*numsegments, 0.0);
 
   // file creation
   if (force == false && access(filename.c_str(), W_OK) == 0)
@@ -102,70 +94,36 @@ ccruncher::Aggregator::~Aggregator()
 //===========================================================================
 // append
 //===========================================================================
-bool ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
+void ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
 {
   assert((int)losses.size() == numsegments);
 
-  // filling values
-  double *p = &buffer[icont*numsegments];
-  for(int i=0; i<numsegments; i++)
-  {
-    p[i] = losses[i];
-  }
-
-  // incrementing counters
-  icont++;
-  cont++;
-
-  // flushing if buffer is full
-  if (icont >= bufferrows || timer.read() > CCEFLUSHSECS)
-  {
-    return flush();
-  }
-  else
-  {
-    return true;
-  }
-}
-
-//===========================================================================
-// print
-//===========================================================================
-bool ccruncher::Aggregator::flush() throw(Exception)
-{
-  // if haven't values, exits
-  if (icont <= 0)
-  {
-    return true;
-  }
-
-  // printing buffer content
   try
   {
-    for(int i=0; i<icont; i++)
+    for (int i=(printRestSegment?0:1); i<numsegments-1; i++)
     {
-      // printing simulation counter
-      double *p = &buffer[i*numsegments];
-      
-      for (int j=(printRestSegment?0:1); j<numsegments-1; j++)
-      {
-        // printing simulated value
-        fout << p[j] << ", ";
-      }
-      fout << p[numsegments-1] << "\n"; // endl not used because force to flush in disk
+      fout << losses[i] << ", ";
     }
-    // reseting buffer counter
-    icont = 0;
+    fout << losses[numsegments-1] << "\n"; // endl not used because force to flush in disk
   }
   catch(Exception e)
   {
     throw Exception(e, "error flushing content for aggregator " + segmentation.name);
   }
+}
 
-  // reseting timer
-  timer.start();
-
-  // exit function
-  return true;
+//===========================================================================
+// flush
+//===========================================================================
+void ccruncher::Aggregator::flush() throw(Exception)
+{
+  try
+  {
+    fout.flush();
+  }
+  catch(Exception e)
+  {
+    throw Exception(e, "error flushing segmentation " + segmentation.name);
+  }
 }
 
