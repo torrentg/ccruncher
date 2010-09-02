@@ -29,7 +29,7 @@
 //---------------------------------------------------------------------------
 
 #define NITERS 100000
-#define EPSILON  0.03
+#define EPSILON  0.01
 #define NBINS 100
 #define ndf 3.0
 
