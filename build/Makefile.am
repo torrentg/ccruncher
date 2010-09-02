@@ -111,7 +111,6 @@ ccruncher_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
-    ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
 ccruncher_CXXFLAGS =
@@ -267,7 +266,6 @@ tests_SOURCES = \
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/survival/Survival.hpp\
-    ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
 tests_CXXFLAGS =
@@ -366,7 +364,6 @@ samplegen_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
-    ../src/utils/ccmpi.h\
     ../src/utils/config.h
 
 samplegen_CXXFLAGS =
