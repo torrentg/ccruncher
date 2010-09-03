@@ -36,6 +36,11 @@ ccruncher::Thread::Thread()
 ccruncher::Thread::~Thread()
 {
   cancel();
+  
+  if (status != fresh)
+  {
+    pthread_detach(thread);
+  }
 }
 
 //===========================================================================
