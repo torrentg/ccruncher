@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Sep  3 18:55:58 CEST 2010"
+#define BUILD_DATE "Fri Sep  3 20:53:10 CEST 2010"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -216,7 +216,9 @@
 
 /* cygwin patch */
 #if defined (__CYGWIN__) 
-#define NAN sqrt(-1.0)
+#ifndef NAN
+#define NAN (0.0/0.0)
+#endif
 #endif
 
 
