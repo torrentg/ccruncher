@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;deps\gsl-1.12&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3&quot;;&quot;deps\gzstream-1.5&quot;;deps;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;&quot;deps\pthread-win32\include&quot;;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="1"
@@ -63,11 +63,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libexpat.lib zdll.lib"
+				AdditionalDependencies="libcmt.lib libexpat.lib zdll.lib gsl.lib cblas.lib pthreadVCE2.lib"
 				OutputFile="bin\ccruncher.exe"
 				Version=""
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\Libs\&quot;;&quot;deps\zlib-1.2.3&quot;"
+				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;;&quot;deps\gsl-1.11\win32\lib\release_static-vs90&quot;;&quot;deps\pthread-win32\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ccruncher.pdb"
 				SubSystem="1"
@@ -450,10 +450,6 @@
 				</File>
 				<File
 					RelativePath="src\utils\Arrays.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\utils\ccmpi.h"
 					>
 				</File>
 				<File

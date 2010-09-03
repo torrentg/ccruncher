@@ -24,41 +24,21 @@
 #define WINCONFIG_H
 
 // ======================================================
-// patch against NAN problem
+// patch against isnan() function
 // ======================================================
-#include <cmath>
 #include <cfloat>
-#define NAN sqrt(-1.0)
 #define isnan _isnan
 
 // ======================================================
-// patch against infinity problem
+// patch against NAN problem
+// Visual C++ etc lacks NAN, and won't accept 0.0/0.0.  
+// NAN definition from:
+// http://msdn.microsoft.com/en-us/library/w22adx1s%28v=VS.100%29.aspx
 // ======================================================
-#define INFINITY HUGE_VAL
-#define isinf(x) !_finite(x)
-
-// ======================================================
-// define some special functions (caution, low accuracy?)
-// ======================================================
-#define log1p(x) log(1.0 + x)
-#define expm1(x) (exp(x)-1.0)
-
-// ======================================================
-// patch against round() function
-// ======================================================
-inline double round( double d ) 
-{ 
-  return floor( d + 0.5 ); 
-}
-
-// ======================================================
-// patch against trunc() function
-// ======================================================
-inline double trunc( double d ) 
-{ 
-  if (d >= 0) return floor(d);
-  else return -floor(-d);
-}
+#if !defined(NAN)
+static const uint32 nan[2] = {0xffffffff, 0x7fffffff};
+#define NAN (*(const double *) nan)
+#endif
 
 // ======================================================
 // patch against getopt problem

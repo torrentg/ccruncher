@@ -1,5 +1,4 @@
 
-This directory contains third part projects used by CreditCruncher.
-Exist a subdirectory for each related project required at compilation time.
+This directory contains third party code distributed with CCruncher.
 More info at $CCRUNCHER/doc/html/dependencies.html.
 

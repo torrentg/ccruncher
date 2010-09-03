@@ -215,7 +215,9 @@
 
 /* cygwin patch */
 #if defined (__CYGWIN__) 
-#define NAN sqrt(-1.0)
+#ifndef NAN
+#define NAN (0.0/0.0)
+#endif
 #endif
 
 
