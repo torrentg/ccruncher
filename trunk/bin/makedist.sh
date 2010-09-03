@@ -159,7 +159,7 @@ makeSrcDist() {
   autoconf;
   automake -avcf;
   ./configure --prefix=$PWD;
-  make distcheck;
+  make -j4 distcheck;
 
   # cleaning
   mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
@@ -245,6 +245,8 @@ makeWinDist() {
   unix2dos samples/*.txt;
   unix2dos doc/html/*.html;
   unix2dos doc/html/*.css;
+  unix2dos doc/html/*.csv;
+  unix2dos doc/html/*.xml;
   unix2dos data/readme.txt;
 
   #creating tarball
