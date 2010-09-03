@@ -4,7 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * remove file buffers
   * add risk aggregation to documentation
      - explain how to distribute the risk (eg. ES) along segments
      - see 'introduction to credit risk modeling'
