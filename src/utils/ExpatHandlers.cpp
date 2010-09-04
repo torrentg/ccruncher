@@ -137,7 +137,7 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &a
     {
       return Parser::intValue(val);
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       return defval;
     }
@@ -161,7 +161,7 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string 
     {
       return Parser::longValue(val);
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       return defval;
     }
@@ -185,7 +185,7 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const str
     {
       return Parser::doubleValue(val);
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       return defval;
     }
@@ -209,7 +209,7 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string 
     {
       return Parser::dateValue(val);
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       return defval;
     }
@@ -233,7 +233,7 @@ bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const stri
     {
       return Parser::boolValue(val);
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       return defval;
     }
