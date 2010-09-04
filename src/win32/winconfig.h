@@ -80,12 +80,6 @@ static const unsigned long nan[2] = {0xffffffff, 0x7fffffff};
 // disabling warnings
 // ======================================================
 #pragma warning( disable : 4290 )
-#pragma warning( disable : 4101 )
-#pragma warning( disable : 4146 )
-#pragma warning( disable : 4267 )
-#pragma warning( disable : 4700 )
-#pragma warning( disable : 4800 )
-#pragma warning( disable : 4996 )
 
 #endif
 
