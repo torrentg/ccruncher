@@ -68,6 +68,7 @@ class Parser
     static Date dateValue(const string &) throw(Exception);
     // convert string to bool
     static bool boolValue(const string &) throw(Exception);
+    
     // convert string to int
     static int intValue(const char *) throw(Exception);
     // convert string to long
@@ -78,6 +79,7 @@ class Parser
     static Date dateValue(const char *) throw(Exception);
     // convert string to bool
     static bool boolValue(const char *) throw(Exception);
+    
     // parse a distribution
     static DistributionType parseDistribution(const char *, double *) throw(Exception);
     // parse a distribution

@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
             string snice = string(optarg);
             inice = Parser::intValue(snice);
           }
-          catch(Exception &e)
+          catch(Exception &)
           {
             cerr << "invalid nice value" << endl;
             return 1;
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
             string shash = string(optarg);
             ihash = Parser::intValue(shash);
           }
-          catch(Exception &e)
+          catch(Exception &)
           {
             cerr << "invalid hash value" << endl;
             return 1;
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             ithreads = Parser::intValue(sthreads);
             if (ithreads <= 0) throw Exception();
           }
-          catch(Exception &e)
+          catch(Exception &)
           {
             cerr << "invalid threads value" << endl;
             return 1;
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
   catch(...)
   {
     cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
+            "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
     return 1;
   }
 

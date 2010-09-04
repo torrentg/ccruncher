@@ -49,5 +49,7 @@ ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _recovery
 //===========================================================================
 bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
 {
-  return (x.date < y.date);
+  if (x.date < y.date) return true;
+  else return false;
 }
+
