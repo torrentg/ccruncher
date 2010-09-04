@@ -273,7 +273,7 @@ void ccruncher::Survival::validate() throw(Exception)
         }
         else
         {
-          string msg = "survival function of rating " + (*ratings)[i].name + " is not monotone at t=" + Format::toString(j);
+          string msg = "survival function of rating " + (*ratings)[i].name + " is not monotone at t=" + Format::toString((int)j);
           throw Exception(msg);
         }
       }
@@ -487,7 +487,7 @@ string ccruncher::Survival::getXML(int ilevel) const throw(Exception)
     {
       ret += spc2 + "<svalue ";
       ret += "rating='" + (*ratings)[i].name + "' ";
-      ret += "t='" + Format::toString(j) + "' ";
+      ret += "t='" + Format::toString((int)j) + "' ";
       ret += "value ='" + Format::toString(ddata[i][j]) + "'";
       ret += "/>\n";
     }

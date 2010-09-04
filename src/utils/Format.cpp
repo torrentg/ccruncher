@@ -75,17 +75,6 @@ string ccruncher::Format::toString(const bool val)
 }
 
 //===========================================================================
-// unsigned int
-//===========================================================================
-string ccruncher::Format::toString(const unsigned int val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-#ifndef size_t
-//===========================================================================
 // size_t
 //===========================================================================
 string ccruncher::Format::toString(const size_t val)
@@ -94,5 +83,4 @@ string ccruncher::Format::toString(const size_t val)
   oss << (int)val;
   return oss.str();
 }
-#endif
 

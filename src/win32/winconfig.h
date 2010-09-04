@@ -36,7 +36,7 @@
 // http://msdn.microsoft.com/en-us/library/w22adx1s%28v=VS.100%29.aspx
 // ======================================================
 #if !defined(NAN)
-static const uint32 nan[2] = {0xffffffff, 0x7fffffff};
+static const unsigned long nan[2] = {0xffffffff, 0x7fffffff};
 #define NAN (*(const double *) nan)
 #endif
 

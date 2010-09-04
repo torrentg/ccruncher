@@ -53,7 +53,6 @@ void ccruncher_test::FormatTest::test_toString(void)
 {
   Date date1 = Date("1/1/2005");
   vector<int> v;
-  unsigned int a = 3;
 
   ASSERT("35" == Format::toString(35));
   ASSERT("50000" == Format::toString(50000));
@@ -62,6 +61,5 @@ void ccruncher_test::FormatTest::test_toString(void)
   ASSERT("true" == Format::toString(true));
   ASSERT("false" == Format::toString(false));
   ASSERT("0" == Format::toString(v.size()));
-  ASSERT("3" == Format::toString(a));
 }
 
