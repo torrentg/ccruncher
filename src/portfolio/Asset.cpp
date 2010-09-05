@@ -38,8 +38,8 @@ ccruncher::Asset::Asset(Segmentations *segs, double drecovery_) : vsegments(), d
   segmentations = segs;
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
-  date = Date(1,1,1);
-  lastdate = Date(1,1,1);
+  date = NAD;
+  lastdate = NAD;
   drecovery = drecovery_;
 }
 
@@ -95,13 +95,13 @@ double ccruncher::Asset::getRecovery(Date d)
 //===========================================================================
 double ccruncher::Asset::getLossX(Date d)
 {
-  int n = (int) data.size();
-  double ret = 0.0;
-
   if (d < date)
   {
     return 0.0;
   }
+
+  int n = (int) data.size();
+  double ret = 0.0;
 
   for(int i=0; i<n; i++)
   {
@@ -176,14 +176,14 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"values") && have_data == true) 
   {
-    Date at = getDateAttribute(attributes, "at", Date(1,1,1));
+    Date at = getDateAttribute(attributes, "at", NAD);
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
     double recovery = drecovery;
     if (getAttributeValue(attributes, "recovery") != NULL) {
       recovery = getDoubleAttribute(attributes, "recovery", NAN);
     }
 
-    if (at == Date(1,1,1) || isnan(cashflow) || isnan(recovery)) {
+    if (at == NAD || isnan(cashflow) || isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
     }
     else if (recovery < 0.0 || 1.0 < recovery) {
@@ -210,14 +210,14 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   else if (isEqual(name_,"asset")) {
     id = getStringAttribute(attributes, "id", "");
     name = getStringAttribute(attributes, "name", "");
-    date = getDateAttribute(attributes, "date", Date(1,1,1));
+    date = getDateAttribute(attributes, "date", NAD);
     if (getAttributeValue(attributes, "recovery") != NULL) {
       drecovery = getDoubleAttribute(attributes, "recovery", NAN);
       if (drecovery < 0.0 || 1.0 < drecovery) {
         throw Exception("recovery value out of range [0%,100%]");
       }
     }
-    if (id == "" || name == "" || date == Date(1,1,1))
+    if (id == "" || name == "" || date == NAD)
     {
       throw Exception("invalid attributes at <asset>");
     }
@@ -258,6 +258,15 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     sort(data.begin(), data.end());
     lastdate = data.back().date;
 
+    // checking for repeated dates    
+    for(int i=1; i<data.size(); i++)
+    {
+      if (data[i-1].date == data[i].date)
+      {
+        throw Exception("asset with repeated date");
+      }
+    }
+    
     // filling implicit segment
     try {
       int isegmentation = segmentations->indexOfSegmentation("assets");
@@ -285,15 +294,6 @@ void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
   if (val.date < date)
   {
     throw Exception("trying to insert an event with date previous to asset creation date");
-  }
-
-  // checking if date exist
-  for(unsigned int i=0;i<data.size();i++)
-  {
-    if (data[i].date == val.date)
-    {
-      throw Exception("trying to insert an existent date");
-    }
   }
 
   // inserting date-values

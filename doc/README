@@ -176,6 +176,9 @@ Developers tips & tricks
 8. profiling executable (only if configure is called with option --enable-profiler)
      ccruncher writes gmon.out because we compiled with -pg flag
      > gprof bin/ccruncher gmon.out
+     > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
+     > valgrind --tool=callgrind bin/ccruncher
+     > kcachegrind callgrind.out.99999
 
 9. debuging executable
      > gdb ./path/progname

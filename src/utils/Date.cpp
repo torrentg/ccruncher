@@ -488,7 +488,7 @@ Date ccruncher::addMonths(const Date& inDate, const int& num_months)
   }
 
   assert(false);
-  return Date(1,1,1);
+  return NAD;
 }
 
 //===========================================================================

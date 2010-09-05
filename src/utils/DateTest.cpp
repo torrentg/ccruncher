@@ -144,6 +144,9 @@ void ccruncher_test::DateTest::test_misc(void)
 
   ASSERT_EQUALS(28, Date::numDaysInMonth(2, 2005));
   ASSERT_EQUALS(29, Date::numDaysInMonth(2, 2004));
+  
+  ASSERT_THROW(Date(0,0,0));
+  ASSERT(NAD == Date(NAD));
 }
 
 //===========================================================================

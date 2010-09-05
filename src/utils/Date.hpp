@@ -66,6 +66,12 @@
 
 //---------------------------------------------------------------------------
 
+// NAD = Not A Date = Date(0,0,0)
+static const long nad[1] = { 1721026L };
+#define NAD (*(const Date *) nad)
+
+//---------------------------------------------------------------------------
+
 using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
@@ -122,12 +128,12 @@ class Date
     Date& operator--();
     Date operator--( int );
 
-    int operator==( const Date& Right ) const;
-    int operator!=( const Date& Right ) const;
-    int operator<( const Date& Right ) const;
-    int operator<=( const Date& Right ) const;
-    int operator>( const Date& Right ) const;
-    int operator>=( const Date& Right ) const;
+    bool operator==( const Date& Right ) const;
+    bool operator!=( const Date& Right ) const;
+    bool operator<( const Date& Right ) const;
+    bool operator<=( const Date& Right ) const;
+    bool operator>( const Date& Right ) const;
+    bool operator>=( const Date& Right ) const;
 
 };
 
@@ -227,27 +233,27 @@ inline Date ccruncher::Date::operator--( int )
 // comparison operators
 // non-zero if the comparison succeeds 0 if it fails
 //===========================================================================
-inline int ccruncher::Date::operator==( const Date& Right ) const
+inline bool ccruncher::Date::operator==( const Date& Right ) const
 {
     return lJulianDay == Right.lJulianDay;
 }
-inline int ccruncher::Date::operator!=( const Date& Right ) const
+inline bool ccruncher::Date::operator!=( const Date& Right ) const
 {
     return lJulianDay != Right.lJulianDay;
 }
-inline int ccruncher::Date::operator<( const Date& Right ) const
+inline bool ccruncher::Date::operator<( const Date& Right ) const
 {
     return lJulianDay < Right.lJulianDay;
 }
-inline int ccruncher::Date::operator<=( const Date& Right ) const
+inline bool ccruncher::Date::operator<=( const Date& Right ) const
 {
     return lJulianDay <= Right.lJulianDay;
 }
-inline int ccruncher::Date::operator>( const Date& Right ) const
+inline bool ccruncher::Date::operator>( const Date& Right ) const
 {
     return lJulianDay > Right.lJulianDay;
 }
-inline int ccruncher::Date::operator>=( const Date& Right ) const
+inline bool ccruncher::Date::operator>=( const Date& Right ) const
 {
     return lJulianDay >= Right.lJulianDay;
 }
