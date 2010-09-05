@@ -39,8 +39,8 @@ ccruncher::Params::Params()
 //===========================================================================
 void ccruncher::Params::init()
 {
-  time0 = Date(1,1,1900);
-  timeT = Date(1,1,1900);
+  time0 = NAD;
+  timeT = NAD;
   maxiterations = -1L;
   maxseconds = -1L;
   copula_type = "";
@@ -143,8 +143,8 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 
   if (name == "time.0")
   {
-    Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
-    if (time0 != Date(1,1,1900) || aux == Date(1,1,1900)) {
+    Date aux = getDateAttribute(attributes, "value", NAD);
+    if (time0 != NAD || aux == NAD) {
       throw Exception("invalid time.begintime");
     } else {
       time0 = aux;
@@ -152,8 +152,8 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
   }
   else if (name == "time.T")
   {
-    Date aux = getDateAttribute(attributes, "value", Date(1,1,1900));
-    if (timeT != Date(1,1,1900) || aux == Date(1,1,1900)) {
+    Date aux = getDateAttribute(attributes, "value", NAD);
+    if (timeT != NAD || aux == NAD) {
       throw Exception("invalid time.begintime");
     } else {
       timeT = aux;
@@ -216,12 +216,12 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
 void ccruncher::Params::validate(void) const throw(Exception)
 {
 
-  if (time0 == Date(1,1,1900))
+  if (time0 == NAD)
   {
     throw Exception("property time.0 not defined");
   }
 
-  if (timeT == Date(1,1,1900))
+  if (timeT == NAD)
   {
     throw Exception("property time.T not defined");
   }

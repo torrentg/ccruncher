@@ -29,7 +29,7 @@
 //===========================================================================
 ccruncher::DateValues::DateValues()
 {
-  date = Date(1,1,1);
+  date = NAD;
   cashflow = NAN;
   recovery = NAN;
 }

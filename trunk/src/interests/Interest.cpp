@@ -184,8 +184,8 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
     else
     {
       // getting attributes
-      date0 = getDateAttribute(attributes, "date", Date(1,1,1900));
-      if (date0 == Date(1,1,1900))
+      date0 = getDateAttribute(attributes, "date", NAD);
+      if (date0 == NAD)
       {
         throw Exception("invalid attributes values at <interest>");
       }
