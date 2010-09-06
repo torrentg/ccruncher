@@ -100,6 +100,12 @@ class MonteCarlo
     int nfthreads;
     // ensures data consistence
     pthread_mutex_t mutex;
+    // trace simulated copulas+defaults flag
+    bool btrace;
+    // file where copula values are stored (if btrace is set)
+    ofstream fcopulas;
+    // file where default times are stored (if btrace is set)
+    ofstream fdefaults;
 
   private:
   
@@ -115,8 +121,12 @@ class MonteCarlo
     void initCopula(IData &idata, long) throw(Exception);
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
+    // initialize trace files
+    void initTrace() throw(Exception);
+    // print trace
+    void printTrace(vector<SimulatedBorrower> &) throw(Exception);
     // append simulation result
-    bool append(vector<vector<double> > &);
+    bool append(vector<vector<double> > &, vector<SimulatedBorrower> &);
 
   public:
 
@@ -132,6 +142,8 @@ class MonteCarlo
     void initialize(IData &) throw(Exception);
     // execute Monte Carlo
     int execute(int) throw(Exception);
+    // trace copula values + trace default times
+    void trace(bool);
     // deallocate memory
     void release();
     

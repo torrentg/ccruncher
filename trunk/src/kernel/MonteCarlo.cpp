@@ -49,6 +49,7 @@ ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators(), thre
   hash = 0;
   fpath = "path not set";
   bforce = false;
+  btrace = false;
   copula = NULL;
 }
 
@@ -90,6 +91,13 @@ void ccruncher::MonteCarlo::release()
     }
   }
   aggregators.clear();
+  
+  // closing files
+  if (btrace) 
+  {
+    fcopulas.close();
+    fdefaults.close();
+  }
 }
 
 //===========================================================================
@@ -129,6 +137,9 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 
     // initializing aggregators
     initAggregators(idata);
+
+    // initialize trace
+    initTrace();
 
     // exit function
     Logger::previousIndentLevel();
@@ -491,7 +502,7 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
+bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, vector<SimulatedBorrower> &x)
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
@@ -504,6 +515,12 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
     for(unsigned int i=0; i<aggregators.size(); i++) 
     {
       aggregators[i]->append(losses[i]);
+    }
+    
+    // trace values
+    if (btrace)
+    {
+      printTrace(x);
     }
 
     // counter increment
@@ -530,8 +547,8 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses)
   }
   catch(Exception &e)
   {
-    pthread_mutex_unlock(&mutex);
     timer4.stop();
+    pthread_mutex_unlock(&mutex);
     throw Exception(e, "error ocurred while executing Monte Carlo");
   }
 
@@ -557,5 +574,71 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
 {
   fpath = path;
   bforce = force;
+}
+
+//===========================================================================
+// trace
+//===========================================================================
+void ccruncher::MonteCarlo::trace(bool val)
+{
+  btrace = val;
+}
+
+//===========================================================================
+// initAdditionalOutput
+//===========================================================================
+void ccruncher::MonteCarlo::initTrace() throw(Exception)
+{
+  assert(fpath != "" && fpath != "path not set"); 
+  string dirpath = File::normalizePath(fpath);
+  
+  if (btrace)
+  {
+    // simulated copula values file
+    string filename1 = dirpath + "copula.csv";
+    try
+    {
+      fcopulas.open(filename1.c_str(), ios::out|ios::trunc);
+      for(unsigned int i=0; i<borrowers.size(); i++)
+      {
+        fcopulas << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
+      }
+      fcopulas << endl;
+    }
+    catch(...)
+    {
+      throw Exception("error writing file " + filename1);
+    }
+    
+    // simulated default times file
+    string filename2 = dirpath + "defaults.csv";
+    try
+    {
+      fdefaults.open(filename2.c_str(), ios::out|ios::trunc);
+      for(unsigned int i=0; i<borrowers.size(); i++)
+      {
+        fdefaults << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
+      }
+      fdefaults << endl;
+    }
+    catch(...)
+    {
+      throw Exception("error writing file " + filename2);
+    }
+  }
+}
+
+//===========================================================================
+// printTrace
+//===========================================================================
+void ccruncher::MonteCarlo::printTrace(vector<SimulatedBorrower> &x) throw(Exception)
+{
+  for(unsigned int i=0; i<x.size(); i++) 
+  {
+    fcopulas << x[i].rvalue << (i!=x.size()-1?", ":"");
+    fdefaults << x[i].dtime << (i!=x.size()-1?", ":"");
+  }
+  fcopulas << "\n";
+  fdefaults << "\n";
 }
 

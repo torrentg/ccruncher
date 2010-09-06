@@ -31,7 +31,8 @@ ccruncher::SimulatedBorrower::SimulatedBorrower(Borrower *borrower)
 {
   assert(borrower != NULL);
   irating = borrower->irating;
-  dtime = Date();
+  rvalue = NAN;
+  dtime = NAD;
   ref = borrower;
 }
 

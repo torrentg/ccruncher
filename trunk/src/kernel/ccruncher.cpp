@@ -55,6 +55,7 @@ string sfilename = "";
 string spath = "";
 bool bverbose = false;
 bool bforce = false;
+bool btrace = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
+      { "trace",        0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -168,6 +170,10 @@ int main(int argc, char *argv[])
             cerr << "invalid threads value" << endl;
             return 1;
           }
+          break;
+
+      case 306: // --trace (trace copula values and default times)
+          btrace = true;
           break;
 
       default: // unexpected error
@@ -278,6 +284,7 @@ void run(string filename, string path, int nthreads) throw(Exception)
   MonteCarlo montecarlo;
   montecarlo.setFilePath(path, bforce);
   montecarlo.setHash(ihash);
+  montecarlo.trace(btrace);
 
   // initializing simulation
   montecarlo.initialize(idata);
@@ -358,6 +365,9 @@ void usage()
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
+  "    --trace        for debuging and validation purposes only!\n"
+  "                   bulk simulated copula values to file copula.csv\n"
+  "                   bulk simulated default times to file defaults.csv\n"
   "    --help -h      show this message and exit\n"
   "    --version      show version and exit\n"
   "  return codes:\n"

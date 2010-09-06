@@ -95,8 +95,10 @@ class SimulationThread : public Thread
     void evalue();
     // aggregate value
     void aggregate();
+    // transfer data
+    bool transfer();
     // simulate default time
-    Date simTimeToDefault(int iborrower);
+    Date simTimeToDefault(double, int);
     // returns the copula value
     double getRandom(int iborrower);
 
