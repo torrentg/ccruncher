@@ -91,7 +91,7 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'hvx' opt
+  while getopts 'hv' opt
   do
     case $opt in
       v) version;

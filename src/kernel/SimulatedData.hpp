@@ -46,6 +46,8 @@ class SimulatedBorrower
 
     // borrower's rating index
     int irating;
+    // current simulated copula value
+    double rvalue;
     // current simulated default time
     Date dtime;
     // reference to borrower

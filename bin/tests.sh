@@ -24,8 +24,8 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=tests.sh
-numversion="1.4"
-svnversion="R454"
+numversion="1.6"
+svnversion="R631"
 retcode=0
 options=""
 
@@ -59,24 +59,18 @@ _EOF_
 usage() {
 
   cat << _EOF_
-  usage: $progname [options] <file1> <file2>
+  usage: $progname [options]
 
   description:
-    $progname computes the credit risk using the output data 
-    files generates by ccruncher using R. The report is 
-    stored in an html file in the same directory where output
-    data file resides. More info at http://www.ccruncher.net
-  arguments:
-    file     ccruncher output data file
+    $progname runs some functional tests to check that ccruncher
+    runs fine. More info at http://www.ccruncher.net
   options
     -h       show this message and exit
     -v       show version and exit
-  return codes:
-    0        OK. finished without errors
-    1        KO. finished with errors
+  return code:
+    val      number of failed tests (0 = OK)
   examples:
-    $progname portfolio-rest.out
-    $progname *.out
+    $progname
 
 _EOF_
 
@@ -87,7 +81,7 @@ _EOF_
 #-------------------------------------------------------------
 readconf() {
 
-  while getopts 'hvx' opt
+  while getopts 'hv' opt
   do
     case $opt in
       v) version;
@@ -114,7 +108,7 @@ readconf() {
 
   if [ $? != 0 ]; then
     echo "ccruncher not found in bin/ directory";
-    echo "please, execute command 'make install'";
+    echo "please, execute command 'bin/src2bin.sh'";
     exit 1;
   fi
 
@@ -125,7 +119,7 @@ readconf() {
 #-------------------------------------------------------------
 test01() {
 
-  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test01.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --path=data $CCRUNCHER/samples/test01.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test01.xml";

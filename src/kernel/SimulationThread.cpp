@@ -74,25 +74,25 @@ void ccruncher::SimulationThread::run()
   
   while(more)
   {
-      // generating random numbers
-      timer1.resume();
-      randomize();
-      timer1.stop();
+    // generating random numbers
+    timer1.resume();
+    randomize();
+    timer1.stop();
 
-      // simulating default time for each borrower
-      timer2.resume();
-      simulate();
-      timer2.stop();
+    // simulating default time for each borrower
+    timer2.resume();
+    simulate();
+    timer2.stop();
 
-      // portfolio evaluation
-      timer3.resume();
-      evalue();
-      aggregate();
-      timer3.stop();
+    // portfolio evaluation
+    timer3.resume();
+    evalue();
+    aggregate();
+    timer3.stop();
 
-      // data transfer
-      more = montecarlo.append(losses);
-    }
+    // data transfer
+    more = transfer();
+  }
 }
 
 //===========================================================================
@@ -121,14 +121,13 @@ void ccruncher::SimulationThread::randomize()
 
 //===========================================================================
 // simulate time-to-default for each borrower
-// put result in rpaths[iborrower]
 //===========================================================================
 void ccruncher::SimulationThread::simulate()
 {
-  // simulates default times
   for (unsigned int i=0; i<borrowers.size(); i++) 
   {
-    borrowers[i].dtime = simTimeToDefault(i);
+    borrowers[i].rvalue = getRandom(i);
+    borrowers[i].dtime = simTimeToDefault(borrowers[i].rvalue, borrowers[i].irating);
   }
 }
 
@@ -155,18 +154,11 @@ double ccruncher::SimulationThread::getRandom(int iborrower)
   }
 }
 
-
 //===========================================================================
-// given a borrower, simule time to default
+// simule time to default
 //===========================================================================
-Date ccruncher::SimulationThread::simTimeToDefault(int iborrower)
+Date ccruncher::SimulationThread::simTimeToDefault(double u, int r)
 {
-  // rating at t0 is initial rating
-  int r = borrowers[iborrower].irating;
-
-  // getting random number U[0,1] (correlated with rest of borrowers...)
-  double u = getRandom(iborrower);
-
   // simulate time where this borrower defaults (in months)
   double t = survival.inverse(r, u);
 
@@ -213,6 +205,14 @@ void ccruncher::SimulationThread::aggregate()
 	  losses[isegmentation][isegment] += assets[i].loss;
     }
   }
+}
+
+//===========================================================================
+// transfer simulated data to master
+//===========================================================================
+bool ccruncher::SimulationThread::transfer()
+{
+  return montecarlo.append(losses, borrowers);
 }
 
 //===========================================================================
