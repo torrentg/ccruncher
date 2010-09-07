@@ -155,7 +155,7 @@ _EOF_
 #-------------------------------------------------------------
 test02() {
 
-  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test02.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test02.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test02.xml";
@@ -197,7 +197,7 @@ _EOF_
 #-------------------------------------------------------------
 test03() {
 
-  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test03.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test03.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test03.xml";
@@ -246,7 +246,7 @@ _EOF_
 #-------------------------------------------------------------
 test04() {
 
-  $CCRUNCHER/bin/ccruncher -f --lcopula --path=data $CCRUNCHER/samples/test04.xml > /dev/null;
+  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test04.xml > /dev/null;
 
   if [ $? != 0 ]; then
     echo "error: ccruncher has reported an error executing file samples/test04.xml";
