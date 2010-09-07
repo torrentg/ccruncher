@@ -15,7 +15,6 @@
 #
 # retcodes:
 #   0    : OK
-#   other: KO
 #
 #=============================================================
 
@@ -26,8 +25,6 @@ CCRUNCHER=`dirname $0`/..
 progname=tests.sh
 numversion="1.6"
 svnversion="R631"
-retcode=0
-options=""
 
 #-------------------------------------------------------------
 # version function
@@ -115,188 +112,6 @@ readconf() {
 }
 
 #-------------------------------------------------------------
-# performs test 1
-#-------------------------------------------------------------
-test01() {
-
-  $CCRUNCHER/bin/ccruncher -f --path=data $CCRUNCHER/samples/test01.xml > /dev/null;
-
-  if [ $? != 0 ]; then
-    echo "error: ccruncher has reported an error executing file samples/test01.xml";
-    return $?;
-  fi
-
-  R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
-    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
-    #computes observed frequencies
-    obs <- tabulate(data[,1]+1, 2);
-    #fixes theoretical probabilities
-    prob <- c(0.9, 0.1);
-    #performs chi square test
-    cst <- chisq.test(obs, p=prob)
-    #if p-value > 0.01 than distribution is correct
-    if (cst\$p.value > 0.01) { 
-      cat("test01 passed\n");
-      quit(save="no", status=0);
-    }
-    else {
-      cat("test01 failed\n");
-      quit(save="no", status=1);
-    }
-_EOF_
-
-  return $?;
-
-}
-
-#-------------------------------------------------------------
-# performs test 2
-#-------------------------------------------------------------
-test02() {
-
-  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test02.xml > /dev/null;
-
-  if [ $? != 0 ]; then
-    echo "error: ccruncher has reported an error executing file samples/test02.xml";
-    return $?;
-  fi
-
-  R --vanilla --slave << _EOF_
-    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
-    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
-    #computes observed frequencies
-    obs <- tabulate(data[,1]+1, 3);
-    #fixes theoretical probabilities
-    prob <- c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1);
-    #performs chi square test
-    cst <- chisq.test(obs, p=prob)
-    #if p-value > 0.01 than distribution is correct
-    if (cst\$p.value <= 0.01) { 
-      cat("test02 failed (chisq test)\n");
-      quit(save="no", status=1);
-    }
-    #load copula data
-    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
-    correl <- cor(data[,1],data[,2])
-    if (abs(correl) > 0.05) { 
-      cat("test02 failed (correlation test)\n");
-      quit(save="no", status=1);
-    }
-    #exit
-    cat("test02 passed\n");
-    quit(save="no", status=0);
-_EOF_
-
-  return $?;
-
-}
-
-#-------------------------------------------------------------
-# performs test 3
-#-------------------------------------------------------------
-test03() {
-
-  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test03.xml > /dev/null;
-
-  if [ $? != 0 ]; then
-    echo "error: ccruncher has reported an error executing file samples/test03.xml";
-    return $?;
-  fi
-
-  R --vanilla --slave << _EOF_
-    options(warn=-1)
-    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
-    data <- ccruncher.read("$CCRUNCHER/data/portfolio.csv");
-    #computes observed frequencies
-    obs <- tabulate(data[,1]+1, 101);
-    #fixes theoretical probabilities
-    prob <- dbinom(0:100, 100, 0.1);
-    #performs chi square test
-    cst <- chisq.test(obs, p=prob);
-    #if p-value > 0.01 than distribution is correct
-    if (cst\$p.value <= 0.01) { 
-      cat("test03 failed (chisq test)\n");
-      quit(save="no", status=1);
-    }
-    #load copula data
-    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
-    correl <- cor(data)
-    for(i in 1:length(data))
-    {
-       for(j in 1:i)
-       {
-         if (i!=j && abs(correl[i,j]) > 0.05) { 
-           cat("test03 failed (correlation test)\n");
-           quit(save="no", status=1);
-         }
-       }
-    }
-    #exit
-    cat("test03 passed\n");
-    quit(save="no", status=0);
-_EOF_
-
-  return $?;
-
-}
-
-#-------------------------------------------------------------
-# performs test 4
-#-------------------------------------------------------------
-test04() {
-
-  $CCRUNCHER/bin/ccruncher -f --trace --path=data $CCRUNCHER/samples/test04.xml > /dev/null;
-
-  if [ $? != 0 ]; then
-    echo "error: ccruncher has reported an error executing file samples/test04.xml";
-    return $?;
-  fi
-
-  R --vanilla --slave << _EOF_
-    #load copula data
-    data <- read.csv("$CCRUNCHER/data/copula.csv", header=TRUE)
-    correl <- cor(data)
-    for(i in 1:50)
-    {
-       for(j in 1:50)
-       {
-         if (i!=j && abs(correl[i,j]-0.1) > 0.025) { 
-           cat("test04 failed (correlation test)\n");
-           quit(save="no", status=1);
-         }
-       }
-    }
-    for(i in 51:100)
-    {
-       for(j in 51:100)
-       {
-         if (i!=j && abs(correl[i,j]-0.15) > 0.025) { 
-           cat("test04 failed (correlation test)\n");
-           quit(save="no", status=1);
-         }
-       }
-    }
-    for(i in 1:50)
-    {
-       for(j in 51:100)
-       {
-         if (i!=j && abs(correl[i,j]-0.05) > 0.025) { 
-           cat("test04 failed (correlation test)\n");
-           quit(save="no", status=1);
-         }
-       }
-    }
-    #exit
-    cat("test04 passed\n");
-    quit(save="no", status=0);
-_EOF_
-
-  return $?;
-
-}
-
-#-------------------------------------------------------------
 # main function
 #-------------------------------------------------------------
 
@@ -304,25 +119,25 @@ readconf $@;
 
 #copyright;
 
-test01;
-if [ $? != 0 ]; then
-  retcode=`expr $retcode + 1`;
-fi
+cd $CCRUNCHER;
 
-test02;
-if [ $? != 0 ]; then
-  retcode=`expr $retcode + 1`;
-fi
+rm -rf data/test01;
+rm -rf data/test02;
+rm -rf data/test03;
+rm -rf data/test04;
 
-test03;
-if [ $? != 0 ]; then
-  retcode=`expr $retcode + 1`;
-fi
+./bin/ccruncher -f --trace --path=data/test01 samples/test01.xml;
+./bin/ccruncher -f --trace --path=data/test02 samples/test02.xml;
+./bin/ccruncher -f --trace --path=data/test03 samples/test03.xml;
+./bin/ccruncher -f --trace --path=data/test04 samples/test04.xml;
 
-test04;
-if [ $? != 0 ]; then
-  retcode=`expr $retcode + 1`;
-fi
-
-exit $retcode;
+R --vanilla --slave << _EOF_
+    source("./bin/ccreport.R", echo=FALSE);
+    source("./bin/tests.R", echo=FALSE);
+    options(warn=-1)
+    test01();
+    test02();
+    test03();
+    test04();
+_EOF_
 

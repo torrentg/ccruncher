@@ -176,7 +176,9 @@ isUniform <- function(data)
 #===========================================================================
 isComplete <- function(segmentation1, segmentation2)
 {
-  if (length(segmentation1) != length(segmentation2))
+  if (length(segmentation1) <= 0 || 
+      length(segmentation2) <= 0 || 
+      length(segmentation1[[1]]) != length(segmentation2[[1]]) )
   {
     return(FALSE);
   }
@@ -186,6 +188,7 @@ isComplete <- function(segmentation1, segmentation2)
   
   aux <- apply(segmentation1,1,sum) - apply(segmentation2,1,sum)
   if (length(aux[aux>epsilon])) { 
+cat(aux[aux>epsilon])
     return(FALSE);
   }
 
@@ -246,7 +249,7 @@ test01 <- function()
 #===========================================================================
 # test02
 #===========================================================================
-test02 <- function(filename, hasvalues)
+test02 <- function()
 {
   cat("test02\n");
   
@@ -287,7 +290,7 @@ test02 <- function(filename, hasvalues)
 #===========================================================================
 # test03
 #===========================================================================
-test03 <- function(filename)
+test03 <- function()
 {
   cat("test03\n");
   
@@ -317,7 +320,6 @@ test03 <- function(filename)
   #checking copula (correlations)
   cat("  copula correlations: ")
   correlations = diag(100)
-  options(warn=-1)
   if (checkCorrelations(copula, correlations)) {
     cat("OK\n");
   } else { 
@@ -336,7 +338,7 @@ test03 <- function(filename)
 # example
 #   test4("copula.csv", correls)
 #===========================================================================
-test04 <- function(filename, matrix)
+test04 <- function()
 {
   cat("test04\n");
   
