@@ -50,7 +50,6 @@
     rate+
 )>
 <!ATTLIST interest
-    name ID #REQUIRED
     date CDATA #REQUIRED
 >
 
