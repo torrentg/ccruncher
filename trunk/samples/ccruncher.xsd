@@ -5,16 +5,12 @@
 	xmlns="http://www.ccruncher.net"
 	targetNamespace="http://www.ccruncher.net"
 	elementFormDefault="qualified">
-	
+
 	<!--
 		  if you desire debug your xml add these lines to main tag:
 		  xmlns="http://www.ccruncher.net"
 		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://www.ccruncher.net ccruncher.xsd"
-		
-		  other way to do the same is:
-		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		  xsi:noNamespaceSchemaLocation="ccruncher.xsd"
 		
 		  export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
 		  java dom.Writer -v -s sample01.xml

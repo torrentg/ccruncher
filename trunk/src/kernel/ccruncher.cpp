@@ -374,9 +374,9 @@ void usage()
   "    0              OK. finished without errors\n"
   "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher -f --path=data/samele01 samples/sample01.xml\n"
-  "    ccruncher -fv --hash=100 --threads=4 --path=data/ test01.xml\n"
-  "    ccruncher -fv --hash=100 --threads=4 --path=data/ test100.xml.gz\n"
+  "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher -fv --hash=100 --threads=4 --path=data/ samples/test01.xml\n"
+  "    ccruncher -fv --hash=100 --threads=4 --path=data/ samples/test100.xml\n"
   << endl;
 }
 
