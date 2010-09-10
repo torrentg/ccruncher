@@ -32,6 +32,7 @@
 // --------------------------------------------------------------------------
 
 #define EPSILON 1E-12
+#define COEFS(i,j) (coefs[(i)+(j)*N])
 
 //===========================================================================
 // Description:
@@ -148,7 +149,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   M = x.M;
   N = x.N;
   n = Arrays<int>::allocVector(M, x.n);
-  coefs = Arrays<double>::allocMatrix(N, M, x.coefs);
+  coefs = Arrays<double>::allocVector(N*M, x.coefs);
   diag = Arrays<double>::allocVector(N, x.diag);
   spe = Arrays<int>::allocVector(N, x.spe);
   cnum = x.cnum;
@@ -319,7 +320,7 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
   }
 
   // allocating memory for cholesky coeficients
-  coefs = Arrays<double>::allocMatrix(N, M, 0.0);
+  coefs = Arrays<double>::allocVector(N*M, 0.0);
 
   // allocating memory for diagonal cholesky coeficients
   diag = Arrays<double>::allocVector(N, 0.0);
@@ -370,7 +371,7 @@ void ccruncher::BlockMatrixChol::reset()
 
   // deallocating matrix coefs
   if (coefs != NULL) {
-    Arrays<double>::deallocMatrix(coefs, N);
+    Arrays<double>::deallocVector(coefs);
     coefs = NULL;
   }
 
@@ -408,13 +409,13 @@ double ccruncher::BlockMatrixChol::get(int row, int col)
   assert(row >= 0 && row < N);
   assert(col >= 0 && col < N);
 
-  if (col == row)
+  if (col < row)
+  {
+    return COEFS(col,spe[row]);
+  }
+  else if (col == row)
   {
     return diag[col];
-  }
-  else if (col < row)
-  {
-    return coefs[col][spe[row]];
   }
   else
   {
@@ -512,7 +513,7 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
       // retrieving A[i][j] value
       sum = A[iaux][iaux] - aprod(i, i+1, i);
 
-      coefs[i][iaux] = sum/diag[i];
+      COEFS(i,iaux) = sum/diag[i];
     }
 
     // move to next sector
@@ -534,7 +535,7 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
       // retrieving A[i][j] value
       sum = A[iaux][jaux] - aprod(i, j, i);
 
-      coefs[i][jaux] = sum/diag[i];
+      COEFS(i,jaux) = sum/diag[i];
     }
   }
 }
@@ -563,7 +564,7 @@ double ccruncher::BlockMatrixChol::aprod(int row, int col, int order)
   // computing internal auto-prod
   for(int i=0;i<order;i++)
   {
-    ret += coefs[i][sper] * coefs[i][spec];
+    ret += COEFS(i,sper) * COEFS(i,spec);
   }
 
   // return value

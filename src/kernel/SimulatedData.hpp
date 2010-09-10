@@ -46,10 +46,6 @@ class SimulatedBorrower
 
     // borrower's rating index
     int irating;
-    // current simulated copula value
-    double rvalue;
-    // current simulated default time
-    Date dtime;
     // reference to borrower
     Borrower *ref;
 
@@ -75,8 +71,6 @@ class SimulatedAsset
     Date maxdate;
     // borrower index (see borrowers vector)
     int iborrower;
-    // simulated loss
-    double loss;
     // reference to asset
     Asset *ref;
     

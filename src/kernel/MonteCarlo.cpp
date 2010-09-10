@@ -96,7 +96,6 @@ void ccruncher::MonteCarlo::release()
   if (btrace) 
   {
     fcopulas.close();
-    fdefaults.close();
   }
 }
 
@@ -461,14 +460,18 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   // creating and launching simulation threads
   timer.start();
   nfthreads = numthreads;
+  vector<Copula*> copulas(numthreads, NULL);
   numiterations = 0;
   timer4.reset();
   pthread_mutex_init(&mutex, NULL);
   threads.assign(numthreads, NULL);
   for(int i=0; i<numthreads; i++)
   {
-    threads[i] = new SimulationThread(*this, seed+i);
-    threads[i]->start(); // to avoid threads use run()
+    if (i == 0) copulas[i] = copula;
+    else copulas[i] = copula->clone(false);
+    copulas[i]->setSeed(seed+i);
+    threads[i] = new SimulationThread(*this, copulas[i]);
+    threads[i]->start(); // to work without threads use run() instead of start()
   }
 
   // awaiting threads
@@ -488,6 +491,13 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
     timer4.stop();
   }
 
+  // destroying copulas (except main copula)
+  for(int i=1; i<numthreads; i++)
+  {
+    delete copulas[i];
+    copulas[i] = NULL;
+  }
+
   // exit function
   Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
   Logger::trace("elapsed time simulating default times", Timer::format(etime2/numthreads));
@@ -502,7 +512,7 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, vector<SimulatedBorrower> &x)
+bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double *u)
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
@@ -520,7 +530,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, vector<Simul
     // trace values
     if (btrace)
     {
-      printTrace(x);
+      printTrace(u);
     }
 
     // counter increment
@@ -595,10 +605,10 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
   if (btrace)
   {
     // simulated copula values file
-    string filename1 = dirpath + "copula.csv";
+    string filename = dirpath + "copula.csv";
     try
     {
-      fcopulas.open(filename1.c_str(), ios::out|ios::trunc);
+      fcopulas.open(filename.c_str(), ios::out|ios::trunc);
       for(unsigned int i=0; i<borrowers.size(); i++)
       {
         fcopulas << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
@@ -607,23 +617,7 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
     }
     catch(...)
     {
-      throw Exception("error writing file " + filename1);
-    }
-    
-    // simulated default times file
-    string filename2 = dirpath + "defaults.csv";
-    try
-    {
-      fdefaults.open(filename2.c_str(), ios::out|ios::trunc);
-      for(unsigned int i=0; i<borrowers.size(); i++)
-      {
-        fdefaults << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
-      }
-      fdefaults << endl;
-    }
-    catch(...)
-    {
-      throw Exception("error writing file " + filename2);
+      throw Exception("error writing file " + filename);
     }
   }
 }
@@ -631,14 +625,12 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
 //===========================================================================
 // printTrace
 //===========================================================================
-void ccruncher::MonteCarlo::printTrace(vector<SimulatedBorrower> &x) throw(Exception)
+void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
 {
-  for(unsigned int i=0; i<x.size(); i++) 
+  for(unsigned int i=0; i<borrowers.size(); i++) 
   {
-    fcopulas << x[i].rvalue << (i!=x.size()-1?", ":"");
-    fdefaults << x[i].dtime << (i!=x.size()-1?", ":"");
+    fcopulas << u[i] << (i!=borrowers.size()-1?", ":"");
   }
   fcopulas << "\n";
-  fdefaults << "\n";
 }
 

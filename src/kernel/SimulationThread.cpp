@@ -21,32 +21,39 @@
 //===========================================================================
 
 #include "kernel/SimulationThread.hpp"
+#include "utils/Arrays.hpp"
 #include <cassert>
+
+// --------------------------------------------------------------------------
+
+#define ISEGMENTS(i,j) (isegments[(j)+(i)*numassets])
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, long seed) : Thread(), montecarlo(mc)
+ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : 
+  Thread(), montecarlo(mc), copula(cop_), dtimes(0), alosses(0), isegments(0)
 {
   borrowers = montecarlo.borrowers;
+  dtimes = vector<Date>(borrowers.size(), NAD);
   assets = montecarlo.assets;
+  alosses = vector<double>(assets.size(), NAN);
+  numassets = assets.size();
   time0 = montecarlo.time0;
   timeT = montecarlo.timeT;
   survival = montecarlo.survival;
-  copula = montecarlo.copula->clone();
-  copula->setSeed(seed);
   antithetic = montecarlo.antithetic;
   reversed = montecarlo.reversed;
   numsegmentations = montecarlo.segmentations->size();
   losses.resize(numsegmentations);
-  isegments.assign(numsegmentations, vector<int>(assets.size()));
+  isegments = vector<int>(numassets*numsegmentations, 0);
   for(int isegmentation=0; isegmentation<numsegmentations; isegmentation++)
   {
     losses[isegmentation] = vector<double>(montecarlo.segmentations->getSegmentation(isegmentation).size(), 0.0);
     
-    for(unsigned int i=0; i<assets.size(); i++)
+    for(int i=0; i<numassets; i++)
     {
-	  isegments[isegmentation][i] = assets[i].ref->getSegment(isegmentation);
+	  ISEGMENTS(isegmentation,i) = assets[i].ref->getSegment(isegmentation);
     }
   }
 }
@@ -56,10 +63,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, long seed) : Threa
 //===========================================================================
 ccruncher::SimulationThread::~SimulationThread()
 {
-  if (copula != NULL) {
-    delete copula;
-    copula = NULL;
-  }
+  // nothing to do
 }
 
 //===========================================================================
@@ -79,7 +83,7 @@ void ccruncher::SimulationThread::run()
     randomize();
     timer1.stop();
 
-    // simulating default time for each borrower
+    // simulating default times
     timer2.resume();
     simulate();
     timer2.stop();
@@ -126,8 +130,7 @@ void ccruncher::SimulationThread::simulate()
 {
   for (unsigned int i=0; i<borrowers.size(); i++) 
   {
-    borrowers[i].rvalue = getRandom(i);
-    borrowers[i].dtime = simTimeToDefault(borrowers[i].rvalue, borrowers[i].irating);
+    dtimes[i] = simTimeToDefault(getRandom(i), borrowers[i].irating);
   }
 }
 
@@ -172,17 +175,17 @@ Date ccruncher::SimulationThread::simTimeToDefault(double u, int r)
 //===========================================================================
 void ccruncher::SimulationThread::evalue()
 {
-  for(unsigned int i=0; i<assets.size(); i++)
+  for(int i=0; i<numassets; i++)
   {
-    Date t = borrowers[assets[i].iborrower].dtime;
+    Date t = dtimes[assets[i].iborrower];
     
     if (assets[i].mindate <= t && t <= assets[i].maxdate)
     {
-      assets[i].loss = assets[i].ref->getLoss(t);
+      alosses[i] = assets[i].ref->getLoss(t);
     }
     else
     {
-      assets[i].loss = 0.0;
+      alosses[i] = 0.0;
     }
   }
 }
@@ -198,11 +201,11 @@ void ccruncher::SimulationThread::aggregate()
     {
 	  losses[isegmentation][i] = 0.0;
     }
-        
-    for(unsigned int i=0; i<assets.size(); i++)
+
+    for(int i=0; i<numassets; i++)
     {
-      int isegment = isegments[isegmentation][i];
-	  losses[isegmentation][isegment] += assets[i].loss;
+      int isegment = ISEGMENTS(isegmentation,i);
+	  losses[isegmentation][isegment] += alosses[i];
     }
   }
 }
@@ -212,7 +215,7 @@ void ccruncher::SimulationThread::aggregate()
 //===========================================================================
 bool ccruncher::SimulationThread::transfer()
 {
-  return montecarlo.append(losses, borrowers);
+  return montecarlo.append(losses, copula->get());
 }
 
 //===========================================================================

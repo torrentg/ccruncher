@@ -31,8 +31,6 @@ ccruncher::SimulatedBorrower::SimulatedBorrower(Borrower *borrower)
 {
   assert(borrower != NULL);
   irating = borrower->irating;
-  rvalue = NAN;
-  dtime = NAD;
   ref = borrower;
 }
 
@@ -45,7 +43,6 @@ ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset, int iborrower_)
   iborrower = iborrower_;
   mindate = asset->getMinDate();
   maxdate = asset->getMaxDate();
-  loss = 0.0;
   ref = asset;
 }
 

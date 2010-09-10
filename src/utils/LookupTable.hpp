@@ -59,6 +59,8 @@ class LookupTable
     LookupTable();
     // constructor
     LookupTable(double minv, double maxv, const vector<double> &vals) throw(Exception);
+    // copyp constructor
+    LookupTable(const LookupTable &x) throw(Exception);
     // lookup table initialization
     void init(double minv, double maxv, const vector<double> &vals) throw(Exception);
     // number of steps

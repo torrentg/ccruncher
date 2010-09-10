@@ -60,6 +60,10 @@ class SimulationThread : public Thread
     vector<SimulatedBorrower> borrowers;
     // list of simulated assets
     vector<SimulatedAsset> assets;
+    // borrowers default times
+    vector<Date> dtimes;
+    // assets losses
+    vector<double> alosses;
     // initial date
     Date time0;
     // date where risk is computed
@@ -72,10 +76,12 @@ class SimulationThread : public Thread
     bool antithetic;
     // management flag for antithetic method (default=false)
     bool reversed;
+    // number of assets
+    int numassets;
     // number of segmentations
     int numsegmentations;
-    // asset segment indexes by segmentation
-    vector<vector<int> > isegments;
+    // asset segment indexes by segmentation (matrix size=numsegmentationsxnumassets)
+    vector<int> isegments;
     // asset loss values by segmentation
     vector<vector<double> > losses;
     // elapsed time creating random numbers
@@ -105,7 +111,7 @@ class SimulationThread : public Thread
   public:
 
     // constructor
-    SimulationThread(MonteCarlo &, long);
+    SimulationThread(MonteCarlo &, Copula *);
     // destructor
     ~SimulationThread();
     // thread main function
