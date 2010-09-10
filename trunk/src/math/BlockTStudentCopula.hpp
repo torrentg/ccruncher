@@ -52,7 +52,7 @@ class BlockTStudentCopula : public Copula
     // number of degrees of freedom
     double ndf;
     // cholesky matrix
-    BlockMatrixChol chol;
+    BlockMatrixChol *chol;
     // internal buffer
     double *aux1;
     // internal buffer
@@ -60,7 +60,9 @@ class BlockTStudentCopula : public Copula
     // random number generator
     Random random;
     // lookup table
-    LookupTable lut;
+    LookupTable *lut;
+    // chol & lut allocation flag
+    bool owner;
 
   private:
 
@@ -80,17 +82,19 @@ class BlockTStudentCopula : public Copula
     // constructor
     BlockTStudentCopula(double **C, int *n, int m, double ndf) throw(Exception);
     // copy constructor
-    BlockTStudentCopula(const BlockTStudentCopula &) throw(Exception);
+    BlockTStudentCopula(const BlockTStudentCopula &, bool alloc=true) throw(Exception);
     // destructor
     ~BlockTStudentCopula();
     // clone
-    Copula* clone();
+    Copula* clone(bool alloc=true);
     // returns the copula size (n)
-    int size();
+    int size() const;
     // simulates a copula realization
     void next();
     // returns i-th component
-    double get(int);
+    double get(int) const;
+    // returns simulated values
+    const double* get() const;
     // random number generator seed
     void setSeed(long);
     // returns the cholesky condition number

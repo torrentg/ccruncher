@@ -39,15 +39,17 @@ class Copula
   public:
 
     // copula size
-    virtual int size() = 0;
+    virtual int size() const = 0;
     // simulates a copula realization
     virtual void next() = 0;
     // returns i-th component
-    virtual double get(int) = 0;
+    virtual double get(int) const = 0;
+    // returns simulated values
+    virtual const double* get() const = 0;
     // random number generator seed
     virtual void setSeed(long) = 0;
     // object replication
-    virtual Copula* clone() = 0;
+    virtual Copula* clone(bool alloc=true) = 0;
     // destructor
     virtual ~Copula() {};
 

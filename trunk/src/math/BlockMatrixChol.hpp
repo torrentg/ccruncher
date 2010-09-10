@@ -46,7 +46,7 @@ class BlockMatrixChol
     // number of elements in each sector (array size = M)
     int *n;
     // cholesky coeficients (matrix size = NxM)
-    double **coefs;
+    double *coefs;
     // diagonal cholesky coeficients (array size = N)
     double *diag;
     // for each element (0...N), gives his sector (array size = N)

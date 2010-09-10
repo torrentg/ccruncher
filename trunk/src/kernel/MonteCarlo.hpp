@@ -104,8 +104,6 @@ class MonteCarlo
     bool btrace;
     // file where copula values are stored (if btrace is set)
     ofstream fcopulas;
-    // file where default times are stored (if btrace is set)
-    ofstream fdefaults;
 
   private:
   
@@ -124,9 +122,9 @@ class MonteCarlo
     // initialize trace files
     void initTrace() throw(Exception);
     // print trace
-    void printTrace(vector<SimulatedBorrower> &) throw(Exception);
+    void printTrace(const double *) throw(Exception);
     // append simulation result
-    bool append(vector<vector<double> > &, vector<SimulatedBorrower> &);
+    bool append(vector<vector<double> > &, const double *);
 
   public:
 

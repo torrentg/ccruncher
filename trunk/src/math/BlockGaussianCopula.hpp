@@ -50,7 +50,7 @@ class BlockGaussianCopula : public Copula
     // number of sectors
     int m;
     // cholesky matrix
-    BlockMatrixChol chol;
+    BlockMatrixChol *chol;
     // internal buffer
     double *aux1;
     // internal buffer
@@ -58,7 +58,9 @@ class BlockGaussianCopula : public Copula
     // random number generator
     Random random;
     // lookup table
-    LookupTable lut;
+    LookupTable *lut;
+    // chol & lut allocation flag
+    bool owner;
 
   private:
   
@@ -78,17 +80,19 @@ class BlockGaussianCopula : public Copula
     // constructor
     BlockGaussianCopula(double **C, int *n, int m) throw(Exception);
     // copy constructor
-    BlockGaussianCopula(const BlockGaussianCopula &) throw(Exception);
+    BlockGaussianCopula(const BlockGaussianCopula &, bool alloc=true) throw(Exception);
     // destructor
     ~BlockGaussianCopula();
     // clone
-    Copula* clone();
+    Copula* clone(bool alloc=true);
     // returns the copula size (n)
-    int size();
+    int size() const;
     // simulates a copula realization
     void next();
     // returns i-th component
-    double get(int);
+    double get(int) const;
+    // returns simulated values
+    const double* get() const;
     // random number generator seed
     void setSeed(long);
     // returns the cholesky condition number

@@ -46,7 +46,9 @@ void ccruncher::BlockTStudentCopula::reset()
   ndf = -1.0;
   aux1 = NULL;
   aux2 = NULL;
-  lut = LookupTable();
+  chol = NULL;
+  lut = NULL;
+  owner = true;
 }
 
 //===========================================================================
@@ -63,21 +65,41 @@ void ccruncher::BlockTStudentCopula::finalize()
     Arrays<double>::deallocVector(aux2);
     aux2 = NULL;
   }
+  
+  if (lut != NULL && owner == true) {
+    delete lut;
+    lut = NULL;
+  }
+  
+  if (chol != NULL && owner == true) {
+    delete chol;
+    chol = NULL;
+  }
 }
 
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x) throw(Exception) : Copula()
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x, bool alloc) throw(Exception) : 
+  Copula(), chol(NULL), lut(NULL)
 {
   reset();
   n = x.n;
   m = x.m;
   ndf = x.ndf;
-  chol = BlockMatrixChol(x.chol);
+  owner = alloc;
+  if (alloc == true)
+  {
+    chol = new BlockMatrixChol(*x.chol);
+    lut = new LookupTable(*x.lut);
+  }
+  else
+  {
+    chol = x.chol;
+    lut = x.lut;
+  }
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
-  lut = x.lut;
   next();
 }
 
@@ -87,7 +109,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 // n: number of elements at each sector
 // m: number of sectors
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception)
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception) : Copula()
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
@@ -116,11 +138,11 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
     }
 
     // computing cholesky factorization
-    chol = BlockMatrixChol(correls, n_, m_);
+    chol = new BlockMatrixChol(correls, n_, m_);
     Arrays<double>::deallocMatrix(correls, m_);
 
     // allocating mem for temp arrays
-    n = chol.getDim();
+    n = chol->getDim();
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
 
@@ -149,9 +171,9 @@ ccruncher::BlockTStudentCopula::~BlockTStudentCopula()
 //===========================================================================
 // clone
 //===========================================================================
-Copula* ccruncher::BlockTStudentCopula::clone()
+Copula* ccruncher::BlockTStudentCopula::clone(bool alloc)
 {
-  return new BlockTStudentCopula(*this);
+  return new BlockTStudentCopula(*this, alloc);
 }
 
 //===========================================================================
@@ -177,13 +199,13 @@ void ccruncher::BlockTStudentCopula::initLUT() throw(Exception)
   maxv += steplength;
   values.push_back(1.0);
 
-  lut = LookupTable(minv, maxv, values);
+  lut = new LookupTable(minv, maxv, values);
 }
 
 //===========================================================================
 // size. returns number of components
 //===========================================================================
-int ccruncher::BlockTStudentCopula::size()
+int ccruncher::BlockTStudentCopula::size() const
 {
   return n;
 }
@@ -209,7 +231,7 @@ void ccruncher::BlockTStudentCopula::randNm()
     aux1[i] = random.nextGaussian();
   }
 
-  chol.mult(aux1, aux2);
+  chol->mult(aux1, aux2);
 }
 
 //===========================================================================
@@ -232,7 +254,7 @@ void ccruncher::BlockTStudentCopula::next()
     // t-student lut covers only positive values
     // negative values are computed as 1-lut(abs(x))
     double x = factor*aux2[i];
-    double y = lut.evalue(abs(x));
+    double y = lut->evalue(abs(x));
     aux1[i] = (x<0.0?1.0-y:y);
   }
 }
@@ -240,7 +262,7 @@ void ccruncher::BlockTStudentCopula::next()
 //===========================================================================
 // Return components i-th from current copula
 //===========================================================================
-double ccruncher::BlockTStudentCopula::get(int i)
+double ccruncher::BlockTStudentCopula::get(int i) const
 {
   if (i < 0 || i >= n)
   {
@@ -250,6 +272,14 @@ double ccruncher::BlockTStudentCopula::get(int i)
   {
     return aux1[i];
   }
+}
+
+//===========================================================================
+// Returns simulated values
+//===========================================================================
+const double* ccruncher::BlockTStudentCopula::get() const
+{
+  return aux1;
 }
 
 //===========================================================================
@@ -265,6 +295,6 @@ void ccruncher::BlockTStudentCopula::setSeed(long k)
 //===========================================================================
 double ccruncher::BlockTStudentCopula::getConditionNumber()
 {
-  return chol.getConditionNumber();
+  return chol->getConditionNumber();
 }
 

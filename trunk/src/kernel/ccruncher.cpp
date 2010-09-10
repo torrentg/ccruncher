@@ -367,7 +367,6 @@ void usage()
   "    --hash=num     print '.' for each num simulations (default=0)\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
-  "                   bulk simulated default times to file defaults.csv\n"
   "    --help -h      show this message and exit\n"
   "    --version      show version and exit\n"
   "  return codes:\n"

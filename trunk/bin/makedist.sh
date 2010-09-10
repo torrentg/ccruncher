@@ -24,8 +24,7 @@ numversion="1.6"
 svnversion="R586"
 disttype="xxx"
 PACKAGE="ccruncher"
-pathexes=""
-retcode=0
+pathexes="."
 
 #-------------------------------------------------------------
 # usage function
@@ -209,6 +208,23 @@ makeBinDist() {
 # -------------------------------------------------------------
 makeWinDist() {
 
+  if [ ! -f $pathexes/ccruncher.exe ]; then 
+    echo "file $pathexes/ccruncher.exe not found" 
+    return;
+  fi
+  if [ ! -f $pathexes/libexpat.dll ]; then 
+    echo "file $pathexes/libexpat.dll not found" 
+    return;
+  fi
+  if [ ! -f $pathexes/pthreadVCE2.dll ]; then 
+    echo "file $pathexes/pthreadVCE2.dll not found" 
+    return;
+  fi
+  if [ ! -f $pathexes/zlib1.dll ]; then 
+    echo "file $pathexes/zlib1.dll not found" 
+    return;
+  fi
+
   # local variables
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
@@ -282,12 +298,4 @@ case $disttype in
          exit 1;;
 
 esac
-
-if [ $retcode = 0 ]; then
-  echo "done!";
-else
-  echo "finished with problems";
-fi
-
-exit $retcode;
 

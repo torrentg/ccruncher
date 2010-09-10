@@ -45,6 +45,14 @@ ccruncher::LookupTable::LookupTable(double xmin_, double xmax_, const vector<dou
 }
 
 //===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::LookupTable::LookupTable(const LookupTable &x) throw(Exception)
+{
+  *this = x;
+}
+
+//===========================================================================
 // init
 //===========================================================================
 void ccruncher::LookupTable::init(double xmin_, double xmax_, const vector<double> &values_) throw(Exception)
