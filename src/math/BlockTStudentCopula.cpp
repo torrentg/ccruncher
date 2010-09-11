@@ -24,6 +24,7 @@
 #include <cfloat>
 #include <cstdlib>
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_randist.h>
 #include "math/BlockTStudentCopula.hpp"
 #include "utils/Arrays.hpp"
 #include <cassert>
@@ -48,6 +49,7 @@ void ccruncher::BlockTStudentCopula::reset()
   aux2 = NULL;
   chol = NULL;
   lut = NULL;
+  rng = NULL;
   owner = true;
 }
 
@@ -56,6 +58,11 @@ void ccruncher::BlockTStudentCopula::reset()
 //===========================================================================
 void ccruncher::BlockTStudentCopula::finalize()
 {
+  if (rng != NULL) {
+    gsl_rng_free(rng);
+    rng = NULL;
+  }
+
   if (aux1 != NULL) {
     Arrays<double>::deallocVector(aux1);
     aux1 = NULL;
@@ -81,12 +88,13 @@ void ccruncher::BlockTStudentCopula::finalize()
 // copy constructor
 //===========================================================================
 ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x, bool alloc) throw(Exception) : 
-  Copula(), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL), lut(NULL)
 {
   reset();
   n = x.n;
   m = x.m;
   ndf = x.ndf;
+  rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = alloc;
   if (alloc == true)
   {
@@ -109,15 +117,19 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 // n: number of elements at each sector
 // m: number of sectors
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception) : Copula()
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception) : 
+  Copula(), rng(NULL), chol(NULL), lut(NULL)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
   assert(m_ > 0);
   double **correls = NULL;
+  
   reset();
   m = m_;
-
+  rng = gsl_rng_alloc(gsl_rng_mt19937);
+  owner = true;
+  
   if (ndf_ <= 0.0) {
     throw Exception("invalid degrees of freedom (ndf > 0 required)");
   }
@@ -228,7 +240,7 @@ void ccruncher::BlockTStudentCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
-    aux1[i] = random.nextGaussian();
+    aux1[i] = gsl_ran_ugaussian(rng);
   }
 
   chol->mult(aux1, aux2);
@@ -243,7 +255,7 @@ void ccruncher::BlockTStudentCopula::next()
   // generate a random vector following N(0,sigmas) into aux2
   randNm();
   // create the factor (involves the generation of a chi-square)
-  double chisq = random.nextChisq(ndf);
+  double chisq =  gsl_ran_chisq(rng, ndf);
   if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
   double factor = sqrt(ndf/chisq);
 
@@ -260,21 +272,6 @@ void ccruncher::BlockTStudentCopula::next()
 }
 
 //===========================================================================
-// Return components i-th from current copula
-//===========================================================================
-double ccruncher::BlockTStudentCopula::get(int i) const
-{
-  if (i < 0 || i >= n)
-  {
-    return NAN;
-  }
-  else
-  {
-    return aux1[i];
-  }
-}
-
-//===========================================================================
 // Returns simulated values
 //===========================================================================
 const double* ccruncher::BlockTStudentCopula::get() const
@@ -285,9 +282,9 @@ const double* ccruncher::BlockTStudentCopula::get() const
 //===========================================================================
 // Set new seed in the number generator
 //===========================================================================
-void ccruncher::BlockTStudentCopula::setSeed(long k)
+void ccruncher::BlockTStudentCopula::setSeed(long seed)
 {
-  random.setSeed(k);
+  gsl_rng_set(rng, (unsigned long) seed);
 }
 
 //===========================================================================

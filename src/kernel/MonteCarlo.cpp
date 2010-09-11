@@ -33,8 +33,6 @@
 #include "utils/File.hpp"
 #include <cassert>
 
-#define MAX_NUM_THREADS 16
-
 //===========================================================================
 // constructor
 //===========================================================================
@@ -444,13 +442,8 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   double etime3=0.0; // ellapsed time evaluating portfolio
 
   // assertions
-  assert(1 <= numthreads && numthreads <= MAX_NUM_THREADS); 
+  assert(1 <= numthreads); 
   assert(fpath != "" && fpath != "path not set"); 
-
-  if (numthreads <= 0 || MAX_NUM_THREADS < numthreads)
-  {
-    throw Exception("invalid number of threads");
-  }
 
   // setting logger header
   Logger::addBlankLine();

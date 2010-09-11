@@ -312,14 +312,6 @@
 					RelativePath="src\math\PowMatrix.hpp"
 					>
 				</File>
-				<File
-					RelativePath="src\math\Random.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\Random.hpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="params"

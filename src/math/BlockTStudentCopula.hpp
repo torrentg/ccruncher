@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "math/Random.hpp"
+#include <gsl/gsl_rng.h>
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
 #include "utils/LookupTable.hpp"
@@ -51,14 +51,14 @@ class BlockTStudentCopula : public Copula
     int m;
     // number of degrees of freedom
     double ndf;
+    // random number generator
+    gsl_rng *rng;
     // cholesky matrix
     BlockMatrixChol *chol;
     // internal buffer
     double *aux1;
     // internal buffer
     double *aux2;
-    // random number generator
-    Random random;
     // lookup table
     LookupTable *lut;
     // chol & lut allocation flag
@@ -101,6 +101,23 @@ class BlockTStudentCopula : public Copula
     double getConditionNumber();
 
 };
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// Return components i-th from current copula
+//===========================================================================
+inline double ccruncher::BlockTStudentCopula::get(int i) const
+{
+  if (i < 0 || i >= n)
+  {
+    return NAN;
+  }
+  else
+  {
+    return aux1[i];
+  }
+}
 
 //---------------------------------------------------------------------------
 

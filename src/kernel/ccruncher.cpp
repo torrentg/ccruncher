@@ -42,6 +42,10 @@
 
 //---------------------------------------------------------------------------
 
+#define MAX_NUM_THREADS 16
+
+//---------------------------------------------------------------------------
+
 void usage();
 void version();
 void copyright();
@@ -163,7 +167,6 @@ int main(int argc, char *argv[])
           {
             string sthreads = string(optarg);
             ithreads = Parser::intValue(sthreads);
-            if (ithreads <= 0) throw Exception();
           }
           catch(Exception &)
           {
@@ -207,6 +210,11 @@ int main(int argc, char *argv[])
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
+    return 1;
+  }
+  if (ithreads <= 0 || MAX_NUM_THREADS < ithreads)
+  {
+    cerr << "error: invalid number of threads" << endl;
     return 1;
   }
 

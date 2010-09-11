@@ -43,7 +43,6 @@ ccruncher_SOURCES = \
     ../src/sectors/Sectors.cpp\
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/Random.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
@@ -87,7 +86,6 @@ ccruncher_SOURCES = \
     ../src/correlations/CorrelationMatrix.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/Random.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
@@ -170,7 +168,6 @@ tests_SOURCES = \
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
-    ../src/math/Random.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -242,7 +239,6 @@ tests_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
-    ../src/math/Random.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -296,7 +292,6 @@ samplegen_SOURCES = \
     ../src/sectors/Sectors.cpp\
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/Random.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
@@ -340,7 +335,6 @@ samplegen_SOURCES = \
     ../src/correlations/CorrelationMatrix.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/Random.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
