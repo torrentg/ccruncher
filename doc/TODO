@@ -14,8 +14,6 @@ Future works
   * add stochastic exposure
   * improve functional tests
      - examples based on real data
-     - script to run functional tests
-     - improve validations (eg. kolmogorov-Smirnof tests)
      - improve documentation adding tests section
   * beautify html printing output
   * allow evaluation in multiple time horizons

@@ -6,6 +6,7 @@ version 1.6 (???. 2010)
 --------------------------
   * technical document updated
   * improved t-sudent copula fit
+  * performance improvements
   * added multi-thread support
   * removed MPI support
   * portfolio file can be referenced in input file
