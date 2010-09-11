@@ -57,7 +57,7 @@ void catchsignal(int signal);
 
 string sfilename = "";
 string spath = "";
-bool bverbose = false;
+bool bverbose = true;
 bool bforce = false;
 bool btrace = false;
 int inice = -999;
@@ -83,7 +83,7 @@ void catchsignal(int signal)
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "hvf" ;
+  const char* const options1 = "hqf" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
           usage();
           return 0;
 
-      case 'v': // -v (be verbose)
-          bverbose = true;
+      case 'q': // -q (be quiet)
+          bverbose = false;
           break;
 
       case 'f': // -f (force overwriting)
@@ -368,7 +368,7 @@ void usage()
   "                   file can be gziped (caution, zip format not suported)\n"
   "  options:\n"
   "    -f             force output files overwrite\n"
-  "    -v             be verbose\n"
+  "    -q             quiet mode, non-verbose\n"
   "    --path=dir     directory where output files will be placed (required)\n"
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
@@ -381,9 +381,8 @@ void usage()
   "    0              OK. finished without errors\n"
   "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher -f --path=data/sample01 samples/sample01.xml\n"
-  "    ccruncher -fv --hash=100 --threads=4 --path=data/ samples/test01.xml\n"
-  "    ccruncher -fv --hash=100 --threads=4 --path=data/ samples/test100.xml\n"
+  "    ccruncher -qf --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher -f --hash=100 --threads=4 --path=data/ samples/test100.xml\n"
   << endl;
 }
 

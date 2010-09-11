@@ -95,7 +95,7 @@ Using CCruncher
 
 2. run CCruncher
      > $CCRUNCHER/bin/ccruncher --help
-     > $CCRUNCHER/bin/ccruncher -vf --hash=100 --path=./data samples/test01.xml
+     > $CCRUNCHER/bin/ccruncher -f --hash=100 --path=./data samples/test01.xml
 
 3. compute risk indicators typing:
      > $CCRUNCHER/bin/ccreport.sh data/portfolio.csv
@@ -197,7 +197,7 @@ Developers tips & tricks
       > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
       > $CCRUNCHER/bin/makedist.sh -s
-      > $CCRUNCHER/bin/makedist.sh -l
+      > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 12. create a tag in subversion repository
