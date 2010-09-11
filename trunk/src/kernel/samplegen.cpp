@@ -25,6 +25,8 @@
 #include <string>
 #include <cstdlib>
 #include <getopt.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
 #include "utils/Strings.hpp"
@@ -33,7 +35,6 @@
 #include "utils/Format.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Utils.hpp"
-#include "math/Random.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -49,7 +50,7 @@ using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 
-Random randomizer = Random();
+gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);
 
 //---------------------------------------------------------------------------
 
@@ -263,7 +264,7 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
 //===========================================================================
 double getNominal()
 {
-  double ret = randomizer.nextGaussian(NOMINAL_MU, NOMINAL_SIGMA2);
+  double ret = NOMINAL_MU + gsl_ran_gaussian(rng, NOMINAL_SIGMA2);
 
   if (ret <= NOMINAL_MIN) {
     return NOMINAL_MIN;

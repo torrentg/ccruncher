@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "math/Random.hpp"
+#include <gsl/gsl_rng.h>
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
 #include "utils/LookupTable.hpp"
@@ -49,14 +49,14 @@ class BlockGaussianCopula : public Copula
     int n;
     // number of sectors
     int m;
+    // random number generator
+    gsl_rng *rng;
     // cholesky matrix
     BlockMatrixChol *chol;
     // internal buffer
     double *aux1;
     // internal buffer
     double *aux2;
-    // random number generator
-    Random random;
     // lookup table
     LookupTable *lut;
     // chol & lut allocation flag
@@ -99,6 +99,23 @@ class BlockGaussianCopula : public Copula
     double getConditionNumber();
 
 };
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// Return components i-th from current copula
+//===========================================================================
+inline double ccruncher::BlockGaussianCopula::get(int i) const
+{
+  if (i < 0 || i >= n)
+  {
+    return NAN;
+  }
+  else
+  {
+    return aux1[i];
+  }
+}
 
 //---------------------------------------------------------------------------
 

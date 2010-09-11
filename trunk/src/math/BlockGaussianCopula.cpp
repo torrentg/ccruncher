@@ -24,6 +24,7 @@
 #include <cfloat>
 #include <cstdlib>
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_randist.h>
 #include "math/BlockGaussianCopula.hpp"
 #include "utils/Arrays.hpp"
 #include <cassert>
@@ -47,6 +48,7 @@ void ccruncher::BlockGaussianCopula::reset()
   aux2 = NULL;
   chol = NULL;
   lut = NULL;
+  rng = NULL;
   owner = true;
 }
 
@@ -55,6 +57,11 @@ void ccruncher::BlockGaussianCopula::reset()
 //===========================================================================
 void ccruncher::BlockGaussianCopula::finalize()
 {
+  if (rng != NULL) {
+    gsl_rng_free(rng);
+    rng = NULL;
+  }
+  
   if (aux1 != NULL) {
     Arrays<double>::deallocVector(aux1);
     aux1 = NULL;
@@ -82,11 +89,12 @@ void ccruncher::BlockGaussianCopula::finalize()
 // when exists multiple copulas with the same static data (chol, lut)
 //===========================================================================
 ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x, bool alloc) throw(Exception) : 
-  Copula(), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL), lut(NULL)
 {
   reset();
   n = x.n;
   m = x.m;
+  rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = alloc;
   if (alloc == true)
   {
@@ -109,7 +117,8 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
 // n: number of elements at each sector
 // m: number of sectors
 //===========================================================================
-ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_) throw(Exception) : Copula()
+ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_) throw(Exception) : 
+  Copula(), rng(NULL), chol(NULL), lut(NULL)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
@@ -118,6 +127,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
   
   reset();
   m = m_;
+  rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = true;
 
   try
@@ -224,7 +234,7 @@ void ccruncher::BlockGaussianCopula::randNm()
 {
   for(int i=0;i<n;i++)
   {
-    aux1[i] = random.nextGaussian();
+    aux1[i] = gsl_ran_ugaussian(rng);
   }
 
   chol->mult(aux1, aux2);
@@ -252,21 +262,6 @@ void ccruncher::BlockGaussianCopula::next()
 }
 
 //===========================================================================
-// Return components i-th from current copula
-//===========================================================================
-double ccruncher::BlockGaussianCopula::get(int i) const
-{
-  if (i < 0 || i >= n)
-  {
-    return NAN;
-  }
-  else
-  {
-    return aux1[i];
-  }
-}
-
-//===========================================================================
 // Returns simulated values
 //===========================================================================
 const double* ccruncher::BlockGaussianCopula::get() const
@@ -277,9 +272,9 @@ const double* ccruncher::BlockGaussianCopula::get() const
 //===========================================================================
 // Set new seed in the number generator
 //===========================================================================
-void ccruncher::BlockGaussianCopula::setSeed(long k)
+void ccruncher::BlockGaussianCopula::setSeed(long seed)
 {
-  random.setSeed(k);
+  gsl_rng_set(rng, (unsigned long) seed);
 }
 
 //===========================================================================

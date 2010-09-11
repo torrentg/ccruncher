@@ -20,9 +20,10 @@
 //
 //===========================================================================
 
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
-#include "math/Random.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
@@ -232,12 +233,12 @@ void ccruncher_test::SurvivalTest::test6()
   Survival sf(ratings, 2, (int *) imonths, (double**) mvalues);
 
   // creating randomizer
-  Random random;
+  gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);
 
   // checking values
   for(int i=0;i<20000;i++)
   {
-    double u = random.nextUnif(0.0, 1.0);
+    double u = gsl_ran_flat (rng, 0.0, 1.0);
     if (sf.inverse(0,u) > 12) {
       ivalues[0]++;
     }
@@ -245,9 +246,13 @@ void ccruncher_test::SurvivalTest::test6()
       ivalues[1]++;
     }
   }
+  
+  // deallocates randomizer
+  gsl_rng_free(rng);
 
   // checking that P(X in [0,0.9]) = 0.9
   ASSERT(ivalues[0] > 17500);  // exact value is 18000 (margin=500)
   // checking that P(X in [0.9,1.0]) = 0.1
   ASSERT(ivalues[1] < 2500);  // exact value is 2000 (margin=500)
 }
+
