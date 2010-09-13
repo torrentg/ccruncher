@@ -27,4 +27,7 @@ Future works
   * allow ratings evaluated to date previous to T0
   * add borrower-borrower dependences
   * graphic interface
+  * considere that a borrower could belong to a few different sectors
+  * determine the degrees-of-freedom of t-student copula based on historical data
+  * explain how to determine the minimum number of simulations required
 

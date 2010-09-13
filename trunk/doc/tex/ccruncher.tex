@@ -133,7 +133,7 @@ using the transition matrix.
 The risk of a credit portfolio depends crucially on correlations between 
 economic sectors. These sectors are groupings of companies that react similarly to 
 economic conditions. Some examples of sectors include: energy, financial, technology, 
-media and entertainment, utilities and health care. Default correlations between 
+media and entertainment, utilities, and health care. Default correlations between 
 sectors measure the default time dependence between the defined sectors. This 
 can be expressed in tabular form:
 
@@ -153,8 +153,8 @@ can be expressed in tabular form:
 \end{displaymath}
 \end{center}
 
-Note that diagonal elements are default time correlations between members of the 
-same sector (values that are different than $1$), while the elements outside of the
+Note that diagonal elements are different than $1$ because they are the default time 
+correlations between members of the same sector. The elements outside of the
 diagonal are default time correlations between elements of distinct sectors.
 \newline
 
@@ -221,8 +221,8 @@ This section explains how CCruncher computes the credit risk of a portfolio.
 \label{tcorrel}
 We need to translate from default correlations between sectors to default 
 correlations between borrowers. Suppose we have $n$ borrowers and $m$ 
-sectors. Each borrower belongs to a sector. Correlations between sectors are 
-known (see Section \ref{sectors}):
+sectors. Each borrower belongs to a sector. $\rho_{i,j}$ are the estimated 
+default time correlations between sectors:
 
 \begin{center}
 \begin{displaymath}
@@ -283,10 +283,17 @@ using the Cholesky algorithm, so it must be positive-definite.
 \label{mcsim}
 Monte Carlo methods are a class of computational algorithms for 
 simulating the behaviour of various physical and mathematical systems. 
-Each simulation consists of computing a random default time for each borrower and
-then calculating the loss of the portfolio. Default times must fulfil two 
-conditions: the borrower's survival functions and the borrower's correlation matrix. 
-This is achieved by simulating a copula. 
+Each simulation consists of computing a random default time for each borrower 
+and then calculating the loss of the portfolio. Default times must fulfil two 
+conditions: the borrower's survival functions and the borrower's correlation 
+matrix. The link between the marginal distributions (survival functions) and 
+the dependence structure (correlations) is achieved with a copula.
+
+\begin{comment}
+TODO: The last two sentences do not clearly explain or make it obvious as to why 
+a copula is needed for the default times to fulfill the two conditions. Maybe you 
+could clarify those statements.
+\end{comment}
 
 %...........................................................................
 \subsubsection{Random numbers generation}
@@ -316,14 +323,24 @@ Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \\
 \end{displaymath}
 
 Two copula generators, the Gaussian and the t-Student copulas, are implemented. 
-Appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu} describe the 
-algorithms that were used to generate them.
+These two copulas have good properties: they are commonly used in finance, exist 
+algorithms to simulate them for any correlation matrix, and these algorithms work 
+for large dimensions (see Appendices \ref{ap:gaussiancopu} and \ref{ap:tstudentcopu}).
 \newline
 
-Evidences exists \cite{copu:selecting} in favour of the t-Student copula. 
-In comparison with the t-Student copula, the Gaussian copula underestimates the 
-probability of joint extreme downward movements. Moreover, the Gaussian copula is 
-too optimistic on diversification benefits.
+Erik Kole et al. \cite{copu:selecting} have compared some copulas used in risk 
+management. They observe that the t-Student copula can be considered to model the 
+dependence between the different elements of a portfolio:
+\begin{quotation}
+"For a portfolio consisting of stocks, bonds and real estate, these tests provide
+clear evidence in favor of the Student's t copula, and reject both the correlation-based
+Gaussian copula and the extreme value-based Gumbel copula. In comparison with the
+Student's t copula, we find that the Gaussian copula underestimates the probability of
+joint extreme downward movements, while the Gumbel copula overestimates this risk.
+Similarly we establish that the Gaussian copula is too optimistic on diversiﬁcation
+benefits, while the Gumbel copula is too pessimistic. Moreover, these differences are
+significant."
+\end{quotation}
 
 %...........................................................................
 \subsubsection{Default times simulation}
@@ -1279,8 +1296,11 @@ P(S_i \cap S_j) = \left\{
 \right.
 \end{displaymath}
 
-You can find more information about correlation matrix estimation in 
-\cite{correlations:ubs} and \cite{correlations:cmetrics}.
+Observe that $P(S_i)$ is the probability that an individual belonging to sector $i$
+defaults over a year. To determine $P(S_i \cap S_j)$, divide all combinations of pairs 
+of defaulted individuals by all combinations of pairs of individuals. You can find 
+more information about correlation matrix estimation in \cite{correlations:ubs} and 
+\cite{correlations:cmetrics}.
 
 %---------------------------------------------------------------------------
 \subsection{Gaussian copula simulation}
