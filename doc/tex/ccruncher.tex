@@ -59,12 +59,13 @@
 
 %===========================================================================
 \begin{abstract}
-The goal of CCruncher is to compute the credit risk of massive loan portfolios 
+CCruncher computes the credit risk of massive loan portfolios 
 taking into account default correlations between economic sectors. This is done 
 by determining the probability distribution of portfolio loss at time $T$ using 
-the Monte Carlo method and simulating the borrower's default times. Risk is 
-obtained using the usual risk statistics, including Expected Loss, Value at Risk 
-and Expected Shortfall.
+the Monte Carlo method. The simulation of borrower's default times is achieved
+using a copula that combines the survival functions with the observed
+sectorial correlations. Risk is obtained using the usual risk statistics, 
+including Expected Loss, Value at Risk and Expected Shortfall.
 \newline
 \newline
 \textbf{Keywords}: credit risk, Monte Carlo, survival functions, Gaussian copula, 
@@ -167,21 +168,9 @@ pure risk operations like bank guarantees, and the creation of a graphical inter
 make the tool available to the public, such as portfolio bond managers.
 
 \begin{comment}
-\subsection{Alternatives}
-
-\subsubsection{CreditRisk+ approach}
-%TODO: fill this section
-
-\subsubsection{CreditMetrics approach}
-%TODO: fill this section
-
-\subsubsection{Copula approach}
-%TODO: fill this section
-
-\subsection{Comparison}
-%TODO: Comparison with other methods (CreditRisk+, CreditMetrics)
-%TODO: bottom-up approach
-
+\subsection{Credit Risk Models}
+TODO: merton models, actuarial models, econometric models, intensity models, copula models
+TODO: Comparison with other methods (CreditRisk+, CreditMetrics)
 \end{comment}
 
 %===========================================================================
