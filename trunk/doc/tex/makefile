@@ -22,14 +22,14 @@
 
 all: pdf
 
-pdf:
+pdf: ccruncher.tex refs.bib
 	latex ccruncher
 	bibtex ccruncher
 	latex ccruncher
 	latex ccruncher
 	dvipdfm ccruncher
 
-rtf:
+rtf: ccruncher.tex refs.bib
 	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
 	latex ccruncher-iso88591
 	bibtex ccruncher-iso88591

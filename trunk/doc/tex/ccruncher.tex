@@ -79,9 +79,94 @@ t-Student copula, value at risk, expected shortfall, block matrix.
 
 
 %===========================================================================
-\begin{comment}
 \section{Introduction}
 
+This chapter was originally published in \emph{Ercim News 78} \cite{ccruncher:ercim78}
+as a contribution to the special theme \emph{Mathematics for Finance and Economy}.
+\newline
+
+Financial institutions need tools to simulate their credit portfolios in the same 
+way that they simulate their equity portfolios. CreditCruncher allows each payment
+in a massive loan portfolio to be simulated, taking into account the probability 
+of default for each creditor and the correlations between them.
+\newline
+
+While the portfolios of loans given to SMEs and portfolios of corporate bonds do 
+not have the glamour of the equity or foreign exchange markets, they are nevertheless 
+the core business of many financial institutions. Such portfolios tend to have values 
+of thousands of millions of dollars and may be composed of tens of thousands of small 
+loans.
+\newline
+
+At first glance, credit portfolios may seem harmless because payments are based on 
+pre-agreed dates. Nothing could be farther from the truth. Defaults frequently occur 
+in clusters, affecting entire sectors of industry. The correlation between defaults 
+is the main difficulty in risk assessment, and this is the rationale behind many of 
+the approaches to credit risk valuation. The impact of the correlation on the loss 
+distribution function is notorious, and causes an asymmetrical distribution function 
+with long tails.
+\newline
+
+CreditCruncher is an open-source project for the simulation of massive portfolios of 
+loans where the unique risk is the default risk. It is addressed to financial institutions 
+searching for a well-documented and efficient tool. It consists of an engine that runs 
+in batch mode and is designed to be integrated into the risk management systems of 
+financial institutions for risk assessment and stress testing. The method used to 
+determine the distribution of losses in the portfolio is the Monte Carlo algorithm, 
+because it allows us to consider the majority of variables involved, such as the 
+date and amount of each payment. This approach is conceptually equivalent to the 
+valuation of portfolios of equities and derivatives using the Monte Carlo method. 
+In the case of market risk, the price of the underlying assets is simulated using 
+a geometric Brownian motion with a given volatility and trend. In the credit risk 
+case, borrowers' defaults are simulated using a copula with given survival rates 
+and correlations.
+\newline
+
+Sklar's theorem states that any multivariate distribution can be decomposed into 
+two parts, the marginal distributions and a copula that reflects the structure of 
+dependencies between components. This result is important because it allows us to 
+separate the default probabilities from the default correlations.
+\newline
+
+CreditCruncher implements two of the most commonly used copulas in finance, the Normal 
+and T-Student copulas. Because the default time of each borrower is modelled as a 
+random variable, the size of the copula can be over 50,000, where each component 
+represents a borrower. Simulating low-dimensional copulas poses no problem, but many 
+of the algorithms operating in low dimensions are unsuitable for large dimensions. 
+To solve this problem, the Cholesky decomposition was adapted to operate with a large 
+correlation matrix composed of blocks, in order to reduce the memory space and the 
+number of operations involved.
+
+\begin{figure}[!hbt]
+\begin{center}
+\includegraphics[height=10cm]{./images/ercim78.eps}
+\caption{Impact of correlation and copula selection on portfolio loss distribution.}
+\label{survival}
+\end{center}
+\end{figure}
+\FloatBarrier
+
+Each Monte Carlo run simulates the default time for each debtor by combining a copula 
+sampling with the survival functions. This default time is used to determine the loss 
+caused by the default, mitigated by an estimated recovery at a given time. The default 
+amount is discounted to the present value using the interest rate provided by the yield 
+curve. The sum of all losses provides the loss value of the portfolio for that simulation. 
+The completion of thousands of simulations allows us to obtain the loss distribution 
+function and compute the usual risk indicators, such as the Value at Risk or Expected 
+Shortfall. Depending on the portfolio size and the required accuracy, the computational 
+cost may be high; CreditCruncher is therefore compatible with execution in parallel 
+computers.
+\newline
+
+CreditCruncher is currently a one-man project with no financial support, and is looking 
+for collaborators with expertise in applied and/or theoretical financial mathematics 
+to participate in a GPL (GNU General Public License) structure. The CreditCruncher 
+system has been tested against both simple hand-made portfolios and large automatically 
+generated portfolios. Future work is being considered to add stochastic recovery rates, 
+pure risk operations like bank guarantees, and the creation of a graphical interface to 
+make the tool available to the public, such as portfolio bond managers.
+
+\begin{comment}
 \subsection{Alternatives}
 
 \subsubsection{CreditRisk+ approach}
