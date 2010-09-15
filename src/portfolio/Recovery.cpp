@@ -39,7 +39,7 @@ ccruncher::Recovery::Recovery()
 //===========================================================================
 ccruncher::Recovery::Recovery(const string &str) throw(Exception)
 {
-  //TODO: parse beta(x,y) o a double value
+  //TODO: parse beta(x,y) or double value
 }
 
 //===========================================================================

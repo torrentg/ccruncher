@@ -60,6 +60,8 @@ class SimulationThread : public Thread
     vector<SimulatedBorrower> borrowers;
     // list of simulated assets
     vector<SimulatedAsset> assets;
+    // copula used to simulate correlations
+    Copula *copula;
     // borrowers default times
     vector<Date> dtimes;
     // assets losses
@@ -70,8 +72,6 @@ class SimulationThread : public Thread
     Date timeT;
     // survival functions
     Survival survival;
-    // copula used to simulate correlations
-    Copula *copula;
     // antithetic method flag
     bool antithetic;
     // management flag for antithetic method (default=false)

@@ -259,7 +259,7 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
     lastdate = data.back().date;
 
     // checking for repeated dates    
-    for(int i=1; i<data.size(); i++)
+    for(unsigned int i=1; i<data.size(); i++)
     {
       if (data[i-1].date == data[i].date)
       {

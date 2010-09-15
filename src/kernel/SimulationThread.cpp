@@ -31,12 +31,11 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : 
-  Thread(), montecarlo(mc), copula(cop_), dtimes(0), alosses(0), isegments(0)
+ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
+  montecarlo(mc), borrowers(mc.borrowers), assets(mc.assets), copula(cop_), 
+  dtimes(0), alosses(0), isegments(0), losses(0)
 {
-  borrowers = montecarlo.borrowers;
   dtimes = vector<Date>(borrowers.size(), NAD);
-  assets = montecarlo.assets;
   alosses = vector<double>(assets.size(), NAN);
   numassets = assets.size();
   time0 = montecarlo.time0;
