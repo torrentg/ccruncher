@@ -30,4 +30,6 @@ Future works
   * considere that a borrower could belong to a few different sectors
   * determine the degrees-of-freedom of t-student copula based on historical data
   * explain how to determine the minimum number of simulations required
+  * improve lookup-table when survival values are low
+  * in techdoc add cholesky decomposition detail
 

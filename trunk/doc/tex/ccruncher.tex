@@ -37,7 +37,7 @@
 % defining some useful values
 %-----------------------------------------------------
 \def\numversion{1.6}
-\def\svnversion{R638}
+\def\svnversion{R642}
 
 %-----------------------------------------------------
 % some format directives
@@ -61,8 +61,8 @@
 \begin{abstract}
 CCruncher computes the credit risk of massive loan portfolios 
 taking into account default correlations between economic sectors. This is done 
-by determining the probability distribution of portfolio loss at time $T$ using 
-the Monte Carlo method. The simulation of borrower's default times is achieved
+by determining the probability distribution of portfolio loss using the Monte 
+Carlo method. The simulation of borrower's default times is achieved
 using a copula that combines the survival functions with the observed
 sectorial correlations. Risk is obtained using the usual risk statistics, 
 including Expected Loss, Value at Risk and Expected Shortfall.
@@ -82,12 +82,13 @@ t-Student copula, value at risk, expected shortfall, block matrix.
 %===========================================================================
 \section{Introduction}
 
-This chapter was originally published in \emph{Ercim News 78} \cite{ccruncher:ercim78}
+This introduction was originally published in \emph{Ercim News 78} \cite{ccruncher:ercim78}
 as a contribution to the special theme \emph{Mathematics for Finance and Economy}.
+There have been done some minor changes in order to adapt to the current situation.
 \newline
 
 Financial institutions need tools to simulate their credit portfolios in the same 
-way that they simulate their equity portfolios. CreditCruncher allows each payment
+way that they simulate their equity portfolios. CCruncher allows each payment
 in a massive loan portfolio to be simulated, taking into account the probability 
 of default for each creditor and the correlations between them.
 \newline
@@ -108,7 +109,7 @@ distribution function is notorious, and causes an asymmetrical distribution func
 with long tails.
 \newline
 
-CreditCruncher is an open-source project for the simulation of massive portfolios of 
+CCruncher is an open-source project for the simulation of massive portfolios of 
 loans where the unique risk is the default risk. It is addressed to financial institutions 
 searching for a well-documented and efficient tool. It consists of an engine that runs 
 in batch mode and is designed to be integrated into the risk management systems of 
@@ -129,9 +130,9 @@ dependencies between components. This result is important because it allows us t
 separate the default probabilities from the default correlations.
 \newline
 
-CreditCruncher implements two of the most commonly used copulas in finance, the Normal 
+CCruncher implements two of the most commonly used copulas in finance, the Normal 
 and T-Student copulas. Because the default time of each borrower is modelled as a 
-random variable, the size of the copula can be over 50,000, where each component 
+random variable, the size of the copula can be over 50.000, where each component 
 represents a borrower. Simulating low-dimensional copulas poses no problem, but many 
 of the algorithms operating in low dimensions are unsuitable for large dimensions. 
 To solve this problem, the Cholesky decomposition was adapted to operate with a large 
@@ -141,7 +142,7 @@ number of operations involved.
 \begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=10cm]{./images/ercim78.eps}
-\caption{Impact of correlation and copula selection on portfolio loss distribution.}
+\caption{Impact of correlation and copula selection on portfolio loss distribution}
 \label{survival}
 \end{center}
 \end{figure}
@@ -155,13 +156,12 @@ curve. The sum of all losses provides the loss value of the portfolio for that s
 The completion of thousands of simulations allows us to obtain the loss distribution 
 function and compute the usual risk indicators, such as the Value at Risk or Expected 
 Shortfall. Depending on the portfolio size and the required accuracy, the computational 
-cost may be high; CreditCruncher is therefore compatible with execution in parallel 
-computers.
+cost may be high.
 \newline
 
-CreditCruncher is currently a one-man project with no financial support, and is looking 
+CCruncher is currently a one-man project with no financial support, and is looking 
 for collaborators with expertise in applied and/or theoretical financial mathematics 
-to participate in a GPL (GNU General Public License) structure. The CreditCruncher 
+to participate in a GPL (GNU General Public License) structure. The CCruncher 
 system has been tested against both simple hand-made portfolios and large automatically 
 generated portfolios. Future work is being considered to add stochastic recovery rates, 
 pure risk operations like bank guarantees, and the creation of a graphical interface to 
@@ -241,7 +241,6 @@ The portfolio is composed by the borrowers. Each borrower has an initial rating,
 belongs to a sector and has one or more assets. Each asset
 is defined by its creation date, expected cashflow and recovery at certain 
 dates. Figure \ref{portfolio} shows the structure of a portfolio.
-\newline
 
 \paragraph{Cashflow.} Indicates the cash given to the borrower (negative amounts) and the
 cash received from the borrower (positive amounts) at each date (see Figure \ref{cashflow}).
@@ -281,6 +280,8 @@ If a borrower defaults, the loss is the sum of all remaining cashflows at the de
 \section{Resolution}
 
 This section explains how CCruncher computes the credit risk of a portfolio.
+Figure \ref{fig:mcschema1} shows the schema followed to simulate the 
+portfolio losses.
 
 \begin{figure}[!hb]
 \begin{center}
@@ -370,11 +371,11 @@ could clarify those statements.
 \end{comment}
 
 %...........................................................................
-\subsubsection{Random numbers generation}
+\subsubsection{Correlated random numbers generation}
 A copula \cite{copu:pitfalls} \cite{copu:wang} is a multivariate random variable 
 in which each component is uniform, $U[0,1]$. Each simulation requires a set of 
 random numbers between $[0, 1]$ and is correlated with the borrowers correlation 
-matrix, $\Sigma$ (see Figure \ref{borrowercorrel}).
+matrix, $\Sigma$.
 
 \begin{displaymath}
 \begin{array}{ccc}
@@ -420,8 +421,8 @@ significant."
 \subsubsection{Default times simulation}
 \label{sec:deftimessim}
 Given a borrower $k$ and a random number ($u_k \in [0,1]$) (generated using a 
-copula in the previous step), we simulate the default time considering the 
-inverse of the borrower survival function at $u_k$ \cite{ref:cred_risk}. 
+copula), we simulate the default time considering the inverse of the borrower 
+survival function at $u_k$ \cite{ref:cred_risk}. 
 Figure \ref{simttd} shows this graphically.
 
 \begin{figure}[!hbt]
@@ -1147,7 +1148,7 @@ we use the simulated default times and the portfolio composition (Tables
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|c|c|}
-Borrower & Default month & Asset & Exposed & Recovery & Loss \\
+Borrower & Default month & Asset & Exposure    & Recovery & Loss  \\
 \hline
 B1       & 961           &  A1   &             &  80\%    &       \\
 B2       & 898           &  A2   &             &  75\%    &       \\
@@ -1225,7 +1226,7 @@ a borrower with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
         &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \\
 \hline
 AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \\
- AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $0.14$ &   $0.02$ &   $0.00$ \\
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $\underline{0.14}$ &   $0.02$ &   $0.00$ \\
   A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \\
 BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \\
  BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \\
@@ -1785,9 +1786,9 @@ Using the condition number definition and its properties, we know that:
 where $\sigma_{max}(B)$ and $\sigma_{min}(B)$ are the maximal and minimal singular 
 values of $B$, respectively, and $\lambda_{max}(\Sigma)$ and $\lambda_{min}(\Sigma)$ 
 are the maximal and minimal absolute values of the eigenvalues of $\Sigma$, respectively.
-The eigenvalues of $\Sigma$ can be computed using the following proposition.
+The eigenvalues of $\Sigma$ can be computed using the following unproved proposition.
 
-\paragraph{Proposition (unproved).} Let $\Sigma$ be a symmetric block matrix with 
+\paragraph{Proposition.} Let $\Sigma$ be a symmetric block matrix with 
 $1$'s in the diagonal, where $k$ is the number of blocks, $a_{ij}$ is the block 
 value and $n_i$ is the dimension of the $i$-th block. Then, the eigenvalues 
 of $\Sigma$ are:
