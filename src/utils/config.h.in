@@ -206,7 +206,7 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R586"
+#define SVN_VERSION "R642"
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
