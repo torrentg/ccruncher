@@ -112,6 +112,17 @@ readconf() {
 }
 
 #-------------------------------------------------------------
+# runcc function
+#-------------------------------------------------------------
+runcc() {
+
+  rm -rf data/$1;
+  echo "running ccruncher on $1 ...";
+  ./build/ccruncher -fq --trace --path=data/$1 samples/$1.xml;
+  
+}
+
+#-------------------------------------------------------------
 # main function
 #-------------------------------------------------------------
 
@@ -121,15 +132,10 @@ readconf $@;
 
 cd $CCRUNCHER;
 
-rm -rf data/test01;
-rm -rf data/test02;
-rm -rf data/test03;
-rm -rf data/test04;
-
-./bin/ccruncher -f --trace --path=data/test01 samples/test01.xml;
-./bin/ccruncher -f --trace --path=data/test02 samples/test02.xml;
-./bin/ccruncher -f --trace --path=data/test03 samples/test03.xml;
-./bin/ccruncher -f --trace --path=data/test04 samples/test04.xml;
+runcc test01;
+runcc test02;
+runcc test03;
+runcc test04;
 
 R --vanilla --slave << _EOF_
     source("./bin/ccreport.R", echo=FALSE);
