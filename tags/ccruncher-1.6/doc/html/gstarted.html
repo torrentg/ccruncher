@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Getting started</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <div id="main-container">
+  	<div id="page-header">
+      <a href="./index.html">
+        <img style="margin-top:28px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
+      </a>
+  	</div>
+  	<br/>
+
+    <h1>Getting Started - Framework</h1>
+
+    <p>CCruncher is designed to work in batch mode, without graphical support.
+       The user creates a <a href="sample.xml">xml file</a> with the description of the
+      portfolio. CCruncher takes this file and simulates the portfolio <i>N</i> times.
+      The simulated values are stored in a <a href="portfolio.csv">csv file</a>.
+      Finally, a <a href="http://www.r-project.org/">R script</a> takes the simulated
+      values and calculates some statistics on them to generate the graphs and the risk 
+      indicators, such as the Expected Loss, Standard deviation, Value at Risk and 
+      Expected Shortfall.
+      <br />
+      <br />
+      <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
+      <br />
+    </p>
+
+    <h1>Getting Started - Installation</h1>
+
+    <p>
+      <b>Step 1.</b> If you have selected a packaged distribution, unpack it.<br />
+    </p>
+    <pre>
+
+&nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
+&nbsp;&nbsp;cd ccruncher-X.Y
+    </pre>
+
+    <p>
+      <b>Step 2.</b> CCruncher uses a library named <b>gsl</b> not included in CCruncher 
+      distribution packages. Check that you have gsl installed (find file <code>libgsl.so</code> 
+      , usually in folder <code>/usr/lib</code>). In case you don't have 
+      it, install it from the <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM 
+      system, install the package named gsl). CCruncher source distribution requires that 
+      you have gsl-devel installed (find file <code>gsl_math.h</code>, usually in folder 
+      <code>/usr/include/gsl</code>). In case you don't have it, install it from 
+      <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM system, install 
+      the package named gsl-devel).
+    </p>
+
+    <p>
+      <b>Step 3.</b> CCruncher uses a library named <b>expat</b> not included in CCruncher 
+      distribution packages. Check that you have expat installed (find file <code>libexpat.so</code> 
+      or <code>libexpat.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
+      it, install it from <a href="http://expat.sourceforge.net/">expat site</a> (if you use a RPM 
+      system, install the package named expat). CCruncher source distribution requires that 
+      you have expat-devel installed (find file <code>expat.h</code>, usually in folder 
+      <code>/usr/include</code>). In case you don't have it, install it from 
+      <a href="http://expat.sourceforge.net/">expat site</a> (if you use a RPM system, install 
+      the package named expat-devel).
+    </p>
+
+    <p>
+      <b>Step 4.</b> CCruncher uses a library named <b>zlib</b> not included in CCruncher 
+      distribution packages. Check that you have zlib installed (find file <code>libz.so</code>
+      or <code>zlib1.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
+      it, install it from <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM
+      system, install the package named zlib). CCruncher source distribution require that 
+      you have zlib-devel installed (find file <code>zlib.h</code>, usually in folder 
+      <code>/usr/include</code>). In case you don't have it, install it from 
+      <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM system, install 
+      the package named zlib-devel).
+    </p>
+
+    <p>
+      <b>Step 5.</b> CCruncher uses a statistical package named <b>R</b> to compute risk 
+      indicators. Install it from the <a href="http://www.r-project.org/">R project site</a>.
+      If you plan to realize the statistical computations with your own tools (eg. Excel) you can
+      skip this step. If you use a RPM system, install package R.
+    </p>
+
+    <p>
+      <b>Step 6.</b> If you have a source distribution, run the following commands from within the CCruncher directory:
+    </p>
+    <pre>
+
+&nbsp;&nbsp;configure         # prepare compilation
+&nbsp;&nbsp;make              # compile ccruncher
+&nbsp;&nbsp;bin/src2bin.sh    # install and clean
+    </pre>
+
+    <br/>
+    <h1>Getting Started - Usage</h1>
+
+    <p>
+      <b>Step 1.</b> Create a XML ccruncher input file. First, read the
+      <a href="../ccruncher.pdf">Technical Document</a> and the 
+      <a href="ifileref.html">Input File Format</a> document. You can
+      use a file from directory <code>samples</code> as a template. Take into
+      consideration that xml input can be gzipped (gz extension) to reduce
+      the file size. Caution, gzip is a compression algorithm different
+      from zip.
+    </p>
+
+    <p>
+      <b>Step 2.</b> Run ccruncher
+    </p>
+    <pre>
+
+&nbsp;&nbsp;bin/ccruncher --help
+&nbsp;&nbsp;bin/ccruncher -f --hash=100 --path=data/ samples/test03.xml
+    </pre>
+
+    <p>
+      <b>Step 3.</b> Check the output files, which are the csv files. Each column has 
+      the simulated segment values. The first line is a header that contains the 
+      segments names.
+    </p>
+    <pre>
+
+&nbsp;&nbsp;ls -l data/*
+&nbsp;&nbsp;more data/portfolio.csv
+    </pre>
+
+    <p>
+      <b>Step 4.</b> Compute the Value at Risk (script available only in Linux/UNIX version)
+    </p>
+    <pre>
+
+&nbsp;&nbsp;bin/ccreport.sh data/portfolio.csv
+&nbsp;&nbsp;firefox data/portfolio.html
+    </pre>
+    <p>
+      or open a <a href="http://www.r-project.org">R</a> console and type:
+    </p>
+    <pre>
+
+&nbsp;&nbsp;source("bin/ccreport.R")
+&nbsp;&nbsp;ccruncher.summary("data/portfolio.csv")
+&nbsp;&nbsp;ccruncher.graphic("data/portfolio.csv")
+&nbsp;&nbsp;quit(save='no')
+    </pre>
+
+    <br/>
+    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+    		<table width="100%"><tr>
+    			<td style="width:100%; text-align:center; font-size:smaller;">
+            Copyright &copy; 2004-2010 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+    			</td>
+    			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
+    				 Last modified: 03-Sep-2010
+    			</td>
+    		</tr></table>
+    	</div></div></div></div></div>
+    </div>
+    <br/>
+
+  </div>
+  </body>
+</html>

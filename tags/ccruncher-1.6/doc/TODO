@@ -1,0 +1,35 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+  * add risk aggregation to documentation
+     - explain how to distribute the risk (eg. ES) along segments
+     - see 'introduction to credit risk modeling'
+  * add stochastic recovery
+
+Future works
+-------------------
+  * add stochastic exposure
+  * improve functional tests
+     - examples based on real data
+     - improve documentation adding tests section
+  * beautify html printing output
+  * allow evaluation in multiple time horizons
+      <breaks>
+        <break name="T25Y" at="25Y" method="exp">
+          <segmentations>
+            ..
+          </segmentations>
+        </break>
+      </breaks>
+  * allow ratings evaluated to date previous to T0
+  * add borrower-borrower dependences
+  * graphic interface
+  * considere that a borrower could belong to a few different sectors
+  * determine the degrees-of-freedom of t-student copula based on historical data
+  * explain how to determine the minimum number of simulations required
+  * improve lookup-table when survival values are low
+  * in techdoc add cholesky decomposition detail
+
