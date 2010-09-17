@@ -44,6 +44,8 @@ int ccruncher::Parser::intValue(const string &str) throw(Exception)
 //===========================================================================
 int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
 {
+  assert(pnum != NULL);
+  
   long aux = 0L;
 
   // parsing number
@@ -80,6 +82,8 @@ long ccruncher::Parser::longValue(const string &str) throw(Exception)
 //===========================================================================
 long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
 {
+  assert(pnum != NULL);
+  
   char *pstr = NULL;
 
   // initializing numerical error status
@@ -113,6 +117,8 @@ double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 //===========================================================================
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
+  assert(pnum != NULL);
+  
   char *pstr = NULL;
   int l = strlen(pnum);
   bool isPercentage = false;
@@ -157,6 +163,7 @@ Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
 //===========================================================================
 Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
 {
+  assert(cstr != NULL);
   return Date(cstr);
 }
 
@@ -184,6 +191,8 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
 //===========================================================================
 bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
 {
+  assert(cstr != NULL);
+
   if (strcmp(cstr,"true") == 0)
   {
     return true;
@@ -195,69 +204,6 @@ bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
   else
   {
     throw Exception("error parsing boolean value " + string(cstr) + " : distinct than 'true' or 'false'");
-  }
-}
-
-//===========================================================================
-// parse a distribution
-//===========================================================================
-DistributionType ccruncher::Parser::parseDistribution(const char *cstr, double *val) throw(Exception)
-{
-  return parseDistribution(cstr, val, NULL);
-}
-
-//===========================================================================
-// parse a distribution
-//===========================================================================
-DistributionType ccruncher::Parser::parseDistribution(const char *cstr, double *val1, double *val2) throw(Exception)
-{
-  assert(cstr != NULL);
-  assert (val1 != NULL);
-  
-  if (isalpha(cstr[0]))
-  {
-      if (strncmp(cstr, "beta", 4) == 0)
-      {
-        if (val2 == NULL) {
-          throw Exception("NULL argument parsing distribution");
-        }
-        int rc = sscanf(cstr, "beta(%lf,%lf)", val1, val2);
-        if (rc != 2) {
-          throw Exception("invalid distribution format");
-        }
-        return Beta;
-      }
-      else if (strncmp(cstr, "gaussian", 8) == 0)
-      {
-        if (val2 == NULL) {
-          throw Exception("NULL argument parsing distribution");
-        }
-        int rc = sscanf(cstr, "gaussian(%lf,%lf)", val1, val2);
-        if (rc != 2) {
-          throw Exception("invalid distribution format");
-        }
-        return Gaussian;
-      }
-      else if (strncmp(cstr, "t", 1) == 0)
-      {
-        int rc = sscanf(cstr, "t(%lf)", val1);
-        if (rc != 1) {
-          throw Exception("invalid distribution format");
-        }
-        if (val2 != NULL) {
-          *val2 = NAN;
-        }
-        return TStudent;
-      }
-      else
-      {
-        throw Exception("error parsing distribution" + string(cstr) + " : unknow identifier");
-      }
-  }
-  else
-  {
-    *val1 = doubleValue(cstr);
-    return Fixed;
   }
 }
 

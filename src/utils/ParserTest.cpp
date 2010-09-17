@@ -153,27 +153,3 @@ void ccruncher_test::ParserTest::test_bool(void)
   ASSERT_THROW(Parser::boolValue("False"));
 }
 
-//===========================================================================
-// test_distribution
-//===========================================================================
-void ccruncher_test::ParserTest::test_distribution(void)
-{
-  double val1, val2;
-  
-  ASSERT_EQUALS(Fixed, Parser::parseDistribution("+9.50", &val1));
-  ASSERT_EQUALS_EPSILON(val1, 9.5, EPSILON);
-
-  ASSERT_THROW(Parser::parseDistribution("beta(+4.5, 2.9)", &val1));
-  ASSERT_EQUALS(Beta, Parser::parseDistribution("beta(+4.5, 2.9)", &val1, &val2));
-  ASSERT_EQUALS_EPSILON(val1, 4.5, EPSILON);
-  ASSERT_EQUALS_EPSILON(val2, 2.9, EPSILON);
-
-  ASSERT_THROW(Parser::parseDistribution("gaussian(100.0, 14.9)", &val1));
-  ASSERT_EQUALS(Gaussian, Parser::parseDistribution("gaussian(-100.0, +14.9)", &val1, &val2));
-  ASSERT_EQUALS_EPSILON(val1, -100.0, EPSILON);
-  ASSERT_EQUALS_EPSILON(val2, +14.9, EPSILON);
-
-  ASSERT_EQUALS(TStudent, Parser::parseDistribution("t(4.7)", &val1));
-  ASSERT_EQUALS_EPSILON(val1, 4.7, EPSILON);
-}
-
