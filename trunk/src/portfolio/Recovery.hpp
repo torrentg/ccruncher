@@ -61,6 +61,8 @@ class Recovery
     // default constructor
     Recovery();
     // constructor
+    Recovery(const char *) throw(Exception);
+    // constructor
     Recovery(const string &) throw(Exception);
     // constructor
     Recovery(RecoveryType, double, double);

@@ -22,7 +22,12 @@
 
 #include <cmath>
 #include <cfloat>
+#include <cctype>
+#include <cstring>
+#include <cstdio>
 #include "portfolio/Recovery.hpp"
+#include "utils/Parser.hpp"
+#include <cassert>
 
 //===========================================================================
 // default constructor
@@ -37,9 +42,40 @@ ccruncher::Recovery::Recovery()
 //===========================================================================
 // constructor
 //===========================================================================
+ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
+{
+  assert(cstr != NULL);
+  
+  // triming initial spaces
+  while (isspace(*cstr)) cstr++;
+
+  // parsing recovery value  
+  if (strncmp(cstr, "beta", 4) == 0)
+  {
+    int rc = sscanf(cstr, "beta(%lf,%lf)", &value1, &value2);
+    if (rc != 2) 
+    {
+      throw Exception("invalid recovery value");
+    }
+    if (value1 <= 0.0 || value2 <= 0.0)
+    {
+      throw Exception("invalid beta arguments");
+    }
+    type = Beta;
+  }
+  else
+  {
+    value1 = Parser::doubleValue(cstr);
+    type = Fixed;
+  }
+}
+
+//===========================================================================
+// constructor
+//===========================================================================
 ccruncher::Recovery::Recovery(const string &str) throw(Exception)
 {
-  //TODO: parse beta(x,y) or double value
+  *this = Recovery(str.c_str());
 }
 
 //===========================================================================

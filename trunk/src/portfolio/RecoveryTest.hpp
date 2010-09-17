@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _ParserTest_
-#define _ParserTest_
+#ifndef _RecoveryTest_
+#define _RecoveryTest_
 
 //---------------------------------------------------------------------------
 
@@ -35,27 +35,19 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class ParserTest : public TestFixture<ParserTest>
+class RecoveryTest : public TestFixture<RecoveryTest>
 {
 
   private:
 
-    void test_int(void);
-    void test_long(void);
-    void test_double(void);
-    void test_date(void);
-    void test_bool(void);
+    void test1(void);
 
 
   public:
 
-    TEST_FIXTURE(ParserTest)
+    TEST_FIXTURE(RecoveryTest)
     {
-      TEST_CASE(test_int);
-      TEST_CASE(test_long);
-      TEST_CASE(test_double);
-      TEST_CASE(test_date);
-      TEST_CASE(test_bool);
+      TEST_CASE(test1);
     }
 
     void setUp();
@@ -63,7 +55,7 @@ class ParserTest : public TestFixture<ParserTest>
 
 };
 
-REGISTER_FIXTURE(ParserTest);
+REGISTER_FIXTURE(RecoveryTest);
 
 //---------------------------------------------------------------------------
 

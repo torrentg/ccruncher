@@ -139,6 +139,7 @@ tests_SOURCES = \
     ../src/correlations/CorrelationMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
+    ../src/portfolio/RecoveryTest.cpp\
     ../src/interests/InterestTest.cpp\
     ../src/segmentations/SegmentationTest.cpp\
     ../src/segmentations/SegmentationsTest.cpp\
@@ -210,6 +211,7 @@ tests_SOURCES = \
     ../src/correlations/CorrelationMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
+    ../src/portfolio/RecoveryTest.hpp\
     ../src/interests/InterestTest.hpp\
     ../src/segmentations/SegmentationTest.hpp\
     ../src/segmentations/SegmentationsTest.hpp\
