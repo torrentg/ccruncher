@@ -25,6 +25,7 @@
 #include <cctype>
 #include <cstring>
 #include <cstdio>
+#include <gsl/gsl_randist.h>
 #include "portfolio/Recovery.hpp"
 #include "utils/Parser.hpp"
 #include <cassert>
@@ -106,5 +107,23 @@ ccruncher::Recovery::Recovery(double a, double b)
   type = Beta;
   value1 = a;
   value2 = b;
+}
+
+//===========================================================================
+// getValue
+//===========================================================================
+double ccruncher::Recovery::getValue()
+{
+  if (type == Beta) return NAN;
+  else return value1;
+}
+
+//===========================================================================
+// getValue
+//===========================================================================
+double ccruncher::Recovery::getValue(const gsl_rng *rng)
+{
+  if (type == Fixed) return value1;
+  else return gsl_ran_beta(rng, value1, value2);
 }
 
