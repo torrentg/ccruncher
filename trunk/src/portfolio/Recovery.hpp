@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <gsl/gsl_rng.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -70,6 +71,10 @@ class Recovery
     Recovery(double fixedvalue);
     // constructor
     Recovery(double alpha, double beta);
+    // returns recovery (if Fixed, NAN otherwise)
+    double getValue();
+    // returns recovery (includes Beta)
+    double getValue(const gsl_rng *);
 
 };
 
