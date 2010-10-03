@@ -49,6 +49,7 @@ ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators(), thre
   bforce = false;
   btrace = false;
   copula = NULL;
+  running = false;
 }
 
 //===========================================================================
@@ -443,7 +444,13 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 
   // assertions
   assert(1 <= numthreads); 
-  assert(fpath != "" && fpath != "path not set"); 
+  assert(fpath != "" && fpath != "path not set");
+  
+  // check that number of threads is lower than number of iterations
+  if (maxiterations > 0 && numthreads > maxiterations) 
+  {
+    numthreads = maxiterations;
+  }
 
   // setting logger header
   Logger::addBlankLine();
@@ -451,6 +458,7 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   Logger::newIndentLevel();
 
   // creating and launching simulation threads
+  running = true;
   timer.start();
   nfthreads = numthreads;
   vector<Copula*> copulas(numthreads, NULL);
@@ -499,6 +507,7 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();
+  running = false;
   return numiterations;
 }
 
@@ -625,5 +634,23 @@ void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
     fcopulas << u[i] << (i!=borrowers.size()-1?", ":"");
   }
   fcopulas << "\n";
+}
+
+//===========================================================================
+// abort
+// return 1 if running, 0 otherwise
+//===========================================================================
+int ccruncher::MonteCarlo::abort()
+{
+  if (running)
+  {
+    maxiterations = 1;
+    return 1;
+  }
+  else
+  {
+    release();
+    return 0;
+  }
 }
 

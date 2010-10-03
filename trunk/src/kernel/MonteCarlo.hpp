@@ -104,9 +104,13 @@ class MonteCarlo
     bool btrace;
     // file where copula values are stored (if btrace is set)
     ofstream fcopulas;
+    // running flag
+    bool running;
 
   private:
   
+    // deallocate memory
+    void release();
     // initialize params
     void initParams(IData &) throw(Exception);
     // initialize borrowers
@@ -142,8 +146,8 @@ class MonteCarlo
     int execute(int) throw(Exception);
     // trace copula values + trace default times
     void trace(bool);
-    // deallocate memory
-    void release();
+    // abort execution
+    int abort();
     
   public:
   
