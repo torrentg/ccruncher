@@ -67,14 +67,14 @@ MonteCarlo *mcref = NULL;
 
 //===========================================================================
 // catchsignal
+// TODO: review Ctrl-C crash
 //===========================================================================
 void catchsignal(int signal)
 {
   // flush files before close
-  if (mcref != NULL) {
-    mcref->release();
+  if (mcref != NULL && mcref->abort()==0) {
+    exit(1);
   }
-  exit(1);
 } 
 
 //===========================================================================
