@@ -46,7 +46,7 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
   isector = -1;
   id = "NON_ID";
   name = "NO_NAME";
-  recovery = NAN;
+  recovery = Recovery::getNAN();
 }
 
 //===========================================================================
@@ -118,11 +118,9 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
     name = getStringAttribute(attributes, "name", "");
     string strrating = getStringAttribute(attributes, "rating", "");
     string strsector= getStringAttribute(attributes, "sector", "");
-    if (getAttributeValue(attributes, "recovery") != NULL) {
-      recovery = getDoubleAttribute(attributes, "recovery", NAN);
-      if (recovery < 0.0 || 1.0 < recovery) {
-        throw Exception("recovery value out of range [0%,100%]");
-      }
+    char *str = getAttributeValue(attributes, "recovery");
+    if (str != NULL) {
+      recovery = Recovery(str);
     }
 
     // retrieving indexes

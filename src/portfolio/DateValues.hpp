@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include "utils/Date.hpp"
+#include "portfolio/Recovery.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -46,14 +47,14 @@ class DateValues
     // cashflow value
     double cashflow;
     // recovery value
-    double recovery;
+    Recovery recovery;
 
   public:
   
     // default constructor
     DateValues();
     // constructor
-    DateValues(Date date, double cashflow, double recovery);
+    DateValues(Date date, double cashflow, Recovery recovery);
 
 };
 

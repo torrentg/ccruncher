@@ -30,7 +30,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs, double drecovery_) : vsegments(), data(), ptimes(), plosses()
+ccruncher::Asset::Asset(Segmentations *segs, Recovery drecovery_) : vsegments(), data(), ptimes(), plosses()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
@@ -70,7 +70,7 @@ string ccruncher::Asset::getName(void) const
 //===========================================================================
 // get recovery at date d
 //===========================================================================
-double ccruncher::Asset::getRecovery(Date d)
+Recovery ccruncher::Asset::getRecovery(Date d)
 {
   int n = (int) data.size();
 
@@ -111,7 +111,7 @@ double ccruncher::Asset::getLossX(Date d)
     }
   }
 
-  ret *= (1.0 - getRecovery(d));
+  ret *= (1.0 - getRecovery(d).getValue());
 
   return ret;
 }
@@ -178,16 +178,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   {
     Date at = getDateAttribute(attributes, "at", NAD);
     double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
-    double recovery = drecovery;
-    if (getAttributeValue(attributes, "recovery") != NULL) {
-      recovery = getDoubleAttribute(attributes, "recovery", NAN);
+    Recovery recovery = drecovery;
+    char *str = getAttributeValue(attributes, "recovery");
+    if (str != NULL) {
+      recovery = Recovery(str);
     }
-
-    if (at == NAD || isnan(cashflow) || isnan(recovery)) {
+    if (at == NAD || isnan(cashflow) || Recovery::isnan(recovery)) {
       throw Exception("invalid attributes at <values>");
-    }
-    else if (recovery < 0.0 || 1.0 < recovery) {
-      throw Exception("recovery value out of range [0%,100%]");
     }
     else {
       DateValues aux(at, cashflow, recovery);
@@ -211,11 +208,9 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     id = getStringAttribute(attributes, "id", "");
     name = getStringAttribute(attributes, "name", "");
     date = getDateAttribute(attributes, "date", NAD);
-    if (getAttributeValue(attributes, "recovery") != NULL) {
-      drecovery = getDoubleAttribute(attributes, "recovery", NAN);
-      if (drecovery < 0.0 || 1.0 < drecovery) {
-        throw Exception("recovery value out of range [0%,100%]");
-      }
+    char *str = getAttributeValue(attributes, "recovery");
+    if (str != NULL) {
+      drecovery = Recovery(str);
     }
     if (id == "" || name == "" || date == NAD)
     {
@@ -391,11 +386,11 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
     return false;
   }
 }
- 
+
 //===========================================================================
 // getRecovery
 //===========================================================================
-double ccruncher::Asset::getRecovery() const
+Recovery ccruncher::Asset::getRecovery() const
 {
   return drecovery;
 }

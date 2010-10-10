@@ -211,7 +211,7 @@ void ccruncher_test::BorrowerTest::test1()
   ASSERT(borrower.name == "Borrower1");
   ASSERT(borrower.irating == 0);
   ASSERT(borrower.isector == 1);
-  ASSERT(isnan(borrower.recovery));
+  ASSERT(Recovery::isnan(borrower.recovery));
 
   ASSERT(borrower.belongsTo(1, 1));
   ASSERT(borrower.belongsTo(3, 2));
@@ -351,6 +351,6 @@ void ccruncher_test::BorrowerTest::test4()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
 
   // assertions
-  ASSERT_EQUALS_EPSILON(borrower.recovery, 0.5, EPSILON);
+  ASSERT_EQUALS_EPSILON(borrower.recovery.getValue(), 0.5, EPSILON);
 }
 

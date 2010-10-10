@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <cfloat>
 #include "portfolio/DateValues.hpp"
 
 //===========================================================================
@@ -31,13 +30,13 @@ ccruncher::DateValues::DateValues()
 {
   date = NAD;
   cashflow = NAN;
-  recovery = NAN;
+  recovery = Recovery::getNAN();
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, double _recovery)
+ccruncher::DateValues::DateValues(Date _date, double _cashflow, Recovery _recovery)
 {
   date = _date;
   cashflow = _cashflow;

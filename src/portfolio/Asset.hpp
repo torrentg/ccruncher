@@ -35,6 +35,7 @@
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "portfolio/DateValues.hpp"
+#include "portfolio/Recovery.hpp"
 #include <cassert>
 
 //---------------------------------------------------------------------------
@@ -71,14 +72,14 @@ class Asset : public ExpatHandlers
     // auxiliary variable (used by parser)
     bool have_data;
     // default recovery
-    double drecovery;
+    Recovery drecovery;
 
   private:
   
     // insert a cashflow value
     void insertDateValues(const DateValues &) throw(Exception);
     // returns recovery at given date
-    double getRecovery(Date d);
+    Recovery getRecovery(Date d);
     // returns loss at given date
     double getLossX(Date d);
 
@@ -92,7 +93,7 @@ class Asset : public ExpatHandlers
   public:
 
     // constructor
-    Asset(Segmentations *, double recovery=NAN);
+    Asset(Segmentations *, Recovery recovery=Recovery::getNAN());
     // destructor
     ~Asset();
     // return asset id
@@ -120,7 +121,7 @@ class Asset : public ExpatHandlers
     // returns maximum event date (restricted to precomputed events)
     Date getMaxDate() const;
     // returns default recovery
-    double getRecovery() const;
+    Recovery getRecovery() const;
 
 };
 

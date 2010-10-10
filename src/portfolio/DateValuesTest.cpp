@@ -28,10 +28,6 @@
 
 using namespace ccruncher;
 
-// --------------------------------------------------------------------------
-
-#define EPSILON 1E-14
-
 //===========================================================================
 // setUp
 //===========================================================================
@@ -53,8 +49,8 @@ void ccruncher_test::DateValuesTest::tearDown()
 //===========================================================================
 void ccruncher_test::DateValuesTest::test1()
 {
-  DateValues val1(Date(10,10,2001), +1.0, +2.0);
-  DateValues val2(Date(01,01,2006), -1.0, -2.0);
+  DateValues val1(Date(10,10,2001), +1.0, +0.50);
+  DateValues val2(Date(01,01,2006), -1.0, +0.25);
 
   // checking that sorts by date
   ASSERT(val1 < val2);
