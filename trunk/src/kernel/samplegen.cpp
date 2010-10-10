@@ -307,7 +307,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
     ret += spc2;
     ret += "<values at='" + Format::toString(events[i].date) + "' ";
     ret += "cashflow='" + Format::toString(events[i].cashflow) + "' ";
-    ret += "recovery='" + Format::toString(events[i].recovery*100.0) + "%' ";
+    ret += "recovery='" + events[i].recovery.toString() + "' ";
     ret += "/>\n";
   }
 

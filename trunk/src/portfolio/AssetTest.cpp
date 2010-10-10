@@ -147,7 +147,7 @@ void ccruncher_test::AssetTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   makeAssertions(&asset);
-  ASSERT(isnan(asset.getRecovery()));
+  ASSERT(Recovery::isnan(asset.getRecovery()));
 }
 
 //===========================================================================
@@ -267,7 +267,7 @@ void ccruncher_test::AssetTest::test5()
   // asset object creation
   Asset asset(&segs, 0.5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT_EQUALS_EPSILON(asset.getRecovery(), 0.5, EPSILON);
+  ASSERT_EQUALS_EPSILON(asset.getRecovery().getValue(), 0.5, EPSILON);
 
   Date time0 = Date("1/1/2004");
   Date timeT = Date("1/7/2011");
@@ -320,7 +320,7 @@ void ccruncher_test::AssetTest::test6()
   // asset object creation
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT_EQUALS_EPSILON(asset.getRecovery(), 0.6, EPSILON);
+  ASSERT_EQUALS_EPSILON(asset.getRecovery().getValue(), 0.6, EPSILON);
 
   Date time0 = Date("1/1/2004");
   Date timeT = Date("1/7/2011");
@@ -469,31 +469,31 @@ void ccruncher_test::AssetTest::makeAssertions(Asset *asset)
 
   ASSERT(Date("01/01/2000") == data[0].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[0].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[0].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[0].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/07/2000") == data[1].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[1].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[1].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[1].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/01/2001") == data[2].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[2].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[2].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[2].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/07/2001") == data[3].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[3].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[3].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[3].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/01/2002") == data[4].date);
   ASSERT_EQUALS_EPSILON(+10.0 , data[4].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[4].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[4].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/07/2002") == data[5].date);
   ASSERT_EQUALS_EPSILON(+510.0, data[5].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[5].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[5].recovery.getValue(), EPSILON);
 
   ASSERT(Date("01/07/2020") == data[6].date);
   ASSERT_EQUALS_EPSILON(+10.0, data[6].cashflow, EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, data[6].recovery, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, data[6].recovery.getValue(), EPSILON);
 
   Date time0 = Date("1/1/1999");
   Date timeT = Date("1/1/2010");

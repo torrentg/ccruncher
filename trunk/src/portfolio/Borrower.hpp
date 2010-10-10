@@ -29,6 +29,7 @@
 #include <map>
 #include <vector>
 #include "portfolio/Asset.hpp"
+#include "portfolio/Recovery.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -91,7 +92,7 @@ class Borrower : public ExpatHandlers
     // borrower name
     string name;
     // default recovery
-    double recovery;
+    Recovery recovery;
 
   public:
   

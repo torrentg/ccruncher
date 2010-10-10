@@ -48,7 +48,7 @@ enum RecoveryType
 class Recovery
 {
 
-  public:
+  private:
 
     // recovery type
     RecoveryType type;
@@ -56,6 +56,11 @@ class Recovery
     double value1;
     // type=Beta->beta
     double value2;
+
+  private:
+  
+    // set values
+    void init(RecoveryType, double, double) throw(Exception);
 
   public:
   
@@ -66,16 +71,28 @@ class Recovery
     // constructor
     Recovery(const string &) throw(Exception);
     // constructor
-    Recovery(RecoveryType, double, double);
+    Recovery(RecoveryType, double, double) throw(Exception);
     // constructor
-    Recovery(double fixedvalue);
+    Recovery(double fixedvalue) throw(Exception);
     // constructor
-    Recovery(double alpha, double beta);
+    Recovery(double alpha, double beta) throw(Exception);
+    // returns type
+    RecoveryType getType() const;
+    // retuns value1
+    double getValue1() const;
+    // returns value2
+    double getValue2() const;
     // returns recovery (if Fixed, NAN otherwise)
-    double getValue();
+    double getValue() const;
     // returns recovery (includes Beta)
-    double getValue(const gsl_rng *);
-
+    double getValue(const gsl_rng *) const;
+    // returns a Non-A-Recovery value
+    static Recovery getNAN();
+    // check if is a Non-A-Recovery value
+    static bool isnan(Recovery);
+    // to string
+	string toString() const;
+	
 };
 
 //---------------------------------------------------------------------------
