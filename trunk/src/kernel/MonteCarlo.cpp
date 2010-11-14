@@ -461,11 +461,11 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   running = true;
   timer.start();
   nfthreads = numthreads;
-  vector<Copula*> copulas(numthreads, NULL);
+  vector<Copula*> copulas(numthreads, (Copula*)NULL);
   numiterations = 0;
   timer4.reset();
   pthread_mutex_init(&mutex, NULL);
-  threads.assign(numthreads, NULL);
+  threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
   {
     if (i == 0) copulas[i] = copula;
