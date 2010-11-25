@@ -67,7 +67,7 @@ class Survival : public ExpatHandlers
     // linear interpolation algorithm
     double interpole(double x, double x0, double y0, double x1, double y1) const;
     // inverse function
-    double inverse1(const int irating, double val) const;
+    double inverse1(const int irating, double val) const __attribute__ ((noinline));
 
   protected:
 

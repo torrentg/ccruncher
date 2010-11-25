@@ -400,32 +400,30 @@ double ccruncher::Survival::inverse1(const int irating, double val) const
     return 0.0;
   }
 
-  if (val >= ddata[irating].back())
-  {
-    double x0=-1.0, y0=-1.0, x1=-1.0, y1=-1.0;
-
-    for (int j=1;j<(int)ddata[irating].size();j++)
-    {
-      if (ddata[irating][j] <= val)
-      {
-        x0 = ddata[irating][j-1];
-        y0 = (double)(j-1);
-        x1 = ddata[irating][j];
-        y1 = (double)(j);
-        break;
-      }
-    }
-    assert(x0 >= 0.0);
-    return interpole(val, x0, y0, x1, y1);
-
-    // error if value not found
-    assert(false);
-    return 0.0;
-  }
-  else
+  if(val < ddata[irating].back())
   {
     return (double)(INT_MAX);
   }
+
+  double x0=-1.0, y0=-1.0, x1=-1.0, y1=-1.0;
+
+  for (int j=1;j<(int)ddata[irating].size();j++)
+  {
+    if (ddata[irating][j] <= val)
+    {
+      x0 = ddata[irating][j-1];
+      y0 = (double)(j-1);
+      x1 = ddata[irating][j];
+      y1 = (double)(j);
+      break;
+    }
+  }
+  assert(x0 >= 0.0);
+  return interpole(val, x0, y0, x1, y1);
+
+  // error if value not found
+  assert(false);
+  return 0.0;
 }
 
 //===========================================================================
@@ -460,7 +458,7 @@ double ccruncher::Survival::inverse(const int irating, double val) const
   double x1 = (double)(k+1)/double(ISURVFNUMBINS);
   double y1 = idata[irating][k+1];
 
-  if (y0 == INT_MAX || y1 == INT_MAX) {
+  if ((int)y0 == INT_MAX || (int)y1 == INT_MAX) {
     return ddata[irating].size()+11.0;
   }
 
