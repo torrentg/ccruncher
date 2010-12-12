@@ -39,7 +39,7 @@
     <h1>Input File Format</h1>
 
     <p>
-      This document describes the xml input file for ccruncher-1.6.
+      This document describes the xml input file for ccruncher-1.7.
       In the distribution package you can find the DTD, the XSD and some XML 
       samples into the $CCRUNCHER/samples directory. The xml used as
       example in this section can be found <a href="sample.xml">here</a>.
@@ -680,8 +680,10 @@
     <h2>Section Portfolio</h2>
 
     <p>
-      This section shows how to define the portfolio. For each defined asset 
-      define all the remaining events from the starting date.
+      This section shows how to define the portfolio. 
+      A portfolio is a set of assets. The description of assets is done 
+      by listing future payments and recovery rates in case of default. 
+      Assets are grouped by debtor.
     </p>
 
     <h3>Example</h3>
@@ -833,11 +835,15 @@
       <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
-          Default recovery value used in case of absence of recovery in the description of assets.
-          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          Default recovery used in case of absence of recovery in the description of assets.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the 
+          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
+          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).<br/>
           This attribute is optional.
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3"><code>double<br/>string</code></td>
       </tr>
     </table>
 
@@ -901,11 +907,15 @@
       <tr class="b">
         <td class="c1">recovery</td>
         <td class="c2">
-          Default recovery value used in case of absence of recovery in the description of assets.
-          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          Default recovery used in case of absence of recovery in the description of assets.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the 
+          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
+          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).<br/>
           This attribute is optional.
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3"><code>double<br/>string</code></td>
       </tr>
     </table>
 
@@ -937,10 +947,14 @@
         <td class="c2">
           The portion of loss that will be recovered in case of default at date 
           "at". This value takes into account guarantees, the cost to take legal actions, 
-          recovery rate based on historical data, etc. The value can be set as percentage 
-          (eg. 5.3%) or absolute value (eg. 0.053).
+          recovery rate based on historical data, etc.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the 
+          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
+          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3"><code>double<br/>string</code></td>
       </tr>
     </table>
 
@@ -1042,7 +1056,7 @@
             Copyright &copy; 2004-2010 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 03-Sep-2010
+            Last modified: 15-Oct-2010
           </td>
         </tr></table>
       </div></div></div></div></div>
