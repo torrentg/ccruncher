@@ -92,7 +92,7 @@
     </p>
     <pre>
 
-&nbsp;&nbsp;configure         # prepare compilation
+&nbsp;&nbsp;./configure       # prepare compilation
 &nbsp;&nbsp;make              # compile ccruncher
 &nbsp;&nbsp;bin/src2bin.sh    # install and clean
     </pre>
@@ -131,15 +131,12 @@
     </pre>
 
     <p>
-      <b>Step 4.</b> Compute the Value at Risk (script available only in Linux/UNIX version)
+      <b>Step 4.</b> Use your prefered data analysis tool to compute the risk indicators.
     </p>
-    <pre>
-
-&nbsp;&nbsp;bin/ccreport.sh data/portfolio.csv
-&nbsp;&nbsp;firefox data/portfolio.html
-    </pre>
     <p>
-      or open a <a href="http://www.r-project.org">R</a> console and type:
+      Ccruncher provides a basic <a href="http://www.r-project.org">R</a> script 
+      located in <code>$CCRUNCHER/bin/ccreport.R</code> that implements the risk 
+      indicators described in documentation. To run it, open a R console and type:
     </p>
     <pre>
 
@@ -147,6 +144,14 @@
 &nbsp;&nbsp;ccruncher.summary("data/portfolio.csv")
 &nbsp;&nbsp;ccruncher.graphic("data/portfolio.csv")
 &nbsp;&nbsp;quit(save='no')
+    </pre>
+    <p>
+      Linux/UNIX version has an additional script to create a report:
+    </p>
+    <pre>
+
+&nbsp;&nbsp;bin/ccreport.sh data/portfolio.csv
+&nbsp;&nbsp;firefox data/portfolio.html
     </pre>
 
     <br/>
@@ -157,7 +162,7 @@
             Copyright &copy; 2004-2010 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
     			</td>
     			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 03-Sep-2010
+    				 Last modified: 12-Dec-2010
     			</td>
     		</tr></table>
     	</div></div></div></div></div>
