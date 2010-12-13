@@ -706,3 +706,47 @@ ccruncher.graphic <- function(filename, rdigits=1)
   }
 }
 
+#===========================================================================
+# description
+#   plots a density chart
+# arguments
+#   x: vector with simulated values
+# returns
+#   the requested density chart
+# example
+#   x <- ccruncher.read("file.csv");
+#   ccruncher.density(x[,1])
+#===========================================================================
+ccruncher.density <- function(x)
+{
+  aux <- density(x);
+  plot(aux, panel.first = grid(),
+     main="Density Function",
+     xlab="default loss", ylab="probability");
+}
+
+#===========================================================================
+# description
+#   creates a pie chart with expected loss per segment
+# arguments
+#   filename: string. csv ccruncher output filename
+#   rdigits: number of decimal digits
+# returns
+#   the requested graphic
+# example
+#   ccruncher.piechart("file.csv")
+#===========================================================================
+ccruncher.piechart <- function(filename, rdigits=1)
+{
+  x <- ccruncher.read(filename);
+  txts <- names(x);
+  vals <- vector(length=length(x));
+  for(i in 1:length(x)) {
+    vals[i] <- mean(x[,i]);
+  }
+  for(i in 1:length(x)) {
+    txts[i] <- txts[i] %&% " (" %&% round(100*vals[i]/sum(vals),rdigits) %&% "%)";
+  }
+  pie(vals, txts, main="Expected Loss by segment")
+}
+
