@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE xsl:stylesheet [<!ENTITY nbsp "&#160;">]>
+
 <!--
 ===========================================================================
 #
@@ -41,11 +43,11 @@
 body {
 	padding: 0px;
 	margin: 0px;
-	font: normal 8pt/13pt verdana,arial,sans-serif;
+	font: normal 10pt/12pt verdana,arial,sans-serif;
 	color: black;
 }
 #main-container {
-	width:650px;
+	width: 800px;
 	margin: 0 auto;
 	clear:both;
 	padding-top: 10px;
@@ -55,9 +57,9 @@ body {
 	background-color: white;
 }
 .gray-bar {
-	margin-top:20px;
-	margin-bottom:15px;
-	padding-left:5px;
+	margin-top: 20px;
+	margin-bottom: 15px;
+	padding-left: 5px;
 	height: 40px;
 	text-align: left;
 	background-color: #E0E0E0;
@@ -79,42 +81,72 @@ body {
 table.its tr.even {
 	background-color: #def;
 	color: black;
+	text-align: right;
+	white-space:nowrap;
+	font: normal 8pt/10pt verdana,arial,sans-serif;
 }
 table.its tr.odd {
 	background-color: white;
 	color: black;
+	text-align: right;
+	white-space:nowrap;
+	font: normal 8pt/10pt verdana,arial,sans-serif;
 }
 		</style>
-	</head>  
+	</head>
 	<body>
 		<div id="main-container">
 			<div class="gray-bar">
-				<table width="100%" border="0"><tr><td align="left">
-				<span class="big">Segmentation <xsl:value-of select="/ccruncher-report/segmentation/@name"/></span>
-				</td><td align="right">
-					<xsl:element name="a">
-						<xsl:attribute name="href"><xsl:value-of select="/ccruncher-report/segmentation/@name" />.csv</xsl:attribute>
-						<xsl:value-of select="/ccruncher-report/segmentation/@name" />.csv
-					</xsl:element>
-				&#160;
-					<xsl:element name="a">
-						<xsl:attribute name="href"><xsl:value-of select="/ccruncher-report/segmentation/@name" />.xml</xsl:attribute>
-						<xsl:value-of select="/ccruncher-report/segmentation/@name" />.xml
-					</xsl:element>
-				</td></tr></table>
+				<span class="big"><b><a style="text-decoration:none;color:black;" href="http://www.ccruncher.net">CCRUNCHER</a> REPORT</b></span>
 			</div>
-			<center>
+			<table width="100%"><tr><td align="center">
+			<table class="its" border="0" cellpadding="4" cellspacing="4">
+			<tr class="even">
+				<td align="left">Segmentation name</td>
+				<td align="center">
+				<xsl:value-of select="/ccruncher-report/segmentation/@name"/>
+				</td>
+			</tr>
+			<tr class="odd">
+				<td align="left">Simulated values</td>
+				<td align="center">
+				<xsl:element name="a">
+					<xsl:attribute name="href"><xsl:value-of select="/ccruncher-report/segmentation/@name" />.csv</xsl:attribute>
+					<xsl:value-of select="/ccruncher-report/segmentation/@name" />.csv
+				</xsl:element>
+				</td>
+			</tr>
+			<tr class="even">
+				<td align="left">Results file</td>
+				<td align="center">
+				<xsl:element name="a">
+					<xsl:attribute name="href"><xsl:value-of select="/ccruncher-report/segmentation/@name" />.xml</xsl:attribute>
+					<xsl:value-of select="/ccruncher-report/segmentation/@name" />.xml
+				</xsl:element>
+				</td>
+			</tr>
+			<tr class="odd">
+				<td align="left">Number of simulations</td>
+				<td align="center">
+					<xsl:value-of select="/ccruncher-report/segmentation/segment[1]/size/@value"/>
+				</td>
+			</tr>
+			</table>
+			</td><td align="center">
+			<xsl:if test="count(//ccruncher-report/segmentation/segment)>1">
 				<xsl:element name="img">
 					<xsl:attribute name="src"><xsl:value-of select="/ccruncher-report/segmentation/@name" />.png</xsl:attribute>
-					<xsl:attribute name="alt">graphics</xsl:attribute>
+					<xsl:attribute name="width">300</xsl:attribute>
+					<xsl:attribute name="alt">expected loss piechart</xsl:attribute>
 				</xsl:element>
-			</center>
+			</xsl:if>
+			</td></tr></table>
 			<xsl:apply-templates/>
-			<div class="gray-bar">
-				<span class="little" style="text-align:center;">
-					risk computed by <a href="http://www.ccruncher.net">ccruncher</a>
-				</span>
-			</div>
+			<hr style="margin-top:20px;"/>
+			<p class="little" style="text-align:left; margin-bottom:30px;">
+				<b>Note:</b> results are calculated from a Monte Carlo simulation and may differ across 
+				simulations when using the same input.
+			</p>
 		</div>
 	</body>
 </html>
@@ -122,145 +154,124 @@ table.its tr.odd {
 
 <xsl:template match="/ccruncher-report/segmentation/segment">
 	<div class="gray-bar">
-		<span class="big">Segment <xsl:value-of select="@name"/></span>
+		<span class="big" style="text-transform:capitalize">
+			<xsl:value-of select="@name"/> default loss simulation statistics
+		</span>
 	</div>
 	<table width="100%" border="0"><tr>
 	<td align="center" valign="middle">
-	<table class="its" border="0" cellpadding="4" cellspacing="4">
-		<tr class="even">
-			<td>
-				<b>Mean(Expected Loss)</b>
-			</td>
-			<td align="right"><xsl:value-of select="mean/@value"/></td>
-		</tr>
-		<tr class="odd">
-			<td>
-				<b>Stddev(Expected Loss)</b>
-			</td>
-			<td align="right"><xsl:value-of select="mean/@stderr"/></td>
-		</tr>
-		<tr class="even">
-			<td>
-				<b>Mean(Stddev Portfolio Loss)</b>
-			</td>
-			<td align="right"><xsl:value-of select="stddev/@value"/></td>
-		</tr>
-		<tr class="odd">
-			<td>
-				<b>Stddev(Stddev Portfolio Loss)</b>
-			</td>
-			<td align="right"><xsl:value-of select="stddev/@stderr"/></td>
-		</tr>
-		<tr class="even">
-			<td>
-				<b>Minimum loss simulated value</b>
-			</td>
-			<td align="right"><xsl:value-of select="min/@value"/></td>
-		</tr>
-		<tr class="odd">
-			<td>
-				<b>Maximum loss simulated value</b>
-			</td>
-			<td align="right"><xsl:value-of select="max/@value"/></td>
-		</tr>
-		<tr class="even">
-			<td>
-				<b>Number of simulations</b>
-			</td>
-			<td align="right"><xsl:value-of select="size/@value"/></td>
-		</tr>
-	</table>
+		<xsl:element name="img">
+			<xsl:attribute name="src"><xsl:value-of select="/ccruncher-report/segmentation/@name" />-<xsl:value-of select="/ccruncher-report/segmentation/segment/@name" />.png</xsl:attribute>
+			<xsl:attribute name="width">300</xsl:attribute>
+			<xsl:attribute name="alt">density function</xsl:attribute>
+		</xsl:element>
 	</td>
-	<td align="center" valign="top">
-	<table border="1" cellpadding="4" cellspacing="4" style="border:none;">
+	<td align="center" valign="middle">
+	<table class="its" border="0" cellpadding="4" cellspacing="4">
 		<tr>
-			<td align="center" style="border:none;">
-			</td>
-			<td colspan="2" align="center">
-				<b><a style="text-decoration:none;color:black;" href="http://en.wikipedia.org/wiki/Value_at_risk">Value At Risk</a></b>
-			</td>
-			<td colspan="2" align="center" nowrap="nowrap">
-				<b><a style="text-decoration:none;color:black;" href="http://en.wikipedia.org/wiki/Expected_shortfall">Expected Shortfall</a></b>
-			</td>
+			<td>&nbsp;</td>
+			<td class="little" align="center"><b>Mean</b></td>
+			<td class="little" align="center"><b>StdErr</b></td>
+			<td style="background-color: white;" colspan="4">&nbsp;</td>
+		</tr>
+		<tr class="even">
+			<td align="center">Expected Loss</td>
+			<td><xsl:value-of select="mean/@value"/></td>
+			<td><xsl:value-of select="mean/@stderr"/></td>
+			<td style="background-color: white;" colspan="4">&nbsp;</td>
 		</tr>
 		<tr>
-			<td align="center" style="border:none;">
-			</td>
-			<td align="center">
-				<b>Mean</b>
-			</td>
-			<td align="center">
-				<b>Stddev</b>
-			</td>
-			<td align="center">
-				<b>Mean</b>
-			</td>
-			<td align="center">
-				<b>Stddev</b>
-			</td>
+			<td colspan="7">&nbsp;</td>
 		</tr>
 		<tr>
-			<td align="center"><b>90%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9']/@stderr"/></td>
+			<td class="little" nowrap="nowrap"><b>&nbsp;&nbsp;<a href="http://en.wikipedia.org/wiki/Value_at_risk">Value At Risk</a>&nbsp;&nbsp;</b></td>
+			<td class="little" align="center"><b>Mean</b></td>
+			<td class="little" align="center"><b>StdErr</b></td>
+			<td>&nbsp;</td>
+			<td class="little" nowrap="nowrap"><b><a href="http://en.wikipedia.org/wiki/Expected_shortfall">Expected Shortfall</a></b></td>
+			<td class="little"><b>Mean</b></td>
+			<td class="little"><b>StdErr</b></td>
 		</tr>
-		<tr>
-			<td align="center"><b>95%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.95']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.95']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.95']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.95']/@stderr"/></td>
+		<tr class="even">
+			<td align="center">VAR (90.00%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.9']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.9']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (90.00%)</td>
+			<td><xsl:value-of select="ES[@prob='0.9']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.9']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>97.5%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.975']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.975']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.975']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.975']/@stderr"/></td>
+		<tr class="odd">
+			<td align="center">VAR (95.00%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.95']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.95']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (95.00%)</td>
+			<td><xsl:value-of select="ES[@prob='0.95']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.95']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.99']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.99']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.99']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.99']/@stderr"/></td>
+		<tr class="even">
+			<td align="center">VAR (97.50%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.975']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.975']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (97.50%)</td>
+			<td><xsl:value-of select="ES[@prob='0.975']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.975']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99.25%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9925']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9925']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9925']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9925']/@stderr"/></td>
+		<tr class="odd">
+			<td align="center">VAR (99.00%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.99']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.99']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.00%)</td>
+			<td><xsl:value-of select="ES[@prob='0.99']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.99']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99.5%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.995']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.995']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.995']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.995']/@stderr"/></td>
+		<tr class="even">
+			<td align="center">VAR (99.25%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.9925']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.9925']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.25%)</td>
+			<td><xsl:value-of select="ES[@prob='0.9925']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.9925']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99.75%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9975']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9975']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9975']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9975']/@stderr"/></td>
+		<tr class="odd">
+			<td align="center">VAR (99.50%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.995']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.995']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.50%)</td>
+			<td><xsl:value-of select="ES[@prob='0.995']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.995']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99.9%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.999']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.999']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.999']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.999']/@stderr"/></td>
+		<tr class="even">
+			<td align="center">VAR (99.75%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.9975']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.9975']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.75%)</td>
+			<td><xsl:value-of select="ES[@prob='0.9975']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.9975']/@stderr"/></td>
 		</tr>
-		<tr>
-			<td align="center"><b>99.99%</b></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9999']/@value"/></td>
-			<td align="center"><xsl:value-of select="VaR[@prob='0.9999']/@stderr"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9999']/@value"/></td>
-			<td align="center"><xsl:value-of select="ES[@prob='0.9999']/@stderr"/></td>
+		<tr class="odd">
+			<td align="center">VAR (99.90%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.999']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.999']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.90%)</td>
+			<td><xsl:value-of select="ES[@prob='0.999']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.999']/@stderr"/></td>
+		</tr>
+		<tr class="even">
+			<td align="center">VAR (99.99%)</td>
+			<td><xsl:value-of select="VaR[@prob='0.9999']/@value"/></td>
+			<td><xsl:value-of select="VaR[@prob='0.9999']/@stderr"/></td>
+			<td style="background-color: white;">&nbsp;</td>
+			<td align="center">ES (99.99%)</td>
+			<td><xsl:value-of select="ES[@prob='0.9999']/@value"/></td>
+			<td><xsl:value-of select="ES[@prob='0.9999']/@stderr"/></td>
 		</tr>
 	</table>
 	</td>

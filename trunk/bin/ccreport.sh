@@ -25,7 +25,7 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=ccreport.sh
-numversion="1.6"
+numversion="1.7"
 svnversion="R644"
 retcode=0
 options=""
@@ -159,12 +159,24 @@ doreport() {
   rm -f $name.html;
 
   R --vanilla --slave > /dev/null << _EOF_
+    # load ccruncher script
     source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
+    # create the xml report
     lines <- ccruncher.summary("$filename", format="xml");
     write(lines, file="${name}.xml");
-    png(file="${name}.png", width=400);
-    ccruncher.graphic("$filename");
-    dev.off();
+    # create density graphics
+    x <- ccruncher.read("$filename");
+    for(i in 1:length(x)) {
+      png(file="${name}-" %&% names(x)[i] %&% ".png", width=600);
+      ccruncher.density(x[,i]);
+      dev.off();
+    }
+    # create piechart (if required)
+    if (length(x) > 1) {
+      png(file="${name}.png", width=600);
+      ccruncher.piechart("$filename");
+      dev.off();
+    }
 _EOF_
 
   if [ $? != 0 ]; then
