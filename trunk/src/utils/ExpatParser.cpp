@@ -75,7 +75,7 @@ void ccruncher::ExpatParser::reset()
   assert(xmlparser != NULL);
 
   // creating userData
-  userdata = ExpatUserData::ExpatUserData(xmlparser);
+  userdata = ExpatUserData(xmlparser);
   XML_SetUserData(xmlparser, &userdata);
 
   // setting element handlers
