@@ -36,7 +36,7 @@
     <property name='montecarlo.antithetic' value='false'/>
     <property name='portfolio.onlyActiveBorrowers' value='true'/>
   </parameters>
-  <interest date='18/11/2004'>
+  <interest type='compound'>
     <rate t='0' r='0%'/>
     <rate t='1' r='4%'/>
     <rate t='2' r='4.1%'/>

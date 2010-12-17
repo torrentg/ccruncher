@@ -27,7 +27,6 @@
 
 #include "utils/config.h"
 #include <cmath>
-#include <map>
 #include <vector>
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
@@ -65,10 +64,8 @@ class Asset : public ExpatHandlers
     vector<DateValues> data;
     // pointer to segmentations list
     Segmentations *segmentations;
-    // precomputed times at event dates
-    vector<Date> ptimes;
-    // precomputed losses at event dates
-    vector<double> plosses;
+    // precomputed data
+    vector<DateValues> pdata;
     // auxiliary variable (used by parser)
     bool have_data;
     // default recovery
@@ -142,9 +139,9 @@ inline int ccruncher::Asset::getSegment(int isegmentation) const
 //===========================================================================
 inline double ccruncher::Asset::getLoss(const Date &at) const
 {
-  int length = (int) ptimes.size();
+  int length = (int) pdata.size();
 
-  if (length == 0 || at < ptimes.front() || ptimes.back() < at)
+  if (length == 0 || at < pdata.front().date || pdata.back().date < at)
   {
     return 0.0;
   }
@@ -152,9 +149,9 @@ inline double ccruncher::Asset::getLoss(const Date &at) const
   {
     for(int i=0; i<length; i++) 
     {
-      if (at <= ptimes[i]) 
+      if (at <= pdata[i].date) 
       {
-        return plosses[i];
+        return pdata[i].cashflow * (1.0-pdata[i].recovery.getValue());
       }
     }
   }

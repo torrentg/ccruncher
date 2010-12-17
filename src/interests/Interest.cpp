@@ -35,15 +35,7 @@
 //===========================================================================
 ccruncher::Interest::Interest()
 {
-  date0 = Date();
-}
-
-//===========================================================================
-// contructor
-//===========================================================================
-ccruncher::Interest::Interest(const Date &d)
-{
-  date0 = d;
+  type = Compound;
 }
 
 //===========================================================================
@@ -55,19 +47,19 @@ ccruncher::Interest::~Interest()
 }
 
 //===========================================================================
+// return interest type
+//===========================================================================
+InterestType ccruncher::Interest::getType() const
+{
+  return type;
+}
+
+//===========================================================================
 // returns the numbers of rates
 //===========================================================================
 int ccruncher::Interest::size() const
 {
   return (int) vrates.size();
-}
-
-//===========================================================================
-// returns initial date of this curve
-//===========================================================================
-Date ccruncher::Interest::getDate0() const
-{
-  return date0;
 }
 
 //===========================================================================
@@ -105,36 +97,30 @@ double ccruncher::Interest::getValue(const double t) const
 }
 
 //===========================================================================
-// returns index of date date1
-//===========================================================================
-inline double ccruncher::Interest::date2idx(const Date &date1) const
-{
-  return (double)(date1-date0)/30.3958;
-}
-
-//===========================================================================
-// returns factor to aply to transport a money value from date0 to date1
-// r: interest rate to apply
-// t: time (in months)
-//===========================================================================
-inline double ccruncher::Interest::getUpsilon(const double r, const double t) const
-{
-  return pow(1.0 + r, t/12.0);
-}
-
-//===========================================================================
 // returns factor to aply to transport a money value from date1 to date2
-// satisfying interest curve rate values
+// where is assumed that date2 is the interest curve date
 //===========================================================================
-double ccruncher::Interest::getUpsilon(const Date &date1, const Date &date2) const
+double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) const
 {
-  double t1 = date2idx(date1);
-  double t2 = date2idx(date2);
+  double t = (double)(date1-date2)/(double)(30.3958);
+  double r = getValue(t);
 
-  double r1 = getValue(t1);
-  double r2 = getValue(t2);
-
-  return getUpsilon(r1, -t1) * getUpsilon(r2, +t2);
+  if (type == Simple)
+  {
+    return 1.0/(1.0+r*(t/12.0));
+  }
+  else if (type == Compound)
+  {
+    return 1.0/pow(1.0+r, t/12.0);
+  }
+  else if (type == Continuous)
+  {
+    return 1.0/exp(r*t/12.0);
+  }
+  else
+  {
+    assert(false);
+  }
 }
 
 //===========================================================================
@@ -178,17 +164,28 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"interest")) {
-    if (getNumAttributes(attributes) != 1) {
-      throw Exception("incorrect number of attributes");
+    if (getNumAttributes(attributes) == 0) {
+      type = Compound;
     }
-    else
+    else if (getNumAttributes(attributes) == 1)
     {
-      // getting attributes
-      date0 = getDateAttribute(attributes, "date", NAD);
-      if (date0 == NAD)
-      {
-        throw Exception("invalid attributes values at <interest>");
+      string str = Strings::trim(getStringAttribute(attributes, "type", ""));
+      str = Strings::lowercase(str);
+      if (str == "simple") {
+        type = Simple;
       }
+      else if (str == "compound") {
+        type = Compound;
+      }
+      else if (str == "continuous") {
+        type = Continuous;
+      }
+      else  {
+        throw Exception("invalid type value at <interest>");
+      }
+    }
+    else {
+      throw Exception("incorrect number of attributes");
     }
   }
   else if (isEqual(name_,"rate")) {
@@ -225,8 +222,13 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
-
-  ret += spc + "<interest date='" + Format::toString(date0) + "'>\n";
+  string strtype = "";
+  
+  if (type == Simple) strtype = "simple";
+  else if (type == Continuous) strtype = "continuous";
+  else strtype = "compound";  
+  
+  ret += spc + "<interest type='" + strtype + "'>\n";;
 
   for (unsigned int i=0;i<vrates.size();i++)
   {
@@ -237,4 +239,3 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 
   return ret;
 }
-

@@ -136,7 +136,7 @@ Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 Interest ccruncher_test::BorrowerTest::getInterest()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <interest date='18/02/2003'>\n\
+      <interest type='compound'>\n\
         <rate t='0' r='0.0'/>\n\
         <rate t='1' r='0.0'/>\n\
         <rate t='2' r='0.0'/>\n\

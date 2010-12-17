@@ -30,7 +30,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs, Recovery drecovery_) : vsegments(), data(), ptimes(), plosses()
+ccruncher::Asset::Asset(Segmentations *segs, Recovery drecovery_) : vsegments(), data(), pdata()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
@@ -111,8 +111,6 @@ double ccruncher::Asset::getLossX(Date d)
     }
   }
 
-  ret *= (1.0 - getRecovery(d).getValue());
-
   return ret;
 }
 
@@ -122,17 +120,15 @@ double ccruncher::Asset::getLossX(Date d)
 void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interest &interest)
 {
   // allocating & initializing memory
-  ptimes.clear();
-  plosses.clear();
-  ptimes.reserve(data.size()+2);
-  plosses.reserve(data.size()+2);
+  pdata.clear();
+  pdata.reserve(data.size()+2);
 
   // computing cashflow/recoveries Current Net Value
   for (int i=0; i<(int)data.size(); i++) 
   {
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
-      double ufactor =  interest.getUpsilon(data[i].date, d1);
+      double ufactor =  interest.getFactor(data[i].date, d1);
       data[i].cashflow *= ufactor;
     }
   }
@@ -140,32 +136,33 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   // precomputing losses (d1 <= t <= d2)
   for (int i=0; i<(int)data.size(); i++) 
   {
-    if (d1 <= data[i].date && data[i].date <= d2) 
+    Date d = data[i].date;
+    
+    if (d1 <= d && d <= d2) 
     {
-      ptimes.push_back(data[i].date);
-      plosses.push_back(getLossX(data[i].date));
+      DateValues val(d, getLossX(d), getRecovery(d));
+      pdata.push_back(val);
     }
   }
   
   // adding minimum event date
   Date mindate = max(date, d1);
-  if (ptimes.size() == 0 || mindate < ptimes.front())
+  if (pdata.size() == 0 || mindate < pdata.front().date)
   {
-    ptimes.insert(ptimes.begin(), mindate);
-    plosses.insert(plosses.begin(), getLossX(mindate));
+    DateValues val(mindate, getLossX(mindate), getRecovery(mindate));
+    pdata.insert(pdata.begin(), val);
   }
   
   // adding maximum event date
   Date maxdate = min(data.back().date, d2);
-  if (ptimes.back() < maxdate)
+  if (pdata.back().date < maxdate)
   {
-    ptimes.push_back(maxdate);
-    plosses.push_back(getLossX(maxdate));
+    DateValues val(maxdate, getLossX(maxdate), getRecovery(maxdate));
+    pdata.push_back(val);
   }
 
   // deallocating unused memory  
-  vector<Date>(ptimes).swap(ptimes);
-  vector<double>(plosses).swap(plosses);
+  vector<DateValues>(pdata).swap(pdata);
 }
 
 //===========================================================================
@@ -352,7 +349,7 @@ void ccruncher::Asset::deleteData()
 //===========================================================================
 Date ccruncher::Asset::getMinDate() const
 {
-  return ptimes.front();
+  return pdata.front().date;
 }
 
 //===========================================================================
@@ -361,7 +358,7 @@ Date ccruncher::Asset::getMinDate() const
 //===========================================================================
 Date ccruncher::Asset::getMaxDate() const
 {
-  return ptimes.back();
+  return pdata.back().date;
 }
 
 //===========================================================================
@@ -394,4 +391,4 @@ Recovery ccruncher::Asset::getRecovery() const
 {
   return drecovery;
 }
-       
+

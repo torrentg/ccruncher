@@ -36,7 +36,7 @@
 %-----------------------------------------------------
 % defining some useful values
 %-----------------------------------------------------
-\def\numversion{1.6}
+\def\numversion{1.7}
 \def\svnversion{R644}
 
 %-----------------------------------------------------
@@ -164,7 +164,7 @@ for collaborators with expertise in applied and/or theoretical financial mathema
 to participate in a GPL (GNU General Public License) structure. The CCruncher 
 system has been tested against both simple hand-made portfolios and large automatically 
 generated portfolios. Future work is being considered to add stochastic recovery rates, 
-pure risk operations like bank guarantees, and the creation of a graphical interface to 
+and stochastic exposures, and the creation of a graphical interface to 
 make the tool available to the public, such as portfolio bond managers.
 
 \begin{comment}
@@ -626,18 +626,14 @@ obtain the risk indicators for this subportfolio.
 
 %---------------------------------------------------------------------------
 \subsection{Yield curve}
-CCruncher can consider that the value of money decreases with time, following a fixed 
-curve (e.g., a yield curve). CCruncher takes the input of the yield curve and takes
-it into account in all computations. The coefficient that determines the money 
-value decrease over time is given by the compound interest formula:
-
-\begin{displaymath}
-\Upsilon(r, t_0,t_1) = (1+r)^{(t_1-t_0)}
-\end{displaymath}
+CCruncher can consider that the value of money decreases with time, following a 
+curve (e.g., a yield curve). CCruncher use this curve to compute the present value 
+of the cash amounts. Allowed methods are simple interest, compound interest and
+continuous interest.
 
 %---------------------------------------------------------------------------
 \subsection{Antithetic technique}
-The random number generation using a copula is time intesive. The Gaussian and 
+The random number generation using a copula is time intensive. The Gaussian and 
 t-Student copulas are symmetric, which means that $(u_1, u_2, \cdots, u_n)$ is 
 equiprobable to $(1-u_1, 1-u_2, \cdots, 1-u_n)$. In CCruncher's antithetic mode, 
 each copula generation is used twice, $(u_1, u_2, \cdots, u_n)$ and 
@@ -1378,8 +1374,41 @@ more information about correlation matrix estimation in \cite{correlations:ubs} 
 \cite{correlations:cmetrics}.
 
 %---------------------------------------------------------------------------
+\begin{comment}
+\subsection{Copula estimation}
+\label{ap:tcopest}
+
+In this section, we demonstrate a simple method for estimating the degrees of
+freedom of the t-Student copula. The exposed method differs from usual estimation
+based on ML and the density of the copula because copula size cause numerical overflows.
+Suppose that we have thepercentage of defaults for each sector for the last few years 
+(e.g., 1980-2008):
+
+\begin{center}
+\begin{displaymath}
+\begin{array}{c|ccc}
+\mathrm{Year}     & \mathrm{Sector}_1   & \dots  & \mathrm{Sector}_{m} \\
+\hline
+1        & p_{1,1}    & \dots  & p_{1,m}    \\
+2        & p_{2,1}    & \dots  & p_{2,m}    \\
+3        & p_{3,1}    & \dots  & p_{3,m}    \\
+\vdots   & \vdots     & \vdots & \vdots     \\
+T-1      & p_{T-1,1}  & \dots  & p_{T-1,m}  \\
+T        & p_{T,1}    & \dots  & p_{T,m}    \\
+\end{array}
+\end{displaymath}
+\end{center}
+
+where $p_{i,j} = \frac{d_{i,j}}{a_{i,j}}$ is the percentage of defaults in sector $j$
+at year $i$, $a_{i,j}$ is the number of borrowers in sector $j$ at year $i$, and 
+$d_{i,j}$ is the number of defaulted borrowers in sector $j$ at year $i$.
+\newline
+\end{comment}
+
+%---------------------------------------------------------------------------
 \subsection{Gaussian copula simulation}
 \label{ap:gaussiancopu}
+
 We describe the algorithm to simulate a Gaussian copula satisfying the correlation 
 matrix $\Sigma$ \cite{copu:wang} \cite{copu:pricing}:
 
@@ -1480,6 +1509,7 @@ where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 %---------------------------------------------------------------------------
 \subsection{T-Student copula simulation}
 \label{ap:tstudentcopu}
+
 We describe the algorithm to simulate a t-Student copula with $\nu$ degrees of freedom
 to satisfy the correlation matrix $\Sigma$ \cite{copu:pricing}:
 
