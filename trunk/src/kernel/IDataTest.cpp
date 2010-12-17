@@ -60,7 +60,7 @@ void ccruncher_test::IDataTest::test1()
       <property name='copula.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </parameters>\n\
-    <interest date='18/02/2003'>\n\
+    <interest type='compound'>\n\
       <rate t='0' r='0.0'/>\n\
       <rate t='1' r='0.04'/>\n\
       <rate t='2' r='0.041'/>\n\

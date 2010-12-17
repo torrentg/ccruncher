@@ -41,6 +41,8 @@ class InterestTest : public TestFixture<InterestTest>
   private:
 
     void test1(void);
+    void test2(void);
+    void test3(void);
 
 
   public:
@@ -48,6 +50,8 @@ class InterestTest : public TestFixture<InterestTest>
     TEST_FIXTURE(InterestTest)
     {
       TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
     }
 
     void setUp();

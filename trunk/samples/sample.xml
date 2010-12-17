@@ -20,7 +20,7 @@
     <property name="portfolio.onlyActiveBorrowers" value="true"/>
   </parameters>
 
-  <interest date="18/10/2009">
+  <interest type="compound">
     <rate t="0" r="0.0%"/>
     <rate t="1" r="4.0%"/>
     <rate t="2" r="4.1%"/>

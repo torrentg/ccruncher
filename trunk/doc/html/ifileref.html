@@ -202,7 +202,7 @@
 
     <pre>
 
-  &lt;interest date="18/10/2009"&gt;
+  &lt;interest type="compound"&gt;
     &lt;rate t="0" r="0.0%"/&gt;
     &lt;rate t="1" r="4.0%"/&gt;
     &lt;rate t="2" r="4.1%"/&gt;
@@ -224,13 +224,13 @@
         <th>Type</th>
       </tr>
       <tr class="b">
-        <td class="c1">date</td>
+        <td class="c1">type</td>
         <td class="c2">
-          Initial date of the interest rate curve. Usually this value matches 
-          the initial simulation date <i>time.0</i>. The format of this field 
-          is: DD/MM/YYYY.
+          Determine how to apply interest curve.
+          Allowed values are: simple, compound and continuous.
+          This attribute is optional. Default value is compound.
         </td>
-        <td class="c3"><code>date</code></td>
+        <td class="c3"><code>string</code></td>
       </tr>
     </table>
 
@@ -1056,7 +1056,7 @@
             Copyright &copy; 2004-2010 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 15-Oct-2010
+            Last modified: 17-Dec-2010
           </td>
         </tr></table>
       </div></div></div></div></div>

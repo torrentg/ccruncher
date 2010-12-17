@@ -52,7 +52,7 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="date" type="date" use="required"/>
+					<xsd:attribute name="type" type="interestType" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="ratings" minOccurs="1" maxOccurs="1">
@@ -166,7 +166,7 @@
 																<xsd:complexType>
 																	<xsd:attribute name="at" type="date" use="required"/>
 																	<xsd:attribute name="cashflow" type="xsd:double" use="required"/>
-																	<xsd:attribute name="recovery" type="double" use="optional"/>
+																	<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
 																</xsd:complexType>
 															</xsd:element>
 														</xsd:sequence>
@@ -176,7 +176,7 @@
 											<xsd:attribute name="name" type="xsd:string" use="required"/>
 											<xsd:attribute name="id" type="xsd:string" use="required"/>
 											<xsd:attribute name="date" type="date" use="required"/>
-											<xsd:attribute name="recovery" type="double" use="optional"/>
+											<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
@@ -184,7 +184,7 @@
 								<xsd:attribute name="id" type="xsd:string" use="required"/>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
 								<xsd:attribute name="sector" type="xsd:string" use="required"/>
-								<xsd:attribute name="recovery" type="double" use="optional"/>
+								<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -212,11 +212,23 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
+	<xsd:simpleType name="interestType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of interest types.
+      </xsd:documentation>
+    </xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="simple"/>
+			<xsd:enumeration value="compound"/>
+			<xsd:enumeration value="continous"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:simpleType name="componentsType">
     <xsd:annotation>
       <xsd:documentation>
         list of types of components.
-        allowed values: asset, borrower
       </xsd:documentation>
     </xsd:annotation>
 		<xsd:restriction base="xsd:string">

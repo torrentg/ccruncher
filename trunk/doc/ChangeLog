@@ -2,6 +2,12 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 1.7 (XXX. 2011)
+--------------------------
+  * solved minor bugs related with standards compliance by compiler
+  * added support for simple interest and continuous interest rates
+  * updated look style in report
+
 version 1.6 (Sep. 2010)
 --------------------------
   * technical document revised
@@ -58,7 +64,7 @@ version 1.3 (Dec. 2008)
   * added optional bulk of simulated default times to file
   * added t-student copula generator
 
-version 1.2 (Sept. 2008)
+version 1.2 (Sep. 2008)
 --------------------------
   * improved W3C compliance in html documentation
   * changed html encoding (ISO-8859-1 -> UTF-8)
@@ -124,14 +130,14 @@ version 0.8 (Nov. 2005)
   * solved cygwin compilation errors
   * minor changes in MonteCarlo class
 
-version 0.7 (October 2005)
+version 0.7 (Oct. 2005)
 --------------------------
   * technical document completed
   * creditcruncher tag replaced by ccruncher tag
   * removed stdout date list
   * portfolio value at t=T (not t=0 as previous versions)
 
-version 0.6 (Sept. 2005)
+version 0.6 (Sep. 2005)
 --------------------------
   * report generation using R (efective risk computation)
   * added error analisis in documentation
@@ -143,7 +149,7 @@ version 0.6 (Sept. 2005)
   * added pdf doc to rollversion system
   * corrected some mistakes on pdf doc (still incomplete)
 
-version 0.5 (August 2005)
+version 0.5 (Aug. 2005)
 --------------------------
   * important: implemented specialized Gaussian Copula
       . adapted to client correlation matrix structure
@@ -156,7 +162,7 @@ version 0.5 (August 2005)
   * increased performance in inverse survival computation
   * added MPI support
 
-version 0.4 (July 2005)
+version 0.4 (Jul. 2005)
 --------------------------
   * bugfix: solved bug when seed=0L
   * bugfix: solved bug in time-to-default algorithm
@@ -168,7 +174,7 @@ version 0.4 (July 2005)
   * replaced concept recovery/exposure by netting
   * fast parsing when portfolio section is not required
 
-version 0.3 (June 2005)
+version 0.3 (Jun. 2005)
 --------------------------
   * bugfix: solved bug in correlation matrix check when correl = 0
   * changed attribute period from mtransitions tag: (year -> month)
@@ -185,7 +191,7 @@ version 0.3 (June 2005)
   * created MSVC7 project (and code companion)
   * when a error raise, prints stack trace (only in linux)
 
-version 0.2 (April 2005)
+version 0.2 (Apr. 2005)
 --------------------------
   * added POSIX compliance in command line arguments
   * output file changed from xml to tabulated text
@@ -194,7 +200,7 @@ version 0.2 (April 2005)
   * bugfix: 'make distcheck' now works
   * migrated from xercesc xml parser to expat xml parser
 
-version 0.1 (January 2005)
+version 0.1 (Jan. 2005)
 --------------------------
   * initial release
 

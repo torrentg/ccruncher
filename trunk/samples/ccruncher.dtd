@@ -50,7 +50,7 @@
     rate+
 )>
 <!ATTLIST interest
-    date CDATA #REQUIRED
+    type CDATA #IMPLIED
 >
 
 <!ELEMENT rate

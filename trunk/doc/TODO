@@ -8,6 +8,7 @@ Current works
      - explain how to distribute the risk (eg. ES) along segments
      - see 'introduction to credit risk modeling'
   * add stochastic recovery
+  * determine the degrees-of-freedom of t-student copula based on historical data
 
 Future works
 -------------------
@@ -28,7 +29,6 @@ Future works
   * add borrower-borrower dependences
   * graphic interface
   * considere that a borrower could belong to a few different sectors
-  * determine the degrees-of-freedom of t-student copula based on historical data
   * explain how to determine the minimum number of simulations required
   * improve lookup-table when survival values are low
   * in techdoc add cholesky decomposition detail
