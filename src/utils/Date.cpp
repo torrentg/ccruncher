@@ -548,7 +548,7 @@ bool ccruncher::Date::valid(int d, int m, int y)
 // returns the number of months between this date and d
 // fractional part are the remaining days / 30
 //===========================================================================
-double ccruncher::Date::getMonthsTo(Date &d)
+double ccruncher::Date::getMonthsTo(const Date &d) const
 {
   if (d < *this) {
     return -d.getMonthsTo(*this);

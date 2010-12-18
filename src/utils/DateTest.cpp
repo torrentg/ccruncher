@@ -216,6 +216,7 @@ void ccruncher_test::DateTest::test_distances(void)
   Date date4 = Date(31,12,2010);
   Date date5 = Date( 1, 1,2011);
   Date date6 = Date(15, 1,2010);
+  Date date7 = Date(2 , 1,2012);
 
   ASSERT_EQUALS_EPSILON(      1.0/30.0, date0.getMonthsTo(date1), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0           , date0.getMonthsTo(date2), EPSILON);
@@ -223,5 +224,6 @@ void ccruncher_test::DateTest::test_distances(void)
   ASSERT_EQUALS_EPSILON(11.0+30.0/30.0, date0.getMonthsTo(date4), EPSILON);
   ASSERT_EQUALS_EPSILON(12.0          , date0.getMonthsTo(date5), EPSILON);
   ASSERT_EQUALS_EPSILON(     14.0/30.0, date0.getMonthsTo(date6), EPSILON);
+  ASSERT_EQUALS_EPSILON(24.0+ 1.0/30.0, date0.getMonthsTo(date7), EPSILON);
 }
 
