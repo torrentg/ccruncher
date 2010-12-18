@@ -48,14 +48,14 @@
     <rate t='120' r='5.2%'/>
   </interest>
   <ratings>
-    <rating name='AAA' description='AAA desc'/>
-    <rating name='AA' description='AA desc'/>
-    <rating name='A' description='A desc'/>
-    <rating name='BBB' description='BBB desc'/>
-    <rating name='BB' description='BB desc'/>
-    <rating name='B' description='B desc'/>
-    <rating name='CCC' description='CCC desc'/>
-    <rating name='Default' description='Default desc'/>
+    <rating name='AAA' description='prime'/>
+    <rating name='AA' description='high grade'/>
+    <rating name='A' description='upper medium grade'/>
+    <rating name='BBB' description='lower medium grade'/>
+    <rating name='BB' description='non investment grade speculative'/>
+    <rating name='B' description='highly speculative'/>
+    <rating name='CCC' description='extremely speculative'/>
+    <rating name='Default' description='in default'/>
   </ratings>
   <mtransitions period='12'>
     <transition from="AAA" to="AAA" value="90.81%"/>
