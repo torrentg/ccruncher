@@ -113,7 +113,7 @@ class Date
     bool isLeapYear( void ) const;
     void YMD( int *pY, int *pM, int *pD ) const;
     time_t ToSysTime( void ) const;
-    double getMonthsTo(Date& d);
+    double getMonthsTo(const Date& d) const;
 
     Date& operator=( const Date& Orig );
     friend Date operator+( const Date& Left, const long Right );

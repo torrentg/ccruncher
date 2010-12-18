@@ -102,7 +102,7 @@ double ccruncher::Interest::getValue(const double t) const
 //===========================================================================
 double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) const
 {
-  double t = (double)(date1-date2)/(double)(30.3958);
+  double t = date2.getMonthsTo(date1);
   double r = getValue(t);
 
   if (type == Simple)
