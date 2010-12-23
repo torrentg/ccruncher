@@ -295,3 +295,11 @@ double ccruncher::BlockTStudentCopula::getConditionNumber()
   return chol->getConditionNumber();
 }
 
+//===========================================================================
+// returns the Random Number Generator
+//===========================================================================
+gsl_rng* ccruncher::BlockTStudentCopula::getRng()
+{
+  return rng;
+}
+

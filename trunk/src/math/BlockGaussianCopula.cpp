@@ -285,3 +285,11 @@ double ccruncher::BlockGaussianCopula::getConditionNumber()
   return chol->getConditionNumber();
 }
 
+//===========================================================================
+// returns the Random Number Generator
+//===========================================================================
+gsl_rng* ccruncher::BlockGaussianCopula::getRng()
+{
+  return rng;
+}
+

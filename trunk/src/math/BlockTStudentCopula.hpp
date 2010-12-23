@@ -99,6 +99,8 @@ class BlockTStudentCopula : public Copula
     void setSeed(long);
     // returns the cholesky condition number
     double getConditionNumber();
+    // returns the Random Number Generator
+    gsl_rng* getRng();
 
 };
 
