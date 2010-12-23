@@ -146,8 +146,10 @@ class MonteCarlo
     int execute(int) throw(Exception);
     // trace copula values + trace default times
     void trace(bool);
+    // indicates if is doing simulations
+    bool isRunning() const;
     // abort execution
-    int abort();
+    void abort();
     
   public:
   
