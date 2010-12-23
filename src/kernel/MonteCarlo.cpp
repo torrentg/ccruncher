@@ -637,20 +637,22 @@ void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
 }
 
 //===========================================================================
+// indicates if is doing simulations
+//===========================================================================
+bool ccruncher::MonteCarlo::isRunning() const
+{
+  return running;
+}
+
+//===========================================================================
 // abort
 // return 1 if running, 0 otherwise
 //===========================================================================
-int ccruncher::MonteCarlo::abort()
+void ccruncher::MonteCarlo::abort()
 {
   if (running)
   {
     maxiterations = 1;
-    return 1;
-  }
-  else
-  {
-    release();
-    return 0;
   }
 }
 
