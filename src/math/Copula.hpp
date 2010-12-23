@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <gsl/gsl_rng.h>
 
 //---------------------------------------------------------------------------
 
@@ -50,6 +51,8 @@ class Copula
     virtual void setSeed(long) = 0;
     // object replication
     virtual Copula* clone(bool alloc=true) = 0;
+    // returns the Random Number Generator
+    virtual gsl_rng* getRng() = 0;
     // destructor
     virtual ~Copula() {};
 

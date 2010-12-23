@@ -180,6 +180,7 @@ void ccruncher::SimulationThread::evalue()
     
     if (assets[i].mindate <= t && t <= assets[i].maxdate)
     {
+      //TODO: use copula->getRng()
       alosses[i] = assets[i].ref->getLoss(t);
     }
     else
