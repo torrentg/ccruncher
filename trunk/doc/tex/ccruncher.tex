@@ -62,7 +62,7 @@
 CCruncher computes the credit risk of massive loan portfolios 
 taking into account default correlations between economic sectors. This is done 
 by determining the probability distribution of portfolio loss using the Monte 
-Carlo method. The simulation of borrower's default times is achieved
+Carlo method. The simulation of obligor's default times is achieved
 using a copula that combines the survival functions with the observed
 sectorial correlations. Risk is obtained using the usual risk statistics, 
 including Expected Loss, Value at Risk and Expected Shortfall.
@@ -120,7 +120,7 @@ date and amount of each payment. This approach is conceptually equivalent to the
 valuation of portfolios of equities and derivatives using the Monte Carlo method. 
 In the case of market risk, the price of the underlying assets is simulated using 
 a geometric Brownian motion with a given volatility and trend. In the credit risk 
-case, borrowers' defaults are simulated using a copula with given survival rates 
+case, obligors' defaults are simulated using a copula with given survival rates 
 and correlations.
 \newline
 
@@ -131,9 +131,9 @@ separate the default probabilities from the default correlations.
 \newline
 
 CCruncher implements two of the most commonly used copulas in finance, the Normal 
-and T-Student copulas. Because the default time of each borrower is modelled as a 
+and T-Student copulas. Because the default time of each obligor is modelled as a 
 random variable, the size of the copula can be over 50.000, where each component 
-represents a borrower. Simulating low-dimensional copulas poses no problem, but many 
+represents a obligor. Simulating low-dimensional copulas poses no problem, but many 
 of the algorithms operating in low dimensions are unsuitable for large dimensions. 
 To solve this problem, the Cholesky decomposition was adapted to operate with a large 
 correlation matrix composed of blocks, in order to reduce the memory space and the 
@@ -163,9 +163,9 @@ CCruncher is currently a one-man project with no financial support, and is looki
 for collaborators with expertise in applied and/or theoretical financial mathematics 
 to participate in a GPL (GNU General Public License) structure. The CCruncher 
 system has been tested against both simple hand-made portfolios and large automatically 
-generated portfolios. Future work is being considered to add stochastic recovery rates, 
-and stochastic exposures, and the creation of a graphical interface to 
-make the tool available to the public, such as portfolio bond managers.
+generated portfolios. Future work is being considered to add stochastic exposures, and 
+the creation of a graphical interface to make the tool available to the public, such as 
+portfolio bond managers.
 
 \begin{comment}
 \subsection{Credit Risk Models}
@@ -183,7 +183,7 @@ This section explains the input parameters that are required by CCruncher.
 A credit rating estimates the probability that an individual or corporation 
 will pay back a loan. A poor rating indicates a high risk of defaulting.
 Each rating has an associated survival function. This function indicates 
-the probability that a borrower with an initial rating ($X$) will not have 
+the probability that a obligor with an initial rating ($X$) will not have 
 defaulted at time $t$. 
 
 \begin{figure}[!hbt]
@@ -237,13 +237,13 @@ the correlations table based on the historical information about defaults.
 
 %---------------------------------------------------------------------------
 \subsection{Portfolio}
-The portfolio is composed by the borrowers. Each borrower has an initial rating, 
+The portfolio is composed by the obligors. Each obligor has an initial rating, 
 belongs to a sector and has one or more assets. Each asset
 is defined by its creation date, expected cashflow and recovery at certain 
 dates. Figure \ref{portfolio} shows the structure of a portfolio.
 
-\paragraph{Cashflow.} Indicates the cash given to the borrower (negative amounts) and the
-cash received from the borrower (positive amounts) at each date (see Figure \ref{cashflow}).
+\paragraph{Cashflow.} Indicates the cash given to the obligor (negative amounts) and the
+cash received from the obligor (positive amounts) at each date (see Figure \ref{cashflow}).
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -259,7 +259,7 @@ in the case of default at a fixed time. This value takes into account guarantees
 the cost of taking legal action, and recovery rate based on historical data.
 \newline
 
-If a borrower defaults, the loss is the sum of all remaining cashflows at the default time 
+If a obligor defaults, the loss is the sum of all remaining cashflows at the default time 
 (\emph{exposure}) as weighted by the recovery rate at the default time.
 
 \begin{displaymath}
@@ -292,11 +292,11 @@ portfolio losses.
 \end{figure}
 
 %---------------------------------------------------------------------------
-\subsection{Borrowers correlation matrix}
+\subsection{Obligors correlation matrix}
 \label{tcorrel}
 We need to translate from default correlations between sectors to default 
-correlations between borrowers. Suppose we have $n$ borrowers and $m$ 
-sectors. Each borrower belongs to a sector. $\rho_{i,j}$ are the estimated 
+correlations between obligors. Suppose we have $n$ obligors and $m$ 
+sectors. Each obligor belongs to a sector. $\rho_{i,j}$ are the estimated 
 default time correlations between sectors:
 
 \begin{center}
@@ -315,10 +315,10 @@ default time correlations between sectors:
 \end{displaymath}
 \end{center}
 
-Sort the borrowers so that those who belong to sector $1$ are at the beginning 
-and those in sector $m$ are at the end. Then, create the borrowers correlation 
-matrix, taking as the correlation between two borrowers the correlation between 
-their sectors (see Figure \ref{borrowercorrel}).
+Sort the obligors so that those who belong to sector $1$ are at the beginning 
+and those in sector $m$ are at the end. Then, create the obligors correlation 
+matrix, taking as the correlation between two obligors the correlation between 
+their sectors (see Figure \ref{obligorcorrel}).
 
 \begin{figure}[!hb]
 \begin{displaymath}
@@ -345,8 +345,8 @@ their sectors (see Figure \ref{borrowercorrel}).
 \right)
 \end{array}
 \end{displaymath}
-\caption{Borrowers correlation matrix}
-\label{borrowercorrel}
+\caption{Obligors correlation matrix}
+\label{obligorcorrel}
 \end{figure}
 
 Observe that this is a correlation matrix (symmetric, $|\rho_{i,j}| \leq 1$, 
@@ -358,9 +358,9 @@ using the Cholesky algorithm, so it must be positive-definite.
 \label{mcsim}
 Monte Carlo methods are a class of computational algorithms for 
 simulating the behaviour of various physical and mathematical systems. 
-Each simulation consists of computing a random default time for each borrower 
+Each simulation consists of computing a random default time for each obligor 
 and then calculating the loss of the portfolio. Default times must fulfil two 
-conditions: the borrower's survival functions and the borrower's correlation 
+conditions: the obligor's survival functions and the obligor's correlation 
 matrix. The link between the marginal distributions (survival functions) and 
 the dependence structure (correlations) is achieved with a copula.
 
@@ -374,7 +374,7 @@ could clarify those statements.
 \subsubsection{Correlated random numbers generation}
 A copula \cite{copu:pitfalls} \cite{copu:wang} is a multivariate random variable 
 in which each component is uniform, $U[0,1]$. Each simulation requires a set of 
-random numbers between $[0, 1]$ and is correlated with the borrowers correlation 
+random numbers between $[0, 1]$ and is correlated with the obligors correlation 
 matrix, $\Sigma$.
 
 \begin{displaymath}
@@ -389,7 +389,7 @@ u_{k1} & u_{k2} & \dots  & u_{kn} \\
 \qquad
 &
 \begin{array}{c}
-n \textrm{ number of borrowers}    \\
+n \textrm{ number of obligors}    \\
 k \textrm{ number of simulations}  \\
 u_{.i} \sim U[0,1]                 \\
 Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \\
@@ -420,8 +420,8 @@ significant."
 %...........................................................................
 \subsubsection{Default times simulation}
 \label{sec:deftimessim}
-Given a borrower $k$ and a random number ($u_k \in [0,1]$) (generated using a 
-copula), we simulate the default time considering the inverse of the borrower 
+Given a obligor $k$ and a random number ($u_k \in [0,1]$) (generated using a 
+copula), we simulate the default time considering the inverse of the obligor 
 survival function at $u_k$ \cite{ref:cred_risk}. 
 Figure \ref{simttd} shows this graphically.
 
@@ -437,21 +437,21 @@ Figure \ref{simttd} shows this graphically.
 %...........................................................................
 \subsubsection{Portfolio loss evaluation}
 \label{sec:portfolioloss}
-At this point, all borrowers have a simulated default time. The loss
-caused by any borrower is the sum of all remaining cashflows at the default time 
+At this point, all obligors have a simulated default time. The loss
+caused by any obligor is the sum of all remaining cashflows at the default time 
 weighted by the recovery at the default time. To obtain the simulated 
-value of the portfolio loss, add up all borrowers' losses:
+value of the portfolio loss, add up all obligors' losses:
 
 \begin{displaymath}
-\mathrm{PortfolioLoss} = \sum_{i=1}^N \mathrm{BorrowerLoss}_i
+\mathrm{PortfolioLoss} = \sum_{i=1}^N \mathrm{ObligorLoss}_i
 \end{displaymath}
 
-where $N$ is the number of borrowers in the portfolio. For each borrower, we 
+where $N$ is the number of obligors in the portfolio. For each obligor, we 
 use the simulated default time, $t_i$, described in the previous section, to 
-compute the borrower loss:
+compute the obligor loss:
 
 \begin{displaymath}
-\mathrm{BorrowerLoss}_{i} = (1 - \mathrm{recovery}_{t_i}^i) \cdot \sum_{j \ge {t_i}} \mathrm{cashflow}_{j}^i
+\mathrm{ObligorLoss}_{i} = (1 - \mathrm{recovery}_{t_i}^i) \cdot \sum_{j \ge {t_i}} \mathrm{cashflow}_{j}^i
 \end{displaymath}
 
 %---------------------------------------------------------------------------
@@ -616,10 +616,18 @@ CCruncher takes into consideration other concepts that have not been discussed
 up to this point with the purpose of simplifying the content.
 
 %---------------------------------------------------------------------------
+\subsection{Stochastic recovery}
+In most cases, recovery is not known in advance and is estimated based on historical data. 
+CCruncher allows to describe the recovery of an asset at time \emph{t} using the beta 
+distribution, the most popular recovery distribution. When obligor defaults, 
+CCruncher simule a value from the recovery distribution at time \emph{t} 
+to determine the asset loss.
+
+%---------------------------------------------------------------------------
 \subsection{Risk aggregation}
 CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
 the same execution) the simulation of subportfolios by defining one or more 
-aggregators. Consequently, one can determine which borrowers (or products, 
+aggregators. Consequently, one can determine which obligors (or products, 
 branches, regions, assets, etc.) increase the risk of the portfolio. 
 Each subportfolio has its own list of simulated values that can be processed to 
 obtain the risk indicators for this subportfolio.
@@ -666,7 +674,7 @@ We compute the credit risk at $T=30$ years for the following portfolio.
 \begin{table}[!h]
 \begin{center}
 \begin{tabular}[]{c|l|c|c|c|l}
-Id  & Borrower name        & Rating & Sector         & Recovery & Assets     \\
+Id  & Obligor name         & Rating & Sector         & Recovery & Assets     \\
 \hline
 B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \\
 B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \\
@@ -956,9 +964,9 @@ Month &  AAA   &  AA    &   A    &  BBB   &  BB    &   B    &  CCC   \\
 \clearpage 
 
 %---------------------------------------------------------------------------
-\subsection{Creating the borrowers correlation matrix}
+\subsection{Creating the obligors correlation matrix}
 
-Use Section \ref{tcorrel} to create the borrowers correlation matrix. In 
+Use Section \ref{tcorrel} to create the obligors correlation matrix. In 
 this example, the debtors are sorted by sector, and therefore, no reorder is 
 required.
 \begin{displaymath}
@@ -1110,15 +1118,15 @@ where $\Phi(x)$ is the $N(0,1)$ cumulative distribution function.
 
 \paragraph{Default times simulation.} To simulate the default time, use the 
 inverse of the survival functions, as explained in Section \ref{sec:deftimessim}.
-The first borrower has an initial rating AA and a copula value of $52.75$. 
+The first obligor has an initial rating AA and a copula value of $52.75$. 
 In Table \ref{example.survivals} search for the month in which AA is close to 
-$52.75$, and consider this month, $961$, as the month in which the first borrower 
+$52.75$, and consider this month, $961$, as the month in which the first obligor 
 defaults. 
 {\small
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|}
-Borrower & Rating & $\vec{U}_i$ & Default month \\
+Obligor  & Rating & $\vec{U}_i$ & Default month \\
 \hline
 B1       & AA     &  0.5275     &  961      \\
 B2       & BBB    &  0.4093     &  898      \\
@@ -1144,7 +1152,7 @@ we use the simulated default times and the portfolio composition (Tables
 \begin{table}[!hbt]
 \begin{center}
 \begin{tabular}[]{|c|c|c|c|c|c|}
-Borrower & Default month & Asset & Exposure    & Recovery & Loss  \\
+Obligor  & Default month & Asset & Exposure    & Recovery & Loss  \\
 \hline
 B1       & 961           &  A1   &             &  80\%    &       \\
 B2       & 898           &  A2   &             &  75\%    &       \\
@@ -1174,16 +1182,16 @@ in this Monte Carlo trial.
 \begin{comment}
 \section{Case studies}
 
-\subsection{Identical uncorrelated borrowers}
+\subsection{Identical uncorrelated obligors}
 %TODO: fill this section. use samples/README
 
-\subsection{Identical correlated borrowers}
+\subsection{Identical correlated obligors}
 %TODO: fill this section. use samples/README
 
-\subsection{Non-identical uncorrelated borrowers}
+\subsection{Non-identical uncorrelated obligors}
 %TODO: fill this section. use samples/README
 
-\subsection{Non-identical correlated borrowers}
+\subsection{Non-identical correlated obligors}
 %TODO: fill this section. use samples/README
 \end{comment}
 
@@ -1211,9 +1219,9 @@ m_{i,j} = P(r_i \to r_j;T)
 \end{displaymath}
 
 where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
-borrower with rating $r_i$ changes to rating $r_j$ in $T$ years.
+obligor with rating $r_i$ changes to rating $r_j$ in $T$ years.
 Figure \ref{tmatrix1} shows a transition matrix in which the probability that 
-a borrower with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
+a obligor with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
 \newline
 
 \begin{figure}[!hb]
@@ -1343,8 +1351,8 @@ T        & d_{T,1}    & \dots  & d_{T,m}    \\
 \end{displaymath}
 \end{center}
 
-where $a_{i,j}$ is the number of borrowers in sector $j$ at year $i$, and
-$d_{i,j}$ is the number of defaulted borrowers in sector $j$ at year $i$.
+where $a_{i,j}$ is the number of obligors in sector $j$ at year $i$, and
+$d_{i,j}$ is the number of defaulted obligors in sector $j$ at year $i$.
 \newline
 
 We use the following expression of correlation:
@@ -1400,8 +1408,8 @@ T        & p_{T,1}    & \dots  & p_{T,m}    \\
 \end{center}
 
 where $p_{i,j} = \frac{d_{i,j}}{a_{i,j}}$ is the percentage of defaults in sector $j$
-at year $i$, $a_{i,j}$ is the number of borrowers in sector $j$ at year $i$, and 
-$d_{i,j}$ is the number of defaulted borrowers in sector $j$ at year $i$.
+at year $i$, $a_{i,j}$ is the number of obligors in sector $j$ at year $i$, and 
+$d_{i,j}$ is the number of defaulted obligors in sector $j$ at year $i$.
 \newline
 \end{comment}
 
@@ -1714,11 +1722,11 @@ description can be found in \emph{Numerical Recipes in C}\footnote{http://www.nr
 A = U^{\top} \cdot U
 \end{displaymath}
 
-If we have a portfolio of $50000$ borrowers, then the correlation matrix size will
+If we have a portfolio of $50000$ obligors, then the correlation matrix size will
 be $50000 \times 50000$. This requires up to 19 GB of RAM. The 
 multiplication of this matrix by a vector implies $2500000000$ multiplications.
 This is far too many. So, we adapt the Cholesky algorithm in order to consider that 
-the borrowers correlation matrix is a block matrix with $1$'s in the diagonal. 
+the obligors correlation matrix is a block matrix with $1$'s in the diagonal. 
 For instance:
 
 \begin{displaymath}
@@ -1772,8 +1780,8 @@ U = \left|
 
 That is, for each row, we keep the diagonal value and the value of each sector. 
 With this strategy, the required memory size is $N \times (M+1)$, where $N$ is
-the number of borrowers, and $M$ is the number of sectors. With this consideration,
-the memory required to store a $50000 \times 50000$ borrowers correlation matrix
+the number of obligors, and $M$ is the number of sectors. With this consideration,
+the memory required to store a $50000 \times 50000$ obligors correlation matrix
 is only $4.2$ Mb.
 \newline
 
@@ -1789,8 +1797,8 @@ operations that are required to multiply $U$ by a vector. For example:
 \end{displaymath}
 
 Considering this, we can reduce the number of operations from $N^2$ to 
-$N \times (M+1)$, where $N$ is the number of borrowers, and $M$ is the number of 
-sectors. In the $50000$ borrowers example, the operations number reduces from 
+$N \times (M+1)$, where $N$ is the number of obligors, and $M$ is the number of 
+sectors. In the $50000$ obligors example, the operations number reduces from 
 $2500000000$ to only $500000$.
 
 %---------------------------------------------------------------------------

@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Borrower_
-#define _Borrower_
+#ifndef _Obligor_
+#define _Obligor_
 
 //---------------------------------------------------------------------------
 
@@ -47,14 +47,14 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Borrower : public ExpatHandlers
+class Obligor : public ExpatHandlers
 {
 
   private:
 
     // segmentation-segment relations
     vector<int> vsegments;
-    // borrower assets list
+    // obligor assets list
     vector<Asset *> vassets;
     // pointer to ratings object (used by parser)
     const Ratings *ratings;
@@ -83,13 +83,13 @@ class Borrower : public ExpatHandlers
 
   public:
 
-    // borrower rating
+    // obligor rating
     int irating;
-    // borrower sector
+    // obligor sector
     int isector;
-    // borrower identifier
+    // obligor identifier
     string id;
-    // borrower name
+    // obligor name
     string name;
     // default recovery
     Recovery recovery;
@@ -97,12 +97,12 @@ class Borrower : public ExpatHandlers
   public:
   
     // constructor
-    Borrower(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
+    Obligor(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     // destructor
-    ~Borrower();
+    ~Obligor();
     // return the asset list
     vector<Asset *> & getAssets();
-    // indicates if this borrower has cashflows in date1-date2
+    // indicates if this obligor has cashflows in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);

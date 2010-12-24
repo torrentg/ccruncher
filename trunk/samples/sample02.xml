@@ -13,7 +13,7 @@
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->
@@ -570,17 +570,17 @@
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-    <segmentation name="borrowers" components="borrower">
+    <segmentation name="obligors" components="obligor">
       <segment name="*"/>
     </segmentation>
     <segmentation name="assets" components="asset">
       <segment name="*"/>
     </segmentation>
-    <segmentation name="sectors" components="borrower">
+    <segmentation name="sectors" components="obligor">
       <segment name="S1"/>
       <segment name="S2"/>
     </segmentation>
-    <segmentation name="size" components="borrower">
+    <segmentation name="size" components="obligor">
       <segment name="big"/>
       <segment name="medium"/>
     </segmentation>
@@ -599,10 +599,10 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <borrower rating="BB" sector="S1" name="Repsol" id="000001">
+    <obligor rating="BB" sector="S1" name="Repsol" id="000001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <!-- implicit: belongs-to segmentation="borrower" value="cif1" -->
+      <!-- implicit: belongs-to segmentation="obligor" value="cif1" -->
       <asset date="01/01/1999" name="generic" id="op1">
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
@@ -620,7 +620,7 @@
           <values at="01/06/2004" cashflow="10.0" recovery="20%" />
         </data>
       </asset>
-    </borrower>
+    </obligor>
   </portfolio>
 
 </ccruncher>

@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Obligor.hpp"
 #include "utils/Utils.hpp"
 #include <cmath>
 #include <cassert>
@@ -28,7 +28,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
+ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
                Segmentations &segmentations_, const Interest &interest_,
                const Date &d1, const Date &d2) : vsegments(), vassets()
 {
@@ -52,7 +52,7 @@ ccruncher::Borrower::Borrower(const Ratings &ratings_, const Sectors &sectors_,
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::Borrower::~Borrower()
+ccruncher::Obligor::~Obligor()
 {
   for(unsigned int i=0; i<vassets.size(); i++)
   {
@@ -64,7 +64,7 @@ ccruncher::Borrower::~Borrower()
 //===========================================================================
 // check last asset
 //===========================================================================
-void ccruncher::Borrower::prepareLastAsset() throw(Exception)
+void ccruncher::Obligor::prepareLastAsset() throw(Exception)
 {
   int ila = vassets.size()-1;
 
@@ -92,7 +92,7 @@ void ccruncher::Borrower::prepareLastAsset() throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset")) {
     Asset *asset = new Asset(segmentations, recovery);
@@ -112,7 +112,7 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
 
     addBelongsTo(isegmentation, isegment);
   }
-  else if (isEqual(name_,"borrower")) {
+  else if (isEqual(name_,"obligor")) {
     // reading atributes
     id = getStringAttribute(attributes, "id", "");
     name = getStringAttribute(attributes, "name", "");
@@ -129,7 +129,7 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
 
     // doing some checks
     if (id == "" || name == "" || irating < 0 || isector < 0) {
-      throw Exception("invalid attributes at <borrower>");
+      throw Exception("invalid attributes at <obligor>");
     }
   }
   else {
@@ -140,7 +140,7 @@ void ccruncher::Borrower::epstart(ExpatUserData &eu, const char *name_, const ch
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"asset")) {
@@ -149,24 +149,24 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"belongs-to")) {
     // nothing to do
   }
-  else if (isEqual(name_,"borrower")) {
+  else if (isEqual(name_,"obligor")) {
 
     // shrinking memory
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
     // filling implicit segment
     try {
-      int isegmentation = segmentations->indexOfSegmentation("borrowers");
+      int isegmentation = segmentations->indexOfSegmentation("obligors");
       int isegment = segmentations->getSegmentation(isegmentation).addSegment(id);
       addBelongsTo(isegmentation, isegment);
     } 
     catch(...) {
-      // segmentation 'borrowers' not found
+      // segmentation 'obligors' not found
     }
 
-    // important: coding borrower-segments as asset-segments
+    // important: coding obligor-segments as asset-segments
     for (int i=0; i<(int)segmentations->size(); i++) {
-      if (segmentations->getSegmentation(i).components == borrower) {
+      if (segmentations->getSegmentation(i).components == obligor) {
         for(int j=0; j<(int)vassets.size(); j++) {
           vassets[j]->addBelongsTo(i, vsegments[i]);
         }
@@ -181,7 +181,7 @@ void ccruncher::Borrower::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 // isActive
 //===========================================================================
-bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Exception)
+bool ccruncher::Obligor::isActive(const Date &from, const Date &to) throw(Exception)
 {
   for(unsigned int i=0;i<vassets.size();i++)
   {
@@ -197,7 +197,7 @@ bool ccruncher::Borrower::isActive(const Date &from, const Date &to) throw(Excep
 //===========================================================================
 // addBelongsTo
 //===========================================================================
-void ccruncher::Borrower::addBelongsTo(int isegmentation, int isegment) throw(Exception)
+void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation >= 0);
   assert(isegmentation < (int)vsegments.size());
@@ -214,7 +214,7 @@ void ccruncher::Borrower::addBelongsTo(int isegmentation, int isegment) throw(Ex
 //===========================================================================
 // belongsTo
 //===========================================================================
-bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
+bool ccruncher::Obligor::belongsTo(int isegmentation, int isegment)
 {
   return (vsegments[isegmentation]==isegment);
 }
@@ -222,7 +222,7 @@ bool ccruncher::Borrower::belongsTo(int isegmentation, int isegment)
 //===========================================================================
 // getAssets
 //===========================================================================
-vector<Asset *> & ccruncher::Borrower::getAssets()
+vector<Asset *> & ccruncher::Obligor::getAssets()
 {
   return vassets;
 }
@@ -230,7 +230,7 @@ vector<Asset *> & ccruncher::Borrower::getAssets()
 //===========================================================================
 // getSegment
 //===========================================================================
-int ccruncher::Borrower::getSegment(int isegmentation)
+int ccruncher::Obligor::getSegment(int isegmentation)
 {
   assert(isegmentation >= 0);
   assert(isegmentation < (int)vsegments.size());

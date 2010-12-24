@@ -31,8 +31,8 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_
              Segmentations &segmentations_, const Interest &interest_, 
              const Date &date1_, const Date &date2_)
 {
-  auxborrower = NULL;
-  vborrowers.clear();
+  auxobligor = NULL;
+  vobligors.clear();
   // setting external objects
   ratings = &ratings_;
   sectors = &sectors_;
@@ -47,36 +47,36 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_
 //===========================================================================
 ccruncher::Portfolio::~Portfolio()
 {
-  // dropping borrowers
-  for(unsigned int i=0;i<vborrowers.size();i++)
+  // dropping obligors
+  for(unsigned int i=0;i<vobligors.size();i++)
   {
-    delete vborrowers[i];
+    delete vobligors[i];
   }
 }
 
 //===========================================================================
-// returns borrower list
+// returns obligor list
 //===========================================================================
-vector<Borrower *> & ccruncher::Portfolio::getBorrowers()
+vector<Obligor *> & ccruncher::Portfolio::getObligors()
 {
-  return vborrowers;
+  return vobligors;
 }
 
 //===========================================================================
-// inserting a borrower into list
+// inserting a obligor into list
 //===========================================================================
-void ccruncher::Portfolio::insertBorrower(Borrower *val) throw(Exception)
+void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
 {
-  // checking if borrower id is previously defined
-  if(idborrowers.find(val->id) != idborrowers.end())
+  // checking if obligor id is previously defined
+  if(idobligors.find(val->id) != idobligors.end())
   {
-    string msg = "borrower id " + val->id + " repeated";
+    string msg = "obligor id " + val->id + " repeated";
     delete val;
     throw Exception(msg);
   }
   else
   {
-    idborrowers[val->id] = true;
+    idobligors[val->id] = true;
   }
 
   // checking if assets id are previously defined
@@ -95,10 +95,10 @@ void ccruncher::Portfolio::insertBorrower(Borrower *val) throw(Exception)
     }
   }
 
-  // inserting borrower in portfolio
+  // inserting obligor in portfolio
   try
   {
-    vborrowers.push_back(val);
+    vobligors.push_back(val);
   }
   catch(std::exception &e)
   {
@@ -112,9 +112,9 @@ void ccruncher::Portfolio::insertBorrower(Borrower *val) throw(Exception)
 //===========================================================================
 void ccruncher::Portfolio::validations() throw(Exception)
 {
-  if (vborrowers.size() == 0)
+  if (vobligors.size() == 0)
   {
-    throw Exception("portfolio without borrowers");
+    throw Exception("portfolio without obligors");
   }
 }
 
@@ -128,9 +128,9 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
       throw Exception("attributes are not allowed in tag portfolio");
     }
   }
-  else if (isEqual(name_,"borrower")) {
-    auxborrower = new Borrower(*ratings, *sectors, *segmentations, *interest, date1, date2);
-    eppush(eu, auxborrower, name_, attributes);
+  else if (isEqual(name_,"obligor")) {
+    auxobligor = new Obligor(*ratings, *sectors, *segmentations, *interest, date1, date2);
+    eppush(eu, auxobligor, name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -144,13 +144,13 @@ void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"portfolio")) {
-    auxborrower = NULL;
+    auxobligor = NULL;
     validations();
   }
-  else if (isEqual(name_,"borrower")) {
-    assert(auxborrower != NULL);
-    insertBorrower(auxborrower);
-    auxborrower = NULL;
+  else if (isEqual(name_,"obligor")) {
+    assert(auxobligor != NULL);
+    insertObligor(auxobligor);
+    auxobligor = NULL;
   }
   else {
     throw Exception("unexpected end tag " + string(name_));

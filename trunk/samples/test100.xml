@@ -11,12 +11,12 @@
     correl(S1,S1) = 0.20
     correl(S1,S2) = 0.10
     correl(S2,S2) = 0.25
-    100 borrowers
-    each borrower with 3 assets
+    100 obligors
+    each obligor with 3 assets
     24 time steps of 1 month length
     asset profile = 10 years bond. montly retribution. last payement = N(1000,x)
-                    if borrower defaults, recovery=80% last payement.
-    each borrower belongs to a random sector.
+                    if obligor defaults, recovery=80% last payement.
+    each obligor belongs to a random sector.
     interest spot curve defined
 
   Expected Results:
@@ -34,7 +34,7 @@
     <property name='copula.type' value='t(5)'/>
     <property name='copula.seed' value='0'/>
     <property name='montecarlo.antithetic' value='false'/>
-    <property name='portfolio.onlyActiveBorrowers' value='true'/>
+    <property name='portfolio.onlyActiveObligors' value='true'/>
   </parameters>
   <interest type='compound'>
     <rate t='0' r='0%'/>

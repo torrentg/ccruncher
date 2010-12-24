@@ -36,7 +36,7 @@
 #include "sectors/Sectors.hpp"
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Obligor.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -51,8 +51,8 @@ class Portfolio : public ExpatHandlers
 
   private:
 
-    // list of borrowers
-    vector<Borrower *> vborrowers;
+    // list of obligors
+    vector<Obligor *> vobligors;
     // list of ratings (used by parser)
     const Ratings *ratings;
     // list of sectors (used by parser)
@@ -65,17 +65,17 @@ class Portfolio : public ExpatHandlers
     Date date1;
     // final simulation date
     Date date2;
-    // auxiliar borrower (used by parser)
-    Borrower *auxborrower;
-    // map used to check id borrower oneness
-    map<string,bool> idborrowers;
+    // auxiliar obligor (used by parser)
+    Obligor *auxobligor;
+    // map used to check id obligor oneness
+    map<string,bool> idobligors;
     // map used to check id asset oneness
     map<string,bool> idassets;
 
   private:
   
-    // inserts a borrower in the portfolio
-    void insertBorrower(Borrower *) throw(Exception);
+    // inserts a obligor in the portfolio
+    void insertObligor(Obligor *) throw(Exception);
     // validate portfolio
     void validations() throw(Exception);
 
@@ -92,8 +92,8 @@ class Portfolio : public ExpatHandlers
     Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
     // destructor
     ~Portfolio();
-    // returns the borrowers list
-    vector<Borrower *> &getBorrowers();
+    // returns the obligors list
+    vector<Obligor *> &getObligors();
 
 };
 

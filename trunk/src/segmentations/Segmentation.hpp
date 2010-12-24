@@ -40,7 +40,7 @@ namespace ccruncher {
 
 enum components_t {
   asset,
-  borrower,
+  obligor,
   undefined
 };
 
@@ -72,7 +72,7 @@ class Segmentation : public ExpatHandlers
 
     // segmentation name
     string name;
-    // type of components (borrowers/assets)
+    // type of components (obligors/assets)
     components_t components;
 
   public:

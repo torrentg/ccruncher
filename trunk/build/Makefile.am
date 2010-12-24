@@ -31,7 +31,7 @@ ccruncher_SOURCES = \
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
     ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Borrower.cpp\
+    ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
     ../src/interests/Interest.cpp\
     ../src/interests/Rate.cpp\
@@ -73,7 +73,7 @@ ccruncher_SOURCES = \
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
     ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Borrower.hpp\
+    ../src/portfolio/Obligor.hpp\
     ../src/params/Params.hpp\
     ../src/interests/Interest.hpp\
     ../src/interests/Rate.hpp\
@@ -146,7 +146,7 @@ tests_SOURCES = \
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
     ../src/params/ParamsTest.cpp\
-    ../src/portfolio/BorrowerTest.cpp\
+    ../src/portfolio/ObligorTest.cpp\
     ../src/ratings/RatingsTest.cpp\
     ../src/sectors/SectorsTest.cpp\
     ../src/transitions/TransitionMatrixTest.cpp\
@@ -186,7 +186,7 @@ tests_SOURCES = \
     ../src/transitions/TransitionMatrix.cpp\
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Borrower.cpp\
+    ../src/portfolio/Obligor.cpp\
     ../src/interests/Rate.cpp\
     ../src/interests/Interest.cpp\
     ../src/segmentations/Segmentations.cpp\
@@ -218,7 +218,7 @@ tests_SOURCES = \
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
     ../src/params/ParamsTest.hpp\
-    ../src/portfolio/BorrowerTest.hpp\
+    ../src/portfolio/ObligorTest.hpp\
     ../src/ratings/RatingsTest.hpp\
     ../src/sectors/SectorsTest.hpp\
     ../src/transitions/TransitionMatrixTest.hpp\
@@ -258,7 +258,7 @@ tests_SOURCES = \
     ../src/transitions/TransitionMatrix.hpp\
     ../src/correlations/CorrelationMatrix.hpp\
     ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Borrower.hpp\
+    ../src/portfolio/Obligor.hpp\
     ../src/interests/Rate.hpp\
     ../src/interests/Interest.hpp\
     ../src/segmentations/Segmentations.hpp\
@@ -282,7 +282,7 @@ samplegen_SOURCES = \
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
     ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Borrower.cpp\
+    ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
     ../src/interests/Interest.cpp\
     ../src/interests/Rate.cpp\
@@ -324,7 +324,7 @@ samplegen_SOURCES = \
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
     ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Borrower.hpp\
+    ../src/portfolio/Obligor.hpp\
     ../src/params/Params.hpp\
     ../src/interests/Interest.hpp\
     ../src/interests/Rate.hpp\

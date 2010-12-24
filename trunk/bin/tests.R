@@ -46,12 +46,12 @@
 
 #===========================================================================
 # description
-#   given a sector correlation matrix creates the borrower matrix
+#   given a sector correlation matrix creates the obligor matrix
 # arguments
 #   smatrix: matrix. sectorial correlation matrix
-#   bpsector: array. number of borrowers per sector
+#   bpsector: array. number of obligors per sector
 # returns
-#   borrower correlation matrix
+#   obligor correlation matrix
 # example
 #   smatrix <- matrix(nrow=3,ncol=3,c(0.2,0.05,0.03,0.05,0.25,0.07,0.03,0.07,0.4))
 #   bpsector <- c(3,2,4)
@@ -62,8 +62,8 @@
 #===========================================================================
 s2bcorrel <- function(smatrix, bpsector)
 {
-  numborrowers <- sum(bpsector)
-  ret <- matrix(nrow=0, ncol=numborrowers)
+  numobligors <- sum(bpsector)
+  ret <- matrix(nrow=0, ncol=numobligors)
 
   for(i in 1:length(bpsector)) {
     dimx <- bpsector[i]
@@ -77,7 +77,7 @@ s2bcorrel <- function(smatrix, bpsector)
     ret <- rbind(ret, aux)
   }
 
-  for(i in 1:numborrowers) {
+  for(i in 1:numobligors) {
     ret[i,i] = 1
   }
 

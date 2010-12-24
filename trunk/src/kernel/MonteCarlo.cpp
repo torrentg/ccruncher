@@ -36,7 +36,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo() : borrowers(), assets(), aggregators(), threads(0)
+ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(), aggregators(), threads(0)
 {
   maxseconds = 0;
   numiterations = 0;
@@ -121,8 +121,8 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
     // initializing parameters
     initParams(idata);
 
-    // initializing borrowers
-    initBorrowers(idata);
+    // initializing obligors
+    initObligors(idata);
 
     // initializing assets
     initAssets(idata);
@@ -183,48 +183,48 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initBorrowers
+// initObligors
 //===========================================================================
-void ccruncher::MonteCarlo::initBorrowers(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 {
   // doing assertions
-  assert(borrowers.size() == 0);
+  assert(obligors.size() == 0);
 
   // setting logger header
-  Logger::trace("setting borrowers to simulate", '-');
+  Logger::trace("setting obligors to simulate", '-');
   Logger::newIndentLevel();
 
   // setting logger info
-  Logger::trace("simulate only active borrowers", Format::toString(idata.getParams().onlyactive));
-  Logger::trace("number of initial borrowers", Format::toString(idata.getPortfolio().getBorrowers().size()));
+  Logger::trace("simulate only active obligors", Format::toString(idata.getParams().onlyactive));
+  Logger::trace("number of initial obligors", Format::toString(idata.getPortfolio().getObligors().size()));
 
-  // determining the borrowers to simulate
+  // determining the obligors to simulate
   bool onlyactive = idata.getParams().onlyactive;
-  vector<Borrower *> &vborrowers = idata.getPortfolio().getBorrowers();
-  borrowers.reserve(vborrowers.size());
-  for(unsigned int i=0; i<vborrowers.size(); i++)
+  vector<Obligor *> &vobligors = idata.getPortfolio().getObligors();
+  obligors.reserve(vobligors.size());
+  for(unsigned int i=0; i<vobligors.size(); i++)
   {
     if (onlyactive)
     {
-      if (vborrowers[i]->isActive(time0, timeT)) 
+      if (vobligors[i]->isActive(time0, timeT)) 
       {
-        borrowers.push_back(SimulatedBorrower(vborrowers[i]));
+        obligors.push_back(SimulatedObligor(vobligors[i]));
       }
     }
     else
     {
-      borrowers.push_back(SimulatedBorrower(vborrowers[i]));
+      obligors.push_back(SimulatedObligor(vobligors[i]));
     }
   }
   
-  // important: sorting borrowers list by sector and rating
-  sort(borrowers.begin(), borrowers.end());
-  Logger::trace("number of simulated borrowers", Format::toString(borrowers.size()));
+  // important: sorting obligors list by sector and rating
+  sort(obligors.begin(), obligors.end());
+  Logger::trace("number of simulated obligors", Format::toString(obligors.size()));
 
-  // checking that exist borrowers to simulate
-  if (borrowers.size() == 0)
+  // checking that exist obligors to simulate
+  if (obligors.size() == 0)
   {
-    throw Exception("error initializing borrowers: 0 borrowers to simulate");
+    throw Exception("error initializing obligors: 0 obligors to simulate");
   }
 
   // exit function
@@ -244,16 +244,16 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   Logger::newIndentLevel();
 
   // note: this is the place where it must have the asset losses precomputation.
-  // Asset losses has been moved to Borrower:insertAsset() with the purpose of 
+  // Asset losses has been moved to Obligor:insertAsset() with the purpose of 
   // being able flush memory on asset events just after precomputation because 
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
   int numassets = 0;
-  assets.reserve(4*borrowers.size());
-  for(unsigned int i=0; i<borrowers.size(); i++)
+  assets.reserve(4*obligors.size());
+  for(unsigned int i=0; i<obligors.size(); i++)
   {
-    vector<Asset*> &vassets = borrowers[i].ref->getAssets();
+    vector<Asset*> &vassets = obligors[i].ref->getAssets();
     for(unsigned int j=0; j<vassets.size(); j++)
     {
       numassets++;
@@ -344,17 +344,17 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
 
   // setting logger info
   Logger::trace("copula type", idata.getParams().copula_type);
-  Logger::trace("copula dimension", Format::toString(borrowers.size()));
+  Logger::trace("copula dimension", Format::toString(obligors.size()));
   Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed_));
 
   try
   {
     vector<int> tmp(idata.getCorrelationMatrix().size(),0);
 
-    // computing the number of borrowers in each sector
-    for(unsigned int i=0; i<borrowers.size(); i++)
+    // computing the number of obligors in each sector
+    for(unsigned int i=0; i<obligors.size(); i++)
     {
-      tmp[borrowers[i].ref->isector]++;
+      tmp[obligors[i].ref->isector]++;
     }
 
     // creating the copula object
@@ -611,9 +611,9 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
     try
     {
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
-      for(unsigned int i=0; i<borrowers.size(); i++)
+      for(unsigned int i=0; i<obligors.size(); i++)
       {
-        fcopulas << "\"" << borrowers[i].ref->name << "\"" << (i!=borrowers.size()-1?", ":"");
+        fcopulas << "\"" << obligors[i].ref->name << "\"" << (i!=obligors.size()-1?", ":"");
       }
       fcopulas << endl;
     }
@@ -629,9 +629,9 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
 {
-  for(unsigned int i=0; i<borrowers.size(); i++) 
+  for(unsigned int i=0; i<obligors.size(); i++) 
   {
-    fcopulas << u[i] << (i!=borrowers.size()-1?", ":"");
+    fcopulas << u[i] << (i!=obligors.size()-1?", ":"");
   }
   fcopulas << "\n";
 }

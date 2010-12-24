@@ -11,9 +11,9 @@
 
 Description:
 -------------------------------
-  1 borrower
+  1 obligor
   1 unique sector
-  uncorrelated defaults (because only exist 1 borrower)
+  uncorrelated defaults (because only exist 1 obligor)
   2 ratings (dead and alive)
   transition values:
     P(alive->alive) = 0.9
@@ -21,9 +21,9 @@ Description:
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
   12 months
-  The borrower has an unique asset with this profile:
-    asset value at t=12 is 1 if borrower is alive and
-    asset value at t=12 is 0 if borrower dead (default)
+  The obligor has an unique asset with this profile:
+    asset value at t=12 is 1 if obligor is alive and
+    asset value at t=12 is 0 if obligor dead (default)
 
 Expected Results:
 -------------------------------
@@ -63,7 +63,7 @@ How to check results?
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->
@@ -118,7 +118,7 @@ How to check results?
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-    <segmentation name="sectors" components="borrower">
+    <segmentation name="sectors" components="obligor">
       <segment name="S1"/>
     </segmentation>
   </segmentations>
@@ -127,14 +127,14 @@ How to check results?
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <borrower rating="A" sector="S1" name="001" id="001">
+    <obligor rating="A" sector="S1" name="001" id="001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2007" cashflow="1.0" recovery="0%" />
         </data>
       </asset>
-    </borrower>
+    </obligor>
   </portfolio>
 
 </ccruncher>

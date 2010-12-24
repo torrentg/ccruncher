@@ -112,7 +112,7 @@ class Asset : public ExpatHandlers
     int getSegment(int isegmentation) const;
     // free memory allocated by DateValues
     void deleteData();
-    // indicates if this borrower has cashflows in date1-date2
+    // indicates if this asset has cashflows in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // returns minimum event date (restricted to precomputed events)
     Date getMinDate() const;

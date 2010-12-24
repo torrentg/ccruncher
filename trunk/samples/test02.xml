@@ -8,7 +8,7 @@
 
 Description:
 -------------------------------
-  2 borrowers
+  2 obligors
   1 unique sector
   uncorrelated defaults
   2 ratings (dead and alive)
@@ -18,9 +18,9 @@ Description:
     P(dead->alive)  = 0.0
     P(dead->dead)   = 1.0
   12 months
-  Each borrower has an unique asset with this profile:
-    asset value at t=12 is 1 if borrower is alive and
-    asset value at t=12 is 0 if borrower dead (default)
+  Each obligor has an unique asset with this profile:
+    asset value at t=12 is 1 if obligor is alive and
+    asset value at t=12 is 0 if obligor dead (default)
 
 Expected Results:
 -------------------------------
@@ -62,7 +62,7 @@ How to check results?
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->
@@ -123,20 +123,20 @@ How to check results?
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <borrower rating="A" sector="S1" name="001" id="001">
+    <obligor rating="A" sector="S1" name="001" id="001">
       <asset name="generic" id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0.0" />
         </data>
       </asset>
-    </borrower>
-    <borrower rating="A" sector="S1" name="002" id="002">
+    </obligor>
+    <obligor rating="A" sector="S1" name="002" id="002">
       <asset name="generic" id="op2" date="01/01/2005">
         <data>
           <values at="01/01/2006" cashflow="1.0" recovery="0%" />
         </data>
       </asset>
-    </borrower>
+    </obligor>
   </portfolio>
 
 </ccruncher>

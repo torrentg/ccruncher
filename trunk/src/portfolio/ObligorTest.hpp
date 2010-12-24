@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _BorrowerTest_
-#define _BorrowerTest_
+#ifndef _ObligorTest_
+#define _ObligorTest_
 
 //---------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class BorrowerTest : public TestFixture<BorrowerTest>
+class ObligorTest : public TestFixture<ObligorTest>
 {
 
   private:
@@ -59,7 +59,7 @@ class BorrowerTest : public TestFixture<BorrowerTest>
 
   public:
 
-    TEST_FIXTURE(BorrowerTest)
+    TEST_FIXTURE(ObligorTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -72,7 +72,7 @@ class BorrowerTest : public TestFixture<BorrowerTest>
 
 };
 
-REGISTER_FIXTURE(BorrowerTest);
+REGISTER_FIXTURE(ObligorTest);
 
 //---------------------------------------------------------------------------
 

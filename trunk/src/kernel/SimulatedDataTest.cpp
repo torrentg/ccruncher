@@ -96,17 +96,17 @@ Segmentations ccruncher_test::SimulatedDataTest::getSegmentations()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='borrowers' components='borrower'>\n\
+    <segmentation name='obligors' components='obligor'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='assets' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sectors' components='borrower'>\n\
+    <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='borrower'>\n\
+    <segmentation name='size' components='obligor'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
@@ -160,84 +160,84 @@ Interest ccruncher_test::SimulatedDataTest::getInterest()
 }
 
 //===========================================================================
-// getBorrowers
+// getObligors
 //===========================================================================
-vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
+vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
 {
   string xmlcontent1 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='C' sector='S1' name='Borrower1' id='cif1'>\n\
+    <obligor rating='C' sector='S1' name='Obligor1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   string xmlcontent2 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='D' sector='S2' name='Borrower2' id='cif2'>\n\
+    <obligor rating='D' sector='S2' name='Obligor2' id='cif2'>\n\
       <asset name='generic' id='op2' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   string xmlcontent3 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='A' sector='S1' name='Borrower3' id='cif3'>\n\
+    <obligor rating='A' sector='S1' name='Obligor3' id='cif3'>\n\
       <asset name='generic' id='op3' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   string xmlcontent4 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='B' sector='S1' name='Borrower4' id='cif4'>\n\
+    <obligor rating='B' sector='S1' name='Obligor4' id='cif4'>\n\
       <asset name='generic' id='op4' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   string xmlcontent5 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='A' sector='S2' name='Borrower5' id='cif5'>\n\
+    <obligor rating='A' sector='S2' name='Obligor5' id='cif5'>\n\
       <asset name='generic' id='op5' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
-  Borrower *bp = NULL;
+  Obligor *bp = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest();
   ExpatParser xmlparser;
-  vector<Borrower*> borrowers;
+  vector<Obligor*> obligors;
   
-  bp = new Borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));
-  borrowers.push_back(bp);
+  obligors.push_back(bp);
   
-  bp = new Borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent2, bp));
-  borrowers.push_back(bp);
+  obligors.push_back(bp);
   
-  bp = new Borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent3, bp));
-  borrowers.push_back(bp);
+  obligors.push_back(bp);
   
-  bp = new Borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent4, bp));
-  borrowers.push_back(bp);
+  obligors.push_back(bp);
   
-  bp = new Borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent5, bp));
-  borrowers.push_back(bp);
+  obligors.push_back(bp);
 
-  return borrowers;
+  return obligors;
 }
 
 //===========================================================================
@@ -245,43 +245,43 @@ vector<Borrower*> ccruncher_test::SimulatedDataTest::getBorrowers()
 //===========================================================================
 void ccruncher_test::SimulatedDataTest::test1()
 {
-  vector<Borrower*> borrowers = getBorrowers();
-  vector<SimulatedBorrower> sborrowers;
+  vector<Obligor*> obligors = getObligors();
+  vector<SimulatedObligor> sobligors;
 
-  for(unsigned int i=0; i<borrowers.size(); i++)
+  for(unsigned int i=0; i<obligors.size(); i++)
   {
-    sborrowers.push_back(SimulatedBorrower(borrowers[i]));
+    sobligors.push_back(SimulatedObligor(obligors[i]));
   }
   
-  ASSERT_EQUALS(sborrowers[0].irating, 2);
-  ASSERT_EQUALS(sborrowers[1].irating, 3);
-  ASSERT_EQUALS(sborrowers[2].irating, 0);
-  ASSERT_EQUALS(sborrowers[3].irating, 1);
-  ASSERT_EQUALS(sborrowers[4].irating, 0);
+  ASSERT_EQUALS(sobligors[0].irating, 2);
+  ASSERT_EQUALS(sobligors[1].irating, 3);
+  ASSERT_EQUALS(sobligors[2].irating, 0);
+  ASSERT_EQUALS(sobligors[3].irating, 1);
+  ASSERT_EQUALS(sobligors[4].irating, 0);
 
-  ASSERT_EQUALS(sborrowers[0].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[1].ref->isector, 1);
-  ASSERT_EQUALS(sborrowers[2].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[3].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[4].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[0].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[1].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[2].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[3].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[4].ref->isector, 1);
   
-  sort(sborrowers.begin(), sborrowers.end());
+  sort(sobligors.begin(), sobligors.end());
 
-  ASSERT_EQUALS(sborrowers[0].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[1].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[2].ref->isector, 0);
-  ASSERT_EQUALS(sborrowers[3].ref->isector, 1);
-  ASSERT_EQUALS(sborrowers[4].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[0].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[1].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[2].ref->isector, 0);
+  ASSERT_EQUALS(sobligors[3].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[4].ref->isector, 1);
   
-  ASSERT_EQUALS(sborrowers[0].irating, 0);
-  ASSERT_EQUALS(sborrowers[1].irating, 1);
-  ASSERT_EQUALS(sborrowers[2].irating, 2);
-  ASSERT_EQUALS(sborrowers[3].irating, 0);
-  ASSERT_EQUALS(sborrowers[4].irating, 3);
+  ASSERT_EQUALS(sobligors[0].irating, 0);
+  ASSERT_EQUALS(sobligors[1].irating, 1);
+  ASSERT_EQUALS(sobligors[2].irating, 2);
+  ASSERT_EQUALS(sobligors[3].irating, 0);
+  ASSERT_EQUALS(sobligors[4].irating, 3);
 
-  for(unsigned int i=0; i<borrowers.size(); i++)
+  for(unsigned int i=0; i<obligors.size(); i++)
   {
-    delete borrowers[i];
+    delete obligors[i];
   }
 }
 

@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "portfolio/Borrower.hpp"
-#include "portfolio/BorrowerTest.hpp"
+#include "portfolio/Obligor.hpp"
+#include "portfolio/ObligorTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 #define EPSILON 0.000001
@@ -29,7 +29,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::BorrowerTest::setUp()
+void ccruncher_test::ObligorTest::setUp()
 {
   // nothing to do
 }
@@ -37,7 +37,7 @@ void ccruncher_test::BorrowerTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::BorrowerTest::tearDown()
+void ccruncher_test::ObligorTest::tearDown()
 {
   // nothing to do
 }
@@ -45,7 +45,7 @@ void ccruncher_test::BorrowerTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ccruncher_test::BorrowerTest::getRatings()
+Ratings ccruncher_test::ObligorTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
@@ -69,7 +69,7 @@ Ratings ccruncher_test::BorrowerTest::getRatings()
 //===========================================================================
 // getSectors
 //===========================================================================
-Sectors ccruncher_test::BorrowerTest::getSectors()
+Sectors ccruncher_test::ObligorTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
@@ -90,22 +90,22 @@ Sectors ccruncher_test::BorrowerTest::getSectors()
 //===========================================================================
 // getSegmentations
 //===========================================================================
-Segmentations ccruncher_test::BorrowerTest::getSegmentations()
+Segmentations ccruncher_test::ObligorTest::getSegmentations()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='borrowers' components='borrower'>\n\
+    <segmentation name='obligors' components='obligor'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='assets' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sectors' components='borrower'>\n\
+    <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='borrower'>\n\
+    <segmentation name='size' components='obligor'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
@@ -133,7 +133,7 @@ Segmentations ccruncher_test::BorrowerTest::getSegmentations()
 //===========================================================================
 // getInterest
 //===========================================================================
-Interest ccruncher_test::BorrowerTest::getInterest()
+Interest ccruncher_test::ObligorTest::getInterest()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
@@ -161,11 +161,11 @@ Interest ccruncher_test::BorrowerTest::getInterest()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::BorrowerTest::test1()
+void ccruncher_test::ObligorTest::test1()
 {
-  // borrower definition
+  // obligor definition
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
+    <obligor rating='A' sector='S2' name='Obligor1' id='cif1'>\n\
       <belongs-to segmentation='sectors' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
@@ -192,32 +192,32 @@ void ccruncher_test::BorrowerTest::test1()
           <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // borrower creation
+  // obligor creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest();
-  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
 
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
   // assertions
-  ASSERT(borrower.id == "cif1");
-  ASSERT(borrower.name == "Borrower1");
-  ASSERT(borrower.irating == 0);
-  ASSERT(borrower.isector == 1);
-  ASSERT(Recovery::isnan(borrower.recovery));
+  ASSERT(obligor.id == "cif1");
+  ASSERT(obligor.name == "Obligor1");
+  ASSERT(obligor.irating == 0);
+  ASSERT(obligor.isector == 1);
+  ASSERT(Recovery::isnan(obligor.recovery));
 
-  ASSERT(borrower.belongsTo(1, 1));
-  ASSERT(borrower.belongsTo(3, 2));
-  ASSERT(borrower.belongsTo(4, 1));
+  ASSERT(obligor.belongsTo(1, 1));
+  ASSERT(obligor.belongsTo(3, 2));
+  ASSERT(obligor.belongsTo(4, 1));
 
-  vector<Asset*> &assets = borrower.getAssets();
+  vector<Asset*> &assets = obligor.getAssets();
 
   ASSERT(2 == assets.size());
   ASSERT(assets[0]->getId() == "op1");
@@ -227,11 +227,11 @@ void ccruncher_test::BorrowerTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::BorrowerTest::test2()
+void ccruncher_test::ObligorTest::test2()
 {
-  // borrower definition with invalid rating
+  // obligor definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='K' sector='S2' name='Borrower1' id='cif1'>\n\
+    <obligor rating='K' sector='S2' name='Obligor1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
@@ -252,28 +252,28 @@ void ccruncher_test::BorrowerTest::test2()
           <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // borrower creation
+  // obligor creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest();
-  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
+  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::BorrowerTest::test3()
+void ccruncher_test::ObligorTest::test3()
 {
-  // borrower definition with invalid asset (data repeated)
+  // obligor definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='A' sector='S2' name='borrower1' id='cif1'>\n\
+    <obligor rating='A' sector='S2' name='obligor1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
@@ -294,28 +294,28 @@ void ccruncher_test::BorrowerTest::test3()
           <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // borrower creation
+  // obligor creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest();
-  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &borrower));
+  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
 //===========================================================================
 // test4
 //===========================================================================
-void ccruncher_test::BorrowerTest::test4()
+void ccruncher_test::ObligorTest::test4()
 {
-  // checks that borrower recovery works
+  // checks that obligor recovery works
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <borrower rating='A' sector='S2' name='borrower1' id='cif1' recovery='50%'>\n\
+    <obligor rating='A' sector='S2' name='obligor1' id='cif1' recovery='50%'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' cashflow='10.0' recovery='80%' />\n\
@@ -336,21 +336,21 @@ void ccruncher_test::BorrowerTest::test4()
           <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
-    </borrower>";
+    </obligor>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // borrower creation
+  // obligor creation
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest();
-  Borrower borrower(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
 
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &borrower));
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
   // assertions
-  ASSERT_EQUALS_EPSILON(borrower.recovery.getValue(), 0.5, EPSILON);
+  ASSERT_EQUALS_EPSILON(obligor.recovery.getValue(), 0.5, EPSILON);
 }
 

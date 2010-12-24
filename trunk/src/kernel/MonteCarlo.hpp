@@ -56,8 +56,8 @@ class MonteCarlo
 
   private:
 
-    // list of simulated borrowers
-    vector<SimulatedBorrower> borrowers;
+    // list of simulated obligors
+    vector<SimulatedObligor> obligors;
     // list of simulated assets
     vector<SimulatedAsset> assets;
     // list of aggregators
@@ -113,8 +113,8 @@ class MonteCarlo
     void release();
     // initialize params
     void initParams(IData &) throw(Exception);
-    // initialize borrowers
-    void initBorrowers(IData &) throw(Exception);
+    // initialize obligors
+    void initObligors(IData &) throw(Exception);
     // initialize assets
     void initAssets(IData &) throw(Exception);
     // initialize survival functions

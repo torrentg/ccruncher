@@ -106,7 +106,7 @@
 // previous explanation works with diagonal elements d1,d2,...,dn.
 // This feature dirts the interface (force to add the diagonal values at
 // constructor, etc). For this reason is suposed that all diagonal elements
-// have value = 1.0 (the value that we need for solve borrowers correlation matrix
+// have value = 1.0 (the value that we need for solve obligors correlation matrix
 // factorization problem)
 //
 //===========================================================================
