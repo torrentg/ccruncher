@@ -20,12 +20,10 @@
 //
 //===========================================================================
 
-#include <cmath>
 #include <cfloat>
 #include <cctype>
 #include <cstring>
 #include <cstdio>
-#include <gsl/gsl_randist.h>
 #include "portfolio/Recovery.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
@@ -128,24 +126,6 @@ void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Excepti
   else {
     throw Exception("unknow recovery type");
   }
-}
-
-//===========================================================================
-// getValue
-//===========================================================================
-double ccruncher::Recovery::getValue() const
-{
-  if (type == Beta) return NAN;
-  else return value1;
-}
-
-//===========================================================================
-// getValue
-//===========================================================================
-double ccruncher::Recovery::getValue(const gsl_rng *rng) const
-{
-  if (type == Fixed) return value1;
-  else return gsl_ran_beta(rng, value1, value2);
 }
 
 //===========================================================================

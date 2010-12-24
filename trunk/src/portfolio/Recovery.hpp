@@ -26,7 +26,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <cmath>
 #include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -94,6 +96,27 @@ class Recovery
 	string toString() const;
 	
 };
+
+//---------------------------------------------------------------------------
+
+//===========================================================================
+// getValue
+//===========================================================================
+inline double ccruncher::Recovery::getValue() const
+{
+  if (type == Beta) return NAN;
+  else return value1;
+}
+
+//===========================================================================
+// getValue
+//===========================================================================
+inline double ccruncher::Recovery::getValue(const gsl_rng *rng) const
+{
+  if (type == Fixed) return value1;
+  else if (rng == NULL) return NAN;
+  else return gsl_ran_beta(rng, value1, value2);
+}
 
 //---------------------------------------------------------------------------
 

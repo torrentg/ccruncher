@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <cmath>
 #include <vector>
+#include <gsl/gsl_rng.h>
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
@@ -102,7 +103,7 @@ class Asset : public ExpatHandlers
     // precompute losses
     void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
     // returns loss at the given default time
-    double getLoss(const Date &at) const;
+    double getLoss(const Date &at, const gsl_rng *rng=NULL) const;
     // returns a pointer to cashflow
     vector<DateValues> &getData();
     // check if belongs to segmentation-segment
@@ -137,7 +138,7 @@ inline int ccruncher::Asset::getSegment(int isegmentation) const
 //===========================================================================
 // getLoss
 //===========================================================================
-inline double ccruncher::Asset::getLoss(const Date &at) const
+inline double ccruncher::Asset::getLoss(const Date &at, const gsl_rng *rng) const
 {
   int length = (int) pdata.size();
 
@@ -151,7 +152,7 @@ inline double ccruncher::Asset::getLoss(const Date &at) const
     {
       if (at <= pdata[i].date) 
       {
-        return pdata[i].cashflow * (1.0-pdata[i].recovery.getValue());
+        return pdata[i].cashflow * (1.0-pdata[i].recovery.getValue(rng));
       }
     }
   }
