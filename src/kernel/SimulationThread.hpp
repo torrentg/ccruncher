@@ -56,13 +56,13 @@ class SimulationThread : public Thread
 
     // Monte Carlo parent
     MonteCarlo &montecarlo;
-    // list of simulated borrowers
-    vector<SimulatedBorrower> borrowers;
+    // list of simulated obligors
+    vector<SimulatedObligor> obligors;
     // list of simulated assets
     vector<SimulatedAsset> assets;
     // copula used to simulate correlations
     Copula *copula;
-    // borrowers default times
+    // obligors default times
     vector<Date> dtimes;
     // assets losses
     vector<double> alosses;
@@ -106,7 +106,7 @@ class SimulationThread : public Thread
     // simulate default time
     Date simTimeToDefault(double, int);
     // returns the copula value
-    double getRandom(int iborrower);
+    double getRandom(int ibobligor);
 
   public:
 

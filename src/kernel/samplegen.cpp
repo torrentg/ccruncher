@@ -75,14 +75,14 @@ int main(int argc, char *argv[])
   {
       { "help",         0,  NULL,  300 },
       { "version",      0,  NULL,  301 },
-      { "nborrowers",   1,  NULL,  302 },
+      { "nobligors",    1,  NULL,  302 },
       { "nassets",      1,  NULL,  303 },
       { "copyright",    0,  NULL,  304 },
       { NULL,           0,  NULL,   0  }
   };
 
   string sfilename = "";
-  int nborrowers = 0;
+  int nobligors = 0;
   int nassets = 0;
 
   // parsing options
@@ -111,15 +111,15 @@ int main(int argc, char *argv[])
           version();
           return 0;
 
-      case 302: // --nborrowers (set number borrowers)
+      case 302: // --nobligors (set number obligors)
           try
           {
-            string sborrowers = string(optarg);
-            nborrowers = Parser::intValue(sborrowers);
+            string sobligors = string(optarg);
+            nobligors = Parser::intValue(sobligors);
           }
           catch(Exception &e)
           {
-            cerr << "invalid nborrowers value" << endl;
+            cerr << "invalid nobligors value" << endl;
             return 1;
           }
           break;
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
   }
 
   // checking basic arguments existence
-  if (nborrowers == 0L || nassets == 0L)
+  if (nobligors == 0L || nassets == 0L)
   {
     cerr << "required arguments not especified" << endl;
     cerr << "use --help option for more information" << endl;
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 
   try
   {
-    run(sfilename, nborrowers, nassets);
+    run(sfilename, nobligors, nassets);
   }
   catch(Exception &e)
   {
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, int nborrowers, int nassets) throw(Exception)
+void run(string filename, int nobligors, int nassets) throw(Exception)
 {
   // checking input file readeability
   File::checkFile(filename, "r");
@@ -217,7 +217,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
   cout << idata.getCorrelationMatrix().getXML(2);
   cout << idata.getSegmentations().getXML(2);
   cout << "  <portfolio>\n";
-  printXMLPortfolio(2, idata, nborrowers, nassets);
+  printXMLPortfolio(2, idata, nobligors, nassets);
   cout << "  </portfolio>\n";
   cout << "</ccruncher>\n";
 }
@@ -225,7 +225,7 @@ void run(string filename, int nborrowers, int nassets) throw(Exception)
 //===========================================================================
 // getXMLPortfolio
 //===========================================================================
-void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) throw(Exception)
+void printXMLPortfolio(int ilevel, IData &idata, int nobligors, int nassets) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -235,12 +235,12 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
   int nsectors = idata.getSectors().size();
   Date date1 = idata.getParams().time0;
 
-  for (int i=1;i<=nborrowers;i++)
+  for (int i=1;i<=nobligors;i++)
   {
-    cout << spc2 + "<borrower ";
+    cout << spc2 + "<obligor ";
     cout << "rating='" + idata.getRatings()[rand()%(nratings-1)].name + "' ";
     cout << "sector='" + idata.getSectors()[rand()%(nsectors)].name + "' ";
-    cout << "name='borrower" + Format::toString(i) + "' ";
+    cout << "name='obligor" + Format::toString(i) + "' ";
     cout << "id='" + Format::toString(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
@@ -255,7 +255,7 @@ void printXMLPortfolio(int ilevel, IData &idata, int nborrowers, int nassets) th
       cout << spc3 + "</asset>\n";
     }
 
-    cout << spc2 +  "</borrower>\n" << endl;
+    cout << spc2 +  "</obligor>\n" << endl;
   }
 }
 
@@ -332,15 +332,15 @@ void version()
 void usage()
 {
   cout << "\n"
-  "  usage: generator [options] --nborrowers=num1 --nassets=num2 file.xml\n"
+  "  usage: generator [options] --nobligors=num1 --nassets=num2 file.xml\n"
   "\n"
   "  description:\n"
   "    generator is a creditcruncher tool for generating input test files\n"
   "    ratings and sectors are extracted from template file\n"
   "  arguments:\n"
   "    file.xml         file used as template\n"
-  "    --nborrowers=val number of borrowers in portfolio\n"
-  "    --nassets=val    number of assets per borrower\n"
+  "    --nobligors=val number of obligors in portfolio\n"
+  "    --nassets=val    number of assets per obligor\n"
   "  options:\n"
   "    --help           show this message and exit\n"
   "    --version        show version and exit\n"
@@ -349,7 +349,7 @@ void usage()
   "        0            OK. finished without errors\n"
   "        1            KO. finished with errors\n"
   "  examples:\n"
-  "    generator --nborrowers=50000 --nassets=4 template.xml\n"
+  "    generator --nobligors=50000 --nassets=4 template.xml\n"
   << endl;
 }
 

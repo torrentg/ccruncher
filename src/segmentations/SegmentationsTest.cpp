@@ -52,17 +52,17 @@ void ccruncher_test::SegmentationsTest::test1()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='borrowers' components='borrower'>\n\
+    <segmentation name='obligors' components='obligor'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='assets' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sectors' components='borrower'>\n\
+    <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='borrower'>\n\
+    <segmentation name='size' components='obligor'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\

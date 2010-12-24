@@ -27,20 +27,20 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulatedBorrower::SimulatedBorrower(Borrower *borrower)
+ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
-  assert(borrower != NULL);
-  irating = borrower->irating;
-  ref = borrower;
+  assert(obligor != NULL);
+  irating = obligor->irating;
+  ref = obligor;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset, int iborrower_)
+ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset, int iobligor_)
 {
   assert(asset != NULL);
-  iborrower = iborrower_;
+  iobligor = iobligor_;
   mindate = asset->getMinDate();
   maxdate = asset->getMaxDate();
   ref = asset;
@@ -48,9 +48,9 @@ ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset, int iborrower_)
 
 //===========================================================================
 // less-than operator
-// sort SimulatedBorrower by sector and rating
+// sort SimulatedObligor by sector and rating
 //===========================================================================
-bool ccruncher::SimulatedBorrower::operator < (const SimulatedBorrower &c) const
+bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
 {
   if (ref->isector < c.ref->isector)
   {

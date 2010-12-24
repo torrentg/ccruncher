@@ -31,7 +31,7 @@
 #include "ratings/Ratings.hpp"
 #include "sectors/Sectors.hpp"
 #include "interests/Interest.hpp"
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Obligor.hpp"
 #include "segmentations/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
@@ -50,7 +50,7 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
     Sectors getSectors();
     Segmentations getSegmentations();
     Interest getInterest();
-    vector<Borrower*> getBorrowers();
+    vector<Obligor*> getObligors();
     
     void test1(void);
 

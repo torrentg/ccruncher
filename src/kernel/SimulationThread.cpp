@@ -32,10 +32,10 @@
 // constructor
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
-  montecarlo(mc), borrowers(mc.borrowers), assets(mc.assets), copula(cop_), 
+  montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
   dtimes(0), alosses(0), isegments(0), losses(0)
 {
-  dtimes = vector<Date>(borrowers.size(), NAD);
+  dtimes = vector<Date>(obligors.size(), NAD);
   alosses = vector<double>(assets.size(), NAN);
   numassets = assets.size();
   time0 = montecarlo.time0;
@@ -123,13 +123,13 @@ void ccruncher::SimulationThread::randomize()
 }
 
 //===========================================================================
-// simulate time-to-default for each borrower
+// simulate time-to-default for each obligor
 //===========================================================================
 void ccruncher::SimulationThread::simulate()
 {
-  for (unsigned int i=0; i<borrowers.size(); i++) 
+  for (unsigned int i=0; i<obligors.size(); i++) 
   {
-    dtimes[i] = simTimeToDefault(getRandom(i), borrowers[i].irating);
+    dtimes[i] = simTimeToDefault(getRandom(i), obligors[i].irating);
   }
 }
 
@@ -137,22 +137,22 @@ void ccruncher::SimulationThread::simulate()
 // getRandom. Returns requested copula value
 // encapsules antithetic management
 //===========================================================================
-double ccruncher::SimulationThread::getRandom(int iborrower)
+double ccruncher::SimulationThread::getRandom(int iobligor)
 {
   if (antithetic)
   {
     if (reversed)
     {
-      return 1.0 - copula->get(iborrower);
+      return 1.0 - copula->get(iobligor);
     }
     else
     {
-      return copula->get(iborrower);
+      return copula->get(iobligor);
     }
   }
   else
   {
-    return copula->get(iborrower);
+    return copula->get(iobligor);
   }
 }
 
@@ -161,7 +161,7 @@ double ccruncher::SimulationThread::getRandom(int iborrower)
 //===========================================================================
 Date ccruncher::SimulationThread::simTimeToDefault(double u, int r)
 {
-  // simulate time where this borrower defaults (in months)
+  // simulate time where this obligor defaults (in months)
   double t = survival.inverse(r, u);
 
   // return simulated default date
@@ -176,12 +176,12 @@ void ccruncher::SimulationThread::evalue()
 {
   for(int i=0; i<numassets; i++)
   {
-    Date t = dtimes[assets[i].iborrower];
+    Date t = dtimes[assets[i].iobligor];
     
     if (assets[i].mindate <= t && t <= assets[i].maxdate)
     {
       //TODO: use copula->getRng()
-      alosses[i] = assets[i].ref->getLoss(t);
+      alosses[i] = assets[i].ref->getLoss(t, copula->getRng());
     }
     else
     {

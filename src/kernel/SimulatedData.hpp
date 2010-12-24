@@ -27,7 +27,7 @@
 
 #include "utils/config.h"
 #include <vector>
-#include "portfolio/Borrower.hpp"
+#include "portfolio/Obligor.hpp"
 #include "portfolio/Asset.hpp"
 #include "utils/Date.hpp"
 
@@ -39,22 +39,22 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class SimulatedBorrower
+class SimulatedObligor
 {
 
   public:
 
-    // borrower's rating index
+    // obligor's rating index
     int irating;
-    // reference to borrower
-    Borrower *ref;
+    // reference to obligor
+    Obligor *ref;
 
   public: 
     
     // constructor
-    SimulatedBorrower(Borrower *);
+    SimulatedObligor(Obligor *);
     // less-than operator
-    bool operator < (const SimulatedBorrower &obj) const;
+    bool operator < (const SimulatedObligor &obj) const;
 
 };
 
@@ -69,8 +69,8 @@ class SimulatedAsset
     Date mindate;
     // maximum event date (restricted to simulation time horizon)
     Date maxdate;
-    // borrower index (see borrowers vector)
-    int iborrower;
+    // obligor index (see obligors vector)
+    int iobligor;
     // reference to asset
     Asset *ref;
     

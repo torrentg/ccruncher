@@ -123,17 +123,17 @@ void ccruncher_test::IDataTest::test1()
     </mcorrels>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
-      <segmentation name='borrowers' components='borrower'>\n\
+      <segmentation name='obligors' components='obligor'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
       <segmentation name='assets' components='asset'>\n\
         <segment name='*'/>\n\
       </segmentation>\n\
-      <segmentation name='sectors' components='borrower'>\n\
+      <segmentation name='sectors' components='obligor'>\n\
         <segment name='S1'/>\n\
         <segment name='S2'/>\n\
       </segmentation>\n\
-      <segmentation name='size' components='borrower'>\n\
+      <segmentation name='size' components='obligor'>\n\
         <segment name='big'/>\n\
         <segment name='medium'/>\n\
       </segmentation>\n\
@@ -148,7 +148,7 @@ void ccruncher_test::IDataTest::test1()
       </segmentation>\n\
     </segmentations>\n\
     <portfolio>\n\
-      <borrower rating='A' sector='S2' name='Borrower1' id='cif1'>\n\
+      <obligor rating='A' sector='S2' name='Obligor1' id='cif1'>\n\
         <asset name='generic' id='op1' date='01/01/1999'>\n\
           <belongs-to segmentation='products' segment='bond'/>\n\
           <belongs-to segmentation='offices' segment='0001'/>\n\
@@ -173,14 +173,14 @@ void ccruncher_test::IDataTest::test1()
             <values at='01/07/2003' cashflow='515.0' recovery='70%' />\n\
           </data>\n\
         </asset>\n\
-      </borrower>\n\
+      </obligor>\n\
     </portfolio>\n\
   </ccruncher>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // borrower creation
+  // obligor creation
   IData idata;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &idata));
   ASSERT_EQUALS("set your title here", idata.getTitle());

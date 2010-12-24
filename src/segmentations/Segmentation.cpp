@@ -86,7 +86,7 @@ void ccruncher::Segmentation::reset()
   insertSegment("rest"); // adding catcher segment
   modificable = false;
   name = "";
-  components = borrower;
+  components = obligor;
 }
 
 //===========================================================================
@@ -111,7 +111,7 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   // checking for patterns
   if (sname == "*")
   {
-    if (name != "borrowers" && name != "assets")
+    if (name != "obligors" && name != "assets")
     {
       throw Exception("invalid segment name '*'");
     }
@@ -157,8 +157,8 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
       if (strcomp == "asset") {
         components = asset;
       }
-      else if (strcomp == "borrower") {
-        components = borrower;
+      else if (strcomp == "obligor") {
+        components = obligor;
       }
       else {
         throw Exception("tag <segmentation> with invalid components attribute");
@@ -221,14 +221,14 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   string ret = "";
 
   ret += spc + "<segmentation name='" + name + "' components='";
-  ret += (components==asset?"asset":"borrower");
+  ret += (components==asset?"asset":"obligor");
   ret += "'>\n";
 
   if (name == "portfolio")
   {
     // nothing to do
   }
-  else if (name == "borrowers" || name == "assets")
+  else if (name == "obligors" || name == "assets")
   {
     ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
   }

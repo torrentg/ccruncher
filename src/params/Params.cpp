@@ -199,7 +199,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes
     bool aux = getBooleanAttribute(attributes, "value", false);
     antithetic = aux;
   }
-  else if (name == "portfolio.onlyActiveBorrowers")
+  else if (name == "portfolio.onlyActiveObligors")
   {
     bool aux = getBooleanAttribute(attributes, "value", false);
     onlyactive = aux;
@@ -273,7 +273,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<property name='copula.seed' value='" + Format::toString(copula_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveBorrowers' value='" + Format::toString(onlyactive) + "'/>\n";
+  ret += spc2 + "<property name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
   ret += spc1 + "</parameters>\n";
 
   return ret;

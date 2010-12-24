@@ -13,7 +13,7 @@
     <property name="copula.type" value="gaussian"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveBorrowers" value="true"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->
@@ -166,7 +166,7 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <borrower rating="A" sector="bank" name="BenderBank" id="001">
+    <obligor rating="A" sector="bank" name="BenderBank" id="001">
       <asset name="generic" id="op1" date="15/01/2005">
         <data>
           <values at="15/01/2005" cashflow="-4000.0" recovery="50%" />
@@ -177,7 +177,7 @@
           <values at="15/01/2010" cashflow="+1000.0" recovery="50%" />
         </data>
       </asset>
-    </borrower>
+    </obligor>
   </portfolio>
 
 </ccruncher>

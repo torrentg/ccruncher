@@ -25,8 +25,8 @@
 
 //===========================================================================
 // constructor
-// note: we don't diferentiate between asset-segmentations or borrower-segmentations
-// because borrower segments has been recoded as asset segments (see Borrower code)
+// note: we don't diferentiate between asset-segmentations or obligor-segmentations
+// because obligor segments has been recoded as asset segments (see Obligor code)
 //===========================================================================
 ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentation, 
     Segmentation &segmentation_, const string &filename, bool force) 

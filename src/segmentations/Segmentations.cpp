@@ -102,9 +102,9 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
   }
 
   // checking special segmentations
-  if (val.name == "borrowers" && val.components != borrower)
+  if (val.name == "obligors" && val.components != obligor)
   {
-    throw Exception("segmentation 'borrowers' needs components of type borrower");
+    throw Exception("segmentation 'obligors' needs components of type obligor");
   }
   if (val.name == "assets" && val.components != asset)
   {

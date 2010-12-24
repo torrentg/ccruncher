@@ -7,7 +7,6 @@ Current works
   * add risk aggregation to documentation
      - explain how to distribute the risk (eg. ES) along segments
      - see 'introduction to credit risk modeling'
-  * add stochastic recovery
   * determine the degrees-of-freedom of t-student copula based on historical data
 
 Future works
@@ -26,9 +25,9 @@ Future works
         </break>
       </breaks>
   * allow ratings evaluated to date previous to T0
-  * add borrower-borrower dependences
+  * add obligor-obligor dependences
   * graphic interface
-  * considere that a borrower could belong to a few different sectors
+  * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
   * improve lookup-table when survival values are low
   * in techdoc add cholesky decomposition detail
