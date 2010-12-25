@@ -24,7 +24,6 @@
 #include <gsl/gsl_randist.h>
 #include "survival/Survival.hpp"
 #include "survival/SurvivalTest.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------

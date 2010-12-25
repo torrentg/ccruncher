@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Dec 24 08:30:25 CET 2010"
+#define BUILD_DATE "Sat Dec 25 12:49:51 CET 2010"
 
 /* build host name */
 #define BUILD_HOST "localhost"

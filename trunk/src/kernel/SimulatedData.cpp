@@ -20,7 +20,6 @@
 //
 //===========================================================================
 
-#include <algorithm>
 #include "kernel/SimulatedData.hpp"
 #include <cassert>
 
