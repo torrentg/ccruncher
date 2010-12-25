@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <iostream>
-#include <string>
 #include <cmath>
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"

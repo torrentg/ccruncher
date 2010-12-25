@@ -21,10 +21,10 @@
 //===========================================================================
 
 #include "params/Params.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
 #include "utils/Parser.hpp"
+#include <cassert>
 
 //===========================================================================
 // constructor

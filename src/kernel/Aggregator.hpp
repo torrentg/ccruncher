@@ -32,7 +32,6 @@
 #include <fstream>
 #include "kernel/SimulatedData.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Timer.hpp"
 #include "segmentations/Segmentation.hpp"
 
 //---------------------------------------------------------------------------

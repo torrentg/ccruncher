@@ -32,6 +32,7 @@
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
+#include "segmentations/Segmentations.hpp"
 #include "survival/Survival.hpp"
 #include "math/Copula.hpp"
 #include "utils/Date.hpp"

@@ -55,7 +55,6 @@
 #include <cstdio>
 #include <cstring>
 #include <ctime>
-#include <vector>
 #include "utils/Date.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Strings.hpp"

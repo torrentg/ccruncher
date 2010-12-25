@@ -22,7 +22,6 @@
 #include <cmath>
 #include <cfloat>
 #include "survival/Survival.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
 #include <climits>

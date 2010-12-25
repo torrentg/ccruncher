@@ -23,8 +23,6 @@
 #include <cmath>
 #include <algorithm>
 #include "portfolio/Asset.hpp"
-#include "utils/Arrays.hpp"
-#include "utils/Utils.hpp"
 #include <cassert>
 
 //===========================================================================
