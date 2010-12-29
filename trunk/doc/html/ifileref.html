@@ -475,8 +475,11 @@
     <pre>
 
   &lt;sectors&gt;
-    &lt;sector name="S1" description="oil and gas"/&gt;
-    &lt;sector name="S2" description="other sectors"/&gt;
+    &lt;sector name="S1" description='Consumer/service sector'/&gt;
+    &lt;sector name="S2" description='Forest/building products'/&gt;
+    &lt;sector name="S3" description='High technology'/&gt;
+    &lt;sector name="S4" description='Utilities'/&gt;
+    &lt;sector name="S5" description="Other sectors"/&gt;
   &lt;/sectors&gt;
     </pre>
 
@@ -525,9 +528,21 @@
     <pre>
 
   &lt;mcorrels&gt;
-    &lt;sigma sector1="S1" sector2="S1" value="20%"/&gt;
-    &lt;sigma sector1="S1" sector2="S2" value="10%"/&gt;
-    &lt;sigma sector1="S2" sector2="S2" value="25%"/&gt;
+    &lt;sigma sector1="S1" sector2="S1" value="15.1%"/&gt;
+    &lt;sigma sector1="S1" sector2="S2" value="6.2%"/&gt;
+    &lt;sigma sector1="S1" sector2="S3" value="8.6%"/&gt;
+    &lt;sigma sector1="S1" sector2="S4" value="3.9%"/&gt;
+    &lt;sigma sector1="S1" sector2="S5" value="9.1%"/&gt;
+    &lt;sigma sector1="S2" sector2="S2" value="17.9%"/&gt;
+    &lt;sigma sector1="S2" sector2="S3" value="6.3%"/&gt;
+    &lt;sigma sector1="S2" sector2="S4" value="10.2%"/&gt;
+    &lt;sigma sector1="S2" sector2="S5" value="8.8%"/&gt;
+    &lt;sigma sector1="S3" sector2="S3" value="17.5%"/&gt;
+    &lt;sigma sector1="S3" sector2="S4" value="7.3%"/&gt;
+    &lt;sigma sector1="S3" sector2="S5" value="7.1%"/&gt;
+    &lt;sigma sector1="S4" sector2="S4" value="12.8%"/&gt;
+    &lt;sigma sector1="S4" sector2="S5" value="6.4%"/&gt;
+    &lt;sigma sector1="S5" sector2="S5" value="15.0%"/&gt;
   &lt;/mcorrels&gt;
     </pre>
 
@@ -607,10 +622,14 @@
     &lt;segmentation name="sectors" components="obligor"&gt;
       &lt;segment name="S1"/&gt;
       &lt;segment name="S2"/&gt;
+      &lt;segment name="S3"/&gt;
+      &lt;segment name="S4"/&gt;
+      &lt;segment name="S5"/&gt;
     &lt;/segmentation&gt;
     &lt;segmentation name="size" components="obligor"&gt;
-      &lt;segment name="big"/&gt;
+      &lt;segment name="large"/&gt;
       &lt;segment name="medium"/&gt;
+      &lt;segment name="small"/&gt;
     &lt;/segmentation&gt;
     &lt;segmentation name="products" components="asset"&gt;
       &lt;segment name="bond"/&gt;
@@ -724,7 +743,7 @@
     &lt;/obligor&gt;
     &lt;obligor rating="B" sector="S2" name="Gixirre" id="000002" recovery="20%"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
-      &lt;belongs-to segmentation="size" segment="big"/&gt;
+      &lt;belongs-to segmentation="size" segment="large"/&gt;
       &lt;asset name="bond" id="op3" date="01/06/2003"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
@@ -786,7 +805,7 @@
           The format of the portfolio file is exactly the same of the section 
           portfolio where the root tag of this file is <code>portfolio</code>. This attribute is optional. 
           If your portfolio is large and you plan to simulate it multiple times using distinct 
-          parameters use this feature, otherwise no.
+          parameters use this feature, otherwise this attribute can be omitted.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -805,7 +824,7 @@
         <td class="c2">
           Initial obligor credit rating at time t0, see attribute <i>time.0</i> at the 
           <a href="#parameters">parameters</a> section. This value must be a credit rating 
-          identifier, see name attribute in rating tag.
+          identifier, see name attribute in <a href="#ratings">rating</a> tag.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -1056,7 +1075,7 @@
             Copyright &copy; 2004-2010 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 24-Dec-2010
+            Last modified: 29-Dec-2010
           </td>
         </tr></table>
       </div></div></div></div></div>
