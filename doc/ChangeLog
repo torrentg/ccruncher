@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 1.7 (XXX. 2011)
+version 1.7 (Jan. 2011)
 --------------------------
   * added support for stochastic recoveries
   * solved minor bugs related with standards compliance by compiler
