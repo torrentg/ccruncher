@@ -165,6 +165,11 @@
     </segmentation>
     <segmentation name="products" components="asset">
       <segment name="bond"/>
+      <segment name="loan"/>
+      <segment name="lease"/>
+      <segment name="mortgage"/>
+      <segment name="line of credit"/>
+      <segment name="bank guarantee"/>
     </segmentation>
     <segmentation name="offices" components="asset">
       <segment name="0001"/>
