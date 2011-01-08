@@ -184,11 +184,11 @@ table.its tr.odd {
 			<td colspan="7">&nbsp;</td>
 		</tr>
 		<tr>
-			<td class="little" nowrap="nowrap"><b>&nbsp;&nbsp;<a href="http://en.wikipedia.org/wiki/Value_at_risk">Value At Risk</a>&nbsp;&nbsp;</b></td>
+			<td class="little" nowrap="nowrap" align="center"><b><a href="http://en.wikipedia.org/wiki/Value_at_risk">Value<br/>At Risk</a></b></td>
 			<td class="little" align="center"><b>Mean</b></td>
 			<td class="little" align="center"><b>StdErr</b></td>
 			<td>&nbsp;</td>
-			<td class="little" nowrap="nowrap"><b><a href="http://en.wikipedia.org/wiki/Expected_shortfall">Expected Shortfall</a></b></td>
+			<td class="little" nowrap="nowrap" align="center"><b><a href="http://en.wikipedia.org/wiki/Expected_shortfall">Expected<br/>Shortfall</a></b></td>
 			<td class="little"><b>Mean</b></td>
 			<td class="little"><b>StdErr</b></td>
 		</tr>

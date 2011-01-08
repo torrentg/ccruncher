@@ -79,8 +79,7 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
   // preparing asset
   try
   {
-    vassets[ila]->precomputeLosses(date1, date2, *interest);
-    vassets[ila]->deleteData();
+    vassets[ila]->prepare(date1, date2, *interest);
   }
   catch(std::exception &e)
   {
@@ -94,7 +93,7 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
 void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset")) {
-    Asset *asset = new Asset(segmentations, recovery);
+    Asset *asset = new Asset(segmentations);
     vassets.push_back(asset);
     eppush(eu, asset, name_, attributes);
   }
@@ -150,6 +149,11 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
   }
   else if (isEqual(name_,"obligor")) {
 
+    // check recovery values
+    if (hasRecovery() && Recovery::isnan(recovery)) {
+      throw Exception("obligor hasn't recovery, but has asset that assumes obligor recovery");
+    }
+    
     // shrinking memory
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
@@ -235,4 +239,19 @@ int ccruncher::Obligor::getSegment(int isegmentation)
   assert(isegmentation < (int)vsegments.size());
   return vsegments[isegmentation];
 }
-      
+
+//===========================================================================
+// hasRecovery
+//===========================================================================
+bool ccruncher::Obligor::hasRecovery() const
+{
+  for(unsigned int i=0; i<vassets.size(); i++)
+  {
+    if (vassets[i]->hasObligorRecovery())
+    {
+      return true;
+    }
+  }
+  return false;
+}
+

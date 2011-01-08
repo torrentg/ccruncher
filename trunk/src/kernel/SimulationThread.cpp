@@ -32,9 +32,12 @@
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  dtimes(0), alosses(0), isegments(0), losses(0)
+  dtimes(0), orecovery(0), alosses(0), isegments(0), losses(0)
 {
+  assert(copula != NULL);
+  rng = copula->getRng();
   dtimes = vector<Date>(obligors.size(), NAD);
+  orecovery = vector<double>(obligors.size(), NAN);
   alosses = vector<double>(assets.size(), NAN);
   numassets = assets.size();
   time0 = montecarlo.time0;
@@ -129,6 +132,15 @@ void ccruncher::SimulationThread::simulate()
   for (unsigned int i=0; i<obligors.size(); i++) 
   {
     dtimes[i] = simTimeToDefault(getRandom(i), obligors[i].irating);
+    
+    if (obligors[i].hasRecovery && time0 <= dtimes[i] && dtimes[i] <= timeT)
+    {
+      orecovery[i] = obligors[i].ref->recovery.getValue(rng);
+    }   
+    else
+    {
+      orecovery[i] = NAN;
+    }
   }
 }
 
@@ -179,8 +191,21 @@ void ccruncher::SimulationThread::evalue()
     
     if (assets[i].mindate <= t && t <= assets[i].maxdate)
     {
-      //TODO: use copula->getRng()
-      alosses[i] = assets[i].ref->getLoss(t, copula->getRng());
+      const DateValues &values = assets[i].ref->getValues(t);
+      double rpct = 0.0;
+      
+      // recovery inherited from obligor
+      if (isnan(values.recovery.getType()))
+      {
+        rpct = orecovery[assets[i].iobligor];
+      }
+      // asset recovery (fixed or stochastic)
+      else 
+      {
+        rpct = values.recovery.getValue(rng);
+      }
+      
+      alosses[i] = values.exposure * (1.0 - rpct);
     }
     else
     {

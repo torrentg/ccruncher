@@ -57,7 +57,7 @@
     <transition from="AAA" to="BB" value="0.12%"/>
     <transition from="AAA" to="B" value="0.0%"/>
     <transition from="AAA" to="CCC" value="0.0%"/>
-    <transition from="AAA" to="Default" value="0.0%"/>
+    <transition from="AAA" to="D" value="0.0%"/>
 
     <transition from="AA" to="AAA" value="0.70%"/>
     <transition from="AA" to="AA" value="90.65%"/>
@@ -66,7 +66,7 @@
     <transition from="AA" to="BB" value="0.06%"/>
     <transition from="AA" to="B" value="0.14%"/>
     <transition from="AA" to="CCC" value="0.02%"/>
-    <transition from="AA" to="Default" value="0.0%"/>
+    <transition from="AA" to="D" value="0.0%"/>
 
     <transition from="A" to="AAA" value="0.09%"/>
     <transition from="A" to="AA" value="2.27%"/>
@@ -75,7 +75,7 @@
     <transition from="A" to="BB" value="0.74%"/>
     <transition from="A" to="B" value="0.26%"/>
     <transition from="A" to="CCC" value="0.01%"/>
-    <transition from="A" to="Default" value="0.06%"/>
+    <transition from="A" to="D" value="0.06%"/>
 
     <transition from="BBB" to="AAA" value="0.02%"/>
     <transition from="BBB" to="AA" value="0.33%"/>
@@ -84,7 +84,7 @@
     <transition from="BBB" to="BB" value="5.30%"/>
     <transition from="BBB" to="B" value="1.17%"/>
     <transition from="BBB" to="CCC" value="0.12%"/>
-    <transition from="BBB" to="Default" value="0.18%"/>
+    <transition from="BBB" to="D" value="0.18%"/>
 
     <transition from="BB" to="AAA" value="0.03%"/>
     <transition from="BB" to="AA" value="0.14%"/>
@@ -93,7 +93,7 @@
     <transition from="BB" to="BB" value="80.53%"/>
     <transition from="BB" to="B" value="8.84%"/>
     <transition from="BB" to="CCC" value="1.0%"/>
-    <transition from="BB" to="Default" value="1.06%"/>
+    <transition from="BB" to="D" value="1.06%"/>
 
     <transition from="B" to="AAA" value="0.0%"/>
     <transition from="B" to="AA" value="0.11%"/>
@@ -102,7 +102,7 @@
     <transition from="B" to="BB" value="6.48%"/>
     <transition from="B" to="B" value="83.46%"/>
     <transition from="B" to="CCC" value="4.07%"/>
-    <transition from="B" to="Default" value="5.21%"/>
+    <transition from="B" to="D" value="5.21%"/>
 
     <transition from="CCC" to="AAA" value="0.22%"/>
     <transition from="CCC" to="AA" value="0.0%"/>
@@ -111,16 +111,16 @@
     <transition from="CCC" to="BB" value="2.38%"/>
     <transition from="CCC" to="B" value="11.24%"/>
     <transition from="CCC" to="CCC" value="64.86%"/>
-    <transition from="CCC" to="Default" value="19.78%"/>
+    <transition from="CCC" to="D" value="19.78%"/>
 
-    <transition from="Default" to="AAA" value="0.0%"/>
-    <transition from="Default" to="AA" value="0.0%"/>
-    <transition from="Default" to="A" value="0.0%"/>
-    <transition from="Default" to="BBB" value="0.0%"/>
-    <transition from="Default" to="BB" value="0.0%"/>
-    <transition from="Default" to="B" value="0.0%"/>
-    <transition from="Default" to="CCC" value="0.0%"/>
-    <transition from="Default" to="Default" value="100.0%"/>
+    <transition from="D" to="AAA" value="0.0%"/>
+    <transition from="D" to="AA" value="0.0%"/>
+    <transition from="D" to="A" value="0.0%"/>
+    <transition from="D" to="BBB" value="0.0%"/>
+    <transition from="D" to="BB" value="0.0%"/>
+    <transition from="D" to="B" value="0.0%"/>
+    <transition from="D" to="CCC" value="0.0%"/>
+    <transition from="D" to="D" value="100.0%"/>
 
   </mtransitions>
 
@@ -602,22 +602,22 @@
     <obligor rating="BB" sector="S1" name="Repsol" id="000001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <!-- implicit: belongs-to segmentation="obligor" value="cif1" -->
+      <!-- implicit: belongs-to segmentation="obligor" value="000001" -->
       <asset date="01/01/1999" name="generic" id="op1">
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <!-- implicit: belongs-to segmentation="asset" segment="op1" -->
         <data>
-          <values at="01/01/2000" cashflow="10.0" recovery="20%" />
-          <values at="01/06/2000" cashflow="10.0" recovery="20%" />
-          <values at="01/01/2001" cashflow="10.0" recovery="20%" />
-          <values at="01/06/2001" cashflow="10.0" recovery="20%" />
-          <values at="01/01/2002" cashflow="10.0" recovery="20%" />
-          <values at="01/06/2002" cashflow="10.0" recovery="20%" />
-          <values at="01/01/2003" cashflow="10.0" recovery="20%" />
-          <values at="01/06/2003" cashflow="10.0" recovery="20%" />
-          <values at="01/01/2004" cashflow="10.0" recovery="20%" />
-          <values at="01/06/2004" cashflow="10.0" recovery="20%" />
+          <values at="01/01/2000" exposure="100.0" recovery="20%" />
+          <values at="01/06/2000" exposure="90.0" recovery="20%" />
+          <values at="01/01/2001" exposure="80.0" recovery="20%" />
+          <values at="01/06/2001" exposure="70.0" recovery="20%" />
+          <values at="01/01/2002" exposure="60.0" recovery="20%" />
+          <values at="01/06/2002" exposure="50.0" recovery="20%" />
+          <values at="01/01/2003" exposure="40.0" recovery="20%" />
+          <values at="01/06/2003" exposure="30.0" recovery="20%" />
+          <values at="01/01/2004" exposure="20.0" recovery="20%" />
+          <values at="01/06/2004" exposure="10.0" recovery="20%" />
         </data>
       </asset>
     </obligor>

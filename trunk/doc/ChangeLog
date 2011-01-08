@@ -5,10 +5,11 @@ CCRUNCHER CHANGELOG
 version 1.7 (Jan. 2011)
 --------------------------
   * added support for stochastic recoveries
-  * solved minor bugs related with standards compliance by compiler
-  * added support for simple interest and continuous interest rates
-  * updated look style in report
+  * exposure concept replace cashflow events
   * borrowers renamed to obligors
+  * added support for simple interest and continuous interest rates
+  * solved minor bugs reported by g++ in ubuntu distro
+  * updated the report look
 
 version 1.6 (Sep. 2010)
 --------------------------

@@ -29,18 +29,28 @@
 ccruncher::DateValues::DateValues()
 {
   date = NAD;
-  cashflow = NAN;
+  exposure = NAN;
   recovery = Recovery::getNAN();
+}
+
+//===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::DateValues::DateValues(const DateValues &x)
+{
+  date = x.date;
+  exposure = x.exposure;
+  recovery = x.recovery;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date _date, double _cashflow, Recovery _recovery)
+ccruncher::DateValues::DateValues(Date date_, double exposure_, const Recovery &recovery_)
 {
-  date = _date;
-  cashflow = _cashflow;
-  recovery = _recovery;
+  date = date_;
+  exposure = exposure_;
+  recovery = recovery_;
 }
 
 //===========================================================================

@@ -129,14 +129,6 @@ void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Excepti
 }
 
 //===========================================================================
-// returns type
-//===========================================================================
-RecoveryType ccruncher::Recovery::getType() const
-{
-  return type;
-}
-
-//===========================================================================
 // retuns value1
 //===========================================================================
 double ccruncher::Recovery::getValue1() const
@@ -166,7 +158,7 @@ Recovery ccruncher::Recovery::getNAN()
 //===========================================================================
 // check if is a Non-A-Recovery value
 //===========================================================================
-bool ccruncher::Recovery::isnan(Recovery x)
+bool ccruncher::Recovery::isnan(const Recovery &x)
 {
   if (x.type == Fixed && std::isnan(x.value1)) return true;
   else return false;

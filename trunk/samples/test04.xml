@@ -117,7 +117,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op01">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -125,7 +125,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op02">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -133,7 +133,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op03">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -141,7 +141,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op04">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -149,7 +149,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op05">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -157,7 +157,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op06">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -165,7 +165,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op07">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -173,7 +173,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op08">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -181,7 +181,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op09">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -189,7 +189,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op10">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -197,7 +197,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op11">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -205,7 +205,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op12">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -213,7 +213,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op13">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -221,7 +221,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op14">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -229,7 +229,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op15">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -237,7 +237,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op16">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -245,7 +245,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op17">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -253,7 +253,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op18">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -261,7 +261,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op19">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -269,7 +269,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op20">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -277,7 +277,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op21">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -285,7 +285,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op22">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -293,7 +293,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op23">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -301,7 +301,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op24">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -309,7 +309,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op25">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -317,7 +317,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op26">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -325,7 +325,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op27">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -333,7 +333,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op28">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -341,7 +341,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op29">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -349,7 +349,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op30">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -357,7 +357,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op31">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -365,7 +365,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op32">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -373,7 +373,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op33">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -381,7 +381,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op34">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -389,7 +389,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op35">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -397,7 +397,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op36">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -405,7 +405,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op37">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -413,7 +413,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op38">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -421,7 +421,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op39">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -429,7 +429,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op40">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -437,7 +437,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op41">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -445,7 +445,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op42">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -453,7 +453,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op43">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -461,7 +461,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op44">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -469,7 +469,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op45">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -477,7 +477,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op46">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -485,7 +485,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op47">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -493,7 +493,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op48">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -501,7 +501,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op49">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -509,7 +509,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op50">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -517,7 +517,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op51">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -525,7 +525,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op52">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -533,7 +533,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op53">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -541,7 +541,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op54">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -549,7 +549,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op55">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -557,7 +557,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op56">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -565,7 +565,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op57">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -573,7 +573,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op58">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -581,7 +581,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op59">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -589,7 +589,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op60">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -597,7 +597,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op61">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -605,7 +605,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op62">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -613,7 +613,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op63">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -621,7 +621,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op64">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -629,7 +629,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op65">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -637,7 +637,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op66">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -645,7 +645,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op67">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -653,7 +653,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op68">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -661,7 +661,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op69">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -669,7 +669,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op70">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -677,7 +677,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op71">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -685,7 +685,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op72">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -693,7 +693,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op73">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -701,7 +701,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op74">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -709,7 +709,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op75">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -717,7 +717,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op76">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -725,7 +725,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op77">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -733,7 +733,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op78">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -741,7 +741,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op79">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -749,7 +749,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op80">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -757,7 +757,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op81">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -765,7 +765,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op82">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -773,7 +773,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op83">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -781,7 +781,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op84">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -789,7 +789,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op85">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -797,7 +797,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op86">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -805,7 +805,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op87">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -813,7 +813,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op88">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -821,7 +821,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op89">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -829,7 +829,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op90">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -837,7 +837,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op91">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -845,7 +845,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op92">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -853,7 +853,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op93">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -861,7 +861,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op94">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -869,7 +869,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op95">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -877,7 +877,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op96">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -885,7 +885,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op97">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -893,7 +893,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op98">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -901,7 +901,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" name="generic" id="op99">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -909,7 +909,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" name="generic" id="op100">
         <data>
-          <values at="01/01/2006" cashflow="1.0" recovery="0%" />
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>

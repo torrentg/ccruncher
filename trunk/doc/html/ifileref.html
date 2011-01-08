@@ -706,8 +706,8 @@
     <p>
       This section shows how to define the portfolio. 
       A portfolio is a set of assets. The description of assets is done 
-      by listing future payments and recovery rates in case of default. 
-      Assets are grouped by debtor.
+      by listing the expected exposures and recovery rates in case of default. 
+      Assets are grouped by obligor.
     </p>
 
     <h3>Example</h3>
@@ -722,27 +722,27 @@
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;belongs-to segmentation="offices" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values at="01/06/2005" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2006" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2007" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2008" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2009" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2010" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2011" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2012" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2013" cashflow="100.0" /&gt;
-          &lt;values at="01/06/2014" cashflow="1100.0" /&gt;
+          &lt;values at="01/06/2005" exposure="2000.0" /&gt;
+          &lt;values at="01/06/2006" exposure="1900.0" /&gt;
+          &lt;values at="01/06/2007" exposure="1800.0" /&gt;
+          &lt;values at="01/06/2008" exposure="1700.0" /&gt;
+          &lt;values at="01/06/2009" exposure="1600.0" /&gt;
+          &lt;values at="01/06/2010" exposure="1500.0" /&gt;
+          &lt;values at="01/06/2011" exposure="1400.0" /&gt;
+          &lt;values at="01/06/2012" exposure="1300.0" /&gt;
+          &lt;values at="01/06/2013" exposure="1200.0" /&gt;
+          &lt;values at="01/06/2014" exposure="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset name="bond" id="op2" date="01/06/2008"&gt;
         &lt;belongs-to segmentation="offices" segment="0004"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/07/2009" cashflow="480.0" recovery="75%" /&gt;
-          &lt;values at="01/07/2011" cashflow="480.0" recovery="70%" /&gt;
-          &lt;values at="01/07/2013" cashflow="480.0" recovery="65%" /&gt;
-          &lt;values at="01/07/2015" cashflow="480.0" recovery="60%" /&gt;
-          &lt;values at="01/07/2017" cashflow="2480.0" recovery="55%" /&gt;
+          &lt;values at="01/07/2009" exposure="4400.0" recovery="75%" /&gt;
+          &lt;values at="01/07/2011" exposure="3920.0" recovery="70%" /&gt;
+          &lt;values at="01/07/2013" exposure="3340.0" recovery="65%" /&gt;
+          &lt;values at="01/07/2015" exposure="2960.0" recovery="60%" /&gt;
+          &lt;values at="01/07/2017" exposure="2480.0" recovery="55%" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
@@ -753,35 +753,35 @@
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2005" cashflow="150.0" /&gt;
-          &lt;values at="01/06/2007" cashflow="150.0" /&gt;
-          &lt;values at="01/01/2009" cashflow="150.0" /&gt;
-          &lt;values at="01/06/2011" cashflow="150.0" /&gt;
-          &lt;values at="01/01/2013" cashflow="1150.0" /&gt;
+          &lt;values at="01/01/2005" exposure="1750.0" /&gt;
+          &lt;values at="01/06/2007" exposure="1600.0" /&gt;
+          &lt;values at="01/01/2009" exposure="1450.0" /&gt;
+          &lt;values at="01/06/2011" exposure="1300.0" /&gt;
+          &lt;values at="01/01/2013" exposure="1150.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
     &lt;obligor rating="CCC" sector="S2" name="Altleopard" id="000003"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op4" date="01/01/1999" recovery="50%"&gt;
+      &lt;asset name="bond" id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values at="01/01/2000" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2001" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2002" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2003" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2004" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2005" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2006" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2007" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2008" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2009" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2010" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2011" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2012" cashflow="100.0" /&gt;
-          &lt;values at="01/01/2013" cashflow="1100.0" /&gt;
+          &lt;values at="01/01/2000" exposure="2400.0" /&gt;
+          &lt;values at="01/01/2001" exposure="2300.0" /&gt;
+          &lt;values at="01/01/2002" exposure="2200.0" /&gt;
+          &lt;values at="01/01/2003" exposure="2100.0" /&gt;
+          &lt;values at="01/01/2004" exposure="2000.0" /&gt;
+          &lt;values at="01/01/2005" exposure="1900.0" /&gt;
+          &lt;values at="01/01/2006" exposure="1800.0" /&gt;
+          &lt;values at="01/01/2007" exposure="1700.0" /&gt;
+          &lt;values at="01/01/2008" exposure="1600.0" /&gt;
+          &lt;values at="01/01/2009" exposure="1500.0" /&gt;
+          &lt;values at="01/01/2010" exposure="1400.0" /&gt;
+          &lt;values at="01/01/2011" exposure="1300.0" /&gt;
+          &lt;values at="01/01/2012" exposure="1200.0" /&gt;
+          &lt;values at="01/01/2013" exposure="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
@@ -959,10 +959,10 @@
         <td class="c3"><code>date</code></td>
       </tr>
       <tr class="b">
-        <td class="c1">cashflow</td>
+        <td class="c1">exposure</td>
         <td class="c2">
-          Cashflow at date "at". Positive values mean that the obligor pays, negative
-          values mean that the obligor receives money.
+          Esposure at date "at". Amount that lender can lose in case of obligor's default 
+          on the indicated date.
         </td>
         <td class="c3"><code>double</code></td>
       </tr>
@@ -1022,17 +1022,23 @@
     <pre>
 
   &lt;survival&gt;
+    &lt;svalue rating="AAA" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="AA" t="0" value="100.0%"/&gt;
     &lt;svalue rating="A" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="BBB" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="BB" t="0" value="100.0%"/&gt;
     &lt;svalue rating="B" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="C" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="D" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="E" t="0" value="0.0%"/&gt;
+    &lt;svalue rating="CCC" t="0" value="0.0%"/&gt;
+    &lt;svalue rating="D" t="0" value="0.0%"/&gt;
 
-    &lt;svalue rating="A" t="6" value="99.9621298%"/&gt;
-    &lt;svalue rating="B" t="6" value="92.5452791%"/&gt;
-    &lt;svalue rating="C" t="6" value="87.9896024%"/&gt;
-    &lt;svalue rating="D" t="6" value="78.9845972%"/&gt;
-    &lt;svalue rating="E" t="6" value="0.0%"/&gt;
+    &lt;svalue rating="AAA" t="6" value="99.96%"/&gt;
+    &lt;svalue rating="AA" t="6" value="98.54%"/&gt;
+    &lt;svalue rating="A" t="6" value="97.19%"/&gt;
+    &lt;svalue rating="BBB" t="6" value="95.98%"/&gt;
+    &lt;svalue rating="BB" t="6" value="92.63%"/&gt;
+    &lt;svalue rating="B" t="6" value="85.72%"/&gt;
+    &lt;svalue rating="CCC" t="6" value="78.88%"/&gt;
+    &lt;svalue rating="D" t="6" value="0.0%"/&gt;
     ...
   &lt;/survival&gt;
     </pre>
@@ -1080,7 +1086,7 @@
             Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 03-Jan-2011
+            Last modified: 05-Jan-2011
           </td>
         </tr></table>
       </div></div></div></div></div>

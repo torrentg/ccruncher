@@ -4,14 +4,16 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * add risk aggregation to documentation
-     - explain how to distribute the risk (eg. ES) along segments
-     - see 'introduction to credit risk modeling'
   * determine the degrees-of-freedom of t-student copula based on historical data
+  * add stochastic exposure
 
 Future works
 -------------------
-  * add stochastic exposure
+  * in 'values' tag allow express date as interval from starting 
+    date (eg. 1D, 2M, 3Y) instead of a fixed date (eg. 03/01/2011).
+  * add risk aggregation to documentation
+     - explain how to distribute the risk (eg. ES) along segments
+     - see 'introduction to credit risk modeling'
   * improve functional tests
      - examples based on real data
      - improve documentation adding tests section

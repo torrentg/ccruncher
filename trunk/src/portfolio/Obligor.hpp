@@ -102,7 +102,7 @@ class Obligor : public ExpatHandlers
     ~Obligor();
     // return the asset list
     vector<Asset *> & getAssets();
-    // indicates if this obligor has cashflows in date1-date2
+    // indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
@@ -110,6 +110,8 @@ class Obligor : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     // given a segmentation returns the segment
     int getSegment(int isegmentation);
+    // says if this obligor has an asset that use obligor's recovery
+    bool hasRecovery() const;
 
 };
 

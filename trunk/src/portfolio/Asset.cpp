@@ -28,7 +28,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Asset::Asset(Segmentations *segs, Recovery drecovery_) : vsegments(), data(), pdata()
+ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
@@ -37,8 +37,7 @@ ccruncher::Asset::Asset(Segmentations *segs, Recovery drecovery_) : vsegments(),
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   date = NAD;
-  lastdate = NAD;
-  drecovery = drecovery_;
+  drecovery = Recovery::getNAN();
 }
 
 //===========================================================================
@@ -64,81 +63,21 @@ string ccruncher::Asset::getName(void) const
 {
   return name;
 }
-
+#include "utils/Format.hpp"
 //===========================================================================
-// get recovery at date d
+// prepare data
 //===========================================================================
-Recovery ccruncher::Asset::getRecovery(Date d)
+void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &interest)
 {
-  int n = (int) data.size();
-
-  if (d < date)
-  {
-    return 0.0;
-  }
-
-  for(int i=0; i<n; i++)
-  {
-    if (d <= data[i].date)
-    {
-      return data[i].recovery;
-    }
-  }
-
-  return 0.0;
-}
-
-//===========================================================================
-// getLossX
-//===========================================================================
-double ccruncher::Asset::getLossX(Date d)
-{
-  if (d < date)
-  {
-    return 0.0;
-  }
-
-  int n = (int) data.size();
-  double ret = 0.0;
-
-  for(int i=0; i<n; i++)
-  {
-    if (d <= data[i].date)
-    {
-      ret += data[i].cashflow;
-    }
-  }
-
-  return ret;
-}
-
-//===========================================================================
-// precomputeLosses
-//===========================================================================
-void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const Interest &interest)
-{
-  // allocating & initializing memory
-  pdata.clear();
+  vector<DateValues> pdata;
   pdata.reserve(data.size()+2);
 
-  // computing cashflow/recoveries Current Net Value
+  // clipping data
   for (int i=0; i<(int)data.size(); i++) 
   {
     if (d1 <= data[i].date && data[i].date <= d2) 
     {
-      double ufactor =  interest.getFactor(data[i].date, d1);
-      data[i].cashflow *= ufactor;
-    }
-  }
-
-  // precomputing losses (d1 <= t <= d2)
-  for (int i=0; i<(int)data.size(); i++) 
-  {
-    Date d = data[i].date;
-    
-    if (d1 <= d && d <= d2) 
-    {
-      DateValues val(d, getLossX(d), getRecovery(d));
+      DateValues val(data[i]);
       pdata.push_back(val);
     }
   }
@@ -147,7 +86,14 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   Date mindate = max(date, d1);
   if (pdata.size() == 0 || mindate < pdata.front().date)
   {
-    DateValues val(mindate, getLossX(mindate), getRecovery(mindate));
+    DateValues val(mindate, 0.0, Recovery(1.0));
+    for(unsigned int i=0; i<data.size(); i++)
+    {
+      if (data[i].date < mindate) continue;
+      val.exposure = data[i].exposure;
+      val.recovery = data[i].recovery;
+      break;
+    }
     pdata.insert(pdata.begin(), val);
   }
   
@@ -155,12 +101,25 @@ void ccruncher::Asset::precomputeLosses(const Date &d1, const Date &d2, const In
   Date maxdate = min(data.back().date, d2);
   if (pdata.back().date < maxdate)
   {
-    DateValues val(maxdate, getLossX(maxdate), getRecovery(maxdate));
+    DateValues val(maxdate, 0.0, Recovery(1.0));
+    for(unsigned int i=0; i<data.size(); i++)
+    {
+      if (data[i].date < maxdate) continue;
+      val.exposure = data[i].exposure;
+      val.recovery = data[i].recovery;
+      break;
+    }
     pdata.push_back(val);
   }
 
-  // deallocating unused memory  
-  vector<DateValues>(pdata).swap(pdata);
+  // computing Current Net Value
+  for(unsigned int i=0; i<pdata.size(); i++)
+  {
+    pdata[i].exposure *= interest.getFactor(pdata[i].date, d1);
+  }
+
+  // reassigning data (with memory shrink)
+  vector<DateValues>(pdata).swap(data);
 }
 
 //===========================================================================
@@ -172,18 +131,17 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   if (isEqual(name_,"values") && have_data == true) 
   {
     Date at = getDateAttribute(attributes, "at", NAD);
-    double cashflow = getDoubleAttribute(attributes, "cashflow", NAN);
+    double exposure = getDoubleAttribute(attributes, "exposure", NAN);
     Recovery recovery = drecovery;
     char *str = getAttributeValue(attributes, "recovery");
     if (str != NULL) {
       recovery = Recovery(str);
     }
-    if (at == NAD || isnan(cashflow) || Recovery::isnan(recovery)) {
+    if (at == NAD || isnan(exposure)) {
       throw Exception("invalid attributes at <values>");
     }
     else {
-      DateValues aux(at, cashflow, recovery);
-      insertDateValues(aux);
+      data.push_back(DateValues(at, exposure, recovery));
     }
   }
   else if (isEqual(name_,"belongs-to")) {
@@ -246,7 +204,12 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 
     // sorting events by date
     sort(data.begin(), data.end());
-    lastdate = data.back().date;
+
+    // checking for dates previous to asset date
+    if (data[0].date < date)
+    {
+      throw Exception("asset with date values previous to asset creation date");
+    }
 
     // checking for repeated dates    
     for(unsigned int i=1; i<data.size(); i++)
@@ -276,28 +239,6 @@ void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
 }
 
 //===========================================================================
-// insertDateValues
-//===========================================================================
-void ccruncher::Asset::insertDateValues(const DateValues &val) throw(Exception)
-{
-  // checking if date is previous to creation date
-  if (val.date < date)
-  {
-    throw Exception("trying to insert an event with date previous to asset creation date");
-  }
-
-  // inserting date-values
-  try
-  {
-    data.push_back(val);
-  }
-  catch(std::exception &e)
-  {
-    throw Exception(e);
-  }
-}
-
-//===========================================================================
 // addBelongsTo
 //===========================================================================
 void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
@@ -323,40 +264,21 @@ bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 }
 
 //===========================================================================
-// getData
-//===========================================================================
-vector<DateValues>& ccruncher::Asset::getData()
-{
-  return data;
-}
-
-//===========================================================================
-// getData
-//===========================================================================
-void ccruncher::Asset::deleteData()
-{
-  data.clear();
-  // incredible but true, this shrink memory
-  //std::vector<DateValues>(data.begin(), data.end()).swap(data);
-  std::vector<DateValues>(0).swap(data);
-}
-
-//===========================================================================
 // getMinDate
-// be sure that precomputeLosses is called before the execution of this method
+// be sure that precomputeData is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMinDate() const
 {
-  return pdata.front().date;
+  return data.front().date;
 }
 
 //===========================================================================
 // getMaxDate
-// be sure that precomputeLosses is called before the execution of this method
+// be sure that precomputeData is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMaxDate() const
 {
-  return pdata.back().date;
+  return data.back().date;
 }
 
 //===========================================================================
@@ -368,11 +290,11 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
   {
     return true;
   }
-  else if (from <= lastdate && lastdate <= to)
+  else if (from <= data.back().date && data.back().date <= to)
   {
     return true;
   }
-  else if (date <= from && to <= lastdate)
+  else if (date <= from && to <= data.back().date)
   {
     return true;
   }
@@ -383,10 +305,18 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
 }
 
 //===========================================================================
-// getRecovery
+// says if use obligor recovery
 //===========================================================================
-Recovery ccruncher::Asset::getRecovery() const
+bool ccruncher::Asset::hasObligorRecovery() const
 {
-  return drecovery;
+  for(unsigned int i=0; i<data.size(); i++)
+  {
+    if (Recovery::isnan(data[i].recovery))
+    {
+      return true;
+    }
+  }
+  
+  return false;
 }
 
