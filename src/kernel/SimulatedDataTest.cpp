@@ -168,7 +168,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='C' sector='S1' name='Obligor1' id='cif1'>\n\
       <asset name='generic' id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -177,7 +177,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='D' sector='S2' name='Obligor2' id='cif2'>\n\
       <asset name='generic' id='op2' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -186,7 +186,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='A' sector='S1' name='Obligor3' id='cif3'>\n\
       <asset name='generic' id='op3' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -195,7 +195,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='B' sector='S1' name='Obligor4' id='cif4'>\n\
       <asset name='generic' id='op4' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -204,7 +204,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='A' sector='S2' name='Obligor5' id='cif5'>\n\
       <asset name='generic' id='op5' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' cashflow='10.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";

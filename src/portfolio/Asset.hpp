@@ -28,7 +28,6 @@
 #include "utils/config.h"
 #include <cmath>
 #include <vector>
-#include <gsl/gsl_rng.h>
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
@@ -59,27 +58,14 @@ class Asset : public ExpatHandlers
     string name;
     // asset creation date
     Date date;
-    // last asset date
-    Date lastdate;
-    // cashflow values
+    // exposure-recovery values
     vector<DateValues> data;
-    // pointer to segmentations list
-    Segmentations *segmentations;
-    // precomputed data
-    vector<DateValues> pdata;
-    // auxiliary variable (used by parser)
-    bool have_data;
     // default recovery
     Recovery drecovery;
-
-  private:
-  
-    // insert a cashflow value
-    void insertDateValues(const DateValues &) throw(Exception);
-    // returns recovery at given date
-    Recovery getRecovery(Date d);
-    // returns loss at given date
-    double getLossX(Date d);
+    // pointer to segmentations list (used by parser)
+    Segmentations *segmentations;
+    // auxiliary variable (used by parser)
+    bool have_data;
 
   protected:
   
@@ -91,7 +77,7 @@ class Asset : public ExpatHandlers
   public:
 
     // constructor
-    Asset(Segmentations *, Recovery recovery=Recovery::getNAN());
+    Asset(Segmentations *);
     // destructor
     ~Asset();
     // return asset id
@@ -100,26 +86,22 @@ class Asset : public ExpatHandlers
     string getName(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // precompute losses
-    void precomputeLosses(const Date &d1, const Date &d2, const Interest &interest);
-    // returns loss at the given default time
-    double getLoss(const Date &at, const gsl_rng *rng=NULL) const;
-    // returns a pointer to cashflow
-    vector<DateValues> &getData();
+    // precpare data
+    void prepare(const Date &d1, const Date &d2, const Interest &interest);
     // check if belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment) const;
     // given a segmentation returns the segment
     int getSegment(int isegmentation) const;
-    // free memory allocated by DateValues
-    void deleteData();
-    // indicates if this asset has cashflows in date1-date2
+    // indicates if this asset has info in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // returns minimum event date (restricted to precomputed events)
     Date getMinDate() const;
     // returns maximum event date (restricted to precomputed events)
     Date getMaxDate() const;
-    // returns default recovery
-    Recovery getRecovery() const;
+    // returns exposure-recovery at given date
+    const DateValues& getValues(const Date) const;
+    // says if use obligor recovery
+    bool hasObligorRecovery() const;
 
 };
 
@@ -136,29 +118,27 @@ inline int ccruncher::Asset::getSegment(int isegmentation) const
 }
 
 //===========================================================================
-// getLoss
+// getData
 //===========================================================================
-inline double ccruncher::Asset::getLoss(const Date &at, const gsl_rng *rng) const
+inline const DateValues& ccruncher::Asset::getValues(const Date at) const
 {
-  int length = (int) pdata.size();
-
-  if (length == 0 || at < pdata.front().date || pdata.back().date < at)
+  static const DateValues dvnf(NAD, 0.0, Recovery(1.0));
+  
+  if (at < date || data.size() == 0 || at < data[0].date || data.back().date < at)
   {
-    return 0.0;
+    return dvnf;
   }
-  else 
+  
+  for(unsigned int i=0; i<data.size(); i++) 
   {
-    for(int i=0; i<length; i++) 
+    if (at <= data[i].date) 
     {
-      if (at <= pdata[i].date) 
-      {
-        return pdata[i].cashflow * (1.0-pdata[i].recovery.getValue(rng));
-      }
+      return data[i];
     }
   }
   
   assert(false);
-  return 0.0;
+  return dvnf;
 }
 
 //---------------------------------------------------------------------------

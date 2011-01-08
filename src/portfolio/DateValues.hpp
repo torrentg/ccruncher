@@ -44,8 +44,8 @@ class DateValues
 
     // date where values take place
     Date date;
-    // cashflow value
-    double cashflow;
+    // exposure value
+    double exposure;
     // recovery value
     Recovery recovery;
 
@@ -53,8 +53,10 @@ class DateValues
   
     // default constructor
     DateValues();
+    // copy constructor
+    DateValues(const DateValues &);
     // constructor
-    DateValues(Date date, double cashflow, Recovery recovery);
+    DateValues(Date date, double, const Recovery &);
 
 };
 

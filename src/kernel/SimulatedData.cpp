@@ -30,6 +30,7 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   assert(obligor != NULL);
   irating = obligor->irating;
+  hasRecovery = obligor->hasRecovery();
   ref = obligor;
 }
 

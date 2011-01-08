@@ -84,14 +84,12 @@ class Recovery
     double getValue1() const;
     // returns value2
     double getValue2() const;
-    // returns recovery (if Fixed, NAN otherwise)
-    double getValue() const;
     // returns recovery (includes Beta)
-    double getValue(const gsl_rng *) const;
+    double getValue(const gsl_rng *rng=NULL) const;
     // returns a Non-A-Recovery value
     static Recovery getNAN();
     // check if is a Non-A-Recovery value
-    static bool isnan(Recovery);
+    static bool isnan(const Recovery &);
     // to string
 	string toString() const;
 	
@@ -100,12 +98,11 @@ class Recovery
 //---------------------------------------------------------------------------
 
 //===========================================================================
-// getValue
+// returns type
 //===========================================================================
-inline double ccruncher::Recovery::getValue() const
+inline RecoveryType ccruncher::Recovery::getType() const
 {
-  if (type == Beta) return NAN;
-  else return value1;
+  return type;
 }
 
 //===========================================================================

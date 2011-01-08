@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <vector>
+#include <gsl/gsl_rng.h>
 #include "survival/Survival.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/SimulatedData.hpp"
@@ -57,13 +58,15 @@ class SimulationThread : public Thread
     // Monte Carlo parent
     MonteCarlo &montecarlo;
     // list of simulated obligors
-    vector<SimulatedObligor> obligors;
+    const vector<SimulatedObligor> &obligors;
     // list of simulated assets
-    vector<SimulatedAsset> assets;
+    const vector<SimulatedAsset> &assets;
     // copula used to simulate correlations
     Copula *copula;
     // obligors default times
     vector<Date> dtimes;
+    // obligors recoveries
+    vector<double> orecovery;
     // assets losses
     vector<double> alosses;
     // initial date
@@ -84,6 +87,8 @@ class SimulationThread : public Thread
     vector<int> isegments;
     // asset loss values by segmentation
     vector<vector<double> > losses;
+    // copula random number generator
+    gsl_rng *rng;
     // elapsed time creating random numbers
     Timer timer1;
     // ellapsed time simulating default times

@@ -44,7 +44,6 @@ class AssetTest : public TestFixture<AssetTest>
 
     Segmentations getSegmentations();
     Interest getInterest();
-    void makeAssertions(Asset *asset);
 
     void test1(void);
     void test2(void);
@@ -53,8 +52,6 @@ class AssetTest : public TestFixture<AssetTest>
     void test5(void);
     void test6(void);
     void test7(void);
-    void test8(void);
-    void test9(void);
 
 
   public:
@@ -68,8 +65,6 @@ class AssetTest : public TestFixture<AssetTest>
       TEST_CASE(test5);
       TEST_CASE(test6);
       TEST_CASE(test7);
-      TEST_CASE(test8);
-      TEST_CASE(test9);
     }
 
     void setUp();

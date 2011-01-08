@@ -187,27 +187,27 @@
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <data>
-          <values at="01/06/2005" cashflow="100.0" />
-          <values at="01/06/2006" cashflow="100.0" />
-          <values at="01/06/2007" cashflow="100.0" />
-          <values at="01/06/2008" cashflow="100.0" />
-          <values at="01/06/2009" cashflow="100.0" />
-          <values at="01/06/2010" cashflow="100.0" />
-          <values at="01/06/2011" cashflow="100.0" />
-          <values at="01/06/2012" cashflow="100.0" />
-          <values at="01/06/2013" cashflow="100.0" />
-          <values at="01/06/2014" cashflow="1100.0" />
+          <values at="01/06/2005" exposure="2000.0" />
+          <values at="01/06/2006" exposure="1900.0" />
+          <values at="01/06/2007" exposure="1800.0" />
+          <values at="01/06/2008" exposure="1700.0" />
+          <values at="01/06/2009" exposure="1600.0" />
+          <values at="01/06/2010" exposure="1500.0" />
+          <values at="01/06/2011" exposure="1400.0" />
+          <values at="01/06/2012" exposure="1300.0" />
+          <values at="01/06/2013" exposure="1200.0" />
+          <values at="01/06/2014" exposure="1100.0" />
         </data>
       </asset>
       <asset name="bond" id="op2" date="01/06/2008">
         <belongs-to segmentation="offices" segment="0004"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/07/2009" cashflow="480.0" recovery="75%" />
-          <values at="01/07/2011" cashflow="480.0" recovery="70%" />
-          <values at="01/07/2013" cashflow="480.0" recovery="65%" />
-          <values at="01/07/2015" cashflow="480.0" recovery="60%" />
-          <values at="01/07/2017" cashflow="2480.0" recovery="55%" />
+          <values at="01/07/2009" exposure="4400.0" recovery="75%" />
+          <values at="01/07/2011" exposure="3920.0" recovery="70%" />
+          <values at="01/07/2013" exposure="3340.0" recovery="65%" />
+          <values at="01/07/2015" exposure="2960.0" recovery="60%" />
+          <values at="01/07/2017" exposure="2480.0" recovery="55%" />
         </data>
       </asset>
     </obligor>
@@ -218,35 +218,35 @@
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/01/2005" cashflow="150.0" />
-          <values at="01/06/2007" cashflow="150.0" />
-          <values at="01/01/2009" cashflow="150.0" />
-          <values at="01/06/2011" cashflow="150.0" />
-          <values at="01/01/2013" cashflow="1150.0" />
+          <values at="01/01/2005" exposure="1750.0" />
+          <values at="01/06/2007" exposure="1600.0" />
+          <values at="01/01/2009" exposure="1450.0" />
+          <values at="01/06/2011" exposure="1300.0" />
+          <values at="01/01/2013" exposure="1150.0" />
         </data>
       </asset>
     </obligor>
     <obligor rating="CCC" sector="S2" name="Altleopard" id="000003">
       <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <asset name="bond" id="op4" date="01/01/1999" recovery="50%">
+      <asset name="bond" id="op4" date="01/01/1999" recovery="beta(2.5,2.7)">
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/01/2000" cashflow="100.0" />
-          <values at="01/01/2001" cashflow="100.0" />
-          <values at="01/01/2002" cashflow="100.0" />
-          <values at="01/01/2003" cashflow="100.0" />
-          <values at="01/01/2004" cashflow="100.0" />
-          <values at="01/01/2005" cashflow="100.0" />
-          <values at="01/01/2006" cashflow="100.0" />
-          <values at="01/01/2007" cashflow="100.0" />
-          <values at="01/01/2008" cashflow="100.0" />
-          <values at="01/01/2009" cashflow="100.0" />
-          <values at="01/01/2010" cashflow="100.0" />
-          <values at="01/01/2011" cashflow="100.0" />
-          <values at="01/01/2012" cashflow="100.0" />
-          <values at="01/01/2013" cashflow="1100.0" />
+          <values at="01/01/2000" exposure="2400.0" />
+          <values at="01/01/2001" exposure="2300.0" />
+          <values at="01/01/2002" exposure="2200.0" />
+          <values at="01/01/2003" exposure="2100.0" />
+          <values at="01/01/2004" exposure="2000.0" />
+          <values at="01/01/2005" exposure="1900.0" />
+          <values at="01/01/2006" exposure="1800.0" />
+          <values at="01/01/2007" exposure="1700.0" />
+          <values at="01/01/2008" exposure="1600.0" />
+          <values at="01/01/2009" exposure="1500.0" />
+          <values at="01/01/2010" exposure="1400.0" />
+          <values at="01/01/2011" exposure="1300.0" />
+          <values at="01/01/2012" exposure="1200.0" />
+          <values at="01/01/2013" exposure="1100.0" />
         </data>
       </asset>
     </obligor>

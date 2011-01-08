@@ -166,16 +166,16 @@
 			bond with anual cupons at 10% with a recovery rate of 80%
 		-->
         <data>
-          <values at="01/06/2005" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2006" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2007" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2008" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2009" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2010" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2011" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2012" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2013" cashflow="100.0" recovery="80%" />
-          <values at="01/06/2014" cashflow="1100.0" recovery="80%" />
+          <values at="01/06/2005" exposure="1000.0" recovery="80%" />
+          <values at="01/06/2006" exposure="900.0" recovery="80%" />
+          <values at="01/06/2007" exposure="800.0" recovery="80%" />
+          <values at="01/06/2008" exposure="700.0" recovery="80%" />
+          <values at="01/06/2009" exposure="600.0" recovery="80%" />
+          <values at="01/06/2010" exposure="500.0" recovery="80%" />
+          <values at="01/06/2011" exposure="400.0" recovery="80%" />
+          <values at="01/06/2012" exposure="300.0" recovery="80%" />
+          <values at="01/06/2013" exposure="200.0" recovery="80%" />
+          <values at="01/06/2014" exposure="100.0" recovery="80%" />
         </data>
       </asset>
       <asset name="bond" id="op2" date="01/06/2008">
@@ -185,11 +185,11 @@
 			bond with bianual cupons at 12% with a recovery rate of 75%
 		-->
         <data>
-          <values at="01/07/2009" cashflow="480.0" recovery="75%" />
-          <values at="01/07/2011" cashflow="480.0" recovery="70%" />
-          <values at="01/07/2013" cashflow="480.0" recovery="65%" />
-          <values at="01/07/2015" cashflow="480.0" recovery="60%" />
-          <values at="01/07/2017" cashflow="2480.0" recovery="55%" />
+          <values at="01/07/2009" exposure="2400.0" recovery="75%" />
+          <values at="01/07/2011" exposure="1920.0" recovery="70%" />
+          <values at="01/07/2013" exposure="1440.0" recovery="65%" />
+          <values at="01/07/2015" exposure="960.0" recovery="60%" />
+          <values at="01/07/2017" exposure="480.0" recovery="55%" />
         </data>
       </asset>
     </obligor>
@@ -203,11 +203,11 @@
 			bond with bianual cupons at 7.5% with a recovery rate of 40%
 		-->
         <data>
-          <values at="01/01/2005" cashflow="150.0" recovery="20%" />
-          <values at="01/06/2007" cashflow="150.0" recovery="20%" />
-          <values at="01/01/2009" cashflow="150.0" recovery="20%" />
-          <values at="01/06/2011" cashflow="150.0" recovery="20%" />
-          <values at="01/01/2013" cashflow="1150.0" recovery="20%" />
+          <values at="01/01/2005" exposure="750.0" recovery="20%" />
+          <values at="01/06/2007" exposure="600.0" recovery="20%" />
+          <values at="01/01/2009" exposure="450.0" recovery="20%" />
+          <values at="01/06/2011" exposure="300.0" recovery="20%" />
+          <values at="01/01/2013" exposure="150.0" recovery="20%" />
         </data>
       </asset>
     </obligor>
@@ -221,20 +221,20 @@
 			bond with anual cupons at 10% with a recovery rate of 25%
 		-->
         <data>
-          <values at="01/01/2000" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2001" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2002" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2003" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2004" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2005" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2006" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2007" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2008" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2009" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2010" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2011" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2012" cashflow="100.0" recovery="50%" />
-          <values at="01/01/2013" cashflow="1100.0" recovery="50%" />
+          <values at="01/01/2000" exposure="1400.0" recovery="50%" />
+          <values at="01/01/2001" exposure="1300.0" recovery="50%" />
+          <values at="01/01/2002" exposure="1200.0" recovery="50%" />
+          <values at="01/01/2003" exposure="1100.0" recovery="50%" />
+          <values at="01/01/2004" exposure="1000.0" recovery="50%" />
+          <values at="01/01/2005" exposure="900.0" recovery="50%" />
+          <values at="01/01/2006" exposure="800.0" recovery="50%" />
+          <values at="01/01/2007" exposure="700.0" recovery="50%" />
+          <values at="01/01/2008" exposure="600.0" recovery="50%" />
+          <values at="01/01/2009" exposure="500.0" recovery="50%" />
+          <values at="01/01/2010" exposure="400.0" recovery="50%" />
+          <values at="01/01/2011" exposure="300.0" recovery="50%" />
+          <values at="01/01/2012" exposure="200.0" recovery="50%" />
+          <values at="01/01/2013" exposure="100.0" recovery="50%" />
         </data>
       </asset>
     </obligor>

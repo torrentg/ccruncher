@@ -288,16 +288,16 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   vector<DateValues> events;
   DateValues curr;
 
-  curr.date = issuedate;
-  curr.cashflow = -nominal;
-  curr.recovery = pctrecv;
-  events.push_back(curr);
-
-  for(int i=1; i<term; i++) {
-    curr.date = addMonths(issuedate, i);
-    curr.cashflow = nominal*rent/(double)(term);
+  for(int i=0; i<term; i++) {
+    curr.date = addMonths(issuedate, i+1);
+    curr.exposure = nominal*rent/(double)(term);
     curr.recovery = pctrecv;
     events.push_back(curr);
+  }
+  
+  for(int i=events.size()-2; i>=0; i--)
+  {
+    events[i].exposure += events[i+1].exposure;
   }
 
   ret += spc1 + "<data>\n";
@@ -306,7 +306,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   {
     ret += spc2;
     ret += "<values at='" + Format::toString(events[i].date) + "' ";
-    ret += "cashflow='" + Format::toString(events[i].cashflow) + "' ";
+    ret += "exposure='" + Format::toString(events[i].exposure) + "' ";
     ret += "recovery='" + events[i].recovery.toString() + "' ";
     ret += "/>\n";
   }
@@ -335,11 +335,11 @@ void usage()
   "  usage: generator [options] --nobligors=num1 --nassets=num2 file.xml\n"
   "\n"
   "  description:\n"
-  "    generator is a creditcruncher tool for generating input test files\n"
+  "    generator is a ccruncher tool for generating input test files\n"
   "    ratings and sectors are extracted from template file\n"
   "  arguments:\n"
   "    file.xml         file used as template\n"
-  "    --nobligors=val number of obligors in portfolio\n"
+  "    --nobligors=val  number of obligors in portfolio\n"
   "    --nassets=val    number of assets per obligor\n"
   "  options:\n"
   "    --help           show this message and exit\n"
@@ -359,8 +359,8 @@ void usage()
 void copyright()
 {
   cout << "\n"
-  "  generator is Copyright (C) 2004-2011 Gerard Torrent\n"
-  "  and licensed under the GNU General Public License, version 2.\n"
+  "  samplegen is Copyright (C) 2004-2011 Gerard Torrent and\n"
+  "  licensed under the GNU General Public License, version 2.\n"
   "  More info at http://www.ccruncher.net\n"
   << endl;
 }

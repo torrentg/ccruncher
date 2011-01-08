@@ -46,6 +46,8 @@ class SimulatedObligor
 
     // obligor's rating index
     int irating;
+    // has recovery flag
+    bool hasRecovery;
     // reference to obligor
     Obligor *ref;
 
