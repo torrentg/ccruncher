@@ -600,8 +600,8 @@
     <p>
       All segmentations must be complete, so that an element belongs to only one segment and 
       the union of all segments constitutes the whole portfolio. Every segmentation must have 
-      a segment named 'rest' defined in an implicit way. If a obligor (or an asset)
-      does not belong to any segment, then it is considered part of the 'rest' segment. Finally, 
+      a segment named 'unassigned' defined in an implicit way. If a obligor (or an asset)
+      does not belong to any segment, then it is considered part of the 'unassigned' segment. Finally, 
       there are 2 special segmentations: 'obligors' (one segment per obligor) and 'assets'
       (one segment per asset), and in these cases you don't need to specify all the segments,
       because these are defined implicitly. 
@@ -689,7 +689,7 @@
           the same name. All references to a segment, eg. belongs-to tag,
           are made using this field and always in conjunction with the segmentation. 
           If a segmentation doesn't have any segments, all the elements belong to
-          the 'rest' segment. The 'obligors' and 'assets' segmentations allow
+          the 'unassigned' segment. The 'obligors' and 'assets' segmentations allow
           defining the '*' segment. The '*' segment contains an implicit 
           definition of a segment to every asset and obligor.
         </td>
@@ -1086,7 +1086,7 @@
             Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 05-Jan-2011
+            Last modified: 09-Jan-2011
           </td>
         </tr></table>
       </div></div></div></div></div>
