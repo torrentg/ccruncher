@@ -69,7 +69,7 @@ void ccruncher_test::SegmentationTest::test1()
 
   ASSERT(5 == sobj.size());
 
-  ASSERT(0 == sobj.indexOfSegment("rest"));
+  ASSERT(0 == sobj.indexOfSegment("unassigned"));
   ASSERT(1 == sobj.indexOfSegment("0001"));
   ASSERT(2 == sobj.indexOfSegment("0002"));
   ASSERT(3 == sobj.indexOfSegment("0003"));

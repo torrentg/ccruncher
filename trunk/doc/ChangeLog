@@ -6,8 +6,9 @@ version 1.7 (Jan. 2011)
 --------------------------
   * added support for stochastic recoveries
   * exposure concept replace cashflow events
-  * borrowers renamed to obligors
   * added support for simple interest and continuous interest rates
+  * borrowers renamed to obligors
+  * implicit segment 'rest' renamed to 'unassigned'
   * solved minor bugs reported by g++ in ubuntu distro
   * updated the report look
 

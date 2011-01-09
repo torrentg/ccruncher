@@ -53,8 +53,8 @@ class Aggregator
     ofstream fout;
     // number of segments
     int numsegments;
-    // indicates if rest segment is used
-    bool printRestSegment;
+    // indicates if unassigned segment is used
+    bool printUnassignedSegment;
 
   public:
 

@@ -83,7 +83,7 @@ int ccruncher::Segmentation::indexOfSegment(const string &sname) throw(Exception
 void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
-  insertSegment("rest"); // adding catcher segment
+  insertSegment("unassigned"); // adding catcher segment
   modificable = false;
   name = "";
   components = obligor;
@@ -236,7 +236,7 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   {
     for (unsigned int i=0;i<vsegments.size();i++)
     {
-      if (vsegments[i] != "rest")
+      if (vsegments[i] != "unassigned")
       {
         ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i] + "'/>\n";
       }

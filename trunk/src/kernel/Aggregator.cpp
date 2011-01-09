@@ -34,12 +34,12 @@ ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentat
 {
   // initialization
   numsegments = segmentation.size();
-  printRestSegment = false;
+  printUnassignedSegment = false;
   for(unsigned int i=0; i<assets.size(); i++)
   {
     if (assets[i].ref->getSegment(isegmentation) == 0) 
     {
-      printRestSegment = true;
+      printUnassignedSegment = true;
       break;
     }
   }
@@ -61,9 +61,13 @@ ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentat
     }
     else
     {
-      for(int i=(printRestSegment?0:1); i<numsegments; i++)
+      for(int i=1; i<numsegments; i++)
       {
         fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
+      }
+      if (printUnassignedSegment)
+      {
+        fout << ", \"" << segmentation.getSegment(0) << "\"";
       }
     }
     fout << endl;
@@ -100,11 +104,15 @@ void ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
 
   try
   {
-    for (int i=(printRestSegment?0:1); i<numsegments-1; i++)
+    for (int i=1; i<numsegments; i++)
     {
-      fout << losses[i] << ", ";
+      fout << losses[i] << (i<numsegments-1?", ":"");
     }
-    fout << losses[numsegments-1] << "\n"; // endl not used because force to flush in disk
+    if (printUnassignedSegment)
+    {
+      fout << (numsegments>1?", ":"") << losses[0];
+    }
+    fout << "\n"; // endl not used because force to flush in disk
   }
   catch(Exception e)
   {
