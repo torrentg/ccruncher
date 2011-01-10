@@ -81,6 +81,9 @@ void ccruncher::ExpatHandlers::epstop(ExpatUserData &eud)
 //===========================================================================
 void ccruncher::ExpatHandlers::epdata(ExpatUserData &eud, const char *name, const char *s, int len)
 {
+  UNUSED(eud);
+  UNUSED(name);
+  
   // default simple rule: character data is not allowed
   for(int i=0;i<len;i++)
   {

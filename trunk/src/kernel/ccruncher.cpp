@@ -70,6 +70,8 @@ MonteCarlo *mcref = NULL;
 //===========================================================================
 void catchsignal(int signal)
 {
+  UNUSED(signal);
+  
   if (mcref != NULL) 
   {
     if (mcref->isRunning()) 

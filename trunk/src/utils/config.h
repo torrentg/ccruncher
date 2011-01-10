@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Jan  8 09:18:03 CET 2011"
+#define BUILD_DATE "Mon Jan 10 12:41:41 CET 2011"
 
 /* build host name */
-#define BUILD_HOST "localhost"
+#define BUILD_HOST "img22-131-54"
 
 /* build user */
-#define BUILD_USER "gerard"
+#define BUILD_USER "gtorrent"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -208,6 +208,9 @@
 
 /* subversion identifier */
 #define SVN_VERSION "R644"
+
+/* unused argument macro */
+#define UNUSED(x) (void)x;
 
 /* required by Microsoft project */
 #ifdef _MSC_VER
