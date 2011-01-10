@@ -236,6 +236,8 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 {
+  UNUSED(idata);
+  
   // doing assertions
   assert(assets.size() == 0);
 
