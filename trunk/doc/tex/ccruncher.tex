@@ -239,11 +239,16 @@ the correlations table based on the historical information about defaults.
 \subsection{Portfolio}
 The portfolio is composed by the obligors. Each obligor has an initial rating, 
 belongs to a sector and has one or more assets. Each asset
-is defined by its creation date, expected cashflow and recovery at certain 
-dates. Figure \ref{portfolio} shows the structure of a portfolio.
+is defined by its creation date, expected exposure and recovery at certain 
+dates.
 
-\paragraph{Cashflow.} Indicates the cash given to the obligor (negative amounts) and the
-cash received from the obligor (positive amounts) at each date (see Figure \ref{cashflow}).
+\paragraph{Exposure.} Amount that lender can lose in case of obligor's default 
+on the indicated date. When cashflow events are know in advance (see Figure 
+\ref{cashflow}) exposure at date $t$ can be computed as:
+
+\begin{displaymath}
+\mathrm{exposure}_{t} = \sum_{i \ge t} \mathrm{cashflow}_{i}
+\end{displaymath}
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -259,20 +264,13 @@ in the case of default at a fixed time. This value takes into account guarantees
 the cost of taking legal action, and recovery rate based on historical data.
 \newline
 
-If a obligor defaults, the loss is the sum of all remaining cashflows at the default time 
-(\emph{exposure}) as weighted by the recovery rate at the default time.
+If a obligor defaults, the loss is the exposure weighted by the recovery rate at the 
+default time.
 
 \begin{displaymath}
-\mathrm{loss}_{t} = (1 - \mathrm{recovery}_t) \cdot \sum_{i \ge t} \mathrm{cashflow}_{i}
+\mathrm{loss}_{t} = (1 - \mathrm{recovery}_t) \cdot \mathrm{exposure}_t
 \end{displaymath}
 
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[height=10.5cm, angle=0]{./images/portfolio.eps}
-\caption{Portfolio example}
-\label{portfolio}
-\end{center}
-\end{figure}
 \FloatBarrier
 
 %===========================================================================
@@ -438,9 +436,9 @@ Figure \ref{simttd} shows this graphically.
 \subsubsection{Portfolio loss evaluation}
 \label{sec:portfolioloss}
 At this point, all obligors have a simulated default time. The loss
-caused by any obligor is the sum of all remaining cashflows at the default time 
-weighted by the recovery at the default time. To obtain the simulated 
-value of the portfolio loss, add up all obligors' losses:
+caused by any obligor is the exposure at the default time weighted by 
+the recovery at the default time. To obtain the simulated value of the 
+portfolio loss, add up all obligors' losses:
 
 \begin{displaymath}
 \mathrm{PortfolioLoss} = \sum_{i=1}^N \mathrm{ObligorLoss}_i
@@ -451,8 +449,18 @@ use the simulated default time, $t_i$, described in the previous section, to
 compute the obligor loss:
 
 \begin{displaymath}
-\mathrm{ObligorLoss}_{i} = (1 - \mathrm{recovery}_{t_i}^i) \cdot \sum_{j \ge {t_i}} \mathrm{cashflow}_{j}^i
+\mathrm{ObligorLoss}_{i} = \left\{
+\begin{array}{ll}
+\sum_{j=1}^{K_i} (1 - \mathrm{recovery}_{t_i}^j) \cdot \mathrm{exposure}_{t_i}^j & \textrm{if  } t_i \le T \\
+0 & \textrm{if  } t_i > T
+\end{array}
+\right.
 \end{displaymath}
+
+where $K_i$ is the number of assets subscribed to obligor $i$, 
+$\mathrm{recovery}_{t_i}^j$ is the recovery of the asset $j$ of the obligor $i$ at time $t_i$,
+$\mathrm{exposure}_{t_i}^j$ is the exposure of the asset $j$ of the obligor $i$ at time $t_i$
+and $T$ is the time horizon where risk is computed.
 
 %---------------------------------------------------------------------------
 \subsection{Risk computation}
@@ -636,7 +644,7 @@ obtain the risk indicators for this subportfolio.
 \subsection{Yield curve}
 CCruncher can consider that the value of money decreases with time, following a 
 curve (e.g., a yield curve). CCruncher use this curve to compute the present value 
-of the cash amounts. Allowed methods are simple interest, compound interest and
+of the exposures. Allowed methods are simple interest, compound interest and
 continuous interest.
 
 %---------------------------------------------------------------------------
