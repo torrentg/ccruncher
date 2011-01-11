@@ -20,14 +20,14 @@
   <!--                       INTEREST                                 -->
   <!-- ============================================================== -->
   <interest type="compound">
-    <rate t="0" r="0%"/>
-    <rate t="1" r="4%"/>
+    <rate t="0" r="0.0%"/>
+    <rate t="1" r="4.0%"/>
     <rate t="2" r="4.1%"/>
     <rate t="3" r="4.5%"/>
     <rate t="6" r="4.55%"/>
     <rate t="12" r="4.8%"/>
     <rate t="24" r="4.9%"/>
-    <rate t="60" r="5%"/>
+    <rate t="60" r="5.0%"/>
     <rate t="120" r="5.2%"/>
   </interest>
 
@@ -552,17 +552,32 @@
   <!--                           SECTORS                              -->
   <!-- ============================================================== -->
   <sectors>
-    <sector name="S1" description="oil and gas"/>
-    <sector name="S2" description="other sectors"/>
+    <sector name="S1" description='Consumer/service sector'/>
+    <sector name="S2" description='Forest/building products'/>
+    <sector name="S3" description='High technology'/>
+    <sector name="S4" description='Utilities'/>
+    <sector name="S5" description="Other sectors"/>
   </sectors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <mcorrels>
-    <sigma sector1="S1" sector2="S1" value="20%"/>
-    <sigma sector1="S1" sector2="S2" value="10%"/> 
-    <sigma sector1="S2" sector2="S2" value="25%"/> 
+    <sigma sector1="S1" sector2="S1" value="15.1%"/>
+    <sigma sector1="S1" sector2="S2" value="6.2%"/>
+    <sigma sector1="S1" sector2="S3" value="8.6%"/>
+    <sigma sector1="S1" sector2="S4" value="3.9%"/>
+    <sigma sector1="S1" sector2="S5" value="9.1%"/>
+    <sigma sector1="S2" sector2="S2" value="17.9%"/>
+    <sigma sector1="S2" sector2="S3" value="6.3%"/>
+    <sigma sector1="S2" sector2="S4" value="10.2%"/>
+    <sigma sector1="S2" sector2="S5" value="8.8%"/>
+    <sigma sector1="S3" sector2="S3" value="17.5%"/>
+    <sigma sector1="S3" sector2="S4" value="7.3%"/>
+    <sigma sector1="S3" sector2="S5" value="7.1%"/>
+    <sigma sector1="S4" sector2="S4" value="12.8%"/>
+    <sigma sector1="S4" sector2="S5" value="6.4%"/>
+    <sigma sector1="S5" sector2="S5" value="15.0%"/>
   </mcorrels>
 
   <!-- ============================================================== -->
@@ -579,13 +594,22 @@
     <segmentation name="sectors" components="obligor">
       <segment name="S1"/>
       <segment name="S2"/>
+      <segment name="S3"/>
+      <segment name="S4"/>
+      <segment name="S5"/>
     </segmentation>
     <segmentation name="size" components="obligor">
-      <segment name="big"/>
+      <segment name="large"/>
       <segment name="medium"/>
+      <segment name="small"/>
     </segmentation>
     <segmentation name="products" components="asset">
       <segment name="bond"/>
+      <segment name="loan"/>
+      <segment name="lease"/>
+      <segment name="mortgage"/>
+      <segment name="line of credit"/>
+      <segment name="bank guarantee"/>
     </segmentation>
     <segmentation name="offices" components="asset">
       <segment name="0001"/>
