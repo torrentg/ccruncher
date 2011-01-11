@@ -37,15 +37,15 @@
     <property name='portfolio.onlyActiveObligors' value='true'/>
   </parameters>
   <interest type='compound'>
-    <rate t='0' r='0%'/>
-    <rate t='1' r='4%'/>
-    <rate t='2' r='4.1%'/>
-    <rate t='3' r='4.5%'/>
-    <rate t='6' r='4.55%'/>
-    <rate t='12' r='4.8%'/>
-    <rate t='24' r='4.9%'/>
-    <rate t='60' r='5%'/>
-    <rate t='120' r='5.2%'/>
+    <rate t="0" r="0.0%"/>
+    <rate t="1" r="4.0%"/>
+    <rate t="2" r="4.1%"/>
+    <rate t="3" r="4.5%"/>
+    <rate t="6" r="4.55%"/>
+    <rate t="12" r="4.8%"/>
+    <rate t="24" r="4.9%"/>
+    <rate t="60" r="5.0%"/>
+    <rate t="120" r="5.2%"/>
   </interest>
   <ratings>
     <rating name='AAA' description='prime'/>
@@ -55,7 +55,7 @@
     <rating name='BB' description='non investment grade speculative'/>
     <rating name='B' description='highly speculative'/>
     <rating name='CCC' description='extremely speculative'/>
-    <rating name='Default' description='in default'/>
+    <rating name='D' description='in default'/>
   </ratings> 
   <mtransitions period='12'>
     <transition from="AAA" to="AAA" value="90.81%"/>
@@ -65,7 +65,7 @@
     <transition from="AAA" to="BB" value="0.12%"/>
     <transition from="AAA" to="B" value="0.0%"/>
     <transition from="AAA" to="CCC" value="0.0%"/>
-    <transition from="AAA" to="Default" value="0.0%"/>
+    <transition from="AAA" to="D" value="0.0%"/>
     <transition from="AA" to="AAA" value="0.70%"/>
     <transition from="AA" to="AA" value="90.65%"/>
     <transition from="AA" to="A" value="7.79%"/>
@@ -73,7 +73,7 @@
     <transition from="AA" to="BB" value="0.06%"/>
     <transition from="AA" to="B" value="0.14%"/>
     <transition from="AA" to="CCC" value="0.02%"/>
-    <transition from="AA" to="Default" value="0.0%"/>
+    <transition from="AA" to="D" value="0.0%"/>
     <transition from="A" to="AAA" value="0.09%"/>
     <transition from="A" to="AA" value="2.27%"/>
     <transition from="A" to="A" value="91.05%"/>
@@ -81,7 +81,7 @@
     <transition from="A" to="BB" value="0.74%"/>
     <transition from="A" to="B" value="0.26%"/>
     <transition from="A" to="CCC" value="0.01%"/>
-    <transition from="A" to="Default" value="0.06%"/>
+    <transition from="A" to="D" value="0.06%"/>
     <transition from="BBB" to="AAA" value="0.02%"/>
     <transition from="BBB" to="AA" value="0.33%"/>
     <transition from="BBB" to="A" value="5.95%"/>
@@ -89,7 +89,7 @@
     <transition from="BBB" to="BB" value="5.30%"/>
     <transition from="BBB" to="B" value="1.17%"/>
     <transition from="BBB" to="CCC" value="0.12%"/>
-    <transition from="BBB" to="Default" value="0.18%"/>
+    <transition from="BBB" to="D" value="0.18%"/>
     <transition from="BB" to="AAA" value="0.03%"/>
     <transition from="BB" to="AA" value="0.14%"/>
     <transition from="BB" to="A" value="0.67%"/>
@@ -97,7 +97,7 @@
     <transition from="BB" to="BB" value="80.53%"/>
     <transition from="BB" to="B" value="8.84%"/>
     <transition from="BB" to="CCC" value="1.0%"/>
-    <transition from="BB" to="Default" value="1.06%"/>
+    <transition from="BB" to="D" value="1.06%"/>
     <transition from="B" to="AAA" value="0.0%"/>
     <transition from="B" to="AA" value="0.11%"/>
     <transition from="B" to="A" value="0.24%"/>
@@ -105,7 +105,7 @@
     <transition from="B" to="BB" value="6.48%"/>
     <transition from="B" to="B" value="83.46%"/>
     <transition from="B" to="CCC" value="4.07%"/>
-    <transition from="B" to="Default" value="5.21%"/>
+    <transition from="B" to="D" value="5.21%"/>
     <transition from="CCC" to="AAA" value="0.22%"/>
     <transition from="CCC" to="AA" value="0.0%"/>
     <transition from="CCC" to="A" value="0.22%"/>
@@ -113,28 +113,42 @@
     <transition from="CCC" to="BB" value="2.38%"/>
     <transition from="CCC" to="B" value="11.24%"/>
     <transition from="CCC" to="CCC" value="64.86%"/>
-    <transition from="CCC" to="Default" value="19.78%"/>
-    <transition from="Default" to="AAA" value="0.0%"/>
-    <transition from="Default" to="AA" value="0.0%"/>
-    <transition from="Default" to="A" value="0.0%"/>
-    <transition from="Default" to="BBB" value="0.0%"/>
-    <transition from="Default" to="BB" value="0.0%"/>
-    <transition from="Default" to="B" value="0.0%"/>
-    <transition from="Default" to="CCC" value="0.0%"/>
-    <transition from="Default" to="Default" value="100.0%"/>
+    <transition from="CCC" to="D" value="19.78%"/>
+    <transition from="D" to="AAA" value="0.0%"/>
+    <transition from="D" to="AA" value="0.0%"/>
+    <transition from="D" to="A" value="0.0%"/>
+    <transition from="D" to="BBB" value="0.0%"/>
+    <transition from="D" to="BB" value="0.0%"/>
+    <transition from="D" to="B" value="0.0%"/>
+    <transition from="D" to="CCC" value="0.0%"/>
+    <transition from="D" to="D" value="100.0%"/>
   </mtransitions>
   <sectors>
-    <sector name ='S1' description='oil and gas'/>
-    <sector name ='S2' description='other sectors'/>
+    <sector name="S1" description='Consumer/service sector'/>
+    <sector name="S2" description='Forest/building products'/>
+    <sector name="S3" description='High technology'/>
+    <sector name="S4" description='Utilities'/>
+    <sector name="S5" description="Other sectors"/>
   </sectors>
   <mcorrels>
-    <sigma sector1 ='S1' sector2 ='S1' value ='20%'/>
-    <sigma sector1 ='S1' sector2 ='S2' value ='10%'/>
-    <sigma sector1 ='S2' sector2 ='S2' value ='25%'/>
+    <sigma sector1="S1" sector2="S1" value="15.1%"/>
+    <sigma sector1="S1" sector2="S2" value="6.2%"/>
+    <sigma sector1="S1" sector2="S3" value="8.6%"/>
+    <sigma sector1="S1" sector2="S4" value="3.9%"/>
+    <sigma sector1="S1" sector2="S5" value="9.1%"/>
+    <sigma sector1="S2" sector2="S2" value="17.9%"/>
+    <sigma sector1="S2" sector2="S3" value="6.3%"/>
+    <sigma sector1="S2" sector2="S4" value="10.2%"/>
+    <sigma sector1="S2" sector2="S5" value="8.8%"/>
+    <sigma sector1="S3" sector2="S3" value="17.5%"/>
+    <sigma sector1="S3" sector2="S4" value="7.3%"/>
+    <sigma sector1="S3" sector2="S5" value="7.1%"/>
+    <sigma sector1="S4" sector2="S4" value="12.8%"/>
+    <sigma sector1="S4" sector2="S5" value="6.4%"/>
+    <sigma sector1="S5" sector2="S5" value="15.0%"/>
   </mcorrels>
   <segmentations>
-    <segmentation name='portfolio' components='asset'>
-    </segmentation>
+    <segmentation name='portfolio' components='asset'/>
   </segmentations>
   <portfolio include="portfolio100.xml.gz"/>
 </ccruncher>

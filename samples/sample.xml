@@ -118,14 +118,29 @@
   </mtransitions>
 
   <sectors>
-    <sector name="S1" description="oil and gas"/>
-    <sector name="S2" description="other sectors"/>
+    <sector name="S1" description='Consumer/service sector'/>
+    <sector name="S2" description='Forest/building products'/>
+    <sector name="S3" description='High technology'/>
+    <sector name="S4" description='Utilities'/>
+    <sector name="S5" description="Other sectors"/>
   </sectors>
 
   <mcorrels>
-    <sigma sector1="S1" sector2="S1" value="0.2"/>
-    <sigma sector1="S1" sector2="S2" value="0.1"/>
-    <sigma sector1="S2" sector2="S2" value="0.25"/>
+    <sigma sector1="S1" sector2="S1" value="15.1%"/>
+    <sigma sector1="S1" sector2="S2" value="6.2%"/>
+    <sigma sector1="S1" sector2="S3" value="8.6%"/>
+    <sigma sector1="S1" sector2="S4" value="3.9%"/>
+    <sigma sector1="S1" sector2="S5" value="9.1%"/>
+    <sigma sector1="S2" sector2="S2" value="17.9%"/>
+    <sigma sector1="S2" sector2="S3" value="6.3%"/>
+    <sigma sector1="S2" sector2="S4" value="10.2%"/>
+    <sigma sector1="S2" sector2="S5" value="8.8%"/>
+    <sigma sector1="S3" sector2="S3" value="17.5%"/>
+    <sigma sector1="S3" sector2="S4" value="7.3%"/>
+    <sigma sector1="S3" sector2="S5" value="7.1%"/>
+    <sigma sector1="S4" sector2="S4" value="12.8%"/>
+    <sigma sector1="S4" sector2="S5" value="6.4%"/>
+    <sigma sector1="S5" sector2="S5" value="15.0%"/>
   </mcorrels>
 
   <segmentations>
@@ -139,13 +154,22 @@
     <segmentation name="sectors" components="obligor">
       <segment name="S1"/>
       <segment name="S2"/>
+      <segment name="S3"/>
+      <segment name="S4"/>
+      <segment name="S5"/>
     </segmentation>
     <segmentation name="size" components="obligor">
-      <segment name="big"/>
+      <segment name="large"/>
       <segment name="medium"/>
+      <segment name="small"/>
     </segmentation>
     <segmentation name="products" components="asset">
       <segment name="bond"/>
+      <segment name="loan"/>
+      <segment name="lease"/>
+      <segment name="mortgage"/>
+      <segment name="line of credit"/>
+      <segment name="bank guarantee"/>
     </segmentation>
     <segmentation name="offices" components="asset">
       <segment name="0001"/>
@@ -156,85 +180,73 @@
   </segmentations>
 
   <portfolio>
-    <obligor rating="A" sector="S1" name="Diria" id="000001">
+    <obligor rating="A" sector="S1" name="Diria" id="000001" recovery="80%">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <asset name="bond" id="op1" date="01/01/2005">
+      <asset name="bond" id="op1" date="01/01/2005" recovery="80%">
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
-		<!--
-			bond with anual cupons at 10% with a recovery rate of 80%
-		-->
         <data>
-          <values at="01/06/2005" exposure="1000.0" recovery="80%" />
-          <values at="01/06/2006" exposure="900.0" recovery="80%" />
-          <values at="01/06/2007" exposure="800.0" recovery="80%" />
-          <values at="01/06/2008" exposure="700.0" recovery="80%" />
-          <values at="01/06/2009" exposure="600.0" recovery="80%" />
-          <values at="01/06/2010" exposure="500.0" recovery="80%" />
-          <values at="01/06/2011" exposure="400.0" recovery="80%" />
-          <values at="01/06/2012" exposure="300.0" recovery="80%" />
-          <values at="01/06/2013" exposure="200.0" recovery="80%" />
-          <values at="01/06/2014" exposure="100.0" recovery="80%" />
+          <values at="01/06/2005" exposure="2000.0" />
+          <values at="01/06/2006" exposure="1900.0" />
+          <values at="01/06/2007" exposure="1800.0" />
+          <values at="01/06/2008" exposure="1700.0" />
+          <values at="01/06/2009" exposure="1600.0" />
+          <values at="01/06/2010" exposure="1500.0" />
+          <values at="01/06/2011" exposure="1400.0" />
+          <values at="01/06/2012" exposure="1300.0" />
+          <values at="01/06/2013" exposure="1200.0" />
+          <values at="01/06/2014" exposure="1100.0" />
         </data>
       </asset>
       <asset name="bond" id="op2" date="01/06/2008">
         <belongs-to segmentation="offices" segment="0004"/>
         <belongs-to segmentation="products" segment="bond"/>
-		<!--
-			bond with bianual cupons at 12% with a recovery rate of 75%
-		-->
         <data>
-          <values at="01/07/2009" exposure="2400.0" recovery="75%" />
-          <values at="01/07/2011" exposure="1920.0" recovery="70%" />
-          <values at="01/07/2013" exposure="1440.0" recovery="65%" />
-          <values at="01/07/2015" exposure="960.0" recovery="60%" />
-          <values at="01/07/2017" exposure="480.0" recovery="55%" />
+          <values at="01/07/2009" exposure="4400.0" recovery="75%" />
+          <values at="01/07/2011" exposure="3920.0" recovery="70%" />
+          <values at="01/07/2013" exposure="3340.0" recovery="65%" />
+          <values at="01/07/2015" exposure="2960.0" recovery="60%" />
+          <values at="01/07/2017" exposure="2480.0" recovery="55%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="B" sector="S2" name="Gixirre" id="000002">
+    <obligor rating="B" sector="S2" name="Gixirre" id="000002" recovery="20%">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <belongs-to segmentation="size" segment="big"/>
+      <belongs-to segmentation="size" segment="large"/>
       <asset name="bond" id="op3" date="01/06/2003">
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
-		<!--
-			bond with bianual cupons at 7.5% with a recovery rate of 40%
-		-->
         <data>
-          <values at="01/01/2005" exposure="750.0" recovery="20%" />
-          <values at="01/06/2007" exposure="600.0" recovery="20%" />
-          <values at="01/01/2009" exposure="450.0" recovery="20%" />
-          <values at="01/06/2011" exposure="300.0" recovery="20%" />
-          <values at="01/01/2013" exposure="150.0" recovery="20%" />
+          <values at="01/01/2005" exposure="1750.0" />
+          <values at="01/06/2007" exposure="1600.0" />
+          <values at="01/01/2009" exposure="1450.0" />
+          <values at="01/06/2011" exposure="1300.0" />
+          <values at="01/01/2013" exposure="1150.0" />
         </data>
       </asset>
     </obligor>
     <obligor rating="CCC" sector="S2" name="Altleopard" id="000003">
       <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <asset name="bond" id="op4" date="01/01/1999">
+      <asset name="bond" id="op4" date="01/01/1999" recovery="beta(2.5,2.7)">
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
-		<!--
-			bond with anual cupons at 10% with a recovery rate of 25%
-		-->
         <data>
-          <values at="01/01/2000" exposure="1400.0" recovery="50%" />
-          <values at="01/01/2001" exposure="1300.0" recovery="50%" />
-          <values at="01/01/2002" exposure="1200.0" recovery="50%" />
-          <values at="01/01/2003" exposure="1100.0" recovery="50%" />
-          <values at="01/01/2004" exposure="1000.0" recovery="50%" />
-          <values at="01/01/2005" exposure="900.0" recovery="50%" />
-          <values at="01/01/2006" exposure="800.0" recovery="50%" />
-          <values at="01/01/2007" exposure="700.0" recovery="50%" />
-          <values at="01/01/2008" exposure="600.0" recovery="50%" />
-          <values at="01/01/2009" exposure="500.0" recovery="50%" />
-          <values at="01/01/2010" exposure="400.0" recovery="50%" />
-          <values at="01/01/2011" exposure="300.0" recovery="50%" />
-          <values at="01/01/2012" exposure="200.0" recovery="50%" />
-          <values at="01/01/2013" exposure="100.0" recovery="50%" />
+          <values at="01/01/2000" exposure="2400.0" />
+          <values at="01/01/2001" exposure="2300.0" />
+          <values at="01/01/2002" exposure="2200.0" />
+          <values at="01/01/2003" exposure="2100.0" />
+          <values at="01/01/2004" exposure="2000.0" />
+          <values at="01/01/2005" exposure="1900.0" />
+          <values at="01/01/2006" exposure="1800.0" />
+          <values at="01/01/2007" exposure="1700.0" />
+          <values at="01/01/2008" exposure="1600.0" />
+          <values at="01/01/2009" exposure="1500.0" />
+          <values at="01/01/2010" exposure="1400.0" />
+          <values at="01/01/2011" exposure="1300.0" />
+          <values at="01/01/2012" exposure="1200.0" />
+          <values at="01/01/2013" exposure="1100.0" />
         </data>
       </asset>
     </obligor>
