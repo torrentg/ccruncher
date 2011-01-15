@@ -32,6 +32,12 @@
 #include "utils/Exception.hpp"
 #include "ratings/Ratings.hpp"
 
+#ifdef __GNUC__
+#define NOINLINE  __attribute__((noinline))
+#else
+#define NOINLINE 
+#endif
+
 //---------------------------------------------------------------------------
 
 using namespace std;
@@ -67,7 +73,7 @@ class Survival : public ExpatHandlers
     // linear interpolation algorithm
     double interpole(double x, double x0, double y0, double x1, double y1) const;
     // inverse function
-    double inverse1(const int irating, double val) const __attribute__ ((noinline));
+    double inverse1(const int irating, double val) const NOINLINE;
 
   protected:
 

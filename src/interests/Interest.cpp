@@ -120,6 +120,7 @@ double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) cons
   else
   {
     assert(false);
+	return NAN;
   }
 }
 
