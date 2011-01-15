@@ -150,7 +150,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"obligor")) {
 
     // check recovery values
-    if (hasRecovery() && Recovery::isnan(recovery)) {
+    if (hasRecovery() && Recovery::valid(recovery)) {
       throw Exception("obligor hasn't recovery, but has asset that assumes obligor recovery");
     }
     

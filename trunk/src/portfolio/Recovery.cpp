@@ -34,7 +34,9 @@
 //===========================================================================
 ccruncher::Recovery::Recovery()
 {
-  *this = getNAN();
+  type = Fixed;
+  value1 = NAN;
+  value2 = NAN;
 }
 
 //===========================================================================
@@ -149,18 +151,15 @@ double ccruncher::Recovery::getValue2() const
 //===========================================================================
 Recovery ccruncher::Recovery::getNAN()
 {
-  Recovery ret(0.0);
-  ret.value1 = NAN;
-  ret.value2 = NAN;
-  return ret;
+  return Recovery();
 }
 
 //===========================================================================
 // check if is a Non-A-Recovery value
 //===========================================================================
-bool ccruncher::Recovery::isnan(const Recovery &x)
+bool ccruncher::Recovery::valid(const Recovery &x)
 {
-  if (x.type == Fixed && std::isnan(x.value1)) return true;
+  if (x.type == Fixed && isnan(x.value1)) return true;
   else return false;
 }
 

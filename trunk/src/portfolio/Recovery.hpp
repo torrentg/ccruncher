@@ -89,7 +89,7 @@ class Recovery
     // returns a Non-A-Recovery value
     static Recovery getNAN();
     // check if is a Non-A-Recovery value
-    static bool isnan(const Recovery &);
+    static bool valid(const Recovery &);
     // to string
 	string toString() const;
 	

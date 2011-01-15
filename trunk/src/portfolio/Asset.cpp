@@ -311,7 +311,7 @@ bool ccruncher::Asset::hasObligorRecovery() const
 {
   for(unsigned int i=0; i<data.size(); i++)
   {
-    if (Recovery::isnan(data[i].recovery))
+    if (Recovery::valid(data[i].recovery))
     {
       return true;
     }

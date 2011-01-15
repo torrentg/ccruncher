@@ -49,7 +49,7 @@
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -63,11 +63,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcmt.lib libexpat.lib zdll.lib gsl.lib cblas.lib pthreadVCE2.lib"
+				AdditionalDependencies="libexpat.lib zdll.lib gsl.lib cblas.lib pthreadVCE2.lib"
 				OutputFile="bin\ccruncher.exe"
 				Version=""
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;;&quot;deps\gsl-1.11\win32\lib\release_static-vs90&quot;;&quot;deps\pthread-win32\lib&quot;"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/ccruncher.pdb"
 				SubSystem="1"
@@ -144,7 +146,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libcmt.lib libexpat.lib zdll.lib gsl.lib cblas.lib pthreadVCE2.lib"
+				AdditionalDependencies="libexpat.lib zdll.lib gsl.lib cblas.lib pthreadVCE2.lib"
 				OutputFile="bin\ccruncher.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;deps\expat-2.0.1\bin\&quot;;&quot;deps\zlib-1.2.3\lib&quot;;&quot;deps\gsl-1.11\win32\lib\release_static-vs90&quot;;&quot;deps\pthread-win32\lib&quot;"
@@ -337,14 +339,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\portfolio\Borrower.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\portfolio\Borrower.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\portfolio\DateValues.cpp"
 					>
 				</File>
@@ -353,11 +347,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\portfolio\Obligor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\portfolio\Obligor.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\portfolio\Portfolio.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\portfolio\Portfolio.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\portfolio\Recovery.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\portfolio\Recovery.hpp"
 					>
 				</File>
 			</Filter>
