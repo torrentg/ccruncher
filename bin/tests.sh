@@ -101,11 +101,10 @@ readconf() {
     exit 1;
   fi
 
-  which $CCRUNCHER/bin/ccruncher > /dev/null 2> /dev/null;
+  which $CCRUNCHER/build/ccruncher > /dev/null 2> /dev/null;
 
   if [ $? != 0 ]; then
-    echo "ccruncher not found in bin/ directory";
-    echo "please, execute command 'bin/src2bin.sh'";
+    echo "error: ccruncher not found in build/ directory";
     exit 1;
   fi
 
