@@ -120,11 +120,13 @@ checkCorrelations <- function(copula, ecorrels)
 #===========================================================================
 areUniforms <- function(copula)
 {
-  ret = TRUE;
-  for(i in 1:length(copula)) {
-    ret = ret && isUniform(copula[[i]])
+  n = length(copula)
+  ret <- vector(length=n)
+  for(i in 1:n) {
+    ret[i] = isUniform(copula[[i]])
   }
-  return(ret)
+  fails = length(ret[ret==FALSE]);
+  return(fails/n <= 0.05)
 }
 
 #===========================================================================
