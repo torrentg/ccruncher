@@ -318,7 +318,7 @@ and those in sector $m$ are at the end. Then, create the obligors correlation
 matrix, taking as the correlation between two obligors the correlation between 
 their sectors (see Figure \ref{obligorcorrel}).
 
-\begin{figure}[!hb]
+\begin{figure}[h!]
 \begin{displaymath}
 \begin{array}{c}
 \Sigma=
@@ -684,15 +684,15 @@ We compute the credit risk at $T=30$ years for the following portfolio.
 \begin{tabular}[]{c|l|c|c|c|l}
 Id  & Obligor name         & Rating & Sector         & Recovery & Assets     \\
 \hline
-B1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \\
-B2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \\
-B3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \\
-B4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5, A6, A7 \\
-B5  & White \& Rebolan     & B      & Services       & 30\%     & A8         \\
-B6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \\
-B7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \\
-B8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \\
-B9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \\
+O1  & Future Skyline       & AA     & Construction   & 80\%     & A1         \\
+O2  & Ramses builds        & BBB    & Construction   & 75\%     & A2, A3     \\
+O3  & Gramdateresi         & AA     & Consumer goods & 60\%     & A4         \\
+O4  & Tantor Pinori        & BB     & Consumer goods & 90\%     & A5, A6, A7 \\
+O5  & White \& Rebolan     & B      & Services       & 30\%     & A8         \\
+O6  & Adign Consulting     & BBB    & Services       & 60\%     & A9         \\
+O7  & Advanced Engineering & AAA    & Services       & 50\%     & A10        \\
+O8  & Sigmacle Research    & CCC    & Services       & 60\%     & A11        \\
+O9  & Loglament Asia       & AA     & Services       & 50\%     & A12        \\
 \end{tabular}
 \caption{Portfolio composition}
 \label{example.portfolio}
@@ -1136,15 +1136,15 @@ defaults.
 \begin{tabular}[]{|c|c|c|c|}
 Obligor  & Rating & $\vec{U}_i$ & Default month \\
 \hline
-B1       & AA     &  0.5275     &  961      \\
-B2       & BBB    &  0.4093     &  898      \\
-B3       & AA     &  0.3848     &  $>$ 1000 \\
-B4       & BB     &  0.5647     &  310      \\
-B5       & B      &  0.1189     &  $>$ 1000 \\
-B6       & BBB    &  0.1452     &  $>$ 1000 \\
-B7       & AAA    &  0.1558     &  $>$ 1000 \\
-B8       & CCC    &  0.2797     &  171      \\
-B9       & AA     &  0.1326     &  $>$ 1000 \\
+O1       & AA     &  0.5275     &  961      \\
+O2       & BBB    &  0.4093     &  898      \\
+O3       & AA     &  0.3848     &  $>$ 1000 \\
+O4       & BB     &  0.5647     &  310      \\
+O5       & B      &  0.1189     &  $>$ 1000 \\
+O6       & BBB    &  0.1452     &  $>$ 1000 \\
+O7       & AAA    &  0.1558     &  $>$ 1000 \\
+O8       & CCC    &  0.2797     &  171      \\
+O9       & AA     &  0.1326     &  $>$ 1000 \\
 \end{tabular}
 \caption{Simulated default times}
 \end{center}
@@ -1162,18 +1162,18 @@ we use the simulated default times and the portfolio composition (Tables
 \begin{tabular}[]{|c|c|c|c|c|c|}
 Obligor  & Default month & Asset & Exposure    & Recovery & Loss  \\
 \hline
-B1       & 961           &  A1   &             &  80\%    &       \\
-B2       & 898           &  A2   &             &  75\%    &       \\
-B2       & 898           &  A3   &             &  75\%    &       \\
-B3       & $>$ 1000      &  A4   &             &  60\%    &       \\
-B4       & 310           &  A5   & 70\$ + 90\$ &  90\%    &  16\$ \\
-B4       & 310           &  A6   & 15\$        &  90\%    & 1.5\$ \\
-B4       & 310           &  A7   &             &  90\%    &       \\
-B5       & $>$ 1000      &  A8   &             &  30\%    &       \\
-B6       & $>$ 1000      &  A9   &             &  60\%    &       \\
-B7       & $>$ 1000      &  A10  &             &  50\%    &       \\
-B8       & 171           &  A11  & 40\$ + 90\$ &  60\%    &  52\$ \\
-B9       & $>$ 1000      &  A12  &             &  50\%    &       \\
+O1       & 961           &  A1   &             &  80\%    &       \\
+O2       & 898           &  A2   &             &  75\%    &       \\
+O2       & 898           &  A3   &             &  75\%    &       \\
+O3       & $>$ 1000      &  A4   &             &  60\%    &       \\
+O4       & 310           &  A5   & 70\$ + 90\$ &  90\%    &  16\$ \\
+O4       & 310           &  A6   & 15\$        &  90\%    & 1.5\$ \\
+O4       & 310           &  A7   &             &  90\%    &       \\
+O5       & $>$ 1000      &  A8   &             &  30\%    &       \\
+O6       & $>$ 1000      &  A9   &             &  60\%    &       \\
+O7       & $>$ 1000      &  A10  &             &  50\%    &       \\
+O8       & 171           &  A11  & 40\$ + 90\$ &  60\%    &  52\$ \\
+O9       & $>$ 1000      &  A12  &             &  50\%    &       \\
 \end{tabular}
 \caption{Portfolio loss evaluation}
 \end{center}
@@ -1441,7 +1441,7 @@ $\Sigma$ component, $\rho_{ij}$, to $2 sin(\frac{\pi}{6} \rho_{ij})$:
 \right)
 \end{displaymath}
 
-\paragraph{Step 2.} If we apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
+\paragraph{Step 2.} We apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
 decomposition to deal with the block matrix.} to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
 \begin{displaymath}
@@ -1629,7 +1629,7 @@ set term x11
 
 \FloatBarrier
 
-\paragraph{Step 2.} If we apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
+\paragraph{Step 2.} We apply Cholesky\footnote{Appendix \ref{ap:cholblock} adapts Cholesky 
 decomposition to deal with the block matrix.} to $\Sigma'$, then $\Sigma' = B \cdot B^{\top}$, 
 where:
 \begin{displaymath}
