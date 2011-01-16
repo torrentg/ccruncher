@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Mon Jan 10 12:41:41 CET 2011"
+#define BUILD_DATE "Sun Jan 16 19:10:19 CET 2011"
 
 /* build host name */
-#define BUILD_HOST "img22-131-54"
+#define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "gtorrent"
+#define BUILD_USER "gerard"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -207,7 +207,7 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R644"
+#define SVN_VERSION "R678"
 
 /* unused argument macro */
 #define UNUSED(x) (void)x;
