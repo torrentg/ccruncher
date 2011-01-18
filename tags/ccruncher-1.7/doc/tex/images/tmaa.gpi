@@ -1,0 +1,49 @@
+#===========================================================================
+#
+# CreditCruncher - A portfolio credit risk valorator
+# Copyright (C) 2004 Gerard Torrent
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#
+# tmaa.gpi - gnuplot instructions
+# --------------------------------------------------------------------------
+#
+# 2005/04/21 - Gerard Torrent [gerard@mail.generacio.com]
+#   . initial release
+#
+#===========================================================================
+
+reset
+
+set title 'Cumulative Forward Default Rate'
+set xlabel "time (in years)"
+set ylabel "probability"
+
+set grid
+set yrange [0:1.05]
+set key right bottom
+
+set terminal postscript
+set output 'tmaa.ps'
+
+plot "tmaa.dat" using 1:2 with lines title 'AAA', \
+     "tmaa.dat" using 1:3 with lines title 'AA', \
+     "tmaa.dat" using 1:4 with lines title 'A', \
+     "tmaa.dat" using 1:5 with lines title 'BBB', \
+     "tmaa.dat" using 1:6 with lines title 'BB', \
+     "tmaa.dat" using 1:7 with lines title 'B', \
+     "tmaa.dat" using 1:8 with lines title 'CCC', \
+     "tmaa.dat" using 1:9 with lines title 'Default'

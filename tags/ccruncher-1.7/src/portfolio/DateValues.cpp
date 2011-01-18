@@ -1,0 +1,64 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004-2011 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//===========================================================================
+
+#include <cmath>
+#include "portfolio/DateValues.hpp"
+
+//===========================================================================
+// constructor
+//===========================================================================
+ccruncher::DateValues::DateValues()
+{
+  date = NAD;
+  exposure = NAN;
+  recovery = Recovery::getNAN();
+}
+
+//===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::DateValues::DateValues(const DateValues &x)
+{
+  date = x.date;
+  exposure = x.exposure;
+  recovery = x.recovery;
+}
+
+//===========================================================================
+// constructor
+//===========================================================================
+ccruncher::DateValues::DateValues(Date date_, double exposure_, const Recovery &recovery_)
+{
+  date = date_;
+  exposure = exposure_;
+  recovery = recovery_;
+}
+
+//===========================================================================
+// comparation operador (needed by sort functions)
+//===========================================================================
+bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
+{
+  if (x.date < y.date) return true;
+  else return false;
+}
+

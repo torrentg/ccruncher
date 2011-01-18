@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <property name="time.0" value="18/02/2003"/>
+    <property name="time.T" value="18/02/2005"/>
+    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="stopcriteria.maxseconds" value="30000000"/>
+    <property name="copula.type" value="gaussian"/>
+    <property name="copula.seed" value="0"/>
+    <property name="montecarlo.antithetic" value="false"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                       INTEREST                                 -->
+  <!-- ============================================================== -->
+  <interest type="compound">
+    <rate t="0" r="0.0%"/>
+    <rate t="1" r="4.0%"/>
+    <rate t="2" r="4.1%"/>
+    <rate t="3" r="4.5%"/>
+    <rate t="6" r="4.55%"/>
+    <rate t="12" r="4.8%"/>
+    <rate t="24" r="4.9%"/>
+    <rate t="60" r="5.0%"/>
+    <rate t="120" r="5.2%"/>
+  </interest>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="AAA" description="prime"/>
+    <rating name="AA" description="high grade"/>
+    <rating name="A" description="upper medium grade"/>
+    <rating name="BBB" description="lower medium grade"/>
+    <rating name="BB" description="non investment grade speculative"/>
+    <rating name="B" description="highly speculative"/>
+    <rating name="CCC" description="extremely speculative"/>
+    <rating name="D" description="in default"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <mtransitions period="12">
+
+    <transition from="AAA" to="AAA" value="90.81%"/>
+    <transition from="AAA" to="AA" value="8.33%"/>
+    <transition from="AAA" to="A" value="0.68%"/>
+    <transition from="AAA" to="BBB" value="0.06%"/>
+    <transition from="AAA" to="BB" value="0.12%"/>
+    <transition from="AAA" to="B" value="0.0%"/>
+    <transition from="AAA" to="CCC" value="0.0%"/>
+    <transition from="AAA" to="D" value="0.0%"/>
+
+    <transition from="AA" to="AAA" value="0.70%"/>
+    <transition from="AA" to="AA" value="90.65%"/>
+    <transition from="AA" to="A" value="7.79%"/>
+    <transition from="AA" to="BBB" value="0.64%"/>
+    <transition from="AA" to="BB" value="0.06%"/>
+    <transition from="AA" to="B" value="0.14%"/>
+    <transition from="AA" to="CCC" value="0.02%"/>
+    <transition from="AA" to="D" value="0.0%"/>
+
+    <transition from="A" to="AAA" value="0.09%"/>
+    <transition from="A" to="AA" value="2.27%"/>
+    <transition from="A" to="A" value="91.05%"/>
+    <transition from="A" to="BBB" value="5.52%"/>
+    <transition from="A" to="BB" value="0.74%"/>
+    <transition from="A" to="B" value="0.26%"/>
+    <transition from="A" to="CCC" value="0.01%"/>
+    <transition from="A" to="D" value="0.06%"/>
+
+    <transition from="BBB" to="AAA" value="0.02%"/>
+    <transition from="BBB" to="AA" value="0.33%"/>
+    <transition from="BBB" to="A" value="5.95%"/>
+    <transition from="BBB" to="BBB" value="86.93%"/>
+    <transition from="BBB" to="BB" value="5.30%"/>
+    <transition from="BBB" to="B" value="1.17%"/>
+    <transition from="BBB" to="CCC" value="0.12%"/>
+    <transition from="BBB" to="D" value="0.18%"/>
+
+    <transition from="BB" to="AAA" value="0.03%"/>
+    <transition from="BB" to="AA" value="0.14%"/>
+    <transition from="BB" to="A" value="0.67%"/>
+    <transition from="BB" to="BBB" value="7.73%"/>
+    <transition from="BB" to="BB" value="80.53%"/>
+    <transition from="BB" to="B" value="8.84%"/>
+    <transition from="BB" to="CCC" value="1.0%"/>
+    <transition from="BB" to="D" value="1.06%"/>
+
+    <transition from="B" to="AAA" value="0.0%"/>
+    <transition from="B" to="AA" value="0.11%"/>
+    <transition from="B" to="A" value="0.24%"/>
+    <transition from="B" to="BBB" value="0.43%"/>
+    <transition from="B" to="BB" value="6.48%"/>
+    <transition from="B" to="B" value="83.46%"/>
+    <transition from="B" to="CCC" value="4.07%"/>
+    <transition from="B" to="D" value="5.21%"/>
+
+    <transition from="CCC" to="AAA" value="0.22%"/>
+    <transition from="CCC" to="AA" value="0.0%"/>
+    <transition from="CCC" to="A" value="0.22%"/>
+    <transition from="CCC" to="BBB" value="1.30%"/>
+    <transition from="CCC" to="BB" value="2.38%"/>
+    <transition from="CCC" to="B" value="11.24%"/>
+    <transition from="CCC" to="CCC" value="64.86%"/>
+    <transition from="CCC" to="D" value="19.78%"/>
+
+    <transition from="D" to="AAA" value="0.0%"/>
+    <transition from="D" to="AA" value="0.0%"/>
+    <transition from="D" to="A" value="0.0%"/>
+    <transition from="D" to="BBB" value="0.0%"/>
+    <transition from="D" to="BB" value="0.0%"/>
+    <transition from="D" to="B" value="0.0%"/>
+    <transition from="D" to="CCC" value="0.0%"/>
+    <transition from="D" to="D" value="100.0%"/>
+
+  </mtransitions>
+
+  <!-- ============================================================== -->
+  <!--                    SURVIVAL FUNCTION                           -->
+  <!-- ============================================================== -->
+<!--
+  <survival>
+
+    <svalue rating="AAA" t="0" value="1"/>
+    <svalue rating="AAA" t="12" value="1"/>
+    <svalue rating="AAA" t="24" value="0.99998212"/>
+    <svalue rating="AAA" t="36" value="0.9999250285"/>
+    <svalue rating="AAA" t="48" value="0.999810271"/>
+    <svalue rating="AAA" t="60" value="0.999621298"/>
+    <svalue rating="AAA" t="72" value="0.999342791"/>
+    <svalue rating="AAA" t="84" value="0.99896024"/>
+    <svalue rating="AAA" t="96" value="0.99845972"/>
+    <svalue rating="AAA" t="108" value="0.99782778"/>
+    <svalue rating="AAA" t="120" value="0.99705147"/>
+    <svalue rating="AAA" t="132" value="0.99611836"/>
+    <svalue rating="AAA" t="144" value="0.99501673"/>
+    <svalue rating="AAA" t="156" value="0.9937356"/>
+    <svalue rating="AAA" t="168" value="0.99226486"/>
+    <svalue rating="AAA" t="180" value="0.99059543"/>
+    <svalue rating="AAA" t="192" value="0.9887193"/>
+    <svalue rating="AAA" t="204" value="0.9866295"/>
+    <svalue rating="AAA" t="216" value="0.9843204"/>
+    <svalue rating="AAA" t="228" value="0.9817875"/>
+    <svalue rating="AAA" t="240" value="0.9790276"/>
+    <svalue rating="AAA" t="252" value="0.9760385"/>
+    <svalue rating="AAA" t="264" value="0.9728193"/>
+    <svalue rating="AAA" t="276" value="0.9693704"/>
+    <svalue rating="AAA" t="288" value="0.9656929"/>
+    <svalue rating="AAA" t="300" value="0.9617892"/>
+    <svalue rating="AAA" t="312" value="0.9576624"/>
+    <svalue rating="AAA" t="324" value="0.9533168"/>
+    <svalue rating="AAA" t="336" value="0.948757"/>
+    <svalue rating="AAA" t="348" value="0.9439887"/>
+    <svalue rating="AAA" t="360" value="0.939018"/>
+    <svalue rating="AAA" t="372" value="0.9338517"/>
+    <svalue rating="AAA" t="384" value="0.9284969"/>
+    <svalue rating="AAA" t="396" value="0.9229611"/>
+    <svalue rating="AAA" t="408" value="0.9172523"/>
+    <svalue rating="AAA" t="420" value="0.9113785"/>
+    <svalue rating="AAA" t="432" value="0.9053481"/>
+    <svalue rating="AAA" t="444" value="0.899169"/>
+    <svalue rating="AAA" t="456" value="0.892851"/>
+    <svalue rating="AAA" t="468" value="0.886402"/>
+    <svalue rating="AAA" t="480" value="0.879829"/>
+    <svalue rating="AAA" t="492" value="0.873143"/>
+    <svalue rating="AAA" t="504" value="0.866351"/>
+    <svalue rating="AAA" t="516" value="0.859462"/>
+    <svalue rating="AAA" t="528" value="0.852483"/>
+    <svalue rating="AAA" t="540" value="0.845422"/>
+    <svalue rating="AAA" t="552" value="0.838288"/>
+    <svalue rating="AAA" t="564" value="0.831088"/>
+    <svalue rating="AAA" t="576" value="0.823829"/>
+    <svalue rating="AAA" t="588" value="0.816518"/>
+    <svalue rating="AAA" t="600" value="0.809163"/>
+
+    <svalue rating="AA" t="0" value="1"/>
+    <svalue rating="AA" t="12" value="1"/>
+    <svalue rating="AA" t="24" value="0.99982288"/>
+    <svalue rating="AA" t="36" value="0.999465272"/>
+    <svalue rating="AA" t="48" value="0.99891757"/>
+    <svalue rating="AA" t="60" value="0.99816629"/>
+    <svalue rating="AA" t="72" value="0.99719596"/>
+    <svalue rating="AA" t="84" value="0.9959906"/>
+    <svalue rating="AA" t="96" value="0.9945349"/>
+    <svalue rating="AA" t="108" value="0.99281495"/>
+    <svalue rating="AA" t="120" value="0.99081887"/>
+    <svalue rating="AA" t="132" value="0.9885371"/>
+    <svalue rating="AA" t="144" value="0.9859626"/>
+    <svalue rating="AA" t="156" value="0.9830907"/>
+    <svalue rating="AA" t="168" value="0.9799196"/>
+    <svalue rating="AA" t="180" value="0.9764495"/>
+    <svalue rating="AA" t="192" value="0.972683"/>
+    <svalue rating="AA" t="204" value="0.9686245"/>
+    <svalue rating="AA" t="216" value="0.9642803"/>
+    <svalue rating="AA" t="228" value="0.9596582"/>
+    <svalue rating="AA" t="240" value="0.9547672"/>
+    <svalue rating="AA" t="252" value="0.9496176"/>
+    <svalue rating="AA" t="264" value="0.9442205"/>
+    <svalue rating="AA" t="276" value="0.9385874"/>
+    <svalue rating="AA" t="288" value="0.9327308"/>
+    <svalue rating="AA" t="300" value="0.9266632"/>
+    <svalue rating="AA" t="312" value="0.9203975"/>
+    <svalue rating="AA" t="324" value="0.9139465"/>
+    <svalue rating="AA" t="336" value="0.9073232"/>
+    <svalue rating="AA" t="348" value="0.9005403"/>
+    <svalue rating="AA" t="360" value="0.893611"/>
+    <svalue rating="AA" t="372" value="0.886546"/>
+    <svalue rating="AA" t="384" value="0.879359"/>
+    <svalue rating="AA" t="396" value="0.872061"/>
+    <svalue rating="AA" t="408" value="0.864664"/>
+    <svalue rating="AA" t="420" value="0.857177"/>
+    <svalue rating="AA" t="432" value="0.849613"/>
+    <svalue rating="AA" t="444" value="0.841979"/>
+    <svalue rating="AA" t="456" value="0.834287"/>
+    <svalue rating="AA" t="468" value="0.826546"/>
+    <svalue rating="AA" t="480" value="0.818762"/>
+    <svalue rating="AA" t="492" value="0.810946"/>
+    <svalue rating="AA" t="504" value="0.803105"/>
+    <svalue rating="AA" t="516" value="0.795245"/>
+    <svalue rating="AA" t="528" value="0.787373"/>
+    <svalue rating="AA" t="540" value="0.779497"/>
+    <svalue rating="AA" t="552" value="0.771622"/>
+    <svalue rating="AA" t="564" value="0.763753"/>
+    <svalue rating="AA" t="576" value="0.755896"/>
+    <svalue rating="AA" t="588" value="0.748056"/>
+    <svalue rating="AA" t="600" value="0.740238"/>
+
+    <svalue rating="A" t="0" value="1"/>
+    <svalue rating="A" t="12" value="0.9994"/>
+    <svalue rating="A" t="24" value="0.99852066"/>
+    <svalue rating="A" t="36" value="0.99728769"/>
+    <svalue rating="A" t="48" value="0.99564595"/>
+    <svalue rating="A" t="60" value="0.99355719"/>
+    <svalue rating="A" t="72" value="0.99099783"/>
+    <svalue rating="A" t="84" value="0.9879568"/>
+    <svalue rating="A" t="96" value="0.9844333"/>
+    <svalue rating="A" t="108" value="0.9804349"/>
+    <svalue rating="A" t="120" value="0.975976"/>
+    <svalue rating="A" t="132" value="0.9710759"/>
+    <svalue rating="A" t="144" value="0.9657576"/>
+    <svalue rating="A" t="156" value="0.9600469"/>
+    <svalue rating="A" t="168" value="0.953971"/>
+    <svalue rating="A" t="180" value="0.9475581"/>
+    <svalue rating="A" t="192" value="0.9408365"/>
+    <svalue rating="A" t="204" value="0.9338344"/>
+    <svalue rating="A" t="216" value="0.9265792"/>
+    <svalue rating="A" t="228" value="0.9190973"/>
+    <svalue rating="A" t="240" value="0.9114142"/>
+    <svalue rating="A" t="252" value="0.9035539"/>
+    <svalue rating="A" t="264" value="0.895539"/>
+    <svalue rating="A" t="276" value="0.887391"/>
+    <svalue rating="A" t="288" value="0.879129"/>
+    <svalue rating="A" t="300" value="0.870773"/>
+    <svalue rating="A" t="312" value="0.862338"/>
+    <svalue rating="A" t="324" value="0.853842"/>
+    <svalue rating="A" t="336" value="0.845297"/>
+    <svalue rating="A" t="348" value="0.836718"/>
+    <svalue rating="A" t="360" value="0.828116"/>
+    <svalue rating="A" t="372" value="0.819503"/>
+    <svalue rating="A" t="384" value="0.810888"/>
+    <svalue rating="A" t="396" value="0.80228"/>
+    <svalue rating="A" t="408" value="0.793689"/>
+    <svalue rating="A" t="420" value="0.78512"/>
+    <svalue rating="A" t="432" value="0.776581"/>
+    <svalue rating="A" t="444" value="0.768077"/>
+    <svalue rating="A" t="456" value="0.759615"/>
+    <svalue rating="A" t="468" value="0.751199"/>
+    <svalue rating="A" t="480" value="0.742833"/>
+    <svalue rating="A" t="492" value="0.73452"/>
+    <svalue rating="A" t="504" value="0.726265"/>
+    <svalue rating="A" t="516" value="0.718071"/>
+    <svalue rating="A" t="528" value="0.709939"/>
+    <svalue rating="A" t="540" value="0.701872"/>
+    <svalue rating="A" t="552" value="0.693872"/>
+    <svalue rating="A" t="564" value="0.685941"/>
+    <svalue rating="A" t="576" value="0.678081"/>
+    <svalue rating="A" t="588" value="0.670292"/>
+    <svalue rating="A" t="600" value="0.662575"/>
+
+    <svalue rating="BBB" t="0" value="1"/>
+    <svalue rating="BBB" t="12" value="0.9982"/>
+    <svalue rating="BBB" t="24" value="0.99519083"/>
+    <svalue rating="BBB" t="36" value="0.99094072"/>
+    <svalue rating="BBB" t="48" value="0.9854936"/>
+    <svalue rating="BBB" t="60" value="0.9789399"/>
+    <svalue rating="BBB" t="72" value="0.9713959"/>
+    <svalue rating="BBB" t="84" value="0.9629888"/>
+    <svalue rating="BBB" t="96" value="0.9538475"/>
+    <svalue rating="BBB" t="108" value="0.9440957"/>
+    <svalue rating="BBB" t="120" value="0.9338485"/>
+    <svalue rating="BBB" t="132" value="0.9232105"/>
+    <svalue rating="BBB" t="144" value="0.9122746"/>
+    <svalue rating="BBB" t="156" value="0.9011223"/>
+    <svalue rating="BBB" t="168" value="0.889824"/>
+    <svalue rating="BBB" t="180" value="0.87844"/>
+    <svalue rating="BBB" t="192" value="0.867022"/>
+    <svalue rating="BBB" t="204" value="0.855613"/>
+    <svalue rating="BBB" t="216" value="0.844247"/>
+    <svalue rating="BBB" t="228" value="0.832954"/>
+    <svalue rating="BBB" t="240" value="0.821757"/>
+    <svalue rating="BBB" t="252" value="0.810677"/>
+    <svalue rating="BBB" t="264" value="0.799726"/>
+    <svalue rating="BBB" t="276" value="0.788918"/>
+    <svalue rating="BBB" t="288" value="0.778261"/>
+    <svalue rating="BBB" t="300" value="0.767761"/>
+    <svalue rating="BBB" t="312" value="0.757422"/>
+    <svalue rating="BBB" t="324" value="0.747247"/>
+    <svalue rating="BBB" t="336" value="0.737237"/>
+    <svalue rating="BBB" t="348" value="0.727393"/>
+    <svalue rating="BBB" t="360" value="0.717713"/>
+    <svalue rating="BBB" t="372" value="0.708197"/>
+    <svalue rating="BBB" t="384" value="0.698843"/>
+    <svalue rating="BBB" t="396" value="0.689647"/>
+    <svalue rating="BBB" t="408" value="0.680608"/>
+    <svalue rating="BBB" t="420" value="0.671723"/>
+    <svalue rating="BBB" t="432" value="0.662987"/>
+    <svalue rating="BBB" t="444" value="0.654398"/>
+    <svalue rating="BBB" t="456" value="0.645953"/>
+    <svalue rating="BBB" t="468" value="0.637648"/>
+    <svalue rating="BBB" t="480" value="0.62948"/>
+    <svalue rating="BBB" t="492" value="0.621445"/>
+    <svalue rating="BBB" t="504" value="0.61354"/>
+    <svalue rating="BBB" t="516" value="0.605762"/>
+    <svalue rating="BBB" t="528" value="0.598107"/>
+    <svalue rating="BBB" t="540" value="0.590573"/>
+    <svalue rating="BBB" t="552" value="0.583157"/>
+    <svalue rating="BBB" t="564" value="0.575854"/>
+    <svalue rating="BBB" t="576" value="0.568664"/>
+    <svalue rating="BBB" t="588" value="0.561582"/>
+    <svalue rating="BBB" t="600" value="0.554607"/>
+
+    <svalue rating="BB" t="0" value="1"/>
+    <svalue rating="BB" t="12" value="0.9894"/>
+    <svalue rating="BB" t="24" value="0.974137"/>
+    <svalue rating="BB" t="36" value="0.9556457"/>
+    <svalue rating="BB" t="48" value="0.9350568"/>
+    <svalue rating="BB" t="60" value="0.9132384"/>
+    <svalue rating="BB" t="72" value="0.890841"/>
+    <svalue rating="BB" t="84" value="0.868342"/>
+    <svalue rating="BB" t="96" value="0.846081"/>
+    <svalue rating="BB" t="108" value="0.824296"/>
+    <svalue rating="BB" t="120" value="0.803143"/>
+    <svalue rating="BB" t="132" value="0.782721"/>
+    <svalue rating="BB" t="144" value="0.763087"/>
+    <svalue rating="BB" t="156" value="0.744263"/>
+    <svalue rating="BB" t="168" value="0.726252"/>
+    <svalue rating="BB" t="180" value="0.709042"/>
+    <svalue rating="BB" t="192" value="0.692607"/>
+    <svalue rating="BB" t="204" value="0.676917"/>
+    <svalue rating="BB" t="216" value="0.661939"/>
+    <svalue rating="BB" t="228" value="0.647635"/>
+    <svalue rating="BB" t="240" value="0.633968"/>
+    <svalue rating="BB" t="252" value="0.620901"/>
+    <svalue rating="BB" t="264" value="0.608398"/>
+    <svalue rating="BB" t="276" value="0.596425"/>
+    <svalue rating="BB" t="288" value="0.584948"/>
+    <svalue rating="BB" t="300" value="0.573936"/>
+    <svalue rating="BB" t="312" value="0.56336"/>
+    <svalue rating="BB" t="324" value="0.553192"/>
+    <svalue rating="BB" t="336" value="0.543405"/>
+    <svalue rating="BB" t="348" value="0.533977"/>
+    <svalue rating="BB" t="360" value="0.524884"/>
+    <svalue rating="BB" t="372" value="0.516106"/>
+    <svalue rating="BB" t="384" value="0.507623"/>
+    <svalue rating="BB" t="396" value="0.499417"/>
+    <svalue rating="BB" t="408" value="0.491472"/>
+    <svalue rating="BB" t="420" value="0.483772"/>
+    <svalue rating="BB" t="432" value="0.476303"/>
+    <svalue rating="BB" t="444" value="0.469051"/>
+    <svalue rating="BB" t="456" value="0.462004"/>
+    <svalue rating="BB" t="468" value="0.455151"/>
+    <svalue rating="BB" t="480" value="0.448482"/>
+    <svalue rating="BB" t="492" value="0.441985"/>
+    <svalue rating="BB" t="504" value="0.435653"/>
+    <svalue rating="BB" t="516" value="0.429476"/>
+    <svalue rating="BB" t="528" value="0.423448"/>
+    <svalue rating="BB" t="540" value="0.417559"/>
+    <svalue rating="BB" t="552" value="0.411804"/>
+    <svalue rating="BB" t="564" value="0.406177"/>
+    <svalue rating="BB" t="576" value="0.400671"/>
+    <svalue rating="BB" t="588" value="0.395281"/>
+    <svalue rating="BB" t="600" value="0.390002"/>
+
+    <svalue rating="B" t="0" value="1"/>
+    <svalue rating="B" t="12" value="0.9479"/>
+    <svalue rating="B" t="24" value="0.895671"/>
+    <svalue rating="B" t="36" value="0.845605"/>
+    <svalue rating="B" t="48" value="0.798796"/>
+    <svalue rating="B" t="60" value="0.755651"/>
+    <svalue rating="B" t="72" value="0.716195"/>
+    <svalue rating="B" t="84" value="0.680255"/>
+    <svalue rating="B" t="96" value="0.647565"/>
+    <svalue rating="B" t="108" value="0.617827"/>
+    <svalue rating="B" t="120" value="0.590741"/>
+    <svalue rating="B" t="132" value="0.566024"/>
+    <svalue rating="B" t="144" value="0.54342"/>
+    <svalue rating="B" t="156" value="0.522695"/>
+    <svalue rating="B" t="168" value="0.503646"/>
+    <svalue rating="B" t="180" value="0.48609"/>
+    <svalue rating="B" t="192" value="0.469869"/>
+    <svalue rating="B" t="204" value="0.454842"/>
+    <svalue rating="B" t="216" value="0.440887"/>
+    <svalue rating="B" t="228" value="0.427896"/>
+    <svalue rating="B" t="240" value="0.415774"/>
+    <svalue rating="B" t="252" value="0.404437"/>
+    <svalue rating="B" t="264" value="0.39381"/>
+    <svalue rating="B" t="276" value="0.383827"/>
+    <svalue rating="B" t="288" value="0.37443"/>
+    <svalue rating="B" t="300" value="0.365567"/>
+    <svalue rating="B" t="312" value="0.35719"/>
+    <svalue rating="B" t="324" value="0.349258"/>
+    <svalue rating="B" t="336" value="0.341734"/>
+    <svalue rating="B" t="348" value="0.334584"/>
+    <svalue rating="B" t="360" value="0.327777"/>
+    <svalue rating="B" t="372" value="0.321287"/>
+    <svalue rating="B" t="384" value="0.315087"/>
+    <svalue rating="B" t="396" value="0.309157"/>
+    <svalue rating="B" t="408" value="0.303476"/>
+    <svalue rating="B" t="420" value="0.298025"/>
+    <svalue rating="B" t="432" value="0.292787"/>
+    <svalue rating="B" t="444" value="0.287748"/>
+    <svalue rating="B" t="456" value="0.282893"/>
+    <svalue rating="B" t="468" value="0.27821"/>
+    <svalue rating="B" t="480" value="0.273687"/>
+    <svalue rating="B" t="492" value="0.269314"/>
+    <svalue rating="B" t="504" value="0.265081"/>
+    <svalue rating="B" t="516" value="0.260979"/>
+    <svalue rating="B" t="528" value="0.257"/>
+    <svalue rating="B" t="540" value="0.253137"/>
+    <svalue rating="B" t="552" value="0.249382"/>
+    <svalue rating="B" t="564" value="0.245729"/>
+    <svalue rating="B" t="576" value="0.242174"/>
+    <svalue rating="B" t="588" value="0.238709"/>
+    <svalue rating="B" t="600" value="0.23533"/>
+
+    <svalue rating="CCC" t="0" value="1"/>
+    <svalue rating="CCC" t="12" value="0.8022"/>
+    <svalue rating="CCC" t="24" value="0.667774"/>
+    <svalue rating="CCC" t="36" value="0.57431"/>
+    <svalue rating="CCC" t="48" value="0.507564"/>
+    <svalue rating="CCC" t="60" value="0.458446"/>
+    <svalue rating="CCC" t="72" value="0.42113"/>
+    <svalue rating="CCC" t="84" value="0.391854"/>
+    <svalue rating="CCC" t="96" value="0.368174"/>
+    <svalue rating="CCC" t="108" value="0.348483"/>
+    <svalue rating="CCC" t="120" value="0.331713"/>
+    <svalue rating="CCC" t="132" value="0.317144"/>
+    <svalue rating="CCC" t="144" value="0.304279"/>
+    <svalue rating="CCC" t="156" value="0.292771"/>
+    <svalue rating="CCC" t="168" value="0.282368"/>
+    <svalue rating="CCC" t="180" value="0.272888"/>
+    <svalue rating="CCC" t="192" value="0.264191"/>
+    <svalue rating="CCC" t="204" value="0.256168"/>
+    <svalue rating="CCC" t="216" value="0.248733"/>
+    <svalue rating="CCC" t="228" value="0.241817"/>
+    <svalue rating="CCC" t="240" value="0.235362"/>
+    <svalue rating="CCC" t="252" value="0.229319"/>
+    <svalue rating="CCC" t="264" value="0.223647"/>
+    <svalue rating="CCC" t="276" value="0.218308"/>
+    <svalue rating="CCC" t="288" value="0.213272"/>
+    <svalue rating="CCC" t="300" value="0.208512"/>
+    <svalue rating="CCC" t="312" value="0.204003"/>
+    <svalue rating="CCC" t="324" value="0.199723"/>
+    <svalue rating="CCC" t="336" value="0.195653"/>
+    <svalue rating="CCC" t="348" value="0.191775"/>
+    <svalue rating="CCC" t="360" value="0.188075"/>
+    <svalue rating="CCC" t="372" value="0.184538"/>
+    <svalue rating="CCC" t="384" value="0.181151"/>
+    <svalue rating="CCC" t="396" value="0.177904"/>
+    <svalue rating="CCC" t="408" value="0.174785"/>
+    <svalue rating="CCC" t="420" value="0.171785"/>
+    <svalue rating="CCC" t="432" value="0.168896"/>
+    <svalue rating="CCC" t="444" value="0.16611"/>
+    <svalue rating="CCC" t="456" value="0.163421"/>
+    <svalue rating="CCC" t="468" value="0.16082"/>
+    <svalue rating="CCC" t="480" value="0.158304"/>
+    <svalue rating="CCC" t="492" value="0.155865"/>
+    <svalue rating="CCC" t="504" value="0.1535"/>
+    <svalue rating="CCC" t="516" value="0.151203"/>
+    <svalue rating="CCC" t="528" value="0.148972"/>
+    <svalue rating="CCC" t="540" value="0.146801"/>
+    <svalue rating="CCC" t="552" value="0.144687"/>
+    <svalue rating="CCC" t="564" value="0.142627"/>
+    <svalue rating="CCC" t="576" value="0.140619"/>
+    <svalue rating="CCC" t="588" value="0.138658"/>
+    <svalue rating="CCC" t="600" value="0.136744"/>
+
+    <svalue rating="Default" t="0" value="0"/>
+    <svalue rating="Default" t="12" value="0"/>
+    <svalue rating="Default" t="24" value="0"/>
+    <svalue rating="Default" t="36" value="0"/>
+    <svalue rating="Default" t="48" value="0"/>
+    <svalue rating="Default" t="60" value="0"/>
+    <svalue rating="Default" t="72" value="0"/>
+    <svalue rating="Default" t="84" value="0"/>
+    <svalue rating="Default" t="96" value="0"/>
+    <svalue rating="Default" t="108" value="0"/>
+    <svalue rating="Default" t="120" value="0"/>
+    <svalue rating="Default" t="132" value="0"/>
+    <svalue rating="Default" t="144" value="0"/>
+    <svalue rating="Default" t="156" value="0"/>
+    <svalue rating="Default" t="168" value="0"/>
+    <svalue rating="Default" t="180" value="0"/>
+    <svalue rating="Default" t="192" value="0"/>
+    <svalue rating="Default" t="204" value="0"/>
+    <svalue rating="Default" t="216" value="0"/>
+    <svalue rating="Default" t="228" value="0"/>
+    <svalue rating="Default" t="240" value="0"/>
+    <svalue rating="Default" t="252" value="0"/>
+    <svalue rating="Default" t="264" value="0"/>
+    <svalue rating="Default" t="276" value="0"/>
+    <svalue rating="Default" t="288" value="0"/>
+    <svalue rating="Default" t="300" value="0"/>
+    <svalue rating="Default" t="312" value="0"/>
+    <svalue rating="Default" t="324" value="0"/>
+    <svalue rating="Default" t="336" value="0"/>
+    <svalue rating="Default" t="348" value="0"/>
+    <svalue rating="Default" t="360" value="0"/>
+    <svalue rating="Default" t="372" value="0"/>
+    <svalue rating="Default" t="384" value="0"/>
+    <svalue rating="Default" t="396" value="0"/>
+    <svalue rating="Default" t="408" value="0"/>
+    <svalue rating="Default" t="420" value="0"/>
+    <svalue rating="Default" t="432" value="0"/>
+    <svalue rating="Default" t="444" value="0"/>
+    <svalue rating="Default" t="456" value="0"/>
+    <svalue rating="Default" t="468" value="0"/>
+    <svalue rating="Default" t="480" value="0"/>
+    <svalue rating="Default" t="492" value="0"/>
+    <svalue rating="Default" t="504" value="0"/>
+    <svalue rating="Default" t="516" value="0"/>
+    <svalue rating="Default" t="528" value="0"/>
+    <svalue rating="Default" t="540" value="0"/>
+    <svalue rating="Default" t="552" value="0"/>
+    <svalue rating="Default" t="564" value="0"/>
+    <svalue rating="Default" t="576" value="0"/>
+    <svalue rating="Default" t="588" value="0"/>
+    <svalue rating="Default" t="600" value="0"/>
+
+  </survival>
+-->
+  <!-- ============================================================== -->
+  <!--                           SECTORS                              -->
+  <!-- ============================================================== -->
+  <sectors>
+    <sector name="S1" description='Consumer/service sector'/>
+    <sector name="S2" description='Forest/building products'/>
+    <sector name="S3" description='High technology'/>
+    <sector name="S4" description='Utilities'/>
+    <sector name="S5" description="Other sectors"/>
+  </sectors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <mcorrels>
+    <sigma sector1="S1" sector2="S1" value="15.1%"/>
+    <sigma sector1="S1" sector2="S2" value="6.2%"/>
+    <sigma sector1="S1" sector2="S3" value="8.6%"/>
+    <sigma sector1="S1" sector2="S4" value="3.9%"/>
+    <sigma sector1="S1" sector2="S5" value="9.1%"/>
+    <sigma sector1="S2" sector2="S2" value="17.9%"/>
+    <sigma sector1="S2" sector2="S3" value="6.3%"/>
+    <sigma sector1="S2" sector2="S4" value="10.2%"/>
+    <sigma sector1="S2" sector2="S5" value="8.8%"/>
+    <sigma sector1="S3" sector2="S3" value="17.5%"/>
+    <sigma sector1="S3" sector2="S4" value="7.3%"/>
+    <sigma sector1="S3" sector2="S5" value="7.1%"/>
+    <sigma sector1="S4" sector2="S4" value="12.8%"/>
+    <sigma sector1="S4" sector2="S5" value="6.4%"/>
+    <sigma sector1="S5" sector2="S5" value="15.0%"/>
+  </mcorrels>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="obligors" components="obligor">
+      <segment name="*"/>
+    </segmentation>
+    <segmentation name="assets" components="asset">
+      <segment name="*"/>
+    </segmentation>
+    <segmentation name="sectors" components="obligor">
+      <segment name="S1"/>
+      <segment name="S2"/>
+      <segment name="S3"/>
+      <segment name="S4"/>
+      <segment name="S5"/>
+    </segmentation>
+    <segmentation name="size" components="obligor">
+      <segment name="large"/>
+      <segment name="medium"/>
+      <segment name="small"/>
+    </segmentation>
+    <segmentation name="products" components="asset">
+      <segment name="bond"/>
+      <segment name="loan"/>
+      <segment name="lease"/>
+      <segment name="mortgage"/>
+      <segment name="line of credit"/>
+      <segment name="bank guarantee"/>
+    </segmentation>
+    <segmentation name="offices" components="asset">
+      <segment name="0001"/>
+      <segment name="0002"/>
+      <segment name="0003"/>
+      <segment name="0004"/>
+    </segmentation>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <obligor rating="BB" sector="S1" name="Repsol" id="000001">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <belongs-to segmentation="size" segment="medium"/>
+      <!-- implicit: belongs-to segmentation="obligor" value="000001" -->
+      <asset date="01/01/1999" name="generic" id="op1">
+        <belongs-to segmentation="products" segment="bond"/>
+        <belongs-to segmentation="offices" segment="0001"/>
+        <!-- implicit: belongs-to segmentation="asset" segment="op1" -->
+        <data>
+          <values at="01/01/2000" exposure="100.0" recovery="20%" />
+          <values at="01/06/2000" exposure="90.0" recovery="20%" />
+          <values at="01/01/2001" exposure="80.0" recovery="20%" />
+          <values at="01/06/2001" exposure="70.0" recovery="20%" />
+          <values at="01/01/2002" exposure="60.0" recovery="20%" />
+          <values at="01/06/2002" exposure="50.0" recovery="20%" />
+          <values at="01/01/2003" exposure="40.0" recovery="20%" />
+          <values at="01/06/2003" exposure="30.0" recovery="20%" />
+          <values at="01/01/2004" exposure="20.0" recovery="20%" />
+          <values at="01/06/2004" exposure="10.0" recovery="20%" />
+        </data>
+      </asset>
+    </obligor>
+  </portfolio>
+
+</ccruncher>

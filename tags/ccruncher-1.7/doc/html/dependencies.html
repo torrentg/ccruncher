@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Dependencies</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body class="composite">
+    <div id="main-container">
+  	<div id="page-header">
+      <a href="./index.html">
+        <img style="margin-top:28px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
+      </a>
+  	</div>
+  	<br/>
+
+    <h1>Dependencies</h1>
+
+    <p style="text-align:justify;">
+      CCruncher uses projects wich are already existing. The selection criteria
+      have been: well tested, simplicity, efficiency and open source.
+    </p>
+
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>GSL</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.14</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. 
+          It is free software under the GNU General Public License. The library provides a 
+          wide range of mathematical routines such as random number generators, special 
+          functions and least-squares fitting. There are over 1000 functions in total with 
+          an extensive test suite.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this library is used to generate random numbers, find eigenvalues and solve linear 
+          systems.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>expat</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.0.1</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>MIT License</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Expat is an XML parser library written in C. It is a stream-oriented
+          parser in which an application registers handlers for things the
+          parser might find in the XML document, like start tags.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher expat is used to manage XML files.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>zlib</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.2.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.zlib.net/">http://www.zlib.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>Free license, see declaration at the home site</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          zlib is designed to be a free, general-purpose, legally unencumbered
+          -- that is, not covered by any patents -- lossless data-compression
+          library for use on virtually any computer hardware and operating system.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this module allows the usage of gzipped input files, such that the size of xml input files reduces drastically.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>gzstream</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.cs.unc.edu/Research/compgeom/gzstream/">http://www.cs.unc.edu/Research/compgeom/gzstream/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU LGPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Gzstream is a small C++ library, basically just a wrapper, that
+          provides the functionality of the zlib C-library in a C++ iostream.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this module is used to access the zlib library.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          File gzstream.C renamed to gzstream.cpp due to MSVC7 confusion about *.C extension.
+          Done some minor modifications in code to avoid warnings at compilation time.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>MiniCppUnit</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          MiniCppUnit is a C++ unit testing framework.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher MiniCppUnit is used to test all basic classes.
+          All classes that match the pattern <code>*Test.?pp</code> are unit tests.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 to UTF-8) and 
+          assertTrue(), assertTrueMissatge() methods. 
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>R project</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.12.0</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.r-project.org/">http://www.r-project.org/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          R is a system for statistical computation and graphics. It consists of a
+          language plus a run-time environment with graphics, a debugger, access to
+          certain system functions, and the ability to run programs stored in script
+          files.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Recommended
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In CCruncher this module is used to do the statistical reporting and graphing.
+        </td>
+      </tr>
+    </table>
+
+	<br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>libxslt</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.1.26</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://xmlsoft.org/XSLT/xsltproc2.html">http://xmlsoft.org/XSLT/xsltproc2.html</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>MIT license</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+		  libxslt is a C library that allows to transform XML files into other 
+		  XML files (or HTML, text, ...) using the standard XSLT stylesheet 
+		  transformation. The xsltproc command is a command line interface 
+		  to the XSLT engine.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+		  Recommended
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this module is used to create the report of simulation results. Transforms the xml file
+		  generated by R to html.
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+    		<table width="100%"><tr>
+    			<td style="width:100%; text-align:center; font-size:smaller;">
+            Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+    			</td>
+    			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
+    				 Last modified: 01-Jan-2011
+    			</td>
+    		</tr></table>
+    	</div></div></div></div></div>
+    </div>
+    <br/>
+
+  </div>
+  </body>
+</html>
+

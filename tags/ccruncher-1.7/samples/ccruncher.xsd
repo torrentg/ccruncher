@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.ccruncher.net"
+	targetNamespace="http://www.ccruncher.net"
+	elementFormDefault="qualified">
+
+	<!--
+		  if you desire debug your xml add these lines to main tag:
+		  xmlns="http://www.ccruncher.net"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://www.ccruncher.net ccruncher.xsd"
+		
+		  export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
+		  java dom.Writer -v -s sample01.xml
+		  java sax.Writer -v -s sample01.xml
+	-->
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			Credit Cruncher Schema.
+			Copyright 2004-2011.
+			Gerard Torrent Gironella.
+		</xsd:documentation>
+	</xsd:annotation>
+	
+	<xsd:element name="ccruncher" type="ccruncherType"/>
+	
+	<xsd:complexType name="ccruncherType">
+		<xsd:sequence>
+			<xsd:element name="title" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="parameters" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="property" minOccurs="8" maxOccurs="8">
+							<xsd:complexType>
+								<xsd:attribute name="name" type="propertyType" use="required"/>
+								<xsd:attribute name="value" type="xsd:string" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="interest" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="t" type="xsd:nonNegativeInteger" use="required"/>
+								<xsd:attribute name="r" type="double" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="type" type="interestType" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ratings" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="rating" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="name" type="xsd:string" use="required"/>
+								<xsd:attribute name="description" type="xsd:string" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="mtransitions" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="transition" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="from" type="xsd:string" use="required"/>
+								<xsd:attribute name="to" type="xsd:string" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="survival" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="svalue" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="rating" type="xsd:string" use="required"/>
+								<xsd:attribute name="t" type="xsd:positiveInteger" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sectors" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sector" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="name" type="xsd:string" use="required"/>
+								<xsd:attribute name="description" type="xsd:string" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="mcorrels" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sigma" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:attribute name="sector1" type="xsd:string" use="required"/>
+								<xsd:attribute name="sector2" type="xsd:string" use="required"/>
+								<xsd:attribute name="value" type="double" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="segmentations" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="segmentation" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="segment" minOccurs="0" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:attribute name="name" type="xsd:string" use="required"/>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:attribute name="name" type="xsd:string" use="required"/>
+								<xsd:attribute name="components" type="componentsType" use="required"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="portfolio" minOccurs="1" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="obligor" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="belongs-to" minOccurs="0" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:attribute name="segmentation" type="xsd:string" use="required"/>
+											<xsd:attribute name="segment" type="xsd:string" use="required"/>
+										</xsd:complexType>
+									</xsd:element>
+									<xsd:element name="asset" minOccurs="1" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="belongs-to" minOccurs="0" maxOccurs="unbounded">
+													<xsd:complexType>
+														<xsd:attribute name="segmentation" type="xsd:string" use="required"/>
+														<xsd:attribute name="segment" type="xsd:string" use="required"/>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="data" minOccurs="1" maxOccurs="1">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element name="values" minOccurs="1" maxOccurs="unbounded">
+																<xsd:complexType>
+																	<xsd:attribute name="at" type="date" use="required"/>
+																	<xsd:attribute name="exposure" type="xsd:double" use="required"/>
+																	<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+											<xsd:attribute name="name" type="xsd:string" use="required"/>
+											<xsd:attribute name="id" type="xsd:string" use="required"/>
+											<xsd:attribute name="date" type="date" use="required"/>
+											<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:attribute name="name" type="xsd:string" use="required"/>
+								<xsd:attribute name="id" type="xsd:string" use="required"/>
+								<xsd:attribute name="rating" type="xsd:string" use="required"/>
+								<xsd:attribute name="sector" type="xsd:string" use="required"/>
+								<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="include" type="xsd:string" use="optional"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="propertyType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of property names.
+      </xsd:documentation>
+    </xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="time.0"/>
+			<xsd:enumeration value="time.T"/>
+			<xsd:enumeration value="stopcriteria.maxiterations"/>
+			<xsd:enumeration value="stopcriteria.maxseconds"/>
+			<xsd:enumeration value="copula.type"/>
+			<xsd:enumeration value="copula.seed"/>
+			<xsd:enumeration value="montecarlo.antithetic"/>
+			<xsd:enumeration value="portfolio.onlyActiveObligors"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="interestType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of interest types.
+      </xsd:documentation>
+    </xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="simple"/>
+			<xsd:enumeration value="compound"/>
+			<xsd:enumeration value="continous"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="componentsType">
+    <xsd:annotation>
+      <xsd:documentation>
+        list of types of components.
+      </xsd:documentation>
+    </xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="asset"/>
+			<xsd:enumeration value="obligor"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="date">
+    <xsd:annotation>
+      <xsd:documentation>
+        date in the format DD/MM/YYYY.
+        e.g. 1/1/2003, 25/07/1945, 12/3/2007
+      </xsd:documentation>
+    </xsd:annotation>
+		<xsd:union memberTypes="xsd:date">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[0-3]?[0-9]/[0-1]?[0-9]/[1-2][0-9]{3}" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="double">
+    <xsd:annotation>
+      <xsd:documentation>
+        double that can be followed by the percentage sign.
+        exponential notation not supported.
+        e.g. 2, 2.1, 2., .2, +2, -2.1, +4.5%, -.45%
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[+\-]?([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)%?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+	
+</xsd:schema>
+

@@ -1,0 +1,217 @@
+<!-- ============================================================== -->
+<!--                   CREDITCRUNCHER DTD                           -->
+<!-- ============================================================== -->
+
+<!--
+    if you desire debug your xml add these lines just after xml declaration:
+    <!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
+
+    export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
+    java dom.Writer -v sample01.xml
+    java sax.Writer -v sample01.xml
+-->
+
+<!-- .............................................................. -->
+<!--                       common stuff                             -->
+<!-- .............................................................. -->
+<!ELEMENT property 
+    EMPTY
+>
+<!ATTLIST property 
+    name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                        creditcruncher                          -->
+<!-- .............................................................. -->
+<!ELEMENT ccruncher (
+    (title?, description?, parameters, interest, ratings, mtransitions, 
+     survival?, sectors, mcorrels, segmentations, portfolio)
+)>
+
+<!-- .............................................................. -->
+<!--                         descriptives                           -->
+<!-- .............................................................. -->
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+<!-- .............................................................. -->
+<!--                           parameters                           -->
+<!-- .............................................................. -->
+<!ELEMENT parameters (
+    property+
+)>
+
+<!-- .............................................................. -->
+<!--                          interest                              -->
+<!-- .............................................................. -->
+<!ELEMENT interest (
+    rate+
+)>
+<!ATTLIST interest
+    type CDATA #IMPLIED
+>
+
+<!ELEMENT rate
+    EMPTY
+>
+<!ATTLIST rate
+    t CDATA #REQUIRED
+    r CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                           ratings                              -->
+<!-- .............................................................. -->
+<!ELEMENT ratings (
+    rating+
+)>
+
+<!ELEMENT rating
+    EMPTY
+>
+<!ATTLIST rating 
+    name ID #REQUIRED
+    description CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         mtransition                            -->
+<!-- .............................................................. -->
+<!ELEMENT mtransitions (
+    transition+
+)>
+<!ATTLIST mtransitions
+    period CDATA #REQUIRED
+>
+
+<!ELEMENT transition
+    EMPTY
+>
+<!ATTLIST transition
+    from IDREF #REQUIRED
+    to IDREF #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         survival                               -->
+<!-- .............................................................. -->
+<!ELEMENT survival (
+    svalue+
+)>
+
+<!ELEMENT svalue
+    EMPTY
+>
+<!ATTLIST svalue
+    rating IDREF #REQUIRED
+    t CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         sectors                                -->
+<!-- .............................................................. -->
+<!ELEMENT sectors (
+    sector+
+)>
+
+<!ELEMENT sector
+    EMPTY
+>
+<!ATTLIST sector
+    name ID #REQUIRED
+    description CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                        correlations                            -->
+<!-- .............................................................. -->
+<!ELEMENT mcorrels (
+    sigma+
+)>
+
+<!ELEMENT sigma
+    EMPTY
+>
+<!ATTLIST sigma
+    sector1 IDREF #REQUIRED
+    sector2 IDREF #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         segmentations                          -->
+<!-- .............................................................. -->
+<!ELEMENT segmentations (
+    segmentation*
+)>
+
+<!ELEMENT segmentation (
+    segment*
+)>
+<!ATTLIST segmentation
+    name CDATA #REQUIRED
+    components (asset|obligor) #REQUIRED
+>
+
+<!ELEMENT segment
+    EMPTY
+>
+<!ATTLIST segment 
+    name CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                        portfolio                               -->
+<!-- .............................................................. -->
+<!ELEMENT portfolio (
+    obligor+
+)>
+<!ATTLIST portfolio
+    include CDATA #IMPLIED
+>
+
+<!ELEMENT obligor (
+    (belongs-to*, asset*)
+)>
+<!ATTLIST obligor
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    rating IDREF #REQUIRED
+    sector IDREF #REQUIRED
+    recovery CDATA #IMPLIED
+>
+
+<!ELEMENT asset (
+    (belongs-to*, data)
+)>
+<!ATTLIST asset
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    date CDATA #REQUIRED
+    recovery CDATA #IMPLIED
+>
+
+<!ELEMENT belongs-to
+    EMPTY
+>
+<!ATTLIST belongs-to 
+    segmentation CDATA #REQUIRED
+    segment CDATA #REQUIRED
+>
+
+<!ELEMENT data (
+    values+
+)>
+
+<!ELEMENT values
+    EMPTY
+>
+<!ATTLIST values
+    at CDATA #REQUIRED
+    exposure CDATA #REQUIRED
+    recovery CDATA #IMPLIED
+>
