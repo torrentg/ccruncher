@@ -645,7 +645,20 @@ obtain the risk indicators for this subportfolio.
 CCruncher can consider that the value of money decreases with time, following a 
 curve (e.g., a yield curve). CCruncher use this curve to compute the present value 
 of the exposures. Allowed methods are simple interest, compound interest and
-continuous interest.
+continuous interest. The formulas used to compute the present value are:
+
+\begin{center}
+\begin{tabular}{ccccc}
+$C_{t_0} = \frac{C_t}{1+r \cdot (t-t_0)}$ & $\qquad$ &
+$C_{t_0} = \frac{C_t}{(1+r)^{(t-t_0)}}$ & $\qquad$ &
+$C_{t_0} = \frac{C_t}{exp(r \cdot (t-t_0))}$ \\
+(Simple) & $\qquad$ & (Compound) & $\qquad$ & (Continuous)
+\end{tabular}
+\end{center}
+
+Where $t_0$ is the current date, $C_{t_0}$ is the present value of the exposure at 
+time $t_0$, $C_t$ is the exposure at time $t$, $r$ is the interest rate given by the 
+yield curve at time $t$ and $t-t_0$ is the number of years between $t_0$ and $t$.
 
 %---------------------------------------------------------------------------
 \subsection{Antithetic technique}

@@ -33,4 +33,5 @@ Future works
   * explain how to determine the minimum number of simulations required
   * improve lookup-table when survival values are low
   * in techdoc add cholesky decomposition detail
+  * address the issue of curse of dimensionality
 
