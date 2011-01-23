@@ -226,9 +226,9 @@
       <tr class="b">
         <td class="c1">type</td>
         <td class="c2">
-          Determine how to apply interest curve.
-          Allowed values are: simple, compound and continuous.
-          This attribute is optional. Default value is compound.
+          Determine how to apply interest curve. Allowed values are: simple, compound 
+          and continuous. The formulas used in each case are described in the <i>Technical 
+          Document</i>. This attribute is optional. Default value is compound.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -709,6 +709,14 @@
       by listing the expected exposures and recovery rates in case of default. 
       Assets are grouped by obligor.
     </p>
+    <p>
+      Recovery can be defined at 3 different levels: obligor, asset and data value. 
+      When a default occurs at time t, we get the recovery at time <i>t</i> (or the closest 
+      date above). If this recovery is not reported, we get the asset recovery. If 
+      this recovery is not reported, we get the obligor recovery.When a default occurs 
+      at time <i>t</i>, in the beta distribution case, a new sample is drawn. In the obligor 
+      level, this drawn is shared by all assets that have not defined a recovery at <i>t</i>. 
+    </p>
 
     <h3>Example</h3>
 
@@ -1086,7 +1094,7 @@
             Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 09-Jan-2011
+            Last modified: 22-Jan-2011
           </td>
         </tr></table>
       </div></div></div></div></div>
