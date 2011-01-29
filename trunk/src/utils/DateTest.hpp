@@ -48,6 +48,7 @@ class DateTest : public TestFixture<DateTest>
     void test_comparators(void);
     void test_dayofweek(void);
     void test_distances(void);
+    void test_intervals(void);
 
   public:
 
@@ -61,6 +62,7 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_comparators);
       TEST_CASE(test_dayofweek);
       TEST_CASE(test_distances);
+      TEST_CASE(test_intervals);
     }
 
     void setUp();
