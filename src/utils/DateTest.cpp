@@ -150,7 +150,7 @@ void ccruncher_test::DateTest::test_misc(void)
 }
 
 //===========================================================================
-// test_misc
+// test_comparators
 //===========================================================================
 void ccruncher_test::DateTest::test_comparators(void)
 {
@@ -179,7 +179,6 @@ void ccruncher_test::DateTest::test_comparators(void)
   ASSERT(date1 == ccruncher::min(date1, date2));
   ASSERT(date2 == ccruncher::max(date1, date2));
   ASSERT(date1 == ccruncher::min(date1, datex));
-  ASSERT(date1 == ccruncher::max(date1, datex));
 }
 
 //===========================================================================
@@ -226,4 +225,37 @@ void ccruncher_test::DateTest::test_distances(void)
   ASSERT_EQUALS_EPSILON(     14.0/30.0, date0.getMonthsTo(date6), EPSILON);
   ASSERT_EQUALS_EPSILON(24.0+ 1.0/30.0, date0.getMonthsTo(date7), EPSILON);
 }
+
+//===========================================================================
+// test_interval_increments
+//===========================================================================
+void ccruncher_test::DateTest::test_intervals(void)
+{
+  ASSERT(ccruncher::isInterval("-450D"));
+  ASSERT(ccruncher::isInterval("45D"));
+  ASSERT(ccruncher::isInterval("-5Y"));
+  ASSERT(ccruncher::isInterval("1974D"));
+  ASSERT(ccruncher::isInterval("12000M"));
+  ASSERT(ccruncher::isInterval("200000Y"));
+
+  ASSERT(!ccruncher::isInterval("+67d"));
+  ASSERT(!ccruncher::isInterval("Y200000Y"));
+  ASSERT(!ccruncher::isInterval("200000"));
+  ASSERT(!ccruncher::isInterval("2+00000Y"));
+ 
+  Date date0 = Date(31,12,1970);
+  date0.addIncrement("+76D");
+  ASSERT(Date("17/03/1971") == date0);
+  date0.addIncrement("10M");
+  ASSERT(Date("17/01/1972") == date0);
+  date0.addIncrement("40Y");
+  ASSERT(Date("17/01/2012") == date0);
+  date0.addIncrement("2M");
+  ASSERT(Date("17/03/2012") == date0);
+  date0.addIncrement("-17D");
+  ASSERT(Date("29/02/2012") == date0);
+  date0.addIncrement("1Y");
+  ASSERT(Date("28/02/2013") == date0);
+}
+
 
