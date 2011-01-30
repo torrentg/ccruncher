@@ -128,21 +128,29 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   assert(eu.getCurrentHandlers() != NULL);
-  if (isEqual(name_,"values") && have_data == true) 
+  if (isEqual(name_,"values") && have_data == true)
   {
-    Date at = getDateAttribute(attributes, "at", NAD);
+    Date at(date);
+    char *str = getAttributeValue(attributes, "at");
+    if (isInterval(str)) {
+      at.addIncrement(str);
+    }
+    else {
+      at = Date(str);
+    }
+    
     double exposure = getDoubleAttribute(attributes, "exposure", NAN);
+    if (isnan(exposure)) {
+      throw Exception("invalid exposure at <values>");
+    }
+
     Recovery recovery = drecovery;
-    char *str = getAttributeValue(attributes, "recovery");
+    str = getAttributeValue(attributes, "recovery");
     if (str != NULL) {
       recovery = Recovery(str);
     }
-    if (at == NAD || isnan(exposure)) {
-      throw Exception("invalid attributes at <values>");
-    }
-    else {
-      data.push_back(DateValues(at, exposure, recovery));
-    }
+    
+    data.push_back(DateValues(at, exposure, recovery));
   }
   else if (isEqual(name_,"belongs-to")) {
     string ssegmentation = getStringAttribute(attributes, "segmentation", "");
