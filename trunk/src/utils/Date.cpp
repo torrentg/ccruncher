@@ -613,7 +613,7 @@ void ccruncher::Date::addIncrement(const char *str) throw(Exception)
         else lJulianDay = YmdToJd(y+interval,m,d-1); //29-Feb case
       }
       else {
-        assert(false);
+        throw Exception("invalid increment");
       }
     }
 	else 
