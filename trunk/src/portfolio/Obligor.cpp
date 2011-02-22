@@ -126,7 +126,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
     isector = sectors->getIndex(strsector);
 
     // doing some checks
-    if (id == "" || name == "" || irating < 0 || isector < 0) {
+    if (id == "" || irating < 0 || isector < 0) {
       throw Exception("invalid attributes at <obligor>");
     }
   }
