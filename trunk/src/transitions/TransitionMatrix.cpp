@@ -274,7 +274,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 
     if (sum < (1.0-EPSILON) || sum > (1.0+EPSILON))
     {
-      throw Exception("transition matrix row " + Format::toString(i+1) + " don't sums 1");
+      throw Exception("transition matrix row " + Format::toString(i+1) + " does not add up to 1");
     }
   }
 
