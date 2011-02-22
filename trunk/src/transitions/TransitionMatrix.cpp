@@ -432,11 +432,18 @@ void ccruncher::TransitionMatrix::regularize() throw(Exception)
 //===========================================================================
 TransitionMatrix ccruncher::TransitionMatrix::scale(int t) const throw(Exception)
 {
-  TransitionMatrix ret(*this);
-  PowMatrix::pow(getMatrix(), double(t)/double(getPeriod()), size(), ret.matrix);
-  ret.period = t;
-  ret.regularize();
-  return ret;
+  try
+  {
+    TransitionMatrix ret(*this);
+    PowMatrix::pow(getMatrix(), double(t)/double(getPeriod()), size(), ret.matrix);
+    ret.period = t;
+    ret.regularize();
+    return ret;
+  }
+  catch(Exception &e)
+  {
+    throw Exception(e, "invalid transition matrix");
+  }
 }
 
 //===========================================================================
