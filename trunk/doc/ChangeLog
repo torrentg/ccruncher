@@ -2,6 +2,10 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 1.8 (???. 2011)
+--------------------------
+  * solved bug with obligor recovery retrieval
+
 version 1.7 (Jan. 2011)
 --------------------------
   * added support for stochastic recoveries
