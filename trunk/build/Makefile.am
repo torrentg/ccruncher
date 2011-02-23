@@ -7,9 +7,9 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../deps/MiniCppUnit-2.5/\
-    ../deps/gzstream-1.5/\
-    ../src/win32/
+    ../deps/MiniCppUnit-2.5\
+    ../deps/gzstream-1.5\
+    ../src/win32
 
 bin_PROGRAMS = ccruncher
 
