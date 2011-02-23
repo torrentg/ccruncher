@@ -516,15 +516,15 @@ estimator that was defined previously.
 %...........................................................................
 \subsubsection{Value At Risk}
 Value at Risk \cite{var:jorion} is the most commonly used risk value. We call it 
-$\textrm{VAR}_{\beta}$ where $\beta$ is the VAR confidence level (e.g., VAR at $95\%$).
-VAR is another way to say quantile. Thus,
-$\textrm{VAR}_{\beta} = q_{\beta} = \textrm{inf}\{x | F(x) \geq \beta \}$ and
+$\textrm{VaR}_{\beta}$ where $\beta$ is the VaR confidence level (e.g., VaR at $95\%$).
+VaR is another way to say quantile. Thus,
+$\textrm{VaR}_{\beta} = q_{\beta} = \textrm{inf}\{x | F(x) \geq \beta \}$ and
 
 \begin{displaymath}
-\textrm{VAR}_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
+\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
 \end{displaymath}
 
-where $\alpha$ is the error confidence level, $\beta$ is the VAR confidence 
+where $\alpha$ is the error confidence level, $\beta$ is the VaR confidence 
 level, $\phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution function, 
 $\widehat{q_{\beta}}$ is the quantile estimator, and $\textrm{stderr}(q_{\beta})$
 is the estimation of the standard error.
@@ -565,8 +565,8 @@ Thus,
 
 %...........................................................................
 \subsubsection{Expected Shortfall}
-VAR is not a distance because it does not fulfil the sub-additive property 
-\cite{var:varbad}, $VAR(A+B) \nleq VAR(A)+VAR(B)$. Similar to VAR, Expected 
+VaR is not a distance because it does not fulfil the sub-additive property 
+\cite{var:varbad}, $VaR(A+B) \nleq VaR(A)+VaR(B)$. Similar to VaR, Expected 
 Shortfall is a consistent risk measure \cite{var:eshortfall}. It can be described
 as the average of the $\beta\%$ worst losses:
 
@@ -581,10 +581,10 @@ is the estimation of the standard error.
 \newline
 
 If we select the simulation portfolio loss values ($x_1, ..., x_N$) that are bigger 
-than $VAR_{\beta}$,
+than $VaR_{\beta}$,
 
 \begin{displaymath}
-y_1, y_2, y_3, \cdots, y_K \qquad \textrm{where} \quad y_i > VAR_{\beta}
+y_1, y_2, y_3, \cdots, y_K \qquad \textrm{where} \quad y_i > VaR_{\beta}
 \end{displaymath}
 
 then,
@@ -603,7 +603,7 @@ then,
 Compute the Economic Capital at confidence level $\beta$ as:
 
 \begin{displaymath}
-\textrm{Economic Capital} = VAR_{\beta} - \textrm{Expected Loss}
+\textrm{Economic Capital} = VaR_{\beta} - \textrm{Expected Loss}
 \end{displaymath}
 
 %...........................................................................
