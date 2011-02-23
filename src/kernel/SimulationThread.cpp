@@ -132,15 +132,7 @@ void ccruncher::SimulationThread::simulate()
   for (unsigned int i=0; i<obligors.size(); i++) 
   {
     dtimes[i] = simTimeToDefault(getRandom(i), obligors[i].irating);
-    
-    if (obligors[i].hasRecovery && time0 <= dtimes[i] && dtimes[i] <= timeT)
-    {
-      orecovery[i] = obligors[i].ref->recovery.getValue(rng);
-    }   
-    else
-    {
-      orecovery[i] = NAN;
-    }
+    orecovery[i] = NAN;
   }
 }
 
@@ -192,17 +184,17 @@ void ccruncher::SimulationThread::evalue()
     if (assets[i].mindate <= t && t <= assets[i].maxdate)
     {
       const DateValues &values = assets[i].ref->getValues(t);
-      double rpct = 0.0;
-      
-      // recovery inherited from obligor
-      if (isnan(values.recovery.getType()))
+      double rpct = values.recovery.getValue(rng);
+
+      // non-recovery means that is inherited from obligor
+      if (isnan(rpct))
       {
-        rpct = orecovery[assets[i].iobligor];
-      }
-      // asset recovery (fixed or stochastic)
-      else 
-      {
-        rpct = values.recovery.getValue(rng);
+        int iobligor = assets[i].iobligor;
+        if (isnan(orecovery[iobligor]))
+        {
+          orecovery[iobligor] = obligors[iobligor].ref->recovery.getValue(rng);
+        }
+        rpct = orecovery[iobligor];
       }
       
       alosses[i] = values.exposure * (1.0 - rpct);
