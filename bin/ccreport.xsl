@@ -193,7 +193,7 @@ table.its tr.odd {
 			<td class="little"><b>StdErr</b></td>
 		</tr>
 		<tr class="even">
-			<td align="center">VAR (90.00%)</td>
+			<td align="center">VaR (90.00%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.9']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.9']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -202,7 +202,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.9']/@stderr"/></td>
 		</tr>
 		<tr class="odd">
-			<td align="center">VAR (95.00%)</td>
+			<td align="center">VaR (95.00%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.95']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.95']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -211,7 +211,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.95']/@stderr"/></td>
 		</tr>
 		<tr class="even">
-			<td align="center">VAR (97.50%)</td>
+			<td align="center">VaR (97.50%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.975']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.975']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -220,7 +220,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.975']/@stderr"/></td>
 		</tr>
 		<tr class="odd">
-			<td align="center">VAR (99.00%)</td>
+			<td align="center">VaR (99.00%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.99']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.99']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -229,7 +229,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.99']/@stderr"/></td>
 		</tr>
 		<tr class="even">
-			<td align="center">VAR (99.25%)</td>
+			<td align="center">VaR (99.25%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.9925']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.9925']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -238,7 +238,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.9925']/@stderr"/></td>
 		</tr>
 		<tr class="odd">
-			<td align="center">VAR (99.50%)</td>
+			<td align="center">VaR (99.50%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.995']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.995']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -247,7 +247,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.995']/@stderr"/></td>
 		</tr>
 		<tr class="even">
-			<td align="center">VAR (99.75%)</td>
+			<td align="center">VaR (99.75%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.9975']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.9975']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -256,7 +256,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.9975']/@stderr"/></td>
 		</tr>
 		<tr class="odd">
-			<td align="center">VAR (99.90%)</td>
+			<td align="center">VaR (99.90%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.999']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.999']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
@@ -265,7 +265,7 @@ table.its tr.odd {
 			<td><xsl:value-of select="ES[@prob='0.999']/@stderr"/></td>
 		</tr>
 		<tr class="even">
-			<td align="center">VAR (99.99%)</td>
+			<td align="center">VaR (99.99%)</td>
 			<td><xsl:value-of select="VaR[@prob='0.9999']/@value"/></td>
 			<td><xsl:value-of select="VaR[@prob='0.9999']/@stderr"/></td>
 			<td style="background-color: white;">&nbsp;</td>
