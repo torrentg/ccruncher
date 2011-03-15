@@ -68,6 +68,9 @@ struct parameters
 	int n;
 };
 
+//===========================================================================
+// function g
+//===========================================================================
 double g(double x, double a)
 {
   return asin(x*sin(a))/a;
@@ -133,6 +136,22 @@ double bisection(double *x, double *y, int n)
 }
 
 //===========================================================================
+// root finding procedure
+//===========================================================================
+double error(double h, double *x, double *y, int n)
+{
+	double ret = 0.0;
+	
+	for(int i=0; i<n; i++)
+	{
+		double err = g(x[i],h)-y[i];
+		if (fabs(err)>fabs(ret)) ret = err;
+	}
+
+	return ret;
+}
+
+//===========================================================================
 // main procedure
 //===========================================================================
 int main(int argc, char *argv[])
@@ -156,8 +175,8 @@ int main(int argc, char *argv[])
 			y[n] = 1.0;
 			n++;
 			double coef = bisection(x, y, n);
-			CALCULAR ERROR MAXIMO
-			cout << ndf << "\t" << coef << endl;
+			double err = error(coef, x, y, n);
+			cout << ndf << "\t" << coef << "\t" << err << endl;
 			
 			x[0] = 0.0;
 			y[0] = 0.0;
@@ -177,7 +196,8 @@ int main(int argc, char *argv[])
 		y[n] = 1.0;
 		n++;
 		double coef = bisection(x, y, n);
-		cout << ndf << "\t" << coef << endl;
+		double err = error(coef, x, y, n);
+		cout << ndf << "\t" << coef << "\t" << err << endl;
 	}
 	
 }

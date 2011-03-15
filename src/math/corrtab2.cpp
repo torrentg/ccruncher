@@ -35,8 +35,10 @@
 // a=1
 // b=1
 // c=1
-// h(y)=pi/6 + 1/(a+b*y+exp(c*y))
+// h(y)=pi/6 + 1/(a+b*y+exp(c*y)) + d*atan(y)
 // fit h(x) "corrtab2.dat" using 1:2 via a,b,c
+//
+// h(y)=pi/2 + 2/pi*atan(y)
 //
 //===========================================================================
 
@@ -154,6 +156,8 @@ int main(int argc, char *argv[])
 		}
 		
 		cin >> y[n] >> x[n];
+		
+		if (y[n] == 0.0) x[n] = 0.0;
 		//cout << y[n] << "\t" << x[n] << endl;
 		n++;
 		
