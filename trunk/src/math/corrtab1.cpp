@@ -29,7 +29,7 @@
 //
 // compilation commands:
 // ----------------------------
-// g++ -g -Wall -Wextra -Wshadow -O3 -lgsl -o corrtab1 corrtab1.cpp
+// g++ -g -Wall -Wextra -Wshadow -O3 -lgsl -lblas -o corrtab1 corrtab1.cpp
 //
 // gnuplot commands:
 // ----------------------------
@@ -165,12 +165,14 @@ int main(int argc, char *argv[])
 
   while (ndf <= t0+dt*nt)
   {
-    for(int i=0; i<=nx; i++)
+    cout << ndf << "\t" << "0.0" << "\t" << "0.0" << endl;
+    for(int i=1; i<nx; i++)
     {
-      double x = i/(double)nx;
+      double x = (double)(i)/(double)(nx);
       double y = ncorr2(x, ndf, ns);
       cout << ndf << "\t" << x << "\t" << y << endl;
     }
+    cout << ndf << "\t" << "1.0" << "\t" << "1.0" << endl;
     ndf += dt;
   }
   
