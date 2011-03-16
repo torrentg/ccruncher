@@ -38,11 +38,11 @@
 //
 // gnuplot commands:
 // ----------------------------
-// a=1
-// b=1
-// c=1
+// a=+1
+// b=+1
+// c=-1
 // h(y)=pi/6 + 1/(a+b*y+exp(c*y))
-// fit h(x) "corrtab2.dat" using 1:2 via a,b,c
+// fit h(x) "corrtab3.dat" using 1:2 via a,b,c
 //
 //===========================================================================
 
@@ -163,38 +163,29 @@ int main(int argc, char *argv[])
 	n = 0;
 	cin >> ndf;
 	ndf_prev = ndf;
-	x[n] = 1.0;
-	y[n] = 1.0;
-	n++;
 
 	while (!cin.eof())
 	{
 		if (ndf != ndf_prev)
 		{
-			x[n] = 1.0;
-			y[n] = 1.0;
-			n++;
+			// assertions
+			if (n != 101) {cout << "ERROR1 " << n << endl; return 1;}
+			if (ndf <= ndf_prev) {cout << "ERROR2 " << n << endl; return 1;}
 			double coef = bisection(x, y, n);
 			double err = error(coef, x, y, n);
-			cout << ndf << "\t" << coef << "\t" << err << endl;
-			
-			x[0] = 0.0;
-			y[0] = 0.0;
-			n = 1;
+			cout << ndf_prev << "\t" << coef << "\t" << err << endl;
+			n = 0;
 		}
-		
+
 		cin >> x[n] >> y[n];
 		n++;
 		
 		ndf_prev = ndf;
 		cin >> ndf;
 	}
-	
+
 	if (n > 1)
 	{
-		x[n] = 1.0;
-		y[n] = 1.0;
-		n++;
 		double coef = bisection(x, y, n);
 		double err = error(coef, x, y, n);
 		cout << ndf << "\t" << coef << "\t" << err << endl;
