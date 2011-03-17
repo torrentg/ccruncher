@@ -65,8 +65,10 @@ class SimulationThread : public Thread
     Copula *copula;
     // obligors default times
     vector<Date> dtimes;
-    // obligors recoveries
-    vector<double> orecovery;
+    // obligor recovery index (obligor index)
+    int orindex;
+    // obligor recovery value
+    double orvalue;
     // assets losses
     vector<double> alosses;
     // initial date
