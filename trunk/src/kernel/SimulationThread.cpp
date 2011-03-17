@@ -32,12 +32,11 @@
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  dtimes(0), orecovery(0), alosses(0), isegments(0), losses(0)
+  dtimes(0), alosses(0), isegments(0), losses(0)
 {
   assert(copula != NULL);
   rng = copula->getRng();
   dtimes = vector<Date>(obligors.size(), NAD);
-  orecovery = vector<double>(obligors.size(), NAN);
   alosses = vector<double>(assets.size(), NAN);
   numassets = assets.size();
   time0 = montecarlo.time0;
@@ -129,10 +128,11 @@ void ccruncher::SimulationThread::randomize()
 //===========================================================================
 void ccruncher::SimulationThread::simulate()
 {
+  orindex = -1;
+  orvalue = NAN;
   for (unsigned int i=0; i<obligors.size(); i++) 
   {
     dtimes[i] = simTimeToDefault(getRandom(i), obligors[i].irating);
-    orecovery[i] = NAN;
   }
 }
 
@@ -190,11 +190,12 @@ void ccruncher::SimulationThread::evalue()
       if (isnan(rpct))
       {
         int iobligor = assets[i].iobligor;
-        if (isnan(orecovery[iobligor]))
+        if (iobligor != orindex)
         {
-          orecovery[iobligor] = obligors[iobligor].ref->recovery.getValue(rng);
+          orvalue = obligors[iobligor].ref->recovery.getValue(rng);
+          orindex = iobligor;
         }
-        rpct = orecovery[iobligor];
+        rpct = orvalue;
       }
       
       alosses[i] = values.exposure * (1.0 - rpct);
