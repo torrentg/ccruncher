@@ -32,82 +32,19 @@
 // --------------------------------------------------------------------------
 
 #define EPSILON 1E-12
-#define COEFS(i,j) (coefs[(i)+(j)*N])
+#define COEFS(i,j) (coefs[(i)*N+(j)])
 
 //===========================================================================
 // Description:
 // ------------
-// implements Cholesky decomposition matrix for a type of block matrix
-//
-// Cholesky algorithm description:
-// -------------------------------
-// Given a squared, simetric and definite positive matrix A, Cholesky
-// algorithm computes L where A = L.L' and L lower triangular matrix
-// You can found Cholesky algorithm explaned  at
-// 'Numerical Recipes in C' (see http://www.nr.com)
-//
-// Problem:
-// --------
-// a 50.000 x 50.000 matrix requires too much memory and computations
-// memory size:
-//   50.000 x 50.000 matrix => 50.000 x 50.000 x 8 bytes / (1024*1024) = 19.073 Mb = 19 Gb RAM
-// number of operations (matrix x vector):
-//   50.000 x 50.000 matrix, 50.000 vector => 50.000 x 50.000 multiplications = 2.500.000.000 products
-// size and computations have order N^2, where N is the matrix dimension
-//
-// Solution:
-// ---------
-// If the matrix is a block matrix, the cholesky decomposition have
-// elements repeated and we can store only the distincts elements.
-//
-// example of block matrix:
-//   1.0  0.5  0.5  0.5  0.1  0.1  0.1
-//   0.5  1.0  0.5  0.5  0.1  0.1  0.1
-//   0.5  0.5  1.0  0.5  0.1  0.1  0.1
-//   0.5  0.5  0.5  1.0  0.1  0.1  0.1
-//   0.1  0.1  0.1  0.1  1.0  0.3  0.3
-//   0.1  0.1  0.1  0.1  0.3  1.0  0.3
-//   0.1  0.1  0.1  0.1  0.3  0.3  1.0
-//
-// the previous matrix can be writen as (in submatrix form):
-//   D1 A
-//   A' D2
-// where ' denote transposed and A is a matrix where all elements
-// have the same value (0.1) and D1, D2 are square matrix where all
-// elements have the same value (0.5 and 0.3 respectively) except
-// in diagonal (diagonal elements allways are 1). Note that Dx
-// matrix are squared, but the other submatrix not necesariely.
-// Note that D1 and D2 can have distinct dimension (in the example,
-// dim(D1)=4 and dim(D2)=3.
-//
-// the Cholesky decomposition is:
-//   1.00000  0.00000  0.00000  0.00000  0.00000  0.00000  0.00000
-//   0.50000  0.86603  0.00000  0.00000  0.00000  0.00000  0.00000
-//   0.50000  0.28868  0.81650  0.00000  0.00000  0.00000  0.00000
-//   0.50000  0.28868  0.20412  0.79057  0.00000  0.00000  0.00000
-//   0.10000  0.05774  0.04082  0.03162  0.99197  0.00000  0.00000
-//   0.10000  0.05774  0.04082  0.03162  0.28630  0.94975  0.00000
-//   0.10000  0.05774  0.04082  0.03162  0.28630  0.21272  0.92563
-//
-// observe that each row have repeated elements. The algoritm implemented
-// in this class store only M+1 elements per row (where M is the dimension of
-// matrix of submatrix, 2 in the example).
-//
-// With this algorithm a 50.000 x 50.000 block matrix matrix, with 10 sectors have:
-// memory size:
-//   50.000 x 50.000 matrix => 50.000 x (10+1) x 8 bytes / (1024*1024) = 4.20 Mb RAM
-// number of operations (matrix x vector):
-//   50.000 x 50.000 matrix, 50.000 vector => 50.000 x (10+1) multiplications = 500.000 products
-// size and computations have order N*(M+1), where N is the matrix dimension and M the number of sectors
+// implements the Cholesky decomposition algorithm for block matrices
+// described in paper 'Simulation of High-Dimensional t-Student Copula
+// Copulas with a Given Block Matrix Correlation Matrix' by
+// Gerard Torrent Gironella
 //
 // Notes:
 // ------
-// the assumption that diagonal is always 1 isn't a required condition. All
-// previous explanation works with diagonal elements d1,d2,...,dn.
-// This feature dirts the interface (force to add the diagonal values at
-// constructor, etc). For this reason is suposed that all diagonal elements
-// have value = 1.0 (the value that we need for solve obligors correlation matrix
-// factorization problem)
+// assumes that diagonal elements are always 1
 //
 //===========================================================================
 
@@ -257,33 +194,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
 
 //===========================================================================
 // init
-//
-// A: matrix of coeficients
-// m: number of sectors
-// n: dimension of each sector
-//
-// means that the input matrix is:
-//
-//   1   A11 ... A11         A1m   ...   A1m
-//   A11  1  ... A11          .           .
-//    .   .       .    ...    .           .
-//    .   .       .           .           .
-//    .   .       .           .           .
-//   A11 A11 ...  1          A1m   ...   A1m
-//         .        .               .
-//         .          .             .
-//         .            .           .
-//         .              .         .
-//         .                .       .
-//   Am1   ...   Am1          1  Amm ... Amm
-//    .           .          Amm  1  ... Amm
-//    .           .           .   .       .
-//    .           .    ...    .   .       .
-//    .           .           .   .       .
-//   A11   ...   Am1         Amm Amm ...  1
-//
 // Note: take care, we check that Aij = Aji
-//
 //===========================================================================
 void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Exception)
 {
@@ -411,7 +322,7 @@ double ccruncher::BlockMatrixChol::get(int row, int col)
 
   if (col < row)
   {
-    return COEFS(col,spe[row]);
+    return COEFS(spe[row], col);
   }
   else if (col == row)
   {
@@ -425,150 +336,93 @@ double ccruncher::BlockMatrixChol::get(int row, int col)
 
 //===========================================================================
 // returns cholesky matrix multiplied by vector x
-// puts result in vector ret (allocated by caller)
-// does the multiplication with the minimum operations posible
 //===========================================================================
 void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
 {
+  int i, j, r;
+  double *ptr;
+
   assert(x != NULL);
   assert(ret != NULL);
 
-  // setting ret to 0
-  for(int i=0;i<N;i++)
-  {
-    ret[i] = 0.0;
-  }
-
-  // computing the first element of each sector (diagonal product not included)
-  for(int s=0,i=0;s<M;s++)
-  {
-    for(int j=0;j<i;j++)
-    {
-      ret[i] += get(i,j) * x[j];
-    }
-    i += n[s];
-  }
-
-  // computing the rest of elements for each sector (diagonal product not included)
-  for(int s=0,i=0;s<M;s++)
+  for(i=-1, r=0; r<M; r++)
   {
     i++;
-    for(int k=1;k<n[s];k++)
+    ret[i] = 0.0;
+    
+    // computing the first element of this sector (diagonal product not included)
+    ptr = coefs+r*N;
+    for(j=0; j<i; j++) 
     {
-      ret[i] += ret[i-1] + get(i,i-1)*x[i-1];
+      ret[i] += ptr[j]*x[j]; // COEFS(r,j)*x[j];
+    }
+
+    // computing the rest of elements of this sector (diagonal product not included)
+    for(j=1; j<n[r]; j++)
+    {
       i++;
+      ret[i] = ret[i-1] + ptr[i-1]*x[i-1]; // ret[i-1] + COEFS(r,i-1)*x[i-1];
     }
   }
 
   // adding diagonal products
-  for(int i=0;i<N;i++)
+  for(j=0; j<=i; j++)
   {
-    ret[i] += diag[i] * x[i];
+    ret[j] += diag[j]*x[j];
   }
 }
 
 //===========================================================================
-// adapted cholesky for block matrix (see header of this file)
-// TODO: it is still posible to reduce the number of multiplications
+// adapted cholesky for block matrix
 //===========================================================================
 void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 {
-  double sum;
-  int iaux, jaux;
+  int i, j, r, s, q;
+  double val1, val2;
 
-  // doing assertions
   assert(A != NULL);
 
-  // filling cholesky coeficients
-  for(int i=0;i<N;i++)
+  diag[0] = 1.0;
+
+  for(r=0; r<M; r++)
   {
-    // retrieving sector of element i
-    iaux = spe[i];
-
-    // computing diagonal element
+    COEFS(r,0) = A[r][0]/diag[0];
+  }
+	
+  for(i=-1, r=0; r<M; r++)
+  {
+    for(q=0; q<n[r]; q++)
     {
-      // we asume that A[i][i] = 1.0
-      sum = 1.0 - aprod(i, i, i);
-
-      // checking if is non-definite positive matrix
-      if (sum <= 0.0)
+      i++;
+      if (i==0) continue;
+      if (q == 0)
       {
-        throw Exception("non definite positive block matrix");
+        for(val1=0.0, j=0; j<i; j++)
+        {
+          val1 += COEFS(r,j)*COEFS(r,j);
+        }
       }
       else
       {
-        diag[i] = std::sqrt(sum);
+        val1 += COEFS(r,i-1)*COEFS(r,i-1);
       }
-    }
-
-    // exit if last element reached
-    if (i == N-1)
-    {
-      break;
-    }
-
-    // computing [i][spe[i]] coeficient
-    if (spe[i] == spe[i+1])
-    {
-      // retrieving A[i][j] value
-      sum = A[iaux][iaux] - aprod(i, i+1, i);
-
-      COEFS(i,iaux) = sum/diag[i];
-    }
-
-    // move to next sector
-    int j=i+1;
-    for(int k=i+1;k<N;k++) {
-      if (spe[k] != spe[i])
+      if (1.0-val1 < 0.0) {
+        throw Exception("non definite positive block matrix");
+      }
+      else {
+        diag[i] = sqrt(1.0-val1);
+      }
+      for(s=r; s<M; s++)
       {
-        j = k;
-        break;
+        if (q==n[r]-1 && s==r) continue;
+        for(val2=0.0, j=0; j<i; j++)
+        {
+          val2 += COEFS(r,j)*COEFS(s,j);
+        }
+        COEFS(s,i) = (A[s][r]-val2)/diag[i];
       }
     }
-
-    // computing [i][j] coeficients where j = spe[i]+1 ... M
-    for(j=j;j<N;j=j+n[spe[j]]) //int j=i+n[spe[i]]
-    {
-      // retrieving sector
-      jaux = spe[j];
-
-      // retrieving A[i][j] value
-      sum = A[iaux][jaux] - aprod(i, j, i);
-
-      COEFS(i,jaux) = sum/diag[i];
-    }
   }
-}
-
-//===========================================================================
-// internal function
-// does product of cholesky row by cholesky col (only first order elements)
-//===========================================================================
-double ccruncher::BlockMatrixChol::aprod(int row, int col, int order)
-{
-  double ret;
-  int sper, spec;
-
-  // doing assertions
-  assert(row >= 0 && row < N);
-  assert(col >= 0 && col < N);
-  assert(order >=0 && order < N);
-  assert(row <= col);
-  assert(order <= row);
-
-  // initializing values
-  ret = 0.0;
-  sper = spe[row];
-  spec = spe[col];
-
-  // computing internal auto-prod
-  for(int i=0;i<order;i++)
-  {
-    ret += COEFS(i,sper) * COEFS(i,spec);
-  }
-
-  // return value
-  return ret;
 }
 
 //===========================================================================
