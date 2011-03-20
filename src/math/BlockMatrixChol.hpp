@@ -60,8 +60,6 @@ class BlockMatrixChol
     void init(double **A, int *n, int m) throw(Exception);
     // adapted cholesky algorithm
     void chold(double **A) throw(Exception);
-    // internal function
-    double aprod(int row, int col, int order);
     // computes condition number (2-norm)
     double cond(double **A, int *n, int m) throw(Exception);
     // dealloc memory
