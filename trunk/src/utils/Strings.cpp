@@ -91,7 +91,7 @@ string ccruncher::Strings::uppercase(string str)
 {
   string res = str;
 
-  transform(res.begin(), res.end(), res.begin(), ccruncher::ltoupper);
+  transform(res.begin(), res.end(), res.begin(), (int(*)(int)) toupper);
 
   return res;
 }
@@ -103,7 +103,7 @@ string ccruncher::Strings::lowercase(string str)
 {
   string res = str;
 
-  transform(res.begin(), res.end(), res.begin(), ccruncher::ltolower);
+  transform(res.begin(), res.end(), res.begin(), (int(*)(int)) tolower);
 
   return res;
 }
