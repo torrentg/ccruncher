@@ -378,7 +378,7 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
 void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 {
   int i, j, r, s, q;
-  double val1, val2;
+  double val1=0.0, val2=0.0;
 
   assert(A != NULL);
 
@@ -388,7 +388,7 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
   {
     COEFS(r,0) = A[r][0]/diag[0];
   }
-	
+
   for(i=-1, r=0; r<M; r++)
   {
     for(q=0; q<n[r]; q++)
