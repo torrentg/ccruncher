@@ -370,6 +370,14 @@
 					RelativePath=".\src\portfolio\Recovery.hpp"
 					>
 				</File>
+				<File
+					RelativePath=".\src\portfolio\Exposure.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\portfolio\Exposure.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="ratings"
