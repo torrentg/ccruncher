@@ -47,6 +47,7 @@ ccruncher_SOURCES = \
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
+    ../src/portfolio/Exposure.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
@@ -90,6 +91,7 @@ ccruncher_SOURCES = \
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
+    ../src/portfolio/Exposure.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
@@ -138,6 +140,7 @@ tests_SOURCES = \
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
     ../src/portfolio/RecoveryTest.cpp\
+    ../src/portfolio/ExposureTest.cpp\
     ../src/interests/InterestTest.cpp\
     ../src/segmentations/SegmentationTest.cpp\
     ../src/segmentations/SegmentationsTest.cpp\
@@ -152,6 +155,7 @@ tests_SOURCES = \
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
+    ../src/portfolio/Exposure.cpp\
     ../src/utils/Arrays.cpp\
     ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
@@ -210,6 +214,7 @@ tests_SOURCES = \
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
     ../src/portfolio/RecoveryTest.hpp\
+    ../src/portfolio/ExposureTest.hpp\
     ../src/interests/InterestTest.hpp\
     ../src/segmentations/SegmentationTest.hpp\
     ../src/segmentations/SegmentationsTest.hpp\
@@ -224,6 +229,7 @@ tests_SOURCES = \
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
+    ../src/portfolio/Exposure.hpp\
     ../src/utils/Arrays.hpp\
     ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
@@ -298,6 +304,7 @@ samplegen_SOURCES = \
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
+    ../src/portfolio/Exposure.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
@@ -341,6 +348,7 @@ samplegen_SOURCES = \
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
+    ../src/portfolio/Exposure.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
