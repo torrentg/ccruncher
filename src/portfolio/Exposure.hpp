@@ -66,6 +66,8 @@ class Exposure
   
     // set values
     void init(ExposureType, double, double) throw(Exception);
+    // check params
+    static void checkParams(ExposureType, double, double) throw(Exception);
 
   public:
   
@@ -85,8 +87,6 @@ class Exposure
     double getValue2() const;
     // returns exposure
     double getValue(const gsl_rng *rng=NULL) const;
-    // returns a Non-A-Exposure value
-    static Exposure getNAN();
     // check if is a Non-A-Exposure value
     static bool valid(const Exposure &);
     // to string

@@ -59,6 +59,14 @@ ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
     }
     init(Beta, value1, value2);
   }
+  else if (strncmp(cstr, "uniform", 7) == 0)
+  {
+    int rc = sscanf(cstr, "uniform(%lf,%lf)", &value1, &value2);
+    if (rc != 2) {
+      throw Exception("invalid recovery value");
+    }
+    init(Uniform, value1, value2);
+  }
   else
   {
     value1 = Parser::doubleValue(cstr);
@@ -83,20 +91,22 @@ ccruncher::Recovery::Recovery(RecoveryType t, double a, double b) throw(Exceptio
 }
 
 //===========================================================================
-// constructor
-// caution: not checked that 0<= val <= 1
+// checkParams
 //===========================================================================
-ccruncher::Recovery::Recovery(double val) throw(Exception)
+void ccruncher::Recovery::checkParams(RecoveryType t, double a, double b) throw(Exception)
 {
-  init(Fixed, val, NAN);
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Recovery::Recovery(double a, double b) throw(Exception)
-{
-  init(Beta, a, b);
+  if (t == Fixed && (a < 0.0 || a > 1.0 || isnan(a) )) {
+    throw Exception("recovery value out of range");
+  }
+  else if (t == Beta && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
+    throw Exception("beta parameters out of range");
+  }
+  else if (t == Uniform && (a < 0.0 || 1.0 < b || b <= a || isnan(a) || isnan(b))) {
+    throw Exception("uniform parameters out of range");
+  }
+  else if (t < 1 || t > 3) {
+    throw Exception("unknow recovery type");
+  }
 }
 
 //===========================================================================
@@ -104,30 +114,14 @@ ccruncher::Recovery::Recovery(double a, double b) throw(Exception)
 //===========================================================================
 void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Exception)
 {
-  if (t == Fixed)
+  if (t != Fixed || !isnan(a))
   {
-    if (a < 0.0 || 1.0 < a) {
-      throw Exception("recovery value out of range [0%,100%]");
-    }
-    else {
-      type = t;
-      value1 = a;
-      value2 = NAN;
-    }
+    checkParams(t, a, b);  
   }
-  else if (t == Beta) {
-    if (a <= 0.0 || b <= 0.0) {
-      throw Exception("beta arguments out of range (0,inf)");
-    }
-    else {
-      type = t;
-      value1 = a;
-      value2 = b;
-    }
-  }
-  else {
-    throw Exception("unknow recovery type");
-  }
+  
+  type = t;
+  value1 = a;
+  value2 = b;
 }
 
 //===========================================================================
@@ -147,20 +141,19 @@ double ccruncher::Recovery::getValue2() const
 }
 
 //===========================================================================
-// returns a Non-A-Recovery value (Fixed & NAN)
-//===========================================================================
-Recovery ccruncher::Recovery::getNAN()
-{
-  return Recovery();
-}
-
-//===========================================================================
 // check if is a Non-A-Recovery value
 //===========================================================================
 bool ccruncher::Recovery::valid(const Recovery &x)
 {
-  if (x.type == Fixed && isnan(x.value1)) return true;
-  else return false;
+  try
+  {
+    checkParams(x.type, x.value1, x.value2);
+    return true;
+  }
+  catch(Exception &e)
+  {
+    return false;
+  }
 }
 
 //===========================================================================
@@ -168,7 +161,15 @@ bool ccruncher::Recovery::valid(const Recovery &x)
 //===========================================================================
 string ccruncher::Recovery::toString() const
 {
-  if (type == Fixed) return Format::toString(value1*100.0) + "%";
-  else return "beta("+Format::toString(value1)+","+Format::toString(value2)+")";
+  switch(type)
+  {
+    case Fixed:
+      return Format::toString(value1*100.0) + "%";
+    case Beta:
+      return "beta(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
+    case Uniform:
+      return "uniform(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
+    default:
+      return "NAN";
+  }
 }
-

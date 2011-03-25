@@ -45,7 +45,7 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
   isector = -1;
   id = "NON_ID";
   name = "NO_NAME";
-  recovery = Recovery::getNAN();
+  recovery = Recovery(Fixed,NAN);
 }
 
 //===========================================================================
@@ -150,7 +150,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
   else if (isEqual(name_,"obligor")) {
 
     // check recovery values
-    if (hasRecovery() && Recovery::valid(recovery)) {
+    if (hasRecovery() && !Recovery::valid(recovery)) {
       throw Exception("obligor hasn't recovery, but has asset that assumes obligor recovery");
     }
     
