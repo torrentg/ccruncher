@@ -211,7 +211,8 @@ void ccruncher_test::ObligorTest::test1()
   ASSERT(obligor.name == "Obligor1");
   ASSERT(obligor.irating == 0);
   ASSERT(obligor.isector == 1);
-  ASSERT(Recovery::valid(obligor.recovery));
+  ASSERT(!Recovery::valid(obligor.recovery));
+  ASSERT(!obligor.hasRecovery());
 
   ASSERT(obligor.belongsTo(1, 1));
   ASSERT(obligor.belongsTo(3, 2));

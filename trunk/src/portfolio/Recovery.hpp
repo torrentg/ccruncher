@@ -41,8 +41,9 @@ namespace ccruncher {
 
 enum RecoveryType
 { 
-  Fixed,
-  Beta
+  Fixed=1,
+  Uniform=2,
+  Beta=3
 };
 
 //---------------------------------------------------------------------------
@@ -54,15 +55,17 @@ class Recovery
 
     // recovery type
     RecoveryType type;
-    // type=Fixed->recovery , type=Beta->alpha
+    // depends on type
     double value1;
-    // type=Beta->beta
+    // depends on type
     double value2;
 
   private:
   
     // set values
     void init(RecoveryType, double, double) throw(Exception);
+    // check params
+    static void checkParams(RecoveryType, double, double) throw(Exception);
 
   public:
   
@@ -73,11 +76,7 @@ class Recovery
     // constructor
     Recovery(const string &) throw(Exception);
     // constructor
-    Recovery(RecoveryType, double, double) throw(Exception);
-    // constructor
-    Recovery(double fixedvalue) throw(Exception);
-    // constructor
-    Recovery(double alpha, double beta) throw(Exception);
+    Recovery(RecoveryType, double a, double b=NAN) throw(Exception);
     // returns type
     RecoveryType getType() const;
     // retuns value1
@@ -86,8 +85,6 @@ class Recovery
     double getValue2() const;
     // returns recovery (includes Beta)
     double getValue(const gsl_rng *rng=NULL) const;
-    // returns a Non-A-Recovery value
-    static Recovery getNAN();
     // check if is a Non-A-Recovery value
     static bool valid(const Recovery &);
     // to string
@@ -112,7 +109,18 @@ inline double ccruncher::Recovery::getValue(const gsl_rng *rng) const
 {
   if (type == Fixed) return value1;
   else if (rng == NULL) return NAN;
-  else return gsl_ran_beta(rng, value1, value2);
+  else 
+  {
+    switch(type)
+    {
+      case Beta:
+        return gsl_ran_beta(rng, value1, value2);
+      case Uniform:
+        return gsl_ran_flat(rng, value1, value2);
+      default:
+        return NAN;
+    }
+  }
 }
 
 //---------------------------------------------------------------------------

@@ -122,7 +122,7 @@ inline int ccruncher::Asset::getSegment(int isegmentation) const
 //===========================================================================
 inline const DateValues& ccruncher::Asset::getValues(const Date at) const
 {
-  static const DateValues dvnf(NAD, 0.0, Recovery(1.0));
+  static const DateValues dvnf(NAD, 0.0, Recovery(Fixed,1.0));
   
   if (at < date || data.size() == 0 || at < data[0].date || data.back().date < at)
   {

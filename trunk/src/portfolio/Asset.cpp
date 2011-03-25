@@ -37,7 +37,7 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   date = NAD;
-  drecovery = Recovery::getNAN();
+  drecovery = Recovery(Fixed,NAN);
 }
 
 //===========================================================================
@@ -86,7 +86,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   Date mindate = max(date, d1);
   if (pdata.size() == 0 || mindate < pdata.front().date)
   {
-    DateValues val(mindate, 0.0, Recovery(1.0));
+    DateValues val(mindate, 0.0, Recovery(Fixed,1.0));
     for(unsigned int i=0; i<data.size(); i++)
     {
       if (data[i].date < mindate) continue;
@@ -101,7 +101,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   Date maxdate = min(data.back().date, d2);
   if (pdata.back().date < maxdate)
   {
-    DateValues val(maxdate, 0.0, Recovery(1.0));
+    DateValues val(maxdate, 0.0, Recovery(Fixed,1.0));
     for(unsigned int i=0; i<data.size(); i++)
     {
       if (data[i].date < maxdate) continue;
@@ -319,7 +319,7 @@ bool ccruncher::Asset::hasObligorRecovery() const
 {
   for(unsigned int i=0; i<data.size(); i++)
   {
-    if (Recovery::valid(data[i].recovery))
+    if (!Recovery::valid(data[i].recovery))
     {
       return true;
     }

@@ -291,7 +291,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   for(int i=0; i<term; i++) {
     curr.date = addMonths(issuedate, i+1);
     curr.exposure = nominal*rent/(double)(term);
-    curr.recovery = pctrecv;
+    curr.recovery = Recovery(Fixed,pctrecv);
     events.push_back(curr);
   }
   

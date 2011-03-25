@@ -30,7 +30,7 @@ ccruncher::DateValues::DateValues()
 {
   date = NAD;
   exposure = NAN;
-  recovery = Recovery::getNAN();
+  recovery = Recovery(Fixed,NAN);
 }
 
 //===========================================================================
