@@ -4,7 +4,13 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * determine the degrees-of-freedom of t-student copula based on historical data
+  * estimate the degrees-of-freedom of t-student copula based on historical data
+    - paper -> Copula’s Conditional Dependence Measures for Portfolio Management and Value at Risk
+    - copula density in section 2.3.2 (page 6)
+    - estimation method CML in section 4.3 (page 13)
+    - inverse of correlation matrix using Cholesky decomposition (see Numeral Recipes)
+    - note that logarithm converts x^n to n*log(x)
+
   * add stochastic exposure
 
 Future works
