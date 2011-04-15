@@ -154,46 +154,46 @@ void ccruncher_test::AssetTest::test1()
   ASSERT(asset.belongsTo(5, 1)); // product-bond
   ASSERT(asset.belongsTo(6, 3)); // office-0003
 
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).recovery.getValue(), EPSILON);
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1999")).recovery.getValue(), EPSILON);
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("31/12/1999")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("31/12/1999")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("31/12/1999")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2000")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("02/01/2000")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("02/01/2000")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("02/01/2000")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("01/07/2000")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("01/07/2000")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2000")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(550.0, asset.getValues(Date("01/01/2001")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(550.0, asset.getValues(Date("01/01/2001")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2001")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(540.0, asset.getValues(Date("01/07/2001")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(540.0, asset.getValues(Date("01/07/2001")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2001")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(530.0, asset.getValues(Date("01/01/2002")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(530.0, asset.getValues(Date("01/01/2002")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2002")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(520.0, asset.getValues(Date("01/07/2002")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(520.0, asset.getValues(Date("01/07/2002")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2002")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2003")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2003")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2003")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2010")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2010")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2010")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/07/2020")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/07/2020")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2020")).recovery.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/07/2021")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/07/2021")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/07/2021")).recovery.getValue(), EPSILON);
 }
 
@@ -331,14 +331,14 @@ void ccruncher_test::AssetTest::test5()
   Date timeT = Date("1/7/2011");
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).exposure, EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("12/01/2005")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).exposure.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("12/01/2005")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.3, asset.getValues(Date("12/01/2005")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("01/07/2005")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("01/07/2005")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.4, asset.getValues(Date("01/07/2005")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1000.0, asset.getValues(Date("10/01/2010")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getValues(Date("10/01/2010")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("10/01/2010")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("16/01/2010")).exposure, EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("16/01/2010")).exposure.getValue(), EPSILON);
 }
 
 //===========================================================================

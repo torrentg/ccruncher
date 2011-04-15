@@ -29,8 +29,8 @@
 ccruncher::DateValues::DateValues()
 {
   date = NAD;
-  exposure = NAN;
-  recovery = Recovery(Fixed,NAN);
+  exposure = Exposure(Exposure::Fixed,NAN);
+  recovery = Recovery(Recovery::Fixed,NAN);
 }
 
 //===========================================================================
@@ -46,7 +46,7 @@ ccruncher::DateValues::DateValues(const DateValues &x)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DateValues::DateValues(Date date_, double exposure_, const Recovery &recovery_)
+ccruncher::DateValues::DateValues(Date date_, const Exposure &exposure_, const Recovery &recovery_)
 {
   date = date_;
   exposure = exposure_;
@@ -61,4 +61,3 @@ bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
   if (x.date < y.date) return true;
   else return false;
 }
-

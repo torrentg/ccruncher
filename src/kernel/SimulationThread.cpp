@@ -198,7 +198,7 @@ void ccruncher::SimulationThread::evalue()
         rpct = orvalue;
       }
       
-      alosses[i] = values.exposure * (1.0 - rpct);
+      alosses[i] = values.exposure.getValue(rng) * (1.0 - rpct);
     }
     else
     {

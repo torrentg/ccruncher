@@ -39,19 +39,20 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-enum ExposureType
-{ 
-  Fixed=1,
-  Lognormal=2,
-  Exponential=3,
-  Uniform=4,
-  Gamma=5
-};
-
-//---------------------------------------------------------------------------
-
 class Exposure
 {
+
+  public:
+
+    // exposure types
+    enum ExposureType
+    { 
+      Fixed=1,
+      Lognormal=2,
+      Exponential=3,
+      Uniform=4,
+      Gamma=5
+    };
 
   private:
 
@@ -99,7 +100,7 @@ class Exposure
 //===========================================================================
 // returns type
 //===========================================================================
-inline ExposureType ccruncher::Exposure::getType() const
+inline ccruncher::Exposure::ExposureType ccruncher::Exposure::getType() const
 {
   return type;
 }

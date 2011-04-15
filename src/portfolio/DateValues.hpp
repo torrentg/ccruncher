@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include "utils/Date.hpp"
+#include "portfolio/Exposure.hpp"
 #include "portfolio/Recovery.hpp"
 
 //---------------------------------------------------------------------------
@@ -45,7 +46,7 @@ class DateValues
     // date where values take place
     Date date;
     // exposure value
-    double exposure;
+    Exposure exposure;
     // recovery value
     Recovery recovery;
 
@@ -56,14 +57,14 @@ class DateValues
     // copy constructor
     DateValues(const DateValues &);
     // constructor
-    DateValues(Date date, double, const Recovery &);
+    DateValues(Date date, const Exposure &, const Recovery &);
 
 };
 
 //---------------------------------------------------------------------------
 
 // comparation operator
-bool operator <  (const DateValues&, const DateValues&);
+bool operator < (const DateValues&, const DateValues&);
 
 //---------------------------------------------------------------------------
 

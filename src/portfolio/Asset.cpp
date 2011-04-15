@@ -37,7 +37,7 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   date = NAD;
-  drecovery = Recovery(Fixed,NAN);
+  drecovery = Recovery(Recovery::Fixed,NAN);
 }
 
 //===========================================================================
@@ -86,7 +86,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   Date mindate = max(date, d1);
   if (pdata.size() == 0 || mindate < pdata.front().date)
   {
-    DateValues val(mindate, 0.0, Recovery(Fixed,1.0));
+    DateValues val(mindate, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
     for(unsigned int i=0; i<data.size(); i++)
     {
       if (data[i].date < mindate) continue;
@@ -101,7 +101,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   Date maxdate = min(data.back().date, d2);
   if (pdata.back().date < maxdate)
   {
-    DateValues val(maxdate, 0.0, Recovery(Fixed,1.0));
+    DateValues val(maxdate, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
     for(unsigned int i=0; i<data.size(); i++)
     {
       if (data[i].date < maxdate) continue;
@@ -115,7 +115,8 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   // computing Current Net Value
   for(unsigned int i=0; i<pdata.size(); i++)
   {
-    pdata[i].exposure *= interest.getFactor(pdata[i].date, d1);
+    //TODO: compute exposure current net value
+    //pdata[i].exposure *= interest.getFactor(pdata[i].date, d1);
   }
 
   // reassigning data (with memory shrink)
@@ -139,9 +140,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
       at = Date(str);
     }
     
-    double exposure = getDoubleAttribute(attributes, "exposure", NAN);
-    if (isnan(exposure)) {
-      throw Exception("invalid exposure at <values>");
+    Exposure exposure(Exposure::Fixed, NAN);
+    str = getAttributeValue(attributes, "exposure");
+    if (str != NULL) {
+      exposure = Exposure(str);
+    }
+    else {
+      throw Exception("exposure not found");
     }
 
     Recovery recovery = drecovery;
