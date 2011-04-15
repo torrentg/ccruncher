@@ -4,13 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * estimate the degrees-of-freedom of t-student copula based on historical data
-    - paper -> Copula’s Conditional Dependence Measures for Portfolio Management and Value at Risk
-    - copula density in section 2.3.2 (page 6)
-    - estimation method CML in section 4.3 (page 13)
-    - inverse of correlation matrix using Cholesky decomposition (see Numeral Recipes)
-    - note that logarithm converts x^n to n*log(x)
-
   * add stochastic exposure
 
 Future works
@@ -38,6 +31,4 @@ Future works
   * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
   * improve lookup-table when survival values are low
-  * in techdoc add cholesky decomposition detail
-  * address the issue of curse of dimensionality
 

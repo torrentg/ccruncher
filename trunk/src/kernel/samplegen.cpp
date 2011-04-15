@@ -290,14 +290,15 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
 
   for(int i=0; i<term; i++) {
     curr.date = addMonths(issuedate, i+1);
-    curr.exposure = nominal*rent/(double)(term);
-    curr.recovery = Recovery(Fixed,pctrecv);
+    curr.exposure = Exposure(Exposure::Fixed,nominal*rent/(double)(term));
+    curr.recovery = Recovery(Recovery::Fixed,pctrecv);
     events.push_back(curr);
   }
   
   for(int i=events.size()-2; i>=0; i--)
   {
-    events[i].exposure += events[i+1].exposure;
+    double val = events[i].exposure.getValue() + events[i+1].exposure.getValue();
+    events[i].exposure = Exposure(Exposure::Fixed,val);
   }
 
   ret += spc1 + "<data>\n";
@@ -306,7 +307,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   {
     ret += spc2;
     ret += "<values at='" + Format::toString(events[i].date) + "' ";
-    ret += "exposure='" + Format::toString(events[i].exposure) + "' ";
+    ret += "exposure='" + events[i].exposure.toString() + "' ";
     ret += "recovery='" + events[i].recovery.toString() + "' ";
     ret += "/>\n";
   }

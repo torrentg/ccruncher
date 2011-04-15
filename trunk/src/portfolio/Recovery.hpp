@@ -39,17 +39,18 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-enum RecoveryType
-{ 
-  Fixed=1,
-  Uniform=2,
-  Beta=3
-};
-
-//---------------------------------------------------------------------------
-
 class Recovery
 {
+
+  public:
+
+    // recovery types
+    enum RecoveryType
+    { 
+      Fixed=1,
+      Uniform=2,
+      Beta=3
+    };
 
   private:
 
@@ -97,7 +98,7 @@ class Recovery
 //===========================================================================
 // returns type
 //===========================================================================
-inline RecoveryType ccruncher::Recovery::getType() const
+inline ccruncher::Recovery::RecoveryType ccruncher::Recovery::getType() const
 {
   return type;
 }

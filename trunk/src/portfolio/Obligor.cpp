@@ -45,7 +45,7 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
   isector = -1;
   id = "NON_ID";
   name = "NO_NAME";
-  recovery = Recovery(Fixed,NAN);
+  recovery = Recovery(Recovery::Fixed,NAN);
 }
 
 //===========================================================================
