@@ -58,6 +58,8 @@ class Rate : public ExpatHandlers
   
     // default constructor
     Rate();
+    // constructor
+    Rate(double t);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 
@@ -65,8 +67,13 @@ class Rate : public ExpatHandlers
 
 //---------------------------------------------------------------------------
 
-// comparation operator
-bool operator <  (const Rate&, const Rate&);
+//===========================================================================
+// operator less-than (needed by sort functions)
+//===========================================================================
+inline bool operator <  (const Rate &x, const Rate &y)
+{
+  return (x.t < y.t);
+}
 
 //---------------------------------------------------------------------------
 

@@ -130,32 +130,14 @@ inline const DateValues& ccruncher::Asset::getValues(const Date at) const
 {
   static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
   
-  //if (at < date || data.size() == 0 || at < data[0].date || data.back().date < at)
   if (at <= date || data.size() == 0 || data.back().date < at)
   {
     return dvnf;
   }
-  else if (data.back().date == at)
-  {
-    return data.back();
-  }
   else
   {
-    return *(upper_bound(data.begin(), data.end(), DateValues(at-1)));
+    return *(lower_bound(data.begin(), data.end(), DateValues(at)));
   }
-  
-  /*
-  for(unsigned int i=0; i<data.size(); i++) 
-  {
-    if (at <= data[i].date) 
-    {
-      return data[i];
-    }
-  }
-  
-  assert(false);
-  return dvnf;
-  */
 }
 
 //---------------------------------------------------------------------------

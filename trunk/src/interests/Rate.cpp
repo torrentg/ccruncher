@@ -35,11 +35,12 @@ ccruncher::Rate::Rate()
 }
 
 //===========================================================================
-// operator less-than (needed by sort functions)
+// constructor
 //===========================================================================
-bool ccruncher::operator <  (const Rate &x, const Rate &y)
+ccruncher::Rate::Rate(double t_)
 {
-  return (x.t < y.t);
+  t = t_;
+  r = 0.0;
 }
 
 //===========================================================================

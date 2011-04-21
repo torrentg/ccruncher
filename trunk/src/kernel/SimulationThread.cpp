@@ -181,7 +181,7 @@ void ccruncher::SimulationThread::evalue()
   {
     Date t = dtimes[assets[i].iobligor];
     
-    if (time0 <= t && t <= timeT && assets[i].mindate <= t && t <= assets[i].maxdate)
+    if (t <= timeT && assets[i].mindate <= t && t <= assets[i].maxdate) // time0 <= t by-design
     {
       const DateValues &values = assets[i].ref->getValues(t);
       double recovery = values.recovery.getValue(rng);
