@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <cmath>
+#include <algorithm>
 #include "interests/Interest.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
@@ -83,16 +84,11 @@ double ccruncher::Interest::getValue(const double t) const
   }
   else
   {
-    for(register unsigned int i=1;i<n;i++)
-    {
-      if (t <= vrates[i].t)
-      {
-        return vrates[i-1].r + (t-vrates[i-1].t)*(vrates[i].r - vrates[i-1].r)/(vrates[i].t - vrates[i-1].t);
-      }
-    }
-
-    assert(false);
-    return vrates[n-1].r;
+    vector<Rate>::const_iterator it2 = lower_bound(vrates.begin(), vrates.end(), Rate(t));
+    assert(it2 != vrates.begin());
+    assert(it2 != vrates.end());
+    vector<Rate>::const_iterator it1 = it2-1;
+    return it1->r + (t-it1->t)*(it2->r - it1->r)/(it2->t - it1->t);
   }
 }
 
@@ -206,7 +202,12 @@ void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
 {
   assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"interest")) {
-    // nothing to do
+    if (vrates.size() == 0) {
+      throw Exception("interest has no rates");
+    }
+    else {
+      sort(vrates.begin(), vrates.end());
+    }
   }
   else if (isEqual(name_,"rate")) {
     insertRate(auxrate);
