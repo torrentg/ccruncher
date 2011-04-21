@@ -66,41 +66,45 @@ string ccruncher::Asset::getName(void) const
 
 //===========================================================================
 // prepare data
+// assumes that data is sorted
 //===========================================================================
 void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &interest)
 {
-  vector<DateValues> pdata;
-  pdata.reserve(data.size());
+  int pos1=-1, pos2=-1;
+
+  assert(d1 <= d2);
 
   for (int i=0; i<(int)data.size(); i++) 
   {
     if (d1 <= data[i].date)
     {
-      if (data[i].date <= d2)
+      if (pos1 < 0)
       {
-        DateValues val(data[i]);
-        pdata.push_back(val);
+        pos1 = i;
       }
-      else
+      pos2 = i;
+      if (d2 <= data[i].date)
       {
-        if (pdata.size() == 0 || pdata.back().date < d2)
-        {
-          DateValues val(data[i]);
-          pdata.push_back(val);
-        }
         break;
       }
     }
   }
-
-  // computing Current Net Value
-  for(unsigned int i=0; i<pdata.size(); i++)
-  {
-    pdata[i].exposure.mult(interest.getFactor(pdata[i].date, d1));
+  
+  assert(pos1 <= pos2);
+  
+  // memory shrink
+  if (pos1 < 0) {
+    vector<DateValues>(0).swap(data);
   }
-
-  // reassigning data (with memory shrink)
-  vector<DateValues>(pdata).swap(data);
+  else {
+    vector<DateValues>(data.begin()+pos1, data.begin()+pos2+1).swap(data);
+  }
+  
+  // computing Current Net Value
+  for(unsigned int i=0; i<data.size(); i++)
+  {
+    data[i].exposure.mult(interest.getFactor(data[i].date, d1));
+  }
 }
 
 //===========================================================================
