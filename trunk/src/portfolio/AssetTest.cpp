@@ -160,8 +160,8 @@ void ccruncher_test::AssetTest::test1()
   ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1999")).recovery.getValue(), EPSILON);
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("31/12/1999")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("31/12/1999")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("31/12/1999")).exposure.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("31/12/1999")).recovery.getValue(), EPSILON);
 
   ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2000")).recovery.getValue(), EPSILON);
@@ -394,5 +394,120 @@ void ccruncher_test::AssetTest::test7()
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   ASSERT(asset.hasObligorRecovery());
+}
+
+//===========================================================================
+// test8 (getValues)
+//===========================================================================
+void ccruncher_test::AssetTest::test8()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
+        <belongs-to segmentation='products' segment='bond'/>\n\
+        <belongs-to segmentation='offices' segment='0003'/>\n\
+        <data>\n\
+          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+  Interest interest = getInterest();
+
+  // asset object creation
+  Asset asset(&segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
+  Date time0 = Date("1/1/1997");
+  Date timeT = Date("1/7/2040");
+  ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
+
+  // assertions
+  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/1995")).date);
+  
+  ASSERT_EQUALS(NAD, asset.getValues(Date("31/12/1998")).date);
+  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/1999")).date);
+  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("02/01/1999")).date);
+  
+  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("31/12/1999")).date);
+  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("01/01/2000")).date);
+  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("02/01/2000")).date);
+
+  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("01/06/2000")).date);
+  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("01/07/2000")).date);
+
+  ASSERT_EQUALS(Date("01/01/2001"), asset.getValues(Date("01/12/2000")).date);
+  ASSERT_EQUALS(Date("01/01/2001"), asset.getValues(Date("01/01/2001")).date);
+  
+  ASSERT_EQUALS(Date("01/07/2001"), asset.getValues(Date("01/06/2001")).date);
+  ASSERT_EQUALS(Date("01/07/2001"), asset.getValues(Date("01/07/2001")).date);
+
+  ASSERT_EQUALS(Date("01/01/2002"), asset.getValues(Date("01/12/2001")).date);
+  ASSERT_EQUALS(Date("01/01/2002"), asset.getValues(Date("01/01/2002")).date);
+
+  ASSERT_EQUALS(Date("01/07/2002"), asset.getValues(Date("01/06/2002")).date);
+  ASSERT_EQUALS(Date("01/07/2002"), asset.getValues(Date("01/07/2002")).date);
+
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/06/2020")).date);
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/07/2020")).date);
+
+  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/2035")).date);
+}
+
+
+//===========================================================================
+// test9 (getValues)
+//===========================================================================
+void ccruncher_test::AssetTest::test9()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+      <asset name='generic' id='op1' date='01/01/1999'>\n\
+        <belongs-to segmentation='products' segment='bond'/>\n\
+        <belongs-to segmentation='offices' segment='0003'/>\n\
+        <data>\n\
+          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+        </data>\n\
+      </asset>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // segmentations object creation
+  Segmentations segs = getSegmentations();
+  Interest interest = getInterest();
+
+  // asset object creation
+  Asset asset(&segs);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/7/2011");
+  ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
+
+  // assertions
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2003")).date);
+  
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("31/12/2003")).date);
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2004")).date);
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("02/01/2004")).date);
+
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2009")).date);
+  
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/06/2011")).date);
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/07/2011")).date);
+  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("02/07/2011")).date);
 }
 

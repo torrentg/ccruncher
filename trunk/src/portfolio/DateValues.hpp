@@ -58,13 +58,21 @@ class DateValues
     DateValues(const DateValues &);
     // constructor
     DateValues(Date date, const Exposure &, const Recovery &);
+    // constructor
+    DateValues(Date date);
 
 };
 
 //---------------------------------------------------------------------------
 
-// comparation operator
-bool operator < (const DateValues&, const DateValues&);
+//===========================================================================
+// comparation operador (needed by sort functions)
+//===========================================================================
+inline bool operator < (const DateValues &x, const DateValues &y)
+{
+  if (x.date < y.date) return true;
+  else return false;
+}
 
 //---------------------------------------------------------------------------
 

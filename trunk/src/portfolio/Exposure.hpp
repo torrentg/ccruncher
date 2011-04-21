@@ -51,7 +51,8 @@ class Exposure
       Lognormal=2,
       Exponential=3,
       Uniform=4,
-      Gamma=5
+      Gamma=5,
+      Normal=6
     };
 
   private:
@@ -92,6 +93,8 @@ class Exposure
     static bool valid(const Exposure &);
     // to string
     string toString() const;
+    // apply current net value factor
+    void mult(double);
 
 };
 
@@ -124,6 +127,8 @@ inline double ccruncher::Exposure::getValue(const gsl_rng *rng) const
         return gsl_ran_flat(rng, value1, value2);
       case Gamma:
         return gsl_ran_gamma(rng, value1, value2);
+      case Normal:
+        return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
       default:
         return NAN;
     }

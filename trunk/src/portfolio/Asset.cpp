@@ -63,60 +63,40 @@ string ccruncher::Asset::getName(void) const
 {
   return name;
 }
-#include "utils/Format.hpp"
+
 //===========================================================================
 // prepare data
 //===========================================================================
 void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &interest)
 {
   vector<DateValues> pdata;
-  pdata.reserve(data.size()+2);
+  pdata.reserve(data.size());
 
-  // clipping data
   for (int i=0; i<(int)data.size(); i++) 
   {
-    if (d1 <= data[i].date && data[i].date <= d2) 
+    if (d1 <= data[i].date)
     {
-      DateValues val(data[i]);
-      pdata.push_back(val);
+      if (data[i].date <= d2)
+      {
+        DateValues val(data[i]);
+        pdata.push_back(val);
+      }
+      else
+      {
+        if (pdata.size() == 0 || pdata.back().date < d2)
+        {
+          DateValues val(data[i]);
+          pdata.push_back(val);
+        }
+        break;
+      }
     }
-  }
-  
-  // adding minimum event date
-  Date mindate = max(date, d1);
-  if (pdata.size() == 0 || mindate < pdata.front().date)
-  {
-    DateValues val(mindate, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
-    for(unsigned int i=0; i<data.size(); i++)
-    {
-      if (data[i].date < mindate) continue;
-      val.exposure = data[i].exposure;
-      val.recovery = data[i].recovery;
-      break;
-    }
-    pdata.insert(pdata.begin(), val);
-  }
-  
-  // adding maximum event date
-  Date maxdate = min(data.back().date, d2);
-  if (pdata.back().date < maxdate)
-  {
-    DateValues val(maxdate, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
-    for(unsigned int i=0; i<data.size(); i++)
-    {
-      if (data[i].date < maxdate) continue;
-      val.exposure = data[i].exposure;
-      val.recovery = data[i].recovery;
-      break;
-    }
-    pdata.push_back(val);
   }
 
   // computing Current Net Value
   for(unsigned int i=0; i<pdata.size(); i++)
   {
-    //TODO: compute exposure current net value
-    //pdata[i].exposure *= interest.getFactor(pdata[i].date, d1);
+    pdata[i].exposure.mult(interest.getFactor(pdata[i].date, d1));
   }
 
   // reassigning data (with memory shrink)
@@ -278,16 +258,16 @@ bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 
 //===========================================================================
 // getMinDate
-// be sure that precomputeData is called before the execution of this method
+// be sure that prepare() is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMinDate() const
 {
-  return data.front().date;
+  return date;
 }
 
 //===========================================================================
 // getMaxDate
-// be sure that precomputeData is called before the execution of this method
+// be sure that prepare() is called before the execution of this method
 //===========================================================================
 Date ccruncher::Asset::getMaxDate() const
 {

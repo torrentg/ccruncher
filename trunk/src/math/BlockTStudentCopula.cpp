@@ -131,6 +131,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
   owner = true;
   
   if (ndf_ <= 0.0) {
+    finalize();
     throw Exception("invalid degrees of freedom (ndf > 0 required)");
   }
   ndf = ndf_;

@@ -90,15 +90,14 @@ void ccruncher_test::RecoveryTest::test1(void)
   Recovery r12("uniform(0.2,0.3"); // warning: lacks ending ')' but works
   ASSERT(r12.getType() == Recovery::Uniform && fabs(r12.getValue1()-0.2) < EPSILON && fabs(r12.getValue2()-0.3) < EPSILON);
   
-  Recovery *r = NULL;
-  ASSERT_THROW(r = new Recovery("beta (0.2,0.3)"));      // additional space
-  ASSERT_THROW(r = new Recovery("beta(a,0.3)"));         // invalid number
-  ASSERT_THROW(r = new Recovery("beta(+0.2,-0.3)"));     // negative argument
-  ASSERT_THROW(r = new Recovery("beta(-0.2,+0.3)"));     // negative argument
-  ASSERT_THROW(r = new Recovery("beta(0.2,)"));          // lacks argument 2
-  ASSERT_THROW(r = new Recovery("beta( +0.2 , +0.3 )")); // space after argument 1
-  ASSERT_THROW(r = new Recovery("beto(0.5,0.25)"));      // beto != beta
-  ASSERT_THROW(r = new Recovery("beta[0.5,0.25]"));      // invalid delimiters
+  ASSERT_THROW(Recovery("beta (0.2,0.3)"));      // additional space
+  ASSERT_THROW(Recovery("beta(a,0.3)"));         // invalid number
+  ASSERT_THROW(Recovery("beta(+0.2,-0.3)"));     // negative argument
+  ASSERT_THROW(Recovery("beta(-0.2,+0.3)"));     // negative argument
+  ASSERT_THROW(Recovery("beta(0.2,)"));          // lacks argument 2
+  ASSERT_THROW(Recovery("beta( +0.2 , +0.3 )")); // space after argument 1
+  ASSERT_THROW(Recovery("beto(0.5,0.25)"));      // beto != beta
+  ASSERT_THROW(Recovery("beta[0.5,0.25]"));      // invalid delimiters
 }
 
 //===========================================================================
@@ -106,16 +105,14 @@ void ccruncher_test::RecoveryTest::test1(void)
 //===========================================================================
 void ccruncher_test::RecoveryTest::test2(void)
 {
-  Recovery *r = NULL;
-  
-  ASSERT_THROW(r = new Recovery(Recovery::Fixed,-0.5)); // fixed & distinct than [0,1]
-  ASSERT_THROW(r = new Recovery(Recovery::Fixed,+1.5)); // fixed & distinct than [0,1]
-  ASSERT_THROW(r = new Recovery(Recovery::Beta,-0.5,+0.5));  // beta & value1 <= 0.0
-  ASSERT_THROW(r = new Recovery(Recovery::Beta,+0.5,-0.5));  // beta & value1 <= 0.0
-  ASSERT_THROW(r = new Recovery(Recovery::Uniform,-0.5,+0.5));  // uniform & value1 < 0.0
-  ASSERT_THROW(r = new Recovery(Recovery::Uniform,+0.5,+1.5));  // uniform & value2 > 1.0
-  ASSERT_THROW(r = new Recovery(Recovery::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
+  ASSERT_THROW(Recovery(Recovery::Fixed,-0.5)); // fixed & distinct than [0,1]
+  ASSERT_THROW(Recovery(Recovery::Fixed,+1.5)); // fixed & distinct than [0,1]
+  ASSERT_THROW(Recovery(Recovery::Beta,-0.5,+0.5));  // beta & value1 <= 0.0
+  ASSERT_THROW(Recovery(Recovery::Beta,+0.5,-0.5));  // beta & value1 <= 0.0
+  ASSERT_THROW(Recovery(Recovery::Uniform,-0.5,+0.5));  // uniform & value1 < 0.0
+  ASSERT_THROW(Recovery(Recovery::Uniform,+0.5,+1.5));  // uniform & value2 > 1.0
+  ASSERT_THROW(Recovery(Recovery::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
 
-  ASSERT_NO_THROW(r = new Recovery(Recovery::Fixed,NAN));  // fixed & distinct than [0,1]
+  ASSERT_NO_THROW(Recovery(Recovery::Fixed,NAN));  // fixed & distinct than [0,1]
 }
 

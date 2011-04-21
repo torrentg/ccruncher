@@ -90,15 +90,14 @@ void ccruncher_test::ExposureTest::test1(void)
   Exposure r12("uniform(0.2,0.3"); // warning: lacks ending ')' but works
   ASSERT(r12.getType() == Exposure::Uniform && fabs(r12.getValue1()-0.2) < EPSILON && fabs(r12.getValue2()-0.3) < EPSILON);
   
-  Exposure *r = NULL;
-  ASSERT_THROW(r = new Exposure("gamma (0.2,0.3)"));      // additional space
-  ASSERT_THROW(r = new Exposure("gamma(a,0.3)"));         // invalid number
-  ASSERT_THROW(r = new Exposure("gamma(+0.2,-0.3)"));     // negative argument
-  ASSERT_THROW(r = new Exposure("gamma(-0.2,+0.3)"));     // negative argument
-  ASSERT_THROW(r = new Exposure("gamma(0.2,)"));          // lacks argument 2
-  ASSERT_THROW(r = new Exposure("gamma( +0.2 , +0.3 )")); // space after argument 1
-  ASSERT_THROW(r = new Exposure("gama(0.5,0.25)"));      // bemma != gama
-  ASSERT_THROW(r = new Exposure("gamma[0.5,0.25]"));      // invalid delimiters
+  ASSERT_THROW(Exposure("gamma (0.2,0.3)"));      // additional space
+  ASSERT_THROW(Exposure("gamma(a,0.3)"));         // invalid number
+  ASSERT_THROW(Exposure("gamma(+0.2,-0.3)"));     // negative argument
+  ASSERT_THROW(Exposure("gamma(-0.2,+0.3)"));     // negative argument
+  ASSERT_THROW(Exposure("gamma(0.2,)"));          // lacks argument 2
+  ASSERT_THROW(Exposure("gamma( +0.2 , +0.3 )")); // space after argument 1
+  ASSERT_THROW(Exposure("gama(0.5,0.25)"));       // gamma != gama
+  ASSERT_THROW(Exposure("gamma[0.5,0.25]"));      // invalid delimiters
 }
 
 //===========================================================================
@@ -106,16 +105,14 @@ void ccruncher_test::ExposureTest::test1(void)
 //===========================================================================
 void ccruncher_test::ExposureTest::test2(void)
 {
-  Exposure *r = NULL;
-  
-  ASSERT_THROW(r = new Exposure(Exposure::Fixed,-0.5)); // fixed & distinct than [0,1]
-  ASSERT_NO_THROW(r = new Exposure(Exposure::Fixed,+1.5)); // fixed & distinct than [0,1]
-  ASSERT_THROW(r = new Exposure(Exposure::Gamma,-0.5,+0.5));  // gamma & value1 <= 0.0
-  ASSERT_THROW(r = new Exposure(Exposure::Gamma,+0.5,-0.5));  // gamma & value1 <= 0.0
-  ASSERT_THROW(r = new Exposure(Exposure::Uniform,-0.5,+0.5));  // uniform & value1 < 0.0
-  ASSERT_NO_THROW(r = new Exposure(Exposure::Uniform,+0.5,+1.5));  // uniform & value2 > 1.0
-  ASSERT_THROW(r = new Exposure(Exposure::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
+  ASSERT_THROW(Exposure(Exposure::Fixed,-0.5)); // fixed & distinct than [0,1]
+  ASSERT_NO_THROW(Exposure(Exposure::Fixed,+1.5)); // fixed & distinct than [0,1]
+  ASSERT_THROW(Exposure(Exposure::Gamma,-0.5,+0.5));  // gamma & value1 <= 0.0
+  ASSERT_THROW(Exposure(Exposure::Gamma,+0.5,-0.5));  // gamma & value1 <= 0.0
+  ASSERT_THROW(Exposure(Exposure::Uniform,-0.5,+0.5));  // uniform & value1 < 0.0
+  ASSERT_NO_THROW(Exposure(Exposure::Uniform,+0.5,+1.5));  // uniform & value2 > 1.0
+  ASSERT_THROW(Exposure(Exposure::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
 
-  ASSERT_NO_THROW(r = new Exposure(Exposure::Fixed,NAN));  // fixed & distinct than [0,1]
+  ASSERT_NO_THROW(Exposure(Exposure::Fixed,NAN));  // fixed & distinct than [0,1]
 }
 
