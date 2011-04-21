@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Fri Mar 25 15:55:03 CET 2011"
+#define BUILD_DATE "Thu Apr 21 11:05:27 CEST 2011"
 
 /* build host name */
 #define BUILD_HOST "imd1.imagina.local"
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-#define NDEBUG 1
+/* #undef NDEBUG */
 
 /* Name of package */
 #define PACKAGE "ccruncher"
