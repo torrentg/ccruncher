@@ -181,13 +181,14 @@ void ccruncher::SimulationThread::evalue()
   {
     Date t = dtimes[assets[i].iobligor];
     
-    if (assets[i].mindate <= t && t <= assets[i].maxdate)
+    if (time0 <= t && t <= timeT && assets[i].mindate <= t && t <= assets[i].maxdate)
     {
       const DateValues &values = assets[i].ref->getValues(t);
-      double rpct = values.recovery.getValue(rng);
+      double recovery = values.recovery.getValue(rng);
+      double exposure = values.exposure.getValue(rng);
 
       // non-recovery means that is inherited from obligor
-      if (isnan(rpct))
+      if (isnan(recovery))
       {
         int iobligor = assets[i].iobligor;
         if (iobligor != orindex)
@@ -195,10 +196,10 @@ void ccruncher::SimulationThread::evalue()
           orvalue = obligors[iobligor].ref->recovery.getValue(rng);
           orindex = iobligor;
         }
-        rpct = orvalue;
+        recovery = orvalue;
       }
       
-      alosses[i] = values.exposure.getValue(rng) * (1.0 - rpct);
+      alosses[i] = exposure * (1.0 - recovery);
     }
     else
     {

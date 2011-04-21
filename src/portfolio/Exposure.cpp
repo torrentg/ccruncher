@@ -24,6 +24,7 @@
 #include <cctype>
 #include <cstring>
 #include <cstdio>
+#include <cmath>
 #include "portfolio/Exposure.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
@@ -82,6 +83,14 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
     }
     init(Gamma, value1, value2);
   }
+  else if (strncmp(cstr, "normal", 6) == 0)
+  {
+    int rc = sscanf(cstr, "normal(%lf,%lf)", &value1, &value2);
+    if (rc != 2) {
+      throw Exception("invalid exposure value");
+    }
+    init(Normal, value1, value2);
+  }
   else
   {
     value1 = Parser::doubleValue(cstr);
@@ -125,7 +134,10 @@ void ccruncher::Exposure::checkParams(ExposureType t, double a, double b) throw(
   else if (t == Gamma && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
     throw Exception("gamma parameters out of range");
   }
-  else if (t < 1 || t > 5) {
+  else if (t == Normal && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
+    throw Exception("normal parameters out of range");
+  }
+  else if (t < 1 || t > 6) {
     throw Exception("unknow exposure type");
   }
 }
@@ -194,7 +206,52 @@ string ccruncher::Exposure::toString() const
       return "uniform(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
     case Gamma:
       return "gamma(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
+    case Normal:
+      return "normal(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
     default:
       return "NAN";
   }
 }
+
+//===========================================================================
+// apply current net value factor to exposure
+//===========================================================================
+void ccruncher::Exposure::mult(double factor)
+{
+  switch(type)
+  {
+    case Fixed:
+      value1 *= factor;
+      break;
+    case Lognormal:
+      // http://en.wikipedia.org/wiki/Log-normal_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
+      value1 += log(factor);
+      break;
+    case Exponential:
+      // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
+      value1 *= factor;
+      break;
+    case Uniform:
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
+      value1 *= factor;
+      value2 *= factor;
+      break;
+    case Gamma:
+      // http://en.wikipedia.org/wiki/Gamma_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
+      value2 *= factor;
+      break;
+    case Normal:
+      // http://en.wikipedia.org/wiki/Normal_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
+      value1 *= factor;
+      value2 *= factor*factor;
+      break;
+    default:
+      assert(false);
+      break;
+  }
+}
+

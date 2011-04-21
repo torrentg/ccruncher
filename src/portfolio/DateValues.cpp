@@ -54,10 +54,12 @@ ccruncher::DateValues::DateValues(Date date_, const Exposure &exposure_, const R
 }
 
 //===========================================================================
-// comparation operador (needed by sort functions)
+// constructor
 //===========================================================================
-bool ccruncher::operator <  (const DateValues &x, const DateValues &y)
+ccruncher::DateValues::DateValues(Date date_)
 {
-  if (x.date < y.date) return true;
-  else return false;
+  date = date_;
+  exposure = Exposure(Exposure::Fixed,NAN);
+  recovery = Recovery(Recovery::Fixed,NAN);
 }
+

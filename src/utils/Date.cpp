@@ -553,10 +553,14 @@ double ccruncher::Date::getMonthsTo(const Date &d) const
     return -d.getMonthsTo(*this);
   }
   else {
+    int y1, m1, d1;
+    int y2, m2, d2;
     double ret = 0.0;
-    ret += 12.0 * (d.getYear() - getYear());
-    ret += 1.0 * (d.getMonth() - getMonth());
-    ret += (d.getDay() - getDay()) / 30.0;
+    JdToYmd( lJulianDay, &y1, &m1, &d1 );
+    JdToYmd( d.lJulianDay, &y2, &m2, &d2 );
+    ret += 12.0 * (y2 - y1);
+    ret += 1.0 * (m2 - m1);
+    ret += (d2 - d1) / 30.0;
     return ret;
   }
 }

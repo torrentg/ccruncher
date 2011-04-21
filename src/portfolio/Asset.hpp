@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <cmath>
 #include <vector>
+#include <algorithm>
 #include "interests/Interest.hpp"
 #include "segmentations/Segmentations.hpp"
 #include "utils/Exception.hpp"
@@ -119,16 +120,31 @@ inline int ccruncher::Asset::getSegment(int isegmentation) const
 
 //===========================================================================
 // getData
+// returns:
+//    > (NAD,0,1) if at <= asset creation date
+//    > (NAD,0,1) if asset has 0 date-values
+//    > (NAD,0,1) if at > last date-values
+//    > otherwise, returns the smallest date-values that is not less than at
 //===========================================================================
 inline const DateValues& ccruncher::Asset::getValues(const Date at) const
 {
   static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
   
-  if (at < date || data.size() == 0 || at < data[0].date || data.back().date < at)
+  //if (at < date || data.size() == 0 || at < data[0].date || data.back().date < at)
+  if (at <= date || data.size() == 0 || data.back().date < at)
   {
     return dvnf;
   }
+  else if (data.back().date == at)
+  {
+    return data.back();
+  }
+  else
+  {
+    return *(upper_bound(data.begin(), data.end(), DateValues(at-1)));
+  }
   
+  /*
   for(unsigned int i=0; i<data.size(); i++) 
   {
     if (at <= data[i].date) 
@@ -139,6 +155,7 @@ inline const DateValues& ccruncher::Asset::getValues(const Date at) const
   
   assert(false);
   return dvnf;
+  */
 }
 
 //---------------------------------------------------------------------------
