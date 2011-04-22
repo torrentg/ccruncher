@@ -32,7 +32,6 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
 {
   assert(segs != NULL);
   id = "NON_ASSIGNED";
-  name = "NO_NAME";
   segmentations = segs;
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
@@ -54,14 +53,6 @@ ccruncher::Asset::~Asset()
 string ccruncher::Asset::getId(void) const
 {
   return id;
-}
-
-//===========================================================================
-// getName
-//===========================================================================
-string ccruncher::Asset::getName(void) const
-{
-  return name;
 }
 
 //===========================================================================
@@ -156,13 +147,12 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   else if (isEqual(name_,"asset")) {
     id = getStringAttribute(attributes, "id", "");
-    name = getStringAttribute(attributes, "name", "");
     date = getDateAttribute(attributes, "date", NAD);
     char *str = getAttributeValue(attributes, "recovery");
     if (str != NULL) {
       drecovery = Recovery(str);
     }
-    if (id == "" || name == "" || date == NAD)
+    if (id == "" || date == NAD)
     {
       throw Exception("invalid attributes at <asset>");
     }

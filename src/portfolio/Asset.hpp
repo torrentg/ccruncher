@@ -55,8 +55,6 @@ class Asset : public ExpatHandlers
     vector<int> vsegments;
     // asset identifier
     string id;
-    // asset name
-    string name;
     // asset creation date
     Date date;
     // exposure-recovery values
@@ -83,8 +81,6 @@ class Asset : public ExpatHandlers
     ~Asset();
     // return asset id
     string getId(void) const;
-    // returns asset name
-    string getName(void) const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precpare data

@@ -165,8 +165,8 @@ Interest ccruncher_test::SimulatedDataTest::getInterest()
 vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
 {
   string xmlcontent1 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='C' sector='S1' name='Obligor1' id='cif1'>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+    <obligor rating='C' sector='S1' id='cif1'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
@@ -174,8 +174,8 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent2 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='D' sector='S2' name='Obligor2' id='cif2'>\n\
-      <asset name='generic' id='op2' date='01/01/1999'>\n\
+    <obligor rating='D' sector='S2' id='cif2'>\n\
+      <asset id='op2' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
@@ -183,8 +183,8 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent3 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S1' name='Obligor3' id='cif3'>\n\
-      <asset name='generic' id='op3' date='01/01/1999'>\n\
+    <obligor rating='A' sector='S1' id='cif3'>\n\
+      <asset id='op3' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
@@ -192,8 +192,8 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent4 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='B' sector='S1' name='Obligor4' id='cif4'>\n\
-      <asset name='generic' id='op4' date='01/01/1999'>\n\
+    <obligor rating='B' sector='S1' id='cif4'>\n\
+      <asset id='op4' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
@@ -201,8 +201,8 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent5 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' name='Obligor5' id='cif5'>\n\
-      <asset name='generic' id='op5' date='01/01/1999'>\n\
+    <obligor rating='A' sector='S2' id='cif5'>\n\
+      <asset id='op5' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\

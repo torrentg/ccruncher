@@ -179,7 +179,6 @@
 )>
 <!ATTLIST obligor
     id CDATA #REQUIRED
-    name CDATA #REQUIRED
     rating IDREF #REQUIRED
     sector IDREF #REQUIRED
     recovery CDATA #IMPLIED
@@ -190,7 +189,6 @@
 )>
 <!ATTLIST asset
     id CDATA #REQUIRED
-    name CDATA #REQUIRED
     date CDATA #REQUIRED
     recovery CDATA #IMPLIED
 >

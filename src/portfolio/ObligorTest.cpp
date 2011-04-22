@@ -165,10 +165,10 @@ void ccruncher_test::ObligorTest::test1()
 {
   // obligor definition
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' name='Obligor1' id='cif1'>\n\
+    <obligor rating='A' sector='S2' id='cif1'>\n\
       <belongs-to segmentation='sectors' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
@@ -180,7 +180,7 @@ void ccruncher_test::ObligorTest::test1()
           <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2' date='01/01/2000'>\n\
+      <asset id='op2' date='01/01/2000'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
@@ -208,7 +208,6 @@ void ccruncher_test::ObligorTest::test1()
 
   // assertions
   ASSERT(obligor.id == "cif1");
-  ASSERT(obligor.name == "Obligor1");
   ASSERT(obligor.irating == 0);
   ASSERT(obligor.isector == 1);
   ASSERT(!Recovery::valid(obligor.recovery));
@@ -232,8 +231,8 @@ void ccruncher_test::ObligorTest::test2()
 {
   // obligor definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='K' sector='S2' name='Obligor1' id='cif1'>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+    <obligor rating='K' sector='S2'id='cif1'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
           <values at='01/07/2000' exposure='550.0' recovery='80%' />\n\
@@ -243,7 +242,7 @@ void ccruncher_test::ObligorTest::test2()
           <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2' date='01/01/2000'>\n\
+      <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
           <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
@@ -274,8 +273,8 @@ void ccruncher_test::ObligorTest::test3()
 {
   // obligor definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' name='obligor1' id='cif1'>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+    <obligor rating='A' sector='S2' id='cif1'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
           <values at='01/01/2000' exposure='550.0' recovery='80%' />\n\
@@ -285,7 +284,7 @@ void ccruncher_test::ObligorTest::test3()
           <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2' date='01/01/2000'>\n\
+      <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
           <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
@@ -316,8 +315,8 @@ void ccruncher_test::ObligorTest::test4()
 {
   // checks that obligor recovery works
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' name='obligor1' id='cif1' recovery='50%'>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+    <obligor rating='A' sector='S2' id='cif1' recovery='50%'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
           <values at='01/07/2000' exposure='550.0' recovery='80%' />\n\
@@ -327,7 +326,7 @@ void ccruncher_test::ObligorTest::test4()
           <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
-      <asset name='generic' id='op2' date='01/01/2000'>\n\
+      <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
           <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
           <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\

@@ -723,10 +723,10 @@
     <pre>
 
   &lt;portfolio&gt;
-    &lt;obligor rating="A" sector="S1" name="Diria" id="000001"&gt;
+    &lt;obligor rating="A" sector="S1" id="000001"&gt;
       &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op1" date="01/01/2005" recovery="80%"&gt;
+      &lt;asset id="op1" date="01/01/2005" recovery="80%"&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;belongs-to segmentation="offices" segment="0001"/&gt;
         &lt;data&gt;
@@ -742,7 +742,7 @@
           &lt;values at="01/06/2014" exposure="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
-      &lt;asset name="bond" id="op2" date="01/06/2008"&gt;
+      &lt;asset id="op2" date="01/06/2008"&gt;
         &lt;belongs-to segmentation="offices" segment="0004"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
@@ -754,10 +754,10 @@
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
-    &lt;obligor rating="B" sector="S2" name="Gixirre" id="000002" recovery="20%"&gt;
+    &lt;obligor rating="B" sector="S2" id="000002" recovery="20%"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="large"/&gt;
-      &lt;asset name="bond" id="op3" date="01/06/2003"&gt;
+      &lt;asset id="op3" date="01/06/2003"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
@@ -769,10 +769,10 @@
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
-    &lt;obligor rating="CCC" sector="S2" name="Altleopard" id="000003"&gt;
+    &lt;obligor rating="CCC" sector="S2" id="000003"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset name="bond" id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
+      &lt;asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
@@ -833,6 +833,13 @@
         <th>Type</th>
       </tr>
       <tr class="a">
+        <td class="c1">id</td>
+        <td class="c2">
+          Unique obligor identifier. Used by implicit obligor segmentation.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
         <td class="c1">rating</td>
         <td class="c2">
           Initial obligor credit rating at time t0, see attribute <i>time.0</i> at the 
@@ -841,7 +848,7 @@
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">sector</td>
         <td class="c2">
           Sector where this obligor is included.
@@ -849,22 +856,7 @@
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
-      <tr class="a">
-        <td class="c1">name</td>
-        <td class="c2">
-          A descriptive name of the obligor. This name does not have to be unique.
-          This attribute is optional.
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
       <tr class="b">
-        <td class="c1">id</td>
-        <td class="c2">
-          Unique obligor identifier. Used by implicit obligor segmentation.
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
-      <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
           Default recovery used in absence of recovery in the description of assets.
@@ -914,21 +906,13 @@
         <th>Type</th>
       </tr>
       <tr class="a">
-        <td class="c1">name</td>
-        <td class="c2">
-          A descriptive name of the asset. This name does not have to be unique. Currently
-          this field is not used, but can be used in reports.
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
-      <tr class="b">
         <td class="c1">id</td>
         <td class="c2">
           Unique asset identifier. Used by implicit asset segmentation.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">date</td>
         <td class="c2">
           Date (in format DD/MM/YYYY) from wich there is credit risk, eg. bond
@@ -936,7 +920,7 @@
         </td>
         <td class="c3"><code>date</code></td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
           Default recovery used in absence of recovery in the description of assets.

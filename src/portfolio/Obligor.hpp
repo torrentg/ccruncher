@@ -89,8 +89,6 @@ class Obligor : public ExpatHandlers
     int isector;
     // obligor identifier
     string id;
-    // obligor name
-    string name;
     // default recovery
     Recovery recovery;
 

@@ -148,8 +148,8 @@ void ccruncher_test::IDataTest::test1()
       </segmentation>\n\
     </segmentations>\n\
     <portfolio>\n\
-      <obligor rating='A' sector='S2' name='Obligor1' id='cif1'>\n\
-        <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <obligor rating='A' sector='S2' id='cif1'>\n\
+        <asset id='op1' date='01/01/1999'>\n\
           <belongs-to segmentation='products' segment='bond'/>\n\
           <belongs-to segmentation='offices' segment='0001'/>\n\
           <data>\n\
@@ -161,7 +161,7 @@ void ccruncher_test::IDataTest::test1()
             <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
           </data>\n\
         </asset>\n\
-        <asset name='generic' id='op2' date='01/01/2000'>\n\
+        <asset id='op2' date='01/01/2000'>\n\
           <belongs-to segmentation='products' segment='bond'/>\n\
           <belongs-to segmentation='offices' segment='0001'/>\n\
           <data>\n\
