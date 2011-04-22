@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Thu Apr 21 11:05:27 CEST 2011"
+#define BUILD_DATE "Fri Apr 22 08:58:55 CEST 2011"
 
 /* build host name */
-#define BUILD_HOST "imd1.imagina.local"
+#define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "gtorrent"
+#define BUILD_USER "gerard"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -170,7 +170,7 @@
 #define PACKAGE_VERSION "1.7"
 
 /* Profiler instructions are added when this is defined. */
-/* #undef PROFILER */
+#define PROFILER 1
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be

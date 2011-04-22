@@ -82,7 +82,7 @@ void ccruncher::ExpatUserData::removeCurrentHandlers()
 //===========================================================================
 // setCurrentHandlers
 //===========================================================================
-void ccruncher::ExpatUserData::setCurrentHandlers(const string &name, ExpatHandlers *eh)
+void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandlers *eh)
 {
   pila.push(ExpatUserDataToken(name, eh));
 }

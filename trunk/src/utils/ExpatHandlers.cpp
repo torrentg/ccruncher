@@ -57,7 +57,7 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
   assert(eud.getCurrentHandlers() == this);
 
   // adding new handlers to stack
-  eud.setCurrentHandlers(string(name), eh);
+  eud.setCurrentHandlers(name, eh);
 
   // calling new handler
   eh->epstart(eud, name, atts);
