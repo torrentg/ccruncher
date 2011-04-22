@@ -4,8 +4,10 @@ CCRUNCHER CHANGELOG
 
 version 1.8 (???. 2011)
 --------------------------
+  * added support for stochastic exposure
   * solved bug with obligor recovery retrieval
   * block matrix cholesky decomposition reviewed
+  * minor performance improvements
 
 version 1.7 (Jan. 2011)
 --------------------------

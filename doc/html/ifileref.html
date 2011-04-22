@@ -780,15 +780,15 @@
           &lt;values at="01/01/2001" exposure="2300.0" /&gt;
           &lt;values at="01/01/2002" exposure="2200.0" /&gt;
           &lt;values at="01/01/2003" exposure="2100.0" /&gt;
-          &lt;values at="01/01/2004" exposure="2000.0" /&gt;
+          &lt;values at="01/01/2004" exposure="lognormal(6.5,1.0)" /&gt;
           &lt;values at="01/01/2005" exposure="1900.0" /&gt;
-          &lt;values at="01/01/2006" exposure="1800.0" /&gt;
+          &lt;values at="01/01/2006" exposure="exponential(1800.0)" /&gt;
           &lt;values at="01/01/2007" exposure="1700.0" /&gt;
-          &lt;values at="01/01/2008" exposure="1600.0" /&gt;
+          &lt;values at="01/01/2008" exposure="uniform(1500.0,1700.0)" /&gt;
           &lt;values at="01/01/2009" exposure="1500.0" /&gt;
-          &lt;values at="01/01/2010" exposure="1400.0" /&gt;
+          &lt;values at="01/01/2010" exposure="gamma(2800.0,0.5)" /&gt;
           &lt;values at="01/01/2011" exposure="1300.0" /&gt;
-          &lt;values at="01/01/2012" exposure="1200.0" /&gt;
+          &lt;values at="01/01/2012" exposure="normal(1200.0,100.0)" /&gt;
           &lt;values at="01/01/2013" exposure="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
@@ -867,12 +867,12 @@
       <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
-          Default recovery used in case of absence of recovery in the description of assets.
+          Default recovery used in absence of recovery in the description of assets.
           Recovery can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the 
-          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
-          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).<br/>
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
         </td>
         <td class="c3"><code>double<br/>string</code></td>
@@ -939,12 +939,12 @@
       <tr class="b">
         <td class="c1">recovery</td>
         <td class="c2">
-          Default recovery used in case of absence of recovery in the description of assets.
+          Default recovery used in absence of recovery in the description of assets.
           Recovery can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the 
-          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
-          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).<br/>
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
         </td>
         <td class="c3"><code>double<br/>string</code></td>
@@ -970,9 +970,16 @@
         <td class="c1">exposure</td>
         <td class="c2">
           Esposure at date "at". Amount that lender can lose in case of obligor's default 
-          on the indicated date.
+          on the indicated date. Exposure can be a fixed value or a probability distribution. 
+          In the first case, set the numeric value that represents the exposure (eg. 50000). 
+          In the second case, you can model recovery using the folowing distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Log-normal_distribution">lognormal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential(&beta;)</a>, where &beta; &gt; 0 is the <a href="http://en.wikipedia.org/wiki/Exponential_distribution#Alternative_parameterization">survival parameter</a><br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where a &gt; 0 and b &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Gamma_distribution">gamma(k,&rho;)</a>, where k &gt; 0 and &rho; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Normal_distribution">normal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0. Values less than 0 are truncated to 0.<br/>
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3"><code>double<br/>string</code></td>
       </tr>
       <tr class="a">
         <td class="c1">recovery</td>
@@ -982,9 +989,9 @@
           recovery rate based on historical data, etc.
           Recovery can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the 
-          <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta</a> distribution as follows:
-          beta(a,b), where a &gt; 0 and b &gt; 0 (eg. beta(2.3,0.5)).
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
         </td>
         <td class="c3"><code>double<br/>string</code></td>
       </tr>
@@ -1094,7 +1101,7 @@
             Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 22-Feb-2011
+            Last modified: 22-Apr-2011
           </td>
         </tr></table>
       </div></div></div></div></div>

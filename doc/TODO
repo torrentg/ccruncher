@@ -4,7 +4,7 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * add stochastic exposure
+  * improve lookup-table when survival values are low
 
 Future works
 -------------------
@@ -30,5 +30,5 @@ Future works
   * graphic interface
   * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
-  * improve lookup-table when survival values are low
+  * use OpenMP (http://www.openmp.org)
 

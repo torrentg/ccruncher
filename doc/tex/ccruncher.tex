@@ -163,9 +163,8 @@ CCruncher is currently a one-man project with no financial support, and is looki
 for collaborators with expertise in applied and/or theoretical financial mathematics 
 to participate in a GPL (GNU General Public License) structure. The CCruncher 
 system has been tested against both simple hand-made portfolios and large automatically 
-generated portfolios. Future work is being considered to add stochastic exposures, and 
-the creation of a graphical interface to make the tool available to the public, such as 
-portfolio bond managers.
+generated portfolios. Future work is being considered to add a graphical interface to 
+make the tool available to the public, such as portfolio bond managers.
 
 \begin{comment}
 \subsection{Credit Risk Models}
@@ -622,6 +621,14 @@ Compute the Economic Capital at confidence level $\beta$ as:
 \section{Other considerations}
 CCruncher takes into consideration other concepts that have not been discussed 
 up to this point with the purpose of simplifying the content.
+
+%---------------------------------------------------------------------------
+\subsection{Stochastic exposure}
+In most cases, exposure is not known in advance and is estimated based on historical data. 
+CCruncher allows to describe the exposure of an asset at time \emph{t} using the lognormal,
+exponential, uniform, gamma, and truncated normal distributions. When obligor defaults, 
+CCruncher simule a value from the exposure distribution at time \emph{t} 
+to determine the asset loss.
 
 %---------------------------------------------------------------------------
 \subsection{Stochastic recovery}
