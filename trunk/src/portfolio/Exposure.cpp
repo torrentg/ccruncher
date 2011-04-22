@@ -234,6 +234,7 @@ void ccruncher::Exposure::mult(double factor)
       value1 *= factor;
       break;
     case Uniform:
+      // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
       value1 *= factor;
       value2 *= factor;

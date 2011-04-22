@@ -237,15 +237,15 @@
           <values at="01/01/2001" exposure="2300.0" />
           <values at="01/01/2002" exposure="2200.0" />
           <values at="01/01/2003" exposure="2100.0" />
-          <values at="01/01/2004" exposure="2000.0" />
+          <values at="01/01/2004" exposure="lognormal(6.5,1.0)" />
           <values at="01/01/2005" exposure="1900.0" />
-          <values at="01/01/2006" exposure="1800.0" />
+          <values at="01/01/2006" exposure="exponential(1800.0)" />
           <values at="01/01/2007" exposure="1700.0" />
-          <values at="01/01/2008" exposure="1600.0" />
+          <values at="01/01/2008" exposure="uniform(1500.0,1700.0)" />
           <values at="01/01/2009" exposure="1500.0" />
-          <values at="01/01/2010" exposure="1400.0" />
+          <values at="01/01/2010" exposure="gamma(2800.0,0.5)" />
           <values at="01/01/2011" exposure="1300.0" />
-          <values at="01/01/2012" exposure="1200.0" />
+          <values at="01/01/2012" exposure="normal(1200.0,100.0)" />
           <values at="01/01/2013" exposure="1100.0" />
         </data>
       </asset>
