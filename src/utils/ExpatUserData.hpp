@@ -59,9 +59,8 @@ class ExpatUserData
         ExpatHandlers *handlers;
 
         // constructor
-        ExpatUserDataToken(const string &n, ExpatHandlers *h)
+        ExpatUserDataToken(const char *n, ExpatHandlers *h) : name(n)
         {
-          name = n;
           handlers = h;
         }
     };
@@ -90,7 +89,7 @@ class ExpatUserData
     // removeCurrentHandlers
     void removeCurrentHandlers();
     // setCurrentHandlers
-    void setCurrentHandlers(const string &name, ExpatHandlers *eh);
+    void setCurrentHandlers(const char *name, ExpatHandlers *eh);
 
 };
 
