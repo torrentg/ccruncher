@@ -615,7 +615,7 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
       for(unsigned int i=0; i<obligors.size(); i++)
       {
-        fcopulas << "\"" << obligors[i].ref->name << "\"" << (i!=obligors.size()-1?", ":"");
+        fcopulas << "\"" << obligors[i].ref->id << "\"" << (i!=obligors.size()-1?", ":"");
       }
       fcopulas << endl;
     }

@@ -166,8 +166,8 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="A" sector="bank" name="BenderBank" id="001">
-      <asset name="generic" id="op1" date="15/01/2005">
+    <obligor rating="A" sector="bank" id="001">
+      <asset id="op1" date="15/01/2005">
         <data>
           <values at="15/01/2005" exposure="5000.0" recovery="50%" />
           <values at="15/01/2006" exposure="5000.0" recovery="50%" />

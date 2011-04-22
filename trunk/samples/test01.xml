@@ -127,9 +127,9 @@ How to check results?
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="A" sector="S1" name="001" id="001">
+    <obligor rating="A" sector="S1" id="001">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset name="generic" id="op1" date="01/01/2005">
+      <asset id="op1" date="01/01/2005">
         <data>
           <values at="01/01/2007" exposure="1.0" recovery="0%" />
         </data>

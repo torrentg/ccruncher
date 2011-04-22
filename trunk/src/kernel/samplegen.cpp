@@ -240,13 +240,12 @@ void printXMLPortfolio(int ilevel, IData &idata, int nobligors, int nassets) thr
     cout << spc2 + "<obligor ";
     cout << "rating='" + idata.getRatings()[rand()%(nratings-1)].name + "' ";
     cout << "sector='" + idata.getSectors()[rand()%(nsectors)].name + "' ";
-    cout << "name='obligor" + Format::toString(i) + "' ";
     cout << "id='" + Format::toString(i) + "'>\n";
 
     for (int j=1;j<=nassets;j++)
     {
       cout << spc3;
-      cout << "<asset name='bond' ";
+      cout << "<asset ";
       cout << "id='" + Format::toString(i) + "-" + Format::toString(j) + "' ";
       cout << "date='" + Format::toString(date1) + "'>\n";
 

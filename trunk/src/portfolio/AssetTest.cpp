@@ -122,7 +122,7 @@ Interest ccruncher_test::AssetTest::getInterest()
 void ccruncher_test::AssetTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
@@ -203,7 +203,7 @@ void ccruncher_test::AssetTest::test1()
 void ccruncher_test::AssetTest::test2()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
@@ -234,7 +234,7 @@ void ccruncher_test::AssetTest::test2()
 void ccruncher_test::AssetTest::test3()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/2005'>\n\
+      <asset id='op1' date='01/01/2005'>\n\
         <belongs-to segmentation='product' segment='bond'/>\n\
         <belongs-to segmentation='office' segment='0001'/>\n\
         <data>\n\
@@ -265,7 +265,7 @@ void ccruncher_test::AssetTest::test3()
 void ccruncher_test::AssetTest::test4()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/2007'>\n\
+      <asset id='op1' date='01/01/2007'>\n\
         <data>\n\
            <values at='15D' exposure='+1000.0' />\n\
            <values at='15/01/2008' exposure='+1000.0' recovery='80%' />\n\
@@ -303,7 +303,7 @@ void ccruncher_test::AssetTest::test4()
 void ccruncher_test::AssetTest::test5()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='10/01/2005' recovery='50%'>\n\
+      <asset id='op1' date='10/01/2005' recovery='50%'>\n\
         <data>\n\
            <values at='+5D' exposure='5000.0' recovery='30%' />\n\
            <values at='15/01/2006' exposure='5000.0' recovery='40%' />\n\
@@ -347,7 +347,7 @@ void ccruncher_test::AssetTest::test5()
 void ccruncher_test::AssetTest::test6()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='10/01/2005' recovery='60%'>\n\
+      <asset id='op1' date='10/01/2005' recovery='60%'>\n\
         <data>\n\
         </data>\n\
       </asset>";
@@ -370,7 +370,7 @@ void ccruncher_test::AssetTest::test6()
 void ccruncher_test::AssetTest::test7()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
@@ -402,7 +402,7 @@ void ccruncher_test::AssetTest::test7()
 void ccruncher_test::AssetTest::test8()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
@@ -469,7 +469,7 @@ void ccruncher_test::AssetTest::test8()
 void ccruncher_test::AssetTest::test9()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset name='generic' id='op1' date='01/01/1999'>\n\
+      <asset id='op1' date='01/01/1999'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\

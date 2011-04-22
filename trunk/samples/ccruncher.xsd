@@ -173,14 +173,12 @@
 													</xsd:complexType>
 												</xsd:element>
 											</xsd:sequence>
-											<xsd:attribute name="name" type="xsd:string" use="required"/>
 											<xsd:attribute name="id" type="xsd:string" use="required"/>
 											<xsd:attribute name="date" type="date" use="required"/>
 											<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
-								<xsd:attribute name="name" type="xsd:string" use="required"/>
 								<xsd:attribute name="id" type="xsd:string" use="required"/>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
 								<xsd:attribute name="sector" type="xsd:string" use="required"/>

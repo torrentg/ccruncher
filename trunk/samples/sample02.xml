@@ -623,11 +623,11 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="BB" sector="S1" name="Repsol" id="000001">
+    <obligor rating="BB" sector="S1" id="000001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
       <!-- implicit: belongs-to segmentation="obligor" value="000001" -->
-      <asset date="01/01/1999" name="generic" id="op1">
+      <asset date="01/01/1999" id="op1">
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <!-- implicit: belongs-to segmentation="asset" segment="op1" -->

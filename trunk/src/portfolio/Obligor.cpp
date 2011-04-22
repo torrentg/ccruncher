@@ -44,7 +44,6 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
   irating = -1;
   isector = -1;
   id = "NON_ID";
-  name = "NO_NAME";
   recovery = Recovery(Recovery::Fixed,NAN);
 }
 
@@ -113,7 +112,6 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   else if (isEqual(name_,"obligor")) {
     // reading atributes
     id = getStringAttribute(attributes, "id", "");
-    name = getStringAttribute(attributes, "name", "");
     string strrating = getStringAttribute(attributes, "rating", "");
     string strsector= getStringAttribute(attributes, "sector", "");
     char *str = getAttributeValue(attributes, "recovery");

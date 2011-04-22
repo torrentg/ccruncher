@@ -113,801 +113,801 @@ Expected Results:
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="A" sector="S1" name="001" id="001">
+    <obligor rating="A" sector="S1" id="001">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op01">
+      <asset date="01/01/2005" id="op01">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="002" id="002">
+    <obligor rating="A" sector="S2" id="002">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op02">
+      <asset date="01/01/2005" id="op02">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="003" id="003">
+    <obligor rating="A" sector="S1" id="003">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op03">
+      <asset date="01/01/2005" id="op03">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="004" id="004">
+    <obligor rating="A" sector="S2" id="004">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op04">
+      <asset date="01/01/2005" id="op04">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="005" id="005">
+    <obligor rating="A" sector="S1" id="005">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op05">
+      <asset date="01/01/2005" id="op05">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="006" id="006">
+    <obligor rating="A" sector="S2" id="006">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op06">
+      <asset date="01/01/2005" id="op06">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="007" id="007">
+    <obligor rating="A" sector="S1" id="007">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op07">
+      <asset date="01/01/2005" id="op07">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="008" id="008">
+    <obligor rating="A" sector="S2" id="008">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op08">
+      <asset date="01/01/2005" id="op08">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="009" id="009">
+    <obligor rating="A" sector="S1" id="009">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op09">
+      <asset date="01/01/2005" id="op09">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="010" id="010">
+    <obligor rating="A" sector="S2" id="010">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op10">
+      <asset date="01/01/2005" id="op10">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="011" id="011">
+    <obligor rating="A" sector="S1" id="011">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op11">
+      <asset date="01/01/2005" id="op11">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="012" id="012">
+    <obligor rating="A" sector="S2" id="012">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op12">
+      <asset date="01/01/2005" id="op12">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="013" id="013">
+    <obligor rating="A" sector="S1" id="013">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op13">
+      <asset date="01/01/2005" id="op13">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="014" id="014">
+    <obligor rating="A" sector="S2" id="014">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op14">
+      <asset date="01/01/2005" id="op14">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="015" id="015">
+    <obligor rating="A" sector="S1" id="015">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op15">
+      <asset date="01/01/2005" id="op15">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="016" id="016">
+    <obligor rating="A" sector="S2" id="016">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op16">
+      <asset date="01/01/2005" id="op16">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="017" id="017">
+    <obligor rating="A" sector="S1" id="017">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op17">
+      <asset date="01/01/2005" id="op17">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="018" id="018">
+    <obligor rating="A" sector="S2" id="018">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op18">
+      <asset date="01/01/2005" id="op18">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="019" id="019">
+    <obligor rating="A" sector="S1" id="019">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op19">
+      <asset date="01/01/2005" id="op19">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="020" id="020">
+    <obligor rating="A" sector="S2" id="020">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op20">
+      <asset date="01/01/2005" id="op20">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="021" id="021">
+    <obligor rating="A" sector="S1" id="021">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op21">
+      <asset date="01/01/2005" id="op21">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="022" id="022">
+    <obligor rating="A" sector="S2" id="022">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op22">
+      <asset date="01/01/2005" id="op22">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="023" id="023">
+    <obligor rating="A" sector="S1" id="023">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op23">
+      <asset date="01/01/2005" id="op23">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="024" id="024">
+    <obligor rating="A" sector="S2" id="024">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op24">
+      <asset date="01/01/2005" id="op24">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="025" id="025">
+    <obligor rating="A" sector="S1" id="025">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op25">
+      <asset date="01/01/2005" id="op25">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="026" id="026">
+    <obligor rating="A" sector="S2" id="026">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op26">
+      <asset date="01/01/2005" id="op26">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="027" id="027">
+    <obligor rating="A" sector="S1" id="027">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op27">
+      <asset date="01/01/2005" id="op27">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="028" id="028">
+    <obligor rating="A" sector="S2" id="028">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op28">
+      <asset date="01/01/2005" id="op28">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="029" id="029">
+    <obligor rating="A" sector="S1" id="029">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op29">
+      <asset date="01/01/2005" id="op29">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="030" id="030">
+    <obligor rating="A" sector="S2" id="030">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op30">
+      <asset date="01/01/2005" id="op30">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="031" id="031">
+    <obligor rating="A" sector="S1" id="031">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op31">
+      <asset date="01/01/2005" id="op31">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="032" id="032">
+    <obligor rating="A" sector="S2" id="032">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op32">
+      <asset date="01/01/2005" id="op32">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="033" id="033">
+    <obligor rating="A" sector="S1" id="033">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op33">
+      <asset date="01/01/2005" id="op33">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="034" id="034">
+    <obligor rating="A" sector="S2" id="034">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op34">
+      <asset date="01/01/2005" id="op34">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="035" id="035">
+    <obligor rating="A" sector="S1" id="035">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op35">
+      <asset date="01/01/2005" id="op35">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="036" id="036">
+    <obligor rating="A" sector="S2" id="036">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op36">
+      <asset date="01/01/2005" id="op36">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="037" id="037">
+    <obligor rating="A" sector="S1" id="037">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op37">
+      <asset date="01/01/2005" id="op37">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="038" id="038">
+    <obligor rating="A" sector="S2" id="038">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op38">
+      <asset date="01/01/2005" id="op38">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="039" id="039">
+    <obligor rating="A" sector="S1" id="039">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op39">
+      <asset date="01/01/2005" id="op39">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="040" id="040">
+    <obligor rating="A" sector="S2" id="040">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op40">
+      <asset date="01/01/2005" id="op40">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="041" id="041">
+    <obligor rating="A" sector="S1" id="041">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op41">
+      <asset date="01/01/2005" id="op41">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="042" id="042">
+    <obligor rating="A" sector="S2" id="042">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op42">
+      <asset date="01/01/2005" id="op42">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="043" id="043">
+    <obligor rating="A" sector="S1" id="043">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op43">
+      <asset date="01/01/2005" id="op43">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="044" id="044">
+    <obligor rating="A" sector="S2" id="044">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op44">
+      <asset date="01/01/2005" id="op44">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="045" id="045">
+    <obligor rating="A" sector="S1" id="045">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op45">
+      <asset date="01/01/2005" id="op45">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="046" id="046">
+    <obligor rating="A" sector="S2" id="046">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op46">
+      <asset date="01/01/2005" id="op46">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="047" id="047">
+    <obligor rating="A" sector="S1" id="047">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op47">
+      <asset date="01/01/2005" id="op47">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="048" id="048">
+    <obligor rating="A" sector="S2" id="048">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op48">
+      <asset date="01/01/2005" id="op48">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="049" id="049">
+    <obligor rating="A" sector="S1" id="049">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op49">
+      <asset date="01/01/2005" id="op49">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="050" id="050">
+    <obligor rating="A" sector="S2" id="050">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op50">
+      <asset date="01/01/2005" id="op50">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="051" id="051">
+    <obligor rating="A" sector="S1" id="051">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op51">
+      <asset date="01/01/2005" id="op51">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="052" id="052">
+    <obligor rating="A" sector="S2" id="052">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op52">
+      <asset date="01/01/2005" id="op52">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="053" id="053">
+    <obligor rating="A" sector="S1" id="053">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op53">
+      <asset date="01/01/2005" id="op53">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="054" id="054">
+    <obligor rating="A" sector="S2" id="054">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op54">
+      <asset date="01/01/2005" id="op54">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="055" id="055">
+    <obligor rating="A" sector="S1" id="055">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op55">
+      <asset date="01/01/2005" id="op55">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="056" id="056">
+    <obligor rating="A" sector="S2" id="056">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op56">
+      <asset date="01/01/2005" id="op56">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="057" id="057">
+    <obligor rating="A" sector="S1" id="057">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op57">
+      <asset date="01/01/2005" id="op57">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="058" id="058">
+    <obligor rating="A" sector="S2" id="058">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op58">
+      <asset date="01/01/2005" id="op58">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="059" id="059">
+    <obligor rating="A" sector="S1" id="059">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op59">
+      <asset date="01/01/2005" id="op59">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="060" id="060">
+    <obligor rating="A" sector="S2" id="060">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op60">
+      <asset date="01/01/2005" id="op60">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="061" id="061">
+    <obligor rating="A" sector="S1" id="061">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op61">
+      <asset date="01/01/2005" id="op61">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="062" id="062">
+    <obligor rating="A" sector="S2" id="062">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op62">
+      <asset date="01/01/2005" id="op62">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="063" id="063">
+    <obligor rating="A" sector="S1" id="063">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op63">
+      <asset date="01/01/2005" id="op63">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="064" id="064">
+    <obligor rating="A" sector="S2" id="064">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op64">
+      <asset date="01/01/2005" id="op64">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="065" id="065">
+    <obligor rating="A" sector="S1" id="065">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op65">
+      <asset date="01/01/2005" id="op65">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="066" id="066">
+    <obligor rating="A" sector="S2" id="066">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op66">
+      <asset date="01/01/2005" id="op66">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="067" id="067">
+    <obligor rating="A" sector="S1" id="067">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op67">
+      <asset date="01/01/2005" id="op67">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="068" id="068">
+    <obligor rating="A" sector="S2" id="068">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op68">
+      <asset date="01/01/2005" id="op68">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="069" id="069">
+    <obligor rating="A" sector="S1" id="069">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op69">
+      <asset date="01/01/2005" id="op69">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="070" id="070">
+    <obligor rating="A" sector="S2" id="070">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op70">
+      <asset date="01/01/2005" id="op70">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="071" id="071">
+    <obligor rating="A" sector="S1" id="071">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op71">
+      <asset date="01/01/2005" id="op71">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="072" id="072">
+    <obligor rating="A" sector="S2" id="072">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op72">
+      <asset date="01/01/2005" id="op72">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="073" id="073">
+    <obligor rating="A" sector="S1" id="073">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op73">
+      <asset date="01/01/2005" id="op73">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="074" id="074">
+    <obligor rating="A" sector="S2" id="074">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op74">
+      <asset date="01/01/2005" id="op74">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="075" id="075">
+    <obligor rating="A" sector="S1" id="075">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op75">
+      <asset date="01/01/2005" id="op75">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="076" id="076">
+    <obligor rating="A" sector="S2" id="076">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op76">
+      <asset date="01/01/2005" id="op76">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="077" id="077">
+    <obligor rating="A" sector="S1" id="077">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op77">
+      <asset date="01/01/2005" id="op77">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="078" id="078">
+    <obligor rating="A" sector="S2" id="078">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op78">
+      <asset date="01/01/2005" id="op78">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="079" id="079">
+    <obligor rating="A" sector="S1" id="079">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op79">
+      <asset date="01/01/2005" id="op79">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="080" id="080">
+    <obligor rating="A" sector="S2" id="080">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op80">
+      <asset date="01/01/2005" id="op80">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="081" id="081">
+    <obligor rating="A" sector="S1" id="081">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op81">
+      <asset date="01/01/2005" id="op81">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="082" id="082">
+    <obligor rating="A" sector="S2" id="082">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op82">
+      <asset date="01/01/2005" id="op82">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="083" id="083">
+    <obligor rating="A" sector="S1" id="083">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op83">
+      <asset date="01/01/2005" id="op83">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="084" id="084">
+    <obligor rating="A" sector="S2" id="084">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op84">
+      <asset date="01/01/2005" id="op84">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="085" id="085">
+    <obligor rating="A" sector="S1" id="085">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op85">
+      <asset date="01/01/2005" id="op85">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="086" id="086">
+    <obligor rating="A" sector="S2" id="086">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op86">
+      <asset date="01/01/2005" id="op86">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="087" id="087">
+    <obligor rating="A" sector="S1" id="087">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op87">
+      <asset date="01/01/2005" id="op87">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="088" id="088">
+    <obligor rating="A" sector="S2" id="088">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op88">
+      <asset date="01/01/2005" id="op88">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="089" id="089">
+    <obligor rating="A" sector="S1" id="089">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op89">
+      <asset date="01/01/2005" id="op89">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="090" id="090">
+    <obligor rating="A" sector="S2" id="090">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op90">
+      <asset date="01/01/2005" id="op90">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="091" id="091">
+    <obligor rating="A" sector="S1" id="091">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op91">
+      <asset date="01/01/2005" id="op91">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="092" id="092">
+    <obligor rating="A" sector="S2" id="092">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op92">
+      <asset date="01/01/2005" id="op92">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="093" id="093">
+    <obligor rating="A" sector="S1" id="093">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op93">
+      <asset date="01/01/2005" id="op93">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="094" id="094">
+    <obligor rating="A" sector="S2" id="094">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op94">
+      <asset date="01/01/2005" id="op94">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="095" id="095">
+    <obligor rating="A" sector="S1" id="095">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op95">
+      <asset date="01/01/2005" id="op95">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="096" id="096">
+    <obligor rating="A" sector="S2" id="096">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op96">
+      <asset date="01/01/2005" id="op96">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="097" id="097">
+    <obligor rating="A" sector="S1" id="097">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op97">
+      <asset date="01/01/2005" id="op97">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="098" id="098">
+    <obligor rating="A" sector="S2" id="098">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op98">
+      <asset date="01/01/2005" id="op98">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" name="099" id="099">
+    <obligor rating="A" sector="S1" id="099">
       <belongs-to segmentation="sectors" segment="S1"/>
-      <asset date="01/01/2005" name="generic" id="op99">
+      <asset date="01/01/2005" id="op99">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" name="100" id="100">
+    <obligor rating="A" sector="S2" id="100">
       <belongs-to segmentation="sectors" segment="S2"/>
-      <asset date="01/01/2005" name="generic" id="op100">
+      <asset date="01/01/2005" id="op100">
         <data>
           <values at="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
