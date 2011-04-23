@@ -53,6 +53,7 @@ void ccruncher_test::DateTest::test_constructors(void)
   Date date1 = Date(25,7,2001);
   Date date2 = Date("25/07/2001");
   Date date3 = Date(date2);
+  Date date4 = Date(time(NULL));
 
   ASSERT(date1 == date2);
   ASSERT(date2 == date3);

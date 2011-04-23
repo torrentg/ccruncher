@@ -74,6 +74,8 @@ class Segmentations : public ExpatHandlers
     Segmentation& getSegmentation(int i);
     // return the index of the given segmentation
     int indexOfSegmentation(const string &sname) throw(Exception);
+    // return the index of the given segmentation
+    int indexOfSegmentation(const char *sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

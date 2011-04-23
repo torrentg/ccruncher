@@ -78,6 +78,22 @@ int ccruncher::Segmentation::indexOfSegment(const string &sname) throw(Exception
 }
 
 //===========================================================================
+// return the index of the given segment
+//===========================================================================
+int ccruncher::Segmentation::indexOfSegment(const char *sname) throw(Exception)
+{
+  for (unsigned int i=0;i<vsegments.size();i++)
+  {
+    if (vsegments[i].compare(sname) == 0)
+    {
+      return (int)i;
+    }
+  }
+
+  throw Exception("segment " + string(sname) + " not found");
+}
+
+//===========================================================================
 // reset
 //===========================================================================
 void ccruncher::Segmentation::reset()

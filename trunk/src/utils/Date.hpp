@@ -156,6 +156,14 @@ bool isInterval(const char *str);
 }
 
 //===========================================================================
+// Constructor. constructs a new object initialized to current date
+//===========================================================================
+inline ccruncher::Date::Date()
+{
+  lJulianDay = nad[0];
+}
+
+//===========================================================================
 // asignation operator
 //===========================================================================
 inline Date& ccruncher::Date::operator=( const Date& Orig )

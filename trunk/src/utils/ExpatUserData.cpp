@@ -21,12 +21,13 @@
 //===========================================================================
 
 #include "utils/ExpatUserData.hpp"
+#include <cstring>
 #include <cassert>
 
 //===========================================================================
 // void constructor (don't use)
 //===========================================================================
-ccruncher::ExpatUserData::ExpatUserData()
+ccruncher::ExpatUserData::ExpatUserData() : pila(10), pos(-1)
 {
   // nothing to do
 }
@@ -34,7 +35,7 @@ ccruncher::ExpatUserData::ExpatUserData()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_)
+ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_) : pila(10), pos(-1)
 {
   xmlparser = xmlparser_;
 }
@@ -60,15 +61,15 @@ XML_Parser ccruncher::ExpatUserData::getParser()
 //===========================================================================
 ExpatHandlers* ccruncher::ExpatUserData::getCurrentHandlers()
 {
-  return pila.top().handlers;
+  return pila[pos].handlers;
 }
 
 //===========================================================================
 // getCurrentName
 //===========================================================================
-string& ccruncher::ExpatUserData::getCurrentName()
+const char* ccruncher::ExpatUserData::getCurrentName()
 {
-  return pila.top().name;
+  return pila[pos].name;
 }
 
 //===========================================================================
@@ -76,7 +77,7 @@ string& ccruncher::ExpatUserData::getCurrentName()
 //===========================================================================
 void ccruncher::ExpatUserData::removeCurrentHandlers()
 {
-  pila.pop();
+  pos--;
 }
 
 //===========================================================================
@@ -84,5 +85,10 @@ void ccruncher::ExpatUserData::removeCurrentHandlers()
 //===========================================================================
 void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandlers *eh)
 {
-  pila.push(ExpatUserDataToken(name, eh));
+  pos++;
+  assert(pos<10);
+  pila[pos].handlers = eh;
+  assert(strlen(name)<20);
+  strcpy(pila[pos].name, name);
 }
+
