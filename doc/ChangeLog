@@ -7,7 +7,7 @@ version 1.8 (???. 2011)
   * added support for stochastic exposure
   * solved bug with obligor recovery retrieval
   * block matrix cholesky decomposition reviewed
-  * minor performance improvements
+  * performance improvements
   * removed unused attribute 'name' from obligor and asset
 
 version 1.7 (Jan. 2011)

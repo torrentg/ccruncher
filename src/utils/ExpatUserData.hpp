@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include "utils/ExpatHandlers.hpp"
 #include <stack>
+#include <vector>
 #include <string>
 #include <expat.h>
 
@@ -48,21 +49,13 @@ class ExpatUserData
 
   private:
 
-    // internal class
-    class ExpatUserDataToken
+    // internal struct
+    struct ExpatUserDataToken
     {
-      public:
-
         // token name related to handler
-        string name;
+        char name[20];
         // pointer to class handlers container
         ExpatHandlers *handlers;
-
-        // constructor
-        ExpatUserDataToken(const char *n, ExpatHandlers *h) : name(n)
-        {
-          handlers = h;
-        }
     };
 
   private:
@@ -70,7 +63,9 @@ class ExpatUserData
     // expat xml parser
     XML_Parser xmlparser;
     // stack of handlers
-    stack<ExpatUserDataToken> pila;
+    vector<ExpatUserDataToken> pila;
+    // current handler
+    int pos;
 
   public:
 
@@ -85,7 +80,7 @@ class ExpatUserData
     // returns current handlers
     ExpatHandlers* getCurrentHandlers();
     // returns current name
-    string & getCurrentName();
+    const char* getCurrentName();
     // removeCurrentHandlers
     void removeCurrentHandlers();
     // setCurrentHandlers

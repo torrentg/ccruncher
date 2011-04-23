@@ -61,19 +61,6 @@
 #include <cassert>
 
 //===========================================================================
-// Constructor. constructs a new object initialized to current date
-//===========================================================================
-ccruncher::Date::Date()
-{
-  time_t now = time(NULL);
-  tm lt = *(localtime(&now));
-  int y = lt.tm_year + 1900;
-  int m = (char) (lt.tm_mon + 1);
-  int d = (char) lt.tm_mday;
-  lJulianDay = YmdToJd( y, m, d );
-}
-
-//===========================================================================
 // Constructor. Copy constructor
 //===========================================================================
 ccruncher::Date::Date(const Date& Orig) 
@@ -99,6 +86,7 @@ ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(E
 //===========================================================================
 // Constructor. Constructs an object initialized to the date
 // represented by a system time value.
+// example: Date date(time(NULL));
 //===========================================================================
 ccruncher::Date::Date( const time_t tSysTime )
 {

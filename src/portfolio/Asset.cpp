@@ -133,10 +133,10 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     data.push_back(DateValues(at, exposure, recovery));
   }
   else if (isEqual(name_,"belongs-to")) {
-    string ssegmentation = getStringAttribute(attributes, "segmentation", "");
-    string ssegment = getStringAttribute(attributes, "segment", "");
+    char *ssegmentation = getAttributeValue(attributes, "segmentation");
+    char *ssegment = getAttributeValue(attributes, "segment");
 
-    if (ssegmentation == "" || ssegment == "") {
+    if (ssegmentation == NULL || ssegment == NULL) {
       throw Exception("invalid attributes at <belongs-to> tag");
     }
 

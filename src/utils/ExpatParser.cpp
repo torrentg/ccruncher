@@ -123,7 +123,7 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
   eh->epend(*ud, name);
 
   // checking handlers domain
-  if (strcmp(name,ud->getCurrentName().c_str()) == 0)
+  if (strcmp(name,ud->getCurrentName()) == 0)
   {
     // restore parent handlers
     ud->removeCurrentHandlers();
