@@ -116,11 +116,15 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   }
 
   // checking coherence
-  for (unsigned int i=0;i<vsegments.size();i++)
+  // performance trick (asset_id or obligor_id is always unique)
+  if (modificable == false) 
   {
-    if (vsegments[i] == sname)
+    for (unsigned int i=0;i<vsegments.size();i++)
     {
-      throw Exception("segment " + vsegments[i] + " repeated");
+      if (vsegments[i] == sname)
+      {
+        throw Exception("segment " + vsegments[i] + " repeated");
+      }
     }
   }
 
