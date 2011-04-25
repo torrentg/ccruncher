@@ -161,7 +161,7 @@ table.its tr.odd {
 	<table width="100%" border="0"><tr>
 	<td align="center" valign="middle">
 		<xsl:element name="img">
-			<xsl:attribute name="src"><xsl:value-of select="/ccruncher-report/segmentation/@name" />-<xsl:value-of select="/ccruncher-report/segmentation/segment/@name" />.png</xsl:attribute>
+			<xsl:attribute name="src"><xsl:value-of select="/ccruncher-report/segmentation/@name" />-<xsl:value-of select="@name" />.png</xsl:attribute>
 			<xsl:attribute name="width">300</xsl:attribute>
 			<xsl:attribute name="alt">density function</xsl:attribute>
 		</xsl:element>
