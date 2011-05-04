@@ -32,13 +32,12 @@
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  dtimes(0), alosses(0), isegments(0), losses(0)
+  isegments(0), losses(0)
 {
   assert(copula != NULL);
   rng = copula->getRng();
-  dtimes = vector<Date>(obligors.size(), NAD);
-  alosses = vector<double>(assets.size(), NAN);
-  numassets = assets.size();
+  assetsize = mc.assetsize;
+  numassets = mc.numassets;
   time0 = montecarlo.time0;
   timeT = montecarlo.timeT;
   survival = montecarlo.survival;
@@ -46,15 +45,9 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   reversed = montecarlo.reversed;
   numsegmentations = montecarlo.segmentations->size();
   losses.resize(numsegmentations);
-  isegments = vector<int>(numassets*numsegmentations, 0);
-  for(int isegmentation=0; isegmentation<numsegmentations; isegmentation++)
+  for(int i=0; i<numsegmentations; i++)
   {
-    losses[isegmentation] = vector<double>(montecarlo.segmentations->getSegmentation(isegmentation).size(), 0.0);
-    
-    for(int i=0; i<numassets; i++)
-    {
-	  ISEGMENTS(isegmentation,i) = assets[i].ref->getSegment(isegmentation);
-    }
+    losses[i] = vector<double>(mc.segmentations->getSegmentation(i).size());
   }
 }
 
@@ -74,35 +67,40 @@ void ccruncher::SimulationThread::run()
   bool more = true;
   timer1.reset();
   timer2.reset();
-  timer3.reset();
   
   while(more)
   {
+    // initialize aggregated values
+    for(int i=0; i<numsegmentations; i++)
+    {
+      for(int j=0; j<(int)losses[i].size(); j++)
+      {
+        losses[i][j] = 0.0;
+      }
+    }
+
     // generating random numbers
     timer1.resume();
     randomize();
     timer1.stop();
 
-    // simulating default times
+    // simulating default times & evalue losses & aggregate
     timer2.resume();
-    simulate();
+    for(int i=0; i<obligors.size(); i++)
+    {
+      simule(i);
+    }
     timer2.stop();
 
-    // portfolio evaluation
-    timer3.resume();
-    evalue();
-    aggregate();
-    timer3.stop();
-
     // data transfer
-    more = transfer();
+    more = montecarlo.append(losses, copula->get());
   }
 }
 
 //===========================================================================
 // generate random numbers
 //===========================================================================
-void ccruncher::SimulationThread::randomize()
+void ccruncher::SimulationThread::randomize() throw()
 {
   // generate a new realization for each copula
   if (!antithetic)
@@ -124,23 +122,10 @@ void ccruncher::SimulationThread::randomize()
 }
 
 //===========================================================================
-// simulate time-to-default for each obligor
-//===========================================================================
-void ccruncher::SimulationThread::simulate()
-{
-  orindex = -1;
-  orvalue = NAN;
-  for (unsigned int i=0; i<obligors.size(); i++) 
-  {
-    dtimes[i] = simTimeToDefault(getRandom(i), obligors[i].irating);
-  }
-}
-
-//===========================================================================
 // getRandom. Returns requested copula value
 // encapsules antithetic management
 //===========================================================================
-double ccruncher::SimulationThread::getRandom(int iobligor)
+double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 {
   if (antithetic)
   {
@@ -160,80 +145,58 @@ double ccruncher::SimulationThread::getRandom(int iobligor)
 }
 
 //===========================================================================
-// simule time to default
+// simule iobligor
 //===========================================================================
-Date ccruncher::SimulationThread::simTimeToDefault(double u, int r)
+void ccruncher::SimulationThread::simule(int iobligor) throw()
 {
-  // simulate time where this obligor defaults (in months)
+  // simule default time
+  double u = getRandom(iobligor);
+  int r = obligors[iobligor].irating;
   double t = survival.inverse(r, u);
-
-  // return simulated default date
   // TODO: assumed no leap years (this can be improved)
-  return time0 + (long)(t*365.0/12.0);
-}
-
-//===========================================================================
-// portfolio evaluation using simulated default times
-//===========================================================================
-void ccruncher::SimulationThread::evalue()
-{
-  for(int i=0; i<numassets; i++)
+  Date dtime = time0 + (long)(t*365.0/12.0);
+  
+  // evalue obligor losses
+  double obligor_recovery = NAN;
+  char *p = (char*)(obligors[iobligor].assets);
+  for(int i=0; i<obligors[iobligor].numassets; i++)
   {
-    Date t = dtimes[assets[i].iobligor];
-    
-    if (t <= timeT && assets[i].mindate <= t && t <= assets[i].maxdate) // time0 <= t by-design
+    // evalue asset loss
+    double loss = 0.0;
+    SimulatedAsset *asset = (SimulatedAsset*)(p+i*assetsize);
+    int *segments = &(asset->segments);
+
+    if (dtime <= timeT && asset->mindate <= dtime && dtime <= asset->maxdate) // time0 <= t by-design
     {
-      const DateValues &values = assets[i].ref->getValues(t);
+      const DateValues &values = asset->ref->getValues(dtime);
       double recovery = values.recovery.getValue(rng);
       double exposure = values.exposure.getValue(rng);
 
       // non-recovery means that is inherited from obligor
       if (isnan(recovery))
       {
-        int iobligor = assets[i].iobligor;
-        if (iobligor != orindex)
+        if (isnan(obligor_recovery))
         {
-          orvalue = obligors[iobligor].ref->recovery.getValue(rng);
-          orindex = iobligor;
+          obligor_recovery = obligors[iobligor].ref->recovery.getValue(rng);
         }
-        recovery = orvalue;
+        recovery = obligor_recovery;
       }
       
-      alosses[i] = exposure * (1.0 - recovery);
+      loss = exposure * (1.0 - recovery);
     }
     else
     {
-      alosses[i] = 0.0;
+      loss = 0.0;
+    }
+
+    // aggregate asset loss
+    for(int j=0; j<numsegmentations; j++)
+    {
+      int isegment = segments[j];
+      assert(0 <= isegment && isegment < losses[j].size());
+      losses[j][isegment] += loss;
     }
   }
-}
-
-//===========================================================================
-// aggregate simulated losses
-//===========================================================================
-void ccruncher::SimulationThread::aggregate()
-{
-  for(int isegmentation=0; isegmentation<numsegmentations; isegmentation++)
-  {
-    for(unsigned int i=0; i<losses[isegmentation].size(); i++)
-    {
-	  losses[isegmentation][i] = 0.0;
-    }
-
-    for(int i=0; i<numassets; i++)
-    {
-      int isegment = ISEGMENTS(isegmentation,i);
-	  losses[isegmentation][isegment] += alosses[i];
-    }
-  }
-}
-
-//===========================================================================
-// transfer simulated data to master
-//===========================================================================
-bool ccruncher::SimulationThread::transfer()
-{
-  return montecarlo.append(losses, copula->get());
 }
 
 //===========================================================================
@@ -250,13 +213,5 @@ double ccruncher::SimulationThread::getEllapsedTime1()
 double ccruncher::SimulationThread::getEllapsedTime2()
 {
   return timer2.read();
-}
-
-//===========================================================================
-// returns ellapsed time evaluating portfolio
-//===========================================================================
-double ccruncher::SimulationThread::getEllapsedTime3()
-{
-  return timer3.read();
 }
 

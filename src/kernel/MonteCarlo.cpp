@@ -36,7 +36,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(), aggregators(), threads(0)
+ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), threads(0)
 {
   maxseconds = 0;
   numiterations = 0;
@@ -50,6 +50,8 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(), aggregators(), threa
   btrace = false;
   copula = NULL;
   running = false;
+  assetsize = 0;
+  numassets = 0;
 }
 
 //===========================================================================
@@ -65,6 +67,13 @@ ccruncher::MonteCarlo::~MonteCarlo()
 //===========================================================================
 void ccruncher::MonteCarlo::release()
 {
+  // deallocating assets
+  if (assets != NULL)
+  {
+    delete [] assets;
+    assets = NULL;
+  }
+
   // removing threads
   for(unsigned int i=0; i<threads.size(); i++) {
     if (threads[i] != NULL) {
@@ -103,7 +112,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 {
-  if (maxiterations != 0)
+  if (numiterations != 0)
   {
     throw Exception("Monte Carlo reinitialization not allowed");
   }
@@ -239,7 +248,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   UNUSED(idata);
   
   // doing assertions
-  assert(assets.size() == 0);
+  assert(assets == NULL);
 
   // setting logger header
   Logger::trace("setting assets to simulate", '-');
@@ -251,27 +260,58 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
-  int numassets = 0;
-  assets.reserve(4*obligors.size());
+  int cont = 0;
+  numassets = 0;
   for(unsigned int i=0; i<obligors.size(); i++)
   {
     vector<Asset*> &vassets = obligors[i].ref->getAssets();
     for(unsigned int j=0; j<vassets.size(); j++)
     {
-      numassets++;
+      cont++;
       if (vassets[j]->isActive(time0, timeT)) 
       {
-        assets.push_back(SimulatedAsset(vassets[j], i));
+        numassets++;
       }
     }
   }
-  Logger::trace("number of initial assets", Format::toString(numassets));
-  Logger::trace("number of simulated assets", Format::toString(assets.size()));
+  Logger::trace("number of initial assets", Format::toString(cont));
+  Logger::trace("number of simulated assets", Format::toString(numassets));
 
   // checking that exist assets to simulate
-  if (assets.size() == 0)
+  if (numassets == 0)
   {
     throw Exception("error initializing assets: 0 assets to simulate");
+  }
+
+  // creating the simulated assets array
+  assetsize = sizeof(SimulatedAsset) + sizeof(int)*(idata.getSegmentations().size()-1);
+  assets = new char[assetsize*numassets];
+  
+  numassets = 0;
+  for(unsigned int i=0; i<obligors.size(); i++)
+  {
+    vector<Asset*> &vassets = obligors[i].ref->getAssets();
+    for(unsigned int j=0; j<vassets.size(); j++)
+    {
+      if (vassets[j]->isActive(time0, timeT)) 
+      {
+        SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
+        p->mindate = vassets[j]->getMinDate();
+        p->maxdate = vassets[j]->getMaxDate();
+        p->ref = vassets[j];
+        int *segments = &(p->segments);
+        for(int k=0; k<idata.getSegmentations().size(); k++)
+        {
+          segments[k] = vassets[j]->getSegment(k);
+        }
+        if (obligors[i].numassets <= 0)
+        {
+          obligors[i].assets = p;
+        }
+        obligors[i].numassets++;
+        numassets++;
+      }
+    }
   }
 
   // exit function
@@ -426,7 +466,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   for(int i=0; i<segmentations->size(); i++)
   {
     string filename = File::normalizePath(fpath) + segmentations->getSegmentation(i).name + ".csv";
-    Aggregator *aggregator = new Aggregator(assets, i, segmentations->getSegmentation(i), filename, bforce);
+    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, segmentations->getSegmentation(i), filename, bforce);
     aggregators.push_back(aggregator);
   }
 
@@ -441,8 +481,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 {
   double etime1=0.0; // ellapsed time generating random numbers
-  double etime2=0.0; // ellapsed time simulating default times
-  double etime3=0.0; // ellapsed time evaluating portfolio
+  double etime2=0.0; // ellapsed time simulating obligors & segmentations
 
   // assertions
   assert(1 <= numthreads); 
@@ -465,7 +504,7 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   nfthreads = numthreads;
   vector<Copula*> copulas(numthreads, (Copula*)NULL);
   numiterations = 0;
-  timer4.reset();
+  timer3.reset();
   pthread_mutex_init(&mutex, NULL);
   threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
@@ -483,15 +522,14 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
     threads[i]->wait();
     etime1 += threads[i]->getEllapsedTime1();
     etime2 += threads[i]->getEllapsedTime2();
-    etime3 += threads[i]->getEllapsedTime3();
   }
 
   // flushing aggregators
   for(unsigned int i=0; i<aggregators.size(); i++) 
   {
-    timer4.resume();
+    timer3.resume();
     aggregators[i]->flush();
-    timer4.stop();
+    timer3.stop();
   }
 
   // destroying copulas (except main copula)
@@ -503,9 +541,8 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 
   // exit function
   Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
-  Logger::trace("elapsed time simulating default times", Timer::format(etime2/numthreads));
-  Logger::trace("elapsed time evaluating segmentations", Timer::format(etime3/numthreads));
-  Logger::trace("elapsed time writing data to disk", timer4);
+  Logger::trace("elapsed time simulating obligors", Timer::format(etime2/numthreads));
+  Logger::trace("elapsed time writing data to disk", timer3);
   Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();
@@ -516,11 +553,11 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double *u)
+bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double *u) throw()
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
-  timer4.resume();
+  timer3.resume();
   bool more = true;
 
   try
@@ -561,13 +598,12 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double
   }
   catch(Exception &e)
   {
-    timer4.stop();
-    pthread_mutex_unlock(&mutex);
-    throw Exception(e, "error ocurred while executing Monte Carlo");
+    cerr << "error: " << e << endl;
+    more = false;
   }
 
   // exit function
-  timer4.stop();
+  timer3.stop();
   pthread_mutex_unlock(&mutex);
   return(more);
 }

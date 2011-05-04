@@ -60,7 +60,11 @@ class MonteCarlo
     // list of simulated obligors
     vector<SimulatedObligor> obligors;
     // list of simulated assets
-    vector<SimulatedAsset> assets;
+    char *assets;
+    // simulated asset size
+    int assetsize;
+    // number of simulated assets
+    int numassets;
     // list of aggregators
     vector<Aggregator *> aggregators;
     // list of segmentations
@@ -92,7 +96,7 @@ class MonteCarlo
     // time account
     Timer timer;
     // ellapsed time writting data to disk
-    Timer timer4;
+    Timer timer3;
     // simulation threads
     vector<SimulationThread*> threads;
     // number of iterations done
@@ -129,7 +133,7 @@ class MonteCarlo
     // print trace
     void printTrace(const double *) throw(Exception);
     // append simulation result
-    bool append(vector<vector<double> > &, const double *);
+    bool append(vector<vector<double> > &, const double *) throw();
 
   public:
 
