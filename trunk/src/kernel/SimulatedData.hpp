@@ -26,7 +26,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
 #include "portfolio/Obligor.hpp"
 #include "portfolio/Asset.hpp"
 #include "utils/Date.hpp"
@@ -39,29 +38,6 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class SimulatedObligor
-{
-
-  public:
-
-    // obligor's rating index
-    int irating;
-    // has recovery flag
-    bool hasRecovery;
-    // reference to obligor
-    Obligor *ref;
-
-  public: 
-    
-    // constructor
-    SimulatedObligor(Obligor *);
-    // less-than operator
-    bool operator < (const SimulatedObligor &obj) const;
-
-};
-
-//---------------------------------------------------------------------------
-
 class SimulatedAsset
 {
 
@@ -71,15 +47,35 @@ class SimulatedAsset
     Date mindate;
     // maximum event date (restricted to simulation time horizon)
     Date maxdate;
-    // obligor index (see obligors vector)
-    int iobligor;
     // reference to asset
     Asset *ref;
-    
+    // segmentacions indexes
+    int segments;
+
+};
+
+//---------------------------------------------------------------------------
+
+class SimulatedObligor
+{
+
   public:
-  
+
+    // obligor's rating index
+    int irating;
+    // reference to obligor
+    Obligor *ref;
+    // number of assets
+    int numassets;
+    // pointer to simulated assets
+    SimulatedAsset *assets;
+
+  public: 
+    
     // constructor
-    SimulatedAsset(Asset *, int);
+    SimulatedObligor(Obligor *);
+    // less-than operator
+    bool operator < (const SimulatedObligor &obj) const;
 
 };
 

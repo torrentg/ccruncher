@@ -30,20 +30,9 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   assert(obligor != NULL);
   irating = obligor->irating;
-  hasRecovery = obligor->hasRecovery();
   ref = obligor;
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset, int iobligor_)
-{
-  assert(asset != NULL);
-  iobligor = iobligor_;
-  mindate = asset->getMinDate();
-  maxdate = asset->getMaxDate();
-  ref = asset;
+  numassets = 0;
+  assets = NULL;
 }
 
 //===========================================================================

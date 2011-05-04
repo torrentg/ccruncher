@@ -59,7 +59,7 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(vector<SimulatedAsset> &, int, Segmentation &, const string &, bool) throw(Exception);
+    Aggregator(char *, int, int, int, Segmentation &, const string &, bool) throw(Exception);
     // destructor
     ~Aggregator();
     // append data to aggregator

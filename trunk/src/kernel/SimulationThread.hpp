@@ -60,17 +60,11 @@ class SimulationThread : public Thread
     // list of simulated obligors
     const vector<SimulatedObligor> &obligors;
     // list of simulated assets
-    const vector<SimulatedAsset> &assets;
+    const char *assets;
+    // asset size
+    int assetsize;
     // copula used to simulate correlations
     Copula *copula;
-    // obligors default times
-    vector<Date> dtimes;
-    // obligor recovery index (obligor index)
-    int orindex;
-    // obligor recovery value
-    double orvalue;
-    // assets losses
-    vector<double> alosses;
     // initial date
     Date time0;
     // date where risk is computed
@@ -93,27 +87,17 @@ class SimulationThread : public Thread
     gsl_rng *rng;
     // elapsed time creating random numbers
     Timer timer1;
-    // ellapsed time simulating default times
+    // ellapsed time simulating obligors & segmentations
     Timer timer2;
-    // ellapsed time evaluating portfolio
-    Timer timer3;
 
   private:
   
     // generate random numbers
-    void randomize();
-    // simulate default times
-    void simulate();
-    // evalue portfolio
-    void evalue();
-    // aggregate value
-    void aggregate();
-    // transfer data
-    bool transfer();
-    // simulate default time
-    Date simTimeToDefault(double, int);
+    void randomize() throw();
+    // simule obligor
+    void simule(int) throw();
     // returns the copula value
-    double getRandom(int ibobligor);
+    double getRandom(int ibobligor) throw();
 
   public:
 
@@ -127,8 +111,6 @@ class SimulationThread : public Thread
     double getEllapsedTime1();
     // returns ellapsed time simulating default times
     double getEllapsedTime2();
-    // returns ellapsed time evaluating portfolio
-    double getEllapsedTime3();
 
 };
 

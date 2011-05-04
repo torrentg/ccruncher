@@ -28,22 +28,23 @@
 // note: we don't diferentiate between asset-segmentations or obligor-segmentations
 // because obligor segments has been recoded as asset segments (see Obligor code)
 //===========================================================================
-ccruncher::Aggregator::Aggregator(vector<SimulatedAsset> &assets, int isegmentation, 
+ccruncher::Aggregator::Aggregator(char *assets, int numassets, int assetsize, int isegmentation, 
     Segmentation &segmentation_, const string &filename, bool force) 
     throw(Exception) : segmentation(segmentation_)
 {
   // initialization
   numsegments = segmentation.size();
   printUnassignedSegment = false;
-  for(unsigned int i=0; i<assets.size(); i++)
+  for(unsigned int i=0; i<numassets; i++)
   {
-    if (assets[i].ref->getSegment(isegmentation) == 0) 
+    SimulatedAsset *asset = (SimulatedAsset*) &(assets[i*assetsize]);
+    if ((&(asset->segments))[isegmentation] == 0) 
     {
       printUnassignedSegment = true;
       break;
     }
   }
-
+  
   // file creation
   if (force == false && access(filename.c_str(), W_OK) == 0)
   {
