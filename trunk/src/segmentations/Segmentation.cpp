@@ -99,8 +99,8 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) throw(Exception)
 void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
-  insertSegment("unassigned"); // adding catcher segment
   modificable = false;
+  insertSegment("unassigned"); // adding catcher segment
   name = "";
   components = obligor;
 }
