@@ -179,6 +179,18 @@ Developers tips & tricks
      > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
      > valgrind --tool=callgrind bin/ccruncher
      > kcachegrind callgrind.out.99999
+     > # with oprofile
+     > modprobe oprofile
+     > opcontrol --init
+     > opcontrol --start
+     > ./binary
+     > opcontrol --dump
+     > opreport -l ./binary
+     > opcontrol --stop
+     > opcontrol --shutdown
+     > # with sysprof
+     > sysprof
+     > ./binary
 
 9. debuging executable
      > gdb ./path/progname
