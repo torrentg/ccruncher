@@ -228,7 +228,7 @@ int ccruncher::BlockTStudentCopula::size() const
 //===========================================================================
 double ccruncher::BlockTStudentCopula::transform(double val)
 {
-  double h = M_PI/6.0 + 1.0/(-0.0562 + 1.3916*ndf + exp(-0.4726*ndf));
+  double h = M_PI/6.0 + 1.0/(0.44593 + 1.3089*ndf);
   return sin(h*val)/sin(h);
 }
 
