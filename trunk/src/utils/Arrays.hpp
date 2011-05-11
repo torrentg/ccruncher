@@ -262,12 +262,12 @@ inline void ccruncher::Arrays<T>::prodMatrixVector(T **A, T *x, int n1, int n2, 
   T aux;
   T *currentrow;
 
-  for(register int i=0;i<n1;i++)
+  for(int i=0;i<n1;i++)
   {
     aux = 0.0;
     currentrow = A[i];
 
-    for(register int j=0;j<n2;j++)
+    for(int j=0;j<n2;j++)
     {
       aux += currentrow[j]*x[j];
     }
@@ -289,16 +289,16 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
   T *aux1 = allocVector(n1);
   T *aux2 = allocVector(n2);
 
-  for(register int i=0;i<n3;i++)
+  for(int i=0;i<n3;i++)
   {
-    for(register int j=0;j<n2;j++)
+    for(int j=0;j<n2;j++)
     {
       aux2[j] = B[j][i];
     }
 
     prodMatrixVector(A, aux2, n1, n2, aux1);
 
-    for(register int j=0;j<n1;j++)
+    for(int j=0;j<n1;j++)
     {
       ret[j][i] = aux1[j];
     }
@@ -314,7 +314,7 @@ inline void ccruncher::Arrays<T>::prodMatrixMatrix(T **A, T **B, int n1, int n2,
 template <class T>
 inline void ccruncher::Arrays<T>::copyVector(T *x, int n, T *ret)
 {
-  for(register int i=0;i<n;i++)
+  for(int i=0;i<n;i++)
   {
     ret[i] = x[i];
   }
@@ -326,9 +326,9 @@ inline void ccruncher::Arrays<T>::copyVector(T *x, int n, T *ret)
 template <class T>
 inline void ccruncher::Arrays<T>::copyMatrix(T **x, int n, int m, T **ret)
 {
-  for(register int i=0;i<n;i++)
+  for(int i=0;i<n;i++)
   {
-    for(register int j=0;j<m;j++)
+    for(int j=0;j<m;j++)
     {
       ret[i][j] = x[i][j];
     }
@@ -341,7 +341,7 @@ inline void ccruncher::Arrays<T>::copyMatrix(T **x, int n, int m, T **ret)
 template <class T>
 inline void ccruncher::Arrays<T>::initVector(T *x, int n, T val)
 {
-  for(register int i=0;i<n;i++)
+  for(int i=0;i<n;i++)
   {
     x[i] = val;
   }
@@ -353,9 +353,9 @@ inline void ccruncher::Arrays<T>::initVector(T *x, int n, T val)
 template <class T>
 inline void ccruncher::Arrays<T>::initMatrix(T **x, int n, int m, T val)
 {
-  for(register int i=0;i<n;i++)
+  for(int i=0;i<n;i++)
   {
-    for(register int j=0;j<m;j++)
+    for(int j=0;j<m;j++)
     {
       x[i][j] = val;
     }
