@@ -261,6 +261,22 @@ void ccruncher::BlockGaussianCopula::next()
   }
 }
 
+
+//===========================================================================
+// Return components i-th from current copula
+//===========================================================================
+double ccruncher::BlockGaussianCopula::get(int i) const
+{
+  if (i < 0 || i >= n)
+  {
+    return NAN;
+  }
+  else
+  {
+    return aux1[i];
+  }
+}
+
 //===========================================================================
 // Returns simulated values
 //===========================================================================

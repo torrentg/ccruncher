@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue May 10 08:14:54 CEST 2011"
+#define BUILD_DATE "Wed May 11 15:39:10 CEST 2011"
 
 /* build host name */
-#define BUILD_HOST "fobos.generacio.com"
+#define BUILD_HOST "imd1.imagina.local"
 
 /* build user */
-#define BUILD_USER "gerard"
+#define BUILD_USER "gtorrent"
 
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 /* #undef CLOSEDIR_VOID */
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
