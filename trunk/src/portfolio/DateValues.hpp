@@ -66,6 +66,14 @@ class DateValues
 //---------------------------------------------------------------------------
 
 //===========================================================================
+// constructor
+//===========================================================================
+inline ccruncher::DateValues::DateValues(Date date_) : date(date_), exposure(), recovery()
+{
+  // nothing to do
+}
+
+//===========================================================================
 // comparation operador (needed by sort functions)
 //===========================================================================
 inline bool operator < (const DateValues &x, const DateValues &y)

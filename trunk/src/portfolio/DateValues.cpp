@@ -53,13 +53,3 @@ ccruncher::DateValues::DateValues(Date date_, const Exposure &exposure_, const R
   recovery = recovery_;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::DateValues::DateValues(Date date_)
-{
-  date = date_;
-  exposure = Exposure(Exposure::Fixed,NAN);
-  recovery = Recovery(Recovery::Fixed,NAN);
-}
-

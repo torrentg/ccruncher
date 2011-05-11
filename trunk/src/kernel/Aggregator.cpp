@@ -35,7 +35,7 @@ ccruncher::Aggregator::Aggregator(char *assets, int numassets, int assetsize, in
   // initialization
   numsegments = segmentation.size();
   printUnassignedSegment = false;
-  for(unsigned int i=0; i<numassets; i++)
+  for(int i=0; i<numassets; i++)
   {
     SimulatedAsset *asset = (SimulatedAsset*) &(assets[i*assetsize]);
     if ((&(asset->segments))[isegmentation] == 0) 
