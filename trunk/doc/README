@@ -179,10 +179,10 @@ Developers tips & tricks
      > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
      > valgrind --tool=callgrind bin/ccruncher
      > kcachegrind callgrind.out.99999
-     > # with oprofile
+     > # with oprofile (as root)
      > modprobe oprofile
      > opcontrol --init
-     > opcontrol --start
+     > opcontrol --no-vmlinux --start
      > ./binary
      > opcontrol --dump
      > opreport -l ./binary
