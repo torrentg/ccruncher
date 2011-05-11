@@ -86,7 +86,7 @@ void ccruncher::SimulationThread::run()
 
     // simulating default times & evalue losses & aggregate
     timer2.resume();
-    for(int i=0; i<obligors.size(); i++)
+    for(size_t i=0; i<obligors.size(); i++)
     {
       simule(i);
     }
@@ -193,7 +193,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
     for(int j=0; j<numsegmentations; j++)
     {
       int isegment = segments[j];
-      assert(0 <= isegment && isegment < losses[j].size());
+      assert(0 <= isegment && isegment < (int) losses[j].size());
       losses[j][isegment] += loss;
     }
   }
