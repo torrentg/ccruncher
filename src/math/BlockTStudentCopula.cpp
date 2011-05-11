@@ -273,6 +273,21 @@ void ccruncher::BlockTStudentCopula::next()
 }
 
 //===========================================================================
+// Return components i-th from current copula
+//===========================================================================
+double ccruncher::BlockTStudentCopula::get(int i) const
+{
+  if (i < 0 || i >= n)
+  {
+    return NAN;
+  }
+  else
+  {
+    return aux1[i];
+  }
+}
+
+//===========================================================================
 // Returns simulated values
 //===========================================================================
 const double* ccruncher::BlockTStudentCopula::get() const

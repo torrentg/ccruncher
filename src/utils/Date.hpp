@@ -164,6 +164,14 @@ inline ccruncher::Date::Date()
 }
 
 //===========================================================================
+// Copy constructor
+//===========================================================================
+inline ccruncher::Date::Date(const Date& Orig) 
+{ 
+  lJulianDay = Orig.lJulianDay; 
+}
+
+//===========================================================================
 // asignation operator
 //===========================================================================
 inline Date& ccruncher::Date::operator=( const Date& Orig )

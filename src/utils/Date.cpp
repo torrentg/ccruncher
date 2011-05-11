@@ -61,14 +61,6 @@
 #include <cassert>
 
 //===========================================================================
-// Constructor. Copy constructor
-//===========================================================================
-ccruncher::Date::Date(const Date& Orig) 
-{ 
-  lJulianDay = Orig.lJulianDay; 
-}
-
-//===========================================================================
 // Constructor
 //===========================================================================
 ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(Exception)

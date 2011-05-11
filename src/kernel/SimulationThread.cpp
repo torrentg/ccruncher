@@ -32,7 +32,7 @@
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  isegments(0), losses(0)
+  isegments(0), losses(0), uvalues(NULL)
 {
   assert(copula != NULL);
   rng = copula->getRng();
@@ -43,6 +43,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   survival = montecarlo.survival;
   antithetic = montecarlo.antithetic;
   reversed = montecarlo.reversed;
+  uvalues = copula->get();
   numsegmentations = montecarlo.segmentations->size();
   losses.resize(numsegmentations);
   for(int i=0; i<numsegmentations; i++)
@@ -93,7 +94,7 @@ void ccruncher::SimulationThread::run()
     timer2.stop();
 
     // data transfer
-    more = montecarlo.append(losses, copula->get());
+    more = montecarlo.append(losses, uvalues);
   }
 }
 
@@ -131,16 +132,16 @@ double ccruncher::SimulationThread::getRandom(int iobligor) throw()
   {
     if (reversed)
     {
-      return 1.0 - copula->get(iobligor);
+      return 1.0 - uvalues[iobligor];
     }
     else
     {
-      return copula->get(iobligor);
+      return uvalues[iobligor];
     }
   }
   else
   {
-    return copula->get(iobligor);
+    return uvalues[iobligor];
   }
 }
 
