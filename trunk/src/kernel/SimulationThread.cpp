@@ -185,10 +185,6 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
       
       loss = exposure * (1.0 - recovery);
     }
-    else
-    {
-      loss = 0.0;
-    }
 
     // aggregate asset loss
     for(int j=0; j<numsegmentations; j++)

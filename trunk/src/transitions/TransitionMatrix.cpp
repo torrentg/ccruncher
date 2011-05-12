@@ -352,7 +352,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
       ret += spc2 + "<transition ";
       ret += "from ='" + (*ratings)[i].name + "' ";
       ret += "to ='" + (*ratings)[j].name + "' ";
-      ret += "value ='" + Format::toString(matrix[i][j]) + "'";
+      ret += "value ='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }
   }

@@ -245,7 +245,7 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
       ret += spc2 + "<sigma ";
       ret += "sector1 ='" + sectors[i].name + "' ";
       ret += "sector2 ='" + sectors[j].name + "' ";
-      ret += "value ='" + Format::toString(matrix[i][j]) + "'";
+      ret += "value ='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }
   }

@@ -96,7 +96,7 @@ string ccruncher::Rate::getXML(int ilevel) const throw(Exception)
 
   ret += "<rate ";
   ret += "t='" + Format::toString(t) + "' ";
-  ret += "r='" + Format::toString(r) + "'";
+  ret += "r='" + Format::toString(100.0*r) + "%'";
   ret += "/>\n";
 
   return ret;
