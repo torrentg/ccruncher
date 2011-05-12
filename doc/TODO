@@ -5,6 +5,7 @@ CCRUNCHER TODO
 Current works
 -------------------
   * improve lookup-table when survival values are low
+  * in stdout, replace 'parsing ...' by file length + 'elapsed time parsing file'
 
 Future works
 -------------------
@@ -16,7 +17,6 @@ Future works
   * improve functional tests
      - examples based on real data
      - improve documentation adding tests section
-  * beautify html printing output
   * allow evaluation in multiple time horizons
       <breaks>
         <break name="T25Y" at="25Y" method="exp">
@@ -30,5 +30,4 @@ Future works
   * graphic interface
   * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
-  * use OpenMP (http://www.openmp.org)
 
