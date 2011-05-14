@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "utils/Format.hpp"
 
@@ -47,9 +48,12 @@ string ccruncher::Format::toString(const long val)
 //===========================================================================
 // double
 //===========================================================================
-string ccruncher::Format::toString(const double val)
+string ccruncher::Format::toString(const double val, int n)
 {
   ostringstream oss;
+  if (n >= 0) {
+    oss << fixed << setprecision(n);
+  }
   oss << val;
   return oss.str();
 }
@@ -82,5 +86,21 @@ string ccruncher::Format::toString(const size_t val)
   ostringstream oss;
   oss << (int)val;
   return oss.str();
+}
+
+//===========================================================================
+// returns bytes as string (B, KB, MB, GB)
+//===========================================================================
+string ccruncher::Format::bytes(const size_t val)
+{
+  if (val < 1024) {
+    return toString(val) + " B";
+  }
+  else if (val < 1024*1024) {
+    return toString(double(val)/double(1024), 2) + " KB";
+  }
+  else {
+    return toString(double(val)/double(1024*1024), 2) + " MB";
+  }
 }
 

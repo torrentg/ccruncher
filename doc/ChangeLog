@@ -4,11 +4,12 @@ CCRUNCHER CHANGELOG
 
 version 1.8 (???. 2011)
 --------------------------
+  * performance improvements
   * added support for stochastic exposure
   * solved bug with obligor recovery retrieval
   * block matrix cholesky decomposition reviewed
-  * performance improvements
   * removed unused attribute 'name' from obligor and asset
+  * removed 'parsing ...' entries from stdout
 
 version 1.7 (Jan. 2011)
 --------------------------

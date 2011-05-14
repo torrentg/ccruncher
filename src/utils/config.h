@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Thu May 12 07:55:43 CEST 2011"
+#define BUILD_DATE "Sat May 14 08:34:29 CEST 2011"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -158,7 +158,7 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 1.7"
+#define PACKAGE_STRING "ccruncher 1.8"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
@@ -167,10 +167,10 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.7"
+#define PACKAGE_VERSION "1.8"
 
 /* Profiler instructions are added when this is defined. */
-#define PROFILER 1
+/* #undef PROFILER */
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -190,7 +190,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "1.7"
+#define VERSION "1.8"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

@@ -23,6 +23,8 @@
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/File.hpp"
+#include "utils/Format.hpp"
+#include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
 #include <gzstream.h>
 #include <cassert>
@@ -80,12 +82,13 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
       Logger::addBlankLine();
       Logger::trace("reading input file", '*');
       Logger::newIndentLevel();
+      Logger::trace("file size", Format::bytes(File::filesize(xmlfilename)));
 
       // parsing
+      Timer timer(true);
       ExpatParser parser;
       parser.parse(xmlstream, this);
-
-      // exit function
+      Logger::trace("elapsed time parsing data", timer);
       Logger::previousIndentLevel();
     }
   }
@@ -122,7 +125,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag parameters repeated");
     }
     else {
-      timer.start();
       eppush(eu, &params, name_, attributes);
     }
   }
@@ -132,7 +134,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag interest repeated");
     }
     else {
-      timer.start();
       eppush(eu, &interest, name_, attributes);
     }
   }
@@ -142,7 +143,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag ratings repeated");
     }
     else {
-      timer.start();
       eppush(eu, &ratings, name_, attributes);
     }
   }
@@ -155,7 +155,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag transitions repeated");
     }
     else {
-      timer.start();
       transitions.setRatings(ratings);
       eppush(eu, &transitions, name_, attributes);
     }
@@ -169,7 +168,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag survival repeated");
     }
     else {
-      timer.start();
       survival.setRatings(ratings);
       eppush(eu, &survival, name_, attributes);
     }
@@ -180,7 +178,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag sectors repeated");
     }
      else {
-      timer.start();
       eppush(eu, &sectors, name_, attributes);
     }
   }
@@ -193,7 +190,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag correlations repeated");
     }
     else {
-      timer.start();
       correlations.setSectors(sectors);
       eppush(eu, &correlations, name_, attributes);
     }
@@ -204,7 +200,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag segmentations repeated");
     }
     else {
-      timer.start();
       eppush(eu, &segmentations, name_, attributes);
     }
   }
@@ -267,31 +262,31 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"parameters")) {
-    Logger::trace("parsing parameters", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"interest")) {
-    Logger::trace("parsing interest", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"ratings")) {
-    Logger::trace("parsing ratings", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"mtransitions")) {
-    Logger::trace("parsing transition matrix", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"survival")) {
-    Logger::trace("parsing survival function", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"sectors")) {
-    Logger::trace("parsing sectors", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"mcorrels")) {
-    Logger::trace("parsing correlation matrix", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"segmentations")) {
-    Logger::trace("parsing segmentations", timer);
+    // nothing to do
   }
   else if (isEqual(name_,"portfolio")) {
-    Logger::trace("parsing portfolio", timer);
+    // nothing to do
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -303,7 +298,6 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
-  timer.start();
   portfolio = new Portfolio(ratings, sectors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 
@@ -324,6 +318,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       }
       else
       {
+        Logger::trace("file size (" + filepath + ")", Format::bytes(File::filesize(filepath)));
         ExpatParser parser;
         parser.parse(xmlstream, portfolio);
       }

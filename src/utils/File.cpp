@@ -29,6 +29,7 @@
 #include <libgen.h>
 #endif
 #include <cstdio>
+#include <fstream>
 #include <cerrno>
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
@@ -290,5 +291,20 @@ string ccruncher::File::filepath(const string &path, const string &name)
   }
   ret += name;
   return ret;
+}
+
+//===========================================================================
+// filesize
+// returns file size in bytes
+//===========================================================================
+size_t ccruncher::File::filesize(const string &filename)
+{
+  std::ifstream f;
+  f.open(filename.c_str(), std::ios_base::binary | std::ios_base::in);
+  if (!f.good() || f.eof() || !f.is_open()) { return 0; }
+  f.seekg(0, std::ios_base::beg);
+  std::ifstream::pos_type begin_pos = f.tellg();
+  f.seekg(0, std::ios_base::end);
+  return static_cast<size_t>(f.tellg() - begin_pos);
 }
 
