@@ -251,6 +251,16 @@ bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 }
 
 //===========================================================================
+// getSegment
+//===========================================================================
+int ccruncher::Asset::getSegment(int isegmentation) const
+{
+  assert(isegmentation >= 0);
+  assert(isegmentation < (int) vsegments.size());
+  return vsegments[isegmentation];
+}
+
+//===========================================================================
 // getMinDate
 // be sure that prepare() is called before the execution of this method
 //===========================================================================
@@ -273,6 +283,10 @@ Date ccruncher::Asset::getMaxDate() const
 //===========================================================================
 bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exception)
 {
+  if (data.size() == 0)
+  {
+    return false;
+  }
   if (from <= date && date <= to)
   {
     return true;
@@ -305,5 +319,35 @@ bool ccruncher::Asset::hasObligorRecovery() const
   }
   
   return false;
+}
+
+//===========================================================================
+// returns reference to data
+//===========================================================================
+const vector<DateValues>& ccruncher::Asset::getData() const
+{
+  return data;
+}
+
+//===========================================================================
+// getValues
+// returns:
+//    > (NAD,0,1) if at <= asset creation date
+//    > (NAD,0,1) if asset has 0 date-values
+//    > (NAD,0,1) if at > last date-values
+//    > otherwise, returns the smallest date-values that is not less than at
+//===========================================================================
+const DateValues& ccruncher::Asset::getValues(const Date at) const
+{
+  static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
+  
+  if (at <= date || data.size() == 0 || data.back().date < at)
+  {
+    return dvnf;
+  }
+  else
+  {
+    return *(lower_bound(data.begin(), data.end(), DateValues(at)));
+  }
 }
 

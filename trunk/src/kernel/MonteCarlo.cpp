@@ -298,7 +298,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
         p->mindate = vassets[j]->getMinDate();
         p->maxdate = vassets[j]->getMaxDate();
-        p->ref = vassets[j];
+        p->begin = vassets[j]->getData().begin();
+        p->end = vassets[j]->getData().end();
         int *segments = &(p->segments);
         for(int k=0; k<idata.getSegmentations().size(); k++)
         {
