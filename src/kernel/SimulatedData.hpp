@@ -25,9 +25,11 @@
 
 //---------------------------------------------------------------------------
 
+#include <vector>
 #include "utils/config.h"
 #include "portfolio/Obligor.hpp"
 #include "portfolio/Asset.hpp"
+#include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -47,8 +49,10 @@ class SimulatedAsset
     Date mindate;
     // maximum event date (restricted to simulation time horizon)
     Date maxdate;
-    // reference to asset
-    Asset *ref;
+    // reference to asset data
+    vector<DateValues>::const_iterator begin;
+    // reference to asset data
+    vector<DateValues>::const_iterator end;
     // segmentacions indexes
     int segments;
 

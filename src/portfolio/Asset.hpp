@@ -95,46 +95,14 @@ class Asset : public ExpatHandlers
     Date getMinDate() const;
     // returns maximum event date (restricted to precomputed events)
     Date getMaxDate() const;
-    // returns exposure-recovery at given date
-    const DateValues& getValues(const Date) const;
+    // used to test SimulationThread::simule lower_bound
+    const DateValues& getValues(const Date at) const;
     // says if use obligor recovery
     bool hasObligorRecovery() const;
+    // returns reference to data
+    const vector<DateValues>& getData() const;
 
 };
-
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// getSegment
-//===========================================================================
-inline int ccruncher::Asset::getSegment(int isegmentation) const
-{
-  assert(isegmentation >= 0);
-  assert(isegmentation < (int) vsegments.size());
-  return vsegments[isegmentation];
-}
-
-//===========================================================================
-// getData
-// returns:
-//    > (NAD,0,1) if at <= asset creation date
-//    > (NAD,0,1) if asset has 0 date-values
-//    > (NAD,0,1) if at > last date-values
-//    > otherwise, returns the smallest date-values that is not less than at
-//===========================================================================
-inline const DateValues& ccruncher::Asset::getValues(const Date at) const
-{
-  static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
-  
-  if (at <= date || data.size() == 0 || data.back().date < at)
-  {
-    return dvnf;
-  }
-  else
-  {
-    return *(lower_bound(data.begin(), data.end(), DateValues(at)));
-  }
-}
 
 //---------------------------------------------------------------------------
 

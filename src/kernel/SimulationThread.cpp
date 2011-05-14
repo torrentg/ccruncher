@@ -169,7 +169,9 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
 
     if (dtime <= timeT && asset->mindate <= dtime && dtime <= asset->maxdate) // time0 <= t by-design
     {
-      const DateValues &values = asset->ref->getValues(dtime);
+      // not called Asset::getValues() due to memory access latency
+      const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
+      assert(dtime <= (asset->end-1)->date);
       double recovery = values.recovery.getValue(rng);
       double exposure = values.exposure.getValue(rng);
 
