@@ -52,13 +52,15 @@ class Format
     // converts long to string
     static string toString(const long val);
     // converts double to string
-    static string toString(const double val);
+    static string toString(const double val, int n=-1);
     // converts date to string
     static string toString(const ccruncher::Date &val);
     // converts boolean to string
     static string toString(const bool val);
     // converts size_t to string
     static string toString(const size_t val);
+    // returns bytes as string (B, KB, MB)
+    static string bytes(const size_t val);
 
 };
 

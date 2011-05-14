@@ -5,7 +5,6 @@ CCRUNCHER TODO
 Current works
 -------------------
   * improve lookup-table when survival values are low
-  * in stdout, replace 'parsing ...' by file length + 'elapsed time parsing file'
 
 Future works
 -------------------

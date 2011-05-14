@@ -71,6 +71,11 @@ void ccruncher::SimulationThread::run()
   
   while(more)
   {
+    // generating random numbers
+    timer1.resume();
+    randomize();
+    timer1.stop();
+
     // initialize aggregated values
     for(int i=0; i<numsegmentations; i++)
     {
@@ -79,11 +84,6 @@ void ccruncher::SimulationThread::run()
         losses[i][j] = 0.0;
       }
     }
-
-    // generating random numbers
-    timer1.resume();
-    randomize();
-    timer1.stop();
 
     // simulating default times & evalue losses & aggregate
     timer2.resume();
@@ -126,7 +126,7 @@ void ccruncher::SimulationThread::randomize() throw()
 // getRandom. Returns requested copula value
 // encapsules antithetic management
 //===========================================================================
-double ccruncher::SimulationThread::getRandom(int iobligor) throw()
+inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 {
   if (antithetic)
   {

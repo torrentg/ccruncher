@@ -65,6 +65,8 @@ class File
     static string filename(const string &pathname);
     // create a file path using path and a file name
     static string filepath(const string &path, const string &name);
+    // return file size in bytes
+    static size_t filesize(const string &filename);
     
 };
 

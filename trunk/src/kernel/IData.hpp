@@ -38,7 +38,6 @@
 #include "segmentations/Segmentations.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Timer.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -79,8 +78,6 @@ class IData : public ExpatHandlers
     Portfolio *portfolio;
     // indicates if root tag exists
     bool hasmaintag;
-    // timer used to determine parsing times
-    Timer timer;
 
   private:
   
