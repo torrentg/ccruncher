@@ -1566,7 +1566,7 @@ where
 
 \begin{displaymath}
 \begin{array}{l}
-h(\nu) = \frac{\pi}{6} + \frac{1}{-0.0562 + 1.3916 \cdot \nu + e^{-0.4726 \cdot \nu} } \\
+h(\nu) = \frac{\pi}{6} + \frac{1}{0.44593 + 1.3089 \cdot \nu } \\
 f(\rho) = \frac{sin(h(\nu) \cdot \rho)}{sin(h(\nu))} \\
 \end{array}
 \end{displaymath}
@@ -1584,8 +1584,8 @@ To obtain an approximation of $f(x)$, we compute $g(x)$ at regular intervals. We
 the computed values $(g(\rho_i,\nu), \rho_i)$ to $f(x)=sin(a \cdot x)/sin(a)$ using 
 least squares to determine the parameter $a$. We repeat the previous procedure for 
 various values of the variable $\nu$. We fit the computed values $(\nu_j, a_j)$ to 
-$h(y) = \frac{\pi}{6} + \frac{1}{b + c \cdot y + e^{d \cdot y} }$ using least squares
-to determine the parameters $b$, $c$ and $d$.
+$h(y) = \frac{\pi}{6} + \frac{1}{b + c \cdot y }$ using least squares
+to determine the parameters $b$ and $c$.
 
 \begin{comment}
 
