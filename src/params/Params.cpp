@@ -124,9 +124,9 @@ double ccruncher::Params::getCopulaParam() const throw(Exception)
   else {
     string val = copula_type.substr(2, copula_type.length()-3);
     double ndf = Parser::doubleValue(val);
-    if (ndf <= 0.0) 
+    if (ndf < 2.0) 
     {
-      throw Exception("t-student copula requires ndf > 0");
+      throw Exception("t-student copula requires ndf >= 2");
     }
     return ndf;
   }
