@@ -100,10 +100,10 @@ AC_ARG_ENABLE(debug,
   [debug=false])
 
 if test x$debug = xtrue ; then
-  CXXFLAGS="-g -Wall -Wextra -Wshadow"
+  CXXFLAGS="$CXXFLAGS -g -Wall -Wextra -Wshadow"
   AC_SUBST([LDFLAGS], [-rdynamic])
 else
-  CXXFLAGS="-O3"
+  CXXFLAGS="$CXXFLAGS -O3"
   AC_DEFINE([NDEBUG], 1, [Assertions are disabled when this is defined.])
 fi
 
