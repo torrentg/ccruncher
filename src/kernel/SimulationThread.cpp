@@ -25,14 +25,12 @@
 
 // --------------------------------------------------------------------------
 
-#define ISEGMENTS(i,j) (isegments[(j)+(i)*numassets])
-
 //===========================================================================
 // constructor
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  isegments(0), losses(0), uvalues(NULL)
+  losses(0), uvalues(NULL)
 {
   assert(copula != NULL);
   rng = copula->getRng();
@@ -110,14 +108,14 @@ void ccruncher::SimulationThread::randomize() throw()
   }
   else // antithetic == true
   {
-    if (!reversed)
+    if (reversed)
     {
       copula->next();
-      reversed = true;
+      reversed = false;
     }
     else
     {
-      reversed = false;
+      reversed = true;
     }
   }
 }
@@ -128,16 +126,9 @@ void ccruncher::SimulationThread::randomize() throw()
 //===========================================================================
 inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 {
-  if (antithetic)
+  if (antithetic && reversed)
   {
-    if (reversed)
-    {
-      return 1.0 - uvalues[iobligor];
-    }
-    else
-    {
-      return uvalues[iobligor];
-    }
+    return 1.0 - uvalues[iobligor];
   }
   else
   {

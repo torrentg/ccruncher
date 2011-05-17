@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat May 14 18:31:20 CEST 2011"
+#define BUILD_DATE "Sun May 15 07:16:51 CEST 2011"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -170,7 +170,7 @@
 #define PACKAGE_VERSION "1.8"
 
 /* Profiler instructions are added when this is defined. */
-#define PROFILER 1
+/* #undef PROFILER */
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be

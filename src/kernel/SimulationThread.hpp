@@ -79,8 +79,6 @@ class SimulationThread : public Thread
     int numassets;
     // number of segmentations
     int numsegmentations;
-    // asset segment indexes by segmentation (matrix size=numsegmentationsxnumassets)
-    vector<int> isegments;
     // asset loss values by segmentation
     vector<vector<double> > losses;
     // copula random number generator
