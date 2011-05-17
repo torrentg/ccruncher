@@ -173,7 +173,7 @@ bool ccruncher::Exposure::valid(const Exposure &x)
     checkParams(x.type, x.value1, x.value2);
     return true;
   }
-  catch(Exception &e)
+  catch(Exception &)
   {
     return false;
   }
