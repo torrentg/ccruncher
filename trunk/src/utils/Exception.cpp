@@ -97,7 +97,7 @@ ccruncher::Exception::~Exception() throw()
 //===========================================================================
 // toString
 //===========================================================================
-string ccruncher::Exception::toString() const
+const string & ccruncher::Exception::toString() const
 {
    return msg;
 }
@@ -113,7 +113,7 @@ const char * ccruncher::Exception::what() const throw()
 //===========================================================================
 // output operator
 //===========================================================================
-ostream & ccruncher::operator << (ostream& os, Exception const &e)
+ostream & ccruncher::operator << (ostream& os, const Exception &e)
 {
   os << "\nException: " << e.toString();
   string stacktrace = e.getStackTrace();
@@ -216,7 +216,7 @@ string ccruncher::Exception::retrieveStackTrace()
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================
-string ccruncher::Exception::getStackTrace() const
+const string & ccruncher::Exception::getStackTrace() const
 {
   return stacktrace;
 }

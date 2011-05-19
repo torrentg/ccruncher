@@ -73,16 +73,16 @@ class Exception : public std::exception
     // returns exception message
     const char * what() const throw();
     // returns exception message
-    std::string toString() const;
+    const std::string & toString() const;
     // returns stack trace
-    std::string getStackTrace() const;
+    const std::string & getStackTrace() const;
 
 };
 
 //---------------------------------------------------------------------------
 
 // output operator
-std::ostream& operator << (std::ostream& os, Exception const &e);
+std::ostream& operator << (std::ostream& os, const Exception &e);
 
 //---------------------------------------------------------------------------
 
