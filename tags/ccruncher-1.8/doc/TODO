@@ -1,0 +1,32 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+  * improve lookup-table when survival values are low
+
+Future works
+-------------------
+  * in 'values' tag allow express date as interval from starting 
+    date (eg. 1D, 2M, 3Y) instead of a fixed date (eg. 03/01/2011).
+  * add risk aggregation to documentation
+     - explain how to distribute the risk (eg. ES) along segments
+     - see 'introduction to credit risk modeling'
+  * improve functional tests
+     - examples based on real data
+     - improve documentation adding tests section
+  * allow evaluation in multiple time horizons
+      <breaks>
+        <break name="T25Y" at="25Y" method="exp">
+          <segmentations>
+            ..
+          </segmentations>
+        </break>
+      </breaks>
+  * allow ratings evaluated to date previous to T0
+  * add obligor-obligor dependences
+  * graphic interface
+  * considere that a obligor could belong to a few different sectors
+  * explain how to determine the minimum number of simulations required
+

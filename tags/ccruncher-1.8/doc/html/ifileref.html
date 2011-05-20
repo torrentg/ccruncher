@@ -1,0 +1,1097 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CreditCruncher - Input File Format</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+		td.c1 {
+			text-align: center;
+			padding: 8px;
+			width: 80px;
+		}
+		td.c2 {
+			text-align: justify;
+			padding: 8px;
+		}
+		td.c3 {
+			text-align: center;
+			padding: 8px;
+			width: 60px;
+		}
+	</style>
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header">
+      <a href="./index.html">
+        <img style="margin-top:28px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
+      </a>
+    </div>
+    <br/>
+
+<!-- ==================================================== -->
+<!--    introduction                                      -->
+<!-- ==================================================== -->
+    <h1>Input File Format</h1>
+
+    <p>
+      This document describes the xml input file for ccruncher-1.8.
+      In the distribution package you can find the DTD, the XSD and some XML 
+      samples into the $CCRUNCHER/samples directory. The xml used as
+      example in this section can be found <a href="sample.xml">here</a>.
+      <br /><br />
+      The XML input file structure is as follows:
+    </p>
+
+    <pre>
+
+  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+  &lt;ccruncher&gt;
+    &lt;title&gt;<i>your simulation title here</i>&lt;/title&gt;
+    &lt;description&gt;<i>your simulation description here</i>&lt;/description&gt;
+    <a href="#parameters">&lt;paramaters&gt;</a>     ...     <a href="#parameters">&lt;/parameters&gt;</a>
+    <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
+    <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
+    <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
+    <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
+    <a href="#mcorrels">&lt;mcorrels&gt;</a>       ...       <a href="#mcorrels">&lt;/mcorrels&gt;</a>
+    <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
+    <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
+  &lt;/ccruncher&gt;
+    </pre>
+
+    <p>
+      The encoding attribute can be one of these values: 
+      UTF-8, UTF-16, ISO-8859-1, US-ASCII. Take into account that 
+      XML is case-sensitive. Title and description tags are optional. 
+    </p>
+
+    <p>
+      Some configuration options are mutually exclusive. For the configuration 
+      options for which this occurs, please see the <a href="#notes">additional 
+      notes</a> for suggestions of use.
+    </p>
+
+<!-- ==================================================== -->
+<!--    parameters section                                -->
+<!-- ==================================================== -->
+    <a name="parameters"></a>
+    <h2>Section Parameters</h2>
+
+    <p>
+      This section shows the properties of the problem that needs to
+      be solved. The list can be delivered in any order.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;parameters&gt;
+    &lt;property name="time.0" value="18/10/2009"/&gt;
+    &lt;property name="time.T" value="15/07/2015"/&gt;
+    &lt;property name="stopcriteria.maxiterations" value="30000"/&gt;
+    &lt;property name="stopcriteria.maxseconds" value="3600"/&gt;
+    &lt;property name="copula.type" value="t(5)"/&gt;
+    &lt;property name="copula.seed" value="0"/&gt;
+    &lt;property name="montecarlo.antithetic" value="true"/&gt;
+    &lt;property name="portfolio.onlyActiveObligors" value="true"/&gt;
+  &lt;/parameters&gt;
+    </pre>
+
+    <h3>Property Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">time.0</td>
+        <td class="c2">
+          Starting date of the simulation. Initial obligors credit ratings, transition matrix 
+          and survival functions are relative to this date. The format of this attribute 
+          is: DD/MM/YYYY.
+        </td>
+        <td class="c3"><code>date</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">time.T</td>
+        <td class="c2">
+          Ending date of the simulation. Portfolio credit risk is computed at this date. 
+          The format of this attribute is: DD/MM/YYYY.
+        </td>
+        <td class="c3"><code>date</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">stopcriteria.maxiterations</td>
+        <td class="c2">
+          Maximum number of iterations performed by the Monte Carlo algorithm.
+          If it has value 0, this stop criteria is not considered. ccruncher stops when a
+          stop criteria is achieved.
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">stopcriteria.maxseconds</td>
+        <td class="c2">
+          Maximum number of seconds that the current execution can last.
+          If it has value 0, this stop criteria is not considered. ccruncher stops when
+          a stop criteria is achieved.
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">copula.type</td>
+        <td class="c2">
+          Type of copula used to generate correlated variables. 
+          Two families of copulas are implemented: the gaussian copula ('gaussian') and the 
+          t-Student copula ('t(n)' where <i>n > 0</i> is the number of degrees of freedom).
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">copula.seed</td>
+        <td class="c2">
+          Seed used to initialize a random number generator. If it has value 0
+          then a random number based on the current time will be used.
+          This property is optional. Default value is 0.
+        </td>
+        <td class="c3"><code>long</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">montecarlo.antithetic</td>
+        <td class="c2">
+          Specifies whether or not to use a variance reduction technique 
+          named antithetic. If you have doubts about setting this 
+          parameter then set it to 'false', otherwise set it to 'true'.
+        </td>
+        <td class="c3"><code>boolean</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">portfolio.onlyActiveObligors</td>
+        <td class="c2">
+          If you want to simulate all the obligors, including obligors without
+          risk along the time range, type 'false'. If you want to simulate
+          only active obligors along the simulation period type 'true'. We 
+          suggest writing always 'true'.
+        </td>
+        <td class="c3"><code>boolean</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    interest section                                 -->
+<!-- ==================================================== -->
+    <a name="interest"></a>
+    <h2>Section Interest</h2>
+
+    <p>
+      This section shows how to define the interest rates curve used to 
+      compute the Current Net Value of simulated losses. If you are in the
+      euro area you can obtain these values from 
+      <a href="http://www.ecb.int/stats/money/yc/html/index.en.html">ECB</a>.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;interest type="compound"&gt;
+    &lt;rate t="0" r="0.0%"/&gt;
+    &lt;rate t="1" r="4.0%"/&gt;
+    &lt;rate t="2" r="4.1%"/&gt;
+    &lt;rate t="3" r="4.5%"/&gt;
+    &lt;rate t="6" r="4.55%"/&gt;
+    &lt;rate t="12" r="4.8%"/&gt;
+    &lt;rate t="24" r="4.9%"/&gt;
+    &lt;rate t="60" r="5.0%"/&gt;
+    &lt;rate t="120" r="5.2%"/&gt;
+  &lt;/interest&gt;
+    </pre>
+
+    <h3>Interest attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">type</td>
+        <td class="c2">
+          Determine how to apply interest curve. Allowed values are: simple, compound 
+          and continuous. The formulas used in each case are described in the <i>Technical 
+          Document</i>. This attribute is optional. Default value is compound.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Rate attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="a">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">t</td>
+        <td class="c2">
+          Increment (in months) from the initial date of the interest rate curve. 
+          If a value between two given dates is needed, the value will be 
+          linearly interpolated.
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">r</td>
+        <td class="c2">
+          Interest rate at time t. It is a value between -0.5 and 1.0. The value
+          can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    ratings section                                   -->
+<!-- ==================================================== -->
+    <a name="ratings"></a>
+    <h2>Section Ratings</h2>
+
+    <p>
+      This section shows how to define the credit ratings. A minimum of two credit 
+      ratings is required: a non-default rating and a default rating.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;ratings&gt;
+    &lt;rating name="AAA" description="prime"/&gt;
+    &lt;rating name="AA" description="high grade"/&gt;
+    &lt;rating name="A" description="upper medium grade"/&gt;
+    &lt;rating name="BBB" description="lower medium grade"/&gt;
+    &lt;rating name="BB" description="non investment grade speculative"/&gt;
+    &lt;rating name="B" description="highly speculative"/&gt;
+    &lt;rating name="CCC" description="extremely speculative"/&gt;
+    &lt;rating name="D" description="in default"/&gt;
+  &lt;/ratings&gt;
+    </pre>
+
+    <h3>Rating Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">name</td>
+        <td class="c2">
+          Credit rating identifier. All references to a credit rating, eg. obligor rating, 
+          are made using this field. Includes default rating in this list.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">description</td>
+        <td class="c2">
+          Credit rating description. This value is only used in reports. This
+          description must be unique.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    transition matrix section                         -->
+<!-- ==================================================== -->
+    <a name="mtransitions"></a>
+    <h2>Section Transition Matrix</h2>
+
+    <p>
+      This section shows how to define the transition matrix. ccruncher always
+      checks that the sum of elements of each row is 1.0. Also, ccruncher checks
+      that only one row with all probability concentrated in a unique
+      element exists. The number of elements to be established is NxN, where N is the 
+      number of credit ratings. Alternatively, you can define the survival functions instead 
+	  of a transition matrix. See <a href="#notes">additional notes</a> for more information.
+	</p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;mtransitions period="12"&gt;
+    &lt;transition from="AAA" to="AAA" value="92.83%" /&gt;
+    &lt;transition from="AAA" to="AA" value="6.5%" /&gt;
+    &lt;transition from="AAA" to="A" value="0.56%" /&gt;
+    &lt;transition from="AAA" to="BBB" value="0.06%" /&gt;
+    &lt;transition from="AAA" to="BB" value="0.05%" /&gt;
+    &lt;transition from="AAA" to="B" value="0.0%" /&gt;
+    &lt;transition from="AAA" to="CCC" value="0.0%" /&gt;
+    &lt;transition from="AAA" to="D" value="0.0%" /&gt;
+    &lt;transition from="AA" to="AAA" value="0.63%" /&gt;
+    &lt;transition from="AA" to="AA" value="91.87%" /&gt;
+    &lt;transition from="AA" to="A" value="6.64%" /&gt;
+    &lt;transition from="AA" to="BBB" value="0.65%" /&gt;
+    &lt;transition from="AA" to="BB" value="0.06%" /&gt;
+    &lt;transition from="AA" to="B" value="0.11%" /&gt;
+    &lt;transition from="AA" to="CCC" value="0.04%" /&gt;
+    &lt;transition from="AA" to="D" value="0.0%" /&gt;
+    &lt;transition from="A" to="AAA" value="0.08%" /&gt;
+    &lt;transition from="A" to="AA" value="2.26%" /&gt;
+    &lt;transition from="A" to="A" value="91.65%" /&gt;
+    &lt;transition from="A" to="BBB" value="5.11%" /&gt;
+    &lt;transition from="A" to="BB" value="0.61%" /&gt;
+    &lt;transition from="A" to="B" value="0.23%" /&gt;
+    &lt;transition from="A" to="CCC" value="0.02%" /&gt;
+    &lt;transition from="A" to="D" value="0.04%" /&gt;
+    &lt;transition from="BBB" to="AAA" value="0.05%" /&gt;
+    &lt;transition from="BBB" to="AA" value="0.27%" /&gt;
+    &lt;transition from="BBB" to="A" value="5.84%" /&gt;
+    &lt;transition from="BBB" to="BBB" value="87.76%" /&gt;
+    &lt;transition from="BBB" to="BB" value="4.74%" /&gt;
+    &lt;transition from="BBB" to="B" value="0.98%" /&gt;
+    &lt;transition from="BBB" to="CCC" value="0.15%" /&gt;
+    &lt;transition from="BBB" to="D" value="0.21%" /&gt;
+    &lt;transition from="BB" to="AAA" value="0.04%" /&gt;
+    &lt;transition from="BB" to="AA" value="0.11%" /&gt;
+    &lt;transition from="BB" to="A" value="0.64%" /&gt;
+    &lt;transition from="BB" to="BBB" value="7.85%" /&gt;
+    &lt;transition from="BB" to="BB" value="81.13%" /&gt;
+    &lt;transition from="BB" to="B" value="8.27%" /&gt;
+    &lt;transition from="BB" to="CCC" value="0.89%" /&gt;
+    &lt;transition from="BB" to="D" value="1.07%" /&gt;
+    &lt;transition from="B" to="AAA" value="0.0%" /&gt;
+    &lt;transition from="B" to="AA" value="0.11%" /&gt;
+    &lt;transition from="B" to="A" value="0.3%" /&gt;
+    &lt;transition from="B" to="BBB" value="0.42%" /&gt;
+    &lt;transition from="B" to="BB" value="6.75%" /&gt;
+    &lt;transition from="B" to="B" value="83.08%" /&gt;
+    &lt;transition from="B" to="CCC" value="3.86%" /&gt;
+    &lt;transition from="B" to="D" value="5.48%" /&gt;
+    &lt;transition from="CCC" to="AAA" value="0.19%" /&gt;
+    &lt;transition from="CCC" to="AA" value="0.0%" /&gt;
+    &lt;transition from="CCC" to="A" value="0.38%" /&gt;
+    &lt;transition from="CCC" to="BBB" value="0.75%" /&gt;
+    &lt;transition from="CCC" to="BB" value="2.44%" /&gt;
+    &lt;transition from="CCC" to="B" value="12.03%" /&gt;
+    &lt;transition from="CCC" to="CCC" value="60.71%" /&gt;
+    &lt;transition from="CCC" to="D" value="23.5%" /&gt;
+    &lt;transition from="D" to="AAA" value="0.0%" /&gt;
+    &lt;transition from="D" to="AA" value="0.0%" /&gt;
+    &lt;transition from="D" to="A" value="0.0%" /&gt;
+    &lt;transition from="D" to="BBB" value="0.0%" /&gt;
+    &lt;transition from="D" to="BB" value="0.0%" /&gt;
+    &lt;transition from="D" to="B" value="0.0%" /&gt;
+    &lt;transition from="D" to="CCC" value="0.0%" /&gt;
+    &lt;transition from="D" to="D" value="100%" /&gt;
+  &lt;/mtransitions&gt;
+    </pre>
+
+	<p>
+	  The above matrix is the S&amp;P 1-year transition matrix which is adjusted 
+	  for unrated bonds and covers the period between 01-Jan-1981 and 31-Dec-1998.
+	  It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>.
+	</p>
+
+    <h3>MTransitions Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">period</td>
+        <td class="c2">
+          Number of months covered by the transition matrix. Usually the
+          transition matrix covers 1 year, and in such case, set the value to 12. 
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+    </table>
+
+    <h3>Transition Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">from</td>
+        <td class="c2">
+          Initial credit rating. This value must be a credit rating identifier, see 
+          name attribute in the credit rating tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">to</td>
+        <td class="c2">
+          Final credit rating. This value must be a credit rating identifier, see 
+          name attribute in the credit rating tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">value</td>
+        <td class="c2">
+          Probability for credit rating migration and must have a value between 0 and 1.
+          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    sectors section                                   -->
+<!-- ==================================================== -->
+    <a name="sectors"></a>
+    <h2>Section Sectors</h2>
+
+    <p>
+      This section shows how to define the sectors. A minimum of one sector
+      is required.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;sectors&gt;
+    &lt;sector name="S1" description='Consumer/service sector'/&gt;
+    &lt;sector name="S2" description='Forest/building products'/&gt;
+    &lt;sector name="S3" description='High technology'/&gt;
+    &lt;sector name="S4" description='Utilities'/&gt;
+    &lt;sector name="S5" description="Other sectors"/&gt;
+  &lt;/sectors&gt;
+    </pre>
+
+    <h3>Sector Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">name</td>
+        <td class="c2">
+          Sector identifier. All references to a sector, eg. obligor 
+          sector, are made using this field.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">description</td>
+        <td class="c2">
+          Sector description. This value is only used in reports.
+          This description must be unique.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    correlations section                              -->
+<!-- ==================================================== -->
+    <a name="mcorrels"></a>
+    <h2>Section Correlations</h2>
+
+    <p>
+      This section shows how to define the default correlation matrix between 
+      sectors. The correlation matrix must be symmetric and you only need to 
+      set up the upper triangle elements. Ccruncher checks that all the elements 
+      are in the range [-100%,+100%]. The number of elements to set up is 
+      (numsectors+1) x numsectors / 2.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;mcorrels&gt;
+    &lt;sigma sector1="S1" sector2="S1" value="15.1%"/&gt;
+    &lt;sigma sector1="S1" sector2="S2" value="6.2%"/&gt;
+    &lt;sigma sector1="S1" sector2="S3" value="8.6%"/&gt;
+    &lt;sigma sector1="S1" sector2="S4" value="3.9%"/&gt;
+    &lt;sigma sector1="S1" sector2="S5" value="9.1%"/&gt;
+    &lt;sigma sector1="S2" sector2="S2" value="17.9%"/&gt;
+    &lt;sigma sector1="S2" sector2="S3" value="6.3%"/&gt;
+    &lt;sigma sector1="S2" sector2="S4" value="10.2%"/&gt;
+    &lt;sigma sector1="S2" sector2="S5" value="8.8%"/&gt;
+    &lt;sigma sector1="S3" sector2="S3" value="17.5%"/&gt;
+    &lt;sigma sector1="S3" sector2="S4" value="7.3%"/&gt;
+    &lt;sigma sector1="S3" sector2="S5" value="7.1%"/&gt;
+    &lt;sigma sector1="S4" sector2="S4" value="12.8%"/&gt;
+    &lt;sigma sector1="S4" sector2="S5" value="6.4%"/&gt;
+    &lt;sigma sector1="S5" sector2="S5" value="15.0%"/&gt;
+  &lt;/mcorrels&gt;
+    </pre>
+
+    <h3>Sigma Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">sector1</td>
+        <td class="c2">
+          First sector involved in correlation value.
+          This value must be a sector identifier, see name attribute in sector tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">sector2</td>
+        <td class="c2">
+          second sector involved in correlation value.
+          This value must be a sector identifier, see name attribute in sector tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">value</td>
+        <td class="c2">
+          Correlation of defaults times between sector1 and sector2.
+          Correlation(defaults(S1), defaults(S2)). The value can be 
+          set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    segmentations section                             -->
+<!-- ==================================================== -->
+    <a name="segmentations"></a>
+    <h2>Section Segmentations</h2>
+
+    <p>
+      This section shows how to define portfolio segmentations. Segmentations
+      allow you to analyze your portfolio's risk according to a hierarchical organization
+      or another type of segmentation. A segmentation is composed of segments.
+      There are 2 types of segmentations:
+    </p>
+    <ul>
+      <li>obligor segmentations, eg. sector, obligor size, initial credit rating, etc.</li>
+      <li>asset segmentations, eg. products, branch where the contract is made, etc.</li>
+    </ul> 
+    <p>
+      All segmentations must be complete, so that an element belongs to only one segment and 
+      the union of all segments constitutes the whole portfolio. Every segmentation must have 
+      a segment named 'unassigned' defined in an implicit way. If a obligor (or an asset)
+      does not belong to any segment, then it is considered part of the 'unassigned' segment. Finally, 
+      there are 2 special segmentations: 'obligors' (one segment per obligor) and 'assets'
+      (one segment per asset), and in these cases you don't need to specify all the segments,
+      because these are defined implicitly. 
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;segmentations&gt;
+    &lt;segmentation name="portfolio" components="asset"/&gt;
+    &lt;segmentation name="obligors" components="obligor"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="assets" components="asset"&gt;
+      &lt;segment name="*"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="sectors" components="obligor"&gt;
+      &lt;segment name="S1"/&gt;
+      &lt;segment name="S2"/&gt;
+      &lt;segment name="S3"/&gt;
+      &lt;segment name="S4"/&gt;
+      &lt;segment name="S5"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="size" components="obligor"&gt;
+      &lt;segment name="large"/&gt;
+      &lt;segment name="medium"/&gt;
+      &lt;segment name="small"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="products" components="asset"&gt;
+      &lt;segment name="bond"/&gt;
+      &lt;segment name="loan"/&gt;
+      &lt;segment name="lease"/&gt;
+      &lt;segment name="mortgage"/&gt;
+      &lt;segment name="line of credit"/&gt;
+      &lt;segment name="bank guarantee"/&gt;
+    &lt;/segmentation&gt;
+    &lt;segmentation name="offices" components="asset"&gt;
+      &lt;segment name="0001"/&gt;
+      &lt;segment name="0002"/&gt;
+      &lt;segment name="0003"/&gt;
+      &lt;segment name="0004"/&gt;
+    &lt;/segmentation&gt;
+  &lt;/segmentations&gt;
+    </pre>
+
+    <h3>Segmentation Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">name</td>
+        <td class="c2">
+          Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
+          are made using this field.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">components</td>
+        <td class="c2">
+          Type of segments. Accepted values are 'obligor' 
+          and 'asset'.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Segment Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">name</td>
+        <td class="c2">
+          Segment name. Different segmentations can have segments with
+          the same name. All references to a segment, eg. belongs-to tag,
+          are made using this field and always in conjunction with the segmentation. 
+          If a segmentation doesn't have any segments, all the elements belong to
+          the 'unassigned' segment. The 'obligors' and 'assets' segmentations allow
+          defining the '*' segment. The '*' segment contains an implicit 
+          definition of a segment to every asset and obligor.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    portfolio section                                 -->
+<!-- ==================================================== -->
+    <a name="portfolio"></a>
+    <h2>Section Portfolio</h2>
+
+    <p>
+      This section shows how to define the portfolio. 
+      A portfolio is a set of assets. The description of assets is done 
+      by listing the expected exposures and recovery rates in case of default. 
+      Assets are grouped by obligor.
+    </p>
+    <p>
+      Recovery can be defined at 3 different levels: obligor, asset and data value. 
+      When a default occurs at time t, we get the recovery at time <i>t</i> (or the closest 
+      date above). If this recovery is not reported, we get the asset recovery. If 
+      this recovery is not reported, we get the obligor recovery.When a default occurs 
+      at time <i>t</i>, in the beta distribution case, a new sample is drawn. In the obligor 
+      level, this drawn is shared by all assets that have not defined a recovery at <i>t</i>. 
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;portfolio&gt;
+    &lt;obligor rating="A" sector="S1" id="000001"&gt;
+      &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
+      &lt;belongs-to segmentation="size" segment="medium"/&gt;
+      &lt;asset id="op1" date="01/01/2005" recovery="80%"&gt;
+        &lt;belongs-to segmentation="products" segment="bond"/&gt;
+        &lt;belongs-to segmentation="offices" segment="0001"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/06/2005" exposure="2000.0" /&gt;
+          &lt;values at="01/06/2006" exposure="1900.0" /&gt;
+          &lt;values at="01/06/2007" exposure="1800.0" /&gt;
+          &lt;values at="01/06/2008" exposure="1700.0" /&gt;
+          &lt;values at="01/06/2009" exposure="1600.0" /&gt;
+          &lt;values at="01/06/2010" exposure="1500.0" /&gt;
+          &lt;values at="01/06/2011" exposure="1400.0" /&gt;
+          &lt;values at="01/06/2012" exposure="1300.0" /&gt;
+          &lt;values at="01/06/2013" exposure="1200.0" /&gt;
+          &lt;values at="01/06/2014" exposure="1100.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+      &lt;asset id="op2" date="01/06/2008"&gt;
+        &lt;belongs-to segmentation="offices" segment="0004"/&gt;
+        &lt;belongs-to segmentation="products" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/07/2009" exposure="4400.0" recovery="75%" /&gt;
+          &lt;values at="01/07/2011" exposure="3920.0" recovery="70%" /&gt;
+          &lt;values at="01/07/2013" exposure="3340.0" recovery="65%" /&gt;
+          &lt;values at="01/07/2015" exposure="2960.0" recovery="60%" /&gt;
+          &lt;values at="01/07/2017" exposure="2480.0" recovery="55%" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/obligor&gt;
+    &lt;obligor rating="B" sector="S2" id="000002" recovery="20%"&gt;
+      &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
+      &lt;belongs-to segmentation="size" segment="large"/&gt;
+      &lt;asset id="op3" date="01/06/2003"&gt;
+        &lt;belongs-to segmentation="offices" segment="0003"/&gt;
+        &lt;belongs-to segmentation="products" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2005" exposure="1750.0" /&gt;
+          &lt;values at="01/06/2007" exposure="1600.0" /&gt;
+          &lt;values at="01/01/2009" exposure="1450.0" /&gt;
+          &lt;values at="01/06/2011" exposure="1300.0" /&gt;
+          &lt;values at="01/01/2013" exposure="1150.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/obligor&gt;
+    &lt;obligor rating="CCC" sector="S2" id="000003"&gt;
+      &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
+      &lt;belongs-to segmentation="size" segment="medium"/&gt;
+      &lt;asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
+        &lt;belongs-to segmentation="offices" segment="0003"/&gt;
+        &lt;belongs-to segmentation="products" segment="bond"/&gt;
+        &lt;data&gt;
+          &lt;values at="01/01/2000" exposure="2400.0" /&gt;
+          &lt;values at="01/01/2001" exposure="2300.0" /&gt;
+          &lt;values at="01/01/2002" exposure="2200.0" /&gt;
+          &lt;values at="01/01/2003" exposure="2100.0" /&gt;
+          &lt;values at="01/01/2004" exposure="lognormal(6.5,1.0)" /&gt;
+          &lt;values at="01/01/2005" exposure="1900.0" /&gt;
+          &lt;values at="01/01/2006" exposure="exponential(1800.0)" /&gt;
+          &lt;values at="01/01/2007" exposure="1700.0" /&gt;
+          &lt;values at="01/01/2008" exposure="uniform(1500.0,1700.0)" /&gt;
+          &lt;values at="01/01/2009" exposure="1500.0" /&gt;
+          &lt;values at="01/01/2010" exposure="gamma(2800.0,0.5)" /&gt;
+          &lt;values at="01/01/2011" exposure="1300.0" /&gt;
+          &lt;values at="01/01/2012" exposure="normal(1200.0,100.0)" /&gt;
+          &lt;values at="01/01/2013" exposure="1100.0" /&gt;
+        &lt;/data&gt;
+      &lt;/asset&gt;
+    &lt;/obligor&gt;
+  &lt;/portfolio&gt;
+    </pre>
+
+    <p>
+      Note how the obligor does not have any 'belongs-to segmentation=obligor' defined.
+      This definition is made implicitly and the same is done for 'asset'.
+      If you try to assign a obligor to a segmentation of asset components 
+      or vice versa, the input file will be rejected.
+    </p>
+
+    <h3>Portfolio Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">include</td>
+        <td class="c2">
+          Indicates the filepath to portfolio file relative to the main input file location. 
+          The format of the portfolio file is exactly the same of the section 
+          portfolio where the root tag of this file is <code>portfolio</code>. This attribute is optional. 
+          If your portfolio is large and you plan to simulate it multiple times using distinct 
+          parameters use this feature, otherwise this attribute can be omitted.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Obligor Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">id</td>
+        <td class="c2">
+          Unique obligor identifier. Used by implicit obligor segmentation.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">rating</td>
+        <td class="c2">
+          Initial obligor credit rating at time t0, see attribute <i>time.0</i> at the 
+          <a href="#parameters">parameters</a> section. This value must be a credit rating 
+          identifier, see name attribute in <a href="#ratings">rating</a> tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">sector</td>
+        <td class="c2">
+          Sector where this obligor is included.
+          This value must be a sector identifier, see name attribute in sector tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">recovery</td>
+        <td class="c2">
+          Default recovery used in absence of recovery in the description of assets.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
+          This attribute is optional.
+        </td>
+        <td class="c3"><code>double<br/>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Belongs-To Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">segmentation</td>
+        <td class="c2">
+          Segmentation identifier.
+          This value must be a segmentation identifier, see name attribute in segmentation tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">segment</td>
+        <td class="c2">
+          Segment identifier.
+          This value must be a segment identifier, see name attribute in segment tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Asset Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">id</td>
+        <td class="c2">
+          Unique asset identifier. Used by implicit asset segmentation.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">date</td>
+        <td class="c2">
+          Date (in format DD/MM/YYYY) from wich there is credit risk, eg. bond
+          buy date or loan signature.
+        </td>
+        <td class="c3"><code>date</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">recovery</td>
+        <td class="c2">
+          Default recovery used in absence of recovery in the description of assets.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
+          This attribute is optional.
+        </td>
+        <td class="c3"><code>double<br/>string</code></td>
+      </tr>
+    </table>
+
+    <h3>Values Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">at</td>
+        <td class="c2">
+          Date (in format DD/MM/YYYY) where the values take place.
+        </td>
+        <td class="c3"><code>date</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">exposure</td>
+        <td class="c2">
+          Esposure at date "at". Amount that lender can lose in case of obligor's default 
+          on the indicated date. Exposure can be a fixed value or a probability distribution. 
+          In the first case, set the numeric value that represents the exposure (eg. 50000). 
+          In the second case, you can model recovery using the folowing distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Log-normal_distribution">lognormal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential(&beta;)</a>, where &beta; &gt; 0 is the <a href="http://en.wikipedia.org/wiki/Exponential_distribution#Alternative_parameterization">survival parameter</a><br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where a &gt; 0 and b &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Gamma_distribution">gamma(k,&rho;)</a>, where k &gt; 0 and &rho; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Normal_distribution">normal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0. Values less than 0 are truncated to 0.<br/>
+        </td>
+        <td class="c3"><code>double<br/>string</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">recovery</td>
+        <td class="c2">
+          The portion of loss that will be recovered in case of default at date 
+          "at". This value takes into account guarantees, the cost to take legal actions, 
+          recovery rate based on historical data, etc.
+          Recovery can be a fixed value or a probability distribution. In the first case, 
+          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          In the second case, you can model recovery using the following distributions:<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
+          &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
+        </td>
+        <td class="c3"><code>double<br/>string</code></td>
+      </tr>
+    </table>
+
+<!-- ==================================================== -->
+<!--    Notes                                             -->
+<!-- ==================================================== -->
+	<br/>
+    <a name="notes"></a>
+    <h1>Additional Notes</h1>
+
+<!-- ==================================================== -->
+<!--    survival section                                  -->
+<!-- ==================================================== -->
+    <a name="survival"></a>
+    <h2>Section Survival Function</h2>
+
+	<p>
+	  The survival data is often not available, and where it is available, it 
+	  is often inconsistent or not representative. For this reason it is better
+	  to work with the transition matrix. Ccruncher will take care to convert the
+	  transition matrix in the corresponding survival functions. This implies that 
+      the credit rating transitions follow a Markov model. Sometimes 
+	  this asumption is not acceptable because we desire that transition 
+	  probabilities change over the simulation period or we plan to do stress tests over 
+	  the default probabilites. In these cases it recommended to define the 
+	  survival functions explicitely.
+	</p>
+
+    <p>
+      You must define either a mtransitions matrix or a survival function, but not both.
+      This section contains the survival function for each credit rating. If this 
+      section is non provided, the survival function will be computed using 
+      the transition matrix. You don't need to fill all time values. The survival 
+      function is monotonously decreasing and has a value of 1 when time is 0 
+      for all credit ratings other than default. The survival function of the default 
+      rating is always 0.
+    </p>
+
+    <h3>Example</h3>
+
+    <pre>
+
+  &lt;survival&gt;
+    &lt;svalue rating="AAA" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="AA" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="A" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="BBB" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="BB" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="B" t="0" value="100.0%"/&gt;
+    &lt;svalue rating="CCC" t="0" value="0.0%"/&gt;
+    &lt;svalue rating="D" t="0" value="0.0%"/&gt;
+
+    &lt;svalue rating="AAA" t="6" value="99.96%"/&gt;
+    &lt;svalue rating="AA" t="6" value="98.54%"/&gt;
+    &lt;svalue rating="A" t="6" value="97.19%"/&gt;
+    &lt;svalue rating="BBB" t="6" value="95.98%"/&gt;
+    &lt;svalue rating="BB" t="6" value="92.63%"/&gt;
+    &lt;svalue rating="B" t="6" value="85.72%"/&gt;
+    &lt;svalue rating="CCC" t="6" value="78.88%"/&gt;
+    &lt;svalue rating="D" t="6" value="0.0%"/&gt;
+    ...
+  &lt;/survival&gt;
+    </pre>
+
+    <h3>Svalue Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">rating</td>
+        <td class="c2">
+         This value must be a credit rating identifier, see name attribute in the 
+         rating tag.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">t</td>
+        <td class="c2">
+          Time (in months) from starting date <i>time.0</i>.
+        </td>
+        <td class="c3"><code>int</code></td>
+      </tr>
+      <tr class="a">
+        <td class="c1">value</td>
+        <td class="c2">
+          Probability that a obligor with initial rating <i>rating</i> 
+          survives (or: does not default) at time <i>t</i>. It must have a value 
+          between 0 and 1. The value can be set as percentage (eg. 5.3%) or 
+          absolute value (eg. 0.053).
+        </td>
+        <td class="c3"><code>double</code></td>
+      </tr>
+    </table>
+
+    <br />
+    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
+      <div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
+        <table width="100%"><tr>
+          <td style="width:100%; text-align:center; font-size:smaller;">
+            Copyright &copy; 2004-2011 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+          </td>
+          <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
+            Last modified: 11-May-2011
+          </td>
+        </tr></table>
+      </div></div></div></div></div>
+    </div>
+    <br />
+
+  </div>
+  </body>
+</html>

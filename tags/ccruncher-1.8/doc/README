@@ -1,0 +1,223 @@
+
+CCRUNCHER README
+================
+
+
+Description
+--------------------------------
+
+CCruncher computes the Value At Risk (VAR) of large credit
+portfolios using the Monte Carlo method. It is a command line solver
+that read an xml input file and returns a plain text file with the
+simulated values of portfolio.
+
+
+Directory structure
+--------------------------------
+
+Directory structure for binary distributions:
+$CCRUNCHER/
+  |- bin/     : executables and scripts directory
+  |- data/    : put your ccruncher outputs here (recomended)
+  |- doc/     : doc directory
+  |- samples/ : samples directory
+
+Directory structure for source distribution:
+$CCRUNCHER/
+  |- bin/     : executables and scripts directory
+  |- build    : directory used to put the *.o files
+  |- data/    : put your output here (recomended)
+  |- deps/    : source code from other projects used by ccruncher
+  |- doc/     : doc directory
+  |- samples/ : samples directory
+  |- src/     : ccruncher source code files
+
+
+Required libraries installation
+--------------------------------
+
+1. check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://expat.sourceforge.net/ and install it. 
+   Also you can install from expat and expat-devel rpm packages.
+
+2. check that you have libz.so in a lib directory and
+   check that you have zlib.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.zlib.net/ and install it. 
+   Also you can install from zlib and zlib-devel rpm packages.
+
+3. check that you have libgsl.so in a lib directory and
+   check that you have gsl_math.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.gnu.org/software/gsl/ and install it. 
+   Also you can install from gsl and gsl-devel rpm packages.
+
+4. CCruncher use a statistical package named R to compute
+   risk indicators. Install it from http://www.r-project.org/
+   or install from R rpm package.
+
+
+Installation from source package
+--------------------------------
+
+1. uncompress package
+     > tar -xvzf ccruncher-X.Y_src.tgz
+
+2. install required libraries (explained before)
+
+3. execute commands (read INSTALL file):
+     > cd ccruncher-X.Y
+     > configure
+     > make
+     > bin/src2bin.sh
+
+   supported ./configure options:
+     --enable-debug:    add debug instructions
+     --enable-profiler: add profiler instructions
+
+
+Installation from binary package
+--------------------------------
+
+1. uncompress package
+     > tar -xvzf ccruncher-X.Y_bin.tgz
+
+2. install required libraries (explained before)
+
+
+Using CCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step.
+   Use any file in samples directory as template.
+
+2. run CCruncher
+     > $CCRUNCHER/bin/ccruncher --help
+     > $CCRUNCHER/bin/ccruncher -f --hash=100 --path=./data samples/test01.xml
+
+3. compute risk indicators typing:
+     > $CCRUNCHER/bin/ccreport.sh data/portfolio.csv
+     > firefox data/portfolio.html
+   
+   or open a R console and type:
+     > source("$CCRUNCHER/bin/ccreport.R")
+     > ccruncher.summary("$CCRUNCHER/data/portfolio.csv")
+     > x <- ccruncher.read("$CCRUNCHER/data/portfolio.csv")
+     > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="all")
+     > quit(save='no')
+
+
+Notes for Windows developers (MSVC9)
+------------------------------------
+
+1. install a subversion client
+   (eg. http://tortoisesvn.tigris.org/)
+
+2. retrieve repository content
+   (checkout from http://www.ccruncher.net/svn/trunk/)
+
+3. download expat package from http://expat.sourceforge.net/
+   and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
+
+4. download zlib package from http://www.zlib.net/
+   and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
+
+5. download gsl package from http://alexlaier.org/me/index.php?option=com_content&view=article&id=26:gsl-111-port-microsoft-visual-studio-2008-vc90&catid=3:stuff&Itemid=4
+   and unpack at $CCRUNCHER\deps\gsl-1.11 directory
+
+6. download pthreads-win32 package from http://sourceware.org/pthreads-win32/
+   and unpack at $CCRUNCHER\deps\pthread-win32 directory
+
+7. copy zlib1.dll, libexpat.dll and pthreadVCE2.dll (installed in steps 3, 4 and 6) to
+   $CCRUNCHER\bin (required to execute bin\ccruncher.exe)
+
+8. double-click ccruncher.vcproj (opens MSVC9)
+
+9. execute compile option
+
+Microsoft Visual C++ versions:
+ - MSVC6: don't work at all
+ - MSVC7: possibly works, but need to create the file project
+ - MSVC8: possibly works, but need to create the file project
+ - MSVC9: works. see current file project
+
+
+Developers tips & tricks
+--------------------------------
+
+1. download CCruncher sources from subversion repositori
+     > svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
+
+2. install required libraries (explained before)
+
+3. create auto-files (run only 1 time)
+     > autoscan (produces configure.in)
+     > autoheader (produces config.h.in)
+
+4. create ./configure script
+     > aclocal
+     > autoconf
+     > automake -avcf    (--help --warnings=all)
+
+5. compile project in debug mode
+     > configure --enable-debug --enable-profiler
+     > make
+     > make check
+
+6. executing test suite
+     > build/tests
+
+7. checking memory leaks
+     don't enable profiler because can cause problems to valgrind
+     > valgrind --tool=memcheck --leak-check=yes <progname>
+
+8. profiling executable (only if configure is called with option --enable-profiler)
+     ccruncher writes gmon.out because we compiled with -pg flag
+     > gprof bin/ccruncher gmon.out
+     > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
+     > valgrind --tool=callgrind bin/ccruncher
+     > kcachegrind callgrind.out.99999
+     > # with oprofile (as root)
+     > modprobe oprofile
+     > opcontrol --init
+     > opcontrol --no-vmlinux --start
+     > ./binary
+     > opcontrol --dump
+     > opreport -l ./binary
+     > opcontrol --stop
+     > opcontrol --shutdown
+     > # with sysprof
+     > sysprof
+     > ./binary
+
+9. debuging executable
+     > gdb ./path/progname
+       >> help
+       >> set args arg1 arg2 arg3 ... argn
+       >> run
+       >> backtrace
+       >> quit
+
+10. creating pdf documentation
+      > $CCRUNCHER/doc/tex/make
+      > $CCRUNCHER/doc/tex/make install
+
+11. making source distribution package
+      > make distcheck
+      > make dist
+    or (better) use script $CCRUNCHER/bin/makedist.sh
+      > $CCRUNCHER/bin/makedist.sh -s
+      > $CCRUNCHER/bin/makedist.sh -b
+      > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
+
+12. create a tag in subversion repository
+      > svn cp http://www.ccruncher.net/svn/trunk/ \
+             http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
+             -m "created tag ccruncher-x.y"
+
+
+CCruncher Team
+http://www.ccruncher.net
+
