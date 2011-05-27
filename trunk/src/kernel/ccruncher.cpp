@@ -63,6 +63,7 @@ bool btrace = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
+long seed = -1;
 MonteCarlo *mcref = NULL;
 
 //===========================================================================
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
       { "trace",        0,  NULL,  306 },
+      { "seed",         1,  NULL,  307 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -185,6 +187,19 @@ int main(int argc, char *argv[])
 
       case 306: // --trace (trace copula values and default times)
           btrace = true;
+          break;
+
+      case 307: // --seed=val (overwrite seed value)
+          try
+          {
+            string sseed = string(optarg);
+            seed = Parser::longValue(sseed);
+          }
+          catch(Exception &)
+          {
+            cerr << "invalid seed value" << endl;
+            return 1;
+          }
           break;
 
       default: // unexpected error
@@ -295,6 +310,9 @@ void run(string filename, string path, int nthreads) throw(Exception)
 
   // parsing input file
   IData idata(filename);
+  if (seed >= 0) {
+    idata.getParams().copula_seed = seed;
+  }
 
   // creating simulation object
   MonteCarlo montecarlo;
@@ -380,6 +398,7 @@ void usage()
   "    --path=dir     directory where output files will be placed (required)\n"
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
+  "    --seed=num     overwrites configuration seed value (optional)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
