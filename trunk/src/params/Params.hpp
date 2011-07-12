@@ -85,7 +85,11 @@ class Params : public ExpatHandlers
     // destructor
     ~Params();
     // returns copula type as string (gaussian or t)
+    static string getCopulaType(const string &str) throw(Exception);
+    // returns copula type as string (gaussian or t)
     string getCopulaType() const throw(Exception);
+    // returns copula param (if exists)
+    static double getCopulaParam(const string &str) throw(Exception);
     // returns copula param (if exists)
     double getCopulaParam() const throw(Exception);
     // serialize object content as xml

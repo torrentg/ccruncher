@@ -96,19 +96,47 @@ void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
 //===========================================================================
 // checks copula type string
 //===========================================================================
-string ccruncher::Params::getCopulaType() const throw(Exception)
+string ccruncher::Params::getCopulaType(const string &str) throw(Exception)
 {
   // gaussian case
-  if (copula_type == "gaussian") {
+  if (str == "gaussian") {
     return "gaussian";
   }
   // t-student case t(x)
-  else if (copula_type.length() >= 3 && copula_type.substr(0,2) == "t(" && copula_type.at(copula_type.length()-1) == ')') {
+  else if (str.length() >= 3 && str.substr(0,2) == "t(" && str.at(str.length()-1) == ')') {
     return "t";
   }
   // non-valid copula type
   else {
-    throw Exception("invalid copula type: " + copula_type + ". try 'gaussian' or 't(x)' with x>2");
+    throw Exception("invalid copula type: " + str + ". try 'gaussian' or 't(x)' with x>2");
+  }
+}
+
+//===========================================================================
+// checks copula type string
+//===========================================================================
+string ccruncher::Params::getCopulaType() const throw(Exception)
+{
+  return getCopulaType(copula_type);
+}
+
+//===========================================================================
+// checks copula type string
+//===========================================================================
+double ccruncher::Params::getCopulaParam(const string &str) throw(Exception)
+{
+  if (getCopulaType(str) != "t") {
+    throw Exception("copula without params");
+  }
+  // t-student case t(x), where x is a integer
+  else {
+    string val = str.substr(2, str.length()-3);
+    double ndf = Parser::doubleValue(val);
+    if (ndf < 2.0) 
+    {
+      throw Exception("t-student copula requires ndf >= 2");
+    }
+    return ndf;
   }
 }
 
@@ -117,19 +145,7 @@ string ccruncher::Params::getCopulaType() const throw(Exception)
 //===========================================================================
 double ccruncher::Params::getCopulaParam() const throw(Exception)
 {
-  if (getCopulaType() != "t") {
-    throw Exception("copula without params");
-  }
-  // t-student case t(x), where x is a integer
-  else {
-    string val = copula_type.substr(2, copula_type.length()-3);
-    double ndf = Parser::doubleValue(val);
-    if (ndf < 2.0) 
-    {
-      throw Exception("t-student copula requires ndf >= 2");
-    }
-    return ndf;
-  }
+  return getCopulaParam(copula_type);
 }
 
 //===========================================================================
