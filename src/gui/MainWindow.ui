@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -126,7 +126,7 @@
                </widget>
               </item>
               <item row="0" column="4">
-               <widget class="QComboBox" name="comboBox">
+               <widget class="QComboBox" name="copula">
                 <property name="minimumSize">
                  <size>
                   <width>125</width>
@@ -191,7 +191,7 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox">
+               <widget class="QDoubleSpinBox" name="degrees_of_freedom">
                 <property name="minimumSize">
                  <size>
                   <width>125</width>
@@ -286,7 +286,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_4">
+               <widget class="QComboBox" name="interest_type">
                 <item>
                  <property name="text">
                   <string>Simple</string>
@@ -307,7 +307,7 @@
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="tableWidget">
+             <widget class="QTableWidget" name="interest_values">
               <property name="gridStyle">
                <enum>Qt::SolidLine</enum>
               </property>

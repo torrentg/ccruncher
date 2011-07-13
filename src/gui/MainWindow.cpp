@@ -1,5 +1,7 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+#include "params/Params.hpp"
+#include <cassert>
 
 #define CONFIG_UNASSIGNED_STRING "UNASSIGNED"
 #define CONFIG_UNASSIGNED_INT "UNASSIGNED"
@@ -33,12 +35,49 @@ MainWindow::~MainWindow()
 //===========================================================================
 void MainWindow::setData(int id)
 {
+	QString str;
+
 	// parameters tab
 	ui->name->setText(database.getName(id));
 	ui->description->setPlainText(database.getDescription(id));
 	ui->time0->setDate(database.getProperty(id,Database::Time0).toDate());
 	ui->timeT->setDate(database.getProperty(id,Database::TimeT).toDate());
+	str = database.getProperty(id,Database::CopulaType).toString();
+	if (Params::getCopulaType(str.toStdString()) == "gaussian") {
+		ui->copula->setCurrentIndex(0);
+		ui->degrees_of_freedom->setEnabled(false);
+	}
+	else if (Params::getCopulaType(str.toStdString()) == "t") {
+		ui->copula->setCurrentIndex(1);
+		ui->degrees_of_freedom->setEnabled(true);
+		double val = Params::getCopulaParam(str.toStdString());
+		ui->degrees_of_freedom->setValue(val);
+	}
+	else {
+		assert(false);
+	}
 
+	// interests tab
+	QList<pair<int,double> > values;
+	database.getInterest(id, values, str);
+	if (str == "simple") {
+		ui->interest_type->setCurrentIndex(0);
+	}
+	else if (str == "compound") {
+		ui->interest_type->setCurrentIndex(1);
+	}
+	else if (str == "continuous") {
+		ui->interest_type->setCurrentIndex(2);
+	}
+	else {
+		assert(false);
+	}
+	ui->interest_values->clearContents();
+	ui->interest_values->setRowCount(values.size());
+	for(int i=0; i<values.size(); i++) {
+		ui->interest_values->setItem(i, 0, new QTableWidgetItem(QString::number(values[i].first)));
+		ui->interest_values->setItem(i, 1, new QTableWidgetItem(QString::number(values[i].second)));
+	}
 
 	// simulation tab
 	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());

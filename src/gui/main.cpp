@@ -4,7 +4,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QString>
-#include "Exception.hpp"
+#include "utils/Exception.hpp"
 #include "MainWindow.hpp"
 #include "Configuration.hpp"
 
