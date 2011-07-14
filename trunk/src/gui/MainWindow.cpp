@@ -30,6 +30,20 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment)
+{
+	// First : Set the combobox the editable (this allows us to use the lineEdit)
+	mComboBox->setEditable(true);
+	// Second : Put the lineEdit in read-only mode
+	mComboBox->lineEdit()->setReadOnly(true);
+	// Third  : Align the lineEdit to right
+	mComboBox->lineEdit()->setAlignment(alignment);
+	// Fourth : Align each item in the combo to the right
+	for(int i = 0; i < mComboBox->count(); i++)	{
+		mComboBox->setItemData(i, QVariant(alignment), Qt::TextAlignmentRole);
+	}
+}
+
 //===========================================================================
 // destructor
 //===========================================================================
@@ -72,11 +86,21 @@ void MainWindow::setData(int id)
 	else {
 		assert(false);
 	}
+	setTextAlignment(ui->interest_type, Qt::AlignCenter);
 	ui->interest_values->clearContents();
 	ui->interest_values->setRowCount(values.size());
-	for(int i=0; i<values.size(); i++) {
-		ui->interest_values->setItem(i, 0, new QTableWidgetItem(QString::number(values[i].first)));
-		ui->interest_values->setItem(i, 1, new QTableWidgetItem(QString::number(values[i].second)));
+	for(int i=0; i<values.size(); i++)
+	{
+		delete ui->interest_values->verticalHeaderItem(i);
+
+		QTableWidgetItem *col0 = new QTableWidgetItem(QString::number(values[i].first));
+		col0->setTextAlignment(Qt::AlignCenter);
+		ui->interest_values->setItem(i, 0, col0);
+
+
+		QTableWidgetItem *col1 = new QTableWidgetItem(QString::number(100*values[i].second, 'f', 2) + " %");
+		col1->setTextAlignment(Qt::AlignCenter);
+		ui->interest_values->setItem(i, 1, col1);
 	}
 
 	// simulation tab
