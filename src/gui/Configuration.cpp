@@ -31,13 +31,13 @@ Configuration::Configuration(const QString &filename) throw(Exception)
 		db_password = getString(CFGKEY_DB_PASSWORD);
 	}
 	catch(ConfigFile::file_not_found &e) {
-			throw Exception("error: configuration file '" + filename.toStdString() + "' not found");
+		throw Exception("error: configuration file '" + filename.toStdString() + "' not found");
 	}
 	catch(Exception &e) {
-			throw Exception(e, "error: parsing configuration file '" + filename.toStdString() + "'");
+		throw Exception(e, "error: parsing configuration file '" + filename.toStdString() + "'");
 	}
 	catch(...) {
-			throw Exception("error: parsing configuration file '" + filename.toStdString() + "'");
+		throw Exception("error: parsing configuration file '" + filename.toStdString() + "'");
 	}
 }
 
