@@ -31,6 +31,12 @@ private:
 
 	// set data
 	void setData(int id);
+	// initialize paramaters tab
+	void initTabParamaters(int id);
+	// initialize interests tab
+	void initTabInterests(int id);
+	// initialize ratings tab
+	void initTabRatings(int id);
 
 public:
 

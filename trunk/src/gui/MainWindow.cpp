@@ -1,10 +1,11 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 #include "params/Params.hpp"
+#include <QFont>
 #include <cassert>
 
-#define CONFIG_UNASSIGNED_STRING "UNASSIGNED"
-#define CONFIG_UNASSIGNED_INT "UNASSIGNED"
+#define DEFAULT_COLUMN_WIDTH 70
+
 
 //===========================================================================
 // constructor
@@ -49,9 +50,26 @@ void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment)
 //===========================================================================
 void MainWindow::setData(int id)
 {
+	initTabParamaters(id);
+	initTabInterests(id);
+	initTabRatings(id);
+
+	// simulation tab
+	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
+	ui->maxSeconds->setValue(database.getProperty(id,Database::MaxSeconds).toInt());
+	ui->seed->setValue(database.getProperty(id,Database::Seed).toInt());
+	ui->antithetic->setChecked(database.getProperty(id,Database::Antithetic).toBool());
+	ui->onlyActive->setChecked(database.getProperty(id,Database::OnlyActive).toBool());
+}
+
+
+//===========================================================================
+// initialize parameters tab
+//===========================================================================
+void MainWindow::initTabParamaters(int id)
+{
 	QString str;
 
-	// parameters tab
 	ui->name->setText(database.getName(id));
 	ui->description->setPlainText(database.getDescription(id));
 	ui->time0->setDate(database.getProperty(id,Database::Time0).toDate());
@@ -70,10 +88,18 @@ void MainWindow::setData(int id)
 	else {
 		assert(false);
 	}
+}
 
-	// interests tab
+//===========================================================================
+// interests tab
+//===========================================================================
+void MainWindow::initTabInterests(int id)
+{
+	QString str;
 	QList<pair<int,double> > values;
+
 	database.getInterest(id, values, str);
+
 	if (str == "simple") {
 		ui->interest_type->setCurrentIndex(0);
 	}
@@ -87,8 +113,12 @@ void MainWindow::setData(int id)
 		assert(false);
 	}
 	setTextAlignment(ui->interest_type, Qt::AlignCenter);
+
 	ui->interest_values->clearContents();
 	ui->interest_values->setRowCount(values.size());
+	ui->interest_values->setColumnWidth(0, DEFAULT_COLUMN_WIDTH);
+	ui->interest_values->setColumnWidth(1, DEFAULT_COLUMN_WIDTH);
+
 	for(int i=0; i<values.size(); i++)
 	{
 		delete ui->interest_values->verticalHeaderItem(i);
@@ -102,11 +132,93 @@ void MainWindow::setData(int id)
 		col1->setTextAlignment(Qt::AlignCenter);
 		ui->interest_values->setItem(i, 1, col1);
 	}
+}
 
-	// simulation tab
-	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
-	ui->maxSeconds->setValue(database.getProperty(id,Database::MaxSeconds).toInt());
-	ui->seed->setValue(database.getProperty(id,Database::Seed).toInt());
-	ui->antithetic->setChecked(database.getProperty(id,Database::Antithetic).toBool());
-	ui->onlyActive->setChecked(database.getProperty(id,Database::OnlyActive).toBool());
+//===========================================================================
+// ratings tab
+//===========================================================================
+void MainWindow::initTabRatings(int id)
+{
+	QString str;
+	QList<pair<QString,QString> > values;
+
+	database.getRatings(id, values, str);
+
+	setTextAlignment(ui->pd_type, Qt::AlignCenter);
+
+	ui->ratings->clearContents();
+	ui->ratings->setRowCount(values.size());
+	for(int i=0; i<values.size(); i++)
+	{
+		delete ui->ratings->verticalHeaderItem(i);
+
+		QTableWidgetItem *col0 = new QTableWidgetItem(values[i].first);
+		col0->setTextAlignment(Qt::AlignCenter);
+		ui->ratings->setItem(i, 0, col0);
+
+		QTableWidgetItem *col1 = new QTableWidgetItem(values[i].second);
+		col1->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+		ui->ratings->setItem(i, 1, col1);
+	}
+
+	if (str == "transition")
+	{
+		ui->pd_type->setCurrentIndex(0);
+		ui->pd_label->setTitle(tr("Transition matrix"));
+		ui->survival_values->setVisible(false);
+		ui->transitions_values->setVisible(true);
+
+		ui->transitions_values->clearContents();
+		ui->transitions_values->setRowCount(values.size());
+		ui->transitions_values->setColumnCount(values.size()+1);
+		ui->transitions_values->setHorizontalHeaderItem(values.size(), new QTableWidgetItem("Sum"));
+		ui->transitions_values->setColumnWidth(values.size(), DEFAULT_COLUMN_WIDTH);
+
+		for(int i=0; i<values.size(); i++)
+		{
+			double sum = 0.0;
+
+			QTableWidgetItem *header = new QTableWidgetItem(values[i].first);
+			ui->transitions_values->setVerticalHeaderItem(i, header);
+			ui->transitions_values->setHorizontalHeaderItem(i, header);
+			ui->transitions_values->setColumnWidth(i, DEFAULT_COLUMN_WIDTH);
+
+			for(int j=0; j<values.size(); j++)
+			{
+				double val = database.getTransition(id, values[i].first, values[j].first);
+				sum += val;
+
+				QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2));
+				item->setTextAlignment(Qt::AlignCenter);
+				ui->transitions_values->setItem(i, j, item);
+			}
+
+			QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*sum,'f',2));
+			item->setTextAlignment(Qt::AlignCenter);
+			QFont font = item->font();
+			font.setBold(true);
+			item->setFont(font);
+			ui->transitions_values->setItem(i, values.size(), item);
+		}
+	}
+	else if (str == "survival")
+	{
+		ui->pd_type->setCurrentIndex(1);
+		ui->pd_label->setTitle(tr("Survival curve"));
+		ui->survival_values->setVisible(true);
+		ui->transitions_values->setVisible(false);
+	}
+	else
+	{
+		assert(false);
+	}
+
+/*
+	// survival curve
+	void getSurvivalCurve(int id, const QString &rating, QList<pair<int,double> > &values) const;
+	// transition period
+	int getTransitionPeriod(int id);
+	// transition matrix
+
+	*/
 }

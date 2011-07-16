@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>614</width>
-    <height>549</height>
+    <width>742</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ccruncher</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_6">
+   <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -262,384 +262,365 @@
        <attribute name="title">
         <string>Yield curve</string>
        </attribute>
-       <widget class="QLabel" name="label_11">
-        <property name="geometry">
-         <rect>
-          <x>257</x>
-          <y>9</y>
-          <width>311</width>
-          <height>411</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>11</y>
-          <width>231</width>
-          <height>411</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QComboBox" name="interest_type">
-           <item>
-            <property name="text">
-             <string>Simple</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Compound</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Continuous</string>
-            </property>
-           </item>
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QComboBox" name="interest_type">
+              <item>
+               <property name="text">
+                <string>Simple</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Compound</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Continuous</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="interest_values">
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <column>
+               <property name="text">
+                <string>Month</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Rate</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </column>
+              <item row="0" column="0">
+               <property name="text">
+                <string>1 M</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </item>
+              <item row="0" column="1">
+               <property name="text">
+                <string>3%</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </item>
+              <item row="1" column="0">
+               <property name="text">
+                <string>3 M</string>
+               </property>
+              </item>
+              <item row="1" column="1">
+               <property name="text">
+                <string>3.05 %</string>
+               </property>
+              </item>
+              <item row="2" column="0">
+               <property name="text">
+                <string>6 M</string>
+               </property>
+              </item>
+              <item row="2" column="1">
+               <property name="text">
+                <string>3.1 %</string>
+               </property>
+              </item>
+              <item row="3" column="0">
+               <property name="text">
+                <string>1 Y</string>
+               </property>
+              </item>
+              <item row="3" column="1">
+               <property name="text">
+                <string>3.2 %</string>
+               </property>
+              </item>
+              <item row="4" column="0">
+               <property name="text">
+                <string>2 Y</string>
+               </property>
+              </item>
+              <item row="4" column="1">
+               <property name="text">
+                <string>3.3 %</string>
+               </property>
+              </item>
+              <item row="5" column="0">
+               <property name="text">
+                <string>3 Y</string>
+               </property>
+              </item>
+              <item row="5" column="1">
+               <property name="text">
+                <string>3.35 %</string>
+               </property>
+              </item>
+              <item row="6" column="0">
+               <property name="text">
+                <string>5 Y</string>
+               </property>
+              </item>
+              <item row="6" column="1">
+               <property name="text">
+                <string>3.4 %</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-         <item>
-          <widget class="QTableWidget" name="interest_values">
-           <property name="selectionMode">
-            <enum>QAbstractItemView::SingleSelection</enum>
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="title">
+            <string>Graphic</string>
            </property>
-           <property name="gridStyle">
-            <enum>Qt::SolidLine</enum>
-           </property>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string/>
-            </property>
-           </row>
-           <column>
-            <property name="text">
-             <string>Month</string>
-            </property>
-            <property name="textAlignment">
-             <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Rate</string>
-            </property>
-            <property name="textAlignment">
-             <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-            </property>
-           </column>
-           <item row="0" column="0">
-            <property name="text">
-             <string>1 M</string>
-            </property>
-            <property name="textAlignment">
-             <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-            </property>
-           </item>
-           <item row="0" column="1">
-            <property name="text">
-             <string>3%</string>
-            </property>
-            <property name="textAlignment">
-             <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-            </property>
-           </item>
-           <item row="1" column="0">
-            <property name="text">
-             <string>3 M</string>
-            </property>
-           </item>
-           <item row="1" column="1">
-            <property name="text">
-             <string>3.05 %</string>
-            </property>
-           </item>
-           <item row="2" column="0">
-            <property name="text">
-             <string>6 M</string>
-            </property>
-           </item>
-           <item row="2" column="1">
-            <property name="text">
-             <string>3.1 %</string>
-            </property>
-           </item>
-           <item row="3" column="0">
-            <property name="text">
-             <string>1 Y</string>
-            </property>
-           </item>
-           <item row="3" column="1">
-            <property name="text">
-             <string>3.2 %</string>
-            </property>
-           </item>
-           <item row="4" column="0">
-            <property name="text">
-             <string>2 Y</string>
-            </property>
-           </item>
-           <item row="4" column="1">
-            <property name="text">
-             <string>3.3 %</string>
-            </property>
-           </item>
-           <item row="5" column="0">
-            <property name="text">
-             <string>3 Y</string>
-            </property>
-           </item>
-           <item row="5" column="1">
-            <property name="text">
-             <string>3.35 %</string>
-            </property>
-           </item>
-           <item row="6" column="0">
-            <property name="text">
-             <string>5 Y</string>
-            </property>
-           </item>
-           <item row="6" column="1">
-            <property name="text">
-             <string>3.4 %</string>
-            </property>
-           </item>
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_11">
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
-         </item>
-        </layout>
-       </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
         <string>Ratings</string>
        </attribute>
-       <widget class="QTableWidget" name="tableWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>221</width>
-          <height>421</height>
-         </rect>
-        </property>
-        <property name="gridStyle">
-         <enum>Qt::SolidLine</enum>
-        </property>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string/>
-         </property>
-        </row>
-        <column>
-         <property name="text">
-          <string>Name</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Description</string>
-         </property>
-        </column>
+       <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
-         <property name="text">
-          <string>AAA</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-         </property>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget_2">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QComboBox" name="pd_type">
+              <item>
+               <property name="text">
+                <string>Transition matrix</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Survival curves</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="ratings">
+              <property name="gridStyle">
+               <enum>Qt::SolidLine</enum>
+              </property>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string/>
+               </property>
+              </row>
+              <column>
+               <property name="text">
+                <string>Name</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+              <item row="0" column="0">
+               <property name="text">
+                <string>AAA</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </item>
+              <item row="0" column="1">
+               <property name="text">
+                <string>Top grade</string>
+               </property>
+               <property name="textAlignment">
+                <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+               </property>
+              </item>
+              <item row="1" column="0">
+               <property name="text">
+                <string>AA</string>
+               </property>
+              </item>
+              <item row="1" column="1">
+               <property name="text">
+                <string>High grade</string>
+               </property>
+              </item>
+              <item row="2" column="0">
+               <property name="text">
+                <string>A</string>
+               </property>
+              </item>
+              <item row="2" column="1">
+               <property name="text">
+                <string>Upper medium grade</string>
+               </property>
+              </item>
+              <item row="3" column="0">
+               <property name="text">
+                <string>BBB</string>
+               </property>
+              </item>
+              <item row="3" column="1">
+               <property name="text">
+                <string>Lower medium grade</string>
+               </property>
+              </item>
+              <item row="4" column="0">
+               <property name="text">
+                <string>BB</string>
+               </property>
+              </item>
+              <item row="4" column="1">
+               <property name="text">
+                <string>non investement grade</string>
+               </property>
+              </item>
+              <item row="5" column="0">
+               <property name="text">
+                <string>B</string>
+               </property>
+              </item>
+              <item row="5" column="1">
+               <property name="text">
+                <string>malus</string>
+               </property>
+              </item>
+              <item row="6" column="0">
+               <property name="text">
+                <string>Default</string>
+               </property>
+              </item>
+              <item row="6" column="1">
+               <property name="text">
+                <string>Defaulted</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QGroupBox" name="pd_label">
+           <property name="title">
+            <string>Probability of Default</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="transitions_values"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QTableWidget" name="survival_values"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
-        <item row="0" column="1">
-         <property name="text">
-          <string>Top grade</string>
-         </property>
-         <property name="textAlignment">
-          <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-         </property>
-        </item>
-        <item row="1" column="0">
-         <property name="text">
-          <string>AA</string>
-         </property>
-        </item>
-        <item row="1" column="1">
-         <property name="text">
-          <string>High grade</string>
-         </property>
-        </item>
-        <item row="2" column="0">
-         <property name="text">
-          <string>A</string>
-         </property>
-        </item>
-        <item row="2" column="1">
-         <property name="text">
-          <string>Upper medium grade</string>
-         </property>
-        </item>
-        <item row="3" column="0">
-         <property name="text">
-          <string>BBB</string>
-         </property>
-        </item>
-        <item row="3" column="1">
-         <property name="text">
-          <string>Lower medium grade</string>
-         </property>
-        </item>
-        <item row="4" column="0">
-         <property name="text">
-          <string>BB</string>
-         </property>
-        </item>
-        <item row="4" column="1">
-         <property name="text">
-          <string>non investement grade</string>
-         </property>
-        </item>
-        <item row="5" column="0">
-         <property name="text">
-          <string>B</string>
-         </property>
-        </item>
-        <item row="5" column="1">
-         <property name="text">
-          <string>malus</string>
-         </property>
-        </item>
-        <item row="6" column="0">
-         <property name="text">
-          <string>Default</string>
-         </property>
-        </item>
-        <item row="6" column="1">
-         <property name="text">
-          <string>Defaulted</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>10</y>
-          <width>351</width>
-          <height>431</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string>Probability of Default</string>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-        <widget class="QRadioButton" name="radioButton">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>20</y>
-           <width>141</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Transition Matrix</string>
-         </property>
-        </widget>
-        <widget class="QRadioButton" name="radioButton_2">
-         <property name="geometry">
-          <rect>
-           <x>150</x>
-           <y>20</y>
-           <width>141</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Survival Curves</string>
-         </property>
-        </widget>
-        <widget class="QTableWidget" name="tableWidget_3">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>50</y>
-           <width>331</width>
-           <height>361</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -1384,7 +1365,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>614</width>
+     <width>742</width>
      <height>25</height>
     </rect>
    </property>
