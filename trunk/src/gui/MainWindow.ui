@@ -1405,22 +1405,22 @@
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open ...</string>
+    <string>&amp;Open ...</string>
    </property>
   </action>
   <action name="actionImport">
    <property name="text">
-    <string>Import ...</string>
+    <string>&amp;Import ...</string>
    </property>
   </action>
   <action name="actionExport">
    <property name="text">
-    <string>Export ...</string>
+    <string>&amp;Export ...</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
   </action>
   <action name="actionAbout">

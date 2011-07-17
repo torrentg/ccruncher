@@ -17,7 +17,12 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 	ui->mainToolBar->setVisible(false);
 
 	// enabling database
-	database.init(config.db_driver, config.db_host, config.db_port, config.db_name, config.db_user, config.db_password);
+	database.init(config.db_driver, config.db_host,
+				  config.db_port, config.db_name,
+				  config.db_user, config.db_password);
+
+	// linking signals and slots
+	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
 	// filling forms
 	setData(1);
@@ -178,9 +183,10 @@ void MainWindow::initTabRatings(int id)
 		{
 			double sum = 0.0;
 
-			QTableWidgetItem *header = new QTableWidgetItem(values[i].first);
-			ui->transitions_values->setVerticalHeaderItem(i, header);
-			ui->transitions_values->setHorizontalHeaderItem(i, header);
+			QTableWidgetItem *vheader = new QTableWidgetItem(values[i].first);
+			ui->transitions_values->setVerticalHeaderItem(i, vheader);
+			QTableWidgetItem *hheader = new QTableWidgetItem(values[i].first);
+			ui->transitions_values->setHorizontalHeaderItem(i, hheader);
 			ui->transitions_values->setColumnWidth(i, DEFAULT_COLUMN_WIDTH);
 
 			for(int j=0; j<values.size(); j++)
