@@ -37,6 +37,8 @@ private:
 	void initTabInterests(int id);
 	// initialize ratings tab
 	void initTabRatings(int id);
+	// initialize sectors tab
+	void initTabSectors(int id);
 
 public:
 
