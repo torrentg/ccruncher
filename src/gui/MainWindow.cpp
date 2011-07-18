@@ -58,6 +58,7 @@ void MainWindow::setData(int id)
 	initTabParamaters(id);
 	initTabInterests(id);
 	initTabRatings(id);
+	initTabSectors(id);
 
 	// simulation tab
 	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
@@ -194,12 +195,12 @@ void MainWindow::initTabRatings(int id)
 				double val = database.getTransition(id, values[i].first, values[j].first);
 				sum += val;
 
-				QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2));
+				QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2)+" %");
 				item->setTextAlignment(Qt::AlignCenter);
 				ui->transitions_values->setItem(i, j, item);
 			}
 
-			QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*sum,'f',2));
+			QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*sum,'f',2)+" %");
 			item->setTextAlignment(Qt::AlignCenter);
 			QFont font = item->font();
 			font.setBold(true);
@@ -227,4 +228,51 @@ void MainWindow::initTabRatings(int id)
 	// transition matrix
 
 	*/
+}
+
+//===========================================================================
+// sectors tab
+//===========================================================================
+void MainWindow::initTabSectors(int id)
+{
+	QList<pair<QString,QString> > values;
+
+	database.getSectors(id, values);
+
+	ui->sectors->clearContents();
+	ui->sectors->setRowCount(values.size());
+	for(int i=0; i<values.size(); i++)
+	{
+		delete ui->sectors->verticalHeaderItem(i);
+
+		QTableWidgetItem *col0 = new QTableWidgetItem(values[i].first);
+		col0->setTextAlignment(Qt::AlignCenter);
+		ui->sectors->setItem(i, 0, col0);
+
+		QTableWidgetItem *col1 = new QTableWidgetItem(values[i].second);
+		col1->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+		ui->sectors->setItem(i, 1, col1);
+	}
+
+	ui->correlations_values->clearContents();
+	ui->correlations_values->setRowCount(values.size());
+	ui->correlations_values->setColumnCount(values.size());
+
+	for(int i=0; i<values.size(); i++)
+	{
+		QTableWidgetItem *vheader = new QTableWidgetItem(values[i].first);
+		ui->correlations_values->setVerticalHeaderItem(i, vheader);
+		QTableWidgetItem *hheader = new QTableWidgetItem(values[i].first);
+		ui->correlations_values->setHorizontalHeaderItem(i, hheader);
+		ui->correlations_values->setColumnWidth(i, DEFAULT_COLUMN_WIDTH);
+
+		for(int j=i; j<values.size(); j++)
+		{
+			double val = database.getCorrelation(id, values[i].first, values[j].first);
+
+			QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2)+" %");
+			item->setTextAlignment(Qt::AlignCenter);
+			ui->correlations_values->setItem(i, j, item);
+		}
+	}
 }
