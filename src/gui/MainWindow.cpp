@@ -59,6 +59,7 @@ void MainWindow::setData(int id)
 	initTabInterests(id);
 	initTabRatings(id);
 	initTabSectors(id);
+	initTabSegmentations(id);
 
 	// simulation tab
 	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
@@ -67,7 +68,6 @@ void MainWindow::setData(int id)
 	ui->antithetic->setChecked(database.getProperty(id,Database::Antithetic).toBool());
 	ui->onlyActive->setChecked(database.getProperty(id,Database::OnlyActive).toBool());
 }
-
 
 //===========================================================================
 // initialize parameters tab
@@ -275,4 +275,48 @@ void MainWindow::initTabSectors(int id)
 			ui->correlations_values->setItem(i, j, item);
 		}
 	}
+}
+
+//===========================================================================
+// initialize segmentations tab
+//===========================================================================
+void MainWindow::initTabSegmentations(int id)
+{
+	QList<pair<QString,QString> > segmentations;
+
+	ui->segmentations->clear();
+	ui->segmentations->setColumnCount(3);
+	ui->segmentations->setColumnWidth(0, 200);
+	ui->segmentations->setColumnWidth(1, 100);
+
+	database.getSegmentations(id, segmentations);
+
+	for(int i=0; i<segmentations.size(); i++)
+	{
+		QStringList contents;
+
+		QList<QString> segments;
+		database.getSegments(id, segmentations[i].first, segments);
+
+		contents << segmentations[i].first << segmentations[i].second;
+		QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, contents);
+		ui->segmentations->insertTopLevelItem(i, item);
+
+		QComboBox *type = new QComboBox(ui->segmentations);
+		type->addItem("obligors");
+		type->addItem("assets");
+		type->setCurrentIndex((segmentations[i].second=="asset"?1:0));
+		setTextAlignment(type, Qt::AlignCenter);
+		ui->segmentations->setItemWidget(item, 1, type);
+
+		for(int j=0; j<segments.size(); j++)
+		{
+			contents.clear();
+			contents << segments[j] << "";
+			QTreeWidgetItem *subitem = new QTreeWidgetItem(item, contents);
+			item->addChild(subitem);
+		}
+
+	}
+
 }

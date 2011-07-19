@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -734,56 +734,57 @@
        <attribute name="title">
         <string>Segmentations</string>
        </attribute>
-       <widget class="QTreeWidget" name="treeWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>581</width>
-          <height>431</height>
-         </rect>
-        </property>
-        <column>
-         <property name="text">
-          <string>Segmentation/Segment</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </column>
-        <item>
-         <property name="text">
-          <string>Portfolio</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>unassigned</string>
-          </property>
-         </item>
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="0">
+         <widget class="QTreeWidget" name="segmentations">
+          <column>
+           <property name="text">
+            <string>Segmentation</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string> </string>
+           </property>
+          </column>
+          <item>
+           <property name="text">
+            <string>Portfolio</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>unassigned</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text">
+            <string>Offices</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>office-001</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>office-002</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>unassigned</string>
+            </property>
+           </item>
+          </item>
+         </widget>
         </item>
-        <item>
-         <property name="text">
-          <string>Offices</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>office-001</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>office-002</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>unassigned</string>
-          </property>
-         </item>
-        </item>
-       </widget>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_6">
        <attribute name="title">
