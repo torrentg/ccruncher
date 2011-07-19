@@ -39,6 +39,8 @@ private:
 	void initTabRatings(int id);
 	// initialize sectors tab
 	void initTabSectors(int id);
+	// initialize segmentations tab
+	void initTabSegmentations(int id);
 
 public:
 
