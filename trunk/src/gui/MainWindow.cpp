@@ -166,6 +166,7 @@ void MainWindow::initTabRatings(int id)
 		col1->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 		ui->ratings->setItem(i, 1, col1);
 	}
+	ui->ratings->setColumnWidth(0, DEFAULT_COLUMN_WIDTH);
 
 	if (str == "transition")
 	{
