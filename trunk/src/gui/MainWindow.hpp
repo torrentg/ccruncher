@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include <QComboBox>
 #include "Configuration.hpp"
 #include "Database.hpp"
 
@@ -43,6 +44,10 @@ private:
 	void initTabSegmentations(int id);
 	// initialize portfolio tab
 	void initTabPortfolio(int id);
+	// display obligor info
+	void setObligor(int id, const QString &oid);
+	// select a text in a combo
+	void setCurrentIndex(QComboBox *combo, const QString &str);
 
 public:
 
