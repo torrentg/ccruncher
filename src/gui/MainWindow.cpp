@@ -128,8 +128,6 @@ void MainWindow::initTabInterests(int id)
 
 	for(int i=0; i<values.size(); i++)
 	{
-		delete ui->interest_values->verticalHeaderItem(i);
-
 		QTableWidgetItem *col0 = new QTableWidgetItem(QString::number(values[i].first));
 		col0->setTextAlignment(Qt::AlignCenter);
 		ui->interest_values->setItem(i, 0, col0);
@@ -146,30 +144,28 @@ void MainWindow::initTabInterests(int id)
 //===========================================================================
 void MainWindow::initTabRatings(int id)
 {
-	QString str;
-	QList<pair<QString,QString> > values;
+	QString type;
+	QList<pair<QString,QString> > ratings;
 
-	database.getRatings(id, values, str);
+	database.getRatings(id, ratings, type);
 
 	setTextAlignment(ui->pd_type, Qt::AlignCenter);
 
 	ui->ratings->clearContents();
-	ui->ratings->setRowCount(values.size());
-	for(int i=0; i<values.size(); i++)
+	ui->ratings->setRowCount(ratings.size());
+	for(int i=0; i<ratings.size(); i++)
 	{
-		delete ui->ratings->verticalHeaderItem(i);
-
-		QTableWidgetItem *col0 = new QTableWidgetItem(values[i].first);
+		QTableWidgetItem *col0 = new QTableWidgetItem(ratings[i].first);
 		col0->setTextAlignment(Qt::AlignCenter);
 		ui->ratings->setItem(i, 0, col0);
 
-		QTableWidgetItem *col1 = new QTableWidgetItem(values[i].second);
+		QTableWidgetItem *col1 = new QTableWidgetItem(ratings[i].second);
 		col1->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 		ui->ratings->setItem(i, 1, col1);
 	}
 	ui->ratings->setColumnWidth(0, DEFAULT_COLUMN_WIDTH);
 
-	if (str == "transition")
+	if (type == "transition")
 	{
 		ui->pd_type->setCurrentIndex(0);
 		ui->pd_label->setTitle(tr("Transition matrix"));
@@ -177,24 +173,24 @@ void MainWindow::initTabRatings(int id)
 		ui->transitions_values->setVisible(true);
 
 		ui->transitions_values->clearContents();
-		ui->transitions_values->setRowCount(values.size());
-		ui->transitions_values->setColumnCount(values.size()+1);
-		ui->transitions_values->setHorizontalHeaderItem(values.size(), new QTableWidgetItem("Sum"));
-		ui->transitions_values->setColumnWidth(values.size(), DEFAULT_COLUMN_WIDTH);
+		ui->transitions_values->setRowCount(ratings.size());
+		ui->transitions_values->setColumnCount(ratings.size()+1);
+		ui->transitions_values->setHorizontalHeaderItem(ratings.size(), new QTableWidgetItem("Sum"));
+		ui->transitions_values->setColumnWidth(ratings.size(), DEFAULT_COLUMN_WIDTH);
 
-		for(int i=0; i<values.size(); i++)
+		for(int i=0; i<ratings.size(); i++)
 		{
 			double sum = 0.0;
 
-			QTableWidgetItem *vheader = new QTableWidgetItem(values[i].first);
+			QTableWidgetItem *vheader = new QTableWidgetItem(ratings[i].first);
 			ui->transitions_values->setVerticalHeaderItem(i, vheader);
-			QTableWidgetItem *hheader = new QTableWidgetItem(values[i].first);
+			QTableWidgetItem *hheader = new QTableWidgetItem(ratings[i].first);
 			ui->transitions_values->setHorizontalHeaderItem(i, hheader);
 			ui->transitions_values->setColumnWidth(i, DEFAULT_COLUMN_WIDTH);
 
-			for(int j=0; j<values.size(); j++)
+			for(int j=0; j<ratings.size(); j++)
 			{
-				double val = database.getTransition(id, values[i].first, values[j].first);
+				double val = database.getTransition(id, ratings[i].first, ratings[j].first);
 				sum += val;
 
 				QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2)+" %");
@@ -207,10 +203,10 @@ void MainWindow::initTabRatings(int id)
 			QFont font = item->font();
 			font.setBold(true);
 			item->setFont(font);
-			ui->transitions_values->setItem(i, values.size(), item);
+			ui->transitions_values->setItem(i, ratings.size(), item);
 		}
 	}
-	else if (str == "survival")
+	else if (type == "survival")
 	{
 		ui->pd_type->setCurrentIndex(1);
 		ui->pd_label->setTitle(tr("Survival curve"));
@@ -224,7 +220,7 @@ void MainWindow::initTabRatings(int id)
 
 /*
 	// survival curve
-	void getSurvivalCurve(int id, const QString &rating, QList<pair<int,double> > &values) const;
+	void getSurvivalCurve(int id, const QString &rating, QList<pair<int,double> > &ratings) const;
 	// transition period
 	int getTransitionPeriod(int id);
 	// transition matrix
@@ -237,40 +233,38 @@ void MainWindow::initTabRatings(int id)
 //===========================================================================
 void MainWindow::initTabSectors(int id)
 {
-	QList<pair<QString,QString> > values;
+	QList<pair<QString,QString> > sectors;
 
-	database.getSectors(id, values);
+	database.getSectors(id, sectors);
 
 	ui->sectors->clearContents();
-	ui->sectors->setRowCount(values.size());
-	for(int i=0; i<values.size(); i++)
+	ui->sectors->setRowCount(sectors.size());
+	for(int i=0; i<sectors.size(); i++)
 	{
-		delete ui->sectors->verticalHeaderItem(i);
-
-		QTableWidgetItem *col0 = new QTableWidgetItem(values[i].first);
+		QTableWidgetItem *col0 = new QTableWidgetItem(sectors[i].first);
 		col0->setTextAlignment(Qt::AlignCenter);
 		ui->sectors->setItem(i, 0, col0);
 
-		QTableWidgetItem *col1 = new QTableWidgetItem(values[i].second);
+		QTableWidgetItem *col1 = new QTableWidgetItem(sectors[i].second);
 		col1->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
 		ui->sectors->setItem(i, 1, col1);
 	}
 
 	ui->correlations_values->clearContents();
-	ui->correlations_values->setRowCount(values.size());
-	ui->correlations_values->setColumnCount(values.size());
+	ui->correlations_values->setRowCount(sectors.size());
+	ui->correlations_values->setColumnCount(sectors.size());
 
-	for(int i=0; i<values.size(); i++)
+	for(int i=0; i<sectors.size(); i++)
 	{
-		QTableWidgetItem *vheader = new QTableWidgetItem(values[i].first);
+		QTableWidgetItem *vheader = new QTableWidgetItem(sectors[i].first);
 		ui->correlations_values->setVerticalHeaderItem(i, vheader);
-		QTableWidgetItem *hheader = new QTableWidgetItem(values[i].first);
+		QTableWidgetItem *hheader = new QTableWidgetItem(sectors[i].first);
 		ui->correlations_values->setHorizontalHeaderItem(i, hheader);
 		ui->correlations_values->setColumnWidth(i, DEFAULT_COLUMN_WIDTH);
 
-		for(int j=i; j<values.size(); j++)
+		for(int j=i; j<sectors.size(); j++)
 		{
-			double val = database.getCorrelation(id, values[i].first, values[j].first);
+			double val = database.getCorrelation(id, sectors[i].first, sectors[j].first);
 
 			QTableWidgetItem *item = new QTableWidgetItem(QString::number(100*val,'f',2)+" %");
 			item->setTextAlignment(Qt::AlignCenter);
@@ -351,4 +345,69 @@ void MainWindow::initTabPortfolio(int id)
 			item->addChild(subitem);
 		}
 	}
+
+	setObligor(id, obligors[0]);
+}
+
+//===========================================================================
+// auxiliar function
+//===========================================================================
+void MainWindow::setCurrentIndex(QComboBox *combo, const QString &str)
+{
+	for(int i=0; i<combo->count(); i++)
+	{
+		if (combo->itemText(i) == str) {
+			combo->setCurrentIndex(i);
+			return;
+		}
+	}
+
+	assert(false);
+}
+
+//===========================================================================
+// initialize portfolio tab
+//===========================================================================
+void MainWindow::setObligor(int id, const QString &oid)
+{
+	QString type;
+	QList<pair<QString,QString> > ratings;
+	QString rating, sector, recovery;
+	QList<pair<QString,QString> > segments;
+	QList<pair<QString,QString> > sectors;
+
+	database.getRatings(id, ratings, type);
+	database.getSectors(id, sectors);
+	database.getObligorProperties(id, oid, rating, sector, recovery, segments);
+
+	ui->obligor_rating->clear();
+	for(int i=0; i<ratings.size(); i++) {
+		ui->obligor_rating->addItem(ratings[i].first);
+	}
+	ui->obligor_sector->clear();
+	for(int i=0; i<sectors.size(); i++) {
+		ui->obligor_sector->addItem(sectors[i].first);
+	}
+
+	ui->obligor_id->setText(oid);
+	setCurrentIndex(ui->obligor_rating, rating);
+	setCurrentIndex(ui->obligor_sector, sector);
+	ui->obligor_recovery->setText(recovery);
+	ui->obligor_segments->clearContents();
+	ui->obligor_segments->setRowCount(segments.size());
+	for(int i=0; i<segments.size(); i++)
+	{
+
+		QTableWidgetItem *col0 = new QTableWidgetItem(segments[i].first);
+		col0->setTextAlignment(Qt::AlignCenter);
+		ui->obligor_segments->setItem(i, 0, col0);
+
+		QTableWidgetItem *col1 = new QTableWidgetItem(segments[i].second);
+		col1->setTextAlignment(Qt::AlignCenter);
+		ui->obligor_segments->setItem(i, 1, col1);
+	}
+
+// assets
+//void getAssets(int id, const QString &o, QList<QString> &a) const;
+
 }
