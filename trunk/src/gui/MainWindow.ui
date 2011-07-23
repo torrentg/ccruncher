@@ -807,7 +807,7 @@
           </column>
           <column>
            <property name="text">
-            <string> </string>
+            <string/>
            </property>
            <property name="foreground">
             <brush brushstyle="NoBrush">
@@ -863,7 +863,7 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QTreeWidget" name="treeWidget_2">
+          <widget class="QTreeWidget" name="obligors">
            <column>
             <property name="text">
              <string>Obligor</string>

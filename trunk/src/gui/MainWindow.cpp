@@ -60,6 +60,7 @@ void MainWindow::setData(int id)
 	initTabRatings(id);
 	initTabSectors(id);
 	initTabSegmentations(id);
+	initTabPortfolio(id);
 
 	// simulation tab
 	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
@@ -320,4 +321,34 @@ void MainWindow::initTabSegmentations(int id)
 
 	}
 
+}
+
+//===========================================================================
+// initialize portfolio tab
+//===========================================================================
+void MainWindow::initTabPortfolio(int id)
+{
+
+	QList<QString> obligors;
+
+	ui->obligors->clear();
+	ui->obligors->setColumnCount(1);
+
+	database.getObligors(id, obligors);
+
+	for(int i=0; i<obligors.size(); i++)
+	{
+		QList<QString> assets;
+
+		database.getAssets(id, obligors[i], assets);
+
+		QTreeWidgetItem *item = new QTreeWidgetItem((QTreeWidget*)0, QStringList(obligors[i]));
+		ui->obligors->insertTopLevelItem(i, item);
+
+		for(int j=0; j<assets.size(); j++)
+		{
+			QTreeWidgetItem *subitem = new QTreeWidgetItem(item, QStringList(assets[j]));
+			item->addChild(subitem);
+		}
+	}
 }

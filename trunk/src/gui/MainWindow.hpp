@@ -41,6 +41,8 @@ private:
 	void initTabSectors(int id);
 	// initialize segmentations tab
 	void initTabSegmentations(int id);
+	// initialize portfolio tab
+	void initTabPortfolio(int id);
 
 public:
 
