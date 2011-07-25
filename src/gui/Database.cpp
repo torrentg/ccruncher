@@ -479,3 +479,62 @@ void Database::getAssetData(int id, const QString &a, QList<QDate> &dates, QList
 	recoveries.append("60%");
 	recoveries.append("55%");
 }
+
+//===========================================================================
+// update name
+//===========================================================================
+void Database::updateName(int id, const QString &str)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(str);
+}
+
+//===========================================================================
+// update description
+//===========================================================================
+void Database::updateDescripition(int id, const QString &str)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(str);
+}
+
+//===========================================================================
+// update property
+//===========================================================================
+void Database::updateProperty(int id, Property p, const QVariant &val) throw(Exception)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(p);
+	Q_UNUSED(val);
+	//throw Exception();
+	// Ending date can't be lower than starting date
+	// Starting date can't be upper than ending date
+}
+
+//===========================================================================
+// update interest type
+//===========================================================================
+void Database::updateInterestType(int id, const QString &type)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(type);
+}
+
+//===========================================================================
+// insert or update update interest rate
+//===========================================================================
+void Database::updateInterestRate(int id, int month, double val)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(month);
+	Q_UNUSED(val);
+}
+
+//===========================================================================
+// remove interest rate
+//===========================================================================
+void Database::removeInterestRate(int id, int month)
+{
+	Q_UNUSED(id);
+	Q_UNUSED(month);
+}
