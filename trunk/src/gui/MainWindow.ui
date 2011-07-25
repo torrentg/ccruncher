@@ -16,11 +16,11 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="tab_1">
        <attribute name="title">
         <string>Parameters</string>
        </attribute>
@@ -45,9 +45,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="name"/>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_2">
               <property name="text">
@@ -57,6 +54,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QPlainTextEdit" name="description"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="name"/>
             </item>
            </layout>
           </widget>
@@ -98,7 +98,7 @@
                  <string>dd/MM/yyyy</string>
                 </property>
                 <property name="calendarPopup">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -182,7 +182,7 @@
                  <string>dd/MM/yyyy</string>
                 </property>
                 <property name="calendarPopup">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -1468,5 +1468,76 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tabs</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeTab(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>59</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>77</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>name</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateName()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>time0</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateTime0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>477</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>timeT</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateTimeT()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>519</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>531</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changeTab(int)</slot>
+  <slot>updateName()</slot>
+  <slot>updateTime0()</slot>
+  <slot>updateTimeT()</slot>
+ </slots>
 </ui>

@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 #include "params/Params.hpp"
 #include <QFont>
+#include <QMessageBox>
 #include <cassert>
 
 #define DEFAULT_COLUMN_WIDTH 70
@@ -25,7 +26,8 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
 	// filling forms
-	setData(1);
+	currentId = 1;
+	ui->tabs->setCurrentIndex(0);
 }
 
 //===========================================================================
@@ -36,7 +38,10 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment)
+//===========================================================================
+// combo alignment utility function
+//===========================================================================
+void MainWindow::setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment)
 {
 	// First : Set the combobox the editable (this allows us to use the lineEdit)
 	mComboBox->setEditable(true);
@@ -51,29 +56,44 @@ void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment)
 }
 
 //===========================================================================
-// destructor
+// change to tab x
 //===========================================================================
-void MainWindow::setData(int id)
+void MainWindow::changeTab(int num)
 {
-	initTabParamaters(id);
-	initTabInterests(id);
-	initTabRatings(id);
-	initTabSectors(id);
-	initTabSegmentations(id);
-	initTabPortfolio(id);
-
-	// simulation tab
-	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
-	ui->maxSeconds->setValue(database.getProperty(id,Database::MaxSeconds).toInt());
-	ui->seed->setValue(database.getProperty(id,Database::Seed).toInt());
-	ui->antithetic->setChecked(database.getProperty(id,Database::Antithetic).toBool());
-	ui->onlyActive->setChecked(database.getProperty(id,Database::OnlyActive).toBool());
+	switch(num)
+	{
+		case -1:
+			break;
+		case 0:
+			initTabParameters(currentId);
+			break;
+		case 1:
+			initTabInterests(currentId);
+			break;
+		case 2:
+			initTabRatings(currentId);
+			break;
+		case 3:
+			initTabSectors(currentId);
+			break;
+		case 4:
+			initTabSegmentations(currentId);
+			break;
+		case 5:
+			initTabPortfolio(currentId);
+			break;
+		case 6:
+			initTabSimulation(currentId);
+			break;
+		default:
+			assert(false);
+	}
 }
 
 //===========================================================================
 // initialize parameters tab
 //===========================================================================
-void MainWindow::initTabParamaters(int id)
+void MainWindow::initTabParameters(int id)
 {
 	QString str;
 
@@ -410,4 +430,57 @@ void MainWindow::setObligor(int id, const QString &oid)
 // assets
 //void getAssets(int id, const QString &o, QList<QString> &a) const;
 
+}
+
+//===========================================================================
+// initialize simulation tab
+//===========================================================================
+void MainWindow::initTabSimulation(int id)
+{
+	ui->maxIterations->setValue(database.getProperty(id,Database::MaxIterations).toInt());
+	ui->maxSeconds->setValue(database.getProperty(id,Database::MaxSeconds).toInt());
+	ui->seed->setValue(database.getProperty(id,Database::Seed).toInt());
+	ui->antithetic->setChecked(database.getProperty(id,Database::Antithetic).toBool());
+	ui->onlyActive->setChecked(database.getProperty(id,Database::OnlyActive).toBool());
+}
+
+//===========================================================================
+// update name
+//===========================================================================
+void MainWindow::updateName()
+{
+	QString str = ui->name->text();
+	database.updateName(currentId, str);
+}
+
+//===========================================================================
+// update time0
+//===========================================================================
+void MainWindow::updateTime0()
+{
+	try {
+		database.updateProperty(currentId, Database::Time0, ui->time0->date());
+	}
+	catch(Exception &e) {
+		QMessageBox::warning(this, "invalid value", e.what());
+		QVariant val = database.getProperty(currentId, Database::Time0);
+		ui->time0->setDate(val.toDate());
+		ui->time0->setFocus();
+	}
+}
+
+//===========================================================================
+// update timeT
+//===========================================================================
+void MainWindow::updateTimeT()
+{
+	try {
+		database.updateProperty(currentId, Database::TimeT, ui->timeT->date());
+	}
+	catch(Exception &e) {
+		QMessageBox::warning(this, "invalid value", e.what());
+		QVariant val = database.getProperty(currentId, Database::TimeT);
+		ui->timeT->setDate(val.toDate());
+		ui->timeT->setFocus();
+	}
 }

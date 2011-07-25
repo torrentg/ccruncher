@@ -26,14 +26,14 @@ private:
 	Configuration config;
 	// Database
 	Database database;
+	// current id
+	int currentId;
 
 
 private:
 
-	// set data
-	void setData(int id);
 	// initialize paramaters tab
-	void initTabParamaters(int id);
+	void initTabParameters(int id);
 	// initialize interests tab
 	void initTabInterests(int id);
 	// initialize ratings tab
@@ -44,10 +44,14 @@ private:
 	void initTabSegmentations(int id);
 	// initialize portfolio tab
 	void initTabPortfolio(int id);
+	// initialize simulationtab
+	void initTabSimulation(int id);
 	// display obligor info
 	void setObligor(int id, const QString &oid);
 	// select a text in a combo
 	void setCurrentIndex(QComboBox *combo, const QString &str);
+	// combo alignment utility function
+	void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment);
 
 public:
 
@@ -55,6 +59,17 @@ public:
 	explicit MainWindow(const Configuration &c, QWidget *parent = 0);
 	// destructor
     ~MainWindow();
+
+public slots:
+
+	// change to tab x
+	void changeTab(int num);
+	// update name
+	void updateName();
+	// update time0
+	void updateTime0();
+	// update timeT
+	void updateTimeT();
 
 };
 

@@ -50,6 +50,7 @@ class Database
 
 		// initialize database connection
 		void init(const QString &driver, const QString &host, const int port, const QString &dbname, const QString &dbuser, const QString &dbpasswd) throw(Exception);
+
 		// return simulation identifiers
 		void getIds(QList<int> &l) const;
 		// get name
@@ -88,6 +89,19 @@ class Database
 		void getAssetProperties(int id, const QString &a, QDate &d, QString &r, QList<pair<QString,QString> > &segments) const;
 		// asset data
 		void getAssetData(int id, const QString &a, QList<QDate> &dates, QList<QString> &exposures, QList<QString> &recoveries) const;
+
+		// update name
+		void updateName(int id, const QString &str);
+		// update description
+		void updateDescripition(int id, const QString &str);
+		// update property
+		void updateProperty(int id, Property p, const QVariant &val) throw(Exception);
+		// update interest type
+		void updateInterestType(int id, const QString &typer);
+		// insert or update update interest rate
+		void updateInterestRate(int id, int month, double val);
+		// remove interest rate
+		void removeInterestRate(int id, int month);
 
 };
 
