@@ -24,6 +24,7 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 
 	// linking signals and slots
 	connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	ui->description->installEventFilter(this);
 
 	// filling forms
 	currentId = 1;
@@ -449,8 +450,15 @@ void MainWindow::initTabSimulation(int id)
 //===========================================================================
 void MainWindow::updateName()
 {
-	QString str = ui->name->text();
-	database.updateName(currentId, str);
+	database.updateName(currentId, ui->name->text());
+}
+
+//===========================================================================
+// update description
+//===========================================================================
+void MainWindow::updateDescription()
+{
+	database.updateDescripition(currentId, ui->description->toPlainText());
 }
 
 //===========================================================================
@@ -483,4 +491,34 @@ void MainWindow::updateTimeT()
 		ui->timeT->setDate(val.toDate());
 		ui->timeT->setFocus();
 	}
+}
+
+//===========================================================================
+// update timeT
+//===========================================================================
+void MainWindow::updateCopula()
+{
+	if (ui->copula->currentIndex() == 0) {
+		database.updateProperty(currentId, Database::CopulaType, "gaussian");
+	}
+	else {
+		QString str = "t(" + QString::number(ui->degrees_of_freedom->value()) + ")";
+		database.updateProperty(currentId, Database::CopulaType, str);
+	}
+}
+
+//===========================================================================
+// eventFilter
+//===========================================================================
+bool MainWindow::eventFilter(QObject* object, QEvent* event)
+{
+	if (object == ui->description)
+	{
+		if (event->type() == QEvent::FocusOut)
+		{
+			updateDescription();
+			return true;
+		}
+	}
+	return false;
 }

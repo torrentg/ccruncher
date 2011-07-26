@@ -1533,11 +1533,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>copula</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateCopula()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>413</x>
+     <y>485</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>405</x>
+     <y>562</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>degrees_of_freedom</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateCopula()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>457</x>
+     <y>521</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>562</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changeTab(int)</slot>
   <slot>updateName()</slot>
   <slot>updateTime0()</slot>
   <slot>updateTimeT()</slot>
+  <slot>updateCopula()</slot>
  </slots>
 </ui>
