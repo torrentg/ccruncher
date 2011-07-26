@@ -52,6 +52,8 @@ private:
 	void setCurrentIndex(QComboBox *combo, const QString &str);
 	// combo alignment utility function
 	void setTextAlignment(QComboBox *mComboBox, Qt::Alignment alignment);
+	// eventfilter (see QT doc)
+	bool eventFilter(QObject* object, QEvent* event);
 
 public:
 
@@ -66,10 +68,14 @@ public slots:
 	void changeTab(int num);
 	// update name
 	void updateName();
+	// update description
+	void updateDescription();
 	// update time0
 	void updateTime0();
 	// update timeT
 	void updateTimeT();
+	// update copula
+	void updateCopula();
 
 };
 
