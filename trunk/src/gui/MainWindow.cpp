@@ -15,6 +15,7 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow), config(c)
 {
 	ui->setupUi(this);
+	blockSignals(true);
 	ui->mainToolBar->setVisible(false);
 
 	// enabling database
@@ -29,6 +30,7 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 	// filling forms
 	currentId = 1;
 	ui->tabs->setCurrentIndex(0);
+	blockSignals(false);
 }
 
 //===========================================================================
@@ -123,18 +125,19 @@ void MainWindow::initTabParameters(int id)
 //===========================================================================
 void MainWindow::initTabInterests(int id)
 {
-	QString str;
+	QString type;
 	QList<pair<int,double> > values;
 
-	database.getInterest(id, values, str);
+	type = database.getProperty(id,Database::InterestType).toString();
+	database.getInterest(id, values);
 
-	if (str == "simple") {
+	if (type == "simple") {
 		ui->interest_type->setCurrentIndex(0);
 	}
-	else if (str == "compound") {
+	else if (type == "compound") {
 		ui->interest_type->setCurrentIndex(1);
 	}
-	else if (str == "continuous") {
+	else if (type == "continuous") {
 		ui->interest_type->setCurrentIndex(2);
 	}
 	else {
@@ -149,15 +152,27 @@ void MainWindow::initTabInterests(int id)
 
 	for(int i=0; i<values.size(); i++)
 	{
+		QLineEdit *cell0 = new QLineEdit(ui->interest_values);
+		cell0->setValidator(new QIntValidator(0, 1500, cell0));
+		cell0->setFrame(false);
+		cell0->setAlignment(Qt::AlignCenter);
+		cell0->setText(QString::number(values[i].first));
+		ui->interest_values->setCellWidget(i, 0, cell0);
+
+		connect(cell0, SIGNAL(editingFinished()), &interestsSignalMapper, SLOT(map()));
+		interestsSignalMapper.setMapping(cell0, cell0);
+/*
 		QTableWidgetItem *col0 = new QTableWidgetItem(QString::number(values[i].first));
 		col0->setTextAlignment(Qt::AlignCenter);
 		ui->interest_values->setItem(i, 0, col0);
-
+*/
 
 		QTableWidgetItem *col1 = new QTableWidgetItem(QString::number(100*values[i].second, 'f', 2) + " %");
 		col1->setTextAlignment(Qt::AlignCenter);
 		ui->interest_values->setItem(i, 1, col1);
 	}
+
+	connect(&interestsSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(updateInterestRate(QWidget*)));
 }
 
 //===========================================================================
@@ -494,7 +509,7 @@ void MainWindow::updateTimeT()
 }
 
 //===========================================================================
-// update timeT
+// update copula
 //===========================================================================
 void MainWindow::updateCopula()
 {
@@ -512,13 +527,51 @@ void MainWindow::updateCopula()
 //===========================================================================
 bool MainWindow::eventFilter(QObject* object, QEvent* event)
 {
-	if (object == ui->description)
+	if (object == ui->description && event->type() == QEvent::FocusOut)
 	{
-		if (event->type() == QEvent::FocusOut)
-		{
-			updateDescription();
-			return true;
-		}
+		updateDescription();
+		return true;
 	}
 	return false;
+}
+
+//===========================================================================
+// update interest type
+//===========================================================================
+void MainWindow::updateInterestType()
+{
+	switch(ui->interest_type->currentIndex())
+	{
+		case 0:
+			database.updateProperty(currentId, Database::InterestType, "simple");
+			break;
+		case 1:
+			database.updateProperty(currentId, Database::InterestType, "compound");
+			break;
+		case 2:
+			database.updateProperty(currentId, Database::InterestType, "continuous");
+			break;
+		default:
+			assert(false);
+	}
+}
+
+//===========================================================================
+// update interest rate
+//===========================================================================
+void MainWindow::updateInterestRate(QWidget *w)
+{
+	//QString str = QString::number(row) + " " + QString::number(col);
+	int row, col;
+	for(row=0; row<ui->interest_values->rowCount(); row++) {
+		for(col=0; col<ui->interest_values->columnCount(); col++) {
+			if (w == ui->interest_values->cellWidget(row,col)) {
+				goto out;
+			}
+		}
+	}
+	out:
+
+	QLineEdit *le = static_cast<QLineEdit *>(w);
+cout << "row=" << row << ", col=" << col << ", content=" << le->text().toStdString() << endl;
 }

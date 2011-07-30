@@ -1492,8 +1492,8 @@
    <slot>updateName()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>185</x>
-     <y>113</y>
+     <x>119</x>
+     <y>110</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -1508,8 +1508,8 @@
    <slot>updateTime0()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>150</x>
-     <y>477</y>
+     <x>202</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -1524,8 +1524,8 @@
    <slot>updateTimeT()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>116</x>
-     <y>519</y>
+     <x>185</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>5</x>
@@ -1540,8 +1540,8 @@
    <slot>updateCopula()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>413</x>
-     <y>485</y>
+     <x>490</x>
+     <y>490</y>
     </hint>
     <hint type="destinationlabel">
      <x>405</x>
@@ -1556,12 +1556,44 @@
    <slot>updateCopula()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>457</x>
-     <y>521</y>
+     <x>490</x>
+     <y>528</y>
     </hint>
     <hint type="destinationlabel">
      <x>430</x>
      <y>562</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>interest_type</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateInterestType()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>138</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>interest_values</sender>
+   <signal>cellChanged(int,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateInterestRate(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>371</y>
     </hint>
    </hints>
   </connection>
@@ -1572,5 +1604,7 @@
   <slot>updateTime0()</slot>
   <slot>updateTimeT()</slot>
   <slot>updateCopula()</slot>
+  <slot>updateInterestType()</slot>
+  <slot>updateInterestRate(int,int)</slot>
  </slots>
 </ui>

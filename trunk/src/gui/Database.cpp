@@ -91,6 +91,9 @@ QVariant Database::getProperty(int id, Property p) const
 		case Database::OnlyActive:
 			return true;
 			break;
+		case Database::InterestType:
+			return "compound";
+			break;
 		default:
 			assert(false);
 	}
@@ -99,7 +102,7 @@ QVariant Database::getProperty(int id, Property p) const
 //===========================================================================
 // interest curve
 //===========================================================================
-void Database::getInterest(int id, QList<pair<int,double> > &values, QString &type) const
+void Database::getInterest(int id, QList<pair<int,double> > &values) const
 {
 	Q_UNUSED(id);
 	values.clear();
@@ -112,7 +115,6 @@ void Database::getInterest(int id, QList<pair<int,double> > &values, QString &ty
 	values.append(pair<int,double>(24, 0.049));
 	values.append(pair<int,double>(60, 0.05));
 	values.append(pair<int,double>(120, 0.052));
-	type = "compound";
 }
 
 //===========================================================================
