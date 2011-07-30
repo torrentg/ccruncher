@@ -43,7 +43,8 @@ class Database
 			CopulaType,
 			Seed,
 			Antithetic,
-			OnlyActive
+			OnlyActive,
+			InterestType
 		};
 
 	public:
@@ -60,7 +61,7 @@ class Database
 		// get simulation date
 		QVariant getProperty(int id, Property p) const;
 		// interest curve
-		void getInterest(int id, QList<pair<int,double> > &values, QString &type) const;
+		void getInterest(int id, QList<pair<int,double> > &values) const;
 		// ratings
 		void getRatings(int id, QList<pair<QString,QString> > &values, QString &type) const;
 		// survival curve

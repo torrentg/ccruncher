@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QComboBox>
+#include <QSignalMapper>
 #include "Configuration.hpp"
 #include "Database.hpp"
 
@@ -28,7 +29,8 @@ private:
 	Database database;
 	// current id
 	int currentId;
-
+	// interests signal mapper
+	QSignalMapper interestsSignalMapper;
 
 private:
 
@@ -76,6 +78,10 @@ public slots:
 	void updateTimeT();
 	// update copula
 	void updateCopula();
+	// update interest type
+	void updateInterestType();
+	// update interest rate
+	void updateInterestRate(QWidget *w);
 
 };
 
