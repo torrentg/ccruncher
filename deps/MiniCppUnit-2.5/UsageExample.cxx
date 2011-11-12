@@ -3,11 +3,21 @@
  *
  * Any feedback to the autors is really appreciated
  *
- * Authors: Pau Arumí (parumi@iua.upf.es) and David Garcia (dgarcia@iua.upf.es)
+ * Authors: Pau ArumÃ­ (parumi@iua.upf.es) and David Garcia (dgarcia@iua.upf.es)
  */
 
 #include "MiniCppUnit.hxx"
 #include <math.h>
+#include <typeinfo>
+
+// A dummy super class
+class Super
+{
+	public:
+		virtual ~Super() {}
+};
+class Sub1 : public Super {};
+class Sub2 : public Super {};
 
 class MyTestsExample : public TestFixture<MyTestsExample>
 {
@@ -24,7 +34,17 @@ public:
 		TEST_CASE( testComparisonWithEpsilon );
 		TEST_CASE( testException );
 		TEST_CASE( testStringAddition );
+		TEST_CASE( testRunTimeTypesCheck_withObjects );
+		TEST_CASE( testRunTimeTypesCheck_withClasses );
 	}
+
+	template <typename T>
+	T helperNan()
+	{
+		T zero=0.0l;
+		return zero/zero;
+	}
+
 	void testAssert()
 	{
 		ASSERT(3==1+2);
@@ -65,8 +85,8 @@ public:
 	}
 	void testNotANumber()
 	{
-		double expected = 0.0/floor(0.0);
-		double result =   0.0/floor(0.0);
+		double expected = helperNan<double>();
+		double result = helperNan<double>(); 
 		ASSERT_EQUALS(expected, result);
 		
 	}
@@ -93,6 +113,26 @@ public:
 		std::string result("Hello");
 		result += " World";
 		ASSERT_EQUALS("Hello World", result);
+	}
+	void testRunTimeTypesCheck_withObjects()
+	{
+		Sub1 sub1;
+		Sub2 sub2;
+		Sub1 sub3;
+		Super & sup1 = sub1;
+		Super & sup2 = sub2;
+		Super & sup3 = sub3;
+		// Comparingwith a different object
+		ASSERT_EQUALS(typeid(sup3), typeid(sup1)); // Should pass
+		ASSERT_EQUALS(typeid(sup2), typeid(sup1)); // Should fail
+	}
+	void testRunTimeTypesCheck_withClasses()
+	{
+		Sub1 sub1;
+		Super & sup1 = sub1;
+		ASSERT_EQUALS(typeid(Sub1), typeid(sup1)); // Should pass
+		ASSERT_EQUALS(typeid(Sub2), typeid(sup1)); // Should fail
+//		ASSERT_EQUALS(typeid(Supper), typeid(sup1)); // Should fail
 	}
 	
 private:

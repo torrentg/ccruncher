@@ -1,15 +1,56 @@
-import sys
+#!/usr/bin/python
 
-env = Environment()
+import glob, os, sys
 
-if sys.platform == "linux2":
-  ccflags = '-Wall -ansi -g'
-else:
-  ccflags = '/EHsc /MD /GR'
+version = "2.5"
+blacklist = [
+	"UsageExample.cxx"
+]
+common_sources = [ a for a in glob.glob("*.cxx")  if a not in blacklist]
+headers = glob.glob("*.hxx")
 
-env.Append(CCFLAGS = ccflags)
+options = Variables('options.cache', ARGUMENTS)
+options.Add(PathVariable('prefix', 'Installation prefix', '/usr/local'))
 
-sources = Split('TestsRunner.cxx MiniCppUnit.cxx UsageExample.cxx')
+env = Environment(ENV=os.environ, options=options)
+env.Tool("textfile")
 
-env.Program( sources )
+env.SConsignFile() # single signature file
+options.Save('options.cache', env)
 
+InstallDir = env['prefix']
+
+env.AppendUnique( CPPFLAGS=[
+	"-ffast-math", 
+	"-O3", 
+	"-g", 
+	"-Wall",
+])
+env.AppendUnique( CCFLAGS=[
+	'-fomit-frame-pointer', 
+	'-ffast-math',
+	'-funroll-loops',
+	'-mmmx',
+	'-msse',
+	'-mfpmath=sse'
+])
+
+pcfile = env.Substfile(
+        source="mini_cppunit.pc.in",
+        target="mini_cppunit.pc",
+        SUBST_DICT = [
+                ("@libname@", "mini_cppunit"),
+                ("@prefix@", env["prefix"]),
+                ("@version@", version),
+        ])
+
+libraries = [env.SharedLibrary("mini_cppunit", common_sources)]
+
+install = [
+	env.Install(os.path.join(InstallDir,'lib'), libraries),
+	env.Install(os.path.join(InstallDir,'lib/pkgconfig'), pcfile),
+	env.Install(os.path.join(InstallDir,'include/mini_cppunit'), headers),
+	]
+
+env.Alias('install', install)
+env.Default(libraries, pcfile)

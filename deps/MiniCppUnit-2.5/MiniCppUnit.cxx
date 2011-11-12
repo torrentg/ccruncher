@@ -21,15 +21,12 @@
 #include "MiniCppUnit.hxx"
 
 #include <cmath>
+#include <typeinfo>
 
 #ifdef _MSC_VER
 #include <float.h>
 namespace std
 {
-  template <typename T>
-  inline bool isnan(T x) { 
-		return _isnan(x) != 0; 
-	}
 	template <typename T>
 	inline bool isinf(T x) { 
 		return _finite(x) == 0; 
@@ -62,18 +59,18 @@ void TestsListener::currentTestName( std::string& name)
 }
 void TestsListener::testHasRun()
 {
-	std::cout << ".";
+	std::cout << "." << std::flush;
 	theInstance()._executed++;
 }
 void TestsListener::testHasFailed()
 {
-	std::cout << "F";
+	std::cout << "F" << std::flush;
 	theInstance()._failed++;
 	throw TestFailedException();
 }
 void TestsListener::testHasThrown()
 {
-	std::cout << "E";
+	std::cout << "E" << std::flush;
 	theInstance()._exceptions++;
 }
 std::string TestsListener::summary()
@@ -200,6 +197,20 @@ void Assert::assertEqualsEpsilon( const double& expected, const double& result, 
 			<< bold() << expected << normal() << " "
 			<< errmsgTag_butWas() 
 			<< bold() << result << normal() << "\n";
+	TestsListener::theInstance().testHasFailed();
+}
+
+void Assert::assertEquals(const std::type_info& expected, const std::type_info& result,
+		const char * file, int linia)
+{
+	if (expected == result) return;
+	TestsListener::theInstance().errorsLog() 
+			<< errmsgTag_testFailedIn() << file
+			<< errmsgTag_inLine() << linia << "\n" 
+			<< errmsgTag_expected()
+			<< bold() << "'" << expected.name() << "'" << normal() << " "
+			<< errmsgTag_butWas() 
+			<< bold() << "'" << result.name() << "'" << normal() << "\n";
 	TestsListener::theInstance().testHasFailed();
 }
 
