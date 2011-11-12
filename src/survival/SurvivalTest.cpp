@@ -255,3 +255,44 @@ void ccruncher_test::SurvivalTest::test6()
   ASSERT(ivalues[1] < 2500);  // exact value is 2000 (margin=500)
 }
 
+//===========================================================================
+// test7
+// check precision when survival values are near to 100% and ISURVFNUMBINS=100
+//===========================================================================
+void ccruncher_test::SurvivalTest::test7()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <survival>\n\
+      <svalue rating='A' t='0' value='1.00'/>\n\
+      <svalue rating='A' t='12' value='0.999'/>\n\
+      <svalue rating='A' t='24' value='0.995'/>\n\
+      <svalue rating='A' t='48' value='0.97'/>\n\
+      <!-- optionally you can add default rating info (value=0 always) -->\n\
+    </survival>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // ratings list creation
+  Ratings ratings = getRatings();
+
+  // survival function creation
+  Survival sf(ratings);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
+
+  // checking values
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99995), 0.6, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99990), 1.2, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99900), 12.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99800), 15.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99700), 18.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99600), 21.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99500), 24.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99400), 24.96, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99300), 25.92, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99200), 26.88, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99100), 27.84, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.99000), 28.80, EPSILON);
+  ASSERT_EQUALS_EPSILON(sf.inverse(0, 0.98000), 38.40, EPSILON);
+}
+
