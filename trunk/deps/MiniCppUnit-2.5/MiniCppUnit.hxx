@@ -27,7 +27,6 @@
  * (C) 2003-2006 Pau Arumi & David Garcia
  *
  * @version 2.5-ccruncher 2006-03-15
- *   - solved bug in macro std:min definition
  *   - removed warnings "declaration of 'XXX' shadows a member of 'this'"
  *   - added macro ASSERT_THROW
  *   - added macro ASSERT_NO_THROW
@@ -93,13 +92,15 @@
 #include <string>
 #include <sstream>
 #include <list>
+#include <locale>
+#include <typeinfo>
 
 #if defined (_MSC_VER) && (_MSC_VER < 1300)
-/** necesary for Visual 6 which don't define std::min */
+/** necesary for Visual 6 which doesn't define std::min */
 namespace std
 {
 	template<typename T>
-	T min(const T& a, const T& b) { return a < b ? a: b; }
+	const T & min(const T& a, const T& b) { return a < b ? a: b; }
 }
 #endif
 
@@ -124,13 +125,13 @@ public:
 	static void testHasThrown();
 	/** the human readable summary of run tests*/
 	std::string summary();
-	/** returns wheather all run tests have passed */
+	/** returns whether all run tests have passed */
 	static bool allTestsPassed();
 	
 private:
 	static const char* errmsgTag_nameOfTest() { return "Test failed: "; }
 	
-	/** constructor private: force the singleton to be wellbehaved ! */
+	/** constructor private: force the singleton to be well behaved ! */
 	TestsListener() : _currentTestName(0)
 	{
 		_executed=_failed=_exceptions=0;
@@ -157,7 +158,7 @@ class Test
 {
 public:
 	virtual ~Test(){}
-	/** run the test: exercice the code and check results*/
+	/** run the test: exercise the code and check results*/
 	virtual void runTest() = 0;
 	/** the test human-readable name */
 	virtual std::string name() const = 0;
@@ -177,7 +178,7 @@ class Assert
 	static const char * errmsgTag_butWas() { return "But was: "; } 
 
 public:
-#ifdef _MSC_VER
+#ifdef MINICPPUNIT_DONT_USE_COLORS
 	static const char * blue() { return ""; }
 	static const char * green() { return ""; }
 	static const char * red() { return ""; }
@@ -230,6 +231,10 @@ public:
 	static void assertEqualsEpsilon( const double& expected, const double& result, const double& epsilon,
 		const char* file="", int linia=0 );
 
+	static void assertEquals(const std::type_info& x, const std::type_info& y,
+		const char * file="", int linia=0);
+
+
 	static int notEqualIndex( const std::string & one, const std::string & other );
 
 	/**
@@ -247,14 +252,14 @@ public:
 
 /**
  * A TestFixture is a class that contain TestCases --which corresponds to 
- * ConcreteTestFixture methods-- common objects uder tests, and setUp and
+ * ConcreteTestFixture methods-- common objects under tests, and setUp and
  * tearDown methods which are automatically executed before and after each
  * test case.
  *
  * Is the base class of ConcreteFixtures implemented by the framework user
  *
  * It does the 'Composite' role in the 'Composite' GoF pattern.
- * Its composite children are TestCases, which wrapps the test methods.
+ * Its composite children are TestCases, which wraps the test methods.
  *
  * It is a template class parametrized by ConcreteTestFixture so that it can 
  * instantiate TestCase objects templatized with this same parameter: it needs the 
@@ -274,8 +279,8 @@ protected:
 	 * Makes the 'Leave' role in the 'Composite' GoF pattern because can't be
 	 * be a composition of other tests.
 	 * 
-	 * It's also a case of 'Command' pattern because it encapsules in an object 
-	 * certain functionality whose execution depends on some deferred entity.
+	 * It's also a case of the 'Command' pattern because it encapsulates a certain
+   * functionality which execution depends on a deferred entity.
 	 */
 	class TestCase : public Test
 	{
@@ -306,7 +311,7 @@ protected:
 					<< Assert::yellow() << error.what() 
 					<< Assert::normal() << "\n";
 			}
-			catch ( TestFailedException& failure) //just for skiping current test case
+			catch ( TestFailedException& ) //just for skiping current test case
 			{
 			}
 			catch(...)
@@ -338,10 +343,10 @@ private:
 
 	void testsList() const
 	{
-		std::cout << "\n+ " << name() << "\n";
+		std::cout << "\n+ " << name() << std::endl;
 		for( TestCases::const_iterator it=_testCases.begin(); 
 			it!=_testCases.end(); it++ )
-			std::cout << "  - "<< (*it)->name() << "\n";
+			std::cout << "  - "<< (*it)->name() << std::endl;
 	}
 	
 
@@ -358,10 +363,10 @@ public:
 	{
 	}
 
-	void afegeixCasDeTest(ConcreteFixture* parent, TestCaseMethod method, const char* name_)
+	void addTestCase(ConcreteFixture* parent, TestCaseMethod method, const char* name_)
 	{
-		TestCase* casDeTest = new TestCase(parent, method, _name + "::" + name_);
-		_testCases.push_back( casDeTest );
+		TestCase* testCase = new TestCase(parent, method, _name + "::" + name_);
+		_testCases.push_back( testCase );
 	}
 	/** calls each test after setUp and tearDown TestFixture methods */
 	void runTest()
@@ -406,19 +411,37 @@ public:
 		static TestFixtureFactory theFactory;
 		return theFactory;
 	}
-	bool runTests()
+	bool runTests(int	argc = 0,	char*	argv[] = 0)
 	{
-		std::list<FixtureCreator>::iterator it;
-		for(it=_creators.begin(); it!=_creators.end(); it++)
-		{	
-			FixtureCreator creator = *it;
-			Test* test = creator();
-			test->runTest();
-			delete test;
+		std::list<FixtureCreator>::iterator	it;
+
+		if (argc <=	1) //	there	are	no command line	arguments...
+		{
+			for(it=_creators.begin();	it!=_creators.end(); it++)
+			{	
+				FixtureCreator creator = *it;
+				Test*	test = creator();
+				test->runTest();
+				delete test;
+			}
 		}
-		std::string errors =  TestsListener::theInstance().logString();
-		if (errors!="") std::cout << "\n\nError Details:\n" << errors;
-		std::cout << TestsListener::theInstance().summary();
+		else
+		{	// command line	arguments	found
+			for(it=_creators.begin();	it!=_creators.end(); it++)
+			{	
+				FixtureCreator creator = *it;
+				Test*	test = creator();
+				for	(int i=1;	i<argc;	i++)
+				{
+					if (test->name() ==	argv[i])
+						test->runTest();
+				}
+				delete test;
+			}
+		}
+		std::string	errors =	TestsListener::theInstance().logString();
+		if (errors!="")	std::cout	<< "\n\nError	Details:\n"	<< errors;
+		std::cout	<< TestsListener::theInstance().summary()	<< std::flush;
 
 		return TestsListener::theInstance().allTestsPassed();	
 	}
@@ -430,7 +453,7 @@ public:
 };
 
 /** 
- * Macro a usar despr�s de cada classe de test
+ * Macro a usar després de cada classe de test
  */
 #define REGISTER_FIXTURE( ConcreteTestFixture ) \
 \
@@ -498,7 +521,7 @@ static Registrador##ConcreteTestFixture estatic##ConcreteTestFixture;
 	ConcreteFixture() : TestFixture<ConcreteFixture>( #ConcreteFixture )
 
 #define TEST_CASE( methodName ) \
-	afegeixCasDeTest( this, &ConcreteFixture::methodName, #methodName );
+	addTestCase( this, &ConcreteFixture::methodName, #methodName );
 
 
 
