@@ -442,6 +442,11 @@ double ccruncher::Survival::inverse(const int irating, double val) const
     return ddata[irating].size()+11.0;
   }
 
+  // to avoid precision problems
+  if (1.0-val < 1.0/ISURVFNUMBINS) {
+    return inverse1(irating, val);
+  }
+
   // interpolate (because we need day resolution)
   int k = (int)(floor(val*ISURVFNUMBINS));
   if (k >= ISURVFNUMBINS) {
@@ -452,10 +457,6 @@ double ccruncher::Survival::inverse(const int irating, double val) const
   double y0 = idata[irating][k];
   double x1 = (double)(k+1)/double(ISURVFNUMBINS);
   double y1 = idata[irating][k+1];
-
-  if (k+1 == ISURVFNUMBINS && 1.0/ISURVFNUMBINS < val) {
-    return inverse1(irating, val);
-  }
 
   if ((int)y0 == INT_MAX || (int)y1 == INT_MAX) {
     return ddata[irating].size()+11.0;
