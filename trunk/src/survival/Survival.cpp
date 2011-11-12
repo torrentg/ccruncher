@@ -307,14 +307,14 @@ void ccruncher::Survival::fillHoles()
     x0 = 0.0;
     y0 = 1.0;
 
-    for(unsigned int j=1;j<ddata[i].size();j++)
+    for(int j=1; j<(int)ddata[i].size(); j++)
     {
       if (!isnan(ddata[i][j]))
       {
         x1 = double(j);
         y1 = ddata[i][j];
 
-        for (unsigned int k=(unsigned int)(x0)+1;k<j;k++)
+        for (int k=(int)(x0+1); k<j; k++)
         {
           ddata[i][k] = interpole(double(k), x0, y0, x1, y1);
         }
@@ -419,10 +419,6 @@ double ccruncher::Survival::inverse1(const int irating, double val) const
   }
   assert(x0 >= 0.0);
   return interpole(val, x0, y0, x1, y1);
-
-  // error if value not found
-  assert(false);
-  return 0.0;
 }
 
 //===========================================================================
@@ -451,19 +447,21 @@ double ccruncher::Survival::inverse(const int irating, double val) const
   if (k >= ISURVFNUMBINS) {
     return 0.0;
   }
-  
+
   double x0 = (double)(k+0)/double(ISURVFNUMBINS);
   double y0 = idata[irating][k];
   double x1 = (double)(k+1)/double(ISURVFNUMBINS);
   double y1 = idata[irating][k+1];
 
+  if (k+1 == ISURVFNUMBINS && 1.0/ISURVFNUMBINS < val) {
+    return inverse1(irating, val);
+  }
+
   if ((int)y0 == INT_MAX || (int)y1 == INT_MAX) {
     return ddata[irating].size()+11.0;
   }
 
-  assert(x0 <= val);
-  assert(val <= x1);
-
+  assert(x0 <= val && val <= x1);
   return interpole(val, x0, y0, x1, y1);
 }
 

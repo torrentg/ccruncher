@@ -49,6 +49,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
     void test4(void);
     void test5(void);
     void test6(void);
+    void test7(void);
 
 
   public:
@@ -61,6 +62,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
       TEST_CASE(test4);
       TEST_CASE(test5);
       TEST_CASE(test6);
+      TEST_CASE(test7);
     }
 
     void setUp();

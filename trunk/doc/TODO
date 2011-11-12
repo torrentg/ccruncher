@@ -4,6 +4,7 @@ CCRUNCHER TODO
 
 Current works
 -------------------
+  * graphic interface
   * improve lookup-table when survival values are low
 
 Future works
@@ -26,7 +27,6 @@ Future works
       </breaks>
   * allow ratings evaluated to date previous to T0
   * add obligor-obligor dependences
-  * graphic interface
   * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
 

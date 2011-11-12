@@ -5,6 +5,8 @@ CCRUNCHER CHANGELOG
 version 1.9 (?. 2011)
 --------------------------
   * added --seed parameter
+  * solved survival precision problem
+  * updated MiniCppUnit version
 
 version 1.8 (May. 2011)
 --------------------------

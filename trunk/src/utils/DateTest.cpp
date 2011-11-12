@@ -49,15 +49,17 @@ void ccruncher_test::DateTest::tearDown()
 //===========================================================================
 void ccruncher_test::DateTest::test_constructors(void)
 {
-  Date now = Date();
+  Date invalid_date = Date();
   Date date1 = Date(25,7,2001);
   Date date2 = Date("25/07/2001");
   Date date3 = Date(date2);
-  Date date4 = Date(time(NULL));
+  Date now = Date(time(NULL));
 
+  ASSERT(nad[0] == *((long*)(&invalid_date)));
   ASSERT(date1 == date2);
   ASSERT(date2 == date3);
   ASSERT(date3 == date2);
+  ASSERT(Date("01/01/1900") < now);
   ASSERT_THROW(Date("30/02/2003"));
 }
 
