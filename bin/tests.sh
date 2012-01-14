@@ -23,7 +23,7 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=tests.sh
-numversion="1.8"
+numversion="1.9"
 svnversion="R727"
 
 #-------------------------------------------------------------
@@ -42,7 +42,7 @@ copyright() {
 
   cat << _EOF_
 
-   $progname is Copyright (C) 2004-2011 Gerard Torrent and licensed
+   $progname is Copyright (C) 2004-2012 Gerard Torrent and licensed
      under the GNU General Public License, version 2. More info at
                    http://www.ccruncher.net
 

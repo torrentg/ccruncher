@@ -28,9 +28,10 @@ MainWindow::MainWindow(const Configuration &c, QWidget *parent) :
 	ui->description->installEventFilter(this);
 
 	// filling forms
-	currentId = 1;
 	ui->tabs->setCurrentIndex(0);
 	blockSignals(false);
+	currentId = 1;
+	changeTab(0);
 }
 
 //===========================================================================
@@ -122,6 +123,7 @@ void MainWindow::initTabParameters(int id)
 
 //===========================================================================
 // interests tab
+// TODO: use delegates -> http://www.qtcentre.org/archive/index.php/t-36699.html
 //===========================================================================
 void MainWindow::initTabInterests(int id)
 {
@@ -515,10 +517,12 @@ void MainWindow::updateCopula()
 {
 	if (ui->copula->currentIndex() == 0) {
 		database.updateProperty(currentId, Database::CopulaType, "gaussian");
+		ui->degrees_of_freedom->setEnabled(false);
 	}
 	else {
 		QString str = "t(" + QString::number(ui->degrees_of_freedom->value()) + ")";
 		database.updateProperty(currentId, Database::CopulaType, str);
+		ui->degrees_of_freedom->setEnabled(true);
 	}
 }
 
