@@ -44,6 +44,7 @@ ccruncher_SOURCES = \
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
@@ -57,7 +58,6 @@ ccruncher_SOURCES = \
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Arrays.cpp\
-    ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
@@ -88,6 +88,7 @@ ccruncher_SOURCES = \
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
@@ -101,7 +102,6 @@ ccruncher_SOURCES = \
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Arrays.hpp\
-    ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\
@@ -123,7 +123,6 @@ tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
     ../deps/gzstream-1.5/gzstream.cpp\
     ../src/utils/ArraysTest.cpp\
-    ../src/utils/LookupTableTest.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
@@ -136,6 +135,7 @@ tests_SOURCES = \
     ../src/math/BlockMatrixCholTest.cpp\
     ../src/math/BlockGaussianCopulaTest.cpp\
     ../src/math/BlockTStudentCopulaTest.cpp\
+    ../src/math/FastTStudentCdfTest.cpp\
     ../src/correlations/CorrelationMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
@@ -157,7 +157,6 @@ tests_SOURCES = \
     ../src/portfolio/Recovery.cpp\
     ../src/portfolio/Exposure.cpp\
     ../src/utils/Arrays.cpp\
-    ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Parser.cpp\
@@ -175,6 +174,7 @@ tests_SOURCES = \
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/FastTStudentCdf.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
@@ -196,7 +196,6 @@ tests_SOURCES = \
     ../src/survival/Survival.cpp\
     \
     ../src/utils/ArraysTest.hpp\
-    ../src/utils/LookupTableTest.hpp\
     ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
     ../src/utils/DateTest.hpp\
@@ -210,6 +209,7 @@ tests_SOURCES = \
     ../src/math/BlockMatrixCholTest.hpp\
     ../src/math/BlockGaussianCopulaTest.hpp\
     ../src/math/BlockTStudentCopulaTest.hpp\
+    ../src/math/FastTStudentCdfTest.hpp\
     ../src/correlations/CorrelationMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
@@ -231,7 +231,6 @@ tests_SOURCES = \
     ../src/portfolio/Recovery.hpp\
     ../src/portfolio/Exposure.hpp\
     ../src/utils/Arrays.hpp\
-    ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Parser.hpp\
@@ -249,6 +248,7 @@ tests_SOURCES = \
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/FastTStudentCdf.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
@@ -301,6 +301,7 @@ samplegen_SOURCES = \
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
@@ -314,7 +315,6 @@ samplegen_SOURCES = \
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Arrays.cpp\
-    ../src/utils/LookupTable.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
@@ -345,6 +345,7 @@ samplegen_SOURCES = \
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
@@ -358,7 +359,6 @@ samplegen_SOURCES = \
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Arrays.hpp\
-    ../src/utils/LookupTable.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\

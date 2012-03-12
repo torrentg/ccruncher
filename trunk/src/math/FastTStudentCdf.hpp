@@ -20,81 +20,76 @@
 //
 //===========================================================================
 
-#ifndef _LookupTable_
-#define _LookupTable_
+#ifndef _FastTStudentCdf_
+#define _FastTStudentCdf_
 
 //---------------------------------------------------------------------------
 
-#include <cmath>
-#include <vector>
 #include "utils/config.h"
+#include <vector>
+#include <gsl/gsl_cdf.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
 using namespace std;
+using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class LookupTable
+class FastTStudentCdf
 {
 
   private:
 
-    // minimum x value
-    double xmin;
-    // maximum x value
-    double xmax;
-    // number of steps
-    double steplength;
-    // array of values
-    vector<double> values;
-    // array of slopes
-    vector<double> slope;
+    // degrees of freedom
+    double ndf;
+    // values
+    vector<double> breaks;
+    // splines coefficients
+    vector<double> coeffs;
+
+  private:
+
+    // utility function
+    int sign(double x) const;
+    // compute interpolating polynomial of degree 3
+    double getCoeffs3(double x1, double x2, double *ret) const throw(Exception);
+    // find interval [x0,rc] where spline error is less than EPSILON
+    double bisection(double x0, double *ret) const throw(Exception);
 
   public:
 
-    // default constructor
-    LookupTable();
     // constructor
-    LookupTable(double minv, double maxv, const vector<double> &vals) throw(Exception);
-    // copyp constructor
-    LookupTable(const LookupTable &x) throw(Exception);
-    // lookup table initialization
-    void init(double minv, double maxv, const vector<double> &vals) throw(Exception);
-    // number of steps
-    int size() const;
-    // evalue the function at x value
-    double evalue(double x) const;
+    FastTStudentCdf(double nu) throw(Exception);
+    // evaluate cdf at x
+    double eval(double x) const;
 
 };
 
 //---------------------------------------------------------------------------
 
 //===========================================================================
-// returns the function evaluated at x
+// evaluate cdf at x
 //===========================================================================
-inline double ccruncher::LookupTable::evalue(double x) const
+inline double FastTStudentCdf::eval(double x) const
 {
-  if (x <= xmin)
-  {
-    return values.front();
-  }
-  else if (x >= xmax)
-  {
-    return values.back();
-  }
-  else
-  {
-    // interpolation formula: y = y0 + (x-x0) x (y1-y0)/(x1-x0)
-    // precomputed slope: (y1-y0)/(x1-x0)
-    int i = (int) floor((x-xmin)/steplength);
-    return values[i] + (x-(xmin+steplength*i)) * slope[i];
-  }
-}
+  double z = fabs(x);
 
-//---------------------------------------------------------------------------
+  for (unsigned int i=0; i<breaks.size(); i++)
+  {
+    if (z < breaks[i]) 
+    {
+      const double *a = &coeffs[i*4];
+      double ret = a[0]+z*(a[1]+z*(a[2]+z*a[3]));
+      if (x < 0.0) return 1.0-ret;
+      else return ret;
+    }
+  }
+
+  return gsl_cdf_tdist_P(x, ndf);
+}
 
 }
 
@@ -103,3 +98,4 @@ inline double ccruncher::LookupTable::evalue(double x) const
 #endif
 
 //---------------------------------------------------------------------------
+

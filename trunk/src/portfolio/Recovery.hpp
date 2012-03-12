@@ -98,11 +98,8 @@ class Recovery
 //===========================================================================
 // default constructor
 //===========================================================================
-inline ccruncher::Recovery::Recovery()
+inline ccruncher::Recovery::Recovery() : type(Fixed), value1(NAN), value2(NAN)
 {
-  type = Fixed;
-  value1 = NAN;
-  value2 = NAN;
 }
 
 //===========================================================================

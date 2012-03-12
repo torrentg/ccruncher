@@ -20,13 +20,14 @@
 //
 //===========================================================================
 
-#ifndef _LookupTableTest_
-#define _LookupTableTest_
+#ifndef _FastTStudentCdfTest_
+#define _FastTStudentCdfTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
+#include "math/FastTStudentCdf.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -35,21 +36,19 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class LookupTableTest : public TestFixture<LookupTableTest>
+class FastTStudentCdfTest : public TestFixture<FastTStudentCdfTest>
 {
 
   private:
 
-    void test1(void);
-    void test2(void);
+    void test1();
 
 
   public:
 
-    TEST_FIXTURE(LookupTableTest)
+    TEST_FIXTURE(FastTStudentCdfTest)
     {
       TEST_CASE(test1);
-      TEST_CASE(test2);
     }
 
     void setUp();
@@ -57,7 +56,7 @@ class LookupTableTest : public TestFixture<LookupTableTest>
 
 };
 
-REGISTER_FIXTURE(LookupTableTest);
+REGISTER_FIXTURE(FastTStudentCdfTest);
 
 //---------------------------------------------------------------------------
 

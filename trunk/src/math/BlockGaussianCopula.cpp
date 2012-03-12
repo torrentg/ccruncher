@@ -35,8 +35,6 @@
 #define M_PI 3.141592653589793238462643383279502884197196
 #endif
 
-#define LUTSIZE 10001
-
 //===========================================================================
 // reset
 //===========================================================================
@@ -47,7 +45,6 @@ void ccruncher::BlockGaussianCopula::reset()
   aux1 = NULL;
   aux2 = NULL;
   chol = NULL;
-  lut = NULL;
   rng = NULL;
   owner = true;
 }
@@ -72,11 +69,6 @@ void ccruncher::BlockGaussianCopula::finalize()
     aux2 = NULL;
   }
   
-  if (lut != NULL && owner == true) {
-    delete lut;
-    lut = NULL;
-  }
-  
   if (chol != NULL && owner == true) {
     delete chol;
     chol = NULL;
@@ -86,10 +78,10 @@ void ccruncher::BlockGaussianCopula::finalize()
 //===========================================================================
 // copy constructor
 // the owner flag is set to avoid memory allocation and memory fragmentation 
-// when exists multiple copulas with the same static data (chol, lut)
+// when exists multiple copulas with the same static data (chol)
 //===========================================================================
 ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x, bool alloc) throw(Exception) : 
-  Copula(), rng(NULL), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL)
 {
   reset();
   n = x.n;
@@ -99,12 +91,10 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
   if (alloc == true)
   {
     chol = new BlockMatrixChol(*x.chol);
-    lut = (x.lut==NULL?NULL:new LookupTable(*x.lut));
   }
   else
   {
     chol = x.chol;
-    lut = x.lut;
   }
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
@@ -118,7 +108,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
 // m: number of sectors
 //===========================================================================
 ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_) throw(Exception) : 
-  Copula(), rng(NULL), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
@@ -153,9 +143,6 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
 
-    // creating lookuptable to speedup gaussian CDF
-    //initLUT();
-
     // preparing to receive the first get()
     next();
   }
@@ -184,31 +171,6 @@ Copula* ccruncher::BlockGaussianCopula::clone(bool alloc)
 }
 
 //===========================================================================
-// initLUT
-// t-student and gaussian CDF are symmetric respect to 0.0
-// lut contains CDF gaussian evaluated between 0.0 and x where cdf(x)>0.9999
-//===========================================================================
-void ccruncher::BlockGaussianCopula::initLUT() throw(Exception)
-{
-  double minv = 0.0;
-  double maxv = gsl_cdf_ugaussian_Pinv(0.9999);
-  vector<double> values;
-  double steplength = (maxv-minv)/(double)(LUTSIZE-1);
-
-  for(int i=0; i<LUTSIZE; i++)
-  {
-    double x = (double)(i)*steplength;
-    double val = gsl_cdf_ugaussian_P(x);
-    values.push_back(val);
-  }
-  
-  maxv += steplength;
-  values.push_back(1.0);
-
-  lut = new LookupTable(minv, maxv, values);
-}
-
-//===========================================================================
 // size. returns number of components
 //===========================================================================
 int ccruncher::BlockGaussianCopula::size() const
@@ -232,7 +194,7 @@ double ccruncher::BlockGaussianCopula::transform(double val)
 //===========================================================================
 void ccruncher::BlockGaussianCopula::randNm()
 {
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
     aux1[i] = gsl_ran_ugaussian(rng);
   }
@@ -250,14 +212,9 @@ void ccruncher::BlockGaussianCopula::next()
   randNm();
 
   // puting in aux1 the copula
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
     aux1[i] = gsl_cdf_ugaussian_P(aux2[i]);
-    // gaussian lut covers only positive values
-    // negative values are computed as 1-lut(abs(x))
-    //double x = factor*aux2[i];
-    //double y = lut->evalue(abs(x));
-    //aux1[i] = (x<0.0?1.0-y:y);
   }
 }
 

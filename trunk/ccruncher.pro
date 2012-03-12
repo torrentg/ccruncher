@@ -12,6 +12,7 @@ HEADERS += \
     src/math/BlockTStudentCopula.hpp \
     src/math/BlockMatrixChol.hpp \
     src/math/BlockGaussianCopula.hpp \
+    src/math/FastTStudentCdf.hpp \
     src/params/Params.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
@@ -32,7 +33,6 @@ HEADERS += \
     src/utils/Thread.hpp \
     src/utils/Strings.hpp \
     src/utils/Parser.hpp \
-    src/utils/LookupTable.hpp \
     src/utils/Logger.hpp \
     src/utils/Format.hpp \
     src/utils/File.hpp \
@@ -59,6 +59,7 @@ SOURCES += \
     src/math/BlockTStudentCopula.cpp \
     src/math/BlockMatrixChol.cpp \
     src/math/BlockGaussianCopula.cpp \
+    src/math/FastTStudentCdf.cpp \
     src/params/Params.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
@@ -79,7 +80,6 @@ SOURCES += \
     src/utils/Thread.cpp \
     src/utils/Strings.cpp \
     src/utils/Parser.cpp \
-    src/utils/LookupTable.cpp \
     src/utils/Logger.cpp \
     src/utils/Format.cpp \
     src/utils/File.cpp \

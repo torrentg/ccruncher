@@ -22,17 +22,19 @@
 
 #include <iostream>
 #include <cmath>
-#include "utils/LookupTable.hpp"
-#include "utils/LookupTableTest.hpp"
+#include <gsl/gsl_cdf.h>
+#include "math/FastTStudentCdf.hpp"
+#include "math/FastTStudentCdfTest.hpp"
 
 //---------------------------------------------------------------------------
 
-#define EPSILON 1E-7
+//#define EPSILON  1.0002e-6
+#define EPSILON  1.02e-7
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::LookupTableTest::setUp()
+void ccruncher_test::FastTStudentCdfTest::setUp()
 {
   // nothing to do
 }
@@ -40,57 +42,41 @@ void ccruncher_test::LookupTableTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::LookupTableTest::tearDown()
+void ccruncher_test::FastTStudentCdfTest::tearDown()
 {
   // nothing to do
 }
 
 //===========================================================================
-// test1
+// test1. generates NITERS realization of a copula and test that expected
+// correlations are true
 //===========================================================================
-void ccruncher_test::LookupTableTest::test1()
+void ccruncher_test::FastTStudentCdfTest::test1()
 {
-  vector<double> v;
-
-  // fails because xmin >= xmax
-  v.push_back(0.0);
-  v.push_back(1.0);
-  ASSERT_THROW(LookupTable(1.0, 0.0, v));
-
-  // fails because v.size() < 2
-  v.clear();
-  v.push_back(1.0);
-  ASSERT_THROW(LookupTable(0.0, 1.0, v));
-}
-
-//===========================================================================
-// test2
-//===========================================================================
-void ccruncher_test::LookupTableTest::test2()
-{
-  LookupTable lut;
-  vector<double> v;
-
-  for(int i=0; i<=2000; i++)
+  for (int i=2; i<=50; i++)
   {
-    double x = (double)(i)/1000.0;
-    double y = sin(x);
-    v.push_back(y);
-  }
+    double ndf = (double)(i);
+    double x0 = gsl_cdf_tdist_Pinv(0.0001, ndf);
+    double max_err = -1e10;
+    FastTStudentCdf tcdf(ndf);
+    double x = x0;
 
-  lut = LookupTable(0.0, 2.0, v);
+    do
+    {
+      double approx = tcdf.eval(x);
+      ASSERT(0.0 <= approx && approx <= 1.0);
+      double exact = gsl_cdf_tdist_P(x, ndf);
+      double err = fabs(approx-exact);
+      if (max_err < err) 
+      {
+        max_err = err;
+      }
+      
+      x += 0.0001;
+    }
+    while(x < -x0);
 
-  ASSERT_EQUALS(lut.size(), 2001);
-  ASSERT_EQUALS_EPSILON(sin(0.0), lut.evalue(-1.0), EPSILON);
-  ASSERT_EQUALS_EPSILON(sin(0.0), lut.evalue(0.0), EPSILON);
-  ASSERT_EQUALS_EPSILON(sin(1.0), lut.evalue(1.0), EPSILON);
-  ASSERT_EQUALS_EPSILON(sin(2.0), lut.evalue(2.0), EPSILON);
-  ASSERT_EQUALS_EPSILON(sin(2.0), lut.evalue(3.0), EPSILON);
-  for(int i=0; i<58; i++)
-  {
-    double x = (double)(i) * 2.0/57.0;
-    double y = sin(x);
-    ASSERT_EQUALS_EPSILON(y, lut.evalue(x), EPSILON);
+    ASSERT(max_err < EPSILON);
   }
 }
 

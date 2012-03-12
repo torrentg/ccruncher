@@ -314,6 +314,14 @@
 					RelativePath="src\math\PowMatrix.hpp"
 					>
 				</File>
+				<File
+					RelativePath="src\math\FastTStudentCdf.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\FastTStudentCdf.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="params"
@@ -528,14 +536,6 @@
 				</File>
 				<File
 					RelativePath="src\utils\Logger.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\utils\LookupTable.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\utils\LookupTable.hpp"
 					>
 				</File>
 				<File

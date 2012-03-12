@@ -29,7 +29,6 @@
 #include <gsl/gsl_rng.h>
 #include "math/Copula.hpp"
 #include "math/BlockMatrixChol.hpp"
-#include "utils/LookupTable.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -57,9 +56,7 @@ class BlockGaussianCopula : public Copula
     double *aux1;
     // internal buffer
     double *aux2;
-    // lookup table
-    LookupTable *lut;
-    // chol & lut allocation flag
+    // chol allocation flag
     bool owner;
 
   private:
@@ -72,8 +69,6 @@ class BlockGaussianCopula : public Copula
     double transform(double val);
     // generates correlated normal numbers
     void randNm();
-    // initialize the lookup table
-    void initLUT() throw(Exception);
 
   public:
 

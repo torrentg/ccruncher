@@ -35,8 +35,6 @@
 #define M_PI 3.141592653589793238462643383279502884197196
 #endif
 
-#define LUTSIZE 10001
-
 //===========================================================================
 // reset
 //===========================================================================
@@ -48,7 +46,6 @@ void ccruncher::BlockTStudentCopula::reset()
   aux1 = NULL;
   aux2 = NULL;
   chol = NULL;
-  lut = NULL;
   rng = NULL;
   owner = true;
 }
@@ -73,11 +70,6 @@ void ccruncher::BlockTStudentCopula::finalize()
     aux2 = NULL;
   }
   
-  if (lut != NULL && owner == true) {
-    delete lut;
-    lut = NULL;
-  }
-  
   if (chol != NULL && owner == true) {
     delete chol;
     chol = NULL;
@@ -88,7 +80,7 @@ void ccruncher::BlockTStudentCopula::finalize()
 // copy constructor
 //===========================================================================
 ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x, bool alloc) throw(Exception) : 
-  Copula(), rng(NULL), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL), tcdf(x.ndf)
 {
   reset();
   n = x.n;
@@ -99,12 +91,10 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
   if (alloc == true)
   {
     chol = new BlockMatrixChol(*x.chol);
-    lut = new LookupTable(*x.lut);
   }
   else
   {
     chol = x.chol;
-    lut = x.lut;
   }
   aux1 = Arrays<double>::allocVector(n);
   aux2 = Arrays<double>::allocVector(n);
@@ -118,7 +108,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 // m: number of sectors
 //===========================================================================
 ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception) : 
-  Copula(), rng(NULL), chol(NULL), lut(NULL)
+  Copula(), rng(NULL), chol(NULL), tcdf(ndf_)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
@@ -159,9 +149,6 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
     aux1 = Arrays<double>::allocVector(n);
     aux2 = Arrays<double>::allocVector(n);
 
-    // creating lookuptable to speedup t-student CDF
-    initLUT();
-
     // preparing to receive the first get()
     next();
   }
@@ -190,32 +177,6 @@ Copula* ccruncher::BlockTStudentCopula::clone(bool alloc)
 }
 
 //===========================================================================
-// initLUT
-// t-student and gaussian CDF are symmetric respect to 0.0
-// lut contains CDF t-student evaluated between 0.0 and x where cdf(x)>0.9999
-//===========================================================================
-void ccruncher::BlockTStudentCopula::initLUT() throw(Exception)
-{
-  double minv = 0.0;
-  double maxv = gsl_cdf_tdist_Pinv(0.9999, ndf);
-  vector<double> values;
-  double steplength = (maxv-minv)/(double)(LUTSIZE-1);
-
-  for(int i=0; i<LUTSIZE; i++)
-  {
-    double x = (double)(i)*steplength;
-    double val = gsl_cdf_tdist_P(x, ndf);
-    values.push_back(val);
-    //double gsl_ran_tdist_pdf (double x, double nu)
-  }
-  
-  maxv += steplength;
-  values.push_back(1.0);
-
-  lut = new LookupTable(minv, maxv, values);
-}
-
-//===========================================================================
 // size. returns number of components
 //===========================================================================
 int ccruncher::BlockTStudentCopula::size() const
@@ -239,7 +200,7 @@ double ccruncher::BlockTStudentCopula::transform(double val)
 //===========================================================================
 void ccruncher::BlockTStudentCopula::randNm()
 {
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
     aux1[i] = gsl_ran_ugaussian(rng);
   }
@@ -261,14 +222,10 @@ void ccruncher::BlockTStudentCopula::next()
   double factor = sqrt(ndf/chisq);
 
   // puting in aux1 the copula
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
     //aux1[i] = gsl_cdf_tdist_P(factor*aux2[i], ndf);
-    // t-student lut covers only positive values
-    // negative values are computed as 1-lut(abs(x))
-    double x = factor*aux2[i];
-    double y = lut->evalue(abs(x));
-    aux1[i] = (x<0.0?1.0-y:y);
+    aux1[i] = tcdf.eval(factor*aux2[i]);
   }
 }
 

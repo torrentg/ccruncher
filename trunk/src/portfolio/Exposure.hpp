@@ -103,11 +103,8 @@ class Exposure
 //===========================================================================
 // default constructor
 //===========================================================================
-inline ccruncher::Exposure::Exposure()
+inline ccruncher::Exposure::Exposure() : type(Fixed), value1(NAN), value2(NAN)
 {
-  type = Fixed;
-  value1 = NAN;
-  value2 = NAN;
 }
 
 //===========================================================================

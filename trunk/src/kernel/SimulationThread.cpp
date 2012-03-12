@@ -77,7 +77,7 @@ void ccruncher::SimulationThread::run()
     // initialize aggregated values
     for(int i=0; i<numsegmentations; i++)
     {
-      for(int j=0; j<(int)losses[i].size(); j++)
+      for(int j=losses[i].size()-1; j>=0; j--)
       {
         losses[i][j] = 0.0;
       }
@@ -147,18 +147,17 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   double t = survival.inverse(r, u);
   // TODO: assumed no leap years (this can be improved)
   Date dtime = time0 + (long)(t*365.0/12.0);
-  
+  if (dtime > timeT) return;
+
   // evalue obligor losses
   double obligor_recovery = NAN;
   char *p = (char*)(obligors[iobligor].assets);
   for(int i=0; i<obligors[iobligor].numassets; i++)
   {
-    // evalue asset loss
-    double loss = 0.0;
     SimulatedAsset *asset = (SimulatedAsset*)(p+i*assetsize);
-    int *segments = &(asset->segments);
 
-    if (dtime <= timeT && asset->mindate <= dtime && dtime <= asset->maxdate) // time0 <= t by-design
+    // evalue asset loss
+    if (asset->mindate <= dtime && dtime <= asset->maxdate)
     {
       // not called Asset::getValues() due to memory access latency
       const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
@@ -175,16 +174,18 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
         }
         recovery = obligor_recovery;
       }
-      
-      loss = exposure * (1.0 - recovery);
-    }
 
-    // aggregate asset loss
-    for(int j=0; j<numsegmentations; j++)
-    {
-      int isegment = segments[j];
-      assert(0 <= isegment && isegment < (int) losses[j].size());
-      losses[j][isegment] += loss;
+      // compute asset loss
+      double loss = exposure * (1.0 - recovery);
+
+      // aggregate asset loss
+      int *segments = &(asset->segments);
+      for(int j=0; j<numsegmentations; j++)
+      {
+        int isegment = segments[j];
+        assert(0 <= isegment && isegment < (int) losses[j].size());
+        losses[j][isegment] += loss;
+      }
     }
   }
 }
