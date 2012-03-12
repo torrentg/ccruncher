@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue Nov 29 06:59:38 CET 2011"
+#define BUILD_DATE "Sat Mar 10 08:09:50 CET 2012"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -158,7 +158,7 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 1.8"
+#define PACKAGE_STRING "ccruncher 1.9"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
@@ -167,7 +167,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.8"
+#define PACKAGE_VERSION "1.9"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -190,7 +190,7 @@
 /* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
-#define VERSION "1.8"
+#define VERSION "1.9"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

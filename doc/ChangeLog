@@ -6,6 +6,7 @@ version 1.9 (?. 2012)
 --------------------------
   * added --seed parameter
   * solved survival precision problem
+  * modified T-student CDF speedup algorithm
   * updated MiniCppUnit version
 
 version 1.8 (May. 2011)
