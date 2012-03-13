@@ -169,9 +169,8 @@ void ccruncher::Survival::insertValue(const string &srating, int t, double value
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+void ccruncher::Survival::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"survival")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes not allowed in tag survival");
@@ -197,9 +196,8 @@ void ccruncher::Survival::epstart(ExpatUserData &eu, const char *name, const cha
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Survival::epend(ExpatUserData &eu, const char *name)
+void ccruncher::Survival::epend(ExpatUserData &, const char *name)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"survival")) {
     validate();
     fillHoles();
@@ -484,7 +482,7 @@ string ccruncher::Survival::getXML(int ilevel) const throw(Exception)
       ret += spc2 + "<svalue ";
       ret += "rating='" + (*ratings)[i].name + "' ";
       ret += "t='" + Format::toString((int)j) + "' ";
-      ret += "value ='" + Format::toString(ddata[i][j]) + "'";
+      ret += "value='" + Format::toString(ddata[i][j]) + "'";
       ret += "/>\n";
     }
   }

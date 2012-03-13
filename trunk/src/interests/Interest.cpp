@@ -116,7 +116,7 @@ double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) cons
   else
   {
     assert(false);
-	return NAN;
+    return NAN;
   }
 }
 
@@ -198,9 +198,8 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Interest::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"interest")) {
     if (vrates.size() == 0) {
       throw Exception("interest has no rates");

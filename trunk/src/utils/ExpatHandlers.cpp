@@ -66,11 +66,8 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
 //===========================================================================
 // epstop
 //===========================================================================
-void ccruncher::ExpatHandlers::epstop(ExpatUserData &eud)
+void ccruncher::ExpatHandlers::epstop(ExpatUserData &)
 {
-  // assertions
-  assert(eud.getCurrentHandlers() == this);
-
   // throwing an exception to stop parser
   // retrieved by ExpatParser::parse() method
   throw int(999);

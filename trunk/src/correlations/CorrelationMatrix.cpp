@@ -164,9 +164,8 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+void ccruncher::CorrelationMatrix::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mcorrels")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes not allowed in tag mcorrels");
@@ -193,9 +192,8 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &eu, const char *name, 
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::CorrelationMatrix::epend(ExpatUserData &eu, const char *name)
+void ccruncher::CorrelationMatrix::epend(ExpatUserData &, const char *name)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mcorrels")) {
     validate();
   }
@@ -243,9 +241,9 @@ string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
     for(int j=i;j<n;j++)
     {
       ret += spc2 + "<sigma ";
-      ret += "sector1 ='" + sectors[i].name + "' ";
-      ret += "sector2 ='" + sectors[j].name + "' ";
-      ret += "value ='" + Format::toString(100.0*matrix[i][j]) + "%'";
+      ret += "sector1='" + sectors[i].name + "' ";
+      ret += "sector2='" + sectors[j].name + "' ";
+      ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }
   }

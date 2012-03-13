@@ -114,7 +114,7 @@ class Date
     void YMD( int *pY, int *pM, int *pD ) const;
     time_t ToSysTime( void ) const;
     double getMonthsTo(const Date& d) const;
-    void addIncrement(const char *str) throw(Exception);	
+    void addIncrement(const char *str) throw(Exception);
 
     Date& operator=( const Date& Orig );
     friend Date operator+( const Date& Left, const long Right );

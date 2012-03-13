@@ -157,9 +157,8 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"segmentation")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("incorrect number of attributes in tag segmentation");
@@ -203,9 +202,8 @@ void ccruncher::Segmentation::epstart(ExpatUserData &eu, const char *name_, cons
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Segmentation::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"segmentation")) {
     // nothing to do
   }

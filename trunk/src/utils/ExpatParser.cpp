@@ -38,12 +38,6 @@
 #endif
 
 //===========================================================================
-// static variable definition
-//===========================================================================
-//TODO: declare this variable as non-static
-const char *ccruncher::ExpatParser::current_tag = NULL;
-
-//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::ExpatParser::ExpatParser()
@@ -83,23 +77,19 @@ void ccruncher::ExpatParser::reset()
 
   // setting characterdata handler
   XML_SetCharacterDataHandler(xmlparser, characterData);
-
-  // other initializations
-  current_tag = NULL;
 }
 
 //===========================================================================
 // startElement
-//TODO: avoid usage of static variables
 //===========================================================================
 void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
-  // setting current tag
-  current_tag = name;
-
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
   ExpatHandlers *eh = ud->getCurrentHandlers();
+
+  // setting current tag
+  ud->setCurrentTag(name);
 
   // calling current handler
   eh->epstart(*ud, name, atts);
@@ -107,16 +97,15 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 
 //===========================================================================
 // endElement
-//TODO: avoid usage of static variables
 //===========================================================================
 void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
-  // setting current tag
-  current_tag = NULL;
-
   // retrieving current handler
   ExpatUserData *ud = (ExpatUserData *) ud_;
   ExpatHandlers *eh = ud->getCurrentHandlers();
+
+  // setting current tag
+  ud->setCurrentTag(NULL);
 
   // if current handler = name use epend as finish event
   // calling current handler
@@ -135,13 +124,12 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 
 //===========================================================================
 // characterData
-//TODO: avoid usage of static variables
 //===========================================================================
-void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len) throw(Exception)
+void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len)
 {
   ExpatUserData *ud = (ExpatUserData *) ud_;
   ExpatHandlers *eh = ud->getCurrentHandlers();
-  eh->epdata(*ud, current_tag, s, len);
+  eh->epdata(*ud, ud->getCurrentTag(), s, len);
 }
 
 //===========================================================================

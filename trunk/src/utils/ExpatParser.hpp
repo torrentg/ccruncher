@@ -47,17 +47,15 @@ class ExpatParser
     XML_Parser xmlparser;
     // user data
     ExpatUserData userdata;
-    // current tag (internal use)
-    static const char *current_tag;
 
   private:
-  
+
     // startElement function catcher
     static void startElement(void *ud, const char *name, const char **atts);
     // endElement function catcher
     static void endElement(void *ud, const char *name);
     // characterData Handler function
-    static void characterData(void *ud, const char *s, int len) throw(Exception);
+    static void characterData(void *ud, const char *s, int len);
     // reset internal variables
     void reset();
 

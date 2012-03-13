@@ -140,9 +140,8 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Portfolio::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Portfolio::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"portfolio")) {
     auxobligor = NULL;
     validations();

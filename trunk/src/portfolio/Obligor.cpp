@@ -136,9 +136,8 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"asset")) {
     prepareLastAsset();
   }
