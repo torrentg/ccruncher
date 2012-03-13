@@ -69,7 +69,7 @@ class Recovery
     static void checkParams(RecoveryType, double, double) throw(Exception);
 
   public:
-  
+
     // default constructor
     Recovery();
     // constructor
@@ -89,8 +89,8 @@ class Recovery
     // check if is a Non-A-Recovery value
     static bool valid(const Recovery &);
     // to string
-	string toString() const;
-	
+    string toString() const;
+
 };
 
 //---------------------------------------------------------------------------

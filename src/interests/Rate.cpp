@@ -46,9 +46,8 @@ ccruncher::Rate::Rate(double t_)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+void ccruncher::Rate::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"rate")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("incorrect number of attributes");
@@ -76,9 +75,8 @@ void ccruncher::Rate::epstart(ExpatUserData &eu, const char *name, const char **
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Rate::epend(ExpatUserData &eu, const char *name)
+void ccruncher::Rate::epend(ExpatUserData &, const char *name)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"rate")) {
     // nothing to do
   }

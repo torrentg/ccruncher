@@ -143,9 +143,8 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sectors::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sectors")) {
     validations();
     auxsector = Sector();

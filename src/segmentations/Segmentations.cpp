@@ -160,9 +160,8 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Segmentations::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"segmentations")) {
     validate();
     auxsegmentation.reset();

@@ -36,9 +36,8 @@ ccruncher::Rating::Rating()
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Rating::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"rating")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes in rating tag");
@@ -61,9 +60,8 @@ void ccruncher::Rating::epstart(ExpatUserData &eu, const char *name_, const char
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Rating::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Rating::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"rating")) {
     // nothing to do
   }

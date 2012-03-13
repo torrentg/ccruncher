@@ -36,9 +36,8 @@ ccruncher::Sector::Sector()
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Sector::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sector")) {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("invalid number of attributes at sector");
@@ -61,9 +60,8 @@ void ccruncher::Sector::epstart(ExpatUserData &eu, const char *name_, const char
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sector::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Sector::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"sector")) {
     // nothing to do
   }
@@ -80,8 +78,8 @@ string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
   string ret = Strings::blanks(ilevel);
 
   ret += "<sector ";
-  ret += "name ='" + name + "' ";
-  ret += "description ='" + desc + "'";
+  ret += "name='" + name + "' ";
+  ret += "description='" + desc + "'";
   ret += "/>\n";
 
   return ret;

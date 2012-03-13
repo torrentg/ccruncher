@@ -79,9 +79,8 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Params::epend(ExpatUserData &eu, const char *name)
+void ccruncher::Params::epend(ExpatUserData &, const char *name)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"parameters")) {
     validate();
   }
@@ -151,9 +150,8 @@ double ccruncher::Params::getCopulaParam() const throw(Exception)
 //===========================================================================
 // parse a XML property
 //===========================================================================
-void ccruncher::Params::parseProperty(ExpatUserData &eu, const char **attributes) throw(Exception)
+void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) throw(Exception)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   // reading attribute name
   string name = getStringAttribute(attributes, "name", "");
 

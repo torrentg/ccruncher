@@ -197,9 +197,8 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, const char **attributes)
+void ccruncher::TransitionMatrix::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mtransitions")) {
     if (getNumAttributes(attributes) != 1) {
       throw Exception("invalid number of attributes in tag mtransitions");
@@ -231,9 +230,8 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &eu, const char *name, c
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::TransitionMatrix::epend(ExpatUserData &eu, const char *name)
+void ccruncher::TransitionMatrix::epend(ExpatUserData &, const char *name)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name,"mtransitions")) {
     validate();
   }
@@ -350,9 +348,9 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
     for(int j=0;j<n;j++)
     {
       ret += spc2 + "<transition ";
-      ret += "from ='" + (*ratings)[i].name + "' ";
-      ret += "to ='" + (*ratings)[j].name + "' ";
-      ret += "value ='" + Format::toString(100.0*matrix[i][j]) + "%'";
+      ret += "from='" + (*ratings)[i].name + "' ";
+      ret += "to='" + (*ratings)[j].name + "' ";
+      ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }
   }

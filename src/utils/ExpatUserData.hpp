@@ -27,7 +27,6 @@
 
 #include "utils/config.h"
 #include "utils/ExpatHandlers.hpp"
-#include <stack>
 #include <vector>
 #include <string>
 #include <expat.h>
@@ -66,6 +65,8 @@ class ExpatUserData
     vector<ExpatUserDataToken> pila;
     // current handler
     int pos;
+    // current tag (used by ExpatParser)
+    const char *current_tag;
 
   public:
 
@@ -80,11 +81,15 @@ class ExpatUserData
     // returns current handlers
     ExpatHandlers* getCurrentHandlers();
     // returns current name
-    const char* getCurrentName();
+    const char* getCurrentName() const;
     // removeCurrentHandlers
     void removeCurrentHandlers();
     // setCurrentHandlers
     void setCurrentHandlers(const char *name, ExpatHandlers *eh);
+    // set current tag name
+    void setCurrentTag(const char *t) { current_tag = t; }
+    // returns current tag name
+    const char *getCurrentTag() const { return current_tag; }
 
 };
 

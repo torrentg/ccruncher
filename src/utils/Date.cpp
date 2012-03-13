@@ -553,17 +553,17 @@ double ccruncher::Date::getMonthsTo(const Date &d) const
 bool ccruncher::isInterval(const char *str) 
 { 
     if (!str)
-	return false;
-    size_t l = strlen(str);	
-	if (( str[l-1]!='D') && ( str[l-1]!='M') && ( str[l-1]!='Y'))
-	    return false;	
-    if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))		
-	    return false;	
+    return false;
+    size_t l = strlen(str);
+    if (( str[l-1]!='D') && ( str[l-1]!='M') && ( str[l-1]!='Y'))
+        return false;
+    if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))
+        return false;
     for (size_t i=1;i<l-1;i++)
-    {		
+    {
         if (( str[i]<'0') || ( str[i]>'9'))
-		return false;		
-    }	  		
+        return false;
+    }
     return true;
 }
 
@@ -580,18 +580,18 @@ void ccruncher::Date::addIncrement(const char *str) throw(Exception)
     if (l >= 25) 
       throw Exception("increment too long");
     strcpy(buffer,str);
-    buffer[l-1] = '\0';	
-    interval = atoi(buffer);               
+    buffer[l-1] = '\0';
+    interval = atoi(buffer);
     if (interval!=0) 
     {
-      if (str[l-1]=='D') { // increment in days. Ejem 365D       
+      if (str[l-1]=='D') { // increment in days. Ejem 365D
         lJulianDay += interval;
       }
-      else if (str[l-1]=='M') { // increment in Months. Ejem 3M   
+      else if (str[l-1]=='M') { // increment in Months. Ejem 3M
         JdToYmd(lJulianDay,&y,&m,&d);
-        *this = addMonths(*this, interval);    
+        *this = addMonths(*this, interval);
       }
-      else if (str[l-1]=='Y') { // increment in Years. Ejem 5Y 
+      else if (str[l-1]=='Y') { // increment in Years. Ejem 5Y
         JdToYmd(lJulianDay,&y,&m,&d);
         if (valid(d,m,y+interval)) lJulianDay = YmdToJd(y+interval,m,d);
         else lJulianDay = YmdToJd(y+interval,m,d-1); //29-Feb case
@@ -600,7 +600,7 @@ void ccruncher::Date::addIncrement(const char *str) throw(Exception)
         throw Exception("invalid increment");
       }
     }
-	else 
-      throw Exception("invalid conversion to int from interval date: " + string(str) + " (non valid format)");         			
+    else
+      throw Exception("invalid conversion to int from interval date: " + string(str) + " (non valid format)");
 }
 

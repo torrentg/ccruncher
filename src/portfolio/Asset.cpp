@@ -101,9 +101,8 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"values") && have_data == true)
   {
     Date at(date);
@@ -173,9 +172,8 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Asset::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
 {
-  assert(eu.getCurrentHandlers() != NULL);
   if (isEqual(name_,"values")) {
     // nothing to do
   }
