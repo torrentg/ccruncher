@@ -153,70 +153,49 @@ double ccruncher::Params::getCopulaParam() const throw(Exception)
 void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) throw(Exception)
 {
   // reading attribute name
-  string name = getStringAttribute(attributes, "name", "");
+  string name = getStringAttribute(attributes, "name");
 
   if (name == "time.0")
   {
-    Date aux = getDateAttribute(attributes, "value", NAD);
-    if (time0 != NAD || aux == NAD) {
-      throw Exception("invalid time.begintime");
-    } else {
-      time0 = aux;
-    }
+    if (time0 != NAD) throw Exception("parameter time.0 repeated");
+    else time0 = getDateAttribute(attributes, "value");
   }
   else if (name == "time.T")
   {
-    Date aux = getDateAttribute(attributes, "value", NAD);
-    if (timeT != NAD || aux == NAD) {
-      throw Exception("invalid time.begintime");
-    } else {
-      timeT = aux;
-    }
+    if (timeT != NAD) throw Exception("parameter time.T repeated");
+    else timeT = getDateAttribute(attributes, "value");
   }
   else if (name == "stopcriteria.maxiterations")
   {
-    int aux = getIntAttribute(attributes, "value", -1L);
-    if (maxiterations >= 0L || aux < 0L) {
-      throw Exception("invalid stopcriteria.maxiterations");
-    } else {
-      maxiterations = aux;
-    }
+    if (maxiterations >= 0L) throw Exception("parameter stopcriteria.maxiterations repeated");
+    else maxiterations = getIntAttribute(attributes, "value");
+    if (maxiterations < 0L) throw Exception("parameter stopcriteria.maxiterations out of range");
   }
   else if (name == "stopcriteria.maxseconds")
   {
-    int aux = getIntAttribute(attributes, "value", -1L);
-    if (maxseconds >= 0L || aux < 0L) {
-      throw Exception("invalid stopcriteria.maxseconds");
-    } else {
-      maxseconds = aux;
-    }
+    if (maxseconds >= 0L) throw Exception("parameter stopcriteria.maxseconds repeated");
+    else maxseconds = getIntAttribute(attributes, "value");
+    if (maxseconds < 0L) throw Exception("parameter stopcriteria.maxseconds out of range");
   }
   else if (name == "copula.type")
   {
-    copula_type = getStringAttribute(attributes, "value", "");
+    if (copula_type != "") throw Exception("parameter copula.type repeated");
+    else copula_type = getStringAttribute(attributes, "value");
     if (getCopulaType() == "t") {
       getCopulaParam(); //parse and validate param
     }
   }
   else if (name == "copula.seed")
   {
-    long aux = getLongAttribute(attributes, "value", -1L);
-    if (aux == -1L) {
-      throw Exception("invalid copula.seed");
-    }
-    else {
-      copula_seed = aux;
-    }
+    copula_seed = getLongAttribute(attributes, "value");
   }
   else if (name == "montecarlo.antithetic")
   {
-    bool aux = getBooleanAttribute(attributes, "value", false);
-    antithetic = aux;
+    antithetic = getBooleanAttribute(attributes, "value");
   }
   else if (name == "portfolio.onlyActiveObligors")
   {
-    bool aux = getBooleanAttribute(attributes, "value", false);
-    onlyactive = aux;
+    onlyactive = getBooleanAttribute(attributes, "value");
   }
   else
   {

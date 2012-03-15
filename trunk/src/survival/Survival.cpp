@@ -20,7 +20,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <cfloat>
 #include "survival/Survival.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
@@ -177,16 +176,10 @@ void ccruncher::Survival::epstart(ExpatUserData &, const char *name, const char 
     }
   }
   else if (isEqual(name,"svalue")) {
-    string srating = getStringAttribute(attributes, "rating", "");
-    int t = getIntAttribute(attributes, "t", INT_MAX);
-    double value = getDoubleAttribute(attributes, "value", DBL_MAX);
-
-    if (srating == "" || t == INT_MAX || value == DBL_MAX) {
-      throw Exception("invalid values at <svalue>");
-    }
-    else {
-      insertValue(srating, t, value);
-    }
+    string srating = getStringAttribute(attributes, "rating");
+    int t = getIntAttribute(attributes, "t");
+    double value = getDoubleAttribute(attributes, "value");
+    insertValue(srating, t, value);
   }
   else {
     throw Exception("unexpected tag " + string(name));

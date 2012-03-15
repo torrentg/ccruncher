@@ -79,16 +79,25 @@ Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
 //===========================================================================
 // return the index of the sector (-1 if rating not found)
 //===========================================================================
-int ccruncher::Sectors::getIndex(const string &name) const
+int ccruncher::Sectors::getIndex(const char *name) const
 {
+  assert(name != NULL);
   for (unsigned int i=0;i<vsectors.size();i++)
   {
-    if (vsectors[i].name == name)
+    if (vsectors[i].name.compare(name) == 0)
     {
       return i;
     }
   }
   return -1;
+}
+
+//===========================================================================
+// return the index of the sector (-1 if rating not found)
+//===========================================================================
+int ccruncher::Sectors::getIndex(const string &name) const
+{
+  return getIndex(name.c_str());
 }
 
 //===========================================================================

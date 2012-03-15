@@ -26,24 +26,6 @@
 #include <cassert>
 
 //===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Rate::Rate()
-{
-  t = 0.0;
-  r = 0.0;
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Rate::Rate(double t_)
-{
-  t = t_;
-  r = 0.0;
-}
-
-//===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
 void ccruncher::Rate::epstart(ExpatUserData &, const char *name, const char **attributes)
@@ -54,14 +36,10 @@ void ccruncher::Rate::epstart(ExpatUserData &, const char *name, const char **at
     }
     else
     {
-      t = getDoubleAttribute(attributes, "t", -99.0);
-      r = getDoubleAttribute(attributes, "r", -99.0);
+      t = getDoubleAttribute(attributes, "t");
+      r = getDoubleAttribute(attributes, "r");
 
-      if (t == -99.0 || r == -99.0)
-      {
-        throw Exception("invalid attributes values at <rate>");
-      }
-      else if (r < -0.5 || 1.0 < r)
+      if (r < -0.5 || 1.0 < r)
       {
         throw Exception("rate value " + Format::toString(r) + " out of range [-0.5, +1.0]");
       }

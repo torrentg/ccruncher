@@ -35,13 +35,18 @@
 //===========================================================================
 ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
 {
-  assert(cstr != NULL);
-  
+  if (cstr == NULL) throw Exception("null exposure value");
+
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
-  // parsing exposure value  
-  if (strncmp(cstr, "lognormal", 9) == 0)
+  // parsing exposure value
+  if (!isalpha(*cstr))
+  {
+    value1 = Parser::doubleValue(cstr);
+    init(Fixed, value1, NAN);
+  }
+  else if (strncmp(cstr, "lognormal", 9) == 0)
   {
     int rc = sscanf(cstr, "lognormal(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
@@ -83,8 +88,7 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   }
   else
   {
-    value1 = Parser::doubleValue(cstr);
-    init(Fixed, value1, NAN);
+    throw Exception("invalid exposure value");
   }
 }
 

@@ -92,11 +92,11 @@ SOURCES += \
     deps/gzstream-1.5/gzstream.cpp
 
 INCLUDEPATH += ./src \
-	deps/gzstream-1.5
+    deps/gzstream-1.5
 
 LIBS += -lpthread \
-	-lz \
-	-lm \
-	-lgsl \
-	-lgslcblas \
-	-lexpat
+    -lz \
+    -lm \
+    -lgsl \
+    -lgslcblas \
+    -lexpat

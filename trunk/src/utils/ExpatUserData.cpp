@@ -42,46 +42,6 @@ ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_) : pila(10), pos(-
 }
 
 //===========================================================================
-// constructor
-//===========================================================================
-ccruncher::ExpatUserData::~ExpatUserData()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// getParser
-//===========================================================================
-XML_Parser ccruncher::ExpatUserData::getParser()
-{
-  return xmlparser;
-}
-
-//===========================================================================
-// getCurrentHandlers
-//===========================================================================
-ExpatHandlers* ccruncher::ExpatUserData::getCurrentHandlers()
-{
-  return pila[pos].handlers;
-}
-
-//===========================================================================
-// getCurrentName
-//===========================================================================
-const char* ccruncher::ExpatUserData::getCurrentName() const
-{
-  return pila[pos].name;
-}
-
-//===========================================================================
-// removeCurrentHandlers
-//===========================================================================
-void ccruncher::ExpatUserData::removeCurrentHandlers()
-{
-  pos--;
-}
-
-//===========================================================================
 // setCurrentHandlers
 //===========================================================================
 void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandlers *eh)

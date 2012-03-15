@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <cfloat>
 #include "correlations/CorrelationMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
@@ -172,17 +171,10 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &, const char *name, co
     }
   }
   else if (isEqual(name,"sigma")) {
-    string sector1 = getStringAttribute(attributes, "sector1", "");
-    string sector2 = getStringAttribute(attributes, "sector2", "");
-    double value = getDoubleAttribute(attributes, "value", DBL_MAX);
-
-    if (sector1 == "" || sector2 == "" || value == DBL_MAX)
-    {
-      throw Exception("invalid values at <sigma>");
-    }
-    else {
-      insertSigma(sector1, sector2, value);
-    }
+    string sector1 = getStringAttribute(attributes, "sector1");
+    string sector2 = getStringAttribute(attributes, "sector2");
+    double value = getDoubleAttribute(attributes, "value");
+    insertSigma(sector1, sector2, value);
   }
   else {
     throw Exception("unexpected tag " + string(name));

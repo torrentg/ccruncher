@@ -73,6 +73,7 @@ class Ratings : public ExpatHandlers
     // return the number of ratings
     int size() const;
     // return the index of the rating
+    int getIndex(const char *name) const;
     int getIndex(const string &name) const;
     // [] operator
     Rating& operator [] (int i);

@@ -18,7 +18,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-// Description    :
+// Description:
 //
 // Provides a Date class which represents dates as
 // Julian day numbers ( days since 1 Jan 4713 BC ).
@@ -42,13 +42,6 @@
 //
 // 09/11/1995 - Todd Knarr
 //   . initial release
-//
-// 01/08/2007 - Gerard Torrent
-//   . code set in ccruncher form
-//   . added required ccruncher methods and operators
-//
-// 07/02/2009 - Gerard Torrent
-//   . added method getMonthsTo()
 //
 //===========================================================================
 
@@ -305,10 +298,8 @@ int ccruncher::Date::getDayOfWorkWeek( void ) const
 //===========================================================================
 bool ccruncher::Date::isLeapYear( const int iYear )
 {
-    long jd1, jd2;
-    jd1 = YmdToJd( iYear, 2, 28 );
-    jd2 = YmdToJd( iYear, 3, 1 );
-    return ( ( jd2 - jd1 ) > 1 );
+    // check if the year is divisible by 4 or is divisible by 400
+    return ((iYear % 4 == 0 && iYear % 100 != 0) || (iYear % 400 == 0));
 }
 
 //===========================================================================
@@ -545,26 +536,24 @@ double ccruncher::Date::getMonthsTo(const Date &d) const
   }
 }
 
-
 //===========================================================================
 // Indicates if str is a interval
 // true if str is interval, false if not
 //===========================================================================
 bool ccruncher::isInterval(const char *str) 
-{ 
-    if (!str)
+{
+  if (!str) return false;
+  size_t l = strlen(str);
+  if (( str[l-1]!='D') && ( str[l-1]!='M') && ( str[l-1]!='Y'))
     return false;
-    size_t l = strlen(str);
-    if (( str[l-1]!='D') && ( str[l-1]!='M') && ( str[l-1]!='Y'))
-        return false;
-    if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))
-        return false;
-    for (size_t i=1;i<l-1;i++)
-    {
-        if (( str[i]<'0') || ( str[i]>'9'))
-        return false;
-    }
-    return true;
+  if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))
+    return false;
+  for (size_t i=1;i<l-1;i++)
+  {
+    if (( str[i]<'0') || ( str[i]>'9'))
+    return false;
+  }
+  return true;
 }
 
 //===========================================================================
@@ -573,34 +562,34 @@ bool ccruncher::isInterval(const char *str)
 //===========================================================================
 void ccruncher::Date::addIncrement(const char *str) throw(Exception)
 {
-    int y,m,d;
-    int interval;
-    char buffer[25];
-    int l = strlen(str);
-    if (l >= 25) 
-      throw Exception("increment too long");
-    strcpy(buffer,str);
-    buffer[l-1] = '\0';
-    interval = atoi(buffer);
-    if (interval!=0) 
-    {
-      if (str[l-1]=='D') { // increment in days. Ejem 365D
-        lJulianDay += interval;
-      }
-      else if (str[l-1]=='M') { // increment in Months. Ejem 3M
-        JdToYmd(lJulianDay,&y,&m,&d);
-        *this = addMonths(*this, interval);
-      }
-      else if (str[l-1]=='Y') { // increment in Years. Ejem 5Y
-        JdToYmd(lJulianDay,&y,&m,&d);
-        if (valid(d,m,y+interval)) lJulianDay = YmdToJd(y+interval,m,d);
-        else lJulianDay = YmdToJd(y+interval,m,d-1); //29-Feb case
-      }
-      else {
-        throw Exception("invalid increment");
-      }
+  int y,m,d;
+  int interval;
+  char buffer[25];
+  int l = strlen(str);
+  if (l >= 25)
+    throw Exception("increment too long");
+  strcpy(buffer,str);
+  buffer[l-1] = '\0';
+  interval = atoi(buffer);
+  if (interval!=0)
+  {
+    if (str[l-1]=='D') { // increment in days. Ejem 365D
+      lJulianDay += interval;
     }
-    else
-      throw Exception("invalid conversion to int from interval date: " + string(str) + " (non valid format)");
+    else if (str[l-1]=='M') { // increment in Months. Ejem 3M
+      JdToYmd(lJulianDay,&y,&m,&d);
+      *this = addMonths(*this, interval);
+    }
+    else if (str[l-1]=='Y') { // increment in Years. Ejem 5Y
+      JdToYmd(lJulianDay,&y,&m,&d);
+      if (valid(d,m,y+interval)) lJulianDay = YmdToJd(y+interval,m,d);
+      else lJulianDay = YmdToJd(y+interval,m,d-1); //29-Feb case
+    }
+    else {
+      throw Exception("invalid increment");
+    }
+  }
+  else
+    throw Exception("invalid conversion to int from interval date: " + string(str) + " (non valid format)");
 }
 

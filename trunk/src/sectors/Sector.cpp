@@ -43,13 +43,8 @@ void ccruncher::Sector::epstart(ExpatUserData &, const char *name_, const char *
       throw Exception("invalid number of attributes at sector");
     }
     else {
-      name = getStringAttribute(attributes, "name", "");
-      desc = getStringAttribute(attributes, "description", "_UNDEF_");
-
-      if (name == "" || desc == "_UNDEF_")
-      {
-        throw Exception("invalid values at <sector>");
-      }
+      name = getStringAttribute(attributes, "name");
+      desc = getStringAttribute(attributes, "description");
     }
   }
   else {

@@ -79,16 +79,25 @@ Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
 //===========================================================================
 // return the index of the rating (-1 if rating not found)
 //===========================================================================
-int ccruncher::Ratings::getIndex(const string &name) const
+int ccruncher::Ratings::getIndex(const char *name) const
 {
+  assert(name != NULL);
   for (unsigned int i=0;i<vratings.size();i++)
   {
-    if (vratings[i].name == name)
+    if (vratings[i].name.compare(name) == 0)
     {
       return i;
     }
   }
   return -1;
+}
+
+//===========================================================================
+// return the index of the rating (-1 if rating not found)
+//===========================================================================
+int ccruncher::Ratings::getIndex(const string &name) const
+{
+  return getIndex(name.c_str());
 }
 
 //===========================================================================
