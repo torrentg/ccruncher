@@ -197,7 +197,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
                  e.what(),
                  (int) XML_GetCurrentLineNumber(xmlparser),
                  (int) XML_GetCurrentColumnNumber(xmlparser));
-    throw Exception(string(aux));
+    throw Exception(e, string(aux));
   }
   catch(...)
   {

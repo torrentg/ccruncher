@@ -21,8 +21,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <cfloat>
-#include <climits>
 #include "transitions/TransitionMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
@@ -204,23 +202,15 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &, const char *name, con
       throw Exception("invalid number of attributes in tag mtransitions");
     }
     else {
-      period = getIntAttribute(attributes, "period", INT_MAX);
-      if (period == INT_MAX) {
-        throw Exception("invalid period at <mtransitions>");
-      }
+      period = getIntAttribute(attributes, "period");
+      if (period <= 0) throw Exception("attribute 'period' out of range");
     }
   }
   else if (isEqual(name,"transition")) {
-    string from = getStringAttribute(attributes, "from", "");
-    string to = getStringAttribute(attributes, "to", "");
-    double value = getDoubleAttribute(attributes, "value", DBL_MAX);
-
-    if (from == "" || to == "" || value == DBL_MAX) {
-      throw Exception("invalid values at <transition>");
-    }
-    else {
-      insertTransition(from, to, value);
-    }
+    string from = getStringAttribute(attributes, "from");
+    string to = getStringAttribute(attributes, "to");
+    double value = getDoubleAttribute(attributes, "value");
+    insertTransition(from, to, value);
   }
   else {
     throw Exception("unexpected tag " + string(name));

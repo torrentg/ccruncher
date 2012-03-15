@@ -26,6 +26,8 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <string>
+#include <cstring>
 #include "utils/ExpatUserData.hpp"
 #include "utils/Date.hpp"
 
@@ -54,23 +56,29 @@ class ExpatHandlers
     // stops the parser
     void epstop(ExpatUserData &eud);
     // returns the value of the given attribute
-    char * getAttributeValue(const char **atts, const string &attname) const;
+    const char * getAttributeValue(const char **atts, const string &attname) const;
     // string comparison
-    bool isEqual(const char *, const string &);
+    bool isEqual(const char *, const string &) const;
     // returns the number of attributes
-    int getNumAttributes(const char **atts);
+    int getNumAttributes(const char **atts) const;
     // returns attribute value as string
-    string getStringAttribute(const char **atts, const string &attname, const string &defval);
+    string getStringAttribute(const char **atts, const string &attname) const;
+    string getStringAttribute(const char **atts, const string &attname, const string &defval) const;
     // returns attribute value as int
-    int getIntAttribute(const char **atts, const string &attname, const int &defval);
+    int getIntAttribute(const char **atts, const string &attname) const;
+    int getIntAttribute(const char **atts, const string &attname, int defval) const;
     // returns attribute value as long
-    long getLongAttribute(const char **atts, const string &attname, const long &defval);
+    long getLongAttribute(const char **atts, const string &attname) const;
+    long getLongAttribute(const char **atts, const string &attname, long defval) const;
     // returns attribute value as double
-    double getDoubleAttribute(const char **atts, const string &attname, const double &defval);
+    double getDoubleAttribute(const char **atts, const string &attname) const;
+    double getDoubleAttribute(const char **atts, const string &attname, double defval) const;
     // returns attribute value as date
-    Date getDateAttribute(const char **atts, const string &attname, const Date &defval);
+    Date getDateAttribute(const char **atts, const string &attname) const;
+    Date getDateAttribute(const char **atts, const string &attname, const Date &defval) const;
     // returns attribute value as boolean
-    bool getBooleanAttribute(const char **atts, const string &attname, const bool &defval);
+    bool getBooleanAttribute(const char **atts, const string &attname) const;
+    bool getBooleanAttribute(const char **atts, const string &attname, bool defval) const;
 
   protected:
   
@@ -94,6 +102,40 @@ class ExpatHandlers
 };
 
 //---------------------------------------------------------------------------
+
+//===========================================================================
+// epdata
+//===========================================================================
+inline void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char *s, int len)
+{
+  // default simple rule: character data is not allowed
+  for(int i=0; i<len; i++)
+  {
+    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
+    {
+      throw Exception("unexpected text parsing xml");
+    }
+  }
+}
+
+//===========================================================================
+// isEqual
+//===========================================================================
+inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const string &str) const
+{
+  if (pchr == NULL)
+  {
+    return false;
+  }
+  else if (strcmp(str.c_str(), pchr) == 0)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
 
 }
 

@@ -27,7 +27,6 @@
 
 #include "utils/config.h"
 #include "utils/Exception.hpp"
-#include <fstream>
 
 //---------------------------------------------------------------------------
 
@@ -39,11 +38,6 @@ namespace ccruncher {
 
 class Utils
 {
-
-  private:
-
-    // pointer to /dev/null
-    static ofstream *nullstream;
 
   private:
   

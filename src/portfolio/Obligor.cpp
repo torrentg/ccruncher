@@ -91,44 +91,46 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
 //===========================================================================
 void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"asset")) {
+  if (isEqual(name_,"asset"))
+  {
     Asset *asset = new Asset(segmentations);
     vassets.push_back(asset);
     eppush(eu, asset, name_, attributes);
   }
-  else if (isEqual(name_,"belongs-to")) {
-    string ssegmentation = getStringAttribute(attributes, "segmentation", "");
-    string ssegment = getStringAttribute(attributes, "segment", "");
-
-    if (ssegmentation == "" || ssegment == "") {
-      throw Exception("invalid attributes at <belongs-to> tag");
-    }
-
+  else if (isEqual(name_,"belongs-to"))
+  {
+    const char *ssegmentation = getAttributeValue(attributes, "segmentation");
+    if (ssegmentation == NULL) throw Exception("attribute 'segmentation' not found");
     int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+
+    const char *ssegment = getAttributeValue(attributes, "segment");
+    if (ssegment == NULL) throw Exception("attribute 'segment' not found");
     int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
-  else if (isEqual(name_,"obligor")) {
-    // reading atributes
-    id = getStringAttribute(attributes, "id", "");
-    string strrating = getStringAttribute(attributes, "rating", "");
-    string strsector= getStringAttribute(attributes, "sector", "");
-    char *str = getAttributeValue(attributes, "recovery");
+  else if (isEqual(name_,"obligor"))
+  {
+    const char *str = NULL;
+    id = getStringAttribute(attributes, "id");
+
+    str = getAttributeValue(attributes, "rating");
+    if (str == NULL) throw Exception("attribute 'rating' not found");
+    irating = ratings->getIndex(str);
+    if (irating < 0) throw Exception("rating not found");
+
+    str = getAttributeValue(attributes, "sector");
+    if (str == NULL) throw Exception("attribute 'sector' not found");
+    isector = sectors->getIndex(str);
+    if (isector < 0) throw Exception("sector not found");
+
+    str = getAttributeValue(attributes, "recovery");
     if (str != NULL) {
       recovery = Recovery(str);
     }
-
-    // retrieving indexes
-    irating = ratings->getIndex(strrating);
-    isector = sectors->getIndex(strsector);
-
-    // doing some checks
-    if (id == "" || irating < 0 || isector < 0) {
-      throw Exception("invalid attributes at <obligor>");
-    }
   }
-  else {
+  else
+  {
     throw Exception("unexpected tag " + string(name_));
   }
 }

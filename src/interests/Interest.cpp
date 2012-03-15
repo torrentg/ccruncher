@@ -166,7 +166,7 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
     }
     else if (getNumAttributes(attributes) == 1)
     {
-      string str = Strings::trim(getStringAttribute(attributes, "type", ""));
+      string str = Strings::trim(getStringAttribute(attributes, "type"));
       str = Strings::lowercase(str);
       if (str == "simple") {
         type = Simple;

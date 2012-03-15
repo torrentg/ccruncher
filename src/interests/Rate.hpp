@@ -56,10 +56,8 @@ class Rate : public ExpatHandlers
 
   public:
   
-    // default constructor
-    Rate();
     // constructor
-    Rate(double t);
+    Rate(double t_=0.0, double r_=0.0) : t(t_), r(r_) {}
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

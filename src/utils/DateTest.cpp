@@ -220,6 +220,7 @@ void ccruncher_test::DateTest::test_distances(void)
   Date date6 = Date(15, 1,2010);
   Date date7 = Date(2 , 1,2012);
 
+  ASSERT_EQUALS_EPSILON(           0.0, date0.getMonthsTo(date0), EPSILON);
   ASSERT_EQUALS_EPSILON(      1.0/30.0, date0.getMonthsTo(date1), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0           , date0.getMonthsTo(date2), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0 +27.0/30.0, date0.getMonthsTo(date3), EPSILON);

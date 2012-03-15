@@ -34,13 +34,18 @@
 //===========================================================================
 ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
 {
-  assert(cstr != NULL);
+  if (cstr == NULL) throw Exception("null recovery value");
   
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
   // parsing recovery value  
-  if (strncmp(cstr, "beta", 4) == 0)
+  if (!isalpha(*cstr))
+  {
+    value1 = Parser::doubleValue(cstr);
+    init(Fixed, value1, NAN);
+  }
+  else if (strncmp(cstr, "beta", 4) == 0)
   {
     int rc = sscanf(cstr, "beta(%lf,%lf)", &value1, &value2);
     if (rc != 2) 
@@ -59,8 +64,7 @@ ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
   }
   else
   {
-    value1 = Parser::doubleValue(cstr);
-    init(Fixed, value1, NAN);
+    throw Exception("invalid recovery value");
   }
 }
 

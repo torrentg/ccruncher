@@ -82,6 +82,8 @@ int ccruncher::Segmentation::indexOfSegment(const string &sname) throw(Exception
 //===========================================================================
 int ccruncher::Segmentation::indexOfSegment(const char *sname) throw(Exception)
 {
+  assert(sname != NULL);
+
   for (unsigned int i=0;i<vsegments.size();i++)
   {
     if (vsegments[i].compare(sname) == 0)
@@ -164,13 +166,8 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
       throw Exception("incorrect number of attributes in tag segmentation");
     }
     else {
-      name = getStringAttribute(attributes, "name", "");
-      string strcomp = getStringAttribute(attributes, "components", "");
-
-      // checking name
-      if (name == "") {
-        throw Exception("tag <segmentation> with invalid name attribute");
-      }
+      name = getStringAttribute(attributes, "name");
+      string strcomp = getStringAttribute(attributes, "components");
 
       // filling components variable
       if (strcomp == "asset") {
@@ -185,14 +182,8 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
     }
   }
   else if (isEqual(name_,"segment")) {
-    string sname = getStringAttribute(attributes, "name", "");
-    // checking segment name
-    if (sname == "") {
-      throw Exception("tag <segment> with invalid name attribute");
-    }
-    else {
-      insertSegment(sname);
-    }
+    string sname = getStringAttribute(attributes, "name");
+    insertSegment(sname);
   }
   else {
     throw Exception("unexpected tag " + string(name_));

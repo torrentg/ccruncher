@@ -43,13 +43,6 @@
 // 09/11/1995 - Todd Knarr
 //   . initial release
 //
-// 01/08/2007 - Gerard Torrent
-//   . code set in ccruncher form
-//   . added required ccruncher methods and operators
-//
-// 07/02/2009 - Gerard Torrent
-//   . added method getMonthsTo()
-//
 //===========================================================================
 
 #ifndef _Date_
@@ -84,6 +77,9 @@ class Date
   private:
 
     long lJulianDay;
+
+
+  private:
 
     static long YmdToJd(const int iYear, const int iMonth, const int iDay);
     static void JdToYmd(const long lJD, int *piYear, int *piMonth, int *piDay);

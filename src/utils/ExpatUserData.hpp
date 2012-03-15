@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include "utils/ExpatHandlers.hpp"
+#include <map>
 #include <vector>
 #include <string>
 #include <expat.h>
@@ -67,6 +68,8 @@ class ExpatUserData
     int pos;
     // current tag (used by ExpatParser)
     const char *current_tag;
+    // user replaces
+    map<string,string> replaces;
 
   public:
 
@@ -74,16 +77,14 @@ class ExpatUserData
     ExpatUserData();
     // contructor
     ExpatUserData(XML_Parser xmlparser_);
-    // destructor
-    ~ExpatUserData();
     // returns parser
-    XML_Parser getParser();
+    XML_Parser getParser() { return xmlparser; }
     // returns current handlers
-    ExpatHandlers* getCurrentHandlers();
+    ExpatHandlers* getCurrentHandlers() const { return pila[pos].handlers; }
     // returns current name
-    const char* getCurrentName() const;
+    const char* getCurrentName() const { return pila[pos].name; }
     // removeCurrentHandlers
-    void removeCurrentHandlers();
+    void removeCurrentHandlers() { pos--; }
     // setCurrentHandlers
     void setCurrentHandlers(const char *name, ExpatHandlers *eh);
     // set current tag name

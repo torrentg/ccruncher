@@ -106,7 +106,8 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   if (isEqual(name_,"values") && have_data == true)
   {
     Date at(date);
-    char *str = getAttributeValue(attributes, "at");
+    const char *str = getAttributeValue(attributes, "at");
+    if (str == NULL) throw Exception("attribute 'at' not found");
     if (isInterval(str)) {
       at.addIncrement(str);
     }
@@ -114,14 +115,9 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
       at = Date(str);
     }
     
-    Exposure exposure(Exposure::Fixed, NAN);
     str = getAttributeValue(attributes, "exposure");
-    if (str != NULL) {
-      exposure = Exposure(str);
-    }
-    else {
-      throw Exception("exposure not found");
-    }
+    if (str == NULL) throw Exception("attribute 'exposure' not found");
+    Exposure exposure(str);
 
     Recovery recovery = drecovery;
     str = getAttributeValue(attributes, "recovery");
@@ -131,40 +127,34 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
     
     data.push_back(DateValues(at, exposure, recovery));
   }
-  else if (isEqual(name_,"belongs-to")) {
-    char *ssegmentation = getAttributeValue(attributes, "segmentation");
-    char *ssegment = getAttributeValue(attributes, "segment");
-
-    if (ssegmentation == NULL || ssegment == NULL) {
-      throw Exception("invalid attributes at <belongs-to> tag");
-    }
-
+  else if (isEqual(name_,"belongs-to"))
+  {
+    const char *ssegmentation = getAttributeValue(attributes, "segmentation");
+    if (ssegmentation == NULL) throw Exception("attribute 'segmentation' not found");
     int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+
+    const char *ssegment = getAttributeValue(attributes, "segment");
+    if (ssegment == NULL) throw Exception("attribute 'segment' not found");
     int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
-  else if (isEqual(name_,"asset")) {
-    id = getStringAttribute(attributes, "id", "");
-    date = getDateAttribute(attributes, "date", NAD);
-    char *str = getAttributeValue(attributes, "recovery");
+  else if (isEqual(name_,"asset"))
+  {
+    id = getStringAttribute(attributes, "id");
+    date = getDateAttribute(attributes, "date");
+    const char *str = getAttributeValue(attributes, "recovery");
     if (str != NULL) {
       drecovery = Recovery(str);
     }
-    if (id == "" || date == NAD)
-    {
-      throw Exception("invalid attributes at <asset>");
-    }
   }
-  else if (isEqual(name_,"data")) {
-    if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag data");
-    }
-    else {
-      have_data = true;
-    }
+  else if (isEqual(name_,"data"))
+  {
+    if (getNumAttributes(attributes) != 0) throw Exception("attributes are not allowed in tag data");
+    else have_data = true;
   }
-  else {
+  else
+  {
     throw Exception("unexpected tag " + string(name_));
   }
 }
@@ -196,7 +186,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
       throw Exception("asset with date values previous to asset creation date");
     }
 
-    // checking for repeated dates    
+    // checking for repeated dates
     for(unsigned int i=1; i<data.size(); i++)
     {
       if (data[i-1].date == data[i].date)
