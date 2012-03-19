@@ -42,7 +42,7 @@ class Strings
   private:
 
     // non-instantiable class
-    Strings() {};
+    Strings() {}
 
   public:
 

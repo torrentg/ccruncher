@@ -1,6 +1,5 @@
 HEADERS += \
     src/correlations/CorrelationMatrix.hpp \
-    src/interests/Rate.hpp \
     src/interests/Interest.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
@@ -47,7 +46,6 @@ HEADERS += \
 
 SOURCES += \
     src/correlations/CorrelationMatrix.cpp \
-    src/interests/Rate.cpp \
     src/interests/Interest.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \

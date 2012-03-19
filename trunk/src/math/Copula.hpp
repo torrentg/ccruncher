@@ -54,7 +54,7 @@ class Copula
     // returns the Random Number Generator
     virtual gsl_rng* getRng() = 0;
     // destructor
-    virtual ~Copula() {};
+    virtual ~Copula() {}
 
 };
 

@@ -121,12 +121,19 @@ void ccruncher_test::DateTest::test_rollers(void)
   date2 = date1 - 1;
   ASSERT(Date("24/12/2004") == date2);
 
-  date2 = addMonths(date1, 1);
-  ASSERT(Date("25/1/2005") == date2);
-  ASSERT(Date("28/2/2005") == addMonths(Date("30/1/2005"), 1));
+  ASSERT(Date("23/01/2004") == add(Date("24/01/2004"), -1, 'D'))
+  ASSERT(Date("03/02/2004") == add(Date("24/01/2004"), +10, 'D'))
+  ASSERT(Date("25/01/2005") == add(Date("25/12/2004"), 1, 'M'));
+  ASSERT(Date("28/02/2005") == add(Date("30/01/2005"), 1, 'M'));
+  ASSERT(Date("25/03/2005") == add(Date("25/12/2004"), 3, 'M'));
+  ASSERT(Date("25/12/2005") == add(Date("25/12/2004"), 1, 'Y'));
+  ASSERT(Date("28/02/2005") == add(Date("29/02/2004"), 1, 'Y'));
+  ASSERT(Date("25/12/2014") == add(Date("25/12/2004"), 10, 'Y'));
 
-  date2 = addMonths(date1, 3);
-  ASSERT(Date("25/3/2005") == date2);
+  ASSERT_THROW(add(Date("25/12/2004"), 10, 'd'));
+  ASSERT_THROW(add(Date("25/12/2004"), 10, 'm'));
+  ASSERT_THROW(add(Date("25/12/2004"), 10, 'y'));
+  ASSERT_THROW(add(Date("25/12/2004"), 10, 'Z'));
 }
 
 //===========================================================================
@@ -220,14 +227,46 @@ void ccruncher_test::DateTest::test_distances(void)
   Date date6 = Date(15, 1,2010);
   Date date7 = Date(2 , 1,2012);
 
-  ASSERT_EQUALS_EPSILON(           0.0, date0.getMonthsTo(date0), EPSILON);
-  ASSERT_EQUALS_EPSILON(      1.0/30.0, date0.getMonthsTo(date1), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0           , date0.getMonthsTo(date2), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0 +27.0/30.0, date0.getMonthsTo(date3), EPSILON);
-  ASSERT_EQUALS_EPSILON(11.0+30.0/30.0, date0.getMonthsTo(date4), EPSILON);
-  ASSERT_EQUALS_EPSILON(12.0          , date0.getMonthsTo(date5), EPSILON);
-  ASSERT_EQUALS_EPSILON(     14.0/30.0, date0.getMonthsTo(date6), EPSILON);
-  ASSERT_EQUALS_EPSILON(24.0+ 1.0/30.0, date0.getMonthsTo(date7), EPSILON);
+  ASSERT_EQUALS_EPSILON(          0.0, diff(date0, date0, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date1 - date0, diff(date0, date1, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date2 - date0, diff(date0, date2, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date3 - date0, diff(date0, date3, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date4 - date0, diff(date0, date4, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date5 - date0, diff(date0, date5, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date6 - date0, diff(date0, date6, 'D'), EPSILON);
+  ASSERT_EQUALS_EPSILON(date7 - date0, diff(date0, date7, 'D'), EPSILON);
+
+  ASSERT_EQUALS_EPSILON(           0.0, diff(date0, date0, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(      1.0/30.0, diff(date0, date1, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0           , diff(date0, date2, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0 +27.0/30.0, diff(date0, date3, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(11.0+30.0/30.0, diff(date0, date4, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(12.0          , diff(date0, date5, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(     14.0/30.0, diff(date0, date6, 'M'), EPSILON);
+  ASSERT_EQUALS_EPSILON(24.0+ 1.0/30.0, diff(date0, date7, 'M'), EPSILON);
+
+  Date date10 = Date(1, 1, 2011);
+  Date date11 = Date(1, 1, 2012);
+  Date date12 = Date(1, 1, 2013);
+  Date date13 = Date(31,12, 2011);
+  Date date14 = Date(2, 1, 2010);
+  Date date15 = Date(1, 2, 2010);
+  Date date16 = Date(2, 2, 2010);
+  Date date17 = Date(2, 2, 2011);
+
+  ASSERT_EQUALS_EPSILON(          1.0, diff(date0, date10, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(          2.0, diff(date0, date11, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(          3.0, diff(date0, date12, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(          2.0, diff(date0, date13, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0/(12.0*30), diff(date0, date14, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0/12.0     , diff(date0, date15, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0/12.0+1.0/(12.0*30)  , diff(date0, date16, 'Y'), EPSILON);
+  ASSERT_EQUALS_EPSILON(1+1.0/12.0+1.0/(12.0*30), diff(date0, date17, 'Y'), EPSILON);
+
+  ASSERT_THROW(diff(date0, date1, 'd'));
+  ASSERT_THROW(diff(date0, date1, 'm'));
+  ASSERT_THROW(diff(date0, date1, 'y'));
+  ASSERT_THROW(diff(date0, date1, 'Z'));
 }
 
 //===========================================================================
@@ -248,17 +287,17 @@ void ccruncher_test::DateTest::test_intervals(void)
   ASSERT(!ccruncher::isInterval("2+00000Y"));
  
   Date date0 = Date(31,12,1970);
-  date0.addIncrement("+76D");
+  date0.add("+76D");
   ASSERT(Date("17/03/1971") == date0);
-  date0.addIncrement("10M");
+  date0.add("10M");
   ASSERT(Date("17/01/1972") == date0);
-  date0.addIncrement("40Y");
+  date0.add("40Y");
   ASSERT(Date("17/01/2012") == date0);
-  date0.addIncrement("2M");
+  date0.add("2M");
   ASSERT(Date("17/03/2012") == date0);
-  date0.addIncrement("-17D");
+  date0.add("-17D");
   ASSERT(Date("29/02/2012") == date0);
-  date0.addIncrement("1Y");
+  date0.add("1Y");
   ASSERT(Date("28/02/2013") == date0);
 }
 

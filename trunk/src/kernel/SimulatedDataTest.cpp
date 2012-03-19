@@ -134,29 +134,29 @@ Segmentations ccruncher_test::SimulatedDataTest::getSegmentations()
 //===========================================================================
 // getInterest
 //===========================================================================
-Interest ccruncher_test::SimulatedDataTest::getInterest()
+Interest ccruncher_test::SimulatedDataTest::getInterest(const Date &date)
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.0'/>\n\
-        <rate t='2' r='0.0'/>\n\
-        <rate t='3' r='0.0'/>\n\
-        <rate t='6' r='0.0'/>\n\
-        <rate t='12' r='0.0'/>\n\
-        <rate t='24' r='0.0'/>\n\
-        <rate t='60' r='0.0'/>\n\
-        <rate t='120' r='0.0'/>\n\
+        <rate t='0M' r='0.0'/>\n\
+        <rate t='1M' r='0.0'/>\n\
+        <rate t='2M' r='0.0'/>\n\
+        <rate t='3M' r='0.0'/>\n\
+        <rate t='6M' r='0.0'/>\n\
+        <rate t='1Y' r='0.0'/>\n\
+        <rate t='2Y' r='0.0'/>\n\
+        <rate t='5Y' r='0.0'/>\n\
+        <rate t='10Y' r='0.0'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
   // interest object creation
-  Interest ret;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
+  Interest interest(date);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
 
-  return ret;
+  return interest;
 }
 
 //===========================================================================
@@ -209,31 +209,33 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
       </asset>\n\
     </obligor>";
 
+  Date time0("01/01/2000");
+  Date timeT("01/01/2005");
   Obligor *bp = NULL;
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interest interest = getInterest();
+  Interest interest = getInterest(time0);
   ExpatParser xmlparser;
   vector<Obligor*> obligors;
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent2, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent3, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent4, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent5, bp));
   obligors.push_back(bp);
 

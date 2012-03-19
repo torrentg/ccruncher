@@ -30,7 +30,6 @@
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
-#include "interests/Rate.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -54,19 +53,42 @@ class Interest : public ExpatHandlers
 
   private:
 
+    class Rate
+    {
+      public:
+
+        // time (as string)
+        string t_str;
+        // time (in days from interest curve date)
+        int d;
+        // time (in years from interest curve date)
+        double y;
+        // yearly rate value (0.025 -> 2.5% per year)
+        double r;
+
+      public:
+
+        // constructor
+        Rate(int d_, double y_=0.0, double r_=1.0, const string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
+        // comparator
+        bool operator< (const Rate &right ) const { return (d < right.d); }
+    };
+
+  private:
+
     // interest type
     InterestType type;
+    // interest curve date
+    Date date;
     // rate values
     vector<Rate> vrates;
-    // auxiliary variable (used by parser)
-    Rate auxrate;
 
   private:
 
     // insert a rate to list
-    void insertRate(Rate &) throw(Exception);
+    void insertRate(const Rate &) throw(Exception);
     // given a time, returns the rate (interpolated)
-    double getValue(const double) const;
+    void getValues(int, double *, double *) const;
 
   protected:
   
@@ -78,15 +100,13 @@ class Interest : public ExpatHandlers
   public:
 
     // default constructor
-    Interest();
-    // destructor
-    ~Interest();
+    Interest(const Date &date_=Date());
     // return interest type
     InterestType getType() const;
     // numbers of rates
     int size() const;
     // returns upsilon value
-    double getFactor(const Date &date1, const Date &date2) const;
+    double getFactor(const Date &date1) const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

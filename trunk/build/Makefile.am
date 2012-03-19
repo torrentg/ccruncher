@@ -32,7 +32,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
     ../src/interests/Interest.cpp\
-    ../src/interests/Rate.cpp\
     ../src/ratings/Rating.cpp\
     ../src/ratings/Ratings.cpp\
     ../src/transitions/TransitionMatrix.cpp\
@@ -75,7 +74,6 @@ ccruncher_SOURCES = \
     ../src/portfolio/Obligor.hpp\
     ../src/params/Params.hpp\
     ../src/interests/Interest.hpp\
-    ../src/interests/Rate.hpp\
     ../src/ratings/Rating.hpp\
     ../src/ratings/Ratings.hpp\
     ../src/transitions/TransitionMatrix.hpp\
@@ -189,7 +187,6 @@ tests_SOURCES = \
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
-    ../src/interests/Rate.cpp\
     ../src/interests/Interest.cpp\
     ../src/segmentations/Segmentations.cpp\
     ../src/segmentations/Segmentation.cpp\
@@ -263,7 +260,6 @@ tests_SOURCES = \
     ../src/correlations/CorrelationMatrix.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
-    ../src/interests/Rate.hpp\
     ../src/interests/Interest.hpp\
     ../src/segmentations/Segmentations.hpp\
     ../src/segmentations/Segmentation.hpp\
@@ -289,7 +285,6 @@ samplegen_SOURCES = \
     ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
     ../src/interests/Interest.cpp\
-    ../src/interests/Rate.cpp\
     ../src/ratings/Rating.cpp\
     ../src/ratings/Ratings.cpp\
     ../src/transitions/TransitionMatrix.cpp\
@@ -332,7 +327,6 @@ samplegen_SOURCES = \
     ../src/portfolio/Obligor.hpp\
     ../src/params/Params.hpp\
     ../src/interests/Interest.hpp\
-    ../src/interests/Rate.hpp\
     ../src/ratings/Rating.hpp\
     ../src/ratings/Ratings.hpp\
     ../src/transitions/TransitionMatrix.hpp\

@@ -342,7 +342,7 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 
     // checking that survival function is defined for t <= timeT
     int months = idata.getSurvival().getMinCommonTime();
-    Date aux = addMonths(time0, months);
+    Date aux = add(time0, months, 'M');
     if (aux < timeT)
     {
       throw Exception("survival function not defined at t=" + Format::toString(timeT));
@@ -356,7 +356,7 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
     Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitionMatrix().getPeriod()));
 
     // computing survival function using transition matrix
-    int months = (int) ceil(time0.getMonthsTo(timeT));
+    int months = (int) ceil(diff(time0, timeT, 'M'));
     survival = idata.getTransitionMatrix().getSurvival(1, months+1);
     Logger::trace("transition matrix -> survival function", string("computed"));
     TransitionMatrix tm1 = idata.getTransitionMatrix().scale(1);

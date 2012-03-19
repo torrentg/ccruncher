@@ -43,7 +43,7 @@ class Format
   private:
 
     // non-instantiable class
-    Format() {};
+    Format() {}
 
   public:
 

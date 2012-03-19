@@ -49,7 +49,7 @@ class ObligorTest : public TestFixture<ObligorTest>
     Ratings getRatings();
     Sectors getSectors();
     Segmentations getSegmentations();
-    Interest getInterest();
+    Interest getInterest(const Date &);
 
     void test1(void);
     void test2(void);

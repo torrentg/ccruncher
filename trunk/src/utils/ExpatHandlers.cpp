@@ -73,6 +73,21 @@ void ccruncher::ExpatHandlers::epstop(ExpatUserData &)
 }
 
 //===========================================================================
+// epdata
+//===========================================================================
+void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char *s, int len)
+{
+  // default simple rule: character data is not allowed
+  for(int i=0; i<len; i++)
+  {
+    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
+    {
+      throw Exception("unexpected text parsing xml");
+    }
+  }
+}
+
+//===========================================================================
 // getAttributeValue
 //===========================================================================
 const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const

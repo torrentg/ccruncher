@@ -114,9 +114,9 @@
       <tr class="b">
         <td class="c1">time.0</td>
         <td class="c2">
-          Starting date of the simulation. Initial obligors credit ratings, transition matrix 
-          and survival functions are relative to this date. The format of this attribute 
-          is: DD/MM/YYYY.
+          Starting date of the simulation. Interest curve, initial obligors credit ratings, 
+          transition matrix and survival functions are relative to this date. The format of
+          this attribute is: DD/MM/YYYY.
         </td>
         <td class="c3"><code>date</code></td>
       </tr>
@@ -203,15 +203,15 @@
     <pre>
 
   &lt;interest type="compound"&gt;
-    &lt;rate t="0" r="0.0%"/&gt;
-    &lt;rate t="1" r="4.0%"/&gt;
-    &lt;rate t="2" r="4.1%"/&gt;
-    &lt;rate t="3" r="4.5%"/&gt;
-    &lt;rate t="6" r="4.55%"/&gt;
-    &lt;rate t="12" r="4.8%"/&gt;
-    &lt;rate t="24" r="4.9%"/&gt;
-    &lt;rate t="60" r="5.0%"/&gt;
-    &lt;rate t="120" r="5.2%"/&gt;
+    &lt;rate t="0D" r="0.0%"/&gt;
+    &lt;rate t="1M" r="4.0%"/&gt;
+    &lt;rate t="2M" r="4.1%"/&gt;
+    &lt;rate t="3M" r="4.5%"/&gt;
+    &lt;rate t="6M" r="4.55%"/&gt;
+    &lt;rate t="1Y" r="4.8%"/&gt;
+    &lt;rate t="2Y" r="4.9%"/&gt;
+    &lt;rate t="5Y" r="5.0%"/&gt;
+    &lt;rate t="10Y" r="5.2%"/&gt;
   &lt;/interest&gt;
     </pre>
 
@@ -226,9 +226,9 @@
       <tr class="b">
         <td class="c1">type</td>
         <td class="c2">
-          Determine how to apply interest curve. Allowed values are: simple, compound 
-          and continuous. The formulas used in each case are described in the <i>Technical 
-          Document</i>. This attribute is optional. Default value is compound.
+          Determine how to apply interest curve. Allowed values are: 'simple', 'compound' 
+          and 'continuous'. The formulas used in each case are described in the <i>Technical 
+          Document</i>. This attribute is optional. Default value is 'compound'.
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -245,11 +245,12 @@
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
-          Increment (in months) from the initial date of the interest rate curve. 
-          If a value between two given dates is needed, the value will be 
-          linearly interpolated.
+          Increment from the initial date of the interest rate curve. Use suffix 'D'
+          to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
+          suffix 'Y' to indicate years (eg. 15Y). If a value between two given dates is 
+          needed, the value will be linearly interpolated.
         </td>
-        <td class="c3"><code>int</code></td>
+        <td class="c3"><code>int+[DMY]</code></td>
       </tr>
       <tr class="a">
         <td class="c1">r</td>
@@ -1085,7 +1086,7 @@
             Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 14-Jan-2012
+            Last modified: 17-Mar-2012
           </td>
         </tr></table>
       </div></div></div></div></div>

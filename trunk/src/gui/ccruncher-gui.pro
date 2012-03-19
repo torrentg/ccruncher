@@ -14,7 +14,6 @@ SOURCES += main.cpp\
     ConfigFile.cpp \
     Configuration.cpp \
     ../correlations/CorrelationMatrix.cpp \
-    ../interests/Rate.cpp \
     ../interests/Interest.cpp \
     ../kernel/SimulationThread.cpp \
     ../kernel/SimulatedData.cpp \
@@ -25,6 +24,7 @@ SOURCES += main.cpp\
     ../math/BlockTStudentCopula.cpp \
     ../math/BlockMatrixChol.cpp \
     ../math/BlockGaussianCopula.cpp \
+    ../math/FastTStudentCdf.cpp \
     ../params/Params.cpp \
     ../portfolio/Recovery.cpp \
     ../portfolio/Portfolio.cpp \
@@ -45,7 +45,6 @@ SOURCES += main.cpp\
     ../utils/Thread.cpp \
     ../utils/Strings.cpp \
     ../utils/Parser.cpp \
-    ../utils/LookupTable.cpp \
     ../utils/Logger.cpp \
     ../utils/Format.cpp \
     ../utils/File.cpp \
@@ -69,7 +68,6 @@ HEADERS  += MainWindow.hpp \
     ConfigFile.hpp \
     Configuration.hpp \
     ../correlations/CorrelationMatrix.hpp \
-    ../interests/Rate.hpp \
     ../interests/Interest.hpp \
     ../kernel/SimulationThread.hpp \
     ../kernel/SimulatedData.hpp \
@@ -81,6 +79,7 @@ HEADERS  += MainWindow.hpp \
     ../math/BlockTStudentCopula.hpp \
     ../math/BlockMatrixChol.hpp \
     ../math/BlockGaussianCopula.hpp \
+    ../math/FastTStudentCdf.hpp \
     ../params/Params.hpp \
     ../portfolio/Recovery.hpp \
     ../portfolio/Portfolio.hpp \
@@ -101,7 +100,6 @@ HEADERS  += MainWindow.hpp \
     ../utils/Thread.hpp \
     ../utils/Strings.hpp \
     ../utils/Parser.hpp \
-    ../utils/LookupTable.hpp \
     ../utils/Logger.hpp \
     ../utils/Format.hpp \
     ../utils/File.hpp \

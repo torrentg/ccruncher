@@ -43,7 +43,7 @@ class AssetTest : public TestFixture<AssetTest>
   private:
 
     Segmentations getSegmentations();
-    Interest getInterest();
+    Interest getInterest(const Date &date);
 
     void test1(void);
     void test2(void);

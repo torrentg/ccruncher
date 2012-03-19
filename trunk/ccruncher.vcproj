@@ -218,14 +218,6 @@
 					RelativePath="src\interests\Interest.hpp"
 					>
 				</File>
-				<File
-					RelativePath="src\interests\Rate.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\interests\Rate.hpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="kernel"

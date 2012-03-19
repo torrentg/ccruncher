@@ -44,7 +44,7 @@ class Parser
   private:
 
     // non-instantiable class
-    Parser() {};
+    Parser() {}
 
   public:
 

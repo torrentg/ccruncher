@@ -52,38 +52,37 @@ void ccruncher_test::InterestTest::tearDown()
 void ccruncher_test::InterestTest::test1()
 {
   double vactual[] = {
-    1.000000, 0.996678, 0.993213, 0.988875, 0.985168, 0.981461, 
-    0.977756, 0.973914, 0.970037, 0.966125, 0.962181, 0.958205, 
-    0.954198, 0.950489, 0.946795, 0.943118, 0.939457, 0.935812, 
-    0.932184, 0.928571, 0.924974, 0.921394, 0.917829, 0.914280, 
-    0.910747};
-  
+    1.000000, 0.996678, 0.993213, 0.988875, 0.985127, 0.981502,
+    0.977756, 0.973872, 0.970079, 0.966125, 0.962267, 0.958248,
+    0.954198, 0.950671, 0.946916, 0.943299, 0.939577, 0.935991,
+    0.932302, 0.928630, 0.925092, 0.921452, 0.917945, 0.914338,
+    0.910747 };
+
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='simple'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.04'/>\n\
-        <rate t='2' r='0.041'/>\n\
-        <rate t='3' r='0.045'/>\n\
-        <rate t='6' r='0.0455'/>\n\
-        <rate t='12' r='0.048'/>\n\
-        <rate t='24' r='0.049'/>\n\
-        <rate t='60' r='0.05'/>\n\
-        <rate t='120' r='0.052'/>\n\
+        <rate t='0M' r='0.0'/>\n\
+        <rate t='1M' r='0.04'/>\n\
+        <rate t='2M' r='0.041'/>\n\
+        <rate t='3M' r='0.045'/>\n\
+        <rate t='6M' r='0.0455'/>\n\
+        <rate t='1Y' r='0.048'/>\n\
+        <rate t='2Y' r='0.049'/>\n\
+        <rate t='5Y' r='0.05'/>\n\
+        <rate t='10Y' r='0.052'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // correlation matrix creation
-  Interest iobj;
+  Date date0 = Date("18/02/2003");
+  Interest iobj(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
-  Date date0 = Date("18/02/2003");
 
   for (int i=0;i<25;i++)
   {
-    Date aux = addMonths(date0, i);
-    double val = iobj.getFactor(aux, date0);
+    Date aux = add(date0, i, 'M');
+    double val = iobj.getFactor(aux);
     ASSERT_EQUALS_EPSILON(vactual[i], val, EPSILON);
   }
 }
@@ -94,38 +93,36 @@ void ccruncher_test::InterestTest::test1()
 void ccruncher_test::InterestTest::test2()
 {
   double vactual[] = {
-    1.000000, 0.996737, 0.993325, 0.989056, 0.985382, 0.981696, 
-    0.977998, 0.974152, 0.970257, 0.966313, 0.962321, 0.958283, 
-    0.954198, 0.950396, 0.946596, 0.942799, 0.939004, 0.935212, 
-    0.931424, 0.927638, 0.923856, 0.920077, 0.916301, 0.912529, 
-    0.908760};
+    1.000000, 0.996737, 0.993325, 0.989056, 0.985342, 0.981736,
+    0.977998, 0.974110, 0.970299, 0.966313, 0.962409, 0.958327,
+    0.954198, 0.950583, 0.946720, 0.942985, 0.939128, 0.935399,
+    0.931548, 0.927700, 0.923980, 0.920139, 0.916425, 0.912590,
+    0.90876 };
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.04'/>\n\
-        <rate t='2' r='0.041'/>\n\
-        <rate t='3' r='0.045'/>\n\
-        <rate t='6' r='0.0455'/>\n\
-        <rate t='12' r='0.048'/>\n\
-        <rate t='24' r='0.049'/>\n\
-        <rate t='60' r='0.05'/>\n\
-        <rate t='120' r='0.052'/>\n\
+        <rate t='0D' r='0.0'/>\n\
+        <rate t='1M' r='0.04'/>\n\
+        <rate t='2M' r='0.041'/>\n\
+        <rate t='3M' r='0.045'/>\n\
+        <rate t='6M' r='0.0455'/>\n\
+        <rate t='1Y' r='0.048'/>\n\
+        <rate t='24M' r='0.049'/>\n\
+        <rate t='60M' r='0.05'/>\n\
+        <rate t='10Y' r='0.052'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // correlation matrix creation
-  Interest iobj;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
-
   Date date0 = Date("18/02/2003");
+  Interest iobj(date0);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
   for (int i=0;i<25;i++)
   {
-    Date aux = addMonths(date0, i);
-    double val = iobj.getFactor(aux, date0);
+    Date aux = add(date0, i, 'M');
+    double val = iobj.getFactor(aux);
     ASSERT_EQUALS_EPSILON(vactual[i], val, EPSILON);
   }
 }
@@ -136,38 +133,37 @@ void ccruncher_test::InterestTest::test2()
 void ccruncher_test::InterestTest::test3()
 {
   double vactual[] = {
-    1.000000, 0.996672, 0.99319, 0.9888130, 0.985057, 0.981288, 
-    0.977507, 0.973571, 0.969583, 0.965545, 0.961457, 0.957320, 
-    0.953134, 0.949243, 0.945355, 0.941470, 0.937588, 0.933709, 
-    0.929833, 0.925961, 0.922091, 0.918225, 0.914363, 0.910504, 
-    0.906649};
-    
+    1.000000, 0.996672, 0.993190, 0.988813, 0.985016, 0.981329,
+    0.977507, 0.973528, 0.969627, 0.965545, 0.961546, 0.957365,
+    0.953134, 0.949434, 0.945483, 0.941661, 0.937715, 0.933900,
+    0.929960, 0.926024, 0.922218, 0.918289, 0.914489, 0.910567,
+    0.906649 };
+
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='continuous'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.04'/>\n\
-        <rate t='2' r='0.041'/>\n\
-        <rate t='3' r='0.045'/>\n\
-        <rate t='6' r='0.0455'/>\n\
-        <rate t='12' r='0.048'/>\n\
-        <rate t='24' r='0.049'/>\n\
-        <rate t='60' r='0.05'/>\n\
-        <rate t='120' r='0.052'/>\n\
+        <rate t='0D' r='0.0'/>\n\
+        <rate t='1M' r='0.04'/>\n\
+        <rate t='2M' r='0.041'/>\n\
+        <rate t='3M' r='0.045'/>\n\
+        <rate t='6M' r='0.0455'/>\n\
+        <rate t='1Y' r='0.048'/>\n\
+        <rate t='2Y' r='0.049'/>\n\
+        <rate t='5Y' r='0.05'/>\n\
+        <rate t='10Y' r='0.052'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // correlation matrix creation
-  Interest iobj;
+  Date date0 = Date("18/02/2003");
+  Interest iobj(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
-  Date date0 = Date("18/02/2003");
 
   for (int i=0;i<25;i++)
   {
-    Date aux = addMonths(date0, i);
-    double val = iobj.getFactor(aux, date0);
+    Date aux = add(date0, i, 'M');
+    double val = iobj.getFactor(aux);
     ASSERT_EQUALS_EPSILON(vactual[i], val, EPSILON);
   }
 }

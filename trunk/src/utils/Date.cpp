@@ -47,6 +47,7 @@
 
 #include <cstdio>
 #include <cstring>
+#include <cctype>
 #include <ctime>
 #include "utils/Date.hpp"
 #include "utils/Parser.hpp"
@@ -417,48 +418,61 @@ ostream & ccruncher::operator << (ostream& os, const Date& d)
 //===========================================================================
 // increment n number of months
 //===========================================================================
-Date ccruncher::addMonths(const Date& inDate, const int& num_months)
+Date ccruncher::add(const Date &date, int num, char units)
 {
-  int y1, m1, d1;
-  inDate.YMD( &y1, &m1, &d1 );
-
-  if (num_months == 0) {
-    return inDate;
+  if (num == 0)
+  {
+    return date;
   }
-
-  int num_years = num_months/12;
-  if (num_years != 0) {
-    y1 += num_years;
+  else if (units == 'D') // days
+  {
+    return date + num;
   }
+  else if (units == 'M') // months
+  {
+    int y1, m1, d1;
+    date.YMD( &y1, &m1, &d1 );
 
-  int nmonths = num_months%12;
-  if (nmonths == 0) {
-    return Date(d1, m1, y1);
-  }
+    y1 += num/12;
 
-  if (num_months > 0) {
-    if (m1+nmonths<=12) {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
-      return Date(nd, m1+nmonths, y1);
+    int nmonths = num%12;
+    if (nmonths == 0) {
+      return Date(d1, m1, y1);
+    }
+
+    if (num > 0) {
+      if (m1+nmonths<=12) {
+        int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
+        return Date(nd, m1+nmonths, y1);
+      }
+      else {
+        int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths-12, y1+1));
+        return Date(nd, m1+nmonths-12, y1+1);
+      }
     }
     else {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths-12, y1+1));
-      return Date(nd, m1+nmonths-12, y1+1);
+      if (m1+nmonths>=1) {
+        int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
+        return Date(nd, m1+nmonths, y1);
+      }
+      else {
+        int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths+12, y1-1));
+        return Date(nd, m1+nmonths+12, y1-1);
+      }
     }
   }
-  else {
-    if (m1+nmonths>=1) {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths, y1));
-      return Date(nd, m1+nmonths, y1);
-    }
-    else {
-      int nd = std::min(d1, Date::numDaysInMonth(m1+nmonths+12, y1-1));
-      return Date(nd, m1+nmonths+12, y1-1);
-    }
+  else if (units == 'Y') // years
+  {
+    int y, m, d;
+    date.YMD(&y, &m, &d);
+    if (Date::valid(d, m, y+num)) return Date(d, m, y+num);
+    else return Date(d-1,m,y+num); //29-Feb case
   }
-
-  assert(false);
-  return NAD;
+  else // otherwise
+  {
+    assert(false);
+    throw Exception("invalid units. allowed units are D, M, Y");
+  }
 }
 
 //===========================================================================
@@ -515,24 +529,46 @@ bool ccruncher::Date::valid(int d, int m, int y)
 }
 
 //===========================================================================
-// returns the number of months between this date and d
-// fractional part are the remaining days / 30
+// returns the number of units between d1 and d2 (diff = date2-date1)
 //===========================================================================
-double ccruncher::Date::getMonthsTo(const Date &d) const
+double ccruncher::diff(const Date &date1, const Date &date2, char units)
 {
-  if (d < *this) {
-    return -d.getMonthsTo(*this);
+  if (date2 < date1)
+  {
+    return -diff(date2, date1, units);
   }
-  else {
+  else if (units == 'D')
+  {
+    return (double)(date2 - date1);
+  }
+  else if (units == 'M')
+  {
     int y1, m1, d1;
     int y2, m2, d2;
+    date1.YMD(&y1, &m1, &d1 );
+    date2.YMD(&y2, &m2, &d2 );
     double ret = 0.0;
-    JdToYmd( lJulianDay, &y1, &m1, &d1 );
-    JdToYmd( d.lJulianDay, &y2, &m2, &d2 );
     ret += 12.0 * (y2 - y1);
-    ret += 1.0 * (m2 - m1);
+    ret += (m2 - m1);
     ret += (d2 - d1) / 30.0;
     return ret;
+  }
+  else if (units == 'Y')
+  {
+    int y1, m1, d1;
+    int y2, m2, d2;
+    date1.YMD(&y1, &m1, &d1 );
+    date2.YMD(&y2, &m2, &d2 );
+    double ret = 0.0;
+    ret += (y2 - y1);
+    ret += (m2 - m1) / 12.0;
+    ret += (d2 - d1) / (12.0*30.0);
+    return ret;
+  }
+  else
+  {
+    assert(false);
+    throw Exception("invalid units. allowed units are D, M, Y");
   }
 }
 
@@ -557,39 +593,36 @@ bool ccruncher::isInterval(const char *str)
 }
 
 //===========================================================================
-// Increments the date in an interval periorde.
+// Increments the date in an interval periode.
 // Ejemp: Date + 450D, Date + 24M, Date + 5Y (days, months and years)
 //===========================================================================
-void ccruncher::Date::addIncrement(const char *str) throw(Exception)
+void ccruncher::Date::add(const char *str) throw(Exception)
 {
-  int y,m,d;
   int interval;
   char buffer[25];
   int l = strlen(str);
-  if (l >= 25)
-    throw Exception("increment too long");
-  strcpy(buffer,str);
-  buffer[l-1] = '\0';
-  interval = atoi(buffer);
-  if (interval!=0)
-  {
-    if (str[l-1]=='D') { // increment in days. Ejem 365D
-      lJulianDay += interval;
-    }
-    else if (str[l-1]=='M') { // increment in Months. Ejem 3M
-      JdToYmd(lJulianDay,&y,&m,&d);
-      *this = addMonths(*this, interval);
-    }
-    else if (str[l-1]=='Y') { // increment in Years. Ejem 5Y
-      JdToYmd(lJulianDay,&y,&m,&d);
-      if (valid(d,m,y+interval)) lJulianDay = YmdToJd(y+interval,m,d);
-      else lJulianDay = YmdToJd(y+interval,m,d-1); //29-Feb case
-    }
-    else {
-      throw Exception("invalid increment");
-    }
+
+  // trim and copy to local buffer
+  while(isspace(str[l-1]) && l>0) l--; // right trim
+  if (l <= 1 || l >= 25) throw Exception("invalid date increment");
+  strncpy(buffer,str, l);
+
+  // removing extension (D, M or Y) + setting terminating null byte
+  if (buffer[l-1] == 'M' || buffer[l-1] == 'Y' || buffer[l-1] == 'D') buffer[l-1] = '\0';
+  else throw Exception("invalid increment unit (allowed units are: D, M, Y)");
+  interval = Parser::intValue(buffer);
+
+  if (str[l-1] == 'D') { // increment in days. eg. 365D
+    lJulianDay += interval;
   }
-  else
-    throw Exception("invalid conversion to int from interval date: " + string(str) + " (non valid format)");
+  else if (str[l-1] == 'M') { // increment in Months. eg. 3M
+    *this = ccruncher::add(*this, interval, 'M');
+  }
+  else if (str[l-1] == 'Y') { // increment in Years. eg. 5Y
+    *this = ccruncher::add(*this, interval, 'Y');
+  }
+  else {
+    assert(false);
+  }
 }
 
