@@ -133,29 +133,29 @@ Segmentations ccruncher_test::ObligorTest::getSegmentations()
 //===========================================================================
 // getInterest
 //===========================================================================
-Interest ccruncher_test::ObligorTest::getInterest()
+Interest ccruncher_test::ObligorTest::getInterest(const Date &date)
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.0'/>\n\
-        <rate t='2' r='0.0'/>\n\
-        <rate t='3' r='0.0'/>\n\
-        <rate t='6' r='0.0'/>\n\
-        <rate t='12' r='0.0'/>\n\
-        <rate t='24' r='0.0'/>\n\
-        <rate t='60' r='0.0'/>\n\
-        <rate t='120' r='0.0'/>\n\
+        <rate t='0M' r='0.0'/>\n\
+        <rate t='1M' r='0.0'/>\n\
+        <rate t='2M' r='0.0'/>\n\
+        <rate t='3M' r='0.0'/>\n\
+        <rate t='6M' r='0.0'/>\n\
+        <rate t='1Y' r='0.0'/>\n\
+        <rate t='2Y' r='0.0'/>\n\
+        <rate t='5Y' r='0.0'/>\n\
+        <rate t='10Y' r='0.0'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
   // interest object creation
-  Interest ret;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
+  Interest interest(date);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
 
-  return ret;
+  return interest;
 }
 
 //===========================================================================
@@ -198,11 +198,13 @@ void ccruncher_test::ObligorTest::test1()
   ExpatParser xmlparser;
 
   // obligor creation
+  Date time0("01/01/2000");
+  Date timeT("01/01/2005");
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interest interest = getInterest();
-  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest(time0);
+  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
@@ -258,11 +260,13 @@ void ccruncher_test::ObligorTest::test2()
   ExpatParser xmlparser;
 
   // obligor creation
+  Date time0("01/01/2000");
+  Date timeT("01/01/2005");
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interest interest = getInterest();
-  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest(time0);
+  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -300,11 +304,13 @@ void ccruncher_test::ObligorTest::test3()
   ExpatParser xmlparser;
 
   // obligor creation
+  Date time0("01/01/2000");
+  Date timeT("01/01/2005");
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interest interest = getInterest();
-  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest(time0);
+  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -342,11 +348,13 @@ void ccruncher_test::ObligorTest::test4()
   ExpatParser xmlparser;
 
   // obligor creation
+  Date time0("01/01/2000");
+  Date timeT("01/01/2005");
   Ratings ratings = getRatings();
   Sectors sectors = getSectors();
   Segmentations segmentations = getSegmentations();
-  Interest interest = getInterest();
-  Obligor obligor(ratings, sectors, segmentations, interest, Date("01/01/2000"), Date("01/01/2005"));
+  Interest interest = getInterest(time0);
+  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 

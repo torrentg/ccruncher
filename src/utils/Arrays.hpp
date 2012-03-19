@@ -44,7 +44,7 @@ class Arrays
   private:
 
     // non-instantiable class
-    Arrays() {};
+    Arrays() {}
 
   public:
 

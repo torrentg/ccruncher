@@ -104,21 +104,6 @@ class ExpatHandlers
 //---------------------------------------------------------------------------
 
 //===========================================================================
-// epdata
-//===========================================================================
-inline void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char *s, int len)
-{
-  // default simple rule: character data is not allowed
-  for(int i=0; i<len; i++)
-  {
-    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
-    {
-      throw Exception("unexpected text parsing xml");
-    }
-  }
-}
-
-//===========================================================================
 // isEqual
 //===========================================================================
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const string &str) const

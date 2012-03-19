@@ -94,7 +94,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   // computing Current Net Value
   for(unsigned int i=0; i<data.size(); i++)
   {
-    data[i].exposure.mult(interest.getFactor(data[i].date, d1));
+    data[i].exposure.mult(interest.getFactor(data[i].date));
   }
 }
 
@@ -105,6 +105,7 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
 {
   if (isEqual(name_,"values") && have_data == true)
   {
+/*
     Date at(date);
     const char *str = getAttributeValue(attributes, "at");
     if (str == NULL) throw Exception("attribute 'at' not found");
@@ -114,18 +115,21 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
     else {
       at = Date(str);
     }
-    
+*/
+    const char *str;
+    DateValues values;
+
+    values.date = getDateAttribute(attributes, "at");
+
     str = getAttributeValue(attributes, "exposure");
     if (str == NULL) throw Exception("attribute 'exposure' not found");
-    Exposure exposure(str);
+    else values.exposure = Exposure(str);
 
-    Recovery recovery = drecovery;
     str = getAttributeValue(attributes, "recovery");
-    if (str != NULL) {
-      recovery = Recovery(str);
-    }
+    if (str != NULL) values.recovery = Recovery(str);
+    else values.recovery = drecovery;
     
-    data.push_back(DateValues(at, exposure, recovery));
+    data.push_back(values);
   }
   else if (isEqual(name_,"belongs-to"))
   {

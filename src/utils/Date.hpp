@@ -109,8 +109,7 @@ class Date
     bool isLeapYear( void ) const;
     void YMD( int *pY, int *pM, int *pD ) const;
     time_t ToSysTime( void ) const;
-    double getMonthsTo(const Date& d) const;
-    void addIncrement(const char *str) throw(Exception);
+    void add(const char *str) throw(Exception);
 
     Date& operator=( const Date& Orig );
     friend Date operator+( const Date& Left, const long Right );
@@ -138,8 +137,10 @@ class Date
 
 // output operator
 ostream& operator << (ostream& os, const Date& d);
-// increment n number of months
-Date addMonths(const Date& d, const int& no_months);
+// increment n number of days/months/years
+Date add(const Date &d, int num, char units);
+// difference between 2 dates  in days/months/years
+double diff(const Date &d1, const Date &d2, char units);
 // minimum of 2 dates
 Date min(const Date&, const Date&);
 // maximum of 2 dates

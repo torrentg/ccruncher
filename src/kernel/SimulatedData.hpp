@@ -25,8 +25,8 @@
 
 //---------------------------------------------------------------------------
 
-#include <vector>
 #include "utils/config.h"
+#include <vector>
 #include "portfolio/Obligor.hpp"
 #include "portfolio/Asset.hpp"
 #include "portfolio/DateValues.hpp"

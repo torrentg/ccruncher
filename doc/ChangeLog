@@ -8,6 +8,7 @@ version 1.9 (?. 2012)
   * solved survival precision problem
   * modified T-student CDF speedup algorithm
   * updated MiniCppUnit version
+  * allowed units distinct than months to set interest rates in input file
 
 version 1.8 (May. 2011)
 --------------------------

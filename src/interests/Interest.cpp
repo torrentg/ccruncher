@@ -25,26 +25,16 @@
 #include "interests/Interest.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
+#include "utils/Parser.hpp"
 #include <cassert>
-
-// --------------------------------------------------------------------------
-
-#define EPSILON 1e-7
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Interest::Interest()
+ccruncher::Interest::Interest(const Date &date_)
 {
   type = Compound;
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Interest::~Interest()
-{
-  // nothing to do
+  date = date_;
 }
 
 //===========================================================================
@@ -64,31 +54,39 @@ int ccruncher::Interest::size() const
 }
 
 //===========================================================================
-// returns interpolated interest rate at month t
+// returns interpolated interest rate at day d from date
 //===========================================================================
-double ccruncher::Interest::getValue(const double t) const
+void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
   unsigned int n = vrates.size();
 
-  if (n == 0)
+  if (n == 0 || d <= 0)
   {
-    return 1.0;
+    *t = 0.0;
+    *r = 1.0;
   }
-  else if (t <= vrates[0].t)
+  else if (d <= vrates[0].d)
   {
-    return vrates[0].r;
+    int diff = d - 0;
+    int delta = vrates[0].d - 0;
+    *t = 0.0 + diff*(vrates[0].y - 0)/delta;
+    *r = 1.0 + diff*(vrates[0].r - 1.0)/delta;
   }
-  else if (vrates[n-1].t <= t)
+  else if (vrates[n-1].d <= d)
   {
-    return vrates[n-1].r;
+    *t = vrates[n-1].y;
+    *r = vrates[n-1].r;
   }
   else
   {
-    vector<Rate>::const_iterator it2 = lower_bound(vrates.begin(), vrates.end(), Rate(t));
+    vector<Rate>::const_iterator it2 = lower_bound(vrates.begin(), vrates.end(), Rate(d));
     assert(it2 != vrates.begin());
     assert(it2 != vrates.end());
     vector<Rate>::const_iterator it1 = it2-1;
-    return it1->r + (t-it1->t)*(it2->r - it1->r)/(it2->t - it1->t);
+    int diff = d - it1->d;
+    int delta = it2->d - it1->d;
+    *t = it1->y + diff*(it2->y - it1->y)/delta;
+    *r = it1->r + diff*(it2->r - it1->r)/delta;
   }
 }
 
@@ -96,22 +94,26 @@ double ccruncher::Interest::getValue(const double t) const
 // returns factor to aply to transport a money value from date1 to date2
 // where is assumed that date2 is the interest curve date
 //===========================================================================
-double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) const
+double ccruncher::Interest::getFactor(const Date &date1) const
 {
-  double t = date2.getMonthsTo(date1);
-  double r = getValue(t);
+  if (date1 <= date) return 1.0;
+
+  int d = date1 - date;
+  double r, t; // t = time in years
+
+  getValues(d, &t, &r);
 
   if (type == Simple)
   {
-    return 1.0/(1.0+r*(t/12.0));
+    return 1.0/(1.0+r*t);
   }
   else if (type == Compound)
   {
-    return 1.0/pow(1.0+r, t/12.0);
+    return 1.0/pow(1.0+r, t);
   }
   else if (type == Continuous)
   {
-    return 1.0/exp(r*t/12.0);
+    return 1.0/exp(r*t);
   }
   else
   {
@@ -123,11 +125,13 @@ double ccruncher::Interest::getFactor(const Date &date1, const Date &date2) cons
 //===========================================================================
 // insertRate
 //===========================================================================
-void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
+void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
 {
-  if (val.t < 0.0)
+  if (date == NAD) throw Exception("interest curve without date");
+
+  if (val.d < 0)
   {
-    throw Exception("rate with invalid time: " + Format::toString(val.t) + " < 0");
+    throw Exception("rate with invalid time");
   }
 
   // checking consistency
@@ -135,12 +139,9 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
   {
     Rate aux = vrates[i];
 
-    if (fabs(aux.t-val.t) < EPSILON)
+    if (fabs(aux.d-val.d) == 0)
     {
-      string msg = "rate time ";
-      msg += Format::toString(val.t);
-      msg += " repeated";
-      throw Exception(msg);
+      throw Exception("rate time '" + val.t_str + "' repeated");
     }
   }
 
@@ -158,9 +159,10 @@ void ccruncher::Interest::insertRate(Rate &val) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"interest")) {
+  if (isEqual(name_,"interest"))
+  {
     if (getNumAttributes(attributes) == 0) {
       type = Compound;
     }
@@ -185,12 +187,34 @@ void ccruncher::Interest::epstart(ExpatUserData &eu, const char *name_, const ch
       throw Exception("incorrect number of attributes");
     }
   }
-  else if (isEqual(name_,"rate")) {
-    // setting new handlers
-    auxrate = Rate();
-    eppush(eu, &auxrate, name_, attributes);
+  else if (isEqual(name_,"rate"))
+  {
+    if (getNumAttributes(attributes) != 2) {
+      throw Exception("incorrect number of attributes");
+    }
+
+    Date at(date);
+    const char *str = getAttributeValue(attributes, "t");
+    if (str == NULL) throw Exception("attribute 't' not found");
+    if (isInterval(str)) {
+      at.add(str);
+    }
+    else {
+      int nmonths = Parser::intValue(str);
+      at = add(at, nmonths, 'M');
+    }
+    int d = at - date;
+
+    double r = getDoubleAttribute(attributes, "r");
+    if (r < -0.5 || 1.0 < r)
+    {
+      throw Exception("rate value " + Format::toString(r) + " out of range [-0.5, +1.0]");
+    }
+
+    insertRate(Rate(d, diff(date, at, 'Y'), r, str));
   }
-  else {
+  else
+  {
     throw Exception("unexpected tag " + string(name_));
   }
 }
@@ -209,7 +233,7 @@ void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
     }
   }
   else if (isEqual(name_,"rate")) {
-    insertRate(auxrate);
+    // nothing to do
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -233,7 +257,11 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
 
   for (unsigned int i=0;i<vrates.size();i++)
   {
-    ret += vrates[i].getXML(ilevel+2);
+    ret += Strings::blanks(ilevel+2);
+    ret += "<rate ";
+    ret += "t='" + vrates[i].t_str + "' ";
+    ret += "r='" + Format::toString(100.0*vrates[i].r) + "%'";
+    ret += "/>\n";
   }
 
   ret += spc + "</interest>\n";

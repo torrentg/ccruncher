@@ -41,7 +41,7 @@ class PowMatrix
   private:
 
     // non-instantiable class
-    PowMatrix() {};
+    PowMatrix() {}
 
   public:
 

@@ -49,7 +49,7 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
     Ratings getRatings();
     Sectors getSectors();
     Segmentations getSegmentations();
-    Interest getInterest();
+    Interest getInterest(const Date &);
     vector<Obligor*> getObligors();
     
     void test1(void);

@@ -43,7 +43,7 @@ class File
   private:
 
     // non-instantiable class
-    File() {};
+    File() {}
 
   public:
 

@@ -134,6 +134,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag interest repeated");
     }
     else {
+      interest = Interest(params.time0);
       eppush(eu, &interest, name_, attributes);
     }
   }

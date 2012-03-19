@@ -288,7 +288,7 @@ string getXMLData(int ilevel, Date issuedate, int term, double nominal, double p
   DateValues curr;
 
   for(int i=0; i<term; i++) {
-    curr.date = addMonths(issuedate, i+1);
+    curr.date = add(issuedate, i+1, 'M');
     curr.exposure = Exposure(Exposure::Fixed,nominal*rent/(double)(term));
     curr.recovery = Recovery(Recovery::Fixed,pctrecv);
     events.push_back(curr);

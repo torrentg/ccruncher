@@ -42,7 +42,7 @@ class Utils
   private:
   
     // non-instantiable class
-    Utils() {};
+    Utils() {}
 
   public:
 

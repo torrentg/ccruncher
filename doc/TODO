@@ -8,6 +8,7 @@ Current works
 
 Future works
 -------------------
+  * input file in binary format
   * add risk aggregation to documentation
      - explain how to distribute the risk (eg. ES) along segments
      - see 'introduction to credit risk modeling'

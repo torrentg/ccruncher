@@ -91,26 +91,26 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
 //===========================================================================
 // getInterest
 //===========================================================================
-Interest ccruncher_test::AssetTest::getInterest()
+Interest ccruncher_test::AssetTest::getInterest(const Date &date)
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
-        <rate t='0' r='0.0'/>\n\
-        <rate t='1' r='0.0'/>\n\
-        <rate t='2' r='0.0'/>\n\
-        <rate t='3' r='0.0'/>\n\
-        <rate t='6' r='0.0'/>\n\
-        <rate t='12' r='0.0'/>\n\
-        <rate t='24' r='0.0'/>\n\
-        <rate t='60' r='0.0'/>\n\
-        <rate t='120' r='0.0'/>\n\
+        <rate t='0M' r='0.0'/>\n\
+        <rate t='1M' r='0.0'/>\n\
+        <rate t='2M' r='0.0'/>\n\
+        <rate t='3M' r='0.0'/>\n\
+        <rate t='6M' r='0.0'/>\n\
+        <rate t='1Y' r='0.0'/>\n\
+        <rate t='2Y' r='0.0'/>\n\
+        <rate t='5Y' r='0.0'/>\n\
+        <rate t='10Y' r='0.0'/>\n\
       </interest>";
 
   // creating xml
   ExpatParser xmlparser;
 
   // segmentation object creation
-  Interest ret;
+  Interest ret(date);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &ret));
 
   return ret;
@@ -267,7 +267,7 @@ void ccruncher_test::AssetTest::test4()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='01/01/2007'>\n\
         <data>\n\
-           <values at='15D' exposure='+1000.0' />\n\
+           <values at='15/01/2007' exposure='+1000.0' />\n\
            <values at='15/01/2008' exposure='+1000.0' recovery='80%' />\n\
            <values at='15/01/2009' exposure='+1000.0' />\n\
            <values at='15/01/2010' exposure='+1000.0' recovery='80%' />\n\
@@ -277,6 +277,9 @@ void ccruncher_test::AssetTest::test4()
   // creating xml
   ExpatParser xmlparser;
 
+  Date time0("01/01/2005");
+  Date timeT("01/01/2011");
+
   // segmentations object creation
   Segmentations segs = getSegmentations();
 
@@ -284,8 +287,8 @@ void ccruncher_test::AssetTest::test4()
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   
-  Interest interest = getInterest();
-  asset.prepare(Date("01/01/2005"), Date("01/01/2011"), interest);
+  Interest interest = getInterest(time0);
+  asset.prepare(time0, timeT, interest);
   
   // doing assertions
   ASSERT(asset.hasObligorRecovery());
@@ -305,7 +308,7 @@ void ccruncher_test::AssetTest::test5()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='10/01/2005' recovery='50%'>\n\
         <data>\n\
-           <values at='+5D' exposure='5000.0' recovery='30%' />\n\
+           <values at='15/01/2005' exposure='5000.0' recovery='30%' />\n\
            <values at='15/01/2006' exposure='5000.0' recovery='40%' />\n\
            <values at='15/01/2007' exposure='4000.0' recovery='50%' />\n\
            <values at='15/01/2008' exposure='3000.0' recovery='60%' />\n\
@@ -317,9 +320,12 @@ void ccruncher_test::AssetTest::test5()
   // creating xml
   ExpatParser xmlparser;
 
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/7/2011");
+
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interest interest = getInterest();
+  Interest interest = getInterest(time0);
 
   // asset object creation
   Asset asset(&segs);
@@ -327,8 +333,6 @@ void ccruncher_test::AssetTest::test5()
   
   ASSERT(!asset.hasObligorRecovery());
 
-  Date time0 = Date("1/1/2004");
-  Date timeT = Date("1/7/2011");
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
   
   ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).exposure.getValue(), EPSILON);
@@ -357,7 +361,6 @@ void ccruncher_test::AssetTest::test6()
 
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interest interest = getInterest();
 
   // asset object creation
   Asset asset(&segs);
@@ -374,11 +377,11 @@ void ccruncher_test::AssetTest::test7()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values at='1Y' exposure='570.0' />\n\
+          <values at='01/01/2000' exposure='570.0' />\n\
           <values at='01/07/2000' exposure='560.0' />\n\
-          <values at='2Y' exposure='550.0' />\n\
+          <values at='01/01/2001' exposure='550.0' />\n\
           <values at='01/07/2001' exposure='540.0' />\n\
-          <values at='3Y' exposure='530.0' />\n\
+          <values at='01/01/2002' exposure='530.0' />\n\
           <values at='01/07/2002' exposure='520.0' />\n\
           <values at='01/07/2020' exposure='10.0' />\n\
         </data>\n\
@@ -419,15 +422,16 @@ void ccruncher_test::AssetTest::test8()
   // creating xml
   ExpatParser xmlparser;
 
+  Date time0 = Date("1/1/1997");
+  Date timeT = Date("1/7/2040");
+
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interest interest = getInterest();
+  Interest interest = getInterest(time0);
 
   // asset object creation
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  Date time0 = Date("1/1/1997");
-  Date timeT = Date("1/7/2040");
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
 
   // assertions
@@ -486,15 +490,16 @@ void ccruncher_test::AssetTest::test9()
   // creating xml
   ExpatParser xmlparser;
 
+  Date time0 = Date("1/1/2004");
+  Date timeT = Date("1/7/2011");
+
   // segmentations object creation
   Segmentations segs = getSegmentations();
-  Interest interest = getInterest();
+  Interest interest = getInterest(time0);
 
   // asset object creation
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  Date time0 = Date("1/1/2004");
-  Date timeT = Date("1/7/2011");
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
 
   // assertions

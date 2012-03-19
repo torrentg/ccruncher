@@ -47,7 +47,7 @@
 					<xsd:sequence>
 						<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
-								<xsd:attribute name="t" type="xsd:nonNegativeInteger" use="required"/>
+								<xsd:attribute name="t" type="dateIncrement" use="required"/>
 								<xsd:attribute name="r" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
@@ -193,11 +193,11 @@
 	</xsd:complexType>
 
 	<xsd:simpleType name="propertyType">
-    <xsd:annotation>
-      <xsd:documentation>
-        list of property names.
-      </xsd:documentation>
-    </xsd:annotation>
+		<xsd:annotation>
+			<xsd:documentation>
+			list of property names.
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="time.0"/>
 			<xsd:enumeration value="time.T"/>
@@ -211,11 +211,11 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="interestType">
-    <xsd:annotation>
-      <xsd:documentation>
-        list of interest types.
-      </xsd:documentation>
-    </xsd:annotation>
+		<xsd:annotation>
+			<xsd:documentation>
+				list of interest types.
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="simple"/>
 			<xsd:enumeration value="compound"/>
@@ -224,11 +224,11 @@
 	</xsd:simpleType>
 
 	<xsd:simpleType name="componentsType">
-    <xsd:annotation>
-      <xsd:documentation>
-        list of types of components.
-      </xsd:documentation>
-    </xsd:annotation>
+		<xsd:annotation>
+			<xsd:documentation>
+				list of types of components.
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="asset"/>
 			<xsd:enumeration value="obligor"/>
@@ -236,12 +236,12 @@
 	</xsd:simpleType>
 	
 	<xsd:simpleType name="date">
-    <xsd:annotation>
-      <xsd:documentation>
-        date in the format DD/MM/YYYY.
-        e.g. 1/1/2003, 25/07/1945, 12/3/2007
-      </xsd:documentation>
-    </xsd:annotation>
+		<xsd:annotation>
+			<xsd:documentation>
+				date in the format DD/MM/YYYY.
+				e.g. 1/1/2003, 25/07/1945, 12/3/2007
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:union memberTypes="xsd:date">
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">
@@ -252,17 +252,30 @@
 	</xsd:simpleType>
 	
 	<xsd:simpleType name="double">
-    <xsd:annotation>
-      <xsd:documentation>
-        double that can be followed by the percentage sign.
-        exponential notation not supported.
-        e.g. 2, 2.1, 2., .2, +2, -2.1, +4.5%, -.45%
-      </xsd:documentation>
-    </xsd:annotation>
-    <xsd:restriction base="xsd:string">
-      <xsd:pattern value="[+\-]?([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)%?"/>
-    </xsd:restriction>
-  </xsd:simpleType>
+		<xsd:annotation>
+			<xsd:documentation>
+				double that can be followed by the percentage sign.
+				exponential notation not supported.
+				e.g. 2, 2.1, 2., .2, +2, -2.1, +4.5%, -.45%
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[+\-]?([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)%?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="dateIncrement">
+		<xsd:annotation>
+			<xsd:documentation>
+				Time interval expressed as days(D), months(M) or years(Y).
+				exponential notation not supported.
+				e.g. 3D, +24D, -15D, -1M, +2M, 3M, +2Y, -5Y, 10Y
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[+\-]?[0-9]+[DMY]{0,1}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
 	
 </xsd:schema>
 
