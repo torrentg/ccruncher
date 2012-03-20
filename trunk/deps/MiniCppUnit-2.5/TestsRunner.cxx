@@ -1,6 +1,7 @@
 #include "MiniCppUnit.hxx"
 
-int main()
+int main(int argc,	char *argv[])
 {
-	return TestFixtureFactory::theInstance().runTests() ? 0 : -1;
-}	
+	return TestFixtureFactory::theInstance().runTests(argc, argv) ? 0 : -1;
+}
+
