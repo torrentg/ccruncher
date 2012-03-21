@@ -4,11 +4,11 @@ CCRUNCHER CHANGELOG
 
 version 1.9 (?. 2012)
 --------------------------
-  * added --seed parameter
+  * added macros support
+  * updated MiniCppUnit version
   * solved survival precision problem
   * modified T-student CDF speedup algorithm
-  * updated MiniCppUnit version
-  * allowed units distinct than months to set interest rates in input file
+  * allowed distinct time units (D,M,Y) in interest rates
 
 version 1.8 (May. 2011)
 --------------------------

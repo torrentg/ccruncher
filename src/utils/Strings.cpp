@@ -47,47 +47,44 @@ void ccruncher::Strings::tokenize(const string& str, vector<string>& tokens, con
 }
 
 //===========================================================================
-// rtrim
-//===========================================================================
-string ccruncher::Strings::rtrim(string s)
-{
-  string::size_type pos = s.find_last_not_of(" \t\n");
-
-  if (pos == string::npos) {
-    return s;
-  }
-  else {
-    return s.substr( 0, pos+1 );
-  }
-}
-
-//===========================================================================
-// ltrim
-//===========================================================================
-string ccruncher::Strings::ltrim(string s)
-{
-  string::size_type pos = s.find_first_not_of(" \t\n");
-
-  if (pos == string::npos) {
-    return s;
-  }
-  else {
-    return s.substr( pos, s.size()-pos );
-  }
-}
-
-//===========================================================================
 // trim
 //===========================================================================
-string ccruncher::Strings::trim(string s)
+string ccruncher::Strings::trim(const string &s)
 {
-  return ltrim(rtrim(s));
+  if (s.length() == 0) return "";
+
+  int pos1 = s.length()-1;
+  for(int i=0; i<(int)s.length(); i++) {
+    if (!isspace(s[i])) {
+      pos1=i;
+      break;
+    }
+  }
+
+  int pos2 = 0;
+  for(int i=(int)s.length()-1; i>=0; i--) {
+    if (!isspace(s[i])) {
+      pos2=i;
+      break;
+    }
+  }
+
+  if (pos2 < pos1) {
+    return "";
+  }
+  else if (pos1 == pos2) {
+    if (isspace(s[pos1])) return "";
+    else return s.substr(pos1,1);
+  }
+  else {
+    return s.substr(pos1,pos2-pos1+1);
+  }
 }
 
 //===========================================================================
 // uppercase
 //===========================================================================
-string ccruncher::Strings::uppercase(string str)
+string ccruncher::Strings::uppercase(const string &str)
 {
   string res = str;
 
@@ -99,7 +96,7 @@ string ccruncher::Strings::uppercase(string str)
 //===========================================================================
 // uppercase
 //===========================================================================
-string ccruncher::Strings::lowercase(string str)
+string ccruncher::Strings::lowercase(const string &str)
 {
   string res = str;
 

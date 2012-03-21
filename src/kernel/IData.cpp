@@ -35,6 +35,7 @@
 void ccruncher::IData::init()
 {
    hasmaintag = false;
+   hasdefinestag = 0;
    title = "";
    description = "";
    portfolio = NULL;
@@ -61,7 +62,7 @@ ccruncher::IData::IData()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m) throw(Exception)
 {
   // initializing content
   filename = xmlfilename;
@@ -84,9 +85,17 @@ ccruncher::IData::IData(const string &xmlfilename) throw(Exception)
       Logger::newIndentLevel();
       Logger::trace("file size", Format::bytes(File::filesize(xmlfilename)));
 
+      // trace defines
+      map<string,string>::const_iterator it;
+      for (it=m.begin() ; it != m.end(); it++) {
+        checkDefine((*it).first, (*it).second);
+        Logger::trace("define (command line)", (*it).first+"="+(*it).second);
+      }
+
       // parsing
       Timer timer(true);
       ExpatParser parser;
+      parser.setDefines(m);
       parser.parse(xmlstream, this);
       Logger::trace("elapsed time parsing data", timer);
       Logger::previousIndentLevel();
@@ -112,12 +121,28 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     throw Exception("ccruncher tag expected but not found");
   }
 
-  // descriptive tags
+  // title tag
   if (isEqual(name_,"title")) {
     // nothing to do (see epdata method)
   }
+  // description tag
   else if (isEqual(name_,"description")) {
     // nothing to do (see epdata method)
+  }
+  // section defines
+  else if (isEqual(name_,"defines")) {
+    if (hasdefinestag == 0) hasdefinestag = 1;
+    else throw Exception("unexpected tag");
+  }
+  else if (isEqual(name_,"define")) {
+    if (hasdefinestag != 1) throw Exception("unexpected tag");
+    string key = getStringAttribute(attributes, "name");
+    string value = getStringAttribute(attributes, "value");
+    checkDefine(key, value);
+    if (eu.defines.find(key) == eu.defines.end()) {
+      Logger::trace("define (configuration file)", key+"="+value);
+      eu.defines[key] = value;
+    }
   }
   // section params
   else if (isEqual(name_,"parameters")) {
@@ -227,7 +252,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   // default catcher
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 
@@ -259,6 +284,12 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"description")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"defines")) {
+    hasdefinestag = 2;
+  }
+  else if (isEqual(name_,"define")) {
     // nothing to do
   }
   else if (isEqual(name_,"parameters")) {
@@ -320,13 +351,13 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       {
         Logger::trace("file size (" + filepath + ")", Format::bytes(File::filesize(filepath)));
         ExpatParser parser;
+        parser.setDefines(eu.defines);
         parser.parse(xmlstream, portfolio);
       }
     }
     catch(std::exception &e)
     {
-      release();
-      throw Exception(e);
+      throw Exception(e, "error parsing file '" + ref + "'");
     }
   }
 }
@@ -466,3 +497,21 @@ bool ccruncher::IData::hasSurvival() const
   if (survival.size() != 0) return true;
   else return false;
 }
+
+//===========================================================================
+// check define
+//===========================================================================
+void ccruncher::IData::checkDefine(const string &key, const string &value) const throw(Exception)
+{
+  if (key.length() == 0) throw Exception("invalid define name");
+
+  for(size_t i=0; i<key.length(); i++)
+  {
+    if (!isalnum(key[i])) throw Exception("invalid define name '" + key + "'");
+  }
+
+  if (value.find_first_of("&<>\"'") != string::npos) {
+    throw Exception("invalid define value '" + value + "'");
+  }
+}
+

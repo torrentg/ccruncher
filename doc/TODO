@@ -23,7 +23,6 @@ Future works
           </segmentations>
         </break>
       </breaks>
-  * remove interest section
   * considere that a obligor could belong to a few different sectors
   * explain how to determine the minimum number of simulations required
 

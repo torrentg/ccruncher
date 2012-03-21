@@ -65,26 +65,50 @@ class ExpatUserData
     // stack of handlers
     vector<ExpatUserDataToken> pila;
     // current handler
-    int pos;
+    int pila_pos;
     // current tag (used by ExpatParser)
     const char *current_tag;
+    // buffer used to apply defines
+    char *buffer;
+    // buffer size
+    size_t buffer_size;
+    // points to first char in current buffer
+    char *buffer_pos1;
+    // points to last char in current buffer
+    char *buffer_pos2;
+
+  private:
+
+    const char* bufferPush(const char *str, size_t n);
+    const char* bufferAppend(const char *str, size_t n);
+
+  public:
+
     // user replaces
-    map<string,string> replaces;
+    map<string,string> defines;
+    // apply defines to the given string
+    const char* applyDefines(const char *str);
 
   public:
 
     // void constructor
-    ExpatUserData();
+    ExpatUserData(size_t buffersize);
     // contructor
-    ExpatUserData(XML_Parser xmlparser_);
+    ExpatUserData(XML_Parser xmlparser_, size_t buffersize);
+    // destructor
+    ~ExpatUserData();
+    // assignment operator
+    ExpatUserData & operator= (const ExpatUserData &);
     // returns parser
-    XML_Parser getParser() { return xmlparser; }
+    XML_Parser getParser() const { return xmlparser; }
+    // set parser
+    void setParser(XML_Parser p) { xmlparser = p; }
     // returns current handlers
-    ExpatHandlers* getCurrentHandlers() const { return pila[pos].handlers; }
+    ExpatHandlers* getCurrentHandlers() const { return pila[pila_pos].handlers; }
     // returns current name
-    const char* getCurrentName() const { return pila[pos].name; }
+    const char* getCurrentName() const { return pila[pila_pos].name; }
     // removeCurrentHandlers
-    void removeCurrentHandlers() { pos--; }
+    void removeCurrentHandlers() { pila_pos--; }
     // setCurrentHandlers
     void setCurrentHandlers(const char *name, ExpatHandlers *eh);
     // set current tag name

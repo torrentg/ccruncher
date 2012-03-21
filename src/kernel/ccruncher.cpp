@@ -30,6 +30,7 @@
 #include <cerrno>
 #include <iostream>
 #include <csignal>
+#include <map>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
@@ -38,7 +39,13 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
+#include "utils/Strings.hpp"
 #include <cassert>
+
+//---------------------------------------------------------------------------
+
+using namespace std;
+using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 
@@ -63,7 +70,7 @@ bool btrace = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
-long seed = -1;
+map<string,string> defines;
 MonteCarlo *mcref = NULL;
 
 //===========================================================================
@@ -92,7 +99,7 @@ void catchsignal(int signal)
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "hqf" ;
+  const char* const options1 = "hqfD:" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
@@ -104,7 +111,6 @@ int main(int argc, char *argv[])
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
       { "trace",        0,  NULL,  306 },
-      { "seed",         1,  NULL,  307 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -136,6 +142,28 @@ int main(int argc, char *argv[])
 
       case 'f': // -f (force overwriting)
           bforce = true;
+          break;
+
+      case 'D': // -D key=val (define)
+          {
+            string str(optarg);
+            size_t pos = str.find('=');
+            if (pos == string::npos || pos == 0 || pos == str.length()-1 ) {
+              cerr << "error parsing arguments (define with invalid format)" << endl;
+              cerr << "use --help option for more information" << endl;
+              return 1;
+            }
+            string key = Strings::trim(str.substr(0, pos));
+            string value = Strings::trim(str.substr(pos+1));
+            if (key.length() == 0 || value.length() == 0) {
+              cerr << "error parsing arguments (define with invalid format)" << endl;
+              cerr << "use --help option for more information" << endl;
+              return 1;
+            }
+            else {
+              defines[key]= value;
+            }
+          }
           break;
 
       case 301: // --version (show version and exit)
@@ -187,19 +215,6 @@ int main(int argc, char *argv[])
 
       case 306: // --trace (trace copula values and default times)
           btrace = true;
-          break;
-
-      case 307: // --seed=val (overwrite seed value)
-          try
-          {
-            string sseed = string(optarg);
-            seed = Parser::longValue(sseed);
-          }
-          catch(Exception &)
-          {
-            cerr << "invalid seed value" << endl;
-            return 1;
-          }
           break;
 
       default: // unexpected error
@@ -309,10 +324,7 @@ void run(string filename, string path, int nthreads) throw(Exception)
   Logger::previousIndentLevel();
 
   // parsing input file
-  IData idata(filename);
-  if (seed >= 0) {
-    idata.getParams().copula_seed = seed;
-  }
+  IData idata(filename, defines);
 
   // creating simulation object
   MonteCarlo montecarlo;
@@ -395,10 +407,10 @@ void usage()
   "  options:\n"
   "    -f             force output files overwrite\n"
   "    -q             quiet mode, non-verbose\n"
+  "    -D key=val     declare key as a define, with definition val\n"
   "    --path=dir     directory where output files will be placed (required)\n"
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
-  "    --seed=num     overwrites configuration seed value (optional)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
@@ -410,6 +422,7 @@ void usage()
   "  examples:\n"
   "    ccruncher -qf --path=data/sample01 samples/sample01.xml\n"
   "    ccruncher -f --hash=100 --threads=4 --path=data/ samples/test100.xml\n"
+  "    ccruncher -f --hash=100 --threads=4 --path=data/ -D ndf=8 samples/sample.xml\n"
   << endl;
 }
 

@@ -22,6 +22,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <cctype>
 #include <sstream>
 #include "utils/ExpatParser.hpp"
 #include "utils/ExpatUserData.hpp"
@@ -40,7 +41,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::ExpatParser::ExpatParser()
+ccruncher::ExpatParser::ExpatParser() : userdata(4000)
 {
   xmlparser = NULL;
 }
@@ -69,7 +70,7 @@ void ccruncher::ExpatParser::reset()
   assert(xmlparser != NULL);
 
   // creating userData
-  userdata = ExpatUserData(xmlparser);
+  userdata.setParser(xmlparser);
   XML_SetUserData(xmlparser, &userdata);
 
   // setting element handlers
@@ -90,6 +91,15 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 
   // setting current tag
   ud->setCurrentTag(name);
+
+  // replacing defines
+  if (ud->defines.size() > 0)
+  {
+    for (int i=0; atts[i]; i+=2)
+    {
+      atts[i+1] = ud->applyDefines(atts[i+1]);
+    }
+  }
 
   // calling current handler
   eh->epstart(*ud, name, atts);
@@ -216,3 +226,20 @@ void * ccruncher::ExpatParser::getObject()
 {
   return userdata.getCurrentHandlers();
 }
+
+//===========================================================================
+// returns defines
+//===========================================================================
+const map<string,string>& ccruncher::ExpatParser::getDefines() const
+{
+  return userdata.defines;
+}
+
+//===========================================================================
+// set defines
+//===========================================================================
+void ccruncher::ExpatParser::setDefines(const map<string,string> &m)
+{
+  userdata.defines = m;
+}
+

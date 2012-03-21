@@ -71,6 +71,10 @@ class ExpatParser
     void parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception);
     // returns main object
     void * getObject();
+    // returns defines
+    const map<string,string>& getDefines() const;
+    // set defines
+    void setDefines(const map<string,string>&);
 
 };
 

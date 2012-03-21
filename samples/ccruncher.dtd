@@ -1,5 +1,5 @@
 <!-- ============================================================== -->
-<!--                   CREDITCRUNCHER DTD                           -->
+<!--                       CCRUNCHER DTD                            -->
 <!-- ============================================================== -->
 
 <!--
@@ -12,22 +12,12 @@
 -->
 
 <!-- .............................................................. -->
-<!--                       common stuff                             -->
-<!-- .............................................................. -->
-<!ELEMENT property 
-    EMPTY
->
-<!ATTLIST property 
-    name CDATA #REQUIRED
-    value CDATA #REQUIRED
->
-
-<!-- .............................................................. -->
-<!--                        creditcruncher                          -->
+<!--                           ccruncher                            -->
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
-    (title?, description?, parameters, interest, ratings, mtransitions, 
-     survival?, sectors, mcorrels, segmentations, portfolio)
+    (title?, description?, defines?, parameters, interest, ratings, 
+     mtransitions?, survival?, sectors, mcorrels, segmentations, 
+     portfolio)
 )>
 
 <!-- .............................................................. -->
@@ -37,11 +27,34 @@
 <!ELEMENT description (#PCDATA)>
 
 <!-- .............................................................. -->
+<!--                            defines                             -->
+<!-- .............................................................. -->
+<!ELEMENT defines (
+    define+
+)>
+
+<!ELEMENT define 
+    EMPTY
+>
+<!ATTLIST define 
+    name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
 <!--                           parameters                           -->
 <!-- .............................................................. -->
 <!ELEMENT parameters (
     property+
 )>
+
+<!ELEMENT property 
+    EMPTY
+>
+<!ATTLIST property 
+    name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
 
 <!-- .............................................................. -->
 <!--                          interest                              -->

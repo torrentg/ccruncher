@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <map>
 #include "params/Params.hpp"
 #include "interests/Interest.hpp"
 #include "ratings/Ratings.hpp"
@@ -78,6 +79,8 @@ class IData : public ExpatHandlers
     Portfolio *portfolio;
     // indicates if root tag exists
     bool hasmaintag;
+    // defines flag (0=none, 1=current, 2=done)
+    int hasdefinestag;
 
   private:
   
@@ -89,6 +92,8 @@ class IData : public ExpatHandlers
     void validate() throw(Exception);
     // parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
+    // check define
+    void checkDefine(const string &key, const string &value) const throw(Exception);
 
   protected:
   
@@ -104,7 +109,7 @@ class IData : public ExpatHandlers
     // default constructor
     IData();
     // constructor
-    IData(const string &xmlfilename) throw(Exception);
+    IData(const string &xmlfilename, const map<string,string> &m=map<string,string>()) throw(Exception);
     // destructor
     ~IData();
     // returns simulation title
