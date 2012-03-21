@@ -47,6 +47,10 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_
 //===========================================================================
 ccruncher::Portfolio::~Portfolio()
 {
+  if (auxobligor != NULL) {
+    delete auxobligor;
+  }
+
   // dropping obligors
   for(unsigned int i=0;i<vobligors.size();i++)
   {
@@ -143,7 +147,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 void ccruncher::Portfolio::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"portfolio")) {
-    auxobligor = NULL;
+    assert(auxobligor == NULL);
     validations();
   }
   else if (isEqual(name_,"obligor")) {

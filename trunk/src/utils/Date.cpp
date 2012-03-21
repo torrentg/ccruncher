@@ -470,7 +470,6 @@ Date ccruncher::add(const Date &date, int num, char units)
   }
   else // otherwise
   {
-    assert(false);
     throw Exception("invalid units. allowed units are D, M, Y");
   }
 }
@@ -567,7 +566,6 @@ double ccruncher::diff(const Date &date1, const Date &date2, char units)
   }
   else
   {
-    assert(false);
     throw Exception("invalid units. allowed units are D, M, Y");
   }
 }

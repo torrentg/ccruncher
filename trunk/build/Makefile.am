@@ -129,6 +129,7 @@ tests_SOURCES = \
     ../src/utils/FileTest.cpp\
     ../src/utils/FormatTest.cpp\
     ../src/utils/UtilsTest.cpp\
+    ../src/utils/ExpatUserDataTest.cpp\
     ../src/math/PowMatrixTest.cpp\
     ../src/math/BlockMatrixCholTest.cpp\
     ../src/math/BlockGaussianCopulaTest.cpp\
@@ -201,6 +202,7 @@ tests_SOURCES = \
     ../src/utils/FileTest.hpp\
     ../src/utils/FormatTest.hpp\
     ../src/utils/UtilsTest.hpp\
+    ../src/utils/ExpatUserDataTest.hpp\
     ../src/math/Copula.hpp\
     ../src/math/PowMatrixTest.hpp\
     ../src/math/BlockMatrixCholTest.hpp\

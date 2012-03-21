@@ -20,45 +20,42 @@
 //
 //===========================================================================
 
-#ifndef _Strings_
-#define _Strings_
+#ifndef _ExpatUserDataTest_
+#define _ExpatUserDataTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
-#include <string>
+#include <MiniCppUnit.hxx>
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-namespace ccruncher {
+using namespace ccruncher;
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class Strings
+class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
 {
 
   private:
 
-    // non-instantiable class
-    Strings() {}
+    void test1(void);
+
 
   public:
 
-    // tokenize a string
-    static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
-    // trim
-    static string trim(const string &s);
-    // converts to upper case
-    static string uppercase(const string &str);
-    // converts to lower case
-    static string lowercase(const string &str);
-    // creates a filler with the given char
-    static string filler(int, char);
-    // returns a blank string with the given length
-    static string blanks(int);
+    TEST_FIXTURE(ExpatUserDataTest)
+    {
+      TEST_CASE(test1);
+    }
+
+    void setUp();
+    void tearDown();
+
 };
+
+REGISTER_FIXTURE(ExpatUserDataTest);
 
 //---------------------------------------------------------------------------
 

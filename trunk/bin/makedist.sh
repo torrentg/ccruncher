@@ -184,7 +184,11 @@ makeBinDist() {
   rmDevFiles $workpath;
   cd $workpath;
 
-  #creating binaries
+  # removing specific flag
+  sed "s/-mtune=native//" configure.in > configure.in.new
+  mv configure.in.new configure.in
+
+  # creating binaries
   aclocal;
   autoconf;
   automake -avcf;
@@ -193,7 +197,7 @@ makeBinDist() {
   make install;
   bin/src2bin.sh -y;
 
-  #creating tarball
+  # creating tarball
   cd /tmp/;
   tar -cvzf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_bin.tgz $currpath;
@@ -236,17 +240,17 @@ makeWinDist() {
   rmDevFiles $workpath;
   cd $workpath;
 
-  #creating binaries
+  # creating binaries
   cp $pathexes/ccruncher.exe bin/
   cp $pathexes/libexpat.dll bin/
   cp $pathexes/pthreadVCE2.dll bin/
   cp $pathexes/zlib1.dll bin/
 
-  #dropping unused files
+  # dropping unused files
   bin/src2bin.sh -y;
   rm bin/ccreport.sh
 
-  #setting windows end-line
+  # setting windows end-line
   unix2dos doc/AUTHORS;
   unix2dos doc/README;
   unix2dos doc/TODO;
@@ -265,7 +269,7 @@ makeWinDist() {
   unix2dos doc/html/*.xml;
   unix2dos data/readme.txt;
 
-  #creating tarball
+  # creating tarball
   cd /tmp/;
   zip -r  $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_win.zip $currpath;

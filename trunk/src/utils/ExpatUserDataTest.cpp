@@ -20,19 +20,15 @@
 //
 //===========================================================================
 
-#include "utils/Strings.hpp"
-#include "utils/StringsTest.hpp"
+#include "utils/ExpatUserData.hpp"
+#include "utils/ExpatUserDataTest.hpp"
 
-//---------------------------------------------------------------------------
-
-#define XLENGTH 5
-#define YLENGTH 7
-#define EPSILON 1E-14
+using namespace ccruncher;
 
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::StringsTest::setUp()
+void ccruncher_test::ExpatUserDataTest::setUp()
 {
   // nothing to do
 }
@@ -40,7 +36,7 @@ void ccruncher_test::StringsTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::StringsTest::tearDown()
+void ccruncher_test::ExpatUserDataTest::tearDown()
 {
   // nothing to do
 }
@@ -48,27 +44,37 @@ void ccruncher_test::StringsTest::tearDown()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::StringsTest::test1()
+void ccruncher_test::ExpatUserDataTest::test1(void)
 {
-  vector<string> tokens;
-  string str1 = "  I Am A String Ready For Sacrifice  ";
+  ExpatUserData eud(10);
+  eud.defines["var1"] = "abc";
+  eud.defines["var2"] = "def";
+  eud.defines["var3"] = "123456789012345";
 
-  Strings::tokenize(str1, tokens, " ");
+  const char *str0 = "string without defines";
+  ASSERT(str0 == eud.applyDefines(str0));
 
-  ASSERT(7 == tokens.size());
+  const char *str1 = eud.applyDefines("$var1");
+  ASSERT_EQUALS(string("abc"), string(str1));
 
-  ASSERT(tokens[0] == "I");
-  ASSERT(tokens[1] == "Am");
-  ASSERT(tokens[2] == "A");
-  ASSERT(tokens[3] == "String");
-  ASSERT(tokens[4] == "Ready");
-  ASSERT(tokens[5] == "For");
-  ASSERT(tokens[6] == "Sacrifice");
+  const char *str2 = eud.applyDefines("$var2");
+  ASSERT_EQUALS(string("def"), string(str2));
+  ASSERT(str1+4 == str2);
 
-  ASSERT("I Am A String Ready For Sacrifice" == Strings::trim(str1));
-  ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Strings::uppercase(str1));
-  ASSERT("  i am a string ready for sacrifice  " == Strings::lowercase(str1));
-  ASSERT("   " == Strings::blanks(3));
-  ASSERT("" == Strings::trim(" "));
+  const char *str3 = eud.applyDefines("$var2");
+  ASSERT_EQUALS(string("def"), string(str3));
+  ASSERT(str1 == str3);
+
+  const char *str4 = eud.applyDefines("$var1$var2");
+  ASSERT_EQUALS(string("abcdef"), string(str4));
+
+  const char *str5 = eud.applyDefines("123456$var1");
+  ASSERT_EQUALS(string("123456abc"), string(str5));
+
+  const char *str6 = eud.applyDefines("12$var1 34");
+  ASSERT_EQUALS(string("12abc 34"), string(str6));
+
+  ASSERT_THROW(eud.applyDefines("1234567$var1"));
+  ASSERT_THROW(eud.applyDefines("$var3"));
 }
 

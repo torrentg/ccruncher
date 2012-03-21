@@ -9,12 +9,17 @@
   ]]>
   </description>
 
+  <defines>
+    <define name="numsims" value="30000"/>
+    <define name="ndf" value="5"/>
+  </defines>
+
   <parameters>
     <property name="time.0" value="18/10/2009"/>
     <property name="time.T" value="15/07/2015"/>
-    <property name="stopcriteria.maxiterations" value="30000"/>
+    <property name="stopcriteria.maxiterations" value="$numsims"/>
     <property name="stopcriteria.maxseconds" value="3600"/>
-    <property name="copula.type" value="t(5)"/>
+    <property name="copula.type" value="t($ndf)"/>
     <property name="copula.seed" value="0"/>
     <property name="montecarlo.antithetic" value="true"/>
     <property name="portfolio.onlyActiveObligors" value="true"/>
