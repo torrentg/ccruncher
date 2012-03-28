@@ -139,7 +139,7 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
   {
     Rate aux = vrates[i];
 
-    if (fabs(aux.d-val.d) == 0)
+    if (abs(aux.d-val.d) == 0)
     {
       throw Exception("rate time '" + val.t_str + "' repeated");
     }
