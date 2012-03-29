@@ -127,9 +127,12 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;&quot;deps\pthread-win32\include&quot;;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
+				BufferSecurityCheck="false"
+				EnableEnhancedInstructionSet="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
@@ -299,19 +302,19 @@
 					>
 				</File>
 				<File
-					RelativePath="src\math\PowMatrix.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\PowMatrix.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\math\FastTStudentCdf.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\math\FastTStudentCdf.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\PowMatrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\PowMatrix.hpp"
 					>
 				</File>
 			</Filter>
@@ -347,6 +350,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\portfolio\Exposure.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\portfolio\Exposure.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\portfolio\Obligor.cpp"
 					>
 				</File>
@@ -368,14 +379,6 @@
 				</File>
 				<File
 					RelativePath=".\src\portfolio\Recovery.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\portfolio\Exposure.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\portfolio\Exposure.hpp"
 					>
 				</File>
 			</Filter>
