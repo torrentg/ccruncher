@@ -9,6 +9,7 @@ version 1.9 (?. 2012)
   * solved survival precision problem
   * modified T-student CDF speedup algorithm
   * allowed distinct time units (D,M,Y) in interest rates
+  * technical document updated
 
 version 1.8 (May. 2011)
 --------------------------
