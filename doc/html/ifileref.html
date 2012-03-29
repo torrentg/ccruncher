@@ -769,7 +769,7 @@
       Recovery can be defined at 3 different levels: obligor, asset and data value. 
       When a default occurs at time t, we get the recovery at time <i>t</i> (or the closest 
       date above). If this recovery is not reported, we get the asset recovery. If 
-      this recovery is not reported, we get the obligor recovery.When a default occurs 
+      this recovery is not reported, we get the obligor recovery. When a default occurs 
       at time <i>t</i>, in the beta distribution case, a new sample is drawn. In the obligor 
       level, this drawn is shared by all assets that have not defined a recovery at <i>t</i>. 
     </p>
@@ -1012,7 +1012,7 @@
           Esposure at date "at". Amount that lender can lose in case of obligor's default 
           on the indicated date. Exposure can be a fixed value or a probability distribution. 
           In the first case, set the numeric value that represents the exposure (eg. 50000). 
-          In the second case, you can model recovery using the folowing distributions:<br/>
+          In the second case, you can model recovery using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Log-normal_distribution">lognormal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential(&beta;)</a>, where &beta; &gt; 0 is the <a href="http://en.wikipedia.org/wiki/Exponential_distribution#Alternative_parameterization">survival parameter</a><br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where a &gt; 0 and b &gt; 0<br/>
@@ -1056,10 +1056,10 @@
 	  to work with the transition matrix. Ccruncher will take care to convert the
 	  transition matrix in the corresponding survival functions. This implies that 
       the credit rating transitions follow a Markov model. Sometimes 
-	  this asumption is not acceptable because we desire that transition 
+	  this assumption is not acceptable because we desire that transition 
 	  probabilities change over the simulation period or we plan to do stress tests over 
-	  the default probabilites. In these cases it recommended to define the 
-	  survival functions explicitely.
+	  the default probabilities. In these cases it recommended to define the 
+	  survival functions explicitly.
 	</p>
 
     <p>
@@ -1141,7 +1141,7 @@
             Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 24-Mar-2012
+            Last modified: 27-Mar-2012
           </td>
         </tr></table>
       </div></div></div></div></div>
