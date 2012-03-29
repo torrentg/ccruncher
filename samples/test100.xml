@@ -26,13 +26,18 @@
 
   ]]>
   </description>
+  <defines>
+    <define name="numsims" value="500000"/>
+    <define name="ndf" value="5"/>
+    <define name="seed" value="0"/>
+  </defines>
   <parameters>
     <property name='time.0' value='18/02/2003'/>
     <property name='time.T' value='18/02/2005'/>
-    <property name='stopcriteria.maxiterations' value='500000'/>
+    <property name='stopcriteria.maxiterations' value='$numsims'/>
     <property name='stopcriteria.maxseconds' value='30000000'/>
-    <property name='copula.type' value='t(5)'/>
-    <property name='copula.seed' value='0'/>
+    <property name='copula.type' value='t($ndf)'/>
+    <property name='copula.seed' value='$seed'/>
     <property name='montecarlo.antithetic' value='false'/>
     <property name='portfolio.onlyActiveObligors' value='true'/>
   </parameters>

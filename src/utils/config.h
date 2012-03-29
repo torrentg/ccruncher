@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Wed Mar 21 13:44:45 CET 2012"
+#define BUILD_DATE "Thu Mar 29 11:58:56 CEST 2012"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -207,7 +207,7 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R727"
+#define SVN_VERSION "R760"
 
 /* unused argument macro */
 #define UNUSED(x) (void)x;
