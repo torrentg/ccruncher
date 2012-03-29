@@ -33,8 +33,7 @@ usage() {
 
   description:
     $progname is a shell script to roll version numbers in
-    CreditCruncher project. This script is only used by 
-    developers.
+    CCruncher project. This script is only used by developers.
   options
     -s       update svnversion tag
     -g num   update global version identifier
@@ -135,14 +134,12 @@ getPath() {
 #-------------------------------------------------------------
 getSvnVersion() {
 
-  svnversion=R$(svnversion $CCRUNCHERPATH);
+  svnversion=R$(svnversion $CCRUNCHERPATH | sed "s/^\([0-9]\+\)[MSP]*\(:.*\)\?/\1/g");
 
   if [ $? != 0 ]; then
     echo "problems retrieving svnversion";
     exit 1;
   fi
-
-  #TODO; check that is a pure version (non exist ':' or 'M' or 'S')
 }
 
 #-------------------------------------------------------------

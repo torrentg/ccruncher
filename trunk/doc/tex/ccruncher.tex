@@ -37,7 +37,7 @@
 % defining some useful values
 %-----------------------------------------------------
 \def\numversion{1.9}
-\def\svnversion{R727}
+\def\svnversion{R760}
 
 %-----------------------------------------------------
 % some format directives
@@ -158,6 +158,11 @@ function and compute the usual risk indicators, such as the Value at Risk or Exp
 Shortfall. Depending on the portfolio size and the required accuracy, the computational 
 cost may be high.
 \newline
+
+if you are looking for an in-depth explanation of the mathematical concepts used in CCruncher, 
+please refer to document 
+\emph{Simulation of High-Dimensional t-Student Copulas with a Given Block Correlation Matrix} 
+\cite{ccruncher:astin}.
 
 \begin{comment}
 \subsection{Credit Risk Models}
@@ -392,9 +397,11 @@ Corr(u_{.i}, u_{.j}) = \Sigma_{ij} \\
 \end{displaymath}
 
 Two copula generators, the Gaussian and the t-Student copulas, are implemented. 
-These two copulas have good properties: they are commonly used in finance, exist 
-algorithms to simulate them for any correlation matrix, and these algorithms work 
-for large dimensions \cite{ccruncher:astin}.
+These two copulas have good properties: they are commonly used in finance, and exist 
+algorithms to simulate them for any correlation matrix.  The paper 
+\emph{Simulation of High-Dimensional t-Student Copulas with a Given Block Correlation Matrix} 
+\cite{ccruncher:astin} adapts these algorithms to operate in large dimensions given
+a block correlation matrix.
 \newline
 
 Erik Kole et al. \cite{copu:selecting} have compared some copulas used in risk 
