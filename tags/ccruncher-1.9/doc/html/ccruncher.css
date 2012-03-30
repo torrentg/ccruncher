@@ -1,0 +1,110 @@
+/* CCruncher CSS */
+
+body {
+	padding: 0px;
+	margin: 0px;
+	background: #BABBAD url('background.jpg') top center repeat-y;
+	font: normal 10pt verdana,arial,sans-serif;
+	line-height: 1.5;
+	color: black;
+}
+
+#main-container {
+	width: 800px;
+	margin: 0 auto;
+	clear: both;
+	padding-top: 10px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 1px;
+	background-color: white;
+}
+
+#page-header {
+	margin-left: 0px;
+	background: url("header.jpg") repeat-x 0 0;
+	height: 100px;
+	width: 800px;
+}
+
+#right-menu {
+	margin: 10px 0px 10px 20px;
+	float: right;
+	text-align: left;
+	background-color: #E0E0E0;
+	width: 180px;
+}
+
+#right-menu h3 {
+	margin-bottom: 0px;
+	font: bold 10pt verdana,arial,sans-serif;
+}
+
+.bl { background: url("cbl.png") 0 100% no-repeat; }
+.br { background: url("cbr.png") 100% 100% no-repeat; }
+.tl { background: url("ctl.png") 0 0 no-repeat; }
+.tr { background: url("ctr.png") 100% 0 no-repeat; }
+
+.gray-bar {
+	margin: 0px 0px 20px 0px;
+	text-align: left;
+	background-color: #E0E0E0;
+	width: 100%;
+}
+
+h1 {
+	font-size: 12pt;
+	font-weight: bold;
+	color: #005080;
+	margin-left: 0px;
+	padding-left: 30px;
+	background: url("h1bg.png") 0px 5px no-repeat;
+}
+
+h2 {
+	font-size: 12pt;
+	font-style:italic;
+	font-weight: bold;
+	color: #005080;
+	margin-left: 0px;
+}
+
+h3 {
+	font-size: 10pt;
+	font-weight: bold;
+	color: black;
+	margin-left: 0px;
+}
+
+p {
+	text-align: justify;
+}
+
+td.faq_question {
+	font-weight: bold;
+	color: #333333;
+	background-color: #E0E0E0;
+}
+
+tr.even, tr.a {
+	color: black;
+	background-color: #ddd;
+}
+
+tr.odd, tr.b {
+	color: black;
+	background-color: #eee;
+}
+
+pre {
+	font-size: 8pt;
+	font-family: monospace;
+	margin: 0;
+	color: black;
+	background-color: #ddd;
+}
+
+code {
+	font-size: 8pt;
+	font-family: monospace;
+}

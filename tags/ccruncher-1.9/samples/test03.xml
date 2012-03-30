@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher>
+
+  <title>test03</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  100 obligors
+  1 unique sector
+  uncorrelated defaults
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  Each obligor has an asset with this profile:
+    asset value at t=12 is 1 if obligor is alive and
+    asset value at t=12 is 0 if obligor dead (default)
+
+Expected Results:
+-------------------------------
+  This problem has an explicit solution. The asset loss
+  at t=12 for each clieant can be modeled as a Bernouilli(0.1).
+  The sum of 100 uncorrelated Bernouillis is a Binomial(100,0.1).
+  Then, the portfolio loss at t=12 is a Z~Binomial(100,0.1).
+
+How to check results?
+-------------------------------
+  > #loading script
+  > source("bin/ccreport.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio.csv")
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x[,1]+1, 101)
+  > #theoretical probabilities
+  > prob <- dbinom(0:100, 100, 0.1)
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst$p.value
+
+  ]]>
+  </description>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <property name="time.0" value="01/01/2005"/>
+    <property name="time.T" value="01/01/2006"/>
+    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="stopcriteria.maxseconds" value="30000000"/>
+    <property name="copula.type" value="gaussian"/>
+    <property name="copula.seed" value="0"/>
+    <property name="montecarlo.antithetic" value="false"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                       INTERESTS                                -->
+  <!-- ============================================================== -->
+  <interest type="compound">
+    <rate t="0D" r="0%"/>
+    <rate t="1M" r="0%"/>
+    <rate t="2M" r="0%"/>
+    <rate t="3M" r="0%"/>
+    <rate t="6M" r="0%"/>
+    <rate t="1Y" r="0%"/>
+    <rate t="2Y" r="0%"/>
+    <rate t="5Y" r="0%"/>
+    <rate t="10Y" r="0%"/>
+  </interest>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="dead"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <mtransitions period="12">
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
+  </mtransitions>
+
+  <!-- ============================================================== -->
+  <!--                           SECTORS                              -->
+  <!-- ============================================================== -->
+  <sectors>
+    <sector name="S1" description="unique sector"/>
+  </sectors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <mcorrels>
+    <sigma sector1="S1" sector2="S1" value="0%"/>
+  </mcorrels>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <obligor rating="A" sector="S1" id="001">
+      <asset date="01/01/2005" id="op01">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="002">
+      <asset date="01/01/2005" id="op02">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="003">
+      <asset date="01/01/2005" id="op03">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="004">
+      <asset date="01/01/2005" id="op04">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="005">
+      <asset date="01/01/2005" id="op05">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="006">
+      <asset date="01/01/2005" id="op06">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="007">
+      <asset date="01/01/2005" id="op07">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="008">
+      <asset date="01/01/2005" id="op08">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="009">
+      <asset date="01/01/2005" id="op09">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="010">
+      <asset date="01/01/2005" id="op10">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="011">
+      <asset date="01/01/2005" id="op11">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="012">
+      <asset date="01/01/2005" id="op12">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="013">
+      <asset date="01/01/2005" id="op13">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="014">
+      <asset date="01/01/2005" id="op14">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="015">
+      <asset date="01/01/2005" id="op15">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="016">
+      <asset date="01/01/2005" id="op16">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="017">
+      <asset date="01/01/2005" id="op17">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="018">
+      <asset date="01/01/2005" id="op18">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="019">
+      <asset date="01/01/2005" id="op19">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="020">
+      <asset date="01/01/2005" id="op20">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="021">
+      <asset date="01/01/2005" id="op21">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="022">
+      <asset date="01/01/2005" id="op22">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="023">
+      <asset date="01/01/2005" id="op23">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="024">
+      <asset date="01/01/2005" id="op24">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="025">
+      <asset date="01/01/2005" id="op25">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="026">
+      <asset date="01/01/2005" id="op26">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="027">
+      <asset date="01/01/2005" id="op27">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="028">
+      <asset date="01/01/2005" id="op28">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="029">
+      <asset date="01/01/2005" id="op29">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="030">
+      <asset date="01/01/2005" id="op30">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="031">
+      <asset date="01/01/2005" id="op31">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="032">
+      <asset date="01/01/2005" id="op32">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="033">
+      <asset date="01/01/2005" id="op33">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="034">
+      <asset date="01/01/2005" id="op34">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="035">
+      <asset date="01/01/2005" id="op35">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="036">
+      <asset date="01/01/2005" id="op36">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="037">
+      <asset date="01/01/2005" id="op37">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="038">
+      <asset date="01/01/2005" id="op38">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="039">
+      <asset date="01/01/2005" id="op39">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="040">
+      <asset date="01/01/2005" id="op40">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="041">
+      <asset date="01/01/2005" id="op41">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="042">
+      <asset date="01/01/2005" id="op42">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="043">
+      <asset date="01/01/2005" id="op43">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="044">
+      <asset date="01/01/2005" id="op44">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="045">
+      <asset date="01/01/2005" id="op45">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="046">
+      <asset date="01/01/2005" id="op46">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="047">
+      <asset date="01/01/2005" id="op47">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="048">
+      <asset date="01/01/2005" id="op48">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="049">
+      <asset date="01/01/2005" id="op49">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="050">
+      <asset date="01/01/2005" id="op50">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="051">
+      <asset date="01/01/2005" id="op51">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="052">
+      <asset date="01/01/2005" id="op52">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="053">
+      <asset date="01/01/2005" id="op53">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="054">
+      <asset date="01/01/2005" id="op54">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="055">
+      <asset date="01/01/2005" id="op55">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="056">
+      <asset date="01/01/2005" id="op56">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="057">
+      <asset date="01/01/2005" id="op57">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="058">
+      <asset date="01/01/2005" id="op58">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="059">
+      <asset date="01/01/2005" id="op59">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="060">
+      <asset date="01/01/2005" id="op60">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="061">
+      <asset date="01/01/2005" id="op61">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="062">
+      <asset date="01/01/2005" id="op62">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="063">
+      <asset date="01/01/2005" id="op63">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="064">
+      <asset date="01/01/2005" id="op64">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="065">
+      <asset date="01/01/2005" id="op65">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="066">
+      <asset date="01/01/2005" id="op66">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="067">
+      <asset date="01/01/2005" id="op67">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="068">
+      <asset date="01/01/2005" id="op68">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="069">
+      <asset date="01/01/2005" id="op69">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="070">
+      <asset date="01/01/2005" id="op70">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="071">
+      <asset date="01/01/2005" id="op71">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="072">
+      <asset date="01/01/2005" id="op72">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="073">
+      <asset date="01/01/2005" id="op73">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="074">
+      <asset date="01/01/2005" id="op74">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="075">
+      <asset date="01/01/2005" id="op75">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="076">
+      <asset date="01/01/2005" id="op76">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="077">
+      <asset date="01/01/2005" id="op77">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="078">
+      <asset date="01/01/2005" id="op78">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="079">
+      <asset date="01/01/2005" id="op79">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="080">
+      <asset date="01/01/2005" id="op80">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="081">
+      <asset date="01/01/2005" id="op81">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="082">
+      <asset date="01/01/2005" id="op82">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="083">
+      <asset date="01/01/2005" id="op83">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="084">
+      <asset date="01/01/2005" id="op84">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="085">
+      <asset date="01/01/2005" id="op85">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="086">
+      <asset date="01/01/2005" id="op86">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="087">
+      <asset date="01/01/2005" id="op87">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="088">
+      <asset date="01/01/2005" id="op88">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="089">
+      <asset date="01/01/2005" id="op89">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="090">
+      <asset date="01/01/2005" id="op90">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="091">
+      <asset date="01/01/2005" id="op91">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="092">
+      <asset date="01/01/2005" id="op92">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="093">
+      <asset date="01/01/2005" id="op93">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="094">
+      <asset date="01/01/2005" id="op94">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="095">
+      <asset date="01/01/2005" id="op95">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="096">
+      <asset date="01/01/2005" id="op96">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="097">
+      <asset date="01/01/2005" id="op97">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="098">
+      <asset date="01/01/2005" id="op98">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="099">
+      <asset date="01/01/2005" id="op99">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" sector="S1" id="100">
+      <asset date="01/01/2005" id="op100">
+        <data>
+          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+  </portfolio>
+
+</ccruncher>

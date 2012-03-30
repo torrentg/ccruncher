@@ -1,0 +1,29 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+  * case studies
+  * graphic interface
+
+Future works
+-------------------
+  * input file in binary format
+  * add risk aggregation to documentation
+     - explain how to distribute the risk (eg. ES) along segments
+     - see 'introduction to credit risk modeling'
+  * improve functional tests
+     - examples based on real data
+     - improve documentation adding tests section
+  * allow evaluation in multiple time horizons
+      <breaks>
+        <break name="T25Y" at="25Y" method="exp">
+          <segmentations>
+            ..
+          </segmentations>
+        </break>
+      </breaks>
+  * considere that a obligor could belong to a few different sectors
+  * explain how to determine the minimum number of simulations required
+

@@ -1,0 +1,228 @@
+
+CCRUNCHER CHANGELOG
+===================
+
+version 1.9 (Mar. 2012)
+--------------------------
+  * added macros support
+  * updated MiniCppUnit version
+  * solved survival precision problem
+  * modified T-student CDF speedup algorithm
+  * allowed distinct time units (D,M,Y) in interest rates
+  * technical document updated
+
+version 1.8 (May. 2011)
+--------------------------
+  * performance improvements
+  * added support for stochastic exposure
+  * solved bug with obligor recovery retrieval
+  * block matrix cholesky decomposition reviewed
+  * removed unused attribute 'name' from obligor and asset
+  * removed 'parsing ...' entries from stdout
+
+version 1.7 (Jan. 2011)
+--------------------------
+  * added support for stochastic recoveries
+  * exposure concept replace cashflow events
+  * added support for simple interest and continuous interest rates
+  * borrowers renamed to obligors
+  * implicit segment 'rest' renamed to 'unassigned'
+  * solved minor bugs reported by g++ in ubuntu distro
+  * updated the report look
+
+version 1.6 (Sep. 2010)
+--------------------------
+  * technical document revised
+  * improved t-student copula fit
+  * performance improvements
+  * added multi-thread support
+  * removed MPI support
+  * portfolio file can be referenced in input file
+  * added default recovery for borrowers and assets
+  * removed buffer aggregators
+
+version 1.5 (Feb. 2010)
+--------------------------
+  * added condition number computation to cholesky matrix
+  * added transition matrix regularization 
+  * speed up cdf t-student using a lookup table
+  * speed up portfolio parsing
+  * speed up portfolio aggregation
+  * in xml input file, removed interests tag
+  * in xml input file, removed epsilon attribute from mtransitions tag
+  * in xml input file, removed epsilon attribute from mcorrels tag
+  * in xml input file, removed epsilon attribute from survival tag
+  * in xml input file, attribute desc renamed to decription
+  * in xml input file, tag params renamed to parameters
+  * in xml input file, renamed implicit segmentations
+  * in xml file, added support for percentages
+  * recovery expressed as percentage
+  * code refactoring
+  * changed site look & feel
+
+version 1.4 (Jul. 2009)
+--------------------------
+  * improved technical document
+  * add optional tag 'title' in xml file input
+  * add optional tag 'description' in xml file input
+  * changed from discrete time to continuous time
+  * bugfix: error in t-student copula simulation
+  * MersenneTwister library replaced by GSL library
+  * TNT/Jama library replaced by GSL library
+  * improved R script performance
+  * updated to gcc-4.4.0
+  * added MPICH support
+
+version 1.3 (Dec. 2008)
+--------------------------
+  * decimal digits rounded at report
+  * added ccruncher name explanation in faq
+  * changed dependencies info look&feel
+  * script report renamed to ccreport.sh
+  * modified report to be displayed as html
+  * bugfix: error in gaussian copula simulation
+  * modified output files (name, format and content)
+  * added optional bulk of copula values to file
+  * added optional bulk of simulated default times to file
+  * added t-student copula generator
+
+version 1.2 (Sep. 2008)
+--------------------------
+  * improved W3C compliance in html documentation
+  * changed html encoding (ISO-8859-1 -> UTF-8)
+  * directory share/ renamed to deps/
+  * updated expat version (1.95.8 -> 2.0.1)
+  * updated valgrind version (3.2.3 -> 3.3.0)
+  * updated open-mpi version (1.1.8 -> 1.2.4)
+  * updated R project version (2.5.1 -> 2.7.1)
+  * directory shared/ renamed to deps/
+  * minor adaptions to gcc-4.3.0
+  * subversion repository reorganized
+  * updated MS Visual Studio project (MSVC7 -> MSVC9)
+  * solved minor bug in TimerTest class
+
+version 1.1 (Aug. 2007)
+--------------------------
+  * removed order xml tag in rating and sector
+  * updated autoconf configuration
+  * updated to new jama version (1.2.4 -> 1.2.5)
+  * solved bug related with unique asset id check
+  * solved bug when computing recovery with a unique event
+  * added asset creation date
+  * created XSD file for ccruncher xml input file
+  * Technical Document rewrited and translated to english
+  * Modified asset losses computation algorithm
+  * added --listloss command line option
+  * changed Date class (in order to avoid bottlenecks)
+  * removed unused headers from code
+  * class Client renamed to Borrower
+  * changed site look & feel
+  * releases unused memory
+  * added check over asset id uniqueness
+
+version 1.0 (Dec. 2006)
+--------------------------
+  * verified that ccruncher works using Open-MPI
+  * bug: solved multiple touch files (in mpi version)
+  * upgraded to new LAM/MPI version
+  * upgraded to new MiniCppUnit version
+  * updated to new valgrind version
+  * updated to new R project version
+  * forced explicit friend function declaration
+
+version 0.9 (Feb. 2006)
+--------------------------
+  * code refactoring
+  * removed rating-path method
+  * removed simule values option
+  * netting renamed to recovery
+  * modified asset value algorithm (thanks to GG)
+  * upgraded to new R and valgrind versions
+  * technical doc updated
+  * site reviewed (thanks to Francesc and Pei Hwee)
+
+version 0.8 (Nov. 2005)
+--------------------------
+  * root docs moved to doc/ directory
+  * added build directory in src dist
+  * added LastChangedRevision to code files
+  * added expat legacy code support
+  * improved html doc usability
+  * solved bug related to backtrace in debug mode
+  * solved cygwin compilation errors
+  * minor changes in MonteCarlo class
+
+version 0.7 (Oct. 2005)
+--------------------------
+  * technical document completed
+  * creditcruncher tag replaced by ccruncher tag
+  * removed stdout date list
+  * portfolio value at t=T (not t=0 as previous versions)
+
+version 0.6 (Sep. 2005)
+--------------------------
+  * report generation using R (efective risk computation)
+  * added error analisis in documentation
+  * replaced concept attribute by segmentation in belongs-to xml tag
+  * bugfix: removed macro XMLCALL (old platforms don't understand)
+  * added TCE (Tail Conditional Expectation or Expected Shortfall) computation
+  * simulated values can be: portfolio value or portfolio losses (new)
+  * added makefile in $CCRUNCHER/doc/tex directory
+  * added pdf doc to rollversion system
+  * corrected some mistakes on pdf doc (still incomplete)
+
+version 0.5 (Aug. 2005)
+--------------------------
+  * important: implemented specialized Gaussian Copula
+      . adapted to client correlation matrix structure
+      . low memory footprint
+      . fast computations
+      . allows copulas of 50.000 components
+  * some classes has been refactorized
+  * upgraded to new zlib version
+  * increased verbosity
+  * increased performance in inverse survival computation
+  * added MPI support
+
+version 0.4 (Jul. 2005)
+--------------------------
+  * bugfix: solved bug when seed=0L
+  * bugfix: solved bug in time-to-default algorithm
+  * upgraded to new tnt/jama version
+  * added survival tag at DTD
+  * autoflush if more than 30 secs without saving results
+  * added gzip input file suport
+  * modified portfolio value function computation
+  * replaced concept recovery/exposure by netting
+  * fast parsing when portfolio section is not required
+
+version 0.3 (Jun. 2005)
+--------------------------
+  * bugfix: solved bug in correlation matrix check when correl = 0
+  * changed attribute period from mtransitions tag: (year -> month)
+  * improved checks applied to transition matrix
+  * removed aggregators
+  * new SegmentAggregator (simplified)
+  * cc2gpi tool replaced by plotdata script
+  * added time-to-default simulation method
+  * create script grapher for mtrans
+  * create script bin/rollversion.sh
+  * add repository version number (RXXXX) to --version options
+  * upgraded to new tnt/jama version 
+  * www site content reviewed & updated
+  * created MSVC7 project (and code companion)
+  * when a error raise, prints stack trace (only in linux)
+
+version 0.2 (Apr. 2005)
+--------------------------
+  * added POSIX compliance in command line arguments
+  * output file changed from xml to tabulated text
+  * output beautified
+  * asset refactoring
+  * bugfix: 'make distcheck' now works
+  * migrated from xercesc xml parser to expat xml parser
+
+version 0.1 (Jan. 2005)
+--------------------------
+  * initial release
+
