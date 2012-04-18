@@ -51,8 +51,7 @@ void ccruncher::IData::release()
 }
 
 //===========================================================================
-// constructor
-// used to do tests
+// default constructor
 //===========================================================================
 ccruncher::IData::IData()
 {
@@ -65,46 +64,63 @@ ccruncher::IData::IData()
 ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m) throw(Exception)
 {
   // initializing content
-  filename = xmlfilename;
   init();
+  filename = xmlfilename;
 
-  // parsing document
-  try
+  if (filename == STDIN_FILENAME)
+  {
+    // using standard input
+    parse(cin, m);
+  }
+  else
   {
     // gziped file stream, if file isn't a gzip, is like a ifstream
-    igzstream xmlstream((const char *) xmlfilename.c_str());
-    if (xmlstream.peek() == EOF)
+    igzstream xmlstream((const char *) filename.c_str());
+    if (xmlstream.peek() == EOF) 
     {
-      throw Exception("can't open file " + xmlfilename);
+      throw Exception("can't open file " + filename);
     }
-    else
+    parse(xmlstream, m);
+  }
+}
+
+//===========================================================================
+// parse
+//===========================================================================
+void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exception)
+{
+  try
+  {
+    // output header
+    Logger::addBlankLine();
+    Logger::trace("reading input file", '*');
+
+    // trace defines
+    map<string,string>::const_iterator it;
+    for (it=m.begin() ; it != m.end(); it++) {
+      checkDefine((*it).first, (*it).second);
+      Logger::trace("define (command line)", (*it).first+"="+(*it).second);
+    }
+
+    // trace file info
+    Logger::newIndentLevel();
+    if (filename != STDIN_FILENAME) 
     {
-      // output trace
-      Logger::addBlankLine();
-      Logger::trace("reading input file", '*');
-      Logger::newIndentLevel();
-      Logger::trace("file size", Format::bytes(File::filesize(xmlfilename)));
-
-      // trace defines
-      map<string,string>::const_iterator it;
-      for (it=m.begin() ; it != m.end(); it++) {
-        checkDefine((*it).first, (*it).second);
-        Logger::trace("define (command line)", (*it).first+"="+(*it).second);
-      }
-
-      // parsing
-      Timer timer(true);
-      ExpatParser parser;
-      parser.setDefines(m);
-      parser.parse(xmlstream, this);
-      Logger::trace("elapsed time parsing data", timer);
-      Logger::previousIndentLevel();
+      Logger::trace("file size (" + filename + ")", Format::bytes(File::filesize(filename)));
     }
+
+    // parsing
+    Timer timer(true);
+    ExpatParser parser;
+    parser.setDefines(m);
+    parser.parse(is, this);
+    Logger::trace("elapsed time parsing data", timer);
+    Logger::previousIndentLevel();
   }
   catch(std::exception &e)
   {
     release();
-    throw Exception(e);
+    throw;
   }
 }
 
@@ -340,7 +356,10 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
   {
     try
     {
-      string path = File::dirname(filename);
+      string path;
+      if (filename==STDIN_FILENAME) path = File::getWorkDir();
+      else path = File::dirname(filename);
+
       string filepath = File::filepath(path, ref);
       igzstream xmlstream((const char *) filepath.c_str());
       if (xmlstream.peek() == EOF)

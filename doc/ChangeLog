@@ -2,6 +2,10 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 2.0 (XXX. 2012)
+--------------------------
+  * input file can be read from stdin
+
 version 1.9 (Mar. 2012)
 --------------------------
   * added macros support
