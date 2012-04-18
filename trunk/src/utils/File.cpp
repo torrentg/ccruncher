@@ -43,7 +43,7 @@
 #endif
 
 //===========================================================================
-// getWorkDirectory
+// isAbsolutePath
 //===========================================================================
 bool ccruncher::File::isAbsolutePath(const string &str)
 {

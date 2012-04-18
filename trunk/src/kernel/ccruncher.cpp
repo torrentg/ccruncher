@@ -57,7 +57,7 @@ void usage();
 void version();
 void copyright();
 void setnice(int) throw(Exception);
-void run(string, string, int) throw(Exception);
+void run(const string &, const string &, int) throw(Exception);
 void catchsignal(int signal);
 
 //---------------------------------------------------------------------------
@@ -228,9 +228,7 @@ int main(int argc, char *argv[])
   // retrieving input filename
   if (argc == optind)
   {
-    cerr << "xml input file not specified" << endl;
-    cerr << "use --help option for more information" << endl;
-    return 1;
+    sfilename = STDIN_FILENAME;
   }
   else if (argc - optind > 1)
   {
@@ -240,7 +238,16 @@ int main(int argc, char *argv[])
   }
   else
   {
-    sfilename = string(argv[argc-1]);
+    try
+    {
+      sfilename = string(argv[argc-1]);
+      File::checkFile(sfilename, "r");
+    }
+    catch(Exception &e) 
+    {
+      cerr << "can't open file " << sfilename << endl;
+      return 1;
+    }
   }
 
   // checking arguments consistency
@@ -291,13 +298,10 @@ int main(int argc, char *argv[])
 //===========================================================================
 // run
 //===========================================================================
-void run(string filename, string path, int nthreads) throw(Exception)
+void run(const string &filename, const string &path, int nthreads) throw(Exception)
 {
   Timer timer(true);
-
-  // checking input file readeability
-  File::checkFile(filename, "r");
-
+  
   // checking output directory
   if (!File::existDir(path))
   {
@@ -403,7 +407,8 @@ void usage()
   "    the Monte Carlo method. More info at http://www.ccruncher.net\n"
   "  arguments:\n"
   "    file           xml file containing the problem to be solved. This\n"
-  "                   file can be gziped (caution, zip format not suported)\n"
+  "                   file can be gziped (caution, zip format not suported).\n"
+  "                   You can omit this parameter an enter data from stdin.\n"
   "  options:\n"
   "    -f             force output files overwrite\n"
   "    -q             quiet mode, non-verbose\n"

@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <iostream>
 #include <string>
 #include <map>
 #include "params/Params.hpp"
@@ -41,6 +42,8 @@
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
+
+#define STDIN_FILENAME "<stdin>"
 
 using namespace std;
 using namespace ccruncher;
@@ -90,6 +93,8 @@ class IData : public ExpatHandlers
     void release();
     // validate simulation data
     void validate() throw(Exception);
+	// parse data
+	void parse(istream &is, const map<string,string> &m) throw(Exception);
     // parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
     // check define
