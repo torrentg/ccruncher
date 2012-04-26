@@ -340,19 +340,24 @@ test04 <- function()
   portfolio <- ccruncher.read("data/test04/portfolio.csv");
   copula <- ccruncher.read("data/test04/copula.csv");
 
-  #checking loss distribution
+  #checking EL
   cat("  expected loss: ")
   risk <- ccruncher.risk(portfolio[,1])
   if (10 < risk$mean-qnorm(0.95)*risk$mean_stderr | risk$mean+qnorm(0.95)*risk$mean_stderr < 10) {
     cat("FAILED\n");
   }
+  else {
+    cat("OK\n");
+  }
+
+  #checking VAR
   cat("  value at risk: ")
   rho = 2*sin(pi*0.2/6)
   percentiles=c(0.90, 0.95, 0.975, 0.99)
   evars = pnorm((sqrt(rho)*qnorm(percentiles)+qnorm(0.1))/(sqrt(1-rho)))
   aux = abs(risk$VAR[1:4,2] - evars*100);
   if (length(aux[aux>1])) {
-    cat("FAILED");
+    cat("FAILED\n");
   } else { 
     cat("OK\n"); 
   }
