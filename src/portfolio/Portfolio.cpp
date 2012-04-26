@@ -75,7 +75,6 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
   if(idobligors.find(val->id) != idobligors.end())
   {
     string msg = "obligor id " + val->id + " repeated";
-    delete val;
     throw Exception(msg);
   }
   else
@@ -90,7 +89,6 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
     if (idassets.find(id) != idassets.end())
     {
        string msg = "asset id " + id + " repeated";
-       delete val;
        throw Exception(msg);
     }
     else 
@@ -106,7 +104,6 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
   }
   catch(std::exception &e)
   {
-    delete val;
     throw Exception(e);
   }
 }
@@ -133,6 +130,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     }
   }
   else if (isEqual(name_,"obligor")) {
+    assert(auxobligor == NULL);
     auxobligor = new Obligor(*ratings, *sectors, *segmentations, *interest, date1, date2);
     eppush(eu, auxobligor, name_, attributes);
   }
