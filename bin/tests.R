@@ -190,7 +190,6 @@ isComplete <- function(segmentation1, segmentation2)
   
   aux <- apply(segmentation1,1,sum) - apply(segmentation2,1,sum)
   if (length(aux[aux>epsilon])) { 
-cat(aux[aux>epsilon])
     return(FALSE);
   }
 
@@ -331,14 +330,7 @@ test03 <- function()
 }
 
 #===========================================================================
-# description
-#   checks that every column is a uniform[0,1]
-# arguments
-#   filename: string. segmentation filename
-# returns
-#   none
-# example
-#   test4("copula.csv", correls)
+# test04
 #===========================================================================
 test04 <- function()
 {
@@ -346,8 +338,57 @@ test04 <- function()
   
   #reading data
   portfolio <- ccruncher.read("data/test04/portfolio.csv");
-  sectors <- ccruncher.read("data/test04/sectors.csv");
   copula <- ccruncher.read("data/test04/copula.csv");
+
+  #checking loss distribution
+  cat("  expected loss: ")
+  risk <- ccruncher.risk(portfolio[,1])
+  if (10 < risk$mean-qnorm(0.95)*risk$mean_stderr | risk$mean+qnorm(0.95)*risk$mean_stderr < 10) {
+    cat("FAILED\n");
+  }
+  cat("  value at risk: ")
+  rho = 2*sin(pi*0.2/6)
+  percentiles=c(0.90, 0.95, 0.975, 0.99)
+  evars = pnorm((sqrt(rho)*qnorm(percentiles)+qnorm(0.1))/(sqrt(1-rho)))
+  aux = abs(risk$VAR[1:4,2] - evars*100);
+  if (length(aux[aux>1])) {
+    cat("FAILED");
+  } else { 
+    cat("OK\n"); 
+  }
+
+  #checking copula (uniform)
+  cat("  copula distributions: ")
+  if (areUniforms(copula)) {
+    cat("OK\n");
+  } else { 
+    cat("FAILED\n"); 
+  }
+  
+  #checking copula (correlations)
+  cat("  copula correlations: ")
+  smatrix <- matrix(nrow=1,ncol=1,c(0.20))
+  bpsector <- c(100)
+  correlations = s2bcorrel(smatrix, bpsector)
+  if (checkCorrelations(copula, correlations)) {
+    cat("OK\n");
+  } else { 
+    cat("FAILED\n"); 
+  }
+  
+}
+
+#===========================================================================
+# test05
+#===========================================================================
+test05 <- function()
+{
+  cat("test05\n");
+  
+  #reading data
+  portfolio <- ccruncher.read("data/test05/portfolio.csv");
+  sectors <- ccruncher.read("data/test05/sectors.csv");
+  copula <- ccruncher.read("data/test05/copula.csv");
 
   #checking segmention completeness
   cat("  segmentations consistency: ")
@@ -377,4 +418,3 @@ test04 <- function()
   }
   
 }
-
