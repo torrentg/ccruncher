@@ -135,6 +135,7 @@ runcc test01;
 runcc test02;
 runcc test03;
 runcc test04;
+runcc test05;
 
 R --vanilla --slave << _EOF_
     source("./bin/ccreport.R", echo=FALSE);
@@ -144,5 +145,5 @@ R --vanilla --slave << _EOF_
     test02();
     test03();
     test04();
+    test05();
 _EOF_
-
