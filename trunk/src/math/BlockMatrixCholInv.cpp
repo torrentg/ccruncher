@@ -127,6 +127,40 @@ int ccruncher::BlockMatrixCholInv::getDim() const
 }
 
 //===========================================================================
+// returns element at row,col of inverse matrix (lower matrix)
+// non-optimal function, use only to debug or to test code
+//===========================================================================
+double ccruncher::BlockMatrixCholInv::get(int row, int col) const
+{
+  assert(row >= 0 && row < N);
+  assert(col >= 0 && col < N);
+
+  if (col < row)
+  {
+    // find sector of the element
+    int sector = -1;
+    for(int sum=0,i=0; i<M; i++)
+    {
+      sum += n[i];
+      if (col < sum) {
+        sector = i;
+        break;
+      }
+    }
+    assert(sector >= 0);
+    return COEFS2(row, sector);
+  }
+  else if (col == row)
+  {
+    return diag[col];
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+//===========================================================================
 // returns cholesky matrix multiplied by vector x
 //===========================================================================
 void ccruncher::BlockMatrixCholInv::mult(double *x, double *ret) const

@@ -64,6 +64,8 @@ class BlockMatrixCholInv
     ~BlockMatrixCholInv();
     // returns matrix dimension (N)
     int getDim() const;
+    // returns matrix element
+    double get(int row, int col) const;
     // multiplies this matrix by a vector
     void mult(double *x, double *ret) const;
 
