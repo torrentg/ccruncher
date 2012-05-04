@@ -658,7 +658,7 @@ void ccruncher_test::BlockMatrixCholTest::check(double **C, int *n, int M, Block
     for (int j=0;j<N;j++)
     {
       double val = 0.0;
-      for(int k=; k<N; k++)
+      for(int k=0; k<N; k++)
       {
         val += inv->get(i,k) * chol->get(k,j);
       }
