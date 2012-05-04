@@ -188,29 +188,20 @@ double ccruncher::BlockGaussianCopula::transform(double val)
 }
 
 //===========================================================================
-// randNm
-// fill aux1 with rand N(0,1) (independents)
-// fill aux2 with rand N(0,1) (correlateds)
-//===========================================================================
-void ccruncher::BlockGaussianCopula::randNm()
-{
-  for(int i=0; i<n; i++)
-  {
-    aux1[i] = gsl_ran_ugaussian(rng);
-  }
-
-  chol->mult(aux1, aux2);
-}
-
-//===========================================================================
 // Compute a copula. Put in aux1 a random vector where each marginal follows
 // a U[0,1] related by a normal copula
 //===========================================================================
 void ccruncher::BlockGaussianCopula::next()
 {
-  // generate a random vector following N(0,sigmas) into aux2
-  randNm();
+  // fill aux1 with rand N(0,1) (independents)
+  for(int i=0; i<n; i++)
+  {
+    aux1[i] = gsl_ran_ugaussian(rng);
+  }
 
+  // fill aux2 with rand N(0,A) (correlateds)
+  chol->mult(aux1, aux2);
+  
   // puting in aux1 the copula
   for(int i=0; i<n; i++)
   {
@@ -252,7 +243,7 @@ void ccruncher::BlockGaussianCopula::setSeed(long seed)
 //===========================================================================
 // returns the cholesky matrix condition number
 //===========================================================================
-double ccruncher::BlockGaussianCopula::getConditionNumber()
+double ccruncher::BlockGaussianCopula::getConditionNumber() const
 {
   return chol->getConditionNumber();
 }

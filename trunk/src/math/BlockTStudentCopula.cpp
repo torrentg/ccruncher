@@ -194,28 +194,20 @@ double ccruncher::BlockTStudentCopula::transform(double val)
 }
 
 //===========================================================================
-// randNm
-// fill aux1 with rand N(0,1) (independents)
-// fill aux2 with rand N(0,1) (correlateds)
-//===========================================================================
-void ccruncher::BlockTStudentCopula::randNm()
-{
-  for(int i=0; i<n; i++)
-  {
-    aux1[i] = gsl_ran_ugaussian(rng);
-  }
-
-  chol->mult(aux1, aux2);
-}
-
-//===========================================================================
 // Compute a copula. Put in aux1 a random vector where each marginal follows
 // a U[0,1] related by a t-student copula
 //===========================================================================
 void ccruncher::BlockTStudentCopula::next()
 {
-  // generate a random vector following N(0,sigmas) into aux2
-  randNm();
+  // fill aux1 with rand N(0,1) (independents)
+  for(int i=0; i<n; i++)
+  {
+    aux1[i] = gsl_ran_ugaussian(rng);
+  }
+
+  // fill aux2 with rand N(0,A) (correlateds)
+  chol->mult(aux1, aux2);
+
   // create the factor (involves the generation of a chi-square)
   double chisq =  gsl_ran_chisq(rng, ndf);
   if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
@@ -263,7 +255,7 @@ void ccruncher::BlockTStudentCopula::setSeed(long seed)
 //===========================================================================
 // returns the cholesky matrix condition number
 //===========================================================================
-double ccruncher::BlockTStudentCopula::getConditionNumber()
+double ccruncher::BlockTStudentCopula::getConditionNumber() const
 {
   return chol->getConditionNumber();
 }

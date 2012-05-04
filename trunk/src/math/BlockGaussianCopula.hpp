@@ -67,8 +67,6 @@ class BlockGaussianCopula : public Copula
     void finalize();
     // transform correlation
     double transform(double val);
-    // generates correlated normal numbers
-    void randNm();
 
   public:
 
@@ -91,7 +89,7 @@ class BlockGaussianCopula : public Copula
     // random number generator seed
     void setSeed(long);
     // returns the cholesky condition number
-    double getConditionNumber();
+    double getConditionNumber() const;
     // returns the Random Number Generator
     gsl_rng* getRng();
 
