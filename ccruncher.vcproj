@@ -286,7 +286,15 @@
 					>
 				</File>
 				<File
+					RelativePath="src\math\BlockMatrixCholInv.cpp"
+					>
+				</File>
+				<File
 					RelativePath="src\math\BlockMatrixChol.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\BlockMatrixCholInv.hpp"
 					>
 				</File>
 				<File

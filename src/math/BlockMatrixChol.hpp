@@ -32,6 +32,9 @@
 
 namespace ccruncher {
 
+// forward declaration
+class BlockMatrixCholInv;
+
 //---------------------------------------------------------------------------
 
 class BlockMatrixChol
@@ -77,15 +80,22 @@ class BlockMatrixChol
     // assignement operator
     BlockMatrixChol& operator = (const BlockMatrixChol &x);
     // returns matrix dimension (N)
-    int getDim();
+    int getDim() const;
     // returns matrix condition number
-    double getConditionNumber();
+    double getConditionNumber() const;
     // returns matrix determinant
-    double getDeterminant();
+    double getDeterminant() const;
+    // returns matrix inverse
+    BlockMatrixCholInv* getInverse() const;
     // returns matrix element
-    double get(int row, int col);
+    double get(int row, int col) const;
     // multiplies this matrix by a vector
-    void mult(double *x, double *ret);
+    void mult(double *x, double *ret) const;
+
+  public:
+
+    // friend class
+    friend class BlockMatrixCholInv;
 
 };
 
@@ -98,4 +108,3 @@ class BlockMatrixChol
 #endif
 
 //---------------------------------------------------------------------------
-

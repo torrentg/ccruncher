@@ -10,6 +10,7 @@ HEADERS += \
     src/math/Copula.hpp \
     src/math/BlockTStudentCopula.hpp \
     src/math/BlockMatrixChol.hpp \
+    src/math/BlockMatrixCholInv.hpp \
     src/math/BlockGaussianCopula.hpp \
     src/math/FastTStudentCdf.hpp \
     src/params/Params.hpp \
@@ -56,6 +57,7 @@ SOURCES += \
     src/math/PowMatrix.cpp \
     src/math/BlockTStudentCopula.cpp \
     src/math/BlockMatrixChol.cpp \
+    src/math/BlockMatrixCholInv.cpp \
     src/math/BlockGaussianCopula.cpp \
     src/math/FastTStudentCdf.cpp \
     src/params/Params.cpp \

@@ -41,6 +41,7 @@ ccruncher_SOURCES = \
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
+    ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
@@ -84,6 +85,7 @@ ccruncher_SOURCES = \
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/BlockMatrixChol.hpp\
+    ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
@@ -171,6 +173,7 @@ tests_SOURCES = \
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
+    ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
@@ -245,6 +248,7 @@ tests_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/BlockMatrixChol.hpp\
+    ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
@@ -296,6 +300,7 @@ samplegen_SOURCES = \
     ../src/correlations/CorrelationMatrix.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/BlockMatrixChol.cpp\
+    ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
@@ -339,6 +344,7 @@ samplegen_SOURCES = \
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/BlockMatrixChol.hpp\
+    ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\

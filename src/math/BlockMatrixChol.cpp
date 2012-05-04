@@ -25,6 +25,7 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_eigen.h>
 #include "math/BlockMatrixChol.hpp"
+#include "math/BlockMatrixCholInv.hpp"
 #include "utils/Arrays.hpp"
 #include <cassert>
 
@@ -292,7 +293,7 @@ void ccruncher::BlockMatrixChol::reset()
 //===========================================================================
 // return the matrix dimension
 //===========================================================================
-int ccruncher::BlockMatrixChol::getDim()
+int ccruncher::BlockMatrixChol::getDim() const
 {
   return N;
 }
@@ -301,7 +302,7 @@ int ccruncher::BlockMatrixChol::getDim()
 // returns element at row,col of cholesky matrix (lower matrix)
 // non-optimal function, use only to debug or to test code
 //===========================================================================
-double ccruncher::BlockMatrixChol::get(int row, int col)
+double ccruncher::BlockMatrixChol::get(int row, int col) const
 {
   assert(row >= 0 && row < N);
   assert(col >= 0 && col < N);
@@ -334,7 +335,7 @@ double ccruncher::BlockMatrixChol::get(int row, int col)
 //===========================================================================
 // returns cholesky matrix multiplied by vector x
 //===========================================================================
-void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
+void ccruncher::BlockMatrixChol::mult(double *x, double *ret) const
 {
   int i, j, r;
   double *ptr;
@@ -516,7 +517,7 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
 // if A = L*L' where L is the Cholesky matrix, then the condition number
 // is sqrt(max(eig(A)),min(eig(A))
 //===========================================================================
-double ccruncher::BlockMatrixChol::getConditionNumber()
+double ccruncher::BlockMatrixChol::getConditionNumber() const
 {
   double eigmin = +1e100;
   double eigmax = -1e100;
@@ -537,7 +538,7 @@ double ccruncher::BlockMatrixChol::getConditionNumber()
 // observe that det(L) = sqrt(det(A))
 // note: equivalent to the multiplication of all Cholesky diagonal values
 //===========================================================================
-double ccruncher::BlockMatrixChol::getDeterminant()
+double ccruncher::BlockMatrixChol::getDeterminant() const
 {
   double det = 1.0;
 
@@ -554,4 +555,12 @@ double ccruncher::BlockMatrixChol::getDeterminant()
   }
 
   return sqrt(det);
+}
+
+//===========================================================================
+// returns matrix inverse
+//===========================================================================
+BlockMatrixCholInv* ccruncher::BlockMatrixChol::getInverse() const
+{
+  return new BlockMatrixCholInv(*this);
 }
