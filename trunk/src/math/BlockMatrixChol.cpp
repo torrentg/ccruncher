@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <cmath>
-#include <vector>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_eigen.h>
@@ -40,7 +39,7 @@
 // implements the Cholesky decomposition algorithm for block matrices
 // described in paper 'Simulation of High-Dimensional t-Student Copula
 // Copulas with a Given Block Matrix Correlation Matrix' by
-// Gerard Torrent Gironella
+// Gerard Torrent-Gironella and Josep Fortiana
 //
 // Notes:
 // ------
@@ -58,8 +57,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol()
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  spe = NULL;
-  cnum = 0.0;
+  eigenvalues = NULL;
 }
 
 //===========================================================================
@@ -72,8 +70,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(const BlockMatrixChol &x)
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  spe = NULL;
-  cnum = 0.0;
+  eigenvalues = NULL;
   *this = x;
 }
 
@@ -88,8 +85,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   n = Arrays<int>::allocVector(M, x.n);
   coefs = Arrays<double>::allocVector(N*M, x.coefs);
   diag = Arrays<double>::allocVector(N, x.diag);
-  spe = Arrays<int>::allocVector(N, x.spe);
-  cnum = x.cnum;
+  eigenvalues = Arrays<double>::allocVector(2*M, x.eigenvalues);
   return *this;
 }
 
@@ -98,7 +94,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
 // A: matrix with correlations between sectors (simmetric with size = mxm)
 // n: number of elements in each sector (size = m)
 // m: number of sectors
-// Example: A = { {0.2,0.1}, {0.1, 0.3}}, n={2,3}, m=2
+// Example: A = {{0.2,0.1},{0.1, 0.3}}, n={2,3}, m=2
 // indicates the following matrix:
 //    1.0 0.2 0.1 0.1 0.1
 //    0.2 1.0 0.1 0.1 0.1
@@ -136,8 +132,8 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
   {
     // perform factorization
     init(A_, n_, m_);
-    // compute condition number of Cholesky matrix
-    cnum = cond(A_, n_, m_);
+    // compute A eigenvalues
+    eigen(A_, n_, m_);
   }
   else if (nm == 0 || m_ <= 0)
   {
@@ -174,8 +170,8 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
 
       // perform factorization
       init(nA, nn, nm);
-      // compute condition number of Cholesky matrix
-      cnum = cond(nA, nn, nm);
+      // compute A eigenvalues
+      eigen(nA, nn, nm);
 
       // release temporal memory
       Arrays<double>::deallocMatrix(nA, nm);
@@ -187,7 +183,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
     {
       if (nA != NULL) Arrays<double>::deallocMatrix(nA, nm);
       if (nn != NULL) Arrays<int>::deallocVector(nn);
-      throw e;
+      throw;
     }
   }
 }
@@ -203,7 +199,7 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  spe = NULL;
+  eigenvalues = NULL;
 
   // assigning the number of sectors
   M = m_;
@@ -236,18 +232,8 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
   // allocating memory for diagonal cholesky coeficients
   diag = Arrays<double>::allocVector(N, 0.0);
 
-  // allocating memory for spe array
-  spe = Arrays<int>::allocVector(N, 0);
-
-  // filling spe (sector per element)
-  for (int i=0,j=0;j<M;j++)
-  {
-    for(int k=0;k<n[j];k++)
-    {
-      spe[i] = j;
-      i++;
-    }
-  }
+  // allocating memory for eigenvalues
+  eigenvalues = Arrays<double>::allocVector(2*M, 0.0);
 
   // call adapted Cholesky algorithm
   try
@@ -257,7 +243,7 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
   catch(Exception &e)
   {
     reset();
-    throw e;
+    throw;
   }
 }
 
@@ -292,16 +278,15 @@ void ccruncher::BlockMatrixChol::reset()
     diag = NULL;
   }
 
-  // deallocating vector spe
-  if (spe != NULL) {
-    Arrays<int>::deallocVector(spe);
-    spe = NULL;
+  // deallocating eigenvalues values
+  if (eigenvalues != NULL) {
+    Arrays<double>::deallocVector(eigenvalues);
+    eigenvalues = NULL;
   }
 
   // rest of values
   M = 0;
   N = 0;
-  cnum = 0.0;
 }
 
 //===========================================================================
@@ -314,6 +299,7 @@ int ccruncher::BlockMatrixChol::getDim()
 
 //===========================================================================
 // returns element at row,col of cholesky matrix (lower matrix)
+// non-optimal function, use only to debug or to test code
 //===========================================================================
 double ccruncher::BlockMatrixChol::get(int row, int col)
 {
@@ -322,7 +308,18 @@ double ccruncher::BlockMatrixChol::get(int row, int col)
 
   if (col < row)
   {
-    return COEFS(spe[row], col);
+    // find sector of the element
+    int sector = -1;
+    for(int sum=0,i=0; i<M; i++)
+    {
+      sum += n[i];
+      if (row < sum) {
+        sector = i;
+        break;
+      }
+    }
+    assert(sector >= 0);
+    return COEFS(sector, col);
   }
   else if (col == row)
   {
@@ -373,7 +370,7 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret)
 }
 
 //===========================================================================
-// adapted cholesky for block matrix
+// adapted cholesky decomposition for block matrix
 //===========================================================================
 void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 {
@@ -427,21 +424,17 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 
 //===========================================================================
 // internal function
-// computes cholesky matrix condition number (2-norm)
-//
-// if C is the cholesky decomposition of a matrix A composed by blocks
-// then the condition number of C is computed as follows:
-//   sqrt(max(eig(A)),min(eig(A))
+// computes eigenvalues of the matrix A=L*L' (where L is the Cholesky matrix)
 //
 // the (N_1+N_2+...+N_m) eigenvalues of A are:
 //   * 1-A11 with multiplicity (N1)-1
 //   * 1-A22 with multiplicity (N2)-1
 //   *  ...
 //   * 1-Amm with multiplicity (Nk)-1
-//   * eig1 (see below)
-//   * eig2 (see below)
+//   * eig_1 (see below)
+//   * eig_2 (see below)
 //   *  ...
-//   * eigm (see below)
+//   * eig_m (see below)
 // where:
 //   * m is the number of blocks
 //   * Ni is the dimension of i-th block
@@ -460,18 +453,12 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 //   * is mandatory than Aij = Aji
 //
 //===========================================================================
-double ccruncher::BlockMatrixChol::cond(double **A_, int *n_, int m_) throw(Exception)
+void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Exception)
 {
-  vector<double> eig = vector<double>();
-
-  // filling direct eigenvalues
+  // filling trivial eigenvalues
   for(int i=0; i<m_; i++) 
   {
-    if (1 < n_[i])
-    {
-      double val = 1.0 - A_[i][i];
-      eig.push_back(val);;
-    }
+    eigenvalues[i] = 1.0 - A_[i][i];
   }
 
   // defining variables to perform eigenvalues functions
@@ -507,7 +494,7 @@ double ccruncher::BlockMatrixChol::cond(double **A_, int *n_, int m_) throw(Exce
   gsl_matrix_complex_free(VEPS);
   if (rc) {
     gsl_vector_complex_free(vaps);
-    throw Exception("cond: unable to compute eigenvalues: " + string(gsl_strerror(rc)));
+    throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
   }
 
   // retrieving eigenvalues
@@ -515,32 +502,56 @@ double ccruncher::BlockMatrixChol::cond(double **A_, int *n_, int m_) throw(Exce
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON) {
       gsl_vector_complex_free(vaps);
-      throw Exception("cond: imaginary eigenvalue computing eigenvalues");
+      throw Exception("imaginary eigenvalue computing eigenvalues");
     }
     else {
-      double val = GSL_REAL(z);
-      eig.push_back(val);
+      eigenvalues[M+i] = GSL_REAL(z);
     }
   }
   gsl_vector_complex_free(vaps);
-
-  // compute condition number
-  double eigmin = +1e100;
-  double eigmax = -1e100;
-  for(int i=0; i<(int)eig.size(); i++) 
-  {
-    double val = std::fabs(eig[i]);
-    if (val < eigmin) eigmin = val;
-    if (eigmax < val) eigmax = val;
-  }
-  return std::sqrt(eigmax/eigmin);
 }
 
 //===========================================================================
 // returns the condition number (2-norm) of the Cholesky matrix
+// if A = L*L' where L is the Cholesky matrix, then the condition number
+// is sqrt(max(eig(A)),min(eig(A))
 //===========================================================================
-double ccruncher::BlockMatrixChol:: getConditionNumber()
+double ccruncher::BlockMatrixChol::getConditionNumber()
 {
-  return cnum;
+  double eigmin = +1e100;
+  double eigmax = -1e100;
+
+  for(int i=0; i<2*M; i++)
+  {
+    if (i < M && n[i] <= 1) continue;
+    double val = std::fabs(eigenvalues[i]);
+    if (val < eigmin) eigmin = val;
+    if (eigmax < val) eigmax = val;
+  }
+
+  return std::sqrt(eigmax/eigmin);
 }
 
+//===========================================================================
+// returns the determinant of the Cholesky matrix
+// observe that det(L) = sqrt(det(A))
+// note: equivalent to the multiplication of all Cholesky diagonal values
+//===========================================================================
+double ccruncher::BlockMatrixChol::getDeterminant()
+{
+  double det = 1.0;
+
+  for(int i=0; i<2*M; i++)
+  {
+    if (i < M)
+    {
+      if (n[i] > 1) det *= eigenvalues[i] * (n[i]-1.0);
+    }
+    else
+    {
+      det *= eigenvalues[i];
+    }
+  }
+
+  return sqrt(det);
+}

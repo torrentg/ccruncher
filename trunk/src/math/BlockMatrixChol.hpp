@@ -39,20 +39,19 @@ class BlockMatrixChol
 
   private:
 
-    // number of sectors
+    // number of sectors (with more than 0 elements)
     int M;
-    // number of elements
+    // number of elements (Cholesky matrix size = NxN)
     int N;
     // number of elements in each sector (array size = M)
     int *n;
-    // cholesky coeficients (matrix size = NxM)
+    // cholesky coeficients (matrix size = MxN)
     double *coefs;
     // diagonal cholesky coeficients (array size = N)
     double *diag;
-    // for each element (0...N), gives his sector (array size = N)
-    int *spe; // (Sector Per Element)
-    // condition number of the cholesky matrix
-    double cnum;
+    // eigenvalues of A (not L, A=L*L') (array size = 2*M)
+    // first M values have multiplicity n-1, the rest have multiplicity 1
+    double *eigenvalues;
 
   private:
   
@@ -61,7 +60,7 @@ class BlockMatrixChol
     // adapted cholesky algorithm
     void chold(double **A) throw(Exception);
     // computes condition number (2-norm)
-    double cond(double **A, int *n, int m) throw(Exception);
+    void eigen(double **A, int *n, int m) throw(Exception);
     // dealloc memory
     void reset();
 
@@ -81,6 +80,8 @@ class BlockMatrixChol
     int getDim();
     // returns matrix condition number
     double getConditionNumber();
+    // returns matrix determinant
+    double getDeterminant();
     // returns matrix element
     double get(int row, int col);
     // multiplies this matrix by a vector
