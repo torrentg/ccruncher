@@ -53,8 +53,8 @@ class BlockMatrixCholTest : public TestFixture<BlockMatrixCholTest>
     void test9();
     void test10();
     void test11();
-    void run(double *correls, double *solution, double condnum, int *n, int M);
-    void check(double **correls, int *n, int M, BlockMatrixChol *chol);
+    void run(double *correls, double *solution, double condnum, double *solinv, int *n, int M);
+    void check(double **correls, int *n, int M, BlockMatrixChol *chol, BlockMatrixCholInv *inv);
 
 
   public:
