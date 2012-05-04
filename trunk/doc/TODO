@@ -5,10 +5,13 @@ CCRUNCHER TODO
 Current works
 -------------------
   * case studies
-  * graphic interface
+  * support Li model (survivals as exponential distr.)
+  * estimate copula params using MLE
+  * add attribute 'transform' in mcorrels tag
 
 Future works
 -------------------
+  * graphic interface
   * input file in binary format
   * add risk aggregation to documentation
      - explain how to distribute the risk (eg. ES) along segments
