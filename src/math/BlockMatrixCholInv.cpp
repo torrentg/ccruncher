@@ -134,13 +134,13 @@ void ccruncher::BlockMatrixCholInv::mult(double *x, double *ret) const
   int i,j,r,q,num;
   double sum=0.0;
 
-  for(num=0,r=0; r<k; r++) for(q=0; q<n[r]; q++)
+  for(num=0,r=0; r<M; r++) for(q=0; q<n[r]; q++)
   {
     ret[num] = diag[num]*x[num];
     num++;
   }
 
-  for(i=-1,r=0; r<k; r++)
+  for(i=-1,r=0; r<M; r++)
   {
     for(sum=0.0, q=0; q<n[r]; q++)
     {
