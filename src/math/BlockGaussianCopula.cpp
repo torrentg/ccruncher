@@ -150,7 +150,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
   {
     Arrays<double>::deallocMatrix(correls, m_);
     finalize();
-    throw e;
+    throw;
   }
 }
 
