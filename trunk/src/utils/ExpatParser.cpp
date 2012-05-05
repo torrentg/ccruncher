@@ -203,8 +203,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   catch(Exception &e)
   {
     char aux[512];
-    sprintf(aux, "%s at line %d column %d",
-                 e.what(),
+    sprintf(aux, "error at line %d column %d",
                  (int) XML_GetCurrentLineNumber(xmlparser),
                  (int) XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(e, string(aux));

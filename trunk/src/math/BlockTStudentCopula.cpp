@@ -156,7 +156,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
   {
     Arrays<double>::deallocMatrix(correls, m_);
     finalize();
-    throw e;
+    throw;
   }
 }
 
