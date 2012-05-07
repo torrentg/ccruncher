@@ -554,6 +554,7 @@ double ccruncher::BlockMatrixChol::getDeterminant() const
     }
   }
 
+  assert(det > 0.0);
   return sqrt(det);
 }
 

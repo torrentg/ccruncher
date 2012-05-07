@@ -154,15 +154,8 @@ AH_BOTTOM([
 #define UNUSED(x) (void)x;
 
 /* required by Microsoft project */
-#ifdef _MSC_VER
+#ifdef _WIN32
 #include "../win32/winconfig.h"
-#endif
-
-/* cygwin patch */
-#if defined (__CYGWIN__) 
-#ifndef NAN
-#define NAN (0.0/0.0)
-#endif
 #endif
 
 ])

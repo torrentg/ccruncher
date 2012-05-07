@@ -22,8 +22,11 @@
 
 #include "utils/config.h"
 
-#ifndef _MSC_VER
+#ifndef _WIN32
   #include <sys/resource.h>
+#endif
+
+#ifndef _MSC_VER
   #include <getopt.h>
 #endif
 
@@ -363,7 +366,7 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
 //===========================================================================
 void setnice(int niceval) throw(Exception)
 {
-#if !defined(_MSC_VER) && !defined(__CYGWIN__) 
+#if !defined(_WIN32)
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
     throw Exception("nice value out of range [" + Format::toString(PRIO_MIN) +

@@ -26,8 +26,10 @@
 // ======================================================
 // patch against isnan() function
 // ======================================================
+#ifdef _MSC_VER
 #include <cfloat>
 #define isnan _isnan
+#endif
 
 // ======================================================
 // patch against NAN problem
@@ -36,8 +38,8 @@
 // http://msdn.microsoft.com/en-us/library/w22adx1s%28v=VS.100%29.aspx
 // ======================================================
 #if !defined(NAN)
-static const unsigned long nan[2] = {0xffffffff, 0x7fffffff};
-#define NAN (*(const double *) nan)
+static const unsigned long _nan_[2] = {0xffffffff, 0x7fffffff};
+#define NAN (*(const double *) _nan_)
 #endif
 
 // ======================================================
@@ -45,14 +47,18 @@ static const unsigned long nan[2] = {0xffffffff, 0x7fffffff};
 // properties->configuration properties->C/C++->
 // preprocessor->preprocessor definitions (add BUILD_GETOPT)
 // ======================================================
+#ifdef _MSC_VER
 #include "getopt.h"
+#endif
 
 // ======================================================
 // patch against opendir & closedir problems
 // properties->configuration properties->C/C++->
 // preprocessor->preprocessor definitions (add BUILD_DIRENT)
 // ======================================================
+#ifdef _MSC_VER
 #include "dirent.h"
+#endif
 
 // ======================================================
 // patch against gettimeofday problems
@@ -64,22 +70,30 @@ static const unsigned long nan[2] = {0xffffffff, 0x7fffffff};
 // ======================================================
 // patch against mkdir & getcwd problems
 // ======================================================
+#ifdef _MSC_VER
 #include <direct.h>
 #define getcwd _getcwd
 #define mkdir _mkdir
+#endif
 
 // ======================================================
 // patch against access problem
 // ======================================================
 #include <io.h>
 #define access _access
-#define R_OK 04
-#define W_OK 02
+#ifndef R_OK
+  #define R_OK 04
+#endif
+#ifndef W_OK
+  #define W_OK 02
+#endif
 
 // ======================================================
 // disabling warnings
 // ======================================================
+#if defined(_MSC_VER)
 #pragma warning( disable : 4290 )
+#endif
 
 #endif
 
