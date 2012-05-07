@@ -192,7 +192,7 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
   errno = 0;
 
   // creating directory
-#ifdef _MSC_VER
+#ifdef _WIN32
   aux = mkdir(dirname.c_str());
 #else
   aux = mkdir(dirname.c_str(), S_IRWXU|S_IRWXG|S_IRWXO);

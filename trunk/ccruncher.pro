@@ -13,6 +13,7 @@ HEADERS += \
     src/math/BlockMatrixCholInv.hpp \
     src/math/BlockGaussianCopula.hpp \
     src/math/FastTStudentCdf.hpp \
+    src/math/CopulaCalibration.hpp \
     src/params/Params.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
@@ -60,6 +61,7 @@ SOURCES += \
     src/math/BlockMatrixCholInv.cpp \
     src/math/BlockGaussianCopula.cpp \
     src/math/FastTStudentCdf.cpp \
+    src/math/CopulaCalibration.cpp \
     src/params/Params.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
@@ -100,3 +102,12 @@ LIBS += -lpthread \
     -lgsl \
     -lgslcblas \
     -lexpat
+
+win32 {
+  DEFINES += BUILD_GETOPT
+  DEFINES += BUILD_DIRENT
+  INCLUDEPATH += \
+    deps/gsl-1.11/win32/include \
+    deps/expat-2.1.0/Source/lib \
+    deps/zlib-1.2.7
+}

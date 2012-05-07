@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <gsl/gsl_vector.h>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -45,8 +46,16 @@ class CopulaCalibration
       int k; // number of sectors (eg. 10)
       int t; // number of historical rows (eg. 20)
       int *n; // number of indiviudals per sector (size=k)
-      double *p // 1-period probability default per sector (size=k)
+      double *p; // 1-period probability default per sector (size=k)
       double **h; // h[i,j] = pct defaults in sector j at period i (size=txk)
+
+      double dim; // auxiliar value (=sum(n))
+      double **M; // auxiliar mem used by f (to avoid alloc/dealloc)
+      double *x; // auxiliar mem used by f (to avoid alloc/dealloc)
+      double *y; // auxiliar mem used by f (to avoid alloc/dealloc)
+
+      // constructor
+      fparams() : k(0), t(0), n(NULL), p(NULL), h(NULL), M(NULL), x(NULL), y(NULL) {}
     };
 
   private:
@@ -62,13 +71,15 @@ class CopulaCalibration
 
     // reset
     void reset();
-    // serialize params
-    void serialize(const double **matrix, double value, gsl_vector *ret);
-    // deserialize params
-    void deserialize(const gsl_vector *ret, double **matrix, double *value);
 
+    // serialize params
+    static void serialize(int k, const double **matrix, double value, gsl_vector *ret);
+    // deserialize params
+    static void deserialize(int k, const gsl_vector *ret, double **matrix, double *value);
+    // returns observation
+    static void getObservation(int row, const fparams *p, double *ret);
     // minimized function
-    static double f(const gsl_vector *v, void *params);
+    static double f(const gsl_vector *v, void *params_);
 
   public:
 
@@ -83,7 +94,7 @@ class CopulaCalibration
     // return estimated ndf
     double getNdf() const;
     // return estimated correlations
-    const double** getCorrelations() const;
+    double** const getCorrelations() const;
 
 };
 
