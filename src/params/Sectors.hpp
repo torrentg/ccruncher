@@ -20,57 +20,68 @@
 //
 //===========================================================================
 
-#ifndef _SurvivalTest_
-#define _SurvivalTest_
+#ifndef _Sectors_
+#define _Sectors_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
-#include "ratings/Ratings.hpp"
+#include <string>
+#include <vector>
+#include "utils/ExpatHandlers.hpp"
+#include "params/Sector.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
-namespace ccruncher_test {
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class SurvivalTest : public TestFixture<SurvivalTest>
+class Sectors : public ExpatHandlers
 {
 
   private:
 
-    Ratings getRatings();
+    // list of sectors
+    vector<Sector> vsectors;
+    // auxiliary variable (used by parser)
+    Sector auxsector;
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
-    void test6(void);
-    void test7(void);
+  private:
+  
+    // add a sector to list
+    void insertSector(const Sector &) throw(Exception);
+    // validate list
+    void validations() throw(Exception);
 
-
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
+  
   public:
 
-    TEST_FIXTURE(SurvivalTest)
-    {
-      TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-      TEST_CASE(test6);
-      TEST_CASE(test7);
-    }
-
-    void setUp();
-    void tearDown();
+    // default constructor
+    Sectors();
+    // destructor
+    ~Sectors();
+    // return the number of sectors
+    int size() const;
+    // return the index of the sector
+    int getIndex(const char *name) const;
+    int getIndex(const string &name) const;
+    // [] operator
+    Sector& operator [] (int i);
+    // [] operator
+    Sector& operator [] (const string &name) throw(Exception);
+    // returns object content as xml
+    string getXML(int) const throw(Exception);
 
 };
-
-REGISTER_FIXTURE(SurvivalTest);
 
 //---------------------------------------------------------------------------
 

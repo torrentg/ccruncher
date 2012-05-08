@@ -130,6 +130,19 @@
     <sector name="S5" description="Other sectors"/>
   </sectors>
 
+  <historical period="12">
+    <defaults t="1A" sector="S1" value="15.1%"/>
+    <defaults t="1A" sector="S2" value="15.1%"/>
+    <defaults t="1A" sector="S3" value="15.1%"/>
+    <defaults t="1A" sector="S4" value="15.1%"/>
+    <defaults t="1A" sector="S5" value="15.1%"/>
+    <defaults t="2A" sector="S1" value="15.1%"/>
+    <defaults t="2A" sector="S2" value="15.1%"/>
+    <defaults t="2A" sector="S3" value="15.1%"/>
+    <defaults t="2A" sector="S4" value="15.1%"/>
+    <defaults t="2A" sector="S5" value="15.1%"/>
+  </historical>
+
   <mcorrels>
     <sigma sector1="S1" sector2="S1" value="15.1%"/>
     <sigma sector1="S1" sector2="S2" value="6.2%"/>

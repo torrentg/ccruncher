@@ -33,10 +33,10 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "ratings/Ratings.hpp"
-#include "sectors/Sectors.hpp"
-#include "interests/Interest.hpp"
-#include "segmentations/Segmentations.hpp"
+#include "params/Ratings.hpp"
+#include "params/Sectors.hpp"
+#include "params/Interest.hpp"
+#include "params/Segmentations.hpp"
 #include <cassert>
 
 //---------------------------------------------------------------------------

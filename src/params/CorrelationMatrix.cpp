@@ -21,7 +21,7 @@
 //===========================================================================
 
 #include <cmath>
-#include "correlations/CorrelationMatrix.hpp"
+#include "params/CorrelationMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"

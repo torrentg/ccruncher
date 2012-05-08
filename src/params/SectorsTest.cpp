@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "sectors/Sectors.hpp"
-#include "sectors/SectorsTest.hpp"
+#include "params/Sectors.hpp"
+#include "params/SectorsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================

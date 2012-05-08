@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _CorrelationMatrix_
-#define _CorrelationMatrix_
+#ifndef _TransitionMatrix_
+#define _TransitionMatrix_
 
 //---------------------------------------------------------------------------
 
@@ -29,7 +29,8 @@
 #include <string>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "sectors/Sectors.hpp"
+#include "params/Ratings.hpp"
+#include "params/Survival.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -39,52 +40,76 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class CorrelationMatrix : public ExpatHandlers
+class TransitionMatrix : public ExpatHandlers
 {
 
   private:
 
-    // nxn = matrix size (n = number of sectors)
+    // nxn = matrix size (n=number of ratings)
     int n;
-    // list of sectors
-    Sectors sectors;
-    // matrix of values
+    // period (in months) that this transition matrix covers
+    int period;
+    // matrix values
     double **matrix;
+    // list of ratings
+    Ratings *ratings;
+    // index of default rating
+    int indexdefault;
+    // regularization error
+    double rerror;
 
   private:
 
-    // insert a new matrix value
-    void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
+    // insert a transition value into the matrix
+    void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
-    void validate(void) throw(Exception);
+    void validate() throw(Exception);
+    // computes Cumulated Default Forward Rate
+    void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
 
   protected:
-  
+
     // ExpatHandler method
     void epstart(ExpatUserData &, const char *, const char **);
     // ExpatHandler method
     void epend(ExpatUserData &, const char *);
-  
+
   public:
 
+    // default constructor
+    TransitionMatrix();
     // constructor
-    CorrelationMatrix();
+    TransitionMatrix(const Ratings &) throw(Exception);
     // constructor
-    CorrelationMatrix(Sectors &) throw(Exception);
+    TransitionMatrix(const Ratings &, double **, int) throw(Exception);
     // copy constructor
-    CorrelationMatrix(CorrelationMatrix &) throw(Exception);
+    TransitionMatrix(const TransitionMatrix &) throw(Exception);
     // destructor
-    ~CorrelationMatrix();
+    ~TransitionMatrix();
     // assignement operator
-    CorrelationMatrix& operator = (const CorrelationMatrix &x);
-    // initialize object
-    void setSectors(const Sectors &) throw(Exception);
-    // matrix size (= number of sector)
+    TransitionMatrix& operator = (const TransitionMatrix &other);
+    // set ratings
+    void setRatings(const Ratings &);
+    // returns n (number of ratings)
     int size() const;
-    // returns a pointer to matrix values
+    // returns period that covers this matrix
+    int getPeriod() const;
+    // returns pointer to matrix values
     double ** getMatrix() const;
-    // serializes object content as xml
-    string getXML(int) throw(Exception);
+    // returns default rating index
+    int getIndexDefault() const;
+    // simulate transition with random value val
+    int evalue(const int irating, const double val) const;
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
+    // regularize the transition matrix
+    void regularize() throw(Exception);
+    // returns equivalent transition matrix that covers t months
+    TransitionMatrix scale(int t) const throw(Exception);
+    // computes survival function related to this transition matrix
+    Survival getSurvival(int steplength, int numrows) const throw(Exception);
+    // regularization error (|non_regularized| - |regularized|)
+    double getRegularizationError() const;
 
 };
 

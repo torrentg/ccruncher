@@ -24,7 +24,7 @@
 #include <cfloat>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
-#include "segmentations/Segmentations.hpp"
+#include "params/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockTStudentCopula.hpp"
 #include "utils/Utils.hpp"

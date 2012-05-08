@@ -20,66 +20,53 @@
 //
 //===========================================================================
 
-#ifndef _Segmentations_
-#define _Segmentations_
+#ifndef _TransitionMatrixTest_
+#define _TransitionMatrixTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include "utils/Exception.hpp"
-#include "utils/ExpatHandlers.hpp"
-#include "segmentations/Segmentation.hpp"
+#include <MiniCppUnit.hxx>
+#include "params/Ratings.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class Segmentations : public ExpatHandlers
+class TransitionMatrixTest : public TestFixture<TransitionMatrixTest>
 {
 
   private:
 
-    // list of segmentations
-    vector<Segmentation> vsegmentations;
-    // auxiliary variable (used by parser)
-    Segmentation auxsegmentation;
+    Ratings getRatings();
 
-  private:
-  
-    // insert a segmentation to list
-    int insertSegmentation(Segmentation &) throw(Exception);
-    // validate object content
-    void validate() throw(Exception);
+    void test1(void);
+    void test2(void);
+    void test3(void);
+    void test4(void);
+    void test5(void);
 
-  protected:
-  
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
-  
+
   public:
 
-    // constructor
-    Segmentations();
-    // destructor
-    ~Segmentations();
-    // return the number of segmentations
-    int size() const;
-    // [] operator
-    Segmentation& getSegmentation(int i);
-    // return the index of the given segmentation
-    int indexOfSegmentation(const string &sname) throw(Exception);
-    // return the index of the given segmentation
-    int indexOfSegmentation(const char *sname) throw(Exception);
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    TEST_FIXTURE(TransitionMatrixTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+      TEST_CASE(test5);
+    }
+
+    void setUp();
+    void tearDown();
 
 };
+
+REGISTER_FIXTURE(TransitionMatrixTest);
 
 //---------------------------------------------------------------------------
 

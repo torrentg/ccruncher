@@ -28,11 +28,11 @@
 #include "utils/config.h"
 #include <vector>
 #include <MiniCppUnit.hxx>
-#include "ratings/Ratings.hpp"
-#include "sectors/Sectors.hpp"
-#include "interests/Interest.hpp"
+#include "params/Ratings.hpp"
+#include "params/Sectors.hpp"
+#include "params/Interest.hpp"
 #include "utils/Date.hpp"
-#include "segmentations/Segmentations.hpp"
+#include "params/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
 

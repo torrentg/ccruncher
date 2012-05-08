@@ -20,62 +20,58 @@
 //
 //===========================================================================
 
-#include "sectors/Sector.hpp"
-#include "utils/Strings.hpp"
-#include <cassert>
+#include "params/Segmentation.hpp"
+#include "params/SegmentationTest.hpp"
+#include "utils/ExpatParser.hpp"
+
+//---------------------------------------------------------------------------
+
+#define EPSILON 0.00001
 
 //===========================================================================
-// constructor
+// setUp
 //===========================================================================
-ccruncher::Sector::Sector()
+void ccruncher_test::SegmentationTest::setUp()
 {
-  name = "";
-  desc = "";
+  // nothing to do
 }
 
 //===========================================================================
-// epstart - ExpatHandlers method implementation
+// setUp
 //===========================================================================
-void ccruncher::Sector::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher_test::SegmentationTest::tearDown()
 {
-  if (isEqual(name_,"sector")) {
-    if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes at sector");
-    }
-    else {
-      name = getStringAttribute(attributes, "name");
-      desc = getStringAttribute(attributes, "description");
-    }
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
-  }
+  // nothing to do
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
+// test1
 //===========================================================================
-void ccruncher::Sector::epend(ExpatUserData &, const char *name_)
+void ccruncher_test::SegmentationTest::test1()
 {
-  if (isEqual(name_,"sector")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
-}
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <segmentation name='office' components='asset'>\n\
+      <segment name='0001'/>\n\
+      <segment name='0002'/>\n\
+      <segment name='0003'/>\n\
+      <segment name='0004'/>\n\
+    </segmentation>";
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Sector::getXML(int ilevel) const throw(Exception)
-{
-  string ret = Strings::blanks(ilevel);
+  // creating xml
+  ExpatParser xmlparser;
 
-  ret += "<sector ";
-  ret += "name='" + name + "' ";
-  ret += "description='" + desc + "'";
-  ret += "/>\n";
+  // correlation matrix creation
+  Segmentation sobj;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  return ret;
+  ASSERT("office" == sobj.name);
+  ASSERT(asset == sobj.components);
+
+  ASSERT(5 == sobj.size());
+
+  ASSERT(0 == sobj.indexOfSegment("unassigned"));
+  ASSERT(1 == sobj.indexOfSegment("0001"));
+  ASSERT(2 == sobj.indexOfSegment("0002"));
+  ASSERT(3 == sobj.indexOfSegment("0003"));
+  ASSERT(4 == sobj.indexOfSegment("0004"));
 }

@@ -20,14 +20,14 @@
 //
 //===========================================================================
 
-#include "ratings/Ratings.hpp"
+#include "params/Segmentations.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
 
 //===========================================================================
-// constructor privat
+// constructor
 //===========================================================================
-ccruncher::Ratings::Ratings()
+ccruncher::Segmentations::Segmentations()
 {
   // nothing to do
 }
@@ -35,114 +35,122 @@ ccruncher::Ratings::Ratings()
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::Ratings::~Ratings()
+ccruncher::Segmentations::~Segmentations()
 {
-  // cal assegurar que es destrueix vratings;
+  // nothing to do
 }
 
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::Ratings::size() const
+int ccruncher::Segmentations::size() const
 {
-  return vratings.size();
+  return vsegmentations.size();
 }
 
 //===========================================================================
 // [] operator
 //===========================================================================
-Rating& ccruncher::Ratings::operator []  (int i)
+Segmentation& ccruncher::Segmentations::getSegmentation(int i)
 {
   // assertions
-  assert(i >= 0 && i < (int) vratings.size());
+  assert(i >= 0 && i < (int) vsegmentations.size());
 
-  // return i-th rating
-  return vratings[i];
+  // return i-th segmentation
+  return vsegmentations[i];
 }
 
 //===========================================================================
-// [] operator. returns rating by name
+// return the index of the given segmentation
 //===========================================================================
-Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
+int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exception)
 {
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0;i<vsegmentations.size();i++)
   {
-    if (vratings[i].name == name)
+    if (vsegmentations[i].name == sname)
     {
-      return vratings[i];
+      return (int)i;
     }
   }
 
-  throw Exception("rating " + name + " not found");
+  throw Exception("segmentation " + sname + " not found");
 }
 
 //===========================================================================
-// return the index of the rating (-1 if rating not found)
+// return the index of the given segmentation
 //===========================================================================
-int ccruncher::Ratings::getIndex(const char *name) const
+int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Exception)
 {
-  assert(name != NULL);
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0;i<vsegmentations.size();i++)
   {
-    if (vratings[i].name.compare(name) == 0)
+    if (vsegmentations[i].name.compare(sname) == 0)
     {
-      return i;
+      return (int)i;
     }
   }
-  return -1;
+
+  throw Exception("segmentation " + string(sname) + " not found");
 }
 
 //===========================================================================
-// return the index of the rating (-1 if rating not found)
+// validate
 //===========================================================================
-int ccruncher::Ratings::getIndex(const string &name) const
+void ccruncher::Segmentations::validate() throw(Exception)
 {
-  return getIndex(name.c_str());
+  if (vsegmentations.size() == 0)
+  {
+    throw Exception("no segmentations defined");
+  }
 }
 
 //===========================================================================
-// insert a rating into list
+// insert a new segmentation in list
 //===========================================================================
-void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
+int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0;i<vsegmentations.size();i++)
   {
-    Rating aux = vratings[i];
+    if (vsegmentations[i].name == val.name)
+    {
+      throw Exception("segmentation name " + val.name + " repeated");
+    }
+  }
 
-    if (aux.name == val.name)
-    {
-      throw Exception("rating name " + val.name + " repeated");
-    }
-    else if (aux.desc == val.desc)
-    {
-      throw Exception("rating description " + val.desc + " repeated");
-    }
+  // checking special segmentations
+  if (val.name == "obligors" && val.components != obligor)
+  {
+    throw Exception("segmentation 'obligors' needs components of type obligor");
+  }
+  if (val.name == "assets" && val.components != asset)
+  {
+    throw Exception("segmentation 'assets' needs components of type asset");
   }
 
   try
   {
-    vratings.push_back(val);
+    vsegmentations.push_back(val);
+    return vsegmentations.size()-1;
   }
   catch(std::exception &e)
   {
-    throw Exception(e);
+     throw Exception(e);
   }
 }
 
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"ratings")) {
+  if (isEqual(name_,"segmentations")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag ratings");
+      throw Exception("attributes are not allowed in tag segmentations");
     }
   }
-  else if (isEqual(name_,"rating")) {
-    auxrating = Rating();
-    eppush(eu, &auxrating, name_, attributes);
+  else if (isEqual(name_,"segmentation")) {
+    auxsegmentation.reset();
+    eppush(eu, &auxsegmentation, name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -152,14 +160,14 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
+void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 {
-  if (isEqual(name_,"ratings")) {
-    validations();
-    auxrating = Rating();
+  if (isEqual(name_,"segmentations")) {
+    validate();
+    auxsegmentation.reset();
   }
-  else if (isEqual(name_,"rating")) {
-    insertRating(auxrating);
+  else if (isEqual(name_,"segmentation")) {
+    insertSegmentation(auxsegmentation);
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -167,33 +175,21 @@ void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
 }
 
 //===========================================================================
-// global validations
-//===========================================================================
-void ccruncher::Ratings::validations() throw(Exception)
-{
-  // checking number of ratings
-  if (vratings.size() == 0)
-  {
-    throw Exception("ratings have no elements");
-  }
-}
-
-//===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Ratings::getXML(int ilevel) const throw(Exception)
+string ccruncher::Segmentations::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<ratings>\n";
+  ret += spc + "<segmentations>\n";
 
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0;i<vsegmentations.size();i++)
   {
-    ret += vratings[i].getXML(ilevel+2);
+    ret += vsegmentations[i].getXML(ilevel+2);
   }
 
-  ret += spc + "</ratings>\n";
+  ret += spc + "</segmentations>\n";
 
   return ret;
 }

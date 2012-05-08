@@ -20,53 +20,69 @@
 //
 //===========================================================================
 
-#ifndef _TransitionMatrixTest_
-#define _TransitionMatrixTest_
+#ifndef _Ratings_
+#define _Ratings_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
-#include "ratings/Ratings.hpp"
+#include <string>
+#include <vector>
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Exception.hpp"
+#include "params/Rating.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
-namespace ccruncher_test {
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class TransitionMatrixTest : public TestFixture<TransitionMatrixTest>
+class Ratings : public ExpatHandlers
 {
 
   private:
 
-    Ratings getRatings();
+    // ratings list
+    vector<Rating> vratings;
+    // auxiliary variable (used by parser)
+    Rating auxrating;
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
+  private:
+  
+    // insert a rating in the list
+    void insertRating(const Rating &) throw(Exception);
+    // validate object content
+    void validations() throw(Exception);
 
+  protected:
+  
+    // ExpatHandlers method
+    void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
 
   public:
 
-    TEST_FIXTURE(TransitionMatrixTest)
-    {
-      TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-    }
-
-    void setUp();
-    void tearDown();
+    // constructor
+    Ratings();
+    // destructor
+    ~Ratings();
+    // return the number of ratings
+    int size() const;
+    // return the index of the rating
+    int getIndex(const char *name) const;
+    int getIndex(const string &name) const;
+    // [] operator
+    Rating& operator [] (int i);
+    // [] operator
+    Rating& operator [] (const string &name) throw(Exception);
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
 };
-
-REGISTER_FIXTURE(TransitionMatrixTest);
 
 //---------------------------------------------------------------------------
 

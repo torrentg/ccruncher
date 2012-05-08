@@ -20,14 +20,14 @@
 //
 //===========================================================================
 
-#include "segmentations/Segmentations.hpp"
+#include "params/Sectors.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
 
 //===========================================================================
-// constructor
+// private constructor
 //===========================================================================
-ccruncher::Segmentations::Segmentations()
+ccruncher::Sectors::Sectors()
 {
   // nothing to do
 }
@@ -35,7 +35,7 @@ ccruncher::Segmentations::Segmentations()
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::Segmentations::~Segmentations()
+ccruncher::Sectors::~Sectors()
 {
   // nothing to do
 }
@@ -43,114 +43,106 @@ ccruncher::Segmentations::~Segmentations()
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::Segmentations::size() const
+int ccruncher::Sectors::size() const
 {
-  return vsegmentations.size();
+  return vsectors.size();
 }
 
 //===========================================================================
 // [] operator
 //===========================================================================
-Segmentation& ccruncher::Segmentations::getSegmentation(int i)
+Sector& ccruncher::Sectors::operator []  (int i)
 {
   // assertions
-  assert(i >= 0 && i < (int) vsegmentations.size());
+  assert(i >= 0 && i < (int) vsectors.size());
 
-  // return i-th segmentation
-  return vsegmentations[i];
+  // return i-th sector
+  return vsectors[i];
 }
 
 //===========================================================================
-// return the index of the given segmentation
+// [] operator. returns sector by name
 //===========================================================================
-int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exception)
+Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
 {
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (unsigned int i=0;i<vsectors.size();i++)
   {
-    if (vsegmentations[i].name == sname)
+    if (vsectors[i].name == name)
     {
-      return (int)i;
+      return vsectors[i];
     }
   }
 
-  throw Exception("segmentation " + sname + " not found");
+  throw Exception("sector " + name + " not found");
 }
 
 //===========================================================================
-// return the index of the given segmentation
+// return the index of the sector (-1 if rating not found)
 //===========================================================================
-int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Exception)
+int ccruncher::Sectors::getIndex(const char *name) const
 {
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  assert(name != NULL);
+  for (unsigned int i=0;i<vsectors.size();i++)
   {
-    if (vsegmentations[i].name.compare(sname) == 0)
+    if (vsectors[i].name.compare(name) == 0)
     {
-      return (int)i;
+      return i;
     }
   }
-
-  throw Exception("segmentation " + string(sname) + " not found");
+  return -1;
 }
 
 //===========================================================================
-// validate
+// return the index of the sector (-1 if rating not found)
 //===========================================================================
-void ccruncher::Segmentations::validate() throw(Exception)
+int ccruncher::Sectors::getIndex(const string &name) const
 {
-  if (vsegmentations.size() == 0)
-  {
-    throw Exception("no segmentations defined");
-  }
+  return getIndex(name.c_str());
 }
 
 //===========================================================================
-// insert a new segmentation in list
+// inserts a sector in list
 //===========================================================================
-int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
+void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (unsigned int i=0;i<vsectors.size();i++)
   {
-    if (vsegmentations[i].name == val.name)
-    {
-      throw Exception("segmentation name " + val.name + " repeated");
-    }
-  }
+    Sector aux = vsectors[i];
 
-  // checking special segmentations
-  if (val.name == "obligors" && val.components != obligor)
-  {
-    throw Exception("segmentation 'obligors' needs components of type obligor");
-  }
-  if (val.name == "assets" && val.components != asset)
-  {
-    throw Exception("segmentation 'assets' needs components of type asset");
+    if (aux.name == val.name)
+    {
+      throw Exception("sector name " + val.name + " repeated");
+    }
+    else if (aux.desc == val.desc)
+    {
+      throw Exception("sector description " + val.desc + " repeated");
+    }
   }
 
   try
   {
-    vsegmentations.push_back(val);
-    return vsegmentations.size()-1;
+    vsectors.push_back(val);
   }
   catch(std::exception &e)
   {
-     throw Exception(e);
+    throw Exception(e);
   }
 }
 
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"segmentations")) {
+  if (isEqual(name_,"sectors")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag segmentations");
+      throw Exception("attributes are not allowed in tag sectors");
     }
   }
-  else if (isEqual(name_,"segmentation")) {
-    auxsegmentation.reset();
-    eppush(eu, &auxsegmentation, name_, attributes);
+  else if (isEqual(name_,"sector")) {
+    auxsector = Sector();
+    eppush(eu, &auxsector, name_, attributes);
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -160,14 +152,14 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
+void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
 {
-  if (isEqual(name_,"segmentations")) {
-    validate();
-    auxsegmentation.reset();
+  if (isEqual(name_,"sectors")) {
+    validations();
+    auxsector = Sector();
   }
-  else if (isEqual(name_,"segmentation")) {
-    insertSegmentation(auxsegmentation);
+  else if (isEqual(name_,"sector")) {
+    insertSector(auxsector);
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -175,21 +167,33 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 }
 
 //===========================================================================
+// validacions de la llista de sectors recollida
+//===========================================================================
+void ccruncher::Sectors::validations() throw(Exception)
+{
+  // checking number of sectors
+  if (vsectors.size() == 0)
+  {
+    throw Exception("sectors have no elements");
+  }
+}
+
+//===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Segmentations::getXML(int ilevel) const throw(Exception)
+string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<segmentations>\n";
+  ret += spc + "<sectors>\n";
 
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (unsigned int i=0;i<vsectors.size();i++)
   {
-    ret += vsegmentations[i].getXML(ilevel+2);
+    ret += vsectors[i].getXML(ilevel+2);
   }
 
-  ret += spc + "</segmentations>\n";
+  ret += spc + "</sectors>\n";
 
   return ret;
 }

@@ -27,8 +27,8 @@
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
-#include "segmentations/Segmentations.hpp"
-#include "interests/Interest.hpp"
+#include "params/Segmentations.hpp"
+#include "params/Interest.hpp"
 
 //---------------------------------------------------------------------------
 

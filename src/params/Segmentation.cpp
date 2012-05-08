@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include "segmentations/Segmentation.hpp"
+#include "params/Segmentation.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
 

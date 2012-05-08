@@ -30,14 +30,14 @@
 #include <string>
 #include <map>
 #include "params/Params.hpp"
-#include "interests/Interest.hpp"
-#include "ratings/Ratings.hpp"
-#include "sectors/Sectors.hpp"
+#include "params/Interest.hpp"
+#include "params/Ratings.hpp"
+#include "params/Sectors.hpp"
 #include "portfolio/Portfolio.hpp"
-#include "transitions/TransitionMatrix.hpp"
-#include "survival/Survival.hpp"
-#include "correlations/CorrelationMatrix.hpp"
-#include "segmentations/Segmentations.hpp"
+#include "params/TransitionMatrix.hpp"
+#include "params/Survival.hpp"
+#include "params/CorrelationMatrix.hpp"
+#include "params/Segmentations.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 

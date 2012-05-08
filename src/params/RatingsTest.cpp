@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "ratings/Ratings.hpp"
-#include "ratings/RatingsTest.hpp"
+#include "params/Ratings.hpp"
+#include "params/RatingsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
