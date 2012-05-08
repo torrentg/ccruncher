@@ -223,6 +223,19 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &sectors, name_, attributes);
     }
   }
+  // section defaults
+  else if (isEqual(name_,"historical")) {
+    if (sectors.size() == 0) {
+      throw Exception("tag <historical> defined before <sectors> tag");
+    }
+    else if (defaults.size() != 0) {
+      throw Exception("tag historical repeated");
+    }
+     else {
+      defaults.setSectors(sectors);
+      eppush(eu, &defaults, name_, attributes);
+    }
+  }
   // section correlation matrix
   else if (isEqual(name_,"mcorrels")) {
     if (sectors.size() == 0) {
@@ -324,6 +337,9 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
     // nothing to do
   }
   else if (isEqual(name_,"sectors")) {
+    // nothing to do
+  }
+  else if (isEqual(name_,"historical")) {
     // nothing to do
   }
   else if (isEqual(name_,"mcorrels")) {
@@ -482,6 +498,14 @@ Survival & ccruncher::IData::getSurvival()
 Sectors & ccruncher::IData::getSectors()
 {
   return sectors;
+}
+
+//===========================================================================
+// getDefaults
+//===========================================================================
+Defaults & ccruncher::IData::getDefaults()
+{
+  return defaults;
 }
 
 //===========================================================================

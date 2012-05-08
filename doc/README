@@ -125,6 +125,7 @@ Notes for Windows developers (MSVC9)
    and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
 
 5. download gsl package from http://alexlaier.org/me/index.php?option=com_content&view=article&id=26:gsl-111-port-microsoft-visual-studio-2008-vc90&catid=3:stuff&Itemid=4
+   or from http://www.miscdebris.net/blog/2009/04/20/mingw-345-binaries-of-gnu-scientific-library-112-for-use-with-mingw-and-visual-c/
    and unpack at $CCRUNCHER\deps\gsl-1.11 directory
 
 6. download pthreads-win32 package from http://sourceware.org/pthreads-win32/
