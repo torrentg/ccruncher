@@ -44,7 +44,8 @@ HEADERS += \
     src/utils/Date.hpp \
     src/utils/config.h \
     src/utils/Arrays.hpp \
-    deps/gzstream-1.5/gzstream.h
+    deps/gzstream-1.5/gzstream.h \
+    src/params/Defaults.hpp
 
 SOURCES += \
     src/params/CorrelationMatrix.cpp \
@@ -91,24 +92,40 @@ SOURCES += \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
     src/utils/Arrays.cpp \
-    deps/gzstream-1.5/gzstream.cpp
+    deps/gzstream-1.5/gzstream.cpp \
+    src/params/Defaults.cpp
 
 INCLUDEPATH += ./src \
     deps/gzstream-1.5
 
-LIBS += -lpthread \
-    -lz \
+LIBS += \
     -lm \
+    -lpthread
+
+unix {
+  LIBS += \
+    -lz \
     -lgsl \
     -lgslcblas \
     -lexpat
+}
 
 win32 {
   DEFINES += BUILD_GETOPT
   DEFINES += BUILD_DIRENT
   INCLUDEPATH += \
-    deps/gsl-1.11/win32/include \
+#    deps/gsl-1.11/win32/include \
+    deps/gsl-1.12/include \
     deps/expat-2.1.0/Source/lib \
     deps/zlib-1.2.7
+  LIBS += \
+    $$PWD/deps/zlib-1.2.7/libz.dll.a \
+#    $$PWD/deps/gsl-1.11/win32/lib/release_static-vs90/gsl.lib \
+#    $$PWD/deps/gsl-1.11/win32/lib/release_static-vs90/cblas.lib \
+    $$PWD/deps/gsl-1.12/lib-static/libgsl.a \
+    $$PWD/deps/gsl-1.12/lib-static/libgslcblas.a \
+    $$PWD/deps/expat-2.1.0/Bin/libexpat.lib \
+    -L"$$PWD/deps/expat-2.1.0/Bin/"
+#    $$PWD/libpthreadGC2.a
 }
 

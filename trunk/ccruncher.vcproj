@@ -199,7 +199,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<Filter
-				Name="correlations"
+				Name="params"
 				>
 				<File
 					RelativePath="src\params\CorrelationMatrix.cpp"
@@ -209,16 +209,92 @@
 					RelativePath="src\params\CorrelationMatrix.hpp"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="interests"
-				>
 				<File
 					RelativePath="src\params\Interest.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\params\Interest.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Params.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Params.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Rating.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Rating.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Ratings.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Ratings.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Sector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Sector.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Sectors.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Sectors.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Defaults.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Defaults.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Segmentation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Segmentation.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Segmentations.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Segmentations.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\TransitionMatrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\TransitionMatrix.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Survival.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Survival.hpp"
 					>
 				</File>
 			</Filter>
@@ -327,18 +403,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="params"
-				>
-				<File
-					RelativePath="src\params\Params.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Params.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="portfolio"
 				>
 				<File
@@ -387,78 +451,6 @@
 				</File>
 				<File
 					RelativePath=".\src\portfolio\Recovery.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="ratings"
-				>
-				<File
-					RelativePath="src\params\Rating.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Rating.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Ratings.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Ratings.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="sectors"
-				>
-				<File
-					RelativePath="src\params\Sector.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Sector.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Sectors.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Sectors.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="segmentations"
-				>
-				<File
-					RelativePath="src\params\Segmentation.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Segmentation.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Segmentations.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Segmentations.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="transitions"
-				>
-				<File
-					RelativePath="src\params\TransitionMatrix.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\TransitionMatrix.hpp"
 					>
 				</File>
 			</Filter>
@@ -611,18 +603,6 @@
 				</File>
 				<File
 					RelativePath="src\win32\winconfig.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="survival"
-				>
-				<File
-					RelativePath="src\params\Survival.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Survival.hpp"
 					>
 				</File>
 			</Filter>

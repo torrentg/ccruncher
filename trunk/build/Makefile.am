@@ -39,6 +39,7 @@ ccruncher_SOURCES = \
     ../src/params/CorrelationMatrix.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/Defaults.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/CopulaCalibration.cpp\
     ../src/math/BlockMatrixChol.cpp\
@@ -83,6 +84,7 @@ ccruncher_SOURCES = \
     ../src/params/CorrelationMatrix.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/Defaults.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/CopulaCalibration.hpp\
@@ -194,6 +196,7 @@ tests_SOURCES = \
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/Survival.cpp\
+    ../src/params/Defaults.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
@@ -271,6 +274,7 @@ tests_SOURCES = \
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/Survival.hpp\
+    ../src/params/Defaults.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
@@ -325,6 +329,7 @@ samplegen_SOURCES = \
     ../src/params/CorrelationMatrix.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/Defaults.cpp\
     ../src/kernel/samplegen.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -371,6 +376,7 @@ samplegen_SOURCES = \
     ../src/params/CorrelationMatrix.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/Defaults.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
