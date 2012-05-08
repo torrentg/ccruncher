@@ -90,7 +90,7 @@ class CopulaCalibration
     // set function params
     void setParams(int k, int *n, double **h, int t, double *p) throw(Exception);
     // calibrate copula using MLE
-    void run(const double **sigma0, double ndf0) throw(Exception);
+    void run() throw(Exception);
     // return estimated ndf
     double getNdf() const;
     // return estimated correlations

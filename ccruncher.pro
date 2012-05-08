@@ -114,14 +114,11 @@ win32 {
   DEFINES += BUILD_GETOPT
   DEFINES += BUILD_DIRENT
   INCLUDEPATH += \
-#    deps/gsl-1.11/win32/include \
     deps/gsl-1.12/include \
     deps/expat-2.1.0/Source/lib \
     deps/zlib-1.2.7
   LIBS += \
     $$PWD/deps/zlib-1.2.7/libz.dll.a \
-#    $$PWD/deps/gsl-1.11/win32/lib/release_static-vs90/gsl.lib \
-#    $$PWD/deps/gsl-1.11/win32/lib/release_static-vs90/cblas.lib \
     $$PWD/deps/gsl-1.12/lib-static/libgsl.a \
     $$PWD/deps/gsl-1.12/lib-static/libgslcblas.a \
     $$PWD/deps/expat-2.1.0/Bin/libexpat.lib \
@@ -129,3 +126,4 @@ win32 {
 #    $$PWD/libpthreadGC2.a
 }
 
+CONFIG(release, debug|release) DEFINES += NDEBUG

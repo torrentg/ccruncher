@@ -219,7 +219,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     if (sectors.size() != 0) {
       throw Exception("tag sectors repeated");
     }
-     else {
+    else {
       eppush(eu, &sectors, name_, attributes);
     }
   }
@@ -231,7 +231,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     else if (defaults.size() != 0) {
       throw Exception("tag historical repeated");
     }
-     else {
+    else {
       defaults.setSectors(sectors);
       eppush(eu, &defaults, name_, attributes);
     }

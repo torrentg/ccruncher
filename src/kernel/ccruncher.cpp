@@ -70,6 +70,7 @@ string spath = "";
 bool bverbose = true;
 bool bforce = false;
 bool btrace = false;
+bool bcalib = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
@@ -114,6 +115,7 @@ int main(int argc, char *argv[])
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
       { "trace",        0,  NULL,  306 },
+      { "calibrate",    0,  NULL,  307 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -218,6 +220,10 @@ int main(int argc, char *argv[])
 
       case 306: // --trace (trace copula values and default times)
           btrace = true;
+          break;
+
+      case 307: // --calibrate (calibrate copula using historical data)
+          bcalib = true;
           break;
 
       default: // unexpected error
@@ -333,11 +339,19 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   // parsing input file
   IData idata(filename, defines);
 
+  // checking feasibility
+  if (bcalib && idata.getDefaults().size() == 0)
+  {
+    throw Exception("error: input file hasn't 'historical' section\n"
+                    "this section is required in order to calibrate de copula");
+  }
+
   // creating simulation object
   MonteCarlo montecarlo;
   montecarlo.setFilePath(path, bforce);
   montecarlo.setHash(ihash);
-  montecarlo.trace(btrace);
+  montecarlo.setTrace(btrace);
+  montecarlo.setCalib(bcalib);
 
   // initializing simulation
   montecarlo.initialize(idata);
@@ -420,6 +434,8 @@ void usage()
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
+  "    --calibrate    calibrate copula using historical information.\n"
+  "                   results are stored in file calibration.xml\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
   "    --help -h      show this message and exit\n"

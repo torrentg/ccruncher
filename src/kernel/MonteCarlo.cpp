@@ -27,10 +27,12 @@
 #include "params/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockTStudentCopula.hpp"
+#include "math/CopulaCalibration.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
+#include "utils/Arrays.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -48,6 +50,7 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   fpath = "path not set";
   bforce = false;
   btrace = false;
+  bcalib = false;
   copula = NULL;
   running = false;
   assetsize = 0;
@@ -138,6 +141,9 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 
     // initializing survival functions
     initSurvival(idata);
+
+    // calibrate copula params (correlations+ndf)
+    calibrateCopula(idata);
 
     // initializing copula
     initCopula(idata, idata.getParams().copula_seed);
@@ -366,6 +372,38 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 
   // exit function
   Logger::previousIndentLevel();
+}
+
+//===========================================================================
+// calibrate copula params
+//===========================================================================
+void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
+{
+  if (!bcalib) return;
+
+  timer.start();
+
+  // setting logger header
+  Logger::trace("calibrating copula", '-');
+  Logger::newIndentLevel();
+
+  int k = idata.getSectors().size();
+  vector<int> n(idata.getSectors().size(),0);
+  double **h = idata.getDefaults().getMatrix();
+  int t = idata.getDefaults().size();
+  vector<double> p(idata.getSectors().size(),0.05);
+
+  // computing the number of obligors in each sector
+  for(unsigned int i=0; i<obligors.size(); i++)
+  {
+    n[obligors[i].ref->isector]++;
+  }
+
+  CopulaCalibration mle;
+  mle.setParams(k, &(n[0]), h, t, &(p[0]));
+  mle.run();
+
+  Arrays<double>::deallocMatrix(h, t);
 }
 
 //===========================================================================
@@ -628,11 +666,19 @@ void ccruncher::MonteCarlo::setFilePath(string path, bool force)
 }
 
 //===========================================================================
-// trace
+// setTrace
 //===========================================================================
-void ccruncher::MonteCarlo::trace(bool val)
+void ccruncher::MonteCarlo::setTrace(bool val)
 {
   btrace = val;
+}
+
+//===========================================================================
+// setCalib
+//===========================================================================
+void ccruncher::MonteCarlo::setCalib(bool val)
+{
+  bcalib = val;
 }
 
 //===========================================================================
