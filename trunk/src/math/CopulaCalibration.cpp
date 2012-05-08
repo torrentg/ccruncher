@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <iomanip>
 #include <cmath>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_multimin.h>
@@ -124,7 +125,11 @@ void ccruncher::CopulaCalibration::setParams(int k, int *n, double **h, int t, d
   //TODO: check if exist sectors with 0 elements?
   if (params.dim < 2) throw Exception("copula of dimension less than 2");
 
-  params.k = k;
+  //TODO: revisar i pulir
+  int aux=0;
+  for(int i=0; i<k; i++) if (n[i]>0) aux++;
+
+  params.k = aux; //k
   params.t = t;
   params.n = Arrays<int>::allocVector(k, n);
   params.p = Arrays<double>::allocVector(k, p);
@@ -155,7 +160,7 @@ double** ccruncher::CopulaCalibration::getCorrelations() const
 //===========================================================================
 // calibrate copula using MLE
 //===========================================================================
-void ccruncher::CopulaCalibration::run(const double **sigma0, double ndf0) throw(Exception)
+void ccruncher::CopulaCalibration::run() throw(Exception)
 {
   //TODO: comprovar tamanys de parametres
 
@@ -167,13 +172,17 @@ void ccruncher::CopulaCalibration::run(const double **sigma0, double ndf0) throw
   double size;
   int num_params = (params.k*(params.k+1))/2 + 1;
 
-  // starting point
+  // starting point (correls=0, ndf=30)
+  // we start from a known valid point
+  // if p0 was given by user, then p0 can be non-valid
   x = gsl_vector_alloc(num_params);
-  serialize(params.k, sigma0, ndf0, x);
+  gsl_vector_set_all(x, 0.0);
+  gsl_vector_set(x, 0, 30.0);
 
-  // set initial step sizes to 1
+  // set initial step sizes
   ss = gsl_vector_alloc(num_params);
   gsl_vector_set_all(ss, 0.05);
+  gsl_vector_set(ss, 0, 1.0);
 
   // initialize method and iterate
   minex_func.n = num_params;
@@ -199,9 +208,21 @@ void ccruncher::CopulaCalibration::run(const double **sigma0, double ndf0) throw
        printf ("converged to minimum at\n");
      }
 
-     printf ("%5d f() = %7.3f size = %.3f\n", (int) iter, minimizer->fval, size);
+     printf("%5d f() = %7.3f size = %.3f\n", (int) iter, minimizer->fval, size);
   }
   while (status == GSL_CONTINUE && iter < 1000);
+
+  deserialize(params.k, minimizer->x, M, &ndf);
+  cout << "SOLUTION:" << endl;
+  cout << "  ndf = " << ndf << endl;
+  cout << "  correlations = " << endl;
+  for(int i=0; i<params.k; i++) {
+    for(int j=0; j<params.k; j++) {
+        if (params.n[i]==0 || params.n[j]==0) M[i][j] = 0.0;
+        cout << setprecision(4) << M[i][j] << "\t";
+    }
+    cout << endl;
+  }
 
   gsl_vector_free(x);
   gsl_vector_free(ss);
@@ -282,12 +303,27 @@ double ccruncher::CopulaCalibration::f(const gsl_vector *v, void *params_)
   double ret = 0.0;
   double nu;
   fparams *p = (fparams*) params_;
+  BlockMatrixChol *L = NULL;
+  BlockMatrixCholInv *I = NULL;
 
   for(int i=0; i<p->k; i++) dim += p->n[i];
   deserialize(p->k, v, p->M, &nu);
 
-  BlockMatrixChol *L = new BlockMatrixChol(p->M, p->n, p->k);
-  BlockMatrixCholInv *I = L->getInverse();
+  if (nu < 2.0) return 1e6;
+  if (nu > 1000.0) nu = 1000.0;
+
+  try
+  {
+    L = new BlockMatrixChol(p->M, p->n, p->k);
+    I = L->getInverse();
+  }
+  catch(Exception &e)
+  {
+    // non-definite correlation matrix
+    if (L != NULL) delete L;
+    if (I != NULL) delete I;
+    return 1e6;
+  }
 
   // sign inverted because gsl minimize and we try to maximize
   for(int i=0; i<p->t; i++)
@@ -311,8 +347,8 @@ double ccruncher::CopulaCalibration::f(const gsl_vector *v, void *params_)
     ret -= (nu+1.0)/2.0 * aux2;
   }
 
-  delete L;
-  delete I;
+  if (L != NULL) delete L;
+  if (I != NULL) delete I;
 
   return ret;
 }
