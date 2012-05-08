@@ -28,17 +28,17 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
-    ../src/interests/Interest.cpp\
-    ../src/ratings/Rating.cpp\
-    ../src/ratings/Ratings.cpp\
-    ../src/transitions/TransitionMatrix.cpp\
-    ../src/survival/Survival.cpp\
-    ../src/sectors/Sector.cpp\
-    ../src/sectors/Sectors.cpp\
-    ../src/correlations/CorrelationMatrix.cpp\
+    ../src/params/Interest.cpp\
+    ../src/params/Rating.cpp\
+    ../src/params/Ratings.cpp\
+    ../src/params/TransitionMatrix.cpp\
+    ../src/params/Survival.cpp\
+    ../src/params/Sector.cpp\
+    ../src/params/Sectors.cpp\
+    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Segmentations.cpp\
+    ../src/params/Segmentation.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/CopulaCalibration.cpp\
     ../src/math/BlockMatrixChol.cpp\
@@ -46,12 +46,12 @@ ccruncher_SOURCES = \
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
+    ../src/portfolio/Portfolio.cpp\
+    ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
     ../src/portfolio/Exposure.cpp\
-    ../src/segmentations/Segmentations.cpp\
-    ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
     ../src/utils/Parser.cpp\
@@ -72,17 +72,17 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Obligor.hpp\
     ../src/params/Params.hpp\
-    ../src/interests/Interest.hpp\
-    ../src/ratings/Rating.hpp\
-    ../src/ratings/Ratings.hpp\
-    ../src/transitions/TransitionMatrix.hpp\
-    ../src/survival/Survival.hpp\
-    ../src/sectors/Sector.hpp\
-    ../src/sectors/Sectors.hpp\
-    ../src/correlations/CorrelationMatrix.hpp\
+    ../src/params/Interest.hpp\
+    ../src/params/Rating.hpp\
+    ../src/params/Ratings.hpp\
+    ../src/params/TransitionMatrix.hpp\
+    ../src/params/Survival.hpp\
+    ../src/params/Sector.hpp\
+    ../src/params/Sectors.hpp\
+    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Segmentations.hpp\
+    ../src/params/Segmentation.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/CopulaCalibration.hpp\
@@ -91,12 +91,12 @@ ccruncher_SOURCES = \
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
+    ../src/portfolio/Portfolio.hpp\
+    ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
     ../src/portfolio/Exposure.hpp\
-    ../src/segmentations/Segmentations.hpp\
-    ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
     ../src/utils/Parser.hpp\
@@ -139,26 +139,23 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopulaTest.cpp\
     ../src/math/BlockTStudentCopulaTest.cpp\
     ../src/math/FastTStudentCdfTest.cpp\
-    ../src/correlations/CorrelationMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
     ../src/portfolio/RecoveryTest.cpp\
     ../src/portfolio/ExposureTest.cpp\
-    ../src/interests/InterestTest.cpp\
-    ../src/segmentations/SegmentationTest.cpp\
-    ../src/segmentations/SegmentationsTest.cpp\
+    ../src/portfolio/ObligorTest.cpp\
+    ../src/params/InterestTest.cpp\
+    ../src/params/SegmentationTest.cpp\
+    ../src/params/SegmentationsTest.cpp\
+    ../src/params/ParamsTest.cpp\
+    ../src/params/CorrelationMatrixTest.cpp\
+    ../src/params/RatingsTest.cpp\
+    ../src/params/SectorsTest.cpp\
+    ../src/params/TransitionMatrixTest.cpp\
+    ../src/params/SurvivalTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
-    ../src/params/ParamsTest.cpp\
-    ../src/portfolio/ObligorTest.cpp\
-    ../src/ratings/RatingsTest.cpp\
-    ../src/sectors/SectorsTest.cpp\
-    ../src/transitions/TransitionMatrixTest.cpp\
-    ../src/survival/SurvivalTest.cpp\
-    ../src/portfolio/Asset.cpp\
-    ../src/portfolio/DateValues.cpp\
-    ../src/portfolio/Recovery.cpp\
-    ../src/portfolio/Exposure.cpp\
+    \
     ../src/utils/Arrays.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
@@ -180,24 +177,28 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.cpp\
     ../src/math/BlockTStudentCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
+    ../src/portfolio/Portfolio.cpp\
+    ../src/portfolio/Obligor.cpp\
+    ../src/portfolio/Asset.cpp\
+    ../src/portfolio/DateValues.cpp\
+    ../src/portfolio/Recovery.cpp\
+    ../src/portfolio/Exposure.cpp\
+    ../src/params/Sector.cpp\
+    ../src/params/Sectors.cpp\
+    ../src/params/Rating.cpp\
+    ../src/params/Ratings.cpp\
+    ../src/params/Params.cpp\
+    ../src/params/TransitionMatrix.cpp\
+    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Interest.cpp\
+    ../src/params/Segmentations.cpp\
+    ../src/params/Segmentation.cpp\
+    ../src/params/Survival.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/sectors/Sector.cpp\
-    ../src/sectors/Sectors.cpp\
-    ../src/ratings/Rating.cpp\
-    ../src/ratings/Ratings.cpp\
-    ../src/params/Params.cpp\
-    ../src/transitions/TransitionMatrix.cpp\
-    ../src/correlations/CorrelationMatrix.cpp\
-    ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Obligor.cpp\
-    ../src/interests/Interest.cpp\
-    ../src/segmentations/Segmentations.cpp\
-    ../src/segmentations/Segmentation.cpp\
-    ../src/survival/Survival.cpp\
     \
     ../src/utils/ArraysTest.hpp\
     ../src/utils/StringsTest.hpp\
@@ -214,26 +215,23 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopulaTest.hpp\
     ../src/math/BlockTStudentCopulaTest.hpp\
     ../src/math/FastTStudentCdfTest.hpp\
-    ../src/correlations/CorrelationMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
     ../src/portfolio/RecoveryTest.hpp\
     ../src/portfolio/ExposureTest.hpp\
-    ../src/interests/InterestTest.hpp\
-    ../src/segmentations/SegmentationTest.hpp\
-    ../src/segmentations/SegmentationsTest.hpp\
+    ../src/portfolio/ObligorTest.hpp\
+    ../src/params/CorrelationMatrixTest.hpp\
+    ../src/params/InterestTest.hpp\
+    ../src/params/SegmentationTest.hpp\
+    ../src/params/SegmentationsTest.hpp\
+    ../src/params/ParamsTest.hpp\
+    ../src/params/RatingsTest.hpp\
+    ../src/params/SectorsTest.hpp\
+    ../src/params/TransitionMatrixTest.hpp\
+    ../src/params/SurvivalTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
-    ../src/params/ParamsTest.hpp\
-    ../src/portfolio/ObligorTest.hpp\
-    ../src/ratings/RatingsTest.hpp\
-    ../src/sectors/SectorsTest.hpp\
-    ../src/transitions/TransitionMatrixTest.hpp\
-    ../src/survival/SurvivalTest.hpp\
-    ../src/portfolio/Asset.hpp\
-    ../src/portfolio/DateValues.hpp\
-    ../src/portfolio/Recovery.hpp\
-    ../src/portfolio/Exposure.hpp\
+    \
     ../src/utils/Arrays.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
@@ -256,24 +254,28 @@ tests_SOURCES = \
     ../src/math/BlockGaussianCopula.hpp\
     ../src/math/BlockTStudentCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
+    ../src/portfolio/Asset.hpp\
+    ../src/portfolio/DateValues.hpp\
+    ../src/portfolio/Recovery.hpp\
+    ../src/portfolio/Exposure.hpp\
+    ../src/portfolio/Portfolio.hpp\
+    ../src/portfolio/Obligor.hpp\
+    ../src/params/Sector.hpp\
+    ../src/params/Sectors.hpp\
+    ../src/params/Rating.hpp\
+    ../src/params/Ratings.hpp\
+    ../src/params/Params.hpp\
+    ../src/params/TransitionMatrix.hpp\
+    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Interest.hpp\
+    ../src/params/Segmentations.hpp\
+    ../src/params/Segmentation.hpp\
+    ../src/params/Survival.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/sectors/Sector.hpp\
-    ../src/sectors/Sectors.hpp\
-    ../src/ratings/Rating.hpp\
-    ../src/ratings/Ratings.hpp\
-    ../src/params/Params.hpp\
-    ../src/transitions/TransitionMatrix.hpp\
-    ../src/correlations/CorrelationMatrix.hpp\
-    ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Obligor.hpp\
-    ../src/interests/Interest.hpp\
-    ../src/segmentations/Segmentations.hpp\
-    ../src/segmentations/Segmentation.hpp\
-    ../src/survival/Survival.hpp\
     ../src/utils/config.h
 
 tests_CXXFLAGS =
@@ -285,36 +287,6 @@ tests_LDFLAGS =
 # -------------------------------------------------------------
 samplegen_SOURCES = \
     ../deps/gzstream-1.5/gzstream.cpp\
-    ../src/kernel/samplegen.cpp\
-    ../src/kernel/MonteCarlo.cpp\
-    ../src/kernel/SimulationThread.cpp\
-    ../src/kernel/SimulatedData.cpp\
-    ../src/kernel/IData.cpp\
-    ../src/kernel/Aggregator.cpp\
-    ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Obligor.cpp\
-    ../src/params/Params.cpp\
-    ../src/interests/Interest.cpp\
-    ../src/ratings/Rating.cpp\
-    ../src/ratings/Ratings.cpp\
-    ../src/transitions/TransitionMatrix.cpp\
-    ../src/survival/Survival.cpp\
-    ../src/sectors/Sector.cpp\
-    ../src/sectors/Sectors.cpp\
-    ../src/correlations/CorrelationMatrix.cpp\
-    ../src/math/PowMatrix.cpp\
-    ../src/math/CopulaCalibration.cpp\
-    ../src/math/BlockMatrixChol.cpp\
-    ../src/math/BlockMatrixCholInv.cpp\
-    ../src/math/BlockGaussianCopula.cpp\
-    ../src/math/BlockTStudentCopula.cpp\
-    ../src/math/FastTStudentCdf.cpp\
-    ../src/portfolio/Asset.cpp\
-    ../src/portfolio/DateValues.cpp\
-    ../src/portfolio/Recovery.cpp\
-    ../src/portfolio/Exposure.cpp\
-    ../src/segmentations/Segmentations.cpp\
-    ../src/segmentations/Segmentation.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
     ../src/utils/Parser.cpp\
@@ -329,37 +301,37 @@ samplegen_SOURCES = \
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
+    ../src/math/PowMatrix.cpp\
+    ../src/math/CopulaCalibration.cpp\
+    ../src/math/BlockMatrixChol.cpp\
+    ../src/math/BlockMatrixCholInv.cpp\
+    ../src/math/BlockGaussianCopula.cpp\
+    ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/FastTStudentCdf.cpp\
+    ../src/portfolio/Asset.cpp\
+    ../src/portfolio/DateValues.cpp\
+    ../src/portfolio/Recovery.cpp\
+    ../src/portfolio/Exposure.cpp\
+    ../src/portfolio/Portfolio.cpp\
+    ../src/portfolio/Obligor.cpp\
+    ../src/params/Params.cpp\
+    ../src/params/Interest.cpp\
+    ../src/params/Rating.cpp\
+    ../src/params/Ratings.cpp\
+    ../src/params/TransitionMatrix.cpp\
+    ../src/params/Survival.cpp\
+    ../src/params/Sector.cpp\
+    ../src/params/Sectors.cpp\
+    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Segmentations.cpp\
+    ../src/params/Segmentation.cpp\
+    ../src/kernel/samplegen.cpp\
+    ../src/kernel/MonteCarlo.cpp\
+    ../src/kernel/SimulationThread.cpp\
+    ../src/kernel/SimulatedData.cpp\
+    ../src/kernel/IData.cpp\
+    ../src/kernel/Aggregator.cpp\
     \
-    ../src/kernel/MonteCarlo.hpp\
-    ../src/kernel/SimulationThread.hpp\
-    ../src/kernel/SimulatedData.hpp\
-    ../src/kernel/IData.hpp\
-    ../src/kernel/Aggregator.hpp\
-    ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Obligor.hpp\
-    ../src/params/Params.hpp\
-    ../src/interests/Interest.hpp\
-    ../src/ratings/Rating.hpp\
-    ../src/ratings/Ratings.hpp\
-    ../src/transitions/TransitionMatrix.hpp\
-    ../src/survival/Survival.hpp\
-    ../src/sectors/Sector.hpp\
-    ../src/sectors/Sectors.hpp\
-    ../src/correlations/CorrelationMatrix.hpp\
-    ../src/math/PowMatrix.hpp\
-    ../src/math/Copula.hpp\
-    ../src/math/CopulaCalibration.hpp\
-    ../src/math/BlockMatrixChol.hpp\
-    ../src/math/BlockMatrixCholInv.hpp\
-    ../src/math/BlockGaussianCopula.hpp\
-    ../src/math/BlockTStudentCopula.hpp\
-    ../src/math/FastTStudentCdf.hpp\
-    ../src/portfolio/Asset.hpp\
-    ../src/portfolio/DateValues.hpp\
-    ../src/portfolio/Recovery.hpp\
-    ../src/portfolio/Exposure.hpp\
-    ../src/segmentations/Segmentations.hpp\
-    ../src/segmentations/Segmentation.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
     ../src/utils/Parser.hpp\
@@ -374,6 +346,36 @@ samplegen_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
+    ../src/math/PowMatrix.hpp\
+    ../src/math/Copula.hpp\
+    ../src/math/CopulaCalibration.hpp\
+    ../src/math/BlockMatrixChol.hpp\
+    ../src/math/BlockMatrixCholInv.hpp\
+    ../src/math/BlockGaussianCopula.hpp\
+    ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/FastTStudentCdf.hpp\
+    ../src/portfolio/Portfolio.hpp\
+    ../src/portfolio/Obligor.hpp\
+    ../src/portfolio/Asset.hpp\
+    ../src/portfolio/DateValues.hpp\
+    ../src/portfolio/Recovery.hpp\
+    ../src/portfolio/Exposure.hpp\
+    ../src/params/Params.hpp\
+    ../src/params/Interest.hpp\
+    ../src/params/Rating.hpp\
+    ../src/params/Ratings.hpp\
+    ../src/params/TransitionMatrix.hpp\
+    ../src/params/Survival.hpp\
+    ../src/params/Sector.hpp\
+    ../src/params/Sectors.hpp\
+    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Segmentations.hpp\
+    ../src/params/Segmentation.hpp\
+    ../src/kernel/MonteCarlo.hpp\
+    ../src/kernel/SimulationThread.hpp\
+    ../src/kernel/SimulatedData.hpp\
+    ../src/kernel/IData.hpp\
+    ../src/kernel/Aggregator.hpp\
     ../src/utils/config.h
 
 samplegen_CXXFLAGS =

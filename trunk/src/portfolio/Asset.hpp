@@ -29,8 +29,8 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
-#include "interests/Interest.hpp"
-#include "segmentations/Segmentations.hpp"
+#include "params/Interest.hpp"
+#include "params/Segmentations.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"

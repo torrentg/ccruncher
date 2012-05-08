@@ -94,7 +94,7 @@ class CopulaCalibration
     // return estimated ndf
     double getNdf() const;
     // return estimated correlations
-    double** const getCorrelations() const;
+    double** getCorrelations() const;
 
 };
 

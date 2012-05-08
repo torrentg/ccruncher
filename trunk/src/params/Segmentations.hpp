@@ -20,23 +20,15 @@
 //
 //===========================================================================
 
-#ifndef _Survival_
-#define _Survival_
+#ifndef _Segmentations_
+#define _Segmentations_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include <vector>
-#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "ratings/Ratings.hpp"
-
-#ifdef __GNUC__
-#define NOINLINE  __attribute__((noinline))
-#else
-#define NOINLINE 
-#endif
+#include "utils/ExpatHandlers.hpp"
+#include "params/Segmentation.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -46,62 +38,44 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Survival : public ExpatHandlers
+class Segmentations : public ExpatHandlers
 {
 
   private:
 
-    // survival function for each rating
-    vector<vector<double> > ddata;
-    // inverse survival function values
-    vector<vector<double> > idata;
-    // number of ratings
-    int nratings;
-    // pointer to ratings table
-    Ratings *ratings;
+    // list of segmentations
+    vector<Segmentation> vsegmentations;
+    // auxiliary variable (used by parser)
+    Segmentation auxsegmentation;
 
   private:
   
-    // insert a survival value
-    void insertValue(const string &r1, int t, double val) throw(Exception);
+    // insert a segmentation to list
+    int insertSegmentation(Segmentation &) throw(Exception);
     // validate object content
     void validate() throw(Exception);
-    // fill holes in survival functions
-    void fillHoles();
-    // compute inverse for each survival function
-    void computeInvTable();
-    // linear interpolation algorithm
-    double interpole(double x, double x0, double y0, double x1, double y1) const;
-    // inverse function
-    double inverse1(const int irating, double val) const NOINLINE;
 
   protected:
-
+  
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
     // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
-
+  
   public:
 
-    // defaults constructor
-    Survival();
     // constructor
-    Survival(const Ratings &) throw(Exception);
-    // constructor
-    Survival(const Ratings &, int, int *, double**) throw(Exception);
+    Segmentations();
     // destructor
-    ~Survival();
-    // returns ratings size
+    ~Segmentations();
+    // return the number of segmentations
     int size() const;
-    // set ratings
-    void setRatings(const Ratings &) throw(Exception);
-    // evalue survival for irating at t
-    double evalue(const int irating, int t) const;
-    // evalue inverse survival for irating at t
-    double inverse(const int irating, double val) const;
-    // return minimal defined time (in months)
-    int getMinCommonTime() const;
+    // [] operator
+    Segmentation& getSegmentation(int i);
+    // return the index of the given segmentation
+    int indexOfSegmentation(const string &sname) throw(Exception);
+    // return the index of the given segmentation
+    int indexOfSegmentation(const char *sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

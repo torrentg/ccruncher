@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include "ratings/Rating.hpp"
+#include "params/Rating.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
 

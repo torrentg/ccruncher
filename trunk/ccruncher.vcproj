@@ -202,11 +202,11 @@
 				Name="correlations"
 				>
 				<File
-					RelativePath="src\correlations\CorrelationMatrix.cpp"
+					RelativePath="src\params\CorrelationMatrix.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\correlations\CorrelationMatrix.hpp"
+					RelativePath="src\params\CorrelationMatrix.hpp"
 					>
 				</File>
 			</Filter>
@@ -214,11 +214,11 @@
 				Name="interests"
 				>
 				<File
-					RelativePath="src\interests\Interest.cpp"
+					RelativePath="src\params\Interest.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\interests\Interest.hpp"
+					RelativePath="src\params\Interest.hpp"
 					>
 				</File>
 			</Filter>
@@ -394,19 +394,19 @@
 				Name="ratings"
 				>
 				<File
-					RelativePath="src\ratings\Rating.cpp"
+					RelativePath="src\params\Rating.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\ratings\Rating.hpp"
+					RelativePath="src\params\Rating.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\ratings\Ratings.cpp"
+					RelativePath="src\params\Ratings.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\ratings\Ratings.hpp"
+					RelativePath="src\params\Ratings.hpp"
 					>
 				</File>
 			</Filter>
@@ -414,19 +414,19 @@
 				Name="sectors"
 				>
 				<File
-					RelativePath="src\sectors\Sector.cpp"
+					RelativePath="src\params\Sector.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sector.hpp"
+					RelativePath="src\params\Sector.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sectors.cpp"
+					RelativePath="src\params\Sectors.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\sectors\Sectors.hpp"
+					RelativePath="src\params\Sectors.hpp"
 					>
 				</File>
 			</Filter>
@@ -434,19 +434,19 @@
 				Name="segmentations"
 				>
 				<File
-					RelativePath="src\segmentations\Segmentation.cpp"
+					RelativePath="src\params\Segmentation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentation.hpp"
+					RelativePath="src\params\Segmentation.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentations.cpp"
+					RelativePath="src\params\Segmentations.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\segmentations\Segmentations.hpp"
+					RelativePath="src\params\Segmentations.hpp"
 					>
 				</File>
 			</Filter>
@@ -454,11 +454,11 @@
 				Name="transitions"
 				>
 				<File
-					RelativePath="src\transitions\TransitionMatrix.cpp"
+					RelativePath="src\params\TransitionMatrix.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\transitions\TransitionMatrix.hpp"
+					RelativePath="src\params\TransitionMatrix.hpp"
 					>
 				</File>
 			</Filter>
@@ -618,11 +618,11 @@
 				Name="survival"
 				>
 				<File
-					RelativePath="src\survival\Survival.cpp"
+					RelativePath="src\params\Survival.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\survival\Survival.hpp"
+					RelativePath="src\params\Survival.hpp"
 					>
 				</File>
 			</Filter>

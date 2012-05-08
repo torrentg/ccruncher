@@ -22,7 +22,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include "interests/Interest.hpp"
+#include "params/Interest.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Format.hpp"
 #include "utils/Parser.hpp"

@@ -21,8 +21,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "interests/Interest.hpp"
-#include "interests/InterestTest.hpp"
+#include "params/Interest.hpp"
+#include "params/InterestTest.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 

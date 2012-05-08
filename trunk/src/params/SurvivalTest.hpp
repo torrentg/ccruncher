@@ -20,14 +20,14 @@
 //
 //===========================================================================
 
-#ifndef _CorrelationMatrixTest_
-#define _CorrelationMatrixTest_
+#ifndef _SurvivalTest_
+#define _SurvivalTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
-#include "sectors/Sectors.hpp"
+#include "params/Ratings.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -36,27 +36,33 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class CorrelationMatrixTest : public TestFixture<CorrelationMatrixTest>
+class SurvivalTest : public TestFixture<SurvivalTest>
 {
 
   private:
 
-    Sectors getSectors();
+    Ratings getRatings();
 
     void test1(void);
     void test2(void);
     void test3(void);
     void test4(void);
+    void test5(void);
+    void test6(void);
+    void test7(void);
 
 
   public:
 
-    TEST_FIXTURE(CorrelationMatrixTest)
+    TEST_FIXTURE(SurvivalTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
+      TEST_CASE(test5);
+      TEST_CASE(test6);
+      TEST_CASE(test7);
     }
 
     void setUp();
@@ -64,7 +70,7 @@ class CorrelationMatrixTest : public TestFixture<CorrelationMatrixTest>
 
 };
 
-REGISTER_FIXTURE(CorrelationMatrixTest);
+REGISTER_FIXTURE(SurvivalTest);
 
 //---------------------------------------------------------------------------
 

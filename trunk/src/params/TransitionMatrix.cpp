@@ -21,7 +21,7 @@
 //===========================================================================
 
 #include <cmath>
-#include "transitions/TransitionMatrix.hpp"
+#include "params/TransitionMatrix.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"

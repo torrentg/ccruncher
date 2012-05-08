@@ -21,8 +21,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "correlations/CorrelationMatrix.hpp"
-#include "correlations/CorrelationMatrixTest.hpp"
+#include "params/CorrelationMatrix.hpp"
+#include "params/CorrelationMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------

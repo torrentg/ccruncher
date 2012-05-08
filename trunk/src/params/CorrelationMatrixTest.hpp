@@ -20,54 +20,51 @@
 //
 //===========================================================================
 
-#ifndef _Aggregator_
-#define _Aggregator_
+#ifndef _CorrelationMatrixTest_
+#define _CorrelationMatrixTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include "kernel/SimulatedData.hpp"
-#include "utils/Exception.hpp"
-#include "params/Segmentation.hpp"
+#include <MiniCppUnit.hxx>
+#include "params/Sectors.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class Aggregator
+class CorrelationMatrixTest : public TestFixture<CorrelationMatrixTest>
 {
 
   private:
 
-    // segmentation object
-    Segmentation &segmentation;
-    // output file stream
-    ofstream fout;
-    // number of segments
-    int numsegments;
-    // indicates if unassigned segment is used
-    bool printUnassignedSegment;
+    Sectors getSectors();
+
+    void test1(void);
+    void test2(void);
+    void test3(void);
+    void test4(void);
+
 
   public:
 
-    // constructor
-    Aggregator(char *, int, int, int, Segmentation &, const string &, bool) throw(Exception);
-    // destructor
-    ~Aggregator();
-    // append data to aggregator
-    void append(vector<double> &) throw(Exception);
-    // force flush data to disk
-    void flush() throw(Exception);
+    TEST_FIXTURE(CorrelationMatrixTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+    }
+
+    void setUp();
+    void tearDown();
 
 };
+
+REGISTER_FIXTURE(CorrelationMatrixTest);
 
 //---------------------------------------------------------------------------
 

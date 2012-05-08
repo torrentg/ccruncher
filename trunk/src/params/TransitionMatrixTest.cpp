@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "transitions/TransitionMatrix.hpp"
-#include "transitions/TransitionMatrixTest.hpp"
+#include "params/TransitionMatrix.hpp"
+#include "params/TransitionMatrixTest.hpp"
 #include "utils/ExpatParser.hpp"
 #include "utils/Arrays.hpp"
 

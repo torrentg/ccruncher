@@ -20,7 +20,7 @@
 //===========================================================================
 
 #include <cmath>
-#include "survival/Survival.hpp"
+#include "params/Survival.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
 #include <climits>

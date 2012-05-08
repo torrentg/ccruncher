@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Ratings_
-#define _Ratings_
+#ifndef _Survival_
+#define _Survival_
 
 //---------------------------------------------------------------------------
 
@@ -30,7 +30,13 @@
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "ratings/Rating.hpp"
+#include "params/Ratings.hpp"
+
+#ifdef __GNUC__
+#define NOINLINE  __attribute__((noinline))
+#else
+#define NOINLINE 
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -40,25 +46,37 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Ratings : public ExpatHandlers
+class Survival : public ExpatHandlers
 {
 
   private:
 
-    // ratings list
-    vector<Rating> vratings;
-    // auxiliary variable (used by parser)
-    Rating auxrating;
+    // survival function for each rating
+    vector<vector<double> > ddata;
+    // inverse survival function values
+    vector<vector<double> > idata;
+    // number of ratings
+    int nratings;
+    // pointer to ratings table
+    Ratings *ratings;
 
   private:
   
-    // insert a rating in the list
-    void insertRating(const Rating &) throw(Exception);
+    // insert a survival value
+    void insertValue(const string &r1, int t, double val) throw(Exception);
     // validate object content
-    void validations() throw(Exception);
+    void validate() throw(Exception);
+    // fill holes in survival functions
+    void fillHoles();
+    // compute inverse for each survival function
+    void computeInvTable();
+    // linear interpolation algorithm
+    double interpole(double x, double x0, double y0, double x1, double y1) const;
+    // inverse function
+    double inverse1(const int irating, double val) const NOINLINE;
 
   protected:
-  
+
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
     // ExpatHandlers method
@@ -66,19 +84,24 @@ class Ratings : public ExpatHandlers
 
   public:
 
+    // defaults constructor
+    Survival();
     // constructor
-    Ratings();
+    Survival(const Ratings &) throw(Exception);
+    // constructor
+    Survival(const Ratings &, int, int *, double**) throw(Exception);
     // destructor
-    ~Ratings();
-    // return the number of ratings
+    ~Survival();
+    // returns ratings size
     int size() const;
-    // return the index of the rating
-    int getIndex(const char *name) const;
-    int getIndex(const string &name) const;
-    // [] operator
-    Rating& operator [] (int i);
-    // [] operator
-    Rating& operator [] (const string &name) throw(Exception);
+    // set ratings
+    void setRatings(const Ratings &) throw(Exception);
+    // evalue survival for irating at t
+    double evalue(const int irating, int t) const;
+    // evalue inverse survival for irating at t
+    double inverse(const int irating, double val) const;
+    // return minimal defined time (in months)
+    int getMinCommonTime() const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

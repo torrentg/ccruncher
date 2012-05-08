@@ -20,16 +20,16 @@
 //
 //===========================================================================
 
-#ifndef _Sectors_
-#define _Sectors_
+#ifndef _CorrelationMatrix_
+#define _CorrelationMatrix_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "sectors/Sector.hpp"
+#include "utils/Exception.hpp"
+#include "params/Sectors.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -39,47 +39,52 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Sectors : public ExpatHandlers
+class CorrelationMatrix : public ExpatHandlers
 {
 
   private:
 
+    // nxn = matrix size (n = number of sectors)
+    int n;
     // list of sectors
-    vector<Sector> vsectors;
-    // auxiliary variable (used by parser)
-    Sector auxsector;
+    Sectors sectors;
+    // matrix of values
+    double **matrix;
 
   private:
-  
-    // add a sector to list
-    void insertSector(const Sector &) throw(Exception);
-    // validate list
-    void validations() throw(Exception);
+
+    // insert a new matrix value
+    void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
+    // validate object content
+    void validate(void) throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    // ExpatHandler method
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    // ExpatHandler method
     void epend(ExpatUserData &, const char *);
   
   public:
 
-    // default constructor
-    Sectors();
+    // constructor
+    CorrelationMatrix();
+    // constructor
+    CorrelationMatrix(Sectors &) throw(Exception);
+    // copy constructor
+    CorrelationMatrix(CorrelationMatrix &) throw(Exception);
     // destructor
-    ~Sectors();
-    // return the number of sectors
+    ~CorrelationMatrix();
+    // assignement operator
+    CorrelationMatrix& operator = (const CorrelationMatrix &x);
+    // initialize object
+    void setSectors(const Sectors &) throw(Exception);
+    // matrix size (= number of sector)
     int size() const;
-    // return the index of the sector
-    int getIndex(const char *name) const;
-    int getIndex(const string &name) const;
-    // [] operator
-    Sector& operator [] (int i);
-    // [] operator
-    Sector& operator [] (const string &name) throw(Exception);
-    // returns object content as xml
-    string getXML(int) const throw(Exception);
+    // returns a pointer to matrix values
+    double ** getMatrix() const;
+    // serializes object content as xml
+    string getXML(int) throw(Exception);
 
 };
 

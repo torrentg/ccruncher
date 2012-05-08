@@ -1,6 +1,15 @@
 HEADERS += \
-    src/correlations/CorrelationMatrix.hpp \
-    src/interests/Interest.hpp \
+    src/params/CorrelationMatrix.hpp \
+    src/params/Params.hpp \
+    src/params/Interest.hpp \
+    src/params/Ratings.hpp \
+    src/params/Rating.hpp \
+    src/params/Sectors.hpp \
+    src/params/Sector.hpp \
+    src/params/Segmentations.hpp \
+    src/params/Segmentation.hpp \
+    src/params/Survival.hpp \
+    src/params/TransitionMatrix.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
@@ -14,21 +23,12 @@ HEADERS += \
     src/math/BlockGaussianCopula.hpp \
     src/math/FastTStudentCdf.hpp \
     src/math/CopulaCalibration.hpp \
-    src/params/Params.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/portfolio/Exposure.hpp \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
-    src/ratings/Ratings.hpp \
-    src/ratings/Rating.hpp \
-    src/sectors/Sectors.hpp \
-    src/sectors/Sector.hpp \
-    src/segmentations/Segmentations.hpp \
-    src/segmentations/Segmentation.hpp \
-    src/survival/Survival.hpp \
-    src/transitions/TransitionMatrix.hpp \
     src/utils/Utils.hpp \
     src/utils/Timer.hpp \
     src/utils/Thread.hpp \
@@ -47,8 +47,17 @@ HEADERS += \
     deps/gzstream-1.5/gzstream.h
 
 SOURCES += \
-    src/correlations/CorrelationMatrix.cpp \
-    src/interests/Interest.cpp \
+    src/params/CorrelationMatrix.cpp \
+    src/params/Interest.cpp \
+    src/params/Params.cpp \
+    src/params/Ratings.cpp \
+    src/params/Rating.cpp \
+    src/params/Sectors.cpp \
+    src/params/Sector.cpp \
+    src/params/Segmentations.cpp \
+    src/params/Segmentation.cpp \
+    src/params/Survival.cpp \
+    src/params/TransitionMatrix.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \
@@ -62,21 +71,12 @@ SOURCES += \
     src/math/BlockGaussianCopula.cpp \
     src/math/FastTStudentCdf.cpp \
     src/math/CopulaCalibration.cpp \
-    src/params/Params.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/Exposure.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
-    src/ratings/Ratings.cpp \
-    src/ratings/Rating.cpp \
-    src/sectors/Sectors.cpp \
-    src/sectors/Sector.cpp \
-    src/segmentations/Segmentations.cpp \
-    src/segmentations/Segmentation.cpp \
-    src/survival/Survival.cpp \
-    src/transitions/TransitionMatrix.cpp \
     src/utils/Utils.cpp \
     src/utils/Timer.cpp \
     src/utils/Thread.cpp \
@@ -111,3 +111,4 @@ win32 {
     deps/expat-2.1.0/Source/lib \
     deps/zlib-1.2.7
 }
+

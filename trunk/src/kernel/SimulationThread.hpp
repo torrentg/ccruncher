@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include <vector>
 #include <gsl/gsl_rng.h>
-#include "survival/Survival.hpp"
+#include "params/Survival.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "math/Copula.hpp"

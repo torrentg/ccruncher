@@ -147,7 +147,7 @@ double ccruncher::CopulaCalibration::getNdf() const
 //===========================================================================
 // return estimated correlations
 //===========================================================================
-double** const ccruncher::CopulaCalibration::getCorrelations() const
+double** ccruncher::CopulaCalibration::getCorrelations() const
 {
   return M;
 }
@@ -199,8 +199,7 @@ void ccruncher::CopulaCalibration::run(const double **sigma0, double ndf0) throw
        printf ("converged to minimum at\n");
      }
 
-     printf ("%5d f() = %7.3f size = %.3f\n", 
-           iter, minimizer->fval, size);
+     printf ("%5d f() = %7.3f size = %.3f\n", (int) iter, minimizer->fval, size);
   }
   while (status == GSL_CONTINUE && iter < 1000);
 

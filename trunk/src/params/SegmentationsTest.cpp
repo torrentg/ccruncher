@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "segmentations/Segmentations.hpp"
-#include "segmentations/SegmentationsTest.hpp"
+#include "params/Segmentations.hpp"
+#include "params/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
