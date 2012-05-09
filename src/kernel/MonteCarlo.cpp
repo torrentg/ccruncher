@@ -391,7 +391,7 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
   vector<int> n(idata.getSectors().size(),0);
   double **h = idata.getDefaults().getMatrix();
   int t = idata.getDefaults().size();
-  vector<double> p(idata.getSectors().size(),0.05);
+  vector<double> p(idata.getSectors().size(),0.03);
 
   // computing the number of obligors in each sector
   for(unsigned int i=0; i<obligors.size(); i++)

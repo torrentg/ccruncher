@@ -49,7 +49,7 @@ class CopulaCalibration
       double *p; // 1-period probability default per sector (size=k)
       double **h; // h[i,j] = pct defaults in sector j at period i (size=txk)
 
-      double dim; // auxiliar value (=sum(n))
+      int dim; // auxiliar value (=sum(n))
       double **M; // auxiliar mem used by f (to avoid alloc/dealloc)
       double *x; // auxiliar mem used by f (to avoid alloc/dealloc)
       double *y; // auxiliar mem used by f (to avoid alloc/dealloc)
