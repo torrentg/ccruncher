@@ -30,6 +30,8 @@
 #include "utils/Arrays.hpp"
 #include <cassert>
 
+#define MAX_NU 50000.0
+
 using namespace std;
 
 //===========================================================================
@@ -170,7 +172,7 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   size_t iter = 0;
   int status;
   double size;
-  int num_params = (params.k*(params.k+1))/2 + 1;
+  int num_params = 1+ (params.k*(params.k+1))/2;
 
   // starting point (correls=0, ndf=30)
   // we start from a known valid point
@@ -181,8 +183,8 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
 
   // set initial step sizes
   ss = gsl_vector_alloc(num_params);
-  gsl_vector_set_all(ss, 0.05);
-  gsl_vector_set(ss, 0, 1.0);
+  gsl_vector_set_all(ss, 0.1);
+  gsl_vector_set(ss, 0, 10.0);
 
   // initialize method and iterate
   minex_func.n = num_params;
@@ -201,16 +203,21 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
      if (status) break;
 
      size = gsl_multimin_fminimizer_size(minimizer);
-     status = gsl_multimin_test_size(size, 1e-2);
+     status = gsl_multimin_test_size(size, 1e-5);
 
      if (status == GSL_SUCCESS)
      {
        printf ("converged to minimum at\n");
      }
 
-     printf("%5d f() = %7.3f size = %.3f\n", (int) iter, minimizer->fval, size);
+     printf("%5d f()= %7.3f size= %.3f ", (int) iter, minimizer->fval, size);
+     printf("ndf= %7.3f ", gsl_vector_get(minimizer->x, 0));
+     for(int i=0; i<(params.k*(params.k+1))/2; i++) printf("%.3f ", gsl_vector_get(minimizer->x, 1+i));
+     printf("\n");
   }
   while (status == GSL_CONTINUE && iter < 1000);
+
+  //TODO: check convergence
 
   deserialize(params.k, minimizer->x, M, &ndf);
   cout << "SOLUTION:" << endl;
@@ -279,16 +286,80 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
   {
     int num = (int)(p->h[row][i]*p->n[i]);
 
-    for(int j=0; j<num; j++)
+/*
+    // all concentrated in the mean
+    for(int j=1; j<=num; j++)
     {
       ret[s] = (p->p[i])/2.0;
       s++;
     }
-    for(int j=num; j<p->n[i]; j++)
+    for(int j=1; j<=(p->n[i]-num); j++)
     {
       ret[s] = p->p[i] + (1.0 - p->p[i])/2.0;
       s++;
     }
+*/
+/*
+    // equidistributed
+    for(int j=1; j<=num; j++)
+    {
+      ret[s] = (p->p[i]) * double(j)/double(num+1);
+      s++;
+    }
+    for(int j=1; j<=(p->n[i]-num); j++)
+    {
+      ret[s] = p->p[i] + (1.0 - p->p[i]) * double(j)/double(num+1);
+      s++;
+    }
+/*
+    // concentrated + symmetric
+    // TODO: check round
+    if (p->n[i]-2*num > 0)
+    {
+      for(int j=1; j<=num; j++)
+      {
+        ret[s] = (p->p[i])/2.0;
+        s++;
+      }
+      for(int j=1; j<=num; j++)
+      {
+        ret[s] = 1.0 - (p->p[i])/2.0;
+        s++;
+      }
+      for(int j=1; j<=(p->n[i]-2*num); j++)
+      {
+        ret[s] = p->p[i] + (1.0 - 2.0*p->p[i])/2.0;
+        s++;
+      }
+    }
+    else {
+        cout << "USE concentrated" << endl;
+    }
+*/
+    // equidistributed + symmetric
+    // TODO: check round
+    if (p->n[i]-2*num > 0)
+    {
+      for(int j=1; j<=num; j++)
+      {
+        ret[s] = (p->p[i]) * double(j)/double(num+1);
+        s++;
+      }
+      for(int j=1; j<=num; j++)
+      {
+        ret[s] = 1.0 - (p->p[i]) * double(j)/double(num+1);
+        s++;
+      }
+      for(int j=1; j<=(p->n[i]-2*num); j++)
+      {
+        ret[s] = p->p[i] + (1.0 - 2.0*p->p[i]) * double(j)/double(p->n[i]-2*num+1);
+        s++;
+      }
+    }
+    else {
+        cout << "USE equidistributed" << endl;
+    }
+
   }
 }
 
@@ -299,18 +370,19 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
 //=============================================================
 double ccruncher::CopulaCalibration::f(const gsl_vector *v, void *params_)
 {
-  int dim = 0;
   double ret = 0.0;
-  double nu;
+  double nu0, nu;
   fparams *p = (fparams*) params_;
   BlockMatrixChol *L = NULL;
   BlockMatrixCholInv *I = NULL;
 
-  for(int i=0; i<p->k; i++) dim += p->n[i];
-  deserialize(p->k, v, p->M, &nu);
+  deserialize(p->k, v, p->M, &nu0);
 
-  if (nu < 2.0) return 1e6;
-  if (nu > 1000.0) nu = 1000.0;
+  if (nu0 < 2.0) return 1e6;
+  if (nu0 > MAX_NU) nu = MAX_NU;
+  else nu = nu0;
+
+  //TODO: tractar sectors amb 1 individu
 
   try
   {
@@ -328,27 +400,32 @@ double ccruncher::CopulaCalibration::f(const gsl_vector *v, void *params_)
   // sign inverted because gsl minimize and we try to maximize
   for(int i=0; i<p->t; i++)
   {
-    ret -= 1.0/fabs(L->getDeterminant());
-    ret -= gsl_sf_lngamma((nu+dim)/2.0);
-    ret -= (dim-1.0)*gsl_sf_lngamma(nu/2.0);
-    ret += dim*gsl_sf_lngamma((nu+1.0)/2.0);
+    ret += fabs(L->getDeterminant());
+    ret -= gsl_sf_lngamma((nu+p->dim)/2.0);
+    ret -= (p->dim-1.0)*gsl_sf_lngamma(nu/2.0);
+    ret += p->dim*gsl_sf_lngamma((nu+1.0)/2.0);
 
     getObservation(i, p, p->x);
     I->mult(p->x, p->y);
 
     double aux1=0.0, aux2=0.0;
-    for(int j=0; j<dim; j++)
+    for(int j=0; j<p->dim; j++)
     {
-        aux1 += p->y[j]*p->y[j];
-        aux2 += log(1.0+p->x[j]*p->x[j]/2.0);
+        aux1 += (p->y[j])*(p->y[j]);
+        // exist an error in 'Copula’s Conditional Dependence Measures for Portfolio Management and Value at Risk' by Dean Fantazzini.
+        // the error is that Fantazzini divides by 2 instead of nu
+        // see the SAS page: http://support.sas.com/documentation/cdl/en/etsug/63939/HTML/default/viewer.htm#etsug_copula_sect016.htm
+        aux2 += log(1.0+(p->x[j])*(p->x[j])/nu);
     }
 
-    ret += (nu+dim)/2.0 * log(1.0+aux1);
+    ret += (nu+p->dim)/2.0 * log(1.0+aux1/nu);
     ret -= (nu+1.0)/2.0 * aux2;
   }
 
   if (L != NULL) delete L;
   if (I != NULL) delete I;
+
+  if (nu == MAX_NU) ret += (nu0-nu)*1000;
 
   return ret;
 }
