@@ -55,6 +55,14 @@ class BlockMatrixChol
     // eigenvalues of A (not L, A=L*L') (array size = 2*M)
     // first M values have multiplicity n-1, the rest have multiplicity 1
     double *eigenvalues;
+    // deflated matrix eigenvectors (size=MxM, eigenvectors are columns)
+    double **eigenvectors;
+    // condition number (2-norm) of the Cholesky matrix
+    double cond;
+    // determinant of the Cholesky matrix
+    double det;
+    // regularixed flag
+    bool regularized;
 
   private:
   
@@ -66,6 +74,10 @@ class BlockMatrixChol
     void eigen(double **A, int *n, int m) throw(Exception);
     // dealloc memory
     void reset();
+    // returns matrix condition number
+    double getConditionNumber(const double *eigenvalues) const;
+    // returns matrix determinant
+    double getDeterminant(const double *eigenvalues) const;
 
   public:
 
@@ -81,16 +93,16 @@ class BlockMatrixChol
     BlockMatrixChol& operator = (const BlockMatrixChol &x);
     // returns matrix dimension (N)
     int getDim() const;
-    // returns matrix condition number
-    double getConditionNumber() const;
-    // returns matrix determinant
-    double getDeterminant() const;
     // returns matrix inverse
     BlockMatrixCholInv* getInverse() const;
     // returns matrix element
     double get(int row, int col) const;
     // multiplies this matrix by a vector
     void mult(double *x, double *ret) const;
+    // returns matrix condition number
+    double getConditionNumber() const;
+    // returns matrix determinant
+    double getDeterminant() const;
 
   public:
 
