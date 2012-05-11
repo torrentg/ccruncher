@@ -80,6 +80,8 @@ class CopulaCalibration
     static void getObservation(int row, const fparams *p, double *ret);
     // minimized function
     static double f(const gsl_vector *v, void *params_);
+    static void df(const gsl_vector * x, void * params_, gsl_vector * g);
+    static void fdf(const gsl_vector * x, void * params_, double *f, gsl_vector *g);
 
   public:
 

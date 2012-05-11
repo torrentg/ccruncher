@@ -32,6 +32,7 @@
 // --------------------------------------------------------------------------
 
 #define EPSILON 1E-12
+#define MIN_EIGENVALUE 1e-4
 #define COEFS(i,j) (coefs[(i)*N+(j)])
 
 //===========================================================================
@@ -58,7 +59,6 @@ ccruncher::BlockMatrixChol::BlockMatrixChol()
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  eigenvalues = NULL;
 }
 
 //===========================================================================
@@ -71,7 +71,6 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(const BlockMatrixChol &x)
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  eigenvalues = NULL;
   *this = x;
 }
 
@@ -86,7 +85,6 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   n = Arrays<int>::allocVector(M, x.n);
   coefs = Arrays<double>::allocVector(N*M, x.coefs);
   diag = Arrays<double>::allocVector(N, x.diag);
-  eigenvalues = Arrays<double>::allocVector(2*M, x.eigenvalues);
   return *this;
 }
 
@@ -200,7 +198,6 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
   n = NULL;
   coefs = NULL;
   diag = NULL;
-  eigenvalues = NULL;
 
   // assigning the number of sectors
   M = m_;
@@ -232,9 +229,6 @@ void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Except
 
   // allocating memory for diagonal cholesky coeficients
   diag = Arrays<double>::allocVector(N, 0.0);
-
-  // allocating memory for eigenvalues
-  eigenvalues = Arrays<double>::allocVector(2*M, 0.0);
 
   // call adapted Cholesky algorithm
   try
@@ -277,12 +271,6 @@ void ccruncher::BlockMatrixChol::reset()
   if (diag != NULL) {
     Arrays<double>::deallocVector(diag);
     diag = NULL;
-  }
-
-  // deallocating eigenvalues values
-  if (eigenvalues != NULL) {
-    Arrays<double>::deallocVector(eigenvalues);
-    eigenvalues = NULL;
   }
 
   // rest of values
@@ -441,7 +429,7 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 //   * Ni is the dimension of i-th block
 //   * Aij is the value of the i-j block (note: Aij=Aji)
 //
-// eig_i are the eigenvalues of the following matrix (normal matrix, non composed by blocks):
+// eig_i are the eigenvalues of the following deflated matrix:
 //
 //   (1+(N1-1)*A11) (N2*A12)       ... (Nm*A1m)
 //   (N1*A21)       (1+(N2-1)*A22) ... (Nm*A2m)
@@ -456,6 +444,8 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 //===========================================================================
 void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Exception)
 {
+  double *eigenvalues = Arrays<double>::allocVector(2*M, NAN);
+
   // filling trivial eigenvalues
   for(int i=0; i<m_; i++) 
   {
@@ -465,7 +455,6 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
   // defining variables to perform eigenvalues functions
   gsl_matrix *K = gsl_matrix_alloc(m_, m_);
   gsl_vector_complex *vaps = gsl_vector_complex_alloc(m_);
-  gsl_matrix_complex *VAPS = gsl_matrix_complex_alloc(m_, m_);
   gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(m_, m_);
 
   // filling deflated matrix
@@ -491,10 +480,10 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
   int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, W1);
   gsl_matrix_free(K);
   gsl_eigen_nonsymmv_free(W1);
-  gsl_matrix_complex_free(VAPS);
-  gsl_matrix_complex_free(VEPS);
   if (rc) {
     gsl_vector_complex_free(vaps);
+    gsl_matrix_complex_free(VEPS);
+    Arrays<double>::deallocVector(eigenvalues);
     throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
   }
 
@@ -503,13 +492,141 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON) {
       gsl_vector_complex_free(vaps);
+      gsl_matrix_complex_free(VEPS);
+      Arrays<double>::deallocVector(eigenvalues);
       throw Exception("imaginary eigenvalue computing eigenvalues");
     }
     else {
       eigenvalues[M+i] = GSL_REAL(z);
     }
   }
+
+  // regularizing matrix
+  regularized = false;
+  for(int i=0; i<2*M; i++)
+  {
+    if (i < M && n[i] <= 1) continue;
+    if (eigenvalues[i] < MIN_EIGENVALUE)
+    {
+      eigenvalues[i] = MIN_EIGENVALUE;
+      regularized = true;
+    }
+  }
+
+  if (regularized == true)
+  {
+    double *cd = new double[M];
+    double *x1 = new double[N];
+    double *x2 = new double[N];
+    for(int s=0,i=0; i<M; i++)
+    {
+      getEigenvectorsRow(s, VEPS, n, M, NULL, x1);
+      getEigenvectorsRow(s, VEPS, n, M, vaps, x2);
+      cd[i] = prod(x1, x2, N);
+
+      if (n[i] > 1)
+      {
+        getEigenvectorsRow(s+0, VEPS, n, M, NULL, x1);
+        getEigenvectorsRow(s+1, VEPS, n, M, vaps, x2);
+        A[i][i] = prod(x1, x2, N);
+      }
+
+      for(int j=0; j<n[i]; j++)
+      {
+ERROR --> //CONTINUAR AQUI
+      }
+
+      s += n[i];
+    }
+    delete [] cd;
+    delete [] x1;
+    delete [] x2;
+  }
+
+  cond = getConditionNumber(eigenvalues);
+  det = getDeterminant(eigenvalues);
+
   gsl_vector_complex_free(vaps);
+  gsl_matrix_complex_free(VEPS);
+  Arrays<double>::deallocVector(eigenvalues);
+}
+
+double prod(double *v1, double *v2, int size) const
+{
+  ret = 0.0;
+  for(int i=0; i<size; i++) {
+    ret += v1[i]*v2[i];
+  }
+  return ret;
+}
+
+//===========================================================================
+// returns the i-th row of the eigenvectors matrix multiplied by its
+// eigenvalues (if given)
+//
+// params:
+//  pos: index of the row to retrieve
+//  VEPS: eigenvectors of the deflated matrix
+//  n: number of elements per block
+//  vaps: eigenvalues (can be NULL)
+//  m: number of blocks
+//
+//  ret: eigenvector
+//===========================================================================
+void getEigenvectorsRow(int pos, gsl_matrix_complex *VEPS, int *n_, int m_, double *vaps, double *ret) throw(Exception)
+{
+  int sector=-1;
+  int sum=0;
+
+  // obtain sector where pos belong
+  for(int i=0; i<m_; i++)
+  {
+    sum += n_[i];
+    if (pos < sum)
+    {
+      sector = i;
+      break;
+    }
+  }
+  assert(sector >= 0);
+
+  for(int s=0,i=0; i<m_; i++) for(int j=0; j<n_[i]; j++)
+  {
+    if (j == 0)
+    {
+      gsl_complex z = gsl_matrix_complex_get(VEPS, sector, i);
+      assert(fabs(GSL_IMAG(z)) < EPSILON);
+      ret[s] = GSL_REAL(z);
+    }
+    else {
+      ret[s] = 0.0;
+    }
+    s++;
+  }
+
+  // if pos = first element of sector
+  if (pos == sum-n_[sector])
+  {
+    for(int i=sum-n_[sector]+1; i<sum; i++)
+    {
+      ret[i] = 1.0;
+    }
+  }
+  else
+  {
+    ret[pos] = -1.0;
+  }
+
+  // multiplying by factors
+  if (vaps != NULL)
+  {
+    for(int s=0,i=0; i<m_; i++) for(int j=0; j<n_[i]; j++)
+    {
+      if (j == 0) ret[s] *= vaps[m_+i];
+      else ret[s] *= vaps[i];
+      s++;
+    }
+  }
 }
 
 //===========================================================================
@@ -517,7 +634,7 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
 // if A = L*L' where L is the Cholesky matrix, then the condition number
 // is sqrt(max(eig(A)),min(eig(A))
 //===========================================================================
-double ccruncher::BlockMatrixChol::getConditionNumber() const
+double ccruncher::BlockMatrixChol::getConditionNumber(const double *eigenvalues) const
 {
   double eigmin = +1e100;
   double eigmax = -1e100;
@@ -534,11 +651,19 @@ double ccruncher::BlockMatrixChol::getConditionNumber() const
 }
 
 //===========================================================================
+// returns the condition number (2-norm) of the Cholesky matrix
+//===========================================================================
+double ccruncher::BlockMatrixChol::getConditionNumber() const
+{
+  return cond;
+}
+
+//===========================================================================
 // returns the determinant of the Cholesky matrix
 // observe that det(L) = sqrt(det(A))
 // note: equivalent to the multiplication of all Cholesky diagonal values
 //===========================================================================
-double ccruncher::BlockMatrixChol::getDeterminant() const
+double ccruncher::BlockMatrixChol::getDeterminant(const double *eigenvalues) const
 {
   double det = 1.0;
 
@@ -559,9 +684,44 @@ double ccruncher::BlockMatrixChol::getDeterminant() const
 }
 
 //===========================================================================
+// returns the determinant of the Cholesky matrix
+//===========================================================================
+double ccruncher::BlockMatrixChol::getDeterminant() const
+{
+  return det;
+}
+
+//===========================================================================
 // returns matrix inverse
 //===========================================================================
 BlockMatrixCholInv* ccruncher::BlockMatrixChol::getInverse() const
 {
   return new BlockMatrixCholInv(*this);
 }
+
+
+//===========================================================================
+// given a non-valid correlation matrix (definite-positive with 1's in
+// the diagonal), finds a valid correlation matrix close to the given one.
+//
+// based on 'Quantitative Risk Management: Concepts, Techniques and Tools'
+// by Alexander J. McNeil, Rudiger Frey, Paul Embrechts (see algorithm 5.55)
+//
+// parameters:
+//   * A: correlation matrix with Aij=Aji (size=m)
+//   * n: number of elements per sector (size=m)
+//   * m: number of sectors
+//
+// return:
+//   * A values modified, being A a valid correlation matrix
+//
+// notes:
+//   * call eigen() before to call this method
+//
+//===========================================================================
+/*
+void ccruncher::BlockMatrixChol::regularize(double **A_, int *n_, int m_) const
+{
+}
+*/
+
