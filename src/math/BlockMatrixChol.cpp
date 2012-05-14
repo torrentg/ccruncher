@@ -633,22 +633,22 @@ double ccruncher::BlockMatrixChol::getConditionNumber() const
 //===========================================================================
 double ccruncher::BlockMatrixChol::getDeterminant(const double *eigenvalues) const
 {
-  double det = 1.0;
+  double ret = 1.0;
 
   for(int i=0; i<2*M; i++)
   {
     if (i < M)
     {
-      if (n[i] > 1) det *= eigenvalues[i] * (n[i]-1.0);
+      if (n[i] > 1) ret *= eigenvalues[i] * (n[i]-1.0);
     }
     else
     {
-      det *= eigenvalues[i];
+      ret *= eigenvalues[i];
     }
   }
 
-  assert(det > 0.0);
-  return sqrt(det);
+  assert(ret > 0.0);
+  return sqrt(ret);
 }
 
 //===========================================================================
