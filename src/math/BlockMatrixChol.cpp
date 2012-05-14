@@ -510,9 +510,12 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
         }
         else
         {
-          gsl_complex *val = gsl_matrix_complex_ptr(R, i, j);
-          GSL_REAL(*val) /= n[j];
-          GSL_IMAG(*val) /= n[j];
+          gsl_complex *val1 = gsl_matrix_complex_ptr(R, i, j);
+          GSL_REAL(*val1) /= n[j];
+          GSL_IMAG(*val1) /= n[j];
+          gsl_complex *val2 = gsl_matrix_complex_ptr(R, j, i);
+          GSL_REAL(*val2) /= n[i];
+          GSL_IMAG(*val2) /= n[i];
         }
 
         // z1 and z2 are equals and reals
