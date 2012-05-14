@@ -436,14 +436,25 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 //     ...              ...            ...  ...
 //   (N1*Am1)       (N2*Am2)       ... (1+(Nm-1)*A1m)
 //
-// notes: 
-//   * is mandatory that m > 0
-//   * is mandatory that Ni > 0
-//   * is mandatory than Aij = Aji
+//
+// given a non-valid correlation matrix (definite-positive with 1's in
+// the diagonal), finds a valid correlation matrix close to the given one.
+//
+// based on 'Quantitative Risk Management: Concepts, Techniques and Tools'
+// by Alexander J. McNeil, Rudiger Frey, Paul Embrechts (see algorithm 5.55)
+//
+// parameters:
+//   * A: correlation matrix with Aij=Aji (size=m)
+//   * n: number of elements per sector (size=m)
+//   * m: number of sectors
+//
+// return:
+//   * a valid correlation matrix, condition number and determinant
 //
 //===========================================================================
 void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Exception)
 {
+  coerced = false;
   double *eigenvalues = Arrays<double>::allocVector(2*M, NAN);
 
   // filling trivial eigenvalues
@@ -465,6 +476,11 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
       double val = 0.0;
       if (i == j) 
       {
+        if (1.0-A_[i][j] < MIN_EIGENVALUE)
+        {
+          A_[i][j] = 1.0 - MIN_EIGENVALUE;
+          coerced = true;
+        }
         val = 1.0 + (n_[j]-1)*A_[i][j];
       }
       else 
@@ -475,12 +491,12 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
     }
   }
 
-  // computing eigenvalues for deflated matrix
+  // computing deflated matrix eigenvalues
   gsl_eigen_nonsymmv_workspace *W1 = gsl_eigen_nonsymmv_alloc(m_);
   int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, W1);
-  gsl_matrix_free(K);
   gsl_eigen_nonsymmv_free(W1);
   if (rc) {
+    gsl_matrix_free(K);
     gsl_vector_complex_free(vaps);
     gsl_matrix_complex_free(VEPS);
     Arrays<double>::deallocVector(eigenvalues);
@@ -488,145 +504,104 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
   }
 
   // retrieving eigenvalues
-  for(int i=0; i<m_; i++) {
+  for(int i=0; i<m_; i++)
+  {
     gsl_complex z = gsl_vector_complex_get(vaps, i);
-    if (fabs(GSL_IMAG(z)) >= EPSILON) {
+    if (fabs(GSL_IMAG(z)) >= EPSILON)
+    {
       gsl_vector_complex_free(vaps);
       gsl_matrix_complex_free(VEPS);
       Arrays<double>::deallocVector(eigenvalues);
       throw Exception("imaginary eigenvalue computing eigenvalues");
     }
-    else {
+    else
+    {
+      if (GSL_REAL(z) < MIN_EIGENVALUE)
+      {
+        GSL_REAL(z) = MIN_EIGENVALUE;
+        GSL_IMAG(z) = 0.0;
+        gsl_vector_complex_set(vaps, i, z);
+        coerced = true;
+      }
       eigenvalues[M+i] = GSL_REAL(z);
     }
   }
 
-  // regularizing matrix
-  regularized = false;
-  for(int i=0; i<2*M; i++)
+  // coercing to a valid correlation matrix
+  if (coerced == true)
   {
-    if (i < M && n[i] <= 1) continue;
-    if (eigenvalues[i] < MIN_EIGENVALUE)
-    {
-      eigenvalues[i] = MIN_EIGENVALUE;
-      regularized = true;
-    }
-  }
-
-  if (regularized == true)
-  {
-    double *cd = new double[M];
-    double *x1 = new double[N];
-    double *x2 = new double[N];
-    for(int s=0,i=0; i<M; i++)
-    {
-      getEigenvectorsRow(s, VEPS, n, M, NULL, x1);
-      getEigenvectorsRow(s, VEPS, n, M, vaps, x2);
-      cd[i] = prod(x1, x2, N);
-
-      if (n[i] > 1)
-      {
-        getEigenvectorsRow(s+0, VEPS, n, M, NULL, x1);
-        getEigenvectorsRow(s+1, VEPS, n, M, vaps, x2);
-        A[i][i] = prod(x1, x2, N);
-      }
-
-      for(int j=0; j<n[i]; j++)
-      {
-ERROR --> //CONTINUAR AQUI
-      }
-
-      s += n[i];
-    }
-    delete [] cd;
-    delete [] x1;
-    delete [] x2;
+    gsl_matrix_complex *R = gsl_matrix_complex_alloc(m_, m_);
+    prod(VEPS, vaps, R);
+    //TODO: retrieve values from R (check that are real)
+    //TODO: declare function prod
+    //TODO: copy prod to PowMatrix
   }
 
   cond = getConditionNumber(eigenvalues);
   det = getDeterminant(eigenvalues);
 
+  gsl_matrix_free(K);
   gsl_vector_complex_free(vaps);
   gsl_matrix_complex_free(VEPS);
   Arrays<double>::deallocVector(eigenvalues);
 }
 
-double prod(double *v1, double *v2, int size) const
-{
-  ret = 0.0;
-  for(int i=0; i<size; i++) {
-    ret += v1[i]*v2[i];
-  }
-  return ret;
-}
-
 //===========================================================================
-// returns the i-th row of the eigenvectors matrix multiplied by its
-// eigenvalues (if given)
-//
-// params:
-//  pos: index of the row to retrieve
-//  VEPS: eigenvectors of the deflated matrix
-//  n: number of elements per block
-//  vaps: eigenvalues (can be NULL)
-//  m: number of blocks
-//
-//  ret: eigenvector
+// internal function
+// given a matrix A and a vector v, does the following operation:
+//  R = VEPS·diag(vaps)·inv(VEPS)
 //===========================================================================
-void getEigenvectorsRow(int pos, gsl_matrix_complex *VEPS, int *n_, int m_, double *vaps, double *ret) throw(Exception)
+void prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception)
 {
-  int sector=-1;
-  int sum=0;
+  assert(VEPS != NULL && vaps != NULL && R != NULL);
 
-  // obtain sector where pos belong
-  for(int i=0; i<m_; i++)
-  {
-    sum += n_[i];
-    if (pos < sum)
-    {
-      sector = i;
-      break;
-    }
-  }
-  assert(sector >= 0);
+  if (VEPS == NULL || vaps == NULL || R == NULL) throw Exception("invalid objects");
+  if (VEPS->size1 <= 0 || VEPS->size1 != VEPS->size2) throw Exception("non valid matrix");
+  if (VEPS->size1 != vaps->size) throw Exception("distinct sizes");
+  if (VEPS->size1 != R->size1 || VEPS->size1 != R->size2) throw Exception("non valid matrix");
 
-  for(int s=0,i=0; i<m_; i++) for(int j=0; j<n_[i]; j++)
-  {
-    if (j == 0)
-    {
-      gsl_complex z = gsl_matrix_complex_get(VEPS, sector, i);
-      assert(fabs(GSL_IMAG(z)) < EPSILON);
-      ret[s] = GSL_REAL(z);
-    }
-    else {
-      ret[s] = 0.0;
-    }
-    s++;
+  int rc = 0;
+  int n = VEPS->size1;
+
+  // computing the LU decomposition of VEPS
+  int signum=0;
+  gsl_matrix_complex *LU = gsl_matrix_complex_alloc(n, n);
+  gsl_matrix_complex_memcpy(LU, VEPS);
+  gsl_permutation *w = gsl_permutation_alloc(n);
+  rc = gsl_linalg_complex_LU_decomp(LU, w, &signum);
+  if (rc) {
+    gsl_matrix_complex_free(LU);
+    gsl_permutation_free(w);
+    throw Exception("unable to inverse matrix: " + string(gsl_strerror(rc)));
   }
 
-  // if pos = first element of sector
-  if (pos == sum-n_[sector])
-  {
-    for(int i=sum-n_[sector]+1; i<sum; i++)
-    {
-      ret[i] = 1.0;
-    }
-  }
-  else
-  {
-    ret[pos] = -1.0;
+  // computing the inverse of eigenvectors (SPEV)
+  gsl_matrix_complex *SPEV = gsl_matrix_complex_alloc(n, n);
+  rc = gsl_linalg_complex_LU_invert(LU, w, SPEV);
+  gsl_permutation_free(w);
+  if (rc) {
+    gsl_matrix_complex_free(SPEV);
+    gsl_matrix_complex_free(LU);
+    throw Exception("unable to inverse matrix: " + string(gsl_strerror(rc)));
   }
 
-  // multiplying by factors
-  if (vaps != NULL)
-  {
-    for(int s=0,i=0; i<m_; i++) for(int j=0; j<n_[i]; j++)
-    {
-      if (j == 0) ret[s] *= vaps[m_+i];
-      else ret[s] *= vaps[i];
-      s++;
-    }
+  // creating diagonal matrix
+  gsl_matrix_complex_set_zero(R);
+  for(int i=0; i<n; i++) {
+    gsl_complex z = gsl_vector_complex_get(vaps, i);
+    gsl_matrix_complex_set(R, i, i, z);
   }
+
+  // computing VEPS*VAPS*SPEV
+  gsl_complex z0, z1;
+  GSL_REAL(z0)=0.0; GSL_IMAG(z0) = 0.0;
+  GSL_REAL(z1)=1.0; GSL_IMAG(z1) = 0.0;
+  gsl_matrix_complex_set_zero(LU);
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, VEPS, R, z0, LU);
+  gsl_matrix_complex_set_zero(R);
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, LU, SPEV, z0, R);
+  gsl_matrix_complex_free(SPEV);
+  gsl_matrix_complex_free(LU);
 }
 
 //===========================================================================
@@ -698,30 +673,4 @@ BlockMatrixCholInv* ccruncher::BlockMatrixChol::getInverse() const
 {
   return new BlockMatrixCholInv(*this);
 }
-
-
-//===========================================================================
-// given a non-valid correlation matrix (definite-positive with 1's in
-// the diagonal), finds a valid correlation matrix close to the given one.
-//
-// based on 'Quantitative Risk Management: Concepts, Techniques and Tools'
-// by Alexander J. McNeil, Rudiger Frey, Paul Embrechts (see algorithm 5.55)
-//
-// parameters:
-//   * A: correlation matrix with Aij=Aji (size=m)
-//   * n: number of elements per sector (size=m)
-//   * m: number of sectors
-//
-// return:
-//   * A values modified, being A a valid correlation matrix
-//
-// notes:
-//   * call eigen() before to call this method
-//
-//===========================================================================
-/*
-void ccruncher::BlockMatrixChol::regularize(double **A_, int *n_, int m_) const
-{
-}
-*/
 
