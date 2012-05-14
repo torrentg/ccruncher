@@ -121,6 +121,18 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
   coefs = NULL;
   diag = NULL;
 
+  // checking that matrix is symmetric
+  for(int i=0; i<m_; i++)
+  {
+    for(int j=0; j<m_; j++)
+    {
+      if(fabs(A_[i][j]-A_[j][i]) > EPSILON)
+      {
+        throw Exception("trying to perform a Cholesky decomposition for a non-symmetric matrix");
+      }
+    }
+  }
+
   // dealing with n[i]=0's
   for(int j=0; j<m_; j++)
   {
@@ -158,10 +170,6 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
             {
               A[ni][nj] = A_[i][j];
               nj++;
-              if(ni >= nj && fabs(A[ni][nj]-A[nj][ni]) > EPSILON)
-              {
-                throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
-              }
             }
           }
           n[ni] = n_[i];
@@ -546,13 +554,13 @@ void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_compl
   if (VEPS->size1 != R->size1 || VEPS->size1 != R->size2) throw Exception("non valid matrix");
 
   int rc = 0;
-  int n = VEPS->size1;
+  int k = VEPS->size1;
 
   // computing the LU decomposition of VEPS
   int signum=0;
-  gsl_matrix_complex *LU = gsl_matrix_complex_alloc(n, n);
+  gsl_matrix_complex *LU = gsl_matrix_complex_alloc(k, k);
   gsl_matrix_complex_memcpy(LU, VEPS);
-  gsl_permutation *w = gsl_permutation_alloc(n);
+  gsl_permutation *w = gsl_permutation_alloc(k);
   rc = gsl_linalg_complex_LU_decomp(LU, w, &signum);
   if (rc) {
     gsl_matrix_complex_free(LU);
@@ -561,7 +569,7 @@ void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_compl
   }
 
   // computing the inverse of eigenvectors (SPEV)
-  gsl_matrix_complex *SPEV = gsl_matrix_complex_alloc(n, n);
+  gsl_matrix_complex *SPEV = gsl_matrix_complex_alloc(k, k);
   rc = gsl_linalg_complex_LU_invert(LU, w, SPEV);
   gsl_permutation_free(w);
   if (rc) {
@@ -572,7 +580,7 @@ void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_compl
 
   // creating diagonal matrix
   gsl_matrix_complex_set_zero(R);
-  for(int i=0; i<n; i++) {
+  for(int i=0; i<k; i++) {
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     gsl_matrix_complex_set(R, i, i, z);
   }
