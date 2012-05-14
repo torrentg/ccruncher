@@ -524,6 +524,6 @@ void ccruncher::CopulaCalibration::fdf(const gsl_vector * x, void * params_, dou
   cout << "fdf called" << endl;
   cout << "  f= " << *y << endl;
   cout << "  df= ";
-  for(int i=0; i<x->size; i++) cout << gsl_vector_get(g, i) << ", ";
+  for(unsigned int i=0; i<x->size; i++) cout << gsl_vector_get(g, i) << ", ";
   cout << endl;
 }
