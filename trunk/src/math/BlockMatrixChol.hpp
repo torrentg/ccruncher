@@ -61,8 +61,8 @@ class BlockMatrixChol
     double cond;
     // determinant of the Cholesky matrix
     double det;
-    // regularixed flag
-    bool regularized;
+    // coerced flag
+    bool coerced;
 
   private:
   
