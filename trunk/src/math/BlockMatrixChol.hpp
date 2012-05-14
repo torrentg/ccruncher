@@ -46,17 +46,14 @@ class BlockMatrixChol
     int M;
     // number of elements (Cholesky matrix size = NxN)
     int N;
+    // correlations between sectors (matrix size = MxM)
+    double **A;
     // number of elements in each sector (array size = M)
     int *n;
     // cholesky coeficients (matrix size = MxN)
     double *coefs;
     // diagonal cholesky coeficients (array size = N)
     double *diag;
-    // eigenvalues of A (not L, A=L*L') (array size = 2*M)
-    // first M values have multiplicity n-1, the rest have multiplicity 1
-    double *eigenvalues;
-    // deflated matrix eigenvectors (size=MxM, eigenvectors are columns)
-    double **eigenvectors;
     // condition number (2-norm) of the Cholesky matrix
     double cond;
     // determinant of the Cholesky matrix
@@ -66,14 +63,14 @@ class BlockMatrixChol
 
   private:
   
-    // alloc memory, does checks, etc.
-    void init(double **A, int *n, int m) throw(Exception);
-    // adapted cholesky algorithm
-    void chold(double **A) throw(Exception);
-    // computes condition number (2-norm)
-    void eigen(double **A, int *n, int m) throw(Exception);
     // dealloc memory
     void reset();
+    // adapted cholesky algorithm
+    void chold() throw(Exception);
+    // coerce, computes condition number (2-norm) and determinant
+    void prepare() throw(Exception);
+    // multiply VEPS·diag(vaps)·inv(VEPS)
+    void prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception);
     // returns matrix condition number
     double getConditionNumber(const double *eigenvalues) const;
     // returns matrix determinant
@@ -103,6 +100,9 @@ class BlockMatrixChol
     double getConditionNumber() const;
     // returns matrix determinant
     double getDeterminant() const;
+    // indicates if given correlations has been modified
+    // to avoid a non-definite-positive correlation matrix
+    bool isCoerced() const;
 
   public:
 

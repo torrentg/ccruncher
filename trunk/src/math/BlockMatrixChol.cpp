@@ -56,6 +56,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol()
 {
   M = 0;
   N = 0;
+  A = NULL;
   n = NULL;
   coefs = NULL;
   diag = NULL;
@@ -68,6 +69,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(const BlockMatrixChol &x)
 {
   M = 0;
   N = 0;
+  A = NULL;
   n = NULL;
   coefs = NULL;
   diag = NULL;
@@ -82,6 +84,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   reset();
   M = x.M;
   N = x.N;
+  A = Arrays<double>::allocMatrix(M, M, x.A);
   n = Arrays<int>::allocVector(M, x.n);
   coefs = Arrays<double>::allocVector(N*M, x.coefs);
   diag = Arrays<double>::allocVector(N, x.diag);
@@ -110,11 +113,16 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
   assert(n_ != NULL);
   assert(m_ > 0);
 
-  // new m
-  int nm=0;
+  // initializations
+  M = 0;
+  N = 0;
+  A = NULL;
+  n = NULL;
+  coefs = NULL;
+  diag = NULL;
 
   // dealing with n[i]=0's
-  for(int j=0;j<m_;j++)
+  for(int j=0; j<m_; j++)
   {
     if (n_[j] < 0) {
       throw Exception("error: exist a sector with a negative number of elements");
@@ -123,122 +131,61 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
       //nm don't increment
     }
     else {
-      nm++;
+      M++;
+      N += n_[j];
     }
   }
 
-  if (nm == m_ && m_ > 0)
-  {
-    // perform factorization
-    init(A_, n_, m_);
-    // compute A eigenvalues
-    eigen(A_, n_, m_);
-  }
-  else if (nm == 0 || m_ <= 0)
+  if (M == 0 || m_ <= 0)
   {
     throw Exception("input matrix dimension have dimension 0");
   }
-  else // nm > 0 and exist sector/s with 0 elements
+  else
   {
-    double **nA = NULL;
-    int *nn = NULL;
-
     try
     {
-      // alloc temporal memory
-      nA = Arrays<double>::allocMatrix(nm, nm, 0.0);
-      nn = Arrays<int>::allocVector(nm, 0);
+      A = Arrays<double>::allocMatrix(M, M, 0.0);
+      n = Arrays<int>::allocVector(M, 0);
 
-      // filling A and n without void sectors
-      for(int i=0,ni=0;i<m_;i++)
+      // filling A and n removing void sectors
+      for(int i=0,ni=0; i<m_; i++)
       {
         if (n_[i] != 0)
         {
-          for(int j=0,nj=0;j<m_;j++)
+          for(int j=0,nj=0; j<m_; j++)
           {
             if (n_[j] != 0)
             {
-              nA[ni][nj] = A_[i][j];
+              A[ni][nj] = A_[i][j];
               nj++;
+              if(ni >= nj && fabs(A[ni][nj]-A[nj][ni]) > EPSILON)
+              {
+                throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
+              }
             }
           }
-          nn[ni] = n_[i];
+          n[ni] = n_[i];
           ni++;
         }
       }
 
-      // perform factorization
-      init(nA, nn, nm);
-      // compute A eigenvalues
-      eigen(nA, nn, nm);
+      // compute A eigenvalues and coerce if required
+      prepare();
 
-      // release temporal memory
-      Arrays<double>::deallocMatrix(nA, nm);
-      nA = NULL;
-      Arrays<int>::deallocVector(nn);
-      nn = NULL;
+      // allocating memory for cholesky coeficients
+      coefs = Arrays<double>::allocVector(N*M, 0.0);
+
+      // allocating memory for diagonal cholesky coeficients
+      diag = Arrays<double>::allocVector(N, 0.0);
+
+      // doing Cholesky factorization
+      chold();
     }
     catch(Exception &e)
     {
-      if (nA != NULL) Arrays<double>::deallocMatrix(nA, nm);
-      if (nn != NULL) Arrays<int>::deallocVector(nn);
+      reset();
       throw;
     }
-  }
-}
-
-//===========================================================================
-// init
-// Note: take care, we check that Aij = Aji
-//===========================================================================
-void ccruncher::BlockMatrixChol::init(double **A_, int *n_, int m_) throw(Exception)
-{
-  // initializations
-  N = 0;
-  n = NULL;
-  coefs = NULL;
-  diag = NULL;
-
-  // assigning the number of sectors
-  M = m_;
-
-  // assigning the number of elements per sector
-  n = Arrays<int>::allocVector(M, 0);
-
-  for(int i=0;i<M;i++)
-  {
-    // filling internal vector named n
-    n[i] = n_[i];
-
-    // computing dimension matrix
-    N += n[i];
-
-    // checking that Aij = Aji
-    for(int j=0;j<M;j++)
-    {
-      if(fabs(A_[i][j]-A_[j][i]) > EPSILON)
-      {
-        reset();
-        throw Exception("trying to perform a Cholesky decomposition for a non-simetric matrix");
-      }
-    }
-  }
-
-  // allocating memory for cholesky coeficients
-  coefs = Arrays<double>::allocVector(N*M, 0.0);
-
-  // allocating memory for diagonal cholesky coeficients
-  diag = Arrays<double>::allocVector(N, 0.0);
-
-  // call adapted Cholesky algorithm
-  try
-  {
-    chold(A_);
-  }
-  catch(Exception &e)
-  {
-    reset();
-    throw;
   }
 }
 
@@ -255,6 +202,12 @@ ccruncher::BlockMatrixChol::~BlockMatrixChol()
 //===========================================================================
 void ccruncher::BlockMatrixChol::reset()
 {
+  // deallocating correlations
+  if (A != NULL && M > 0) {
+    Arrays<double>::deallocMatrix(A, M);
+    A = NULL;
+  }
+
   // deallocating vector n
   if (n != NULL) {
     Arrays<int>::deallocVector(n);
@@ -361,7 +314,7 @@ void ccruncher::BlockMatrixChol::mult(double *x, double *ret) const
 //===========================================================================
 // adapted cholesky decomposition for block matrix
 //===========================================================================
-void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
+void ccruncher::BlockMatrixChol::chold() throw(Exception)
 {
   int i, j, r, s, q;
   double val1=0.0, val2=0.0;
@@ -452,49 +405,43 @@ void ccruncher::BlockMatrixChol::chold(double **A) throw(Exception)
 //   * a valid correlation matrix, condition number and determinant
 //
 //===========================================================================
-void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Exception)
+void ccruncher::BlockMatrixChol::prepare() throw(Exception)
 {
-  coerced = false;
+  bool coerced1=false, coerced2=false;
   double *eigenvalues = Arrays<double>::allocVector(2*M, NAN);
 
-  // filling trivial eigenvalues
-  for(int i=0; i<m_; i++) 
-  {
-    eigenvalues[i] = 1.0 - A_[i][i];
-  }
-
   // defining variables to perform eigenvalues functions
-  gsl_matrix *K = gsl_matrix_alloc(m_, m_);
-  gsl_vector_complex *vaps = gsl_vector_complex_alloc(m_);
-  gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(m_, m_);
+  gsl_matrix *K = gsl_matrix_alloc(M, M);
+  gsl_vector_complex *vaps = gsl_vector_complex_alloc(M);
+  gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(M, M);
 
   // filling deflated matrix
-  for(int i=0; i<m_; i++) 
+  for(int i=0; i<M; i++)
   {
-    for(int j=0; j<m_; j++) 
+    for(int j=0; j<M; j++)
     {
       double val = 0.0;
       if (i == j) 
       {
-        if (1.0-A_[i][j] < MIN_EIGENVALUE)
+        if (1.0-A[i][j] < MIN_EIGENVALUE)
         {
-          A_[i][j] = 1.0 - MIN_EIGENVALUE;
-          coerced = true;
+          A[i][j] = 1.0 - MIN_EIGENVALUE;
+          coerced1 = true;
         }
-        val = 1.0 + (n_[j]-1)*A_[i][j];
+        val = 1.0 + (n[j]-1)*A[i][j];
       }
       else 
       {
-        val = n_[j] * A_[i][j];
+        val = n[j] * A[i][j];
       }
       gsl_matrix_set(K, i, j, val);
     }
   }
 
   // computing deflated matrix eigenvalues
-  gsl_eigen_nonsymmv_workspace *W1 = gsl_eigen_nonsymmv_alloc(m_);
-  int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, W1);
-  gsl_eigen_nonsymmv_free(W1);
+  gsl_eigen_nonsymmv_workspace *w = gsl_eigen_nonsymmv_alloc(M);
+  int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, w);
+  gsl_eigen_nonsymmv_free(w);
   if (rc) {
     gsl_matrix_free(K);
     gsl_vector_complex_free(vaps);
@@ -503,8 +450,14 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
     throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
   }
 
+  // filling trivial eigenvalues
+  for(int i=0; i<M; i++)
+  {
+    eigenvalues[i] = 1.0 - A[i][i];
+  }
+
   // retrieving eigenvalues
-  for(int i=0; i<m_; i++)
+  for(int i=0; i<M; i++)
   {
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON)
@@ -521,24 +474,55 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
         GSL_REAL(z) = MIN_EIGENVALUE;
         GSL_IMAG(z) = 0.0;
         gsl_vector_complex_set(vaps, i, z);
-        coerced = true;
+        coerced2 = true;
       }
       eigenvalues[M+i] = GSL_REAL(z);
     }
   }
 
   // coercing to a valid correlation matrix
-  if (coerced == true)
+  if (coerced2 == true)
   {
-    gsl_matrix_complex *R = gsl_matrix_complex_alloc(m_, m_);
+    gsl_matrix_complex *R = gsl_matrix_complex_alloc(M, M);
     prod(VEPS, vaps, R);
-    //TODO: retrieve values from R (check that are real)
-    //TODO: declare function prod
-    //TODO: copy prod to PowMatrix
+    for(int i=0; i<M; i++)
+    {
+      for(int j=0; j<=i; j++)
+      {
+        // undoing deflated matrix
+        if (i == j)
+        {
+          if (n[i] > 1)
+          {
+            gsl_complex *val = gsl_matrix_complex_ptr(R, i, j);
+            GSL_REAL(*val) -= 1.0;
+            GSL_REAL(*val) /= (n[j]-1.0);
+            GSL_IMAG(*val) /= (n[j]-1.0);
+          }
+        }
+        else
+        {
+          gsl_complex *val = gsl_matrix_complex_ptr(R, i, j);
+          GSL_REAL(*val) /= n[j];
+          GSL_IMAG(*val) /= n[j];
+        }
+
+        // z1 and z2 are equals and reals
+        // doing mean to round decimals
+        gsl_complex z1 = gsl_matrix_complex_get(R, i, j);
+        gsl_complex z2 = gsl_matrix_complex_get(R, j, i);
+        assert(fabs(GSL_IMAG(z1)) < EPSILON);
+        assert(fabs(GSL_IMAG(z2)) < EPSILON);
+        A[i][j] = (GSL_REAL(z1) + GSL_REAL(z2))/2.0;
+        A[j][i] = A[i][j];
+      }
+    }
+    gsl_matrix_complex_free(R);
   }
 
   cond = getConditionNumber(eigenvalues);
   det = getDeterminant(eigenvalues);
+  coerced = (coerced1||coerced2);
 
   gsl_matrix_free(K);
   gsl_vector_complex_free(vaps);
@@ -548,10 +532,11 @@ void ccruncher::BlockMatrixChol::eigen(double **A_, int *n_, int m_) throw(Excep
 
 //===========================================================================
 // internal function
-// given a matrix A and a vector v, does the following operation:
+// given a matrix VEPS and a vector vaps, does the following operation:
 //  R = VEPS·diag(vaps)·inv(VEPS)
+// where inv() is the matrix inverse
 //===========================================================================
-void prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception)
+void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception)
 {
   assert(VEPS != NULL && vaps != NULL && R != NULL);
 
@@ -674,3 +659,10 @@ BlockMatrixCholInv* ccruncher::BlockMatrixChol::getInverse() const
   return new BlockMatrixCholInv(*this);
 }
 
+//===========================================================================
+// isCoerced
+//===========================================================================
+bool ccruncher::BlockMatrixChol::isCoerced() const
+{
+  return coerced;
+}
