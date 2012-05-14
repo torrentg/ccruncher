@@ -243,6 +243,7 @@ void ccruncher_test::BlockMatrixCholTest::test5()
       0.1404212, 0.09503903, 0.10873399, 0.11865865,
       0.1154046, 0.07810746, 0.11865865, 0.05991995
   };
+  double **B = Arrays<double>::allocMatrix(4,4,valB);
   
   BlockMatrixChol *chol=NULL;
   chol = new BlockMatrixChol(A, n, 4);
@@ -250,13 +251,14 @@ void ccruncher_test::BlockMatrixCholTest::test5()
   ASSERT(chol->isCoerced());
   for(int i=0; i<4; i++) {
     for(int j=0; j<4; j++) {
-      ASSERT_EQUALS(chol->getCorrelations[i][j], valB[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(chol->getCorrelations()[i][j], B[i][j], EPSILON);
     }
   }
 
   // exit function
   if (chol!= NULL) delete chol;
   Arrays<double>::deallocMatrix(A, 4);
+  Arrays<double>::deallocMatrix(B, 4);
 }
 
 //===========================================================================

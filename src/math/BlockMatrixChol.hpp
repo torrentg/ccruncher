@@ -106,7 +106,7 @@ class BlockMatrixChol
     // to avoid a non-definite-positive correlation matrix
     bool isCoerced() const;
     // return correlations matrix (used only to debug)
-    double ** const getCorrelations() const;
+    double** getCorrelations() const;
 
   public:
 
