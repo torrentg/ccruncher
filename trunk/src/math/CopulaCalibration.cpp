@@ -164,7 +164,7 @@ double** ccruncher::CopulaCalibration::getCorrelations() const
 //===========================================================================
 // calibrate copula using MLE
 //===========================================================================
-/*
+
 void ccruncher::CopulaCalibration::run() throw(Exception)
 {
   //TODO: comprovar tamanys de parametres
@@ -238,8 +238,8 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   gsl_vector_free(ss);
   gsl_multimin_fminimizer_free(minimizer);
 }
-*/
 
+/*
 void ccruncher::CopulaCalibration::run() throw(Exception)
 {
   gsl_multimin_fdfminimizer *minimizer=NULL;
@@ -291,7 +291,7 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   gsl_multimin_fdfminimizer_free(minimizer);
   gsl_vector_free(x0);
 }
-
+*/
 //===========================================================================
 // serialize params
 //===========================================================================

@@ -268,3 +268,11 @@ gsl_rng* ccruncher::BlockTStudentCopula::getRng()
   return rng;
 }
 
+//===========================================================================
+// return if given correlation has been modified
+//===========================================================================
+bool ccruncher::BlockTStudentCopula::isCoerced() const
+{
+  assert(chol != NULL);
+  return chol->isCoerced();
+}

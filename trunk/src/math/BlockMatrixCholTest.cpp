@@ -208,6 +208,23 @@ void ccruncher_test::BlockMatrixCholTest::test4()
 // trying to decompose a non-definite positive block matrix
 // observe that autocorrelation factors are very lows (compared with
 // the rest of correlation factors)
+//
+// matrix coertion checked using R:
+//   > sigma = matrix(ncol=4,nrow=4,c(0.00100, 0.10000, 0.20000, 0.15000,
+//      0.10000, 0.00100, 0.12500, 0.05000,
+//      0.20000, 0.12500, 0.00100, 0.15000,
+//      0.15000, 0.05000, 0.15000, 0.00100))
+//   > dims = c(25,25,25,25)
+//   > K = ccruncher.eigen(sigma,dims)
+//   > G = K$G
+//   > eig = eigen(G)
+//   > eig$values[2:4] = 0.0001
+//   > G2 = eig$vectors%*%diag(eig$values)%*%solve(eig$vectors)
+//   > aux = diag(G2)-1
+//   > G2 = G2/25
+//   > diag(G2) = aux/24
+//   > G3 = (G2+t(G2))/2
+//   > ccruncher.eigen(G3,dims)$values
 //===========================================================================
 void ccruncher_test::BlockMatrixCholTest::test5()
 {
@@ -220,8 +237,22 @@ void ccruncher_test::BlockMatrixCholTest::test5()
   int n[] = { 25, 25, 25, 25 };
   double **A = Arrays<double>::allocMatrix(4,4,valA);
 
+  double valB[] = {
+      0.1005982, 0.09243270, 0.14042116, 0.11540458,
+      0.0924327, 0.02350392, 0.09503903, 0.07810746,
+      0.1404212, 0.09503903, 0.10873399, 0.11865865,
+      0.1154046, 0.07810746, 0.11865865, 0.05991995
+  };
+  
   BlockMatrixChol *chol=NULL;
-  ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4));
+  chol = new BlockMatrixChol(A, n, 4);
+
+  ASSERT(chol->isCoerced());
+  for(int i=0; i<4; i++) {
+    for(int j=0; j<4; j++) {
+      ASSERT_EQUALS(chol->getCorrelations[i][j], valB[i][j], EPSILON);
+    }
+  }
 
   // exit function
   if (chol!= NULL) delete chol;

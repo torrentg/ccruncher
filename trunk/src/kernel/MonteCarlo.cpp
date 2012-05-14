@@ -444,6 +444,8 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
       copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size());
       double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::toString(cnum));
+      bool coerced = ((BlockGaussianCopula*)copula)->isCoerced();
+      Logger::trace("correlations coerced", Format::toString(coerced));
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
@@ -451,6 +453,8 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
       copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size(), ndf);
       double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::toString(cnum));
+      bool coerced = ((BlockTStudentCopula*)copula)->isCoerced();
+      Logger::trace("correlations coerced", Format::toString(coerced));
     }
     else 
     {

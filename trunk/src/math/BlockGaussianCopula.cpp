@@ -256,3 +256,11 @@ gsl_rng* ccruncher::BlockGaussianCopula::getRng()
   return rng;
 }
 
+//===========================================================================
+// return if given correlation has been modified
+//===========================================================================
+bool ccruncher::BlockGaussianCopula::isCoerced() const
+{
+  assert(chol != NULL);
+  return chol->isCoerced();
+}

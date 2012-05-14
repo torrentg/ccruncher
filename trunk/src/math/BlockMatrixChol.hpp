@@ -105,6 +105,8 @@ class BlockMatrixChol
     // indicates if given correlations has been modified
     // to avoid a non-definite-positive correlation matrix
     bool isCoerced() const;
+    // return correlations matrix (used only to debug)
+    double ** const getCorrelations() const;
 
   public:
 

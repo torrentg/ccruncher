@@ -97,6 +97,8 @@ class BlockTStudentCopula : public Copula
     double getConditionNumber() const;
     // returns the Random Number Generator
     gsl_rng* getRng();
+    // return if given correlation has been modified
+    bool isCoerced() const;
 
 };
 
