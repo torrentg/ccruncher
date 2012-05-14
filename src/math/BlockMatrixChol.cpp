@@ -677,3 +677,11 @@ bool ccruncher::BlockMatrixChol::isCoerced() const
 {
   return coerced;
 }
+
+//===========================================================================
+// return correlations matrix (used only to debug)
+//===========================================================================
+double** const ccruncher::BlockMatrixChol::getCorrelations() const
+{
+    return A;
+}
