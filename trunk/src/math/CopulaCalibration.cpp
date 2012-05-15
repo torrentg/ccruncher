@@ -525,7 +525,7 @@ cout << ")" << endl;
     for(unsigned int j=0; j<eigenvalues.size(); j++)
     {
       if (eigenvalues[j].value <= 0.0 || eigenvalues[j].multiplicity <= 0) cout << "VAP NEGATIU: " << eigenvalues[j].value << " (" << eigenvalues[j].multiplicity << ")" << endl;
-      assert(eigenvalues[j].multiplicity > 0 && eigenvalues[i].value > 0.0);
+      assert(eigenvalues[j].multiplicity > 0 && eigenvalues[j].value > 0.0);
       ret += eigenvalues[j].multiplicity * log(eigenvalues[j].value);
     }
     ret += 0.5*aux0;
