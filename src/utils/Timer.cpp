@@ -121,7 +121,7 @@ double ccruncher::Timer::read()
 //===========================================================================
 string ccruncher::Timer::format(double val)
 {
-  assert(val >= -1e-14);
+  //assert(val >= -1e-14);
   val = fabs(val);
 
   char buf[20];
