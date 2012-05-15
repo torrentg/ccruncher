@@ -22,6 +22,7 @@
 
 #include <iomanip>
 #include <cmath>
+#include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_multimin.h>
 #include "math/CopulaCalibration.hpp"
@@ -312,6 +313,10 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   double minval = 1e10;
   int N0=100, N1=10, N2=10, N3=10;
 
+  cout << "num_params = " << num_params << endl;
+  cout << "num sectors = " << params.k << endl;
+  cout << "copula dim = " << params.dim << endl;
+
   for(int i0=2; i0<=N0; i0++)
   {
 cout << "NDF = " << double(i0) << endl;
@@ -430,7 +435,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
     }
     for(int j=1; j<=(p->n[i]-num); j++)
     {
-      ret[s] = p->p[i] + (1.0 - p->p[i]) * double(j)/double(num+1);
+      ret[s] = p->p[i] + (1.0 - p->p[i]) * double(j)/double(p->n[i]-num+1);
       s++;
     }
 */
@@ -459,6 +464,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
         cout << "USE concentrated" << endl;
     }
 */
+
     // equidistributed + symmetric
     // TODO: check round
     if (p->n[i]-2*num > 0)
@@ -516,25 +522,34 @@ cout << " COERCED = " << L->isCoerced() << ", NDF = " << nu << ", SIGMA = (";
 for(int i=0; i<p->k; i++) for(int j=0; j<p->k; j++) cout << L->getCorrelations()[i][j] << ", ";
 cout << ")" << endl;
 */
+
+  // determinant section (we use eigenvalues to avoid accuracy problems)
+  const vector<eig> &eigenvalues = L->getEigenvalues();
+  double aux0 = 0.0;
+  for(unsigned int j=0; j<eigenvalues.size(); j++)
+  {
+    assert(eigenvalues[j].multiplicity > 0 && eigenvalues[j].value > 0.0);
+    aux0 += eigenvalues[j].multiplicity * log(eigenvalues[j].value);
+  }
+  ret += 0.5*aux0;
+
+  ret -= gsl_sf_lngamma((nu+p->dim)/2.0);
+  ret -= (p->dim-1.0)*gsl_sf_lngamma(nu/2.0);
+  ret += p->dim*gsl_sf_lngamma((nu+1.0)/2.0);
+
+  ret *= p->t;
+
   // sign inverted because gsl minimize and we try to maximize
   for(int i=0; i<p->t; i++)
   {
-    // determinant section (we use eigenvalues to avoid accuracy problems)
-    const vector<eig> &eigenvalues = L->getEigenvalues();
-    double aux0 = 0.0;
-    for(unsigned int j=0; j<eigenvalues.size(); j++)
-    {
-      if (eigenvalues[j].value <= 0.0 || eigenvalues[j].multiplicity <= 0) cout << "VAP NEGATIU: " << eigenvalues[j].value << " (" << eigenvalues[j].multiplicity << ")" << endl;
-      assert(eigenvalues[j].multiplicity > 0 && eigenvalues[j].value > 0.0);
-      ret += eigenvalues[j].multiplicity * log(eigenvalues[j].value);
-    }
-    ret += 0.5*aux0;
-
-    ret -= gsl_sf_lngamma((nu+p->dim)/2.0);
-    ret -= (p->dim-1.0)*gsl_sf_lngamma(nu/2.0);
-    ret += p->dim*gsl_sf_lngamma((nu+1.0)/2.0);
-
     getObservation(i, p, p->x);
+
+    for (int j=0; j<p->dim; j++)
+    {
+      assert(0.0 <= p->x[j] && p->x[j] <= 1.0);
+      p->x[j] = gsl_cdf_tdist_Pinv(p->x[j], nu);
+    }
+
     I->mult(p->x, p->y);
 
     double aux1=0.0, aux2=0.0;
