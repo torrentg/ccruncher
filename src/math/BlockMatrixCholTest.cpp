@@ -60,6 +60,7 @@ void ccruncher_test::BlockMatrixCholTest::tearDown()
 //      0.50000  0.86603  0.00000
 //      0.50000  0.28868  0.81650
 //    c = cond(B)
+//    d = sqrt(det(A))
 //    C = inv(B)
 //      +1.00000   0.00000   0.00000
 //      -0.57735   1.15470   0.00000
@@ -77,12 +78,13 @@ void ccruncher_test::BlockMatrixCholTest::test1()
       0.50000, 0.28868, 0.81650
   };
   double cond = 2.0;
+  double det = 0.70711;
   double solI[] = {
       1.00000,  0.00000, 0.00000,
      -0.57735,  1.15470, 0.00000,
      -0.40825, -0.40825, 1.22474
   };
-  run(valA, solA, cond, solI, n, 1);
+  run(valA, solA, cond, det, solI, n, 1);
 }
 
 //===========================================================================
@@ -98,6 +100,7 @@ void ccruncher_test::BlockMatrixCholTest::test1()
 //      0.10000  0.99499  0.00000
 //      0.20000  0.28141  0.93851
 //    c = cond(B)
+//    d = sqrt(det(A))
 //    C = inv(B)
 //      +1.00000   0.00000   0.00000
 //      -0.10050   1.00504   0.00000
@@ -118,12 +121,13 @@ void ccruncher_test::BlockMatrixCholTest::test2()
      0.20000, 0.28141, 0.93851
   };
   double cond = 1.4408;
+  double det = 0.93381;
   double solI[] = {
      +1.00000,  0.00000, 0.00000,
      -0.10050,  1.00504, 0.00000,
      -0.18297, -0.30136, 1.06551
   };
-  run(valA, solA, cond, solI, n, 3);
+  run(valA, solA, cond, det, solI, n, 3);
 }
 
 //===========================================================================
@@ -143,6 +147,7 @@ void ccruncher_test::BlockMatrixCholTest::test2()
 //     0.10000  0.05774  0.04082  0.99247  0.00000
 //     0.10000  0.05774  0.04082  0.33754  0.93331
 //    c = cond(B)
+//    d = sqrt(det(A))
 //    C = inv(B)
 //     +1.00000   0.00000   0.00000   0.00000   0.00000
 //     -0.57735   1.15470   0.00000   0.00000   0.00000
@@ -165,6 +170,7 @@ void ccruncher_test::BlockMatrixCholTest::test3()
      0.10000, 0.05774, 0.04082, 0.33754, 0.93331
   };
   double cond = 2.0406;
+  double det = 0.65498;
   double solI[] = {
      +1.00000,  0.00000,  0.00000,  0.00000, 0.00000,
      -0.57735,  1.15470,  0.00000,  0.00000, 0.00000,
@@ -172,7 +178,7 @@ void ccruncher_test::BlockMatrixCholTest::test3()
      -0.05038, -0.05038, -0.05038,  1.00759, 0.00000,
      -0.03535, -0.03535, -0.03535, -0.36440, 1.07146
   };
-  run(valA, solA, cond, solI, n, 2);
+  run(valA, solA, cond, det, solI, n, 2);
 }
 
 //===========================================================================
@@ -313,6 +319,7 @@ void ccruncher_test::BlockMatrixCholTest::test6()
 //      0.10000  0.99499  0.00000
 //      0.20000  0.28141  0.93851
 //    c = cond(B)
+//    d = sqrt(det(A))
 //    C = inv(B)
 //      +1.00000   0.00000   0.00000
 //      -0.10050   1.00504   0.00000
@@ -335,12 +342,13 @@ void ccruncher_test::BlockMatrixCholTest::test7()
      0.20000, 0.28141, 0.93851
   };
   double cond = 1.4408;
+  double det = 0.93381;
   double solI[] = {
     +1.00000,  0.00000, 0.00000,
     -0.10050,  1.00504, 0.00000,
     -0.18297, -0.30136, 1.06551
   };
-  run(valA, solA, cond, solI, n, 4);
+  run(valA, solA, cond, det, solI, n, 4);
 }
 
 //===========================================================================
@@ -354,6 +362,7 @@ void ccruncher_test::BlockMatrixCholTest::test7()
 //      1.00000  0.00000
 //      0.40000  0.91652
 //    c = cond(B)
+//    d = sqrt(det(A))
 //    C = inv(B)
 //      +1.00000   0.00000
 //      -0.43644   1.09109
@@ -369,11 +378,12 @@ void ccruncher_test::BlockMatrixCholTest::test8()
       0.40000, 0.91652
   };
   double cond = 1.5275;
+  double det = 0.91652;
   double solI[] = {
       +1.00000, 0.00000,
       -0.43644, 1.09109
   };
-  run(valA, solA, cond, solI, n, 1);
+  run(valA, solA, cond, det, solI, n, 1);
 }
 
 //===========================================================================
@@ -391,7 +401,8 @@ void ccruncher_test::BlockMatrixCholTest::test9()
       1.00000
   };
   double cond = 1.0;
-  run(valA, solA, cond, solA, n, 1);
+  double det = 1.0;
+  run(valA, solA, cond, det, solA, n, 1);
 }
 
 //===========================================================================
@@ -411,11 +422,12 @@ void ccruncher_test::BlockMatrixCholTest::test10()
       0.10000, 0.99499
   };
   double cond1 = 1.1055; //c=cond(B)
-  double inv1[] = {    //C=inv(B)
+  double det1 = 0.99499; //d=sqrt(det(A))
+  double inv1[] = {      //C=inv(B)
       1.00000,   0.00000,
      -0.10050,   1.00504
   };
-  run(valA, sol1, cond1, inv1, n1, 2);
+  run(valA, sol1, cond1, det1, inv1, n1, 2);
 
   int n2[] = { 1, 2 }; //A=[1,0.1,0.1; 0.1,1,0.35; 0.1,0.35,1]
   double sol2[] = {    //B=chol(A)'
@@ -424,12 +436,13 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.34171,   0.93447
   };
   double cond2 = 1.4676; //c=cond(B)
-  double inv2[] = {    //C=inv(B)
+  double det2 = 0.92978; //d=sqrt(det(A))
+  double inv2[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,
   -0.10050,   1.00504,   0.00000,
   -0.07026,  -0.36752,   1.07013
   };
-  run(valA, sol2, cond2, inv2, n2, 2);
+  run(valA, sol2, cond2, det2, inv2, n2, 2);
 
   int n3[] = { 1, 3 }; //A=[1,0.1,0.1,0.1; 0.1,1,0.35,0.35; 0.1,0.35,1,0.35; 0.1,0.35,0.35,1]
   double sol3[] = {    //B=chol(A)'
@@ -439,13 +452,14 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.34171,   0.23889,   0.90342
   };
   double cond3 = 1.6364; //c=cond(B)
-  double inv3[] = {    //C=inv(B)
+  double det3 = 0.83999; //d=sqrt(det(A))
+  double inv3[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,
   -0.10050,   1.00504,   0.00000,   0.00000,
   -0.07026,  -0.36752,   1.07013,   0.00000,
   -0.05410,  -0.28297,  -0.28297,   1.10691
   };
-  run(valA, sol3, cond3, inv3, n3, 2);
+  run(valA, sol3, cond3, det3, inv3, n3, 2);
 
   int n4[] = { 2, 1 }; //A=[1,0.5,0.1; 0.5,1,0.1; 0.1,0.1,1]
   double sol4[] = {    //B=chol(A)'
@@ -454,12 +468,13 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.99331
   };
   double cond4 = 1.7534; //c=cond(B)
-  double inv4[] = {    //C=inv(B)
+  double det4 = 0.86023; //d=sqrt(det(A))
+  double inv4[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,
   -0.06712,  -0.06712,   1.00673
   };
-  run(valA, sol4, cond4, inv4, n4, 2);
+  run(valA, sol4, cond4, det4, inv4, n4, 2);
 
   int n5[] = { 2, 2 }; //A=[1,0.5,0.1,0.1; 0.5,1,0.1,0.1; 0.1,0.1,1,0.35; 0.1,0.1,0.35,1]
   double sol5[] = {    //B=chol(A)'
@@ -469,13 +484,14 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.33893,   0.93370
   };
   double cond5 = 1.8103; //c=cond(B)
-  double inv5[] = {    //C=inv(B)
+  double det5 = 0.80320; //d=sqrt(det(A))
+  double inv5[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,   0.00000,
   -0.06712,  -0.06712,   1.00673,   0.00000,
   -0.04704,  -0.04704,  -0.36545,   1.07101
   };
-  run(valA, sol5, cond5, inv5, n5, 2);
+  run(valA, sol5, cond5, det5, inv5, n5, 2);
 
   int n6[] = { 2, 3 }; //A=[1,0.5,0.1,0.1,0.1; 0.5,1,0.1,0.1,0.1; 0.1,0.1,1,0.35,0.35; 0.1,0.1,0.35,1,0.35; 0.1,0.1,0.35,0.35,1]
   double sol6[] = {    //B=chol(A)'
@@ -486,14 +502,15 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.33893,   0.23754,   0.90298
   };
   double cond6 = 1.9311; //c=cond(B)
-  double inv6[] = {    //C=inv(B)
+  double det6 = 0.72527; //d=sqrt(det(A))
+  double inv6[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,   0.00000,   0.00000,
   -0.06712,  -0.06712,   1.00673,   0.00000,   0.00000,
   -0.04704,  -0.04704,  -0.36545,   1.07101,   0.00000,
   -0.03626,  -0.03626,  -0.28174,  -0.28174,   1.10745
   };
-  run(valA, sol6, cond6, inv6, n6, 2);
+  run(valA, sol6, cond6, det6, inv6, n6, 2);
 
   int n7[] = { 3, 1 }; //A=[1,0.5,0.5,0.1; 0.5,1,0.5,0.1; 0.5,0.5,1,0.1; 0.1,0.1,0.1,1]
   double sol7[] = {    //B=chol(A)'
@@ -503,13 +520,14 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.04082,   0.99247
   };
   double cond7 = 2.0145; //c=cond(B)
-  double inv7[] = {    //C=inv(B)
+  double det7 = 0.70178; //d=sqrt(det(A))
+  double inv7[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,   0.00000,
   -0.40825,  -0.40825,   1.22474,   0.00000,
   -0.05038,  -0.05038,  -0.05038,   1.00759
   };
-  run(valA, sol7, cond7, inv7, n7, 2);
+  run(valA, sol7, cond7, det7, inv7, n7, 2);
 
   int n8[] = { 3, 2 }; //A=[1,0.5,0.5,0.1,0.1; 0.5,1,0.5,0.1,0.1; 0.5,0.5,1,0.1,0.1; 0.1,0.1,0.1,1,0.35; 0.1,0.1,0.1,0.35,1]
   double sol8[] = {    //B=chol(A)'
@@ -520,14 +538,15 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.04082,   0.33754,   0.93331
   };
   double cond8 = 2.0406; //c=cond(B)
-  double inv8[] = {    //C=inv(B)
+  double det8 = 0.65498; //d=sqrt(det(A))
+  double inv8[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,   0.00000,   0.00000,
   -0.40825,  -0.40825,   1.22474,   0.00000,   0.00000,
   -0.05038,  -0.05038,  -0.05038,   1.00759,   0.00000,
   -0.03535,  -0.03535,  -0.03535,  -0.36440,   1.07146
   };
-  run(valA, sol8, cond8, inv8, n8, 2);
+  run(valA, sol8, cond8, det8, inv8, n8, 2);
 
   int n9[] = { 3, 3 }; //A=[1,0.5,0.5,0.1,0.1,0.1; 0.5,1,0.5,0.1,0.1,0.1; 0.5,0.5,1,0.1,0.1,0.1; 0.1,0.1,0.1,1,0.35,0.35; 0.1,0.1,0.1,0.35,1,0.35; 0.1,0.1,0.1,0.35,0.35,1]
   double sol9[] = {    //B=chol(A)'
@@ -539,7 +558,8 @@ void ccruncher_test::BlockMatrixCholTest::test10()
    0.10000,   0.05774,   0.04082,   0.33754,   0.23686,   0.90275
   };
   double cond9 = 2.0907; //c=cond(B)
-  double inv9[] = {    //C=inv(B)
+  double det9 = 0.59129; //d=sqrt(det(A))
+  double inv9[] = {      //C=inv(B)
    1.00000,   0.00000,   0.00000,   0.00000,   0.00000,   0.00000,
   -0.57735,   1.15470,   0.00000,   0.00000,   0.00000,   0.00000,
   -0.40825,  -0.40825,   1.22474,   0.00000,   0.00000,   0.00000,
@@ -547,7 +567,7 @@ void ccruncher_test::BlockMatrixCholTest::test10()
   -0.03535,  -0.03535,  -0.03535,  -0.36440,   1.07146,   0.00000,
   -0.02727,  -0.02727,  -0.02727,  -0.28113,  -0.28113,   1.10772
   };
-  run(valA, sol9, cond9, inv9, n9, 2);
+  run(valA, sol9, cond9, det9, inv9, n9, 2);
 }
 
 //===========================================================================
@@ -569,19 +589,20 @@ void ccruncher_test::BlockMatrixCholTest::test11()
      0.20000,  0.13093,  0.97101
   };
   double cond = 1.6054; //c=cond(B)
-  double solI[] = {      //C=inv(B)
+  double det = 0.88994; //d=sqrt(det(A))
+  double solI[] = {     //C=inv(B)
      +1.00000,   0.00000,   0.00000,
      -0.43644,   1.09109,   0.00000,
      -0.14712,  -0.14712,   1.02986
   };
-  run(valA, solA, cond, solI, n, 3);
+  run(valA, solA, cond, det, solI, n, 3);
 }
 
 //===========================================================================
 //  given a blockmatrix, A, and his cholesky decomposition, L, check that:
 //    L·L' = A
 //===========================================================================
-void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution, double condnum, double *solinv, int *n, int M)
+void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution, double condnum, double det, double *solinv, int *n, int M)
 {
   int N = 0;
   for(int i=0; i<M; i++) N += n[i];
@@ -593,6 +614,7 @@ void ccruncher_test::BlockMatrixCholTest::run(double *correls, double *solution,
   BlockMatrixChol *chol=NULL;
   ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, M));
   ASSERT_EQUALS_EPSILON(chol->getConditionNumber(), condnum, EPSILON);
+  ASSERT_EQUALS_EPSILON(chol->getDeterminant(), det, EPSILON);
   ASSERT_EQUALS(N, chol->getDim());
   BlockMatrixCholInv *inv = chol->getInverse();
   ASSERT_EQUALS(N, inv->getDim());
