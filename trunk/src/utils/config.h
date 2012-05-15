@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Tue May  8 07:49:03 CEST 2012"
+#define BUILD_DATE "Mon May 14 11:19:05 CEST 2012"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -213,9 +213,15 @@
 #define UNUSED(x) (void)x;
 
 /* required by Microsoft project */
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif
 
+/* cygwin patch */
+#if defined (__CYGWIN__) 
+#ifndef NAN
+#define NAN (0.0/0.0)
+#endif
+#endif
 
 
