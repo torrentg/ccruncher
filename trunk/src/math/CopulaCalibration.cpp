@@ -189,7 +189,7 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   // set initial step sizes
   ss = gsl_vector_alloc(num_params);
   gsl_vector_set_all(ss, 0.01);
-  gsl_vector_set(ss, 0, 1.0);
+  gsl_vector_set(ss, 0, 0.1);
 
   // initialize method and iterate
   minex_func.n = num_params;
@@ -310,31 +310,32 @@ void ccruncher::CopulaCalibration::run() throw(Exception)
   int num_params = 1+(params.k*(params.k+1))/2;
   gsl_vector *x0 = gsl_vector_alloc(num_params);
   double minval = 1e10;
+  int N0=100, N1=10, N2=10, N3=10;
 
-  for(int i0=2; i0<=300; i0++)
+  for(int i0=2; i0<=N0; i0++)
   {
 cout << "NDF = " << double(i0) << endl;
     gsl_vector_set(x0, 0, double(i0));
 
-    for(int i1=0; i1<=100; i1++)
+    for(int i1=0; i1<=N1; i1++)
     {
-      gsl_vector_set(x0, 1, 0.0+0.01*i1);
+      gsl_vector_set(x0, 1, 0.0+i1/double(N1));
 
-      for(int i2=0; i2<=100; i2++)
+      for(int i2=0; i2<=N2; i2++)
       {
-        gsl_vector_set(x0, 2, 0.0+0.01*i2);
+        gsl_vector_set(x0, 2, 0.0+i2/double(N2));
 
-        for(int i3=0; i3<=100; i3++)
+        for(int i3=0; i3<=N3; i3++)
         {
-          gsl_vector_set(x0, 3, 0.0+0.01*i3);
+          gsl_vector_set(x0, 3, 0.0+i3/double(N3));
 
           try
           {
             double y = f(x0, &params);
 
-cout << "coerced= " << params.coerced << ", y= " << y << "\t x= ";
-for(int i=0; i<(int)x0->size; i++) cout << gsl_vector_get(x0, i) << "\t";
-cout << endl;
+//cout << "coerced= " << params.coerced << ", y= " << y << "\t x= ";
+//for(int i=0; i<(int)x0->size; i++) cout << gsl_vector_get(x0, i) << "\t";
+//cout << endl;
 
             if (!params.coerced && y < minval)
             {
@@ -521,10 +522,11 @@ cout << ")" << endl;
     // determinant section (we use eigenvalues to avoid accuracy problems)
     const vector<eig> &eigenvalues = L->getEigenvalues();
     double aux0 = 0.0;
-    for(int j=0; j<p->k; j++)
+    for(unsigned int j=0; j<eigenvalues.size(); j++)
     {
-      if (eigenvalues[i].value <= 0.0) cout << "VAP NEGATIU: " << eigenvalues[i].value << " (" << eigenvalues[i].multiplicity << ")" << endl;
-      ret += eigenvalues[i].multiplicity * log(eigenvalues[i].value);
+      if (eigenvalues[j].value <= 0.0 || eigenvalues[j].multiplicity <= 0) cout << "VAP NEGATIU: " << eigenvalues[j].value << " (" << eigenvalues[j].multiplicity << ")" << endl;
+      assert(eigenvalues[j].multiplicity > 0 && eigenvalues[i].value > 0.0);
+      ret += eigenvalues[j].multiplicity * log(eigenvalues[j].value);
     }
     ret += 0.5*aux0;
 
@@ -557,7 +559,7 @@ cout << ")" << endl;
 
   if (L->isCoerced()) {
       p->coerced = true;
-      ret += 500;
+      ret += 1500;
   }
   else p->coerced = false;
 /*

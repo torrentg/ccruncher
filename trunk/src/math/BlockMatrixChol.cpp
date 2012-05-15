@@ -534,10 +534,6 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
 
   coerced = (coerced1||coerced2);
 
-  for(int i=0; i<eigenvalues.size(); i++) {
-    cout << "VAP(" << (i+1) << ")=" << eigenvalues[i].value << " (" << (int) eigenvalues[i].multiplicity + ")" << endl;
-  }
-
   gsl_matrix_free(K);
   gsl_vector_complex_free(vaps);
   gsl_matrix_complex_free(VEPS);
@@ -635,7 +631,7 @@ double ccruncher::BlockMatrixChol::getDeterminant() const
 
   for(unsigned int i=0; i<eigenvalues.size(); i++)
   {
-    ret += std::pow(eigenvalues[i].value, eigenvalues[i].multiplicity);
+    ret *= std::pow(eigenvalues[i].value, eigenvalues[i].multiplicity);
   }
 
   assert(ret > 0.0);
