@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include "utils/Exception.hpp"
@@ -38,6 +39,13 @@ namespace ccruncher {
 class BlockMatrixCholInv;
 
 //---------------------------------------------------------------------------
+
+struct eig
+{
+  double value;
+  int multiplicity;
+  eig(double x, int n) : value(x), multiplicity(n) {}
+};
 
 class BlockMatrixChol
 {
@@ -56,10 +64,8 @@ class BlockMatrixChol
     double *coefs;
     // diagonal cholesky coeficients (array size = N)
     double *diag;
-    // condition number (2-norm) of the Cholesky matrix
-    double cond;
-    // determinant of the Cholesky matrix
-    double det;
+    // list of eigenvalues
+    vector<eig> eigenvalues;
     // coerced flag
     bool coerced;
 
@@ -73,10 +79,6 @@ class BlockMatrixChol
     void prepare() throw(Exception);
     // multiply VEPS·diag(vaps)·inv(VEPS)
     void prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception);
-    // returns matrix condition number
-    double getConditionNumber(const double *eigenvalues) const;
-    // returns matrix determinant
-    double getDeterminant(const double *eigenvalues) const;
 
   public:
 
@@ -107,6 +109,8 @@ class BlockMatrixChol
     bool isCoerced() const;
     // return correlations matrix (used only to debug)
     double** getCorrelations() const;
+    // return correlations matrix eigenvalues (not Cholesky)
+    const vector<eig>& getEigenvalues() const;
 
   public:
 

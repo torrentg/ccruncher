@@ -53,6 +53,7 @@ class CopulaCalibration
       double **M; // auxiliar mem used by f (to avoid alloc/dealloc)
       double *x; // auxiliar mem used by f (to avoid alloc/dealloc)
       double *y; // auxiliar mem used by f (to avoid alloc/dealloc)
+      bool coerced; // auxiliar, true if coerced in last evaluation
 
       // constructor
       fparams() : k(0), t(0), n(NULL), p(NULL), h(NULL), M(NULL), x(NULL), y(NULL) {}

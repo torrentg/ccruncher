@@ -88,6 +88,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
   n = Arrays<int>::allocVector(M, x.n);
   coefs = Arrays<double>::allocVector(N*M, x.coefs);
   diag = Arrays<double>::allocVector(N, x.diag);
+  eigenvalues = x.eigenvalues;
   return *this;
 }
 
@@ -354,7 +355,7 @@ void ccruncher::BlockMatrixChol::chold() throw(Exception)
         val1 += COEFS(r,i-1)*COEFS(r,i-1);
       }
       if (1.0-val1 < 0.0) {
-        throw Exception("non definite positive block matrix");
+        throw Exception("non definite-positive block matrix");
       }
       else {
         diag[i] = sqrt(1.0-val1);
@@ -416,7 +417,6 @@ void ccruncher::BlockMatrixChol::chold() throw(Exception)
 void ccruncher::BlockMatrixChol::prepare() throw(Exception)
 {
   bool coerced1=false, coerced2=false;
-  double *eigenvalues = Arrays<double>::allocVector(2*M, NAN);
 
   // defining variables to perform eigenvalues functions
   gsl_matrix *K = gsl_matrix_alloc(M, M);
@@ -454,14 +454,16 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
     gsl_matrix_free(K);
     gsl_vector_complex_free(vaps);
     gsl_matrix_complex_free(VEPS);
-    Arrays<double>::deallocVector(eigenvalues);
     throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
   }
 
   // filling trivial eigenvalues
   for(int i=0; i<M; i++)
   {
-    eigenvalues[i] = 1.0 - A[i][i];
+    if (n[i] > 1)
+    {
+      eigenvalues.push_back(eig(1.0-A[i][i],n[i]-1));
+    }
   }
 
   // retrieving eigenvalues
@@ -472,7 +474,6 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
     {
       gsl_vector_complex_free(vaps);
       gsl_matrix_complex_free(VEPS);
-      Arrays<double>::deallocVector(eigenvalues);
       throw Exception("imaginary eigenvalue computing eigenvalues");
     }
     else
@@ -484,7 +485,7 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
         gsl_vector_complex_set(vaps, i, z);
         coerced2 = true;
       }
-      eigenvalues[M+i] = GSL_REAL(z);
+      eigenvalues.push_back(eig(GSL_REAL(z),1));
     }
   }
 
@@ -531,14 +532,15 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
     gsl_matrix_complex_free(R);
   }
 
-  cond = getConditionNumber(eigenvalues);
-  det = getDeterminant(eigenvalues);
   coerced = (coerced1||coerced2);
+
+  for(int i=0; i<eigenvalues.size(); i++) {
+    cout << "VAP(" << (i+1) << ")=" << eigenvalues[i].value << " (" << (int) eigenvalues[i].multiplicity + ")" << endl;
+  }
 
   gsl_matrix_free(K);
   gsl_vector_complex_free(vaps);
   gsl_matrix_complex_free(VEPS);
-  Arrays<double>::deallocVector(eigenvalues);
 }
 
 //===========================================================================
@@ -605,15 +607,14 @@ void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_compl
 // if A = L*L' where L is the Cholesky matrix, then the condition number
 // is sqrt(max(eig(A)),min(eig(A))
 //===========================================================================
-double ccruncher::BlockMatrixChol::getConditionNumber(const double *eigenvalues) const
+double ccruncher::BlockMatrixChol::getConditionNumber() const
 {
   double eigmin = +1e100;
   double eigmax = -1e100;
 
-  for(int i=0; i<2*M; i++)
+  for(unsigned int i=0; i<eigenvalues.size(); i++)
   {
-    if (i < M && n[i] <= 1) continue;
-    double val = std::fabs(eigenvalues[i]);
+    double val = std::fabs(eigenvalues[i].value);
     if (val < eigmin) eigmin = val;
     if (eigmax < val) eigmax = val;
   }
@@ -622,44 +623,23 @@ double ccruncher::BlockMatrixChol::getConditionNumber(const double *eigenvalues)
 }
 
 //===========================================================================
-// returns the condition number (2-norm) of the Cholesky matrix
-//===========================================================================
-double ccruncher::BlockMatrixChol::getConditionNumber() const
-{
-  return cond;
-}
-
-//===========================================================================
 // returns the determinant of the Cholesky matrix
 // observe that det(L) = sqrt(det(A))
 // note: equivalent to the multiplication of all Cholesky diagonal values
+// note: in high dimensions and MLE use log of eigenvalues to avoid
+//       accuracy problems
 //===========================================================================
-double ccruncher::BlockMatrixChol::getDeterminant(const double *eigenvalues) const
+double ccruncher::BlockMatrixChol::getDeterminant() const
 {
   double ret = 1.0;
 
-  for(int i=0; i<2*M; i++)
+  for(unsigned int i=0; i<eigenvalues.size(); i++)
   {
-    if (i < M)
-    {
-      if (n[i] > 1) ret *= eigenvalues[i] * (n[i]-1.0);
-    }
-    else
-    {
-      ret *= eigenvalues[i];
-    }
+    ret += std::pow(eigenvalues[i].value, eigenvalues[i].multiplicity);
   }
 
   assert(ret > 0.0);
   return sqrt(ret);
-}
-
-//===========================================================================
-// returns the determinant of the Cholesky matrix
-//===========================================================================
-double ccruncher::BlockMatrixChol::getDeterminant() const
-{
-  return det;
 }
 
 //===========================================================================
@@ -684,4 +664,12 @@ bool ccruncher::BlockMatrixChol::isCoerced() const
 double** ccruncher::BlockMatrixChol::getCorrelations() const
 {
     return A;
+}
+
+//===========================================================================
+// return correlations matrix eigenvalues (not Cholesky)
+//===========================================================================
+const vector<eig>& ccruncher::BlockMatrixChol::getEigenvalues() const
+{
+  return eigenvalues;
 }
