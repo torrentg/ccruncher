@@ -39,7 +39,7 @@ Required libraries installation
 1. check that you have libexpat.so in a lib directory and
    check that you have expat.h in an include directory. If
    you don't found some of these files you can download 
-   package from http://expat.sourceforge.net/ and install it. 
+   package from http://www.libexpat.org/ and install it. 
    Also you can install from expat and expat-devel rpm packages.
 
 2. check that you have libz.so in a lib directory and
@@ -118,7 +118,7 @@ Notes for Windows developers (MSVC9)
 2. retrieve repository content
    (checkout from http://www.ccruncher.net/svn/trunk/)
 
-3. download expat package from http://expat.sourceforge.net/
+3. download expat package from http://www.libexpat.org/
    and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
 
 4. download zlib package from http://www.zlib.net/

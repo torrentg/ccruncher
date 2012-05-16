@@ -25,8 +25,8 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=ccreport.sh
-numversion="1.9"
-svnversion="R760"
+numversion="2.0"
+svnversion="R795"
 retcode=0
 options=""
 
