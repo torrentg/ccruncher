@@ -48,9 +48,9 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   seed = 0L;
   hash = 0;
   fpath = "path not set";
+  calib = "none";
   bforce = false;
   btrace = false;
-  bcalib = false;
   copula = NULL;
   running = false;
   assetsize = 0;
@@ -146,7 +146,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
     calibrateCopula(idata);
 
     // initializing copula
-    initCopula(idata, idata.getParams().copula_seed);
+    initCopula(idata);
 
     // initializing aggregators
     initAggregators(idata);
@@ -379,7 +379,7 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
 {
-  if (!bcalib) return;
+  if (calib == "none") return;
 
   timer.start();
 
@@ -387,10 +387,9 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
   Logger::trace("calibrating copula", '-');
   Logger::newIndentLevel();
 
-  int k = idata.getSectors().size();
   vector<int> n(idata.getSectors().size(),0);
   const vector<vector<hdata> > &h = idata.getDefaults().getData();
-  vector<double> p(idata.getSectors().size(),0.03);
+  vector<double> p(idata.getSectors().size(),0.03); //TODO: change this (0.3 is a test)
 
   // computing the number of obligors in each sector
   for(unsigned int i=0; i<obligors.size(); i++)
@@ -399,16 +398,20 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
   }
 
   CopulaCalibration mle;
-  mle.setParams(k, &(n[0]), h, &(p[0]));
+  mle.setParams(n, p, h);
   mle.run();
+
+  // exit function
+  Logger::previousIndentLevel();
 }
 
 //===========================================================================
 // copula construction
 //===========================================================================
-void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception)
+void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 {
   timer.start();
+  seed = idata.getParams().copula_seed;
 
   // doing assertions
   assert(copula == NULL);
@@ -423,7 +426,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
   // setting logger info
   Logger::trace("copula type", idata.getParams().copula_type);
   Logger::trace("copula dimension", Format::toString(obligors.size()));
-  Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed_));
+  Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed));
 
   try
   {
@@ -465,7 +468,6 @@ void ccruncher::MonteCarlo::initCopula(IData &idata, long seed_) throw(Exception
   }
 
   // if no seed is given /dev/urandom or time() will be used
-  seed = seed_;
   if (seed == 0L)
   {
     // use a seed based on clock
@@ -660,7 +662,7 @@ void ccruncher::MonteCarlo::setHash(int num)
 //===========================================================================
 // setFilePath
 //===========================================================================
-void ccruncher::MonteCarlo::setFilePath(string path, bool force)
+void ccruncher::MonteCarlo::setFilePath(const string &path, bool force)
 {
   fpath = path;
   bforce = force;
@@ -677,9 +679,13 @@ void ccruncher::MonteCarlo::setTrace(bool val)
 //===========================================================================
 // setCalib
 //===========================================================================
-void ccruncher::MonteCarlo::setCalib(bool val)
+void ccruncher::MonteCarlo::setCalib(const string &val) throw(Exception)
 {
-  bcalib = val;
+  if (calib != "none" && calib != "sigma" && calib != "ndf" && calib != "all")
+  {
+    throw Exception("unrecognized calibration mode");
+  }
+  calib = val;
 }
 
 //===========================================================================

@@ -69,16 +69,6 @@ ccruncher::CopulaCalibration::~CopulaCalibration()
 //===========================================================================
 void ccruncher::CopulaCalibration::reset()
 {
-  if (params.p != NULL) {
-    Arrays<double>::deallocVector(params.p);
-    params.p = NULL;
-  }
-
-  if (params.n != NULL) {
-    Arrays<int>::deallocVector(params.n);
-    params.n = NULL;
-  }
-
   if (M != NULL && params.k > 0) {
     Arrays<double>::deallocMatrix(M, params.k);
     M = NULL;
@@ -106,32 +96,33 @@ void ccruncher::CopulaCalibration::reset()
 //===========================================================================
 // set function params
 //===========================================================================
-void ccruncher::CopulaCalibration::setParams(int k, int *n, const vector<vector<hdata> > &h, double *p) throw(Exception)
+void ccruncher::CopulaCalibration::setParams(const vector<int> &n, const vector<double> &p, const vector<vector<hdata> > &h) throw(Exception)
 {
-  assert(n != NULL);
-  assert(p != NULL);
+  assert(n.size() > 0);
+  assert(n.size() == p.size());
   assert(h.size() > 1);
+  assert(h[0].size() == n.size());
 
   reset();
 
-  if (k <= 0) throw Exception("invalid number of sectors");
+  if (n.size() <= 0) throw Exception("invalid number of sectors");
   if (h.size() < 2) throw Exception("invalid number of observations");
 
   //TODO: check that 0 <= h[i][j] <= 1
   //TODO: check that 0 <= p[i] <= 1
 
   params.dim = 0;
-  for(int i=0; i<k; i++) params.dim += n[i];
+  for(int i=0; i<(int)n.size(); i++) params.dim += n[i];
   //TODO: check if exist sectors with 0 elements?
   if (params.dim < 2) throw Exception("copula of dimension less than 2");
 
   //TODO: revisar i pulir
-  int aux=0;
-  for(int i=0; i<k; i++) if (n[i]>0) aux++;
+  int k=0;
+  for(int i=0; i<(int)n.size(); i++) if (n[i]>0) k++;
 
-  params.k = aux;
-  params.n = Arrays<int>::allocVector(params.k, n);
-  params.p = Arrays<double>::allocVector(params.k, p);
+  params.k = k;
+  params.n = n;
+  params.p = p;
   params.h = h;
   params.M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
   params.x = Arrays<double>::allocVector(params.dim);
@@ -510,7 +501,7 @@ cout << ")" << endl;
 
   //TODO: tractar sectors amb 1 individu
 
-  BlockMatrixChol *L = new BlockMatrixChol(p->M, p->n, p->k);
+  BlockMatrixChol *L = new BlockMatrixChol(p->M, &(p->n[0]), p->k);
   BlockMatrixCholInv *I = L->getInverse();
 /*
 cout << " COERCED = " << L->isCoerced() << ", NDF = " << nu << ", SIGMA = (";
