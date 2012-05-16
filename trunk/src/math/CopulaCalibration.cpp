@@ -69,11 +69,6 @@ ccruncher::CopulaCalibration::~CopulaCalibration()
 //===========================================================================
 void ccruncher::CopulaCalibration::reset()
 {
-  if (params.h != NULL && params.t > 0) {
-    Arrays<double>::deallocMatrix(params.h, params.t);
-    params.h = NULL;
-  }
-
   if (params.p != NULL) {
     Arrays<double>::deallocVector(params.p);
     params.p = NULL;
@@ -105,23 +100,22 @@ void ccruncher::CopulaCalibration::reset()
   }
 
   params.k = 0;
-  params.t = 0;
   ndf = NAN;
 }
 
 //===========================================================================
 // set function params
 //===========================================================================
-void ccruncher::CopulaCalibration::setParams(int k, int *n, double **h, int t, double *p) throw(Exception)
+void ccruncher::CopulaCalibration::setParams(int k, int *n, const vector<vector<hdata> > &h, double *p) throw(Exception)
 {
   assert(n != NULL);
-  assert(h != NULL);
   assert(p != NULL);
+  assert(h.size() > 1);
 
   reset();
 
   if (k <= 0) throw Exception("invalid number of sectors");
-  if (t < 1) throw Exception("invalid number of observations");
+  if (h.size() < 2) throw Exception("invalid number of observations");
 
   //TODO: check that 0 <= h[i][j] <= 1
   //TODO: check that 0 <= p[i] <= 1
@@ -135,15 +129,15 @@ void ccruncher::CopulaCalibration::setParams(int k, int *n, double **h, int t, d
   int aux=0;
   for(int i=0; i<k; i++) if (n[i]>0) aux++;
 
-  params.k = aux; //k
-  params.t = t;
-  params.n = Arrays<int>::allocVector(k, n);
-  params.p = Arrays<double>::allocVector(k, p);
-  params.h = Arrays<double>::allocMatrix(t, k, h);
-  params.M = Arrays<double>::allocMatrix(k, k, NAN);
+  params.k = aux;
+  params.n = Arrays<int>::allocVector(params.k, n);
+  params.p = Arrays<double>::allocVector(params.k, p);
+  params.h = h;
+  params.M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
   params.x = Arrays<double>::allocVector(params.dim);
   params.y = Arrays<double>::allocVector(params.dim);
-  M = Arrays<double>::allocMatrix(k, k, NAN);
+
+  M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
   ndf = NAN;
 }
 
@@ -411,7 +405,8 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
 {
   for(int i=0,s=0; i<p->k; i++)
   {
-    int num = (int)(p->h[row][i]*p->n[i]);
+    double pct = (double)p->h[row][i].ndefaulted/(double)p->h[row][i].nobligors;
+    int num = (int)(pct*p->n[i]);
 
 /*
     // all concentrated in the mean
@@ -537,10 +532,10 @@ cout << ")" << endl;
   ret -= (p->dim-1.0)*gsl_sf_lngamma(nu/2.0);
   ret += p->dim*gsl_sf_lngamma((nu+1.0)/2.0);
 
-  ret *= p->t;
+  ret *= p->h.size();
 
   // sign inverted because gsl minimize and we try to maximize
-  for(int i=0; i<p->t; i++)
+  for(int i=0; i<(int)p->h.size(); i++)
   {
     getObservation(i, p, p->x);
 

@@ -228,7 +228,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     if (sectors.size() == 0) {
       throw Exception("tag <historical> defined before <sectors> tag");
     }
-    else if (defaults.size() != 0) {
+    else if (defaults.getData().size() != 0) {
       throw Exception("tag historical repeated");
     }
     else {

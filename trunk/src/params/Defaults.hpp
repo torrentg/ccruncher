@@ -41,6 +41,14 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+struct hdata
+{
+  int nobligors;
+  int ndefaulted;
+  hdata() : nobligors(-1), ndefaulted(-1) {}
+  hdata(int o_, int d_) : nobligors(o_), ndefaulted(d_) {}
+};
+
 class Defaults : public ExpatHandlers
 {
 
@@ -50,13 +58,15 @@ class Defaults : public ExpatHandlers
     int period;
     // list of sectors
     Sectors sectors;
-    // historical values
-    map<string,vector<double> > values;
+    // auxiliar map
+    map<string, int> indices;
+    // observed values
+    vector<vector<hdata> > data;
 
   private:
 
     // insert a new matrix value
-    void insertValue(const string &time, const string &sector, double val) throw(Exception);
+    void insertValue(const string &t, const string &sector, int nobligors, int ndefaulted) throw(Exception);
     // validate object content
     void validate() throw(Exception);
 
@@ -79,10 +89,8 @@ class Defaults : public ExpatHandlers
     void setSectors(const Sectors &) throw(Exception);
     // initialize object
     void setPeriod(int) throw(Exception);
-    // number of time observations
-    int size() const;
-    // returns data as matrix
-    double ** getMatrix() const;
+    // returns data
+    const vector<vector<hdata> >& getData() const;
     // serializes object content as xml
     string getXML(int) throw(Exception);
 

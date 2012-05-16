@@ -389,8 +389,7 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
 
   int k = idata.getSectors().size();
   vector<int> n(idata.getSectors().size(),0);
-  double **h = idata.getDefaults().getMatrix();
-  int t = idata.getDefaults().size();
+  const vector<vector<hdata> > &h = idata.getDefaults().getData();
   vector<double> p(idata.getSectors().size(),0.03);
 
   // computing the number of obligors in each sector
@@ -400,10 +399,8 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
   }
 
   CopulaCalibration mle;
-  mle.setParams(k, &(n[0]), h, t, &(p[0]));
+  mle.setParams(k, &(n[0]), h, &(p[0]));
   mle.run();
-
-  Arrays<double>::deallocMatrix(h, t);
 }
 
 //===========================================================================

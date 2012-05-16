@@ -70,50 +70,29 @@ void ccruncher::Defaults::setSectors(const Sectors &sectors_) throw(Exception)
 }
 
 //===========================================================================
-// returns size (number of sectors)
+// inserts an element into data
 //===========================================================================
-int ccruncher::Defaults::size() const
+void ccruncher::Defaults::insertValue(const string &t, const string &sector, int nobligors, int ndefaulted) throw(Exception)
 {
-  return values.size();
-}
-
-//===========================================================================
-// returns matrix
-//===========================================================================
-double ** ccruncher::Defaults::getMatrix() const
-{
-  double **ret = Arrays<double>::allocMatrix(values.size(), sectors.size(), NAN);
-  map<string,vector<double> >::const_iterator it;
-  int row=0;
-
-  for(it=values.begin(); it!=values.end(); it++)
-  {
-    for(int i=0; i<sectors.size(); i++)
-    {
-      ret[row][i] = it->second[i];
-    }
-    row++;
-  }
-
-  return ret;
-}
-
-
-//===========================================================================
-// inserts an element into matrix
-//===========================================================================
-void ccruncher::Defaults::insertValue(const string &time, const string &sector, double val) throw(Exception)
-{
+  // parsing sector identifier
   int col = sectors.getIndex(sector);
   if (col < 0) throw Exception("unrecognized sector identifier (" + sector + ")");
 
-  map<string,vector<double> >::iterator it = values.find(time);
-  if (it == values.end()) values[time] = vector<double>(sectors.size(), NAN);
-  if (!isnan(values[time][col])) throw Exception("value defined twice");
+  // retrieving data row
+  int row = -1;
+  map<string,int>::iterator it = indices.find(t);
+  if (it == indices.end()) {
+    data.push_back(vector<hdata>(sectors.size()));
+    indices[t] = data.size()-1;
+  }
+  else {
+    row = it->second;
+  }
 
-  if (val < 0.0 || val > 1.0) throw Exception("value out of range [0,1]");
-
-  values[time][col] = val;
+  // inserting values
+  if (data[row][col].nobligors >= 0) throw Exception("value defined twice");
+  if (ndefaulted < 0 || nobligors < ndefaulted) throw Exception("invalid historical values");
+  data[row][col] = hdata(nobligors, ndefaulted);
 }
 
 //===========================================================================
@@ -125,11 +104,12 @@ void ccruncher::Defaults::epstart(ExpatUserData &, const char *name, const char 
     int val = getIntAttribute(attributes, "period");
     setPeriod(val);
   }
-  else if (isEqual(name,"defaults")) {
-    string time = getStringAttribute(attributes, "t");
+  else if (isEqual(name,"data")) {
+    string t = getStringAttribute(attributes, "t");
     string sector = getStringAttribute(attributes, "sector");
-    double value = getDoubleAttribute(attributes, "value");
-    insertValue(time, sector, value);
+    int nobligors = getIntAttribute(attributes, "obligors");
+    int ndefaulted = getIntAttribute(attributes, "obligors");
+    insertValue(t, sector, nobligors, ndefaulted);
   }
   else {
     throw Exception("unexpected tag " + string(name));
@@ -144,7 +124,7 @@ void ccruncher::Defaults::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"historical")) {
     validate();
   }
-  else if (isEqual(name,"defaults")) {
+  else if (isEqual(name,"data")) {
     // nothing to do
   }
   else {
@@ -157,16 +137,34 @@ void ccruncher::Defaults::epend(ExpatUserData &, const char *name)
 //===========================================================================
 void ccruncher::Defaults::validate() throw(Exception)
 {
-  if (values.size() == 0) throw Exception("data not found");
+  if (data.size() == 0) throw Exception("data not found");
 
-  map<string,vector<double> >::iterator it;
-  for(it=values.begin(); it!=values.end(); it++)
+  for(int i=0; i<(int)data.size(); i++)
   {
-    for(int i=0; i<sectors.size(); i++)
+    for(int j=0; j<sectors.size(); j++)
     {
-      if (isnan(it->second[i])) throw Exception("value not found (t=" + it->first + ", sector=" + sectors[i].name + ")");
+      if (data[i][j].nobligors < 0)
+      {
+        string t="unknow";
+        map<string,int>::iterator it;
+        for (it=indices.begin(); it!=indices.end(); it++) {
+          if (it->second==i) {
+            t = it->first;
+            break;
+          }
+        }
+        throw Exception("value not found (t=" + t + ", sector=" + sectors[i].name + ")");
+      }
     }
   }
+}
+
+//===========================================================================
+// returns data
+//===========================================================================
+const vector<vector<hdata> >& ccruncher::Defaults::getData() const
+{
+  return data;
 }
 
 //===========================================================================
@@ -180,16 +178,18 @@ string ccruncher::Defaults::getXML(int ilevel) throw(Exception)
 
   ret += spc1 + "<historical period='" + Format::toString(period) + "' >\n";
 
-  map<string, vector<double> >::iterator it;
+  map<string,int>::iterator it;
 
-  for(it=values.begin(); it!=values.end(); it++)
+  for(it=indices.begin(); it!=indices.end(); it++)
   {
-    for(int i=0; i<sectors.size(); i++)
+    int row = it->second;
+    for(int col=0; col<sectors.size(); col++)
     {
-      ret += spc2 + "<defaults ";
+      ret += spc2 + "<data ";
       ret += "t='" + it->first  + "' ";
-      ret += "sector='" + sectors[i].name + "' ";
-      ret += "value='" + Format::toString(100.0*(it->second[i])) + "%'";
+      ret += "sector='" + sectors[col].name + "' ";
+      ret += "obligors='" + Format::toString(data[row][col].nobligors) + "' ";
+      ret += "defaulted='" + Format::toString(data[row][col].ndefaulted) + "'";
       ret += "/>\n";
     }
   }
