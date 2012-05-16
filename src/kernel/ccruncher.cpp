@@ -340,7 +340,7 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   IData idata(filename, defines);
 
   // checking feasibility
-  if (bcalib && idata.getDefaults().size() == 0)
+  if (bcalib && idata.getDefaults().getData().size() == 0)
   {
     throw Exception("error: input file hasn't 'historical' section\n"
                     "this section is required in order to calibrate de copula");

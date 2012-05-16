@@ -131,26 +131,25 @@
   <sectors>
     <sector name="S1" description='Consumer/service sector'/>
     <sector name="S2" description='Forest/building products'/>
-    <sector name="S3" description='High technology'/>
-    <sector name="S4" description='Utilities'/>
-    <sector name="S5" description="Other sectors"/>
   </sectors>
+  <historical period="12">
+    <data t="1A" sector="S1" obligors="310" defaulted="23"/>
+    <data t="1A" sector="S2" obligors="321" defaulted="21"/>
+    <data t="2A" sector="S1" obligors="315" defaulted="14"/>
+    <data t="2A" sector="S2" obligors="326" defaulted="17"/>
+    <data t="3A" sector="S1" obligors="319" defaulted="7"/>
+    <data t="3A" sector="S2" obligors="329" defaulted="6"/>
+    <data t="4A" sector="S1" obligors="324" defaulted="10"/>
+    <data t="4A" sector="S2" obligors="325" defaulted="14"/>
+    <data t="5A" sector="S1" obligors="327" defaulted="10"/>
+    <data t="5A" sector="S2" obligors="323" defaulted="26"/>
+    <data t="6A" sector="S1" obligors="330" defaulted="4"/>
+    <data t="6A" sector="S2" obligors="316" defaulted="13"/>
+  </historical>
   <mcorrels>
-    <sigma sector1="S1" sector2="S1" value="15.1%"/>
-    <sigma sector1="S1" sector2="S2" value="6.2%"/>
-    <sigma sector1="S1" sector2="S3" value="8.6%"/>
-    <sigma sector1="S1" sector2="S4" value="3.9%"/>
-    <sigma sector1="S1" sector2="S5" value="9.1%"/>
-    <sigma sector1="S2" sector2="S2" value="17.9%"/>
-    <sigma sector1="S2" sector2="S3" value="6.3%"/>
-    <sigma sector1="S2" sector2="S4" value="10.2%"/>
-    <sigma sector1="S2" sector2="S5" value="8.8%"/>
-    <sigma sector1="S3" sector2="S3" value="17.5%"/>
-    <sigma sector1="S3" sector2="S4" value="7.3%"/>
-    <sigma sector1="S3" sector2="S5" value="7.1%"/>
-    <sigma sector1="S4" sector2="S4" value="12.8%"/>
-    <sigma sector1="S4" sector2="S5" value="6.4%"/>
-    <sigma sector1="S5" sector2="S5" value="15.0%"/>
+    <sigma sector1="S1" sector2="S1" value="9.931%"/>
+    <sigma sector1="S1" sector2="S2" value="10.94%"/>
+    <sigma sector1="S2" sector2="S2" value="12.55%"/>
   </mcorrels>
   <segmentations>
     <segmentation name='portfolio' components='asset'/>

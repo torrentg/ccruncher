@@ -33,17 +33,6 @@
 #===========================================================================
 "%&%" <- function(a, b) paste(a, b, sep="")
 
-
-#ccruncher.bincor <- function(a, c)
-#{
-#  ret <- vector(length=3);
-#  ret[2] <- (1-c)*((1-a)*a^2+a*(1-a)^2);
-#  ret[1] <- (1-a)-ret[2];
-#  ret[3] <- a-ret[2];
-#  ret[2] <- 2*ret[2];
-#  return(ret);
-#}
-
 #===========================================================================
 # description
 #   given a sector correlation matrix creates the obligor matrix

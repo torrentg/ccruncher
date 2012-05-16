@@ -27,10 +27,12 @@
 
 #include "utils/config.h"
 #include <gsl/gsl_vector.h>
+#include "params/Defaults.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -44,10 +46,9 @@ class CopulaCalibration
     struct fparams
     {
       int k; // number of sectors (eg. 10)
-      int t; // number of historical rows (eg. 20)
-      int *n; // number of indiviudals per sector (size=k)
+      int *n; // number of individuals per sector (size=k)
       double *p; // 1-period probability default per sector (size=k)
-      double **h; // h[i,j] = pct defaults in sector j at period i (size=txk)
+      vector<vector<hdata> > h; // h[i,j] = observation at sector j at period i (size=txk)
 
       int dim; // auxiliar value (=sum(n))
       double **M; // auxiliar mem used by f (to avoid alloc/dealloc)
@@ -56,7 +57,7 @@ class CopulaCalibration
       bool coerced; // auxiliar, true if coerced in last evaluation
 
       // constructor
-      fparams() : k(0), t(0), n(NULL), p(NULL), h(NULL), M(NULL), x(NULL), y(NULL) {}
+      fparams() : k(0), n(NULL), p(NULL), M(NULL), x(NULL), y(NULL) {}
     };
 
   private:
@@ -91,7 +92,7 @@ class CopulaCalibration
     // destructor
     ~CopulaCalibration();
     // set function params
-    void setParams(int k, int *n, double **h, int t, double *p) throw(Exception);
+    void setParams(int k, int *n, const vector<vector<hdata> > &h, double *p) throw(Exception);
     // calibrate copula using MLE
     void run() throw(Exception);
     // return estimated ndf
