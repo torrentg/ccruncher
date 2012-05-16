@@ -84,6 +84,7 @@ void ccruncher::Defaults::insertValue(const string &t, const string &sector, int
   if (it == indices.end()) {
     data.push_back(vector<hdata>(sectors.size()));
     indices[t] = data.size()-1;
+    row = data.size()-1;
   }
   else {
     row = it->second;
@@ -108,7 +109,7 @@ void ccruncher::Defaults::epstart(ExpatUserData &, const char *name, const char 
     string t = getStringAttribute(attributes, "t");
     string sector = getStringAttribute(attributes, "sector");
     int nobligors = getIntAttribute(attributes, "obligors");
-    int ndefaulted = getIntAttribute(attributes, "obligors");
+    int ndefaulted = getIntAttribute(attributes, "defaulted");
     insertValue(t, sector, nobligors, ndefaulted);
   }
   else {

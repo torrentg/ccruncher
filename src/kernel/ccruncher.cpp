@@ -67,10 +67,10 @@ void catchsignal(int signal);
 
 string sfilename = "";
 string spath = "";
+string calib = "none";
 bool bverbose = true;
 bool bforce = false;
 bool btrace = false;
-bool bcalib = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
       { "trace",        0,  NULL,  306 },
-      { "calibrate",    0,  NULL,  307 },
+      { "calibrate",    1,  NULL,  307 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
           break;
 
       case 307: // --calibrate (calibrate copula using historical data)
-          bcalib = true;
+          calib = string(optarg);
           break;
 
       default: // unexpected error
@@ -264,6 +264,12 @@ int main(int argc, char *argv[])
   {
     cerr << "--path is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
+    return 1;
+  }
+  if (calib != "none" && calib != "sigma" && calib != "ndf" && calib != "all")
+  {
+    cerr << "error: unrecognized calibrate mode (" << calib << ")" << endl;
+    cerr << "allowed modes are: none, sigma, ndf, all" << endl;
     return 1;
   }
   if (ithreads <= 0 || MAX_NUM_THREADS < ithreads)
@@ -340,7 +346,7 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   IData idata(filename, defines);
 
   // checking feasibility
-  if (bcalib && idata.getDefaults().getData().size() == 0)
+  if (calib != "none" && idata.getDefaults().getData().size() == 0)
   {
     throw Exception("error: input file hasn't 'historical' section\n"
                     "this section is required in order to calibrate de copula");
@@ -351,7 +357,7 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   montecarlo.setFilePath(path, bforce);
   montecarlo.setHash(ihash);
   montecarlo.setTrace(btrace);
-  montecarlo.setCalib(bcalib);
+  montecarlo.setCalib(calib);
 
   // initializing simulation
   montecarlo.initialize(idata);
@@ -434,7 +440,12 @@ void usage()
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
-  "    --calibrate    calibrate copula using historical information.\n"
+  "    --calibrate=x  calibrate copula parameters (optional)\n"
+  "                   where x must take one of the following modes:"
+  "                     none:  no calibration is done\n"
+  "                     sigma: only calibrate correlations\n"
+  "                     ndf:   only calibrate ndf in t-student copula\n"
+  "                     all:   calibrate correlations and ndf\n"
   "                   results are stored in file calibration.xml\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
@@ -445,8 +456,8 @@ void usage()
   "    1              KO. finished with errors\n"
   "  examples:\n"
   "    ccruncher -qf --path=data/sample01 samples/sample01.xml\n"
-  "    ccruncher -f --hash=100 --threads=4 --path=data/ samples/test100.xml\n"
-  "    ccruncher -f --hash=100 --threads=4 --path=data/ -D ndf=8 samples/sample.xml\n"
+  "    ccruncher -f --hash=1000 --path=data/ --calibrate=all samples/test100.xml\n"
+  "    ccruncher -f --hash=1000 --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
   << endl;
 }
 
@@ -461,4 +472,3 @@ void copyright()
   "                   http://www.ccruncher.net\n"
   << endl;
 }
-

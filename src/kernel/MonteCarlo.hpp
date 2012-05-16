@@ -107,8 +107,8 @@ class MonteCarlo
     pthread_mutex_t mutex;
     // trace simulated copulas+defaults flag
     bool btrace;
-    // calibration procedure flag
-    bool bcalib;
+    // calibration procedure mode
+    string calib;
     // file where copula values are stored (if btrace is set)
     ofstream fcopulas;
     // running flag
@@ -129,7 +129,7 @@ class MonteCarlo
     // calibrate copula
     void calibrateCopula(IData &) throw(Exception);
     // initialize copula
-    void initCopula(IData &idata, long) throw(Exception);
+    void initCopula(IData &idata) throw(Exception);
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // initialize trace files
@@ -146,13 +146,13 @@ class MonteCarlo
     // destructor
     ~MonteCarlo();
     // set path for output files
-    void setFilePath(string path, bool force);
+    void setFilePath(const string &path, bool force);
     // set hash value (mark every num values)
     void setHash(int num);
     // trace copula values + trace default times
     void setTrace(bool);
     // enable calibration procedure
-    void setCalib(bool);
+    void setCalib(const string &) throw(Exception);
     // initiliaze this class
     void initialize(IData &) throw(Exception);
     // execute Monte Carlo
