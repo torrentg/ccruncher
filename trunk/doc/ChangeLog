@@ -6,7 +6,8 @@ version 2.0 (XXX. 2012)
 --------------------------
   * input file can be read from stdin
   * improved functional tests
-  * solved minor bug
+  * solved minor bug (obligor/asset id uniqueness)
+  * correlation matrix coercion
   * code refactoring
 
 version 1.9 (Mar. 2012)

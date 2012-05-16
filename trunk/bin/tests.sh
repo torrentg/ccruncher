@@ -23,8 +23,8 @@
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
 progname=tests.sh
-numversion="1.9"
-svnversion="R760"
+numversion="2.0"
+svnversion="R795"
 
 #-------------------------------------------------------------
 # version function
