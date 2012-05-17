@@ -397,11 +397,22 @@ void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
     n[obligors[i].ref->isector]++;
   }
 
-  CopulaCalibration mle;
-  mle.setParams(n, p, h);
-  mle.run();
+  Logger::trace("output file", "calibration.txt");
+
+  if (calib == "sigma" || calib == "all") {
+    CopulaCalibration::correls(h, idata.getCorrelations().getMatrix());
+    Logger::trace("correlation matrix", "done");
+    //TODO: traçar resultats
+  }
+
+  if (calib == "ndf" || calib == "all") {
+    double ndf = CopulaCalibration::ndf(idata.getCorrelations().getMatrix(), n, p, h);
+    Logger::trace("t-student ndf parameter", "done");
+    //TODO: traçar resultats
+  }
 
   // exit function
+  Logger::trace("elapsed time calibrating copula", timer);
   Logger::previousIndentLevel();
 }
 

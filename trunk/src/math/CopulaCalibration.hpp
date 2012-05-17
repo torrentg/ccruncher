@@ -50,6 +50,7 @@ class CopulaCalibration
       vector<int> n; // number of individuals per sector (size=k)
       vector<double> p; // 1-period probability default per sector (size=k)
       vector<vector<hdata> > h; // h[i,j] = observation at sector j at period i (size=txk)
+      double **sigma; // correlation matrix (size=kxk)
 
       int dim; // auxiliar value (=sum(n))
       double **M; // auxiliar mem used by f (to avoid alloc/dealloc) (size=kxk)
@@ -58,50 +59,25 @@ class CopulaCalibration
       bool coerced; // auxiliar, true if coerced in last evaluation
 
       // constructor
-      fparams() : k(0), dim(0), M(NULL), x(NULL), y(NULL), coerced(false) {}
+      fparams() : k(0), sigma(NULL), dim(0), M(NULL), x(NULL), y(NULL), coerced(false) {}
     };
 
   private:
 
-    // function params
-    fparams params;
-    // optimal correlation matrix (size=kxk)
-    double **M;
-    // optimal ndf
-    double ndf;
+    // non-instantiable class
+    CopulaCalibration() {}
 
-  private:
-
-    // reset
-    void reset();
-
-    // serialize params
-    static void serialize(int k, const double **matrix, double value, gsl_vector *ret);
-    // deserialize params
-    static void deserialize(int k, const gsl_vector *ret, double **matrix, double *value);
     // returns observation
     static void getObservation(int row, const fparams *p, double *ret);
     // function to minimize
-    static double f(const gsl_vector *v, void *params_);
-    // derivative of the function to minimize
-    static void df(const gsl_vector *x, void *params_, gsl_vector *g);
-    // function to minimize and its derivative
-    static void fdf(const gsl_vector *x, void *params_, double *f, gsl_vector *g);
+    static double f(double nu, void *params_);
 
   public:
 
-    // constructor
-    CopulaCalibration();
-    // destructor
-    ~CopulaCalibration();
-    // set function params
-    void setParams(const vector<int> &n, const vector<double> &p, const vector<vector<hdata> > &h) throw(Exception);
-    // calibrate copula using MLE
-    void run() throw(Exception);
-    // return estimated ndf
-    double getNdf() const;
-    // return estimated correlations
-    double** getCorrelations() const;
+    // estimate correlations
+    static void correls(const vector<vector<hdata> > &h, double **ret) throw(Exception);
+    // estimate ndf
+    static double ndf(double **sigma, const vector<int> &n, const vector<double> &p, const vector<vector<hdata> > &h) throw(Exception);
 
 };
 
