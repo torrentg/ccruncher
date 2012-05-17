@@ -22,9 +22,9 @@
 
 #include <iomanip>
 #include <cmath>
+#include <gsl/gsl_min.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sf_gamma.h>
-#include <gsl/gsl_multimin.h>
 #include "math/CopulaCalibration.hpp"
 #include "math/BlockMatrixChol.hpp"
 #include "math/BlockMatrixCholInv.hpp"
@@ -33,10 +33,6 @@
 
 #define MIN_NU 2.0
 #define MAX_NU 5000.0
-#define DELTA 0.01
-#define DELTA0 0.05
-
-using namespace std;
 
 //===========================================================================
 // Description:
@@ -47,347 +43,6 @@ using namespace std;
 // Gerard Torrent-Gironella and Josep Fortiana
 //
 //===========================================================================
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::CopulaCalibration::CopulaCalibration() : M(NULL)
-{
-  reset();
-}
-
-//===========================================================================
-// Destructor
-//===========================================================================
-ccruncher::CopulaCalibration::~CopulaCalibration()
-{
-  reset();
-}
-
-//===========================================================================
-// reset
-//===========================================================================
-void ccruncher::CopulaCalibration::reset()
-{
-  if (M != NULL && params.k > 0) {
-    Arrays<double>::deallocMatrix(M, params.k);
-    M = NULL;
-  }
-
-  if (params.M != NULL && params.k > 0) {
-    Arrays<double>::deallocMatrix(params.M, params.k);
-    params.M = NULL;
-  }
-
-  if (params.x != NULL) {
-    Arrays<double>::deallocVector(params.x);
-    params.x = NULL;
-  }
-
-  if (params.y != NULL) {
-    Arrays<double>::deallocVector(params.y);
-    params.y = NULL;
-  }
-
-  params.k = 0;
-  ndf = NAN;
-}
-
-//===========================================================================
-// set function params
-//===========================================================================
-void ccruncher::CopulaCalibration::setParams(const vector<int> &n, const vector<double> &p, const vector<vector<hdata> > &h) throw(Exception)
-{
-  assert(n.size() > 0);
-  assert(n.size() == p.size());
-  assert(h.size() > 1);
-  assert(h[0].size() == n.size());
-
-  reset();
-
-  if (n.size() <= 0) throw Exception("invalid number of sectors");
-  if (h.size() < 2) throw Exception("invalid number of observations");
-
-  //TODO: check that 0 <= h[i][j] <= 1
-  //TODO: check that 0 <= p[i] <= 1
-
-  params.dim = 0;
-  for(int i=0; i<(int)n.size(); i++) params.dim += n[i];
-  //TODO: check if exist sectors with 0 elements?
-  if (params.dim < 2) throw Exception("copula of dimension less than 2");
-
-  //TODO: revisar i pulir
-  int k=0;
-  for(int i=0; i<(int)n.size(); i++) if (n[i]>0) k++;
-
-  params.k = k;
-  params.n = n;
-  params.p = p;
-  params.h = h;
-  params.M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
-  params.x = Arrays<double>::allocVector(params.dim);
-  params.y = Arrays<double>::allocVector(params.dim);
-
-  M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
-  ndf = NAN;
-}
-
-//===========================================================================
-// return estimated ndf
-//===========================================================================
-double ccruncher::CopulaCalibration::getNdf() const
-{
-  return ndf;
-}
-
-//===========================================================================
-// return estimated correlations
-//===========================================================================
-double** ccruncher::CopulaCalibration::getCorrelations() const
-{
-  return M;
-}
-
-//===========================================================================
-// calibrate copula using MLE
-//===========================================================================
-/*
-void ccruncher::CopulaCalibration::run() throw(Exception)
-{
-  //TODO: comprovar tamanys de parametres
-
-  gsl_multimin_fminimizer *minimizer=NULL;
-  gsl_multimin_function minex_func;
-  gsl_vector *ss=NULL, *x0=NULL;
-  size_t iter = 0;
-  int status;
-  double size;
-  int num_params = 1+ (params.k*(params.k+1))/2;
-
-  // starting point (correls=0, ndf=30)
-  // we start from a known valid point
-  // if p0 was given by user, then p0 can be non-valid
-  x0 = gsl_vector_alloc(num_params);
-  gsl_vector_set_all(x0, 0.15);
-  gsl_vector_set(x0, 2, 0.05);
-  gsl_vector_set(x0, 0, 50.0);
-
-  // set initial step sizes
-  ss = gsl_vector_alloc(num_params);
-  gsl_vector_set_all(ss, 0.01);
-  gsl_vector_set(ss, 0, 0.1);
-
-  // initialize method and iterate
-  minex_func.n = num_params;
-  minex_func.f = CopulaCalibration::f;
-  minex_func.params = (void *)(&params);
-
-  //TODO: set gsl_multimin_fminimizer_nmsimplex2 instead of gsl_multimin_fminimizer_nmsimplex
-  minimizer = gsl_multimin_fminimizer_alloc(gsl_multimin_fminimizer_nmsimplex, num_params);
-  gsl_multimin_fminimizer_set(minimizer, &minex_func, x0, ss);
-
-  do
-  {
-     iter++;
-     status = gsl_multimin_fminimizer_iterate(minimizer);
-   
-     if (status) break;
-
-     size = gsl_multimin_fminimizer_size(minimizer);
-     status = gsl_multimin_test_size(size, 1e-5);
-
-     if (status == GSL_SUCCESS)
-     {
-       printf ("converged to minimum at\n");
-     }
-
-     printf("%5d f()= %7.3f size= %.3f ", (int) iter, minimizer->fval, size);
-     printf("ndf= %7.3f ", gsl_vector_get(minimizer->x, 0));
-     for(int i=0; i<(params.k*(params.k+1))/2; i++) printf("%.3f ", gsl_vector_get(minimizer->x, 1+i));
-     printf("\n");
-  }
-  while (status == GSL_CONTINUE && iter < 1000);
-
-  //TODO: check convergence
-
-  deserialize(params.k, minimizer->x, M, &ndf);
-  cout << "SOLUTION:" << endl;
-  cout << "  ndf = " << ndf << endl;
-  cout << "  correlations = " << endl;
-  for(int i=0; i<params.k; i++) {
-    for(int j=0; j<params.k; j++) {
-        if (params.n[i]==0 || params.n[j]==0) M[i][j] = 0.0;
-        cout << setprecision(4) << M[i][j] << "\t";
-    }
-    cout << endl;
-  }
-
-  gsl_vector_free(x0);
-  gsl_vector_free(ss);
-  gsl_multimin_fminimizer_free(minimizer);
-}
-*/
-/*
-void ccruncher::CopulaCalibration::run() throw(Exception)
-{
-  gsl_multimin_fdfminimizer *minimizer=NULL;
-  gsl_multimin_function_fdf my_func;
-  gsl_vector *x0=NULL;
-  size_t iter = 0;
-  int status;
-  int num_params = 1+ (params.k*(params.k+1))/2;
-
-  my_func.n = num_params;
-  my_func.f = CopulaCalibration::f;
-  my_func.df = CopulaCalibration::df;
-  my_func.fdf = CopulaCalibration::fdf;
-  my_func.params = (void *)(&params);
-
-  // starting point (correls=0, ndf=30)
-  // we start from a known valid point
-  // if p0 was given by user, then p0 can be non-valid
-  x0 = gsl_vector_alloc(num_params);
-  gsl_vector_set_all(x0, 0.1);
-  gsl_vector_set(x0, 0, 30.0);
-
-//for(int i=0; i<=200; i++) {
-//double x = -1.0+0.01*i;
-//gsl_vector_set(x0, 2, x);
-//double y = f(x0, &params);
-//cout << x << "\t" << y << endl;
-//}
-
-  minimizer = gsl_multimin_fdfminimizer_alloc(gsl_multimin_fdfminimizer_conjugate_fr, num_params);
-
-  gsl_multimin_fdfminimizer_set(minimizer, &my_func, x0, 0.05, 0.05);
-
-  do
-    {
-      iter++;
-      status = gsl_multimin_fdfminimizer_iterate(minimizer);
-
-      if (status)
-      {
-          printf ("error: %s\n", gsl_strerror(status));
-          break;
-      }
-
-      status = gsl_multimin_test_gradient(minimizer->gradient, 1e-3);
-
-      if (status == GSL_SUCCESS) printf ("Minimum found at:\n");
-
-      printf("%5d f()= %7.3f ", (int) iter, minimizer->f);
-      printf("ndf= %7.3f ", gsl_vector_get(minimizer->x, 0));
-      for(int i=0; i<(params.k*(params.k+1))/2; i++) printf("%.3f ", gsl_vector_get(minimizer->x, 1+i));
-      printf("\n");
-    }
-  while (status == GSL_CONTINUE && iter < 100);
-
-  gsl_multimin_fdfminimizer_free(minimizer);
-  gsl_vector_free(x0);
-}
-*/
-
-//===========================================================================
-// calibrate copula using MLE
-//===========================================================================
-void ccruncher::CopulaCalibration::run() throw(Exception)
-{
-  int num_params = 1+(params.k*(params.k+1))/2;
-  gsl_vector *x0 = gsl_vector_alloc(num_params);
-  double minval = 1e10;
-  int N0=100, N1=10, N2=10, N3=10;
-
-  cout << "num_params = " << num_params << endl;
-  cout << "num sectors = " << params.k << endl;
-  cout << "copula dim = " << params.dim << endl;
-
-  for(int i0=2; i0<=N0; i0++)
-  {
-cout << "NDF = " << double(i0) << endl;
-    gsl_vector_set(x0, 0, double(i0));
-
-    for(int i1=0; i1<=N1; i1++)
-    {
-      gsl_vector_set(x0, 1, 0.0+i1/double(N1));
-
-      for(int i2=0; i2<=N2; i2++)
-      {
-        gsl_vector_set(x0, 2, 0.0+i2/double(N2));
-
-        for(int i3=0; i3<=N3; i3++)
-        {
-          gsl_vector_set(x0, 3, 0.0+i3/double(N3));
-
-          try
-          {
-            double y = f(x0, &params);
-
-//cout << "coerced= " << params.coerced << ", y= " << y << "\t x= ";
-//for(int i=0; i<(int)x0->size; i++) cout << gsl_vector_get(x0, i) << "\t";
-//cout << endl;
-
-            if (!params.coerced && y < minval)
-            {
-              minval = y;
-              cout << "y= " << y << "\t x= ";
-              for(int i=0; i<(int)x0->size; i++) cout << gsl_vector_get(x0, i) << "\t";
-              cout << endl;
-            }
-          }
-          catch(Exception &e)
-          {
-            //TODO: veure perque salta excepcio tot i fer coercio
-            continue;
-          }
-        }
-      }
-    }
-  }
-
-  gsl_vector_free(x0);
-}
-
-//===========================================================================
-// serialize params
-//===========================================================================
-void ccruncher::CopulaCalibration::serialize(int k, const double **matrix, double value, gsl_vector *ret)
-{
-  int pos = 0;
-
-  gsl_vector_set(ret, pos, value);
-  pos++;
-
-  for(int i=0; i<k; i++)
-  {
-    for(int j=i; j<k; j++)
-    {
-      gsl_vector_set(ret, pos, matrix[i][j]);
-      pos++;
-    }
-  }
-}
-
-//===========================================================================
-// deserialize params
-//===========================================================================
-void ccruncher::CopulaCalibration::deserialize(int k, const gsl_vector *ret, double **matrix, double *value)
-{
-  int pos = 0;
-
-  *value = gsl_vector_get(ret, pos);
-  pos++;
-
-  for(int i=0; i<k; i++)
-  {
-    for(int j=i; j<k; j++)
-    {
-      matrix[i][j] = gsl_vector_get(ret, pos);
-      matrix[j][i] = gsl_vector_get(ret, pos);
-      pos++;
-    }
-  }
-}
 
 //=============================================================
 // getObservation
@@ -412,7 +67,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
       s++;
     }
 */
-/*
+
     // equidistributed
     for(int j=1; j<=num; j++)
     {
@@ -424,7 +79,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
       ret[s] = p->p[i] + (1.0 - p->p[i]) * double(j)/double(p->n[i]-num+1);
       s++;
     }
-*/
+
 /*
     // concentrated + symmetric
     // TODO: check round
@@ -450,7 +105,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
         cout << "USE concentrated" << endl;
     }
 */
-
+/*
     // equidistributed + symmetric
     // TODO: check round
     if (p->n[i]-2*num > 0)
@@ -474,7 +129,7 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
     else {
         cout << "USE equidistributed" << endl;
     }
-
+*/
   }
 }
 
@@ -483,23 +138,21 @@ void ccruncher::CopulaCalibration::getObservation(int row, const fparams *p, dou
 // v = values to be optimized
 // params = pointer to a fparams struct
 //=============================================================
-double ccruncher::CopulaCalibration::f(const gsl_vector *v, void *params_)
+double ccruncher::CopulaCalibration::f(double nu, void *params_)
 {
   double ret = 0.0;
-  double nu0, nu;
   fparams *p = (fparams*) params_;
-/*
-cout << "f called (";
-for(unsigned int i=0; i<v->size; i++) cout << gsl_vector_get(v,i) << ", ";
-cout << ")" << endl;
-*/
-  deserialize(p->k, v, p->M, &nu0);
-
-  if (nu0 < MIN_NU) nu = MIN_NU;
-  else if (nu0 > MAX_NU) nu = MAX_NU;
-  else nu = nu0;
 
   //TODO: tractar sectors amb 1 individu
+
+  for(int i=0; i<p->k; i++)
+  {
+    for(int j=0; j<p->k; j++)
+    {
+      double h = M_PI/6.0 + 1.0/(0.44593 + 1.3089*nu);
+      p->M[i][j] = sin(h*p->sigma[i][j])/sin(h);
+    }
+  }
 
   BlockMatrixChol *L = new BlockMatrixChol(p->M, &(p->n[0]), p->k);
   BlockMatrixCholInv *I = L->getInverse();
@@ -541,11 +194,11 @@ cout << ")" << endl;
     double aux1=0.0, aux2=0.0;
     for(int j=0; j<p->dim; j++)
     {
-        aux1 += (p->y[j])*(p->y[j]);
-        // exist an error in 'Copula’s Conditional Dependence Measures for Portfolio Management and Value at Risk' by Dean Fantazzini.
-        // the error is that Fantazzini divides by 2 instead of nu
-        // see the SAS page: http://support.sas.com/documentation/cdl/en/etsug/63939/HTML/default/viewer.htm#etsug_copula_sect016.htm
-        aux2 += log(1.0+(p->x[j])*(p->x[j])/nu);
+      aux1 += (p->y[j])*(p->y[j]);
+      // exist an error in 'Copula’s Conditional Dependence Measures for Portfolio Management and Value at Risk' by Dean Fantazzini.
+      // the error is that Fantazzini divides by 2 instead of nu
+      // see the SAS page: http://support.sas.com/documentation/cdl/en/etsug/63939/HTML/default/viewer.htm#etsug_copula_sect016.htm
+      aux2 += log(1.0+(p->x[j])*(p->x[j])/nu);
     }
 
     ret += (nu+p->dim)/2.0 * log(1.0+aux1/nu);
@@ -555,65 +208,170 @@ cout << ")" << endl;
   if (L != NULL) delete L;
   if (I != NULL) delete I;
 
-  if (nu > MAX_NU) ret += (nu-MAX_NU)*1000;
-  else if (nu < MIN_NU) ret += (MIN_NU-nu)*1000;
-
   if (L->isCoerced()) {
       p->coerced = true;
-      ret += 1500;
+      ret *= 1.5;
   }
   else p->coerced = false;
-/*
-cout << "  y=" << ret << endl;
-*/
+
   return ret;
 }
 
 //=============================================================
-// function to minimize
-// v = values to be optimized
-// params = pointer to a fparams struct
+// estimate correlations using method proposed by Douglas Luca in
+// 'Default Correlation: From Definition to Proposed Solutions'
+// h: h[i,j] is the i-th observation of the sector j
+// ret: allocated metrix of size (kxk) where k=num of sectors
 //=============================================================
-void ccruncher::CopulaCalibration::df(const gsl_vector * x, void * params_, gsl_vector * g)
+void ccruncher::CopulaCalibration::correls(const vector<vector<hdata> > &h, double **ret) throw(Exception)
 {
-  int num_params = x->size;
-  gsl_vector *v = gsl_vector_alloc(num_params);
-  for(int j=0; j<num_params; j++) gsl_vector_set(v, j, gsl_vector_get(x,j));
+  if (h.size() < 2) throw Exception("invalid number of observations");
+  int k = h[0].size();
+  if (k < 1) throw Exception("invalid number of sectors");
+  vector<double> p(k,0.0);
+  vector<vector<double> > M(k,vector<double>(k,0.0));
 
-cout << "df called (";
-for(unsigned int i=0; i<x->size; i++) cout << gsl_vector_get(x,i) << ", ";
-cout << ")" << endl;
-
-  for(int i=0; i<num_params; i++)
+  for(int i=0; i<k; i++)
   {
-    double delta = (i==0?DELTA0:DELTA);
-    double val = gsl_vector_get(x,i);
+    // computing 1-period default probability for sector i
+    for(int t=0; t<(int)h.size(); t++)
+    {
+      p[i] += (double)h[t][i].ndefaulted/(double)h[t][i].nobligors;
+    }
+    p[i] /= (double)h.size();
 
-    gsl_vector_set(v, i, val+delta);
-    double y1 = f(v, params_);
-    gsl_vector_set(v, i, val-delta);
-    double y2 = f(v, params_);
-    gsl_vector_set(g, i, (y1-y2)/(2.0*delta));
+    // computing probability co-default for sector i
+    for(int t=0; t<(int)h.size(); t++)
+    {
+      M[i][i] += (double)(h[t][i].ndefaulted*(h[t][i].ndefaulted-1))/(double)(h[t][i].nobligors*(h[t][i].nobligors-1));
+    }
+    M[i][i] /= (double)h.size();
 
-cout << "  val=" << val << ", delta=" << delta << endl;
-cout << "  y1=" << y1 << ", y2=" << y2 << ", df=" << (y1-y2)/(2.0*delta) << endl;
-//TODO: si una evaluacio dona 1e6 -> usar diferenciacio numerica no-centrada
-    gsl_vector_set(v, i, val);
+    for(int j=0; j<=i; j++)
+    {
+      // computing probability co-default for sector i and j
+      for(int t=0; t<(int)h.size(); t++)
+      {
+        M[i][j] += (double)(h[t][i].ndefaulted*h[t][j].ndefaulted)/(double)(h[t][i].nobligors*h[t][j].nobligors);
+      }
+      M[i][j] /= (double)h.size();
+      M[j][i] = M[i][j];
+    }
   }
 
-  gsl_vector_free(v);
+  for(int i=0; i<k; i++)
+  {
+    for(int j=0; j<k; j++)
+    {
+      ret[i][j] = (M[i][j]-p[i]*p[j])/sqrt(p[i]*(1.0-p[i])*p[j]*(1.0-p[j]));
+    }
+  }
 }
 
-void ccruncher::CopulaCalibration::fdf(const gsl_vector * x, void * params_, double *y, gsl_vector *g)
+//=============================================================
+// estimate ndf t-student using MLE. see 'Simulation of
+// highdimensional t-student copulas with a given block correlation
+// matrix' by Gerard Torrent-Gironella and Josep Fortiana
+// h: h[i,j] is the i-th observation of the sector j
+// ret: allocated metrix of size (kxk) where k=num of sectors
+//=============================================================
+double ccruncher::CopulaCalibration::ndf(double **sigma, const vector<int> &n, const vector<double> &p, const vector<vector<hdata> > &h) throw(Exception)
 {
-  *y = f(x, params_);
-  df(x, params_, g);
+  assert(n.size() > 0);
+  assert(n.size() == p.size());
+  assert(h.size() > 1);
+  assert(h[0].size() == n.size());
 
-cout << "fdf called (";
-for(unsigned int i=0; i<x->size; i++) cout << gsl_vector_get(x,i) << ", ";
-cout << ")" << endl;
-cout << "  f= " << *y << endl;
-cout << "  df= ";
-for(unsigned int i=0; i<x->size; i++) cout << gsl_vector_get(g, i) << ", ";
-cout << endl;
+  if (n.size() <= 0) throw Exception("invalid number of sectors");
+  if (h.size() < 2) throw Exception("invalid number of observations");
+
+  fparams params;
+
+  params.dim = 0;
+  for(int i=0; i<(int)n.size(); i++) params.dim += n[i];
+  //TODO: check if exist sectors with 0 elements?
+  if (params.dim < 2) return 10.0;
+
+  params.k = n.size();
+  params.n = n;
+  params.p = p;
+  params.h = h;
+  params.sigma = sigma;
+  params.M = Arrays<double>::allocMatrix(params.k, params.k, NAN);
+  params.x = Arrays<double>::allocVector(params.dim);
+  params.y = Arrays<double>::allocVector(params.dim);
+
+  int status;
+  int iter = 0, max_iter = 250;
+  gsl_min_fminimizer *s;
+  double a=2.0, m=30.0, b=5000.0;
+  gsl_function F;
+
+  //-----------
+    for(int i=0; i<(int)n.size(); i++)
+    {
+        for(int j=0; j<(int)n.size(); j++)
+        {
+            cout << sigma[i][j] << " ";
+        }
+        cout << endl;
+    }
+    double fa = f(a, &params);
+    double fb = f(b, &params);
+    cout << "F(" << a << ") = " << fa << endl;
+    cout << "F(" << b << ") = " << fb << endl;
+    double m1 = a+0.5;
+    double fm1 = f(m1, &params);
+    cout << "F(" << m1 << ") = " << fm1 << endl;
+    double m2 = b-500;
+    double fm2 = f(m2, &params);
+    cout << "F(" << m2 << ") = " << fm2 << endl;
+/*
+    for(int i=2; i<1000; i++)
+    {
+        cout << "F(" << i << ") = " << f(i, &params) << endl;
+    }
+*/
+    if (fm1 < fa && fm1 < fb) m = m1;
+    else if (fm2 < fa && fm2 < fb) m = m2;
+    else return std::min(a,b);
+cout << "a=" << a << ", b=" << b << ", m=" << m << endl;
+  //-----------
+
+  F.function = CopulaCalibration::f;
+  F.params = (void *)(&params);
+
+  s = gsl_min_fminimizer_alloc(gsl_min_fminimizer_brent);
+  gsl_min_fminimizer_set(s, &F, m, a, b);
+
+  printf ("%5s [%9s, %9s] %9s %9s\n",
+          "iter", "lower", "upper", "min", "err(est)");
+
+  printf ("%5d [%.7f, %.7f] %.7f %.7f\n",
+          iter, a, b, m, b - a);
+
+  do
+    {
+      iter++;
+      status = gsl_min_fminimizer_iterate(s);
+
+      m = gsl_min_fminimizer_x_minimum(s);
+      a = gsl_min_fminimizer_x_lower(s);
+      b = gsl_min_fminimizer_x_upper(s);
+
+      status = gsl_min_test_interval (a, b, 0.001, 0.0);
+
+      if (status == GSL_SUCCESS) printf ("Converged:\n");
+
+      printf ("%5d [%.7f, %.7f] %.7f %.7f\n",
+              iter, a, b, m, b - a);
+    }
+  while (status == GSL_CONTINUE && iter < max_iter);
+
+  gsl_min_fminimizer_free(s);
+  Arrays<double>::deallocMatrix(params.M, params.k);
+  Arrays<double>::deallocVector(params.x);
+  Arrays<double>::deallocVector(params.y);
+
+  return status;
 }

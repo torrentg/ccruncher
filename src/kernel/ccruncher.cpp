@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
   }
   if (calib != "none" && calib != "sigma" && calib != "ndf" && calib != "all")
   {
-    cerr << "error: unrecognized calibrate mode (" << calib << ")" << endl;
+    cerr << "error: unrecognized calibration mode (" << calib << ")" << endl;
     cerr << "allowed modes are: none, sigma, ndf, all" << endl;
     return 1;
   }
@@ -446,7 +446,7 @@ void usage()
   "                     sigma: only calibrate correlations\n"
   "                     ndf:   only calibrate ndf in t-student copula\n"
   "                     all:   calibrate correlations and ndf\n"
-  "                   results are stored in file calibration.xml\n"
+  "                   results are stored in file calibration.txt\n"
   "    --trace        for debuging and validation purposes only!\n"
   "                   bulk simulated copula values to file copula.csv\n"
   "    --help -h      show this message and exit\n"
