@@ -202,11 +202,11 @@
 				Name="params"
 				>
 				<File
-					RelativePath="src\params\CorrelationMatrix.cpp"
+					RelativePath="src\params\Correlations.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\params\CorrelationMatrix.hpp"
+					RelativePath="src\params\Correlations.hpp"
 					>
 				</File>
 				<File
@@ -226,27 +226,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Rating.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Rating.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\params\Ratings.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\params\Ratings.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Sector.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Sector.hpp"
 					>
 				</File>
 				<File
@@ -282,11 +266,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\TransitionMatrix.cpp"
+					RelativePath="src\params\Transitions.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\params\TransitionMatrix.hpp"
+					RelativePath="src\params\Transitions.hpp"
 					>
 				</File>
 				<File

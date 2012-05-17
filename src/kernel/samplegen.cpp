@@ -211,10 +211,10 @@ void run(string filename, int nobligors, int nassets) throw(Exception)
     cout << idata.getSurvival().getXML(2);
   }
   else {
-    cout << idata.getTransitionMatrix().getXML(2);
+    cout << idata.getTransitions().getXML(2);
   }
   cout << idata.getSectors().getXML(2);
-  cout << idata.getCorrelationMatrix().getXML(2);
+  cout << idata.getCorrelations().getXML(2);
   cout << idata.getSegmentations().getXML(2);
   cout << "  <portfolio>\n";
   printXMLPortfolio(2, idata, nobligors, nassets);

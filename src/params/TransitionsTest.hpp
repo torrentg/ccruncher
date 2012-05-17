@@ -20,49 +20,53 @@
 //
 //===========================================================================
 
-#ifndef _Rating_
-#define _Rating_
+#ifndef _TransitionsTest_
+#define _TransitionsTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include "utils/Exception.hpp"
-#include "utils/ExpatHandlers.hpp"
+#include <MiniCppUnit.hxx>
+#include "params/Ratings.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class Rating : public ExpatHandlers
+class TransitionsTest : public TestFixture<TransitionsTest>
 {
 
-  public:
+  private:
 
-    // rating name
-    string name;
-    // rating description
-    string desc;
+    Ratings getRatings();
 
-  protected:
-  
-    // ExpatHandlers method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
+    void test1(void);
+    void test2(void);
+    void test3(void);
+    void test4(void);
+    void test5(void);
+
 
   public:
 
-    // rating constructor
-    Rating();
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    TEST_FIXTURE(TransitionsTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+      TEST_CASE(test5);
+    }
+
+    void setUp();
+    void tearDown();
 
 };
+
+REGISTER_FIXTURE(TransitionsTest);
 
 //---------------------------------------------------------------------------
 

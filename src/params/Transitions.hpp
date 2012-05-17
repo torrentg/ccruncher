@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _TransitionMatrix_
-#define _TransitionMatrix_
+#ifndef _Transitions_
+#define _Transitions_
 
 //---------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class TransitionMatrix : public ExpatHandlers
+class Transitions : public ExpatHandlers
 {
 
   private:
@@ -77,17 +77,17 @@ class TransitionMatrix : public ExpatHandlers
   public:
 
     // default constructor
-    TransitionMatrix();
+    Transitions();
     // constructor
-    TransitionMatrix(const Ratings &) throw(Exception);
+    Transitions(const Ratings &) throw(Exception);
     // constructor
-    TransitionMatrix(const Ratings &, double **, int) throw(Exception);
+    Transitions(const Ratings &, double **, int) throw(Exception);
     // copy constructor
-    TransitionMatrix(const TransitionMatrix &) throw(Exception);
+    Transitions(const Transitions &) throw(Exception);
     // destructor
-    ~TransitionMatrix();
+    ~Transitions();
     // assignement operator
-    TransitionMatrix& operator = (const TransitionMatrix &other);
+    Transitions& operator = (const Transitions &other);
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)
@@ -105,7 +105,7 @@ class TransitionMatrix : public ExpatHandlers
     // regularize the transition matrix
     void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
-    TransitionMatrix scale(int t) const throw(Exception);
+    Transitions scale(int t) const throw(Exception);
     // computes survival function related to this transition matrix
     Survival getSurvival(int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)

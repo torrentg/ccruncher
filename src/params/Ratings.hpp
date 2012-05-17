@@ -30,7 +30,6 @@
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "params/Rating.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -40,6 +39,16 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+struct Rating
+{
+    // rating name
+    string name;
+    // rating description
+    string desc;
+    // constructor
+    Rating(const string &n="", const string &d="") : name(n), desc(d) {}
+};
+
 class Ratings : public ExpatHandlers
 {
 
@@ -47,8 +56,6 @@ class Ratings : public ExpatHandlers
 
     // ratings list
     vector<Rating> vratings;
-    // auxiliary variable (used by parser)
-    Rating auxrating;
 
   private:
   

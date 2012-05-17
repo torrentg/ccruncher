@@ -30,13 +30,11 @@ ccruncher_SOURCES = \
     ../src/kernel/Aggregator.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
-    ../src/params/Rating.cpp\
     ../src/params/Ratings.cpp\
-    ../src/params/TransitionMatrix.cpp\
+    ../src/params/Transitions.cpp\
     ../src/params/Survival.cpp\
-    ../src/params/Sector.cpp\
     ../src/params/Sectors.cpp\
-    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/Defaults.cpp\
@@ -75,13 +73,11 @@ ccruncher_SOURCES = \
     ../src/kernel/Aggregator.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
-    ../src/params/Rating.hpp\
     ../src/params/Ratings.hpp\
-    ../src/params/TransitionMatrix.hpp\
+    ../src/params/Transitions.hpp\
     ../src/params/Survival.hpp\
-    ../src/params/Sector.hpp\
     ../src/params/Sectors.hpp\
-    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/Defaults.hpp\
@@ -150,10 +146,10 @@ tests_SOURCES = \
     ../src/params/SegmentationTest.cpp\
     ../src/params/SegmentationsTest.cpp\
     ../src/params/ParamsTest.cpp\
-    ../src/params/CorrelationMatrixTest.cpp\
+    ../src/params/CorrelationsTest.cpp\
     ../src/params/RatingsTest.cpp\
     ../src/params/SectorsTest.cpp\
-    ../src/params/TransitionMatrixTest.cpp\
+    ../src/params/TransitionsTest.cpp\
     ../src/params/SurvivalTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
@@ -185,13 +181,11 @@ tests_SOURCES = \
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
     ../src/portfolio/Exposure.cpp\
-    ../src/params/Sector.cpp\
     ../src/params/Sectors.cpp\
-    ../src/params/Rating.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Params.cpp\
-    ../src/params/TransitionMatrix.cpp\
-    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Transitions.cpp\
+    ../src/params/Correlations.cpp\
     ../src/params/Interest.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
@@ -223,14 +217,14 @@ tests_SOURCES = \
     ../src/portfolio/RecoveryTest.hpp\
     ../src/portfolio/ExposureTest.hpp\
     ../src/portfolio/ObligorTest.hpp\
-    ../src/params/CorrelationMatrixTest.hpp\
+    ../src/params/CorrelationsTest.hpp\
     ../src/params/InterestTest.hpp\
     ../src/params/SegmentationTest.hpp\
     ../src/params/SegmentationsTest.hpp\
     ../src/params/ParamsTest.hpp\
     ../src/params/RatingsTest.hpp\
     ../src/params/SectorsTest.hpp\
-    ../src/params/TransitionMatrixTest.hpp\
+    ../src/params/TransitionsTest.hpp\
     ../src/params/SurvivalTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
@@ -263,13 +257,11 @@ tests_SOURCES = \
     ../src/portfolio/Exposure.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
-    ../src/params/Sector.hpp\
     ../src/params/Sectors.hpp\
-    ../src/params/Rating.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Params.hpp\
-    ../src/params/TransitionMatrix.hpp\
-    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Transitions.hpp\
+    ../src/params/Correlations.hpp\
     ../src/params/Interest.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
@@ -320,13 +312,11 @@ samplegen_SOURCES = \
     ../src/portfolio/Obligor.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
-    ../src/params/Rating.cpp\
     ../src/params/Ratings.cpp\
-    ../src/params/TransitionMatrix.cpp\
+    ../src/params/Transitions.cpp\
     ../src/params/Survival.cpp\
-    ../src/params/Sector.cpp\
     ../src/params/Sectors.cpp\
-    ../src/params/CorrelationMatrix.cpp\
+    ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/Defaults.cpp\
@@ -367,13 +357,11 @@ samplegen_SOURCES = \
     ../src/portfolio/Exposure.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
-    ../src/params/Rating.hpp\
     ../src/params/Ratings.hpp\
-    ../src/params/TransitionMatrix.hpp\
+    ../src/params/Transitions.hpp\
     ../src/params/Survival.hpp\
-    ../src/params/Sector.hpp\
     ../src/params/Sectors.hpp\
-    ../src/params/CorrelationMatrix.hpp\
+    ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/Defaults.hpp\

@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
-#include "params/Sector.hpp"
+#include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -39,6 +39,16 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+struct Sector
+{
+    // sector name
+    string name;
+    // sector description
+    string desc;
+    // constructor
+    Sector(const string &n="", const string &d="") : name(n), desc(d) {}
+};
+
 class Sectors : public ExpatHandlers
 {
 
@@ -46,8 +56,6 @@ class Sectors : public ExpatHandlers
 
     // list of sectors
     vector<Sector> vsectors;
-    // auxiliary variable (used by parser)
-    Sector auxsector;
 
   private:
   

@@ -357,15 +357,15 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
   else
   {
     // setting logger info
-    string sval = Format::toString(idata.getTransitionMatrix().size());
+    string sval = Format::toString(idata.getTransitions().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitionMatrix().getPeriod()));
+    Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitions().getPeriod()));
 
     // computing survival function using transition matrix
     int months = (int) ceil(diff(time0, timeT, 'M'));
-    survival = idata.getTransitionMatrix().getSurvival(1, months+1);
+    survival = idata.getTransitions().getSurvival(1, months+1);
     Logger::trace("transition matrix -> survival function", string("computed"));
-    TransitionMatrix tm1 = idata.getTransitionMatrix().scale(1);
+    Transitions tm1 = idata.getTransitions().scale(1);
     double rerror = tm1.getRegularizationError();
     Logger::trace("regularization error", Format::toString(rerror));
   }
@@ -430,7 +430,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 
   try
   {
-    vector<int> tmp(idata.getCorrelationMatrix().size(),0);
+    vector<int> tmp(idata.getCorrelations().size(),0);
 
     // computing the number of obligors in each sector
     for(unsigned int i=0; i<obligors.size(); i++)
@@ -441,7 +441,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
     // creating the copula object
     if (idata.getParams().getCopulaType() == "gaussian")
     {
-      copula = new BlockGaussianCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size());
+      copula = new BlockGaussianCopula(idata.getCorrelations().getMatrix(), &tmp[0], idata.getCorrelations().size());
       double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::toString(cnum));
       bool coerced = ((BlockGaussianCopula*)copula)->isCoerced();
@@ -450,7 +450,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
-      copula = new BlockTStudentCopula(idata.getCorrelationMatrix().getMatrix(), &tmp[0], idata.getCorrelationMatrix().size(), ndf);
+      copula = new BlockTStudentCopula(idata.getCorrelations().getMatrix(), &tmp[0], idata.getCorrelations().size(), ndf);
       double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
       Logger::trace("cholesky condition number", Format::toString(cnum));
       bool coerced = ((BlockTStudentCopula*)copula)->isCoerced();

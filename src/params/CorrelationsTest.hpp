@@ -20,73 +20,51 @@
 //
 //===========================================================================
 
-#ifndef _CorrelationMatrix_
-#define _CorrelationMatrix_
+#ifndef _CorrelationsTest_
+#define _CorrelationsTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <string>
-#include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
+#include <MiniCppUnit.hxx>
 #include "params/Sectors.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class CorrelationMatrix : public ExpatHandlers
+class CorrelationsTest : public TestFixture<CorrelationsTest>
 {
 
   private:
 
-    // nxn = matrix size (n = number of sectors)
-    int n;
-    // list of sectors
-    Sectors sectors;
-    // matrix of values
-    double **matrix;
+    Sectors getSectors();
 
-  private:
+    void test1(void);
+    void test2(void);
+    void test3(void);
+    void test4(void);
 
-    // insert a new matrix value
-    void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
-    // validate object content
-    void validate(void) throw(Exception);
 
-  protected:
-  
-    // ExpatHandler method
-    void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
-    void epend(ExpatUserData &, const char *);
-  
   public:
 
-    // constructor
-    CorrelationMatrix();
-    // constructor
-    CorrelationMatrix(Sectors &) throw(Exception);
-    // copy constructor
-    CorrelationMatrix(CorrelationMatrix &) throw(Exception);
-    // destructor
-    ~CorrelationMatrix();
-    // assignement operator
-    CorrelationMatrix& operator = (const CorrelationMatrix &x);
-    // initialize object
-    void setSectors(const Sectors &) throw(Exception);
-    // matrix size (= number of sector)
-    int size() const;
-    // returns a pointer to matrix values
-    double ** getMatrix() const;
-    // serializes object content as xml
-    string getXML(int) throw(Exception);
+    TEST_FIXTURE(CorrelationsTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+    }
+
+    void setUp();
+    void tearDown();
 
 };
+
+REGISTER_FIXTURE(CorrelationsTest);
 
 //---------------------------------------------------------------------------
 

@@ -441,7 +441,7 @@ void usage()
   "    --threads=num  number of threads (default=1)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
   "    --calibrate=x  calibrate copula parameters (optional)\n"
-  "                   where x must take one of the following modes:"
+  "                   where x must take one of the following modes:\n"
   "                     none:  no calibration is done\n"
   "                     sigma: only calibrate correlations\n"
   "                     ndf:   only calibrate ndf in t-student copula\n"
