@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Sector_
-#define _Sector_
+#ifndef _Correlations_
+#define _Correlations_
 
 //---------------------------------------------------------------------------
 
@@ -29,6 +29,7 @@
 #include <string>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
+#include "params/Sectors.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -38,29 +39,52 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Sector : public ExpatHandlers
+class Correlations : public ExpatHandlers
 {
 
-  public:
+  private:
 
-    // sector name
-    string name;
-    // sector description
-    string desc;
+    // nxn = matrix size (n = number of sectors)
+    int n;
+    // list of sectors
+    Sectors sectors;
+    // matrix of values
+    double **matrix;
+
+  private:
+
+    // insert a new matrix value
+    void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
+    // validate object content
+    void validate(void) throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    // ExpatHandler method
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    // ExpatHandler method
     void epend(ExpatUserData &, const char *);
   
   public:
-  
-    // default constructor
-    Sector();
-    // serialize object constent as xml
-    string getXML(int) const throw(Exception);
+
+    // constructor
+    Correlations();
+    // constructor
+    Correlations(Sectors &) throw(Exception);
+    // copy constructor
+    Correlations(Correlations &) throw(Exception);
+    // destructor
+    ~Correlations();
+    // assignement operator
+    Correlations& operator = (const Correlations &x);
+    // initialize object
+    void setSectors(const Sectors &) throw(Exception);
+    // matrix size (= number of sector)
+    int size() const;
+    // returns a pointer to matrix values
+    double ** getMatrix() const;
+    // serializes object content as xml
+    string getXML(int) throw(Exception);
 
 };
 

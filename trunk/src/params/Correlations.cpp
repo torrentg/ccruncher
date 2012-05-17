@@ -21,7 +21,7 @@
 //===========================================================================
 
 #include <cmath>
-#include "params/CorrelationMatrix.hpp"
+#include "params/Correlations.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
@@ -31,7 +31,7 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix()
+ccruncher::Correlations::Correlations()
 {
   n = 0;
   matrix = NULL;
@@ -40,7 +40,7 @@ ccruncher::CorrelationMatrix::CorrelationMatrix()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Exception)
+ccruncher::Correlations::Correlations(Sectors &sectors_) throw(Exception)
 {
   matrix = NULL;
   setSectors(sectors_);
@@ -49,7 +49,7 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(Sectors &sectors_) throw(Excepti
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exception)
+ccruncher::Correlations::Correlations(Correlations &x) throw(Exception)
 {
   matrix = NULL;
   *this = x;
@@ -58,7 +58,7 @@ ccruncher::CorrelationMatrix::CorrelationMatrix(CorrelationMatrix &x) throw(Exce
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::CorrelationMatrix::~CorrelationMatrix()
+ccruncher::Correlations::~Correlations()
 {
   Arrays<double>::deallocMatrix(matrix, n);
 }
@@ -66,7 +66,7 @@ ccruncher::CorrelationMatrix::~CorrelationMatrix()
 //===========================================================================
 // assignment operator
 //===========================================================================
-CorrelationMatrix& ccruncher::CorrelationMatrix::operator = (const CorrelationMatrix &x)
+Correlations& ccruncher::Correlations::operator = (const Correlations &x)
 {
   n = x.n;
 
@@ -93,7 +93,7 @@ CorrelationMatrix& ccruncher::CorrelationMatrix::operator = (const CorrelationMa
 //===========================================================================
 // set sectors
 //===========================================================================
-void ccruncher::CorrelationMatrix::setSectors(const Sectors &sectors_) throw(Exception)
+void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exception)
 {
   sectors = sectors_;
   n = sectors.size();
@@ -111,7 +111,7 @@ void ccruncher::CorrelationMatrix::setSectors(const Sectors &sectors_) throw(Exc
 //===========================================================================
 // returns size (number of sectors)
 //===========================================================================
-int ccruncher::CorrelationMatrix::size() const
+int ccruncher::Correlations::size() const
 {
   return n;
 }
@@ -119,7 +119,7 @@ int ccruncher::CorrelationMatrix::size() const
 //===========================================================================
 // returns matrix
 //===========================================================================
-double ** ccruncher::CorrelationMatrix::getMatrix() const
+double ** ccruncher::Correlations::getMatrix() const
 {
   return matrix;
 }
@@ -128,7 +128,7 @@ double ** ccruncher::CorrelationMatrix::getMatrix() const
 //===========================================================================
 // inserts an element into matrix
 //===========================================================================
-void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
+void ccruncher::Correlations::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
 {
   int row = sectors.getIndex(sector1);
   int col = sectors.getIndex(sector2);
@@ -163,7 +163,7 @@ void ccruncher::CorrelationMatrix::insertSigma(const string &sector1, const stri
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::CorrelationMatrix::epstart(ExpatUserData &, const char *name, const char **attributes)
+void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"mcorrels")) {
     if (getNumAttributes(attributes) != 0) {
@@ -184,7 +184,7 @@ void ccruncher::CorrelationMatrix::epstart(ExpatUserData &, const char *name, co
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::CorrelationMatrix::epend(ExpatUserData &, const char *name)
+void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"mcorrels")) {
     validate();
@@ -200,7 +200,7 @@ void ccruncher::CorrelationMatrix::epend(ExpatUserData &, const char *name)
 //===========================================================================
 // validate class content
 //===========================================================================
-void ccruncher::CorrelationMatrix::validate() throw(Exception)
+void ccruncher::Correlations::validate() throw(Exception)
 {
   // checking that all matrix elements exists
   for (int i=0;i<n;i++)
@@ -220,7 +220,7 @@ void ccruncher::CorrelationMatrix::validate() throw(Exception)
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::CorrelationMatrix::getXML(int ilevel) throw(Exception)
+string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);

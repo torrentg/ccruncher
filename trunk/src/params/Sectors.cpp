@@ -133,7 +133,7 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Sectors::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"sectors")) {
     if (getNumAttributes(attributes) != 0) {
@@ -141,8 +141,14 @@ void ccruncher::Sectors::epstart(ExpatUserData &eu, const char *name_, const cha
     }
   }
   else if (isEqual(name_,"sector")) {
-    auxsector = Sector();
-    eppush(eu, &auxsector, name_, attributes);
+    if (getNumAttributes(attributes) != 2) {
+      throw Exception("invalid number of attributes at sector");
+    }
+    else {
+      string name = getStringAttribute(attributes, "name");
+      string desc = getStringAttribute(attributes, "description");
+      insertSector(Sector(name,desc));
+    }
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -156,10 +162,9 @@ void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"sectors")) {
     validations();
-    auxsector = Sector();
   }
   else if (isEqual(name_,"sector")) {
-    insertSector(auxsector);
+    // nothing to do
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -190,7 +195,11 @@ string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
 
   for (unsigned int i=0;i<vsectors.size();i++)
   {
-    ret += vsectors[i].getXML(ilevel+2);
+    ret += Strings::blanks(ilevel+2);
+    ret += "<sector ";
+    ret += "name='" + vsectors[i].name + "' ";
+    ret += "description='" + vsectors[i].desc + "'";
+    ret += "/>\n";
   }
 
   ret += spc + "</sectors>\n";

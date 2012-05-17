@@ -54,7 +54,7 @@ ccruncher::Survival::Survival()
 
 //===========================================================================
 // constructor
-// used by TransitionMatrix class
+// used by Transitions class
 //===========================================================================
 ccruncher::Survival::Survival(const Ratings &ratings_, int numrows, int *imonths, 
            double **values) throw(Exception)

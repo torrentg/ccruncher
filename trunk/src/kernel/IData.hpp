@@ -33,9 +33,9 @@
 #include "params/Interest.hpp"
 #include "params/Ratings.hpp"
 #include "params/Sectors.hpp"
-#include "params/TransitionMatrix.hpp"
+#include "params/Transitions.hpp"
 #include "params/Survival.hpp"
-#include "params/CorrelationMatrix.hpp"
+#include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
 #include "params/Defaults.hpp"
 #include "portfolio/Portfolio.hpp"
@@ -70,7 +70,7 @@ class IData : public ExpatHandlers
     // simulation ratings
     Ratings ratings;
     // simulation transition matrix
-    TransitionMatrix transitions;
+    Transitions transitions;
     // simulation survival functinos
     Survival survival;
     // simulation sectors
@@ -78,7 +78,7 @@ class IData : public ExpatHandlers
     // historical defaults
     Defaults defaults;
     // simulation correlations
-    CorrelationMatrix correlations;
+    Correlations correlations;
     // simulation segmentations
     Segmentations segmentations;
     // simulation portfolio
@@ -131,7 +131,7 @@ class IData : public ExpatHandlers
     // returns simulation ratings
     Ratings & getRatings();
     // returns simulation transition matrix
-    TransitionMatrix & getTransitionMatrix();
+    Transitions & getTransitions();
     // returns simulation survival functions
     Survival & getSurvival();
     // returns simulation sectors
@@ -139,7 +139,7 @@ class IData : public ExpatHandlers
     // returns historical defaults
     Defaults & getDefaults();
     // returns simulation correlation matrix
-    CorrelationMatrix & getCorrelationMatrix();
+    Correlations & getCorrelations();
     // returns simulation correlations
     Segmentations & getSegmentations();
     // returns simulation portfolio

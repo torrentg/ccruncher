@@ -21,8 +21,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "params/CorrelationMatrix.hpp"
-#include "params/CorrelationMatrixTest.hpp"
+#include "params/Correlations.hpp"
+#include "params/CorrelationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //---------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::setUp()
+void ccruncher_test::CorrelationsTest::setUp()
 {
   // nothing to do
 }
@@ -40,7 +40,7 @@ void ccruncher_test::CorrelationMatrixTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::tearDown()
+void ccruncher_test::CorrelationsTest::tearDown()
 {
   // nothing to do
 }
@@ -48,7 +48,7 @@ void ccruncher_test::CorrelationMatrixTest::tearDown()
 //===========================================================================
 // getSectors
 //===========================================================================
-Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
+Sectors ccruncher_test::CorrelationsTest::getSectors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <sectors>\n\
@@ -69,7 +69,7 @@ Sectors ccruncher_test::CorrelationMatrixTest::getSectors()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::test1()
+void ccruncher_test::CorrelationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <mcorrels>\n\
@@ -89,7 +89,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  Correlations crm(sectors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   double **matrix = crm.getMatrix();
@@ -108,7 +108,7 @@ void ccruncher_test::CorrelationMatrixTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::test2()
+void ccruncher_test::CorrelationsTest::test2()
 {
   // non valid xml (undefined sector S4)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
@@ -125,14 +125,14 @@ void ccruncher_test::CorrelationMatrixTest::test2()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  Correlations crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::test3()
+void ccruncher_test::CorrelationsTest::test3()
 {
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
@@ -148,14 +148,14 @@ void ccruncher_test::CorrelationMatrixTest::test3()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  Correlations crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
 //===========================================================================
 // test4
 //===========================================================================
-void ccruncher_test::CorrelationMatrixTest::test4()
+void ccruncher_test::CorrelationsTest::test4()
 {
   // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
@@ -172,6 +172,6 @@ void ccruncher_test::CorrelationMatrixTest::test4()
   Sectors sectors = getSectors();
 
   // correlation matrix creation
-  CorrelationMatrix crm(sectors);
+  Correlations crm(sectors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }

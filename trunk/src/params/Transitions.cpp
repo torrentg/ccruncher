@@ -21,7 +21,7 @@
 //===========================================================================
 
 #include <cmath>
-#include "params/TransitionMatrix.hpp"
+#include "params/Transitions.hpp"
 #include "utils/Format.hpp"
 #include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
@@ -33,7 +33,7 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix()
+ccruncher::Transitions::Transitions()
 {
   n = 0;
   ratings = NULL;
@@ -46,7 +46,7 @@ ccruncher::TransitionMatrix::TransitionMatrix()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exception)
+ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
 {
   matrix = NULL;
   setRatings(ratings_);
@@ -58,7 +58,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_) throw(Exc
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_, double ** matrix_, int period_) throw(Exception)
+ccruncher::Transitions::Transitions(const Ratings &ratings_, double ** matrix_, int period_) throw(Exception)
 {
   matrix = NULL;
   setRatings(ratings_);
@@ -71,7 +71,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(const Ratings &ratings_, double **
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw(Exception) : ExpatHandlers()
+ccruncher::Transitions::Transitions(const Transitions &otm) throw(Exception) : ExpatHandlers()
 {
   matrix = NULL;
   setRatings(*(otm.ratings));
@@ -84,7 +84,7 @@ ccruncher::TransitionMatrix::TransitionMatrix(const TransitionMatrix &otm) throw
 //===========================================================================
 // destructor
 //===========================================================================
-ccruncher::TransitionMatrix::~TransitionMatrix()
+ccruncher::Transitions::~Transitions()
 {
   assert(n >= 0);
   if (matrix != NULL) {
@@ -96,7 +96,7 @@ ccruncher::TransitionMatrix::~TransitionMatrix()
 //===========================================================================
 // assignement operator
 //===========================================================================
-TransitionMatrix& ccruncher::TransitionMatrix::operator = (const TransitionMatrix &otm)
+Transitions& ccruncher::Transitions::operator = (const Transitions &otm)
 {
   if (this != &otm) // protect against invalid self-assignment
   {
@@ -117,7 +117,7 @@ TransitionMatrix& ccruncher::TransitionMatrix::operator = (const TransitionMatri
 //===========================================================================
 // setRatings
 //===========================================================================
-void ccruncher::TransitionMatrix::setRatings(const Ratings &ratings_)
+void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 {
   ratings = (Ratings *) &ratings_;
   n = ratings->size();
@@ -135,7 +135,7 @@ void ccruncher::TransitionMatrix::setRatings(const Ratings &ratings_)
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::TransitionMatrix::size() const
+int ccruncher::Transitions::size() const
 {
   return n;
 }
@@ -143,7 +143,7 @@ int ccruncher::TransitionMatrix::size() const
 //===========================================================================
 // getPeriod
 //===========================================================================
-int ccruncher::TransitionMatrix::getPeriod() const
+int ccruncher::Transitions::getPeriod() const
 {
   return period;
 }
@@ -151,7 +151,7 @@ int ccruncher::TransitionMatrix::getPeriod() const
 //===========================================================================
 // getMatrix
 //===========================================================================
-double ** ccruncher::TransitionMatrix::getMatrix() const
+double ** ccruncher::Transitions::getMatrix() const
 {
   return matrix;
 }
@@ -159,7 +159,7 @@ double ** ccruncher::TransitionMatrix::getMatrix() const
 //===========================================================================
 // inserts an element into transition matrix
 //===========================================================================
-void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
+void ccruncher::Transitions::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
   assert(n >= 0);
   assert(matrix != NULL);
@@ -195,7 +195,7 @@ void ccruncher::TransitionMatrix::insertTransition(const string &rating1, const 
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::TransitionMatrix::epstart(ExpatUserData &, const char *name, const char **attributes)
+void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"mtransitions")) {
     if (getNumAttributes(attributes) != 1) {
@@ -220,7 +220,7 @@ void ccruncher::TransitionMatrix::epstart(ExpatUserData &, const char *name, con
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::TransitionMatrix::epend(ExpatUserData &, const char *name)
+void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"mtransitions")) {
     validate();
@@ -236,7 +236,7 @@ void ccruncher::TransitionMatrix::epend(ExpatUserData &, const char *name)
 //===========================================================================
 // validate class content
 //===========================================================================
-void ccruncher::TransitionMatrix::validate() throw(Exception)
+void ccruncher::Transitions::validate() throw(Exception)
 {
   // checking that all elements exists
   for (int i=0;i<n;i++)
@@ -294,7 +294,7 @@ void ccruncher::TransitionMatrix::validate() throw(Exception)
 //===========================================================================
 // return default rating index
 //===========================================================================
-int ccruncher::TransitionMatrix::getIndexDefault() const
+int ccruncher::Transitions::getIndexDefault() const
 {
   return indexdefault;
 }
@@ -305,7 +305,7 @@ int ccruncher::TransitionMatrix::getIndexDefault() const
 // @param val random number in [0,1]
 // @return final rating
 //===========================================================================
-int ccruncher::TransitionMatrix::evalue(const int irating, const double val) const
+int ccruncher::Transitions::evalue(const int irating, const double val) const
 {
   double sum = 0.0;
 
@@ -325,7 +325,7 @@ int ccruncher::TransitionMatrix::evalue(const int irating, const double val) con
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
+string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
 {
   string spc1 = Strings::blanks(ilevel);
   string spc2 = Strings::blanks(ilevel+2);
@@ -357,7 +357,7 @@ string ccruncher::TransitionMatrix::getXML(int ilevel) const throw(Exception)
 // authors = Alezander Kreinin, Marina Sidelnikova
 // editor = Algo Research Quarterly, Vol. 4, Nos. 1/2, March/June 2001
 //===========================================================================
-void ccruncher::TransitionMatrix::regularize() throw(Exception)
+void ccruncher::Transitions::regularize() throw(Exception)
 {
 
   // computes the regularization error (sub-inf matrix norm)
@@ -418,11 +418,11 @@ void ccruncher::TransitionMatrix::regularize() throw(Exception)
 // @param t period (in months) of the new transition matrix
 // @return transition matrix for period t
 //===========================================================================
-TransitionMatrix ccruncher::TransitionMatrix::scale(int t) const throw(Exception)
+Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 {
   try
   {
-    TransitionMatrix ret(*this);
+    Transitions ret(*this);
     PowMatrix::pow(getMatrix(), double(t)/double(getPeriod()), size(), ret.matrix);
     ret.period = t;
     ret.regularize();
@@ -437,7 +437,7 @@ TransitionMatrix ccruncher::TransitionMatrix::scale(int t) const throw(Exception
 //===========================================================================
 // Given a transition matrix return the Cumulated Forward Default Rate
 //===========================================================================
-void ccruncher::TransitionMatrix::cdfr(int steplength, int numrows, double **ret) const throw(Exception)
+void ccruncher::Transitions::cdfr(int steplength, int numrows, double **ret) const throw(Exception)
 {
   // making assertions
   assert(numrows >= 0);
@@ -446,7 +446,7 @@ void ccruncher::TransitionMatrix::cdfr(int steplength, int numrows, double **ret
   assert(steplength < 15000);
 
   // building 1-year transition matrix
-  TransitionMatrix tmone = scale(steplength);
+  Transitions tmone = scale(steplength);
   double **one = tmone.getMatrix();
 
   // building Id-matrix of size nxn
@@ -486,7 +486,7 @@ void ccruncher::TransitionMatrix::cdfr(int steplength, int numrows, double **ret
 //===========================================================================
 // returns the Survival Function (1-CDFR[i][j])
 //===========================================================================
-Survival ccruncher::TransitionMatrix::getSurvival(int steplength, int numrows) const throw(Exception)
+Survival ccruncher::Transitions::getSurvival(int steplength, int numrows) const throw(Exception)
 {
   // memory allocation
   double **aux = Arrays<double>::allocMatrix(n, numrows);
@@ -519,7 +519,7 @@ Survival ccruncher::TransitionMatrix::getSurvival(int steplength, int numrows) c
 //===========================================================================
 // returns the regularization error (|non_regularized| - |regularized|)
 //===========================================================================
-double  ccruncher::TransitionMatrix::getRegularizationError() const
+double  ccruncher::Transitions::getRegularizationError() const
 {
   return rerror;
 }

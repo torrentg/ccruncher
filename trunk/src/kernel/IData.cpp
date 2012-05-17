@@ -477,9 +477,9 @@ Ratings & ccruncher::IData::getRatings()
 }
 
 //===========================================================================
-// getTransitionMatrix
+// getTransitions
 //===========================================================================
-TransitionMatrix & ccruncher::IData::getTransitionMatrix()
+Transitions & ccruncher::IData::getTransitions()
 {
   return transitions;
 }
@@ -509,9 +509,9 @@ Defaults & ccruncher::IData::getDefaults()
 }
 
 //===========================================================================
-// getCorrelationMatrix
+// getCorrelations
 //===========================================================================
-CorrelationMatrix & ccruncher::IData::getCorrelationMatrix()
+Correlations & ccruncher::IData::getCorrelations()
 {
   return correlations;
 }

@@ -65,7 +65,7 @@ Rating& ccruncher::Ratings::operator []  (int i)
 //===========================================================================
 Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
 {
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0; i<vratings.size(); i++)
   {
     if (vratings[i].name == name)
     {
@@ -82,7 +82,7 @@ Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
 int ccruncher::Ratings::getIndex(const char *name) const
 {
   assert(name != NULL);
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0; i<vratings.size(); i++)
   {
     if (vratings[i].name.compare(name) == 0)
     {
@@ -106,7 +106,7 @@ int ccruncher::Ratings::getIndex(const string &name) const
 void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vratings.size();i++)
+  for (unsigned int i=0; i<vratings.size(); i++)
   {
     Rating aux = vratings[i];
 
@@ -133,7 +133,7 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ratings")) {
     if (getNumAttributes(attributes) != 0) {
@@ -141,8 +141,14 @@ void ccruncher::Ratings::epstart(ExpatUserData &eu, const char *name_, const cha
     }
   }
   else if (isEqual(name_,"rating")) {
-    auxrating = Rating();
-    eppush(eu, &auxrating, name_, attributes);
+    if (getNumAttributes(attributes) != 2) {
+      throw Exception("invalid number of attributes in rating tag");
+    }
+    else {
+      string name = getStringAttribute(attributes, "name");
+      string desc = getStringAttribute(attributes, "description");
+      insertRating(Rating(name,desc));
+    }
   }
   else {
     throw Exception("unexpected tag " + string(name_));
@@ -156,10 +162,9 @@ void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"ratings")) {
     validations();
-    auxrating = Rating();
   }
   else if (isEqual(name_,"rating")) {
-    insertRating(auxrating);
+    // nothing to do
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -190,7 +195,11 @@ string ccruncher::Ratings::getXML(int ilevel) const throw(Exception)
 
   for (unsigned int i=0;i<vratings.size();i++)
   {
-    ret += vratings[i].getXML(ilevel+2);
+    ret += Strings::blanks(ilevel+2);
+    ret += "<rating ";
+    ret += "name='" + vratings[i].name + "' ";
+    ret += "description='" + vratings[i].desc + "'";
+    ret += "/>\n";
   }
 
   ret += spc + "</ratings>\n";

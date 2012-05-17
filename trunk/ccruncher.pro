@@ -1,15 +1,13 @@
 HEADERS += \
-    src/params/CorrelationMatrix.hpp \
+    src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Ratings.hpp \
-    src/params/Rating.hpp \
     src/params/Sectors.hpp \
-    src/params/Sector.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Survival.hpp \
-    src/params/TransitionMatrix.hpp \
+    src/params/Transitions.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
@@ -48,17 +46,15 @@ HEADERS += \
     src/params/Defaults.hpp
 
 SOURCES += \
-    src/params/CorrelationMatrix.cpp \
+    src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
     src/params/Ratings.cpp \
-    src/params/Rating.cpp \
     src/params/Sectors.cpp \
-    src/params/Sector.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Survival.cpp \
-    src/params/TransitionMatrix.cpp \
+    src/params/Transitions.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \
