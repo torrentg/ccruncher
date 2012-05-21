@@ -201,17 +201,17 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &transitions, name_, attributes);
     }
   }
-  // section survival
-  else if (isEqual(name_,"survival")) {
+  // section survivals
+  else if (isEqual(name_,"survivals")) {
     if (ratings.size() == 0) {
-      throw Exception("tag <survival> defined before <ratings> tag");
+      throw Exception("tag <survivals> defined before <ratings> tag");
     }
-    else if (survival.size() != 0) {
-      throw Exception("tag survival repeated");
+    else if (survivals.size() != 0) {
+      throw Exception("tag survivals repeated");
     }
     else {
-      survival.setRatings(ratings);
-      eppush(eu, &survival, name_, attributes);
+      survivals.setRatings(ratings);
+      eppush(eu, &survivals, name_, attributes);
     }
   }
   // section sectors
@@ -333,7 +333,7 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"transitions")) {
     // nothing to do
   }
-  else if (isEqual(name_,"survival")) {
+  else if (isEqual(name_,"survivals")) {
     // nothing to do
   }
   else if (isEqual(name_,"sectors")) {
@@ -411,8 +411,8 @@ void ccruncher::IData::validate() throw(Exception)
   else if (ratings.size() == 0) {
     throw Exception("ratings section not defined");
   }
-  else if (transitions.size() == 0 && survival.size() == 0) {
-    throw Exception("transition matrix or survival section not defined");
+  else if (transitions.size() == 0 && survivals.size() == 0) {
+    throw Exception("transition matrix or survivals section not defined");
   }
   else if (sectors.size() == 0) {
     throw Exception("sectors section not defined");
@@ -485,11 +485,11 @@ Transitions & ccruncher::IData::getTransitions()
 }
 
 //===========================================================================
-// getSurvival
+// getSurvivals
 //===========================================================================
-Survival & ccruncher::IData::getSurvival()
+Survivals &ccruncher::IData::getSurvivals()
 {
-  return survival;
+  return survivals;
 }
 
 //===========================================================================
@@ -533,11 +533,11 @@ Portfolio & ccruncher::IData::getPortfolio()
 }
 
 //===========================================================================
-// hasSurvival
+// hasSurvivals
 //===========================================================================
-bool ccruncher::IData::hasSurvival() const
+bool ccruncher::IData::hasSurvivals() const
 {
-  if (survival.size() != 0) return true;
+  if (survivals.size() != 0) return true;
   else return false;
 }
 

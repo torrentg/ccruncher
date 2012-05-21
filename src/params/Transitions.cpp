@@ -486,7 +486,7 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, double **ret) con
 //===========================================================================
 // returns the Survival Function (1-CDFR[i][j])
 //===========================================================================
-Survival ccruncher::Transitions::getSurvival(int steplength, int numrows) const throw(Exception)
+Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) const throw(Exception)
 {
   // memory allocation
   double **aux = Arrays<double>::allocMatrix(n, numrows);
@@ -510,7 +510,7 @@ Survival ccruncher::Transitions::getSurvival(int steplength, int numrows) const 
   }
 
   // creating survival function object
-  Survival ret(*ratings, numrows, itime, aux);
+  Survivals ret(*ratings, numrows, itime, aux);
   Arrays<double>::deallocMatrix(aux, n);
   Arrays<int>::deallocVector(itime);
   return ret; 

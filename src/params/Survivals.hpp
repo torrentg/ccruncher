@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Survival_
-#define _Survival_
+#ifndef _Survivals_
+#define _Survivals_
 
 //---------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Survival : public ExpatHandlers
+class Survivals : public ExpatHandlers
 {
 
   private:
@@ -55,10 +55,10 @@ class Survival : public ExpatHandlers
     vector<vector<double> > ddata;
     // inverse survival function values
     vector<vector<double> > idata;
-    // number of ratings
-    int nratings;
-    // pointer to ratings table
-    Ratings *ratings;
+    // ratings table
+    Ratings ratings;
+    // index of default rating
+    int indexdefault;
 
   private:
   
@@ -85,13 +85,13 @@ class Survival : public ExpatHandlers
   public:
 
     // defaults constructor
-    Survival();
+    Survivals();
     // constructor
-    Survival(const Ratings &) throw(Exception);
+    Survivals(const Ratings &) throw(Exception);
     // constructor
-    Survival(const Ratings &, int, int *, double**) throw(Exception);
+    Survivals(const Ratings &, int, int *, double**) throw(Exception);
     // destructor
-    ~Survival();
+    ~Survivals();
     // returns ratings size
     int size() const;
     // set ratings
@@ -103,7 +103,7 @@ class Survival : public ExpatHandlers
     // return minimal defined time (in months)
     int getMinCommonTime() const;
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    string getXML(int) throw(Exception);
 
 };
 

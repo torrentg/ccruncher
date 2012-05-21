@@ -78,7 +78,7 @@ class MonteCarlo
     // date where risk is computed
     Date timeT;
     // survival functions
-    Survival survival;
+    Survivals survivals;
     // copula used to simulate correlations
     Copula *copula;
     // antithetic method flag
@@ -122,8 +122,8 @@ class MonteCarlo
     void initObligors(IData &) throw(Exception);
     // initialize assets
     void initAssets(IData &) throw(Exception);
-    // initialize survival functions
-    void initSurvival(IData &) throw(Exception);
+    // initialize survivals functions
+    void initSurvivals(IData &) throw(Exception);
     // calibrate copula
     void calibrateCopula(IData &) throw(Exception);
     // initialize copula

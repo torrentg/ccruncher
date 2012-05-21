@@ -107,7 +107,7 @@ class Transitions : public ExpatHandlers
     // returns equivalent transition matrix that covers t months
     Transitions scale(int t) const throw(Exception);
     // computes survival function related to this transition matrix
-    Survival getSurvival(int steplength, int numrows) const throw(Exception);
+    Survivals getSurvivals(int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
 
