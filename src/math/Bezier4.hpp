@@ -40,8 +40,6 @@ class Bezier4
 
   private:
 
-    // point where Bx(t0) = By(t0)
-    double p;
     // a value
     double a;
     // b value
@@ -52,7 +50,7 @@ class Bezier4
   public:
 
     // constructor
-    explicit Bezier4(double p_, double b_) throw(Exception);
+    explicit Bezier4(double x0, double y0, double b_) throw(Exception);
     // return By(t) where Bx(t)=x
     double eval(double x);
 
