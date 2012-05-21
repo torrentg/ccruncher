@@ -7,21 +7,25 @@
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type="text/css">
-		td.c1 {
-			text-align: center;
-			padding: 8px;
-			width: 80px;
-		}
-		td.c2 {
-			text-align: justify;
-			padding: 8px;
-		}
-		td.c3 {
-			text-align: center;
-			padding: 8px;
-			width: 60px;
-		}
-	</style>
+        ul {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        td.c1 {
+            text-align: center;
+            padding: 8px;
+            width: 80px;
+        }
+        td.c2 {
+            text-align: justify;
+            padding: 8px;
+        }
+        td.c3 {
+            text-align: center;
+            padding: 8px;
+            width: 60px;
+        }
+    </style>
   </head>
 
   <body>
@@ -57,9 +61,9 @@
     <a href="#parameters">&lt;paramaters&gt;</a>     ...     <a href="#parameters">&lt;/parameters&gt;</a>
     <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
     <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
-    <a href="#mtransitions">&lt;mtransitions&gt;</a>   ...   <a href="#mtransitions">&lt;/mtransitions&gt;</a>
+    <a href="#transitions">&lt;transitions&gt;</a>    ...    <a href="#transitions">&lt;/transitions&gt;</a>
     <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
-    <a href="#mcorrels">&lt;mcorrels&gt;</a>       ...       <a href="#mcorrels">&lt;/mcorrels&gt;</a>
+    <a href="#correlations">&lt;correlations&gt;</a>   ...   <a href="#correlations">&lt;/correlations&gt;</a>
     <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
     <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
   &lt;/ccruncher&gt;
@@ -204,9 +208,17 @@
       <tr class="b">
         <td class="c1">copula.type</td>
         <td class="c2">
-          Type of copula used to generate correlated variables. 
-          Two families of copulas are implemented: the gaussian copula ('gaussian') and the 
-          t-Student copula ('t(n)' where <i>n > 0</i> is the number of degrees of freedom).
+          Type of copula used to generate correlated survival times. 
+          Two families of copulas are implemented: 
+          <ul>
+            <li>
+              gaussian: the gaussian copula
+            </li>
+            <li>
+              t(n): the t-Student copula, where <i>n &ge; 2</i> is the number of 
+              degrees of freedom
+            </li>
+          </ul>
         </td>
         <td class="c3"><code>string</code></td>
       </tr>
@@ -373,7 +385,7 @@
 <!-- ==================================================== -->
 <!--    transition matrix section                         -->
 <!-- ==================================================== -->
-    <a name="mtransitions"></a>
+    <a name="transitions"></a>
     <h2>Section Transition Matrix</h2>
 
     <p>
@@ -389,7 +401,7 @@
 
     <pre>
 
-  &lt;mtransitions period="12"&gt;
+  &lt;transitions period="12"&gt;
     &lt;transition from="AAA" to="AAA" value="92.83%" /&gt;
     &lt;transition from="AAA" to="AA" value="6.5%" /&gt;
     &lt;transition from="AAA" to="A" value="0.56%" /&gt;
@@ -454,7 +466,7 @@
     &lt;transition from="D" to="B" value="0.0%" /&gt;
     &lt;transition from="D" to="CCC" value="0.0%" /&gt;
     &lt;transition from="D" to="D" value="100%" /&gt;
-  &lt;/mtransitions&gt;
+  &lt;/transitions&gt;
     </pre>
 
 	<p>
@@ -463,7 +475,7 @@
 	  It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>.
 	</p>
 
-    <h3>MTransitions Attributes</h3>
+    <h3>Transitions Attributes</h3>
 
     <table cellpadding="3">
       <tr class="b">
@@ -531,10 +543,10 @@
     <pre>
 
   &lt;sectors&gt;
-    &lt;sector name="S1" description='Consumer/service sector'/&gt;
-    &lt;sector name="S2" description='Forest/building products'/&gt;
-    &lt;sector name="S3" description='High technology'/&gt;
-    &lt;sector name="S4" description='Utilities'/&gt;
+    &lt;sector name="S1" description="Consumer/service sector"/&gt;
+    &lt;sector name="S2" description="Forest/building products"/&gt;
+    &lt;sector name="S3" description="High technology"/&gt;
+    &lt;sector name="S4" description="Utilities"/&gt;
     &lt;sector name="S5" description="Other sectors"/&gt;
   &lt;/sectors&gt;
     </pre>
@@ -568,7 +580,7 @@
 <!-- ==================================================== -->
 <!--    correlations section                              -->
 <!-- ==================================================== -->
-    <a name="mcorrels"></a>
+    <a name="correlations"></a>
     <h2>Section Correlations</h2>
 
     <p>
@@ -583,7 +595,7 @@
 
     <pre>
 
-  &lt;mcorrels&gt;
+  &lt;correlations type="spearman" coerce="true"&gt;
     &lt;sigma sector1="S1" sector2="S1" value="15.1%"/&gt;
     &lt;sigma sector1="S1" sector2="S2" value="6.2%"/&gt;
     &lt;sigma sector1="S1" sector2="S3" value="8.6%"/&gt;
@@ -599,8 +611,58 @@
     &lt;sigma sector1="S4" sector2="S4" value="12.8%"/&gt;
     &lt;sigma sector1="S4" sector2="S5" value="6.4%"/&gt;
     &lt;sigma sector1="S5" sector2="S5" value="15.0%"/&gt;
-  &lt;/mcorrels&gt;
+  &lt;/correlations&gt;
     </pre>
+
+    <h3>Correlations Attributes</h3>
+
+    <table cellpadding="3">
+      <tr class="b">
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+      </tr>
+      <tr class="a">
+        <td class="c1">type</td>
+        <td class="c2">
+          Type of correlation matrix. Supported types are:<br/>
+          <ul>
+            <li>
+              basic: correlation values (&rho;) used to define the multivariate
+              t-Student distribution that generates the t-Student copula.
+            </li>
+            <li>
+              spearman: spearman's rho rank values (&rho;<sub>s</sub>). The basic 
+              correlation values are obtained using the equivalence
+              &rho; = 2·sin(&rho;<sub>s</sub>·&pi;/6) for the gaussian
+              copula, and the formula derived in paper 'Simulation of 
+              High-Dimensional t-Student Copulas with a Given Block Correlation
+              Matrix' for the t-Student copula.
+            </li>
+            <li>
+              kendall: kendall's tau rank values (&rho;<sub>&tau;</sub>). The basic 
+              correlation values are obtained using the equivalence
+              &rho; = sin(&rho;<sub>&tau;</sub>·&pi;/2) valid for any 
+              elliptical copula.
+            </li>
+          </ul>
+          This attribute is optional. Default value is 'spearman'.
+        </td>
+        <td class="c3"><code>string</code></td>
+      </tr>
+      <tr class="b">
+        <td class="c1">coerce</td>
+        <td class="c2">
+          If the correlation matrix is not positive-definite, we can coerce 
+          it to the nearest positive-definite matrix using the eigenvalue method. 
+          When correlation matrix is non-definite, this flag indicates if coercion 
+          is done (true) or not (false).
+          <br/>
+          This attribute is optional. Default value is 'false'.
+        </td>
+        <td class="c3"><code>boolean</code></td>
+      </tr>
+    </table>
 
     <h3>Sigma Attributes</h3>
 
@@ -1050,20 +1112,20 @@
     <a name="survival"></a>
     <h2>Section Survival Function</h2>
 
-	<p>
-	  The survival data is often not available, and where it is available, it 
-	  is often inconsistent or not representative. For this reason it is better
-	  to work with the transition matrix. Ccruncher will take care to convert the
-	  transition matrix in the corresponding survival functions. This implies that 
+    <p>
+      The survival data is often not available, and where it is available, it 
+      is often inconsistent or not representative. For this reason it is better
+      to work with the transition matrix. Ccruncher will take care to convert the
+      transition matrix in the corresponding survival functions. This implies that 
       the credit rating transitions follow a Markov model. Sometimes 
-	  this assumption is not acceptable because we desire that transition 
-	  probabilities change over the simulation period or we plan to do stress tests over 
-	  the default probabilities. In these cases it recommended to define the 
-	  survival functions explicitly.
-	</p>
+      this assumption is not acceptable because we desire that transition 
+      probabilities change over the simulation period or we plan to do stress tests over 
+      the default probabilities. In these cases it recommended to define the 
+      survival functions explicitly.
+    </p>
 
     <p>
-      You must define either a mtransitions matrix or a survival function, but not both.
+      You must define either a transition matrix or a survival function, but not both.
       This section contains the survival function for each credit rating. If this 
       section is non provided, the survival function will be computed using 
       the transition matrix. You don't need to fill all time values. The survival 
@@ -1141,7 +1203,7 @@
             Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 16-May-2012
+            Last modified: 21-May-2012
           </td>
         </tr></table>
       </div></div></div></div></div>

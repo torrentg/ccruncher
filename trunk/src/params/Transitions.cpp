@@ -184,7 +184,7 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
   // checking that not exist
   if (!isnan(matrix[row][col]))
   {
-    string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <mtransitions>";
+    string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <transitions>";
     throw Exception(msg);
   }
 
@@ -197,9 +197,9 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
 //===========================================================================
 void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  if (isEqual(name,"mtransitions")) {
+  if (isEqual(name,"transitions")) {
     if (getNumAttributes(attributes) != 1) {
-      throw Exception("invalid number of attributes in tag mtransitions");
+      throw Exception("invalid number of attributes in tag transitions");
     }
     else {
       period = getIntAttribute(attributes, "period");
@@ -222,7 +222,7 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const ch
 //===========================================================================
 void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 {
-  if (isEqual(name,"mtransitions")) {
+  if (isEqual(name,"transitions")) {
     validate();
   }
   else if (isEqual(name,"transition")) {
@@ -331,7 +331,7 @@ string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mtransitions period='" + Format::toString(period) + "' >\n";
+  ret += spc1 + "<transitions period='" + Format::toString(period) + "' >\n";
 
   for(int i=0;i<n;i++)
   {
@@ -345,7 +345,7 @@ string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
     }
   }
 
-  ret += spc1 + "</mtransitions>\n";
+  ret += spc1 + "</transitions>\n";
 
   return ret;
 }

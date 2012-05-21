@@ -40,7 +40,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   timeT = montecarlo.timeT;
   survival = montecarlo.survival;
   antithetic = montecarlo.antithetic;
-  reversed = montecarlo.reversed;
+  reversed = true;
   uvalues = copula->get();
   numsegmentations = montecarlo.segmentations->size();
   losses.resize(numsegmentations);

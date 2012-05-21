@@ -41,7 +41,6 @@
 void ccruncher::BlockGaussianCopula::reset()
 {
   n = 0;
-  m = 0;
   aux1 = NULL;
   aux2 = NULL;
   chol = NULL;
@@ -85,7 +84,6 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
 {
   reset();
   n = x.n;
-  m = x.m;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = alloc;
   if (alloc == true)
@@ -106,37 +104,50 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(const BlockGaussianCopula &x
 // C: sectorial correlation/autocorrelation matrix
 // n: number of elements at each sector
 // m: number of sectors
+// type: type of correlation (0=basic, 1=spearman, 2=kendall)
+// coerce: if correlation matrix is not definite-positive, replace by
+//         the closes definite-positive matrix using the eigenvalue method
 //===========================================================================
-ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_) throw(Exception) : 
+ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m, int type, bool coerce) throw(Exception) :
   Copula(), rng(NULL), chol(NULL)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
-  assert(m_ > 0);
+  assert(m > 0);
   double **correls = NULL;
   
   reset();
-  m = m_;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = true;
 
   try
   {
     // copying correlation coeficients
-    correls = Arrays<double>::allocMatrix(m_, m_, C_);
+    correls = Arrays<double>::allocMatrix(m, m, C_);
 
     // transforming correls coeficients
     for(int i=0;i<m;i++)
     {
       for(int j=0;j<m;j++)
       {
-        correls[i][j] = transform(correls[i][j]);
+        if (type == 0) { // basic
+          correls[i][j] = correls[i][j];
+        }
+        else if (type == 1) { // spearman
+          correls[i][j] = 2.0*sin(correls[i][j]*M_PI/6.0);
+        }
+        else if (type == 2) { // kendall
+          correls[i][j] = sin(correls[i][j]*M_PI/2.0);
+        }
+        else {
+          throw Exception("unrecognized correlation type");
+        }
       }
     }
 
     // computing cholesky factorization
-    chol = new BlockMatrixChol(correls, n_, m_);
-    Arrays<double>::deallocMatrix(correls, m_);
+    chol = new BlockMatrixChol(correls, n_, m, coerce);
+    Arrays<double>::deallocMatrix(correls, m);
 
     // allocating mem for temp arrays
     n = chol->getDim();
@@ -148,7 +159,7 @@ ccruncher::BlockGaussianCopula::BlockGaussianCopula(double **C_, int *n_, int m_
   }
   catch(Exception &e)
   {
-    Arrays<double>::deallocMatrix(correls, m_);
+    Arrays<double>::deallocMatrix(correls, m);
     finalize();
     throw;
   }
@@ -176,15 +187,6 @@ Copula* ccruncher::BlockGaussianCopula::clone(bool alloc)
 int ccruncher::BlockGaussianCopula::size() const
 {
   return n;
-}
-
-//===========================================================================
-// transform initial correlation to normal correlation
-// observation: 2*sin(1*M_PI/6) = 1 => diagonal values = 1 always
-//===========================================================================
-double ccruncher::BlockGaussianCopula::transform(double val)
-{
-  return 2.0*sin(val*M_PI/6.0);
 }
 
 //===========================================================================
@@ -241,14 +243,6 @@ void ccruncher::BlockGaussianCopula::setSeed(long seed)
 }
 
 //===========================================================================
-// returns the cholesky matrix condition number
-//===========================================================================
-double ccruncher::BlockGaussianCopula::getConditionNumber() const
-{
-  return chol->getConditionNumber();
-}
-
-//===========================================================================
 // returns the Random Number Generator
 //===========================================================================
 gsl_rng* ccruncher::BlockGaussianCopula::getRng()
@@ -257,10 +251,9 @@ gsl_rng* ccruncher::BlockGaussianCopula::getRng()
 }
 
 //===========================================================================
-// return if given correlation has been modified
+// returns the cholesky matrix
 //===========================================================================
-bool ccruncher::BlockGaussianCopula::isCoerced() const
+const BlockMatrixChol* ccruncher::BlockGaussianCopula::getCholesky() const
 {
-  assert(chol != NULL);
-  return chol->isCoerced();
+  return chol;
 }

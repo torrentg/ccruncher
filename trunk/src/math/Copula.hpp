@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <gsl/gsl_rng.h>
+#include "math/BlockMatrixChol.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -53,6 +54,8 @@ class Copula
     virtual Copula* clone(bool alloc=true) = 0;
     // returns the Random Number Generator
     virtual gsl_rng* getRng() = 0;
+    // returns the cholesky matrix (only elliptical copulas)
+    virtual const BlockMatrixChol* getCholesky() const { return NULL; }
     // destructor
     virtual ~Copula() {}
 

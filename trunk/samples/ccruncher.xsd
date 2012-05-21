@@ -79,33 +79,35 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="mtransitions" minOccurs="0" maxOccurs="1">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="transition" minOccurs="1" maxOccurs="unbounded">
-							<xsd:complexType>
-								<xsd:attribute name="from" type="xsd:string" use="required"/>
-								<xsd:attribute name="to" type="xsd:string" use="required"/>
-								<xsd:attribute name="value" type="double" use="required"/>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-					<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="survival" minOccurs="0" maxOccurs="1">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="svalue" minOccurs="1" maxOccurs="unbounded">
-							<xsd:complexType>
-								<xsd:attribute name="rating" type="xsd:string" use="required"/>
-								<xsd:attribute name="t" type="xsd:positiveInteger" use="required"/>
-								<xsd:attribute name="value" type="double" use="required"/>
-							</xsd:complexType>
-						</xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
+			<xsd:choice minOccurs="1" maxOccurs="1">
+				<xsd:element name="transitions" minOccurs="1" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="transition" minOccurs="1" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="from" type="xsd:string" use="required"/>
+									<xsd:attribute name="to" type="xsd:string" use="required"/>
+									<xsd:attribute name="value" type="double" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="survival" minOccurs="1" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="svalue" minOccurs="1" maxOccurs="unbounded">
+								<xsd:complexType>
+									<xsd:attribute name="rating" type="xsd:string" use="required"/>
+									<xsd:attribute name="t" type="xsd:positiveInteger" use="required"/>
+									<xsd:attribute name="value" type="double" use="required"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
 			<xsd:element name="sectors" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -118,7 +120,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="mcorrels" minOccurs="1" maxOccurs="1">
+			<xsd:element name="correlations" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="sigma" minOccurs="1" maxOccurs="unbounded">
@@ -129,6 +131,8 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
+					<xsd:attribute name="type" type="correlationType" default="spearman"/>
+					<xsd:attribute name="coerce" type="xsd:boolean" default="false"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="segmentations" minOccurs="1" maxOccurs="1">
@@ -235,10 +239,23 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
+    <xsd:simpleType name="correlationType">
+		<xsd:annotation>
+			<xsd:documentation>
+				list of correlation types.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="basic"/>
+			<xsd:enumeration value="spearman"/>
+			<xsd:enumeration value="kendall"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:simpleType name="componentsType">
 		<xsd:annotation>
 			<xsd:documentation>
-				list of types of components.
+				list of component types.
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">

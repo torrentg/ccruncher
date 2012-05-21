@@ -7,7 +7,7 @@ Current works
   * case studies
   * support Li model (survivals as exponential distr.)
   * estimate copula params using MLE
-  * add attribute 'type' in mcorrels tag
+  * add grouped t-copula support
 
 Future works
 -------------------

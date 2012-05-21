@@ -27,21 +27,27 @@
 #include "utils/Strings.hpp"
 
 #define EPSILON 1e-12
+#define TYPE_BASIC "basic"
+#define TYPE_SPEARMAN "spearman"
+#define TYPE_KENDALL "kendall"
 
 //===========================================================================
 // default constructor
 //===========================================================================
 ccruncher::Correlations::Correlations()
 {
-  n = 0;
+  fcoerce = false;
+  type = spearman;
   matrix = NULL;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Correlations::Correlations(Sectors &sectors_) throw(Exception)
+ccruncher::Correlations::Correlations(const Sectors &sectors_) throw(Exception)
 {
+  fcoerce = false;
+  type = spearman;
   matrix = NULL;
   setSectors(sectors_);
 }
@@ -49,7 +55,7 @@ ccruncher::Correlations::Correlations(Sectors &sectors_) throw(Exception)
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::Correlations::Correlations(Correlations &x) throw(Exception)
+ccruncher::Correlations::Correlations(const Correlations &x) throw(Exception)
 {
   matrix = NULL;
   *this = x;
@@ -60,7 +66,9 @@ ccruncher::Correlations::Correlations(Correlations &x) throw(Exception)
 //===========================================================================
 ccruncher::Correlations::~Correlations()
 {
-  Arrays<double>::deallocMatrix(matrix, n);
+  if (matrix != NULL && size() > 0) {
+    Arrays<double>::deallocMatrix(matrix, size());
+  }
 }
 
 //===========================================================================
@@ -68,19 +76,20 @@ ccruncher::Correlations::~Correlations()
 //===========================================================================
 Correlations& ccruncher::Correlations::operator = (const Correlations &x)
 {
-  n = x.n;
+  type = x.getType();
+  fcoerce = x.fcoerce;
+  setSectors(x.sectors);
 
-  if (n == 0) 
+  if (size() == 0)
   {
     matrix = NULL;
     return *this;
   }
   else
   {
-    setSectors(x.sectors);
-    for(int i=0; i<n; i++) 
+    for(int i=0; i<size(); i++)
     {
-      for(int j=0; j<n; j++) 
+      for(int j=0; j<size(); j++)
       {
         matrix[i][j] = x.matrix[i][j];
       }
@@ -95,17 +104,18 @@ Correlations& ccruncher::Correlations::operator = (const Correlations &x)
 //===========================================================================
 void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exception)
 {
+  if (matrix != NULL && size() > 0)
+  {
+    Arrays<double>::deallocMatrix(matrix, size());
+    matrix = NULL;
+  }
+
   sectors = sectors_;
-  n = sectors.size();
-  if (n <= 0)
+  if (sectors.size() <= 0)
   {
-    throw Exception("invalid matrix dimension ("+Format::toString(n)+" <= 0)");
+    throw Exception("invalid matrix dimension ("+Format::toString(size())+" <= 0)");
   }
-  if (matrix != NULL) 
-  {
-    Arrays<double>::deallocMatrix(matrix, n);
-  }
-  matrix = Arrays<double>::allocMatrix(n, n, NAN);
+  matrix = Arrays<double>::allocMatrix(size(), size(), NAN);
 }
 
 //===========================================================================
@@ -113,7 +123,7 @@ void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exceptio
 //===========================================================================
 int ccruncher::Correlations::size() const
 {
-  return n;
+  return sectors.size();
 }
 
 //===========================================================================
@@ -124,6 +134,21 @@ double ** ccruncher::Correlations::getMatrix() const
   return matrix;
 }
 
+//===========================================================================
+// returns correlation type
+//===========================================================================
+CorrelationType ccruncher::Correlations::getType() const
+{
+  return type;
+}
+
+//===========================================================================
+// returns coerce flag
+//===========================================================================
+bool ccruncher::Correlations::getCoerce() const
+{
+  return fcoerce;
+}
 
 //===========================================================================
 // inserts an element into matrix
@@ -165,10 +190,13 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
 //===========================================================================
 void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  if (isEqual(name,"mcorrels")) {
-    if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes not allowed in tag mcorrels");
-    }
+  if (isEqual(name,"correlations")) {
+    string strtype = getStringAttribute(attributes, "type", TYPE_SPEARMAN);
+    if (strtype == TYPE_SPEARMAN) type = spearman;
+    else if (strtype == TYPE_KENDALL) type = kendall;
+    else if (strtype == TYPE_BASIC) type = basic;
+    else throw Exception("unknow correlation type: " + strtype);
+    fcoerce = getBooleanAttribute(attributes, "coerce", false);
   }
   else if (isEqual(name,"sigma")) {
     string sector1 = getStringAttribute(attributes, "sector1");
@@ -186,7 +214,7 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
 //===========================================================================
 void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 {
-  if (isEqual(name,"mcorrels")) {
+  if (isEqual(name,"correlations")) {
     validate();
   }
   else if (isEqual(name,"sigma")) {
@@ -203,9 +231,9 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 void ccruncher::Correlations::validate() throw(Exception)
 {
   // checking that all matrix elements exists
-  for (int i=0;i<n;i++)
+  for (int i=0;i<size();i++)
   {
-    for (int j=0;j<n;j++)
+    for (int j=0;j<size();j++)
     {
       if (isnan(matrix[i][j]))
       {
@@ -226,11 +254,16 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  ret += spc1 + "<mcorrels>\n";
+  string strtype = "";
+  if (type == spearman) strtype= TYPE_SPEARMAN;
+  else if (type == kendall) strtype = TYPE_KENDALL;
+  else strtype = TYPE_BASIC;
 
-  for(int i=0;i<n;i++)
+  ret += spc1 + "<correlations type='" + strtype + "' coerce='" + Format::toString(fcoerce) + "'>\n";
+
+  for(int i=0;i<size();i++)
   {
-    for(int j=i;j<n;j++)
+    for(int j=i;j<size();j++)
     {
       ret += spc2 + "<sigma ";
       ret += "sector1='" + sectors[i].name + "' ";
@@ -240,7 +273,7 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
     }
   }
 
-  ret += spc1 + "</mcorrels>\n";
+  ret += spc1 + "</correlations>\n";
 
   return ret;
 }

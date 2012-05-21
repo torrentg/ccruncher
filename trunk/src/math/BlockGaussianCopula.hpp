@@ -46,8 +46,6 @@ class BlockGaussianCopula : public Copula
 
     // number of elements
     int n;
-    // number of sectors
-    int m;
     // random number generator
     gsl_rng *rng;
     // cholesky matrix
@@ -65,13 +63,11 @@ class BlockGaussianCopula : public Copula
     void reset();
     // dealloc buffers
     void finalize();
-    // transform correlation
-    double transform(double val);
 
   public:
 
     // constructor
-    BlockGaussianCopula(double **C, int *n, int m) throw(Exception);
+    BlockGaussianCopula(double **C, int *n, int m, int type=1, bool coerce=false) throw(Exception);
     // copy constructor
     BlockGaussianCopula(const BlockGaussianCopula &, bool alloc=true) throw(Exception);
     // destructor
@@ -88,12 +84,10 @@ class BlockGaussianCopula : public Copula
     const double* get() const;
     // random number generator seed
     void setSeed(long);
-    // returns the cholesky condition number
-    double getConditionNumber() const;
     // returns the Random Number Generator
     gsl_rng* getRng();
-    // return if given correlation has been modified
-    bool isCoerced() const;
+    // returns the cholesky matrix
+    const BlockMatrixChol* getCholesky() const;
 
 };
 

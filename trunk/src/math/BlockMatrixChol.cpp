@@ -50,19 +50,6 @@
 //===========================================================================
 
 //===========================================================================
-// Default constructor
-//===========================================================================
-ccruncher::BlockMatrixChol::BlockMatrixChol()
-{
-  M = 0;
-  N = 0;
-  A = NULL;
-  n = NULL;
-  coefs = NULL;
-  diag = NULL;
-}
-
-//===========================================================================
 // Copy constructor
 //===========================================================================
 ccruncher::BlockMatrixChol::BlockMatrixChol(const BlockMatrixChol &x)
@@ -97,6 +84,8 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
 // A: matrix with correlations between sectors (simmetric with size = mxm)
 // n: number of elements in each sector (size = m)
 // m: number of sectors
+// coerce: indicates if correlation matrix is coerced to close definite-positive
+//         matrix if it is non definite-positive
 // Example: A = {{0.2,0.1},{0.1, 0.3}}, n={2,3}, m=2
 // indicates the following matrix:
 //    1.0 0.2 0.1 0.1 0.1
@@ -107,7 +96,7 @@ BlockMatrixChol& ccruncher::BlockMatrixChol::operator = (const BlockMatrixChol &
 // first we asure that input arguments are valids and  don't exist sectors
 // without elements. If exist, they are removed
 //===========================================================================
-ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(Exception)
+ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_, bool coerce) throw(Exception)
 {
   // assertions
   assert(A_ != NULL);
@@ -179,7 +168,7 @@ ccruncher::BlockMatrixChol::BlockMatrixChol(double **A_, int *n_, int m_) throw(
       }
 
       // compute A eigenvalues and coerce if required
-      prepare();
+      prepare(coerce);
 
       // allocating memory for cholesky coeficients
       coefs = Arrays<double>::allocVector(N*M, 0.0);
@@ -414,7 +403,7 @@ void ccruncher::BlockMatrixChol::chold() throw(Exception)
 //   * a valid correlation matrix, condition number and determinant
 //
 //===========================================================================
-void ccruncher::BlockMatrixChol::prepare() throw(Exception)
+void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
 {
   bool coerced1=false, coerced2=false;
 
@@ -433,8 +422,18 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
       {
         if (1.0-A[i][j] < MIN_EIGENVALUE)
         {
-          A[i][j] = 1.0 - MIN_EIGENVALUE;
-          coerced1 = true;
+          if (coerce)
+          {
+            A[i][j] = 1.0 - MIN_EIGENVALUE;
+            coerced1 = true;
+          }
+          else
+          {
+            gsl_matrix_free(K);
+            gsl_vector_complex_free(vaps);
+            gsl_matrix_complex_free(VEPS);
+            throw Exception("non definite-positive matrix");
+          }
         }
         val = 1.0 + (n[j]-1)*A[i][j];
       }
@@ -472,6 +471,7 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON)
     {
+      gsl_matrix_free(K);
       gsl_vector_complex_free(vaps);
       gsl_matrix_complex_free(VEPS);
       throw Exception("imaginary eigenvalue computing eigenvalues");
@@ -480,10 +480,20 @@ void ccruncher::BlockMatrixChol::prepare() throw(Exception)
     {
       if (GSL_REAL(z) < MIN_EIGENVALUE)
       {
-        GSL_REAL(z) = MIN_EIGENVALUE;
-        GSL_IMAG(z) = 0.0;
-        gsl_vector_complex_set(vaps, i, z);
-        coerced2 = true;
+        if (coerce)
+        {
+          GSL_REAL(z) = MIN_EIGENVALUE;
+          GSL_IMAG(z) = 0.0;
+          gsl_vector_complex_set(vaps, i, z);
+          coerced2 = true;
+        }
+        else
+        {
+          gsl_matrix_free(K);
+          gsl_vector_complex_free(vaps);
+          gsl_matrix_complex_free(VEPS);
+          throw Exception("non definite-positive matrix");
+        }
       }
       eigenvalues.push_back(eig(GSL_REAL(z),1));
     }

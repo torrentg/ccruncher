@@ -16,7 +16,7 @@
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
     (title?, description?, defines?, parameters, interest, ratings, 
-     mtransitions?, survival?, sectors, mcorrels, segmentations, 
+     (transitions|survival), sectors, correlations, segmentations, 
      portfolio)
 )>
 
@@ -90,12 +90,12 @@
 >
 
 <!-- .............................................................. -->
-<!--                         mtransition                            -->
+<!--                          transition                            -->
 <!-- .............................................................. -->
-<!ELEMENT mtransitions (
+<!ELEMENT transitions (
     transition+
 )>
-<!ATTLIST mtransitions
+<!ATTLIST transitions
     period CDATA #REQUIRED
 >
 
@@ -142,9 +142,13 @@
 <!-- .............................................................. -->
 <!--                        correlations                            -->
 <!-- .............................................................. -->
-<!ELEMENT mcorrels (
+<!ELEMENT correlations (
     sigma+
 )>
+<!ATTLIST correlations
+    type CDATA #IMPLIED
+    coerce CDATA #IMPLIED
+>
 
 <!ELEMENT sigma
     EMPTY
