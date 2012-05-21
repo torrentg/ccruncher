@@ -44,7 +44,6 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   numiterations = 0;
   maxiterations = 0;
   antithetic = false;
-  reversed = false;
   seed = 0L;
   hash = 0;
   fpath = "path not set";
@@ -191,7 +190,6 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
   Logger::trace("antithetic mode", Format::toString(antithetic));
-  reversed = false;
 
   // exit function
   Logger::previousIndentLevel();
@@ -441,36 +439,37 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 
   try
   {
-    vector<int> tmp(idata.getCorrelations().size(),0);
-
     // computing the number of obligors in each sector
+    vector<int> tmp(idata.getCorrelations().size(),0);
     for(unsigned int i=0; i<obligors.size(); i++)
     {
       tmp[obligors[i].ref->isector]++;
     }
 
     // creating the copula object
+    double **C = idata.getCorrelations().getMatrix();
+    int m = idata.getCorrelations().size();
+    int type = idata.getCorrelations().getType();
+    bool coerce = idata.getCorrelations().getCoerce();
+
     if (idata.getParams().getCopulaType() == "gaussian")
     {
-      copula = new BlockGaussianCopula(idata.getCorrelations().getMatrix(), &tmp[0], idata.getCorrelations().size());
-      double cnum = ((BlockGaussianCopula*)copula)->getConditionNumber();
-      Logger::trace("cholesky condition number", Format::toString(cnum));
-      bool coerced = ((BlockGaussianCopula*)copula)->isCoerced();
-      Logger::trace("correlations coerced", Format::toString(coerced));
+      copula = new BlockGaussianCopula(C, &tmp[0], m, type, coerce);
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
-      copula = new BlockTStudentCopula(idata.getCorrelations().getMatrix(), &tmp[0], idata.getCorrelations().size(), ndf);
-      double cnum = ((BlockTStudentCopula*)copula)->getConditionNumber();
-      Logger::trace("cholesky condition number", Format::toString(cnum));
-      bool coerced = ((BlockTStudentCopula*)copula)->isCoerced();
-      Logger::trace("correlations coerced", Format::toString(coerced));
+      copula = new BlockTStudentCopula(C, &tmp[0], m, ndf, type, coerce);
     }
     else 
     {
       throw Exception("invalid copula type");
     }
+
+    double cnum = copula->getCholesky()->getConditionNumber();
+    Logger::trace("cholesky condition number", Format::toString(cnum));
+    bool coerced = copula->getCholesky()->isCoerced();
+    Logger::trace("correlation matrix coerced", Format::toString(coerced));
   }
   catch(std::exception &e)
   {

@@ -48,7 +48,7 @@
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
-  <mtransitions period="12">
+  <transitions period="12">
 
     <transition from="AAA" to="AAA" value="90.81%"/>
     <transition from="AAA" to="AA" value="8.33%"/>
@@ -122,7 +122,7 @@
     <transition from="D" to="CCC" value="0.0%"/>
     <transition from="D" to="D" value="100.0%"/>
 
-  </mtransitions>
+  </transitions>
 
   <!-- ============================================================== -->
   <!--                    SURVIVAL FUNCTION                           -->
@@ -562,7 +562,7 @@
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <mcorrels>
+  <correlations>
     <sigma sector1="S1" sector2="S1" value="15.1%"/>
     <sigma sector1="S1" sector2="S2" value="6.2%"/>
     <sigma sector1="S1" sector2="S3" value="8.6%"/>
@@ -578,7 +578,7 @@
     <sigma sector1="S4" sector2="S4" value="12.8%"/>
     <sigma sector1="S4" sector2="S5" value="6.4%"/>
     <sigma sector1="S5" sector2="S5" value="15.0%"/>
-  </mcorrels>
+  </correlations>
 
   <!-- ============================================================== -->
   <!--                       SEGMENTATIONS                            -->

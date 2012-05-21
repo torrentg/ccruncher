@@ -78,7 +78,7 @@ void ccruncher_test::IDataTest::test1()
       <rating name='C' description='very bad'/>\n\
       <rating name='E' description='default'/>\n\
     </ratings>\n\
-    <mtransitions period='12'>\n\
+    <transitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -104,7 +104,7 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='C' value='0.00'/>\n\
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
-    </mtransitions>\n\
+    </transitions>\n\
     <survival>\n\
       <svalue rating='A' t='0' value='1.0'/>\n\
       <svalue rating='B' t='0' value='1.0'/>\n\
@@ -116,11 +116,11 @@ void ccruncher_test::IDataTest::test1()
       <sector name='S1' description='retail'/>\n\
       <sector name='S2' description='others'/>\n\
     </sectors>\n\
-    <mcorrels>\n\
+    <correlations>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
-    </mcorrels>\n\
+    </correlations>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
       <segmentation name='obligors' components='obligor'>\n\

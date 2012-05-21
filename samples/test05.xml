@@ -74,12 +74,12 @@ Expected Results:
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
-  <mtransitions period="12">
+  <transitions period="12">
     <transition from="A" to="A" value="90%"/>
     <transition from="A" to="E" value="10%"/>
     <transition from="E" to="A" value="0%"/>
     <transition from="E" to="E" value="100%"/>
-  </mtransitions>
+  </transitions>
 
   <!-- ============================================================== -->
   <!--                           SECTORS                              -->
@@ -92,11 +92,11 @@ Expected Results:
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <mcorrels>
+  <correlations>
     <sigma sector1="S1" sector2="S1" value="10%"/>
     <sigma sector1="S1" sector2="S2" value="5%"/>
     <sigma sector1="S2" sector2="S2" value="15%"/>
-  </mcorrels>
+  </correlations>
 
   <!-- ============================================================== -->
   <!--                       SEGMENTATIONS                            -->

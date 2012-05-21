@@ -55,7 +55,7 @@
 	S&amp;P 1-year transition matrix adjusted for unrated bonds 
 	covering the period between 01-Jan-1981 and 31-Dec-1998 
   -->
-  <mtransitions period="12">
+  <transitions period="12">
     <transition from="AAA" to="AAA" value="92.83%" />
     <transition from="AAA" to="AA" value="6.5%" />
     <transition from="AAA" to="A" value="0.56%" />
@@ -120,7 +120,7 @@
     <transition from="D" to="B" value="0.0%" />
     <transition from="D" to="CCC" value="0.0%" />
     <transition from="D" to="D" value="100%" />
-  </mtransitions>
+  </transitions>
 
   <sectors>
     <sector name="S1" description='Consumer/service sector'/>
@@ -130,7 +130,7 @@
     <sector name="S5" description="Other sectors"/>
   </sectors>
 
-  <mcorrels>
+  <correlations type="spearman" coerce="true">
     <sigma sector1="S1" sector2="S1" value="15.1%"/>
     <sigma sector1="S1" sector2="S2" value="6.2%"/>
     <sigma sector1="S1" sector2="S3" value="8.6%"/>
@@ -146,7 +146,7 @@
     <sigma sector1="S4" sector2="S4" value="12.8%"/>
     <sigma sector1="S4" sector2="S5" value="6.4%"/>
     <sigma sector1="S5" sector2="S5" value="15.0%"/>
-  </mcorrels>
+  </correlations>
 
   <segmentations>
     <segmentation name="portfolio" components="asset"/>

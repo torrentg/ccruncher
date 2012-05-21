@@ -83,8 +83,6 @@ class MonteCarlo
     Copula *copula;
     // antithetic method flag
     bool antithetic;
-    // management flag for antithetic method (default=false)
-    bool reversed;
     // rng seed
     long seed;
     // hash (0=non show hashes) (default=0)

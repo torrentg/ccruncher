@@ -76,18 +76,16 @@ class BlockMatrixChol
     // adapted cholesky algorithm
     void chold() throw(Exception);
     // coerce, computes condition number (2-norm) and determinant
-    void prepare() throw(Exception);
+    void prepare(bool coerce) throw(Exception);
     // multiply VEPS·diag(vaps)·inv(VEPS)
     void prod(gsl_matrix_complex *VEPS, gsl_vector_complex *vaps, gsl_matrix_complex *R) const throw(Exception);
 
   public:
 
-    // default constructor
-    BlockMatrixChol();
     // copy constructor
     BlockMatrixChol(const BlockMatrixChol &x);
     // constructor
-    BlockMatrixChol(double **A, int *n, int m) throw(Exception);
+    BlockMatrixChol(double **A, int *n, int m, bool coerce=false) throw(Exception);
     // destructor
     ~BlockMatrixChol();
     // assignement operator

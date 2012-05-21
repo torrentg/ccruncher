@@ -72,11 +72,11 @@ Sectors ccruncher_test::CorrelationsTest::getSectors()
 void ccruncher_test::CorrelationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels>\n\
+    <correlations>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
-    </mcorrels>";
+    </correlations>";
   double vmatrix[] = {
     0.25, 0.05,
     0.05, 0.30
@@ -112,11 +112,11 @@ void ccruncher_test::CorrelationsTest::test2()
 {
   // non valid xml (undefined sector S4)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels>\n\
+    <correlations>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
       <sigma sector1='S2' sector2='S4' value='0.3'/>\n\
-    </mcorrels>";
+    </correlations>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -136,10 +136,10 @@ void ccruncher_test::CorrelationsTest::test3()
 {
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels>\n\
+    <correlations>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
-    </mcorrels>";
+    </correlations>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -159,11 +159,11 @@ void ccruncher_test::CorrelationsTest::test4()
 {
   // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mcorrels>\n\
+    <correlations>\n\
       <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
       <sigma sector1='S1' sector2='S2' value='1.1'/>\n\
       <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
-    </mcorrels>";
+    </correlations>";
 
   // creating xml
   ExpatParser xmlparser;

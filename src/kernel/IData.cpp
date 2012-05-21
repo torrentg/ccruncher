@@ -189,7 +189,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   // section transition matrix
-  else if (isEqual(name_,"mtransitions")) {
+  else if (isEqual(name_,"transitions")) {
     if (ratings.size() == 0) {
       throw Exception("tag <mtransition> defined before <ratings> tag");
     }
@@ -237,9 +237,9 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     }
   }
   // section correlation matrix
-  else if (isEqual(name_,"mcorrels")) {
+  else if (isEqual(name_,"correlations")) {
     if (sectors.size() == 0) {
-      throw Exception("tag <mcorrels> defined before <sectors> tag");
+      throw Exception("tag <correlations> defined before <sectors> tag");
     }
     else if (correlations.size() > 0) {
       throw Exception("tag correlations repeated");
@@ -330,7 +330,7 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"ratings")) {
     // nothing to do
   }
-  else if (isEqual(name_,"mtransitions")) {
+  else if (isEqual(name_,"transitions")) {
     // nothing to do
   }
   else if (isEqual(name_,"survival")) {
@@ -342,7 +342,7 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"historical")) {
     // nothing to do
   }
-  else if (isEqual(name_,"mcorrels")) {
+  else if (isEqual(name_,"correlations")) {
     // nothing to do
   }
   else if (isEqual(name_,"segmentations")) {

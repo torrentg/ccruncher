@@ -47,8 +47,6 @@ class BlockTStudentCopula : public Copula
 
     // number of elements
     int n;
-    // number of sectors
-    int m;
     // number of degrees of freedom
     double ndf;
     // random number generator
@@ -70,13 +68,11 @@ class BlockTStudentCopula : public Copula
     void reset();
     // dealloc buffers
     void finalize();
-    // transform correlation
-    double transform(double val);
 
   public:
 
     // constructor
-    BlockTStudentCopula(double **C, int *n, int m, double ndf) throw(Exception);
+    BlockTStudentCopula(double **C, int *n, int m, double ndf, int type=1, bool coerce=false) throw(Exception);
     // copy constructor
     BlockTStudentCopula(const BlockTStudentCopula &, bool alloc=true) throw(Exception);
     // destructor
@@ -93,12 +89,10 @@ class BlockTStudentCopula : public Copula
     const double* get() const;
     // random number generator seed
     void setSeed(long);
-    // returns the cholesky condition number
-    double getConditionNumber() const;
     // returns the Random Number Generator
     gsl_rng* getRng();
-    // return if given correlation has been modified
-    bool isCoerced() const;
+    // returns the cholesky matrix
+    const BlockMatrixChol* getCholesky() const;
 
 };
 

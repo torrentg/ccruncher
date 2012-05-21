@@ -41,7 +41,6 @@
 void ccruncher::BlockTStudentCopula::reset()
 {
   n = 0;
-  m = 0;
   ndf = -1.0;
   aux1 = NULL;
   aux2 = NULL;
@@ -79,12 +78,11 @@ void ccruncher::BlockTStudentCopula::finalize()
 //===========================================================================
 // copy constructor
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x, bool alloc) throw(Exception) : 
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x, bool alloc) throw(Exception) :
   Copula(), rng(NULL), chol(NULL), tcdf(x.ndf)
 {
   reset();
   n = x.n;
-  m = x.m;
   ndf = x.ndf;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = alloc;
@@ -106,17 +104,19 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(const BlockTStudentCopula &x
 // C: sectorial correlation/autocorrelation matrix
 // n: number of elements at each sector
 // m: number of sectors
+// type: type of correlation (0=basic, 1=spearman, 2=kendall)
+// coerce: if correlation matrix is not definite-positive, replace by
+//         the closes definite-positive matrix using the eigenvalue method
 //===========================================================================
-ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_, double ndf_) throw(Exception) : 
+ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m, double ndf_, int type, bool coerce) throw(Exception) :
   Copula(), rng(NULL), chol(NULL), tcdf(ndf_)
 {
   assert(C_ != NULL);
   assert(n_ != NULL);
-  assert(m_ > 0);
+  assert(m > 0);
   double **correls = NULL;
   
   reset();
-  m = m_;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   owner = true;
   
@@ -129,20 +129,35 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
   try
   {
     // copying correlation coeficients
-    correls = Arrays<double>::allocMatrix(m_, m_, C_);
+    correls = Arrays<double>::allocMatrix(m, m, C_);
 
     // transforming correls coeficients
     for(int i=0;i<m;i++)
     {
       for(int j=0;j<m;j++)
       {
-        correls[i][j] = transform(correls[i][j]);
+        if (type == 0) { // basic
+          correls[i][j] = correls[i][j];
+        }
+        else if (type == 1) { // spearman
+          // see 'Simulation of High-Dimensional t-Student Copulas
+          // with a Given Block Correlation Matrix' by Gerard
+          // Torrent-Gironella and Josep Fortiana
+          double h = M_PI/6.0 + 1.0/(0.44593 + 1.3089*ndf);
+          correls[i][j] = sin(h*correls[i][j])/sin(h);
+        }
+        else if (type == 2) { // kendall
+          correls[i][j] = sin(correls[i][j]*M_PI/2.0);
+        }
+        else {
+          throw Exception("unrecognized correlation type");
+        }
       }
     }
 
     // computing cholesky factorization
-    chol = new BlockMatrixChol(correls, n_, m_);
-    Arrays<double>::deallocMatrix(correls, m_);
+    chol = new BlockMatrixChol(correls, n_, m, coerce);
+    Arrays<double>::deallocMatrix(correls, m);
 
     // allocating mem for temp arrays
     n = chol->getDim();
@@ -154,7 +169,7 @@ ccruncher::BlockTStudentCopula::BlockTStudentCopula(double **C_, int *n_, int m_
   }
   catch(Exception &e)
   {
-    Arrays<double>::deallocMatrix(correls, m_);
+    Arrays<double>::deallocMatrix(correls, m);
     finalize();
     throw;
   }
@@ -182,15 +197,6 @@ Copula* ccruncher::BlockTStudentCopula::clone(bool alloc)
 int ccruncher::BlockTStudentCopula::size() const
 {
   return n;
-}
-
-//===========================================================================
-// transform initial correlation to normal correlation
-//===========================================================================
-double ccruncher::BlockTStudentCopula::transform(double val)
-{
-  double h = M_PI/6.0 + 1.0/(0.44593 + 1.3089*ndf);
-  return sin(h*val)/sin(h);
 }
 
 //===========================================================================
@@ -253,14 +259,6 @@ void ccruncher::BlockTStudentCopula::setSeed(long seed)
 }
 
 //===========================================================================
-// returns the cholesky matrix condition number
-//===========================================================================
-double ccruncher::BlockTStudentCopula::getConditionNumber() const
-{
-  return chol->getConditionNumber();
-}
-
-//===========================================================================
 // returns the Random Number Generator
 //===========================================================================
 gsl_rng* ccruncher::BlockTStudentCopula::getRng()
@@ -269,10 +267,9 @@ gsl_rng* ccruncher::BlockTStudentCopula::getRng()
 }
 
 //===========================================================================
-// return if given correlation has been modified
+// returns the cholesky matrix
 //===========================================================================
-bool ccruncher::BlockTStudentCopula::isCoerced() const
+const BlockMatrixChol* ccruncher::BlockTStudentCopula::getCholesky() const
 {
-  assert(chol != NULL);
-  return chol->isCoerced();
+  return chol;
 }

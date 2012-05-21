@@ -48,7 +48,7 @@
   <!-- ============================================================== -->
   <!--                     TRANSITION MATRIX                          -->
   <!-- ============================================================== -->
-  <mtransitions period="12">
+  <transitions period="12">
 
     <transition from="AAA" to="AAA" value="90.81%"/>
     <transition from="AAA" to="AA" value="8.33%"/>
@@ -122,7 +122,7 @@
     <transition from="D" to="CCC" value="0.0%"/>
     <transition from="D" to="D" value="100.0%"/>
 
-  </mtransitions>
+  </transitions>
 
   <!-- ============================================================== -->
   <!--                           SECTORS                              -->
@@ -137,7 +137,7 @@
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <mcorrels>
+  <correlations>
 
     <sigma sector1="tech" sector2="tech" value="20%"/>
     <sigma sector1="tech" sector2="util" value="1%"/>
@@ -153,7 +153,7 @@
 
     <sigma sector1="bank" sector2="bank" value="40%"/>
 
-  </mcorrels>
+  </correlations>
 
   <!-- ============================================================== -->
   <!--                SEGMENTATIONS/AGGREGATORS                       -->

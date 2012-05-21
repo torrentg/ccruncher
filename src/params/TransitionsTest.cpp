@@ -73,7 +73,7 @@ Ratings ccruncher_test::TransitionsTest::getRatings()
 void ccruncher_test::TransitionsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12'>\n\
+    <transitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -99,7 +99,7 @@ void ccruncher_test::TransitionsTest::test1()
       <transition from='E' to='C' value='0.00'/>\n\
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
-    </mtransitions>";
+    </transitions>";
   double vmatrix12[] = {
     0.80, 0.10, 0.07, 0.02, 0.01,
     0.05, 0.75, 0.10, 0.07, 0.03,
@@ -182,7 +182,7 @@ void ccruncher_test::TransitionsTest::test2()
 {
   // non valid transition matrix (row sum=1 not true)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12'>\n\
+    <transitions period='12'>\n\
       <transition from='A' to='A' value='0.90'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -208,7 +208,7 @@ void ccruncher_test::TransitionsTest::test2()
       <transition from='E' to='C' value='0.00'/>\n\
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
-    </mtransitions>";
+    </transitions>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -228,7 +228,7 @@ void ccruncher_test::TransitionsTest::test3()
 {
   // non valid xml, refers to non-existents rating (K)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12'>\n\
+    <transitions period='12'>\n\
       <transition from='K' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -254,7 +254,7 @@ void ccruncher_test::TransitionsTest::test3()
       <transition from='E' to='C' value='0.00'/>\n\
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
-    </mtransitions>";
+    </transitions>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -274,7 +274,7 @@ void ccruncher_test::TransitionsTest::test4()
 {
   // non valid transition matrix (default element not defined)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <mtransitions period='12'>\n\
+    <transitions period='12'>\n\
       <transition from='A' to='A' value='0.80'/>\n\
       <transition from='A' to='B' value='0.10'/>\n\
       <transition from='A' to='C' value='0.07'/>\n\
@@ -300,7 +300,7 @@ void ccruncher_test::TransitionsTest::test4()
       <transition from='E' to='C' value='0.25'/>\n\
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='0.00'/>\n\
-    </mtransitions>";
+    </transitions>";
 
   // creating xml
   ExpatParser xmlparser;

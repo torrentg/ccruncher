@@ -39,16 +39,27 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+enum CorrelationType
+{
+  basic = 0,
+  spearman = 1,
+  kendall = 2
+};
+
+//---------------------------------------------------------------------------
+
 class Correlations : public ExpatHandlers
 {
 
   private:
 
-    // nxn = matrix size (n = number of sectors)
-    int n;
+    // coercion flag
+    bool fcoerce;
+    // correlation type
+    CorrelationType type;
     // list of sectors
     Sectors sectors;
-    // matrix of values
+    // matrix values
     double **matrix;
 
   private:
@@ -56,7 +67,7 @@ class Correlations : public ExpatHandlers
     // insert a new matrix value
     void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
-    void validate(void) throw(Exception);
+    void validate() throw(Exception);
 
   protected:
   
@@ -70,9 +81,9 @@ class Correlations : public ExpatHandlers
     // constructor
     Correlations();
     // constructor
-    Correlations(Sectors &) throw(Exception);
+    Correlations(const Sectors &) throw(Exception);
     // copy constructor
-    Correlations(Correlations &) throw(Exception);
+    Correlations(const Correlations &) throw(Exception);
     // destructor
     ~Correlations();
     // assignement operator
@@ -83,6 +94,10 @@ class Correlations : public ExpatHandlers
     int size() const;
     // returns a pointer to matrix values
     double ** getMatrix() const;
+    // return correlation type
+    CorrelationType getType() const;
+    // return coercion flag
+    bool getCoerce() const;
     // serializes object content as xml
     string getXML(int) throw(Exception);
 
