@@ -31,19 +31,19 @@
 // ------------
 // Quadratic Bezier curve that maps [0,1] to [0,1] defined by points:
 // P0=(0,0), P1=(a,0), P2=(b,1), P3=(1,1)
-// and that interpole point (p,p), where p in (0,1)
+// and that interpole point (x0,y0)
 // see http://en.wikipedia.org/wiki/B%C3%A9zier_curve
 //
 // B(t) = P0·(1-t)^3 + P1·3·t·(1-t)^2 + P2·3·t^2·(1-t) + P3·t^3
 // Bx(t) = 3a·t + 3(b-2a)·t^2 + (3a-3b+1)·t^3
-// By(t) = -2·t^2 + 3·t^3
+// By(t) = 3·t^2 - 2·t^3
 //
 //===========================================================================
 
 //=============================================================
 // constructor
 //=============================================================
-ccruncher::Bezier4::Bezier4(double p_, double b_) throw(Exception) : p(p_), b(b_)
+ccruncher::Bezier4::Bezier4(double x0, double y0, double b_) throw(Exception) : b(b_)
 {
   int num_roots;
   double r[3];
@@ -58,20 +58,37 @@ ccruncher::Bezier4::Bezier4(double p_, double b_) throw(Exception) : p(p_), b(b_
   }
 
   // checking feasebility
-  if (p < 0.0 || p > 1.0) {
-    throw Exception("p value out-of-range");
+  if (x0 < 0.0 || x0 > 1.0) {
+    throw Exception("x0 value out-of-range");
+  }
+  if (y0 < 0.0 || y0 > 1.0) {
+    throw Exception("y0 value out-of-range");
   }
 
-  if (p < EPSILON || p > 1.0-EPSILON)
+  if (x0 < EPSILON)
   {
-    a = 0.0;
+    if (y0 < EPSILON) {
+      a = 0.0;
+    }
+    else {
+      throw Exception("invalid point (x0,y0)");
+    }
+  }
+  else if (x0 > 1.0-EPSILON)
+  {
+    if (y0 > 1.0-EPSILON) {
+      a = 0.0;
+    }
+    else {
+      throw Exception("invalid point (x0,y0)");
+    }
   }
   else
   {
     // searching t0 where By(t0)=p
     double t0 = -1.0;
     double r[3];
-    int num_roots = gsl_poly_solve_cubic(-3.0/2.0, 0.0, p/2.0, r+0, r+1, r+2);
+    int num_roots = gsl_poly_solve_cubic(-3.0/2.0, 0.0, y0/2.0, r+0, r+1, r+2);
     for(int i=0; i<num_roots; i++)
     {
       if (r[i] > 0.0 && r[i] < 1.0) {
@@ -82,7 +99,7 @@ ccruncher::Bezier4::Bezier4(double p_, double b_) throw(Exception) : p(p_), b(b_
     assert(t0 > 0.0);
 
     // fixing a
-    a = p/(3.0*t0*(1-t0)) - b*t0/(1-t0) - t0*t0/(3.0*(1-t0)*(1-t0));
+    a = x0/(3.0*t0*(1-t0)*(1-t0)) - b*t0/(1-t0) - t0*t0/(3.0*(1-t0)*(1-t0));
   }
 
   // checking if well-defined, Bx'(t)!=0 in t=(0,1)
