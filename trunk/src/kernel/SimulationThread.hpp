@@ -70,7 +70,7 @@ class SimulationThread : public Thread
     // date where risk is computed
     Date timeT;
     // survival functions
-    Survival survival;
+    Survivals survivals;
     // antithetic method flag
     bool antithetic;
     // management flag for antithetic method (default=false)

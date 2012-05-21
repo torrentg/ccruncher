@@ -139,7 +139,7 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
     initAssets(idata);
 
     // initializing survival functions
-    initSurvival(idata);
+    initSurvivals(idata);
 
     // calibrate copula params (correlations+ndf)
     calibrateCopula(idata);
@@ -324,12 +324,12 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initSurvival
+// initSurvivals
 //===========================================================================
-void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
 {
   // doing assertions
-  assert(survival.size() == 0);
+  assert(survivals.size() == 0);
 
   // setting logger header
   Logger::trace("setting survival function", '-');
@@ -338,18 +338,18 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
   // setting logger info
   Logger::trace("number of ratings", Format::toString(idata.getRatings().size()));
 
-  if (idata.hasSurvival())
+  if (idata.hasSurvivals())
   {
-    // setting survival function
-    survival = idata.getSurvival();
-    Logger::trace("survival function", string("user defined"));
+    // setting survival functions
+    survivals = idata.getSurvivals();
+    Logger::trace("survival functions", string("user defined"));
 
     // checking that survival function is defined for t <= timeT
-    int months = idata.getSurvival().getMinCommonTime();
+    int months = idata.getSurvivals().getMinCommonTime();
     Date aux = add(time0, months, 'M');
     if (aux < timeT)
     {
-      throw Exception("survival function not defined at t=" + Format::toString(timeT));
+      throw Exception("survival functions not defined at t=" + Format::toString(timeT));
     }
   }
   else
@@ -359,10 +359,10 @@ void ccruncher::MonteCarlo::initSurvival(IData &idata) throw(Exception)
     Logger::trace("transition matrix dimension", sval + "x" + sval);
     Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitions().getPeriod()));
 
-    // computing survival function using transition matrix
+    // computing survival functions using transition matrix
     int months = (int) ceil(diff(time0, timeT, 'M'));
-    survival = idata.getTransitions().getSurvival(1, months+1);
-    Logger::trace("transition matrix -> survival function", string("computed"));
+    survivals = idata.getTransitions().getSurvivals(1, months+1);
+    Logger::trace("transition matrix -> survival functions", string("computed"));
     Transitions tm1 = idata.getTransitions().scale(1);
     double rerror = tm1.getRegularizationError();
     Logger::trace("regularization error", Format::toString(rerror));

@@ -38,7 +38,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   numassets = mc.numassets;
   time0 = montecarlo.time0;
   timeT = montecarlo.timeT;
-  survival = montecarlo.survival;
+  survivals = montecarlo.survivals;
   antithetic = montecarlo.antithetic;
   reversed = true;
   uvalues = copula->get();
@@ -144,7 +144,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   // simule default time
   double u = getRandom(iobligor);
   int r = obligors[iobligor].irating;
-  double t = survival.inverse(r, u);
+  double t = survivals.inverse(r, u);
   // TODO: assumed no leap years (this can be improved)
   Date dtime = time0 + (long)(t*365.0/12.0);
   if (dtime > timeT) return;

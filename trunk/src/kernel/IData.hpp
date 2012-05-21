@@ -71,8 +71,8 @@ class IData : public ExpatHandlers
     Ratings ratings;
     // simulation transition matrix
     Transitions transitions;
-    // simulation survival functinos
-    Survival survival;
+    // simulation survival functions
+    Survivals survivals;
     // simulation sectors
     Sectors sectors;
     // historical defaults
@@ -132,8 +132,8 @@ class IData : public ExpatHandlers
     Ratings & getRatings();
     // returns simulation transition matrix
     Transitions & getTransitions();
-    // returns simulation survival functions
-    Survival & getSurvival();
+    // returns simulation survivals functions
+    Survivals & getSurvivals();
     // returns simulation sectors
     Sectors & getSectors();
     // returns historical defaults
@@ -144,8 +144,8 @@ class IData : public ExpatHandlers
     Segmentations & getSegmentations();
     // returns simulation portfolio
     Portfolio & getPortfolio();
-    // indicates if survival tag is defined
-    bool hasSurvival() const;
+    // indicates if survivals tag is defined
+    bool hasSurvivals() const;
 
 };
 
