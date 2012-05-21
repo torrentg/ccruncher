@@ -20,17 +20,23 @@
 //
 //===========================================================================
 
-#ifndef _Transitions_
-#define _Transitions_
+#ifndef _Survival_
+#define _Survival_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "params/Ratings.hpp"
-#include "params/Survivals.hpp"
+
+#ifdef __GNUC__
+#define NOINLINE  __attribute__((noinline))
+#else
+#define NOINLINE 
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -40,76 +46,64 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Transitions : public ExpatHandlers
+class Survival : public ExpatHandlers
 {
 
   private:
 
-    // nxn = matrix size (n=number of ratings)
-    int n;
-    // period (in months) that this transition matrix covers
-    int period;
-    // matrix values
-    double **matrix;
-    // list of ratings
+    // survival function for each rating
+    vector<vector<double> > ddata;
+    // inverse survival function values
+    vector<vector<double> > idata;
+    // number of ratings
+    int nratings;
+    // pointer to ratings table
     Ratings *ratings;
-    // index of default rating
-    int indexdefault;
-    // regularization error
-    double rerror;
 
   private:
-
-    // insert a transition value into the matrix
-    void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
+  
+    // insert a survival value
+    void insertValue(const string &r1, int t, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
-    // computes Cumulated Default Forward Rate
-    void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
+    // fill holes in survival functions
+    void fillHoles();
+    // compute inverse for each survival function
+    void computeInvTable();
+    // linear interpolation algorithm
+    double interpole(double x, double x0, double y0, double x1, double y1) const;
+    // inverse function
+    double inverse1(const int irating, double val) const NOINLINE;
 
   protected:
 
-    // ExpatHandler method
+    // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
+    // ExpatHandlers method
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // default constructor
-    Transitions();
+    // defaults constructor
+    Survival();
     // constructor
-    Transitions(const Ratings &) throw(Exception);
+    Survival(const Ratings &) throw(Exception);
     // constructor
-    Transitions(const Ratings &, double **, int) throw(Exception);
-    // copy constructor
-    Transitions(const Transitions &) throw(Exception);
+    Survival(const Ratings &, int, int *, double**) throw(Exception);
     // destructor
-    ~Transitions();
-    // assignement operator
-    Transitions& operator = (const Transitions &other);
-    // set ratings
-    void setRatings(const Ratings &);
-    // returns n (number of ratings)
+    ~Survival();
+    // returns ratings size
     int size() const;
-    // returns period that covers this matrix
-    int getPeriod() const;
-    // returns pointer to matrix values
-    double ** getMatrix() const;
-    // returns default rating index
-    int getIndexDefault() const;
-    // simulate transition with random value val
-    int evalue(const int irating, const double val) const;
+    // set ratings
+    void setRatings(const Ratings &) throw(Exception);
+    // evalue survival for irating at t
+    double evalue(const int irating, int t) const;
+    // evalue inverse survival for irating at t
+    double inverse(const int irating, double val) const;
+    // return minimal defined time (in months)
+    int getMinCommonTime() const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
-    // regularize the transition matrix
-    void regularize() throw(Exception);
-    // returns equivalent transition matrix that covers t months
-    Transitions scale(int t) const throw(Exception);
-    // computes survival function related to this transition matrix
-    Survival getSurvival(int steplength, int numrows) const throw(Exception);
-    // regularization error (|non_regularized| - |regularized|)
-    double getRegularizationError() const;
 
 };
 

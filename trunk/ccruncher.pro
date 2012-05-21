@@ -6,7 +6,7 @@ HEADERS += \
     src/params/Sectors.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
-    src/params/Survival.hpp \
+    src/params/Survivals.hpp \
     src/params/Transitions.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
@@ -43,7 +43,8 @@ HEADERS += \
     src/utils/config.h \
     src/utils/Arrays.hpp \
     deps/gzstream-1.5/gzstream.h \
-    src/params/Defaults.hpp
+    src/params/Defaults.hpp \
+    src/math/Bezier4.hpp
 
 SOURCES += \
     src/params/Correlations.cpp \
@@ -53,7 +54,7 @@ SOURCES += \
     src/params/Sectors.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
-    src/params/Survival.cpp \
+    src/params/Survivals.cpp \
     src/params/Transitions.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
@@ -89,7 +90,8 @@ SOURCES += \
     src/utils/Date.cpp \
     src/utils/Arrays.cpp \
     deps/gzstream-1.5/gzstream.cpp \
-    src/params/Defaults.cpp
+    src/params/Defaults.cpp \
+    src/math/Bezier4.cpp
 
 INCLUDEPATH += ./src \
     deps/gzstream-1.5
@@ -123,3 +125,5 @@ win32 {
 }
 
 CONFIG(release, debug|release) DEFINES += NDEBUG
+
+

@@ -34,7 +34,7 @@
 #include "params/Ratings.hpp"
 #include "params/Sectors.hpp"
 #include "params/Transitions.hpp"
-#include "params/Survival.hpp"
+#include "params/Survivals.hpp"
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
 #include "params/Defaults.hpp"

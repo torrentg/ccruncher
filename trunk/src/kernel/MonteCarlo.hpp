@@ -33,7 +33,7 @@
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
 #include "params/Segmentations.hpp"
-#include "params/Survival.hpp"
+#include "params/Survivals.hpp"
 #include "math/Copula.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"

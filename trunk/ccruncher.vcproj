@@ -274,11 +274,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Survival.cpp"
+					RelativePath="src\params\Survivals.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\params\Survival.hpp"
+					RelativePath="src\params\Survivals.hpp"
 					>
 				</File>
 			</Filter>
