@@ -420,7 +420,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
       double val = 0.0;
       if (i == j) 
       {
-        if (1.0-A[i][j] < MIN_EIGENVALUE)
+        if (1.0-A[i][j] < MIN_EIGENVALUE && n[i] > 1)
         {
           if (coerce)
           {
@@ -432,7 +432,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
             gsl_matrix_free(K);
             gsl_vector_complex_free(vaps);
             gsl_matrix_complex_free(VEPS);
-            throw Exception("non definite-positive matrix");
+            throw Exception("non definite-positive matrix (trivial eigenvalues)");
           }
         }
         val = 1.0 + (n[j]-1)*A[i][j];
@@ -492,7 +492,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
           gsl_matrix_free(K);
           gsl_vector_complex_free(vaps);
           gsl_matrix_complex_free(VEPS);
-          throw Exception("non definite-positive matrix");
+          throw Exception("non definite-positive matrix (non-trivial eigenvalues)");
         }
       }
       eigenvalues.push_back(eig(GSL_REAL(z),1));

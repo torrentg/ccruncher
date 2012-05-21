@@ -252,7 +252,9 @@ void ccruncher_test::BlockMatrixCholTest::test5()
   double **B = Arrays<double>::allocMatrix(4,4,valB);
   
   BlockMatrixChol *chol=NULL;
-  chol = new BlockMatrixChol(A, n, 4);
+  
+  ASSERT_THROW(chol = new BlockMatrixChol(A, n, 4, false));
+  ASSERT_NO_THROW(chol = new BlockMatrixChol(A, n, 4, true));
 
   ASSERT(chol->isCoerced());
   for(int i=0; i<4; i++) {
