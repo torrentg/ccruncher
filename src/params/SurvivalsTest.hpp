@@ -36,7 +36,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class SurvivalTest : public TestFixture<SurvivalTest>
+class SurvivalsTest : public TestFixture<SurvivalsTest>
 {
 
   private:
@@ -54,7 +54,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
 
   public:
 
-    TEST_FIXTURE(SurvivalTest)
+    TEST_FIXTURE(SurvivalsTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -70,7 +70,7 @@ class SurvivalTest : public TestFixture<SurvivalTest>
 
 };
 
-REGISTER_FIXTURE(SurvivalTest);
+REGISTER_FIXTURE(SurvivalsTest);
 
 //---------------------------------------------------------------------------
 

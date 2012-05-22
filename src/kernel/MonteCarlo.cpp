@@ -174,7 +174,7 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 
   // max number of seconds
   maxseconds = idata.getParams().maxseconds;
-  Logger::trace("maximum execution time (in seconds)", Format::toString(maxseconds));
+  Logger::trace("maximum execution time (seconds)", Format::toString(maxseconds));
 
   // max number of iterations
   maxiterations = idata.getParams().maxiterations;
@@ -357,7 +357,7 @@ void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
     // setting logger info
     string sval = Format::toString(idata.getTransitions().size());
     Logger::trace("transition matrix dimension", sval + "x" + sval);
-    Logger::trace("transition matrix period (in months)", Format::toString(idata.getTransitions().getPeriod()));
+    Logger::trace("transition matrix period (months)", Format::toString(idata.getTransitions().getPeriod()));
 
     // computing survival functions using transition matrix
     int months = (int) ceil(diff(time0, timeT, 'M'));

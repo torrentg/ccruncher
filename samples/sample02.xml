@@ -128,7 +128,7 @@
   <!--                    SURVIVAL FUNCTION                           -->
   <!-- ============================================================== -->
 <!--
-  <survival>
+  <survivals>
 
     <svalue rating="AAA" t="0" value="1"/>
     <svalue rating="AAA" t="12" value="1"/>
@@ -546,7 +546,7 @@
     <svalue rating="Default" t="588" value="0"/>
     <svalue rating="Default" t="600" value="0"/>
 
-  </survival>
+  </survivals>
 -->
   <!-- ============================================================== -->
   <!--                           SECTORS                              -->

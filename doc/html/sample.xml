@@ -123,10 +123,10 @@
   </transitions>
 
   <sectors>
-    <sector name="S1" description='Consumer/service sector'/>
-    <sector name="S2" description='Forest/building products'/>
-    <sector name="S3" description='High technology'/>
-    <sector name="S4" description='Utilities'/>
+    <sector name="S1" description="Consumer/service sector"/>
+    <sector name="S2" description="Forest/building products"/>
+    <sector name="S3" description="High technology"/>
+    <sector name="S4" description="Utilities"/>
     <sector name="S5" description="Other sectors"/>
   </sectors>
 
