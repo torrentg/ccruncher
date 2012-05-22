@@ -33,7 +33,7 @@
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::SurvivalTest::setUp()
+void ccruncher_test::SurvivalsTest::setUp()
 {
   // nothing to do
 }
@@ -41,7 +41,7 @@ void ccruncher_test::SurvivalTest::setUp()
 //===========================================================================
 // setUp
 //===========================================================================
-void ccruncher_test::SurvivalTest::tearDown()
+void ccruncher_test::SurvivalsTest::tearDown()
 {
   // nothing to do
 }
@@ -49,7 +49,7 @@ void ccruncher_test::SurvivalTest::tearDown()
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ccruncher_test::SurvivalTest::getRatings()
+Ratings ccruncher_test::SurvivalsTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
@@ -68,16 +68,16 @@ Ratings ccruncher_test::SurvivalTest::getRatings()
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::SurvivalTest::test1()
+void ccruncher_test::SurvivalsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
       <svalue rating='A' t='5' value='0.10'/>\n\
       <!-- optionally you can add default rating info (value=0 always) -->\n\
-    </survival>";
+    </survivals>";
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
   double ivalues[] = { 17.0, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
 
@@ -88,7 +88,7 @@ void ccruncher_test::SurvivalTest::test1()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survivals sf(ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values
@@ -109,16 +109,16 @@ void ccruncher_test::SurvivalTest::test1()
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::SurvivalTest::test2()
+void ccruncher_test::SurvivalsTest::test2()
 {
   // non valid survival function (value at t=0 distinct that 1)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='0.98'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.25'/>\n\
       <svalue rating='A' t='5' value='0.10'/>\n\
-    </survival>";
+    </survivals>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -127,23 +127,23 @@ void ccruncher_test::SurvivalTest::test2()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survivals sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::SurvivalTest::test3()
+void ccruncher_test::SurvivalsTest::test3()
 {
   // non valid survival function, non monotone
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='0.50'/>\n\
       <svalue rating='A' t='3' value='0.75'/>\n\
       <svalue rating='A' t='5' value='0.10'/>\n\
-    </survival>";
+    </survivals>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -152,23 +152,23 @@ void ccruncher_test::SurvivalTest::test3()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survivals sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test4
 //===========================================================================
-void ccruncher_test::SurvivalTest::test4()
+void ccruncher_test::SurvivalsTest::test4()
 {
   // non valid transition matrix (values out of range [0,1])
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='2' value='-0.50'/>\n\
       <svalue rating='A' t='3' value='-0.75'/>\n\
       <svalue rating='A' t='5' value='-0.85'/>\n\
-    </survival>";
+    </survivals>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -177,14 +177,14 @@ void ccruncher_test::SurvivalTest::test4()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survivals sf(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &sf));
 }
 
 //===========================================================================
 // test5 (equals than test1, but with diferent constructor)
 //===========================================================================
-void ccruncher_test::SurvivalTest::test5()
+void ccruncher_test::SurvivalsTest::test5()
 {
   double mvalues1[] = {1.00, 0.75, 0.50, 0.25, 0.175, 0.10};
   double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
@@ -197,7 +197,7 @@ void ccruncher_test::SurvivalTest::test5()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 6, (int *) imonths, (double**) mvalues);
+  Survivals sf(ratings, 6, (int *) imonths, (double**) mvalues);
 
   // checking values
   for(int i=0;i<7;i++)
@@ -217,7 +217,7 @@ void ccruncher_test::SurvivalTest::test5()
 //===========================================================================
 // test6 (checks distribution assumptions)
 //===========================================================================
-void ccruncher_test::SurvivalTest::test6()
+void ccruncher_test::SurvivalsTest::test6()
 {
   double mvalues1[] = {1.00, 0.90};
   double mvalues2[] = {0.00, 0.00};
@@ -229,7 +229,7 @@ void ccruncher_test::SurvivalTest::test6()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings, 2, (int *) imonths, (double**) mvalues);
+  Survivals sf(ratings, 2, (int *) imonths, (double**) mvalues);
 
   // creating randomizer
   gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);
@@ -259,16 +259,16 @@ void ccruncher_test::SurvivalTest::test6()
 // test7
 // check precision when survival values are near to 100% and ISURVFNUMBINS=100
 //===========================================================================
-void ccruncher_test::SurvivalTest::test7()
+void ccruncher_test::SurvivalsTest::test7()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='1.00'/>\n\
       <svalue rating='A' t='12' value='0.999'/>\n\
       <svalue rating='A' t='24' value='0.995'/>\n\
       <svalue rating='A' t='48' value='0.97'/>\n\
       <!-- optionally you can add default rating info (value=0 always) -->\n\
-    </survival>";
+    </survivals>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -277,7 +277,7 @@ void ccruncher_test::SurvivalTest::test7()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survival sf(ratings);
+  Survivals sf(ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sf));
 
   // checking values

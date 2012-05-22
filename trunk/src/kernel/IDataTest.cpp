@@ -105,13 +105,13 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </transitions>\n\
-    <survival>\n\
+    <survivals>\n\
       <svalue rating='A' t='0' value='1.0'/>\n\
       <svalue rating='B' t='0' value='1.0'/>\n\
       <svalue rating='C' t='0' value='1.0'/>\n\
       <svalue rating='D' t='0' value='1.0'/>\n\
       <svalue rating='E' t='0' value='0.0'/>\n\
-    </survival>\n\
+    </survivals>\n\
     <sectors>\n\
       <sector name='S1' description='retail'/>\n\
       <sector name='S2' description='others'/>\n\

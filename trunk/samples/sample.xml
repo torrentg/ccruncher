@@ -123,25 +123,12 @@
   </transitions>
 
   <sectors>
-    <sector name="S1" description='Consumer/service sector'/>
-    <sector name="S2" description='Forest/building products'/>
-    <sector name="S3" description='High technology'/>
-    <sector name="S4" description='Utilities'/>
+    <sector name="S1" description="Consumer/service sector"/>
+    <sector name="S2" description="Forest/building products"/>
+    <sector name="S3" description="High technology"/>
+    <sector name="S4" description="Utilities"/>
     <sector name="S5" description="Other sectors"/>
   </sectors>
-
-  <historical period="12">
-    <defaults t="1A" sector="S1" value="15.1%"/>
-    <defaults t="1A" sector="S2" value="15.1%"/>
-    <defaults t="1A" sector="S3" value="15.1%"/>
-    <defaults t="1A" sector="S4" value="15.1%"/>
-    <defaults t="1A" sector="S5" value="15.1%"/>
-    <defaults t="2A" sector="S1" value="15.1%"/>
-    <defaults t="2A" sector="S2" value="15.1%"/>
-    <defaults t="2A" sector="S3" value="15.1%"/>
-    <defaults t="2A" sector="S4" value="15.1%"/>
-    <defaults t="2A" sector="S5" value="15.1%"/>
-  </historical>
 
   <correlations type="spearman" coerce="true">
     <sigma sector1="S1" sector2="S1" value="15.1%"/>

@@ -94,7 +94,7 @@
 						<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
 					</xsd:complexType>
 				</xsd:element>
-				<xsd:element name="survival" minOccurs="1" maxOccurs="1">
+				<xsd:element name="survivals" minOccurs="1" maxOccurs="1">
 					<xsd:complexType>
 						<xsd:sequence>
 							<xsd:element name="svalue" minOccurs="1" maxOccurs="unbounded">

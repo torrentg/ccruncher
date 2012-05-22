@@ -121,7 +121,7 @@ void ccruncher::Survivals::insertValue(const string &srating, int t, double valu
   // checking rating index
   if (irating < 0 || irating >= ratings.size())
   {
-    throw Exception("unknow rating at <survival>: " + srating);
+    throw Exception("unknow rating at <survivals>: " + srating);
   }
 
   // validating time
@@ -164,7 +164,7 @@ void ccruncher::Survivals::insertValue(const string &srating, int t, double valu
 //===========================================================================
 void ccruncher::Survivals::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
-  if (isEqual(name,"survival")) {
+  if (isEqual(name,"survivals")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes not allowed in tag survival");
     }
@@ -185,7 +185,7 @@ void ccruncher::Survivals::epstart(ExpatUserData &, const char *name, const char
 //===========================================================================
 void ccruncher::Survivals::epend(ExpatUserData &, const char *name)
 {
-  if (isEqual(name,"survival")) {
+  if (isEqual(name,"survivals")) {
     validate();
     fillHoles();
     computeInvTable();
