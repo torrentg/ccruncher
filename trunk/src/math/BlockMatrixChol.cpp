@@ -408,7 +408,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
   bool coerced1=false, coerced2=false;
 
   // defining variables to perform eigenvalues functions
-  gsl_matrix *K = gsl_matrix_alloc(M, M);
+  gsl_matrix *G = gsl_matrix_alloc(M, M);
   gsl_vector_complex *vaps = gsl_vector_complex_alloc(M);
   gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(M, M);
 
@@ -429,7 +429,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
           }
           else
           {
-            gsl_matrix_free(K);
+            gsl_matrix_free(G);
             gsl_vector_complex_free(vaps);
             gsl_matrix_complex_free(VEPS);
             throw Exception("non definite-positive matrix (trivial eigenvalues)");
@@ -441,16 +441,16 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
       {
         val = n[j] * A[i][j];
       }
-      gsl_matrix_set(K, i, j, val);
+      gsl_matrix_set(G, i, j, val);
     }
   }
 
   // computing deflated matrix eigenvalues
   gsl_eigen_nonsymmv_workspace *w = gsl_eigen_nonsymmv_alloc(M);
-  int rc = gsl_eigen_nonsymmv(K, vaps, VEPS, w);
+  int rc = gsl_eigen_nonsymmv(G, vaps, VEPS, w);
   gsl_eigen_nonsymmv_free(w);
   if (rc) {
-    gsl_matrix_free(K);
+    gsl_matrix_free(G);
     gsl_vector_complex_free(vaps);
     gsl_matrix_complex_free(VEPS);
     throw Exception("unable to compute eigenvalues: " + string(gsl_strerror(rc)));
@@ -471,7 +471,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON)
     {
-      gsl_matrix_free(K);
+      gsl_matrix_free(G);
       gsl_vector_complex_free(vaps);
       gsl_matrix_complex_free(VEPS);
       throw Exception("imaginary eigenvalue computing eigenvalues");
@@ -489,7 +489,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
         }
         else
         {
-          gsl_matrix_free(K);
+          gsl_matrix_free(G);
           gsl_vector_complex_free(vaps);
           gsl_matrix_complex_free(VEPS);
           throw Exception("non definite-positive matrix (non-trivial eigenvalues)");
@@ -503,38 +503,48 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
   if (coerced2 == true)
   {
     gsl_matrix_complex *R = gsl_matrix_complex_alloc(M, M);
+
+    // doing R = VEPS·diag(vaps)·inv(VEPS)
     prod(VEPS, vaps, R);
+
+    // calculating epsilons required by correlation matrix operator
+    vector<double> epsilon(M);
+    for(int i=0; i<M; i++)
+    {
+        double g1 = gsl_matrix_get(G,i,i);
+        double g2 = GSL_REAL(gsl_matrix_complex_get(R, i, i));
+        epsilon[i] = 1.0 + (g2-g1)/n[i];
+    }
+
+    // undoing deflated matrix
     for(int i=0; i<M; i++)
     {
       for(int j=0; j<=i; j++)
       {
-        // undoing deflated matrix
         if (i == j)
         {
           if (n[i] > 1)
           {
+            double factor =  epsilon[j]; // correlation matrix operator factor
             gsl_complex *val = gsl_matrix_complex_ptr(R, i, j);
+            GSL_REAL(*val) /= factor;
             GSL_REAL(*val) -= 1.0;
             GSL_REAL(*val) /= (n[j]-1.0);
-            GSL_IMAG(*val) /= (n[j]-1.0);
           }
         }
         else
         {
+          double factor = sqrt(epsilon[i]*epsilon[j]); // correlation matrix operator factor
           gsl_complex *val1 = gsl_matrix_complex_ptr(R, i, j);
-          GSL_REAL(*val1) /= n[j];
-          GSL_IMAG(*val1) /= n[j];
+          GSL_REAL(*val1) /= n[j]*factor;
           gsl_complex *val2 = gsl_matrix_complex_ptr(R, j, i);
-          GSL_REAL(*val2) /= n[i];
-          GSL_IMAG(*val2) /= n[i];
+          GSL_REAL(*val2) /= n[i]*factor;
         }
 
         // z1 and z2 are equals and reals
-        // doing mean to round decimals
+        // doing mean to deal with decimals
         gsl_complex z1 = gsl_matrix_complex_get(R, i, j);
         gsl_complex z2 = gsl_matrix_complex_get(R, j, i);
-        assert(fabs(GSL_IMAG(z1)) < EPSILON);
-        assert(fabs(GSL_IMAG(z2)) < EPSILON);
         A[i][j] = (GSL_REAL(z1) + GSL_REAL(z2))/2.0;
         A[j][i] = A[i][j];
       }
@@ -544,7 +554,7 @@ void ccruncher::BlockMatrixChol::prepare(bool coerce) throw(Exception)
 
   coerced = (coerced1||coerced2);
 
-  gsl_matrix_free(K);
+  gsl_matrix_free(G);
   gsl_vector_complex_free(vaps);
   gsl_matrix_complex_free(VEPS);
 }
@@ -606,6 +616,15 @@ void ccruncher::BlockMatrixChol::prod(gsl_matrix_complex *VEPS, gsl_vector_compl
   gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, LU, SPEV, z0, R);
   gsl_matrix_complex_free(SPEV);
   gsl_matrix_complex_free(LU);
+
+  // checking that resulting matrix is real
+  for(int i=0; i<k; i++) {
+    for(int j=0; j<k; j++) {
+      if (fabs(GSL_IMAG(gsl_matrix_complex_get(R,i,j))) > EPSILON) {
+        throw Exception("unexpected imaginary values doing eigendecomposition");
+      }
+    }
+  }
 }
 
 //===========================================================================
