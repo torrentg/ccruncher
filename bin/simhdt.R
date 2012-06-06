@@ -126,8 +126,9 @@ ccruncher.cdbm <- function(sigma, dims)
 #          sectors. dims(i) is the number of components 
 #          in sector i.
 # returns
+#   $G deflated matrix
 #   $values eigenvalues
-#   $vectors eigenvectors
+#   $multiplicity eigenvalues multiplicity
 # example
 #   sigma = matrix(nrow=3, ncol=3, data=c(1,2,3,2,4,5,3,5,6))
 #   dims = c(2,3,1)
@@ -169,43 +170,25 @@ ccruncher.eigen <- function(sigma, dims)
   # computing G eigenvalues + eigenvectors
   eig=eigen(G)
   
-  # creating return objects
-  values <- 1:N
-  vectors <- matrix(0, nrow=N, ncol=N)
-  
-  # filling eigenvectors
-  icol = 1
-  for (i1 in 1:K)
+  num = K + length(dims[dims>1])
+  values = vector(length=num)
+  multiplicity = vector(length=num)
+
+  s = 1
+  for(i in 1:K)
   {
-    for (j1 in 1:dims[i1])
+    values[s] = eig$values[i]
+    multiplicity[s] = 1
+    s = s + 1
+    if (dims[i] > 1)
     {
-      if (j1==1)
-      {
-        values[icol] = eig$values[i1]
-        irow = 1
-        for (i2 in 1:K)
-        {
-          for (j2 in 1:dims[i2])
-          {
-            vectors[irow,icol]=eig$vectors[i2,i1]
-            irow = irow+1;
-          }
-        }
-      }
-      else
-      {
-        values[icol] = 1 - sigma[i1,i1]
-        vectors[,icol] = 0
-        vectors[icol-1,icol] = +1
-        vectors[icol-j1+dims[i1],icol] = -1
-      }
-      #vector normalization
-      vectors[,icol] = vectors[,icol]/sqrt(sum(vectors[,icol]*vectors[,icol]))
-      icol = icol+1;
+      values[s] = 1 - sigma[i,i]
+      multiplicity[s] = dims[i]-1
+      s = s + 1
     }
   }
   
-  return(list(G=G,v=eig$values,H=eig$vectors,values=values,vectors=vectors))
+  return(list(G=G,values=values,multiplicity=multiplicity))
 }
 
 #===========================================================================
@@ -463,6 +446,7 @@ ccruncher.simcounts <- function(O, nu, p, n=1)
 
   for(i in 1:n)
   {
+    # TODO: replace next by fmodsim
     x = ccruncher.next(O,nu)
     
     i1 = 0
@@ -497,10 +481,11 @@ ccruncher.simcounts <- function(O, nu, p, n=1)
 ccruncher.coerce <- function(sigma, dims, epsilon=0.05)
 {
   k = length(dims)
-  EIG2 = ccruncher.eigen(sigma, dims)
-  EIG2$v[EIG2$v<=0] = 0.05
-  G2 = EIG2$H %*% diag(EIG2$v) %*% solve(EIG2$H)
-  epsilons = 1+(diag(G2)-diag(EIG2$G))/dims
+  G1 = ccruncher.eigen(sigma, dims)$G
+  eig1 = eigen(G1)
+  eig1$values[eig1$values<=0] = epsilon
+  G2 = eig1$vectors %*% diag(eig1$values) %*% solve(eig1$vectors)
+  epsilons = 1+(diag(G2)-diag(G1))/dims
   for(i in 1:k) 
   {
     for(j in 1:k) 
@@ -511,7 +496,7 @@ ccruncher.coerce <- function(sigma, dims, epsilon=0.05)
   aux = diag(G2)
   sigma2 = t(t(G2)/dims)
   diag(sigma2) = (aux-1)/(dims-1)
-  sigma2[is.nan(sigma2)] = 1
+  sigma2[!is.finite(sigma2)] = 1
   sigma2 = (sigma2+t(sigma2))/2
   return(sigma2)
 }
@@ -630,6 +615,159 @@ ccruncher.multinv <- function(O, x)
   }
 
   return(y)
+}
+
+#===========================================================================
+# description
+#   convert a vector to a symmetric matrix
+# arguments
+#   v: matrix values as vector
+# returns
+#   symmetric matrix
+# example
+#   ccruncher.v2sm(1:6)
+#===========================================================================
+ccruncher.v2sm <- function(v)
+{
+  k = (-1 + sqrt(1+8*length(v)))/2
+  if (abs(k-trunc(k)) > 1e-10) {
+    stop("invalid vector length");
+  }
+  
+  sm = matrix(0, nrow=k, ncol=k);
+  
+  s = 1
+  for(i in 1:k) 
+  {
+    for(j in i:k)
+    {
+      sm[i,j] = v[s]
+      sm[j,i] = sm[i,j]
+      s = s+1
+    }
+  }
+  
+  return(sm)
+}
+
+#===========================================================================
+# description
+#   convert symmetric matrix to a vector
+# arguments
+#   M: symmetric matrix
+# returns
+#   vector
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   ccruncher.sm2v(sigma)
+#===========================================================================
+ccruncher.sm2v <- function(M)
+{
+  k = dim(M)[1]
+  v = vector(length=k*(k+1)/2)
+  s = 1
+  for(i in 1:k)
+  {
+    for(j in i:k)
+    {
+      v[s] = M[i,j]
+      s = s+1
+    }
+  }
+  return(v);
+}
+
+#===========================================================================
+# description
+#   likelihood function
+#   see 'Simulation of High-Dimensional t-Student Copulas'
+#   by Gerard Torrent-Gironella and Josep Fortiana
+# arguments
+#   x: parameters to estimate (length=1+k*(k+1)/2 where x[1]=nu and
+#      the rest of values are the correlation matrix matrix values
+#   dims: elements per sector (length=k)
+#   p: 1-period (eg. 1-year) default probability (length=k)
+#   u: observations count data (size=Txk)
+# returns
+#   likelihood value
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(300,200,100)
+#   O = ccruncher.chold(sigma,dims)
+#   nu = 15
+#   p = c(0.03,0.04,0.05)
+#   U = ccruncher.simcounts(O,nu,p,10000)
+#   x5 = c(5,ccruncher.sm2v(sigma))
+#   x15 = c(15,ccruncher.sm2v(sigma))
+#   x25 = c(25,ccruncher.sm2v(sigma))
+#   ccruncher.likf(x5,dims,p,U)
+#   ccruncher.likf(x15,dims,p,U)
+#   ccruncher.likf(x25,dims,p,U)
+#===========================================================================
+ccruncher.likf <- function(x,dims,p,u)
+{
+  ret = 0;
+  #TODO: check params
+
+  T = dim(u)[1]; # number of obervations
+  k = length(dims); # number of sector
+  size = sum(dims); # copula dimension
+  
+  # retrieve estimated parameters
+  nu = x[1]
+  sigma = ccruncher.v2sm(x[2:length(x)])
+  sigma = ccruncher.coerce(sigma, dims)
+  
+  # computes required values
+  alfa = qt(1-p,df=nu)
+  chol = ccruncher.chold(sigma,dims);
+  cinv = ccruncher.choldinv(chol);
+  eigv = ccruncher.eigen(sigma, dims)
+  
+  for(t in 1:T)
+  {
+    zeta = vector(length=size)
+    s = 0
+    for(i in 1:k)
+    {
+      zeta[(s+1):(s+u[t,i])] = 100
+      zeta[(s+u[t,i]+1):(s+dims[i])] = alfa[i]
+      s = s + dims[i]
+    }
+
+    # combinatorial coefficients
+    for(i in 1:k)
+    {
+      ret = ret + lgamma(dims[i]+1) - lgamma(u[t,i]+1) - lgamma(dims[i]-u[t,i]+1);
+    }
+    
+    # ln determinant
+    det = 0
+    for(i in 1:length(eigv$values))
+    {
+      det = det + eigv$multiplicity[i]*log(eigv$values[i])
+    }
+    
+    # gammas
+    ret = ret - 0.5*det
+    ret = ret + lgamma((nu+size)/2)
+    ret = ret + (size-1)*lgamma(nu/2)
+    ret = ret - size * lgamma((nu+1)/2)
+    
+    # inverse
+    aux = ccruncher.multinv(cinv,zeta)
+    ret = ret - (nu+size)/2 * log(1+(aux %*% aux)/nu)
+
+    # denominator
+    aux = 0
+    for(i in 1:size)
+    {
+      aux = aux + log(1+(zeta[i]^2)/nu)
+    }
+    ret = ret + (nu+1)/2 * aux
+  }
+  
+  return(ret);
 }
 
 #------------------------------------------------------------
