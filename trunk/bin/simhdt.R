@@ -324,7 +324,7 @@ ccruncher.chold <- function(M, n)
 #===========================================================================
 ccruncher.mult <- function(O, x)
 {
-  k = dim(O$M)[1]
+  k = O$k
   size = sum(O$n)
 
   y = vector(length=size)
@@ -370,8 +370,10 @@ ccruncher.mult <- function(O, x)
 # example
 #   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
 #   dims = c(3,2,1)
-#   O = ccruncher.chold(sigma,dims)
-#   ccruncher.next(O,15,1000)
+#   sigma1 = ccruncher.ginv(sigma,15)
+#   O = ccruncher.chold(sigma1,dims)
+#   X = ccruncher.next(O,15,100000)
+#   cor(X)
 #===========================================================================
 ccruncher.next <- function(O, nu, n=1)
 {
@@ -384,6 +386,55 @@ ccruncher.next <- function(O, nu, n=1)
     s = rchisq(1,nu)
     ret[i,] = sqrt(nu/s)*ret[i,]
     ret[i,] = pt(ret[i,],nu)
+  }
+    
+  return(ret)
+}
+
+#===========================================================================
+# description
+#   simulate t-student copula using factor model algorithm
+# arguments
+#   sigma: correlation matrix (block matrix form)
+#   dims: numbers of components by sector
+#   nu: degrees of freedom
+#   n: number of realizations
+# returns
+#   matrix (nrow=n, ncol=sum(O$n))
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(3,2,1)
+#   sigma1 = ccruncher.ginv(sigma,15)
+#   X = ccruncher.fmodsim(sigma1,dims,15,100000)
+#   cor(X)
+#===========================================================================
+ccruncher.fmodsim <- function(sigma, dims, nu, n=1)
+{
+  k = dim(sigma)[1]
+  w = sqrt(diag(sigma))
+  M = ccruncher.cmo(sigma)
+  R = t(chol(M))
+
+  size = sum(dims)
+  ret = matrix(nrow=n, ncol=size)
+
+  for (row in 1:n)
+  {
+    z = R %*% rnorm(k)
+    
+    col = 1
+    for (i1 in 1:k)
+    {
+      for (i2 in 1:dims[i1])
+      {
+        ret[row,col] = w[i1]*z[i1] + sqrt(1-w[i1]^2)*rnorm(1)
+        col = col+1
+      }
+    }
+    
+    s = rchisq(1,nu)
+    ret[row,] = sqrt(nu/s)*ret[row,]
+    ret[row,] = pt(ret[row,],nu)
   }
     
   return(ret)
@@ -427,6 +478,159 @@ ccruncher.simcounts <- function(O, nu, p, n=1)
   return(ret)
 }
 
+#===========================================================================
+# description
+#   adapted eigenvalues method
+#   see 'Simulation of High-Dimensional t-Student Copulas'
+#   by Gerard Torrent-Gironella and Josep Fortiana
+# arguments
+#   sigma: correlation matrix (size=kxk)
+#   dims: elements per sector (length=k)
+#   epsilon: minimum eigenvalue value
+# returns
+#   coerced correlation matrix
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.99,0.1,0.99,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(3,2,1)
+#   ccruncher.coerce(sigma,dims)
+#===========================================================================
+ccruncher.coerce <- function(sigma, dims, epsilon=0.05)
+{
+  k = length(dims)
+  EIG2 = ccruncher.eigen(sigma, dims)
+  EIG2$v[EIG2$v<=0] = 0.05
+  G2 = EIG2$H %*% diag(EIG2$v) %*% solve(EIG2$H)
+  epsilons = 1+(diag(G2)-diag(EIG2$G))/dims
+  for(i in 1:k) 
+  {
+    for(j in 1:k) 
+    {
+      G2[i,j] = G2[i,j]/(sqrt(epsilons[i])*sqrt(epsilons[j]))
+    }
+  }
+  aux = diag(G2)
+  sigma2 = t(t(G2)/dims)
+  diag(sigma2) = (aux-1)/(dims-1)
+  sigma2[is.nan(sigma2)] = 1
+  sigma2 = (sigma2+t(sigma2))/2
+  return(sigma2)
+}
+
+#===========================================================================
+# description
+#   inverse Cholesky algorithm for block matrix
+#   see 'Simulation of High-Dimensional t-Student Copulas'
+#   by Gerard Torrent-Gironella and Josep Fortiana
+# arguments
+#   O: cholesky decomposition object
+# returns
+#   k: number of blocks
+#   n: element per block
+#   J: inverse Cholesky values
+#   w: inverse Cholesky values
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(3,2,1)
+#   O = ccruncher.chold(sigma,dims)
+#   ccruncher.choldinv(O)
+#===========================================================================
+ccruncher.choldinv <- function(O)
+{
+  #TODO: check parameters
+
+  k = O$k;
+  size = sum(O$n);
+    
+  J = matrix(nrow=size, ncol=k, 0)
+  w = vector(length=size)
+    
+  for(i in 1:size) 
+  { 
+    w[i] = 1.0/O$v[i];
+  }
+
+  i = 1
+  for(r in 1:k)
+  {
+    j = i-1
+    for(s in r:k)
+    {
+      sum = -O$H[s,i]*w[i];
+      if (i+1 <= j-1) {
+        sum = sum - sum(O$H[s,(i+1):(j-1)]*J[(i+1):(j-1),r]);
+      }
+      for(q in 1:O$n[s])
+      {
+        j = j+1
+        if (j!=i | s!=r)
+        {
+          sum = sum - O$H[s,j-1]*J[j-1,r];
+          J[j,r] = sum/O$v[j];
+        }
+      }
+    }
+    i = i + O$n[r];
+  }
+
+  return(list(n=O$n, k=O$k, J=J, w=w));
+}
+
+
+#===========================================================================
+# description
+#   Multiplies a inverse Cholesky matrix by a vector
+#   see 'Simulation of High-Dimensional t-Student Copulas'
+#   by Gerard Torrent-Gironella and Josep Fortiana
+# arguments
+#   O: inverse Cholesky decomposition object
+#   x: vector (length=sum(O$n))
+# returns
+#   y: inv(chol())%*%x
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(3,2,1)
+#   O = ccruncher.chold(sigma,dims)
+#   I = ccruncher.choldinv(O)
+#   x = ccruncher.multinv(I,1:6)
+#   ccruncher.mult(O,x)
+#===========================================================================
+ccruncher.multinv <- function(O, x)
+{
+  k = O$k
+  size = sum(O$n)
+
+  y = vector(length=size)
+  y[] = 0
+
+  for(i in 1:size)
+  {
+    y[i] = O$w[i]*x[i];
+  }
+
+  i = 0
+  for(r in 1:k)
+  {
+    sum = 0
+    for(q in 1:O$n[r])
+    {
+      i = i+1;
+      if (q > 1) 
+      {
+        y[i] = y[i] + sum*O$J[i,r];
+      }
+      sum = sum + x[i];
+    }
+    if (i+1 <= size)
+    {
+      for(j in (i+1):size)
+      {
+        y[j] = y[j] + sum*O$J[j,r];
+      }
+    }
+  }
+
+  return(y)
+}
 
 #------------------------------------------------------------
 # try to fit marginal of multivariate counts distribution
@@ -455,24 +659,9 @@ EIG1 = eigen(A)
 EIG1$values[EIG1$values<=0] = 0.05
 A1 = EIG1$vectors %*% diag(EIG1$values) %*% t(EIG1$vectors)
 A1 = ccruncher.cmo(A1)
-
 # adapted eigenvalues method
-k = length(dims)
-EIG2 = ccruncher.eigen(sigma, dims)
-EIG2$v[EIG2$v<=0] = 0.05
-G2 = EIG2$H %*% diag(EIG2$v) %*% solve(EIG2$H)
-epsilons = 1+(diag(G2)-diag(EIG2$G))/dims
-for(i in 1:k) {
-  for(j in 1:k) {
-      G2[i,j] = G2[i,j]/(sqrt(epsilons[i])*sqrt(epsilons[j]))
-  }
-}
-aux = diag(G2)
-sigma2 = t(t(G2)/dims)
-diag(sigma2) = (aux-1)/(dims-1)
-sigma2[is.nan(sigma2)]=1
-sigma2 = (sigma2+t(sigma2))/2
-A2 = ccruncher.cdbm(sigma2,dims)
+sigma2 = ccruncher.coerce(sigma,dims)
+ccruncher.cdbm(sigma2,dims)
 
 #------------------------------------------------------------
 # check spearman's rank approx
@@ -521,46 +710,3 @@ O = ccruncher.chold(M, dims)
 ccruncher.mult(O, 1:6)
 A = ccruncher.cdbm(M, dims)
 t(chol(A))%*%c(1:6)
-
-#===========================================================================
-# description
-#   simulate using factor model algorithm
-# arguments
-#   sigma: correlation matrix (block matrix form)
-#   nu: degrees of freedom
-#   n: number of realizations
-# returns
-#   matrix (nrow=n, ncol=sum(O$n))
-# example
-#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
-#   dims = c(3,2,1)
-#   ccruncher.next(O,15,1000)
-#===========================================================================
-ccruncher.fmodsim(sigma, dims, nu, n=1)
-{
-  k = dim(sigma)[1]
-  w = sqrt(diag(sigma))
-  M = ccruncher.cmo(sigma)
-  R = t(chol(M))
-
-  size = sum(dims)
-  ret = matrix(nrow=n, ncol=size)
-
-  for (i in 1:n)
-  {
-    z = R %*% rnorm(k)
-    
-    for (j in 1:size)
-    {
-      ret[i,j] = w[j]*z
-ERROR - CONTINUAR
-    }
-    ret[i,] = ccruncher.mult(O,rnorm(size))
-    s = rchisq(1,nu)
-    ret[i,] = sqrt(nu/s)*ret[i,]
-    ret[i,] = pt(ret[i,],nu)
-  }
-    
-  return(ret)
-
-}
