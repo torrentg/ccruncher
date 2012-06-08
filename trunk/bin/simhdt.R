@@ -408,9 +408,11 @@ ccruncher.fmodsim <- function(sigma, dims, nu, n=1)
     col = 1
     for (i1 in 1:k)
     {
+      coef = sqrt(1-w[i1]^2)
+
       for (i2 in 1:dims[i1])
       {
-        ret[row,col] = w[i1]*z[i1] + sqrt(1-w[i1]^2)*rnorm(1)
+        ret[row,col] = w[i1]*z[i1] + coef*rnorm(1)
         col = col+1
       }
     }
@@ -419,7 +421,46 @@ ccruncher.fmodsim <- function(sigma, dims, nu, n=1)
     ret[row,] = sqrt(nu/s)*ret[row,]
     ret[row,] = pt(ret[row,],nu)
   }
+
+  return(ret)
+}
+
+ccruncher.initsim <- function(sigma, dims, nu)
+{
+  k = dim(sigma)[1]
+  w = sqrt(diag(sigma))
+  M = ccruncher.cmo(sigma)
+  R = t(chol(M))
+  
+  return(list(dims=dims, nu=nu, w=w, R=R))
+}
+
+ccruncher.next2 <- function(O, n=1)
+{
+  ret = matrix(nrow=n, ncol=sum(O$dims))
+  k = length(O$dims)
+
+  for (row in 1:n)
+  {
+    z = O$R %*% rnorm(k)
     
+    col = 1
+    for (i in 1:k)
+    {
+      coef = sqrt(1-O$w[i]^2)
+
+      for (j in 1:O$dims[i])
+      {
+        ret[row,col] = O$w[i]*z[i] + coef*rnorm(1)
+        col = col+1
+      }
+    }
+    
+    s = rchisq(1,O$nu)
+    ret[row,] = sqrt(O$nu/s)*ret[row,]
+    ret[row,] = pt(ret[row,],O$nu)
+  }
+
   return(ret)
 }
 
@@ -453,6 +494,29 @@ ccruncher.simcounts <- function(O, nu, p, n=1)
     for(j in 1:O$k)
     {
       i2 = i1 + O$n[j]
+      i1 = i1 + 1
+      ret[i,j] = sum(x[i1:i2]<p[j])
+      i1 = i2
+    }
+  }
+  
+  return(ret)
+}
+
+ccruncher.simcounts2 <- function(O, p, n=1)
+{
+  k = length(O$dims)
+  size = sum(O$dims)
+  ret = matrix(0, nrow=n, ncol=k)
+
+  for(i in 1:n)
+  {
+    x = ccruncher.next2(O)
+    
+    i1 = 0
+    for(j in 1:k)
+    {
+      i2 = i1 + O$dims[j]
       i1 = i1 + 1
       ret[i,j] = sum(x[i1:i2]<p[j])
       i1 = i2
@@ -679,32 +743,75 @@ ccruncher.sm2v <- function(M)
 
 #===========================================================================
 # description
-#   likelihood function
-#   see 'Simulation of High-Dimensional t-Student Copulas'
-#   by Gerard Torrent-Gironella and Josep Fortiana
+#   auxiliar likelihood function
 # arguments
-#   x: parameters to estimate (length=1+k*(k+1)/2 where x[1]=nu and
-#      the rest of values are the correlation matrix matrix values
-#   dims: elements per sector (length=k)
-#   p: 1-period (eg. 1-year) default probability (length=k)
-#   u: observations count data (size=Txk)
+#   eig: eigenvalue object
+#   cinv: cholesky inverse object
+#   nu: degrees of freedom
+#   alfa: qt(1-p,df=nu)
+#   u: observartion, count data
 # returns
 #   likelihood value
 # example
-#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
-#   dims = c(300,200,100)
-#   O = ccruncher.chold(sigma,dims)
-#   nu = 15
-#   p = c(0.03,0.04,0.05)
-#   U = ccruncher.simcounts(O,nu,p,10000)
-#   x5 = c(5,ccruncher.sm2v(sigma))
-#   x15 = c(15,ccruncher.sm2v(sigma))
-#   x25 = c(25,ccruncher.sm2v(sigma))
-#   ccruncher.likf(x5,dims,p,U)
-#   ccruncher.likf(x15,dims,p,U)
-#   ccruncher.likf(x25,dims,p,U)
 #===========================================================================
-ccruncher.likf <- function(x,dims,p,u)
+ccruncher.likf <- function(eigv,cinv,nu,alfa,u)
+{
+  ret = 0;
+  #TODO: check params
+
+  dims = cinv$n
+  k = length(dims); # number of sector
+  size = sum(dims); # copula dimension
+  zeta = vector(length=size)
+  
+  s = 0
+  for(i in 1:k)
+  {
+    if (u[i]>1)
+      zeta[(s+1):(s+u[i])] = 100
+    if (u[i]+1<=dims[i])
+      zeta[(s+u[i]+1):(s+dims[i])] = alfa[i]
+    s = s + dims[i]
+  }
+
+  # combinatorial coefficients
+  for(i in 1:k)
+  {
+    ret = ret + lgamma(dims[i]+1) - lgamma(u[i]+1) - lgamma(dims[i]-u[i]+1);
+  }
+
+  # ln determinant
+  det = 0
+  for(i in 1:length(eigv$values))
+  {
+    det = det + eigv$multiplicity[i]*log(eigv$values[i])
+  }
+  ret = ret - 0.5*det
+
+  # gammas
+  ret = ret + lgamma((nu+size)/2)
+  ret = ret + (size-1)*lgamma(nu/2)
+  ret = ret - size * lgamma((nu+1)/2)
+
+  # inverse
+  aux = ccruncher.multinv(cinv,zeta)
+  ret = ret - (nu+size)/2 * log(1+(aux %*% aux)/nu)
+
+  # denominator
+  aux = 0
+  for(i in 1:size)
+  {
+    aux = aux + log(1+(zeta[i]^2)/nu)
+  }
+  ret = ret + (nu+1)/2 * aux
+
+  return(ret);
+}
+ccruncher.likf2(x5,dims,p,U)
+
+# -------------
+
+ccruncher.likf1 <- function(x,dims,p,u)
 {
   ret = 0;
   #TODO: check params
@@ -726,49 +833,147 @@ ccruncher.likf <- function(x,dims,p,u)
   
   for(t in 1:T)
   {
-    zeta = vector(length=size)
-    s = 0
-    for(i in 1:k)
-    {
-      zeta[(s+1):(s+u[t,i])] = 100
-      zeta[(s+u[t,i]+1):(s+dims[i])] = alfa[i]
-      s = s + dims[i]
-    }
-
-    # combinatorial coefficients
-    for(i in 1:k)
-    {
-      ret = ret + lgamma(dims[i]+1) - lgamma(u[t,i]+1) - lgamma(dims[i]-u[t,i]+1);
-    }
-    
-    # ln determinant
-    det = 0
-    for(i in 1:length(eigv$values))
-    {
-      det = det + eigv$multiplicity[i]*log(eigv$values[i])
-    }
-    
-    # gammas
-    ret = ret - 0.5*det
-    ret = ret + lgamma((nu+size)/2)
-    ret = ret + (size-1)*lgamma(nu/2)
-    ret = ret - size * lgamma((nu+1)/2)
-    
-    # inverse
-    aux = ccruncher.multinv(cinv,zeta)
-    ret = ret - (nu+size)/2 * log(1+(aux %*% aux)/nu)
-
-    # denominator
-    aux = 0
-    for(i in 1:size)
-    {
-      aux = aux + log(1+(zeta[i]^2)/nu)
-    }
-    ret = ret + (nu+1)/2 * aux
+    ret = ret + ccruncher.likf(eigv,cinv,nu,alfa,U[t,])
   }
   
   return(ret);
 }
+
+
+#===========================================================================
+# description
+#   likelihood function
+#   see 'Simulation of High-Dimensional t-Student Copulas'
+#   by Gerard Torrent-Gironella and Josep Fortiana
+# arguments
+#   x: parameters to estimate (length=1+k*(k+1)/2 where x[1]=nu and
+#      the rest of values are the correlation matrix matrix values
+#   dims: elements per sector (length=k)
+#   p: 1-period (eg. 1-year) default probability (length=k)
+#   u: observations count data (size=Txk)
+# returns
+#   likelihood value
+# example
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(300,200,100)
+#   O = ccruncher.chold(sigma,dims)
+#   nu = 15
+#   p = c(0.03,0.04,0.05)
+#   U = ccruncher.simcounts(O,nu,p,10000)
+#   x5 = c(5,ccruncher.sm2v(sigma))
+#   x15 = c(15,ccruncher.sm2v(sigma))
+#   x25 = c(25,ccruncher.sm2v(sigma))
+#   ccruncher.likf2(x5,dims,p,U)
+#   ccruncher.likf2(x15,dims,p,U)
+#   ccruncher.likf2(x25,dims,p,U)
+#===========================================================================
+ccruncher.likf2 <- function(x,dims,p,U)
+{
+  ret = 0;
+  #TODO: check params
+
+  T = dim(U)[1]; # number of obervations
+
+  # retrieve estimated parameters
+  nu = x[1]
+  sigma = ccruncher.v2sm(x[2:length(x)])
+  sigma = ccruncher.coerce(sigma, dims)
+
+  # computes required values
+  alfa = qt(1-p,df=nu)
+  chol = ccruncher.chold(sigma,dims);
+  cinv = ccruncher.choldinv(chol);
+  eigv = ccruncher.eigen(sigma, dims)
+
+  umin = apply(U,2,min);
+  umax = apply(U,2,max);
+cat("umin=",umin,", umax=",umax,"\n");
+  lmin = ccruncher.likf(eigv,cinv,nu,alfa,umin);
+  lmax = ccruncher.likf(eigv,cinv,nu,alfa,umax);
+cat("lmin=",lmin,", lmax=", lmax, "\n")
+  ret = ret + T*lmax
+  ret = ret - T*lmin
+  
+  return(ret);
+}
+ccruncher.likf2(x5,dims,p,U)
+
+#===========================================================================
+# description
+#   likelihood function based on simulation
+# exampe
+#   sigma = matrix(nrow=3, ncol=3, data=c(0.5,0.2,0.1,0.2,0.4,0.15,0.1,0.15,0.3))
+#   dims = c(300,200,100)
+#   nu = 15
+#   p = c(0.03,0.04,0.05)
+#   O = ccruncher.initsim(sigma,dims,nu)
+#   U = ccruncher.simcounts2(O,p,10000)
+#   x5 = c(5,ccruncher.sm2v(sigma))
+#   x15 = c(15,ccruncher.sm2v(sigma))
+#   x25 = c(25,ccruncher.sm2v(sigma))
+#   ccruncher.likf3(x5,dims,p,U)
+#   ccruncher.likf3(x15,dims,p,U)
+#   ccruncher.likf3(x25,dims,p,U)
+#===========================================================================
+ccruncher.likf3 <- function(x,dims,p,U)
+{
+  #TODO: check params
+
+  # function constants
+  SEED = 100
+  NUMSIMS = 1000
+  NUMOBS = dim(U)[1]
+  k = length(dims)
+  dnorm0 = dnorm(0)
+  
+  # retrieve estimated parameters
+  nu = x[1]
+  sigma = ccruncher.v2sm(x[2:length(x)])
+  sigma = ccruncher.coerce(sigma, dims)
+
+  # initialize values
+  sim = ccruncher.initsim(sigma, dims, nu)
+  saved_seed = .Random.seed
+  set.seed(SEED)
+  counts = 1:k
+  prob = 1:NUMOBS
+  prob[] = 0
+
+  for(t in 1:NUMSIMS)
+  {
+    u = ccruncher.next2(sim)
+
+    i1 = 0
+    for(i in 1:k)
+    {
+      i2 = i1 + dims[i]
+      i1 = i1 + 1
+      counts[i] = sum(u[i1:i2]<p[i])
+      i1 = i2
+    }
+
+    for(i in 1:NUMOBS)
+    {
+      diff = U[i,] - counts
+      dist = sqrt(diff%*%diff)
+      #if (sum(abs(diff))<=5) prob[i] = prob[i]+1
+      #prob[i] = prob[i] + 1/(diff%*%diff + 0.001)
+      prob[i] = prob[i] + dnorm(dist)/dnorm0
+    }
+  }
+
+prob[prob==0]=0.000000000001
+  ret = 0
+  for(i in 1:NUMOBS)
+  {
+    ret = ret + log(prob[i])
+  }
+
+  # exits
+  .Random.seed = saved_seed
+  return(ret);
+}
+ccruncher.likf3(x5,dims,p,U[1:100,])
 
 #------------------------------------------------------------
 # try to fit marginal of multivariate counts distribution
