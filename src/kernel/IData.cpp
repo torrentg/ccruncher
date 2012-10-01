@@ -94,6 +94,7 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     // output header
     Logger::addBlankLine();
     Logger::trace("reading input file", '*');
+    Logger::newIndentLevel();
 
     // trace defines
     map<string,string>::const_iterator it;
@@ -103,7 +104,6 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     }
 
     // trace file info
-    Logger::newIndentLevel();
     if (filename != STDIN_FILENAME) 
     {
       Logger::trace("file size (" + filename + ")", Format::bytes(File::filesize(filename)));

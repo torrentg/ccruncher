@@ -39,7 +39,6 @@ ccruncher_SOURCES = \
     ../src/params/Segmentation.cpp\
     ../src/params/Defaults.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/CopulaCalibration.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -83,7 +82,6 @@ ccruncher_SOURCES = \
     ../src/params/Defaults.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/CopulaCalibration.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -169,7 +167,6 @@ tests_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/CopulaCalibration.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -245,7 +242,6 @@ tests_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/CopulaCalibration.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\
@@ -298,7 +294,6 @@ samplegen_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/CopulaCalibration.cpp\
     ../src/math/BlockMatrixChol.cpp\
     ../src/math/BlockMatrixCholInv.cpp\
     ../src/math/BlockGaussianCopula.cpp\
@@ -343,7 +338,6 @@ samplegen_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/CopulaCalibration.hpp\
     ../src/math/BlockMatrixChol.hpp\
     ../src/math/BlockMatrixCholInv.hpp\
     ../src/math/BlockGaussianCopula.hpp\

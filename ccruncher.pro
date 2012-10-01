@@ -20,7 +20,6 @@ HEADERS += \
     src/math/BlockMatrixCholInv.hpp \
     src/math/BlockGaussianCopula.hpp \
     src/math/FastTStudentCdf.hpp \
-    src/math/CopulaCalibration.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -43,8 +42,7 @@ HEADERS += \
     src/utils/config.h \
     src/utils/Arrays.hpp \
     deps/gzstream-1.5/gzstream.h \
-    src/params/Defaults.hpp \
-    src/math/Bezier4.hpp
+    src/params/Defaults.hpp
 
 SOURCES += \
     src/params/Correlations.cpp \
@@ -68,7 +66,6 @@ SOURCES += \
     src/math/BlockMatrixCholInv.cpp \
     src/math/BlockGaussianCopula.cpp \
     src/math/FastTStudentCdf.cpp \
-    src/math/CopulaCalibration.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
@@ -90,8 +87,7 @@ SOURCES += \
     src/utils/Date.cpp \
     src/utils/Arrays.cpp \
     deps/gzstream-1.5/gzstream.cpp \
-    src/params/Defaults.cpp \
-    src/math/Bezier4.cpp
+    src/params/Defaults.cpp
 
 INCLUDEPATH += ./src \
     deps/gzstream-1.5
