@@ -164,11 +164,82 @@ please refer to document
 \emph{Simulation of High-Dimensional t-Student Copulas with a Given Block Correlation Matrix} 
 \cite{ccruncher:astin}.
 
-\begin{comment}
-\subsection{Credit Risk Models}
-TODO: merton models, actuarial models, econometric models, intensity models, copula models
-TODO: Comparison with other methods (CreditRisk+, CreditMetrics)
-\end{comment}
+%---------------------------------------------------------------------------
+\subsection{Underlying model}
+\label{model}
+
+This model is exposed in \cite{correlations:cmetrics}, ANOTHERREF, and others.
+\newline
+
+We assume that obligor's default times are modeled by a multivariate survival distribution
+where its marginals are the obligor's survival functions, and the dependence among them is
+determined by the obligors' economic sector.
+\newline
+
+CCruncher assumptions:
+\begin{itemize}
+  \setlength{\itemsep}{0pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+\item exist $m$ ratings, $R_1,\cdots,R_m$
+\item each rating maps to a survival function, $S_1,\cdots,S_m$
+\item each obligor has a survival function given by its rating
+\item exist $k$ economic sectors
+\item each obligor belongs only to a sector
+\end{itemize}
+
+The dependence between obligors is modeled using a Gaussian or t-Student copula 
+for the following reasons:
+\begin{itemize}
+\item is an elliptical copula, this means that is determined only by correlations
+\item allows a range of dependence structures varying the $\nu$ parameter
+\item has tail dependence
+\item is a symmetrical copula (allows antithetic variance reduction method)
+\item copula coincides with the survival copula
+\item it is easy to simulate in high dimensions
+\end{itemize}
+
+
+The multi-factor model (REF PENDING) can be expressed as:
+\begin{displaymath}
+X_i^j = \underbrace{\sigma_i  \cdot Z_i}_\textrm{systematic} + \underbrace{\sqrt{1-\sigma_i^2} \cdot \varepsilon_i^j}_\textrm{specific}
+\quad \textrm{ where }
+\left\{
+\begin{array}{l}
+i = 1, \cdots, k \\
+j=1,\cdots,n_i \\
+\sigma \in [0,1] \\
+Z_i \sim N(0,1) \\
+Z \sim N(0,\Sigma) \\
+\varepsilon_i^j \sim N(0,1) \textrm{ i.i.d} \ \forall i,j \\
+Z \textrm{ independent from } \varepsilon_i^j \ \forall i,j
+\end{array}
+\right.
+\end{displaymath}
+
+We compute the variance and correlation between these variables:
+\begin{displaymath}
+\small
+\begin{array}{rl}
+\textrm{Var}(X_i^j) = & 
+\sigma_i^2 \cdot \textrm{Var}(Z_i) + 
+(1-\sigma_i^2) \cdot \textrm{Var}(\varepsilon_i^j) + 
+2 \cdot \sigma_i \cdot \sqrt{1-\sigma_i^2} \cdot \textrm{Cov}(Z_i,\varepsilon_i) \\
+= & \sigma_i^2 + (1-\sigma_i^2) \\
+= & 1 \\
+\textrm{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \textrm{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2})
+\left[ \textrm{ because Var}(X_i^j) = 1 \ \right] \\
+= & 
+\sigma_{i_1} \cdot \sigma_{i_2} \cdot \textrm{Cov}(Z_{i_1},Z_{i_2}) +
+\sigma_{i_1} \cdot \sqrt{1-\sigma_{i_2}^2} \cdot \textrm{Cov}(Z_{i_1},\varepsilon_{i_2})\ + \\
+& \sqrt{1-\sigma_{i_1}^2} \cdot \sigma_{i_2} \cdot \textrm{Cov}(\varepsilon_{i_1},Z_{i_2})\ + \\
+& \sqrt{1-\sigma_{i_1}^2} \cdot \sqrt{1-\sigma_{i_2}^2} \cdot \textrm{Cov}(\varepsilon_{i_1},\varepsilon_{i_2}) \\
+= & \sigma_{i_1} \cdot \sigma_{i_2} \cdot \textrm{Cov}(Z_{i_1},Z_{i_2}) \\
+= & \sigma_{i_1} \cdot \sigma_{i_2} \cdot \textrm{Cor}(Z_{i_1},Z_{i_2}) \\
+= & \sigma_{i_1} \cdot \sigma_{i_2} \cdot \Sigma_{i_1,i_2}
+\end{array}
+\end{displaymath}
+
 
 %===========================================================================
 \section{Parameters}
@@ -272,7 +343,7 @@ default time.
 
 %===========================================================================
 \clearpage
-\section{Resolution}
+\section{Implementation}
 
 This section explains how CCruncher computes the credit risk of a portfolio.
 Figure \ref{fig:mcschema1} shows the schema followed to simulate the 
@@ -1448,7 +1519,7 @@ $d_{i,j}$ is the number of defaulted obligors in sector $j$ at year $i$.
 
 %===========================================================================
 \newpage
-\bibliography{refs}
+\bibliography{ccruncher}
 \bibliographystyle{plain}
 
 \end{document}

@@ -907,7 +907,7 @@ ccruncher.likf2(x5,dims,p,U)
 #   nu = 15
 #   p = c(0.03,0.04,0.05)
 #   O = ccruncher.initsim(sigma,dims,nu)
-#   U = ccruncher.simcounts2(O,p,10000)
+#   U = ccruncher.simcounts2(O,p,100)
 #   x5 = c(5,ccruncher.sm2v(sigma))
 #   x15 = c(15,ccruncher.sm2v(sigma))
 #   x25 = c(25,ccruncher.sm2v(sigma))
@@ -920,11 +920,11 @@ ccruncher.likf3 <- function(x,dims,p,U)
   #TODO: check params
 
   # function constants
-  SEED = 100
-  NUMSIMS = 1000
+  SEED = 10
+  NUMSIMS = 10000
   NUMOBS = dim(U)[1]
   k = length(dims)
-  dnorm0 = dnorm(0)
+  dnorm0 = dnorm(0)/10;
   
   # retrieve estimated parameters
   nu = x[1]
@@ -956,24 +956,24 @@ ccruncher.likf3 <- function(x,dims,p,U)
     {
       diff = U[i,] - counts
       dist = sqrt(diff%*%diff)
-      #if (sum(abs(diff))<=5) prob[i] = prob[i]+1
+      #if (sum(abs(diff))<1) prob[i] = prob[i]+1
       #prob[i] = prob[i] + 1/(diff%*%diff + 0.001)
       prob[i] = prob[i] + dnorm(dist)/dnorm0
     }
   }
 
-prob[prob==0]=0.000000000001
-  ret = 0
+  ret = -NUMOBS*log(NUMSIMS)
   for(i in 1:NUMOBS)
   {
-    ret = ret + log(prob[i])
+    if (prob[i] == 0) prob[i]=1e-225
+    ret = ret + log(prob[i]) 
   }
 
   # exits
   .Random.seed = saved_seed
   return(ret);
 }
-ccruncher.likf3(x5,dims,p,U[1:100,])
+ccruncher.likf3(x5,dims,p,U[1:20,])
 
 #------------------------------------------------------------
 # try to fit marginal of multivariate counts distribution
