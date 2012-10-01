@@ -27,7 +27,6 @@
 #include "params/Segmentations.hpp"
 #include "math/BlockGaussianCopula.hpp"
 #include "math/BlockTStudentCopula.hpp"
-#include "math/CopulaCalibration.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
@@ -47,7 +46,6 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   seed = 0L;
   hash = 0;
   fpath = "path not set";
-  calib = "none";
   bforce = false;
   btrace = false;
   copula = NULL;
@@ -140,9 +138,6 @@ void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
 
     // initializing survival functions
     initSurvivals(idata);
-
-    // calibrate copula params (correlations+ndf)
-    calibrateCopula(idata);
 
     // initializing copula
     initCopula(idata);
@@ -369,48 +364,6 @@ void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::previousIndentLevel();
-}
-
-//===========================================================================
-// calibrate copula params
-//===========================================================================
-void ccruncher::MonteCarlo::calibrateCopula(IData &idata) throw(Exception)
-{
-  if (calib == "none") return;
-
-  timer.start();
-
-  // setting logger header
-  Logger::trace("calibrating copula", '-');
-  Logger::newIndentLevel();
-
-  vector<int> n(idata.getSectors().size(),0);
-  const vector<vector<hdata> > &h = idata.getDefaults().getData();
-  vector<double> p(idata.getSectors().size(),0.03); //TODO: change this (0.3 is a test)
-
-  // computing the number of obligors in each sector
-  for(unsigned int i=0; i<obligors.size(); i++)
-  {
-    n[obligors[i].ref->isector]++;
-  }
-
-  Logger::trace("output file", "calibration.txt");
-
-  if (calib == "sigma" || calib == "all") {
-    CopulaCalibration::correls(h, idata.getCorrelations().getMatrix());
-    Logger::trace("correlation matrix", "done");
-    //TODO: traçar resultats
-  }
-
-  if (calib == "ndf" || calib == "all") {
-    double ndf = CopulaCalibration::ndf(idata.getCorrelations().getMatrix(), n, p, h);
-    Logger::trace("t-student ndf parameter", "done");
-    //TODO: traçar resultats
-  }
-
-  // exit function
-  Logger::trace("elapsed time calibrating copula", timer);
   Logger::previousIndentLevel();
 }
 
@@ -684,18 +637,6 @@ void ccruncher::MonteCarlo::setFilePath(const string &path, bool force)
 void ccruncher::MonteCarlo::setTrace(bool val)
 {
   btrace = val;
-}
-
-//===========================================================================
-// setCalib
-//===========================================================================
-void ccruncher::MonteCarlo::setCalib(const string &val) throw(Exception)
-{
-  if (calib != "none" && calib != "sigma" && calib != "ndf" && calib != "all")
-  {
-    throw Exception("unrecognized calibration mode");
-  }
-  calib = val;
 }
 
 //===========================================================================

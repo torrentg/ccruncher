@@ -117,7 +117,7 @@ ostream & ccruncher::operator << (ostream& os, const Exception &e)
 {
   os << "\nException: " << e.toString();
   string stacktrace = e.getStackTrace();
-  if (stacktrace == "") {
+  if (stacktrace != "") {
     os << endl;
     os << stacktrace;
   }

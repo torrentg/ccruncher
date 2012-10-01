@@ -4,29 +4,21 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * case studies
-  * support Li model (survivals as exponential distr.)
-  * estimate copula params using MLE
-  * add grouped t-copula support
+  * multi-factor model support
 
 Future works
 -------------------
-  * graphic interface
-  * input file in binary format
-  * add risk aggregation to documentation
-     - explain how to distribute the risk (eg. ES) along segments
-     - see 'introduction to credit risk modeling'
+  * technical features
+     - graphic interface
+     - input file in binary format
+     - allow evaluation in multiple time horizons
+     - remove gzip support (replaced by pipes support)
+  * improve model
+     - add grouped t-copula support
+     - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
+     - considere that a obligor could belong to a few different sectors
+     - how to determine the minimum number of simulations required?
   * improve functional tests
      - examples based on real data
      - improve documentation adding tests section
-  * allow evaluation in multiple time horizons
-      <breaks>
-        <break name="T25Y" at="25Y" method="exp">
-          <segmentations>
-            ..
-          </segmentations>
-        </break>
-      </breaks>
-  * considere that a obligor could belong to a few different sectors
-  * explain how to determine the minimum number of simulations required
-
+     - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling') 
