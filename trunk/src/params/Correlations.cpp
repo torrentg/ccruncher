@@ -23,22 +23,16 @@
 #include <cmath>
 #include "params/Correlations.hpp"
 #include "utils/Format.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 
 #define EPSILON 1e-12
-#define TYPE_BASIC "basic"
-#define TYPE_SPEARMAN "spearman"
-#define TYPE_KENDALL "kendall"
 
 //===========================================================================
 // default constructor
 //===========================================================================
 ccruncher::Correlations::Correlations()
 {
-  fcoerce = false;
-  type = spearman;
-  matrix = NULL;
+  // nothing to do
 }
 
 //===========================================================================
@@ -46,57 +40,7 @@ ccruncher::Correlations::Correlations()
 //===========================================================================
 ccruncher::Correlations::Correlations(const Sectors &sectors_) throw(Exception)
 {
-  fcoerce = false;
-  type = spearman;
-  matrix = NULL;
   setSectors(sectors_);
-}
-
-//===========================================================================
-// copy constructor
-//===========================================================================
-ccruncher::Correlations::Correlations(const Correlations &x) throw(Exception)
-{
-  matrix = NULL;
-  *this = x;
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Correlations::~Correlations()
-{
-  if (matrix != NULL && size() > 0) {
-    Arrays<double>::deallocMatrix(matrix, size());
-  }
-}
-
-//===========================================================================
-// assignment operator
-//===========================================================================
-Correlations& ccruncher::Correlations::operator = (const Correlations &x)
-{
-  type = x.getType();
-  fcoerce = x.fcoerce;
-  setSectors(x.sectors);
-
-  if (size() == 0)
-  {
-    matrix = NULL;
-    return *this;
-  }
-  else
-  {
-    for(int i=0; i<size(); i++)
-    {
-      for(int j=0; j<size(); j++)
-      {
-        matrix[i][j] = x.matrix[i][j];
-      }
-    }
-  }
-
-  return *this;
 }
 
 //===========================================================================
@@ -104,18 +48,13 @@ Correlations& ccruncher::Correlations::operator = (const Correlations &x)
 //===========================================================================
 void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exception)
 {
-  if (matrix != NULL && size() > 0)
-  {
-    Arrays<double>::deallocMatrix(matrix, size());
-    matrix = NULL;
+  if (sectors_.size() <= 0) {
+    throw Exception("sectors not found");
   }
-
-  sectors = sectors_;
-  if (sectors.size() <= 0)
-  {
-    throw Exception("invalid matrix dimension ("+Format::toString(size())+" <= 0)");
+  else {
+    sectors = sectors_;
+    matrix.assign(size(), vector<double>(size(), NAN));
   }
-  matrix = Arrays<double>::allocMatrix(size(), size(), NAN);
 }
 
 //===========================================================================
@@ -129,25 +68,9 @@ int ccruncher::Correlations::size() const
 //===========================================================================
 // returns matrix
 //===========================================================================
-double ** ccruncher::Correlations::getMatrix() const
+const vector<vector<double> > &ccruncher::Correlations::getMatrix() const
 {
   return matrix;
-}
-
-//===========================================================================
-// returns correlation type
-//===========================================================================
-CorrelationType ccruncher::Correlations::getType() const
-{
-  return type;
-}
-
-//===========================================================================
-// returns coerce flag
-//===========================================================================
-bool ccruncher::Correlations::getCoerce() const
-{
-  return fcoerce;
 }
 
 //===========================================================================
@@ -166,10 +89,14 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
   }
 
   // checking value
-  if (value <= -(1.0+EPSILON) || (1.0+EPSILON) <= value )
+  if (row == col && (value < EPSILON || 1.0-EPSILON < value) )
   {
-    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range: " + 
-                 Format::toString(value);
+    string msg = "factor loading [" + sector1 + "][" + sector2 + "] out of range (0,1)";
+    throw Exception(msg);
+  }
+  if (row != col && (value < -1.0+EPSILON || 1.0-EPSILON < value) )
+  {
+    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range (-1,+1)";
     throw Exception(msg);
   }
 
@@ -191,12 +118,9 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
 void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"correlations")) {
-    string strtype = getStringAttribute(attributes, "type", TYPE_SPEARMAN);
-    if (strtype == TYPE_SPEARMAN) type = spearman;
-    else if (strtype == TYPE_KENDALL) type = kendall;
-    else if (strtype == TYPE_BASIC) type = basic;
-    else throw Exception("unknow correlation type: " + strtype);
-    fcoerce = getBooleanAttribute(attributes, "coerce", false);
+    if (getNumAttributes(attributes) != 0) {
+      throw Exception("attributes not allowed in tag correlations");
+    }
   }
   else if (isEqual(name,"sigma")) {
     string sector1 = getStringAttribute(attributes, "sector1");
@@ -254,12 +178,7 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
   string spc2 = Strings::blanks(ilevel+2);
   string ret = "";
 
-  string strtype = "";
-  if (type == spearman) strtype= TYPE_SPEARMAN;
-  else if (type == kendall) strtype = TYPE_KENDALL;
-  else strtype = TYPE_BASIC;
-
-  ret += spc1 + "<correlations type='" + strtype + "' coerce='" + Format::toString(fcoerce) + "'>\n";
+  ret += spc1 + "<correlations>\n";
 
   for(int i=0;i<size();i++)
   {

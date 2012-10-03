@@ -26,10 +26,12 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
 
+using namespace std;
 using namespace ccruncher;
 namespace ccruncher {
 
@@ -47,6 +49,8 @@ class PowMatrix
 
     // matrix pow function
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
+    // matrix pow function (using vector instead of arrays)
+    static void pow(const vector<vector<double> > &a, double x, vector<vector<double> > &ret) throw(Exception);
 
 };
 

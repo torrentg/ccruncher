@@ -1,3 +1,6 @@
+QT += core
+QT -= gui
+
 HEADERS += \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
@@ -8,6 +11,7 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Survivals.hpp \
     src/params/Transitions.hpp \
+    src/params/Defaults.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
@@ -15,11 +19,9 @@ HEADERS += \
     src/kernel/SimulationThread.hpp \
     src/math/PowMatrix.hpp \
     src/math/Copula.hpp \
-    src/math/BlockTStudentCopula.hpp \
-    src/math/BlockMatrixChol.hpp \
-    src/math/BlockMatrixCholInv.hpp \
-    src/math/BlockGaussianCopula.hpp \
     src/math/FastTStudentCdf.hpp \
+    src/math/GMFCopula.hpp \
+    src/math/TMFCopula.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -40,9 +42,7 @@ HEADERS += \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
     src/utils/config.h \
-    src/utils/Arrays.hpp \
-    deps/gzstream-1.5/gzstream.h \
-    src/params/Defaults.hpp
+    deps/gzstream-1.5/gzstream.h
 
 SOURCES += \
     src/params/Correlations.cpp \
@@ -54,6 +54,7 @@ SOURCES += \
     src/params/Segmentation.cpp \
     src/params/Survivals.cpp \
     src/params/Transitions.cpp \
+    src/params/Defaults.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \
@@ -61,11 +62,9 @@ SOURCES += \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
     src/math/PowMatrix.cpp \
-    src/math/BlockTStudentCopula.cpp \
-    src/math/BlockMatrixChol.cpp \
-    src/math/BlockMatrixCholInv.cpp \
-    src/math/BlockGaussianCopula.cpp \
     src/math/FastTStudentCdf.cpp \
+    src/math/GMFCopula.cpp \
+    src/math/TMFCopula.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
@@ -85,9 +84,7 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
-    src/utils/Arrays.cpp \
-    deps/gzstream-1.5/gzstream.cpp \
-    src/params/Defaults.cpp
+    deps/gzstream-1.5/gzstream.cpp
 
 INCLUDEPATH += ./src \
     deps/gzstream-1.5
@@ -120,6 +117,7 @@ win32 {
 #    $$PWD/libpthreadGC2.a
 }
 
-CONFIG(release, debug|release) DEFINES += NDEBUG
-
+CONFIG(release, debug|release) {
+  DEFINES += NDEBUG
+}
 

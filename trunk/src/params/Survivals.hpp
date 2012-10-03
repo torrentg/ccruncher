@@ -89,7 +89,7 @@ class Survivals : public ExpatHandlers
     // constructor
     Survivals(const Ratings &) throw(Exception);
     // constructor
-    Survivals(const Ratings &, int, int *, double**) throw(Exception);
+    Survivals(const Ratings &, const vector<int> &imonths, const vector<vector<double> > &values) throw(Exception);
     // destructor
     ~Survivals();
     // returns ratings size

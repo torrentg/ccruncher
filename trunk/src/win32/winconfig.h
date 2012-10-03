@@ -24,6 +24,13 @@
 #define WINCONFIG_H
 
 // ======================================================
+// patch against M_PI undeclaration
+// ======================================================
+#ifdef _MSC_VER
+#define _USE_MATH_DEFINES
+#endif
+
+// ======================================================
 // patch against isnan() function
 // ======================================================
 #ifdef _MSC_VER

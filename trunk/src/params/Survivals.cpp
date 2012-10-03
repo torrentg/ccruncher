@@ -55,17 +55,17 @@ ccruncher::Survivals::Survivals(const Ratings &ratings_) throw(Exception)
 // constructor
 // used by Transitions class
 //===========================================================================
-ccruncher::Survivals::Survivals(const Ratings &ratings_, int numrows, int *imonths,
-           double **values) throw(Exception)
+ccruncher::Survivals::Survivals(const Ratings &ratings_, const vector<int> &imonths,
+           const vector<vector<double> > &values) throw(Exception)
 {
   setRatings(ratings_);
 
   // adding values
-  for(int i=0;i<ratings.size();i++)
+  for(int i=0; i<ratings.size(); i++)
   {
-    for(int j=0;j<numrows;j++)
+    for(unsigned int j=0; j<imonths.size(); j++)
     {
-      insertValue(ratings[i].name, imonths[j], values[i][j]);
+      insertValue(ratings.getName(i), imonths[j], values[i][j]);
     }
   }
 
@@ -223,7 +223,7 @@ void ccruncher::Survivals::validate() throw(Exception)
   for (int i=0; i<ratings.size(); i++)
   {
     if (ddata[i].size() == 0 && i != indexdefault) {
-      string msg = "rating " + ratings[i].name + " without survival function defined";
+        string msg = "rating " + ratings.getName(i) + " without survival function defined";
       throw Exception(msg);
     }
   }
@@ -239,7 +239,7 @@ void ccruncher::Survivals::validate() throw(Exception)
       }
       else if (fabs(ddata[i][0]-1.0) > EPSILON)
       {
-        string msg = "rating " + ratings[i].name + " have a survival value distinct that 1 at t=0";
+        string msg = "rating " + ratings.getName(i) + " have a survival value distinct that 1 at t=0";
         throw Exception(msg);
       }
     }
@@ -275,7 +275,7 @@ void ccruncher::Survivals::validate() throw(Exception)
         }
         else
         {
-          string msg = "survival function of rating " + ratings[i].name + " is not monotone at t=" + Format::toString((int)j);
+          string msg = "survival function of rating " + ratings.getName(i) + " is not monotone at t=" + Format::toString((int)j);
           throw Exception(msg);
         }
       }
@@ -493,7 +493,7 @@ string ccruncher::Survivals::getXML(int ilevel) throw(Exception)
     for(unsigned int j=0; j<ddata[i].size(); j++)
     {
       ret += spc2 + "<svalue ";
-      ret += "rating='" + ratings[i].name + "' ";
+      ret += "rating='" + ratings.getName(i) + "' ";
       ret += "t='" + Format::toString((int)j) + "' ";
       ret += "value='" + Format::toString(100.0*ddata[i][j]) + "%'";
       ret += "/>\n";

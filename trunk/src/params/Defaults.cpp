@@ -23,7 +23,6 @@
 #include <cmath>
 #include "params/Defaults.hpp"
 #include "utils/Format.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 
 //===========================================================================

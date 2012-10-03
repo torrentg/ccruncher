@@ -50,9 +50,9 @@ class Transitions : public ExpatHandlers
     // period (in months) that this transition matrix covers
     int period;
     // matrix values
-    double **matrix;
+    vector<vector<double> > matrix;
     // list of ratings
-    Ratings *ratings;
+    Ratings ratings;
     // index of default rating
     int indexdefault;
     // regularization error
@@ -60,12 +60,14 @@ class Transitions : public ExpatHandlers
 
   private:
 
+    // matrix product (M12 = M1·M2)
+    static void prod(const vector<vector<double> > &M1, const vector<vector<double> > &M2, vector<vector<double> > &M12);
     // insert a transition value into the matrix
     void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
     // computes Cumulated Default Forward Rate
-    void cdfr(int steplength, int numrows, double **ret) const throw(Exception);
+    void cdfr(int steplength, int numrows, vector<vector<double> > &ret) const throw(Exception);
 
   protected:
 
@@ -81,21 +83,15 @@ class Transitions : public ExpatHandlers
     // constructor
     Transitions(const Ratings &) throw(Exception);
     // constructor
-    Transitions(const Ratings &, double **, int) throw(Exception);
+    Transitions(const Ratings &, const vector<vector<double> > &, int) throw(Exception);
     // copy constructor
     Transitions(const Transitions &) throw(Exception);
-    // destructor
-    ~Transitions();
-    // assignement operator
-    Transitions& operator = (const Transitions &other);
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)
     int size() const;
     // returns period that covers this matrix
     int getPeriod() const;
-    // returns pointer to matrix values
-    double ** getMatrix() const;
     // returns default rating index
     int getIndexDefault() const;
     // simulate transition with random value val

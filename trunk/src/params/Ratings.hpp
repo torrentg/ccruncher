@@ -39,18 +39,21 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-struct Rating
-{
-    // rating name
-    string name;
-    // rating description
-    string desc;
-    // constructor
-    Rating(const string &n="", const string &d="") : name(n), desc(d) {}
-};
-
 class Ratings : public ExpatHandlers
 {
+
+  private:
+
+    // internal struct
+    struct Rating
+    {
+        // rating name
+        string name;
+        // rating description
+        string desc;
+        // constructor
+        Rating(const string &n="", const string &d="") : name(n), desc(d) {}
+    };
 
   private:
 
@@ -82,10 +85,10 @@ class Ratings : public ExpatHandlers
     // return the index of the rating
     int getIndex(const char *name) const;
     int getIndex(const string &name) const;
-    // [] operator
-    Rating& operator [] (int i);
-    // [] operator
-    Rating& operator [] (const string &name) throw(Exception);
+    // return rating name
+    const string& getName(int i) const;
+    // return rating description
+    const string& getDescription(int i) const;
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

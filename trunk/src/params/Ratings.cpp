@@ -49,31 +49,21 @@ int ccruncher::Ratings::size() const
 }
 
 //===========================================================================
-// [] operator
+// return rating name
 //===========================================================================
-Rating& ccruncher::Ratings::operator []  (int i)
+const string& ccruncher::Ratings::getName(int i) const
 {
-  // assertions
   assert(i >= 0 && i < (int) vratings.size());
-
-  // return i-th rating
-  return vratings[i];
+  return vratings[i].name;
 }
 
 //===========================================================================
-// [] operator. returns rating by name
+// return rating description
 //===========================================================================
-Rating& ccruncher::Ratings::operator []  (const string &name) throw(Exception)
+const string& ccruncher::Ratings::getDescription(int i) const
 {
-  for (unsigned int i=0; i<vratings.size(); i++)
-  {
-    if (vratings[i].name == name)
-    {
-      return vratings[i];
-    }
-  }
-
-  throw Exception("rating " + name + " not found");
+  assert(i >= 0 && i < (int) vratings.size());
+  return vratings[i].desc;
 }
 
 //===========================================================================
