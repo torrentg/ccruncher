@@ -23,7 +23,6 @@
 #include <cmath>
 #include "params/Transitions.hpp"
 #include "utils/Format.hpp"
-#include "utils/Arrays.hpp"
 #include "utils/Strings.hpp"
 #include "math/PowMatrix.hpp"
 #include <cassert>
@@ -36,10 +35,8 @@
 ccruncher::Transitions::Transitions()
 {
   n = 0;
-  ratings = NULL;
   period = -1;
   indexdefault = -1;
-  matrix = NULL;
   rerror = 0.0;
 }
 
@@ -48,7 +45,6 @@ ccruncher::Transitions::Transitions()
 //===========================================================================
 ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
 {
-  matrix = NULL;
   setRatings(ratings_);
   period = -1;
   indexdefault = -1;
@@ -58,12 +54,13 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Transitions::Transitions(const Ratings &ratings_, double ** matrix_, int period_) throw(Exception)
+ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector<double> > &matrix_, int period_) throw(Exception)
 {
-  matrix = NULL;
+  assert(period_ > 0);
+  assert(ratings_.size() == (int)matrix.size());
   setRatings(ratings_);
   period = period_;
-  Arrays<double>::copyMatrix(matrix_, n, n, matrix);
+  matrix = matrix_;
   rerror = 0.0;
   validate();
 }
@@ -73,45 +70,11 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_, double ** matrix_, 
 //===========================================================================
 ccruncher::Transitions::Transitions(const Transitions &otm) throw(Exception) : ExpatHandlers()
 {
-  matrix = NULL;
-  setRatings(*(otm.ratings));
+  setRatings(otm.ratings);
   period = otm.period;
   indexdefault = otm.indexdefault;
-  Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
+  matrix = otm.matrix;
   rerror = 0.0;
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Transitions::~Transitions()
-{
-  assert(n >= 0);
-  if (matrix != NULL) {
-    Arrays<double>::deallocMatrix(matrix, n);
-    matrix = NULL;
-  }
-}
-
-//===========================================================================
-// assignement operator
-//===========================================================================
-Transitions& ccruncher::Transitions::operator = (const Transitions &otm)
-{
-  if (this != &otm) // protect against invalid self-assignment
-  {
-    if (matrix != NULL) {
-      Arrays<double>::deallocMatrix(matrix, n);
-      matrix = NULL;
-    }
-    setRatings(*(otm.ratings));
-    period = otm.period;
-    indexdefault = otm.indexdefault;
-    Arrays<double>::copyMatrix(otm.getMatrix(), n, n, matrix);
-  }
-
-  // by convention, always return *this
-  return *this;
 }
 
 //===========================================================================
@@ -119,17 +82,13 @@ Transitions& ccruncher::Transitions::operator = (const Transitions &otm)
 //===========================================================================
 void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 {
-  ratings = (Ratings *) &ratings_;
-  n = ratings->size();
-  if (n <= 0)
-  {
+  if (ratings_.size() <= 0) {
     throw Exception("invalid transition matrix dimension (" + Format::toString(n) + " <= 0)");
   }
-  if (matrix != NULL) {
-    Arrays<double>::deallocMatrix(matrix, n);
-    matrix = NULL;    
-  }
-  matrix = Arrays<double>::allocMatrix(n, n, NAN);
+
+  ratings = ratings_;
+  n = ratings.size();
+  matrix.assign(n, vector<double>(n, NAN));
 }
 
 //===========================================================================
@@ -149,23 +108,14 @@ int ccruncher::Transitions::getPeriod() const
 }
 
 //===========================================================================
-// getMatrix
-//===========================================================================
-double ** ccruncher::Transitions::getMatrix() const
-{
-  return matrix;
-}
-
-//===========================================================================
 // inserts an element into transition matrix
 //===========================================================================
 void ccruncher::Transitions::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
   assert(n >= 0);
-  assert(matrix != NULL);
 
-  int row = (*ratings).getIndex(rating1);
-  int col = (*ratings).getIndex(rating2);
+  int row = ratings.getIndex(rating1);
+  int col = ratings.getIndex(rating2);
 
   // validating ratings
   if (row < 0 || col < 0)
@@ -338,8 +288,8 @@ string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
     for(int j=0;j<n;j++)
     {
       ret += spc2 + "<transition ";
-      ret += "from='" + (*ratings)[i].name + "' ";
-      ret += "to='" + (*ratings)[j].name + "' ";
+      ret += "from='" + ratings.getName(i) + "' ";
+      ret += "to='" + ratings.getName(j) + "' ";
       ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }
@@ -423,7 +373,7 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
   try
   {
     Transitions ret(*this);
-    PowMatrix::pow(getMatrix(), double(t)/double(getPeriod()), size(), ret.matrix);
+    PowMatrix::pow(matrix, double(t)/double(getPeriod()), ret.matrix);
     ret.period = t;
     ret.regularize();
     return ret;
@@ -437,7 +387,7 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 //===========================================================================
 // Given a transition matrix return the Cumulated Forward Default Rate
 //===========================================================================
-void ccruncher::Transitions::cdfr(int steplength, int numrows, double **ret) const throw(Exception)
+void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<double> > &ret) const throw(Exception)
 {
   // making assertions
   assert(numrows >= 0);
@@ -447,40 +397,34 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, double **ret) con
 
   // building 1-year transition matrix
   Transitions tmone = scale(steplength);
-  double **one = tmone.getMatrix();
 
   // building Id-matrix of size nxn
-  double **aux = Arrays<double>::allocMatrix(n, n, 0.0);
-  for(int i=0;i<n;i++)
-  {
+  vector<vector<double> > aux(n, vector<double>(n,0.0));
+  for(int i=0; i<n; i++) {
     aux[i][i] = 1.0;
   }
 
   // auxiliary matrix
-  double **tmp = Arrays<double>::allocMatrix(n, n, 0.0);
+  vector<vector<double> > tmp(n, vector<double>(n,0.0));
 
   // filling CDFR(.,0)
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
     ret[i][0] = aux[i][n-1];
   }
 
   // filling CDFR(.,t)
-  for(int t=1;t<numrows;t++)
+  for(int t=1; t<numrows; t++)
   {
-    Arrays<double>::prodMatrixMatrix(aux, one, n, n, n, tmp);
+    prod(aux, tmone.matrix, tmp);
 
-    for(int i=0;i<n;i++)
+    for(int i=0; i<n; i++)
     {
       ret[i][t] = tmp[i][n-1];
     }
 
-    for(int i=0;i<n;i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
+    for(int i=0; i<n; i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
   }
-
-  // exit function
-  Arrays<double>::deallocMatrix(aux, n);
-  Arrays<double>::deallocMatrix(tmp, n);
 }
 
 //===========================================================================
@@ -488,20 +432,14 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, double **ret) con
 //===========================================================================
 Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) const throw(Exception)
 {
-  // memory allocation
-  double **aux = Arrays<double>::allocMatrix(n, numrows);
-  int *itime = Arrays<int>::allocVector(numrows);
-  for (int i=0;i<numrows;i++) {
-    itime[i] = i;
-  }
-
   // computing CDFR
+  vector<vector<double> > aux(n, vector<double>(numrows,NAN));
   cdfr(steplength, numrows, aux);
 
   // building survival function
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
-    for(int j=0;j<numrows;j++)
+    for(int j=0; j<numrows; j++)
     {
       aux[i][j] = 1.0 - aux[i][j];
       if (aux[i][j] < 0.0) aux[i][j] = 0.0;
@@ -510,17 +448,42 @@ Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) cons
   }
 
   // creating survival function object
-  Survivals ret(*ratings, numrows, itime, aux);
-  Arrays<double>::deallocMatrix(aux, n);
-  Arrays<int>::deallocVector(itime);
+  vector<int> itime(numrows);
+  for(int i=0; i<numrows; i++) itime[i] = i;
+  Survivals ret(ratings, itime, aux);
   return ret; 
 }
 
 //===========================================================================
 // returns the regularization error (|non_regularized| - |regularized|)
 //===========================================================================
-double  ccruncher::Transitions::getRegularizationError() const
+double ccruncher::Transitions::getRegularizationError() const
 {
   return rerror;
+}
+
+//===========================================================================
+// matrix product (M3 = M1·M2)
+//===========================================================================
+void ccruncher::Transitions::prod(const vector<vector<double> > &M1, const vector<vector<double> > &M2, vector<vector<double> > &M3)
+{
+  assert(M1.size() > 0 && M1[0].size() > 0);
+  assert(M1.size() == M2.size() && M1[0].size() == M2[0].size());
+  assert(M1.size() == M3.size() && M1[0].size() == M3[0].size());
+
+  unsigned int n = M1.size();
+
+  for(unsigned int i=0; i<n; i++)
+  {
+    for(unsigned int j=0; j<n; j++)
+    {
+      double val = 0.0;
+      for(unsigned int k=0; k<n; k++)
+      {
+        val += M1[i][k]*M2[k][j];
+      }
+      M3[i][j] = val;
+    }
+  }
 }
 

@@ -172,3 +172,23 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   gsl_matrix_complex_free(VAPS);
 }
 
+//===========================================================================
+// matrix pow function (using vector instead of arrays)
+//===========================================================================
+void ccruncher::PowMatrix::pow(const vector<vector<double> > &a, double x, vector<vector<double> > &ret) throw(Exception)
+{
+  int n = a.size();
+  double **A = new double*[n];
+  double **C = new double*[n];
+
+  for(int i=0; i<n; i++) {
+    A[i] = (double *) &(a[i][0]);
+    C[i] = &(ret[i][0]);
+  }
+
+  PowMatrix::pow(A, x, n, C);
+
+  delete[] A;
+  delete[] C;
+}
+

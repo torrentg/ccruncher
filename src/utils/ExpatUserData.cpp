@@ -32,7 +32,7 @@ ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
   buffer(NULL), buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   if (buffer_size == 0) buffer_size = 1;
-  buffer = new char[buffer_size]; //  buffer = Arrays<char>::allocVector(buffer_size, '\0');
+  buffer = new char[buffer_size];
   buffer_pos1 = buffer + buffer_size + 1;
   buffer_pos2 = buffer + buffer_size + 1;
 }
@@ -46,7 +46,7 @@ ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize
 {
   if (buffer_size == 0) buffer_size = 1;
   xmlparser = xmlparser_;
-  buffer = new char[buffer_size]; //buffer = Arrays<char>::allocVector(buffer_size, '\0');
+  buffer = new char[buffer_size];
   buffer_pos1 = buffer + buffer_size + 1;
   buffer_pos2 = buffer + buffer_size + 1;
 }
@@ -56,11 +56,7 @@ ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize
 //===========================================================================
 ccruncher::ExpatUserData::~ExpatUserData()
 {
-  if (buffer != NULL)
-  {
-    delete [] buffer; // Arrays<char>::deallocVector(buffer);
-    buffer = NULL;
-  }
+  if (buffer != NULL) delete [] buffer;
 }
 
 //===========================================================================
@@ -78,7 +74,7 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
 
   if (buffer != NULL) delete [] buffer;
   buffer_size = o.buffer_size;
-  buffer = new char[buffer_size]; // buffer = Arrays<char>::allocVector(buffer_size, '\0');
+  buffer = new char[buffer_size];
   buffer_pos1 = buffer + buffer_size + 1;
   buffer_pos2 = buffer + buffer_size + 1;
 

@@ -25,13 +25,12 @@
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
 #include "params/Segmentations.hpp"
-#include "math/BlockGaussianCopula.hpp"
-#include "math/BlockTStudentCopula.hpp"
+#include "math/GMFCopula.hpp"
+#include "math/TMFCopula.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
-#include "utils/Arrays.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -393,36 +392,28 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
   try
   {
     // computing the number of obligors in each sector
-    vector<int> tmp(idata.getCorrelations().size(),0);
+    vector<unsigned int> noblig(idata.getCorrelations().size(),0);
     for(unsigned int i=0; i<obligors.size(); i++)
     {
-      tmp[obligors[i].ref->isector]++;
+      noblig[obligors[i].ref->isector]++;
     }
 
     // creating the copula object
-    double **C = idata.getCorrelations().getMatrix();
-    int m = idata.getCorrelations().size();
-    int type = idata.getCorrelations().getType();
-    bool coerce = idata.getCorrelations().getCoerce();
+    const vector<vector<double> > &C = idata.getCorrelations().getMatrix();
 
     if (idata.getParams().getCopulaType() == "gaussian")
     {
-      copula = new BlockGaussianCopula(C, &tmp[0], m, type, coerce);
+      copula = new GMFCopula(C, noblig);
     }
     else if (idata.getParams().getCopulaType() == "t")
     {
       double ndf = idata.getParams().getCopulaParam();
-      copula = new BlockTStudentCopula(C, &tmp[0], m, ndf, type, coerce);
+      copula = new TMFCopula(C, noblig, ndf);
     }
     else 
     {
       throw Exception("invalid copula type");
     }
-
-    double cnum = copula->getCholesky()->getConditionNumber();
-    Logger::trace("cholesky condition number", Format::toString(cnum));
-    bool coerced = copula->getCholesky()->isCoerced();
-    Logger::trace("correlation matrix coerced", Format::toString(coerced));
   }
   catch(std::exception &e)
   {
