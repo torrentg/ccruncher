@@ -49,31 +49,21 @@ int ccruncher::Sectors::size() const
 }
 
 //===========================================================================
-// [] operator
+// return rating name
 //===========================================================================
-Sector& ccruncher::Sectors::operator []  (int i)
+const string& ccruncher::Sectors::getName(int i) const
 {
-  // assertions
   assert(i >= 0 && i < (int) vsectors.size());
-
-  // return i-th sector
-  return vsectors[i];
+  return vsectors[i].name;
 }
 
 //===========================================================================
-// [] operator. returns sector by name
+// return rating description
 //===========================================================================
-Sector& ccruncher::Sectors::operator []  (const string &name) throw(Exception)
+const string& ccruncher::Sectors::getDescription(int i) const
 {
-  for (unsigned int i=0;i<vsectors.size();i++)
-  {
-    if (vsectors[i].name == name)
-    {
-      return vsectors[i];
-    }
-  }
-
-  throw Exception("sector " + name + " not found");
+  assert(i >= 0 && i < (int) vsectors.size());
+  return vsectors[i].desc;
 }
 
 //===========================================================================

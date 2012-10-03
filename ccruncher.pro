@@ -121,3 +121,6 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+OBJECTS_DIR = $$PWD/build
+DESTDIR = $$PWD/build
+

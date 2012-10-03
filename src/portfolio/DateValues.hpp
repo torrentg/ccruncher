@@ -54,12 +54,10 @@ class DateValues
   
     // default constructor
     DateValues();
-    // copy constructor
-    DateValues(const DateValues &);
-    // constructor
-    DateValues(Date date, const Exposure &, const Recovery &);
     // constructor
     DateValues(Date date);
+    // constructor
+    DateValues(Date date, const Exposure &, const Recovery &);
 
 };
 

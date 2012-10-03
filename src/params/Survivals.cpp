@@ -75,14 +75,6 @@ ccruncher::Survivals::Survivals(const Ratings &ratings_, const vector<int> &imon
 }
 
 //===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Survivals::~Survivals()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // set ratings
 //===========================================================================
 void ccruncher::Survivals::setRatings(const Ratings &ratings_) throw(Exception)

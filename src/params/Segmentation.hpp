@@ -79,8 +79,6 @@ class Segmentation : public ExpatHandlers
   
     // constructor
     Segmentation();
-    // destructor
-    ~Segmentation();
     // return the number of segments
     int size() const;
     // returns i-th segment

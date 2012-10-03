@@ -145,10 +145,6 @@
 <!ELEMENT correlations (
     sigma+
 )>
-<!ATTLIST correlations
-    type CDATA #IMPLIED
-    coerce CDATA #IMPLIED
->
 
 <!ELEMENT sigma
     EMPTY

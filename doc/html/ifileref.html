@@ -595,7 +595,7 @@
 
     <pre>
 
-  &lt;correlations type="spearman" coerce="true"&gt;
+  &lt;correlations&gt;
     &lt;sigma sector1="S1" sector2="S1" value="15.1%"/&gt;
     &lt;sigma sector1="S1" sector2="S2" value="6.2%"/&gt;
     &lt;sigma sector1="S1" sector2="S3" value="8.6%"/&gt;
@@ -613,56 +613,6 @@
     &lt;sigma sector1="S5" sector2="S5" value="15.0%"/&gt;
   &lt;/correlations&gt;
     </pre>
-
-    <h3>Correlations Attributes</h3>
-
-    <table cellpadding="3">
-      <tr class="b">
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <tr class="a">
-        <td class="c1">type</td>
-        <td class="c2">
-          Type of correlation matrix. Supported types are:<br/>
-          <ul>
-            <li>
-              basic: correlation values (&rho;) used to define the multivariate
-              t-Student distribution that generates the t-Student copula.
-            </li>
-            <li>
-              spearman: spearman's rho rank values (&rho;<sub>s</sub>). The basic 
-              correlation values are obtained using the equivalence
-              &rho; = 2·sin(&rho;<sub>s</sub>·&pi;/6) for the gaussian
-              copula, and the formula derived in paper 'Simulation of 
-              High-Dimensional t-Student Copulas with a Given Block Correlation
-              Matrix' for the t-Student copula.
-            </li>
-            <li>
-              kendall: kendall's tau rank values (&rho;<sub>&tau;</sub>). The basic 
-              correlation values are obtained using the equivalence
-              &rho; = sin(&rho;<sub>&tau;</sub>·&pi;/2) valid for any 
-              elliptical copula.
-            </li>
-          </ul>
-          This attribute is optional. Default value is 'spearman'.
-        </td>
-        <td class="c3"><code>string</code></td>
-      </tr>
-      <tr class="b">
-        <td class="c1">coerce</td>
-        <td class="c2">
-          If the correlation matrix is not positive-definite, we can coerce 
-          it to the nearest positive-definite matrix using the eigenvalue method. 
-          When correlation matrix is non-definite, this flag indicates if coercion 
-          is done (true) or not (false).
-          <br/>
-          This attribute is optional. Default value is 'false'.
-        </td>
-        <td class="c3"><code>boolean</code></td>
-      </tr>
-    </table>
 
     <h3>Sigma Attributes</h3>
 
@@ -1203,7 +1153,7 @@
             Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
           </td>
           <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 22-May-2012
+            Last modified: 03-Oct-2012
           </td>
         </tr></table>
       </div></div></div></div></div>

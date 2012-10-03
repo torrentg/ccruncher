@@ -153,7 +153,7 @@ void ccruncher::Defaults::validate() throw(Exception)
             break;
           }
         }
-        throw Exception("value not found (t=" + t + ", sector=" + sectors[i].name + ")");
+        throw Exception("value not found (t=" + t + ", sector=" + sectors.getName(i) + ")");
       }
     }
   }
@@ -187,7 +187,7 @@ string ccruncher::Defaults::getXML(int ilevel) throw(Exception)
     {
       ret += spc2 + "<data ";
       ret += "t='" + it->first  + "' ";
-      ret += "sector='" + sectors[col].name + "' ";
+      ret += "sector='" + sectors.getName(col) + "' ";
       ret += "obligors='" + Format::toString(data[row][col].nobligors) + "' ";
       ret += "defaulted='" + Format::toString(data[row][col].ndefaulted) + "'";
       ret += "/>\n";

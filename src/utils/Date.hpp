@@ -89,7 +89,6 @@ class Date
   public:
 
     Date();
-    Date(const Date& Orig);
     Date(const int iDay, const int iMonth, const int iYear) throw(Exception);
     explicit Date(const time_t tSysTime);
     Date(const string &str) throw(Exception);
@@ -153,19 +152,11 @@ bool isInterval(const char *str);
 }
 
 //===========================================================================
-// Constructor. constructs a new object initialized to current date
+// Constructor. constructs a new object with non-valid date (NAD)
 //===========================================================================
 inline ccruncher::Date::Date()
 {
   lJulianDay = nad[0];
-}
-
-//===========================================================================
-// Copy constructor
-//===========================================================================
-inline ccruncher::Date::Date(const Date& Orig) 
-{ 
-  lJulianDay = Orig.lJulianDay; 
 }
 
 //===========================================================================
