@@ -39,18 +39,21 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-struct Sector
-{
-    // sector name
-    string name;
-    // sector description
-    string desc;
-    // constructor
-    Sector(const string &n="", const string &d="") : name(n), desc(d) {}
-};
-
 class Sectors : public ExpatHandlers
 {
+
+  private:
+
+    // internal struct
+    struct Sector
+    {
+        // sector name
+        string name;
+        // sector description
+        string desc;
+        // constructor
+        Sector(const string &n="", const string &d="") : name(n), desc(d) {}
+    };
 
   private:
 
@@ -82,10 +85,10 @@ class Sectors : public ExpatHandlers
     // return the index of the sector
     int getIndex(const char *name) const;
     int getIndex(const string &name) const;
-    // [] operator
-    Sector& operator [] (int i);
-    // [] operator
-    Sector& operator [] (const string &name) throw(Exception);
+    // return sector name
+    const string& getName(int i) const;
+    // return sector description
+    const string& getDescription(int i) const;
     // returns object content as xml
     string getXML(int) const throw(Exception);
 

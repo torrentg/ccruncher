@@ -131,8 +131,6 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="type" type="correlationType" default="spearman"/>
-					<xsd:attribute name="coerce" type="xsd:boolean" default="false"/>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="segmentations" minOccurs="1" maxOccurs="1">
@@ -236,19 +234,6 @@
 			<xsd:enumeration value="simple"/>
 			<xsd:enumeration value="compound"/>
 			<xsd:enumeration value="continous"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-
-    <xsd:simpleType name="correlationType">
-		<xsd:annotation>
-			<xsd:documentation>
-				list of correlation types.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="basic"/>
-			<xsd:enumeration value="spearman"/>
-			<xsd:enumeration value="kendall"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

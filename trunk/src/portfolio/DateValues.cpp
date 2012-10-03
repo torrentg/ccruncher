@@ -34,16 +34,6 @@ ccruncher::DateValues::DateValues()
 }
 
 //===========================================================================
-// copy constructor
-//===========================================================================
-ccruncher::DateValues::DateValues(const DateValues &x)
-{
-  date = x.date;
-  exposure = x.exposure;
-  recovery = x.recovery;
-}
-
-//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::DateValues::DateValues(Date date_, const Exposure &exposure_, const Recovery &recovery_)

@@ -66,18 +66,6 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector
 }
 
 //===========================================================================
-// copy constructor
-//===========================================================================
-ccruncher::Transitions::Transitions(const Transitions &otm) throw(Exception) : ExpatHandlers()
-{
-  setRatings(otm.ratings);
-  period = otm.period;
-  indexdefault = otm.indexdefault;
-  matrix = otm.matrix;
-  rerror = 0.0;
-}
-
-//===========================================================================
 // setRatings
 //===========================================================================
 void ccruncher::Transitions::setRatings(const Ratings &ratings_)

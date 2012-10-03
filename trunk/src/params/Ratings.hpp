@@ -78,8 +78,6 @@ class Ratings : public ExpatHandlers
 
     // constructor
     Ratings();
-    // destructor
-    ~Ratings();
     // return the number of ratings
     int size() const;
     // return the index of the rating

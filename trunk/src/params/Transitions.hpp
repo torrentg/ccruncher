@@ -84,8 +84,6 @@ class Transitions : public ExpatHandlers
     Transitions(const Ratings &) throw(Exception);
     // constructor
     Transitions(const Ratings &, const vector<vector<double> > &, int) throw(Exception);
-    // copy constructor
-    Transitions(const Transitions &) throw(Exception);
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)

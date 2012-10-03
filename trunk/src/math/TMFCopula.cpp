@@ -30,7 +30,7 @@
 // copy constructor
 //===========================================================================
 ccruncher::TMFCopula::TMFCopula(const TMFCopula &x, bool alloc) throw(Exception) :
-    GMFCopula(static_cast<const GMFCopula&>(*this), alloc), ndf(x.ndf), tcdf(x.ndf)
+    GMFCopula(static_cast<const GMFCopula&>(x), alloc), ndf(x.ndf), tcdf(x.ndf)
 {
   // nothing to do
 }

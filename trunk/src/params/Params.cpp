@@ -50,14 +50,6 @@ void ccruncher::Params::init()
 }
 
 //===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Params::~Params()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
 void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char **atrs)
