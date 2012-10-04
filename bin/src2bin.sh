@@ -43,6 +43,7 @@ fi
 rm -f  $CCRUNCHER/ccruncher.sln;
 rm -f  $CCRUNCHER/ccruncher.vcproj;
 rm -f  $CCRUNCHER/ccruncher.pro*;
+rm -f  $CCRUNCHER/ccruncher-tests.pro*;
 rm -f  $CCRUNCHER/aclocal.m4;
 rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;

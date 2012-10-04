@@ -36,7 +36,6 @@ void ccruncher::GMFCopula::finalize()
 {
   if (rng != NULL) gsl_rng_free(rng);
   if (aux != NULL) gsl_vector_free(aux);
-  if (values != NULL) delete[] values;
 
   if (owner && n != NULL) delete[] n;
   if (owner && w != NULL) delete[] w;
@@ -49,7 +48,7 @@ void ccruncher::GMFCopula::finalize()
 // when exists multiple copulas with the same static data (chol)
 //===========================================================================
 ccruncher::GMFCopula::GMFCopula(const GMFCopula &x, bool alloc) throw(Exception) :
-    Copula(), n(NULL), w(NULL), chol(NULL), owner(alloc), k(x.k), rng(NULL), aux(NULL), values(NULL)
+    Copula(), n(NULL), w(NULL), chol(NULL), owner(alloc), k(x.k), rng(NULL), aux(NULL), values(x.values.size(),NAN)
 {
   if (owner)
   {
@@ -69,7 +68,6 @@ ccruncher::GMFCopula::GMFCopula(const GMFCopula &x, bool alloc) throw(Exception)
 
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   aux = gsl_vector_alloc(k);
-  values = new double[size()];
 }
 
 //===========================================================================
@@ -79,17 +77,21 @@ ccruncher::GMFCopula::GMFCopula(const GMFCopula &x, bool alloc) throw(Exception)
 // k: number of sectors
 //===========================================================================
 ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<unsigned int> &dims) throw(Exception) :
-    Copula(), n(NULL), w(NULL), chol(NULL), owner(true), k(0), rng(NULL), aux(NULL), values(NULL)
+    Copula(), n(NULL), w(NULL), chol(NULL), owner(true), k(0), rng(NULL), aux(NULL), values(0)
 {
   assert(dims.size() > 0);
   assert(M.size() == dims.size());
 
   try
   {
+    unsigned int dim = 0;
+    for(unsigned int i=0; i<dims.size(); i++) dim += dims[i];
+    if (dim == 0) throw Exception("copula dimension equals 0");
+
     k = dims.size();
-    rng = gsl_rng_alloc(gsl_rng_mt19937);
     n = new unsigned int[k];
     memcpy(n, &(dims[0]), sizeof(unsigned int)*k);
+    rng = gsl_rng_alloc(gsl_rng_mt19937);
     w = new double[k];
     chol = gsl_matrix_alloc(k, k);
     aux = gsl_vector_alloc(k);
@@ -137,7 +139,7 @@ ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<u
     }
 
     // preparing to receive the first get()
-    values = new double[size()];
+    values.assign(dim, NAN);
   }
   catch(Exception &e)
   {
@@ -164,14 +166,10 @@ Copula* ccruncher::GMFCopula::clone(bool alloc)
 
 //===========================================================================
 // size. returns number of components
-// use with care: only for debug purposes!!
 //===========================================================================
 int ccruncher::GMFCopula::size() const
 {
-  assert(k > 0 && n != NULL);
-  int ret = 0;
-  for (unsigned int i=0; i<k; i++) ret += n[i];
-  return ret;
+  return values.size();
 }
 
 //===========================================================================
@@ -184,7 +182,7 @@ void ccruncher::GMFCopula::rmvnorm()
   assert(w != NULL);
   assert(chol != NULL);
   assert(aux != NULL);
-  assert(values != NULL);
+  assert(values.size() > 0);
   assert(rng != NULL);
 
   // simulate w·N(0,R)
@@ -230,8 +228,8 @@ void ccruncher::GMFCopula::next()
 //===========================================================================
 double ccruncher::GMFCopula::get(int i) const
 {
-  assert(0 <= i && i < size());
-  return values[i];
+  if (i < 0 || (int)values.size() <= i) return NAN;
+  else return values[i];
 }
 
 //===========================================================================
@@ -239,7 +237,7 @@ double ccruncher::GMFCopula::get(int i) const
 //===========================================================================
 const double* ccruncher::GMFCopula::get() const
 {
-  return values;
+  return &(values[0]);
 }
 
 //===========================================================================
