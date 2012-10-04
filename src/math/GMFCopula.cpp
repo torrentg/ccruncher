@@ -194,7 +194,7 @@ void ccruncher::GMFCopula::rmvnorm()
   // copula simulation
   for(unsigned int pos=0, i=0; i<k; i++)
   {
-    for(unsigned int j=0; j<n[i]; j++)
+    for(unsigned int j=n[i]; j>0; j--)
     {
       // simulate pos-th component of a multivariate Normal
       values[pos] = gsl_vector_get(aux, i) + w[i]*gsl_ran_ugaussian(rng);
@@ -215,7 +215,7 @@ void ccruncher::GMFCopula::next()
   // inverse sampling method
   for(unsigned int pos=0, i=0; i<k; i++)
   {
-    for(unsigned int j=0; j<n[i]; j++)
+    for(unsigned int j=n[i]; j>0; j--)
     {
       values[pos] = gsl_cdf_ugaussian_P(values[pos]);
       pos++;

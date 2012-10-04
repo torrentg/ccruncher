@@ -84,7 +84,7 @@ void ccruncher::TMFCopula::next()
   // inverse sampling method
   for(unsigned int pos=0, i=0; i<k; i++)
   {
-    for(unsigned int j=0; j<n[i]; j++)
+    for(unsigned int j=n[i]; j>0; j--)
     {
       //values[pos] = gsl_cdf_tdist_P(factor*values[pos], ndf);
       values[pos] = tcdf.eval(factor*values[pos]);
