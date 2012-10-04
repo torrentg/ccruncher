@@ -96,17 +96,18 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     Logger::trace("reading input file", '*');
     Logger::newIndentLevel();
 
+    // trace file info
+    Logger::trace("file name", filename);
+    if (filename != STDIN_FILENAME)
+    {
+      Logger::trace("file size", Format::bytes(File::filesize(filename)));
+    }
+
     // trace defines
     map<string,string>::const_iterator it;
     for (it=m.begin() ; it != m.end(); it++) {
       checkDefine((*it).first, (*it).second);
       Logger::trace("define (command line)", (*it).first+"="+(*it).second);
-    }
-
-    // trace file info
-    if (filename != STDIN_FILENAME) 
-    {
-      Logger::trace("file size (" + filename + ")", Format::bytes(File::filesize(filename)));
     }
 
     // parsing
@@ -384,7 +385,8 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       }
       else
       {
-        Logger::trace("file size (" + filepath + ")", Format::bytes(File::filesize(filepath)));
+        Logger::trace("included file name", filepath);
+        Logger::trace("included file size", Format::bytes(File::filesize(filepath)));
         ExpatParser parser;
         parser.setDefines(eu.defines);
         parser.parse(xmlstream, portfolio);

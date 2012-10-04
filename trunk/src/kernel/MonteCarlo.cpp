@@ -371,7 +371,6 @@ void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 {
-  timer.start();
   seed = idata.getParams().copula_seed;
 
   // doing assertions
@@ -433,7 +432,6 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
   copula->setSeed(seed);
 
   // exit function
-  Logger::trace("elapsed time initializing copula", timer);
   Logger::previousIndentLevel();
 }
 
@@ -442,7 +440,6 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
-  timer.start();
   segmentations = &(idata.getSegmentations());
 
   // assertions
@@ -467,7 +464,6 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::trace("elapsed time initializing aggregators", timer);
   Logger::previousIndentLevel();
 }
 
