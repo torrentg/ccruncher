@@ -20,79 +20,56 @@
 //
 //===========================================================================
 
-#ifndef _GMFCopula_
-#define _GMFCopula_
+#ifndef _TMFCopulaTest_
+#define _TMFCopulaTest_
 
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_rng.h>
-#include "math/Copula.hpp"
-#include "utils/Exception.hpp"
+#include <MiniCppUnit.hxx>
+#include "math/TMFCopula.hpp"
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 using namespace ccruncher;
-namespace ccruncher {
+namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class GMFCopula : public Copula
+class TMFCopulaTest : public TestFixture<TMFCopulaTest>
 {
 
-  protected:
+  private:
 
-    // number of elements per factor
-    unsigned int *n;
-    // factor loadings
-    double *w;
-    // cholesky matrix
-    gsl_matrix *chol;
-    // memory owner flag
-    bool owner;
-    // number of factors
-    unsigned int k;
-    // random number generator
-    gsl_rng *rng;
-    // simulated factors
-    gsl_vector *aux;
-    // simulated values
-    vector<double> values;
+    int getSector(int x, int *n, int m);
+    double pearsn(const vector<double> &x, const vector<double> &y);
+    void testCopula(Copula &, const vector<vector<double> > &, int *n);
+    void computeDensity(Copula &copula);
+    virtual vector<vector<double> > spearman(const vector<vector<double> > &);
 
-  protected:
+    void test1();
+    void test2();
+    void test3();
+    void test4();
+    void test5();
+    void test6();
 
-    // dealloc buffers
-    void finalize();
-    // simulate a multivariate gaussian
-    void rmvnorm();
 
   public:
 
-    // constructor
-    GMFCopula(const vector<vector<double> > &M, const vector<unsigned int> &dims) throw(Exception);
-    // copy constructor
-    GMFCopula(const GMFCopula &, bool alloc=true) throw(Exception);
-    // destructor
-    ~GMFCopula();
-    // clone
-    Copula* clone(bool alloc=true);
-    // returns the copula size (n)
-    int size() const;
-    // simulates a copula realization
-    void next();
-    // returns i-th component
-    double get(int) const;
-    // returns simulated values
-    const double* get() const;
-    // random number generator seed
-    void setSeed(long);
-    // returns the Random Number Generator
-    gsl_rng* getRng();
+    TEST_FIXTURE(TMFCopulaTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+      TEST_CASE(test5);
+      TEST_CASE(test6);
+    }
 
 };
+
+REGISTER_FIXTURE(TMFCopulaTest)
 
 //---------------------------------------------------------------------------
 
