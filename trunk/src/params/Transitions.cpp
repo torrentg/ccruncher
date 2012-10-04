@@ -57,7 +57,7 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
 ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector<double> > &matrix_, int period_) throw(Exception)
 {
   assert(period_ > 0);
-  assert(ratings_.size() == (int)matrix.size());
+  assert(ratings_.size() == (int)matrix_.size());
   setRatings(ratings_);
   period = period_;
   matrix = matrix_;
@@ -473,5 +473,14 @@ void ccruncher::Transitions::prod(const vector<vector<double> > &M1, const vecto
       M3[i][j] = val;
     }
   }
+}
+
+//===========================================================================
+// matrix element access
+//===========================================================================
+const vector<double>& ccruncher::Transitions::operator[] (int row) const
+{
+  assert(row >= 0 && row < (int)matrix.size());
+  return matrix[row];
 }
 

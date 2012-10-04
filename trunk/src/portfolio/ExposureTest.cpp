@@ -31,25 +31,9 @@
 using namespace ccruncher;
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ExposureTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ExposureTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test1. constructors
 //===========================================================================
-void ccruncher_test::ExposureTest::test1(void)
+void ccruncher_test::ExposureTest::test1()
 {
   Exposure r0 = Exposure(Exposure::Fixed,NAN);
   ASSERT(r0.getType() == Exposure::Fixed && isnan(r0.getValue1()) && isnan(r0.getValue2()));
@@ -103,7 +87,7 @@ void ccruncher_test::ExposureTest::test1(void)
 //===========================================================================
 // test2. ranges
 //===========================================================================
-void ccruncher_test::ExposureTest::test2(void)
+void ccruncher_test::ExposureTest::test2()
 {
   ASSERT_THROW(Exposure(Exposure::Fixed,-0.5)); // fixed & distinct than [0,1]
   ASSERT_NO_THROW(Exposure(Exposure::Fixed,+1.5)); // fixed & distinct than [0,1]

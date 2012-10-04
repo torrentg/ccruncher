@@ -27,7 +27,6 @@
 
 #include "utils/config.h"
 #include <gsl/gsl_rng.h>
-#include "math/BlockMatrixChol.hpp"
 
 //---------------------------------------------------------------------------
 

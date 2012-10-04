@@ -51,10 +51,10 @@ class ObligorTest : public TestFixture<ObligorTest>
     Segmentations getSegmentations();
     Interest getInterest(const Date &);
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
 
 
   public:
@@ -67,12 +67,9 @@ class ObligorTest : public TestFixture<ObligorTest>
       TEST_CASE(test4);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(ObligorTest);
+REGISTER_FIXTURE(ObligorTest)
 
 //---------------------------------------------------------------------------
 

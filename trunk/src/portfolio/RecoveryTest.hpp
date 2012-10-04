@@ -30,7 +30,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -40,8 +39,8 @@ class RecoveryTest : public TestFixture<RecoveryTest>
 
   private:
 
-    void test1(void);
-    void test2(void);
+    void test1();
+    void test2();
 
 
   public:
@@ -52,12 +51,9 @@ class RecoveryTest : public TestFixture<RecoveryTest>
       TEST_CASE(test2);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(RecoveryTest);
+REGISTER_FIXTURE(RecoveryTest)
 
 //---------------------------------------------------------------------------
 

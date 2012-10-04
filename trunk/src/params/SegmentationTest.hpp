@@ -40,7 +40,7 @@ class SegmentationTest : public TestFixture<SegmentationTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -50,12 +50,9 @@ class SegmentationTest : public TestFixture<SegmentationTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(SegmentationTest);
+REGISTER_FIXTURE(SegmentationTest)
 
 //---------------------------------------------------------------------------
 

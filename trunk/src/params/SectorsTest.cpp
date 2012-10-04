@@ -25,22 +25,6 @@
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::SectorsTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::SectorsTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test1
 //===========================================================================
 void ccruncher_test::SectorsTest::test1()
@@ -63,14 +47,14 @@ void ccruncher_test::SectorsTest::test1()
   ASSERT_EQUALS(0, sectors.getIndex("S1"));
   ASSERT_EQUALS(1, sectors.getIndex("S2"));
 
-  ASSERT("S1" == sectors[0].name);
-  ASSERT("S2" == sectors[1].name);
+  ASSERT("S1" == sectors.getName(0));
+  ASSERT("S2" == sectors.getName(1));
 
-  ASSERT("retail" == sectors[0].desc);
-  ASSERT("others" == sectors[1].desc);
+  ASSERT("retail" == sectors.getDescription(0));
+  ASSERT("others" == sectors.getDescription(1));
 
-  ASSERT(sectors[0].name == "S1");
-  ASSERT(sectors[1].name == "S2");
+  ASSERT(sectors.getName(0) == "S1");
+  ASSERT(sectors.getName(1) == "S2");
 }
 
 //===========================================================================

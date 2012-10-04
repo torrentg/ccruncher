@@ -23,26 +23,12 @@
 #include "utils/File.hpp"
 #include "utils/FileTest.hpp"
 
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::FileTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::FileTest::tearDown()
-{
-  // nothing to do
-}
+using namespace ccruncher;
 
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::FileTest::test1(void)
+void ccruncher_test::FileTest::test1()
 {
   // testing normalizePath function
   string str1;

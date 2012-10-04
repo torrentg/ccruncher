@@ -77,10 +77,8 @@ class Asset : public ExpatHandlers
 
     // constructor
     Asset(Segmentations *);
-    // destructor
-    ~Asset();
     // return asset id
-    string getId(void) const;
+    string getId() const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precpare data

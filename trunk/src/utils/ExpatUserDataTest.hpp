@@ -30,7 +30,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -40,7 +39,7 @@ class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -50,12 +49,9 @@ class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(ExpatUserDataTest);
+REGISTER_FIXTURE(ExpatUserDataTest)
 
 //---------------------------------------------------------------------------
 

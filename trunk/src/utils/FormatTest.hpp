@@ -40,7 +40,7 @@ class FormatTest : public TestFixture<FormatTest>
 
   private:
 
-    void test_toString(void);
+    void test_toString();
 
 
   public:
@@ -50,12 +50,9 @@ class FormatTest : public TestFixture<FormatTest>
       TEST_CASE(test_toString);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(FormatTest);
+REGISTER_FIXTURE(FormatTest)
 
 //---------------------------------------------------------------------------
 

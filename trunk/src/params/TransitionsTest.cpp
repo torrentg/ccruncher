@@ -20,30 +20,14 @@
 //
 //===========================================================================
 
+#include <vector>
 #include "params/Transitions.hpp"
 #include "params/TransitionsTest.hpp"
 #include "utils/ExpatParser.hpp"
-#include "utils/Arrays.hpp"
 
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-5
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::TransitionsTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::TransitionsTest::tearDown()
-{
-  // nothing to do
-}
 
 //===========================================================================
 // getRatings
@@ -133,16 +117,12 @@ void ccruncher_test::TransitionsTest::test1()
   // transition matrix creation
   Transitions trm(ratings);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &trm));
-
-  double **matrix = trm.getMatrix();
-
   ASSERT(5 == trm.size());
-
-  for(int i=0;i<5;i++)
+  for(int i=0; i<5; i++)
   {
-    for(int j=0;j<5;j++)
+    for(int j=0; j<5; j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], trm[i][j], EPSILON);
     }
   }
 
@@ -151,25 +131,21 @@ void ccruncher_test::TransitionsTest::test1()
 
   // testing scale method
   Transitions aux = trm.scale(12);
-  matrix = aux.getMatrix();
-
-  for(int i=0;i<5;i++)
+  for(int i=0; i<5; i++)
   {
-    for(int j=0;j<5;j++)
+    for(int j=0; j<5; j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*5], aux[i][j], EPSILON);
     }
   }
 
   // testing scale method
   aux = trm.scale(1);
-  matrix = aux.getMatrix();
-
-  for(int i=0;i<5;i++)
+  for(int i=0; i<5; i++)
   {
-    for(int j=0;j<5;j++)
+    for(int j=0; j<5; j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix1[j+i*5], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix1[j+i*5], aux[i][j], EPSILON);
     }
   }
 
@@ -389,8 +365,7 @@ void ccruncher_test::TransitionsTest::test5()
    0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  1.00000
   };
 
-  double **matrix=NULL;
-  double **values = Arrays<double>::allocMatrix(8, 8);
+  vector<vector<double> > values(8, vector<double>(8));
   for(int i=0; i<8; i++)
   {
     for(int j=0; j<8; j++) 
@@ -401,26 +376,23 @@ void ccruncher_test::TransitionsTest::test5()
 
   // transition matrix creation (1-year)
   Transitions t12(ratings, values, 12);
-  Arrays<double>::deallocMatrix(values, 8);
   ASSERT(t12.size() == 8);
-  matrix = t12.getMatrix();
-  for(int i=0;i<8;i++)
+  for(int i=0; i<8; i++)
   {
-    for(int j=0;j<8;j++)
+    for(int j=0; j<8; j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*8], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix12[j+i*8], t12[i][j], EPSILON);
     }
   }
 
   // regularized transition matrix (6-months)
   Transitions t6 = t12.scale(6);
   ASSERT(t6.size() == 8);
-  matrix = t6.getMatrix();
-  for(int i=0;i<8;i++)
+  for(int i=0; i<8; i++)
   {
-    for(int j=0;j<8;j++)
+    for(int j=0; j<8; j++)
     {
-      ASSERT_EQUALS_EPSILON(QOM[j+i*8], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(QOM[j+i*8], t6[i][j], EPSILON);
     }
   }
 }

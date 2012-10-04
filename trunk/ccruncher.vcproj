@@ -334,35 +334,19 @@
 				Name="math"
 				>
 				<File
-					RelativePath="src\math\BlockGaussianCopula.cpp"
+					RelativePath="src\math\GMFCopula.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\math\BlockGaussianCopula.hpp"
+					RelativePath="src\math\GMFCopula.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\math\BlockMatrixChol.cpp"
+					RelativePath="src\math\TMFCopula.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\math\BlockMatrixCholInv.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\BlockMatrixChol.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\BlockMatrixCholInv.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\BlockTStudentCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\BlockTStudentCopula.hpp"
+					RelativePath="src\math\TMFCopula.hpp"
 					>
 				</File>
 				<File
@@ -441,14 +425,6 @@
 			<Filter
 				Name="utils"
 				>
-				<File
-					RelativePath="src\utils\Arrays.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\utils\Arrays.hpp"
-					>
-				</File>
 				<File
 					RelativePath="src\utils\config.h"
 					>

@@ -198,7 +198,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) 
 //===========================================================================
 // check class content
 //===========================================================================
-void ccruncher::Params::validate(void) const throw(Exception)
+void ccruncher::Params::validate() const throw(Exception)
 {
 
   if (time0 == NAD)

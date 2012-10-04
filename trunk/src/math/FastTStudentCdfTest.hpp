@@ -51,12 +51,9 @@ class FastTStudentCdfTest : public TestFixture<FastTStudentCdfTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(FastTStudentCdfTest);
+REGISTER_FIXTURE(FastTStudentCdfTest)
 
 //---------------------------------------------------------------------------
 

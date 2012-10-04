@@ -30,22 +30,6 @@
 #define EPSILON 0.001
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::AssetTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::AssetTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // getSegmentations
 //===========================================================================
 Segmentations ccruncher_test::AssetTest::getSegmentations()
@@ -204,8 +188,8 @@ void ccruncher_test::AssetTest::test2()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='01/01/1999'>\n\
-        <belongs-to segmentation='product' segment='bond'/>\n\
-        <belongs-to segmentation='office' segment='0001'/>\n\
+        <belongs-to segmentation='products' segment='bond'/>\n\
+        <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
           <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
           <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
@@ -235,8 +219,8 @@ void ccruncher_test::AssetTest::test3()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='01/01/2005'>\n\
-        <belongs-to segmentation='product' segment='bond'/>\n\
-        <belongs-to segmentation='office' segment='0001'/>\n\
+        <belongs-to segmentation='products' segment='bond'/>\n\
+        <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
           <values at='-5Y' exposure='570.0' recovery='80%' />\n\
           <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\

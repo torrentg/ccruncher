@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <vector>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
 #include "math/Copula.hpp"

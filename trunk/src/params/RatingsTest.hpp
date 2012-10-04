@@ -40,10 +40,10 @@ class RatingsTest : public TestFixture<RatingsTest>
 
   private:
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
 
 
   public:
@@ -56,12 +56,9 @@ class RatingsTest : public TestFixture<RatingsTest>
       TEST_CASE(test4);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(RatingsTest);
+REGISTER_FIXTURE(RatingsTest)
 
 //---------------------------------------------------------------------------
 

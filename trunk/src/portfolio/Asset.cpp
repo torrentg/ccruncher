@@ -40,17 +40,9 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
 }
 
 //===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Asset::~Asset()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // getId
 //===========================================================================
-string ccruncher::Asset::getId(void) const
+string ccruncher::Asset::getId() const
 {
   return id;
 }

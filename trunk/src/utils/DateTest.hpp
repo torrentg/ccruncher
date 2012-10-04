@@ -30,7 +30,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -40,15 +39,15 @@ class DateTest : public TestFixture<DateTest>
 
   private:
 
-    void test_constructors(void);
-    void test_valid(void);
-    void test_gets(void);
-    void test_rollers(void);
-    void test_misc(void);
-    void test_comparators(void);
-    void test_dayofweek(void);
-    void test_distances(void);
-    void test_intervals(void);
+    void test_constructors();
+    void test_valid();
+    void test_gets();
+    void test_rollers();
+    void test_misc();
+    void test_comparators();
+    void test_dayofweek();
+    void test_distances();
+    void test_intervals();
 
   public:
 
@@ -65,12 +64,9 @@ class DateTest : public TestFixture<DateTest>
       TEST_CASE(test_intervals);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(DateTest);
+REGISTER_FIXTURE(DateTest)
 
 //---------------------------------------------------------------------------
 

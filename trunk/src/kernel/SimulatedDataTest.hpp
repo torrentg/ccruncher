@@ -52,7 +52,7 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
     Interest getInterest(const Date &);
     vector<Obligor*> getObligors();
     
-    void test1(void);
+    void test1();
 
 
   public:
@@ -62,12 +62,9 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(SimulatedDataTest);
+REGISTER_FIXTURE(SimulatedDataTest)
 
 //---------------------------------------------------------------------------
 
