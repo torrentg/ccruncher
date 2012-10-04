@@ -75,6 +75,8 @@ class Correlations : public ExpatHandlers
     int size() const;
     // returns a pointer to matrix values
     const vector<vector<double> >& getMatrix() const;
+    // matrix element access
+    const vector<double>& operator[] (int row) const;
     // serializes object content as xml
     string getXML(int) throw(Exception);
 

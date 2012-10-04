@@ -24,6 +24,7 @@
 #include "params/Correlations.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
+#include <cassert>
 
 #define EPSILON 1e-12
 
@@ -195,4 +196,14 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
   ret += spc1 + "</correlations>\n";
 
   return ret;
+}
+
+
+//===========================================================================
+// matrix element access
+//===========================================================================
+const vector<double>& ccruncher::Correlations::operator[] (int row) const
+{
+  assert(row >= 0 && row < (int)matrix.size());
+  return matrix[row];
 }

@@ -40,10 +40,10 @@ class SectorsTest : public TestFixture<SectorsTest>
 
   private:
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
 
 
   public:
@@ -56,12 +56,9 @@ class SectorsTest : public TestFixture<SectorsTest>
       TEST_CASE(test4);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(SectorsTest);
+REGISTER_FIXTURE(SectorsTest)
 
 //---------------------------------------------------------------------------
 

@@ -40,11 +40,11 @@ class ParserTest : public TestFixture<ParserTest>
 
   private:
 
-    void test_int(void);
-    void test_long(void);
-    void test_double(void);
-    void test_date(void);
-    void test_bool(void);
+    void test_int();
+    void test_long();
+    void test_double();
+    void test_date();
+    void test_bool();
 
 
   public:
@@ -58,12 +58,9 @@ class ParserTest : public TestFixture<ParserTest>
       TEST_CASE(test_bool);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(ParserTest);
+REGISTER_FIXTURE(ParserTest)
 
 //---------------------------------------------------------------------------
 

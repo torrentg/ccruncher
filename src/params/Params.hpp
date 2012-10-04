@@ -50,7 +50,7 @@ class Params : public ExpatHandlers
     // parse a property
     void parseProperty(ExpatUserData &, const char **) throw(Exception);
     // validate object content
-    void validate(void) const throw(Exception);
+    void validate() const throw(Exception);
 
   public:
 

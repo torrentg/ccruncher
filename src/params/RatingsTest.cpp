@@ -25,22 +25,6 @@
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::RatingsTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::RatingsTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test1
 //===========================================================================
 void ccruncher_test::RatingsTest::test1()
@@ -63,11 +47,11 @@ void ccruncher_test::RatingsTest::test1()
 
   ASSERT(5 == ratings.size());
 
-  ASSERT("A" == ratings[0].name);
-  ASSERT("B" == ratings[1].name);
-  ASSERT("D" == ratings[2].name);
-  ASSERT("C" == ratings[3].name);
-  ASSERT("E" == ratings[4].name);
+  ASSERT("A" == ratings.getName(0));
+  ASSERT("B" == ratings.getName(1));
+  ASSERT("D" == ratings.getName(2));
+  ASSERT("C" == ratings.getName(3));
+  ASSERT("E" == ratings.getName(4));
 
   ASSERT(0 == ratings.getIndex("A"));
   ASSERT(1 == ratings.getIndex("B"));
@@ -75,11 +59,11 @@ void ccruncher_test::RatingsTest::test1()
   ASSERT(3 == ratings.getIndex("C"));
   ASSERT(4 == ratings.getIndex("E"));
 
-  ASSERT("very good" == ratings[0].desc);
-  ASSERT("good" == ratings[1].desc);
-  ASSERT("very bad" == ratings[2].desc);
-  ASSERT("bad" == ratings[3].desc);
-  ASSERT("defaulted" == ratings[4].desc);
+  ASSERT("very good" == ratings.getDescription(0));
+  ASSERT("good" == ratings.getDescription(1));
+  ASSERT("very bad" == ratings.getDescription(2));
+  ASSERT("bad" == ratings.getDescription(3));
+  ASSERT("defaulted" == ratings.getDescription(4));
 }
 
 //===========================================================================

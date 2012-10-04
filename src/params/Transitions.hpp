@@ -94,8 +94,6 @@ class Transitions : public ExpatHandlers
     int getIndexDefault() const;
     // simulate transition with random value val
     int evalue(const int irating, const double val) const;
-    // serialize object content as xml
-    string getXML(int) const throw(Exception);
     // regularize the transition matrix
     void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
@@ -104,6 +102,10 @@ class Transitions : public ExpatHandlers
     Survivals getSurvivals(int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
+    // matrix element access
+    const vector<double>& operator[] (int row) const;
+    // serialize object content as xml
+    string getXML(int) const throw(Exception);
 
 };
 

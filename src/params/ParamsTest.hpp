@@ -40,9 +40,9 @@ class ParamsTest : public TestFixture<ParamsTest>
 
   private:
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
+    void test1();
+    void test2();
+    void test3();
 
 
   public:
@@ -54,12 +54,9 @@ class ParamsTest : public TestFixture<ParamsTest>
       TEST_CASE(test3);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(ParamsTest);
+REGISTER_FIXTURE(ParamsTest)
 
 //---------------------------------------------------------------------------
 

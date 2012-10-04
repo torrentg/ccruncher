@@ -43,11 +43,11 @@ class TransitionsTest : public TestFixture<TransitionsTest>
 
     Ratings getRatings();
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
+    void test5();
 
 
   public:
@@ -61,12 +61,9 @@ class TransitionsTest : public TestFixture<TransitionsTest>
       TEST_CASE(test5);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(TransitionsTest);
+REGISTER_FIXTURE(TransitionsTest)
 
 //---------------------------------------------------------------------------
 

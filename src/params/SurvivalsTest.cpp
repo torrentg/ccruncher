@@ -31,22 +31,6 @@
 #define EPSILON 1E-6
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::SurvivalsTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::SurvivalsTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // getRatings
 //===========================================================================
 Ratings ccruncher_test::SurvivalsTest::getRatings()
@@ -188,7 +172,6 @@ void ccruncher_test::SurvivalsTest::test5()
 {
   double mvalues1[] = {1.00, 0.75, 0.50, 0.25, 0.175, 0.10};
   double mvalues2[] = {0.00, 0.00, 0.00, 0.00, 0.000, 0.00};
-  double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 1, 2, 3, 4, 5};
   double svalues[] = { 1.00, 0.75, 0.50, 0.25, 0.175, 0.10, 1.0};
   double ivalues[] = { 17.0, 5.0, 3.66666666, 2.8, 2.4, 2.0, 1.6, 1.2, 0.8, 0.4, 0.0};
@@ -197,7 +180,10 @@ void ccruncher_test::SurvivalsTest::test5()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survivals sf(ratings, 6, (int *) imonths, (double**) mvalues);
+  vector<vector<double> > mvalues(2);
+  mvalues[0] = vector<double>(mvalues1, mvalues1+6);
+  mvalues[1] = vector<double>(mvalues2, mvalues2+6);
+  Survivals sf(ratings, vector<int>(imonths, imonths+6), mvalues);
 
   // checking values
   for(int i=0;i<7;i++)
@@ -221,7 +207,6 @@ void ccruncher_test::SurvivalsTest::test6()
 {
   double mvalues1[] = {1.00, 0.90};
   double mvalues2[] = {0.00, 0.00};
-  double *mvalues[] = {mvalues1, mvalues2};
   int imonths[] = {0, 12};
   int ivalues[] = {0, 0};
 
@@ -229,7 +214,10 @@ void ccruncher_test::SurvivalsTest::test6()
   Ratings ratings = getRatings();
 
   // survival function creation
-  Survivals sf(ratings, 2, (int *) imonths, (double**) mvalues);
+  vector<vector<double> > mvalues(2);
+  mvalues[0] = vector<double>(mvalues1, mvalues1+2);
+  mvalues[1] = vector<double>(mvalues2, mvalues2+2);
+  Survivals sf(ratings, vector<int>(imonths, imonths+2), mvalues);
 
   // creating randomizer
   gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);

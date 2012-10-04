@@ -31,25 +31,9 @@
 using namespace ccruncher;
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::RecoveryTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::RecoveryTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test1. constructors
 //===========================================================================
-void ccruncher_test::RecoveryTest::test1(void)
+void ccruncher_test::RecoveryTest::test1()
 {
   Recovery r0 = Recovery(Recovery::Fixed,NAN);
   ASSERT(r0.getType() == Recovery::Fixed && isnan(r0.getValue1()) && isnan(r0.getValue2()));
@@ -103,7 +87,7 @@ void ccruncher_test::RecoveryTest::test1(void)
 //===========================================================================
 // test2. ranges
 //===========================================================================
-void ccruncher_test::RecoveryTest::test2(void)
+void ccruncher_test::RecoveryTest::test2()
 {
   ASSERT_THROW(Recovery(Recovery::Fixed,-0.5)); // fixed & distinct than [0,1]
   ASSERT_THROW(Recovery(Recovery::Fixed,+1.5)); // fixed & distinct than [0,1]

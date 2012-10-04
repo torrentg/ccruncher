@@ -40,7 +40,7 @@ class StringsTest : public TestFixture<StringsTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -50,12 +50,9 @@ class StringsTest : public TestFixture<StringsTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(StringsTest);
+REGISTER_FIXTURE(StringsTest)
 
 //---------------------------------------------------------------------------
 

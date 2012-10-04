@@ -172,7 +172,7 @@ public:
 class Assert
 {
 	static const char * errmsgTag_testFailedIn() { return "Test failed in "; }
-	static const char * errmsgTag_inLine() { return ", line: "; };
+    static const char * errmsgTag_inLine() { return ", line: "; }
 	static const char * errmsgTag_failedExpression() { return "Failed expression: "; } 
 	static const char * errmsgTag_expected() { return "Expected: "; } 
 	static const char * errmsgTag_butWas() { return "But was: "; } 

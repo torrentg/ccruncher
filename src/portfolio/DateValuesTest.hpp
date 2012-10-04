@@ -39,7 +39,7 @@ class DateValuesTest : public TestFixture<DateValuesTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -49,12 +49,9 @@ class DateValuesTest : public TestFixture<DateValuesTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(DateValuesTest);
+REGISTER_FIXTURE(DateValuesTest)
 
 //---------------------------------------------------------------------------
 

@@ -40,7 +40,7 @@ class UtilsTest : public TestFixture<UtilsTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -50,12 +50,9 @@ class UtilsTest : public TestFixture<UtilsTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(UtilsTest);
+REGISTER_FIXTURE(UtilsTest)
 
 //---------------------------------------------------------------------------
 

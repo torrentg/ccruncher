@@ -28,26 +28,12 @@
 
 #define EPSILON 1E-14
 
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::DateTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::DateTest::tearDown()
-{
-  // nothing to do
-}
+using namespace ccruncher;
 
 //===========================================================================
 // test_constructors
 //===========================================================================
-void ccruncher_test::DateTest::test_constructors(void)
+void ccruncher_test::DateTest::test_constructors()
 {
   Date invalid_date = Date();
   Date date1 = Date(25,7,2001);
@@ -66,7 +52,7 @@ void ccruncher_test::DateTest::test_constructors(void)
 //===========================================================================
 // test_valid
 //===========================================================================
-void ccruncher_test::DateTest::test_valid(void)
+void ccruncher_test::DateTest::test_valid()
 {
   ASSERT(Date::valid(25,12,2004));
   ASSERT(!Date::valid(25,13,2004));
@@ -77,7 +63,7 @@ void ccruncher_test::DateTest::test_valid(void)
 //===========================================================================
 // test_gets
 //===========================================================================
-void ccruncher_test::DateTest::test_gets(void)
+void ccruncher_test::DateTest::test_gets()
 {
   Date date1 = Date(25,12,2005);
 
@@ -96,7 +82,7 @@ void ccruncher_test::DateTest::test_gets(void)
 //===========================================================================
 // test_rollers
 //===========================================================================
-void ccruncher_test::DateTest::test_rollers(void)
+void ccruncher_test::DateTest::test_rollers()
 {
   Date date1 = Date("25/12/2004");
   Date date2;
@@ -139,7 +125,7 @@ void ccruncher_test::DateTest::test_rollers(void)
 //===========================================================================
 // test_misc
 //===========================================================================
-void ccruncher_test::DateTest::test_misc(void)
+void ccruncher_test::DateTest::test_misc()
 {
   Date date1 = Date(1,2,2005);
 
@@ -162,7 +148,7 @@ void ccruncher_test::DateTest::test_misc(void)
 //===========================================================================
 // test_comparators
 //===========================================================================
-void ccruncher_test::DateTest::test_comparators(void)
+void ccruncher_test::DateTest::test_comparators()
 {
   Date date1 = Date(23,11,2003);
   Date date2 = Date(25,12,2004);
@@ -194,7 +180,7 @@ void ccruncher_test::DateTest::test_comparators(void)
 //===========================================================================
 // test_dayofweek
 //===========================================================================
-void ccruncher_test::DateTest::test_dayofweek(void)
+void ccruncher_test::DateTest::test_dayofweek()
 {
   Date date0 = Date(15, 5,1994);  //sunday    (0)
   Date date1 = Date( 7, 4,2008);  //monday    (1)
@@ -216,7 +202,7 @@ void ccruncher_test::DateTest::test_dayofweek(void)
 //===========================================================================
 // test_distances
 //===========================================================================
-void ccruncher_test::DateTest::test_distances(void)
+void ccruncher_test::DateTest::test_distances()
 {
   Date date0 = Date( 1, 1,2010);
   Date date1 = Date( 2, 1,2010);
@@ -272,7 +258,7 @@ void ccruncher_test::DateTest::test_distances(void)
 //===========================================================================
 // test_interval_increments
 //===========================================================================
-void ccruncher_test::DateTest::test_intervals(void)
+void ccruncher_test::DateTest::test_intervals()
 {
   ASSERT(ccruncher::isInterval("-450D"));
   ASSERT(ccruncher::isInterval("45D"));

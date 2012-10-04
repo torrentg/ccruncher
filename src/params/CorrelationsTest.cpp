@@ -30,22 +30,6 @@
 #define EPSILON 1E-14
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::CorrelationsTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::CorrelationsTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // getSectors
 //===========================================================================
 Sectors ccruncher_test::CorrelationsTest::getSectors()
@@ -92,15 +76,13 @@ void ccruncher_test::CorrelationsTest::test1()
   Correlations crm(sectors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
-  double **matrix = crm.getMatrix();
-
   ASSERT(2 == crm.size());
 
-  for(int i=0;i<2;i++)
+  for(int i=0; i<2; i++)
   {
-    for(int j=0;j<2;j++)
+    for(int j=0; j<2; j++)
     {
-      ASSERT_EQUALS_EPSILON(vmatrix[j+i*2], matrix[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(vmatrix[j+i*2], crm[i][j], EPSILON);
     }
   }
 }

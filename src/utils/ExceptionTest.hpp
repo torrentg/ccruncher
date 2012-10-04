@@ -41,12 +41,12 @@ class ExceptionTest : public TestFixture<ExceptionTest>
 
   private:
 
-    void function1(void);
-    void function2(void) throw(ccruncher::Exception, exception);
-    void function3(void) throw(ccruncher::Exception);
-    void function4(void) throw();
+    void function1();
+    void function2() throw(ccruncher::Exception, exception);
+    void function3() throw(ccruncher::Exception);
+    void function4() throw();
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -56,12 +56,9 @@ class ExceptionTest : public TestFixture<ExceptionTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(ExceptionTest);
+REGISTER_FIXTURE(ExceptionTest)
 
 //---------------------------------------------------------------------------
 

@@ -43,13 +43,13 @@ class SurvivalsTest : public TestFixture<SurvivalsTest>
 
     Ratings getRatings();
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
-    void test6(void);
-    void test7(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
+    void test5();
+    void test6();
+    void test7();
 
 
   public:
@@ -65,12 +65,9 @@ class SurvivalsTest : public TestFixture<SurvivalsTest>
       TEST_CASE(test7);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(SurvivalsTest);
+REGISTER_FIXTURE(SurvivalsTest)
 
 //---------------------------------------------------------------------------
 

@@ -26,25 +26,9 @@
 using namespace ccruncher;
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ExpatUserDataTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ExpatUserDataTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::ExpatUserDataTest::test1(void)
+void ccruncher_test::ExpatUserDataTest::test1()
 {
   ExpatUserData eud(10);
   eud.defines["var1"] = "abc";

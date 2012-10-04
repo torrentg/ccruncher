@@ -30,25 +30,9 @@
 using namespace ccruncher;
 
 //===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ParserTest::setUp()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// setUp
-//===========================================================================
-void ccruncher_test::ParserTest::tearDown()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // test_int
 //===========================================================================
-void ccruncher_test::ParserTest::test_int(void)
+void ccruncher_test::ParserTest::test_int()
 {
   ASSERT_EQUALS(1, Parser::intValue("1"));
   ASSERT_EQUALS(2, Parser::intValue("+2"));
@@ -64,7 +48,7 @@ void ccruncher_test::ParserTest::test_int(void)
 //===========================================================================
 // test_long
 //===========================================================================
-void ccruncher_test::ParserTest::test_long(void)
+void ccruncher_test::ParserTest::test_long()
 {
   ASSERT_EQUALS(1L, Parser::longValue("1"));
   ASSERT_EQUALS(2L, Parser::longValue("+2"));
@@ -80,7 +64,7 @@ void ccruncher_test::ParserTest::test_long(void)
 //===========================================================================
 // test_double
 //===========================================================================
-void ccruncher_test::ParserTest::test_double(void)
+void ccruncher_test::ParserTest::test_double()
 {
   ASSERT_EQUALS_EPSILON(1.0, Parser::doubleValue("1"), EPSILON);
   ASSERT_EQUALS_EPSILON(2.0, Parser::doubleValue("+2"), EPSILON);
@@ -115,7 +99,7 @@ void ccruncher_test::ParserTest::test_double(void)
 //===========================================================================
 // test_date
 //===========================================================================
-void ccruncher_test::ParserTest::test_date(void)
+void ccruncher_test::ParserTest::test_date()
 {
   Date date1 = Parser::dateValue("5/1/2001");
 
@@ -136,7 +120,7 @@ void ccruncher_test::ParserTest::test_date(void)
 //===========================================================================
 // test_bool
 //===========================================================================
-void ccruncher_test::ParserTest::test_bool(void)
+void ccruncher_test::ParserTest::test_bool()
 {
   ASSERT_EQUALS(true, Parser::boolValue("true"));
   ASSERT_EQUALS(false, Parser::boolValue("false"));

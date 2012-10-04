@@ -40,14 +40,11 @@ class TimerTest : public TestFixture<TimerTest>
 
   private:
 
-    void test1(void);
-    void test2(void);
+    void test1();
+    void test2();
 
 
   public:
-
-    void setUp();
-    void tearDown();
 
     TEST_FIXTURE(TimerTest)
     {
@@ -57,7 +54,7 @@ class TimerTest : public TestFixture<TimerTest>
 
 };
 
-REGISTER_FIXTURE(TimerTest);
+REGISTER_FIXTURE(TimerTest)
 
 //---------------------------------------------------------------------------
 

@@ -57,12 +57,9 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
       TEST_CASE(test4);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(PowMatrixTest);
+REGISTER_FIXTURE(PowMatrixTest)
 
 //---------------------------------------------------------------------------
 

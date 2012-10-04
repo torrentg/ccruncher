@@ -39,10 +39,8 @@ ccruncher_SOURCES = \
     ../src/params/Segmentation.cpp\
     ../src/params/Defaults.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/BlockMatrixChol.cpp\
-    ../src/math/BlockMatrixCholInv.cpp\
-    ../src/math/BlockGaussianCopula.cpp\
-    ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/GMFCopula.cpp\
+    ../src/math/TMFCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
@@ -56,7 +54,6 @@ ccruncher_SOURCES = \
     ../src/utils/File.cpp\
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
-    ../src/utils/Arrays.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
@@ -82,10 +79,8 @@ ccruncher_SOURCES = \
     ../src/params/Defaults.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/BlockMatrixChol.hpp\
-    ../src/math/BlockMatrixCholInv.hpp\
-    ../src/math/BlockGaussianCopula.hpp\
-    ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/GMFCopula.hpp\
+    ../src/math/TMFCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
@@ -99,7 +94,6 @@ ccruncher_SOURCES = \
     ../src/utils/File.hpp\
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
-    ../src/utils/Arrays.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\
@@ -120,7 +114,6 @@ tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
     ../deps/gzstream-1.5/gzstream.cpp\
-    ../src/utils/ArraysTest.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
@@ -131,9 +124,8 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.cpp\
     ../src/utils/ExpatUserDataTest.cpp\
     ../src/math/PowMatrixTest.cpp\
-    ../src/math/BlockMatrixCholTest.cpp\
-    ../src/math/BlockGaussianCopulaTest.cpp\
-    ../src/math/BlockTStudentCopulaTest.cpp\
+    ../src/math/GMFCopulaTest.cpp\
+    ../src/math/GMFCopulaTest.cpp\
     ../src/math/FastTStudentCdfTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
@@ -152,7 +144,6 @@ tests_SOURCES = \
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
     \
-    ../src/utils/Arrays.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Parser.cpp\
@@ -167,10 +158,8 @@ tests_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/BlockMatrixChol.cpp\
-    ../src/math/BlockMatrixCholInv.cpp\
-    ../src/math/BlockGaussianCopula.cpp\
-    ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/GMFCopula.cpp\
+    ../src/math/TMFCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
@@ -194,7 +183,6 @@ tests_SOURCES = \
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
     \
-    ../src/utils/ArraysTest.hpp\
     ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
     ../src/utils/DateTest.hpp\
@@ -205,9 +193,8 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.hpp\
     ../src/utils/ExpatUserDataTest.hpp\
     ../src/math/PowMatrixTest.hpp\
-    ../src/math/BlockMatrixCholTest.hpp\
-    ../src/math/BlockGaussianCopulaTest.hpp\
-    ../src/math/BlockTStudentCopulaTest.hpp\
+    ../src/math/GMFCopulaTest.hpp\
+    ../src/math/TMFCopulaTest.hpp\
     ../src/math/FastTStudentCdfTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
@@ -226,7 +213,6 @@ tests_SOURCES = \
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
     \
-    ../src/utils/Arrays.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Parser.hpp\
@@ -242,10 +228,8 @@ tests_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/BlockMatrixChol.hpp\
-    ../src/math/BlockMatrixCholInv.hpp\
-    ../src/math/BlockGaussianCopula.hpp\
-    ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/GMFCopula.hpp\
+    ../src/math/TMFCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
@@ -285,7 +269,6 @@ samplegen_SOURCES = \
     ../src/utils/File.cpp\
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
-    ../src/utils/Arrays.cpp\
     ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
@@ -294,10 +277,8 @@ samplegen_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/BlockMatrixChol.cpp\
-    ../src/math/BlockMatrixCholInv.cpp\
-    ../src/math/BlockGaussianCopula.cpp\
-    ../src/math/BlockTStudentCopula.cpp\
+    ../src/math/GMFCopula.cpp\
+    ../src/math/TMFCopula.cpp\
     ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
@@ -328,7 +309,6 @@ samplegen_SOURCES = \
     ../src/utils/File.hpp\
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
-    ../src/utils/Arrays.hpp\
     ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\
@@ -338,10 +318,8 @@ samplegen_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
-    ../src/math/BlockMatrixChol.hpp\
-    ../src/math/BlockMatrixCholInv.hpp\
-    ../src/math/BlockGaussianCopula.hpp\
-    ../src/math/BlockTStudentCopula.hpp\
+    ../src/math/GMFCopula.hpp\
+    ../src/math/TMFCopula.hpp\
     ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\

@@ -45,15 +45,15 @@ class AssetTest : public TestFixture<AssetTest>
     Segmentations getSegmentations();
     Interest getInterest(const Date &date);
 
-    void test1(void);
-    void test2(void);
-    void test3(void);
-    void test4(void);
-    void test5(void);
-    void test6(void);
-    void test7(void);
-    void test8(void);
-    void test9(void);
+    void test1();
+    void test2();
+    void test3();
+    void test4();
+    void test5();
+    void test6();
+    void test7();
+    void test8();
+    void test9();
 
 
   public:
@@ -71,12 +71,9 @@ class AssetTest : public TestFixture<AssetTest>
       TEST_CASE(test9);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(AssetTest);
+REGISTER_FIXTURE(AssetTest)
 
 //---------------------------------------------------------------------------
 

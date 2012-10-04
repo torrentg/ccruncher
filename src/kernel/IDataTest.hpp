@@ -40,7 +40,7 @@ class IDataTest : public TestFixture<IDataTest>
 
   private:
 
-    void test1(void);
+    void test1();
 
 
   public:
@@ -50,12 +50,9 @@ class IDataTest : public TestFixture<IDataTest>
       TEST_CASE(test1);
     }
 
-    void setUp();
-    void tearDown();
-
 };
 
-REGISTER_FIXTURE(IDataTest);
+REGISTER_FIXTURE(IDataTest)
 
 //---------------------------------------------------------------------------
 
