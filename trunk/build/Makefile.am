@@ -125,7 +125,7 @@ tests_SOURCES = \
     ../src/utils/ExpatUserDataTest.cpp\
     ../src/math/PowMatrixTest.cpp\
     ../src/math/GMFCopulaTest.cpp\
-    ../src/math/GMFCopulaTest.cpp\
+    ../src/math/TMFCopulaTest.cpp\
     ../src/math/FastTStudentCdfTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
