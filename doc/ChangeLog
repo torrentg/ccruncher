@@ -4,11 +4,10 @@ CCRUNCHER CHANGELOG
 
 version 2.0 (XXX. 2012)
 --------------------------
+  * implemented multi-factor approach
   * input file can be read from stdin
   * improved functional tests
   * solved minor bug (obligor/asset id uniqueness)
-  * supported various correlations (basic, spearman, kendall)
-  * correlation matrix coercion
   * code refactoring
 
 version 1.9 (Mar. 2012)

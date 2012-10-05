@@ -159,7 +159,7 @@ doreport() {
 
   R --vanilla --slave > /dev/null << _EOF_
     # load ccruncher script
-    source("$(dirname '$0')/ccreport.R", echo=FALSE);
+    source("$(dirname "$0")/ccreport.R", echo=FALSE);
     # create the xml report
     lines <- ccruncher.summary("$filename", format="xml");
     write(lines, file="${name}.xml");
