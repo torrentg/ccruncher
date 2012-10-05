@@ -12,7 +12,6 @@ Future works
      - graphic interface
      - input file in binary format
      - allow evaluation in multiple time horizons
-     - remove gzip support (replaced by pipes support)
   * improve model
      - add grouped t-copula support
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
