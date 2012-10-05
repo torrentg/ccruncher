@@ -23,7 +23,6 @@
 #-------------------------------------------------------------
 # variables declaration
 #-------------------------------------------------------------
-CCRUNCHER=`dirname $0`/..
 progname=ccreport.sh
 numversion="2.0"
 svnversion="R795"
@@ -160,7 +159,7 @@ doreport() {
 
   R --vanilla --slave > /dev/null << _EOF_
     # load ccruncher script
-    source("$CCRUNCHER/bin/ccreport.R", echo=FALSE);
+    source("$(dirname '$0')/ccreport.R", echo=FALSE);
     # create the xml report
     lines <- ccruncher.summary("$filename", format="xml");
     write(lines, file="${name}.xml");
@@ -183,7 +182,7 @@ _EOF_
     return $?;
   fi
 
-  xsltproc -o $name.html $CCRUNCHER/bin/ccreport.xsl ${name}.xml;
+  xsltproc -o $name.html $(dirname "$0")/ccreport.xsl ${name}.xml;
 
   if [ $? != 0 ]; then
     return $?;
