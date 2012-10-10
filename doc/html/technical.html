@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Technical information</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        #references li {
+            margin-bottom: 15px;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Technical Information</h1>
+    <img src="creditvar.png" width="350" style="float:right; margin:10px; margin-bottom:5px"/>
+    <p>
+      CCruncher is an open-source tool for estimating the loss distribution 
+      of a portfolio of loans to SMEs developed by 
+      <a href="http://www.tatine.es">Tatine</a>. It is based on the Merton 
+      multi-factor model, a bottom-up approach to credit risk modeling widely 
+      used in the financial sector, either by in-house developments or 
+      commercial products such as CreditMetrics [1] or KMV [2].
+    </p>
+    <p>
+      The complete solution consists of two parts. The first part models the 
+      joint distribution of the default times of multiple obligors and estimates 
+      its parameters using the historical records of observed defaults. 
+      The second part computes the portfolio loss distribution 
+      based on the simulation of default times using the Monte Carlo method. 
+      The credit risk is estimated computing VaR or ES or another statistic 
+      to the simulated loss values. Note that CCruncher only covers the 
+      second part.
+    </p>
+    <p>
+      The advantages of the complete solution are: 1) it avoids 
+      over-simplifications that can be dangerous [7] (eg. limiting the number 
+      of factors, or assuming homogeneous portfolios), 2) correlation is 
+      considered suitably, 3) asset exposures/recoveries can vary over time, 
+      4) it can be considered the uncertainty of the parameters in the credit 
+      risk assessment, and 5) the ability to disaggregate the risk.
+    </p>
+
+    <a name="assumptions"></a>
+    <h2>Assumptions</h2>
+    <img src="ecicle.png" style="float:right; margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
+    <p>
+      <b>1.</b> Every obligor has assigned a probability of default 
+      (PD) expressed as a rating. Usually the evolution of this
+      probability over time is given by the transition matrix.
+    </p>
+    <p>
+      <b>2.</b> 
+      The correlation between obligors depends only on the economic 
+      sectors to which they belong. In particular, correlations don't 
+      depend on the rating of obligors or the number of obligors in 
+      each sector.      
+    </p>
+    <p>
+      <b>3.</b> 
+      The correlations are constant over time. This means that the PD 
+      is affected by the economic cycle, more in detail, the transition 
+      matrix. See figure.
+    </p>
+    
+    <a name="PD"></a>
+    <h2>Probability of Default</h2>
+    <div style="float:right;">
+      <img src="tmatrix.png" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/><br/>
+      <img src="pdefault.png" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
+    </div>
+    <p>
+      To assess the credit risk it is necessary to have the probability of 
+      default (PD) of each obligor over time (see figure). The transition 
+      matrix is one way to obtain the PD for each rating. This matrix 
+      indicates the probability of moving from one rating to another in 
+      a fixed time horizon (ie. one year). The connection between the PD 
+      at time <i>t</i> of an obligor who currently has a rating <i>r</i>, 
+      <i>F<sub>r</sub>(t)</i>, and the transition matrix at horizon <i>T</i>, 
+      <i>M<sub>T</sub></i>, is given by the following formula:
+    </p>
+    <center>
+      <i>F<sub>r</sub>(t) = M<sub>t</sub>(r,n)</i>
+    </center>
+    <p>
+      where <i>r</i> is the rating, <i>t</i> is the time, <i>M<sub>t</sub></i> 
+      is the transition matrix at horizon <i>t</i> (scaled from <i>M<sub>T</sub></i>), 
+      and <i>n</i> is the index of the rating 'defaulted'. The transition matrix 
+      can be scaled in time by using the following rules:
+    </p>
+    <object class="equation" type="image/png" data="mrules.png" style="display:block; margin-left:auto; margin-right:auto">
+\renewcommand*{\arraystretch}{1.5}
+\begin{array}{lcl}
+M_{T_1+T_2} &amp; = &amp; M_{T_1} \cdot M_{T_2} \\
+M_{k \cdot T} &amp; = &amp; M_{T}^k \\
+M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
+\end{array}
+    </object>
+    <p>
+      If the transition matrix isn't a regular Markov matrix, then it may occur 
+      that the scaled transition matrix has some invalid values (eg. probability
+      values out of range <i>[0,1]</i>). 
+      In these cases CCruncher regularize the original transition matrix using 
+      the QOM algorithm (Quasi-Optimization of the root Matrix) [6].
+    </p>
+    
+    <a name="jointdist"></a>
+    <h2>Multivariate Default Times</h2>
+    <p>
+      The multivariate default times model can be seen both as a copula-type 
+      model as a model of multi-factor type. Both forms are equivalent. 
+      The copula type approach allows formulating the problem in all its 
+      generality. The multi-factor type approach allows interpreting and 
+      estimating the parameters, and provides an efficient algorithm to 
+      perform the Monte Carlo simulation.
+    </p>
+    <h3>Copula model</h3>
+    <p>
+      The model described in this section is the same as described in
+      [3] [4] [5]. It is assumed that the default times of the obligors, 
+      <i>T<sub>i</sub></i>, are modeled by a multivariate distribution
+      <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> such that:
+    </p>
+    <center>
+      <i>F(t<sub>1</sub>,…,t<sub>n</sub>) = Pr{T<sub>1</sub>&lt; t<sub>1</sub>,…,T<sub>n</sub>&lt; t<sub>n</sub>}</i>
+    </center>
+    <p>
+      Sklar's theorem applied to multivariate distribution <i>T</i> gives:
+    </p>
+    <center>
+      <i>F(t<sub>1</sub>,…,t<sub>n</sub>) = C(F<sub>1</sub>(t<sub>1</sub>), …, F<sub>n</sub>(t<sub>n</sub>))</i>
+    </center>
+    <p>
+      where <i>F<sub>1</sub>,…,F<sub>n</sub></i> are the marginals of <i>F</i> and 
+      <i>C</i> is the copula [8] that contains the dependence structure between obligors.
+      The univariate distribution <i>F<sub>i</sub>(t) = Pr{T<sub>i</sub> &lt; t}</i>
+      is the PD over time of the <i>i</i>-th obligor and is fully determined by its 
+      rating.
+      CCruncher assumes that the copula <i>C</i> is a t-Student copula by the following 
+      reasons:
+       1) it is completely determined by the correlation (because it is an elliptical copula), 
+       2) it supports a wide range dependence structures changing the degrees of 
+          freedom, <i>&nu;</i>,
+       3) if <i>&nu; &ne; &infin;</i> then it has tail dependence,
+       4) it is a symmetric copula (because it is an elliptical copula), allowing to 
+          apply the antithetic variance reduction method, and
+       5) it can be expressed as a multi-factor model.
+    </p>
+    <p>
+      The obligors default times are characterized by the following property:
+      Sea <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> el tiempo de fallido conjunto con cópula
+      t-Student <i>C=(U<sub>1</sub>,…,U<sub>n</sub>)</i> y marginales F<sub>i</sub>, y sea 
+      <i>X=(X<sub>1</sub>,…,X<sub>n</sub>)</i> una distribución t-Student multivariante. 
+      Entonces,
+    </p>
+    <center>
+      <i>P{T<sub>i</sub> ≤ t} = P{X<sub>i</sub> ≤ t<sub>&nu;</sub><sup>-1</sup>(F<sub>i</sub>(t))}</i>
+    </center>
+    <p>
+      where <i>t<sub>&nu;</sub><sup>-1</sup></i> is the inverse of the univariate t-Student
+      distribution with <i>&nu;</i> degrees of freedom.
+      This result is widely used both in the parameters estimation as the simulation 
+      of the default times. In the following section we see that this copula model can be 
+      interpreted as a t-Student multi-factor model.
+    </p>
+    
+    <h3>Multi-factor model</h3>
+    <p>
+      It is proved, under very general conditions, that any multivariate 
+      t-Student distribution with a correlation matrix composed of blocks 
+      can be expressed by a multi-factor model like:
+    </p>
+    <object class="equation" type="image/png" data="mfmodel.png" style="display:block; margin-left:auto; margin-right:auto">
+X_i^j = \sqrt{\frac{\nu}{S}} \cdot \left( w_i  \cdot Z_i + \sqrt{1-w_i^2} \cdot \varepsilon_i^j \right)
+\quad \textrm{ where }
+\left\{
+\begin{array}{l}
+i=1, \cdots, k \\
+j=1, \cdots, n_i \\
+w_i \in (0,1) \ \forall i \\
+2 \le \nu \\
+Z \sim N(0,R) \\
+S \sim \chi^2_{\nu} \\
+\varepsilon_i^j \sim N(0,1) \textrm{ i.i.d} \ \forall i,j \\
+Z, S, \varepsilon_i^j \textrm{ independents } \ \forall i,j
+\end{array}
+\right.
+    </object>
+    <p>
+      where <i>S</i>, <i>Z</i> and <i>&epsilon;<sub>i</sub><sup>j</sup></i> are
+      latent variables, <i>k</i> is the number of factors/sectors, <i>n<sub>i</sub></i>
+      is the number of obligors in the sector <i>i</i>, <i>w<sub>i</sub></i> are the
+      factor loadings of sector <i>i</i>, and <i>R</i> is the correlation matrix between 
+      factors/sectors. 
+    </p>
+    <p>
+      The combination of the characterization of the default times as a multivariate 
+      t-Student distribution and the interpretation of this as a multi-factor model 
+      lead to the multi-factor Merton model. This considers that a default occurs 
+      if the marginal distribution, the default time in our case, falls below a 
+      certain level.
+    </p>
+    <p>
+      The estimation of the model parameters, <i>&nu;</i> and <i>R</i> is outside 
+      the scope of this document. See [1] [2] [9] [10] for additional information.
+    </p>
+    
+    <a name="lossdist"></a>
+    <h2>Portfolio Loss Distribution</h2>
+    <p>
+      We define the portfolio loss distribution from the multivariate 
+      distribution of default times, <i>T</i>, as:
+    </p>
+    <center>
+      <i>L<sub>t</sub> = &sum; 1(T<sub>i</sub> &lt; t)·(1-Recovery<sub>i</sub>(T<sub>i</sub>))·Exposure<sub>i</sub>(T<sub>i</sub>)</i>
+    </center>
+    <p>
+      We use the Monte Carlo method to estimate the portfolio loss distribution 
+      simulating the default times of obligors. The loss is computed using the 
+      following formulas:
+    </p>
+    <object class="equation" type="image/png" data="losses.png" style="display:block; margin-left:auto; margin-right:auto">
+\begin{array}{rcl}
+PortfolioLoss &amp; = &amp; \sum ObligorLoss \\
+ &amp; &amp; \\
+ObligorLoss &amp; = &amp; \sum AssetLoss \\
+ &amp; &amp; \\
+AssetLoss &amp; = &amp; \left\{
+\renewcommand{\baselinestretch}{1.5}
+\begin{array}{cc}
+exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
+0 &amp; \textrm{ if } t &gt; T
+\end{array}
+\right.
+\end{array}
+    </object>
+    <p>
+      <b>Algorithm</b> (default times simulation). 
+      We use the characterization of the default times to simulate the <i>T</i> 
+      distribution from their marginals <i>F<sub>1</sub>,...,F<sub>n</sub></i> 
+      and the t-Student copula with <i>&nu;</i> degrees of freedom and 
+      correlation matrix <i>R</i>:
+    </p>
+    <ol>
+      <li>Simulate a t-Student copula with <i>&nu;</i> degrees of freedom and correlation <i>R</i> -see below-: <i>(u<sub>1</sub>,…,u<sub>n</sub>)</i></li> 
+      <li>Apply the inverse sampling method to obtain the default times: <i>(F<sub>1</sub><sup>-1</sup>(u<sub>1</sub>),…, F<sub>n</sub><sup>-1</sup>(u<sub>n</sub>))</i></li>
+    </ol>
+    <p>
+      <b>Algorithm</b> (t-Student copula simulation). 
+      We apply the t-Student multi-factor formulation and the standard gaussian 
+      simulation algorithm to obtain:
+    </p>
+    <ol>
+      <li>Obtain the Cholesky decomposition, <i>L</i>, of <i>R</i></li>
+      <li>Simulate <i>k</i> independent random variates <i>v<sub>1</sub>,&hellip;,v<sub>k</sub></i> from <i>N(0,1)</i></li>
+      <li>Let <i>z = L·v</i></li>
+      <li>Simulate <i>n</i> independent random variates <i>&epsilon;<sub>i</sub><sup>j</sup></i> from <i>N(0,1)</i></li>
+      <li>Let <i>y<sub>i</sub><sup>j</sup> = w<sub>i</sub>·z<sub>i</sub>+&radic;(1- w<sub>i</sub><sup>2</sup>)·&epsilon;<sub>i</sub><sup>j</sup></i></li>
+      <li>Simulate a random variate <i>s</i> from <i>&chi;<sub>&nu;</sub><sup>2</sup></i>
+      <li>Set <i>x<sub>i</sub><sup>j</sup> = &radic;(&nu;/s)·y<sub>i</sub><sup>j</sup></i></li>
+      <li>Set <i>u<sub>i</sub><sup>j</sup> = t<sub>&nu;</sub>(x<sub>i</sub><sup>j</sup>)</i></li>
+    </ol>
+    
+    <a name="crisk"></a>
+    <h2>Credit Risk Analysis</h2>
+    <p>
+      After <i>N</i> Monte Carlo simulations (eg. 20000 500000 or more) we have a 
+      sampling of the portfolio loss distribution, 
+      <i>x<sub>1</sub>,&hellip;x<sub>N</sub></i>. 
+      We call <i>x<sub>k:N</sub></i> the <i>k</i>-th value of the sorted list 
+      of values. We can estimate the credit risk using the following statistics:
+    </p>
+    <object class="equation" type="image/png" data="riskstats.png" style="display:block; margin-left:auto; margin-right:auto">
+\renewcommand*{\arraystretch}{1.5}
+\begin{array}{lcll}
+\textrm{Expected Loss} &amp; \simeq &amp; \frac{1}{N} \displaystyle \sum_{i=1}^{N} x_i &amp; \\
+\textrm{VaR}_\beta &amp; \simeq &amp; x_{k:N} &amp; \textrm{ where } \frac{k}{N} \leq \beta &lt; \frac{k+1}{N} \\
+\textrm{ES}_\beta &amp; \simeq &amp; \frac{1}{N-k} \displaystyle \sum_{i=k+1}^{N} x_{i:N} &amp; \textrm{ where } \frac{k}{N} \leq \beta &lt; \frac{k+1}{N}
+\end{array}
+    </object>
+    <p>
+      The accuracy of these statistics can be estimated using the 
+      sampling variance formulas when available or by resampling methods 
+      when not.
+    </p>
+    
+    <br/>
+    <hr/>
+    <h3>References</h3>
+    <ol id="references">
+      <li>Greg M. Gupton, Christopher C. Finger, Mickey Bhatia (1997). <a href="http://www.defaultrisk.com/pp_model_20.htm">CreditMetrics - Technical Document</a>. J.P. Morgan &amp; Co. Incorporated.</li>
+      <li>Peter Crosbie (2003). <a href="http://www.defaultrisk.com/_asp/rd_model_35.asp">Modeling default risk</a>. Moody’s KMV Company</li>
+      <li>David X. Li. (2000). <a href="http://www.defaultrisk.com/pp_corr_05.htm">On Default Correlation: A Copula Function Approach</a>. Journal of Fixed Income 9 (4): 43–54.</li>
+      <li>Bluhm, C., Overbeck, L., Wagner, C. (2003). <a href="http://www.stat.fsu.edu/~jfrade/PAPERS/Credit%20risk%20modeling%20papers/An%20Introduction%20to%20Credit%20Risk%20Modeling%20-%20Bluhm,%20Overbeck%20%26%20Wagner%20%282003%29.pdf">An Introduction to Credit Risk Modeling</a>. Chapman &amp; Hall/CRC Financial Mathematics Series; 2nd Reprint; CRC Press</li>
+      <li>Rüdiger Frey, Alexander J. McNeil, Mark A. Nyfeler (2001). <a href="http://www.math.ethz.ch/~mcneil/ftp/copula-credit.pdf">Copulas and credit models</a>. RISK, October 2001: pages 111-114.</li>
+      <li>Alexander Kreinin and Marina Sidelnikova (2001). <a href="http://www.defaultrisk.com/pp_other_91.htm">Regularization algorithms for transition matrices</a>. Algo Research Quarterly, Vol. 4, Nos. 1/2.</li>
+      <li>Long, Kete (2011). <a href="http://www.defaultrisk.com/pa_corr_18.htm">The Fallacy of an Overly Simpliﬁed Asymptotic Single-risk-factor Model</a>. Journal of Risk Model Validation, Vol. 5, No. 4, (Winter 2011/12), pp. 27-48.</li>
+      <li>Embrechts P, McNeil A, Straumann D (2003). <a href="http://www.math.ethz.ch/~baltes/ftp/pitfalls.pdf">Correlation and dependence in risk management: properties and pitfalls</a>. Risk Management: Value at Risk and Beyond, ed. M.A.H. Dempster, Cambridge University Press, Cambridge, pp. 176-223</li>
+      <li>Michael Gordy, Erik Heitfield (2002). <a href="http://emlab.berkeley.edu/~mcfadden/e242_f03/heitfield.pdf">Estimating Default Correlations from Short Panels of Credit Rating Performance Data</a>. Working paper.</li>
+      <li>Christoff Gössl (2005). <a href="http://www.defaultrisk.com/pp_model119.htm">Predictions based on certain uncertainties - a Bayesian credit portfolio approach</a>. 
+    </ol>
+
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 10-Oct-2012
+        </td>
+      </tr></table>
+    </div>
+
+    </div>
+  </body>
+</html>
+
+<!--
+# DEFAULT PROBABILITY OVER TIME
+
+ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC")
+
+A = matrix(ncol=8, nrow=8, data=c(
+90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
+8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
+0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
+0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
+0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
+0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
+0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
+0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
+)/100)
+
+n=101
+B = diag(8)
+T = matrix(nrow=n, ncol=8, 0)
+for(i in 2:n)
+{
+  B = B %*% A
+  T[i,] = B[,8]
+}
+
+png(filename = "pdefault.png",
+    width = 350, height = 250, units = "px", 
+    pointsize = 12, bg = "white", type = "cairo")
+
+matplot(0:100, T[,1:7], type='l', xlab = "time in years", 
+  ylab = "probability of default", lty = 1:7, col= 1:6)
+grid()
+title("Probability of Default over time", font.main=1, cex.main=1)
+legend(80, 0.75, ratings, lty = 1:7, col= 1:6, bg="white", cex=0.7)
+
+dev.off()
+-->
+
+<!--
+# NUMBER OF DEFAULTS OVER ECONOMIC CICLE
+
+p = matrix(ncol=7, nrow=1, data=c(0.5, 0.7, 1.0, 2.0, 5.0, 10.0, 20.0)/100)
+colnames(p) = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC")
+p1 = p/sum(p)
+d = 700+300*sin(seq(-pi,pi,0.5))
+
+png(filename = "ecicle.png",
+    width = 350, height = 250, units = "px", 
+    pointsize = 12, bg = "white", type = "cairo")
+
+matplot(d%*%p1, type='l', xlab = "time in years", 
+  ylab = "number of defaults", lty = 1:7, col= 1:6, main="")
+grid()
+title("Number of defaults over economic cycle", font.main=1, cex.main=1)
+legend(6, 490, colnames(p1), lty = 1:7, col= 1:6, bg="white", cex=0.7)
+text(4,150,"expansion", cex=0.7)
+text(10.5,150,"contraction", cex=0.7)
+
+dev.off()
+-->

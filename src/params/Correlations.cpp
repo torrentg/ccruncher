@@ -26,8 +26,6 @@
 #include "utils/Strings.hpp"
 #include <cassert>
 
-#define EPSILON 1e-12
-
 //===========================================================================
 // default constructor
 //===========================================================================
@@ -90,14 +88,14 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
   }
 
   // checking value
-  if (row == col && (value < EPSILON || 1.0-EPSILON < value) )
+  if (row == col && (value < 0.0 || 1.0 < value) )
   {
-    string msg = "factor loading [" + sector1 + "][" + sector2 + "] out of range (0,1)";
+    string msg = "factor loading [" + sector1 + "][" + sector2 + "] out of range [0,1]";
     throw Exception(msg);
   }
-  if (row != col && (value < -1.0+EPSILON || 1.0-EPSILON < value) )
+  if (row != col && (value < -1.0 || 1.0 < value) )
   {
-    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range (-1,+1)";
+    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range [-1,+1]";
     throw Exception(msg);
   }
 
