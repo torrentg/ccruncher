@@ -38,14 +38,16 @@ filename=<xsl:value-of select="@data"/>
 name=${filename%.*};
 extension=${filename##*.};
 echo -n &quot;  $name &quot;
-latex -jobname=$name  &gt;/dev/null 2&gt;/dev/null &lt;&lt; _EOF_
+latex -jobname=$name  &gt;/dev/null 2&gt;/dev/null &lt;&lt; "_EOF_"
 \documentclass{article} 
+\usepackage[american]{babel}
+\usepackage{array}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
 \pagestyle{empty} 
 \begin{document} 
-$<xsl:value-of select="."/>$
+\begin{displaymath}<xsl:value-of select="."/>\end{displaymath}
 \end{document}
 _EOF_
 if [ $? != 0 ]; then

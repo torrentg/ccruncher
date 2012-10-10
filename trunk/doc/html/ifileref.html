@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CreditCruncher - Input File Format</title>
+    <title>CreditCruncher - Input file format</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type="text/css">
@@ -24,6 +24,8 @@
             text-align: center;
             padding: 8px;
             width: 60px;
+            font-size: 80%;
+            font-family: monospace;
         }
     </style>
   </head>
@@ -31,11 +33,20 @@
   <body>
     <div id="main-container">
     <div id="page-header">
-      <a href="./index.html">
-        <img style="margin-top:28px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
-      </a>
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
     </div>
-    <br/>
 
 <!-- ==================================================== -->
 <!--    introduction                                      -->
@@ -123,7 +134,7 @@
           (eg. $numsims) in the configuration file will be replaced by its value (eg. 30000). 
           The define name can only consist of letters and numbers.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
@@ -131,7 +142,7 @@
           Value used to replace the define identifier. <br/>
           You can put any value that does not contain XML special characters (&lt; &amp; &gt; &quot; &apos;).
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -177,7 +188,7 @@
           transition matrix and survival functions are relative to this date. The format of
           this attribute is: DD/MM/YYYY.
         </td>
-        <td class="c3"><code>date</code></td>
+        <td class="c3">date</td>
       </tr>
       <tr class="a">
         <td class="c1">time.T</td>
@@ -185,7 +196,7 @@
           Ending date of the simulation. Portfolio credit risk is computed at this date. 
           The format of this attribute is: DD/MM/YYYY.
         </td>
-        <td class="c3"><code>date</code></td>
+        <td class="c3">date</td>
       </tr>
       <tr class="b">
         <td class="c1">stopcriteria.maxiterations</td>
@@ -194,7 +205,7 @@
           If it has value 0, this stop criteria is not considered. ccruncher stops when a
           stop criteria is achieved.
         </td>
-        <td class="c3"><code>int</code></td>
+        <td class="c3">int</td>
       </tr>
       <tr class="a">
         <td class="c1">stopcriteria.maxseconds</td>
@@ -203,7 +214,7 @@
           If it has value 0, this stop criteria is not considered. ccruncher stops when
           a stop criteria is achieved.
         </td>
-        <td class="c3"><code>int</code></td>
+        <td class="c3">int</td>
       </tr>
       <tr class="b">
         <td class="c1">copula.type</td>
@@ -220,7 +231,7 @@
             </li>
           </ul>
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">copula.seed</td>
@@ -229,7 +240,7 @@
           then a random number based on the current time will be used.
           This property is optional. Default value is 0.
         </td>
-        <td class="c3"><code>long</code></td>
+        <td class="c3">long</td>
       </tr>
       <tr class="b">
         <td class="c1">montecarlo.antithetic</td>
@@ -238,7 +249,7 @@
           named antithetic. If you have doubts about setting this 
           parameter then set it to 'false', otherwise set it to 'true'.
         </td>
-        <td class="c3"><code>boolean</code></td>
+        <td class="c3">boolean</td>
       </tr>
       <tr class="a">
         <td class="c1">portfolio.onlyActiveObligors</td>
@@ -248,7 +259,7 @@
           only active obligors along the simulation period type 'true'. We 
           suggest writing always 'true'.
         </td>
-        <td class="c3"><code>boolean</code></td>
+        <td class="c3">boolean</td>
       </tr>
     </table>
 
@@ -297,7 +308,7 @@
           and 'continuous'. The formulas used in each case are described in the <i>Technical 
           Document</i>. This attribute is optional. Default value is 'compound'.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -317,7 +328,7 @@
           suffix 'Y' to indicate years (eg. 15Y). If a value between two given dates is 
           needed, the value will be linearly interpolated.
         </td>
-        <td class="c3"><code>int+[DMY]</code></td>
+        <td class="c3">int+[DMY]</td>
       </tr>
       <tr class="a">
         <td class="c1">r</td>
@@ -325,7 +336,7 @@
           Interest rate at time t. It is a value between -0.5 and 1.0. The value
           can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3">double</td>
       </tr>
     </table>
 
@@ -370,7 +381,7 @@
           Credit rating identifier. All references to a credit rating, eg. obligor rating, 
           are made using this field. Includes default rating in this list.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">description</td>
@@ -378,7 +389,7 @@
           Credit rating description. This value is only used in reports. This
           description must be unique.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -489,7 +500,7 @@
           Number of months covered by the transition matrix. Usually the
           transition matrix covers 1 year, and in such case, set the value to 12. 
         </td>
-        <td class="c3"><code>int</code></td>
+        <td class="c3">int</td>
       </tr>
     </table>
 
@@ -507,7 +518,7 @@
           Initial credit rating. This value must be a credit rating identifier, see 
           name attribute in the credit rating tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">to</td>
@@ -515,7 +526,7 @@
           Final credit rating. This value must be a credit rating identifier, see 
           name attribute in the credit rating tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
@@ -523,7 +534,7 @@
           Probability for credit rating migration and must have a value between 0 and 1.
           The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3">double</td>
       </tr>
     </table>
 
@@ -565,7 +576,7 @@
           Sector identifier. All references to a sector, eg. obligor 
           sector, are made using this field.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">description</td>
@@ -573,7 +584,7 @@
           Sector description. This value is only used in reports.
           This description must be unique.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -628,7 +639,7 @@
           First sector involved in correlation value.
           This value must be a sector identifier, see name attribute in sector tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">sector2</td>
@@ -636,7 +647,7 @@
           second sector involved in correlation value.
           This value must be a sector identifier, see name attribute in sector tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
@@ -645,7 +656,7 @@
           Correlation(defaults(S1), defaults(S2)). The value can be 
           set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3">double</td>
       </tr>
     </table>
 
@@ -730,7 +741,7 @@
           Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
           are made using this field.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">components</td>
@@ -738,7 +749,7 @@
           Type of segments. Accepted values are 'obligor' 
           and 'asset'.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -761,7 +772,7 @@
           defining the '*' segment. The '*' segment contains an implicit 
           definition of a segment to every asset and obligor.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -888,7 +899,7 @@
           If your portfolio is large and you plan to simulate it multiple times using distinct 
           parameters use this feature, otherwise this attribute can be omitted.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -905,7 +916,7 @@
         <td class="c2">
           Unique obligor identifier. Used by implicit obligor segmentation.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">rating</td>
@@ -914,7 +925,7 @@
           <a href="#parameters">parameters</a> section. This value must be a credit rating 
           identifier, see name attribute in <a href="#ratings">rating</a> tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">sector</td>
@@ -922,7 +933,7 @@
           Sector where this obligor is included.
           This value must be a sector identifier, see name attribute in sector tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">recovery</td>
@@ -935,7 +946,7 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
         </td>
-        <td class="c3"><code>double<br/>string</code></td>
+        <td class="c3">double<br/>string</td>
       </tr>
     </table>
 
@@ -953,7 +964,7 @@
           Segmentation identifier.
           This value must be a segmentation identifier, see name attribute in segmentation tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">segment</td>
@@ -961,7 +972,7 @@
           Segment identifier.
           This value must be a segment identifier, see name attribute in segment tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
     </table>
 
@@ -978,7 +989,7 @@
         <td class="c2">
           Unique asset identifier. Used by implicit asset segmentation.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">date</td>
@@ -986,7 +997,7 @@
           Date (in format DD/MM/YYYY) from wich there is credit risk, eg. bond
           buy date or loan signature.
         </td>
-        <td class="c3"><code>date</code></td>
+        <td class="c3">date</td>
       </tr>
       <tr class="a">
         <td class="c1">recovery</td>
@@ -999,7 +1010,7 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
         </td>
-        <td class="c3"><code>double<br/>string</code></td>
+        <td class="c3">double<br/>string</td>
       </tr>
     </table>
 
@@ -1016,7 +1027,7 @@
         <td class="c2">
           Date (in format DD/MM/YYYY) where the values take place.
         </td>
-        <td class="c3"><code>date</code></td>
+        <td class="c3">date</td>
       </tr>
       <tr class="b">
         <td class="c1">exposure</td>
@@ -1031,7 +1042,7 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Gamma_distribution">gamma(k,&rho;)</a>, where k &gt; 0 and &rho; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Normal_distribution">normal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0. Values less than 0 are truncated to 0.<br/>
         </td>
-        <td class="c3"><code>double<br/>string</code></td>
+        <td class="c3">double<br/>string</td>
       </tr>
       <tr class="a">
         <td class="c1">recovery</td>
@@ -1045,7 +1056,7 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
         </td>
-        <td class="c3"><code>double<br/>string</code></td>
+        <td class="c3">double<br/>string</td>
       </tr>
     </table>
 
@@ -1124,14 +1135,14 @@
          This value must be a credit rating identifier, see name attribute in the 
          rating tag.
         </td>
-        <td class="c3"><code>string</code></td>
+        <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
           Time (in months) from starting date <i>time.0</i>.
         </td>
-        <td class="c3"><code>int</code></td>
+        <td class="c3">int</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
@@ -1141,24 +1152,20 @@
           between 0 and 1. The value can be set as percentage (eg. 5.3%) or 
           absolute value (eg. 0.053).
         </td>
-        <td class="c3"><code>double</code></td>
+        <td class="c3">double</td>
       </tr>
     </table>
 
-    <br />
-    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
-      <div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
-        <table width="100%"><tr>
-          <td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-          </td>
-          <td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-            Last modified: 03-Oct-2012
-          </td>
-        </tr></table>
-      </div></div></div></div></div>
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 10-Oct-2012
+        </td>
+      </tr></table>
     </div>
-    <br />
 
   </div>
   </body>

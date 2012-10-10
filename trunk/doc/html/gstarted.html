@@ -10,15 +10,23 @@
 
   <body>
     <div id="main-container">
-  	<div id="page-header">
-      <a href="./index.html">
-        <img style="margin-top:28px; margin-left:20px; border:none;" src="logo.png" alt="ccruncher"/>
-      </a>
-  	</div>
-  	<br/>
+    <div id="page-header">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
 
     <h1>Getting Started - Framework</h1>
-
     <p>CCruncher is designed to work in batch mode, without graphical support.
        The user creates a <a href="sample.xml">xml file</a> with the description of the
       portfolio. CCruncher takes this file and simulates the portfolio <i>N</i> times.
@@ -35,7 +43,6 @@
     </p>
 
     <h1>Getting Started - Installation</h1>
-
     <p>
       <b>Step 1.</b> If you have selected a packaged distribution, unpack it.<br />
     </p>
@@ -44,7 +51,6 @@
 &nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
 &nbsp;&nbsp;cd ccruncher-X.Y
     </pre>
-
     <p>
       <b>Step 2.</b> CCruncher uses a library named <b>gsl</b> not included in CCruncher 
       distribution packages. Check that you have gsl installed (find file <code>libgsl.so</code> 
@@ -56,7 +62,6 @@
       <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM system, install 
       the package named gsl-devel).
     </p>
-
     <p>
       <b>Step 3.</b> CCruncher uses a library named <b>expat</b> not included in CCruncher 
       distribution packages. Check that you have expat installed (find file <code>libexpat.so</code> 
@@ -68,7 +73,6 @@
       <a href="http://www.libexpat.org/">expat site</a> (if you use a RPM system, install 
       the package named expat-devel).
     </p>
-
     <p>
       <b>Step 4.</b> CCruncher uses a library named <b>zlib</b> not included in CCruncher 
       distribution packages. Check that you have zlib installed (find file <code>libz.so</code>
@@ -80,14 +84,12 @@
       <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM system, install 
       the package named zlib-devel).
     </p>
-
     <p>
       <b>Step 5.</b> CCruncher uses a statistical package named <b>R</b> to compute risk 
       indicators. Install it from the <a href="http://www.r-project.org/">R project site</a>.
       If you plan to realize the statistical computations with your own tools (eg. Excel) you can
       skip this step. If you use a RPM system, install package R.
     </p>
-
     <p>
       <b>Step 6.</b> If you have a source distribution, run the following commands from within the CCruncher directory:
     </p>
@@ -100,7 +102,6 @@
 
     <br/>
     <h1>Getting Started - Usage</h1>
-
     <p>
       <b>Step 1.</b> Create a XML ccruncher input file. First, read the
       <a href="../ccruncher.pdf">Technical Document</a> and the 
@@ -110,7 +111,6 @@
       the file size. Caution, gzip is a compression algorithm different
       from zip.
     </p>
-
     <p>
       <b>Step 2.</b> Run ccruncher
     </p>
@@ -130,7 +130,6 @@
 &nbsp;&nbsp;ls -l data/*
 &nbsp;&nbsp;more data/portfolio.csv
     </pre>
-
     <p>
       <b>Step 4.</b> Use your prefered data analysis tool to compute the risk indicators.
     </p>
@@ -155,20 +154,16 @@
 &nbsp;&nbsp;firefox data/portfolio.html
     </pre>
 
-    <br/>
-    <div class="gray-bar" style="margin-top:20px;margin-bottom:5px;">
-    	<div class="bl"><div class="br"><div class="tl"><div class="tr"><div style="padding:8px; text-align:center;">
-    		<table width="100%"><tr>
-    			<td style="width:100%; text-align:center; font-size:smaller;">
-            Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-    			</td>
-    			<td style="white-space:nowrap; text-align:right; font-size:smaller; font-weight:bold;">
-    				 Last modified: 16-May-2012
-    			</td>
-    		</tr></table>
-    	</div></div></div></div></div>
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 10-Oct-2012
+        </td>
+      </tr></table>
     </div>
-    <br/>
 
   </div>
   </body>

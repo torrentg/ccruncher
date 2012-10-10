@@ -4,7 +4,9 @@ CCRUNCHER TODO
 
 Current works
 -------------------
+  * documentation rewrite
   * multi-factor model support
+  * rename sigma to correlation in input file
 
 Future works
 -------------------
