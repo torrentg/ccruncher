@@ -101,9 +101,9 @@ void ccruncher_test::IDataTest::test1()
       <sector name='S2' description='others'/>\n\
     </sectors>\n\
     <correlations>\n\
-      <sigma sector1='S1' sector2='S1' value='0.25'/>\n\
-      <sigma sector1='S1' sector2='S2' value='0.05'/>\n\
-      <sigma sector1='S2' sector2='S2' value='0.3'/>\n\
+      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
+      <correlation sector1='S1' sector2='S2' value='0.05'/>\n\
+      <correlation sector1='S2' sector2='S2' value='0.3'/>\n\
     </correlations>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
