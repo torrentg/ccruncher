@@ -93,9 +93,9 @@ Expected Results:
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <correlations>
-    <sigma sector1="S1" sector2="S1" value="10%"/>
-    <sigma sector1="S1" sector2="S2" value="5%"/>
-    <sigma sector1="S2" sector2="S2" value="15%"/>
+    <correlation sector1="S1" sector2="S1" value="10%"/>
+    <correlation sector1="S1" sector2="S2" value="5%"/>
+    <correlation sector1="S2" sector2="S2" value="15%"/>
   </correlations>
 
   <!-- ============================================================== -->

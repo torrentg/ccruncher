@@ -112,8 +112,9 @@ win32 {
     $$PWD/deps/zlib-1.2.7/libz.dll.a \
     $$PWD/deps/gsl-1.12/lib-static/libgsl.a \
     $$PWD/deps/gsl-1.12/lib-static/libgslcblas.a \
-    $$PWD/deps/expat-2.1.0/Bin/libexpat.lib \
-    -L"$$PWD/deps/expat-2.1.0/Bin/"
+#    $$PWD/deps/expat-2.1.0/Bin/libexpat.lib \
+#    -L"$$PWD/deps/expat-2.1.0/Bin/"
+    C:\MinGW\msys\1.0\home\gtorrent\expat-2.0.1\.libs\libexpat.a
 #    $$PWD/libpthreadGC2.a
 }
 

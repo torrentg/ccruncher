@@ -52,7 +52,7 @@ class Correlations : public ExpatHandlers
   private:
 
     // insert a new matrix value
-    void insertSigma(const string &r1, const string &r2, double val) throw(Exception);
+    void insertCorrelation(const string &r1, const string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
 

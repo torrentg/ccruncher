@@ -75,7 +75,7 @@ const vector<vector<double> > &ccruncher::Correlations::getMatrix() const
 //===========================================================================
 // inserts an element into matrix
 //===========================================================================
-void ccruncher::Correlations::insertSigma(const string &sector1, const string &sector2, double value) throw(Exception)
+void ccruncher::Correlations::insertCorrelation(const string &sector1, const string &sector2, double value) throw(Exception)
 {
   int row = sectors.getIndex(sector1);
   int col = sectors.getIndex(sector2);
@@ -83,7 +83,7 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
   // checking index sector
   if (row < 0 || col < 0)
   {
-    string msg = "undefined sector at <sigma>, sector1=" + sector1 + ", sector2=" + sector2;
+    string msg = "undefined sector at <correlation>, sector1=" + sector1 + ", sector2=" + sector2;
     throw Exception(msg);
   }
 
@@ -102,7 +102,7 @@ void ccruncher::Correlations::insertSigma(const string &sector1, const string &s
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <sigma>";
+    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <correlation>";
     throw Exception(msg);
   }
 
@@ -121,11 +121,11 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
       throw Exception("attributes not allowed in tag correlations");
     }
   }
-  else if (isEqual(name,"sigma")) {
+  else if (isEqual(name,"correlation")) {
     string sector1 = getStringAttribute(attributes, "sector1");
     string sector2 = getStringAttribute(attributes, "sector2");
     double value = getDoubleAttribute(attributes, "value");
-    insertSigma(sector1, sector2, value);
+    insertCorrelation(sector1, sector2, value);
   }
   else {
     throw Exception("unexpected tag " + string(name));
@@ -140,7 +140,7 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"correlations")) {
     validate();
   }
-  else if (isEqual(name,"sigma")) {
+  else if (isEqual(name,"correlation")) {
     // nothing to do
   }
   else {
@@ -183,7 +183,7 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
   {
     for(int j=i;j<size();j++)
     {
-      ret += spc2 + "<sigma ";
+      ret += spc2 + "<correlation ";
       ret += "sector1='" + sectors.getName(i) + "' ";
       ret += "sector2='" + sectors.getName(j) + "' ";
       ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";

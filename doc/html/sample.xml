@@ -131,21 +131,21 @@
   </sectors>
 
   <correlations>
-    <sigma sector1="S1" sector2="S1" value="15.1%"/>
-    <sigma sector1="S1" sector2="S2" value="6.2%"/>
-    <sigma sector1="S1" sector2="S3" value="8.6%"/>
-    <sigma sector1="S1" sector2="S4" value="3.9%"/>
-    <sigma sector1="S1" sector2="S5" value="9.1%"/>
-    <sigma sector1="S2" sector2="S2" value="17.9%"/>
-    <sigma sector1="S2" sector2="S3" value="6.3%"/>
-    <sigma sector1="S2" sector2="S4" value="10.2%"/>
-    <sigma sector1="S2" sector2="S5" value="8.8%"/>
-    <sigma sector1="S3" sector2="S3" value="17.5%"/>
-    <sigma sector1="S3" sector2="S4" value="7.3%"/>
-    <sigma sector1="S3" sector2="S5" value="7.1%"/>
-    <sigma sector1="S4" sector2="S4" value="12.8%"/>
-    <sigma sector1="S4" sector2="S5" value="6.4%"/>
-    <sigma sector1="S5" sector2="S5" value="15.0%"/>
+    <correlation sector1="S1" sector2="S1" value="15.1%"/>
+    <correlation sector1="S1" sector2="S2" value="6.2%"/>
+    <correlation sector1="S1" sector2="S3" value="8.6%"/>
+    <correlation sector1="S1" sector2="S4" value="3.9%"/>
+    <correlation sector1="S1" sector2="S5" value="9.1%"/>
+    <correlation sector1="S2" sector2="S2" value="17.9%"/>
+    <correlation sector1="S2" sector2="S3" value="6.3%"/>
+    <correlation sector1="S2" sector2="S4" value="10.2%"/>
+    <correlation sector1="S2" sector2="S5" value="8.8%"/>
+    <correlation sector1="S3" sector2="S3" value="17.5%"/>
+    <correlation sector1="S3" sector2="S4" value="7.3%"/>
+    <correlation sector1="S3" sector2="S5" value="7.1%"/>
+    <correlation sector1="S4" sector2="S4" value="12.8%"/>
+    <correlation sector1="S4" sector2="S5" value="6.4%"/>
+    <correlation sector1="S5" sector2="S5" value="15.0%"/>
   </correlations>
 
   <segmentations>

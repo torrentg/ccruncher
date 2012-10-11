@@ -11,6 +11,9 @@ version 2.0 (XXX. 2012)
   * added technical information
   * changed site look & feel
   * code refactoring
+  * in xml input file, tag mtransitions renamed to transitions
+  * in xml input file, tag mcorrels renamed to correlations
+  * in xml input file, tag sigma renamed to correlation
 
 version 1.9 (Mar. 2012)
 --------------------------

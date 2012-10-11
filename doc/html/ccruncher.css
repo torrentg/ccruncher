@@ -99,6 +99,7 @@ pre {
 	margin: 0;
 	color: black;
 	background-color: #ddd;
+	border: 1px solid #ddd;
 }
 
 code {
