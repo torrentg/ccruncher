@@ -23,7 +23,6 @@
 #include <iostream>
 #include "math/PowMatrix.hpp"
 #include "math/PowMatrixTest.hpp"
-#include "utils/Arrays.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -45,23 +44,24 @@
 //===========================================================================
 void ccruncher_test::PowMatrixTest::test1()
 {
-  // matrix powerable
+  // matrix
   double valA[] = {
      +1.0, +0.1, +0.3,
      +0.1, +1.0, +0.0,
      +0.3, +0.0, +1.0
   };
-  // A^(0.3) values (extracted with Mathematica)
+  // A^(0.3) values
   double solA[] = {
      +0.989073 , +0.0306268 , +0.0918803,
      +0.0306268, +0.998907  , -0.00327799,
      +0.0918803, -0.00327799, +0.990166
   };
 
-  double **A = Arrays<double>::allocMatrix(3,3, valA);
-  double **M = Arrays<double>::allocMatrix(3,3);
+  vector<vector<double> > A(3, vector<double>(3));
+  for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
+  vector<vector<double> > M(3, vector<double>(3));
 
-  ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, 3, M));
+  ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, M));
 
   for (int i=0;i<3;i++)
   {
@@ -71,12 +71,25 @@ void ccruncher_test::PowMatrixTest::test1()
     }
   }
 
-  Arrays<double>::deallocMatrix(A, 3);
-  Arrays<double>::deallocMatrix(M, 3);
+  // checking array version
+  double *aA[3] = {valA+0, valA+3, valA+6};
+  double aux[9];
+  double *aM[3] = {aux+0, aux+3, aux+6};
+
+  ASSERT_NO_THROW(PowMatrix::pow(aA, 0.3, 3, aM));
+
+  for (int i=0;i<3;i++)
+  {
+    for (int j=0;j<3;j++)
+    {
+       ASSERT_EQUALS_EPSILON(solA[j+3*i], aM[i][j], EPSILON);
+    }
+  }
+
 }
 
 //===========================================================================
-// test2. try to pow a non-invertible matrix (singular matrix)
+// test2. test standar pow matrix
 //
 // validated with Mathematica (Wolfram Research) using:
 //    A = {{1.0, 0.1, 0.3},{0.1, 1.0, 0.0},{2.0, 0.2, 0.6}}
@@ -93,64 +106,110 @@ void ccruncher_test::PowMatrixTest::test1()
 //===========================================================================
 void ccruncher_test::PowMatrixTest::test2()
 {
-  // singular matrix
-  double valB[] = {
+  // matrix
+  double valA[] = {
      +1.0, +0.1, +0.3,
      +0.1, +1.0, +0.0,
      +2.0, +0.2, +0.6
   };
-  // B^(0.2) values (extracted with Mathematica)
-  double solB[] = {
+  // A^(0.2) values
+  double solA[] = {
      +0.684587 , +0.0164512 , +0.206761,
      +0.0479328, +0.999403  , -0.0157408,
      +1.36792  , +0.0329025 , +0.414152
   };
 
-  double **B = Arrays<double>::allocMatrix(3, 3, valB);
-  double **M = Arrays<double>::allocMatrix(3, 3);
+  vector<vector<double> > A(3, vector<double>(3));
+  for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
+  vector<vector<double> > M(3, vector<double>(3));
 
-  ASSERT_NO_THROW(PowMatrix::pow(B, 0.2, 3, M));
+  ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
 
   for (int i=0;i<3;i++)
   {
     for (int j=0;j<3;j++)
     {
-      ASSERT_EQUALS_EPSILON(solB[j+3*i], M[i][j], EPSILON);
+      ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
     }
   }
+}
 
-  Arrays<double>::deallocMatrix(B, 3);
-  Arrays<double>::deallocMatrix(M, 3);
+
+//===========================================================================
+// test3. try to pow a non-invertible matrix (singular matrix)
+//
+// validated with Mathematica (Wolfram Research) using:
+//    A = {{1.0, 0.1, 0.3},{0.1, 1.0, 0.0},{1.0, 0.1, 0.3}}
+//    A // MatrixForm
+//      A =
+//        1.0, 0.1, 0.3,
+//        0.1, 1.0, 0.0,
+//        2.0, 0.2, 0.6
+//    Det[A]
+//      = 0.
+//    MatrixPower[A, 0.2] // MatrixForm
+//      A^0.2 =
+//        0.808758  0.0179912  0.244533
+//        0.0370471 0.999317  -0.0190559
+//        0.808758  0.0179912  0.244533
+//===========================================================================
+void ccruncher_test::PowMatrixTest::test3()
+{
+  // matrix
+  double valA[] = {
+     +1.0, +0.1, +0.3,
+     +0.1, +1.0, +0.0,
+     +1.0, +0.1, +0.3
+  };
+  // A^(0.2) values
+  double solA[] = {
+    0.808758,  0.0179912,  0.244533,
+    0.0370471, 0.999317,  -0.0190559,
+    0.808758,  0.0179912,  0.244533
+  };
+
+  vector<vector<double> > A(3, vector<double>(3));
+  for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
+  vector<vector<double> > M(3, vector<double>(3));
+
+  ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
+
+  for (int i=0;i<3;i++)
+  {
+    for (int j=0;j<3;j++)
+    {
+      ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
+    }
+  }
 }
 
 //===========================================================================
-// test3. try to pow a matrix with complex eigenvalues
+// test4. try to pow a matrix with complex eigenvalues
 //
 // validated with Mathematica (Wolfram Research) using:
 //    A = {{3, -2, 0},{4, -1, -2}, {0, 0, -1}}
 //    Eigenvalues[A]
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test3()
+void ccruncher_test::PowMatrixTest::test4()
 {
   // matrix with complex eigenvalues
-  double valC[] = {
+  double valA[] = {
      +3.0, -2.0, +0.0,
      +4.0, -1.0, -2.0,
      +0.0, +0.0, -1.0
   };
-  double **C = Arrays<double>::allocMatrix(3,3, valC);
-  double **M = Arrays<double>::allocMatrix(3,3);
 
-  ASSERT_THROW(PowMatrix::pow(C, 0.3, 3, M));
+  vector<vector<double> > A(3, vector<double>(3));
+  for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
+  vector<vector<double> > M(3, vector<double>(3));
 
-  Arrays<double>::deallocMatrix(C, 3);
-  Arrays<double>::deallocMatrix(M, 3);
+  ASSERT_THROW(PowMatrix::pow(A, 0.3, M));
 }
 
 //===========================================================================
-// test4. testing pow function
+// test5. testing pow function
 //===========================================================================
-void ccruncher_test::PowMatrixTest::test4()
+void ccruncher_test::PowMatrixTest::test5()
 {
   double x = 2.0;
   double y = 1.0/3.0;
