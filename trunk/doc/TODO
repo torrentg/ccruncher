@@ -4,9 +4,7 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * documentation rewrite
-  * multi-factor model support
-  * rename sigma to correlation in input file
+  * reviewing functional tests
 
 Future works
 -------------------
@@ -17,9 +15,7 @@ Future works
   * improve model
      - add grouped t-copula support
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
-     - considere that a obligor could belong to a few different sectors
-     - how to determine the minimum number of simulations required?
+     - considere that a obligor could belong to a weighted sum of sectors
   * improve functional tests
      - examples based on real data
-     - improve documentation adding tests section
      - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling') 

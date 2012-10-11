@@ -151,9 +151,9 @@
     <data t="8A" sector="S2" obligors="316" defaulted="60"/>
   </historical>
   <correlations>
-    <sigma sector1="S1" sector2="S1" value="9.931%"/>
-    <sigma sector1="S1" sector2="S2" value="10.94%"/>
-    <sigma sector1="S2" sector2="S2" value="12.55%"/>
+    <correlation sector1="S1" sector2="S1" value="9.931%"/>
+    <correlation sector1="S1" sector2="S2" value="10.94%"/>
+    <correlation sector1="S2" sector2="S2" value="12.55%"/>
   </correlations>
   <segmentations>
     <segmentation name='portfolio' components='asset'/>

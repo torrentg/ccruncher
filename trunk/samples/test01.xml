@@ -110,7 +110,7 @@ How to check results?
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <correlations>
-    <sigma sector1="S1" sector2="S1" value="0%"/>
+    <correlation sector1="S1" sector2="S1" value="0%"/>
   </correlations>
 
   <!-- ============================================================== -->

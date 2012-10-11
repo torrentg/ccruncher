@@ -123,7 +123,7 @@
 			<xsd:element name="correlations" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="sigma" minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="correlation" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="sector1" type="xsd:string" use="required"/>
 								<xsd:attribute name="sector2" type="xsd:string" use="required"/>

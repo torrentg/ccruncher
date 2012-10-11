@@ -143,13 +143,13 @@
 <!--                        correlations                            -->
 <!-- .............................................................. -->
 <!ELEMENT correlations (
-    sigma+
+    correlation+
 )>
 
-<!ELEMENT sigma
+<!ELEMENT correlation
     EMPTY
 >
-<!ATTLIST sigma
+<!ATTLIST correlation
     sector1 IDREF #REQUIRED
     sector2 IDREF #REQUIRED
     value CDATA #REQUIRED

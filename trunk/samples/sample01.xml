@@ -139,19 +139,19 @@
   <!-- ============================================================== -->
   <correlations>
 
-    <sigma sector1="tech" sector2="tech" value="20%"/>
-    <sigma sector1="tech" sector2="util" value="1%"/>
-    <sigma sector1="tech" sector2="energ" value="2%"/>
-    <sigma sector1="tech" sector2="bank" value="-3%"/>
+    <correlation sector1="tech" sector2="tech" value="20%"/>
+    <correlation sector1="tech" sector2="util" value="1%"/>
+    <correlation sector1="tech" sector2="energ" value="2%"/>
+    <correlation sector1="tech" sector2="bank" value="-3%"/>
 
-    <sigma sector1="util" sector2="util" value="35%"/>
-    <sigma sector1="util" sector2="energ" value="-4%"/>
-    <sigma sector1="util" sector2="bank" value="-1%"/>
+    <correlation sector1="util" sector2="util" value="35%"/>
+    <correlation sector1="util" sector2="energ" value="-4%"/>
+    <correlation sector1="util" sector2="bank" value="-1%"/>
 
-    <sigma sector1="energ" sector2="energ" value="20%"/>
-    <sigma sector1="energ" sector2="bank" value="-6%"/>
+    <correlation sector1="energ" sector2="energ" value="20%"/>
+    <correlation sector1="energ" sector2="bank" value="-6%"/>
 
-    <sigma sector1="bank" sector2="bank" value="40%"/>
+    <correlation sector1="bank" sector2="bank" value="40%"/>
 
   </correlations>
 

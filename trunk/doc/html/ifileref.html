@@ -27,6 +27,12 @@
             font-size: 80%;
             font-family: monospace;
         }
+        @media print {
+            td.c1, td.c2, td.c3
+            {
+                border: 1px solid gray;
+            }
+        }
     </style>
   </head>
 
@@ -117,7 +123,6 @@
     &lt;define name="ndf" value="5"/&gt;
   &lt;/defines&gt;
     </pre>
-
 
     <h3>Define Attributes</h3>
 
@@ -516,7 +521,7 @@
         <td class="c1">from</td>
         <td class="c2">
           Initial credit rating. This value must be a credit rating identifier, see 
-          name attribute in the credit rating tag.
+          'name' attribute in the credit rating tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -524,7 +529,7 @@
         <td class="c1">to</td>
         <td class="c2">
           Final credit rating. This value must be a credit rating identifier, see 
-          name attribute in the credit rating tag.
+          'name' attribute in the credit rating tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -595,11 +600,14 @@
     <h2>Section Correlations</h2>
 
     <p>
-      This section shows how to define the default correlation matrix between 
-      sectors. The correlation matrix must be symmetric and you only need to 
-      set up the upper triangle elements. Ccruncher checks that all the elements 
-      are in the range [-100%,+100%]. The number of elements to set up is 
-      (numsectors+1) x numsectors / 2.
+      This section shows how to define the correlation matrix between 
+      sectors, <i>R</i>, and the factor loadings,<i>w<sub>i</sub></i> 
+      of the <a href="technical.html#multifactor-model">multi-factor model</a>. 
+      Diagonal elements correspond to the factor loadings. The 
+      non-diagonal elements are the correlation matrix coefficients 
+      (diagonal elements aren't reported because they are allways 
+      <i>1</i>'s). You only need to set up the upper triangle elements. 
+      The number of elements to set up is (numsectors+1) x numsectors / 2.
     </p>
 
     <h3>Example</h3>
@@ -607,25 +615,25 @@
     <pre>
 
   &lt;correlations&gt;
-    &lt;sigma sector1="S1" sector2="S1" value="15.1%"/&gt;
-    &lt;sigma sector1="S1" sector2="S2" value="6.2%"/&gt;
-    &lt;sigma sector1="S1" sector2="S3" value="8.6%"/&gt;
-    &lt;sigma sector1="S1" sector2="S4" value="3.9%"/&gt;
-    &lt;sigma sector1="S1" sector2="S5" value="9.1%"/&gt;
-    &lt;sigma sector1="S2" sector2="S2" value="17.9%"/&gt;
-    &lt;sigma sector1="S2" sector2="S3" value="6.3%"/&gt;
-    &lt;sigma sector1="S2" sector2="S4" value="10.2%"/&gt;
-    &lt;sigma sector1="S2" sector2="S5" value="8.8%"/&gt;
-    &lt;sigma sector1="S3" sector2="S3" value="17.5%"/&gt;
-    &lt;sigma sector1="S3" sector2="S4" value="7.3%"/&gt;
-    &lt;sigma sector1="S3" sector2="S5" value="7.1%"/&gt;
-    &lt;sigma sector1="S4" sector2="S4" value="12.8%"/&gt;
-    &lt;sigma sector1="S4" sector2="S5" value="6.4%"/&gt;
-    &lt;sigma sector1="S5" sector2="S5" value="15.0%"/&gt;
+    &lt;correlation sector1="S1" sector2="S1" value="15.1%"/&gt;
+    &lt;correlation sector1="S1" sector2="S2" value="6.2%"/&gt;
+    &lt;correlation sector1="S1" sector2="S3" value="8.6%"/&gt;
+    &lt;correlation sector1="S1" sector2="S4" value="3.9%"/&gt;
+    &lt;correlation sector1="S1" sector2="S5" value="9.1%"/&gt;
+    &lt;correlation sector1="S2" sector2="S2" value="17.9%"/&gt;
+    &lt;correlation sector1="S2" sector2="S3" value="6.3%"/&gt;
+    &lt;correlation sector1="S2" sector2="S4" value="10.2%"/&gt;
+    &lt;correlation sector1="S2" sector2="S5" value="8.8%"/&gt;
+    &lt;correlation sector1="S3" sector2="S3" value="17.5%"/&gt;
+    &lt;correlation sector1="S3" sector2="S4" value="7.3%"/&gt;
+    &lt;correlation sector1="S3" sector2="S5" value="7.1%"/&gt;
+    &lt;correlation sector1="S4" sector2="S4" value="12.8%"/&gt;
+    &lt;correlation sector1="S4" sector2="S5" value="6.4%"/&gt;
+    &lt;correlation sector1="S5" sector2="S5" value="15.0%"/&gt;
   &lt;/correlations&gt;
     </pre>
 
-    <h3>Sigma Attributes</h3>
+    <h3>Correlation Attributes</h3>
 
     <table cellpadding="3">
       <tr class="b">
@@ -636,25 +644,34 @@
       <tr class="a">
         <td class="c1">sector1</td>
         <td class="c2">
-          First sector involved in correlation value.
-          This value must be a sector identifier, see name attribute in sector tag.
+          First sector.
+          This value must be a sector identifier, see 'name' attribute in sector tag.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">sector2</td>
         <td class="c2">
-          second sector involved in correlation value.
-          This value must be a sector identifier, see name attribute in sector tag.
+          Second sector.
+          This value must be a sector identifier, see 'name' attribute in sector tag.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
         <td class="c2">
-          Correlation of defaults times between sector1 and sector2.
-          Correlation(defaults(S1), defaults(S2)). The value can be 
-          set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          <ul>
+            <li>
+              if sector1 = sector2: factor loading of sector1. <br/>
+              A value in the range [0%,100%].
+            </li>
+            <li>
+              if sector1 &ne; sector2: correlation between sector1 and sector2. <br/>
+              A value in the range [-100%,+100%]
+            </li>
+          </ul>
+          The value can be set as percentage (eg. 5.3%) or absolute 
+          value (eg. 0.053)
         </td>
         <td class="c3">double</td>
       </tr>
@@ -923,7 +940,7 @@
         <td class="c2">
           Initial obligor credit rating at time t0, see attribute <i>time.0</i> at the 
           <a href="#parameters">parameters</a> section. This value must be a credit rating 
-          identifier, see name attribute in <a href="#ratings">rating</a> tag.
+          identifier, see 'name' attribute in <a href="#ratings">rating</a> tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -931,7 +948,7 @@
         <td class="c1">sector</td>
         <td class="c2">
           Sector where this obligor is included.
-          This value must be a sector identifier, see name attribute in sector tag.
+          This value must be a sector identifier, see 'name' attribute in sector tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -962,7 +979,7 @@
         <td class="c1">segmentation</td>
         <td class="c2">
           Segmentation identifier.
-          This value must be a segmentation identifier, see name attribute in segmentation tag.
+          This value must be a segmentation identifier, see 'name' attribute in segmentation tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -970,7 +987,7 @@
         <td class="c1">segment</td>
         <td class="c2">
           Segment identifier.
-          This value must be a segment identifier, see name attribute in segment tag.
+          This value must be a segment identifier, see 'name' attribute in segment tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -1132,7 +1149,7 @@
       <tr class="a">
         <td class="c1">rating</td>
         <td class="c2">
-         This value must be a credit rating identifier, see name attribute in the 
+         This value must be a credit rating identifier, see 'name' attribute in the 
          rating tag.
         </td>
         <td class="c3">string</td>
@@ -1162,7 +1179,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 10-Oct-2012
+          Last modified: 11-Oct-2012
         </td>
       </tr></table>
     </div>
