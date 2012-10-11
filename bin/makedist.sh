@@ -137,7 +137,6 @@ prepare() {
   rm $1/bin/tex2png.xsl;
   rm -rvf `find $1/ -name \.svn\*`;
   rm -rvf $1/doc/share;
-  rm -rvf $1/doc/other;
   rm -vf $1/doc/html/*.gpi;
   rm -vf $1/doc/html/*.vsd;
 
