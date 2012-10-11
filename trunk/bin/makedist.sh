@@ -126,6 +126,9 @@ prepare() {
 
   # create html doc graphics
   $1/bin/tex2png.sh $1/doc/html/*.html;
+  
+  # set version information
+  $1/bin/rollversion.sh -s;
 
   # remove developers files
   rm $1/bin/clean.sh;
