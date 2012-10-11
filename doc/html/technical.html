@@ -327,7 +327,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 10-Oct-2012
+          Last modified: 11-Oct-2012
         </td>
       </tr></table>
     </div>
@@ -335,64 +335,3 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
     </div>
   </body>
 </html>
-
-<!--
-# DEFAULT PROBABILITY OVER TIME
-
-ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC")
-
-A = matrix(ncol=8, nrow=8, data=c(
-90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
-8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
-0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
-0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
-0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
-0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
-0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
-0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
-)/100)
-
-n=101
-B = diag(8)
-T = matrix(nrow=n, ncol=8, 0)
-for(i in 2:n)
-{
-  B = B %*% A
-  T[i,] = B[,8]
-}
-
-png(filename = "pdefault.png",
-    width = 350, height = 250, units = "px", 
-    pointsize = 12, bg = "white", type = "cairo")
-
-matplot(0:100, T[,1:7], type='l', xlab = "time in years", 
-  ylab = "probability of default", lty = 1:7, col= 1:6)
-grid()
-title("Probability of Default over time", font.main=1, cex.main=1)
-legend(80, 0.75, ratings, lty = 1:7, col= 1:6, bg="white", cex=0.7)
-
-dev.off()
--->
-
-<!--
-# NUMBER OF DEFAULTS OVER ECONOMIC CICLE
-
-p = matrix(ncol=7, nrow=1, data=c(0.5, 0.7, 1.0, 2.0, 5.0, 10.0, 20.0)/100)
-colnames(p) = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC")
-p1 = p/sum(p)
-d = 700+300*sin(seq(-pi,pi,0.5))
-
-png(filename = "ecicle.png",
-    width = 350, height = 250, units = "px", 
-    pointsize = 12, bg = "white", type = "cairo")
-
-matplot(d%*%p1, type='l', xlab = "time in years", 
-  ylab = "number of defaults", lty = 1:7, col= 1:6, main="")
-grid()
-title("Number of defaults over economic cycle", font.main=1, cex.main=1)
-legend(6, 490, colnames(p1), lty = 1:7, col= 1:6, bg="white", cex=0.7)
-text(4,150,"expansion", cex=0.7)
-text(10.5,150,"contraction", cex=0.7)
-
-dev.off()
--->
