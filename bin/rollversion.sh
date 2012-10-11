@@ -134,8 +134,9 @@ getPath() {
 #-------------------------------------------------------------
 getSvnVersion() {
 
-  svnversion=R$(svnversion $CCRUNCHERPATH | sed "s/^\([0-9]\+\)[MSP]*\(:.*\)\?/\1/g");
-
+  #svnversion=R$(svnversion $CCRUNCHERPATH | sed "s/^\([0-9]\+\)[MSP]*\(:.*\)\?/\1/g");
+  svnversion=R$(svn info http://www.ccruncher.net/svn/ | awk '/Revision:/ { print $2 }');
+ 
   if [ $? != 0 ]; then
     echo "problems retrieving svnversion";
     exit 1;
@@ -174,12 +175,6 @@ if [ "$cver" = "true" ]; then
   echo "you need to run autoconf to take effect some changes";
 fi
 
-if [ $retcode != 0 ]; then
-  echo "";
-  echo "panic: retrieve version from repository now!";
-fi
-
 #TODO: add version changes in HTML's
 
 exit $retcode;
-
