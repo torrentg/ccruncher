@@ -133,7 +133,6 @@ prepare() {
   rm $1/bin/rollversion.sh
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
-  rm $1/bin/simhdt.R;
   rm $1/bin/tex2png.sh;
   rm $1/bin/tex2png.xsl;
   rm -rvf `find $1/ -name \.svn\*`;
