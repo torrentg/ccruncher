@@ -29,11 +29,16 @@ progname=tex2png.sh
 numversion="2.0"
 svnversion="R795"
 retcode=0
+xslfile=$(dirname "$0")/tex2png.xsl;
+xslfile=$(readlink -f "$xslfile");
 
 #-------------------------------------------------------------
 # checking dependences
 #-------------------------------------------------------------
-command -v tidy >/dev/null 2>&1 || { echo "aborting: tidy command not found" >&2; exit 1; }
+if [ ! -f $xslfile ]
+then
+  echo "aborting: file $xslfile does not exist";
+fi
 command -v xsltproc >/dev/null 2>&1 || { echo "aborting: xsltproc command not found" >&2; exit 1; }
 command -v latex >/dev/null 2>&1 || { echo "aborting: latex command not found" >&2; exit 1; }
 command -v dvipng >/dev/null 2>&1 || { echo "aborting: dvipng command not found" >&2; exit 1; }
@@ -47,7 +52,7 @@ process() {
   extension=${1##*.};
 
   echo "processing file $1 ...";
-  xsltproc --html --nonet -o ${name}-$$.sh $(dirname "$0")/tex2png.xsl $1;
+  xsltproc --html --nonet -o ${name}-$$.sh $xslfile $1;
   if [ $? != 0 ]; then
     echo "  error processing html!";
     retcode=`expr $retcode + 1`;
@@ -69,7 +74,10 @@ process() {
 #-------------------------------------------------------------
 for filename in "$@"
 do
-  process $filename;
+  cwd=$PWD;
+  cd $(dirname $filename);
+  process $(basename $filename);
+  cd $cwd;
 done
 
 exit $retcode;

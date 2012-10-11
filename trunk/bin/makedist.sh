@@ -122,8 +122,12 @@ checkout() {
 # -------------------------------------------------------------
 # remove developers files
 # -------------------------------------------------------------
-rmDevFiles() {
+prepare() {
 
+  # create html doc graphics
+  $1/bin/tex2png.sh $1/doc/html/*.html;
+
+  # remove developers files
   rm $1/bin/clean.sh;
   rm $1/bin/makedist.sh;
   rm $1/bin/rollversion.sh
@@ -134,8 +138,9 @@ rmDevFiles() {
   rm $1/bin/tex2png.xsl;
   rm -rvf `find $1/ -name \.svn\*`;
   rm -rvf $1/doc/share;
-  rm -rvf $1/doc/tex;
   rm -rvf $1/doc/other;
+  rm -vf $1/doc/html/*.gpi;
+  rm -vf $1/doc/html/*.vsd;
 
 }
 
@@ -153,7 +158,7 @@ makeSrcDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-  rmDevFiles $workpath;
+  prepare $workpath;
   cd $workpath;
 
   # creating tarball
@@ -184,7 +189,7 @@ makeBinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-  rmDevFiles $workpath;
+  prepare $workpath;
   cd $workpath;
 
   # removing specific flag
@@ -198,6 +203,8 @@ makeBinDist() {
   ./configure --prefix=$PWD;
   make -j4;
   make install;
+  
+  # dropping unused files
   bin/src2bin.sh -y;
 
   # creating tarball
@@ -240,7 +247,7 @@ makeWinDist() {
   chmod -R +w $workpath > /dev/null 2> /dev/null;
   rm -rvf $workpath > /dev/null 2> /dev/null;
   checkout $workpath;
-  rmDevFiles $workpath;
+  prepare $workpath;
   cd $workpath;
 
   # creating binaries
