@@ -98,8 +98,8 @@ ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<u
 
     for(unsigned int i=0; i<k; i++)
     {
-      if (M[i][i] <= 0.0 || 1.0 <= M[i][i]) {
-        throw Exception("factor loading out of range (0,1)");
+      if (M[i][i] < 0.0 || 1.0 < M[i][i]) {
+        throw Exception("factor loading out of range [0,1]");
       }
       else {
         w[i] = M[i][i];
@@ -108,8 +108,8 @@ ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<u
 
       for(unsigned int j=i+1; j<k; j++)
       {
-        if (M[i][j] <= -1.0 || 1.0 <= M[i][j]) {
-          throw Exception("factor correlation out of range (-1,+1)");
+        if (M[i][j] < -1.0 || 1.0 < M[i][j]) {
+          throw Exception("factor correlation out of range [-1,+1]");
         }
         if (fabs(M[i][j]-M[j][i]) > 1e-10) {
           throw Exception("non-symmetric correlation matrix");
