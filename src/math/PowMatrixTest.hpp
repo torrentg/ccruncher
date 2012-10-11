@@ -44,6 +44,7 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
     void test2();
     void test3();
     void test4();
+    void test5();
     void printMatrix(double **a, int n);
 
 
@@ -55,6 +56,7 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
+      TEST_CASE(test5);
     }
 
 };
