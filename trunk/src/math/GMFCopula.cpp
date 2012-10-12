@@ -127,7 +127,7 @@ ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<u
     }
 
     // performance tip: chol contains the w·chol (to avoid multiplications)
-    // and w contaings sqrt(1-w^2) (to avoid sqrt and multipluications)
+    // and w contaings sqrt(1-w^2) (to avoid sqrt and multiplications)
     for(unsigned int i=0; i<k; i++)
     {
       for(unsigned int j=0; j<k; j++)

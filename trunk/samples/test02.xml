@@ -85,7 +85,7 @@ How to check results?
   <!-- ============================================================== -->
   <ratings>
     <rating name="A" description="alive"/>
-    <rating name="E" description="death"/>
+    <rating name="E" description="dead"/>
   </ratings>
 
   <!-- ============================================================== -->
