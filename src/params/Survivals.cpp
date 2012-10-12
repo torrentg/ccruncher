@@ -402,6 +402,11 @@ double ccruncher::Survivals::inverse1(const int irating, double val) const
     return 0.0;
   }
 
+  if (fabs(ddata[irating].back()-val) < EPSILON)
+  {
+    val = ddata[irating].back();
+  }
+
   if(val < ddata[irating].back())
   {
     return (double)(INT_MAX);
