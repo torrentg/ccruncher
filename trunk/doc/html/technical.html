@@ -32,7 +32,7 @@
     </div>
 
     <h1>Technical Information</h1>
-    <img src="creditvar.png" width="350" style="float:right; margin:10px; margin-bottom:5px"/>
+    <img src="creditvar.png" alt="credit VaR" width="350" style="float:right; margin:10px; margin-bottom:5px"/>
     <p>
       CCruncher is an open-source tool for estimating the loss distribution 
       of a portfolio of loans to SMEs developed by 
@@ -62,21 +62,21 @@
 
     <a name="assumptions"></a>
     <h2>Assumptions</h2>
-    <img src="ecicle.png" style="float:right; margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
+    <img src="ecicle.png" alt="number of defaults over economic cicle" style="float:right; margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
     <p>
-      <b>1.</b> Every obligor has assigned a probability of default 
+      <i>1.</i> Every obligor has assigned a probability of default 
       (PD) expressed as a rating. Usually the evolution of this
       probability over time is given by the transition matrix.
     </p>
     <p>
-      <b>2.</b> 
+      <i>2.</i> 
       The correlation between obligors depends only on the economic 
       sectors to which they belong. In particular, correlations don't 
       depend on the rating of obligors or the number of obligors in 
       each sector.      
     </p>
     <p>
-      <b>3.</b> 
+      <i>3.</i> 
       The correlations are constant over time. This means that the PD 
       is affected by the economic cycle, more in detail, the transition 
       matrix. See figure.
@@ -85,8 +85,8 @@
     <a name="PD"></a>
     <h2>Probability of Default</h2>
     <div style="float:right;">
-      <img src="tmatrix.png" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/><br/>
-      <img src="pdefault.png" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
+      <img src="tmatrix.png" alt="1-year transtion matrix" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/><br/>
+      <img src="pdefault.png" alt="probability of default over time" style="margin-left:15px; border: 1px dashed gray; padding-left:5px"/>
     </div>
     <p>
       To assess the credit risk it is necessary to have the probability of 
@@ -98,9 +98,9 @@
       <i>F<sub>r</sub>(t)</i>, and the transition matrix at horizon <i>T</i>, 
       <i>M<sub>T</sub></i>, is given by the following formula:
     </p>
-    <center>
+    <p style="text-align:center;">
       <i>F<sub>r</sub>(t) = M<sub>t</sub>(r,n)</i>
-    </center>
+    </p>
     <p>
       where <i>r</i> is the rating, <i>t</i> is the time, <i>M<sub>t</sub></i> 
       is the transition matrix at horizon <i>t</i> (scaled from <i>M<sub>T</sub></i>), 
@@ -140,15 +140,15 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
       <i>T<sub>i</sub></i>, are modeled by a multivariate distribution
       <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> such that:
     </p>
-    <center>
+    <p style="text-align:center;">
       <i>F(t<sub>1</sub>,…,t<sub>n</sub>) = Pr{T<sub>1</sub>&lt; t<sub>1</sub>,…,T<sub>n</sub>&lt; t<sub>n</sub>}</i>
-    </center>
+    </p>
     <p>
       Sklar's theorem applied to multivariate distribution <i>T</i> gives:
     </p>
-    <center>
+    <p style="text-align:center;">
       <i>F(t<sub>1</sub>,…,t<sub>n</sub>) = C(F<sub>1</sub>(t<sub>1</sub>), …, F<sub>n</sub>(t<sub>n</sub>))</i>
-    </center>
+    </p>
     <p>
       where <i>F<sub>1</sub>,…,F<sub>n</sub></i> are the marginals of <i>F</i> and 
       <i>C</i> is the copula [8] that contains the dependence structure between obligors.
@@ -166,15 +166,15 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
        5) it can be expressed as a multi-factor model.
     </p>
     <p>
-      The obligors default times are characterized by the following property:
-      Sea <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> el tiempo de fallido conjunto con cópula
-      t-Student <i>C=(U<sub>1</sub>,…,U<sub>n</sub>)</i> y marginales F<sub>i</sub>, y sea 
-      <i>X=(X<sub>1</sub>,…,X<sub>n</sub>)</i> una distribución t-Student multivariante. 
-      Entonces,
+      <i>Proposition (characterization of the default times)</i>. 
+      Let <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> the joint distribution of default times 
+      with t-Student copula <i>C=(U<sub>1</sub>,…,U<sub>n</sub>)</i> and marginals 
+      <i>F<sub>i</sub></i>, and <i>X=(X<sub>1</sub>,…,X<sub>n</sub>)</i> a multivariate 
+      t-Student distribution with the same <i>R</i> and <i>&nu;</i> than <i>C</i>. Then,
     </p>
-    <center>
+    <p style="text-align:center;">
       <i>P{T<sub>i</sub> ≤ t} = P{X<sub>i</sub> ≤ t<sub>&nu;</sub><sup>-1</sup>(F<sub>i</sub>(t))}</i>
-    </center>
+    </p>
     <p>
       where <i>t<sub>&nu;</sub><sup>-1</sup></i> is the inverse of the univariate t-Student
       distribution with <i>&nu;</i> degrees of freedom.
@@ -232,9 +232,9 @@ Z, S, \varepsilon_i^j \textrm{ independents } \ \forall i,j
       We define the portfolio loss distribution from the multivariate 
       distribution of default times, <i>T</i>, as:
     </p>
-    <center>
+    <p style="text-align:center;">
       <i>L<sub>t</sub> = &sum; 1(T<sub>i</sub> &lt; t)·(1-Recovery<sub>i</sub>(T<sub>i</sub>))·Exposure<sub>i</sub>(T<sub>i</sub>)</i>
-    </center>
+    </p>
     <p>
       We use the Monte Carlo method to estimate the portfolio loss distribution 
       simulating the default times of obligors. The loss is computed using the 
@@ -256,7 +256,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
 \end{array}
     </object>
     <p>
-      <b>Algorithm</b> (default times simulation). 
+      <i>Algorithm (default times simulation)</i>. 
       We use the characterization of the default times to simulate the <i>T</i> 
       distribution from their marginals <i>F<sub>1</sub>,...,F<sub>n</sub></i> 
       and the t-Student copula with <i>&nu;</i> degrees of freedom and 
@@ -267,7 +267,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
       <li>Apply the inverse sampling method to obtain the default times: <i>(F<sub>1</sub><sup>-1</sup>(u<sub>1</sub>),…, F<sub>n</sub><sup>-1</sup>(u<sub>n</sub>))</i></li>
     </ol>
     <p>
-      <b>Algorithm</b> (t-Student copula simulation). 
+      <i>Algorithm (t-Student copula simulation)</i>. 
       We apply the t-Student multi-factor formulation and the standard gaussian 
       simulation algorithm to obtain:
     </p>
@@ -277,7 +277,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
       <li>Let <i>z = L·v</i></li>
       <li>Simulate <i>n</i> independent random variates <i>&epsilon;<sub>i</sub><sup>j</sup></i> from <i>N(0,1)</i></li>
       <li>Let <i>y<sub>i</sub><sup>j</sup> = w<sub>i</sub>·z<sub>i</sub>+&radic;(1- w<sub>i</sub><sup>2</sup>)·&epsilon;<sub>i</sub><sup>j</sup></i></li>
-      <li>Simulate a random variate <i>s</i> from <i>&chi;<sub>&nu;</sub><sup>2</sup></i>
+      <li>Simulate a random variate <i>s</i> from <i>&chi;<sub>&nu;</sub><sup>2</sup></i></li>
       <li>Set <i>x<sub>i</sub><sup>j</sup> = &radic;(&nu;/s)·y<sub>i</sub><sup>j</sup></i></li>
       <li>Set <i>u<sub>i</sub><sup>j</sup> = t<sub>&nu;</sub>(x<sub>i</sub><sup>j</sup>)</i></li>
     </ol>
@@ -318,7 +318,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
       <li>Long, Kete (2011). <a href="http://www.defaultrisk.com/pa_corr_18.htm">The Fallacy of an Overly Simpliﬁed Asymptotic Single-risk-factor Model</a>. Journal of Risk Model Validation, Vol. 5, No. 4, (Winter 2011/12), pp. 27-48.</li>
       <li>Embrechts P, McNeil A, Straumann D (2003). <a href="http://www.math.ethz.ch/~baltes/ftp/pitfalls.pdf">Correlation and dependence in risk management: properties and pitfalls</a>. Risk Management: Value at Risk and Beyond, ed. M.A.H. Dempster, Cambridge University Press, Cambridge, pp. 176-223</li>
       <li>Michael Gordy, Erik Heitfield (2002). <a href="http://emlab.berkeley.edu/~mcfadden/e242_f03/heitfield.pdf">Estimating Default Correlations from Short Panels of Credit Rating Performance Data</a>. Working paper.</li>
-      <li>Christoff Gössl (2005). <a href="http://www.defaultrisk.com/pp_model119.htm">Predictions based on certain uncertainties - a Bayesian credit portfolio approach</a>. 
+      <li>Christoff Gössl (2005). <a href="http://www.defaultrisk.com/pp_model119.htm">Predictions based on certain uncertainties - a Bayesian credit portfolio approach</a>.</li>
     </ol>
 
     <div id="page-footer">
@@ -327,7 +327,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 11-Oct-2012
+          Last modified: 12-Oct-2012
         </td>
       </tr></table>
     </div>
@@ -335,3 +335,4 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
     </div>
   </body>
 </html>
+
