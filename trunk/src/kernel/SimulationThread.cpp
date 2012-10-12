@@ -147,7 +147,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   double t = survivals.inverse(r, u);
   // TODO: assumed no leap years (this can be improved)
   Date dtime = time0 + (long)(t*365.0/12.0);
-  if (dtime > timeT) return;
+  if (timeT < dtime) return;
 
   // evalue obligor losses
   double obligor_recovery = NAN;
