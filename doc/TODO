@@ -12,6 +12,7 @@ Future works
      - graphic interface
      - input file in binary format
      - allow evaluation in multiple time horizons
+     - replace invSurvival+invT tables by invSurvival(invT(x)) table
   * improve model
      - add grouped t-copula support
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
