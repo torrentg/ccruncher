@@ -159,7 +159,7 @@ void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
 void ccruncher::Ratings::validations() throw(Exception)
 {
   // checking number of ratings
-  if (vratings.size() == 0)
+  if (vratings.empty())
   {
     throw Exception("ratings have no elements");
   }

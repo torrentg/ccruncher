@@ -225,7 +225,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
 void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"interest")) {
-    if (vrates.size() == 0) {
+    if (vrates.empty()) {
       throw Exception("interest has no rates");
     }
     else {

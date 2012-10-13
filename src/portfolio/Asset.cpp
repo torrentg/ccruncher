@@ -169,7 +169,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"asset")) 
   {
     // checking data size
-    if (data.size() == 0) {
+    if (data.empty()) {
       throw Exception("asset without data");
     }
 
@@ -267,7 +267,7 @@ Date ccruncher::Asset::getMaxDate() const
 //===========================================================================
 bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exception)
 {
-  if (data.size() == 0)
+  if (data.empty())
   {
     return false;
   }
@@ -325,7 +325,7 @@ const DateValues& ccruncher::Asset::getValues(const Date at) const
 {
   static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
   
-  if (at <= date || data.size() == 0 || data.back().date < at)
+  if (at <= date || data.empty() || data.back().date < at)
   {
     return dvnf;
   }

@@ -177,7 +177,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
       if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
       {
         char aux[512];
-        sprintf(aux, "%s at line %d column %d",
+        snprintf(aux, 512, "%s at line %d column %d",
                      XML_ErrorString(XML_GetErrorCode(xmlparser)),
                      (int) XML_GetCurrentLineNumber(xmlparser),
                      (int) XML_GetCurrentColumnNumber(xmlparser));
@@ -194,16 +194,16 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
     // unknow exception
     else {
       char aux[512];
-      sprintf(aux, "error at line %d column %d",
+      snprintf(aux, 512, "error at line %d column %d",
                  (int) XML_GetCurrentLineNumber(xmlparser),
                  (int) XML_GetCurrentColumnNumber(xmlparser));
       throw Exception(string(aux));
     }
   }
-  catch(Exception &e)
+  catch(std::exception &e)
   {
     char aux[512];
-    sprintf(aux, "error at line %d column %d",
+    snprintf(aux, 512, "error at line %d column %d",
                  (int) XML_GetCurrentLineNumber(xmlparser),
                  (int) XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(e, string(aux));
@@ -211,7 +211,7 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   catch(...)
   {
     char aux[512];
-    sprintf(aux, "error at line %d column %d",
+    snprintf(aux, 512, "error at line %d column %d",
                  (int) XML_GetCurrentLineNumber(xmlparser),
                  (int) XML_GetCurrentColumnNumber(xmlparser));
     throw Exception(string(aux));

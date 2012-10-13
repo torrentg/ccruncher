@@ -167,7 +167,7 @@ void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
 void ccruncher::Sectors::validations() throw(Exception)
 {
   // checking number of sectors
-  if (vsectors.size() == 0)
+  if (vsectors.empty())
   {
     throw Exception("sectors have no elements");
   }

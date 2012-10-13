@@ -182,7 +182,7 @@ void ccruncher::GMFCopula::rmvnorm()
   assert(w != NULL);
   assert(chol != NULL);
   assert(aux != NULL);
-  assert(values.size() > 0);
+  assert(!values.empty());
   assert(rng != NULL);
 
   // simulate w·N(0,R)

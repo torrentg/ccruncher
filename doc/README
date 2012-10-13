@@ -95,7 +95,7 @@ Using CCruncher
 
 2. run CCruncher
      > $CCRUNCHER/bin/ccruncher --help
-     > $CCRUNCHER/bin/ccruncher -f --hash=100 --path=./data samples/test01.xml
+     > $CCRUNCHER/bin/ccruncher -f --hash=100 --path=data samples/test01.xml
 
 3. compute risk indicators typing:
      > $CCRUNCHER/bin/ccreport.sh data/portfolio.csv
@@ -145,6 +145,15 @@ Microsoft Visual C++ versions:
  - MSVC9: works. see current file project
 
 
+Notes for Windows developers (QT+MINGW)
+---------------------------------------
+
+1. install qt
+   http://qt-project.org/downloads
+
+2. install msys
+   
+
 Developers tips & tricks
 --------------------------------
 
@@ -167,14 +176,19 @@ Developers tips & tricks
      > make
      > make check
 
-6. executing test suite
-     > build/tests
+6. executing tests suites
+     > build/tests   # unitary tests
+     > bin/tests.sh  # functional tests
 
 7. checking memory leaks
      don't enable profiler because can cause problems to valgrind
      > valgrind --tool=memcheck --leak-check=yes <progname>
 
-8. profiling executable (only if configure is called with option --enable-profiler)
+8. finding vulnerabilities
+     > flawfinder src/
+     > cppcheck --enable=all -I ./ ./
+
+9. profiling executable (only if configure is called with option --enable-profiler)
      ccruncher writes gmon.out because we compiled with -pg flag
      > gprof bin/ccruncher gmon.out
      > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
@@ -193,17 +207,13 @@ Developers tips & tricks
      > sysprof
      > ./binary
 
-9. debuging executable
+10. debuging executable
      > gdb ./path/progname
        >> help
        >> set args arg1 arg2 arg3 ... argn
        >> run
        >> backtrace
        >> quit
-
-10. creating pdf documentation
-      > $CCRUNCHER/doc/tex/make
-      > $CCRUNCHER/doc/tex/make install
 
 11. making source distribution package
       > make distcheck
