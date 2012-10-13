@@ -53,6 +53,7 @@ ccruncher::Aggregator::Aggregator(char *assets, int numassets, int assetsize, in
   }
   try
   {
+    fout.exceptions(ios::failbit | ios::badbit);
     fout.open(filename.c_str(), ios::out|ios::trunc); //ios.app
     fout.setf(ios::fixed);
     fout.setf(ios::showpoint);
@@ -74,9 +75,9 @@ ccruncher::Aggregator::Aggregator(char *assets, int numassets, int assetsize, in
     }
     fout << endl;
   }
-  catch(...)
+  catch(std::exception &e)
   {
-    throw Exception("error opening file " + filename);
+    throw Exception(e, "error opening file " + filename);
   }
 
 }
@@ -88,12 +89,11 @@ ccruncher::Aggregator::~Aggregator()
 {
   try
   {
-    flush();
     fout.close();
   }
-  catch(...)
+  catch(std::exception &e)
   {
-    throw Exception("error closing file for aggregator " + segmentation.name);
+    // destructor can't throw exceptions
   }
 }
 
@@ -116,7 +116,7 @@ void ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
     }
     fout << "\n"; // endl not used because force to flush in disk
   }
-  catch(Exception e)
+  catch(std::exception &e)
   {
     throw Exception(e, "error flushing content for aggregator " + segmentation.name);
   }
@@ -131,7 +131,7 @@ void ccruncher::Aggregator::flush() throw(Exception)
   {
     fout.flush();
   }
-  catch(Exception e)
+  catch(std::exception &e)
   {
     throw Exception(e, "error flushing segmentation " + segmentation.name);
   }

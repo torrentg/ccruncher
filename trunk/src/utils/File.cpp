@@ -252,7 +252,7 @@ string ccruncher::File::dirname(const string &pathname)
   char fname[_MAX_FNAME];
   char ext[_MAX_EXT];
   _splitpath(pathname.c_str(), drive, dir, fname, ext);
-  sprintf(buf, "%s%s", drive, dir);
+  snprintf(buf, _MAX_PATH, "%s%s", drive, dir);
   return string(buf);
 #else
   return string(::dirname((char*)pathname.c_str()));
@@ -272,7 +272,7 @@ string ccruncher::File::filename(const string &pathname)
   char fname[_MAX_FNAME];
   char ext[_MAX_EXT];
   _splitpath(pathname.c_str(), drive, dir, fname, ext);
-  sprintf(buf, "%s%s", fname, ext);
+  snprintf(buf, _MAX_PATH, "%s%s", fname, ext);
   return string(buf);
 #else
   return string(::basename((char*)pathname.c_str()));

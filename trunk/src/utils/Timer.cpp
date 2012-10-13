@@ -144,7 +144,7 @@ string ccruncher::Timer::format(double val)
   //cur = cur-double(sec);
 
   // formating elapsed time
-  sprintf(buf,"%02d:%02d:%02d.%03d", hh, min, sec, ms);
+  snprintf(buf, 20, "%02d:%02d:%02d.%03d", hh, min, sec, ms);
 
   // exit function
   return string(buf);

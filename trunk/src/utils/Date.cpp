@@ -61,8 +61,8 @@ ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(E
 {
   if (!valid(iDay, iMonth, iYear))
   {
-    char buf[150];
-    sprintf(buf, "invalid Date: %i/%i/%i", iDay, iMonth, iYear);
+    char buf[50];
+    snprintf(buf, 50, "invalid Date: %i/%i/%i", iDay, iMonth, iYear);
     throw Exception(buf);
   }
 
@@ -116,7 +116,7 @@ void ccruncher::Date::parse(const char *str) throw(Exception)
     throw Exception("invalid date: " + string(str) + " (non valid format)");
   }
 
-  int rc = sscanf(str, "%d/%d/%d%s", &d, &m, &y, buf);
+  int rc = sscanf(str, "%d/%d/%d%8s", &d, &m, &y, buf);
   if (rc != 3)
   {
     throw Exception("invalid date: " + string(str) + " (non valid format)");
@@ -143,7 +143,7 @@ long ccruncher::Date::YmdToJd( const int iYear, const int iMonth, const int iDay
 
 #ifndef JULDATE_USE_ALTERNATE_METHOD
 
-    int a,b;
+    int b = 0;
     int year = iYear, month = iMonth, day = iDay;
     float year_corr;
 
@@ -155,10 +155,9 @@ long ccruncher::Date::YmdToJd( const int iYear, const int iMonth, const int iDay
         year--;
         month += 12;
     }
-    b = 0;
     if ( year * 10000.0 + month * 100.0 + day >= 15821015.0 )
     {
-        a = year / 100;
+        int a = year / 100;
         b = 2 - a + a / 4;
     }
     jul_day = (long) ( 365.25 * year - year_corr ) +
@@ -191,14 +190,14 @@ void ccruncher::Date::JdToYmd( const long lJD, int *piYear, int *piMonth, int *p
 {
 #ifndef JULDATE_USE_ALTERNATE_METHOD
 
-    long a, b, c, d, e, z, alpha;
+    long a, b, c, d, e, z;
 
     z = lJD;
     if ( z < 2299161L )
         a = z;
     else
     {
-        alpha = (long) ( ( z - 1867216.25 ) / 36524.25 );
+        long alpha = (long) ( ( z - 1867216.25 ) / 36524.25 );
         a = z + 1 + alpha - alpha / 4;
     }
     b = a + 1524;
@@ -361,7 +360,7 @@ string ccruncher::Date::toString() const
   char aux[] = "dd/mm/yyyy ";
   aux[10] = 0;
   JdToYmd( lJulianDay, &y, &m, &d );
-  sprintf(aux, "%02d/%02d/%04d", d, m, y);
+  snprintf(aux, 11, "%02d/%02d/%04d", d, m, y);
   return string(aux);
 }
 
@@ -603,7 +602,7 @@ void ccruncher::Date::add(const char *str) throw(Exception)
   // trim and copy to local buffer
   while(isspace(str[l-1]) && l>0) l--; // right trim
   if (l <= 1 || l >= 25) throw Exception("invalid date increment");
-  strncpy(buffer,str, l);
+  strncpy(buffer, str, l);
 
   // removing extension (D, M or Y) + setting terminating null byte
   if (buffer[l-1] == 'M' || buffer[l-1] == 'Y' || buffer[l-1] == 'D') buffer[l-1] = '\0';

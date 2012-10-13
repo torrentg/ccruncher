@@ -90,7 +90,7 @@ void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandler
   assert(pila_pos<10);
   pila[pila_pos].handlers = eh;
   assert(strlen(name)<20);
-  strcpy(pila[pila_pos].name, name);
+  strncpy(pila[pila_pos].name, name, 20);
 }
 
 //===========================================================================

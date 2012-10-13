@@ -51,10 +51,6 @@ bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
     {
       return true;
     }
-    else if (ref->irating == c.ref->irating)
-    {
-      return false;
-    }
     else
     {
       return false;

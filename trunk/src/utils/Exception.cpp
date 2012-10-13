@@ -26,45 +26,40 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::Exception::Exception() : exception()
+ccruncher::Exception::Exception() : exception(), msg("")
 {
-  msg = "";
   stacktrace = retrieveStackTrace();
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const char *str) : exception()
+ccruncher::Exception::Exception(const char *str) : exception(), msg(str)
 {
-  msg = string(str);
   stacktrace = retrieveStackTrace();
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const string &str) : exception()
+ccruncher::Exception::Exception(const string &str) : exception(), msg(str)
 {
-  msg = str;
   stacktrace = retrieveStackTrace();
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const ccruncher::Exception &e) : exception(e)
+ccruncher::Exception::Exception(const ccruncher::Exception &e) : exception(e), msg(e.what())
 {
-  msg = e.what();
   stacktrace = e.getStackTrace();
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exception::Exception(const std::exception &e) : exception(e)
+ccruncher::Exception::Exception(const std::exception &e) : exception(e), msg(e.what())
 {
-  msg = e.what();
   stacktrace = retrieveStackTrace();
 }
 

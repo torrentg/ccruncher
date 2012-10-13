@@ -113,7 +113,7 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
 //===========================================================================
 void ccruncher::Portfolio::validations() throw(Exception)
 {
-  if (vobligors.size() == 0)
+  if (vobligors.empty())
   {
     throw Exception("portfolio without obligors");
   }

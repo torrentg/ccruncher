@@ -97,7 +97,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Excep
 //===========================================================================
 void ccruncher::Segmentations::validate() throw(Exception)
 {
-  if (vsegmentations.size() == 0)
+  if (vsegmentations.empty())
   {
     throw Exception("no segmentations defined");
   }

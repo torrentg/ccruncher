@@ -195,7 +195,7 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
 void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 {
   // doing assertions
-  assert(obligors.size() == 0);
+  assert(obligors.empty());
 
   // setting logger header
   Logger::trace("setting obligors to simulate", '-');
@@ -229,7 +229,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   Logger::trace("number of simulated obligors", Format::toString(obligors.size()));
 
   // checking that exist obligors to simulate
-  if (obligors.size() == 0)
+  if (obligors.empty())
   {
     throw Exception("error initializing obligors: 0 obligors to simulate");
   }
@@ -444,7 +444,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
-  assert(aggregators.size() == 0); 
+  assert(aggregators.empty()); 
 
   // setting logger header
   Logger::trace("initializing aggregators", '-');
