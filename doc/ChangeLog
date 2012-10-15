@@ -2,13 +2,13 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 2.0 (XXX. 2012)
+version 2.0 (Oct. 2012)
 --------------------------
   * implemented multi-factor approach
   * input file can be read from stdin
   * improved functional tests
   * solved minor bug (obligor/asset id uniqueness)
-  * added technical information
+  * documentation reviewed and improved
   * changed site look & feel
   * code refactoring
   * in xml input file, tag mtransitions renamed to transitions
@@ -238,4 +238,3 @@ version 0.2 (Apr. 2005)
 version 0.1 (Jan. 2005)
 --------------------------
   * initial release
-
