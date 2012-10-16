@@ -45,7 +45,7 @@ ccruncher::Segmentations::~Segmentations()
 //===========================================================================
 int ccruncher::Segmentations::size() const
 {
-  return vsegmentations.size();
+  return enabled.size();
 }
 
 //===========================================================================
@@ -54,10 +54,14 @@ int ccruncher::Segmentations::size() const
 Segmentation& ccruncher::Segmentations::getSegmentation(int i)
 {
   // assertions
-  assert(i >= 0 && i < (int) vsegmentations.size());
-
-  // return i-th segmentation
-  return vsegmentations[i];
+  if (i >= 0) {
+    assert(i < (int) enabled.size());
+    return enabled[i];
+  }
+  else {
+    assert(-1-i < (int) disabled.size());
+    return disabled[-1-i];
+  }
 }
 
 //===========================================================================
@@ -65,14 +69,20 @@ Segmentation& ccruncher::Segmentations::getSegmentation(int i)
 //===========================================================================
 int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exception)
 {
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (size_t i=0; i<enabled.size(); i++)
   {
-    if (vsegmentations[i].name == sname)
+    if (enabled[i].name == sname)
     {
       return (int)i;
     }
   }
-
+  for (size_t i=0; i<disabled.size(); i++)
+  {
+    if (disabled[i].name == sname)
+    {
+      return -i-1;
+    }
+  }
   throw Exception("segmentation " + sname + " not found");
 }
 
@@ -81,14 +91,20 @@ int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exc
 //===========================================================================
 int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Exception)
 {
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (size_t i=0; i<enabled.size(); i++)
   {
-    if (vsegmentations[i].name.compare(sname) == 0)
+    if (enabled[i].name.compare(sname) == 0)
     {
       return (int)i;
     }
   }
-
+  for (size_t i=0; i<disabled.size(); i++)
+  {
+    if (disabled[i].name.compare(sname) == 0)
+    {
+      return -i-1;
+    }
+  }
   throw Exception("segmentation " + string(sname) + " not found");
 }
 
@@ -97,9 +113,9 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Excep
 //===========================================================================
 void ccruncher::Segmentations::validate() throw(Exception)
 {
-  if (vsegmentations.empty())
+  if (enabled.empty())
   {
-    throw Exception("no segmentations defined");
+    throw Exception("don't found active segmentations");
   }
 }
 
@@ -109,9 +125,16 @@ void ccruncher::Segmentations::validate() throw(Exception)
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (size_t i=0; i<enabled.size(); i++)
   {
-    if (vsegmentations[i].name == val.name)
+    if (enabled[i].name == val.name)
+    {
+      throw Exception("segmentation name " + val.name + " repeated");
+    }
+  }
+  for (size_t i=0; i<disabled.size(); i++)
+  {
+    if (disabled[i].name == val.name)
     {
       throw Exception("segmentation name " + val.name + " repeated");
     }
@@ -127,14 +150,15 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
     throw Exception("segmentation 'assets' needs components of type asset");
   }
 
-  try
+  if (val.isEnabled())
   {
-    vsegmentations.push_back(val);
-    return vsegmentations.size()-1;
+    enabled.push_back(val);
+    return enabled.size()-1;
   }
-  catch(std::exception &e)
+  else
   {
-     throw Exception(e);
+    disabled.push_back(val);
+    return -disabled.size();
   }
 }
 
@@ -162,12 +186,12 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
 //===========================================================================
 void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 {
-  if (isEqual(name_,"segmentations")) {
+  if (isEqual(name_,"segmentation")) {
+    insertSegmentation(auxsegmentation);
+  }
+  else if (isEqual(name_,"segmentations")) {
     validate();
     auxsegmentation.reset();
-  }
-  else if (isEqual(name_,"segmentation")) {
-    insertSegmentation(auxsegmentation);
   }
   else {
     throw Exception("unexpected end tag " + string(name_));
@@ -184,9 +208,13 @@ string ccruncher::Segmentations::getXML(int ilevel) const throw(Exception)
 
   ret += spc + "<segmentations>\n";
 
-  for (unsigned int i=0;i<vsegmentations.size();i++)
+  for (size_t i=0; i<enabled.size(); i++)
   {
-    ret += vsegmentations[i].getXML(ilevel+2);
+    ret += enabled[i].getXML(ilevel+2);
+  }
+  for (size_t i=0; i<disabled.size(); i++)
+  {
+    ret += disabled[i].getXML(ilevel+2);
   }
 
   ret += spc + "</segmentations>\n";

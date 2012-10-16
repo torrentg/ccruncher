@@ -168,6 +168,7 @@
 <!ATTLIST segmentation
     name CDATA #REQUIRED
     components (asset|obligor) #REQUIRED
+    enabled (true|false) true
 >
 
 <!ELEMENT segment

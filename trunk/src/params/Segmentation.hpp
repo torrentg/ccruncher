@@ -53,6 +53,8 @@ class Segmentation : public ExpatHandlers
 
     // list of segments
     vector<string> vsegments;
+    // enabled flag (true by default)
+    bool enabled;
     // if generic pattern (eg: *) -> modificable=true, false otherwise
     bool modificable;
 
@@ -93,6 +95,8 @@ class Segmentation : public ExpatHandlers
     string getXML(int) const throw(Exception);
     // reset object content
     void reset();
+    // returns enabled flag
+    bool isEnabled() const;
 
 };
 

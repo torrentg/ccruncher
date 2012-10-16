@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 306: // --trace (trace copula values and default times)
+      case 306: // --trace (trace copula values to file copula.csv)
           btrace = true;
           break;
 
@@ -419,8 +419,6 @@ void usage()
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"
   "    --hash=num     print '.' for each num simulations (default=0)\n"
-  "    --trace        for debuging and validation purposes only!\n"
-  "                   bulk simulated copula values to file copula.csv\n"
   "    --help -h      show this message and exit\n"
   "    --version      show version and exit\n"
   "  return codes:\n"
