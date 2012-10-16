@@ -114,7 +114,6 @@ checkCorrelations <- function(copula, correls, ndf)
   for(i in 1:length(copula)) {
     for(j in 1:i) {
       if (i!=j && abs(ecorrels[i,j]-ocorrels[i,j]) > 0.03) { 
-cat(ecorrels[i,j],ocorrels[i,j],"\n")
         return(FALSE);
       }
     }
@@ -357,43 +356,35 @@ test04 <- function()
   #checking EL
   cat("  expected loss: ")
   risk <- ccruncher.risk(portfolio[,1])
-  if (10 < risk$mean-qnorm(0.95)*risk$mean_stderr | risk$mean+qnorm(0.95)*risk$mean_stderr < 10) {
+  if (100 < risk$mean-qnorm(0.95)*risk$mean_stderr | risk$mean+qnorm(0.95)*risk$mean_stderr < 100) {
     cat("FAILED\n");
   }
   else {
     cat("OK\n");
   }
 
-UNDER DEVELOPMENT
-
-portfolio <- ccruncher.read("data/test04/portfolio.csv");
-copula <- ccruncher.read("data/test04/copula.csv");
-defaults = apply((copula[,] > 0.9)*1,1,sum)
-sum(defaults != portfolio)
-
+  # checking default times
+  cat("  default times: ")
+  defaults = apply((copula[,] > 0.9)*1,1,sum)
+  if (sum(defaults != portfolio[,1]) > 15) {
+    cat("FAILED\n");
+  }
+  else {
+    cat("OK\n");
+  }
+  
   #check portfolio loss distribution
-# number of obligors incremented to 1000 because 100 isn't enough
-f <- function(x, p, r) {
-sqrt(1-r^2)/r * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-r^2)*qnorm(x))^2/(2*r^2))
-}
-y = tabulate(portfolio[,1]+1)/60000
-x = ((1:length(y))-1)/1000
-plot(x,f(x,0.1,0.2)/1000,type='l')
-lines(x, y, type='l', col=2)
-grid()
-
-#!/bin/bash
-for i in $(seq -w 1000)
-do
-echo '    <obligor rating="A" sector="S1" id="'$i'">'
-echo '      <asset date="01/01/2005" id="op'$i'">'
-echo '        <data>'
-echo '          <values at="01/01/2006" exposure="1.0" recovery="0%" />'
-echo '        </data>'
-echo '      </asset>'
-echo '    </obligor>'
-done
-
+  cat("  portfolio loss distribution: ")
+  pf <- function(x, p, w) {
+    ifelse(x <= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
+  }
+  kstest = ks.test(portfolio[1:1000,1]/1000, pf, p=0.1, w=0.2)
+  if (kstest$p.value < 0.05) {
+    cat("FAILED\n");
+  }
+  else {
+    cat("OK\n");
+  }
 
   #checking VAR
   cat("  value at risk: ")
@@ -401,8 +392,8 @@ done
   w = 0.2
   percentiles=risk$VAR[1:4,1]
   evars = pnorm((qnorm(p)+w*qnorm(percentiles))/sqrt(1-w^2))
-  aux = abs(risk$VAR[1:4,2] - evars*100);
-  if (length(aux[aux>1])) {
+  aux = abs(risk$VAR[1:4,2] - evars*1000);
+  if (length(aux[aux>=10])) {
     cat("FAILED\n");
   } else { 
     cat("OK\n"); 
@@ -419,8 +410,8 @@ done
   #checking copula (correlations)
   cat("  copula correlations: ")
   x = cor(copula)
-  v = x[!diag(100)]
-  if (abs(mean(v)-correl2spearman(w^2,Inf)) < 0.01) {
+  v = x[!diag(1000)]
+  if (abs(mean(v)-correl2spearman(w^2,Inf)) < 0.001 & sd(v) < 0.01) {
     cat("OK\n");
   } else { 
     cat("FAILED\n"); 

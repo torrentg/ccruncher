@@ -93,6 +93,7 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) throw(Exception)
 void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
+  enabled = true;
   modificable = false;
   insertSegment("unassigned"); // adding catcher segment
   name = "";
@@ -154,23 +155,21 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
 void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"segmentation")) {
-    if (getNumAttributes(attributes) != 2) {
+    if (getNumAttributes(attributes) < 2 || 3 < getNumAttributes(attributes)) {
       throw Exception("incorrect number of attributes in tag segmentation");
     }
+    name = getStringAttribute(attributes, "name");
+    enabled = getBooleanAttribute(attributes, "enabled", true);
+    string strcomp = getStringAttribute(attributes, "components");
+    // filling components variable
+    if (strcomp == "asset") {
+      components = asset;
+    }
+    else if (strcomp == "obligor") {
+      components = obligor;
+    }
     else {
-      name = getStringAttribute(attributes, "name");
-      string strcomp = getStringAttribute(attributes, "components");
-
-      // filling components variable
-      if (strcomp == "asset") {
-        components = asset;
-      }
-      else if (strcomp == "obligor") {
-        components = obligor;
-      }
-      else {
-        throw Exception("tag <segmentation> with invalid components attribute");
-      }
+      throw Exception("tag <segmentation> with invalid components attribute");
     }
   }
   else if (isEqual(name_,"segment")) {
@@ -211,6 +210,14 @@ int ccruncher::Segmentation::addSegment(const string &sname) throw(Exception)
   {
     return insertSegment(sname);
   }
+}
+
+//===========================================================================
+// returns enabled flag
+//===========================================================================
+bool ccruncher::Segmentation::isEnabled() const
+{
+  return enabled;
 }
 
 //===========================================================================

@@ -35,12 +35,19 @@ Expected Results:
   </description>
 
   <!-- ============================================================== -->
+  <!--                        DEFINES                                 -->
+  <!-- ============================================================== -->
+  <defines>
+    <define name="numsims" value="20000"/>
+  </defines>
+
+  <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
   <parameters>
     <property name="time.0" value="01/01/2005"/>
     <property name="time.T" value="01/01/2006"/>
-    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="stopcriteria.maxiterations" value="$numsims"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
     <property name="copula.type" value="t(3)"/>
     <property name="copula.seed" value="0"/>

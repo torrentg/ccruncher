@@ -43,8 +43,10 @@ class Segmentations : public ExpatHandlers
 
   private:
 
-    // list of segmentations
-    vector<Segmentation> vsegmentations;
+    // list of enabled segmentations
+    vector<Segmentation> enabled;
+    // list of disabled segmentations
+    vector<Segmentation> disabled;
     // auxiliary variable (used by parser)
     Segmentation auxsegmentation;
 
@@ -68,9 +70,9 @@ class Segmentations : public ExpatHandlers
     Segmentations();
     // destructor
     ~Segmentations();
-    // return the number of segmentations
+    // return the number of enabled segmentations
     int size() const;
-    // [] operator
+    // [] operator (i>=0 -> enabled, i<0 -> disabled)
     Segmentation& getSegmentation(int i);
     // return the index of the given segmentation
     int indexOfSegmentation(const string &sname) throw(Exception);

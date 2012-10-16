@@ -214,13 +214,14 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
-  assert(isegmentation >= 0);
   assert(isegmentation < (int) vsegments.size());
   assert(isegment >= 0);
 
+  if (isegmentation < 0) return;
+
   if (vsegments[isegmentation] > 0)
   {
-    throw Exception("trying to reinsert a defined segmentation");
+    throw Exception("belongs-to defined twice");
   }
 
   vsegments[isegmentation] = isegment;
