@@ -84,6 +84,13 @@ static const unsigned long _nan_[2] = {0xffffffff, 0x7fffffff};
 #endif
 
 // ======================================================
+// patch against snprintf problem
+// ======================================================
+#ifdef _MSC_VER
+#define snprintf _snprintf
+#endif
+
+// ======================================================
 // patch against access problem
 // ======================================================
 #include <io.h>

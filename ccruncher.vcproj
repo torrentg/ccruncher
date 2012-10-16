@@ -210,6 +210,14 @@
 					>
 				</File>
 				<File
+					RelativePath="src\params\Defaults.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Defaults.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\params\Interest.cpp"
 					>
 				</File>
@@ -242,14 +250,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Defaults.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Defaults.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\params\Segmentation.cpp"
 					>
 				</File>
@@ -266,19 +266,19 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Transitions.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Transitions.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\params\Survivals.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\params\Survivals.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Transitions.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\Transitions.hpp"
 					>
 				</File>
 			</Filter>
@@ -334,22 +334,6 @@
 				Name="math"
 				>
 				<File
-					RelativePath="src\math\GMFCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\GMFCopula.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TMFCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TMFCopula.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\math\Copula.hpp"
 					>
 				</File>
@@ -362,11 +346,27 @@
 					>
 				</File>
 				<File
+					RelativePath="src\math\GMFCopula.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\GMFCopula.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\math\PowMatrix.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\math\PowMatrix.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\TMFCopula.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\math\TMFCopula.hpp"
 					>
 				</File>
 			</Filter>

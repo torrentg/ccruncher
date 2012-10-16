@@ -141,7 +141,7 @@ ccruncher::GMFCopula::GMFCopula(const vector<vector<double> > &M, const vector<u
     // preparing to receive the first get()
     values.assign(dim, NAN);
   }
-  catch(Exception &e)
+  catch(Exception &)
   {
     finalize();
     throw;

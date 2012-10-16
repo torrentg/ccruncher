@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
       sfilename = string(argv[argc-1]);
       File::checkFile(sfilename, "r");
     }
-    catch(Exception &e) 
+    catch(Exception &) 
     {
       cerr << "can't open file " << sfilename << endl;
       return 1;

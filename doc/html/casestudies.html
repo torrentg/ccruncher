@@ -86,12 +86,12 @@ f_{p,w}(x) =
     </p>
     <pre>
 
-  pf <- function(x, p, w) {
-    ifelse(x <= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
+  pf &lt;- function(x, p, w) {
+    ifelse(x &lt;= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
   }
 
-  df <- function(x, p, w) {
-    ifelse(x <= 0, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
+  df &lt;- function(x, p, w) {
+    ifelse(x &lt;= 0, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
   }
   
   portfolio <- read.csv("data/test04/portfolio.csv", header=TRUE, sep=",")
