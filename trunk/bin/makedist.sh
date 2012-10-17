@@ -227,16 +227,16 @@ makeWinDist() {
     echo "file $pathexes/ccruncher.exe not found" 
     return;
   fi
-  if [ ! -f $pathexes/libexpat.dll ]; then 
-    echo "file $pathexes/libexpat.dll not found" 
+  if [ ! -f $pathexes/pthreadGC2.dll ]; then 
+    echo "file $pathexes/pthreadGC2.dll not found" 
     return;
   fi
-  if [ ! -f $pathexes/pthreadVCE2.dll ]; then 
-    echo "file $pathexes/pthreadVCE2.dll not found" 
+  if [ ! -f $pathexes/mingwm10.dll ]; then 
+    echo "file $pathexes/mingwm10.dll not found" 
     return;
   fi
-  if [ ! -f $pathexes/zlib1.dll ]; then 
-    echo "file $pathexes/zlib1.dll not found" 
+  if [ ! -f $pathexes/libgcc_s_dw2-1.dll ]; then 
+    echo "file $pathexes/libgcc_s_dw2-1.dll not found" 
     return;
   fi
 
@@ -253,9 +253,9 @@ makeWinDist() {
 
   # creating binaries
   cp $pathexes/ccruncher.exe bin/
-  cp $pathexes/libexpat.dll bin/
-  cp $pathexes/pthreadVCE2.dll bin/
-  cp $pathexes/zlib1.dll bin/
+  cp $pathexes/mingwm10.dll bin/
+  cp $pathexes/pthreadGC2.dll bin/
+  cp $pathexes/libgcc_s_dw2-1.dll bin/
 
   # dropping unused files
   bin/src2bin.sh -y;

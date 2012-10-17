@@ -139,7 +139,7 @@ dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h
 dnl -------------------------------------------------------------
 AC_DEFINE_UNQUOTED([BUILD_USER], ["`whoami`"], [build user])
-AC_DEFINE_UNQUOTED([BUILD_DATE], ["`date`"], [build date])
+AC_DEFINE_UNQUOTED([BUILD_DATE], ["`date --rfc-3339=seconds`"], [build date])
 AC_DEFINE_UNQUOTED([BUILD_HOST], ["`hostname | head -n 1`"], [build host name])
 
 dnl -------------------------------------------------------------
@@ -154,7 +154,7 @@ AH_BOTTOM([
 #define UNUSED(x) (void)x;
 
 /* required by Microsoft project */
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif
 

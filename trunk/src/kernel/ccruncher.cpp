@@ -392,7 +392,9 @@ void setnice(int niceval) throw(Exception)
 void version()
 {
   cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
-  cout << "builded by " << BUILD_USER << "@" << BUILD_HOST << " at " << BUILD_DATE << endl;
+  cout << "build host: " << BUILD_HOST << endl;
+  cout << "build date: " << BUILD_DATE << endl;
+  cout << "build author: " << BUILD_USER << endl;
   cout << "build options: " << Utils::getCompilationOptions() << endl;
 }
 
@@ -414,7 +416,7 @@ void usage()
   "  options:\n"
   "    -f             force output files overwrite\n"
   "    -q             quiet mode, non-verbose\n"
-  "    -D key=val     declare key as a define, with definition val\n"
+  "    -D key=val     declare a define named key with value val\n"
   "    --path=dir     directory where output files will be placed (required)\n"
   "    --nice=num     set nice priority to num (optional)\n"
   "    --threads=num  number of threads (default=1)\n"

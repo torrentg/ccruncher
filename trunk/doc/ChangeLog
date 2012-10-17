@@ -14,6 +14,7 @@ version 2.0 (Oct. 2012)
   * in xml input file, tag mtransitions renamed to transitions
   * in xml input file, tag mcorrels renamed to correlations
   * in xml input file, tag sigma renamed to correlation
+  * segmentations can be disabled
 
 version 1.9 (Mar. 2012)
 --------------------------
