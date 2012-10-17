@@ -11,7 +11,6 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Survivals.hpp \
     src/params/Transitions.hpp \
-    src/params/Defaults.hpp \
     src/params/TransitionsTest.hpp \
     src/params/SurvivalsTest.hpp \
     src/params/SegmentationTest.hpp \
@@ -84,7 +83,6 @@ SOURCES += \
     src/params/Segmentation.cpp \
     src/params/Survivals.cpp \
     src/params/Transitions.cpp \
-    src/params/Defaults.cpp \
     src/params/TransitionsTest.cpp \
     src/params/SurvivalsTest.cpp \
     src/params/SegmentationTest.cpp \

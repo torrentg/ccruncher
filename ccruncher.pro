@@ -11,7 +11,6 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Survivals.hpp \
     src/params/Transitions.hpp \
-    src/params/Defaults.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
@@ -54,7 +53,6 @@ SOURCES += \
     src/params/Segmentation.cpp \
     src/params/Survivals.cpp \
     src/params/Transitions.cpp \
-    src/params/Defaults.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \

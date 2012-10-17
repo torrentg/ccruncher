@@ -210,14 +210,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Defaults.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Defaults.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\params\Interest.cpp"
 					>
 				</File>
