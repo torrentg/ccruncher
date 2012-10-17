@@ -132,24 +132,6 @@
     <sector name="S1" description='Consumer/service sector'/>
     <sector name="S2" description='Forest/building products'/>
   </sectors>
-  <historical period="12">
-    <data t="1A" sector="S1" obligors="310" defaulted="23"/>
-    <data t="1A" sector="S2" obligors="321" defaulted="21"/>
-    <data t="2A" sector="S1" obligors="315" defaulted="14"/>
-    <data t="2A" sector="S2" obligors="326" defaulted="17"/>
-    <data t="3A" sector="S1" obligors="319" defaulted="7"/>
-    <data t="3A" sector="S2" obligors="329" defaulted="6"/>
-    <data t="4A" sector="S1" obligors="324" defaulted="10"/>
-    <data t="4A" sector="S2" obligors="325" defaulted="14"/>
-    <data t="5A" sector="S1" obligors="327" defaulted="10"/>
-    <data t="5A" sector="S2" obligors="323" defaulted="26"/>
-    <data t="6A" sector="S1" obligors="330" defaulted="4"/>
-    <data t="6A" sector="S2" obligors="316" defaulted="13"/>
-    <data t="7A" sector="S1" obligors="330" defaulted="0"/>
-    <data t="7A" sector="S2" obligors="316" defaulted="20"/>
-    <data t="8A" sector="S1" obligors="330" defaulted="50"/>
-    <data t="8A" sector="S2" obligors="316" defaulted="60"/>
-  </historical>
   <correlations>
     <correlation sector1="S1" sector2="S1" value="9.931%"/>
     <correlation sector1="S1" sector2="S2" value="10.94%"/>

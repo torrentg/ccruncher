@@ -37,7 +37,6 @@ ccruncher_SOURCES = \
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
-    ../src/params/Defaults.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/GMFCopula.cpp\
     ../src/math/TMFCopula.cpp\
@@ -76,7 +75,6 @@ ccruncher_SOURCES = \
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
-    ../src/params/Defaults.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/GMFCopula.hpp\
@@ -176,7 +174,6 @@ tests_SOURCES = \
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/Survivals.cpp\
-    ../src/params/Defaults.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
@@ -246,7 +243,6 @@ tests_SOURCES = \
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/Survivals.hpp\
-    ../src/params/Defaults.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
@@ -295,7 +291,6 @@ samplegen_SOURCES = \
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
-    ../src/params/Defaults.cpp\
     ../src/kernel/samplegen.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -336,7 +331,6 @@ samplegen_SOURCES = \
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
-    ../src/params/Defaults.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
