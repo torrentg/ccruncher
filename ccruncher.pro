@@ -1,5 +1,8 @@
-QT += core
+QT -= core
 QT -= gui
+
+CONFIG -= qt
+CONFIG += console thread
 
 HEADERS += \
     src/params/Correlations.hpp \
@@ -84,8 +87,9 @@ SOURCES += \
     src/utils/Date.cpp \
     deps/gzstream-1.5/gzstream.cpp
 
-INCLUDEPATH += ./src \
-    deps/gzstream-1.5
+INCLUDEPATH += \
+    $$PWD/src \
+    $$PWD/deps/gzstream-1.5
 
 LIBS += \
     -lm \
@@ -100,20 +104,14 @@ unix {
 }
 
 win32 {
-  DEFINES += BUILD_GETOPT
-  DEFINES += BUILD_DIRENT
   INCLUDEPATH += \
-    deps/gsl-1.12/include \
-    deps/expat-2.1.0/Source/lib \
-    deps/zlib-1.2.7
+    C:/MinGW/msys/1.0/local/include \
+    C:/MinGW/include
   LIBS += \
-    $$PWD/deps/zlib-1.2.7/libz.dll.a \
-    $$PWD/deps/gsl-1.12/lib-static/libgsl.a \
-    $$PWD/deps/gsl-1.12/lib-static/libgslcblas.a \
-#    $$PWD/deps/expat-2.1.0/Bin/libexpat.lib \
-#    -L"$$PWD/deps/expat-2.1.0/Bin/"
-    C:\MinGW\msys\1.0\home\gtorrent\expat-2.0.1\.libs\libexpat.a
-#    $$PWD/libpthreadGC2.a
+    C:/MinGW/lib/libz.a \
+    C:/MinGW/msys/1.0/local/lib/libexpat.a \
+    C:/MinGW/msys/1.0/local/lib/libgsl.a \
+    C:/MinGW/msys/1.0/local/lib/libgslcblas.a
 }
 
 CONFIG(release, debug|release) {

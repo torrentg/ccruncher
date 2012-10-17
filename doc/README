@@ -149,22 +149,32 @@ Microsoft Visual C++ versions:
 Notes for Windows developers (QT+MINGW)
 ---------------------------------------
 
-1. install qt
+1. install qt in C:\QtSDK
    http://qt-project.org/downloads
 
-2. install mingw + msys
+2. install MSYS+MINGW in C:\mingw\
    http://www.mingw.org/
-
+   
 3. open the mingw console and type
+   > mingw-get install pthreads
+   > mingw-get install libz
    > mingw-get source expat
-   > cd expat-x.y.z
-   > ./configure; make
-   > cd ..
-   > mingw-get source zlib
-   > cd zlib-*
-   > ./configure; make
+   > cd expat-*
+   > ./configure CFLAGS="-fexceptions"
+   > make
+   > make install
 
-4. launch qtcreator
+4. download gsl source in C:\MinGW\msys\1.0\home\user
+   http://www.gnu.org/software/gsl/
+   
+5. open the mingw console and type
+   > tar -xvzf gsl-x.y.tar.gz
+   > cd gsl-x.y
+   > ./configure CFLAGS="-fexceptions"
+   > make
+   > make install
+
+6. launch qtcreator
    > open project ccruncher.pro
    > review ccruncher.pro libs
    > compile
