@@ -126,9 +126,17 @@ prepare() {
 
   # create html doc graphics
   $1/bin/tex2png.sh $1/doc/html/*.html;
+  if [ $? != 0 ]; then
+    echo "aborting: error found processing images";
+    exit 1;
+  fi
   
   # set version information
   $1/bin/rollversion.sh -s;
+  if [ $? != 0 ]; then
+    echo "aborting: error setting version";
+    exit 1;
+  fi
 
   # remove developers files
   rm $1/bin/clean.sh;

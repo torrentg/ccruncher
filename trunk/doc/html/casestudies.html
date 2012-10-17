@@ -94,7 +94,7 @@ f_{p,w}(x) =
     ifelse(x &lt;= 0, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
   }
   
-  portfolio <- read.csv("data/test04/portfolio.csv", header=TRUE, sep=",")
+  portfolio = read.csv("data/test04/portfolio.csv", header=TRUE, sep=",")
   n = length(portfolio[,1])
   y = tabulate(portfolio[,1]+1)/n
   x = ((1:length(y))-1)/1000
