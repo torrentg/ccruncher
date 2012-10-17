@@ -229,8 +229,8 @@ Z, S, \varepsilon_i^j \textrm{ independents } \ \forall i,j
     <a name="lossdist"></a>
     <h2>Portfolio Loss Distribution</h2>
     <p>
-      We define the portfolio loss distribution from the multivariate 
-      distribution of default times, <i>T</i>, as:
+      We define the portfolio loss distribution at time <i>t</i>, <i>L<sub>t</sub></i>, 
+      from the multivariate distribution of default times, <i>T</i>, as:
     </p>
     <p style="text-align:center;">
       <i>L<sub>t</sub> = &sum; 1(T<sub>i</sub> &lt; t)·(1-Recovery<sub>i</sub>(T<sub>i</sub>))·Exposure<sub>i</sub>(T<sub>i</sub>)</i>
@@ -268,7 +268,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
     </ol>
     <p>
       <i>Algorithm (t-Student copula simulation)</i>. 
-      We apply the t-Student multi-factor formulation and the standard gaussian 
+      We combine the t-Student multi-factor formulation and the standard gaussian 
       simulation algorithm to obtain:
     </p>
     <ol>
@@ -327,7 +327,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 13-Oct-2012
+          Last modified: 17-Oct-2012
         </td>
       </tr></table>
     </div>

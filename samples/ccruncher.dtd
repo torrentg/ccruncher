@@ -52,7 +52,7 @@
     EMPTY
 >
 <!ATTLIST property 
-    name CDATA #REQUIRED
+    name (time.0|time.T|stopcriteria.maxiterations|stopcriteria.maxseconds|copula.type|copula.seed|montecarlo.antithetic|portfolio.onlyActiveObligors) #REQUIRED
     value CDATA #REQUIRED
 >
 
@@ -63,7 +63,7 @@
     rate+
 )>
 <!ATTLIST interest
-    type CDATA #IMPLIED
+    type (simple|compound|continuous) "compound"
 >
 
 <!ELEMENT rate
@@ -168,7 +168,7 @@
 <!ATTLIST segmentation
     name CDATA #REQUIRED
     components (asset|obligor) #REQUIRED
-    enabled (true|false) true
+    enabled (true|false) "true"
 >
 
 <!ELEMENT segment
