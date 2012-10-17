@@ -24,10 +24,6 @@
 #include "params/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
-//---------------------------------------------------------------------------
-
-#define EPSILON 0.00001
-
 //===========================================================================
 // test1
 //===========================================================================
@@ -35,25 +31,25 @@ void ccruncher_test::SegmentationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
-    <segmentation name='portfolio' components='asset'/>\n\
+    <segmentation name='portfolio' components='asset' enabled='false'/>\n\
     <segmentation name='obligors' components='obligor'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
     <segmentation name='assets' components='asset'>\n\
       <segment name='*'/>\n\
     </segmentation>\n\
-    <segmentation name='sectors' components='obligor'>\n\
+    <segmentation name='sectors' components='obligor' enabled='true'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
     </segmentation>\n\
-    <segmentation name='size' components='obligor'>\n\
+    <segmentation name='size' components='obligor' enabled='false'>\n\
       <segment name='big'/>\n\
       <segment name='medium'/>\n\
     </segmentation>\n\
     <segmentation name='products' components='asset'>\n\
       <segment name='bond'/>\n\
     </segmentation>\n\
-    <segmentation name='offices' components='asset'>\n\
+    <segmentation name='offices' components='asset' enabled='false'>\n\
       <segment name='0001'/>\n\
       <segment name='0002'/>\n\
       <segment name='0003'/>\n\
@@ -68,6 +64,21 @@ void ccruncher_test::SegmentationsTest::test1()
   Segmentations sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  ASSERT(7 == sobj.size());
-  ASSERT(0 == sobj.indexOfSegmentation("portfolio"));
+  ASSERT(4 == sobj.size());
+
+  ASSERT(-1 == sobj.indexOfSegmentation("portfolio"));
+  ASSERT(0 == sobj.indexOfSegmentation("obligors"));
+  ASSERT(1 == sobj.indexOfSegmentation("assets"));
+  ASSERT(2 == sobj.indexOfSegmentation("sectors"));
+  ASSERT(-2 == sobj.indexOfSegmentation("size"));
+  ASSERT(3 == sobj.indexOfSegmentation("products"));
+  ASSERT(-3 == sobj.indexOfSegmentation("offices"));
+
+  ASSERT(sobj.getSegmentation(-1).name == "portfolio");
+  ASSERT(sobj.getSegmentation(-2).name == "size");
+  ASSERT(sobj.getSegmentation(-3).name == "offices");
+  ASSERT(sobj.getSegmentation(0).name == "obligors");
+  ASSERT(sobj.getSegmentation(1).name == "assets");
+  ASSERT(sobj.getSegmentation(2).name == "sectors");
+  ASSERT(sobj.getSegmentation(3).name == "products");
 }

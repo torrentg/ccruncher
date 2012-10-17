@@ -24,10 +24,6 @@
 #include "params/SegmentationTest.hpp"
 #include "utils/ExpatParser.hpp"
 
-//---------------------------------------------------------------------------
-
-#define EPSILON 0.00001
-
 //===========================================================================
 // test1
 //===========================================================================
@@ -48,6 +44,7 @@ void ccruncher_test::SegmentationTest::test1()
   Segmentation sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
+  ASSERT(sobj.isEnabled());
   ASSERT("office" == sobj.name);
   ASSERT(asset == sobj.components);
 
