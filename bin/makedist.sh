@@ -139,7 +139,6 @@ prepare() {
   fi
 
   # remove developers files
-  rm $1/bin/clean.sh;
   rm $1/bin/makedist.sh;
   rm $1/bin/rollversion.sh
   rm $1/bin/tests.sh;
