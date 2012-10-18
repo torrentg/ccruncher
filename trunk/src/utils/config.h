@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "Sat Oct 13 17:19:26 CEST 2012"
+#define BUILD_DATE "2012-10-18 10:43:48+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -146,7 +146,7 @@
 #define HAVE__BOOL 1
 
 /* Assertions are disabled when this is defined. */
-/* #undef NDEBUG */
+#define NDEBUG 1
 
 /* Name of package */
 #define PACKAGE "ccruncher"
@@ -207,13 +207,13 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R795"
+#define SVN_VERSION "R849"
 
 /* unused argument macro */
 #define UNUSED(x) (void)x;
 
 /* required by Microsoft project */
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include "../win32/winconfig.h"
 #endif
 

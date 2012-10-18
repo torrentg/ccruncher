@@ -25,7 +25,7 @@
 #-------------------------------------------------------------
 progname=ccreport.sh
 numversion="2.0"
-svnversion="R795"
+svnversion="R849"
 retcode=0
 options=""
 
