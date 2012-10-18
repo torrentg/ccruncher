@@ -1,0 +1,121 @@
+/* CCruncher CSS */
+
+body {
+	padding: 0px;
+	margin: 0px;
+	background: #BABBAD url('background.jpg') top center repeat-y;
+	font: normal 10pt verdana,arial,sans-serif;
+	line-height: 1.5;
+	color: black;
+}
+
+#main-container {
+	width: 750px;
+	margin: 0 auto;
+	clear: both;
+	padding: 10px 25px 1px 25px;
+	background-color: white;
+}
+
+#page-header {
+	margin: 0px 0px 30px -25px;
+	background: #005080;
+	height: 100px;
+	width: 800px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+}
+
+#page-footer {
+	margin: 30px 0px 20px -25px;
+	background: #E0E0E0;
+	height: 40px;
+	width: 800px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	font-size:smaller;
+}
+
+#right-menu {
+	margin: 10px -25px 10px 20px;
+	float: right;
+	text-align: left;
+	background: #E0E0E0;
+	width: 180px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 1px 12px 25px 12px;
+}
+
+#right-menu h3 {
+	margin-bottom: 0px;
+	font-weight: bold;
+}
+
+h1 {
+	font-size: 150%;
+	color: #005080;
+}
+
+h2 {
+	font-size: 120%;
+	color: #005080;
+}
+
+h3 {
+	font-size: 100%;
+	font-weight: bold;
+	color: black;
+}
+
+p {
+	text-align: justify;
+}
+
+div.gray-box {
+	margin: 30px 0px 0px 0px;
+	font-weight: bold;
+	color: #333333;
+	background: #E0E0E0;
+	width: 100%;
+	height: 2.2em;
+	line-height: 2.2em;
+	padding-left: 5px;
+}
+
+tr.even, tr.a {
+	color: black;
+	background-color: #ddd;
+}
+
+tr.odd, tr.b {
+	color: black;
+	background-color: #eee;
+}
+
+pre {
+	font-size: 80%;
+	font-family: monospace;
+	margin: 0;
+	color: black;
+	background-color: #ddd;
+	border: 1px solid #ddd;
+}
+
+code {
+	font-size: 80%;
+	font-family: monospace;
+}
+
+@media all {
+	.page-break { 
+		display: none;
+	}
+}
+
+@media print {
+	.page-break { 
+		display: block;
+		page-break-before: always; 
+	}
+}

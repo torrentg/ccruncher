@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - FAQ</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="gray-box">
+      1. Why this ugly name ?
+    </div>
+    <p>
+      CCruncher calculates the credit portfolio risk valuation with intensive numerical 
+      computation. These kind of programs are called number crunchers.
+      The mix between the terms 'credit' and 'number cruncher' generates 
+      the name 'credit cruncher'. CCruncher is not related to the recent 
+      <a href="http://en.wikipedia.org/wiki/Credit_crunch">credit crunch</a>, but is
+      a tool that can aid to control the risks involved in this crisis.
+    </p>
+
+    <div class="gray-box">
+      2. What is the project's maturity ?
+    </div>
+    <p>
+      ccruncher-2.0 is a stable version. If you have any bug or suggestion to report, 
+      please send an email to <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>
+      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+    </p>
+
+    <div class="gray-box">
+      3. Is the Windows platform supported ?
+    </div>
+    <p>
+      Yes, but the main stream is developed for the UNIX environment. If you want to compile ccruncher
+      under Windows, read the file docs/README. The repository contains the project
+      files for MSVC9 compiler (*.sln, *.vcproj) and the QtCreator+MinGW (*.pro).
+    </p>
+
+    <div class="gray-box">
+      4. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
+    </div>
+    <p>
+      The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
+      source. You can download a gzip tool for windows from
+      <a href="http://www.7-zip.org/">7-zip</a>. UNIX environments
+      have the gzip/gunzip commands out of the box. You can read more at the <a href="http://www.gzip.org/">gzip website</a>.
+    </p>
+
+    <div class="gray-box">
+      5. Is there a company that provides support for CCruncher ?
+    </div>
+    <p>
+      Yes. <a href="http://www.tatine.es">Tatine.es</a> provides consulting services for the 
+      analysis of SME loan portfolios using CCruncher. It also provides support services such as integration, 
+      maintenance and ad-hoc development related to CCruncher.
+    </p>
+
+    <div class="gray-box">
+      6. Can an obligor belong to a weighted sum of sectors?
+    </div>
+    <p>
+      Currently not. CCruncher was designed to work with portfolios of SMEs. 
+      Usually, in these portfolios each obligor belongs to a single sector. 
+      We can add this feature if there are several people who request it.
+    </p>
+
+    <br/>
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 15-Oct-2012
+        </td>
+      </tr></table>
+    </div>
+
+  </div>
+  </body>
+</html>

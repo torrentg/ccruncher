@@ -1,0 +1,22 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+
+
+Future works
+-------------------
+  * technical features
+     - graphic interface
+     - input file in binary format
+     - allow evaluation in multiple time horizons
+     - replace invSurvival+invT tables by invSurvival(invT(x)) table
+  * improve model
+     - add grouped t-copula support
+     - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
+     - considere that a obligor could belong to a weighted sum of sectors
+  * improve functional tests
+     - examples based on real data
+     - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling') 

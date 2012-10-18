@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher
+	xmlns="http://www.ccruncher.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.ccruncher.net ccruncher.xsd">
+
+  <title>test01</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  1 obligor
+  1 unique sector
+  uncorrelated defaults (because only exist 1 obligor)
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  The obligor has an unique asset with this profile:
+    asset value at t=12 is 1 if obligor is alive and
+    asset value at t=12 is 0 if obligor dead (default)
+
+Expected Results:
+-------------------------------
+  This problem has an explicit solution. The asset loss
+  at t=12 can be modeled as a Bernouilli(0.1). Then, the
+  portfolio loss at t=12 can be modeled as Z~Bernouilli(0.1)
+    P(Z=0) = 0.9
+    P(Z=1) = 0.1
+
+How to check results?
+-------------------------------
+  > #loading script
+  > source("bin/ccreport.R")
+  > #reading data
+  > x <- ccruncher.read("data/portfolio.csv")
+  > x <- x[,1]
+  > #observed frequencies (number of 0's and 1's)
+  > obs <- tabulate(x+1, 2)
+  > #theoretical probabilities
+  > prob <- c(0.9, 0.1)
+  > #chi square test (if p-value > 0.05 means that is true)
+  > cst <- chisq.test(obs, p=prob)
+  > #if p-value > 0.05 than distribution is correct
+  > cst$p.value
+
+  ]]>
+  </description>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <property name="time.0" value="01/01/2005"/>
+    <property name="time.T" value="01/01/2006"/>
+    <property name="stopcriteria.maxiterations" value="20000"/>
+    <property name="stopcriteria.maxseconds" value="30000000"/>
+    <property name="copula.type" value="gaussian"/>
+    <property name="copula.seed" value="0"/>
+    <property name="montecarlo.antithetic" value="false"/>
+    <property name="portfolio.onlyActiveObligors" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                       INTEREST                                 -->
+  <!-- ============================================================== -->
+  <interest type="compound">
+    <rate t="0D" r="0%"/>
+    <rate t="1M" r="0%"/>
+    <rate t="2M" r="0%"/>
+    <rate t="3M" r="0%"/>
+    <rate t="6M" r="0%"/>
+    <rate t="1Y" r="0%"/>
+    <rate t="2Y" r="0%"/>
+    <rate t="5Y" r="0%"/>
+    <rate t="10Y" r="0%"/>
+  </interest>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="dead"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <transitions period="12">
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
+  </transitions>
+
+  <!-- ============================================================== -->
+  <!--                           SECTORS                              -->
+  <!-- ============================================================== -->
+  <sectors>
+    <sector name="S1" description="unique sector"/>
+  </sectors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <correlations>
+    <correlation sector1="S1" sector2="S1" value="0%"/>
+  </correlations>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="sectors" components="obligor">
+      <segment name="S1"/>
+    </segmentation>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <obligor rating="A" sector="S1" id="001">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset id="op1" date="01/01/2005">
+        <data>
+          <values at="01/01/2007" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+  </portfolio>
+
+</ccruncher>
+

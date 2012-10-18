@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Case studies</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        #references li {
+            margin-bottom: 15px;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Case Studies</h1>
+    <p>
+      Often, credit portfolios don't fulfill some assumptions used to 
+      evaluate their credit risk. This is emphasized in the portfolio
+      of SMEs. These portfolios deals with large number of obligors
+      organized in economic sectors, with a variety of products and
+      amounts, and with a rating system composed by multiple 
+      levels (AAA, AA, ...).
+    </p>
+    <p>
+      In the following section we review the Large Homogeneous Pool 
+      approach and we replicate it using CCruncher. Then, we see an 
+      example where the LHP fails and how we can use CCruncher 
+      to evaluate the credit risk correctly.
+    </p>
+    
+    <h2>Large Homogeneous Pool</h2>
+    <p>
+      Vasicek [3] derived an analytical formula for the loss distribution of an 
+      infinitely large portfolio called the large homogeneous portfolio (LHP) 
+      approximation. Later, Schloegl and O'Kane [2] extended it to the t-Student 
+      case. The assumptions of these approximations are: 1) one-factor model, 
+      2) infinitely large portfolio, 3) equals ratings, 4) equals exposures. 
+      The density, in the Gaussian case, is:
+    </p>
+    <object class="equation" type="image/png" data="lhpden.png" style="display:block; margin-left:auto; margin-right:auto">
+f_{p,w}(x) = 
+\frac{\sqrt{1-w^2}}{w} \cdot \textrm{exp}\left( 
+  \frac{\left(N^{-1}(x)\right)^2}{2} -
+  \frac{\left(N^{-1}(p) - \sqrt{1-w^2} \cdot N^{-1}(x)\right)^2}{2 \cdot w^2}
+\right)
+    </object>
+    <p>
+      where <i>w</i> is the factor loading, <i>p</i> is the probability of default
+      (PD), and <i>x &isin; [0,1]</i> represents the percentage
+      of loss in the portfolio.
+    </p>
+    <p>
+      File <code>samples/test04.xml</code> contains a portfolio composed of 1000 
+      identical obligors (same rating and sector) where every one of them owe 1&euro; 
+      to 1 year. The common default probability is 10% and the sector/factor 
+      loading is 20%. This problem fulfills the LHP approach. 
+      We use CCruncher to determine the distribution of this case and compare 
+      it with the analytical solution:
+    </p>
+    <pre>
+
+  bin/ccruncher -f --hash=1000 --threads=2 -D numsims=100000 --path=data/test04 samples/test04.xml
+    </pre>
+    <p>
+      We use the <a href="http://www.r-project.org/">R project</a> to do the 
+      statistical tasks:
+    </p>
+    <pre>
+
+  pf &lt;- function(x, p, w) {
+    ifelse(x &lt;= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
+  }
+
+  df &lt;- function(x, p, w) {
+    ifelse(x &lt;= 0, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
+  }
+  
+  portfolio = read.csv("data/test04/portfolio.csv", header=TRUE, sep=",")
+  n = length(portfolio[,1])
+  y = tabulate(portfolio[,1]+1)/n
+  x = ((1:length(y))-1)/1000
+  
+  plot(x, df(x,0.1,0.2)/1000, type='l', col=1,xlab="portfolio loss (%)", ylab="probability")
+  lines(x, y, type='l', col=2)
+  title("Portfolio Loss Distribution", cex=0.7)
+  legend(0.20, 0.01, c("theoretical","ccruncher"), lty=c(1,1), col= 1:2, bg="white", cex=0.7)
+  grid()
+  
+  kstest = ks.test(portfolio[1:1000,1]/1000, pf, p=0.1, w=0.2)
+  kstest$p.value
+    </pre>
+<!--
+png(filename = "lhpdist.png",
+    width = 350, height = 250, units = "px", 
+    pointsize = 12, bg = "white", type = "cairo")
+dev.off()
+-->
+    <table><tr><td>
+    <p>
+      We use the Kolmogorov-Smirnof test to check that the distribution 
+      estimated by CCruncher is similar to the theoretical distribution. 
+      The first 1000 simulations gives a p-value bigger than 0.25,
+      sufficient to assert that it is a good approximation. If we consider
+      more simulations (eg. 100000) in the Kolmogorov-Smirnov test then the 
+      p-value drops to 0. The reason is that the simulated portfolio is 
+      finite (1000 obligors), but the theoretical distribution assumes an
+      infinite portfolio. Increasing the number of simulated obligors improves
+      the approximation.
+    </p>
+    </td><td>
+    <img src="lhpdist1.png" alt="LHP distr. comparison" style="float:right; margin:10px; margin-bottom:5px; border: 1px dashed gray;"/>
+    </td></tr></table>
+    
+    <h2>Breaking Assumptions</h2>
+    <img src="lhpdist2.png" alt="breaking large" style="float:right; margin:10px; margin-bottom:5px; border: 1px dashed gray;"/>
+    <p>
+      We copy <code>samples/test04.xml</code> to <code>samples/test04-1.xml</code>
+      and we remove the obligors with id bigger than 100. The resulting portfolio
+      has only 100 obligors. We approximate the loss distribution using CCruncher 
+      and compare with the theoretical LHP loss distribution (see graphic). 
+      Observe that, in this case, the LHP loss distribution is a bad approximation 
+      because the infinitely large portfolio assumption is not satisfied.
+    </p>
+    <p>
+      You can try to force the remaining assumptions with similar results.
+      Fortunately, CCruncher don't rely on rigid assumptions and has
+      some additional features that make it appealing such as: 
+      1) allows multiple sectors,
+      2) allows multiple rating levels,
+      3) an obligor can have multiple assets, 
+      4) each of them with they own exposures and recoveries, 
+      5) that can be stochastic values,
+      6) and vary over the time.
+      Finally, 7) losses can be simultaneously computed for any 
+      sub-portfolio that you define (see <a href="ifileref.html#segmentations">segmentations</a>) 
+      in order to disaggregate the risk.
+    </p>
+    
+    <br/>
+    <hr/>
+    <h3>References</h3>
+    <ol id="references">
+      <li>Bluhm, C., Overbeck, L., Wagner, C. (2003). <a href="http://www.stat.fsu.edu/~jfrade/PAPERS/Credit%20risk%20modeling%20papers/An%20Introduction%20to%20Credit%20Risk%20Modeling%20-%20Bluhm,%20Overbeck%20%26%20Wagner%20%282003%29.pdf">An Introduction to Credit Risk Modeling</a>. Chapman &amp; Hall/CRC Financial Mathematics Series; 2nd Reprint; CRC Press</li>
+      <li>Schloegl, L., and O'Kane, D. (2005). <a href="http://www.springerlink.com/content/q61w48t74222016j/">A note on the large homogeneous portfolio approximation with the Student-t copula</a>. Finance and Stochastics, 577-584.</li>
+      <li>Vasicek, O. (1987). <a href="http://www.defaultrisk.com/pp_model_60.htm">Probability of Loss on Loan Portfolio</a>. Memo, KMV Corporation.</li>
+    </ol>
+
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 17-Oct-2012
+        </td>
+      </tr></table>
+    </div>
+
+    </div>
+  </body>
+</html>
