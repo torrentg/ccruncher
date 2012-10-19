@@ -32,12 +32,12 @@
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
-#include "params/Segmentations.hpp"
 #include "params/Survivals.hpp"
 #include "math/Copula.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Exception.hpp"
+#include "utils/Thread.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ class SimulationThread;
 
 //---------------------------------------------------------------------------
 
-class MonteCarlo
+class MonteCarlo : public Thread
 {
 
   private:
@@ -67,8 +67,6 @@ class MonteCarlo
     int numassets;
     // list of aggregators
     vector<Aggregator *> aggregators;
-    // list of segmentations
-    Segmentations *segmentations;
     // maximum number of iterations
     int maxiterations;
     // maximum execution time
@@ -99,6 +97,8 @@ class MonteCarlo
     vector<SimulationThread*> threads;
     // number of iterations done
     int numiterations;
+    // number of threads
+    int numthreads;
     // number of finished threads
     int nfthreads;
     // ensures data consistence
@@ -146,13 +146,17 @@ class MonteCarlo
     // trace copula values + trace default times
     void setTrace(bool);
     // initiliaze this class
-    void initialize(IData &) throw(Exception);
+    void setData(IData &) throw(Exception);
+    // set the number of execution threads
+    void setNumThreads(int);
     // execute Monte Carlo
-    int execute(int) throw(Exception);
+    void run();
     // indicates if is doing simulations
     bool isRunning() const;
     // abort execution
     void abort();
+    // returns iterations done
+    int getNumIterations() const;
     
   public:
   

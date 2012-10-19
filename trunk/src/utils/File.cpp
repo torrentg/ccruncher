@@ -36,7 +36,7 @@
 
 // --------------------------------------------------------------------------
 
-#ifdef _MSC_VER
+#ifdef _WIN32
   #define PATHSEPARATOR string("\\")
 #else
   #define PATHSEPARATOR string("/")
@@ -51,15 +51,15 @@ bool ccruncher::File::isAbsolutePath(const string &str)
     return false;
   }
 
-#ifdef _MSC_VER
+#ifdef _WIN32
   // windows style path
   if (str.substr(0,1) == PATHSEPARATOR) {
     return true;
   }
-  else if (str.substr(0,2) == PATHSEPARATOR+PATHSEPARATOR) {
+  else if (str.length() >= 2 && str.substr(0,2) == PATHSEPARATOR+PATHSEPARATOR) {
     return true;
   }
-  else if (isalpha(str.substr(0,1).c_str()[0]) && str.substr(1,1) == PATHSEPARATOR) {
+  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str.substr(2,1) == PATHSEPARATOR) {
     return true;
   }
   else {
@@ -245,7 +245,7 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
 //===========================================================================
 string ccruncher::File::dirname(const string &pathname)
 {
-#ifdef _MSC_VER
+#ifdef _WIN32
   char buf[_MAX_PATH];
   char drive[_MAX_DRIVE];
   char dir[_MAX_DIR];
@@ -265,7 +265,7 @@ string ccruncher::File::dirname(const string &pathname)
 //===========================================================================
 string ccruncher::File::filename(const string &pathname)
 {
-#ifdef _MSC_VER
+#ifdef _WIN32
   char buf[_MAX_PATH];
   char drive[_MAX_DRIVE];
   char dir[_MAX_DIR];

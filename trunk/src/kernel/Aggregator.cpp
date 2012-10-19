@@ -139,3 +139,11 @@ void ccruncher::Aggregator::flush() throw(Exception)
   }
 }
 
+//===========================================================================
+// return the number of segments
+//===========================================================================
+int ccruncher::Aggregator::size() const
+{
+  return numsegments;
+}
+
