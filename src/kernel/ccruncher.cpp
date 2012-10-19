@@ -330,16 +330,18 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   Logger::previousIndentLevel();
 
   // parsing input file
-  IData idata(filename, defines);
+  IData *idata = new IData(filename, defines);
 
   // creating simulation object
   MonteCarlo montecarlo;
   montecarlo.setFilePath(path, bforce);
   montecarlo.setHash(ihash);
   montecarlo.setTrace(btrace);
+  montecarlo.setNumThreads(nthreads);
 
   // initializing simulation
-  montecarlo.initialize(idata);
+  montecarlo.setData(*idata);
+  delete idata;
 
   // setting interruptions handlers
   mcref = &montecarlo;
@@ -348,14 +350,14 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   signal(SIGTERM, catchsignal);
 
   // running simulation
-  int nsims = montecarlo.execute(nthreads);
+  montecarlo.run();
 
   // tracing some execution info
   Logger::trace("general information", '*');
   Logger::newIndentLevel();
   Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
   Logger::trace("total elapsed time", timer);
-  Logger::trace("simulations realized", Format::toString(nsims));
+  Logger::trace("simulations realized", Format::toString(montecarlo.getNumIterations()));
   Logger::previousIndentLevel();
   Logger::addBlankLine();
 }

@@ -24,7 +24,6 @@
 #include <cfloat>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
-#include "params/Segmentations.hpp"
 #include "math/GMFCopula.hpp"
 #include "math/TMFCopula.hpp"
 #include "utils/Utils.hpp"
@@ -38,6 +37,7 @@
 //===========================================================================
 ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), threads(0)
 {
+  pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
   numiterations = 0;
   maxiterations = 0;
@@ -51,6 +51,7 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   running = false;
   assetsize = 0;
   numassets = 0;
+  numthreads = 1;
 }
 
 //===========================================================================
@@ -59,6 +60,7 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
 ccruncher::MonteCarlo::~MonteCarlo()
 {
   release();
+  pthread_mutex_destroy(&mutex);
 }
 
 //===========================================================================
@@ -82,7 +84,6 @@ void ccruncher::MonteCarlo::release()
     }
   }
   threads.clear();
-  pthread_mutex_destroy(&mutex);
 
   // deallocating copula
   if (copula != NULL) { 
@@ -109,7 +110,7 @@ void ccruncher::MonteCarlo::release()
 //===========================================================================
 // initialize
 //===========================================================================
-void ccruncher::MonteCarlo::initialize(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
 {
   if (numiterations != 0)
   {
@@ -440,8 +441,6 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
-  segmentations = &(idata.getSegmentations());
-
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
   assert(aggregators.empty()); 
@@ -452,14 +451,14 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // setting logger info
   Logger::trace("output data directory", fpath);
-  Logger::trace("number of segmentations", Format::toString(segmentations->size()));
+  Logger::trace("number of segmentations", Format::toString(idata.getSegmentations().size()));
 
   // allocating and initializing aggregators
   aggregators.clear();
-  for(int i=0; i<segmentations->size(); i++)
+  for(int i=0; i<idata.getSegmentations().size(); i++)
   {
-    string filename = File::normalizePath(fpath) + segmentations->getSegmentation(i).name + ".csv";
-    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, segmentations->getSegmentation(i), filename, bforce);
+    string filename = File::normalizePath(fpath) + idata.getSegmentations().getSegmentation(i).name + ".csv";
+    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations().getSegmentation(i), filename, bforce);
     aggregators.push_back(aggregator);
   }
 
@@ -470,7 +469,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 // execute
 //===========================================================================
-int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
+void ccruncher::MonteCarlo::run()
 {
   double etime1=0.0; // ellapsed time generating random numbers
   double etime2=0.0; // ellapsed time simulating obligors & segmentations
@@ -497,7 +496,6 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   vector<Copula*> copulas(numthreads, (Copula*)NULL);
   numiterations = 0;
   timer3.reset();
-  pthread_mutex_init(&mutex, NULL);
   threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
   {
@@ -539,7 +537,6 @@ int ccruncher::MonteCarlo::execute(int numthreads) throw(Exception)
   Logger::addBlankLine();
   Logger::previousIndentLevel();
   running = false;
-  return numiterations;
 }
 
 //===========================================================================
@@ -627,6 +624,17 @@ void ccruncher::MonteCarlo::setTrace(bool val)
 }
 
 //===========================================================================
+// set the number of execution threads
+//===========================================================================
+void ccruncher::MonteCarlo::setNumThreads(int v)
+{
+  assert(0 < v && v < 17);
+  if (0 < v && v < 17) {
+    numthreads = v;
+  }
+}
+
+//===========================================================================
 // initAdditionalOutput
 //===========================================================================
 void ccruncher::MonteCarlo::initTrace() throw(Exception)
@@ -684,5 +692,13 @@ void ccruncher::MonteCarlo::abort()
   {
     maxiterations = 1;
   }
+}
+
+//===========================================================================
+// returns iterations done
+//===========================================================================
+int ccruncher::MonteCarlo::getNumIterations() const
+{
+  return numiterations;
 }
 

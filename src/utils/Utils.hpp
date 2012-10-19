@@ -52,6 +52,8 @@ class Utils
     static string getCompilationOptions();
     // returns random value based on current time
     static long trand();
+    // return the number of cores
+    static int getNumCores();
 
 };
 

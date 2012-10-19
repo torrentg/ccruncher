@@ -36,17 +36,17 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   rng = copula->getRng();
   assetsize = mc.assetsize;
   numassets = mc.numassets;
-  time0 = montecarlo.time0;
-  timeT = montecarlo.timeT;
-  survivals = montecarlo.survivals;
-  antithetic = montecarlo.antithetic;
+  time0 = mc.time0;
+  timeT = mc.timeT;
+  survivals = mc.survivals;
+  antithetic = mc.antithetic;
   reversed = true;
   uvalues = copula->get();
-  numsegmentations = montecarlo.segmentations->size();
+  numsegmentations = mc.aggregators.size();
   losses.resize(numsegmentations);
   for(int i=0; i<numsegmentations; i++)
   {
-    losses[i] = vector<double>(mc.segmentations->getSegmentation(i).size());
+    losses[i] = vector<double>(mc.aggregators[i]->size());
   }
 }
 

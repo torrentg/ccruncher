@@ -66,6 +66,8 @@ class Aggregator
     void append(vector<double> &) throw(Exception);
     // force flush data to disk
     void flush() throw(Exception);
+    // return the number of segments
+    int size() const;
 
 };
 
