@@ -30,6 +30,13 @@ class DefinesDialog : public QDialog
     // return content
     const map<string,string> & getDefines() const;
 
+  public slots:
+
+    // cell content changed
+    void cellChanged(int, int);
+    // submit dialog content
+    void submit();
+
 };
 
 #endif

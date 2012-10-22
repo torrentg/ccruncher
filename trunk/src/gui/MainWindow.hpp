@@ -35,6 +35,8 @@ class MainWindow : public QMainWindow
     void deletemc();
     // fill widget defines
     void setDefines();
+    // check dialog status
+    void check();
 
   public:
 
@@ -47,10 +49,12 @@ class MainWindow : public QMainWindow
 
     // selects input file
     void selectFile();
+    // set input file
+    void setFile();
     // selects output directory
     void selectDir();
-    // check dialog status
-    void check();
+    // set ooutput directory
+    void setDir();
     // run ccruncher
     void run();
     // stop ccruncher
