@@ -24,7 +24,6 @@ class QDebugStream : public QObject, public std::basic_streambuf<char>
 
     std::ostream &m_stream;
     std::streambuf *m_old_buf;
-    std::string m_string;
 
   public:
 

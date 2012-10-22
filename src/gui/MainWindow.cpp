@@ -3,9 +3,12 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QDir>
-#include "MainWindow.hpp"
 #include "ui_MainWindow.h"
+#include "gui/MainWindow.hpp"
+#include "gui/DefinesDialog.hpp"
 #include "utils/Utils.hpp"
+#include "utils/Logger.hpp"
+#include "utils/Format.hpp"
 
 #define REFRESH_MS 250
 
@@ -17,8 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  ui->ifile->setText("/home/gerard/projects/ccruncher/samples/test02.xml");
-  ui->odir->setText("/home/gerard/projects/ccruncher/data");
+  ui->ifile->setText("C:/Users/gtorrent/Projects/ccruncher/samples/test04.xml");
+  ui->odir->setText("C:/Users/gtorrent/Projects/ccruncher/data");
+
+  defines["numsims"] = "10000";
+  setDefines();
 
   connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
   check();
@@ -65,9 +71,8 @@ void MainWindow::selectFile()
 
   if (filename != "") {
     ui->ifile->setText(filename);
+    check();
   }
-
-  check();
 }
 
 //===========================================================================
@@ -83,9 +88,8 @@ void MainWindow::selectDir()
 
   if (dirpath != "") {
     ui->odir->setText(dirpath);
+    check();
   }
-
-  check();
 }
 
 //===========================================================================
@@ -100,16 +104,23 @@ void MainWindow::check()
     ui->progress->setEnabled(false);
     ui->runButton->setEnabled(false);
     ui->progress->setValue(0);
+    ui->defines->clear();
+    ui->log->clear();
+    cout << Utils::copyright() << endl;
   }
   else
   {
     ui->defines->setEnabled(true);
     ui->definesButton->setEnabled(true);
-    //TODO: comprovar perque s'habilita si no existeix
-    if (QDir("/").exists(ui->odir->text()))
+    if (QDir(ui->odir->text()).exists())
     {
       ui->progress->setEnabled(true);
       ui->runButton->setEnabled(true);
+    }
+    else
+    {
+      ui->progress->setEnabled(false);
+      ui->runButton->setEnabled(false);
     }
   }
 }
@@ -119,6 +130,11 @@ void MainWindow::check()
 //===========================================================================
 void MainWindow::run()
 {
+  if (montecarlo != NULL && montecarlo->isRunning()) {
+    stop();
+    return;
+  }
+
   try
   {
     // reseting environment
@@ -131,11 +147,20 @@ void MainWindow::run()
     ui->odirButton->setEnabled(false);
     ui->defines->setEnabled(false);
     ui->definesButton->setEnabled(false);
-    this->setCursor(Qt::WaitCursor);
+    ui->runButton->setText(tr("Stop"));
+    //this->setCursor(Qt::WaitCursor);
 
     // parsing input file
     cout << Utils::copyright() << endl;
-    map<string,string> defines;
+
+    // tracing some execution info
+    Logger::trace("general information", '*');
+    Logger::newIndentLevel();
+    Logger::trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
+    Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
+    Logger::trace("number of threads", Format::toString(Utils::getNumCores()));
+    Logger::previousIndentLevel();
+
     IData idata(ui->ifile->text().toStdString(), defines);
 
     // creating simulation object
@@ -153,10 +178,29 @@ void MainWindow::run()
   }
   catch(std::exception &e)
   {
-    //TODO: reset status
     cout << endl;
     cout << e.what() << endl;
+    stop();
   }
+}
+
+//===========================================================================
+// print message
+//===========================================================================
+void MainWindow::stop()
+{
+  timer.stop();
+  deletemc();
+  ui->ifile->setEnabled(true);
+  ui->ifileButton->setEnabled(true);
+  ui->odir->setEnabled(true);
+  ui->odirButton->setEnabled(true);
+  ui->defines->setEnabled(true);
+  ui->definesButton->setEnabled(true);
+  ui->progress->setEnabled(false);
+  ui->runButton->setText(tr("Run"));
+  check();
+  //this->setCursor(Qt::ArrowCursor);
 }
 
 //===========================================================================
@@ -164,8 +208,7 @@ void MainWindow::run()
 //===========================================================================
 void MainWindow::print(const QString str)
 {
-  ui->log->appendPlainText(str);
-  //ui->log->textCursor().insertText(str);
+  ui->log->textCursor().insertText(str);
 }
 
 //===========================================================================
@@ -181,15 +224,45 @@ void MainWindow::refresh()
     ui->progress->setValue((int)(100.0*val));
     if (!montecarlo->isRunning() && n > 0)
     {
-      this->setCursor(Qt::ArrowCursor);
-      timer.stop();
-      ui->ifile->setEnabled(true);
-      ui->ifileButton->setEnabled(true);
-      ui->odir->setEnabled(true);
-      ui->odirButton->setEnabled(true);
-      ui->defines->setEnabled(true);
-      ui->definesButton->setEnabled(true);
+      // tracing some execution info
+      Logger::trace("general information", '*');
+      Logger::newIndentLevel();
+      Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
+      Logger::trace("simulations realized", Format::toString(montecarlo->getNumIterations()));
+      Logger::previousIndentLevel();
+      Logger::addBlankLine();
+
+      stop();
     }
   }
+}
+
+//===========================================================================
+// show the defines dialog
+//===========================================================================
+void MainWindow::showDefines()
+{
+  DefinesDialog dialog(this, defines);
+  int rc = dialog.exec();
+
+  if (rc == QDialog::Accepted)
+  {
+    defines = dialog.getDefines();
+    setDefines();
+  }
+}
+
+//===========================================================================
+// show the defines dialog
+//===========================================================================
+void MainWindow::setDefines()
+{
+  QString str;
+  map<string,string>::iterator it;
+  for (it=defines.begin(); it != defines.end(); it++)
+  {
+    str += QString("-D ") + it->first.c_str() + QString("=") + it->second.c_str() + QString(" ");
+  }
+  ui->defines->setText(str);
 }
 
