@@ -154,6 +154,16 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>ifile</tabstop>
+  <tabstop>ifileButton</tabstop>
+  <tabstop>odir</tabstop>
+  <tabstop>odirButton</tabstop>
+  <tabstop>defines</tabstop>
+  <tabstop>definesButton</tabstop>
+  <tabstop>runButton</tabstop>
+  <tabstop>log</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -192,7 +202,7 @@
    <sender>ifile</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
-   <slot>check()</slot>
+   <slot>setFile()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>323</x>
@@ -208,7 +218,7 @@
    <sender>odir</sender>
    <signal>editingFinished()</signal>
    <receiver>MainWindow</receiver>
-   <slot>check()</slot>
+   <slot>setDir()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>415</x>
@@ -256,8 +266,9 @@
  <slots>
   <slot>selectFile()</slot>
   <slot>selectDir()</slot>
-  <slot>check()</slot>
   <slot>run()</slot>
   <slot>showDefines()</slot>
+  <slot>setFile()</slot>
+  <slot>setDir()</slot>
  </slots>
 </ui>

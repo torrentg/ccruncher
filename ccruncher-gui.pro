@@ -6,6 +6,7 @@ HEADERS += \
     src/gui/MainWindow.hpp \
     src/gui/DefinesDialog.hpp \
     src/gui/QDebugStream.hpp \
+    src/gui/FindDefines.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -52,6 +53,7 @@ SOURCES += \
     src/gui/DefinesDialog.cpp \
     src/gui/MainWindow.cpp \
     src/gui/QDebugStream.cpp \
+    src/gui/FindDefines.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \

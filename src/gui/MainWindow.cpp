@@ -6,6 +6,7 @@
 #include "ui_MainWindow.h"
 #include "gui/MainWindow.hpp"
 #include "gui/DefinesDialog.hpp"
+#include "gui/FindDefines.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
@@ -19,13 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow), montecarlo(NULL)
 {
   ui->setupUi(this);
-
-  ui->ifile->setText("C:/Users/gtorrent/Projects/ccruncher/samples/test04.xml");
-  ui->odir->setText("C:/Users/gtorrent/Projects/ccruncher/data");
-
-  defines["numsims"] = "10000";
-  setDefines();
-
   connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
   check();
 }
@@ -71,8 +65,20 @@ void MainWindow::selectFile()
 
   if (filename != "") {
     ui->ifile->setText(filename);
-    check();
+    setFile();
   }
+}
+
+//===========================================================================
+// set input file
+//===========================================================================
+void MainWindow::setFile()
+{
+  string filename = ui->ifile->text().toStdString();
+  FindDefines finder = FindDefines(filename);
+  defines = finder.getDefines();
+  setDefines();
+  check();
 }
 
 //===========================================================================
@@ -88,8 +94,16 @@ void MainWindow::selectDir()
 
   if (dirpath != "") {
     ui->odir->setText(dirpath);
-    check();
+    setDir();
   }
+}
+
+//===========================================================================
+// select output directory
+//===========================================================================
+void MainWindow::setDir()
+{
+  check();
 }
 
 //===========================================================================
@@ -131,7 +145,7 @@ void MainWindow::check()
 void MainWindow::run()
 {
   if (montecarlo != NULL && montecarlo->isRunning()) {
-    stop();
+    montecarlo->abort();
     return;
   }
 
@@ -261,7 +275,7 @@ void MainWindow::setDefines()
   map<string,string>::iterator it;
   for (it=defines.begin(); it != defines.end(); it++)
   {
-    str += QString("-D ") + it->first.c_str() + QString("=") + it->second.c_str() + QString(" ");
+      str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
   }
   ui->defines->setText(str);
 }

@@ -65,11 +65,11 @@
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
    <receiver>DefinesDialog</receiver>
-   <slot>accept()</slot>
+   <slot>submit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -84,8 +84,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -93,5 +93,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>table</sender>
+   <signal>cellChanged(int,int)</signal>
+   <receiver>DefinesDialog</receiver>
+   <slot>cellChanged(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>95</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>cellChanged(int,int)</slot>
+  <slot>submit()</slot>
+ </slots>
 </ui>
