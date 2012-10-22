@@ -4,6 +4,7 @@ TEMPLATE = app
 
 HEADERS += \
     src/gui/MainWindow.hpp \
+    src/gui/DefinesDialog.hpp \
     src/gui/QDebugStream.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
@@ -48,6 +49,7 @@ HEADERS += \
 
 SOURCES += \
     src/gui/main.cpp\
+    src/gui/DefinesDialog.cpp \
     src/gui/MainWindow.cpp \
     src/gui/QDebugStream.cpp \
     src/params/Correlations.cpp \
@@ -90,7 +92,8 @@ SOURCES += \
     deps/gzstream-1.5/gzstream.cpp
 
 FORMS += \
-    src/gui/MainWindow.ui
+    src/gui/MainWindow.ui \
+    src/gui/DefinesDialog.ui
 
 INCLUDEPATH += \
     $$PWD/src \

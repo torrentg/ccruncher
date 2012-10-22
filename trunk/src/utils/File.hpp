@@ -45,6 +45,11 @@ class File
     // non-instantiable class
     File() {}
 
+  private:
+
+    // normalize a string
+    static string normalize(const string &);
+
   public:
 
     // normalize path

@@ -43,37 +43,43 @@
 #endif
 
 //===========================================================================
+// normalize a string
+// in win32 replaces '\' by '/'
+//===========================================================================
+string ccruncher::File::normalize(const string &str)
+{
+#ifdef _WIN32
+  string ret = str;
+  for(size_t i=0; i<str.length(); i++) {
+    if (ret[i] == '\\') ret[i] = '/';
+  }
+  return ret;
+#else
+  return str;
+#endif
+}
+//===========================================================================
 // isAbsolutePath
 //===========================================================================
-bool ccruncher::File::isAbsolutePath(const string &str)
+bool ccruncher::File::isAbsolutePath(const string &path)
 {
-  if (str.size() <= 0) {
+  if (path.size() <= 0) {
     return false;
   }
 
+  string str = normalize(path);
+
+  if (str[0] == '/') { // /home
+    return true;
+  }
 #ifdef _WIN32
-  // windows style path
-  if (str.substr(0,1) == PATHSEPARATOR) {
+  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str[2] == '/') { // C:/users
     return true;
-  }
-  else if (str.length() >= 2 && str.substr(0,2) == PATHSEPARATOR+PATHSEPARATOR) {
-    return true;
-  }
-  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str.substr(2,1) == PATHSEPARATOR) {
-    return true;
-  }
-  else {
-    return false;
-  }
-#else
-  // unix style path
-  if (str.substr(0,1) == PATHSEPARATOR) {
-    return true;
-  }
-  else {
-    return false;
   }
 #endif
+  else {
+    return false;
+  }
 }
 
 //===========================================================================
@@ -157,10 +163,7 @@ bool ccruncher::File::existDir(const string &dirname)
 {
   DIR *tmp;
 
-  // inicialitzem estat errors
   errno = 0;
-
-  // inicialitzem estat errors numerics
   tmp = opendir(dirname.c_str());
 
   if (tmp == NULL)
@@ -188,7 +191,6 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
 {
   int aux;
 
-  // setting errno default
   errno = 0;
 
   // creating directory

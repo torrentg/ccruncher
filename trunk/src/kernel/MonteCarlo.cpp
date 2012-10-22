@@ -92,7 +92,7 @@ void ccruncher::MonteCarlo::release()
   }
 
   // dropping aggregators elements
-  for(unsigned int i=0;i<aggregators.size();i++) {
+  for(unsigned int i=0; i<aggregators.size(); i++) {
     if (aggregators[i] != NULL) {
       delete aggregators[i];
       aggregators[i] = NULL;
@@ -530,15 +530,18 @@ void ccruncher::MonteCarlo::run()
     threads[i]->wait();
     etime1 += threads[i]->getEllapsedTime1();
     etime2 += threads[i]->getEllapsedTime2();
+    delete threads[i];
+    threads[i] = NULL;
   }
 
-  // flushing aggregators
-  for(unsigned int i=0; i<aggregators.size(); i++) 
+  // closing aggregators
+  timer3.resume();
+  for(unsigned int i=0; i<aggregators.size(); i++)
   {
-    timer3.resume();
-    aggregators[i]->flush();
-    timer3.stop();
+    delete aggregators[i];
+    aggregators[i] = NULL;
   }
+  timer3.stop();
 
   // destroying copulas (except main copula)
   for(int i=1; i<numthreads; i++)
