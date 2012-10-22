@@ -32,6 +32,7 @@
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
+#include "portfolio/DateValues.hpp"
 #include "params/Survivals.hpp"
 #include "math/Copula.hpp"
 #include "utils/Date.hpp"
@@ -65,6 +66,8 @@ class MonteCarlo : public Thread
     int assetsize;
     // number of simulated assets
     int numassets;
+    // datevalues list
+    vector<DateValues> datevalues;
     // list of aggregators
     vector<Aggregator *> aggregators;
     // maximum number of iterations
@@ -157,7 +160,9 @@ class MonteCarlo : public Thread
     void abort();
     // returns iterations done
     int getNumIterations() const;
-    
+    // returns iterations done
+    int getMaxIterations() const;
+
   public:
   
     // friend class

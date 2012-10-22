@@ -35,7 +35,6 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
   assert(copula != NULL);
   rng = copula->getRng();
   assetsize = mc.assetsize;
-  numassets = mc.numassets;
   time0 = mc.time0;
   timeT = mc.timeT;
   survivals = mc.survivals;
@@ -151,10 +150,11 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
 
   // evalue obligor losses
   double obligor_recovery = NAN;
-  char *p = (char*)(obligors[iobligor].assets);
+  char *p = (char*)(obligors[iobligor].ref.assets);
   for(int i=0; i<obligors[iobligor].numassets; i++)
   {
-    SimulatedAsset *asset = (SimulatedAsset*)(p+i*assetsize);
+    SimulatedAsset *asset = (SimulatedAsset*)(p);
+    p += assetsize;
 
     // evalue asset loss
     if (asset->mindate <= dtime && dtime <= asset->maxdate)
@@ -170,7 +170,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
       {
         if (isnan(obligor_recovery))
         {
-          obligor_recovery = obligors[iobligor].ref->recovery.getValue(rng);
+          obligor_recovery = obligors[iobligor].recovery.getValue(rng);
         }
         recovery = obligor_recovery;
       }

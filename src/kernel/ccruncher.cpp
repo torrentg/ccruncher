@@ -57,8 +57,6 @@ using namespace ccruncher;
 //---------------------------------------------------------------------------
 
 void usage();
-void version();
-void copyright();
 void setnice(int) throw(Exception);
 void run(const string &, const string &, int) throw(Exception);
 void catchsignal(int signal);
@@ -170,7 +168,7 @@ int main(int argc, char *argv[])
           break;
 
       case 301: // --version (show version and exit)
-          version();
+          cout << Utils::version() << endl;
           return 0;
 
       case 302: // --path=dir (set output files path)
@@ -269,7 +267,7 @@ int main(int argc, char *argv[])
   // license info
   if (bverbose)
   {
-    copyright();
+    cout << endl << Utils::copyright() << endl;
   }
 
   try
@@ -389,18 +387,6 @@ void setnice(int niceval) throw(Exception)
 }
 
 //===========================================================================
-// version
-//===========================================================================
-void version()
-{
-  cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
-  cout << "build host: " << BUILD_HOST << endl;
-  cout << "build date: " << BUILD_DATE << endl;
-  cout << "build author: " << BUILD_USER << endl;
-  cout << "build options: " << Utils::getCompilationOptions() << endl;
-}
-
-//===========================================================================
 // usage
 //===========================================================================
 void usage()
@@ -435,14 +421,3 @@ void usage()
   << endl;
 }
 
-//===========================================================================
-// copyright
-//===========================================================================
-void copyright()
-{
-  cout << "\n"
-  "   ccruncher is Copyright (C) 2004-2012 Gerard Torrent and licensed\n"
-  "     under the GNU General Public License, version 2. More info at\n"
-  "                   http://www.ccruncher.net\n"
-  << endl;
-}

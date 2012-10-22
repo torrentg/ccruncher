@@ -2,9 +2,11 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
-#include "gui/QDebugStream.hpp"
+#include <QString>
+#include <QTimer>
 #include "kernel/MonteCarlo.hpp"
 
+using namespace std;
 using namespace ccruncher;
 
 namespace Ui {
@@ -19,12 +21,15 @@ class MainWindow : public QMainWindow
 
     // interface widget
     Ui::MainWindow *ui;
-    // redirects cout to textedit
-    QDebugStream *qout;
-    // redirects cerr to textedit
-    QDebugStream *qerr;
+    // internal timer
+    QTimer timer;
     // Monte Carlo simulator
     MonteCarlo *montecarlo;
+
+  private:
+
+    // delete montecarlo
+    void deletemc();
 
   public:
 
@@ -43,6 +48,10 @@ class MainWindow : public QMainWindow
     void check();
     // run ccruncher
     void run();
+    // print message to log
+    void print(const QString);
+    // refresh progress bar
+    void refresh();
 
 };
 

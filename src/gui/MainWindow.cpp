@@ -7,18 +7,20 @@
 #include "ui_MainWindow.h"
 #include "utils/Utils.hpp"
 
-using namespace std;
+#define REFRESH_MS 250
 
 //===========================================================================
 // constructor
 //===========================================================================
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::MainWindow),
-    qout(NULL), qerr(NULL), montecarlo(NULL)
+    QMainWindow(parent), ui(new Ui::MainWindow), montecarlo(NULL)
 {
   ui->setupUi(this);
-  qout = new QDebugStream(std::cout, ui->log);
-  qerr = new QDebugStream(std::cerr, ui->log);
+
+  ui->ifile->setText("/home/gerard/projects/ccruncher/samples/test02.xml");
+  ui->odir->setText("/home/gerard/projects/ccruncher/data");
+
+  connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
   check();
 }
 
@@ -27,10 +29,27 @@ MainWindow::MainWindow(QWidget *parent) :
 //===========================================================================
 MainWindow::~MainWindow()
 {
-  if (qout != NULL) delete qout;
-  if (qout != NULL) delete qerr;
-  if (montecarlo != NULL) delete montecarlo;
+  deletemc();
   delete ui;
+}
+
+//===========================================================================
+// delete montecarlo
+//===========================================================================
+void MainWindow::deletemc()
+{
+  timer.stop();
+  if (montecarlo != NULL) {
+    if (montecarlo->isRunning()) {
+      montecarlo->abort();
+    }
+    else {
+      montecarlo->cancel();
+    }
+    montecarlo->wait();
+    delete montecarlo;
+    montecarlo = NULL;
+  }
 }
 
 //===========================================================================
@@ -80,11 +99,13 @@ void MainWindow::check()
     ui->definesButton->setEnabled(false);
     ui->progress->setEnabled(false);
     ui->runButton->setEnabled(false);
+    ui->progress->setValue(0);
   }
   else
   {
     ui->defines->setEnabled(true);
     ui->definesButton->setEnabled(true);
+    //TODO: comprovar perque s'habilita si no existeix
     if (QDir("/").exists(ui->odir->text()))
     {
       ui->progress->setEnabled(true);
@@ -98,21 +119,22 @@ void MainWindow::check()
 //===========================================================================
 void MainWindow::run()
 {
-  if (montecarlo != NULL) {
-    if (montecarlo->isRunning()) {
-      montecarlo->abort();
-    }
-    else {
-      montecarlo->cancel();
-    }
-    montecarlo->wait();
-    delete montecarlo;
-    montecarlo = NULL;
-  }
-
   try
   {
+    // reseting environment
+    deletemc();
+    ui->log->clear();
+    ui->progress->setValue(0);
+    ui->ifile->setEnabled(false);
+    ui->ifileButton->setEnabled(false);
+    ui->odir->setEnabled(false);
+    ui->odirButton->setEnabled(false);
+    ui->defines->setEnabled(false);
+    ui->definesButton->setEnabled(false);
+    this->setCursor(Qt::WaitCursor);
+
     // parsing input file
+    cout << Utils::copyright() << endl;
     map<string,string> defines;
     IData idata(ui->ifile->text().toStdString(), defines);
 
@@ -122,15 +144,52 @@ void MainWindow::run()
     montecarlo->setHash(1000);
     montecarlo->setNumThreads(Utils::getNumCores());
     montecarlo->setData(idata);
+
+    // running simulation
+    timer.start(REFRESH_MS);
+    //montecarlo->run();
     montecarlo->start();
-    //montecarlo.wait();
+    //montecarlo->wait();
   }
   catch(std::exception &e)
   {
+    //TODO: reset status
     cout << endl;
     cout << e.what() << endl;
   }
+}
 
-  cout << "done" << endl;
+//===========================================================================
+// print message
+//===========================================================================
+void MainWindow::print(const QString str)
+{
+  ui->log->appendPlainText(str);
+  //ui->log->textCursor().insertText(str);
+}
+
+//===========================================================================
+// refresh progress bar
+//===========================================================================
+void MainWindow::refresh()
+{
+  if (montecarlo != NULL)
+  {
+    int n = montecarlo->getNumIterations();
+    int N = montecarlo->getMaxIterations();
+    float val = (float) n / (float) N;
+    ui->progress->setValue((int)(100.0*val));
+    if (!montecarlo->isRunning() && n > 0)
+    {
+      this->setCursor(Qt::ArrowCursor);
+      timer.stop();
+      ui->ifile->setEnabled(true);
+      ui->ifileButton->setEnabled(true);
+      ui->odir->setEnabled(true);
+      ui->odirButton->setEnabled(true);
+      ui->defines->setEnabled(true);
+      ui->definesButton->setEnabled(true);
+    }
+  }
 }
 

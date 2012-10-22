@@ -29,6 +29,7 @@
 #include <vector>
 #include "portfolio/Obligor.hpp"
 #include "portfolio/Asset.hpp"
+#include "portfolio/Recovery.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 
@@ -67,15 +68,21 @@ class SimulatedObligor
 
     // obligor's rating index
     int irating;
-    // reference to obligor
-    Obligor *ref;
+    // obligor's recovery
+    Recovery recovery;
     // number of assets
     int numassets;
-    // pointer to simulated assets
-    SimulatedAsset *assets;
+    // pointer
+    union
+    {
+      // obligor
+      Obligor *obligor;
+      // simulated assets
+      SimulatedAsset *assets;
+    } ref;
 
-  public: 
-    
+  public:
+
     // constructor
     SimulatedObligor(Obligor *);
     // less-than operator

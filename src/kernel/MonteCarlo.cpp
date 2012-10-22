@@ -133,20 +133,20 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
     // initializing obligors
     initObligors(idata);
 
+    // initialize trace
+    initTrace();
+
+    // initializing copula
+    initCopula(idata);
+
     // initializing assets
     initAssets(idata);
 
     // initializing survival functions
     initSurvivals(idata);
 
-    // initializing copula
-    initCopula(idata);
-
     // initializing aggregators
     initAggregators(idata);
-
-    // initialize trace
-    initTrace();
 
     // exit function
     Logger::previousIndentLevel();
@@ -261,15 +261,17 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // determining the assets to simulate
   int cont = 0;
   numassets = 0;
+  int numdatevalues = 0;
   for(unsigned int i=0; i<obligors.size(); i++)
   {
-    vector<Asset*> &vassets = obligors[i].ref->getAssets();
+    vector<Asset*> &vassets = obligors[i].ref.obligor->getAssets();
     for(unsigned int j=0; j<vassets.size(); j++)
     {
       cont++;
       if (vassets[j]->isActive(time0, timeT)) 
       {
         numassets++;
+        numdatevalues += vassets[j]->getData().size();
       }
     }
   }
@@ -283,30 +285,46 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   }
 
   // creating the simulated assets array
+  datevalues.resize(numdatevalues);
   assetsize = sizeof(SimulatedAsset) + sizeof(int)*(idata.getSegmentations().size()-1);
   assets = new char[assetsize*numassets];
   
   numassets = 0;
+  numdatevalues = 0;
   for(unsigned int i=0; i<obligors.size(); i++)
   {
-    vector<Asset*> &vassets = obligors[i].ref->getAssets();
+    Obligor *obligor = obligors[i].ref.obligor;
+    obligors[i].ref.assets = NULL;
+    vector<Asset*> &vassets = obligor->getAssets();
     for(unsigned int j=0; j<vassets.size(); j++)
     {
       if (vassets[j]->isActive(time0, timeT)) 
       {
-        SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
+        // creating asset
+        SimulatedAsset *p = (SimulatedAsset *)(assets+numassets*assetsize);
         p->mindate = vassets[j]->getMinDate();
         p->maxdate = vassets[j]->getMaxDate();
-        p->begin = vassets[j]->getData().begin();
-        p->end = vassets[j]->getData().end();
+        p->begin = datevalues.begin() + numdatevalues;
+
+        // setting asset datevalues
+        for(size_t k=0; k<vassets[j]->getData().size(); k++)
+        {
+          datevalues[numdatevalues] = vassets[j]->getData()[k];
+          numdatevalues++;
+        }
+        p->end = datevalues.begin() + numdatevalues;
+
+        // setting asset segments
         int *segments = &(p->segments);
         for(int k=0; k<idata.getSegmentations().size(); k++)
         {
           segments[k] = vassets[j]->getSegment(k);
         }
-        if (obligors[i].numassets <= 0)
+
+        // assigning asset to obligor
+        if (obligors[i].ref.assets == NULL)
         {
-          obligors[i].assets = p;
+          obligors[i].ref.assets = p;
         }
         obligors[i].numassets++;
         numassets++;
@@ -395,7 +413,7 @@ void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
     vector<unsigned int> noblig(idata.getCorrelations().size(),0);
     for(unsigned int i=0; i<obligors.size(); i++)
     {
-      noblig[obligors[i].ref->isector]++;
+      noblig[obligors[i].ref.obligor->isector]++;
     }
 
     // creating the copula object
@@ -651,7 +669,7 @@ void ccruncher::MonteCarlo::initTrace() throw(Exception)
       fcopulas.open(filename.c_str(), ios::out|ios::trunc);
       for(unsigned int i=0; i<obligors.size(); i++)
       {
-        fcopulas << "\"" << obligors[i].ref->id << "\"" << (i!=obligors.size()-1?", ":"");
+        fcopulas << "\"" << obligors[i].ref.obligor->id << "\"" << (i!=obligors.size()-1?", ":"");
       }
       fcopulas << endl;
     }
@@ -700,5 +718,13 @@ void ccruncher::MonteCarlo::abort()
 int ccruncher::MonteCarlo::getNumIterations() const
 {
   return numiterations;
+}
+
+//===========================================================================
+// returns maximum number of iterations
+//===========================================================================
+int ccruncher::MonteCarlo::getMaxIterations() const
+{
+  return maxiterations;
 }
 

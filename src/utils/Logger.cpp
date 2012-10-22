@@ -35,23 +35,14 @@
 
 int ccruncher::Logger::ilevel = DEFAULT_INDENTATION_LEVEL;
 int ccruncher::Logger::curcol = -1;
-bool ccruncher::Logger::verbose = false;
+bool ccruncher::Logger::verbose = true;
 
 //===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Logger::Logger()
 {
-  init(false);
-}
-
-//===========================================================================
-// init
-//===========================================================================
-void ccruncher::Logger::init(bool verbose_)
-{
-  verbose = verbose_;
-
+  verbose = true;
   ilevel = DEFAULT_INDENTATION_LEVEL;
   curcol = -1;
 }
