@@ -3,9 +3,9 @@
 //===========================================================================
 // constructor
 //===========================================================================
-QDebugStream::QDebugStream(std::ostream &stream, QPlainTextEdit* text_edit) : m_stream(stream)
+QDebugStream::QDebugStream(std::ostream &stream, QObject *parent) :
+  QObject(parent), basic_streambuf<char>(), m_stream(stream)
 {
-  log_window = text_edit;
   m_old_buf = stream.rdbuf();
   stream.rdbuf(this);
 }
@@ -16,8 +16,7 @@ QDebugStream::QDebugStream(std::ostream &stream, QPlainTextEdit* text_edit) : m_
 QDebugStream::~QDebugStream()
 {
   // output anything that is left
-  if (!m_string.empty())
-  log_window->appendPlainText(m_string.c_str());
+  if (!m_string.empty()) emit print(m_string.c_str());
   m_stream.rdbuf(m_old_buf);
 }
 
@@ -26,9 +25,14 @@ QDebugStream::~QDebugStream()
 //===========================================================================
 int QDebugStream::overflow(int v)
 {
+/*
+  m_string += v;
+  emit print(m_string.c_str());
+  m_string.erase(m_string.begin(), m_string.end());
+*/
   if (v == '\n')
   {
-    log_window->appendPlainText(m_string.c_str());
+    emit print(m_string.c_str());
     m_string.erase(m_string.begin(), m_string.end());
   }
   else
@@ -51,7 +55,7 @@ std::streamsize QDebugStream::xsputn(const char *p, std::streamsize n)
     if (pos != std::string::npos)
     {
       std::string tmp(m_string.begin(), m_string.begin() + pos);
-      log_window->appendPlainText(tmp.c_str());
+      emit print(tmp.c_str());
       m_string.erase(m_string.begin(), m_string.begin() + pos + 1);
     }
   }

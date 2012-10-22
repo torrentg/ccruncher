@@ -53,8 +53,6 @@ class Logger
 
     // private constructor (non-instantiable class)
     Logger();
-    // initialization stuff
-    static void init(bool verbose_);
 
   public:
 

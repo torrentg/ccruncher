@@ -75,8 +75,6 @@ class SimulationThread : public Thread
     bool antithetic;
     // management flag for antithetic method (default=false)
     bool reversed;
-    // number of assets
-    int numassets;
     // number of segmentations
     int numsegmentations;
     // asset loss values by segmentation

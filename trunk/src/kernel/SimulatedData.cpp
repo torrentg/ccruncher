@@ -30,24 +30,25 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   assert(obligor != NULL);
   irating = obligor->irating;
-  ref = obligor;
+  recovery = obligor->recovery;
   numassets = 0;
-  assets = NULL;
+  ref.obligor = obligor;
 }
 
 //===========================================================================
 // less-than operator
 // sort SimulatedObligor by sector and rating
+// caution: ref contains obligor, not assets
 //===========================================================================
 bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
 {
-  if (ref->isector < c.ref->isector)
+  if (ref.obligor->isector < c.ref.obligor->isector)
   {
     return true;
   }
-  else if (ref->isector == c.ref->isector)
+  else if (ref.obligor->isector == c.ref.obligor->isector)
   {
-    if (ref->irating < c.ref->irating)
+    if (irating < c.irating)
     {
       return true;
     }
@@ -61,3 +62,4 @@ bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
     return false;
   }
 }
+
