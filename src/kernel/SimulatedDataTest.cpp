@@ -245,19 +245,19 @@ void ccruncher_test::SimulatedDataTest::test1()
   ASSERT_EQUALS(sobligors[3].irating, 1);
   ASSERT_EQUALS(sobligors[4].irating, 0);
 
-  ASSERT_EQUALS(sobligors[0].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[1].ref->isector, 1);
-  ASSERT_EQUALS(sobligors[2].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[3].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[4].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[0].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[1].ref.obligor->isector, 1);
+  ASSERT_EQUALS(sobligors[2].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[3].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[4].ref.obligor->isector, 1);
   
   sort(sobligors.begin(), sobligors.end());
 
-  ASSERT_EQUALS(sobligors[0].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[1].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[2].ref->isector, 0);
-  ASSERT_EQUALS(sobligors[3].ref->isector, 1);
-  ASSERT_EQUALS(sobligors[4].ref->isector, 1);
+  ASSERT_EQUALS(sobligors[0].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[1].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[2].ref.obligor->isector, 0);
+  ASSERT_EQUALS(sobligors[3].ref.obligor->isector, 1);
+  ASSERT_EQUALS(sobligors[4].ref.obligor->isector, 1);
   
   ASSERT_EQUALS(sobligors[0].irating, 0);
   ASSERT_EQUALS(sobligors[1].irating, 1);

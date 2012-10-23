@@ -53,6 +53,9 @@ const map<string,string> & DefinesDialog::getDefines() const
 //===========================================================================
 void DefinesDialog::cellChanged(int row, int col)
 {
+  Q_UNUSED(row)
+  Q_UNUSED(col)
+
   ui->table->blockSignals(true);
 
   //remove unused rows

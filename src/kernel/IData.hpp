@@ -84,6 +84,8 @@ class IData : public ExpatHandlers
     bool hasmaintag;
     // defines flag (0=none, 1=current, 2=done)
     int hasdefinestag;
+    // stop flag
+    bool *stop;
 
   private:
   
@@ -114,7 +116,7 @@ class IData : public ExpatHandlers
     // default constructor
     IData();
     // constructor
-    IData(const string &xmlfilename, const map<string,string> &m=map<string,string>()) throw(Exception);
+    IData(const string &xmlfilename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
     // destructor
     ~IData();
     // returns simulation title

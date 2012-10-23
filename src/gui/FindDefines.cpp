@@ -63,7 +63,7 @@ void FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **att
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void FindDefines::epend(ExpatUserData &, const char *name_)
+void FindDefines::epend(ExpatUserData &, const char *)
 {
   // nothing to do
 }
@@ -71,7 +71,7 @@ void FindDefines::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void FindDefines::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
+void FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
 {
   // nothing to do
 }

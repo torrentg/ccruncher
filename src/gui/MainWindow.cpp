@@ -8,8 +8,6 @@
 #include "gui/DefinesDialog.hpp"
 #include "gui/FindDefines.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Logger.hpp"
-#include "utils/Format.hpp"
 
 #define REFRESH_MS 250
 
@@ -17,10 +15,11 @@
 // constructor
 //===========================================================================
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::MainWindow), montecarlo(NULL)
+    QMainWindow(parent), ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
   connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
+  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
   check();
 }
 
@@ -29,27 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //===========================================================================
 MainWindow::~MainWindow()
 {
-  deletemc();
   delete ui;
-}
-
-//===========================================================================
-// delete montecarlo
-//===========================================================================
-void MainWindow::deletemc()
-{
-  timer.stop();
-  if (montecarlo != NULL) {
-    if (montecarlo->isRunning()) {
-      montecarlo->abort();
-    }
-    else {
-      montecarlo->cancel();
-    }
-    montecarlo->wait();
-    delete montecarlo;
-    montecarlo = NULL;
-  }
 }
 
 //===========================================================================
@@ -126,7 +105,8 @@ void MainWindow::check()
   {
     ui->defines->setEnabled(true);
     ui->definesButton->setEnabled(true);
-    if (QDir(ui->odir->text()).exists())
+    QString odir = ui->odir->text();
+    if (odir.trimmed().length() > 0 && QDir(odir).exists())
     {
       ui->progress->setEnabled(true);
       ui->runButton->setEnabled(true);
@@ -144,77 +124,19 @@ void MainWindow::check()
 //===========================================================================
 void MainWindow::run()
 {
-  if (montecarlo != NULL && montecarlo->isRunning()) {
-    montecarlo->abort();
+  if (task.isRunning()) {
+    task.stop();
     return;
   }
-
-  try
+  else
   {
-    // reseting environment
-    deletemc();
     ui->log->clear();
-    ui->progress->setValue(0);
-    ui->ifile->setEnabled(false);
-    ui->ifileButton->setEnabled(false);
-    ui->odir->setEnabled(false);
-    ui->odirButton->setEnabled(false);
-    ui->defines->setEnabled(false);
-    ui->definesButton->setEnabled(false);
-    ui->runButton->setText(tr("Stop"));
-    //this->setCursor(Qt::WaitCursor);
-
-    // parsing input file
-    cout << Utils::copyright() << endl;
-
-    // tracing some execution info
-    Logger::trace("general information", '*');
-    Logger::newIndentLevel();
-    Logger::trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
-    Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-    Logger::trace("number of threads", Format::toString(Utils::getNumCores()));
-    Logger::previousIndentLevel();
-
-    IData idata(ui->ifile->text().toStdString(), defines);
-
-    // creating simulation object
-    montecarlo = new MonteCarlo();
-    montecarlo->setFilePath(ui->odir->text().toStdString(), true);
-    montecarlo->setHash(1000);
-    montecarlo->setNumThreads(Utils::getNumCores());
-    montecarlo->setData(idata);
-
-    // running simulation
+    string ifile = ui->ifile->text().toStdString();
+    string odir = ui->odir->text().toStdString();
+    task.setData(ifile, defines, odir);
+    task.start();
     timer.start(REFRESH_MS);
-    //montecarlo->run();
-    montecarlo->start();
-    //montecarlo->wait();
   }
-  catch(std::exception &e)
-  {
-    cout << endl;
-    cout << e.what() << endl;
-    stop();
-  }
-}
-
-//===========================================================================
-// print message
-//===========================================================================
-void MainWindow::stop()
-{
-  timer.stop();
-  deletemc();
-  ui->ifile->setEnabled(true);
-  ui->ifileButton->setEnabled(true);
-  ui->odir->setEnabled(true);
-  ui->odirButton->setEnabled(true);
-  ui->defines->setEnabled(true);
-  ui->definesButton->setEnabled(true);
-  ui->progress->setEnabled(false);
-  ui->runButton->setText(tr("Run"));
-  check();
-  //this->setCursor(Qt::ArrowCursor);
 }
 
 //===========================================================================
@@ -230,25 +152,16 @@ void MainWindow::print(const QString str)
 //===========================================================================
 void MainWindow::refresh()
 {
-  if (montecarlo != NULL)
-  {
-    int n = montecarlo->getNumIterations();
-    int N = montecarlo->getMaxIterations();
-    float val = (float) n / (float) N;
-    ui->progress->setValue((int)(100.0*val));
-    if (!montecarlo->isRunning() && n > 0)
-    {
-      // tracing some execution info
-      Logger::trace("general information", '*');
-      Logger::newIndentLevel();
-      Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-      Logger::trace("simulations realized", Format::toString(montecarlo->getNumIterations()));
-      Logger::previousIndentLevel();
-      Logger::addBlankLine();
-
-      stop();
-    }
+  int val = task.getProgress();
+  if (val < 0) {
+    ui->progress->setTextVisible(false);
+    val = ui->progress->value();
+    val = (val+1)%100;
   }
+  else {
+    ui->progress->setTextVisible(true);
+  }
+  ui->progress->setValue(val);
 }
 
 //===========================================================================
@@ -278,5 +191,45 @@ void MainWindow::setDefines()
       str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
   }
   ui->defines->setText(str);
+}
+
+//===========================================================================
+// set status
+// see TaskThread::status
+//===========================================================================
+void MainWindow::setStatus(int val)
+{
+  switch(val)
+  {
+    case 2: // parsing
+    case 3: // simulating
+      ui->progress->setValue(0);
+      ui->ifile->setEnabled(false);
+      ui->ifileButton->setEnabled(false);
+      ui->odir->setEnabled(false);
+      ui->odirButton->setEnabled(false);
+      ui->defines->setEnabled(false);
+      ui->definesButton->setEnabled(false);
+      ui->runButton->setText(tr("Stop"));
+      break;
+    case 1: // inactive
+    case 4: // failed
+    case 5: // aborted
+    case 6: // finished
+      timer.stop();
+      refresh();
+      ui->ifile->setEnabled(true);
+      ui->ifileButton->setEnabled(true);
+      ui->odir->setEnabled(true);
+      ui->odirButton->setEnabled(true);
+      ui->defines->setEnabled(true);
+      ui->definesButton->setEnabled(true);
+      ui->progress->setEnabled(false);
+      ui->runButton->setText(tr("Run"));
+      check();
+      break;
+    default:
+      assert(false);
+  }
 }
 
