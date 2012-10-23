@@ -50,7 +50,7 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   bforce = false;
   btrace = false;
   copula = NULL;
-  running = false;
+  stop = NULL;
   assetsize = 0;
   numassets = 0;
   numthreads = 1;
@@ -489,8 +489,11 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 //===========================================================================
 // execute
 //===========================================================================
-void ccruncher::MonteCarlo::run()
+void ccruncher::MonteCarlo::run(bool *stop_)
 {
+  stop = stop_;
+  if (stop != NULL && *stop) return;
+
   double etime1=0.0; // ellapsed time generating random numbers
   double etime2=0.0; // ellapsed time simulating obligors & segmentations
 
@@ -510,7 +513,6 @@ void ccruncher::MonteCarlo::run()
   Logger::newIndentLevel();
 
   // creating and launching simulation threads
-  running = true;
   timer.start();
   nfthreads = numthreads;
   vector<Copula*> copulas(numthreads, (Copula*)NULL);
@@ -559,7 +561,6 @@ void ccruncher::MonteCarlo::run()
   Logger::trace("total simulation time", Timer::format(timer.read()));
   Logger::addBlankLine();
   Logger::previousIndentLevel();
-  running = false;
 }
 
 //===========================================================================
@@ -595,17 +596,14 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double
       Logger::append(".");
     }
 
-    // checking stop criteria
-    if (maxiterations > 0 && numiterations > maxiterations-nfthreads)
+    // checking stop criterias
+    if (
+         (maxiterations > 0 && numiterations > maxiterations-nfthreads) ||
+         (maxseconds > 0 && timer.read() >  maxseconds) ||
+         (stop != NULL && *stop)
+       )
     {
       more = false;
-      nfthreads--;
-    }
-    // checking stop criteria
-    else if (maxseconds > 0 && timer.read() >  maxseconds)
-    {
-      more = false;
-      nfthreads--;
     }
   }
   catch(Exception &e)
@@ -615,6 +613,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double
   }
 
   // exit function
+  if (!more) nfthreads--;
   timer3.stop();
   pthread_mutex_unlock(&mutex);
   return(more);
@@ -695,26 +694,6 @@ void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
     fcopulas << u[i] << (i!=obligors.size()-1?", ":"");
   }
   fcopulas << "\n";
-}
-
-//===========================================================================
-// indicates if is doing simulations
-//===========================================================================
-bool ccruncher::MonteCarlo::isRunning() const
-{
-  return running;
-}
-
-//===========================================================================
-// abort
-// return 1 if running, 0 otherwise
-//===========================================================================
-void ccruncher::MonteCarlo::abort()
-{
-  if (running)
-  {
-    maxiterations = std::max(1,numiterations);
-  }
 }
 
 //===========================================================================

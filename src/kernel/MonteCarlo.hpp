@@ -109,8 +109,8 @@ class MonteCarlo
     bool btrace;
     // file where copula values are stored (if btrace is set)
     ofstream fcopulas;
-    // running flag
-    bool running;
+    // stop flag
+    bool *stop;
 
   private:
   
@@ -152,11 +152,7 @@ class MonteCarlo
     // set the number of execution threads
     void setNumThreads(int);
     // execute Monte Carlo
-    void run();
-    // indicates if is doing simulations
-    bool isRunning() const;
-    // abort execution
-    void abort();
+    void run(bool *stop_=NULL);
     // returns iterations done
     int getNumIterations() const;
     // returns iterations done

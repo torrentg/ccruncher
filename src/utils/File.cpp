@@ -44,20 +44,21 @@
 
 //===========================================================================
 // normalize a string
-// in win32 replaces '\' by '/'
+// in win32 replaces '/' by '\'
 //===========================================================================
 string ccruncher::File::normalize(const string &str)
 {
 #ifdef _WIN32
   string ret = str;
   for(size_t i=0; i<str.length(); i++) {
-    if (ret[i] == '\\') ret[i] = '/';
+    if (ret[i] == '/') ret[i] = '\\';
   }
   return ret;
 #else
   return str;
 #endif
 }
+
 //===========================================================================
 // isAbsolutePath
 //===========================================================================
@@ -67,19 +68,25 @@ bool ccruncher::File::isAbsolutePath(const string &path)
     return false;
   }
 
-  string str = normalize(path);
-
-  if (str[0] == '/') { // /home
-    return true;
-  }
 #ifdef _WIN32
-  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str[2] == '/') { // C:/users
+  string str = normalize(path);
+  if (str.substr(0,1) == PATHSEPARATOR) { // \users, \\net-pc1\users
     return true;
   }
-#endif
+  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str.substr(2,1) == PATHSEPARATOR) { // C:\users
+    return true;
+  }
   else {
     return false;
   }
+#else
+  if (path.substr(0,1) == PATHSEPARATOR) { // /home
+    return true;
+  }
+  else {
+    return false;
+  }
+#endif
 }
 
 //===========================================================================
@@ -121,7 +128,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
 //===========================================================================
 string ccruncher::File::normalizePath(const string &path) throw(Exception)
 {
-  string ret = path;
+  string ret = normalize(path);
 
   if (path.length() == 0)
   {
@@ -287,12 +294,20 @@ string ccruncher::File::filename(const string &pathname)
 //===========================================================================
 string ccruncher::File::filepath(const string &path, const string &name)
 {
-  string ret = ((path=="." || path=="."+PATHSEPARATOR)?"":path);
-  if (ret.length() > 0 && ret.substr(ret.length()-1,1) != PATHSEPARATOR) {
-    ret += PATHSEPARATOR;
+  if (isAbsolutePath(name))
+  {
+    return normalize(name);
   }
-  ret += name;
-  return ret;
+  else
+  {
+    string str1 = normalize(path);
+    string ret = ((str1=="." || str1=="."+PATHSEPARATOR)?"":str1);
+    if (ret.length() > 0 && ret.substr(ret.length()-1,1) != PATHSEPARATOR) {
+      ret += PATHSEPARATOR;
+    }
+    ret += normalize(name);
+    return ret;
+  }
 }
 
 //===========================================================================
