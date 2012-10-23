@@ -29,9 +29,6 @@ TaskThread::~TaskThread()
 void TaskThread::deletemc()
 {
   if (montecarlo != NULL) {
-    if (montecarlo->isRunning()) {
-      montecarlo->abort();
-    }
     delete montecarlo;
     montecarlo = NULL;
   }
@@ -76,7 +73,7 @@ void TaskThread::run()
     delete idata;
 
     // simulating
-    montecarlo->run();
+    montecarlo->run(&stop_);
 
     // tracing some execution info
     Logger::trace("general information", '*');
@@ -106,16 +103,6 @@ void TaskThread::run()
 void TaskThread::stop()
 {
   stop_ = true;
-  if (montecarlo != NULL && montecarlo->isRunning())
-  {
-    montecarlo->abort();
-  }
-/*
-  else
-  {
-    terminate();
-  }
-*/
 }
 
 //===========================================================================

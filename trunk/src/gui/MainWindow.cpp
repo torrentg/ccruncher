@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //===========================================================================
 MainWindow::~MainWindow()
 {
+  task.stop();
+  task.wait();
   delete ui;
 }
 

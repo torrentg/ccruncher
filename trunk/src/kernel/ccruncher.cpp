@@ -72,7 +72,7 @@ int inice = -999;
 int ihash = 0;
 int ithreads = 1;
 map<string,string> defines;
-MonteCarlo *mcref = NULL;
+bool stop = false;
 
 //===========================================================================
 // catchsignal
@@ -80,18 +80,7 @@ MonteCarlo *mcref = NULL;
 void catchsignal(int signal)
 {
   UNUSED(signal);
-  
-  if (mcref != NULL) 
-  {
-    if (mcref->isRunning()) 
-    {
-      mcref->abort();
-    }
-    else
-    {
-      exit(1);
-    }
-  }
+  stop = true;
 } 
 
 //===========================================================================
@@ -302,7 +291,12 @@ int main(int argc, char *argv[])
 void run(const string &filename, const string &path, int nthreads) throw(Exception)
 {
   Timer timer(true);
-  
+
+  // setting interruptions handlers
+  signal(SIGINT, catchsignal);
+  signal(SIGABRT, catchsignal);
+  signal(SIGTERM, catchsignal);
+
   // checking output directory
   if (!File::existDir(path))
   {
@@ -328,7 +322,7 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   Logger::previousIndentLevel();
 
   // parsing input file
-  IData *idata = new IData(filename, defines);
+  IData *idata = new IData(filename, defines, &stop);
 
   // creating simulation object
   MonteCarlo montecarlo;
@@ -341,14 +335,8 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   montecarlo.setData(*idata);
   delete idata;
 
-  // setting interruptions handlers
-  mcref = &montecarlo;
-  signal(SIGINT, catchsignal);
-  signal(SIGABRT, catchsignal);
-  signal(SIGTERM, catchsignal);
-
   // running simulation
-  montecarlo.run();
+  montecarlo.run(&stop);
 
   // tracing some execution info
   Logger::trace("general information", '*');
