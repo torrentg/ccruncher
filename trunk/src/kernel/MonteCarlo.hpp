@@ -38,7 +38,6 @@
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Thread.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -53,7 +52,7 @@ class SimulationThread;
 
 //---------------------------------------------------------------------------
 
-class MonteCarlo : public Thread
+class MonteCarlo
 {
 
   private:

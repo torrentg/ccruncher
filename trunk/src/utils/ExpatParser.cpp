@@ -145,16 +145,16 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len)
 //===========================================================================
 // parse
 //===========================================================================
-void ccruncher::ExpatParser::parse(const string &xmlcontent, ExpatHandlers *eh) throw(Exception)
+void ccruncher::ExpatParser::parse(const string &xmlcontent, ExpatHandlers *eh, bool *stop) throw(Exception)
 {
   istringstream iss (xmlcontent, istringstream::in);
-  parse(iss, eh);
+  parse(iss, eh, stop);
 }
 
 //===========================================================================
 // parse
 //===========================================================================
-void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw(Exception)
+void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh, bool *stop) throw(Exception)
 {
   char buf[BUFSIZE+1];
   streamsize len=0;
@@ -169,6 +169,10 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh) throw
   {
     do
     {
+      if (stop != NULL && *stop == true) {
+        throw Exception("parser stopped");
+      }
+
       xmlcontent.read(buf, BUFSIZE);
       len = xmlcontent.gcount();
       buf[len] = 0;

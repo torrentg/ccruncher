@@ -5,10 +5,9 @@
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>
-#include "kernel/MonteCarlo.hpp"
+#include "gui/TaskThread.hpp"
 
 using namespace std;
-using namespace ccruncher;
 
 namespace Ui {
 class MainWindow;
@@ -24,15 +23,13 @@ class MainWindow : public QMainWindow
     Ui::MainWindow *ui;
     // internal timer
     QTimer timer;
-    // Monte Carlo simulator
-    MonteCarlo *montecarlo;
+    // task thread
+    TaskThread task;
     // defines
     map<string,string> defines;
 
   private:
 
-    // delete montecarlo
-    void deletemc();
     // fill widget defines
     void setDefines();
     // check dialog status
@@ -57,14 +54,14 @@ class MainWindow : public QMainWindow
     void setDir();
     // run ccruncher
     void run();
-    // stop ccruncher
-    void stop();
     // print message to log
     void print(const QString);
     // refresh progress bar
     void refresh();
     // defines dialog
     void showDefines();
+    // set status
+    void setStatus(int);
 
 };
 

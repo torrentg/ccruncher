@@ -39,6 +39,7 @@ void ccruncher::IData::init()
    title = "";
    description = "";
    portfolio = NULL;
+   stop = NULL;
 }
 
 //===========================================================================
@@ -61,11 +62,12 @@ ccruncher::IData::IData()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m) throw(Exception)
+ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m, bool *stop_) throw(Exception)
 {
   // initializing content
   init();
   filename = xmlfilename;
+  stop = stop_;
 
   if (filename == STDIN_FILENAME)
   {
@@ -114,7 +116,7 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     Timer timer(true);
     ExpatParser parser;
     parser.setDefines(m);
-    parser.parse(is, this);
+    parser.parse(is, this, stop);
     Logger::trace("elapsed time parsing data", timer);
     Logger::previousIndentLevel();
   }
@@ -373,7 +375,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
         Logger::trace("included file size", Format::bytes(File::filesize(filepath)));
         ExpatParser parser;
         parser.setDefines(eu.defines);
-        parser.parse(xmlstream, portfolio);
+        parser.parse(xmlstream, portfolio, stop);
       }
     }
     catch(std::exception &e)

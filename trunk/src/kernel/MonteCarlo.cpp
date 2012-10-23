@@ -32,6 +32,8 @@
 #include "utils/File.hpp"
 #include <cassert>
 
+#define MAX_NUM_THREADS 16
+
 //===========================================================================
 // constructor
 //===========================================================================
@@ -649,8 +651,8 @@ void ccruncher::MonteCarlo::setTrace(bool val)
 //===========================================================================
 void ccruncher::MonteCarlo::setNumThreads(int v)
 {
-  assert(0 < v && v < 17);
-  if (0 < v && v < 17) {
+  assert(0 < v && v <= MAX_NUM_THREADS);
+  if (0 < v && v <= MAX_NUM_THREADS) {
     numthreads = v;
   }
 }
@@ -711,7 +713,7 @@ void ccruncher::MonteCarlo::abort()
 {
   if (running)
   {
-    maxiterations = 1;
+    maxiterations = std::max(1,numiterations);
   }
 }
 
