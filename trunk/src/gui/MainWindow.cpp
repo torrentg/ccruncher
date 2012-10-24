@@ -41,7 +41,7 @@ void MainWindow::selectFile()
   QString filename = QFileDialog::getOpenFileName(
               this,
               tr("Select Input File ..."),
-              QDir::currentPath(),
+              ui->ifile->text(),
               tr("ccruncher files (*.xml *.gz);;All files (*.*)"));
 
   if (filename != "") {
@@ -70,7 +70,7 @@ void MainWindow::selectDir()
   QString dirpath = QFileDialog::getExistingDirectory(
               this,
               tr("Select Ouput Directory ..."),
-              QDir::currentPath(),
+              ui->odir->text(),
               QFileDialog::ShowDirsOnly);
 
   if (dirpath != "") {
@@ -96,6 +96,7 @@ void MainWindow::check(bool clear)
   {
     ui->log->clear();
     cout << Utils::copyright() << endl;
+    ui->progress->setValue(0);
   }
 
   if (!QFile::exists(ui->ifile->text()))
