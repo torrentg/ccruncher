@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
   connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
-  check();
+  check(true);
 }
 
 //===========================================================================
@@ -59,7 +59,7 @@ void MainWindow::setFile()
   FindDefines finder = FindDefines(filename);
   defines = finder.getDefines();
   setDefines();
-  check();
+  check(true);
 }
 
 //===========================================================================
@@ -84,14 +84,20 @@ void MainWindow::selectDir()
 //===========================================================================
 void MainWindow::setDir()
 {
-  check();
+  check(true);
 }
 
 //===========================================================================
 // review widget enabled/disabled
 //===========================================================================
-void MainWindow::check()
+void MainWindow::check(bool clear)
 {
+  if (clear)
+  {
+    ui->log->clear();
+    cout << Utils::copyright() << endl;
+  }
+
   if (!QFile::exists(ui->ifile->text()))
   {
     ui->defines->setEnabled(false);
@@ -100,8 +106,6 @@ void MainWindow::check()
     ui->runButton->setEnabled(false);
     ui->progress->setValue(0);
     ui->defines->clear();
-    ui->log->clear();
-    cout << Utils::copyright() << endl;
   }
   else
   {
@@ -146,7 +150,11 @@ void MainWindow::run()
 //===========================================================================
 void MainWindow::print(const QString str)
 {
-  ui->log->textCursor().insertText(str);
+  QTextCursor cursor = ui->log->textCursor();
+  cursor.movePosition(QTextCursor::End);
+  cursor.insertText(str);
+  //ui->log->setTextCursor(cursor);
+  //ui->log->textCursor().insertText(str);
 }
 
 //===========================================================================
@@ -178,6 +186,7 @@ void MainWindow::showDefines()
   {
     defines = dialog.getDefines();
     setDefines();
+    check(true);
   }
 }
 
@@ -228,7 +237,7 @@ void MainWindow::setStatus(int val)
       ui->definesButton->setEnabled(true);
       ui->progress->setEnabled(false);
       ui->runButton->setText(tr("Run"));
-      check();
+      check(false);
       break;
     default:
       assert(false);

@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
     // fill widget defines
     void setDefines();
     // check dialog status
-    void check();
+    void check(bool clear);
 
   public:
 

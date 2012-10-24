@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     setlocale(LC_ALL, "C"); // sets decimal point to sprintf
-    MainWindow w;
     QDebugStream qout(cout);
     QDebugStream qerr(cerr);
+    MainWindow w;
     qApp->connect(&qout, SIGNAL(print(QString)), &w, SLOT(print(QString)), Qt::QueuedConnection);
     qApp->connect(&qerr, SIGNAL(print(QString)), &w, SLOT(print(QString)), Qt::QueuedConnection);
     w.show();
