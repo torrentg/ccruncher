@@ -94,6 +94,10 @@ class Survivals : public ExpatHandlers
     int size() const;
     // set ratings
     void setRatings(const Ratings &) throw(Exception);
+    // return ratings
+    const Ratings & getRatings() const;
+    // return index of default rating
+    int getIndexDefault() const;
     // evalue survival for irating at t
     double evalue(const int irating, int t) const;
     // evalue inverse survival for irating at t

@@ -47,7 +47,9 @@ HEADERS += \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
     src/utils/config.h \
-    deps/gzstream-1.5/gzstream.h
+    deps/gzstream-1.5/gzstream.h \
+    src/kernel/Inverse.hpp \
+    src/params/DefaultProbabilities.hpp
 
 SOURCES += \
     src/gui/main.cpp\
@@ -93,7 +95,9 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
-    deps/gzstream-1.5/gzstream.cpp
+    deps/gzstream-1.5/gzstream.cpp \
+    src/kernel/Inverse.cpp \
+    src/params/DefaultProbabilities.cpp
 
 FORMS += \
     src/gui/MainWindow.ui \
@@ -131,6 +135,8 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+UI_DIR = $$PWD/build
+MOC_DIR = $$PWD/build
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
 
