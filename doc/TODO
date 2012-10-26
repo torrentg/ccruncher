@@ -5,13 +5,16 @@ CCRUNCHER TODO
 Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
+  * replace invSurvival+cdfT tables by invSurvival(cdfT(x)) table
 
 Future works
 -------------------
   * technical features
      - input file in binary format
      - allow evaluation in multiple time horizons
-     - replace invSurvival+invT tables by invSurvival(invT(x)) table
+     - allow to aggregators to append data to file
+     - add configuration file to ccruncher-gui
+     - add menu to ccruncher-gui
   * improve model
      - add grouped t-copula support
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')

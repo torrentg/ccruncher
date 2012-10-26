@@ -96,6 +96,22 @@ void ccruncher::Survivals::setRatings(const Ratings &ratings_) throw(Exception)
 }
 
 //===========================================================================
+// return ratings
+//===========================================================================
+const Ratings & ccruncher::Survivals::getRatings() const
+{
+  return ratings;
+}
+
+//===========================================================================
+// return index of default rating
+//===========================================================================
+int ccruncher::Survivals::getIndexDefault() const
+{
+  return indexdefault;
+}
+
+//===========================================================================
 // destructor
 //===========================================================================
 int ccruncher::Survivals::size() const
