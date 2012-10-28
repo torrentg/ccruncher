@@ -23,6 +23,8 @@ HEADERS += \
     src/params/ParamsTest.hpp \
     src/params/InterestTest.hpp \
     src/params/CorrelationsTest.hpp \
+    src/params/DefaultProbabilities.hpp \
+    src/params/DefaultProbabilitiesTest.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
@@ -30,6 +32,7 @@ HEADERS += \
     src/kernel/SimulationThread.hpp \
     src/kernel/SimulatedDataTest.hpp \
     src/kernel/IDataTest.hpp \
+    src/kernel/Inverse.hpp \
     src/math/PowMatrix.hpp \
     src/math/Copula.hpp \
     src/math/FastTStudentCdf.hpp \
@@ -95,6 +98,8 @@ SOURCES += \
     src/params/ParamsTest.cpp \
     src/params/InterestTest.cpp \
     src/params/CorrelationsTest.cpp \
+    src/params/DefaultProbabilities.cpp \
+    src/params/DefaultProbabilitiesTest.cpp \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
@@ -102,6 +107,7 @@ SOURCES += \
     src/kernel/SimulationThread.cpp \
     src/kernel/SimulatedDataTest.cpp \
     src/kernel/IDataTest.cpp \
+    src/kernel/Inverse.cpp \
     src/math/PowMatrix.cpp \
     src/math/FastTStudentCdf.cpp \
     src/math/GMFCopula.cpp \

@@ -5,6 +5,7 @@
 
 #include "utils/config.h"
 #include <vector>
+#include <cmath>
 #include "params/Survivals.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
