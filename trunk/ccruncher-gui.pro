@@ -17,11 +17,13 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Survivals.hpp \
     src/params/Transitions.hpp \
+    src/params/DefaultProbabilities.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
+    src/kernel/Inverse.hpp \
     src/math/PowMatrix.hpp \
     src/math/Copula.hpp \
     src/math/FastTStudentCdf.hpp \
@@ -47,9 +49,7 @@ HEADERS += \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
     src/utils/config.h \
-    deps/gzstream-1.5/gzstream.h \
-    src/kernel/Inverse.hpp \
-    src/params/DefaultProbabilities.hpp
+    deps/gzstream-1.5/gzstream.h
 
 SOURCES += \
     src/gui/main.cpp\
@@ -67,11 +67,13 @@ SOURCES += \
     src/params/Segmentation.cpp \
     src/params/Survivals.cpp \
     src/params/Transitions.cpp \
+    src/params/DefaultProbabilities.cpp \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
+    src/kernel/Inverse.cpp \
     src/math/PowMatrix.cpp \
     src/math/FastTStudentCdf.cpp \
     src/math/GMFCopula.cpp \
@@ -95,9 +97,7 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
-    deps/gzstream-1.5/gzstream.cpp \
-    src/kernel/Inverse.cpp \
-    src/params/DefaultProbabilities.cpp
+    deps/gzstream-1.5/gzstream.cpp
 
 FORMS += \
     src/gui/MainWindow.ui \

@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
+#include <gsl/gsl_spline.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "params/Ratings.hpp"
@@ -57,6 +58,13 @@ class DefaultProbabilities : public ExpatHandlers
       }
     };
 
+    struct fparams
+    {
+      gsl_spline *spline;
+      gsl_interp_accel *accel;
+      double y;
+    };
+
   private:
 
     // default probabilities for each rating
@@ -65,6 +73,12 @@ class DefaultProbabilities : public ExpatHandlers
     Ratings ratings;
     // index of default rating
     int indexdefault;
+    // cubic spline engines
+    vector<gsl_spline *> splines;
+    // splines accelerators
+    vector<gsl_interp_accel *> accels;
+    // type of splines
+    string type;
 
   private:
 
@@ -72,8 +86,18 @@ class DefaultProbabilities : public ExpatHandlers
     void insertValue(const string &r1, int t, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
-    // linear interpolation algorithm
-    double interpole(double x, double x0, double y0, double x1, double y1) const;
+    // set splines
+    void setSplines();
+    // inverse by root finding (derivative method)
+    double inverse_cspline(gsl_spline *, double, gsl_interp_accel *) const;
+    // inverse by root finding (bracketing method)
+    double inverse_linear(gsl_spline *, double, gsl_interp_accel *) const;
+    // root-finding function
+    static double f(double x, void *params);
+    // root-finding function
+    static double df(double x, void *params);
+    // root-finding function
+    static void fdf (double x, void *params, double *y, double *dy);
 
   protected:
 
@@ -90,6 +114,8 @@ class DefaultProbabilities : public ExpatHandlers
     DefaultProbabilities(const Ratings &) throw(Exception);
     // constructor
     DefaultProbabilities(const Ratings &, const vector<int> &imonths, const vector<vector<double> > &values) throw(Exception);
+    // destructor
+    ~DefaultProbabilities();
     // returns ratings size
     int size() const;
     // set ratings
@@ -99,11 +125,13 @@ class DefaultProbabilities : public ExpatHandlers
     // return index of default rating
     int getIndexDefault() const;
     // evalue pd for irating at t
-    double evalue(const int irating, int t) const;
+    double evalue(int irating, double t) const;
     // evalue pd inverse for irating at t
-    double inverse(const int irating, double val) const;
+    double inverse(int irating, double val) const;
     // return minimal defined time (in months)
     int getMinCommonTime() const;
+    // return type of interpolation
+    string getInterpolationType(int i) const;
     // serialize object content as xml
     string getXML(int) throw(Exception);
 

@@ -105,6 +105,7 @@ void ccruncher::Inverse::setCoefs(const Survivals &survivals) throw(Exception)
 //===========================================================================
 // set interpolation coefficients
 // n: number of breaks (eg. n=3 -> 4 points -included extremals-)
+// we don't use gsl splines because we try to minize memory footprint
 //===========================================================================
 vector<ccruncher::Inverse::csc> ccruncher::Inverse::getCoefs(int irating, const Survivals &survivals, int n) throw(Exception)
 {

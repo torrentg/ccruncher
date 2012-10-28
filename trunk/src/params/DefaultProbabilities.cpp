@@ -21,6 +21,8 @@
 
 #include <cmath>
 #include <algorithm>
+#include <gsl/gsl_roots.h>
+#include <gsl/gsl_errno.h>
 #include "params/DefaultProbabilities.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
@@ -30,13 +32,17 @@
 // --------------------------------------------------------------------------
 
 #define EPSILON 1e-12
+#define MAX_ITER_BISECTION 100
+#define MAX_ITER_NEWTON 40
+// root-finding with a resolution of 1 second
+#define ABS_ERR_ROOT 1.0/(double)(60*60*24*30)
 
 //===========================================================================
 // default constructor
 //===========================================================================
 ccruncher::DefaultProbabilities::DefaultProbabilities()
 {
-  // nothing to do
+  indexdefault = -1;
 }
 
 //===========================================================================
@@ -44,6 +50,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities()
 //===========================================================================
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_) throw(Exception)
 {
+  indexdefault = -1;
   setRatings(ratings_);
 }
 
@@ -54,6 +61,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_) t
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const vector<int> &imonths,
            const vector<vector<double> > &values) throw(Exception)
 {
+  indexdefault = -1;
   setRatings(ratings_);
 
   // adding values
@@ -66,6 +74,25 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, c
   }
 
   validate();
+  setSplines();
+}
+
+//===========================================================================
+// set ratings
+//===========================================================================
+ccruncher::DefaultProbabilities::~DefaultProbabilities()
+{
+  for(size_t i=0; i<splines.size(); i++) {
+    if (splines[i] != NULL) {
+      gsl_spline_free(splines[i]);
+    }
+  }
+
+  for(size_t i=0; i<accels.size(); i++) {
+    if (accels[i] != NULL) {
+      gsl_interp_accel_free(accels[i]);
+    }
+  }
 }
 
 //===========================================================================
@@ -77,16 +104,11 @@ void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(
 
   if (ratings.size() <= 0)
   {
-      throw Exception("invalid number of ratings (" + Format::toString(ratings.size()) + " <= 0)");
+    throw Exception("invalid number of ratings (" + Format::toString(ratings.size()) + " <= 0)");
   }
   else
   {
     ddata = vector<vector<pd> >(ratings.size());
-    //TODO: review idata allocation
-    //idata = vector<vector<double> >(nratings);
-    //idata.insert(idata.begin(), nratings, vector<double>(ISURVFNUMBINS+1, NAN));
-    //idata.assign(ratings.size(), vector<double>(ISURVFNUMBINS+1, NAN));
-    //TODO: eliminar aquests comentaris + resoldre tamany ddata
   }
 }
 
@@ -107,7 +129,7 @@ int ccruncher::DefaultProbabilities::getIndexDefault() const
 }
 
 //===========================================================================
-// destructor
+// number of ratings
 //===========================================================================
 int ccruncher::DefaultProbabilities::size() const
 {
@@ -115,16 +137,34 @@ int ccruncher::DefaultProbabilities::size() const
 }
 
 //===========================================================================
+// return type of interpolation
+//===========================================================================
+string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
+{
+  assert(!splines.empty());
+  assert(i < splines.size());
+  if (i == indexdefault) {
+    return "none";
+  }
+  else {
+    assert(splines[i] != NULL);
+    return gsl_interp_name(splines[i]->interp);
+  }
+}
+
+//===========================================================================
 // insert an element
 //===========================================================================
 void ccruncher::DefaultProbabilities::insertValue(const string &srating, int t, double value) throw(Exception)
 {
+  assert(ratings.size() > 0);
+
   int irating = ratings.getIndex(srating);
 
   // checking rating index
   if (irating < 0)
   {
-    throw Exception("unknow rating at <dprobs>: " + srating);
+    throw Exception("unknow rating at dprob[" + srating + "][" + Format::toString(t) + "]");
   }
 
   // validating time
@@ -182,6 +222,7 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"dprobs")) {
     validate();
+    setSplines();
   }
   else if (isEqual(name,"dprob")) {
     // nothing to do
@@ -219,23 +260,33 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   // checking that all ratings (except default) have pd function defined
   for (int i=0; i<ratings.size(); i++)
   {
-    if (ddata[i].size() == 0 && i != indexdefault) {
+    if (i == indexdefault) continue;
+    if(ddata[i].size() == 0 || (ddata[i].size() == 1 && ddata[i][0].month == 0)) {
       string msg = "rating " + ratings.getName(i) + " without dprob";
       throw Exception(msg);
     }
   }
 
-  // checking dprob value at t=0 is 0 if rating != default
+  // checking dprob[irating][0]=0 if rating != default
   for (int i=0; i<ratings.size(); i++)
   {
     if (i != indexdefault && ddata[i][0].month == 0 && ddata[i][0].prob > EPSILON)
     {
-      string msg = "rating " + ratings.getName(i) + " have a dprob distinct than 0 at t=0";
+      string msg = "dprob[" + ratings.getName(i) + "][0] > 0";
       throw Exception(msg);
     }
   }
 
-  // checking that dprob[default][t] = 1 for any t
+  // setting dprob[irating][0]=0 if not set
+  for (int i=0; i<ratings.size(); i++)
+  {
+    if (i != indexdefault && ddata[i][0].month > 0)
+    {
+      ddata[i].insert(ddata[i].begin(), pd(0,0.0));
+    }
+  }
+
+  // checking that dprob[default][t] = 1 for all t's
   for (size_t j=0; j<ddata[indexdefault].size(); j++)
   {
     if (ddata[indexdefault][j].prob < 1.0-EPSILON)
@@ -261,89 +312,242 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
 }
 
 //===========================================================================
-// interpole
+// setSplines
 //===========================================================================
-double ccruncher::DefaultProbabilities::interpole(double x, double x0, double y0, double x1, double y1) const
+void ccruncher::DefaultProbabilities::setSplines()
 {
-  if (std::fabs(x1-x0) < 1e-14)
+  assert(indexdefault >= 0);
+  assert(ddata.size() > 0);
+
+  splines.assign(ddata.size(), NULL);
+  accels.assign(ddata.size(), NULL);
+
+  for(size_t i=0; i<ddata.size(); i++)
   {
-    return y0;
-  }
-  else
-  {
-    return y0 + (x-x0)*(y1-y0)/(x1-x0);
+    if (i == (size_t) indexdefault) continue;
+
+    size_t n = ddata[i].size();
+    vector<double> x(n);
+    vector<double> y(n);
+    for(size_t j=0; j<n; j++)
+    {
+      x[j] = ddata[i][j].month;
+      y[j] = ddata[i][j].prob;
+    }
+
+    assert(n >= 2);
+
+    bool iscspline = false;
+
+    if (gsl_interp_type_min_size(gsl_interp_cspline) <= n)
+    {
+      splines[i] = gsl_spline_alloc(gsl_interp_cspline, n);
+      gsl_spline_init(splines[i], &(x[0]), &(y[0]), n);
+      iscspline = true;
+
+      for(size_t j=0; j<n; j++)
+      {
+        double deriv = gsl_spline_eval_deriv(splines[i], x[j], NULL);
+        if (deriv <= 0.0) {
+          gsl_spline_free(splines[i]);
+          splines[i] = NULL;
+          iscspline = false;
+          break;
+        }
+      }
+    }
+
+    if (!iscspline)
+    {
+      splines[i] = gsl_spline_alloc(gsl_interp_linear, n);
+      gsl_spline_init(splines[i], &(x[0]), &(y[0]), n);
+    }
+
+    assert(splines[i]->size == n);
+    accels[i] = gsl_interp_accel_alloc();
   }
 }
-/*
+
 //===========================================================================
-// evalue irating-survival function at time (in months) t
+// evalue pd[irating][t] where t is the time in months
+// return probability, a value in [0,1]
 //===========================================================================
-double ccruncher::DefaultProbabilities::evalue(const int irating, int t) const
+double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
 {
-  assert(irating < ratings.size());
-  assert(irating >= 0);
-  assert(t >= 0);
+  assert(!splines.empty() && !accels.empty());
+  assert(splines.size() == accels.size());
+  assert(irating <= 0 && irating < ratings.size());
+
+  // if default rating
+  if (irating == indexdefault) {
+    return 1.0;
+  }
+
+  if (t < 0) {
+    assert(false);
+    return 0.0;
+  }
+  else if (ddata[irating].back().month < t) {
+    return 1.0;
+  }
+  else {
+    double ret = gsl_spline_eval(splines[irating], t, accels[irating]);
+    assert(0.0 <= ret && ret <= 1.0);
+    return ret;
+  }
+}
+
+//===========================================================================
+// evalue inv_pd[irating][prob], where prob is the probability (value in [0,1])
+// returns the default time in months
+// obs: inverse of a spline isn't a spline
+// obs: inv(spline(x,y)) != spline(y,x)
+// caution: this method is not concurrent
+// caution: this is not a high-performance method
+//===========================================================================
+double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
+{
+  assert(!splines.empty() && !accels.empty());
+  assert(splines.size() == accels.size());
+  assert(irating <= 0 && irating < ratings.size());
+  assert(0 <= t);
 
   // if default rating
   if (irating == indexdefault) {
     return 0.0;
   }
 
-  if (t < (int) ddata[irating].size())
-  {
-    return ddata[irating][t].prob;
+  if (val < 0.0) {
+    assert(false);
+    return 0.0;
   }
-  else
-  {
-    return 1.0;
+  else if (ddata[irating].back().prob < val) {
+    return ddata[irating].back().month + 1.0;
+  }
+  else {
+    if (splines[irating]->interp->type == gsl_interp_cspline) {
+      return inverse_cspline(splines[irating], val, accels[irating]);
+    }
+    else if (splines[irating]->interp->type == gsl_interp_linear) {
+      return inverse_linear(splines[irating], val, accels[irating]);
+    }
+    else {
+      assert(false);
+      return NAN;
+    }
   }
 }
 
 //===========================================================================
-// evalue inverse irating-survival function.
-// returns the default time in months
-// if result time is bigger than maximum date, returns last_date+1_year
-// obs: val is a value in [0,1]
+// root-finding solver functions
 //===========================================================================
-double ccruncher::DefaultProbabilities::inverse(const int irating, double val) const
+double ccruncher::DefaultProbabilities::f(double x, void *params)
 {
-  assert(irating >=0 && irating < ratings.size());
-  assert(val >= 0.0 && val <= 1.0);
-
-  // default rating allways is defaulted
-  if (irating == indexdefault) {
-    return 0.0;
+  fparams *p = (fparams *) params;
+  if (x <= p->spline->x[0]) {
+    x = p->spline->x[0];
   }
-
-  // if val=0 => non-default
-  if (val <= EPSILON) {
-    return ddata[irating].size()+11.0;
+  else if (p->spline->x[p->spline->size-1] <= x) {
+    x = p->spline->x[p->spline->size-1];
   }
-
-  // to avoid precision problems
-  if (1.0-val < 1.0/ISURVFNUMBINS) {
-    return inverse1(irating, val);
-  }
-
-  // interpolate (because we need day resolution)
-  int k = (int)(floor(val*ISURVFNUMBINS));
-  if (k >= ISURVFNUMBINS) {
-    return 0.0;
-  }
-
-  double x0 = (double)(k+0)/double(ISURVFNUMBINS);
-  double y0 = idata[irating][k];
-  double x1 = (double)(k+1)/double(ISURVFNUMBINS);
-  double y1 = idata[irating][k+1];
-
-  if ((int)y0 == INT_MAX || (int)y1 == INT_MAX) {
-    return ddata[irating].size()+11.0;
-  }
-
-  assert(x0 <= val && val <= x1);
-  return interpole(val, x0, y0, x1, y1);
+  return gsl_spline_eval(p->spline, x, p->accel) - p->y;
 }
-*/
+
+double ccruncher::DefaultProbabilities::df(double x, void *params)
+{
+  fparams *p = (fparams *) params;
+  if (x <= p->spline->x[0]) {
+    x = p->spline->x[0];
+  }
+  else if (p->spline->x[p->spline->size-1] <= x) {
+    x = p->spline->x[p->spline->size-1];
+  }
+  return gsl_spline_eval_deriv(p->spline, x, p->accel);
+}
+
+void ccruncher::DefaultProbabilities::fdf (double x, void *params, double *y, double *dy)
+{
+  *y = f(x, params);
+  *dy = df(x, params);
+}
+
+//===========================================================================
+// inverse by root finding (bracketing method)
+//===========================================================================
+double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, double y, gsl_interp_accel *accel) const
+{
+  assert(spline != NULL);
+  assert(accel != NULL);
+
+  int status;
+  int iter = 0;
+  double root = 0;
+  double x_lo = spline->x[0];
+  double x_hi = spline->x[spline->size-1];
+  gsl_function F;
+  fparams params = {spline, accel, y};
+
+  F.function = &ccruncher::DefaultProbabilities::f;
+  F.params = &params;
+
+  gsl_root_fsolver *solver = gsl_root_fsolver_alloc(gsl_root_fsolver_bisection);
+  gsl_root_fsolver_set(solver, &F, x_lo, x_hi);
+
+  do
+  {
+    iter++;
+    gsl_root_fsolver_iterate(solver);
+    root = gsl_root_fsolver_root(solver);
+    x_lo = gsl_root_fsolver_x_lower(solver);
+    x_hi = gsl_root_fsolver_x_upper(solver);
+    status = gsl_root_test_interval(x_lo, x_hi, ABS_ERR_ROOT, 0.0);
+  }
+  while (status == GSL_CONTINUE && iter < MAX_ITER_BISECTION);
+
+  gsl_root_fsolver_free(solver);
+
+  return root;
+}
+
+
+//===========================================================================
+// inverse by root finding (bracketing method)
+//===========================================================================
+double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, double y, gsl_interp_accel *accel) const
+{
+  assert(spline != NULL);
+  assert(accel != NULL);
+
+  int status;
+  int iter = 0;
+  double root = spline->x[0] + (spline->x[spline->size-1]-spline->x[0])/2.0;
+  double x0 = 0.0;
+  gsl_function_fdf FDF;
+  fparams params = {spline, accel, y};
+
+  FDF.f = &ccruncher::DefaultProbabilities::f;
+  FDF.df = &ccruncher::DefaultProbabilities::df;
+  FDF.fdf = &ccruncher::DefaultProbabilities::fdf;
+  FDF.params = &params;
+
+  gsl_root_fdfsolver *solver = gsl_root_fdfsolver_alloc(gsl_root_fdfsolver_newton);
+  gsl_root_fdfsolver_set(solver, &FDF, root);
+
+  do
+  {
+    iter++;
+    gsl_root_fdfsolver_iterate(solver);
+    x0 = root;
+    root = gsl_root_fdfsolver_root(solver);
+    status = gsl_root_test_delta(root, x0, ABS_ERR_ROOT, 0.0);
+  }
+  while (status == GSL_CONTINUE && iter < MAX_ITER_NEWTON);
+
+  gsl_root_fdfsolver_free(solver);
+
+  return root;
+}
+
 //===========================================================================
 // getXML
 //===========================================================================
