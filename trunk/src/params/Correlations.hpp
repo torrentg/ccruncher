@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <gsl/gsl_matrix.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "params/Sectors.hpp"
@@ -71,12 +72,18 @@ class Correlations : public ExpatHandlers
     Correlations(const Sectors &) throw(Exception);
     // initialize object
     void setSectors(const Sectors &) throw(Exception);
+    // return sectors
+    const Sectors &getSectors() const;
     // matrix size (= number of sector)
     int size() const;
     // returns a pointer to matrix values
     const vector<vector<double> >& getMatrix() const;
     // matrix element access
     const vector<double>& operator[] (int row) const;
+    // return cholesky matrix of factors
+    gsl_matrix * getCholesky() const throw(Exception);
+    // return factor loadings
+    vector<double> getFactorLoadings() const;
     // serializes object content as xml
     string getXML(int) throw(Exception);
 
