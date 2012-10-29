@@ -113,7 +113,7 @@ void ccruncher_test::InverseTest::test2()
 
   for(int i=0; i<1000; i++)
   {
-    double x = -5.0 + i*0.01;
+    double x = -10.0 + i*0.01;
     double u = gsl_cdf_tdist_P(x, ndf);
     double days = dprobs.inverse(0, u);
     int idays = (int)(days+0.5);
@@ -138,7 +138,7 @@ void ccruncher_test::InverseTest::test2()
 
 //===========================================================================
 // test3
-// fails because maxdate bigger than minCommonTime dprob date
+// fails because maxdate bigger than dprob::maxDate
 //===========================================================================
 void ccruncher_test::InverseTest::test3()
 {

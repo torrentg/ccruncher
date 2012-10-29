@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <cmath>
+#include <gsl/gsl_linalg.h>
 #include "params/Correlations.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
@@ -57,6 +58,14 @@ void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exceptio
 }
 
 //===========================================================================
+// return sectors
+//===========================================================================
+const Sectors & ccruncher::Correlations::getSectors() const
+{
+  return sectors;
+}
+
+//===========================================================================
 // returns size (number of sectors)
 //===========================================================================
 int ccruncher::Correlations::size() const
@@ -66,6 +75,7 @@ int ccruncher::Correlations::size() const
 
 //===========================================================================
 // returns matrix
+//TODO: remove this method
 //===========================================================================
 const vector<vector<double> > &ccruncher::Correlations::getMatrix() const
 {
@@ -196,7 +206,6 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
   return ret;
 }
 
-
 //===========================================================================
 // matrix element access
 //===========================================================================
@@ -205,3 +214,50 @@ const vector<double>& ccruncher::Correlations::operator[] (int row) const
   assert(row >= 0 && row < (int)matrix.size());
   return matrix[row];
 }
+
+//===========================================================================
+// cholesky matrix
+//===========================================================================
+gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
+{
+  assert(size() > 0);
+
+  int k = size();
+  gsl_matrix *chol = gsl_matrix_alloc(k, k);
+
+  for(int i=0; i<k; i++)
+  {
+    gsl_matrix_set(chol, i, i, 1.0);
+
+    for(int j=i+1; j<k; j++)
+    {
+      gsl_matrix_set(chol, i, j, matrix[i][j]);
+      gsl_matrix_set(chol, j, i, matrix[i][j]);
+    }
+  }
+
+  gsl_error_handler_t *eh = gsl_set_error_handler_off();
+  int rc = gsl_linalg_cholesky_decomp(chol);
+  gsl_set_error_handler(eh);
+  if (rc != GSL_SUCCESS) {
+    throw Exception("non definite-positive correlation matrix");
+  }
+
+  return chol;
+}
+
+//===========================================================================
+// return factor loadings
+//===========================================================================
+vector<double> ccruncher::Correlations::getFactorLoadings() const
+{
+  vector<double> w(size(), NAN);
+
+  for(int i=0; i<size(); i++)
+  {
+    w[i] = matrix[i][i];
+  }
+
+  return w;
+}
+
