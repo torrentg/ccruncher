@@ -100,7 +100,6 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
 /*
     Date at(date);
     const char *str = getAttributeValue(attributes, "at");
-    if (str == NULL) throw Exception("attribute 'at' not found");
     if (isInterval(str)) {
       at.addIncrement(str);
     }
@@ -111,13 +110,13 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
     const char *str;
     DateValues values;
 
+    //TODO: rename 'at' to 't' and allow dates and intervals from t0
     values.date = getDateAttribute(attributes, "at");
 
     str = getAttributeValue(attributes, "exposure");
-    if (str == NULL) throw Exception("attribute 'exposure' not found");
-    else values.exposure = Exposure(str);
+    values.exposure = Exposure(str);
 
-    str = getAttributeValue(attributes, "recovery");
+    str = getAttributeValue(attributes, "recovery", NULL);
     if (str != NULL) values.recovery = Recovery(str);
     else values.recovery = drecovery;
     
@@ -126,11 +125,9 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   else if (isEqual(name_,"belongs-to"))
   {
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
-    if (ssegmentation == NULL) throw Exception("attribute 'segmentation' not found");
     int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    if (ssegment == NULL) throw Exception("attribute 'segment' not found");
     int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
@@ -139,7 +136,7 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   {
     id = getStringAttribute(attributes, "id");
     date = getDateAttribute(attributes, "date");
-    const char *str = getAttributeValue(attributes, "recovery");
+    const char *str = getAttributeValue(attributes, "recovery", NULL);
     if (str != NULL) {
       drecovery = Recovery(str);
     }

@@ -35,7 +35,7 @@
 #define MAX_ITER_BISECTION 100
 #define MAX_ITER_NEWTON 40
 // root-finding with a resolution of 1 second
-#define ABS_ERR_ROOT 1.0/(double)(60*60*24*30)
+#define ABS_ERR_ROOT 1.0/(double)(60*60*24)
 
 //===========================================================================
 // default constructor
@@ -43,14 +43,16 @@
 ccruncher::DefaultProbabilities::DefaultProbabilities()
 {
   indexdefault = -1;
+  date = NAD;
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_) throw(Exception)
+ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const Date &d) throw(Exception)
 {
   indexdefault = -1;
+  date = d;
   setRatings(ratings_);
 }
 
@@ -58,18 +60,19 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_) t
 // constructor
 // used by Transitions class
 //===========================================================================
-ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const vector<int> &imonths,
-           const vector<vector<double> > &values) throw(Exception)
+ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const Date &d,
+           const vector<Date> &dates, const vector<vector<double> > &values) throw(Exception)
 {
   indexdefault = -1;
+  date = d;
   setRatings(ratings_);
 
   // adding values
   for(int i=0; i<ratings.size(); i++)
   {
-    for(unsigned int j=0; j<imonths.size(); j++)
+    for(unsigned int j=0; j<dates.size(); j++)
     {
-      insertValue(ratings.getName(i), imonths[j], values[i][j]);
+      insertValue(ratings.getName(i), dates[j], values[i][j]);
     }
   }
 
@@ -78,7 +81,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, c
 }
 
 //===========================================================================
-// set ratings
+// destructor
 //===========================================================================
 ccruncher::DefaultProbabilities::~DefaultProbabilities()
 {
@@ -121,6 +124,22 @@ const Ratings & ccruncher::DefaultProbabilities::getRatings() const
 }
 
 //===========================================================================
+// set date
+//===========================================================================
+void ccruncher::DefaultProbabilities::setDate(const Date &d)
+{
+  date = d;
+}
+
+//===========================================================================
+// return date
+//===========================================================================
+Date ccruncher::DefaultProbabilities::getDate() const
+{
+  return date;
+}
+
+//===========================================================================
 // return index of default rating
 //===========================================================================
 int ccruncher::DefaultProbabilities::getIndexDefault() const
@@ -155,9 +174,10 @@ string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
 //===========================================================================
 // insert an element
 //===========================================================================
-void ccruncher::DefaultProbabilities::insertValue(const string &srating, int t, double value) throw(Exception)
+void ccruncher::DefaultProbabilities::insertValue(const string &srating, const Date &t, double value) throw(Exception)
 {
   assert(ratings.size() > 0);
+  assert(date != NAD);
 
   int irating = ratings.getIndex(srating);
 
@@ -168,9 +188,9 @@ void ccruncher::DefaultProbabilities::insertValue(const string &srating, int t, 
   }
 
   // validating time
-  if (t < 0)
+  if (t < date)
   {
-    string msg = "dprob[" + srating + "][" + Format::toString(t) + "] has time < 0";
+    string msg = "dprob[" + srating + "][" + Format::toString(t) + "] has date previous to initial time";
     throw Exception(msg);
   }
 
@@ -182,16 +202,18 @@ void ccruncher::DefaultProbabilities::insertValue(const string &srating, int t, 
     throw Exception(msg);
   }
 
+  int day = t-date;
+
   // checking that is not previously defined
   for(size_t i=0; i<ddata[irating].size(); i++) {
-    if (ddata[irating][i].month == t) {
+    if (ddata[irating][i].day == day) {
       string msg = "dprob[" + srating + "][" + Format::toString(t) + "] redefined";
       throw Exception(msg);
     }
   }
 
   // inserting value
-  ddata[irating].push_back(pd(t,value));
+  ddata[irating].push_back(pd(day,value));
 }
 
 //===========================================================================
@@ -206,7 +228,14 @@ void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name,
   }
   else if (isEqual(name,"dprob")) {
     string srating = getStringAttribute(attributes, "rating");
-    int t = getIntAttribute(attributes, "t");
+    Date t(date);
+    const char *str = getAttributeValue(attributes, "t");
+    if (isInterval(str)) {
+      t.add(str);
+    }
+    else {
+      t = Date(str);
+    }
     double value = getDoubleAttribute(attributes, "value");
     insertValue(srating, t, value);
   }
@@ -248,7 +277,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   indexdefault = -1;
   for (int i=0; i<ratings.size(); i++)
   {
-    if (ddata[i].size() == 0 || (ddata[i][0].month == 0 && ddata[i][0].prob > 1.0-EPSILON)) {
+    if (ddata[i].size() == 0 || (ddata[i][0].day == 0 && ddata[i][0].prob > 1.0-EPSILON)) {
       indexdefault = i;
       break;
     }
@@ -261,7 +290,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   for (int i=0; i<ratings.size(); i++)
   {
     if (i == indexdefault) continue;
-    if(ddata[i].size() == 0 || (ddata[i].size() == 1 && ddata[i][0].month == 0)) {
+    if(ddata[i].size() == 0 || (ddata[i].size() == 1 && ddata[i][0].day == 0)) {
       string msg = "rating " + ratings.getName(i) + " without dprob";
       throw Exception(msg);
     }
@@ -270,7 +299,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   // checking dprob[irating][0]=0 if rating != default
   for (int i=0; i<ratings.size(); i++)
   {
-    if (i != indexdefault && ddata[i][0].month == 0 && ddata[i][0].prob > EPSILON)
+    if (i != indexdefault && ddata[i][0].day == 0 && ddata[i][0].prob > EPSILON)
     {
       string msg = "dprob[" + ratings.getName(i) + "][0] > 0";
       throw Exception(msg);
@@ -280,7 +309,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   // setting dprob[irating][0]=0 if not set
   for (int i=0; i<ratings.size(); i++)
   {
-    if (i != indexdefault && ddata[i][0].month > 0)
+    if (i != indexdefault && ddata[i][0].day > 0)
     {
       ddata[i].insert(ddata[i].begin(), pd(0,0.0));
     }
@@ -304,7 +333,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
     {
       if (ddata[i][j].prob < ddata[i][j-1].prob)
       {
-        string msg = "dprob[" + ratings.getName(i) + "] is not monotonically increasing at t=" + Format::toString(ddata[i][j].month);
+        string msg = "dprob[" + ratings.getName(i) + "] is not monotonically increasing at t=" + Format::toString(ddata[i][j].day + "D");
         throw Exception(msg);
       }
     }
@@ -331,7 +360,7 @@ void ccruncher::DefaultProbabilities::setSplines()
     vector<double> y(n);
     for(size_t j=0; j<n; j++)
     {
-      x[j] = ddata[i][j].month;
+      x[j] = ddata[i][j].day;
       y[j] = ddata[i][j].prob;
     }
 
@@ -369,7 +398,7 @@ void ccruncher::DefaultProbabilities::setSplines()
 }
 
 //===========================================================================
-// evalue pd[irating][t] where t is the time in months
+// evalue pd[irating][t] where t is the time in days
 // return probability, a value in [0,1]
 //===========================================================================
 double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
@@ -387,7 +416,7 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
     assert(false);
     return 0.0;
   }
-  else if (ddata[irating].back().month < t) {
+  else if (ddata[irating].back().day < t) {
     return 1.0;
   }
   else {
@@ -399,7 +428,7 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
 
 //===========================================================================
 // evalue inv_pd[irating][prob], where prob is the probability (value in [0,1])
-// returns the default time in months
+// returns the default time in days
 // obs: inverse of a spline isn't a spline
 // obs: inv(spline(x,y)) != spline(y,x)
 // caution: this method is not concurrent
@@ -422,7 +451,7 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
     return 0.0;
   }
   else if (ddata[irating].back().prob < val) {
-    return ddata[irating].back().month + 1.0;
+    return ddata[irating].back().day + 1.0;
   }
   else {
     if (splines[irating]->interp->type == gsl_interp_cspline) {
@@ -445,12 +474,18 @@ double ccruncher::DefaultProbabilities::f(double x, void *params)
 {
   fparams *p = (fparams *) params;
   if (x <= p->spline->x[0]) {
-    x = p->spline->x[0];
+    double x0 = p->spline->x[0];
+    double deriv = gsl_spline_eval_deriv(p->spline, x0, p->accel);
+    return x0 + deriv*(x-x0);
   }
   else if (p->spline->x[p->spline->size-1] <= x) {
-    x = p->spline->x[p->spline->size-1];
+    double x1 = p->spline->x[p->spline->size-1];
+    double deriv = gsl_spline_eval_deriv(p->spline, x1, p->accel);
+    return x1 + deriv*(x-x1);
   }
-  return gsl_spline_eval(p->spline, x, p->accel) - p->y;
+  else {
+    return gsl_spline_eval(p->spline, x, p->accel) - p->y;
+  }
 }
 
 double ccruncher::DefaultProbabilities::df(double x, void *params)
@@ -520,7 +555,7 @@ double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, doub
 
   int status;
   int iter = 0;
-  double root = spline->x[0] + (spline->x[spline->size-1]-spline->x[0])/2.0;
+  double root = (spline->x[spline->size-1]+spline->x[0])/2.0;
   double x0 = 0.0;
   gsl_function_fdf FDF;
   fparams params = {spline, accel, y};
@@ -565,7 +600,7 @@ string ccruncher::DefaultProbabilities::getXML(int ilevel) throw(Exception)
     {
       ret += spc2 + "<dprob ";
       ret += "rating='" + ratings.getName(i) + "' ";
-      ret += "t='" + Format::toString(ddata[i][j].month) + "' ";
+      ret += "t='" + Format::toString(ddata[i][j].day) + "D' ";
       ret += "value='" + Format::toString(100.0*ddata[i][j].prob) + "%'";
       ret += "/>\n";
     }
@@ -577,25 +612,25 @@ string ccruncher::DefaultProbabilities::getXML(int ilevel) throw(Exception)
 }
 
 //===========================================================================
-// getMinCommonTime (in months)
+// getMinCommonTime
 //===========================================================================
-int ccruncher::DefaultProbabilities::getMinCommonTime() const
+Date ccruncher::DefaultProbabilities::getMinCommonTime() const
 {
-  int ret=INT_MAX;
+  int day=INT_MAX;
 
   // searching min time
   for(int i=0; i<ratings.size(); i++)
   {
     if (i != indexdefault)
     {
-      if (ddata[i].back().month < ret)
+      if (ddata[i].back().day < day)
       {
-        ret = ddata[i].back().month;
+        day = ddata[i].back().day;
       }
     }
   }
 
   // exit function
-  return ret;
+  return date+day;
 }
 

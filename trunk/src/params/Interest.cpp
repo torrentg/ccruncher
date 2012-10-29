@@ -193,17 +193,15 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
       throw Exception("incorrect number of attributes");
     }
 
-    Date at(date);
+    Date t(date);
     const char *str = getAttributeValue(attributes, "t");
-    if (str == NULL) throw Exception("attribute 't' not found");
     if (isInterval(str)) {
-      at.add(str);
+      t.add(str);
     }
     else {
-      int nmonths = Parser::intValue(str);
-      at = add(at, nmonths, 'M');
+      t = Date(str);
     }
-    int d = at - date;
+    int d = t - date;
 
     double r = getDoubleAttribute(attributes, "r");
     if (r < -0.5 || 1.0 < r)
@@ -211,7 +209,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
       throw Exception("rate value " + Format::toString(r) + " out of range [-0.5, +1.0]");
     }
 
-    insertRate(Rate(d, diff(date, at, 'Y'), r, str));
+    insertRate(Rate(d, diff(date, t, 'Y'), r, str));
   }
   else
   {
