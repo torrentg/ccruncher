@@ -348,17 +348,10 @@ void ccruncher_test::DefaultProbabilitiesTest::test7()
                        731, 778.854, 821.464, 860.461, 896.79, 931.055,
                        1215.9 };
 
-double p=0.0;
-while (p <= 0.03+0.000000001) {
-cout << p << "\t" << pd.inverse(0, p) << endl;
-p += 0.00005;
-}
-
   // checking values
   for(int i=0; i<13; i++)
   {
-//cout << pvalues[i] << "\t" << pd.inverse(0, pvalues[i]) << endl;
-    //ASSERT_EQUALS_EPSILON(pd.inverse(0, pvalues[i]), tvalues[i], 1e-5);
+    ASSERT_EQUALS_EPSILON(pd.inverse(0, pvalues[i]), tvalues[i], 1e-5);
   }
 }
 
