@@ -39,12 +39,14 @@ void ccruncher_test::DateTest::test_constructors()
   Date date1 = Date(25,7,2001);
   Date date2 = Date("25/07/2001");
   Date date3 = Date(date2);
+  Date date4 = Date(1,1,2012);
   Date now = Date(time(NULL));
 
   ASSERT(nad[0] == *((long*)(&invalid_date)));
   ASSERT(date1 == date2);
   ASSERT(date2 == date3);
   ASSERT(date3 == date2);
+  ASSERT(date4 == Date("1/1/2012"));
   ASSERT(Date("01/01/1900") < now);
   ASSERT_THROW(Date("30/02/2003"));
 }

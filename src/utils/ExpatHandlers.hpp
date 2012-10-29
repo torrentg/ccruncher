@@ -29,6 +29,7 @@
 #include <string>
 #include <cstring>
 #include "utils/ExpatUserData.hpp"
+#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
@@ -55,29 +56,30 @@ class ExpatHandlers
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
     // stops the parser
     void epstop(ExpatUserData &eud);
-    // returns the value of the given attribute
-    const char * getAttributeValue(const char **atts, const string &attname) const;
     // string comparison
     bool isEqual(const char *, const string &) const;
     // returns the number of attributes
     int getNumAttributes(const char **atts) const;
+    // returns the value of the given attribute
+    const char * getAttributeValue(const char **atts, const string &attname) const throw(Exception);
+    const char * getAttributeValue(const char **atts, const string &attname, const char *defval) const;
     // returns attribute value as string
-    string getStringAttribute(const char **atts, const string &attname) const;
+    string getStringAttribute(const char **atts, const string &attname) const throw(Exception);
     string getStringAttribute(const char **atts, const string &attname, const string &defval) const;
     // returns attribute value as int
-    int getIntAttribute(const char **atts, const string &attname) const;
+    int getIntAttribute(const char **atts, const string &attname) const throw(Exception);
     int getIntAttribute(const char **atts, const string &attname, int defval) const;
     // returns attribute value as long
-    long getLongAttribute(const char **atts, const string &attname) const;
+    long getLongAttribute(const char **atts, const string &attname) const throw(Exception);
     long getLongAttribute(const char **atts, const string &attname, long defval) const;
     // returns attribute value as double
-    double getDoubleAttribute(const char **atts, const string &attname) const;
+    double getDoubleAttribute(const char **atts, const string &attname) const throw(Exception);
     double getDoubleAttribute(const char **atts, const string &attname, double defval) const;
     // returns attribute value as date
-    Date getDateAttribute(const char **atts, const string &attname) const;
+    Date getDateAttribute(const char **atts, const string &attname) const throw(Exception);
     Date getDateAttribute(const char **atts, const string &attname, const Date &defval) const;
     // returns attribute value as boolean
-    bool getBooleanAttribute(const char **atts, const string &attname) const;
+    bool getBooleanAttribute(const char **atts, const string &attname) const throw(Exception);
     bool getBooleanAttribute(const char **atts, const string &attname, bool defval) const;
 
   protected:

@@ -100,11 +100,9 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   else if (isEqual(name_,"belongs-to"))
   {
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
-    if (ssegmentation == NULL) throw Exception("attribute 'segmentation' not found");
     int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    if (ssegment == NULL) throw Exception("attribute 'segment' not found");
     int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
@@ -115,16 +113,14 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
     id = getStringAttribute(attributes, "id");
 
     str = getAttributeValue(attributes, "rating");
-    if (str == NULL) throw Exception("attribute 'rating' not found");
     irating = ratings->getIndex(str);
     if (irating < 0) throw Exception("rating not found");
 
     str = getAttributeValue(attributes, "sector");
-    if (str == NULL) throw Exception("attribute 'sector' not found");
     isector = sectors->getIndex(str);
     if (isector < 0) throw Exception("sector not found");
 
-    str = getAttributeValue(attributes, "recovery");
+    str = getAttributeValue(attributes, "recovery", NULL);
     if (str != NULL) {
       recovery = Recovery(str);
     }

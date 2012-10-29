@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <cstdio>
+#include <cctype>
 #include <expat.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Parser.hpp"
@@ -80,7 +81,7 @@ void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char 
   // default simple rule: character data is not allowed
   for(int i=0; i<len; i++)
   {
-    if (s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
+    if (!isspace(s[i]))
     {
       throw Exception("unexpected text parsing xml");
     }
@@ -90,7 +91,7 @@ void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char 
 //===========================================================================
 // getAttributeValue
 //===========================================================================
-const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const
+const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname) const throw(Exception)
 {
   for (int i=0; atts[i]; i+=2)
   {
@@ -100,24 +101,32 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
     }
   }
 
-  return NULL;
+  throw Exception("attribute '" + attname + "' not found");
+}
+
+//===========================================================================
+// getAttributeValue
+//===========================================================================
+const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const string &attname, const char *defval) const
+{
+  for (int i=0; atts[i]; i+=2)
+  {
+    if (strcmp(attname.c_str(),atts[i]) == 0)
+    {
+      return atts[i+1];
+    }
+  }
+
+  return defval;
 }
 
 //===========================================================================
 // getStringAttribute
 //===========================================================================
-string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const string &attname) const
+string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return string(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return string(val);
 }
 
 //===========================================================================
@@ -125,7 +134,7 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const str
 //===========================================================================
 string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const string &attname, const string &defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {
@@ -140,18 +149,10 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const str
 //===========================================================================
 // getIntAttribute
 //===========================================================================
-int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &attname) const
+int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return Parser::intValue(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return Parser::intValue(val);
 }
 
 //===========================================================================
@@ -159,7 +160,7 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &a
 //===========================================================================
 int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &attname, int defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {
@@ -174,18 +175,10 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const string &a
 //===========================================================================
 // getLongAttribute
 //===========================================================================
-long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string &attname) const
+long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return Parser::longValue(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return Parser::longValue(val);
 }
 
 //===========================================================================
@@ -193,7 +186,7 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string 
 //===========================================================================
 long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string &attname, long defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {
@@ -208,18 +201,10 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const string 
 //===========================================================================
 // getDoubleAttribute
 //===========================================================================
-double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const string &attname) const
+double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return Parser::doubleValue(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return Parser::doubleValue(val);
 }
 
 //===========================================================================
@@ -227,7 +212,7 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const str
 //===========================================================================
 double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const string &attname, double defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {
@@ -242,18 +227,10 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const str
 //===========================================================================
 // getDateAttribute
 //===========================================================================
-Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string &attname) const
+Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return Parser::dateValue(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return Parser::dateValue(val);
 }
 
 //===========================================================================
@@ -261,7 +238,7 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string 
 //===========================================================================
 Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string &attname, const Date &defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {
@@ -276,25 +253,18 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const string 
 //===========================================================================
 // getBooleanAttribute
 //===========================================================================
-bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const string &attname) const
+bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const string &attname) const throw(Exception)
 {
   const char *val = getAttributeValue(atts, attname);
-
-  if (val != NULL)
-  {
-    return Parser::boolValue(val);
-  }
-  else
-  {
-    throw Exception("attribute '" + attname + "' not found");
-  }
+  return Parser::boolValue(val);
 }
+
 //===========================================================================
 // getBooleanAttribute
 //===========================================================================
 bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const string &attname, bool defval) const
 {
-  const char *val = getAttributeValue(atts, attname);
+  const char *val = getAttributeValue(atts, attname, NULL);
 
   if (val != NULL)
   {

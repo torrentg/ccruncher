@@ -29,9 +29,10 @@
 #include <string>
 #include <vector>
 #include <gsl/gsl_spline.h>
+#include "params/Ratings.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "params/Ratings.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -48,13 +49,13 @@ class DefaultProbabilities : public ExpatHandlers
 
     struct pd
     {
-      int month;
+      int day;
       double prob;
       // constructor
-      pd(int a, double x) : month(a), prob(x) {}
+      pd(int d, double p) : day(d), prob(p) {}
       // less-than operator
       bool operator < (const pd &obj) const {
-       return month < obj.month;
+       return day < obj.day;
       }
     };
 
@@ -67,6 +68,8 @@ class DefaultProbabilities : public ExpatHandlers
 
   private:
 
+    // initial date
+    Date date;
     // default probabilities for each rating
     vector<vector<pd> > ddata;
     // ratings table
@@ -83,7 +86,7 @@ class DefaultProbabilities : public ExpatHandlers
   private:
 
     // insert a data value
-    void insertValue(const string &r1, int t, double val) throw(Exception);
+    void insertValue(const string &r1, const Date &t, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
     // set splines
@@ -111,13 +114,17 @@ class DefaultProbabilities : public ExpatHandlers
     // defaults constructor
     DefaultProbabilities();
     // constructor
-    DefaultProbabilities(const Ratings &) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
     // constructor
-    DefaultProbabilities(const Ratings &, const vector<int> &imonths, const vector<vector<double> > &values) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d, const vector<Date> &dates, const vector<vector<double> > &values) throw(Exception);
     // destructor
     ~DefaultProbabilities();
     // returns ratings size
     int size() const;
+    // set date
+    void setDate(const Date &);
+    // return date
+    Date getDate() const;
     // set ratings
     void setRatings(const Ratings &) throw(Exception);
     // return ratings
@@ -128,8 +135,8 @@ class DefaultProbabilities : public ExpatHandlers
     double evalue(int irating, double t) const;
     // evalue pd inverse for irating at t
     double inverse(int irating, double val) const;
-    // return minimal defined time (in months)
-    int getMinCommonTime() const;
+    // return minimal common time
+    Date getMinCommonTime() const;
     // return type of interpolation
     string getInterpolationType(int i) const;
     // serialize object content as xml
