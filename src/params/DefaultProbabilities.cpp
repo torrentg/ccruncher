@@ -427,6 +427,15 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
 }
 
 //===========================================================================
+// evalue pd[irating] at date t
+// return probability, a value in [0,1]
+//===========================================================================
+double ccruncher::DefaultProbabilities::evalue(int irating, const Date &t) const
+{
+  return evalue(irating, t-date);
+}
+
+//===========================================================================
 // evalue inv_pd[irating][prob], where prob is the probability (value in [0,1])
 // returns the default time in days
 // obs: inverse of a spline isn't a spline
@@ -439,7 +448,6 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
   assert(!splines.empty() && !accels.empty());
   assert(splines.size() == accels.size());
   assert(irating <= 0 && irating < ratings.size());
-  assert(0 <= t);
 
   // if default rating
   if (irating == indexdefault) {
@@ -475,13 +483,15 @@ double ccruncher::DefaultProbabilities::f(double x, void *params)
   fparams *p = (fparams *) params;
   if (x <= p->spline->x[0]) {
     double x0 = p->spline->x[0];
+    double y0 = p->spline->y[0];
     double deriv = gsl_spline_eval_deriv(p->spline, x0, p->accel);
-    return x0 + deriv*(x-x0);
+    return y0 + deriv*(x-x0) - p->y;
   }
   else if (p->spline->x[p->spline->size-1] <= x) {
     double x1 = p->spline->x[p->spline->size-1];
+    double y1 = p->spline->y[p->spline->size-1];
     double deriv = gsl_spline_eval_deriv(p->spline, x1, p->accel);
-    return x1 + deriv*(x-x1);
+    return y1 + deriv*(x-x1) - p->y;
   }
   else {
     return gsl_spline_eval(p->spline, x, p->accel) - p->y;
@@ -580,7 +590,12 @@ double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, doub
 
   gsl_root_fdfsolver_free(solver);
 
-  return root;
+  if (iter < MAX_ITER_NEWTON) {
+    return root;
+  }
+  else {
+    return inverse_linear(spline, y, accel);
+  }
 }
 
 //===========================================================================

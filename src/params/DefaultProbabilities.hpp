@@ -133,6 +133,8 @@ class DefaultProbabilities : public ExpatHandlers
     int getIndexDefault() const;
     // evalue pd for irating at t
     double evalue(int irating, double t) const;
+    // evalue pd for irating at t
+    double evalue(int irating, const Date &t) const;
     // evalue pd inverse for irating at t
     double inverse(int irating, double val) const;
     // return minimal common time
