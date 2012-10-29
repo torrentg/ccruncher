@@ -101,8 +101,7 @@ if test x$debug = xtrue ; then
   CXXFLAGS="-g -Wall -Wextra -Wshadow"
   AC_SUBST([LDFLAGS], [-rdynamic])
 else
-  CXXFLAGS="-O2 -mtune=native"
-  AC_DEFINE([NDEBUG], 1, [Assertions are disabled when this is defined.])
+  CXXFLAGS="-O2 -mtune=native -DNDEBUG"
 fi
 
 dnl -------------------------------------------------------------

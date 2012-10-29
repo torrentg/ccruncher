@@ -24,26 +24,46 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_cdf.h>
 #include "kernel/Inverse.hpp"
+#include "utils/Format.hpp"
 #include <cassert>
 
-// --------------------------------------------------------------------------
+#define NBREAKS 100
 
-#define EPSILON 1e-10
+//===========================================================================
+// default constructor
+//===========================================================================
+ccruncher::Inverse::Inverse()
+{
+  ndf = NAN;
+  t0 = NAD;
+  t1 = NAD;
+}
 
 //===========================================================================
 // constructor
+// if ndf <= 0 then gaussian, t-Student otherwise
 //===========================================================================
-ccruncher::Inverse::Inverse(double ndf_, Date t0_, Date t1_, const Survivals &survivals) throw(Exception)
+ccruncher::Inverse::Inverse(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
 {
-  assert(t0 < t1);
-  assert(2.0 <= ndf);
+  init(ndf_, maxdate, dprobs);
+}
 
+//===========================================================================
+// initialize
+// if ndf <= 0 then gaussian, t-Student otherwise
+//===========================================================================
+void ccruncher::Inverse::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
+{
   ndf = ndf_;
-  t0 = t0_;
-  t1 = t1_;
+  t0 = dprobs.getDate();
+  t1 = maxdate;
 
-  setRanges(survivals);
-  setCoefs(survivals);
+  if (t1 <= t0) {
+    throw Exception("maxdate out of range");
+  }
+
+  setRanges(dprobs);
+  setCoefs(dprobs);
 }
 
 //===========================================================================
@@ -52,30 +72,31 @@ ccruncher::Inverse::Inverse(double ndf_, Date t0_, Date t1_, const Survivals &su
 //   * invF(dnorm(1 day))
 //   * invF(dnorm(t1-t0))
 // where:
-//   * invF is the inverse of the survival function
+//   * invF is the inverse of the probabilities of default function
 //   * dnorm is the CDF of the normal o t-Student dist
 //   * t1-t0 are the days from t0 (starting date) to t1 (ending date)
 //===========================================================================
-void ccruncher::Inverse::setRanges(const Survivals &survivals)
+void ccruncher::Inverse::setRanges(const DefaultProbabilities &dprobs) throw(Exception)
 {
-  int nratings = survivals.getRatings().size();
+  int nratings = dprobs.getRatings().size();
   range.resize(nratings, pair<double,double>(NAN,NAN));
 
   for(int irating=0; irating<nratings; irating++)
   {
-    if (irating == survivals.getIndexDefault()) {
+    if (irating == dprobs.getIndexDefault()) {
       // 'default' rating -> range = [NAN,NAN]
       continue;
     }
 
-    //TODO: modify Survivals to CDF
-    //TODO: modify survivals to operate with days (not months)
-    //TODO: remove from survival fillholes, etc.
-    double prob1 = survivals.evalue(irating, 1);
+    if (dprobs.getMaxDate(irating) < t1) {
+      throw Exception("dprob[" + dprobs.getRatings().getName(irating) + "] undefined at " + Format::toString(t1));
+    }
+
+    double prob1 = dprobs.evalue(irating, 1);
     if (ndf <= 0.0) range[irating].first = gsl_cdf_ugaussian_Pinv(prob1);
     else range[irating].first = gsl_cdf_tdist_Pinv(prob1, ndf);
 
-    double prob2 = survivals.evalue(irating, t1-t0);
+    double prob2 = dprobs.evalue(irating, t1-t0);
     if (ndf <= 0.0) range[irating].second = gsl_cdf_ugaussian_Pinv(prob2);
     else range[irating].second = gsl_cdf_tdist_Pinv(prob2, ndf);
 
@@ -86,19 +107,20 @@ void ccruncher::Inverse::setRanges(const Survivals &survivals)
 //===========================================================================
 // set interpolation coefficients
 //===========================================================================
-void ccruncher::Inverse::setCoefs(const Survivals &survivals) throw(Exception)
+void ccruncher::Inverse::setCoefs(const DefaultProbabilities &dprobs) throw(Exception)
 {
-  int nratings = survivals.getRatings().size();
+  int nratings = dprobs.getRatings().size();
   data.resize(nratings);
 
   for(int irating=0; irating<nratings; irating++)
   {
-    if (irating == survivals.getIndexDefault()) {
+    if (irating == dprobs.getIndexDefault()) {
       // 'default' rating -> data[irating].size() = 0
       continue;
     }
 
-    data[irating] = getCoefs(irating, survivals, 100);
+    data[irating] = getCoefs(irating, dprobs, NBREAKS);
+    //TODO: adjust the number of breaks in order to grant precision
   }
 }
 
@@ -107,16 +129,18 @@ void ccruncher::Inverse::setCoefs(const Survivals &survivals) throw(Exception)
 // n: number of breaks (eg. n=3 -> 4 points -included extremals-)
 // we don't use gsl splines because we try to minize memory footprint
 //===========================================================================
-vector<ccruncher::Inverse::csc> ccruncher::Inverse::getCoefs(int irating, const Survivals &survivals, int n) throw(Exception)
+vector<ccruncher::Inverse::csc> ccruncher::Inverse::getCoefs(int irating, const DefaultProbabilities &dprobs, int n) throw(Exception)
 {
   assert(n >= 3);
   // creating equiespaced points
   vector<double> y(n+1, NAN);
-  y[0] = 1;
-  for(int i=1; i<n-1; i++)
+  y[0] = 1.0;
+  for(int i=1; i<n; i++)
   {
     double x = range[irating].first + i*(range[irating].second-range[irating].first)/(double)n;
-    y[i] = survivals.inverse(irating, gsl_cdf_tdist_P(x, ndf));
+    if (ndf <= 0.0) x = gsl_cdf_ugaussian_P(x);
+    else x = gsl_cdf_tdist_P(x, ndf);
+    y[i] = dprobs.inverse(irating, x);
   }
   y.back() = (double)(t1-t0);
 
