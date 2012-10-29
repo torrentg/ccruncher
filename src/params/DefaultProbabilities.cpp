@@ -161,7 +161,7 @@ int ccruncher::DefaultProbabilities::size() const
 string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
 {
   assert(!splines.empty());
-  assert(i < splines.size());
+  assert(i < (int)splines.size());
   if (i == indexdefault) {
     return "none";
   }
@@ -333,7 +333,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
     {
       if (ddata[i][j].prob < ddata[i][j-1].prob)
       {
-        string msg = "dprob[" + ratings.getName(i) + "] is not monotonically increasing at t=" + Format::toString(ddata[i][j].day + "D");
+        string msg = "dprob[" + ratings.getName(i) + "] is not monotonically increasing at t=" + Format::toString(ddata[i][j].day) + "D";
         throw Exception(msg);
       }
     }
@@ -405,7 +405,7 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
 {
   assert(!splines.empty() && !accels.empty());
   assert(splines.size() == accels.size());
-  assert(irating <= 0 && irating < ratings.size());
+  assert(0 <= irating && irating < ratings.size());
 
   // if default rating
   if (irating == indexdefault) {
@@ -447,7 +447,7 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
 {
   assert(!splines.empty() && !accels.empty());
   assert(splines.size() == accels.size());
-  assert(irating <= 0 && irating < ratings.size());
+  assert(0 <= irating && irating < ratings.size());
 
   // if default rating
   if (irating == indexdefault) {
@@ -627,25 +627,17 @@ string ccruncher::DefaultProbabilities::getXML(int ilevel) throw(Exception)
 }
 
 //===========================================================================
-// getMinCommonTime
+// getMaxDate
 //===========================================================================
-Date ccruncher::DefaultProbabilities::getMinCommonTime() const
+Date ccruncher::DefaultProbabilities::getMaxDate(int irating) const
 {
-  int day=INT_MAX;
-
-  // searching min time
-  for(int i=0; i<ratings.size(); i++)
-  {
-    if (i != indexdefault)
-    {
-      if (ddata[i].back().day < day)
-      {
-        day = ddata[i].back().day;
-      }
-    }
+  assert(date != NAD);
+  assert(0 <= irating && irating < ratings.size());
+  if (irating < 0 || ratings.size() <= irating) {
+    return NAD;
   }
-
-  // exit function
-  return date+day;
+  else {
+    return date + ddata[irating].back().day;
+  }
 }
 

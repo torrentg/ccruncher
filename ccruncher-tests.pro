@@ -33,6 +33,7 @@ HEADERS += \
     src/kernel/SimulatedDataTest.hpp \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
+    src/kernel/InverseTest.hpp \
     src/math/PowMatrix.hpp \
     src/math/Copula.hpp \
     src/math/FastTStudentCdf.hpp \
@@ -108,6 +109,7 @@ SOURCES += \
     src/kernel/SimulatedDataTest.cpp \
     src/kernel/IDataTest.cpp \
     src/kernel/Inverse.cpp \
+    src/kernel/InverseTest.cpp \
     src/math/PowMatrix.cpp \
     src/math/FastTStudentCdf.cpp \
     src/math/GMFCopula.cpp \

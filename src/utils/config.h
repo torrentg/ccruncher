@@ -145,9 +145,6 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #define HAVE__BOOL 1
 
-/* Assertions are disabled when this is defined. */
-#define NDEBUG 1
-
 /* Name of package */
 #define PACKAGE "ccruncher"
 

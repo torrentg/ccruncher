@@ -6,7 +6,7 @@
 #include "utils/config.h"
 #include <vector>
 #include <cmath>
-#include "params/Survivals.hpp"
+#include "params/DefaultProbabilities.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 #include <cassert>
@@ -46,48 +46,54 @@ class Inverse
   private:
 
     // set ranges
-    void setRanges(const Survivals &survivals);
+    void setRanges(const DefaultProbabilities &dprobs) throw(Exception);
     // set interpolation coefficients
-    void setCoefs(const Survivals &survivals) throw(Exception);
+    void setCoefs(const DefaultProbabilities &dprobs) throw(Exception);
     // set interpolation coefficients
-    vector<csc> getCoefs(int irating, const Survivals &survivals, int nbreaks) throw(Exception);
+    vector<csc> getCoefs(int irating, const DefaultProbabilities &dprobs, int nbreaks) throw(Exception);
 
   public:
 
+    // default constructor
+    Inverse();
     // constructor
-    Inverse(double ndf, Date t0, Date t1, const Survivals &) throw(Exception);
-    // evalue
-    inline Date evalue(int irating, double val) const;
+    Inverse(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    // initialize
+    void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    // evalue (return days from t0)
+    inline double evalueAsNum(int irating, double val) const;
+    // evalue (return date)
+    inline Date evalueAsDate(int irating, double val) const;
 
 };
 
 //---------------------------------------------------------------------------
 
 //===========================================================================
-// evalue
+// evalueAsNum
 //===========================================================================
-Date ccruncher::Inverse::evalue(int irating, double val) const
+double ccruncher::Inverse::evalueAsNum(int irating, double val) const
 {
   assert(!isnan(range[irating].first) && !isnan(range[irating].second));
   assert(data[irating].size() > 0);
 
-  if (range[irating].second < val)
+  if (range[irating].second <= val)
   {
     // defaulted in range (t1,inf)
-    return t1+1;
+    return (t1-t0)+1.0;
   }
-  else if (val <= range[irating].first)
+  else if (val < range[irating].first)
   {
     // defaulted in range [t0,t0+1]
-    return t0+1;
+    return 1.0;
   }
   else
   {
     // defaulted in range (t0+1,t1]
-    double val = data[irating].size()*(val-range[irating].first)/(range[irating].second-range[irating].first);
+    double aux = data[irating].size()*(val-range[irating].first)/(range[irating].second-range[irating].first);
     double intpart;
-    double x = modf(val, &intpart);
-    int pos = floor(intpart);
+    double x = modf(aux, &intpart);
+    size_t pos = intpart;
 
     assert(0 <= pos && pos < data[irating].size());
     assert(0.0 <= x && x <= 1.0);
@@ -95,11 +101,21 @@ Date ccruncher::Inverse::evalue(int irating, double val) const
     const double *a = data[irating][pos].coef;
     double days = a[0] + x*(a[1]+x*(a[2]+x*a[3]));
 
-    assert(1.0 <= days);
-
-    return t0 + (long)days;
+    assert(0.0 <= days);
+    return days;
   }
 }
+
+//===========================================================================
+// evalueAsDate
+//===========================================================================
+Date ccruncher::Inverse::evalueAsDate(int irating, double val) const
+{
+  double days = evalueAsNum(irating, val);
+  return t0 + (long)ceil(days);
+}
+
+//---------------------------------------------------------------------------
 
 }
 

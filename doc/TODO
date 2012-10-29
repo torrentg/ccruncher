@@ -9,6 +9,7 @@ Current works
   * update doc -> interest::t (allowed date)
   * update doc -> dprobs (att t, ifileref, samples, xsd, dtd)
   * rename values::at by values::t
+  * remove classes Survivals*
 
 Future works
 -------------------
