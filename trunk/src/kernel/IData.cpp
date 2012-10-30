@@ -217,6 +217,20 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &survivals, name_, attributes);
     }
   }
+  // section default probabilities
+  else if (isEqual(name_,"dprobs")) {
+    if (ratings.size() == 0) {
+      throw Exception("tag <dprobs> defined before <ratings> tag");
+    }
+    else if (dprobs.size() != 0) {
+      throw Exception("tag dprobs repeated");
+    }
+    else {
+      dprobs.setRatings(ratings);
+      dprobs.setDate(params.time0);
+      eppush(eu, &dprobs, name_, attributes);
+    }
+  }
   // section sectors
   else if (isEqual(name_,"sectors")) {
     if (sectors.size() != 0) {
@@ -326,6 +340,9 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"survivals")) {
     // nothing to do
   }
+  else if (isEqual(name_,"dprobs")) {
+    // nothing to do
+  }
   else if (isEqual(name_,"sectors")) {
     // nothing to do
   }
@@ -427,7 +444,7 @@ ccruncher::IData::~IData()
 //===========================================================================
 // getTitle
 //===========================================================================
-string & ccruncher::IData::getTitle()
+const string & ccruncher::IData::getTitle() const
 {
   return title;
 }
@@ -435,7 +452,7 @@ string & ccruncher::IData::getTitle()
 //===========================================================================
 // getDescription
 //===========================================================================
-string & ccruncher::IData::getDescription()
+const string & ccruncher::IData::getDescription() const
 {
   return description;
 }
@@ -481,6 +498,14 @@ Survivals &ccruncher::IData::getSurvivals()
 }
 
 //===========================================================================
+// getDefaultProbabilities
+//===========================================================================
+DefaultProbabilities &ccruncher::IData::getDefaultProbabilities()
+{
+  return dprobs;
+}
+
+//===========================================================================
 // getSectors
 //===========================================================================
 Sectors & ccruncher::IData::getSectors()
@@ -517,7 +542,16 @@ Portfolio & ccruncher::IData::getPortfolio()
 //===========================================================================
 bool ccruncher::IData::hasSurvivals() const
 {
-  if (survivals.size() != 0) return true;
+  if (survivals.size() > 0) return true;
+  else return false;
+}
+
+//===========================================================================
+// hasDefaultProbabilities
+//===========================================================================
+bool ccruncher::IData::hasDefaultProbabilities() const
+{
+  if (dprobs.size() > 0) return true;
   else return false;
 }
 

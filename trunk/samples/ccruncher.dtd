@@ -16,7 +16,7 @@
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
     (title?, description?, defines?, parameters, interest, ratings, 
-     (transitions|survivals), sectors, correlations, segmentations, 
+     (transitions|dprobs), sectors, correlations, segmentations, 
      portfolio)
 )>
 
@@ -109,16 +109,16 @@
 >
 
 <!-- .............................................................. -->
-<!--                         survivals                              -->
+<!--                           dprobs                               -->
 <!-- .............................................................. -->
-<!ELEMENT survivals (
-    svalue+
+<!ELEMENT dprobs (
+    dprob+
 )>
 
-<!ELEMENT svalue
+<!ELEMENT dprob
     EMPTY
 >
-<!ATTLIST svalue
+<!ATTLIST dprob
     rating IDREF #REQUIRED
     t CDATA #REQUIRED
     value CDATA #REQUIRED
