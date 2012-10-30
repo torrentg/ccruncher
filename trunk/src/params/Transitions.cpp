@@ -34,7 +34,6 @@
 //===========================================================================
 ccruncher::Transitions::Transitions()
 {
-  n = 0;
   period = -1;
   indexdefault = -1;
   rerror = 0.0;
@@ -71,12 +70,11 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector
 void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 {
   if (ratings_.size() <= 0) {
-    throw Exception("invalid transition matrix dimension (" + Format::toString(n) + " <= 0)");
+    throw Exception("ratings not found");
   }
 
   ratings = ratings_;
-  n = ratings.size();
-  matrix.assign(n, vector<double>(n, NAN));
+  matrix.assign(size(), vector<double>(size(), NAN));
 }
 
 //===========================================================================
@@ -84,7 +82,7 @@ void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 //===========================================================================
 int ccruncher::Transitions::size() const
 {
-  return n;
+  return ratings.size();
 }
 
 //===========================================================================
@@ -100,7 +98,7 @@ int ccruncher::Transitions::getPeriod() const
 //===========================================================================
 void ccruncher::Transitions::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
 {
-  assert(n >= 0);
+  assert(size() > 0);
 
   int row = ratings.getIndex(rating1);
   int col = ratings.getIndex(rating2);
@@ -177,9 +175,9 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 void ccruncher::Transitions::validate() throw(Exception)
 {
   // checking that all elements exists
-  for (int i=0;i<n;i++)
+  for (int i=0; i<size(); i++)
   {
-    for (int j=0;j<n;j++)
+    for (int j=0; j<size(); j++)
     {
       if (isnan(matrix[i][j]))
       {
@@ -189,11 +187,11 @@ void ccruncher::Transitions::validate() throw(Exception)
   }
 
   // checking that all rows sum 1
-  for (int i=0;i<n;i++)
+  for (int i=0; i<size(); i++)
   {
     double sum = 0.0;
 
-    for (int j=0;j<n;j++)
+    for (int j=0; j<size(); j++)
     {
       sum += matrix[i][j];
     }
@@ -207,7 +205,7 @@ void ccruncher::Transitions::validate() throw(Exception)
   // finding default rating
   indexdefault = -1;
 
-  for (int i=0;i<n;i++)
+  for (int i=0; i<size(); i++)
   {
     if (matrix[i][i] > (1.0-EPSILON) && matrix[i][i] < (1.0+EPSILON))
     {
@@ -238,29 +236,6 @@ int ccruncher::Transitions::getIndexDefault() const
 }
 
 //===========================================================================
-// given a rating and a random number in [0,1] return final rating
-// @param irating initial rating
-// @param val random number in [0,1]
-// @return final rating
-//===========================================================================
-int ccruncher::Transitions::evalue(const int irating, const double val) const
-{
-  double sum = 0.0;
-
-  for (int i=0;i<n;i++)
-  {
-    sum += matrix[irating][i];
-
-    if (val < sum)
-    {
-      return i;
-    }
-  }
-
-  return n-1;
-}
-
-//===========================================================================
 // getXML
 //===========================================================================
 string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
@@ -271,9 +246,9 @@ string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
 
   ret += spc1 + "<transitions period='" + Format::toString(period) + "' >\n";
 
-  for(int i=0;i<n;i++)
+  for(int i=0; i<size(); i++)
   {
-    for(int j=0;j<n;j++)
+    for(int j=0; j<size(); j++)
     {
       ret += spc2 + "<transition ";
       ret += "from='" + ratings.getName(i) + "' ";
@@ -297,14 +272,13 @@ string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
 //===========================================================================
 void ccruncher::Transitions::regularize() throw(Exception)
 {
-
   // computes the regularization error (sub-inf matrix norm)
   // note: regularized matrix has sub-inf norm = 1
   rerror = 0.0;
-  for(int i=0; i<n; i++)
+  for(int i=0; i<size(); i++)
   {
     double sum = 0.0;
-    for(int j=0; j<n; j++)
+    for(int j=0; j<size(); j++)
     {
       sum += abs(matrix[i][j]);
     }
@@ -315,7 +289,7 @@ void ccruncher::Transitions::regularize() throw(Exception)
   }
 
   // matrix regularization
-  for(int i=0; i<n; i++)
+  for(int i=0; i<size(); i++)
   {
     bool stop = false;
     double lambda = 0.0;
@@ -323,12 +297,12 @@ void ccruncher::Transitions::regularize() throw(Exception)
     {
       // step 1. find the row projection on the hyperplane
       lambda = 0.0;
-      for(int j=0; j<n; j++)
+      for(int j=0; j<size(); j++)
       {
         lambda += matrix[i][j];
       }
-      lambda = (lambda-1.0)/(double)(n);
-      for(int j=0; j<n; j++)
+      lambda = (lambda-1.0)/(double)(size());
+      for(int j=0; j<size(); j++)
       {
         if (matrix[i][j] != 0.0)
         {
@@ -338,7 +312,7 @@ void ccruncher::Transitions::regularize() throw(Exception)
 
       // step 2 + step 3'. checking termination criteria
       stop = true;
-      for(int j=0; j<n; j++)
+      for(int j=0; j<size(); j++)
       {
         if (matrix[i][j] < 0.0) 
         {
@@ -378,6 +352,7 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<double> > &ret) const throw(Exception)
 {
   // making assertions
+  assert(indexdefault >= 0);
   assert(numrows >= 0);
   assert(numrows < 15000);
   assert(steplength >= 0);
@@ -387,18 +362,18 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
   Transitions tmone = scale(steplength);
 
   // building Id-matrix of size nxn
-  vector<vector<double> > aux(n, vector<double>(n,0.0));
-  for(int i=0; i<n; i++) {
+  vector<vector<double> > aux(size(), vector<double>(size(),0.0));
+  for(int i=0; i<size(); i++) {
     aux[i][i] = 1.0;
   }
 
   // auxiliary matrix
-  vector<vector<double> > tmp(n, vector<double>(n,0.0));
+  vector<vector<double> > tmp(size(), vector<double>(size(),0.0));
 
   // filling CDFR(.,0)
-  for(int i=0; i<n; i++)
+  for(int i=0; i<size(); i++)
   {
-    ret[i][0] = aux[i][n-1];
+    ret[i][0] = aux[i][indexdefault];
   }
 
   // filling CDFR(.,t)
@@ -406,12 +381,12 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
   {
     prod(aux, tmone.matrix, tmp);
 
-    for(int i=0; i<n; i++)
+    for(int i=0; i<size(); i++)
     {
-      ret[i][t] = tmp[i][n-1];
+      ret[i][t] = tmp[i][indexdefault];
     }
 
-    for(int i=0; i<n; i++) for(int j=0;j<n;j++) aux[i][j] = tmp[i][j];
+    for(int i=0; i<size(); i++) for(int j=0; j<size(); j++) aux[i][j] = tmp[i][j];
   }
 }
 
@@ -421,25 +396,41 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
 Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) const throw(Exception)
 {
   // computing CDFR
-  vector<vector<double> > aux(n, vector<double>(numrows,NAN));
-  cdfr(steplength, numrows, aux);
+  vector<vector<double> > values(size(), vector<double>(numrows,NAN));
+  cdfr(steplength, numrows, values);
 
   // building survival function
-  for(int i=0; i<n; i++)
+  for(int i=0; i<size(); i++)
   {
     for(int j=0; j<numrows; j++)
     {
-      aux[i][j] = 1.0 - aux[i][j];
-      if (aux[i][j] < 0.0) aux[i][j] = 0.0;
-      if (aux[i][j] > 1.0) aux[i][j] = 1.0;
+      values[i][j] = 1.0 - values[i][j];
+      if (values[i][j] < 0.0) values[i][j] = 0.0;
+      if (values[i][j] > 1.0) values[i][j] = 1.0;
     }
   }
 
   // creating survival function object
   vector<int> itime(numrows);
   for(int i=0; i<numrows; i++) itime[i] = i;
-  Survivals ret(ratings, itime, aux);
+  Survivals ret(ratings, itime, values);
   return ret; 
+}
+
+//===========================================================================
+// computes default probabilities functions related to this transition matrix
+//===========================================================================
+DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date, int steplength, int numrows) const throw(Exception)
+{
+  // computing CDFR
+  vector<vector<double> > values(size(), vector<double>(numrows,NAN));
+  cdfr(steplength, numrows, values);
+
+  // creating dprobs function object
+  vector<Date> dates(numrows);
+  for(int i=0; i<numrows; i++) dates[i] = add(date, i, 'M');
+  DefaultProbabilities ret(ratings, date, dates, values);
+  return ret;
 }
 
 //===========================================================================
