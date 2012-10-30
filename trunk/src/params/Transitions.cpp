@@ -353,9 +353,9 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
 {
   // making assertions
   assert(indexdefault >= 0);
-  assert(numrows >= 0);
+  assert(numrows > 1);
   assert(numrows < 15000);
-  assert(steplength >= 0);
+  assert(steplength > 0);
   assert(steplength < 15000);
 
   // building 1-year transition matrix
@@ -412,7 +412,7 @@ Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) cons
 
   // creating survival function object
   vector<int> itime(numrows);
-  for(int i=0; i<numrows; i++) itime[i] = i;
+  for(int i=0; i<numrows; i++) itime[i] = i*steplength;
   Survivals ret(ratings, itime, values);
   return ret; 
 }
@@ -428,7 +428,7 @@ DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date 
 
   // creating dprobs function object
   vector<Date> dates(numrows);
-  for(int i=0; i<numrows; i++) dates[i] = add(date, i, 'M');
+  for(int i=0; i<numrows; i++) dates[i] = add(date, i*steplength, 'M');
   DefaultProbabilities ret(ratings, date, dates, values);
   return ret;
 }

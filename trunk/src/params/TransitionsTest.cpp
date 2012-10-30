@@ -397,7 +397,6 @@ void ccruncher_test::TransitionsTest::test5()
   }
 }
 
-
 //===========================================================================
 // test6
 // checks getSurvivals method
@@ -436,5 +435,46 @@ void ccruncher_test::TransitionsTest::test6()
   {
     double u = 0.9 + 0.001*i;
     ASSERT(survivals.inverse(0,u)<=12.0);
+  }
+}
+
+//===========================================================================
+// test7
+// checks getDefaultProbabilities method
+//===========================================================================
+void ccruncher_test::TransitionsTest::test7()
+{
+  string xmlcontent1 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <ratings>\n\
+      <rating name='A' description='alive'/>\n\
+      <rating name='E' description='dead'/>\n\
+    </ratings>";
+
+  string xmlcontent2 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <transitions period='12'>\n\
+      <transition from='A' to='A' value='90%'/>\n\
+      <transition from='A' to='E' value='10%'/>\n\
+      <transition from='E' to='A' value='0%'/>\n\
+      <transition from='E' to='E' value='100%'/>\n\
+    </transitions>";
+
+  // creating objects
+  ExpatParser xmlparser;
+  Ratings ratings;
+  xmlparser.parse(xmlcontent1, &ratings);
+  Transitions transitions(ratings);
+  xmlparser.parse(xmlcontent2, &transitions);
+  DefaultProbabilities dprobs = transitions.getDefaultProbabilities(Date("1/1/2010"), 1, transitions.getPeriod()+1);
+
+  for(int i=0; i<100; i++)
+  {
+    double u = 0.0 + 0.001*i - (i==0?0.0:1e-12);
+    ASSERT(dprobs.inverse(0,u)<=365.0);
+  }
+
+  for(int i=0; i<100; i++)
+  {
+    double u = 0.1 + 0.001*i;
+    ASSERT(dprobs.inverse(0,u)>365.0);
   }
 }

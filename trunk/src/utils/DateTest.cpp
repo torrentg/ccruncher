@@ -255,6 +255,8 @@ void ccruncher_test::DateTest::test_distances()
   ASSERT_THROW(diff(date0, date1, 'm'));
   ASSERT_THROW(diff(date0, date1, 'y'));
   ASSERT_THROW(diff(date0, date1, 'Z'));
+
+  ASSERT_EQUALS(Date("1/1/2012")-Date("1/1/2011"), 365L);
 }
 
 //===========================================================================
