@@ -189,9 +189,9 @@
       <tr class="b">
         <td class="c1">time.0</td>
         <td class="c2">
-          Starting date of the simulation. Interest curve, initial obligors credit ratings, 
-          transition matrix and survival functions are relative to this date. The format of
-          this attribute is: DD/MM/YYYY.
+          Starting date of the simulation. Interest curve, debtors' rating, 
+          transition matrix and default probabilities functions are relative to 
+          this date. The format of this attribute is: DD/MM/YYYY.
         </td>
         <td class="c3">date</td>
       </tr>
@@ -224,7 +224,7 @@
       <tr class="b">
         <td class="c1">copula.type</td>
         <td class="c2">
-          Type of copula used to generate correlated survival times. 
+          Type of copula used to generate correlated default times. 
           Two families of copulas are implemented: 
           <ul>
             <li>
@@ -327,12 +327,13 @@
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
-          Increment from the initial date of the interest rate curve. Use suffix 'D'
+          Time. Can be a date (in format 'DD/MM/YYYY') or an 
+          increment from the initial date <i>time.0</i>. Use suffix 'D'
           to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
           suffix 'Y' to indicate years (eg. 15Y). If a value between two given dates is 
           needed, the value will be linearly interpolated.
         </td>
-        <td class="c3">int+[DMY]</td>
+        <td class="c3">date <br/>int[DMY]</td>
       </tr>
       <tr class="a">
         <td class="c1">r</td>
@@ -408,8 +409,9 @@
       checks that the sum of elements of each row is 1.0. Also, ccruncher checks
       that only one row with all probability concentrated in a unique
       element exists. The number of elements to be established is NxN, where N is the 
-      number of credit ratings. Alternatively, you can define the survival functions instead 
-	  of a transition matrix. See <a href="#notes">additional notes</a> for more information.
+      number of credit ratings. Alternatively, you can define the default probability
+      functions instead of a transition matrix. See <a href="#notes">additional notes</a> 
+      for more information.
 	</p>
 
     <h3>Example</h3>
@@ -1020,7 +1022,7 @@
       <tr class="b">
         <td class="c1">date</td>
         <td class="c2">
-          Date (in format DD/MM/YYYY) from wich there is credit risk, eg. bond
+          Date (in format 'DD/MM/YYYY') from wich there is credit risk, eg. bond
           buy date or loan signature.
         </td>
         <td class="c3">date</td>
@@ -1051,7 +1053,7 @@
       <tr class="a">
         <td class="c1">at</td>
         <td class="c2">
-          Date (in format DD/MM/YYYY) where the values take place.
+          Date (in format 'DD/MM/YYYY') where the values take place.
         </td>
         <td class="c3">date</td>
       </tr>
@@ -1094,60 +1096,67 @@
     <h1>Additional Notes</h1>
 
 <!-- ==================================================== -->
-<!--    survival section                                  -->
+<!--    default probabilities section                     -->
 <!-- ==================================================== -->
-    <a name="survival"></a>
-    <h2>Section Survival Function</h2>
+    <a name="dprobs"></a>
+    <h2>Default Probability Functions</h2>
 
     <p>
-      The survival data is often not available, and where it is available, it 
-      is often inconsistent or not representative. For this reason it is better
-      to work with the transition matrix. Ccruncher will take care to convert the
-      transition matrix in the corresponding survival functions. This implies that 
+      Default probabilities along the time are difficult to obtain, for 
+      this reason it is better to work with the transition matrix. 
+      Ccruncher will take care to convert the transition matrix in the 
+      corresponding default probability functions. This implies that 
       the credit rating transitions follow a Markov model. Sometimes 
       this assumption is not acceptable because we desire that transition 
-      probabilities change over the simulation period or we plan to do stress tests over 
-      the default probabilities. In these cases it recommended to define the 
-      survival functions explicitly.
+      probabilities change over the simulation period or we plan to do 
+      stress tests over the default probabilities. In these cases you can 
+      define the default probability functions explicitly.
     </p>
 
     <p>
-      You must define either a transition matrix or a survival function, but not both.
-      This section contains the survival function for each credit rating. If this 
-      section is non provided, the survival function will be computed using 
-      the transition matrix. You don't need to fill all time values. The survival 
-      function is monotonously decreasing and has a value of 1 when time is 0 
-      for all credit ratings other than default. The survival function of the default 
-      rating is always 0.
+      You must define either a transition matrix or the default probability
+      functions, but not both. The <code>dprobs</code> section contains the 
+      default probability function for each rating. If this 
+      section is non provided, the default probability functions will be computed 
+      using the transition matrix. You don't need to fill all time values. 
+      For all credit ratings (distinct than the defaulted rating) the default 
+      probability function is monotonously increasing, with a value of 0 at time 0, 
+      and a value of 1 at time &infin;. The default probability function of 
+      the defaulted rating is always 1.
+    </p>
+    <p>
+      The default probability functions are approximated using cubic splines
+      when possible (minimum number of available points, monotone increasing) 
+      and linear splines when not.
     </p>
 
     <h3>Example</h3>
 
     <pre>
 
-  &lt;survivals&gt;
-    &lt;svalue rating="AAA" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="AA" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="A" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="BBB" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="BB" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="B" t="0" value="100.0%"/&gt;
-    &lt;svalue rating="CCC" t="0" value="0.0%"/&gt;
-    &lt;svalue rating="D" t="0" value="0.0%"/&gt;
+  &lt;dprobs&gt;
+    &lt;dprob rating="AAA" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="AA" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="A" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="BBB" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="BB" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="B" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="CCC" t="0" value="0.0%"/&gt;
+    &lt;dprob rating="D" t="0" value="100.0%"/&gt;
 
-    &lt;svalue rating="AAA" t="6" value="99.96%"/&gt;
-    &lt;svalue rating="AA" t="6" value="98.54%"/&gt;
-    &lt;svalue rating="A" t="6" value="97.19%"/&gt;
-    &lt;svalue rating="BBB" t="6" value="95.98%"/&gt;
-    &lt;svalue rating="BB" t="6" value="92.63%"/&gt;
-    &lt;svalue rating="B" t="6" value="85.72%"/&gt;
-    &lt;svalue rating="CCC" t="6" value="78.88%"/&gt;
-    &lt;svalue rating="D" t="6" value="0.0%"/&gt;
+    &lt;dprob rating="AAA" t="6" value="0.04%"/&gt;
+    &lt;dprob rating="AA" t="6" value="1.46%"/&gt;
+    &lt;dprob rating="A" t="6" value="2.81%"/&gt;
+    &lt;dprob rating="BBB" t="6" value="4.02%"/&gt;
+    &lt;dprob rating="BB" t="6" value="7.37%"/&gt;
+    &lt;dprob rating="B" t="6" value="14.28%"/&gt;
+    &lt;dprob rating="CCC" t="6" value="21.12%"/&gt;
+    &lt;dprob rating="D" t="6" value="100.0%"/&gt;
     ...
-  &lt;/survivals&gt;
+  &lt;/dprobs&gt;
     </pre>
 
-    <h3>Svalue Attributes</h3>
+    <h3>Dprob Attributes</h3>
 
     <table cellpadding="3">
       <tr class="b">
@@ -1166,15 +1175,18 @@
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
-          Time (in months) from starting date <i>time.0</i>.
+          Time. Can be a date (in format 'DD/MM/YYYY') bigger or equal than <i>time.0</i> 
+          or an interval from starting date <i>time.0</i>. Use suffix 'D'
+          to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
+          suffix 'Y' to indicate years (eg. 15Y).
         </td>
-        <td class="c3">int</td>
+        <td class="c3">date<br/>int[DMY]</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
         <td class="c2">
-          Probability that a obligor with initial rating <i>rating</i> 
-          survives (or: does not default) at time <i>t</i>. It must have a value 
+          Probability that an obligor with initial rating <i>rating</i> 
+          defaults in the time range <i>[0,t]</i>. It must have a value 
           between 0 and 1. The value can be set as percentage (eg. 5.3%) or 
           absolute value (eg. 0.053).
         </td>
@@ -1188,7 +1200,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 17-Oct-2012
+          Last modified: 30-Oct-2012
         </td>
       </tr></table>
     </div>

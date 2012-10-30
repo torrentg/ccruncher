@@ -59,7 +59,7 @@
 					<xsd:sequence>
 						<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
-								<xsd:attribute name="t" type="dateIncrement" use="required"/>
+								<xsd:attribute name="t" type="date_interval" use="required"/>
 								<xsd:attribute name="r" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
@@ -94,13 +94,13 @@
 						<xsd:attribute name="period" type="xsd:positiveInteger" use="required"/>
 					</xsd:complexType>
 				</xsd:element>
-				<xsd:element name="survivals" minOccurs="1" maxOccurs="1">
+				<xsd:element name="dprobs" minOccurs="1" maxOccurs="1">
 					<xsd:complexType>
 						<xsd:sequence>
-							<xsd:element name="svalue" minOccurs="1" maxOccurs="unbounded">
+							<xsd:element name="dprob" minOccurs="1" maxOccurs="unbounded">
 								<xsd:complexType>
 									<xsd:attribute name="rating" type="xsd:string" use="required"/>
-									<xsd:attribute name="t" type="xsd:positiveInteger" use="required"/>
+									<xsd:attribute name="t" type="date_interval" use="required"/>
 									<xsd:attribute name="value" type="double" use="required"/>
 								</xsd:complexType>
 							</xsd:element>
@@ -257,15 +257,30 @@
 				e.g. 1/1/2003, 25/07/1945, 12/3/2007
 			</xsd:documentation>
 		</xsd:annotation>
-		<xsd:union memberTypes="xsd:date">
-			<xsd:simpleType>
-				<xsd:restriction base="xsd:string">
-					<xsd:pattern value="[0-3]?[0-9]/[0-1]?[0-9]/[1-2][0-9]{3}" />
-				</xsd:restriction>
-			</xsd:simpleType>
-		</xsd:union>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-3]?[0-9]/[0-1]?[0-9]/[1-2][0-9]{3}" />
+		</xsd:restriction>
 	</xsd:simpleType>
-	
+
+	<xsd:simpleType name="interval">
+		<xsd:annotation>
+			<xsd:documentation>
+				Time interval expressed as days(D), months(M) or years(Y).
+				exponential notation not supported.
+				e.g. 3D, +24D, -15D, -1M, +2M, 3M, +2Y, -5Y, 10Y
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[+\-]?[0-9]+[DMY]"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xs:element name="date_interval">
+		<xs:simpleType>
+			<xs:union memberTypes="date interval" />
+		</xs:simpleType>
+	</xs:element>
+
 	<xsd:simpleType name="double">
 		<xsd:annotation>
 			<xsd:documentation>
@@ -276,19 +291,6 @@
 		</xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="[+\-]?([0-9]+|[0-9]+.[0-9]*|[0-9]*.[0-9]+)%?"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-
-	<xsd:simpleType name="dateIncrement">
-		<xsd:annotation>
-			<xsd:documentation>
-				Time interval expressed as days(D), months(M) or years(Y).
-				exponential notation not supported.
-				e.g. 3D, +24D, -15D, -1M, +2M, 3M, +2Y, -5Y, 10Y
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[+\-]?[0-9]+[DMY]{0,1}"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 	

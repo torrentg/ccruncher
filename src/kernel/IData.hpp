@@ -34,6 +34,7 @@
 #include "params/Ratings.hpp"
 #include "params/Sectors.hpp"
 #include "params/Transitions.hpp"
+#include "params/DefaultProbabilities.hpp"
 #include "params/Survivals.hpp"
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
@@ -72,6 +73,8 @@ class IData : public ExpatHandlers
     Transitions transitions;
     // simulation survival functions
     Survivals survivals;
+    // inverse functions
+    DefaultProbabilities dprobs;
     // simulation sectors
     Sectors sectors;
     // simulation correlations
@@ -120,9 +123,9 @@ class IData : public ExpatHandlers
     // destructor
     ~IData();
     // returns simulation title
-    string & getTitle();
+    const string &getTitle() const;
     // returns simulation description
-    string & getDescription();
+    const string & getDescription() const;
     // returns simulation params
     Params & getParams();
     // returns simulation yield interest
@@ -133,6 +136,8 @@ class IData : public ExpatHandlers
     Transitions & getTransitions();
     // returns simulation survivals functions
     Survivals & getSurvivals();
+    // returns default probabilities functions
+    DefaultProbabilities & getDefaultProbabilities();
     // returns simulation sectors
     Sectors & getSectors();
     // returns simulation correlation matrix
@@ -143,6 +148,8 @@ class IData : public ExpatHandlers
     Portfolio & getPortfolio();
     // indicates if survivals tag is defined
     bool hasSurvivals() const;
+    // indicates if dprobs tag is defined
+    bool hasDefaultProbabilities() const;
 
 };
 

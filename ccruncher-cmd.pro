@@ -16,11 +16,13 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Survivals.hpp \
     src/params/Transitions.hpp \
+    src/params/DefaultProbabilities.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
+    src/kernel/Inverse.hpp \
     src/math/PowMatrix.hpp \
     src/math/Copula.hpp \
     src/math/FastTStudentCdf.hpp \
@@ -58,12 +60,14 @@ SOURCES += \
     src/params/Segmentation.cpp \
     src/params/Survivals.cpp \
     src/params/Transitions.cpp \
+    src/params/DefaultProbabilities.cpp \
     src/kernel/IData.cpp \
     src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
+    src/kernel/Inverse.cpp \
     src/math/PowMatrix.cpp \
     src/math/FastTStudentCdf.cpp \
     src/math/GMFCopula.cpp \
