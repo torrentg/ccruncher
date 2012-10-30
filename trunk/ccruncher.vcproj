@@ -273,6 +273,14 @@
 					RelativePath="src\params\Transitions.hpp"
 					>
 				</File>
+				<File
+					RelativePath="src\params\DefaultProbabilities.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\params\DefaultProbabilities.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="kernel"
@@ -319,6 +327,14 @@
 				</File>
 				<File
 					RelativePath=".\src\kernel\SimulationThread.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\kernel\Inverse.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\kernel\Inverse.hpp"
 					>
 				</File>
 			</Filter>

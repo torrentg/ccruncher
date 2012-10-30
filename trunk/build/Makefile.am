@@ -28,6 +28,7 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
+    ../src/kernel/Inverse.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
@@ -37,6 +38,7 @@ ccruncher_SOURCES = \
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/DefaultProbabilities.cpp\
     ../src/math/PowMatrix.cpp\
     ../src/math/GMFCopula.cpp\
     ../src/math/TMFCopula.cpp\
@@ -66,6 +68,7 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
+    ../src/kernel/Inverse.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
@@ -75,6 +78,7 @@ ccruncher_SOURCES = \
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/DefaultProbabilities.hpp\
     ../src/math/PowMatrix.hpp\
     ../src/math/Copula.hpp\
     ../src/math/GMFCopula.hpp\
@@ -139,8 +143,10 @@ tests_SOURCES = \
     ../src/params/SectorsTest.cpp\
     ../src/params/TransitionsTest.cpp\
     ../src/params/SurvivalsTest.cpp\
+    ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
+    ../src/kernel/InverseTest.cpp\
     \
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
@@ -174,11 +180,13 @@ tests_SOURCES = \
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/Survivals.cpp\
+    ../src/params/DefaultProbabilities.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
+    ../src/kernel/Inverse.cpp\
     \
     ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
@@ -207,8 +215,10 @@ tests_SOURCES = \
     ../src/params/SectorsTest.hpp\
     ../src/params/TransitionsTest.hpp\
     ../src/params/SurvivalsTest.hpp\
+    ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
+    ../src/kernel/InverseTest.hpp\
     \
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
@@ -243,11 +253,13 @@ tests_SOURCES = \
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/Survivals.hpp\
+    ../src/params/DefaultProbabilities.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
+    ../src/kernel/Inverse.hpp\
     ../src/utils/config.h
 
 tests_CXXFLAGS =
@@ -291,12 +303,14 @@ samplegen_SOURCES = \
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/DefaultProbabilities.cpp\
     ../src/kernel/samplegen.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
+    ../src/kernel/Inverse.cpp\
     \
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
@@ -331,11 +345,13 @@ samplegen_SOURCES = \
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/DefaultProbabilities.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
+    ../src/kernel/Inverse.hpp\
     ../src/utils/config.h
 
 samplegen_CXXFLAGS =
