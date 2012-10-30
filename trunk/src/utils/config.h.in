@@ -144,9 +144,6 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
-/* Assertions are disabled when this is defined. */
-#undef NDEBUG
-
 /* Name of package */
 #undef PACKAGE
 
