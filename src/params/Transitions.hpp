@@ -27,10 +27,12 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "params/Ratings.hpp"
 #include "params/Survivals.hpp"
+#include "params/DefaultProbabilities.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -45,8 +47,6 @@ class Transitions : public ExpatHandlers
 
   private:
 
-    // nxn = matrix size (n=number of ratings)
-    int n;
     // period (in months) that this transition matrix covers
     int period;
     // matrix values
@@ -92,14 +92,14 @@ class Transitions : public ExpatHandlers
     int getPeriod() const;
     // returns default rating index
     int getIndexDefault() const;
-    // simulate transition with random value val
-    int evalue(const int irating, const double val) const;
     // regularize the transition matrix
     void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
     Transitions scale(int t) const throw(Exception);
     // computes survival function related to this transition matrix
     Survivals getSurvivals(int steplength, int numrows) const throw(Exception);
+    // computes default probabilities functions related to this transition matrix
+    DefaultProbabilities getDefaultProbabilities(const Date &date, int steplength, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
     // matrix element access

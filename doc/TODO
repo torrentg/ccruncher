@@ -10,6 +10,7 @@ Current works
   * update doc -> dprobs (att t, ifileref, samples, xsd, dtd, gsl info)
   * rename values::at by values::t
   * remove classes Survivals*
+  * remove MSVC support (vcproj, src/win32, doc)
 
 Future works
 -------------------
