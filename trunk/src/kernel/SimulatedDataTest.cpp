@@ -80,12 +80,6 @@ Segmentations ccruncher_test::SimulatedDataTest::getSegmentations()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='obligors' components='obligor'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
-    <segmentation name='assets' components='asset'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
     <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
@@ -245,19 +239,19 @@ void ccruncher_test::SimulatedDataTest::test1()
   ASSERT_EQUALS(sobligors[3].irating, 1);
   ASSERT_EQUALS(sobligors[4].irating, 0);
 
-  ASSERT_EQUALS(sobligors[0].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[1].ref.obligor->isector, 1);
-  ASSERT_EQUALS(sobligors[2].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[3].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[4].ref.obligor->isector, 1);
+  ASSERT_EQUALS(sobligors[0].isector, 0);
+  ASSERT_EQUALS(sobligors[1].isector, 1);
+  ASSERT_EQUALS(sobligors[2].isector, 0);
+  ASSERT_EQUALS(sobligors[3].isector, 0);
+  ASSERT_EQUALS(sobligors[4].isector, 1);
   
   sort(sobligors.begin(), sobligors.end());
 
-  ASSERT_EQUALS(sobligors[0].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[1].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[2].ref.obligor->isector, 0);
-  ASSERT_EQUALS(sobligors[3].ref.obligor->isector, 1);
-  ASSERT_EQUALS(sobligors[4].ref.obligor->isector, 1);
+  ASSERT_EQUALS(sobligors[0].isector, 0);
+  ASSERT_EQUALS(sobligors[1].isector, 0);
+  ASSERT_EQUALS(sobligors[2].isector, 0);
+  ASSERT_EQUALS(sobligors[3].isector, 1);
+  ASSERT_EQUALS(sobligors[4].isector, 1);
   
   ASSERT_EQUALS(sobligors[0].irating, 0);
   ASSERT_EQUALS(sobligors[1].irating, 1);

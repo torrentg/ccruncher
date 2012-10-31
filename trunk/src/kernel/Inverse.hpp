@@ -101,9 +101,10 @@ double ccruncher::Inverse::evalueAsNum(int irating, double val) const
     double aux = data[irating].size()*(val-ranges[irating].minval)/(ranges[irating].maxval-ranges[irating].minval);
     double intpart;
     double x = modf(aux, &intpart);
+    assert(0.0 <= intpart);
     size_t pos = intpart;
 
-    assert(0 <= pos && pos < data[irating].size());
+    assert(pos < data[irating].size());
     assert(0.0 <= x && x <= 1.0);
 
     const double *a = data[irating][pos].coef;

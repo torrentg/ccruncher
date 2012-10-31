@@ -79,12 +79,6 @@ Segmentations ccruncher_test::ObligorTest::getSegmentations()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='obligors' components='obligor'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
-    <segmentation name='assets' components='asset'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
     <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
@@ -199,9 +193,8 @@ void ccruncher_test::ObligorTest::test1()
   ASSERT(!Recovery::valid(obligor.recovery));
   ASSERT(!obligor.hasRecovery());
 
-  ASSERT(obligor.belongsTo(1, 1));
-  ASSERT(obligor.belongsTo(3, 2));
-  ASSERT(obligor.belongsTo(4, 1));
+  ASSERT(obligor.belongsTo(1, 2));
+  ASSERT(obligor.belongsTo(2, 1));
 
   vector<Asset*> &assets = obligor.getAssets();
 

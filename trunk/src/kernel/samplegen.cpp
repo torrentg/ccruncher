@@ -207,8 +207,8 @@ void run(string filename, int nobligors, int nassets) throw(Exception)
   cout << idata.getParams().getXML(2);
   cout << idata.getInterest().getXML(2);
   cout << idata.getRatings().getXML(2);
-  if (idata.hasSurvivals()) {
-    cout << idata.getSurvivals().getXML(2);
+  if (idata.hasDefaultProbabilities()) {
+    cout << idata.getDefaultProbabilities().getXML(2);
   }
   else {
     cout << idata.getTransitions().getXML(2);

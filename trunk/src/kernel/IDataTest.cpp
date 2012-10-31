@@ -89,13 +89,18 @@ void ccruncher_test::IDataTest::test1()
       <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </transitions>\n\
-    <survivals>\n\
-      <svalue rating='A' t='0' value='1.0'/>\n\
-      <svalue rating='B' t='0' value='1.0'/>\n\
-      <svalue rating='C' t='0' value='1.0'/>\n\
-      <svalue rating='D' t='0' value='1.0'/>\n\
-      <svalue rating='E' t='0' value='0.0'/>\n\
-    </survivals>\n\
+    <dprobs>\n\
+      <dprob rating='A' t='0M' value='0.0'/>\n\
+      <dprob rating='B' t='0M' value='0.0'/>\n\
+      <dprob rating='C' t='0M' value='0.0'/>\n\
+      <dprob rating='D' t='0M' value='0.0'/>\n\
+      <dprob rating='E' t='0M' value='1.0'/>\n\
+      <dprob rating='A' t='12M' value='1%'/>\n\
+      <dprob rating='B' t='12M' value='2%'/>\n\
+      <dprob rating='C' t='12M' value='3%'/>\n\
+      <dprob rating='D' t='12M' value='4%'/>\n\
+      <dprob rating='E' t='12M' value='100%'/>\n\
+    </dprobs>\n\
     <sectors>\n\
       <sector name='S1' description='retail'/>\n\
       <sector name='S2' description='others'/>\n\
@@ -107,12 +112,6 @@ void ccruncher_test::IDataTest::test1()
     </correlations>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
-      <segmentation name='obligors' components='obligor'>\n\
-        <segment name='*'/>\n\
-      </segmentation>\n\
-      <segmentation name='assets' components='asset'>\n\
-        <segment name='*'/>\n\
-      </segmentation>\n\
       <segmentation name='sectors' components='obligor'>\n\
         <segment name='S1'/>\n\
         <segment name='S2'/>\n\

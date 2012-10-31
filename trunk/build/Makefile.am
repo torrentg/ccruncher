@@ -33,7 +33,6 @@ ccruncher_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Transitions.cpp\
-    ../src/params/Survivals.cpp\
     ../src/params/Sectors.cpp\
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
@@ -70,7 +69,6 @@ ccruncher_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Transitions.hpp\
-    ../src/params/Survivals.hpp\
     ../src/params/Sectors.hpp\
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
@@ -132,7 +130,6 @@ tests_SOURCES = \
     ../src/params/RatingsTest.cpp\
     ../src/params/SectorsTest.cpp\
     ../src/params/TransitionsTest.cpp\
-    ../src/params/SurvivalsTest.cpp\
     ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
@@ -166,7 +163,6 @@ tests_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
-    ../src/params/Survivals.cpp\
     ../src/params/DefaultProbabilities.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -198,7 +194,6 @@ tests_SOURCES = \
     ../src/params/RatingsTest.hpp\
     ../src/params/SectorsTest.hpp\
     ../src/params/TransitionsTest.hpp\
-    ../src/params/SurvivalsTest.hpp\
     ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
@@ -232,7 +227,6 @@ tests_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
-    ../src/params/Survivals.hpp\
     ../src/params/DefaultProbabilities.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulationThread.hpp\
@@ -275,7 +269,6 @@ samplegen_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Transitions.cpp\
-    ../src/params/Survivals.cpp\
     ../src/params/Sectors.cpp\
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
@@ -313,7 +306,6 @@ samplegen_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Transitions.hpp\
-    ../src/params/Survivals.hpp\
     ../src/params/Sectors.hpp\
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
