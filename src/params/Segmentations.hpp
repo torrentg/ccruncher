@@ -68,8 +68,6 @@ class Segmentations : public ExpatHandlers
 
     // constructor
     Segmentations();
-    // destructor
-    ~Segmentations();
     // return the number of enabled segmentations
     int size() const;
     // [] operator (i>=0 -> enabled, i<0 -> disabled)

@@ -55,8 +55,6 @@ class Segmentation : public ExpatHandlers
     vector<string> vsegments;
     // enabled flag (true by default)
     bool enabled;
-    // if generic pattern (eg: *) -> modificable=true, false otherwise
-    bool modificable;
 
   private:
   
@@ -89,8 +87,6 @@ class Segmentation : public ExpatHandlers
     int indexOfSegment(const string &sname) throw(Exception);
     // return the index of the given segment
     int indexOfSegment(const char *sname) throw(Exception);
-    // add a segment to list
-    int addSegment(const string &sname) throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
     // reset object content

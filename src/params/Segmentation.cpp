@@ -58,7 +58,7 @@ const string& ccruncher::Segmentation::getSegment(int i)
 //===========================================================================
 int ccruncher::Segmentation::indexOfSegment(const string &sname) throw(Exception)
 {
-  for (unsigned int i=0;i<vsegments.size();i++)
+  for (unsigned int i=0; i<vsegments.size(); i++)
   {
     if (vsegments[i] == sname)
     {
@@ -76,7 +76,7 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) throw(Exception)
 {
   assert(sname != NULL);
 
-  for (unsigned int i=0;i<vsegments.size();i++)
+  for (unsigned int i=0; i<vsegments.size(); i++)
   {
     if (vsegments[i].compare(sname) == 0)
     {
@@ -94,7 +94,6 @@ void ccruncher::Segmentation::reset()
 {
   vsegments.clear();
   enabled = true;
-  modificable = false;
   insertSegment("unassigned"); // adding catcher segment
   name = "";
   components = obligor;
@@ -111,29 +110,11 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   }
 
   // checking coherence
-  // performance trick (asset_id or obligor_id is always unique)
-  if (modificable == false) 
+  for (unsigned int i=0; i<vsegments.size(); i++)
   {
-    for (unsigned int i=0;i<vsegments.size();i++)
+    if (vsegments[i] == sname)
     {
-      if (vsegments[i] == sname)
-      {
-        throw Exception("segment " + vsegments[i] + " repeated");
-      }
-    }
-  }
-
-  // checking for patterns
-  if (sname == "*")
-  {
-    if (name != "obligors" && name != "assets")
-    {
-      throw Exception("invalid segment name '*'");
-    }
-    else
-    {
-      modificable = true;
-      return -1;
+      throw Exception("segment " + vsegments[i] + " repeated");
     }
   }
 
@@ -198,21 +179,6 @@ void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
 }
 
 //===========================================================================
-// addSegment
-//===========================================================================
-int ccruncher::Segmentation::addSegment(const string &sname) throw(Exception)
-{
-  if (modificable == false)
-  {
-    throw Exception("implicit segments defined. can't define other segments");
-  }
-  else
-  {
-    return insertSegment(sname);
-  }
-}
-
-//===========================================================================
 // returns enabled flag
 //===========================================================================
 bool ccruncher::Segmentation::isEnabled() const
@@ -232,22 +198,11 @@ string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
   ret += (components==asset?"asset":"obligor");
   ret += "'>\n";
 
-  if (name == "portfolio")
+  for (unsigned int i=0;i<vsegments.size();i++)
   {
-    // nothing to do
-  }
-  else if (name == "obligors" || name == "assets")
-  {
-    ret += Strings::blanks(ilevel+2) + "<segment name='*'/>\n";
-  }
-  else
-  {
-    for (unsigned int i=0;i<vsegments.size();i++)
+    if (vsegments[i] != "unassigned")
     {
-      if (vsegments[i] != "unassigned")
-      {
-        ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i] + "'/>\n";
-      }
+      ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i] + "'/>\n";
     }
   }
 

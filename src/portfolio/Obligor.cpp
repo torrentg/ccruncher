@@ -152,16 +152,6 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
     // shrinking memory
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
-    // filling implicit segment
-    try {
-      int isegmentation = segmentations->indexOfSegmentation("obligors");
-      int isegment = segmentations->getSegmentation(isegmentation).addSegment(id);
-      addBelongsTo(isegmentation, isegment);
-    } 
-    catch(...) {
-      // segmentation 'obligors' not found
-    }
-
     // important: coding obligor-segments as asset-segments
     for (int i=0; i<(int)segmentations->size(); i++) {
       if (segmentations->getSegmentation(i).components == obligor) {
