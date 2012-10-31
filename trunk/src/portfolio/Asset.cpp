@@ -187,16 +187,6 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
         throw Exception("asset with repeated date");
       }
     }
-    
-    // filling implicit segment
-    try {
-      int isegmentation = segmentations->indexOfSegmentation("assets");
-      int isegment = segmentations->getSegmentation(isegmentation).addSegment(id);
-      addBelongsTo(isegmentation, isegment);
-    }
-    catch(...) {
-      // segmentation 'assets' not defined
-    }
   }
   else if (isEqual(name_,"data")) {
     // nothing to do

@@ -699,10 +699,7 @@
       All segmentations must be complete, so that an element belongs to only one segment and 
       the union of all segments constitutes the whole portfolio. Every segmentation must have 
       a segment named 'unassigned' defined in an implicit way. If a obligor (or an asset)
-      does not belong to any segment, then it is considered part of the 'unassigned' segment. Finally, 
-      there are 2 special segmentations: 'obligors' (one segment per obligor) and 'assets'
-      (one segment per asset), and in these cases you don't need to specify all the segments,
-      because these are defined implicitly. 
+      does not belong to any segment, then it is considered part of the 'unassigned' segment.
     </p>
 
     <h3>Example</h3>
@@ -711,12 +708,6 @@
 
   &lt;segmentations&gt;
     &lt;segmentation name="portfolio" components="asset"/&gt;
-    &lt;segmentation name="obligors" components="obligor"&gt;
-      &lt;segment name="*"/&gt;
-    &lt;/segmentation&gt;
-    &lt;segmentation name="assets" components="asset"&gt;
-      &lt;segment name="*"/&gt;
-    &lt;/segmentation&gt;
     &lt;segmentation name="sectors" components="obligor"&gt;
       &lt;segment name="S1"/&gt;
       &lt;segment name="S2"/&gt;
@@ -796,9 +787,7 @@
           the same name. All references to a segment, eg. belongs-to tag,
           are made using this field and always in conjunction with the segmentation. 
           If a segmentation doesn't have any segments, all the elements belong to
-          the 'unassigned' segment. The 'obligors' and 'assets' segmentations allow
-          defining the '*' segment. The '*' segment contains an implicit 
-          definition of a segment to every asset and obligor.
+          the 'unassigned' segment.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -903,13 +892,6 @@
   &lt;/portfolio&gt;
     </pre>
 
-    <p>
-      Note how the obligor does not have any 'belongs-to segmentation=obligor' defined.
-      This definition is made implicitly and the same is done for 'asset'.
-      If you try to assign a obligor to a segmentation of asset components 
-      or vice versa, the input file will be rejected.
-    </p>
-
     <h3>Portfolio Attributes</h3>
 
     <table cellpadding="3">
@@ -942,7 +924,7 @@
       <tr class="a">
         <td class="c1">id</td>
         <td class="c2">
-          Unique obligor identifier. Used by implicit obligor segmentation.
+          Unique obligor identifier.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -1015,7 +997,7 @@
       <tr class="a">
         <td class="c1">id</td>
         <td class="c2">
-          Unique asset identifier. Used by implicit asset segmentation.
+          Unique asset identifier.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -1200,7 +1182,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 30-Oct-2012
+          Last modified: 31-Oct-2012
         </td>
       </tr></table>
     </div>

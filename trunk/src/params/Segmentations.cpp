@@ -33,14 +33,6 @@ ccruncher::Segmentations::Segmentations()
 }
 
 //===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Segmentations::~Segmentations()
-{
-  // nothing to do
-}
-
-//===========================================================================
 // size
 //===========================================================================
 int ccruncher::Segmentations::size() const
@@ -117,6 +109,26 @@ void ccruncher::Segmentations::validate() throw(Exception)
   {
     throw Exception("don't found active segmentations");
   }
+
+  // checking duplicates
+  string str;
+  int nbasic = 0;
+  for (size_t i=0; i<enabled.size(); i++) {
+    if (enabled[i].size() == 1) {
+      str += (nbasic>0?", ":"") + enabled[i].name;
+      nbasic++;
+    }
+  }
+  for (size_t i=0; i<disabled.size(); i++) {
+    if (disabled[i].size() == 1) {
+      str += (nbasic>0?", ":"") + disabled[i].name;
+      nbasic++;
+    }
+  }
+  if (nbasic > 1)
+  {
+    throw Exception("found duplicated segmentations [" + str + "]");
+  }
 }
 
 //===========================================================================
@@ -140,16 +152,7 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
     }
   }
 
-  // checking special segmentations
-  if (val.name == "obligors" && val.components != obligor)
-  {
-    throw Exception("segmentation 'obligors' needs components of type obligor");
-  }
-  if (val.name == "assets" && val.components != asset)
-  {
-    throw Exception("segmentation 'assets' needs components of type asset");
-  }
-
+  // inserting segmentation
   if (val.isEnabled())
   {
     enabled.push_back(val);

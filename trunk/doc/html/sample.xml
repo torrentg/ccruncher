@@ -150,12 +150,6 @@
 
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
-    <segmentation name="obligors" components="obligor">
-      <segment name="*"/>
-    </segmentation>
-    <segmentation name="assets" components="asset">
-      <segment name="*"/>
-    </segmentation>
     <segmentation name="sectors" components="obligor">
       <segment name="S1"/>
       <segment name="S2"/>
