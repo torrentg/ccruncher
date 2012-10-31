@@ -35,7 +35,6 @@
 #include "params/Sectors.hpp"
 #include "params/Transitions.hpp"
 #include "params/DefaultProbabilities.hpp"
-#include "params/Survivals.hpp"
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
 #include "portfolio/Portfolio.hpp"
@@ -71,8 +70,6 @@ class IData : public ExpatHandlers
     Ratings ratings;
     // simulation transition matrix
     Transitions transitions;
-    // simulation survival functions
-    Survivals survivals;
     // inverse functions
     DefaultProbabilities dprobs;
     // simulation sectors
@@ -82,7 +79,7 @@ class IData : public ExpatHandlers
     // simulation segmentations
     Segmentations segmentations;
     // simulation portfolio
-    Portfolio *portfolio;
+    Portfolio portfolio;
     // indicates if root tag exists
     bool hasmaintag;
     // defines flag (0=none, 1=current, 2=done)
@@ -94,8 +91,6 @@ class IData : public ExpatHandlers
   
     // intialize class
     void init();
-    // dealloc memory
-    void release();
     // validate simulation data
     void validate() throw(Exception);
     // parse data
@@ -120,8 +115,6 @@ class IData : public ExpatHandlers
     IData();
     // constructor
     IData(const string &xmlfilename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
-    // destructor
-    ~IData();
     // returns simulation title
     const string &getTitle() const;
     // returns simulation description
@@ -134,8 +127,6 @@ class IData : public ExpatHandlers
     Ratings & getRatings();
     // returns simulation transition matrix
     Transitions & getTransitions();
-    // returns simulation survivals functions
-    Survivals & getSurvivals();
     // returns default probabilities functions
     DefaultProbabilities & getDefaultProbabilities();
     // returns simulation sectors
@@ -146,8 +137,6 @@ class IData : public ExpatHandlers
     Segmentations & getSegmentations();
     // returns simulation portfolio
     Portfolio & getPortfolio();
-    // indicates if survivals tag is defined
-    bool hasSurvivals() const;
     // indicates if dprobs tag is defined
     bool hasDefaultProbabilities() const;
 

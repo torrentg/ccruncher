@@ -78,13 +78,13 @@ void ccruncher::Inverse::init(double ndf_, const Date &maxdate, const DefaultPro
 //===========================================================================
 void ccruncher::Inverse::setRanges(const DefaultProbabilities &dprobs) throw(Exception)
 {
+  double prob;
   int nratings = dprobs.getRatings().size();
-  range.resize(nratings, pair<double,double>(NAN,NAN));
+  ranges.resize(nratings, range());
 
   for(int irating=0; irating<nratings; irating++)
   {
     if (irating == dprobs.getIndexDefault()) {
-      // 'default' rating -> range = [NAN,NAN]
       continue;
     }
 
@@ -92,15 +92,32 @@ void ccruncher::Inverse::setRanges(const DefaultProbabilities &dprobs) throw(Exc
       throw Exception("dprob[" + dprobs.getRatings().getName(irating) + "] undefined at " + Format::toString(t1));
     }
 
-    double prob1 = dprobs.evalue(irating, 1);
-    if (ndf <= 0.0) range[irating].first = gsl_cdf_ugaussian_Pinv(prob1);
-    else range[irating].first = gsl_cdf_tdist_Pinv(prob1, ndf);
+    ranges[irating].maxday = t1-t0;
+    prob = dprobs.evalue(irating, t1-t0);
+    if (ndf <= 0.0) ranges[irating].maxval = gsl_cdf_ugaussian_Pinv(prob);
+    else ranges[irating].maxval = gsl_cdf_tdist_Pinv(prob, ndf);
 
-    double prob2 = dprobs.evalue(irating, t1-t0);
-    if (ndf <= 0.0) range[irating].second = gsl_cdf_ugaussian_Pinv(prob2);
-    else range[irating].second = gsl_cdf_tdist_Pinv(prob2, ndf);
+    if (ranges[irating].maxval == 0.0)
+    {
+      ranges[irating].minday = 0;
+      ranges[irating].minval = 0.0;
+    }
+    else
+    {
+      ranges[irating].minday = 0;
+      do
+      {
+        ranges[irating].minday++;
+        prob = dprobs.evalue(irating, ranges[irating].minday);
+      }
+      while(prob == 0.0 && ranges[irating].minday < ranges[irating].maxday);
 
-    assert(range[irating].first <= range[irating].second);
+      if (ndf <= 0.0) ranges[irating].minval = gsl_cdf_ugaussian_Pinv(prob);
+      else ranges[irating].minval = gsl_cdf_tdist_Pinv(prob, ndf);
+    }
+
+    assert(ranges[irating].minday <= ranges[irating].maxday);
+    assert(ranges[irating].minval <= ranges[irating].maxval);
   }
 }
 
@@ -137,7 +154,7 @@ vector<ccruncher::Inverse::csc> ccruncher::Inverse::getCoefs(int irating, const 
   y[0] = 1.0;
   for(int i=1; i<n; i++)
   {
-    double x = range[irating].first + i*(range[irating].second-range[irating].first)/(double)n;
+    double x = ranges[irating].minval + i*(ranges[irating].maxval-ranges[irating].minval)/(double)n;
     if (ndf <= 0.0) x = gsl_cdf_ugaussian_P(x);
     else x = gsl_cdf_tdist_P(x, ndf);
     y[i] = dprobs.inverse(irating, x);

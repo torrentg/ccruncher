@@ -26,7 +26,6 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <map>
 #include <vector>
 #include "portfolio/Asset.hpp"
 #include "portfolio/Recovery.hpp"
@@ -94,10 +93,14 @@ class Obligor : public ExpatHandlers
 
   public:
   
+    // copy constructor
+    Obligor(const Obligor &);
     // constructor
     Obligor(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     // destructor
     ~Obligor();
+    // assignment operator
+    Obligor& operator=(const Obligor &);
     // return the asset list
     vector<Asset *> & getAssets();
     // indicates if this obligor has values in date1-date2

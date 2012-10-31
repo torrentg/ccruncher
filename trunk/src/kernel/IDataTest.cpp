@@ -41,7 +41,7 @@ void ccruncher_test::IDataTest::test1()
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
-      <property name='copula.seed' value='38765874'/>\n\
+      <property name='rng.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </parameters>\n\
     <interest type='compound'>\n\

@@ -349,17 +349,12 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 //===========================================================================
 // Given a transition matrix return the Cumulated Forward Default Rate
 //===========================================================================
-void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<double> > &ret) const throw(Exception)
+void ccruncher::Transitions::cdfr(int numrows, vector<vector<double> > &ret) const throw(Exception)
 {
   // making assertions
   assert(indexdefault >= 0);
   assert(numrows > 1);
   assert(numrows < 15000);
-  assert(steplength > 0);
-  assert(steplength < 15000);
-
-  // building 1-year transition matrix
-  Transitions tmone = scale(steplength);
 
   // building Id-matrix of size nxn
   vector<vector<double> > aux(size(), vector<double>(size(),0.0));
@@ -379,7 +374,7 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
   // filling CDFR(.,t)
   for(int t=1; t<numrows; t++)
   {
-    prod(aux, tmone.matrix, tmp);
+    prod(aux, matrix, tmp);
 
     for(int i=0; i<size(); i++)
     {
@@ -391,44 +386,17 @@ void ccruncher::Transitions::cdfr(int steplength, int numrows, vector<vector<dou
 }
 
 //===========================================================================
-// returns the Survival Function (1-CDFR[i][j])
-//===========================================================================
-Survivals ccruncher::Transitions::getSurvivals(int steplength, int numrows) const throw(Exception)
-{
-  // computing CDFR
-  vector<vector<double> > values(size(), vector<double>(numrows,NAN));
-  cdfr(steplength, numrows, values);
-
-  // building survival function
-  for(int i=0; i<size(); i++)
-  {
-    for(int j=0; j<numrows; j++)
-    {
-      values[i][j] = 1.0 - values[i][j];
-      if (values[i][j] < 0.0) values[i][j] = 0.0;
-      if (values[i][j] > 1.0) values[i][j] = 1.0;
-    }
-  }
-
-  // creating survival function object
-  vector<int> itime(numrows);
-  for(int i=0; i<numrows; i++) itime[i] = i*steplength;
-  Survivals ret(ratings, itime, values);
-  return ret; 
-}
-
-//===========================================================================
 // computes default probabilities functions related to this transition matrix
 //===========================================================================
-DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date, int steplength, int numrows) const throw(Exception)
+DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date, int numrows) const throw(Exception)
 {
   // computing CDFR
   vector<vector<double> > values(size(), vector<double>(numrows,NAN));
-  cdfr(steplength, numrows, values);
+  cdfr(numrows, values);
 
   // creating dprobs function object
   vector<Date> dates(numrows);
-  for(int i=0; i<numrows; i++) dates[i] = add(date, i*steplength, 'M');
+  for(int i=0; i<numrows; i++) dates[i] = add(date, i*period, 'M');
   DefaultProbabilities ret(ratings, date, dates, values);
   return ret;
 }

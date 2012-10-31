@@ -80,8 +80,6 @@ class DefaultProbabilities : public ExpatHandlers
     vector<gsl_spline *> splines;
     // splines accelerators
     vector<gsl_interp_accel *> accels;
-    // type of splines
-    string type;
 
   private:
 
@@ -113,12 +111,16 @@ class DefaultProbabilities : public ExpatHandlers
 
     // defaults constructor
     DefaultProbabilities();
+    // copy constructor
+    DefaultProbabilities(const DefaultProbabilities &);
     // constructor
     DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
     // constructor
     DefaultProbabilities(const Ratings &, const Date &d, const vector<Date> &dates, const vector<vector<double> > &values) throw(Exception);
     // destructor
     ~DefaultProbabilities();
+    // assignment operator
+    DefaultProbabilities & operator=(const DefaultProbabilities &);
     // returns ratings size
     int size() const;
     // set date

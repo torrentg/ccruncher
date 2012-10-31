@@ -40,9 +40,6 @@ ccruncher_SOURCES = \
     ../src/params/Segmentation.cpp\
     ../src/params/DefaultProbabilities.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/GMFCopula.cpp\
-    ../src/math/TMFCopula.cpp\
-    ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
@@ -80,10 +77,6 @@ ccruncher_SOURCES = \
     ../src/params/Segmentation.hpp\
     ../src/params/DefaultProbabilities.hpp\
     ../src/math/PowMatrix.hpp\
-    ../src/math/Copula.hpp\
-    ../src/math/GMFCopula.hpp\
-    ../src/math/TMFCopula.hpp\
-    ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\
@@ -126,9 +119,6 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.cpp\
     ../src/utils/ExpatUserDataTest.cpp\
     ../src/math/PowMatrixTest.cpp\
-    ../src/math/GMFCopulaTest.cpp\
-    ../src/math/TMFCopulaTest.cpp\
-    ../src/math/FastTStudentCdfTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
     ../src/portfolio/RecoveryTest.cpp\
@@ -162,9 +152,6 @@ tests_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/GMFCopula.cpp\
-    ../src/math/TMFCopula.cpp\
-    ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
@@ -198,9 +185,6 @@ tests_SOURCES = \
     ../src/utils/UtilsTest.hpp\
     ../src/utils/ExpatUserDataTest.hpp\
     ../src/math/PowMatrixTest.hpp\
-    ../src/math/GMFCopulaTest.hpp\
-    ../src/math/TMFCopulaTest.hpp\
-    ../src/math/FastTStudentCdfTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
     ../src/portfolio/RecoveryTest.hpp\
@@ -234,10 +218,6 @@ tests_SOURCES = \
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
-    ../src/math/Copula.hpp\
-    ../src/math/GMFCopula.hpp\
-    ../src/math/TMFCopula.hpp\
-    ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
@@ -285,9 +265,6 @@ samplegen_SOURCES = \
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
     ../src/math/PowMatrix.cpp\
-    ../src/math/GMFCopula.cpp\
-    ../src/math/TMFCopula.cpp\
-    ../src/math/FastTStudentCdf.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
@@ -326,10 +303,6 @@ samplegen_SOURCES = \
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
     ../src/math/PowMatrix.hpp\
-    ../src/math/Copula.hpp\
-    ../src/math/GMFCopula.hpp\
-    ../src/math/TMFCopula.hpp\
-    ../src/math/FastTStudentCdf.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\

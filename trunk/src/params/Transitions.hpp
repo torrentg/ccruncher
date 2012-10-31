@@ -31,7 +31,6 @@
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "params/Ratings.hpp"
-#include "params/Survivals.hpp"
 #include "params/DefaultProbabilities.hpp"
 
 //---------------------------------------------------------------------------
@@ -67,7 +66,7 @@ class Transitions : public ExpatHandlers
     // validate object content
     void validate() throw(Exception);
     // computes Cumulated Default Forward Rate
-    void cdfr(int steplength, int numrows, vector<vector<double> > &ret) const throw(Exception);
+    void cdfr(int numrows, vector<vector<double> > &ret) const throw(Exception);
 
   protected:
 
@@ -96,10 +95,8 @@ class Transitions : public ExpatHandlers
     void regularize() throw(Exception);
     // returns equivalent transition matrix that covers t months
     Transitions scale(int t) const throw(Exception);
-    // computes survival function related to this transition matrix
-    Survivals getSurvivals(int steplength, int numrows) const throw(Exception);
     // computes default probabilities functions related to this transition matrix
-    DefaultProbabilities getDefaultProbabilities(const Date &date, int steplength, int numrows) const throw(Exception);
+    DefaultProbabilities getDefaultProbabilities(const Date &date, int numrows) const throw(Exception);
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
     // matrix element access

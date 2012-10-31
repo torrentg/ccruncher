@@ -172,7 +172,7 @@
     &lt;property name="stopcriteria.maxiterations" value="$numsims"/&gt;
     &lt;property name="stopcriteria.maxseconds" value="3600"/&gt;
     &lt;property name="copula.type" value="t($ndf)"/&gt;
-    &lt;property name="copula.seed" value="0"/&gt;
+    &lt;property name="rng.seed" value="0"/&gt;
     &lt;property name="montecarlo.antithetic" value="true"/&gt;
     &lt;property name="portfolio.onlyActiveObligors" value="true"/&gt;
   &lt;/parameters&gt;
@@ -239,7 +239,7 @@
         <td class="c3">string</td>
       </tr>
       <tr class="a">
-        <td class="c1">copula.seed</td>
+        <td class="c1">rng.seed</td>
         <td class="c2">
           Seed used to initialize a random number generator. If it has value 0
           then a random number based on the current time will be used.

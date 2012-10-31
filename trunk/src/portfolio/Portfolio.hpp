@@ -88,8 +88,12 @@ class Portfolio : public ExpatHandlers
 
   public:
 
+    // default constructor
+    Portfolio();
     // constructor
     Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
+    // initialize portfolio object
+    void init(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
     // destructor
     ~Portfolio();
     // returns the obligors list

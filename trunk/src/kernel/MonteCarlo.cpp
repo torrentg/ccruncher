@@ -24,8 +24,6 @@
 #include <cfloat>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
-#include "math/GMFCopula.hpp"
-#include "math/TMFCopula.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
@@ -37,7 +35,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), threads(0)
+ccruncher::MonteCarlo::MonteCarlo() : assets(NULL), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
@@ -48,12 +46,12 @@ ccruncher::MonteCarlo::MonteCarlo() : obligors(), assets(NULL), aggregators(), t
   hash = 0;
   fpath = "path not set";
   bforce = false;
-  btrace = false;
-  copula = NULL;
-  stop = NULL;
   assetsize = 0;
   numassets = 0;
   numthreads = 1;
+  nfthreads = 0;
+  time0 = NAD;
+  timeT = NAD;
 }
 
 //===========================================================================
@@ -76,6 +74,7 @@ void ccruncher::MonteCarlo::release()
     delete [] assets;
     assets = NULL;
   }
+  numassets = 0;
 
   // removing threads
   for(unsigned int i=0; i<threads.size(); i++) {
@@ -87,12 +86,6 @@ void ccruncher::MonteCarlo::release()
   }
   threads.clear();
 
-  // deallocating copula
-  if (copula != NULL) { 
-    delete copula; 
-    copula = NULL; 
-  }
-
   // dropping aggregators elements
   for(unsigned int i=0; i<aggregators.size(); i++) {
     if (aggregators[i] != NULL) {
@@ -101,12 +94,17 @@ void ccruncher::MonteCarlo::release()
     }
   }
   aggregators.clear();
-  
-  // closing files
-  if (btrace) 
-  {
-    fcopulas.close();
+
+  // deallocating choleky matrix
+  if (chol != NULL) {
+    gsl_matrix_free(chol);
+    chol = NULL;
   }
+
+  // flushing memory
+  vector<SimulatedObligor>(0).swap(obligors);
+  vector<DateValues>(0).swap(datevalues);
+  floadings.clear();
 }
 
 //===========================================================================
@@ -135,17 +133,11 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
     // initializing obligors
     initObligors(idata);
 
-    // initialize trace
-    initTrace();
-
-    // initializing copula
-    initCopula(idata);
-
     // initializing assets
     initAssets(idata);
 
-    // initializing survival functions
-    initSurvivals(idata);
+    // initializing model
+    initModel(idata);
 
     // initializing aggregators
     initAggregators(idata);
@@ -180,6 +172,7 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
   // printing initial date
   time0 = idata.getParams().time0;
   Logger::trace("initial date", Format::toString(time0));
+
   // printing end date
   timeT = idata.getParams().timeT;
   Logger::trace("end date", Format::toString(timeT));
@@ -187,6 +180,14 @@ void ccruncher::MonteCarlo::initParams(IData &idata) throw(Exception)
   // fixing variance reduction method
   antithetic = idata.getParams().antithetic;
   Logger::trace("antithetic mode", Format::toString(antithetic));
+
+  // setting seed
+  seed = idata.getParams().rng_seed;
+  Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed));
+  if (seed == 0L) {
+    // use a seed based on clock
+    seed = Utils::trand();
+  }
 
   // exit function
   Logger::previousIndentLevel();
@@ -339,33 +340,23 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 }
 
 //===========================================================================
-// initSurvivals
+// initModel
 //===========================================================================
-void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
 {
-  // doing assertions
-  assert(survivals.size() == 0);
-
   // setting logger header
-  Logger::trace("setting survival function", '-');
+  Logger::trace("initializing multi-factor model", '-');
   Logger::newIndentLevel();
 
   // setting logger info
   Logger::trace("number of ratings", Format::toString(idata.getRatings().size()));
 
-  if (idata.hasSurvivals())
-  {
-    // setting survival functions
-    survivals = idata.getSurvivals();
-    Logger::trace("survival functions", string("user defined"));
+  DefaultProbabilities dprobs;
 
-    // checking that survival function is defined for t <= timeT
-    int months = idata.getSurvivals().getMinCommonTime();
-    Date aux = add(time0, months, 'M');
-    if (aux < timeT)
-    {
-      throw Exception("survival functions not defined at t=" + Format::toString(timeT));
-    }
+  if (idata.hasDefaultProbabilities())
+  {
+    Logger::trace("default probability functions", "user defined");
+    dprobs = idata.getDefaultProbabilities();
   }
   else
   {
@@ -374,83 +365,46 @@ void ccruncher::MonteCarlo::initSurvivals(IData &idata) throw(Exception)
     Logger::trace("transition matrix dimension", sval + "x" + sval);
     Logger::trace("transition matrix period (months)", Format::toString(idata.getTransitions().getPeriod()));
 
-    // computing survival functions using transition matrix
-    int months = (int) ceil(diff(time0, timeT, 'M'));
-    survivals = idata.getTransitions().getSurvivals(1, months+1);
-    Logger::trace("transition matrix -> survival functions", string("computed"));
-    Transitions tm1 = idata.getTransitions().scale(1);
-    double rerror = tm1.getRegularizationError();
+    Logger::trace("default probability functions", string("computed"));
+    Transitions tone = idata.getTransitions().scale(1);
+    double rerror = tone.getRegularizationError();
     Logger::trace("regularization error", Format::toString(rerror));
+
+    // computing default probability functions using transition matrix
+    int months = (int) ceil(diff(time0, timeT, 'M'));
+    dprobs = tone.getDefaultProbabilities(time0, months+1);
   }
 
-  // exit function
-  Logger::previousIndentLevel();
-}
+  // setting inverses
+  Logger::trace("copula type", idata.getParams().copula_type);
+  double ndf = -1.0; // gaussian case
+  if (idata.getParams().getCopulaType() == "t") {
+    ndf = idata.getParams().getCopulaParam();
+  }
 
-//===========================================================================
-// copula construction
-//===========================================================================
-void ccruncher::MonteCarlo::initCopula(IData &idata) throw(Exception)
-{
-  seed = idata.getParams().copula_seed;
-
-  // doing assertions
-  assert(copula == NULL);
-
-  // setting logger header
-  Logger::trace("initializing copula", '-');
-  Logger::newIndentLevel();
-
-  // setting logger info
   Logger::trace("number of sectors", Format::toString(idata.getSectors().size()));
 
-  // setting logger info
-  Logger::trace("copula type", idata.getParams().copula_type);
-  Logger::trace("copula dimension", Format::toString(obligors.size()));
-  Logger::trace("seed used to initialize randomizer (0=none)", Format::toString(seed));
+  // model parameters
+  inverse.init(ndf, timeT, dprobs);
+  chol = idata.getCorrelations().getCholesky();
+  floadings = idata.getCorrelations().getFactorLoadings();
 
-  try
+  assert((int)chol->size1 == idata.getSectors().size());
+  assert(chol->size1 == chol->size2);
+  assert((int)floadings.size() == idata.getSectors().size());
+
+  // performance tip: chol contains the w·chol (to avoid multiplications)
+  // in simulation time and w contaings sqrt(1-w^2) (to avoid sqrt
+  // and multiplications)
+  for(unsigned int i=0; i<chol->size1; i++)
   {
-    // computing the number of obligors in each sector
-    vector<unsigned int> noblig(idata.getCorrelations().size(),0);
-    for(unsigned int i=0; i<obligors.size(); i++)
+    for(unsigned int j=0; j<chol->size2; j++)
     {
-      noblig[obligors[i].ref.obligor->isector]++;
+      double val = gsl_matrix_get(chol, i, j) * floadings[i];
+      gsl_matrix_set(chol, i, j, val);
     }
-
-    // creating the copula object
-    const vector<vector<double> > &C = idata.getCorrelations().getMatrix();
-
-    if (idata.getParams().getCopulaType() == "gaussian")
-    {
-      copula = new GMFCopula(C, noblig);
-    }
-    else if (idata.getParams().getCopulaType() == "t")
-    {
-      double ndf = idata.getParams().getCopulaParam();
-      copula = new TMFCopula(C, noblig, ndf);
-    }
-    else 
-    {
-      throw Exception("invalid copula type");
-    }
+    floadings[i] = sqrt(1.0-floadings[i]*floadings[i]);
   }
-  catch(std::exception &e)
-  {
-    // copula deallocated by release method
-    throw Exception(e, "error ocurred while initializing copula");
-  }
-
-  // if no seed is given /dev/urandom or time() will be used
-  if (seed == 0L)
-  {
-    // use a seed based on clock
-    seed = Utils::trand();
-  }
-
-  // seeding random number generators
-  // see SimulationThread constructor
-  copula->setSeed(seed);
 
   // exit function
   Logger::previousIndentLevel();
@@ -515,16 +469,12 @@ void ccruncher::MonteCarlo::run(bool *stop_)
   // creating and launching simulation threads
   timer.start();
   nfthreads = numthreads;
-  vector<Copula*> copulas(numthreads, (Copula*)NULL);
   numiterations = 0;
   timer3.reset();
   threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
   {
-    if (i == 0) copulas[i] = copula;
-    else copulas[i] = copula->clone(false);
-    copulas[i]->setSeed(seed+i);
-    threads[i] = new SimulationThread(*this, copulas[i]);
+    threads[i] = new SimulationThread(*this, seed+i);
     threads[i]->start(); // to work without threads use run() instead of start()
   }
 
@@ -547,13 +497,6 @@ void ccruncher::MonteCarlo::run(bool *stop_)
   }
   timer3.stop();
 
-  // destroying copulas (except main copula)
-  for(int i=1; i<numthreads; i++)
-  {
-    delete copulas[i];
-    copulas[i] = NULL;
-  }
-
   // exit function
   Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
   Logger::trace("elapsed time simulating obligors", Timer::format(etime2/numthreads));
@@ -566,7 +509,7 @@ void ccruncher::MonteCarlo::run(bool *stop_)
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double *u) throw()
+bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
@@ -579,12 +522,6 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses, const double
     for(unsigned int i=0; i<aggregators.size(); i++) 
     {
       aggregators[i]->append(losses[i]);
-    }
-    
-    // trace values
-    if (btrace)
-    {
-      printTrace(u);
     }
 
     // counter increment
@@ -638,14 +575,6 @@ void ccruncher::MonteCarlo::setFilePath(const string &path, bool force)
 }
 
 //===========================================================================
-// setTrace
-//===========================================================================
-void ccruncher::MonteCarlo::setTrace(bool val)
-{
-  btrace = val;
-}
-
-//===========================================================================
 // set the number of execution threads
 //===========================================================================
 void ccruncher::MonteCarlo::setNumThreads(int v)
@@ -654,46 +583,6 @@ void ccruncher::MonteCarlo::setNumThreads(int v)
   if (0 < v && v <= MAX_NUM_THREADS) {
     numthreads = v;
   }
-}
-
-//===========================================================================
-// initAdditionalOutput
-//===========================================================================
-void ccruncher::MonteCarlo::initTrace() throw(Exception)
-{
-  assert(fpath != "" && fpath != "path not set"); 
-  string dirpath = File::normalizePath(fpath);
-  
-  if (btrace)
-  {
-    // simulated copula values file
-    string filename = dirpath + "copula.csv";
-    try
-    {
-      fcopulas.open(filename.c_str(), ios::out|ios::trunc);
-      for(unsigned int i=0; i<obligors.size(); i++)
-      {
-        fcopulas << "\"" << obligors[i].ref.obligor->id << "\"" << (i!=obligors.size()-1?", ":"");
-      }
-      fcopulas << endl;
-    }
-    catch(...)
-    {
-      throw Exception("error writing file " + filename);
-    }
-  }
-}
-
-//===========================================================================
-// printTrace
-//===========================================================================
-void ccruncher::MonteCarlo::printTrace(const double *u) throw(Exception)
-{
-  for(unsigned int i=0; i<obligors.size(); i++) 
-  {
-    fcopulas << u[i] << (i!=obligors.size()-1?", ":"");
-  }
-  fcopulas << "\n";
 }
 
 //===========================================================================

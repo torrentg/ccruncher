@@ -30,6 +30,16 @@ class Inverse
       double coef[4];
     };
 
+    // inverse function range
+    struct range
+    {
+      int minday;
+      double minval;
+      int maxday;
+      double maxval;
+      range() : minday(0), minval(NAN), maxday(0), maxval(NAN) {}
+    };
+
   private:
 
     // initial date
@@ -39,7 +49,7 @@ class Inverse
     // degrees of freedom (gaussian = negative or 0)
     double ndf;
     // limits
-    vector<pair<double,double> > range;
+    vector<range> ranges;
     // interpolation coeficients
     vector<vector<csc> > data;
 
@@ -74,23 +84,21 @@ class Inverse
 //===========================================================================
 double ccruncher::Inverse::evalueAsNum(int irating, double val) const
 {
-  assert(!isnan(range[irating].first) && !isnan(range[irating].second));
+  assert(!isnan(ranges[irating].minval) && !isnan(ranges[irating].maxval));
   assert(data[irating].size() > 0);
 
-  if (range[irating].second <= val)
+  if (ranges[irating].maxval <= val)
   {
-    // defaulted in range (t1,inf)
-    return (t1-t0)+1.0;
+    return ranges[irating].maxday+1.0;
   }
-  else if (val < range[irating].first)
+  else if (val < ranges[irating].minval)
   {
-    // defaulted in range [t0,t0+1]
-    return 1.0;
+    return ranges[irating].minday;
   }
   else
   {
     // defaulted in range (t0+1,t1]
-    double aux = data[irating].size()*(val-range[irating].first)/(range[irating].second-range[irating].first);
+    double aux = data[irating].size()*(val-ranges[irating].minval)/(ranges[irating].maxval-ranges[irating].minval);
     double intpart;
     double x = modf(aux, &intpart);
     size_t pos = intpart;

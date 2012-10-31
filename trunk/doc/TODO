@@ -5,11 +5,19 @@ CCRUNCHER TODO
 Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
-  * replace invSurvival+cdfT tables by invSurvival(cdfT(x)) table
   * rename values::at by values::t
   * remove classes Survivals*
+  * remove classes *Copula
   * remove MSVC support (vcproj, src/win32, doc)
   * interest interpolation: linear -> cubic
+  * remove antitethical option? (SimulationThread::uvalues)
+  * review functional tests (because --trace removed)
+  * segment indexes as unsigned short
+  * rating indexes as unsigned char
+  * sector indexes as unsigned char
+  * unify ccruncher main (gsl_error_handler, ccruncher-gui, ccruncher-cmd, etc.)
+  * resolve src/math content
+  * review params::copula*
 
 Future works
 -------------------

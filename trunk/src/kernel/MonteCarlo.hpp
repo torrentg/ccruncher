@@ -29,12 +29,11 @@
 #include <vector>
 #include <pthread.h>
 #include "kernel/IData.hpp"
+#include "kernel/Inverse.hpp"
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
 #include "portfolio/DateValues.hpp"
-#include "params/Survivals.hpp"
-#include "math/Copula.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Exception.hpp"
@@ -77,10 +76,12 @@ class MonteCarlo
     Date time0;
     // date where risk is computed
     Date timeT;
-    // survival functions
-    Survivals survivals;
-    // copula used to simulate correlations
-    Copula *copula;
+    // inverse functions
+    Inverse inverse;
+    // factors cholesky matrix
+    gsl_matrix *chol;
+    // factor loadings
+    vector<double> floadings;
     // antithetic method flag
     bool antithetic;
     // rng seed
@@ -105,10 +106,6 @@ class MonteCarlo
     int nfthreads;
     // ensures data consistence
     pthread_mutex_t mutex;
-    // trace simulated copulas+defaults flag
-    bool btrace;
-    // file where copula values are stored (if btrace is set)
-    ofstream fcopulas;
     // stop flag
     bool *stop;
 
@@ -123,17 +120,15 @@ class MonteCarlo
     // initialize assets
     void initAssets(IData &) throw(Exception);
     // initialize survivals functions
-    void initSurvivals(IData &) throw(Exception);
-    // initialize copula
-    void initCopula(IData &idata) throw(Exception);
+    void initModel(IData &) throw(Exception);
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
-    // initialize trace files
-    void initTrace() throw(Exception);
-    // print trace
-    void printTrace(const double *) throw(Exception);
     // append simulation result
-    bool append(vector<vector<double> > &, const double *) throw();
+    bool append(vector<vector<double> > &) throw();
+    // non-copyable class
+    MonteCarlo(const MonteCarlo &);
+    // non-copyable class
+    MonteCarlo & operator=(const MonteCarlo &);
 
   public:
 
@@ -145,8 +140,6 @@ class MonteCarlo
     void setFilePath(const string &path, bool force);
     // set hash value (mark every num values)
     void setHash(int num);
-    // trace copula values + trace default times
-    void setTrace(bool);
     // initiliaze this class
     void setData(IData &) throw(Exception);
     // set the number of execution threads

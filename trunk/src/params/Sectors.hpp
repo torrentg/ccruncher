@@ -78,8 +78,6 @@ class Sectors : public ExpatHandlers
 
     // default constructor
     Sectors();
-    // destructor
-    ~Sectors();
     // return the number of sectors
     int size() const;
     // return the index of the sector

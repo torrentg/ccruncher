@@ -25,6 +25,14 @@
 #include <cassert>
 
 //===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::Obligor::Obligor(const Obligor &o)
+{
+  *this = o;
+}
+
+//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
@@ -54,9 +62,43 @@ ccruncher::Obligor::~Obligor()
 {
   for(unsigned int i=0; i<vassets.size(); i++)
   {
-    delete vassets[i];
+    if (vassets[i] != NULL) delete vassets[i];
   }
   vassets.clear();
+}
+
+//===========================================================================
+// assignment operator
+//===========================================================================
+Obligor& ccruncher::Obligor::operator=(const Obligor &o)
+{
+  irating = o.irating;
+  isector = o.isector;
+  id = o.id;
+  recovery = o.recovery;
+
+  vsegments = o.vsegments;
+  ratings = o.ratings;
+  sectors = o.sectors;
+  segmentations = o.segmentations;
+  interest = o.interest;
+  date1 = o.date1;
+  date2 = o.date2;
+
+  for(unsigned int i=0; i<vassets.size(); i++) {
+    if (vassets[i] != NULL) delete vassets[i];
+  }
+  vassets.assign(o.vassets.size(), NULL);
+  for(size_t i=0; i<vassets.size(); i++)
+  {
+    if (o.vassets[i] != NULL)
+    {
+      vassets[i] = new Asset(NULL);
+      *(vassets[i]) = *(o.vassets[i]);
+    }
+  }
+
+  return *this;
 }
 
 //===========================================================================

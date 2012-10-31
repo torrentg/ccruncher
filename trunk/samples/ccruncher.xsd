@@ -219,7 +219,7 @@
 			<xsd:enumeration value="stopcriteria.maxiterations"/>
 			<xsd:enumeration value="stopcriteria.maxseconds"/>
 			<xsd:enumeration value="copula.type"/>
-			<xsd:enumeration value="copula.seed"/>
+			<xsd:enumeration value="rng.seed"/>
 			<xsd:enumeration value="montecarlo.antithetic"/>
 			<xsd:enumeration value="portfolio.onlyActiveObligors"/>
 		</xsd:restriction>
