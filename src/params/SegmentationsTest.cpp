@@ -32,12 +32,6 @@ void ccruncher_test::SegmentationsTest::test1()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset' enabled='false'/>\n\
-    <segmentation name='obligors' components='obligor'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
-    <segmentation name='assets' components='asset'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
     <segmentation name='sectors' components='obligor' enabled='true'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
@@ -64,21 +58,17 @@ void ccruncher_test::SegmentationsTest::test1()
   Segmentations sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
-  ASSERT(4 == sobj.size());
+  ASSERT(2 == sobj.size());
 
   ASSERT(-1 == sobj.indexOfSegmentation("portfolio"));
-  ASSERT(0 == sobj.indexOfSegmentation("obligors"));
-  ASSERT(1 == sobj.indexOfSegmentation("assets"));
-  ASSERT(2 == sobj.indexOfSegmentation("sectors"));
+  ASSERT(0 == sobj.indexOfSegmentation("sectors"));
   ASSERT(-2 == sobj.indexOfSegmentation("size"));
-  ASSERT(3 == sobj.indexOfSegmentation("products"));
+  ASSERT(1 == sobj.indexOfSegmentation("products"));
   ASSERT(-3 == sobj.indexOfSegmentation("offices"));
 
   ASSERT(sobj.getSegmentation(-1).name == "portfolio");
   ASSERT(sobj.getSegmentation(-2).name == "size");
   ASSERT(sobj.getSegmentation(-3).name == "offices");
-  ASSERT(sobj.getSegmentation(0).name == "obligors");
-  ASSERT(sobj.getSegmentation(1).name == "assets");
-  ASSERT(sobj.getSegmentation(2).name == "sectors");
-  ASSERT(sobj.getSegmentation(3).name == "products");
+  ASSERT(sobj.getSegmentation(0).name == "sectors");
+  ASSERT(sobj.getSegmentation(1).name == "products");
 }

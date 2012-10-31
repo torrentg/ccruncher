@@ -37,12 +37,6 @@ Segmentations ccruncher_test::AssetTest::getSegmentations()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <segmentations>\n\
     <segmentation name='portfolio' components='asset'/>\n\
-    <segmentation name='obligors' components='obligor'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
-    <segmentation name='assets' components='asset'>\n\
-      <segment name='*'/>\n\
-    </segmentation>\n\
     <segmentation name='sectors' components='obligor'>\n\
       <segment name='S1'/>\n\
       <segment name='S2'/>\n\
@@ -134,9 +128,8 @@ void ccruncher_test::AssetTest::test1()
   ASSERT(!asset.hasObligorRecovery());
   
   ASSERT(asset.belongsTo(0, 0)); // portfolio-rest
-  ASSERT(asset.belongsTo(2, 1)); // asset-op1
-  ASSERT(asset.belongsTo(5, 1)); // product-bond
-  ASSERT(asset.belongsTo(6, 3)); // office-0003
+  ASSERT(asset.belongsTo(3, 1)); // product-bond
+  ASSERT(asset.belongsTo(4, 3)); // office-0003
 
   ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).recovery.getValue(), EPSILON);
