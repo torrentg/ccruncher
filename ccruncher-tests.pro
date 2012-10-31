@@ -14,10 +14,8 @@ HEADERS += \
     src/params/Sectors.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
-    src/params/Survivals.hpp \
     src/params/Transitions.hpp \
     src/params/TransitionsTest.hpp \
-    src/params/SurvivalsTest.hpp \
     src/params/SegmentationTest.hpp \
     src/params/SegmentationsTest.hpp \
     src/params/SectorsTest.hpp \
@@ -37,14 +35,7 @@ HEADERS += \
     src/kernel/Inverse.hpp \
     src/kernel/InverseTest.hpp \
     src/math/PowMatrix.hpp \
-    src/math/Copula.hpp \
-    src/math/FastTStudentCdf.hpp \
-    src/math/GMFCopula.hpp \
-    src/math/TMFCopula.hpp \
     src/math/PowMatrixTest.hpp \
-    src/math/FastTStudentCdfTest.hpp \
-    src/math/GMFCopulaTest.hpp \
-    src/math/TMFCopulaTest.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -90,10 +81,8 @@ SOURCES += \
     src/params/Sectors.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
-    src/params/Survivals.cpp \
     src/params/Transitions.cpp \
     src/params/TransitionsTest.cpp \
-    src/params/SurvivalsTest.cpp \
     src/params/SegmentationTest.cpp \
     src/params/SegmentationsTest.cpp \
     src/params/SectorsTest.cpp \
@@ -113,13 +102,7 @@ SOURCES += \
     src/kernel/Inverse.cpp \
     src/kernel/InverseTest.cpp \
     src/math/PowMatrix.cpp \
-    src/math/FastTStudentCdf.cpp \
-    src/math/GMFCopula.cpp \
-    src/math/TMFCopula.cpp \
     src/math/PowMatrixTest.cpp \
-    src/math/FastTStudentCdfTest.cpp \
-    src/math/GMFCopulaTest.cpp \
-    src/math/TMFCopulaTest.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

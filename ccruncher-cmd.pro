@@ -14,7 +14,6 @@ HEADERS += \
     src/params/Sectors.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
-    src/params/Survivals.hpp \
     src/params/Transitions.hpp \
     src/params/DefaultProbabilities.hpp \
     src/kernel/IData.hpp \
@@ -24,10 +23,6 @@ HEADERS += \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverse.hpp \
     src/math/PowMatrix.hpp \
-    src/math/Copula.hpp \
-    src/math/FastTStudentCdf.hpp \
-    src/math/GMFCopula.hpp \
-    src/math/TMFCopula.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -58,7 +53,6 @@ SOURCES += \
     src/params/Sectors.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
-    src/params/Survivals.cpp \
     src/params/Transitions.cpp \
     src/params/DefaultProbabilities.cpp \
     src/kernel/IData.cpp \
@@ -69,9 +63,6 @@ SOURCES += \
     src/kernel/SimulationThread.cpp \
     src/kernel/Inverse.cpp \
     src/math/PowMatrix.cpp \
-    src/math/FastTStudentCdf.cpp \
-    src/math/GMFCopula.cpp \
-    src/math/TMFCopula.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

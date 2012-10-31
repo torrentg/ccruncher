@@ -36,7 +36,7 @@ void ccruncher_test::ParamsTest::test1()
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
-      <property name='copula.seed' value='38765874'/>\n\
+      <property name='rng.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </parameters>";
 
@@ -50,7 +50,7 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(30000000 == params.maxseconds);
   ASSERT("gaussian" == params.copula_type);
   ASSERT("gaussian" == params.getCopulaType());
-  ASSERT(38765874L == params.copula_seed);
+  ASSERT(38765874L == params.rng_seed);
   ASSERT(true == params.antithetic);
 }
 
@@ -67,7 +67,7 @@ void ccruncher_test::ParamsTest::test2()
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='gaussian'/>\n\
-      <property name='copula.seed' value='38765874'/>\n\
+      <property name='rng.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </parameters>";
 
@@ -89,7 +89,7 @@ void ccruncher_test::ParamsTest::test3()
       <property name='stopcriteria.maxiterations' value='3000'/>\n\
       <property name='stopcriteria.maxseconds' value='30000000'/>\n\
       <property name='copula.type' value='t(3)'/>\n\
-      <property name='copula.seed' value='38765874'/>\n\
+      <property name='rng.seed' value='38765874'/>\n\
       <property name='montecarlo.antithetic' value='true'/>\n\
     </parameters>";
 

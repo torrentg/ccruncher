@@ -41,6 +41,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+//TODO: set segments as ushort instead of int
 class SimulatedAsset
 {
 
@@ -61,6 +62,8 @@ class SimulatedAsset
 
 //---------------------------------------------------------------------------
 
+//TODO: set irating as unsigned char instead of int
+//TODO: set isector as unsigned char instead of int
 class SimulatedObligor
 {
 
@@ -68,6 +71,8 @@ class SimulatedObligor
 
     // obligor's rating index
     int irating;
+    // obligor's sector index
+    int isector;
     // obligor's recovery
     Recovery recovery;
     // number of assets
@@ -84,7 +89,7 @@ class SimulatedObligor
   public:
 
     // constructor
-    SimulatedObligor(Obligor *);
+    SimulatedObligor(Obligor *obligor=NULL);
     // less-than operator
     bool operator < (const SimulatedObligor &obj) const;
 

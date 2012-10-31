@@ -56,10 +56,12 @@ class Thread
 
   private:
 
-    // copy constructor denied
-    Thread(const Thread& copy);
     // thread launcher
     static void* launcher(void *d);
+    // non-copyable class
+    Thread(const Thread &);
+    // non-copyable class
+    Thread& operator=(const Thread &);
 
   public:
 

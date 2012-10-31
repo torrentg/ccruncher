@@ -56,6 +56,13 @@ class Aggregator
     // indicates if unassigned segment is used
     bool printUnassignedSegment;
 
+  private:
+
+    // non-copyable class
+    Aggregator(const Aggregator &);
+    // non-copyable class
+    Aggregator & operator=(const Aggregator &);
+
   public:
 
     // constructor

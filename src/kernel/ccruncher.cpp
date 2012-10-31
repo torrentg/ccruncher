@@ -67,7 +67,6 @@ string sfilename = "";
 string spath = "";
 bool bverbose = true;
 bool bforce = false;
-bool btrace = false;
 int inice = -999;
 int ihash = 0;
 int ithreads = 1;
@@ -82,6 +81,22 @@ void catchsignal(int signal)
   UNUSED(signal);
   stop = true;
 } 
+
+//===========================================================================
+// gsl error handler
+//===========================================================================
+void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
+{
+  UNUSED(file);
+  UNUSED(line);
+  UNUSED(gsl_errno);
+  string msg = reason;
+  msg += " (file=" + string(file);
+  msg += ", line=" + Format::toString(line);
+  msg += ", errno=" + Format::toString(errno) + ")";
+  Exception gsl_exception(msg);
+  throw Exception(gsl_exception, "gsl exception");
+}
 
 //===========================================================================
 // main
@@ -100,7 +115,6 @@ int main(int argc, char *argv[])
       { "nice",         1,  NULL,  303 },
       { "hash",         1,  NULL,  304 },
       { "threads",      1,  NULL,  305 },
-      { "trace",        0,  NULL,  306 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -203,10 +217,6 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 306: // --trace (trace copula values to file copula.csv)
-          btrace = true;
-          break;
-
       default: // unexpected error
           cerr << 
                   "unexpected error parsing arguments. Please report this bug sending input\n"
@@ -297,6 +307,9 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   signal(SIGABRT, catchsignal);
   signal(SIGTERM, catchsignal);
 
+  // setting gsl error handler
+  gsl_error_handler_t *prev_gsl_handler = gsl_set_error_handler(gsl_handler);
+
   // checking output directory
   if (!File::existDir(path))
   {
@@ -328,7 +341,6 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
   MonteCarlo montecarlo;
   montecarlo.setFilePath(path, bforce);
   montecarlo.setHash(ihash);
-  montecarlo.setTrace(btrace);
   montecarlo.setNumThreads(nthreads);
 
   // initializing simulation
@@ -337,6 +349,9 @@ void run(const string &filename, const string &path, int nthreads) throw(Excepti
 
   // running simulation
   montecarlo.run(&stop);
+
+  // restoring previous gsl error handler
+  gsl_set_error_handler(prev_gsl_handler);
 
   // tracing some execution info
   Logger::trace("general information", '*');

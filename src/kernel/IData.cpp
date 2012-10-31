@@ -38,17 +38,7 @@ void ccruncher::IData::init()
    hasdefinestag = 0;
    title = "";
    description = "";
-   portfolio = NULL;
    stop = NULL;
-}
-
-//===========================================================================
-// release
-//===========================================================================
-void ccruncher::IData::release()
-{
-  if (portfolio != NULL) delete portfolio;
-  init();
 }
 
 //===========================================================================
@@ -64,7 +54,6 @@ ccruncher::IData::IData()
 //===========================================================================
 ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m, bool *stop_) throw(Exception)
 {
-  // initializing content
   init();
   filename = xmlfilename;
   stop = stop_;
@@ -122,7 +111,6 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
   }
   catch(std::exception &)
   {
-    release();
     throw;
   }
 }
@@ -204,19 +192,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &transitions, name_, attributes);
     }
   }
-  // section survivals
-  else if (isEqual(name_,"survivals")) {
-    if (ratings.size() == 0) {
-      throw Exception("tag <survivals> defined before <ratings> tag");
-    }
-    else if (survivals.size() != 0) {
-      throw Exception("tag survivals repeated");
-    }
-    else {
-      survivals.setRatings(ratings);
-      eppush(eu, &survivals, name_, attributes);
-    }
-  }
   // section default probabilities
   else if (isEqual(name_,"dprobs")) {
     if (ratings.size() == 0) {
@@ -276,8 +251,8 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     else if (segmentations.size() == 0) {
       throw Exception("tag <portfolio> defined before <segmentations> tag");
     }
-    else if (portfolio != NULL) {
-      throw Exception("tag portfolio repeated");
+    else if (portfolio.getObligors().size() != 0) {
+      throw Exception("tag <portfolio> repeated");
     }
     else {
       parsePortfolio(eu, name_, attributes);
@@ -337,9 +312,6 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"transitions")) {
     // nothing to do
   }
-  else if (isEqual(name_,"survivals")) {
-    // nothing to do
-  }
   else if (isEqual(name_,"dprobs")) {
     // nothing to do
   }
@@ -365,12 +337,12 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
-  portfolio = new Portfolio(ratings, sectors, segmentations, interest, params.time0, params.timeT);
+  portfolio.init(ratings, sectors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 
   if (ref == "")
   {
-    eppush(eu, portfolio, name_, attributes);
+    eppush(eu, &portfolio, name_, attributes);
   }
   else
   {
@@ -392,7 +364,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
         Logger::trace("included file size", Format::bytes(File::filesize(filepath)));
         ExpatParser parser;
         parser.setDefines(eu.defines);
-        parser.parse(xmlstream, portfolio, stop);
+        parser.parse(xmlstream, &portfolio, stop);
       }
     }
     catch(std::exception &e)
@@ -416,8 +388,8 @@ void ccruncher::IData::validate() throw(Exception)
   else if (ratings.size() == 0) {
     throw Exception("ratings section not defined");
   }
-  else if (transitions.size() == 0 && survivals.size() == 0) {
-    throw Exception("transition matrix or survivals section not defined");
+  else if (transitions.size() == 0 && dprobs.size() == 0) {
+    throw Exception("transitions or dprobs section not defined");
   }
   else if (sectors.size() == 0) {
     throw Exception("sectors section not defined");
@@ -428,17 +400,9 @@ void ccruncher::IData::validate() throw(Exception)
   else if (segmentations.size() == 0) {
     throw Exception("segmentations section not defined");
   }
-  else if (portfolio == NULL) {
+  else if (portfolio.getObligors().size() == 0) {
     throw Exception("portfolio section not defined");
   }
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::IData::~IData()
-{
-  release();
 }
 
 //===========================================================================
@@ -490,14 +454,6 @@ Transitions & ccruncher::IData::getTransitions()
 }
 
 //===========================================================================
-// getSurvivals
-//===========================================================================
-Survivals &ccruncher::IData::getSurvivals()
-{
-  return survivals;
-}
-
-//===========================================================================
 // getDefaultProbabilities
 //===========================================================================
 DefaultProbabilities &ccruncher::IData::getDefaultProbabilities()
@@ -534,16 +490,7 @@ Segmentations & ccruncher::IData::getSegmentations()
 //===========================================================================
 Portfolio & ccruncher::IData::getPortfolio()
 {
-  return *portfolio;
-}
-
-//===========================================================================
-// hasSurvivals
-//===========================================================================
-bool ccruncher::IData::hasSurvivals() const
-{
-  if (survivals.size() > 0) return true;
-  else return false;
+  return portfolio;
 }
 
 //===========================================================================

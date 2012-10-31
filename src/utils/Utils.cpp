@@ -121,7 +121,6 @@ int ccruncher::Utils::getNumCores()
 #endif
 }
 
-
 //===========================================================================
 // copyright
 //===========================================================================
@@ -146,4 +145,3 @@ string ccruncher::Utils::version()
   oss << "build options: " << Utils::getCompilationOptions() << endl;
   return oss.str();
 }
-

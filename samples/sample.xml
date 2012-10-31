@@ -20,7 +20,7 @@
     <property name="stopcriteria.maxiterations" value="$numsims"/>
     <property name="stopcriteria.maxseconds" value="3600"/>
     <property name="copula.type" value="t($ndf)"/>
-    <property name="copula.seed" value="0"/>
+    <property name="rng.seed" value="0"/>
     <property name="montecarlo.antithetic" value="true"/>
     <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>

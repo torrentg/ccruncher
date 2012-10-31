@@ -44,7 +44,7 @@ void ccruncher::Params::init()
   maxiterations = -1L;
   maxseconds = -1L;
   copula_type = "";
-  copula_seed = 0L;
+  rng_seed = 0L;
   antithetic = false;
   onlyactive = false;
 }
@@ -177,9 +177,9 @@ void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) 
       getCopulaParam(); //parse and validate param
     }
   }
-  else if (name == "copula.seed")
+  else if (name == "rng.seed")
   {
-    copula_seed = getLongAttribute(attributes, "value");
+    rng_seed = getLongAttribute(attributes, "value");
   }
   else if (name == "montecarlo.antithetic")
   {
@@ -256,7 +256,7 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::toString(maxiterations) + "'/>\n";
   ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
   ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
-  ret += spc2 + "<property name='copula.seed' value='" + Format::toString(copula_seed) + "'/>\n";
+  ret += spc2 + "<property name='rng.seed' value='" + Format::toString(rng_seed) + "'/>\n";
   ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
   ret += spc2 + "<property name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
   ret += spc1 + "</parameters>\n";

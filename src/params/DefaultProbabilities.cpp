@@ -47,6 +47,14 @@ ccruncher::DefaultProbabilities::DefaultProbabilities()
 }
 
 //===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::DefaultProbabilities::DefaultProbabilities(const DefaultProbabilities &o)
+{
+  *this = o;
+}
+
+//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const Date &d) throw(Exception)
@@ -96,6 +104,37 @@ ccruncher::DefaultProbabilities::~DefaultProbabilities()
       gsl_interp_accel_free(accels[i]);
     }
   }
+}
+
+//===========================================================================
+// assignment operator
+//===========================================================================
+DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultProbabilities &o)
+{
+  date = o.date;
+  ddata = o.ddata;
+  ratings = o.ratings;
+  indexdefault = o.indexdefault;
+
+  splines = o.splines;
+  for(size_t i=0; i<splines.size(); i++)
+  {
+    if (o.splines[i] != NULL) {
+      splines[i] = gsl_spline_alloc(o.splines[i]->interp->type, o.splines[i]->size);
+      gsl_spline_init(splines[i], o.splines[i]->x, o.splines[i]->y, o.splines[i]->size);
+    }
+  }
+
+  accels = o.accels;
+  for(size_t i=0; i<accels.size(); i++)
+  {
+    if (o.accels[i] != NULL) {
+      accels[i] = gsl_interp_accel_alloc();
+      gsl_interp_accel_reset(accels[i]);
+    }
+  }
+
+  return *this;
 }
 
 //===========================================================================

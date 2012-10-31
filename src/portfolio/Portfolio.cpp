@@ -25,21 +25,23 @@
 #include <cassert>
 
 //===========================================================================
+// default constructor
+//===========================================================================
+ccruncher::Portfolio::Portfolio() : ratings(NULL), sectors(NULL),
+    segmentations(NULL), interest(NULL), auxobligor(NULL)
+{
+  date1 = NAD;
+  date2 = NAD;
+}
+
+//===========================================================================
 // constructor
 //===========================================================================
 ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
              Segmentations &segmentations_, const Interest &interest_, 
              const Date &date1_, const Date &date2_)
 {
-  auxobligor = NULL;
-  vobligors.clear();
-  // setting external objects
-  ratings = &ratings_;
-  sectors = &sectors_;
-  segmentations = &segmentations_;
-  interest = &interest_;
-  date1 = date1_;
-  date2 = date2_;
+  init(ratings_, sectors_, segmentations_, interest_, date1_, date2_);
 }
 
 //===========================================================================
@@ -56,6 +58,24 @@ ccruncher::Portfolio::~Portfolio()
   {
     delete vobligors[i];
   }
+}
+
+//===========================================================================
+// init
+//===========================================================================
+void ccruncher::Portfolio::init(const Ratings &ratings_, const Sectors &sectors_,
+             Segmentations &segmentations_, const Interest &interest_,
+             const Date &date1_, const Date &date2_)
+{
+  auxobligor = NULL;
+  vobligors.clear();
+  // setting external objects
+  ratings = &ratings_;
+  sectors = &sectors_;
+  segmentations = &segmentations_;
+  interest = &interest_;
+  date1 = date1_;
+  date2 = date2_;
 }
 
 //===========================================================================

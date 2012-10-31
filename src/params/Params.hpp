@@ -64,8 +64,8 @@ class Params : public ExpatHandlers
     int maxseconds;
     // copula.type param value
     string copula_type; // gaussian, t(4)
-    // copula.seed param value
-    long copula_seed;
+    // rng.seed param value
+    long rng_seed;
     // montecarlo.antithetic param value
     bool antithetic;
     // portfolio.onlyActiveClients param value

@@ -28,9 +28,16 @@
 //===========================================================================
 ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
-  assert(obligor != NULL);
-  irating = obligor->irating;
-  recovery = obligor->recovery;
+  if (obligor != NULL) {
+    irating = obligor->irating;
+    isector = obligor->isector;
+    recovery = obligor->recovery;
+  }
+  else {
+    irating = -1;
+    isector = -1;
+    //recovery = Recovery();
+  }
   numassets = 0;
   ref.obligor = obligor;
 }
@@ -42,11 +49,11 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 //===========================================================================
 bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
 {
-  if (ref.obligor->isector < c.ref.obligor->isector)
+  if (isector < c.isector)
   {
     return true;
   }
-  else if (ref.obligor->isector == c.ref.obligor->isector)
+  else if (isector == c.isector)
   {
     if (irating < c.irating)
     {

@@ -342,39 +342,11 @@
 				Name="math"
 				>
 				<File
-					RelativePath="src\math\Copula.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\FastTStudentCdf.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\FastTStudentCdf.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\GMFCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\GMFCopula.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\math\PowMatrix.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\math\PowMatrix.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TMFCopula.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\TMFCopula.hpp"
 					>
 				</File>
 			</Filter>

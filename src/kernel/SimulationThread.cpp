@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <gsl/gsl_blas.h>
 #include "kernel/SimulationThread.hpp"
 #include <cassert>
 
@@ -28,19 +29,20 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Thread(), 
-  montecarlo(mc), obligors(mc.obligors), assets(mc.assets), copula(cop_), 
-  losses(0), uvalues(NULL)
+ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed) : Thread(),
+  montecarlo(mc), obligors(mc.obligors), assets(mc.assets), rng(NULL), factors(NULL),
+  chol(mc.chol), floadings(mc.floadings), inverse(mc.inverse), losses(0), uvalues(0)
 {
-  assert(copula != NULL);
-  rng = copula->getRng();
+  assert(chol != NULL);
+  rng = gsl_rng_alloc(gsl_rng_mt19937);
+  gsl_rng_set(rng, (unsigned long) seed);
+  factors = gsl_vector_alloc(chol->size1);
   assetsize = mc.assetsize;
   time0 = mc.time0;
   timeT = mc.timeT;
-  survivals = mc.survivals;
   antithetic = mc.antithetic;
   reversed = true;
-  uvalues = copula->get();
+  uvalues.resize(obligors.size());
   numsegmentations = mc.aggregators.size();
   losses.resize(numsegmentations);
   for(int i=0; i<numsegmentations; i++)
@@ -54,7 +56,8 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, Copula *cop_) : Th
 //===========================================================================
 ccruncher::SimulationThread::~SimulationThread()
 {
-  // nothing to do
+  if (rng != NULL) gsl_rng_free(rng);
+  if (factors != NULL) gsl_vector_free(factors);
 }
 
 //===========================================================================
@@ -91,7 +94,26 @@ void ccruncher::SimulationThread::run()
     timer2.stop();
 
     // data transfer
-    more = montecarlo.append(losses, uvalues);
+    more = montecarlo.append(losses);
+  }
+}
+
+//===========================================================================
+// simulate a multivariate normal and let result in values
+//===========================================================================
+void ccruncher::SimulationThread::rmvnorm()
+{
+  // simulate w·N(0,R)
+  for(size_t i=0; i<factors->size; i++) {
+    gsl_vector_set(factors, i, gsl_ran_ugaussian(rng));
+  }
+  gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, factors);
+
+  // multivariate normal simulation
+  for(size_t i=0; i<obligors.size(); i++)
+  {
+    int isector = obligors[i].isector;
+    uvalues[i] = gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng);
   }
 }
 
@@ -100,16 +122,15 @@ void ccruncher::SimulationThread::run()
 //===========================================================================
 void ccruncher::SimulationThread::randomize() throw()
 {
-  // generate a new realization for each copula
   if (!antithetic)
   {
-    copula->next();
+    rmvnorm();
   }
   else // antithetic == true
   {
     if (reversed)
     {
-      copula->next();
+      rmvnorm();
       reversed = false;
     }
     else
@@ -120,7 +141,7 @@ void ccruncher::SimulationThread::randomize() throw()
 }
 
 //===========================================================================
-// getRandom. Returns requested copula value
+// getRandom. Returns i-th component of the simulated multivariate normal
 // encapsules antithetic management
 //===========================================================================
 inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
@@ -141,11 +162,9 @@ inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 void ccruncher::SimulationThread::simule(int iobligor) throw()
 {
   // simule default time
-  double u = getRandom(iobligor);
+  double x = getRandom(iobligor);
   int r = obligors[iobligor].irating;
-  double t = survivals.inverse(r, u);
-  // TODO: assumed no leap years (this can be improved)
-  Date dtime = time0 + (long)(t*365.0/12.0);
+  Date dtime = inverse.evalueAsDate(r, x);
   if (timeT < dtime) return;
 
   // evalue obligor losses
