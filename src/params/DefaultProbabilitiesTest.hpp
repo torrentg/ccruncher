@@ -50,6 +50,7 @@ class DefaultProbabilitiesTest : public TestFixture<DefaultProbabilitiesTest>
     void test5();
     void test6();
     void test7();
+    void test8();
 
 
   public:
@@ -63,6 +64,7 @@ class DefaultProbabilitiesTest : public TestFixture<DefaultProbabilitiesTest>
       TEST_CASE(test5);
       TEST_CASE(test6);
       TEST_CASE(test7);
+      TEST_CASE(test8);
     }
 
 };

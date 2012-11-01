@@ -394,15 +394,39 @@ void ccruncher::DefaultProbabilities::setSplines()
   {
     if (i == (size_t) indexdefault) continue;
 
-    size_t n = ddata[i].size();
-    vector<double> x(n);
-    vector<double> y(n);
-    for(size_t j=0; j<n; j++)
+    vector<double> x;
+    vector<double> y;
+
+    for(size_t j=0; j<ddata[i].size(); j++)
     {
-      x[j] = ddata[i][j].day;
-      y[j] = ddata[i][j].prob;
+      if (ddata[i][j].prob < 0.0)
+      {
+        assert(false);
+      }
+      else if (ddata[i][j].prob == 0.0)
+      {
+        // because a dprob can have dprob[irating][0:4] = 0
+        // in these cases, cubic spline can have negative derivatives
+        // if we use all the points. For this reason we remove the
+        // starting values with prob=0
+        if (j+1 == ddata[i].size() || ddata[i][j+1].prob != 0)
+        {
+          x.push_back(ddata[i][j].day);
+          y.push_back(ddata[i][j].prob);
+        }
+      }
+      else if (ddata[i][j].prob <= 1.0)
+      {
+        x.push_back(ddata[i][j].day);
+        y.push_back(ddata[i][j].prob);
+      }
+      else
+      {
+        assert(false);
+      }
     }
 
+    size_t n = x.size();
     assert(n >= 2);
 
     bool iscspline = false;
@@ -416,7 +440,7 @@ void ccruncher::DefaultProbabilities::setSplines()
       for(size_t j=0; j<n; j++)
       {
         double deriv = gsl_spline_eval_deriv(splines[i], x[j], NULL);
-        if (deriv <= 0.0) {
+        if (deriv < 0.0) {
           gsl_spline_free(splines[i]);
           splines[i] = NULL;
           iscspline = false;
@@ -446,7 +470,6 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
   assert(splines.size() == accels.size());
   assert(0 <= irating && irating < ratings.size());
 
-  // if default rating
   if (irating == indexdefault) {
     return 1.0;
   }
@@ -454,6 +477,11 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
   if (t < 0) {
     assert(false);
     return 0.0;
+  }
+
+  assert(splines[irating] != NULL && splines[irating]->size > 0);
+  if (t <= splines[irating]->x[0]) {
+    return splines[irating]->y[0];
   }
   else if (ddata[irating].back().day < t) {
     return 1.0;
@@ -488,7 +516,6 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
   assert(splines.size() == accels.size());
   assert(0 <= irating && irating < ratings.size());
 
-  // if default rating
   if (irating == indexdefault) {
     return 0.0;
   }
@@ -497,7 +524,10 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
     assert(false);
     return 0.0;
   }
-  else if (ddata[irating].back().prob < val) {
+
+  assert(splines[irating] != NULL && splines[irating]->size > 0);
+
+  if (ddata[irating].back().prob < val) {
     return ddata[irating].back().day + 1.0;
   }
   else {

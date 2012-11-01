@@ -355,3 +355,42 @@ void ccruncher_test::DefaultProbabilitiesTest::test7()
   }
 }
 
+//===========================================================================
+// test8
+// case with dprob[t=0]=dprob[t=1]=dprob[t=2]=0
+//===========================================================================
+void ccruncher_test::DefaultProbabilitiesTest::test8()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <dprobs>\n\
+      <dprob rating='A' t='0M'  value='0.000'/>\n\
+      <dprob rating='A' t='1M'  value='0.000'/>\n\
+      <dprob rating='A' t='2M'  value='0.000'/>\n\
+      <dprob rating='A' t='3M'  value='0.0002'/>\n\
+      <dprob rating='A' t='12M' value='0.001'/>\n\
+      <dprob rating='A' t='24M' value='0.005'/>\n\
+      <dprob rating='A' t='48M' value='0.03'/>\n\
+      <!-- optionally you can add default rating info (value=0 always) -->\n\
+    </dprobs>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  // ratings list creation
+  Ratings ratings = getRatings();
+
+  // dprob function creation
+  Date date("1/1/2012");
+  DefaultProbabilities pd(ratings, date);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
+
+  for(int i=0; i<=add(date,2,'M')-date; i++)
+  {
+    ASSERT_EQUALS(pd.evalue(0, i), 0.0);
+  }
+  ASSERT(pd.evalue(0, (add(date,2,'M')-date)+1) > 0.0);
+
+
+  ASSERT_EQUALS(pd.inverse(0, 0.0), add(date,2,'M')-date);
+}
+

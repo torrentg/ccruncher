@@ -384,6 +384,12 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
 
   Logger::trace("number of sectors", Format::toString(idata.getSectors().size()));
 
+  string strsplines;
+  for(int i=0; i<dprobs.size(); i++) {
+    strsplines += dprobs.getInterpolationType(i)[0];
+  }
+  Logger::trace("dprobs spline (l=linear, c=cubic, n=none)", strsplines);
+
   // model parameters
   inverse.init(ndf, timeT, dprobs);
   chol = idata.getCorrelations().getCholesky();
