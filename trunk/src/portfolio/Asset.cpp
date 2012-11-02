@@ -97,21 +97,17 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
 {
   if (isEqual(name_,"values") && have_data == true)
   {
-/*
-    Date at(date);
-    const char *str = getAttributeValue(attributes, "at");
-    if (isInterval(str)) {
-      at.addIncrement(str);
-    }
-    else {
-      at = Date(str);
-    }
-*/
     const char *str;
     DateValues values;
 
-    //TODO: rename 'at' to 't' and allow dates and intervals from t0
-    values.date = getDateAttribute(attributes, "at");
+    values.date = date;
+    str = getAttributeValue(attributes, "t");
+    if (isInterval(str)) {
+      values.date.add(str);
+    }
+    else {
+      values.date = Date(str);
+    }
 
     str = getAttributeValue(attributes, "exposure");
     values.exposure = Exposure(str);
@@ -304,22 +300,22 @@ const vector<DateValues>& ccruncher::Asset::getData() const
 //===========================================================================
 // getValues
 // returns:
-//    > (NAD,0,1) if at <= asset creation date
+//    > (NAD,0,1) if t <= asset creation date
 //    > (NAD,0,1) if asset has 0 date-values
-//    > (NAD,0,1) if at > last date-values
-//    > otherwise, returns the smallest date-values that is not less than at
+//    > (NAD,0,1) if t > last date-values
+//    > otherwise, returns the smallest date-values that is not less than t
 //===========================================================================
-const DateValues& ccruncher::Asset::getValues(const Date at) const
+const DateValues& ccruncher::Asset::getValues(const Date t) const
 {
   static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
   
-  if (at <= date || data.empty() || data.back().date < at)
+  if (t <= date || data.empty() || data.back().date < t)
   {
     return dvnf;
   }
   else
   {
-    return *(lower_bound(data.begin(), data.end(), DateValues(at)));
+    return *(lower_bound(data.begin(), data.end(), DateValues(t)));
   }
 }
 

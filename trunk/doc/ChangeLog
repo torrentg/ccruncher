@@ -9,6 +9,7 @@ version 2.1 (???. 2012)
   * removed implicit segmentations
   * improved performance (>40%)
   * property copula.seed renamed to rng.seed
+  * attribute values@at renamed to values@t
 
 version 2.0 (Oct. 2012)
 --------------------------

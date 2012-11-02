@@ -169,12 +169,12 @@
     <obligor rating="A" sector="bank" id="001">
       <asset id="op1" date="15/01/2005">
         <data>
-          <values at="15/01/2005" exposure="5000.0" recovery="50%" />
-          <values at="15/01/2006" exposure="5000.0" recovery="50%" />
-          <values at="15/01/2007" exposure="4000.0" recovery="50%" />
-          <values at="15/01/2008" exposure="3000.0" recovery="50%" />
-          <values at="15/01/2009" exposure="2000.0" recovery="50%" />
-          <values at="15/01/2010" exposure="1000.0" recovery="50%" />
+          <values t="15/01/2005" exposure="5000.0" recovery="50%" />
+          <values t="15/01/2006" exposure="5000.0" recovery="50%" />
+          <values t="15/01/2007" exposure="4000.0" recovery="50%" />
+          <values t="15/01/2008" exposure="3000.0" recovery="50%" />
+          <values t="15/01/2009" exposure="2000.0" recovery="50%" />
+          <values t="15/01/2010" exposure="1000.0" recovery="50%" />
         </data>
       </asset>
     </obligor>

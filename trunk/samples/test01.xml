@@ -131,7 +131,7 @@ How to check results?
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset id="op1" date="01/01/2005">
         <data>
-          <values at="01/01/2007" exposure="1.0" recovery="0%" />
+          <values t="01/01/2007" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>

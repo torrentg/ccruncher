@@ -223,7 +223,7 @@
     EMPTY
 >
 <!ATTLIST values
-    at CDATA #REQUIRED
+    t CDATA #REQUIRED
     exposure CDATA #REQUIRED
     recovery CDATA #IMPLIED
 >

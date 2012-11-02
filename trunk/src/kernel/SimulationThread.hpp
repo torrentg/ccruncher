@@ -63,6 +63,8 @@ class SimulationThread : public Thread
     const char *assets;
     // asset size
     int assetsize;
+    // degrees of freedom
+    double ndf;
     // random number generator
     gsl_rng *rng;
     // simulated factors

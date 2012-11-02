@@ -94,7 +94,7 @@ class Asset : public ExpatHandlers
     // returns maximum event date (restricted to precomputed events)
     Date getMaxDate() const;
     // used to test SimulationThread::simule lower_bound
-    const DateValues& getValues(const Date at) const;
+    const DateValues& getValues(const Date t) const;
     // says if use obligor recovery
     bool hasObligorRecovery() const;
     // returns reference to data

@@ -186,27 +186,27 @@
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <data>
-          <values at="01/06/2005" exposure="2000.0" />
-          <values at="01/06/2006" exposure="1900.0" />
-          <values at="01/06/2007" exposure="1800.0" />
-          <values at="01/06/2008" exposure="1700.0" />
-          <values at="01/06/2009" exposure="1600.0" />
-          <values at="01/06/2010" exposure="1500.0" />
-          <values at="01/06/2011" exposure="1400.0" />
-          <values at="01/06/2012" exposure="1300.0" />
-          <values at="01/06/2013" exposure="1200.0" />
-          <values at="01/06/2014" exposure="1100.0" />
+          <values t="01/06/2005" exposure="2000.0" />
+          <values t="01/06/2006" exposure="1900.0" />
+          <values t="01/06/2007" exposure="1800.0" />
+          <values t="01/06/2008" exposure="1700.0" />
+          <values t="01/06/2009" exposure="1600.0" />
+          <values t="01/06/2010" exposure="1500.0" />
+          <values t="01/06/2011" exposure="1400.0" />
+          <values t="01/06/2012" exposure="1300.0" />
+          <values t="01/06/2013" exposure="1200.0" />
+          <values t="01/06/2014" exposure="1100.0" />
         </data>
       </asset>
       <asset id="op2" date="01/06/2008">
         <belongs-to segmentation="offices" segment="0004"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/07/2009" exposure="4400.0" recovery="75%" />
-          <values at="01/07/2011" exposure="3920.0" recovery="70%" />
-          <values at="01/07/2013" exposure="3340.0" recovery="65%" />
-          <values at="01/07/2015" exposure="2960.0" recovery="60%" />
-          <values at="01/07/2017" exposure="2480.0" recovery="55%" />
+          <values t="01/07/2009" exposure="4400.0" recovery="75%" />
+          <values t="01/07/2011" exposure="3920.0" recovery="70%" />
+          <values t="01/07/2013" exposure="3340.0" recovery="65%" />
+          <values t="01/07/2015" exposure="2960.0" recovery="60%" />
+          <values t="01/07/2017" exposure="2480.0" recovery="55%" />
         </data>
       </asset>
     </obligor>
@@ -217,11 +217,11 @@
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/01/2005" exposure="1750.0" />
-          <values at="01/06/2007" exposure="1600.0" />
-          <values at="01/01/2009" exposure="1450.0" />
-          <values at="01/06/2011" exposure="1300.0" />
-          <values at="01/01/2013" exposure="1150.0" />
+          <values t="01/01/2005" exposure="1750.0" />
+          <values t="01/06/2007" exposure="1600.0" />
+          <values t="01/01/2009" exposure="1450.0" />
+          <values t="01/06/2011" exposure="1300.0" />
+          <values t="01/01/2013" exposure="1150.0" />
         </data>
       </asset>
     </obligor>
@@ -232,20 +232,20 @@
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values at="01/01/2000" exposure="2400.0" />
-          <values at="01/01/2001" exposure="2300.0" />
-          <values at="01/01/2002" exposure="2200.0" />
-          <values at="01/01/2003" exposure="2100.0" />
-          <values at="01/01/2004" exposure="lognormal(6.5,1.0)" />
-          <values at="01/01/2005" exposure="1900.0" />
-          <values at="01/01/2006" exposure="exponential(1800.0)" />
-          <values at="01/01/2007" exposure="1700.0" />
-          <values at="01/01/2008" exposure="uniform(1500.0,1700.0)" />
-          <values at="01/01/2009" exposure="1500.0" />
-          <values at="01/01/2010" exposure="gamma(2800.0,0.5)" />
-          <values at="01/01/2011" exposure="1300.0" />
-          <values at="01/01/2012" exposure="normal(1200.0,100.0)" />
-          <values at="01/01/2013" exposure="1100.0" />
+          <values t="01/01/2000" exposure="2400.0" />
+          <values t="01/01/2001" exposure="2300.0" />
+          <values t="01/01/2002" exposure="2200.0" />
+          <values t="01/01/2003" exposure="2100.0" />
+          <values t="01/01/2004" exposure="lognormal(6.5,1.0)" />
+          <values t="01/01/2005" exposure="1900.0" />
+          <values t="01/01/2006" exposure="exponential(1800.0)" />
+          <values t="01/01/2007" exposure="1700.0" />
+          <values t="01/01/2008" exposure="uniform(1500.0,1700.0)" />
+          <values t="01/01/2009" exposure="1500.0" />
+          <values t="01/01/2010" exposure="gamma(2800.0,0.5)" />
+          <values t="01/01/2011" exposure="1300.0" />
+          <values t="01/01/2012" exposure="normal(1200.0,100.0)" />
+          <values t="01/01/2013" exposure="1100.0" />
         </data>
       </asset>
     </obligor>

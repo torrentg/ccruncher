@@ -146,7 +146,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='C' sector='S1' id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -155,7 +155,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='D' sector='S2' id='cif2'>\n\
       <asset id='op2' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -164,7 +164,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='A' sector='S1' id='cif3'>\n\
       <asset id='op3' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -173,7 +173,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='B' sector='S1' id='cif4'>\n\
       <asset id='op4' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -182,7 +182,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     <obligor rating='A' sector='S2' id='cif5'>\n\
       <asset id='op5' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
