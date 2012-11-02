@@ -233,31 +233,31 @@ void ccruncher_test::SimulatedDataTest::test1()
     sobligors.push_back(SimulatedObligor(obligors[i]));
   }
   
-  ASSERT_EQUALS(sobligors[0].irating, 2);
-  ASSERT_EQUALS(sobligors[1].irating, 3);
-  ASSERT_EQUALS(sobligors[2].irating, 0);
-  ASSERT_EQUALS(sobligors[3].irating, 1);
-  ASSERT_EQUALS(sobligors[4].irating, 0);
+  ASSERT_EQUALS(sobligors[0].irating, (unsigned char) 2);
+  ASSERT_EQUALS(sobligors[1].irating, (unsigned char) 3);
+  ASSERT_EQUALS(sobligors[2].irating, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[3].irating, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[4].irating, (unsigned char) 0);
 
-  ASSERT_EQUALS(sobligors[0].isector, 0);
-  ASSERT_EQUALS(sobligors[1].isector, 1);
-  ASSERT_EQUALS(sobligors[2].isector, 0);
-  ASSERT_EQUALS(sobligors[3].isector, 0);
-  ASSERT_EQUALS(sobligors[4].isector, 1);
+  ASSERT_EQUALS(sobligors[0].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[1].isector, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[2].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[3].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[4].isector, (unsigned char) 1);
   
   sort(sobligors.begin(), sobligors.end());
 
-  ASSERT_EQUALS(sobligors[0].isector, 0);
-  ASSERT_EQUALS(sobligors[1].isector, 0);
-  ASSERT_EQUALS(sobligors[2].isector, 0);
-  ASSERT_EQUALS(sobligors[3].isector, 1);
-  ASSERT_EQUALS(sobligors[4].isector, 1);
+  ASSERT_EQUALS(sobligors[0].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[1].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[2].isector, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[3].isector, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[4].isector, (unsigned char) 1);
   
-  ASSERT_EQUALS(sobligors[0].irating, 0);
-  ASSERT_EQUALS(sobligors[1].irating, 1);
-  ASSERT_EQUALS(sobligors[2].irating, 2);
-  ASSERT_EQUALS(sobligors[3].irating, 0);
-  ASSERT_EQUALS(sobligors[4].irating, 3);
+  ASSERT_EQUALS(sobligors[0].irating, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[1].irating, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[2].irating, (unsigned char) 2);
+  ASSERT_EQUALS(sobligors[3].irating, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[4].irating, (unsigned char) 3);
 
   for(unsigned int i=0; i<obligors.size(); i++)
   {

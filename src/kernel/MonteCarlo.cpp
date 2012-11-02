@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <climits>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Utils.hpp"
@@ -206,6 +207,14 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   Logger::trace("setting obligors to simulate", '-');
   Logger::newIndentLevel();
 
+  // checking limits (see SimulatedObligor fields)
+  if (idata.getRatings().size() == 0 || UCHAR_MAX < idata.getRatings().size()) {
+    throw Exception("invalid number of ratings");
+  }
+  if (idata.getSectors().size() == 0 || UCHAR_MAX < idata.getSectors().size()) {
+    throw Exception("invalid number of sectors");
+  }
+
   // setting logger info
   Logger::trace("simulate only active obligors", Format::toString(idata.getParams().onlyactive));
   Logger::trace("number of initial obligors", Format::toString(idata.getPortfolio().getObligors().size()));
@@ -253,6 +262,11 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // doing assertions
   assert(assets == NULL);
 
+  // checking limits (see SimulatedAsset::segments field)
+  if (idata.getSegmentations().size() == 0 || USHRT_MAX < idata.getSegmentations().size()) {
+    throw Exception("invalid number of segmentations");
+  }
+
   // setting logger header
   Logger::trace("setting assets to simulate", '-');
   Logger::newIndentLevel();
@@ -299,6 +313,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   {
     Obligor *obligor = obligors[i].ref.obligor;
     obligors[i].ref.assets = NULL;
+    obligors[i].numassets = 0;
     vector<Asset*> &vassets = obligor->getAssets();
     for(unsigned int j=0; j<vassets.size(); j++)
     {
@@ -319,16 +334,22 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         p->end = datevalues.begin() + numdatevalues;
 
         // setting asset segments
-        int *segments = &(p->segments);
+        unsigned short *segments = &(p->segments);
         for(int k=0; k<idata.getSegmentations().size(); k++)
         {
-          segments[k] = vassets[j]->getSegment(k);
+          segments[k] = static_cast<unsigned short>(vassets[j]->getSegment(k));
         }
 
         // assigning asset to obligor
         if (obligors[i].ref.assets == NULL)
         {
           obligors[i].ref.assets = p;
+        }
+
+        // incrementing num assets counters
+        if (obligors[i].numassets == USHRT_MAX)
+        {
+          throw Exception("exceeded maximum number of assets by obligor");
         }
         obligors[i].numassets++;
         numassets++;

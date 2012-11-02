@@ -41,7 +41,6 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-//TODO: set segments as ushort instead of int
 class SimulatedAsset
 {
 
@@ -56,27 +55,25 @@ class SimulatedAsset
     // reference to asset data
     vector<DateValues>::const_iterator end;
     // segmentations indexes
-    int segments;
+    unsigned short segments;
 
 };
 
 //---------------------------------------------------------------------------
 
-//TODO: set irating as unsigned char instead of int
-//TODO: set isector as unsigned char instead of int
 class SimulatedObligor
 {
 
   public:
 
     // obligor's rating index
-    int irating;
+    unsigned char irating;
     // obligor's sector index
-    int isector;
+    unsigned char isector;
     // obligor's recovery
     Recovery recovery;
     // number of assets
-    int numassets;
+    unsigned short numassets;
     // pointer
     union
     {

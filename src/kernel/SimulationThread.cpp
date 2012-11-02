@@ -115,7 +115,7 @@ void ccruncher::SimulationThread::rmvnorm()
     // simulate multivariate normal
     for(size_t i=0; i<obligors.size(); i++)
     {
-      int isector = obligors[i].isector;
+      size_t isector = obligors[i].isector;
       uvalues[i] = gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng);
     }
   }
@@ -129,7 +129,7 @@ void ccruncher::SimulationThread::rmvnorm()
     // simulate multivariate t-Student
     for(size_t i=0; i<obligors.size(); i++)
     {
-      int isector = obligors[i].isector;
+      size_t isector = obligors[i].isector;
       uvalues[i] = chival * (gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng));
     }
   }
@@ -188,7 +188,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   // evalue obligor losses
   double obligor_recovery = NAN;
   char *p = (char*)(obligors[iobligor].ref.assets);
-  for(int i=0; i<obligors[iobligor].numassets; i++)
+  for(unsigned short i=0; i<obligors[iobligor].numassets; i++)
   {
     SimulatedAsset *asset = (SimulatedAsset*)(p);
     p += assetsize;
@@ -215,11 +215,11 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
       double loss = exposure * (1.0 - recovery);
 
       // aggregate asset loss
-      int *segments = &(asset->segments);
+      unsigned short *segments = &(asset->segments);
       for(int j=0; j<numsegmentations; j++)
       {
-        int isegment = segments[j];
-        assert(0 <= isegment && isegment < (int) losses[j].size());
+        unsigned short isegment = segments[j];
+        assert(isegment < losses[j].size());
         losses[j][isegment] += loss;
       }
     }
