@@ -26,8 +26,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=tex2png.sh
-numversion="2.0"
-svnversion="R857"
+numversion="2.1"
+svnversion="R877"
 retcode=0
 xslfile=$(dirname "$0")/tex2png.xsl;
 xslfile=$(readlink -f "$xslfile");

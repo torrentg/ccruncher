@@ -24,8 +24,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=ccreport.sh
-numversion="2.0"
-svnversion="R857"
+numversion="2.1"
+svnversion="R877"
 retcode=0
 options=""
 

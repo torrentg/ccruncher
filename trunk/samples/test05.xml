@@ -39,6 +39,8 @@ Expected Results:
   <!-- ============================================================== -->
   <defines>
     <define name="numsims" value="20000"/>
+    <define name="copula" value="t(3)"/>
+    <define name="antithetic" value="false"/>
   </defines>
 
   <!-- ============================================================== -->
@@ -49,9 +51,9 @@ Expected Results:
     <property name="time.T" value="01/01/2006"/>
     <property name="stopcriteria.maxiterations" value="$numsims"/>
     <property name="stopcriteria.maxseconds" value="30000000"/>
-    <property name="copula.type" value="t(3)"/>
-    <property name="rng.seed" value="0"/>
-    <property name="montecarlo.antithetic" value="false"/>
+    <property name="copula.type" value="$copula"/>
+    <property name="rng.seed" value="10"/>
+    <property name="montecarlo.antithetic" value="$antithetic"/>
     <property name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
