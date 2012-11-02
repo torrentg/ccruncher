@@ -352,8 +352,9 @@
     <h2>Section Ratings</h2>
 
     <p>
-      This section shows how to define the credit ratings. A minimum of two credit 
-      ratings is required: a non-default rating and a default rating.
+      This section shows how to define the credit ratings. A minimum of two  
+      ratings is required (a non-default rating and a default rating). 
+      The maximum number of ratings is 256.
     </p>
 
     <h3>Example</h3>
@@ -552,7 +553,7 @@
 
     <p>
       This section shows how to define the sectors. A minimum of one sector
-      is required.
+      is required. The maximum number of sectors is 256.
     </p>
 
     <h3>Example</h3>
@@ -697,9 +698,10 @@
     </ul> 
     <p>
       All segmentations must be complete, so that an element belongs to only one segment and 
-      the union of all segments constitutes the whole portfolio. Every segmentation must have 
+      the union of all segments constitutes the whole portfolio. Every segmentation has 
       a segment named 'unassigned' defined in an implicit way. If a obligor (or an asset)
       does not belong to any segment, then it is considered part of the 'unassigned' segment.
+      The maximum number of segments in a segmentation is 65535.
     </p>
 
     <h3>Example</h3>
@@ -801,17 +803,18 @@
 
     <p>
       This section shows how to define the portfolio. 
-      A portfolio is a set of assets. The description of assets is done 
-      by listing the expected exposures and recovery rates in case of default. 
-      Assets are grouped by obligor.
+      A portfolio is a set of assets, where assets are grouped by obligor 
+      (with a maximum of 65535 assets per obligor).
+      The description of each asset is done by listing the expected exposures 
+      and recovery rates in case of default. 
     </p>
     <p>
       Recovery can be defined at 3 different levels: obligor, asset and data value. 
       When a default occurs at time t, we get the recovery at time <i>t</i> (or the closest 
       date above). If this recovery is not reported, we get the asset recovery. If 
-      this recovery is not reported, we get the obligor recovery. When a default occurs 
-      at time <i>t</i>, in the beta distribution case, a new sample is drawn. In the obligor 
-      level, this drawn is shared by all assets that have not defined a recovery at <i>t</i>. 
+      this recovery is not reported, we get the obligor recovery. In the obligor 
+      level, the value is shared by all assets that have not defined a recovery 
+      at default time. 
     </p>
 
     <h3>Example</h3>
@@ -1185,7 +1188,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 01-Nov-2012
+          Last modified: 02-Nov-2012
         </td>
       </tr></table>
     </div>

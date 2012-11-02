@@ -29,13 +29,13 @@
 ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   if (obligor != NULL) {
-    irating = obligor->irating;
-    isector = obligor->isector;
+    irating = static_cast<unsigned char>(obligor->irating);
+    isector = static_cast<unsigned char>(obligor->isector);
     recovery = obligor->recovery;
   }
   else {
-    irating = -1;
-    isector = -1;
+    irating = 0;
+    isector = 0;
     //recovery = Recovery();
   }
   numassets = 0;
