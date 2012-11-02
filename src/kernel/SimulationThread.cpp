@@ -166,7 +166,7 @@ inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 {
   if (antithetic && reversed)
   {
-    return 1.0 - uvalues[iobligor];
+    return -uvalues[iobligor];
   }
   else
   {
