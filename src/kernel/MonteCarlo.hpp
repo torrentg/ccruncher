@@ -76,6 +76,8 @@ class MonteCarlo
     Date time0;
     // date where risk is computed
     Date timeT;
+    // degrees of freedom
+    double ndf;
     // inverse functions
     Inverse inverse;
     // factors cholesky matrix

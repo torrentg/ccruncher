@@ -124,7 +124,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op01">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -132,7 +132,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op02">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -140,7 +140,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op03">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -148,7 +148,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op04">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -156,7 +156,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op05">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -164,7 +164,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op06">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -172,7 +172,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op07">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -180,7 +180,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op08">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -188,7 +188,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op09">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -196,7 +196,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op10">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -204,7 +204,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op11">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -212,7 +212,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op12">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -220,7 +220,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op13">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -228,7 +228,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op14">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -236,7 +236,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op15">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -244,7 +244,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op16">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -252,7 +252,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op17">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -260,7 +260,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op18">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -268,7 +268,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op19">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -276,7 +276,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op20">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -284,7 +284,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op21">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -292,7 +292,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op22">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -300,7 +300,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op23">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -308,7 +308,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op24">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -316,7 +316,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op25">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -324,7 +324,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op26">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -332,7 +332,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op27">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -340,7 +340,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op28">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -348,7 +348,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op29">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -356,7 +356,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op30">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -364,7 +364,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op31">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -372,7 +372,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op32">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -380,7 +380,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op33">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -388,7 +388,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op34">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -396,7 +396,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op35">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -404,7 +404,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op36">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -412,7 +412,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op37">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -420,7 +420,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op38">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -428,7 +428,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op39">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -436,7 +436,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op40">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -444,7 +444,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op41">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -452,7 +452,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op42">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -460,7 +460,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op43">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -468,7 +468,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op44">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -476,7 +476,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op45">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -484,7 +484,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op46">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -492,7 +492,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op47">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -500,7 +500,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op48">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -508,7 +508,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op49">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -516,7 +516,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op50">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -524,7 +524,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op51">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -532,7 +532,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op52">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -540,7 +540,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op53">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -548,7 +548,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op54">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -556,7 +556,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op55">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -564,7 +564,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op56">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -572,7 +572,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op57">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -580,7 +580,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op58">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -588,7 +588,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op59">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -596,7 +596,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op60">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -604,7 +604,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op61">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -612,7 +612,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op62">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -620,7 +620,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op63">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -628,7 +628,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op64">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -636,7 +636,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op65">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -644,7 +644,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op66">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -652,7 +652,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op67">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -660,7 +660,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op68">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -668,7 +668,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op69">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -676,7 +676,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op70">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -684,7 +684,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op71">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -692,7 +692,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op72">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -700,7 +700,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op73">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -708,7 +708,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op74">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -716,7 +716,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op75">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -724,7 +724,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op76">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -732,7 +732,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op77">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -740,7 +740,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op78">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -748,7 +748,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op79">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -756,7 +756,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op80">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -764,7 +764,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op81">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -772,7 +772,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op82">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -780,7 +780,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op83">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -788,7 +788,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op84">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -796,7 +796,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op85">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -804,7 +804,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op86">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -812,7 +812,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op87">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -820,7 +820,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op88">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -828,7 +828,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op89">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -836,7 +836,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op90">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -844,7 +844,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op91">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -852,7 +852,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op92">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -860,7 +860,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op93">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -868,7 +868,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op94">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -876,7 +876,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op95">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -884,7 +884,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op96">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -892,7 +892,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op97">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -900,7 +900,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op98">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -908,7 +908,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op99">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>
@@ -916,7 +916,7 @@ Expected Results:
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op100">
         <data>
-          <values at="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
         </data>
       </asset>
     </obligor>

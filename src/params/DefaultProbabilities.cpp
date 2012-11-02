@@ -426,6 +426,11 @@ void ccruncher::DefaultProbabilities::setSplines()
       }
     }
 
+    if (y.size() == 1 && y[0] == 0.0) {
+      x.insert(x.begin(), 0.0);
+      y.insert(y.begin(), 0.0);
+    }
+
     size_t n = x.size();
     assert(n >= 2);
 

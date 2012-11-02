@@ -622,16 +622,16 @@
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <data>
-          <values at="01/01/2000" exposure="100.0" recovery="20%" />
-          <values at="01/06/2000" exposure="90.0" recovery="20%" />
-          <values at="01/01/2001" exposure="80.0" recovery="20%" />
-          <values at="01/06/2001" exposure="70.0" recovery="20%" />
-          <values at="01/01/2002" exposure="60.0" recovery="20%" />
-          <values at="01/06/2002" exposure="50.0" recovery="20%" />
-          <values at="01/01/2003" exposure="40.0" recovery="20%" />
-          <values at="01/06/2003" exposure="30.0" recovery="20%" />
-          <values at="01/01/2004" exposure="20.0" recovery="20%" />
-          <values at="01/06/2004" exposure="10.0" recovery="20%" />
+          <values t="01/01/2000" exposure="100.0" recovery="20%" />
+          <values t="01/06/2000" exposure="90.0" recovery="20%" />
+          <values t="01/01/2001" exposure="80.0" recovery="20%" />
+          <values t="01/06/2001" exposure="70.0" recovery="20%" />
+          <values t="01/01/2002" exposure="60.0" recovery="20%" />
+          <values t="01/06/2002" exposure="50.0" recovery="20%" />
+          <values t="01/01/2003" exposure="40.0" recovery="20%" />
+          <values t="01/06/2003" exposure="30.0" recovery="20%" />
+          <values t="01/01/2004" exposure="20.0" recovery="20%" />
+          <values t="01/06/2004" exposure="10.0" recovery="20%" />
         </data>
       </asset>
     </obligor>

@@ -104,13 +104,13 @@ void ccruncher_test::AssetTest::test1()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 
@@ -184,13 +184,13 @@ void ccruncher_test::AssetTest::test2()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 
@@ -215,13 +215,13 @@ void ccruncher_test::AssetTest::test3()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='-5Y' exposure='570.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='-5Y' exposure='570.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 
@@ -244,10 +244,10 @@ void ccruncher_test::AssetTest::test4()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='01/01/2007'>\n\
         <data>\n\
-           <values at='15/01/2007' exposure='+1000.0' />\n\
-           <values at='15/01/2008' exposure='+1000.0' recovery='80%' />\n\
-           <values at='15/01/2009' exposure='+1000.0' />\n\
-           <values at='15/01/2010' exposure='+1000.0' recovery='80%' />\n\
+           <values t='15/01/2007' exposure='+1000.0' />\n\
+           <values t='15/01/2008' exposure='+1000.0' recovery='80%' />\n\
+           <values t='15/01/2009' exposure='+1000.0' />\n\
+           <values t='15/01/2010' exposure='+1000.0' recovery='80%' />\n\
            </data>\n\
       </asset>";
 
@@ -285,12 +285,12 @@ void ccruncher_test::AssetTest::test5()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='10/01/2005' recovery='50%'>\n\
         <data>\n\
-           <values at='15/01/2005' exposure='5000.0' recovery='30%' />\n\
-           <values at='15/01/2006' exposure='5000.0' recovery='40%' />\n\
-           <values at='15/01/2007' exposure='4000.0' recovery='50%' />\n\
-           <values at='15/01/2008' exposure='3000.0' recovery='60%' />\n\
-           <values at='15/01/2009' exposure='2000.0' recovery='70%' />\n\
-           <values at='15/01/2010' exposure='1000.0' recovery='80%' />\n\
+           <values t='15/01/2005' exposure='5000.0' recovery='30%' />\n\
+           <values t='15/01/2006' exposure='5000.0' recovery='40%' />\n\
+           <values t='15/01/2007' exposure='4000.0' recovery='50%' />\n\
+           <values t='15/01/2008' exposure='3000.0' recovery='60%' />\n\
+           <values t='15/01/2009' exposure='2000.0' recovery='70%' />\n\
+           <values t='15/01/2010' exposure='1000.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 
@@ -354,13 +354,13 @@ void ccruncher_test::AssetTest::test7()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='570.0' />\n\
-          <values at='01/07/2000' exposure='560.0' />\n\
-          <values at='01/01/2001' exposure='550.0' />\n\
-          <values at='01/07/2001' exposure='540.0' />\n\
-          <values at='01/01/2002' exposure='530.0' />\n\
-          <values at='01/07/2002' exposure='520.0' />\n\
-          <values at='01/07/2020' exposure='10.0' />\n\
+          <values t='01/01/2000' exposure='570.0' />\n\
+          <values t='01/07/2000' exposure='560.0' />\n\
+          <values t='01/01/2001' exposure='550.0' />\n\
+          <values t='01/07/2001' exposure='540.0' />\n\
+          <values t='01/01/2002' exposure='530.0' />\n\
+          <values t='01/07/2002' exposure='520.0' />\n\
+          <values t='01/07/2020' exposure='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -386,13 +386,13 @@ void ccruncher_test::AssetTest::test8()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 
@@ -454,13 +454,13 @@ void ccruncher_test::AssetTest::test9()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
         </data>\n\
       </asset>";
 

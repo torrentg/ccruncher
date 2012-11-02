@@ -38,6 +38,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
   gsl_rng_set(rng, (unsigned long) seed);
   factors = gsl_vector_alloc(chol->size1);
   assetsize = mc.assetsize;
+  ndf = mc.ndf;
   time0 = mc.time0;
   timeT = mc.timeT;
   antithetic = mc.antithetic;
@@ -109,11 +110,28 @@ void ccruncher::SimulationThread::rmvnorm()
   }
   gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, factors);
 
-  // multivariate normal simulation
-  for(size_t i=0; i<obligors.size(); i++)
+  if (ndf <= 0.0)
   {
-    int isector = obligors[i].isector;
-    uvalues[i] = gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng);
+    // simulate multivariate normal
+    for(size_t i=0; i<obligors.size(); i++)
+    {
+      int isector = obligors[i].isector;
+      uvalues[i] = gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng);
+    }
+  }
+  else
+  {
+    // simulate the chi-square value
+    double chisq =  gsl_ran_chisq(rng, ndf);
+    if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
+    double chival = sqrt(ndf/chisq);
+
+    // simulate multivariate t-Student
+    for(size_t i=0; i<obligors.size(); i++)
+    {
+      int isector = obligors[i].isector;
+      uvalues[i] = chival * (gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng));
+    }
   }
 }
 
@@ -178,7 +196,6 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
     // evalue asset loss
     if (asset->mindate <= dtime && dtime <= asset->maxdate)
     {
-      // not called Asset::getValues() due to memory access latency
       const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
       assert(dtime <= (asset->end-1)->date);
       double recovery = values.recovery.getValue(rng);

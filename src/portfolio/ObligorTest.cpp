@@ -150,24 +150,24 @@ void ccruncher_test::ObligorTest::test1()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values at='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values at='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values at='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values at='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
+          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
+          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
+          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
+          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
+          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -213,22 +213,22 @@ void ccruncher_test::ObligorTest::test2()
     <obligor rating='K' sector='S2'id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values at='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values at='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values at='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values at='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
+          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
+          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
+          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
+          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
+          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -257,22 +257,22 @@ void ccruncher_test::ObligorTest::test3()
     <obligor rating='A' sector='S2' id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/01/2000' exposure='550.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='550.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values at='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values at='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values at='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values at='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
+          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
+          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
+          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
+          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
+          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -301,22 +301,22 @@ void ccruncher_test::ObligorTest::test4()
     <obligor rating='A' sector='S2' id='cif1' recovery='50%'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values at='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values at='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values at='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values at='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values at='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values at='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
+          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
+          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
+          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
+          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
+          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values at='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values at='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values at='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values at='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values at='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values at='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
+          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
+          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
+          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
+          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
+          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";

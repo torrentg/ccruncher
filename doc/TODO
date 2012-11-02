@@ -5,7 +5,7 @@ CCRUNCHER TODO
 Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
-  * rename values::at by values::t
+  * embed R in ui (tab, etc.)
   * remove classes Survivals*
   * remove classes *Copula
   * remove MSVC support (vcproj, src/win32, doc)

@@ -52,6 +52,7 @@ ccruncher::MonteCarlo::MonteCarlo() : assets(NULL), chol(NULL), stop(NULL)
   nfthreads = 0;
   time0 = NAD;
   timeT = NAD;
+  ndf = NAN;
 }
 
 //===========================================================================
@@ -377,7 +378,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
 
   // setting inverses
   Logger::trace("copula type", idata.getParams().copula_type);
-  double ndf = -1.0; // gaussian case
+  ndf = -1.0; // gaussian case
   if (idata.getParams().getCopulaType() == "t") {
     ndf = idata.getParams().getCopulaParam();
   }
