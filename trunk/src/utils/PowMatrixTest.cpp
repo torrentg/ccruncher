@@ -21,8 +21,8 @@
 //===========================================================================
 
 #include <iostream>
-#include "math/PowMatrix.hpp"
-#include "math/PowMatrixTest.hpp"
+#include "utils/PowMatrix.hpp"
+#include "utils/PowMatrixTest.hpp"
 
 //---------------------------------------------------------------------------
 

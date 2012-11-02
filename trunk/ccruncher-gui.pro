@@ -23,13 +23,13 @@ HEADERS += \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverse.hpp \
-    src/math/PowMatrix.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/portfolio/Exposure.hpp \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
+    src/utils/PowMatrix.hpp \
     src/utils/Utils.hpp \
     src/utils/Timer.hpp \
     src/utils/Thread.hpp \
@@ -68,13 +68,13 @@ SOURCES += \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
     src/kernel/Inverse.cpp \
-    src/math/PowMatrix.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/Exposure.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
+    src/utils/PowMatrix.cpp \
     src/utils/Utils.cpp \
     src/utils/Timer.cpp \
     src/utils/Thread.cpp \

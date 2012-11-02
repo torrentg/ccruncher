@@ -25,7 +25,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_eigen.h>
-#include "math/PowMatrix.hpp"
+#include "utils/PowMatrix.hpp"
 #include "utils/Format.hpp"
 
 //---------------------------------------------------------------------------

@@ -6,8 +6,6 @@ Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
   * embed R in ui (tab, etc.)
-  * remove classes Survivals*
-  * remove classes *Copula
   * remove MSVC support (vcproj, src/win32, doc)
   * interest interpolation: linear -> cubic
   * remove antitethical option? (SimulationThread::uvalues)
@@ -16,7 +14,6 @@ Current works
   * rating indexes as unsigned char
   * sector indexes as unsigned char
   * unify ccruncher main (gsl_error_handler, ccruncher-gui, ccruncher-cmd, etc.)
-  * resolve src/math content
   * review params::copula*
 
 Future works

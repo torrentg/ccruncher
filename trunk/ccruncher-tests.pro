@@ -34,8 +34,6 @@ HEADERS += \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/InverseTest.hpp \
-    src/math/PowMatrix.hpp \
-    src/math/PowMatrixTest.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -47,6 +45,8 @@ HEADERS += \
     src/portfolio/ExposureTest.hpp \
     src/portfolio/DateValuesTest.hpp \
     src/portfolio/AssetTest.hpp \
+    src/utils/PowMatrix.hpp \
+    src/utils/PowMatrixTest.hpp \
     src/utils/Utils.hpp \
     src/utils/Timer.hpp \
     src/utils/Thread.hpp \
@@ -101,8 +101,6 @@ SOURCES += \
     src/kernel/IDataTest.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/InverseTest.cpp \
-    src/math/PowMatrix.cpp \
-    src/math/PowMatrixTest.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
@@ -114,6 +112,8 @@ SOURCES += \
     src/portfolio/ExposureTest.cpp \
     src/portfolio/DateValuesTest.cpp \
     src/portfolio/AssetTest.cpp \
+    src/utils/PowMatrix.cpp \
+    src/utils/PowMatrixTest.cpp \
     src/utils/Utils.cpp \
     src/utils/Timer.cpp \
     src/utils/Thread.cpp \
