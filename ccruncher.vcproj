@@ -258,14 +258,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\params\Survivals.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\params\Survivals.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\params\Transitions.cpp"
 					>
 				</File>
@@ -335,18 +327,6 @@
 				</File>
 				<File
 					RelativePath=".\src\kernel\Inverse.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="math"
-				>
-				<File
-					RelativePath="src\math\PowMatrix.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\math\PowMatrix.hpp"
 					>
 				</File>
 			</Filter>
@@ -511,6 +491,14 @@
 				</File>
 				<File
 					RelativePath="src\utils\Utils.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\utils\PowMatrix.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\utils\PowMatrix.hpp"
 					>
 				</File>
 			</Filter>

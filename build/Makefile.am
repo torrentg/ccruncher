@@ -38,13 +38,13 @@ ccruncher_SOURCES = \
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
     ../src/params/DefaultProbabilities.cpp\
-    ../src/math/PowMatrix.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
     ../src/portfolio/Exposure.cpp\
+    ../src/utils/PowMatrix.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
     ../src/utils/Parser.cpp\
@@ -74,13 +74,13 @@ ccruncher_SOURCES = \
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
     ../src/params/DefaultProbabilities.hpp\
-    ../src/math/PowMatrix.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
     ../src/portfolio/Exposure.hpp\
+    ../src/utils/PowMatrix.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
     ../src/utils/Parser.hpp\
@@ -116,7 +116,7 @@ tests_SOURCES = \
     ../src/utils/FormatTest.cpp\
     ../src/utils/UtilsTest.cpp\
     ../src/utils/ExpatUserDataTest.cpp\
-    ../src/math/PowMatrixTest.cpp\
+    ../src/utils/PowMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
     ../src/portfolio/RecoveryTest.cpp\
@@ -148,7 +148,7 @@ tests_SOURCES = \
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
-    ../src/math/PowMatrix.cpp\
+    ../src/utils/PowMatrix.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
@@ -180,7 +180,7 @@ tests_SOURCES = \
     ../src/utils/FormatTest.hpp\
     ../src/utils/UtilsTest.hpp\
     ../src/utils/ExpatUserDataTest.hpp\
-    ../src/math/PowMatrixTest.hpp\
+    ../src/utils/PowMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
     ../src/portfolio/RecoveryTest.hpp\
@@ -212,7 +212,7 @@ tests_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
-    ../src/math/PowMatrix.hpp\
+    ../src/utils/PowMatrix.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
     ../src/portfolio/Recovery.hpp\
@@ -258,7 +258,7 @@ samplegen_SOURCES = \
     ../src/utils/Utils.cpp\
     ../src/utils/Format.cpp\
     ../src/utils/Thread.cpp\
-    ../src/math/PowMatrix.cpp\
+    ../src/utils/PowMatrix.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
@@ -295,7 +295,7 @@ samplegen_SOURCES = \
     ../src/utils/Utils.hpp\
     ../src/utils/Format.hpp\
     ../src/utils/Thread.hpp\
-    ../src/math/PowMatrix.hpp\
+    ../src/utils/PowMatrix.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\

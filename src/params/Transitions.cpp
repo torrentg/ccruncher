@@ -24,7 +24,7 @@
 #include "params/Transitions.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
-#include "math/PowMatrix.hpp"
+#include "utils/PowMatrix.hpp"
 #include <cassert>
 
 #define EPSILON 1e-14
