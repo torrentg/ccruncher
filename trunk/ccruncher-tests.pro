@@ -74,6 +74,7 @@ HEADERS += \
     deps/MiniCppUnit-2.5/MiniCppUnit.hxx
 
 SOURCES += \
+    src/ccruncher-tests.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
@@ -137,7 +138,6 @@ SOURCES += \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
     deps/gzstream-1.5/gzstream.cpp \
-    deps/MiniCppUnit-2.5/TestsRunner.cxx \
     deps/MiniCppUnit-2.5/MiniCppUnit.cxx
 
 INCLUDEPATH += \

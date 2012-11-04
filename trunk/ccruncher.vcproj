@@ -198,6 +198,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="src\ccruncher-cmd.cpp"
+				>
+			</File>
 			<Filter
 				Name="params"
 				>
@@ -283,10 +287,6 @@
 				</File>
 				<File
 					RelativePath="src\kernel\Aggregator.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\kernel\ccruncher.cpp"
 					>
 				</File>
 				<File

@@ -13,7 +13,7 @@ EXTRA_DIST = \
 
 bin_PROGRAMS = ccruncher
 
-check_PROGRAMS = tests samplegen
+check_PROGRAMS = tests
 
 TESTS = tests 
 
@@ -22,7 +22,7 @@ TESTS = tests
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
     ../deps/gzstream-1.5/gzstream.cpp\
-    ../src/kernel/ccruncher.cpp\
+    ../src/ccruncher-cmd.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
     ../src/kernel/SimulatedData.cpp\
@@ -105,8 +105,8 @@ ccruncher_LDFLAGS =
 # -------------------------------------------------------------
 tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../deps/MiniCppUnit-2.5/TestsRunner.cxx\
     ../deps/gzstream-1.5/gzstream.cpp\
+    ../src/ccruncher-tests.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
@@ -239,87 +239,4 @@ tests_SOURCES = \
 tests_CXXFLAGS =
 tests_LDADD =
 tests_LDFLAGS =
-
-# -------------------------------------------------------------
-# samplegen
-# -------------------------------------------------------------
-samplegen_SOURCES = \
-    ../deps/gzstream-1.5/gzstream.cpp\
-    ../src/utils/Exception.cpp\
-    ../src/utils/Logger.cpp\
-    ../src/utils/Parser.cpp\
-    ../src/utils/File.cpp\
-    ../src/utils/Date.cpp\
-    ../src/utils/Timer.cpp\
-    ../src/utils/Strings.cpp\
-    ../src/utils/ExpatParser.cpp\
-    ../src/utils/ExpatUserData.cpp\
-    ../src/utils/ExpatHandlers.cpp\
-    ../src/utils/Utils.cpp\
-    ../src/utils/Format.cpp\
-    ../src/utils/Thread.cpp\
-    ../src/utils/PowMatrix.cpp\
-    ../src/portfolio/Asset.cpp\
-    ../src/portfolio/DateValues.cpp\
-    ../src/portfolio/Recovery.cpp\
-    ../src/portfolio/Exposure.cpp\
-    ../src/portfolio/Portfolio.cpp\
-    ../src/portfolio/Obligor.cpp\
-    ../src/params/Params.cpp\
-    ../src/params/Interest.cpp\
-    ../src/params/Ratings.cpp\
-    ../src/params/Transitions.cpp\
-    ../src/params/Sectors.cpp\
-    ../src/params/Correlations.cpp\
-    ../src/params/Segmentations.cpp\
-    ../src/params/Segmentation.cpp\
-    ../src/params/DefaultProbabilities.cpp\
-    ../src/kernel/samplegen.cpp\
-    ../src/kernel/MonteCarlo.cpp\
-    ../src/kernel/SimulationThread.cpp\
-    ../src/kernel/SimulatedData.cpp\
-    ../src/kernel/IData.cpp\
-    ../src/kernel/Aggregator.cpp\
-    ../src/kernel/Inverse.cpp\
-    \
-    ../src/utils/Exception.hpp\
-    ../src/utils/Logger.hpp\
-    ../src/utils/Parser.hpp\
-    ../src/utils/File.hpp\
-    ../src/utils/Date.hpp\
-    ../src/utils/Timer.hpp\
-    ../src/utils/Strings.hpp\
-    ../src/utils/ExpatParser.hpp\
-    ../src/utils/ExpatUserData.hpp\
-    ../src/utils/ExpatHandlers.hpp\
-    ../src/utils/Utils.hpp\
-    ../src/utils/Format.hpp\
-    ../src/utils/Thread.hpp\
-    ../src/utils/PowMatrix.hpp\
-    ../src/portfolio/Portfolio.hpp\
-    ../src/portfolio/Obligor.hpp\
-    ../src/portfolio/Asset.hpp\
-    ../src/portfolio/DateValues.hpp\
-    ../src/portfolio/Recovery.hpp\
-    ../src/portfolio/Exposure.hpp\
-    ../src/params/Params.hpp\
-    ../src/params/Interest.hpp\
-    ../src/params/Ratings.hpp\
-    ../src/params/Transitions.hpp\
-    ../src/params/Sectors.hpp\
-    ../src/params/Correlations.hpp\
-    ../src/params/Segmentations.hpp\
-    ../src/params/Segmentation.hpp\
-    ../src/params/DefaultProbabilities.hpp\
-    ../src/kernel/MonteCarlo.hpp\
-    ../src/kernel/SimulationThread.hpp\
-    ../src/kernel/SimulatedData.hpp\
-    ../src/kernel/IData.hpp\
-    ../src/kernel/Aggregator.hpp\
-    ../src/kernel/Inverse.hpp\
-    ../src/utils/config.h
-
-samplegen_CXXFLAGS =
-samplegen_LDADD =
-samplegen_LDFLAGS =
 

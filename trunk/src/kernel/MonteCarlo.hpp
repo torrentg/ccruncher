@@ -89,7 +89,7 @@ class MonteCarlo
     // rng seed
     long seed;
     // hash (0=non show hashes) (default=0)
-    int hash;
+    size_t hash;
     // directory for output files
     string fpath;
     // force file overwriting flag
@@ -102,8 +102,6 @@ class MonteCarlo
     vector<SimulationThread*> threads;
     // number of iterations done
     int numiterations;
-    // number of threads
-    int numthreads;
     // number of finished threads
     int nfthreads;
     // ensures data consistence
@@ -140,14 +138,10 @@ class MonteCarlo
     ~MonteCarlo();
     // set path for output files
     void setFilePath(const string &path, bool force);
-    // set hash value (mark every num values)
-    void setHash(int num);
     // initiliaze this class
     void setData(IData &) throw(Exception);
-    // set the number of execution threads
-    void setNumThreads(int);
     // execute Monte Carlo
-    void run(bool *stop_=NULL);
+    void run(unsigned char numthreads, size_t nhash, bool *stop_=NULL);
     // returns iterations done
     int getNumIterations() const;
     // returns iterations done

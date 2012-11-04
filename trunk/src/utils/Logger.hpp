@@ -76,6 +76,10 @@ class Logger
     static void trace(const string &msg, char c);
     // flush content
     static void flush();
+    // header info
+    static void header();
+    // footer info
+    static void footer(Timer &);
 
 };
 
