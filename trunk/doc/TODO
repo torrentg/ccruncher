@@ -9,7 +9,6 @@ Current works
   * remove MSVC support (vcproj, src/win32, doc)
   * interest interpolation: linear -> cubic
   * review functional tests (because --trace removed)
-  * unify ccruncher main (gsl_error_handler, ccruncher-gui, ccruncher-cmd, etc.)
   * review params::copula*
   * rename parameters/property to parameters/parameter
   * bulk output to file

@@ -28,7 +28,7 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/kernel/Inverse.cpp\
+    ../src/kernel/Inverses.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
@@ -64,7 +64,7 @@ ccruncher_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/kernel/Inverse.hpp\
+    ../src/kernel/Inverses.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
@@ -133,7 +133,7 @@ tests_SOURCES = \
     ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
-    ../src/kernel/InverseTest.cpp\
+    ../src/kernel/InversesTest.cpp\
     \
     ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
@@ -169,7 +169,7 @@ tests_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/kernel/Inverse.cpp\
+    ../src/kernel/Inverses.cpp\
     \
     ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
@@ -197,7 +197,7 @@ tests_SOURCES = \
     ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
-    ../src/kernel/InverseTest.hpp\
+    ../src/kernel/InversesTest.hpp\
     \
     ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
@@ -233,7 +233,7 @@ tests_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/kernel/Inverse.hpp\
+    ../src/kernel/Inverses.hpp\
     ../src/utils/config.h
 
 tests_CXXFLAGS =

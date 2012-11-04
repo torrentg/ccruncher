@@ -29,7 +29,7 @@
 #include <vector>
 #include <pthread.h>
 #include "kernel/IData.hpp"
-#include "kernel/Inverse.hpp"
+#include "kernel/Inverses.hpp"
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
@@ -79,7 +79,7 @@ class MonteCarlo
     // degrees of freedom
     double ndf;
     // inverse functions
-    Inverse inverse;
+    Inverses inverses;
     // factors cholesky matrix
     gsl_matrix *chol;
     // factor loadings

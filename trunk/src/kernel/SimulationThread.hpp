@@ -29,7 +29,7 @@
 #include <vector>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
-#include "kernel/Inverse.hpp"
+#include "kernel/Inverses.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "utils/Date.hpp"
@@ -74,7 +74,7 @@ class SimulationThread : public Thread
     // factor loadings
     const vector<double> &floadings;
     // inverse functions
-    const Inverse &inverse;
+    const Inverses &inverses;
     // initial date
     Date time0;
     // date where risk is computed

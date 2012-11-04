@@ -212,7 +212,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   Logger::trace("default probability splines (linear, cubic, none)", strsplines);
 
   // model parameters
-  inverse.init(ndf, timeT, dprobs);
+  inverses.init(ndf, timeT, dprobs);
   chol = idata.getCorrelations().getCholesky();
   floadings = idata.getCorrelations().getFactorLoadings();
 

@@ -322,11 +322,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\kernel\Inverse.cpp"
+					RelativePath=".\src\kernel\Inverses.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\kernel\Inverse.hpp"
+					RelativePath=".\src\kernel\Inverses.hpp"
 					>
 				</File>
 			</Filter>
