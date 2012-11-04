@@ -7,7 +7,7 @@ version 2.1 (???. 2012)
   * added graphic interface
   * replaced survival by default probability
   * removed implicit segmentations
-  * improved performance (>40%)
+  * improved performance
   * property copula.seed renamed to rng.seed
   * attribute values@at renamed to values@t
 

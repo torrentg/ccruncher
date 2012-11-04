@@ -50,14 +50,7 @@ void TaskThread::run()
 
     // copyright info
     cout << Utils::copyright() << endl;
-
-    // tracing some execution info
-    Logger::trace("general information", '*');
-    Logger::newIndentLevel();
-    Logger::trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
-    Logger::trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-    Logger::trace("number of threads", Format::toString(Utils::getNumCores()));
-    Logger::previousIndentLevel();
+    Logger::header();
 
     // parsing input file
     setStatus(parsing);
@@ -67,22 +60,14 @@ void TaskThread::run()
     setStatus(simulating);
     montecarlo = new MonteCarlo();
     montecarlo->setFilePath(odir, true);
-    montecarlo->setHash(1000);
-    montecarlo->setNumThreads(Utils::getNumCores());
     montecarlo->setData(*idata);
     delete idata;
 
     // simulating
-    montecarlo->run(&stop_);
+    montecarlo->run(Utils::getNumCores(), 1000, &stop_);
 
     // tracing some execution info
-    Logger::trace("general information", '*');
-    Logger::newIndentLevel();
-    Logger::trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-    Logger::trace("total elapsed time", timer);
-    Logger::trace("simulations realized", Format::toString(montecarlo->getNumIterations()));
-    Logger::previousIndentLevel();
-    Logger::addBlankLine();
+    Logger::footer(timer);
 
     setStatus(finished);
   }

@@ -109,9 +109,9 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     Logger::trace("elapsed time parsing data", timer);
     Logger::previousIndentLevel();
   }
-  catch(std::exception &)
+  catch(std::exception &e)
   {
-    throw;
+    throw Exception(e);
   }
 }
 

@@ -46,6 +46,7 @@ HEADERS += \
     deps/gzstream-1.5/gzstream.h
 
 SOURCES += \
+    src/ccruncher-cmd.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
@@ -56,7 +57,6 @@ SOURCES += \
     src/params/Transitions.cpp \
     src/params/DefaultProbabilities.cpp \
     src/kernel/IData.cpp \
-    src/kernel/ccruncher.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulatedData.cpp \

@@ -23,13 +23,14 @@
 #include <iostream>
 #include "utils/Logger.hpp"
 #include "utils/Strings.hpp"
+#include "utils/Utils.hpp"
 #include <cassert>
 
 // --------------------------------------------------------------------------
 
 #define DEFAULT_INDENTATION_LEVEL 1
 #define INDENTSIZE 2
-#define MAXCOLS 69
+#define MAXCOLS 79
 
 //---------------------------------------------------------------------------
 
@@ -193,3 +194,29 @@ void ccruncher::Logger::flush()
     cout << std::endl << std::flush;
   }
 }
+
+//===========================================================================
+// header info
+//===========================================================================
+void ccruncher::Logger::header()
+{
+  trace("general information", '*');
+  newIndentLevel();
+  trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
+  trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
+  previousIndentLevel();
+}
+
+//===========================================================================
+// footer info
+//===========================================================================
+void ccruncher::Logger::footer(Timer &timer)
+{
+  trace("general information", '*');
+  newIndentLevel();
+  trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
+  trace("total elapsed time", timer);
+  previousIndentLevel();
+  addBlankLine();
+}
+
