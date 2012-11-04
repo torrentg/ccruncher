@@ -72,11 +72,6 @@ void ccruncher::SimulationThread::run()
   
   while(more)
   {
-    // generating random numbers
-    timer1.resume();
-    randomize();
-    timer1.stop();
-
     // initialize aggregated values
     for(int i=0; i<numsegmentations; i++)
     {
@@ -85,6 +80,11 @@ void ccruncher::SimulationThread::run()
         losses[i][j] = 0.0;
       }
     }
+
+    // generating random numbers
+    timer1.resume();
+    randomize();
+    timer1.stop();
 
     // simulating default times & evalue losses & aggregate
     timer2.resume();
@@ -194,7 +194,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
     p += assetsize;
 
     // evalue asset loss
-    if (asset->mindate <= dtime && dtime <= asset->maxdate)
+    if (dtime <= asset->maxdate && asset->mindate <= dtime)
     {
       const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
       assert(dtime <= (asset->end-1)->date);
