@@ -32,8 +32,8 @@ HEADERS += \
     src/kernel/SimulationThread.hpp \
     src/kernel/SimulatedDataTest.hpp \
     src/kernel/IDataTest.hpp \
-    src/kernel/Inverse.hpp \
-    src/kernel/InverseTest.hpp \
+    src/kernel/Inverses.hpp \
+    src/kernel/InversesTest.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -100,8 +100,8 @@ SOURCES += \
     src/kernel/SimulationThread.cpp \
     src/kernel/SimulatedDataTest.cpp \
     src/kernel/IDataTest.cpp \
-    src/kernel/Inverse.cpp \
-    src/kernel/InverseTest.cpp \
+    src/kernel/Inverses.cpp \
+    src/kernel/InversesTest.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

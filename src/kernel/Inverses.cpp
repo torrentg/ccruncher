@@ -23,7 +23,7 @@
 #include <cmath>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_cdf.h>
-#include "kernel/Inverse.hpp"
+#include "kernel/Inverses.hpp"
 #include "utils/Format.hpp"
 #include <cassert>
 
@@ -32,7 +32,7 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::Inverse::Inverse()
+ccruncher::Inverses::Inverses()
 {
   ndf = NAN;
   t0 = NAD;
@@ -43,7 +43,7 @@ ccruncher::Inverse::Inverse()
 // constructor
 // if ndf <= 0 then gaussian, t-Student otherwise
 //===========================================================================
-ccruncher::Inverse::Inverse(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
+ccruncher::Inverses::Inverses(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
 {
   init(ndf_, maxdate, dprobs);
 }
@@ -52,7 +52,7 @@ ccruncher::Inverse::Inverse(double ndf_, const Date &maxdate, const DefaultProba
 // initialize
 // if ndf <= 0 then gaussian, t-Student otherwise
 //===========================================================================
-void ccruncher::Inverse::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
+void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
 {
   ndf = ndf_;
   t0 = dprobs.getDate();
@@ -76,7 +76,7 @@ void ccruncher::Inverse::init(double ndf_, const Date &maxdate, const DefaultPro
 //   * dnorm is the CDF of the normal o t-Student dist
 //   * t1-t0 are the days from t0 (starting date) to t1 (ending date)
 //===========================================================================
-void ccruncher::Inverse::setRanges(const DefaultProbabilities &dprobs) throw(Exception)
+void ccruncher::Inverses::setRanges(const DefaultProbabilities &dprobs) throw(Exception)
 {
   double prob;
   int nratings = dprobs.getRatings().size();
@@ -124,7 +124,7 @@ void ccruncher::Inverse::setRanges(const DefaultProbabilities &dprobs) throw(Exc
 //===========================================================================
 // set interpolation coefficients
 //===========================================================================
-void ccruncher::Inverse::setCoefs(const DefaultProbabilities &dprobs) throw(Exception)
+void ccruncher::Inverses::setCoefs(const DefaultProbabilities &dprobs) throw(Exception)
 {
   int nratings = dprobs.getRatings().size();
   data.resize(nratings);
@@ -146,7 +146,7 @@ void ccruncher::Inverse::setCoefs(const DefaultProbabilities &dprobs) throw(Exce
 // n: number of breaks (eg. n=3 -> 4 points -included extremals-)
 // we don't use gsl splines because we try to minize memory footprint
 //===========================================================================
-vector<ccruncher::Inverse::csc> ccruncher::Inverse::getCoefs(int irating, const DefaultProbabilities &dprobs, int n) throw(Exception)
+vector<ccruncher::Inverses::csc> ccruncher::Inverses::getCoefs(int irating, const DefaultProbabilities &dprobs, int n) throw(Exception)
 {
   assert(n >= 3);
   // creating equiespaced points

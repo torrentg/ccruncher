@@ -1,5 +1,5 @@
-#ifndef _Inverse_
-#define _Inverse_
+#ifndef _Inverses_
+#define _Inverses_
 
 //---------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Inverse
+class Inverses
 {
 
   private:
@@ -65,9 +65,9 @@ class Inverse
   public:
 
     // default constructor
-    Inverse();
+    Inverses();
     // constructor
-    Inverse(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    Inverses(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
     // initialize
     void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
     // evalue (return days from t0)
@@ -82,7 +82,7 @@ class Inverse
 //===========================================================================
 // evalueAsNum
 //===========================================================================
-double ccruncher::Inverse::evalueAsNum(int irating, double val) const
+double ccruncher::Inverses::evalueAsNum(int irating, double val) const
 {
   assert(!isnan(ranges[irating].minval) && !isnan(ranges[irating].maxval));
   assert(data[irating].size() > 0);
@@ -118,7 +118,7 @@ double ccruncher::Inverse::evalueAsNum(int irating, double val) const
 //===========================================================================
 // evalueAsDate
 //===========================================================================
-Date ccruncher::Inverse::evalueAsDate(int irating, double val) const
+Date ccruncher::Inverses::evalueAsDate(int irating, double val) const
 {
   double days = evalueAsNum(irating, val);
   return t0 + (long)ceil(days);

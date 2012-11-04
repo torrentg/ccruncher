@@ -21,14 +21,14 @@
 //===========================================================================
 
 #include <gsl/gsl_cdf.h>
-#include "kernel/InverseTest.hpp"
-#include "kernel/Inverse.hpp"
+#include "kernel/InversesTest.hpp"
+#include "kernel/Inverses.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // getRatings
 //===========================================================================
-Ratings ccruncher_test::InverseTest::getRatings()
+Ratings ccruncher_test::InversesTest::getRatings()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
@@ -47,7 +47,7 @@ Ratings ccruncher_test::InverseTest::getRatings()
 //===========================================================================
 // getRatings
 //===========================================================================
-DefaultProbabilities ccruncher_test::InverseTest::getDefaultProbabilities(const Date &date)
+DefaultProbabilities ccruncher_test::InversesTest::getDefaultProbabilities(const Date &date)
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <dprobs>\n\
@@ -68,12 +68,12 @@ DefaultProbabilities ccruncher_test::InverseTest::getDefaultProbabilities(const 
 // test1
 // gaussian case
 //===========================================================================
-void ccruncher_test::InverseTest::test1()
+void ccruncher_test::InversesTest::test1()
 {
   Date date0("1/1/2012");
   Date date1("1/1/2013");
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverse inverse(0.0, date1, dprobs);
+  Inverses inverses(0.0, date1, dprobs);
 
   for(int i=0; i<1000; i++)
   {
@@ -82,7 +82,7 @@ void ccruncher_test::InverseTest::test1()
     double days = dprobs.inverse(0, u);
     int idays = (int)(days+0.5);
     if (idays > 0) {
-      double d = inverse.evalueAsNum(0, x);
+      double d = inverses.evalueAsNum(0, x);
       int id = (int)(d+0.5);
       ASSERT_EQUALS(idays, id);
     }
@@ -94,7 +94,7 @@ void ccruncher_test::InverseTest::test1()
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);
     double x = gsl_cdf_ugaussian_Pinv(u);
-    double d = inverse.evalueAsNum(0, x);
+    double d = inverses.evalueAsNum(0, x);
     ASSERT_EQUALS((date-date0), (long)(d+0.5));
   }
 }
@@ -103,13 +103,13 @@ void ccruncher_test::InverseTest::test1()
 // test2
 // t-Student case
 //===========================================================================
-void ccruncher_test::InverseTest::test2()
+void ccruncher_test::InversesTest::test2()
 {
   double ndf = 3.0;
   Date date0("1/1/2012");
   Date date1("1/1/2013");
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverse inverse(ndf, date1, dprobs);
+  Inverses inverses(ndf, date1, dprobs);
 
   for(int i=0; i<1000; i++)
   {
@@ -118,7 +118,7 @@ void ccruncher_test::InverseTest::test2()
     double days = dprobs.inverse(0, u);
     int idays = (int)(days+0.5);
     if (idays > 0) {
-      double d = inverse.evalueAsNum(0, x);
+      double d = inverses.evalueAsNum(0, x);
       //int id = (int)(d+0.5);
       //cout << days << "\t" << d << "\t" << fabs(days-d) << endl;
       ASSERT(fabs(days-d) < 0.5);
@@ -131,7 +131,7 @@ void ccruncher_test::InverseTest::test2()
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);
     double x = gsl_cdf_tdist_Pinv(u, ndf);
-    double d = inverse.evalueAsNum(0, x);
+    double d = inverses.evalueAsNum(0, x);
     ASSERT_EQUALS((date-date0), (long)(d+0.5));
   }
 }
@@ -140,13 +140,13 @@ void ccruncher_test::InverseTest::test2()
 // test3
 // fails because maxdate bigger than dprob::maxDate
 //===========================================================================
-void ccruncher_test::InverseTest::test3()
+void ccruncher_test::InversesTest::test3()
 {
   double ndf = 3.0;
   Date date0("1/1/2012");
   Date date1("1/1/2014");
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverse inverse;
-  ASSERT_THROW(inverse.init(ndf, date1, dprobs));
+  Inverses inverses;
+  ASSERT_THROW(inverses.init(ndf, date1, dprobs));
 }
 

@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _InverseTest_
-#define _InverseTest_
+#ifndef _InversesTest_
+#define _InversesTest_
 
 //---------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class InverseTest : public TestFixture<InverseTest>
+class InversesTest : public TestFixture<InversesTest>
 {
 
   private:
@@ -51,7 +51,7 @@ class InverseTest : public TestFixture<InverseTest>
 
   public:
 
-    TEST_FIXTURE(InverseTest)
+    TEST_FIXTURE(InversesTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -60,7 +60,7 @@ class InverseTest : public TestFixture<InverseTest>
 
 };
 
-REGISTER_FIXTURE(InverseTest)
+REGISTER_FIXTURE(InversesTest)
 
 //---------------------------------------------------------------------------
 

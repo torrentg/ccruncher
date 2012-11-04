@@ -21,7 +21,7 @@ HEADERS += \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
-    src/kernel/Inverse.hpp \
+    src/kernel/Inverses.hpp \
     src/portfolio/Recovery.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -61,7 +61,7 @@ SOURCES += \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
-    src/kernel/Inverse.cpp \
+    src/kernel/Inverses.cpp \
     src/portfolio/Recovery.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

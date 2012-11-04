@@ -31,7 +31,7 @@
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed) : Thread(),
   montecarlo(mc), obligors(mc.obligors), assets(mc.assets), rng(NULL), factors(NULL),
-  chol(mc.chol), floadings(mc.floadings), inverse(mc.inverse), losses(0), uvalues(0)
+  chol(mc.chol), floadings(mc.floadings), inverses(mc.inverses), losses(0), uvalues(0)
 {
   assert(chol != NULL);
   rng = gsl_rng_alloc(gsl_rng_mt19937);
@@ -182,7 +182,7 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   // simule default time
   double x = getRandom(iobligor);
   int r = obligors[iobligor].irating;
-  Date dtime = inverse.evalueAsDate(r, x);
+  Date dtime = inverses.evalueAsDate(r, x);
   if (timeT < dtime) return;
 
   // evalue obligor losses
