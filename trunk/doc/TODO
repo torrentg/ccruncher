@@ -7,11 +7,11 @@ Current works
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
   * embed R in ui (tab, etc.)
   * remove MSVC support (vcproj, src/win32, doc)
-  * interest interpolation: linear -> cubic
   * review functional tests (because --trace removed)
   * review params::copula*
   * rename parameters/property to parameters/parameter
   * bulk output to file
+  * grant inverses precision (<1 hour)
 
 Future works
 -------------------

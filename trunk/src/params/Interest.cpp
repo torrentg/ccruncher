@@ -31,16 +31,24 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Interest::Interest(const Date &date_)
+ccruncher::Interest::Interest(const Date &date_, InterestType type_)
 {
-  type = Compound;
+  type = type_;
   date = date_;
+}
+
+//===========================================================================
+// set date
+//===========================================================================
+void ccruncher::Interest::setDate(const Date &d)
+{
+  date = d;
 }
 
 //===========================================================================
 // return interest type
 //===========================================================================
-InterestType ccruncher::Interest::getType() const
+ccruncher::Interest::InterestType ccruncher::Interest::getType() const
 {
   return type;
 }
@@ -50,38 +58,40 @@ InterestType ccruncher::Interest::getType() const
 //===========================================================================
 int ccruncher::Interest::size() const
 {
-  return (int) vrates.size();
+  return (int) rates.size();
 }
 
 //===========================================================================
-// returns interpolated interest rate at day d from date
+// returns linear interpolated interest rate at day d from date
+// we don't use cubic splines because curve can oscillate depending on
+// entered points
 //===========================================================================
 void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
-  unsigned int n = vrates.size();
+  size_t n = rates.size();
 
   if (n == 0 || d <= 0)
   {
     *t = 0.0;
-    *r = 1.0;
+    *r = 0.0;
   }
-  else if (d <= vrates[0].d)
+  else if (d <= rates[0].d)
   {
     int diff = d - 0;
-    int delta = vrates[0].d - 0;
-    *t = 0.0 + diff*(vrates[0].y - 0)/delta;
-    *r = 1.0 + diff*(vrates[0].r - 1.0)/delta;
+    int delta = rates[0].d - 0;
+    *t = 0.0 + diff*(rates[0].y - 0)/delta;
+    *r = 1.0 + diff*(rates[0].r - 1.0)/delta;
   }
-  else if (vrates[n-1].d <= d)
+  else if (rates[n-1].d <= d)
   {
-    *t = vrates[n-1].y;
-    *r = vrates[n-1].r;
+    *t = rates[n-1].y;
+    *r = rates[n-1].r;
   }
   else
   {
-    vector<Rate>::const_iterator it2 = lower_bound(vrates.begin(), vrates.end(), Rate(d));
-    assert(it2 != vrates.begin());
-    assert(it2 != vrates.end());
+    vector<Rate>::const_iterator it2 = lower_bound(rates.begin(), rates.end(), Rate(d));
+    assert(it2 != rates.begin());
+    assert(it2 != rates.end());
     vector<Rate>::const_iterator it1 = it2-1;
     int diff = d - it1->d;
     int delta = it2->d - it1->d;
@@ -91,8 +101,18 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
 }
 
 //===========================================================================
-// returns factor to aply to transport a money value from date1 to date2
-// where is assumed that date2 is the interest curve date
+// returns rate at date
+//===========================================================================
+double ccruncher::Interest::getValue(const Date &d) const
+{
+  double r, t;
+  getValues(d-date, &t, &r);
+  return r;
+}
+
+//===========================================================================
+// returns factor to aply to transport a money value from date1 to date0
+// where date0 is the interest curve date
 //===========================================================================
 double ccruncher::Interest::getFactor(const Date &date1) const
 {
@@ -127,6 +147,8 @@ double ccruncher::Interest::getFactor(const Date &date1) const
 //===========================================================================
 void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
 {
+  assert(date != NAD);
+
   if (date == NAD) throw Exception("interest curve without date");
 
   if (val.d < 0)
@@ -134,10 +156,15 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
     throw Exception("rate with invalid time");
   }
 
-  // checking consistency
-  for (unsigned int i=0;i<vrates.size();i++)
+  if (val.d == 0 && val.r != 0.0)
   {
-    Rate aux = vrates[i];
+    throw Exception("rate at t=0 distinct than 0");
+  }
+
+  // checking if previously defined
+  for (size_t i=0; i<rates.size(); i++)
+  {
+    Rate aux = rates[i];
 
     if (abs(aux.d-val.d) == 0)
     {
@@ -148,7 +175,7 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
   // inserting value
   try
   {
-    vrates.push_back(val);
+    rates.push_back(val);
   }
   catch(std::exception &e)
   {
@@ -223,11 +250,11 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
 void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"interest")) {
-    if (vrates.empty()) {
+    if (rates.empty()) {
       throw Exception("interest has no rates");
     }
     else {
-      sort(vrates.begin(), vrates.end());
+      sort(rates.begin(), rates.end());
     }
   }
   else if (isEqual(name_,"rate")) {
@@ -253,12 +280,12 @@ string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
   
   ret += spc + "<interest type='" + strtype + "'>\n";;
 
-  for (unsigned int i=0;i<vrates.size();i++)
+  for (unsigned int i=0; i<rates.size(); i++)
   {
     ret += Strings::blanks(ilevel+2);
     ret += "<rate ";
-    ret += "t='" + vrates[i].t_str + "' ";
-    ret += "r='" + Format::toString(100.0*vrates[i].r) + "%'";
+    ret += "t='" + rates[i].t_str + "' ";
+    ret += "r='" + Format::toString(100.0*rates[i].r) + "%'";
     ret += "/>\n";
   }
 

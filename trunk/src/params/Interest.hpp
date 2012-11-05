@@ -39,17 +39,17 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-enum InterestType
-{ 
-  Simple,
-  Compound,
-  Continuous
-};
-
-//---------------------------------------------------------------------------
-
 class Interest : public ExpatHandlers
 {
+
+  public:
+
+    enum InterestType
+    {
+      Simple,
+      Compound,
+      Continuous
+    };
 
   private:
 
@@ -69,7 +69,7 @@ class Interest : public ExpatHandlers
       public:
 
         // constructor
-        Rate(int d_, double y_=0.0, double r_=1.0, const string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
+        Rate(int d_, double y_=0.0, double r_=0.0, const string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
         // comparator
         bool operator< (const Rate &right ) const { return (d < right.d); }
     };
@@ -81,7 +81,7 @@ class Interest : public ExpatHandlers
     // interest curve date
     Date date;
     // rate values
-    vector<Rate> vrates;
+    vector<Rate> rates;
 
   private:
 
@@ -100,11 +100,15 @@ class Interest : public ExpatHandlers
   public:
 
     // default constructor
-    Interest(const Date &date_=Date());
+    explicit Interest(const Date &date_=NAD, InterestType type=Compound);
     // return interest type
     InterestType getType() const;
     // numbers of rates
     int size() const;
+    // set date
+    void setDate(const Date &d);
+    // returns rate at date
+    double getValue(const Date &date1) const;
     // returns upsilon value
     double getFactor(const Date &date1) const;
     // serialize object content as xml
