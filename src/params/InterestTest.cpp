@@ -59,14 +59,13 @@ void ccruncher_test::InterestTest::test1()
   ExpatParser xmlparser;
 
   Date date0 = Date("18/02/2003");
-  Interest iobj(date0);
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
-
+  Interest interest(date0);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
 
   for (int i=0;i<25;i++)
   {
     Date aux = add(date0, i, 'M');
-    double val = iobj.getFactor(aux);
+    double val = interest.getFactor(aux);
     ASSERT_EQUALS_EPSILON(vactual[i], val, EPSILON);
   }
 }
