@@ -61,6 +61,8 @@ class Inverses
     void setCoefs(const DefaultProbabilities &dprobs) throw(Exception);
     // set interpolation coefficients
     vector<csc> getCoefs(int irating, const DefaultProbabilities &dprobs, int nbreaks) throw(Exception);
+    // check spline accuracy
+    bool isAccurate(int irating, const DefaultProbabilities &dprobs) const;
 
   public:
 

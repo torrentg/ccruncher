@@ -27,7 +27,9 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
-#define NBREAKS 100
+#define MAX_NBREAKS 1024
+// maximum error = 1 hour
+#define MAX_ERROR 1.0/24.0
 
 //===========================================================================
 // default constructor
@@ -136,8 +138,14 @@ void ccruncher::Inverses::setCoefs(const DefaultProbabilities &dprobs) throw(Exc
       continue;
     }
 
-    data[irating] = getCoefs(irating, dprobs, NBREAKS);
-    //TODO: adjust the number of breaks in order to grant precision
+    for(int nbreaks=10; nbreaks<=MAX_NBREAKS; nbreaks++)
+    {
+      data[irating] = getCoefs(irating, dprobs, nbreaks);
+      if (isAccurate(irating, dprobs)) {
+        break;
+      }
+    }
+cout << "spline[" << irating << "].size = " << data[irating].size() << endl;
   }
 }
 
@@ -201,5 +209,28 @@ vector<ccruncher::Inverses::csc> ccruncher::Inverses::getCoefs(int irating, cons
   gsl_vector_free(x);
 
   return ret;
+}
+
+//===========================================================================
+// check spline accuracy
+//===========================================================================
+bool ccruncher::Inverses::isAccurate(int irating, const DefaultProbabilities &dprobs) const
+{
+  for(int i=(t1-t0)-1; i>0; i--)
+  {
+    Date date = t0 + i;
+    double u = dprobs.evalue(irating, date);
+    double x;
+    if (ndf <= 0.0) x = gsl_cdf_ugaussian_Pinv(u);
+    else x = gsl_cdf_tdist_Pinv(u, ndf);
+    double days = evalueAsNum(irating, x);
+if (data[irating].size() == MAX_NBREAKS) {
+  cout << i << "\t" << u << "\t" << days << "\t" << days-i << "\t" << endl;
+}
+else
+    if (fabs(days-i) > MAX_ERROR) return false;
+  }
+
+  return true;
 }
 
