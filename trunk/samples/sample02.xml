@@ -6,14 +6,14 @@
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
   <parameters>
-    <property name="time.0" value="18/02/2003"/>
-    <property name="time.T" value="18/02/2005"/>
-    <property name="stopcriteria.maxiterations" value="20000"/>
-    <property name="stopcriteria.maxseconds" value="30000000"/>
-    <property name="copula.type" value="gaussian"/>
-    <property name="rng.seed" value="0"/>
-    <property name="montecarlo.antithetic" value="false"/>
-    <property name="portfolio.onlyActiveObligors" value="true"/>
+    <parameter name="time.0" value="18/02/2003"/>
+    <parameter name="time.T" value="18/02/2005"/>
+    <parameter name="stopcriteria.maxiterations" value="20000"/>
+    <parameter name="stopcriteria.maxseconds" value="30000000"/>
+    <parameter name="copula.type" value="gaussian"/>
+    <parameter name="rng.seed" value="0"/>
+    <parameter name="montecarlo.antithetic" value="false"/>
+    <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->

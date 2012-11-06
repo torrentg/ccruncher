@@ -45,13 +45,13 @@
 <!--                           parameters                           -->
 <!-- .............................................................. -->
 <!ELEMENT parameters (
-    property+
+    parameter+
 )>
 
-<!ELEMENT property 
+<!ELEMENT parameter 
     EMPTY
 >
-<!ATTLIST property 
+<!ATTLIST parameter 
     name (time.0|time.T|stopcriteria.maxiterations|stopcriteria.maxseconds|copula.type|rng.seed|montecarlo.antithetic|portfolio.onlyActiveObligors) #REQUIRED
     value CDATA #REQUIRED
 >

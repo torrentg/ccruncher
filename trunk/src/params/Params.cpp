@@ -60,8 +60,8 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
       throw Exception("attributes are not allowed in tag parameters");
     }
   }
-  else if (isEqual(name,"property")) {
-    parseProperty(eu, atrs);
+  else if (isEqual(name,"parameter")) {
+    parseParameter(eu, atrs);
   }
   else {
     throw Exception("unexpected tag " + string(name));
@@ -76,7 +76,7 @@ void ccruncher::Params::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"parameters")) {
     validate();
   }
-  else if (isEqual(name,"property")) {
+  else if (isEqual(name,"parameter")) {
     // nothing to do
   }
   else {
@@ -140,9 +140,9 @@ double ccruncher::Params::getCopulaParam() const throw(Exception)
 }
 
 //===========================================================================
-// parse a XML property
+// parse a XML parameter
 //===========================================================================
-void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) throw(Exception)
+void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes) throw(Exception)
 {
   // reading attribute name
   string name = getStringAttribute(attributes, "name");
@@ -191,7 +191,7 @@ void ccruncher::Params::parseProperty(ExpatUserData &, const char **attributes) 
   }
   else
   {
-    throw Exception("found unexpected property: " + name);
+    throw Exception("found unexpected parameter: " + name);
   }
 }
 
@@ -203,12 +203,12 @@ void ccruncher::Params::validate() const throw(Exception)
 
   if (time0 == NAD)
   {
-    throw Exception("property time.0 not defined");
+    throw Exception("parameter time.0 not defined");
   }
 
   if (timeT == NAD)
   {
-    throw Exception("property time.T not defined");
+    throw Exception("parameter time.T not defined");
   }
 
   if (time0 >= timeT)
@@ -222,17 +222,17 @@ void ccruncher::Params::validate() const throw(Exception)
 
   if (maxiterations < 0L)
   {
-    throw Exception("property stopcriteria.maxiterations not defined");
+    throw Exception("parameter stopcriteria.maxiterations not defined");
   }
 
   if (maxseconds < 0L)
   {
-    throw Exception("property stopcriteria.maxseconds not defined");
+    throw Exception("parameter stopcriteria.maxseconds not defined");
   }
 
   if (copula_type == "")
   {
-    throw Exception("property copula.type not defined");
+    throw Exception("parameter copula.type not defined");
   }
 
   if (maxiterations == 0 && maxseconds == 0)
@@ -251,14 +251,14 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   string ret = "";
 
   ret += spc1 + "<parameters>\n";
-  ret += spc2 + "<property name='time.0' value='" + Format::toString(time0) + "'/>\n";
-  ret += spc2 + "<property name='time.T' value='" + Format::toString(timeT) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxiterations' value='" + Format::toString(maxiterations) + "'/>\n";
-  ret += spc2 + "<property name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
-  ret += spc2 + "<property name='copula.type' value='" + copula_type + "'/>\n";
-  ret += spc2 + "<property name='rng.seed' value='" + Format::toString(rng_seed) + "'/>\n";
-  ret += spc2 + "<property name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
-  ret += spc2 + "<property name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
+  ret += spc2 + "<parameter name='time.0' value='" + Format::toString(time0) + "'/>\n";
+  ret += spc2 + "<parameter name='time.T' value='" + Format::toString(timeT) + "'/>\n";
+  ret += spc2 + "<parameter name='stopcriteria.maxiterations' value='" + Format::toString(maxiterations) + "'/>\n";
+  ret += spc2 + "<parameter name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
+  ret += spc2 + "<parameter name='copula.type' value='" + copula_type + "'/>\n";
+  ret += spc2 + "<parameter name='rng.seed' value='" + Format::toString(rng_seed) + "'/>\n";
+  ret += spc2 + "<parameter name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
+  ret += spc2 + "<parameter name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
   ret += spc1 + "</parameters>\n";
 
   return ret;

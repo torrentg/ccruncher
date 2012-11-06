@@ -9,7 +9,6 @@ Current works
   * remove MSVC support (vcproj, src/win32, doc)
   * review functional tests (because --trace removed)
   * review params::copula*
-  * rename parameters/property to parameters/parameter
   * bulk output to file
   * add features page in html doc
 

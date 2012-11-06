@@ -15,14 +15,14 @@
   </defines>
 
   <parameters>
-    <property name="time.0" value="18/10/2009"/>
-    <property name="time.T" value="15/07/2015"/>
-    <property name="stopcriteria.maxiterations" value="$numsims"/>
-    <property name="stopcriteria.maxseconds" value="3600"/>
-    <property name="copula.type" value="t($ndf)"/>
-    <property name="rng.seed" value="0"/>
-    <property name="montecarlo.antithetic" value="true"/>
-    <property name="portfolio.onlyActiveObligors" value="true"/>
+    <parameter name="time.0" value="18/10/2009"/>
+    <parameter name="time.T" value="15/07/2015"/>
+    <parameter name="stopcriteria.maxiterations" value="$numsims"/>
+    <parameter name="stopcriteria.maxseconds" value="3600"/>
+    <parameter name="copula.type" value="t($ndf)"/>
+    <parameter name="rng.seed" value="0"/>
+    <parameter name="montecarlo.antithetic" value="true"/>
+    <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
   <interest type="compound">

@@ -47,8 +47,8 @@ class Params : public ExpatHandlers
 
     // initialize variables
     void init();
-    // parse a property
-    void parseProperty(ExpatUserData &, const char **) throw(Exception);
+    // parse a parameter
+    void parseParameter(ExpatUserData &, const char **) throw(Exception);
     // validate object content
     void validate() const throw(Exception);
 
