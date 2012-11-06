@@ -10,6 +10,7 @@ version 2.1 (???. 2012)
   * improved performance
   * property copula.seed renamed to rng.seed
   * attribute values@at renamed to values@t
+  * improved simulated default times accuracy
 
 version 2.0 (Oct. 2012)
 --------------------------

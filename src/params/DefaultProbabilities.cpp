@@ -20,13 +20,13 @@
 //===========================================================================
 
 #include <cmath>
+#include <climits>
 #include <algorithm>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>
 #include "params/DefaultProbabilities.hpp"
 #include "utils/Format.hpp"
 #include "utils/Strings.hpp"
-#include <climits>
 #include <cassert>
 
 // --------------------------------------------------------------------------
@@ -34,8 +34,8 @@
 #define EPSILON 1e-12
 #define MAX_ITER_BISECTION 100
 #define MAX_ITER_NEWTON 40
-// root-finding with a resolution of 1 second
-#define ABS_ERR_ROOT 1.0/(double)(60*60*24)
+// absolute error less than 1 sec (1/(24*60*60)=1.16e-5)
+#define ABS_ERR_ROOT 1e-7
 
 //===========================================================================
 // default constructor
@@ -484,12 +484,14 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
     return 0.0;
   }
 
-  assert(splines[irating] != NULL && splines[irating]->size > 0);
-  if (t <= splines[irating]->x[0]) {
-    return splines[irating]->y[0];
+  assert(splines[irating] != NULL);
+  int n = splines[irating]->size - 1;
+
+  if (splines[irating]->x[n] <= t) {
+    return splines[irating]->y[n];
   }
-  else if (ddata[irating].back().day < t) {
-    return 1.0;
+  else if (t <= splines[irating]->x[0]) {
+    return splines[irating]->y[0];
   }
   else {
     double ret = gsl_spline_eval(splines[irating], t, accels[irating]);
@@ -713,5 +715,21 @@ Date ccruncher::DefaultProbabilities::getMaxDate(int irating) const
   else {
     return date + ddata[irating].back().day;
   }
+}
+
+//===========================================================================
+// return days where dprob is defined
+//===========================================================================
+vector<int> ccruncher::DefaultProbabilities::getDays(int irating) const
+{
+  assert(!splines.empty());
+  if (splines[irating] == NULL) return vector<int>();
+  vector<int> ret(splines[irating]->size, 0);
+  for(size_t i=0; i<splines[irating]->size; i++) {
+    assert(splines[irating]->x[i] >= 0);
+    // rounded to nearest integer (positive values)
+    ret[i] = (int)(splines[irating]->x[i]+0.5);
+  }
+  return ret;
 }
 

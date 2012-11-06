@@ -75,21 +75,21 @@ void ccruncher_test::InversesTest::test1()
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
   Inverses inverses(0.0, date1, dprobs);
 
-  for(int i=0; i<1000; i++)
+  double minday = inverses.evalueAsNum(0, -1e100);
+  double maxday = inverses.evalueAsNum(0, +1e100);
+  double minval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, minday));
+  double maxval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, maxday));
+
+  for(int i=1; i<10000; i++)
   {
-    double x = -5.0 + i*0.01;
+    double x = minval + i*(maxval-minval)/10000.0;
     double u = gsl_cdf_ugaussian_P(x);
-    double days = dprobs.inverse(0, u);
-    int idays = (int)(days+0.5);
-    if (idays > 0) {
-      double d = inverses.evalueAsNum(0, x);
-      int id = (int)(d+0.5);
-      ASSERT_EQUALS(idays, id);
-    }
+    double days1 = dprobs.inverse(0, u);
+    double days2 = inverses.evalueAsNum(0, x);
+    ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
   }
 
-  // in extremes fails (we avoid check this cases in order to speed-up)
-  for(int i=1; i<(date1-date0); i++)
+  for(int i=1; i<=(date1-date0); i++)
   {
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);
@@ -111,22 +111,21 @@ void ccruncher_test::InversesTest::test2()
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
   Inverses inverses(ndf, date1, dprobs);
 
-  for(int i=0; i<1000; i++)
+  double minday = inverses.evalueAsNum(0, -1e100);
+  double maxday = inverses.evalueAsNum(0, +1e100);
+  double minval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, minday), ndf);
+  double maxval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, maxday), ndf);
+
+  for(int i=1; i<10000; i++)
   {
-    double x = -10.0 + i*0.01;
+    double x = minval + i*(maxval-minval)/10000.0;
     double u = gsl_cdf_tdist_P(x, ndf);
-    double days = dprobs.inverse(0, u);
-    int idays = (int)(days+0.5);
-    if (idays > 0) {
-      double d = inverses.evalueAsNum(0, x);
-      //int id = (int)(d+0.5);
-      //cout << days << "\t" << d << "\t" << fabs(days-d) << endl;
-      ASSERT(fabs(days-d) < 0.5);
-    }
+    double days1 = dprobs.inverse(0, u);
+    double days2 = inverses.evalueAsNum(0, x);
+    ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
   }
 
-  // in extremes fails (we avoid check this cases in order to speed-up)
-  for(int i=1; i<(date1-date0); i++)
+  for(int i=1; i<=(date1-date0); i++)
   {
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);

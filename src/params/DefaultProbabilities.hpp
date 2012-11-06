@@ -141,6 +141,8 @@ class DefaultProbabilities : public ExpatHandlers
     double inverse(int irating, double val) const;
     // return maximum defined date
     Date getMaxDate(int irating) const;
+    // return days where dprob is defined
+    vector<int> getDays(int irating) const;
     // return type of interpolation
     string getInterpolationType(int i) const;
     // serialize object content as xml

@@ -21,13 +21,15 @@
 //===========================================================================
 
 #include <cmath>
+#include <algorithm>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_cdf.h>
 #include "kernel/Inverses.hpp"
 #include "utils/Format.hpp"
+#include "utils/Timer.hpp"
 #include <cassert>
 
-#define MAX_NBREAKS 1024
+#define MAX_NBREAKS 256
 // maximum error = 1 hour
 #define MAX_ERROR 1.0/24.0
 
@@ -51,6 +53,47 @@ ccruncher::Inverses::Inverses(double ndf_, const Date &maxdate, const DefaultPro
 }
 
 //===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::Inverses::Inverses(const Inverses &o)
+{
+  *this = o;
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+Inverses::~Inverses()
+{
+  for(size_t i=0; i<splines.size(); i++) {
+    if (splines[i] != NULL) {
+      gsl_spline_free(splines[i]);
+    }
+  }
+}
+
+//===========================================================================
+// assignment operator
+//===========================================================================
+Inverses & ccruncher::Inverses::operator=(const Inverses &o)
+{
+  t0 = o.t0;
+  t1 = o.t1;
+  ndf = o.ndf;
+
+  splines = o.splines;
+  for(size_t i=0; i<splines.size(); i++)
+  {
+    if (o.splines[i] != NULL) {
+      splines[i] = gsl_spline_alloc(o.splines[i]->interp->type, o.splines[i]->size);
+      gsl_spline_init(splines[i], o.splines[i]->x, o.splines[i]->y, o.splines[i]->size);
+    }
+  }
+
+  return *this;
+}
+
+//===========================================================================
 // initialize
 // if ndf <= 0 then gaussian, t-Student otherwise
 //===========================================================================
@@ -60,29 +103,48 @@ void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultPr
   t0 = dprobs.getDate();
   t1 = maxdate;
 
-  if (t1 <= t0) {
+  if (t1 <= t0+1) {
     throw Exception("maxdate out of range");
   }
 
-  setRanges(dprobs);
-  setCoefs(dprobs);
+  setSplines(dprobs);
 }
 
 //===========================================================================
-// set ranges
-// for each rating computes
-//   * invF(dnorm(1 day))
-//   * invF(dnorm(t1-t0))
-// where:
-//   * invF is the inverse of the probabilities of default function
-//   * dnorm is the CDF of the normal o t-Student dist
-//   * t1-t0 are the days from t0 (starting date) to t1 (ending date)
+// return minimum day
+// return the first day bigger than 0 where dprobs(day) > 0
 //===========================================================================
-void ccruncher::Inverses::setRanges(const DefaultProbabilities &dprobs) throw(Exception)
+int ccruncher::Inverses::getMinDay(int irating, const DefaultProbabilities &dprobs) const
 {
-  double prob;
+  for(int day=1; day<t1-t0; day++)
+  {
+    if (1e-8 < dprobs.evalue(irating, (double)day))
+    {
+      return day;
+    }
+  }
+  return t1-t0;
+}
+
+//===========================================================================
+// inverse cumulative distribution function (gaussian/t-student)
+//===========================================================================
+double ccruncher::Inverses::icdf(double u) const
+{
+  assert(0.0 <= u && u <= 1.0);
+  if (ndf <= 0.0) return gsl_cdf_ugaussian_Pinv(u);
+  else return gsl_cdf_tdist_Pinv(u, ndf);
+}
+
+//===========================================================================
+// set splines
+// try to determine a splines with the minimum number of nodes
+// nodes coming from dprobs have precedence over other points
+//===========================================================================
+void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(Exception)
+{
   int nratings = dprobs.getRatings().size();
-  ranges.resize(nratings, range());
+  splines.assign((size_t)nratings, NULL);
 
   for(int irating=0; irating<nratings; irating++)
   {
@@ -91,146 +153,134 @@ void ccruncher::Inverses::setRanges(const DefaultProbabilities &dprobs) throw(Ex
     }
 
     if (dprobs.getMaxDate(irating) < t1) {
-      throw Exception("dprob[" + dprobs.getRatings().getName(irating) + "] undefined at " + Format::toString(t1));
+      throw Exception("dprob[" + dprobs.getRatings().getName(irating) + "] not defined at " + t1.toString());
     }
 
-    ranges[irating].maxday = t1-t0;
-    prob = dprobs.evalue(irating, t1-t0);
-    if (ndf <= 0.0) ranges[irating].maxval = gsl_cdf_ugaussian_Pinv(prob);
-    else ranges[irating].maxval = gsl_cdf_tdist_Pinv(prob, ndf);
+    int minday = getMinDay(irating, dprobs);
+    int maxday = t1-t0;
 
-    if (ranges[irating].maxval == 0.0)
-    {
-      ranges[irating].minday = 0;
-      ranges[irating].minval = 0.0;
-    }
-    else
-    {
-      ranges[irating].minday = 0;
-      do
-      {
-        ranges[irating].minday++;
-        prob = dprobs.evalue(irating, ranges[irating].minday);
-      }
-      while(prob == 0.0 && ranges[irating].minday < ranges[irating].maxday);
-
-      if (ndf <= 0.0) ranges[irating].minval = gsl_cdf_ugaussian_Pinv(prob);
-      else ranges[irating].minval = gsl_cdf_tdist_Pinv(prob, ndf);
-    }
-
-    assert(ranges[irating].minday <= ranges[irating].maxday);
-    assert(ranges[irating].minval <= ranges[irating].maxval);
-  }
-}
-
-//===========================================================================
-// set interpolation coefficients
-//===========================================================================
-void ccruncher::Inverses::setCoefs(const DefaultProbabilities &dprobs) throw(Exception)
-{
-  int nratings = dprobs.getRatings().size();
-  data.resize(nratings);
-
-  for(int irating=0; irating<nratings; irating++)
-  {
-    if (irating == dprobs.getIndexDefault()) {
-      // 'default' rating -> data[irating].size() = 0
+    if (maxday <= minday) {
+      splines[irating] = gsl_spline_alloc(gsl_interp_linear, 2);
+      splines[irating]->x[0] = icdf(dprobs.evalue(irating, maxday));
+      splines[irating]->x[1] = icdf(dprobs.evalue(irating, maxday));
+      splines[irating]->y[0] = maxday;
+      splines[irating]->y[1] = maxday;
       continue;
     }
 
-    for(int nbreaks=10; nbreaks<=MAX_NBREAKS; nbreaks++)
-    {
-      data[irating] = getCoefs(irating, dprobs, nbreaks);
-      if (isAccurate(irating, dprobs)) {
-        break;
-      }
+    vector<int> nodes = dprobs.getDays(irating);
+    while(nodes.size() > 0 && nodes[0] < minday) nodes.erase(nodes.begin());
+    if (nodes.size() == 0 || nodes[0] != minday) nodes.insert(nodes.begin(), minday);
+    while(nodes.size() > 0 && nodes.back() > maxday) nodes.erase(nodes.end()-1);
+    if (nodes.size() == 0 || nodes.back() != maxday) nodes.insert(nodes.end(), maxday);
+    assert(nodes.size() >= 2);
+
+    vector<int> days(1, minday);
+    int dayko = maxday;
+
+    // we create a cache because icdf is very expensive
+    vector<double> cache(maxday+1, NAN);
+    for(int i=minday; i<=maxday; i++) {
+      cache[i] = icdf(dprobs.evalue(irating, (double)i));
     }
-cout << "spline[" << irating << "].size = " << data[irating].size() << endl;
+
+    do
+    {
+      vector<int>::iterator pos1 = lower_bound(days.begin(), days.end(), dayko);
+      assert(days.begin() < pos1);
+      vector<int>::iterator pos2 = lower_bound(nodes.begin(), nodes.end(), dayko);
+      assert(nodes.begin() < pos2 && pos2 < nodes.end());
+      if (dayko == *pos2) {
+        // dayko is a remaining node
+        days.insert(pos1, dayko);
+      }
+      else { // dayko is not a node
+        vector<int> alternatives;
+        if (*(pos1-1) < *(pos2-1)) alternatives.push_back(*(pos2-1)); // left-node
+        if (*pos2 < *pos1) alternatives.push_back(*pos2); // right-node
+        if (alternatives.empty()) {
+          // left and right nodes already set
+          days.insert(pos1, dayko);
+        }
+        else if (alternatives.size() == 1) {
+          // inserting remaining node
+          days.insert(pos1, alternatives[0]);
+        }
+        else if (dayko-alternatives[0] <= alternatives[1]-dayko) {
+          // inserting nearest node (left case)
+          days.insert(pos1, alternatives[0]);
+        }
+        else {
+          // inserting nearest node (right case)
+          days.insert(pos1, alternatives[1]);
+        }
+      }
+      setSpline(irating, dprobs, days, cache);
+      dayko = getWorstDay(irating, dprobs, cache);
+    }
+    while(dayko > 0 && (int)days.size() < (t1-t0));
+    //cout << "splines[" << irating << "].size = " << splines[irating]->size << endl;
   }
 }
 
 //===========================================================================
-// set interpolation coefficients
-// n: number of breaks (eg. n=3 -> 4 points -included extremals-)
-// we don't use gsl splines because we try to minize memory footprint
+// set spline
 //===========================================================================
-vector<ccruncher::Inverses::csc> ccruncher::Inverses::getCoefs(int irating, const DefaultProbabilities &dprobs, int n) throw(Exception)
+void ccruncher::Inverses::setSpline(int irating, const DefaultProbabilities &dprobs, vector<int> &days, vector<double> &cache)
 {
-  assert(n >= 3);
-  // creating equiespaced points
-  vector<double> y(n+1, NAN);
-  y[0] = 1.0;
-  for(int i=1; i<n; i++)
+  assert(days.size() >= 2);
+
+  if (splines[irating] != NULL) {
+    gsl_spline_free(splines[irating]);
+  }
+
+  vector<double> x(days.size(), 0.0);
+  vector<double> y(days.size(), 0.0);
+
+  for(size_t i=0; i<days.size(); i++)
   {
-    double x = ranges[irating].minval + i*(ranges[irating].maxval-ranges[irating].minval)/(double)n;
-    if (ndf <= 0.0) x = gsl_cdf_ugaussian_P(x);
-    else x = gsl_cdf_tdist_P(x, ndf);
-    y[i] = dprobs.inverse(irating, x);
+    y[i] = days[i];
+    x[i] = cache[days[i]]; //icdf(dprobs.evalue(irating, y[i]));
+    //TODO: manage +inf, -inf cases
   }
-  y.back() = (double)(t1-t0);
 
-  // http://mathworld.wolfram.com/CubicSpline.html
-  gsl_vector *diag = gsl_vector_alloc(n+1);
-  gsl_vector *e = gsl_vector_alloc(n);
-  gsl_vector *b = gsl_vector_alloc(n+1);
-  gsl_vector *x = gsl_vector_alloc(n+1);
-  gsl_vector_set_all(diag, 4.0);
-  gsl_vector_set_all(e, 1.0);
-  gsl_vector_set(diag, 0, 2.0);
-  gsl_vector_set(diag, n, 2.0);
-  for(int i=1; i<n; i++)
+  if (gsl_interp_type_min_size(gsl_interp_cspline) <= x.size()) {
+    splines[irating] = gsl_spline_alloc(gsl_interp_cspline, x.size());
+  }
+  else {
+    splines[irating] = gsl_spline_alloc(gsl_interp_linear, x.size());
+  }
+  gsl_spline_init(splines[irating], &(x[0]), &(y[0]), x.size());
+}
+
+//===========================================================================
+// return the worst unaccurate day
+// if all days are accurate, returns 0
+//===========================================================================
+int ccruncher::Inverses::getWorstDay(int irating, const DefaultProbabilities &dprobs, vector<double> &cache)
+{
+  int ret=0;
+  double val=0.0;
+
+  int n = splines[irating]->size - 1;
+  assert(splines[irating]->y[0] >= 0);
+  // rounded to nearest integer (positive values)
+  int d1 = (int)(splines[irating]->y[0] + 0.5);
+  assert(splines[irating]->y[n] >= 0);
+  // rounded to nearest integer (positive values)
+  int d2 = (int)(splines[irating]->y[n] + 0.5);
+
+  for(int i=d1+1; i<d2; i++)
   {
-    double val = 3.0*(y[i+1]-y[i-1]);
-    gsl_vector_set(b, i, val);
+    double x = cache[i];
+    double days = evalueAsNum(irating, x);
+    double err = fabs(days-i);
+    if (err > MAX_ERROR && err > val) {
+      val = err;
+      ret = i;
+    }
   }
-  gsl_vector_set(b, 0, 3.0*(y[1]-y[0]));
-  gsl_vector_set(b, n, 3.0*(y[n]-y[n-1]));
-
-  int rc = gsl_linalg_solve_symm_tridiag(diag, e, b, x);
-  gsl_vector_free(diag);
-  gsl_vector_free(e);
-  if (rc != GSL_SUCCESS) {
-    gsl_vector_free(b);
-    gsl_vector_free(x);
-    throw Exception("error computing cubic splines coefficients");
-  }
-
-  vector<csc> ret(n);
-  const double *d = gsl_vector_const_ptr(x, 0);
-  for(int i=0; i<n; i++)
-  {
-    ret[i].coef[0] = y[i];
-    ret[i].coef[1] = d[i];
-    ret[i].coef[2] = 3.0*(y[i+1]-y[i]) - 2.0*d[i] - d[i+1];
-    ret[i].coef[3] = 2.0*(y[i]-y[i+1]) + d[i] + d[i+1];
-  }
-
-  gsl_vector_free(b);
-  gsl_vector_free(x);
 
   return ret;
-}
-
-//===========================================================================
-// check spline accuracy
-//===========================================================================
-bool ccruncher::Inverses::isAccurate(int irating, const DefaultProbabilities &dprobs) const
-{
-  for(int i=(t1-t0)-1; i>0; i--)
-  {
-    Date date = t0 + i;
-    double u = dprobs.evalue(irating, date);
-    double x;
-    if (ndf <= 0.0) x = gsl_cdf_ugaussian_Pinv(u);
-    else x = gsl_cdf_tdist_Pinv(u, ndf);
-    double days = evalueAsNum(irating, x);
-if (data[irating].size() == MAX_NBREAKS) {
-  cout << i << "\t" << u << "\t" << days << "\t" << days-i << "\t" << endl;
-}
-else
-    if (fabs(days-i) > MAX_ERROR) return false;
-  }
-
-  return true;
 }
 
