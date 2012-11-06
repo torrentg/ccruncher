@@ -177,18 +177,15 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
 //===========================================================================
 void ccruncher::PowMatrix::pow(const vector<vector<double> > &a, double x, vector<vector<double> > &ret) throw(Exception)
 {
-  int n = a.size();
-  double **A = new double*[n];
-  double **C = new double*[n];
+  size_t n = a.size();
+  vector<double*> A(n, NULL);
+  vector<double*> C(n, NULL);
 
-  for(int i=0; i<n; i++) {
+  for(size_t i=0; i<n; i++) {
     A[i] = (double *) &(a[i][0]);
     C[i] = &(ret[i][0]);
   }
 
-  PowMatrix::pow(A, x, n, C);
-
-  delete[] A;
-  delete[] C;
+  PowMatrix::pow(&(A[0]), x, n, &(C[0]));
 }
 
