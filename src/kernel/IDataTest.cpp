@@ -36,13 +36,13 @@ void ccruncher_test::IDataTest::test1()
     <title>set your title here</title>\n\
     <description><![CDATA[set your description here]]></description>\n\
     <parameters>\n\
-      <property name='time.0' value='18/02/2003'/>\n\
-      <property name='time.T' value='18/02/2005'/>\n\
-      <property name='stopcriteria.maxiterations' value='3000'/>\n\
-      <property name='stopcriteria.maxseconds' value='30000000'/>\n\
-      <property name='copula.type' value='gaussian'/>\n\
-      <property name='rng.seed' value='38765874'/>\n\
-      <property name='montecarlo.antithetic' value='true'/>\n\
+      <parameter name='time.0' value='18/02/2003'/>\n\
+      <parameter name='time.T' value='18/02/2005'/>\n\
+      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
+      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='rng.seed' value='38765874'/>\n\
+      <parameter name='montecarlo.antithetic' value='true'/>\n\
     </parameters>\n\
     <interest type='compound'>\n\
       <rate t='0M' r='0.0'/>\n\
