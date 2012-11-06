@@ -11,7 +11,7 @@ Current works
   * review params::copula*
   * rename parameters/property to parameters/parameter
   * bulk output to file
-  * grant inverses precision (<1 hour)
+  * add features page in html doc
 
 Future works
 -------------------

@@ -4,8 +4,9 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <vector>
 #include <cmath>
+#include <vector>
+#include <gsl/gsl_spline.h>
 #include "params/DefaultProbabilities.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
@@ -24,45 +25,27 @@ class Inverses
 
   private:
 
-    // cubic spline coefficients
-    struct csc
-    {
-      double coef[4];
-    };
-
-    // inverse function range
-    struct range
-    {
-      int minday;
-      double minval;
-      int maxday;
-      double maxval;
-      range() : minday(0), minval(NAN), maxday(0), maxval(NAN) {}
-    };
-
-  private:
-
     // initial date
     Date t0;
     // ending date
     Date t1;
     // degrees of freedom (gaussian = negative or 0)
     double ndf;
-    // limits
-    vector<range> ranges;
-    // interpolation coeficients
-    vector<vector<csc> > data;
+    // cubic splines
+    vector<gsl_spline*> splines;
 
   private:
 
-    // set ranges
-    void setRanges(const DefaultProbabilities &dprobs) throw(Exception);
-    // set interpolation coefficients
-    void setCoefs(const DefaultProbabilities &dprobs) throw(Exception);
-    // set interpolation coefficients
-    vector<csc> getCoefs(int irating, const DefaultProbabilities &dprobs, int nbreaks) throw(Exception);
-    // check spline accuracy
-    bool isAccurate(int irating, const DefaultProbabilities &dprobs) const;
+    // inverse cumulative distribution function (gaussian/t-student)
+    double icdf(double) const;
+    // return minimum day
+    int getMinDay(int irating, const DefaultProbabilities &dprobs) const;
+    // set splines
+    void setSplines(const DefaultProbabilities &dprobs) throw(Exception);
+    // set spline
+    void setSpline(int irating, const DefaultProbabilities &dprobs, vector<int> &days, vector<double> &cache);
+    // return the worst unaccurate day
+    int getWorstDay(int irating, const DefaultProbabilities &dprobs, vector<double> &cache);
 
   public:
 
@@ -70,6 +53,12 @@ class Inverses
     Inverses();
     // constructor
     Inverses(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    //copy constructor
+    Inverses(const Inverses &);
+    // destructor
+    ~Inverses();
+    // assignment operator
+    Inverses & operator=(const Inverses &);
     // initialize
     void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
     // evalue (return days from t0)
@@ -86,34 +75,29 @@ class Inverses
 //===========================================================================
 inline double ccruncher::Inverses::evalueAsNum(int irating, double val) const
 {
-  assert(!isnan(ranges[irating].minval) && !isnan(ranges[irating].maxval));
-  assert(data[irating].size() > 0);
+  assert(irating < (int)splines.size());
 
-  if (ranges[irating].maxval <= val)
+  if (splines[irating] == NULL)
   {
-    return ranges[irating].maxday+1.0;
+    // default rating
+    return 0.0;
   }
-  else if (val < ranges[irating].minval)
+
+  size_t n = splines[irating]->size-1;
+  if (splines[irating]->x[n] < val)
   {
-    return ranges[irating].minday;
+    // default date bigger than maximum date
+    return splines[irating]->y[n] + 100.0;
+  }
+  else if (val <= splines[irating]->x[0])
+  {
+    // default in less than 1 day (or minday)
+    return splines[irating]->y[0];
   }
   else
   {
-    // defaulted in range (t0+1,t1]
-    double aux = data[irating].size()*(val-ranges[irating].minval)/(ranges[irating].maxval-ranges[irating].minval);
-    double intpart;
-    double x = modf(aux, &intpart);
-    assert(0.0 <= intpart);
-    size_t pos = intpart;
-
-    assert(pos < data[irating].size());
-    assert(0.0 <= x && x <= 1.0);
-
-    const double *a = data[irating][pos].coef;
-    double days = a[0] + x*(a[1]+x*(a[2]+x*a[3]));
-
-    assert(0.0 <= days);
-    return days;
+    // we don't use accel because values are random
+    return gsl_spline_eval(splines[irating], val, NULL);
   }
 }
 

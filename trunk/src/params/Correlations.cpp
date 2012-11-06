@@ -74,15 +74,6 @@ int ccruncher::Correlations::size() const
 }
 
 //===========================================================================
-// returns matrix
-//TODO: remove this method
-//===========================================================================
-const vector<vector<double> > &ccruncher::Correlations::getMatrix() const
-{
-  return matrix;
-}
-
-//===========================================================================
 // inserts an element into matrix
 //===========================================================================
 void ccruncher::Correlations::insertCorrelation(const string &sector1, const string &sector2, double value) throw(Exception)
