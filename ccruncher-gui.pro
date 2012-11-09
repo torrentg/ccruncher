@@ -1,6 +1,7 @@
 QT += core gui
 TARGET = ccruncher-gui
 TEMPLATE = app
+CONFIG += qwt
 
 HEADERS += \
     src/gui/MainWindow.hpp \
@@ -8,6 +9,8 @@ HEADERS += \
     src/gui/QDebugStream.hpp \
     src/gui/FindDefines.hpp \
     src/gui/TaskThread.hpp \
+    src/gui/SimulationWidget.hpp \
+    src/gui/AnalysisWidget.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -43,6 +46,7 @@ HEADERS += \
     src/utils/ExpatHandlers.hpp \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
+    src/utils/CsvFile.hpp \
     src/utils/config.h \
     deps/gzstream-1.5/gzstream.h
 
@@ -53,6 +57,8 @@ SOURCES += \
     src/gui/QDebugStream.cpp \
     src/gui/FindDefines.cpp \
     src/gui/TaskThread.cpp \
+    src/gui/SimulationWidget.cpp \
+    src/gui/AnalysisWidget.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
@@ -88,11 +94,14 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
+    src/utils/CsvFile.cpp \
     deps/gzstream-1.5/gzstream.cpp
 
 FORMS += \
     src/gui/MainWindow.ui \
-    src/gui/DefinesDialog.ui
+    src/gui/DefinesDialog.ui \
+    src/gui/SimulationWidget.ui \
+    src/gui/AnalysisWidget.ui
 
 INCLUDEPATH += \
     $$PWD/src \
