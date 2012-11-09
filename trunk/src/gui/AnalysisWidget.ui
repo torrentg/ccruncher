@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AnalysisWidget</class>
+ <widget class="QWidget" name="AnalysisWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>560</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AnalysisWidget</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>File:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="filename">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Segment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="segments">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>View:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QComboBox" name="view">
+     <item>
+      <property name="text">
+       <string>Histogram</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Expected Loss</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Value at Risk</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Expected Shortfall</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QwtPlot" name="plot"/>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QwtPlot</class>
+   <extends>QFrame</extends>
+   <header>qwt_plot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>view</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>refresh(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>65</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>segments</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>refresh(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>13</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>refresh(int)</slot>
+ </slots>
+</ui>

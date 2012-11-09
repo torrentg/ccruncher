@@ -11,6 +11,8 @@ Current works
   * review params::copula*
   * bulk output to file
   * add features page in html doc
+  * ad-hoc xml editor see http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter)
+  * log to specific ostream (not as generic as cout)
 
 Future works
 -------------------

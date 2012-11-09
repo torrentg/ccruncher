@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SimulationWidget</class>
+ <widget class="QWidget" name="SimulationWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>641</width>
+    <height>424</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ccruncher</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Input file:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="ifileButton">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Output directory:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="odir"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="odirButton">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Defines:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="defines">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="definesButton">
+         <property name="text">
+          <string>Set...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Status:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QProgressBar" name="progress">
+         <property name="value">
+          <number>0</number>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="runButton">
+         <property name="text">
+          <string>Run</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="ifile"/>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPlainTextEdit" name="log">
+       <property name="font">
+        <font>
+         <family>Courier</family>
+        </font>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOn</enum>
+       </property>
+       <property name="undoRedoEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="lineWrapMode">
+        <enum>QPlainTextEdit::NoWrap</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="plainText">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <action name="action_Open_file">
+   <property name="text">
+    <string>&amp;Open file ...</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="action_Run">
+   <property name="text">
+    <string>&amp;Run</string>
+   </property>
+  </action>
+  <action name="action_Stop">
+   <property name="text">
+    <string>&amp;Stop</string>
+   </property>
+  </action>
+  <action name="action_Abort">
+   <property name="text">
+    <string>&amp;Abort</string>
+   </property>
+  </action>
+  <action name="action_Credits">
+   <property name="text">
+    <string>&amp;Credits</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>ifile</tabstop>
+  <tabstop>ifileButton</tabstop>
+  <tabstop>odir</tabstop>
+  <tabstop>odirButton</tabstop>
+  <tabstop>defines</tabstop>
+  <tabstop>definesButton</tabstop>
+  <tabstop>runButton</tabstop>
+  <tabstop>log</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>ifileButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>selectFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>637</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>odirButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>selectDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>634</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ifile</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>setFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>323</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>-21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>odir</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>setDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>run()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>606</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>636</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>definesButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>showDefines()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>575</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>selectFile()</slot>
+  <slot>selectDir()</slot>
+  <slot>run()</slot>
+  <slot>showDefines()</slot>
+  <slot>setFile()</slot>
+  <slot>setDir()</slot>
+ </slots>
+</ui>

@@ -1,15 +1,12 @@
 #include <iostream>
-#include <map>
 #include <QFileDialog>
-#include <QFile>
-#include <QDir>
+#include <QMessageBox>
 #include "ui_MainWindow.h"
 #include "gui/MainWindow.hpp"
-#include "gui/DefinesDialog.hpp"
-#include "gui/FindDefines.hpp"
+#include "gui/SimulationWidget.hpp"
+#include "gui/AnalysisWidget.hpp"
 #include "utils/Utils.hpp"
-
-#define REFRESH_MS 250
+#include "utils/config.h"
 
 //===========================================================================
 // constructor
@@ -18,9 +15,35 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
-  connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
-  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
-  check(true);
+
+  mdiArea = new QMdiArea;
+  mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  setCentralWidget(mdiArea);
+
+  mdiArea->setViewMode(QMdiArea::TabbedView);
+  mdiArea->setTabsClosable(true);
+  mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
+  mdiArea->setTabsMovable(true);
+
+  setWindowTitle(tr("CCruncher"));
+  setUnifiedTitleAndToolBarOnMac(true);
+
+  connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+  connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
+
+  /*
+    tema menu contextual dels tabs (restore/close), pe. afeguir entrada
+    http://www.qtcentre.org/threads/25207-QMdiArea-context-menu-for-tabs
+
+    QMdiAreaSubWindow *subWindow = mdiArea->addSubWindow(some_widget);
+    QMenu *menu = child->systemMenu();
+    QAction *closeAll = new QAction(tr("Close All"),menu);
+    menu->addAction(closeAll);
+    connect(closeAll, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
+  */
+
 }
 
 //===========================================================================
@@ -28,220 +51,77 @@ MainWindow::MainWindow(QWidget *parent) :
 //===========================================================================
 MainWindow::~MainWindow()
 {
-  task.stop();
-  task.wait();
   delete ui;
+  delete mdiArea;
 }
 
 //===========================================================================
-// select input file
+// close app
 //===========================================================================
-void MainWindow::selectFile()
+void MainWindow::exit()
+{
+  //TODO: check that any simulation is running
+  this->close();
+}
+
+//===========================================================================
+// about dialog
+//===========================================================================
+void MainWindow::about()
+{
+  QMessageBox::about(NULL, tr("About ..."),
+    "<h2>CCruncher</h2>"
+    "<h3>Open-Source Tool for Credit Risk Modeling </h3>"
+    "<p>"
+      "version: " VERSION " (" SVN_VERSION ")<br/>"
+      "build options: " + QString(Utils::getCompilationOptions().c_str()) + "<br/>"
+      "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a>"
+    "</p>");
+}
+
+//===========================================================================
+// open file
+//===========================================================================
+void MainWindow::openFile()
 {
   QString filename = QFileDialog::getOpenFileName(
               this,
-              tr("Select Input File ..."),
-              ui->ifile->text(),
-              tr("ccruncher files (*.xml *.gz);;All files (*.*)"));
+              tr("Open File ..."),
+              "", //ui->ifile->text(),
+              tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
 
-  if (filename != "") {
-    ui->ifile->setText(filename);
-    setFile();
-  }
-}
-
-//===========================================================================
-// set input file
-//===========================================================================
-void MainWindow::setFile()
-{
-  string filename = ui->ifile->text().toStdString();
-  FindDefines finder = FindDefines(filename);
-  defines = finder.getDefines();
-  setDefines();
-  check(true);
-}
-
-//===========================================================================
-// select output directory
-//===========================================================================
-void MainWindow::selectDir()
-{
-  QString dirpath = QFileDialog::getExistingDirectory(
-              this,
-              tr("Select Ouput Directory ..."),
-              ui->odir->text(),
-              QFileDialog::ShowDirsOnly);
-
-  if (dirpath != "") {
-    ui->odir->setText(dirpath);
-    setDir();
-  }
-}
-
-//===========================================================================
-// select output directory
-//===========================================================================
-void MainWindow::setDir()
-{
-  check(true);
-}
-
-//===========================================================================
-// review widget enabled/disabled
-//===========================================================================
-void MainWindow::check(bool clear)
-{
-  if (clear)
+  if (filename != "")
   {
-    ui->log->clear();
-    cout << Utils::copyright() << endl;
-    ui->progress->setValue(0);
-  }
-
-  if (!QFile::exists(ui->ifile->text()))
-  {
-    ui->defines->setEnabled(false);
-    ui->definesButton->setEnabled(false);
-    ui->progress->setEnabled(false);
-    ui->runButton->setEnabled(false);
-    ui->progress->setValue(0);
-    ui->defines->clear();
-  }
-  else
-  {
-    ui->defines->setEnabled(true);
-    ui->definesButton->setEnabled(true);
-    QString odir = ui->odir->text();
-    if (odir.trimmed().length() > 0 && QDir(odir).exists())
-    {
-      ui->progress->setEnabled(true);
-      ui->runButton->setEnabled(true);
+    //TODO: check if file already opened
+    //TODO: catch exceptions
+    QWidget *child = NULL;
+    if (!filename.toLower().endsWith("csv")) {
+      child = new SimulationWidget(this);
     }
-    else
-    {
-      ui->progress->setEnabled(false);
-      ui->runButton->setEnabled(false);
+    else {
+      child = new AnalysisWidget(filename, this);
     }
+    mdiArea->addSubWindow(child);
+    child->setToolTip(filename);
+    QFileInfo pathInfo(filename);
+    child->setWindowTitle(pathInfo.fileName());
+    child->show();
   }
 }
 
+/*
 //===========================================================================
-// run ccruncher
+// find mdi child
 //===========================================================================
-void MainWindow::run()
+QMdiSubWindow* MainWindow::findMdiChild(const QString &fileName)
 {
-  if (task.isRunning()) {
-    task.stop();
-    return;
+  QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
+  foreach (QMdiSubWindow *window, mdiArea->subWindowList()) {
+    MdiChild *mdiChild = qobject_cast<MdiChild *>(window->widget());
+    if (mdiChild->currentFile() == canonicalFilePath)
+      return window;
   }
-  else
-  {
-    ui->log->clear();
-    string ifile = ui->ifile->text().toStdString();
-    string odir = ui->odir->text().toStdString();
-    task.setData(ifile, defines, odir);
-    task.start();
-    timer.start(REFRESH_MS);
-  }
+  return 0;
 }
-
-//===========================================================================
-// print message
-//===========================================================================
-void MainWindow::print(const QString str)
-{
-  QTextCursor cursor = ui->log->textCursor();
-  cursor.movePosition(QTextCursor::End);
-  cursor.insertText(str);
-  //ui->log->setTextCursor(cursor);
-  //ui->log->textCursor().insertText(str);
-}
-
-//===========================================================================
-// refresh progress bar
-//===========================================================================
-void MainWindow::refresh()
-{
-  int val = task.getProgress();
-  if (val < 0) {
-    ui->progress->setTextVisible(false);
-    val = ui->progress->value();
-    val = (val+1)%100;
-  }
-  else {
-    ui->progress->setTextVisible(true);
-  }
-  ui->progress->setValue(val);
-}
-
-//===========================================================================
-// show the defines dialog
-//===========================================================================
-void MainWindow::showDefines()
-{
-  DefinesDialog dialog(this, defines);
-  int rc = dialog.exec();
-
-  if (rc == QDialog::Accepted)
-  {
-    defines = dialog.getDefines();
-    setDefines();
-    check(true);
-  }
-}
-
-//===========================================================================
-// show the defines dialog
-//===========================================================================
-void MainWindow::setDefines()
-{
-  QString str;
-  map<string,string>::iterator it;
-  for (it=defines.begin(); it != defines.end(); it++)
-  {
-      str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
-  }
-  ui->defines->setText(str);
-}
-
-//===========================================================================
-// set status
-// see TaskThread::status
-//===========================================================================
-void MainWindow::setStatus(int val)
-{
-  switch(val)
-  {
-    case 2: // parsing
-    case 3: // simulating
-      ui->progress->setValue(0);
-      ui->ifile->setEnabled(false);
-      ui->ifileButton->setEnabled(false);
-      ui->odir->setEnabled(false);
-      ui->odirButton->setEnabled(false);
-      ui->defines->setEnabled(false);
-      ui->definesButton->setEnabled(false);
-      ui->runButton->setText(tr("Stop"));
-      break;
-    case 1: // inactive
-    case 4: // failed
-    case 5: // aborted
-    case 6: // finished
-      timer.stop();
-      refresh();
-      ui->ifile->setEnabled(true);
-      ui->ifileButton->setEnabled(true);
-      ui->odir->setEnabled(true);
-      ui->odirButton->setEnabled(true);
-      ui->defines->setEnabled(true);
-      ui->definesButton->setEnabled(true);
-      ui->progress->setEnabled(false);
-      ui->runButton->setText(tr("Run"));
-      check(false);
-      break;
-    default:
-      assert(false);
-  }
-}
+*/
 
