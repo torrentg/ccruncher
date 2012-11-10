@@ -20,7 +20,7 @@
 // constructor
 //===========================================================================
 AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
-    QWidget(parent), ui(new Ui::AnalysisWidget)
+  QWidget(parent), ui(new Ui::AnalysisWidget), magnifier(NULL), panner(NULL)
 {
   ui->setupUi(this);
   ui->filename->setText(filename);
@@ -33,24 +33,30 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   int left, top, right, bottom;
   ui->plot->getContentsMargins(&left, &top, &right, &bottom);
   ui->plot->setContentsMargins(left, top+20, right, bottom);
-/*
-  QwtPlotZoomer* zoomer = new QwtPlotZoomer(ui->plot->canvas() );
-  zoomer->setRubberBandPen( QColor( Qt::black ) );
-  zoomer->setTrackerPen( QColor( Qt::black ) );
-  zoomer->setMousePattern( QwtEventPattern::MouseSelect2, Qt::RightButton, Qt::ControlModifier );
-  zoomer->setMousePattern( QwtEventPattern::MouseSelect3, Qt::RightButton );
-*/
-  QwtPlotMagnifier *magnifier = new QwtPlotMagnifier(ui->plot->canvas());
-  //magnifier->setAxisEnabled(QwtPlot::yRight, false);
 
-  QwtPlotPanner *panner = new QwtPlotPanner(ui->plot->canvas());
-  //panner->setMouseButton(Qt::MidButton);
+  magnifier = new QwtPlotMagnifier(ui->plot->canvas());
+  panner = new QwtPlotPanner(ui->plot->canvas());
 
-  //CUIDADIN AMB AIXO
+  // magnifie x-axis
+  QAction *actionZoomX = new QAction("Zoom axis X", this);
+  actionZoomX->setCheckable(true);
+  actionZoomX->setChecked(true);
+  connect(actionZoomX, SIGNAL(triggered(bool)), this, SLOT(setZoomX(bool)));
+  ui->plot->addAction(actionZoomX);
+
+  // magnifie y-axis
+  QAction *actionZoomY = new QAction("Zoom axis Y", this);
+  actionZoomY->setCheckable(true);
+  actionZoomY->setChecked(true);
+  connect(actionZoomY, SIGNAL(triggered(bool)), this, SLOT(setZoomY(bool)));
+  ui->plot->addAction(actionZoomY);
+
+  ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
+
   QKeySequence keys_refresh(QKeySequence::Refresh);
   QAction* actionRefresh = new QAction(this);
   actionRefresh->setShortcut(keys_refresh);
-  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh(int)));
+  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
   this->addAction(actionRefresh);
 }
 
@@ -60,6 +66,22 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 AnalysisWidget::~AnalysisWidget()
 {
   delete ui;
+}
+
+//===========================================================================
+// set zoom on axis
+//===========================================================================
+void AnalysisWidget::setZoomX(bool checked)
+{
+  assert(magnifier != NULL);
+  magnifier->setAxisEnabled(QwtPlot::xBottom, checked);
+  magnifier->setMouseFactor(1.0);
+}
+void AnalysisWidget::setZoomY(bool checked)
+{
+  assert(magnifier != NULL);
+  magnifier->setAxisEnabled(QwtPlot::yLeft, checked);
+  magnifier->setMouseFactor(1.0);
 }
 
 //===========================================================================
@@ -170,7 +192,7 @@ void AnalysisWidget::drawExpectedLoss(const vector<double> &values)
   grid->setMajPen(QPen(Qt::black, 0, Qt::DotLine));
   grid->attach(ui->plot);
 
-  ui->plot->setAxisTitle(QwtPlot::yLeft, "Portfolio Loss");
+  ui->plot->setAxisTitle(QwtPlot::yLeft, "Expected Loss");
   ui->plot->setAxisTitle(QwtPlot::xBottom, "Iteration");
 
   double minval = values[0];

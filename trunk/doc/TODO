@@ -8,9 +8,12 @@ Current works
   * embed R in ui (tab, etc.)
   * remove MSVC support (vcproj, src/win32, doc)
   * review functional tests (because --trace removed)
-  * review params::copula*
-  * bulk output to file
   * add features page in html doc
+  * rename sector to factor
+    - add loading+ndf in factor tag
+    - remove param copula.type
+    - remove correlations diagonal
+  * bulk output to file
   * ad-hoc xml editor see http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter)
   * log to specific ostream (not as generic as cout)
 
@@ -22,6 +25,7 @@ Future works
      - allow to aggregators to append data to file
      - add configuration file to ccruncher-gui
      - add menu to ccruncher-gui
+     - add file hash (CRC32 - cksum - http://www.opensource.apple.com/source/xnu/xnu-1456.1.26/bsd/libkern/crc32.c)
   * improve model
      - add grouped t-copula support
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
