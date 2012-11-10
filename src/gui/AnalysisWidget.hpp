@@ -9,6 +9,10 @@
 
 using namespace std;
 
+// forward definitions
+class QwtPlotMagnifier;
+class QwtPlotPanner;
+
 namespace Ui {
 class AnalysisWidget;
 }
@@ -23,6 +27,10 @@ class AnalysisWidget: public QWidget
     Ui::AnalysisWidget *ui;
     // csv file
     CsvFile csv;
+    // plot magnifier
+    QwtPlotMagnifier *magnifier;
+    // plot panner
+    QwtPlotPanner *panner;
 
   private:
 
@@ -41,7 +49,11 @@ class AnalysisWidget: public QWidget
   public slots:
 
     // refresh current content
-    void refresh(int);
+    void refresh(int i=-1);
+    // enable zoom on axis x
+    void setZoomX(bool checked);
+    // enable zoom on axis y
+    void setZoomY(bool checked);
 
 };
 

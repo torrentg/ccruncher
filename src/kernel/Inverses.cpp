@@ -215,8 +215,8 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
           days.insert(pos1, alternatives[1]);
         }
       }
-      setSpline(irating, dprobs, days, cache);
-      dayko = getWorstDay(irating, dprobs, cache);
+      setSpline(irating, days, cache);
+      dayko = getWorstDay(irating, cache);
     }
     while(dayko > 0 && (int)days.size() < (t1-t0));
     //cout << "splines[" << irating << "].size = " << splines[irating]->size << endl;
@@ -226,7 +226,7 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
 //===========================================================================
 // set spline
 //===========================================================================
-void ccruncher::Inverses::setSpline(int irating, const DefaultProbabilities &dprobs, vector<int> &days, vector<double> &cache)
+void ccruncher::Inverses::setSpline(int irating, vector<int> &days, vector<double> &cache)
 {
   assert(days.size() >= 2);
 
@@ -257,7 +257,7 @@ void ccruncher::Inverses::setSpline(int irating, const DefaultProbabilities &dpr
 // return the worst unaccurate day
 // if all days are accurate, returns 0
 //===========================================================================
-int ccruncher::Inverses::getWorstDay(int irating, const DefaultProbabilities &dprobs, vector<double> &cache)
+int ccruncher::Inverses::getWorstDay(int irating, vector<double> &cache)
 {
   int ret=0;
   double val=0.0;

@@ -43,9 +43,9 @@ class Inverses
     // set splines
     void setSplines(const DefaultProbabilities &dprobs) throw(Exception);
     // set spline
-    void setSpline(int irating, const DefaultProbabilities &dprobs, vector<int> &days, vector<double> &cache);
+    void setSpline(int irating, vector<int> &days, vector<double> &cache);
     // return the worst unaccurate day
-    int getWorstDay(int irating, const DefaultProbabilities &dprobs, vector<double> &cache);
+    int getWorstDay(int irating, vector<double> &cache);
 
   public:
 

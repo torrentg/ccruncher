@@ -112,6 +112,8 @@ LIBS += \
     -lpthread
 
 unix {
+  INCLUDEPATH += \
+    /usr/include/qwt
   LIBS += \
     -lz \
     -lgsl \
