@@ -23,18 +23,13 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QWidget(parent), ui(new Ui::AnalysisWidget), magnifier(NULL), panner(NULL)
 {
   ui->setupUi(this);
-  ui->filename->setText(filename);
-  csv.open(filename.toStdString());
-  vector<string> segments = csv.getHeaders();
-  for(size_t i=0; i<segments.size(); i++) {
-    ui->segments->addItem(segments[i].c_str());
-  }
 
   int left, top, right, bottom;
   ui->plot->getContentsMargins(&left, &top, &right, &bottom);
   ui->plot->setContentsMargins(left, top+20, right, bottom);
 
   magnifier = new QwtPlotMagnifier(ui->plot->canvas());
+  magnifier->setMouseFactor(1.0);
   panner = new QwtPlotPanner(ui->plot->canvas());
 
   // magnifie x-axis
@@ -53,11 +48,19 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 
   ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
 
+  // refresh action
   QKeySequence keys_refresh(QKeySequence::Refresh);
   QAction* actionRefresh = new QAction(this);
   actionRefresh->setShortcut(keys_refresh);
   QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
   this->addAction(actionRefresh);
+
+  ui->filename->setText(filename);
+  csv.open(filename.toStdString());
+  vector<string> segments = csv.getHeaders();
+  for(size_t i=0; i<segments.size(); i++) {
+    ui->segments->addItem(segments[i].c_str());
+  }
 }
 
 //===========================================================================
@@ -75,13 +78,11 @@ void AnalysisWidget::setZoomX(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::xBottom, checked);
-  magnifier->setMouseFactor(1.0);
 }
 void AnalysisWidget::setZoomY(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::yLeft, checked);
-  magnifier->setMouseFactor(1.0);
 }
 
 //===========================================================================
@@ -176,6 +177,8 @@ void AnalysisWidget::drawHistogram(const vector<double> &values)
 
   qhist->setData(new QwtIntervalSeriesData(samples));
   qhist->attach(ui->plot);
+
+  if (panner != NULL) panner->setOrientations(Qt::Horizontal);
   ui->plot->replot();
 }
 
@@ -219,21 +222,22 @@ void AnalysisWidget::drawExpectedLoss(const vector<double> &values)
     }
     double y = sum1/n;
     double stdev = sqrt((n*sum2-sum1*sum1)/(n*(n-1.0)));
-    double delta = gsl_cdf_ugaussian_Pinv(0.025)*stdev/sqrt(n);
+    double delta = fabs(gsl_cdf_ugaussian_Pinv(0.025))*stdev/sqrt(n);
     avgs[i] = QPointF(x+1.0, y);
     ranges[i] = QwtIntervalSample(x+1.0, QwtInterval(y-delta, y+delta));
   }
 
+  // adjusting vertical scale (avoids initial 5%)
+  double ymin=ranges.back().interval.minValue(), ymax=ranges.back().interval.maxValue();
+  for(size_t i=(int)(numpoints*0.05); i<numpoints; i++) {
+    if (ranges[i].interval.minValue() < ymin) ymin = ranges[i].interval.minValue();
+    if (ranges[i].interval.maxValue() > ymax) ymax = ranges[i].interval.maxValue();
+  }
+  ui->plot->setAxisScale(QwtPlot::yLeft, ymin, ymax);
+
   QwtPlotCurve *d_curve = new QwtPlotCurve("title");
   d_curve->setRenderHint(QwtPlotItem::RenderAntialiased);
   d_curve->setStyle(QwtPlotCurve::Lines); //NoCurve
-/*
-  d_curve->setLegendAttribute(QwtPlotCurve::LegendShowSymbol);
-  QwtSymbol *symbol = new QwtSymbol(QwtSymbol::XCross);
-  symbol->setSize(4);
-  symbol->setPen(QPen(Qt::black));
-  d_curve->setSymbol(symbol);
-*/
   d_curve->setSamples(avgs);
   d_curve->attach(ui->plot);
 
@@ -247,6 +251,7 @@ void AnalysisWidget::drawExpectedLoss(const vector<double> &values)
   d_intervalCurve->setSamples(ranges);
   d_intervalCurve->attach(ui->plot);
 
+  if (panner != NULL) panner->setOrientations(Qt::Horizontal | Qt::Vertical);
   ui->plot->replot();
 }
 
