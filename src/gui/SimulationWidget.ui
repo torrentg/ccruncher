@@ -21,21 +21,14 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Input file:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="ifileButton">
-         <property name="text">
-          <string>Browse...</string>
+          <string>File:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Output directory:</string>
+          <string>Output:</string>
          </property>
         </widget>
        </item>
@@ -94,8 +87,12 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="ifile"/>
+       <item row="0" column="1" colspan="2">
+        <widget class="QLineEdit" name="ifile">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -160,7 +157,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>ifile</tabstop>
-  <tabstop>ifileButton</tabstop>
   <tabstop>odir</tabstop>
   <tabstop>odirButton</tabstop>
   <tabstop>defines</tabstop>
@@ -170,22 +166,6 @@
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>ifileButton</sender>
-   <signal>clicked()</signal>
-   <receiver>SimulationWidget</receiver>
-   <slot>selectFile()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>599</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>637</x>
-     <y>5</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>odirButton</sender>
    <signal>clicked()</signal>
@@ -199,22 +179,6 @@
     <hint type="destinationlabel">
      <x>634</x>
      <y>69</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ifile</sender>
-   <signal>editingFinished()</signal>
-   <receiver>SimulationWidget</receiver>
-   <slot>setFile()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>323</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>386</x>
-     <y>-21</y>
     </hint>
    </hints>
   </connection>

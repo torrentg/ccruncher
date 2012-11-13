@@ -36,6 +36,8 @@ class SimulationWidget : public QWidget
 
   private:
 
+    // set input file
+    void setFile();
     // fill widget defines
     void setDefines();
     // check dialog status
@@ -44,16 +46,12 @@ class SimulationWidget : public QWidget
   public:
 
     // constructor
-    explicit SimulationWidget(QWidget *parent = 0);
+    explicit SimulationWidget(const QString &filename, QWidget *parent = 0);
     // destructor
     ~SimulationWidget();
 
   public slots:
 
-    // selects input file
-    void selectFile();
-    // set input file
-    void setFile();
     // selects output directory
     void selectDir();
     // set ooutput directory

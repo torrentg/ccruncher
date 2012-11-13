@@ -1,6 +1,7 @@
 #include <iostream>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMdiSubWindow>
 #include "ui_MainWindow.h"
 #include "gui/MainWindow.hpp"
 #include "gui/SimulationWidget.hpp"
@@ -70,11 +71,11 @@ void MainWindow::exit()
 void MainWindow::about()
 {
   QMessageBox::about(NULL, tr("About ..."),
-    "<h2>CCruncher</h2>"
-    "<h3>Open-Source Tool for Credit Risk Modeling </h3>"
+    "<h3>ccruncher-" VERSION " (" SVN_VERSION ")</h3>"
+    //"<p>Open-Source Tool for<br/> Credit Risk Modeling </p>"
     "<p>"
-      "version: " VERSION " (" SVN_VERSION ")<br/>"
-      "build options: " + QString(Utils::getCompilationOptions().c_str()) + "<br/>"
+      "copyright: Gerard Torrent<br/><br/>"
+      "license: GPL<br/><br/>"
       "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a>"
     "</p>");
 }
@@ -90,38 +91,40 @@ void MainWindow::openFile()
               "", //ui->ifile->text(),
               tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
 
-  if (filename != "")
+  if (!filename.isEmpty())
   {
-    //TODO: check if file already opened
+    QMdiSubWindow *existing = findMdiChild(filename);
+    if (existing) {
+      mdiArea->setActiveSubWindow(existing);
+      return;
+    }
+
     //TODO: catch exceptions
     QWidget *child = NULL;
     if (!filename.toLower().endsWith("csv")) {
-      child = new SimulationWidget(this);
+      child = new SimulationWidget(filename, this);
     }
     else {
       child = new AnalysisWidget(filename, this);
     }
     mdiArea->addSubWindow(child);
-    child->setToolTip(filename);
     QFileInfo pathInfo(filename);
     child->setWindowTitle(pathInfo.fileName());
+    child->setWindowFilePath(filename);
     child->show();
   }
 }
 
-/*
 //===========================================================================
 // find mdi child
 //===========================================================================
-QMdiSubWindow* MainWindow::findMdiChild(const QString &fileName)
+QMdiSubWindow* MainWindow::findMdiChild(const QString &filename)
 {
-  QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
-  foreach (QMdiSubWindow *window, mdiArea->subWindowList()) {
-    MdiChild *mdiChild = qobject_cast<MdiChild *>(window->widget());
-    if (mdiChild->currentFile() == canonicalFilePath)
-      return window;
+  foreach (QMdiSubWindow *child, mdiArea->subWindowList()) {
+    if (child->widget()->windowFilePath() == filename) {
+      return child;
+    }
   }
-  return 0;
+  return NULL;
 }
-*/
 

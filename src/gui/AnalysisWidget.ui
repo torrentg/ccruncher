@@ -7,15 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>660</width>
-    <height>590</height>
+    <height>554</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>AnalysisWidget</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -23,59 +26,11 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1" colspan="3">
+     <item row="0" column="1">
       <widget class="QLineEdit" name="filename">
        <property name="readOnly">
         <bool>true</bool>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Segment:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="segments">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>View:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QComboBox" name="view">
-       <item>
-        <property name="text">
-         <string>Histogram</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Expected Loss</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Value at Risk</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Expected Shortfall</string>
-        </property>
-       </item>
       </widget>
      </item>
     </layout>
@@ -91,7 +46,7 @@
     </widget>
    </item>
    <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QGroupBox" name="params">
        <property name="sizePolicy">
@@ -103,15 +58,66 @@
        <property name="title">
         <string>Parameters</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="spin_str">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Segment:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="segments">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>View:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="view">
+          <item>
+           <property name="text">
+            <string>Histogram</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Expected Loss</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Value at Risk</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Expected Shortfall</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="percentile_str">
           <property name="text">
            <string>Percentile:</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item>
          <widget class="QDoubleSpinBox" name="percentile">
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -127,14 +133,14 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
+        <item>
+         <widget class="QLabel" name="confidence_str">
           <property name="text">
            <string>Confidence:</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item>
          <widget class="QDoubleSpinBox" name="confidence">
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -150,13 +156,36 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QLabel" name="numbins_str">
+          <property name="text">
+           <string>Num. bins:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="numbins">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>4096</number>
+          </property>
+          <property name="value">
+           <number>24</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="results">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -166,18 +195,33 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="iterations_str">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>15</height>
+           </size>
+          </property>
           <property name="text">
-           <string>Iterations:</string>
+           <string>Num. Samples:</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="numiterations">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -199,6 +243,12 @@
         </item>
         <item>
          <widget class="QLabel" name="statistic_str">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>15</height>
+           </size>
+          </property>
           <property name="text">
            <string>Value at Risk:</string>
           </property>
@@ -209,7 +259,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -230,7 +280,13 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="statistic_str_2">
+         <widget class="QLabel" name="interval_str">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>15</height>
+           </size>
+          </property>
           <property name="text">
            <string>Conf. Interval:</string>
           </property>
@@ -240,11 +296,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="statistic_2">
+         <widget class="QLineEdit" name="interval">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -265,7 +321,13 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="statistic_str_3">
+         <widget class="QLabel" name="std_err_str">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>15</height>
+           </size>
+          </property>
           <property name="text">
            <string>Std. Error</string>
           </property>
@@ -275,11 +337,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="statistic_3">
+         <widget class="QLineEdit" name="std_err">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -310,7 +372,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>40</height>
+         <height>18</height>
         </size>
        </property>
       </spacer>
@@ -337,8 +399,8 @@
    <slot>refresh(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>488</x>
-     <y>45</y>
+     <x>639</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
      <x>557</x>
@@ -353,8 +415,8 @@
    <slot>refresh(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>233</x>
-     <y>43</y>
+     <x>639</x>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>4</x>
@@ -362,8 +424,60 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>confidence</sender>
+   <signal>editingFinished()</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>drawStatistic()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>654</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>numbins</sender>
+   <signal>editingFinished()</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>changeNumbins()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>537</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>654</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>percentile</sender>
+   <signal>editingFinished()</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>refresh()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>520</x>
+     <y>181</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>654</x>
+     <y>243</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>refresh(int)</slot>
+  <slot>drawStatistic()</slot>
+  <slot>changeNumbins()</slot>
+  <slot>changePercentile()</slot>
+  <slot>refresh()</slot>
  </slots>
 </ui>
