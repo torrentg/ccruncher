@@ -13,7 +13,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-SimulationWidget::SimulationWidget(QWidget *parent) :
+SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
     QWidget(parent), ui(new Ui::SimulationWidget), qout(cout), qerr(cerr)
 {
   ui->setupUi(this);
@@ -21,7 +21,9 @@ SimulationWidget::SimulationWidget(QWidget *parent) :
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
   connect(&qout, SIGNAL(print(QString)), this, SLOT(print(QString)), Qt::QueuedConnection);
   connect(&qerr, SIGNAL(print(QString)), this, SLOT(print(QString)), Qt::QueuedConnection);
-  check(true);
+  ui->ifile->setText(filename);
+  //TODO: check exceptions
+  setFile();
 }
 
 //===========================================================================
@@ -32,23 +34,6 @@ SimulationWidget::~SimulationWidget()
   task.stop();
   task.wait();
   delete ui;
-}
-
-//===========================================================================
-// select input file
-//===========================================================================
-void SimulationWidget::selectFile()
-{
-  QString filename = QFileDialog::getOpenFileName(
-              this,
-              tr("Select Input File ..."),
-              ui->ifile->text(),
-              tr("ccruncher files (*.xml *.gz);;All files (*.*)"));
-
-  if (filename != "") {
-    ui->ifile->setText(filename);
-    setFile();
-  }
 }
 
 //===========================================================================
@@ -217,8 +202,7 @@ void SimulationWidget::setStatus(int val)
     case 2: // parsing
     case 3: // simulating
       ui->progress->setValue(0);
-      ui->ifile->setEnabled(false);
-      ui->ifileButton->setEnabled(false);
+      ui->ifile->setEnabled(true);
       ui->odir->setEnabled(false);
       ui->odirButton->setEnabled(false);
       ui->defines->setEnabled(false);
@@ -232,7 +216,6 @@ void SimulationWidget::setStatus(int val)
       timer.stop();
       refresh();
       ui->ifile->setEnabled(true);
-      ui->ifileButton->setEnabled(true);
       ui->odir->setEnabled(true);
       ui->odirButton->setEnabled(true);
       ui->defines->setEnabled(true);

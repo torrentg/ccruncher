@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow
   private:
 
     // find mdi child
-    QMdiSubWindow *findMdiChild(const QString &fileName);
+    QMdiSubWindow *findMdiChild(const QString &filename);
 
   public:
 

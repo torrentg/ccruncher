@@ -104,7 +104,7 @@ ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
     if (W[i] < 1e-10) { break };
   }
-  for(i in M:1)
+  for(i in (M-1):1)
   {
     W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
     if (W[i] < 1e-10) { break };
