@@ -376,12 +376,12 @@
     <h3>Rating Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
           Credit rating identifier. All references to a credit rating, eg. obligor rating, 
@@ -389,7 +389,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">description</td>
         <td class="c2">
           Credit rating description. This value is only used in reports. This
@@ -496,12 +496,12 @@
     <h3>Transitions Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">period</td>
         <td class="c2">
           Number of months covered by the transition matrix. Usually the
@@ -514,12 +514,12 @@
     <h3>Transition Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">from</td>
         <td class="c2">
           Initial credit rating. This value must be a credit rating identifier, see 
@@ -527,7 +527,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">to</td>
         <td class="c2">
           Final credit rating. This value must be a credit rating identifier, see 
@@ -535,7 +535,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
           Probability for credit rating migration and must have a value between 0 and 1.
@@ -572,12 +572,12 @@
     <h3>Sector Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
           Sector identifier. All references to a sector, eg. obligor 
@@ -585,7 +585,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">description</td>
         <td class="c2">
           Sector description. This value is only used in reports.
@@ -638,12 +638,12 @@
     <h3>Correlation Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">sector1</td>
         <td class="c2">
           First sector.
@@ -651,7 +651,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">sector2</td>
         <td class="c2">
           Second sector.
@@ -659,7 +659,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
           Sector factor loading or correlation between sectors.
@@ -742,12 +742,12 @@
     <h3>Segmentation Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
           Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
@@ -755,7 +755,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">components</td>
         <td class="c2">
           Type of segments. Accepted values are 'obligor' 
@@ -763,7 +763,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">enabled</td>
         <td class="c2">
           Indicates if this segmentation is enabled (ie. losses will be computed for 
@@ -777,12 +777,12 @@
     <h3>Segment Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
           Segment name. Different segmentations can have segments with
@@ -898,12 +898,12 @@
     <h3>Portfolio Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">include</td>
         <td class="c2">
           Indicates the filepath to portfolio file relative to the main input file location. 
@@ -919,19 +919,19 @@
     <h3>Obligor Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">id</td>
         <td class="c2">
           Unique obligor identifier.
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">rating</td>
         <td class="c2">
           Initial obligor credit rating at time t0, see attribute <i>time.0</i> at the 
@@ -940,7 +940,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">sector</td>
         <td class="c2">
           Sector where this obligor is included.
@@ -948,7 +948,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">recovery</td>
         <td class="c2">
           Default recovery used in absence of recovery in the description of assets.
@@ -966,12 +966,12 @@
     <h3>Belongs-To Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">segmentation</td>
         <td class="c2">
           Segmentation identifier.
@@ -979,7 +979,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">segment</td>
         <td class="c2">
           Segment identifier.
@@ -992,19 +992,19 @@
     <h3>Asset Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">id</td>
         <td class="c2">
           Unique asset identifier.
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">date</td>
         <td class="c2">
           Date (in format 'DD/MM/YYYY') from wich there is credit risk, eg. bond
@@ -1012,7 +1012,7 @@
         </td>
         <td class="c3">date</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">recovery</td>
         <td class="c2">
           Default recovery used in absence of recovery in the description of assets.
@@ -1030,12 +1030,12 @@
     <h3>Values Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
           Date where the values take place.
@@ -1045,7 +1045,7 @@
         </td>
         <td class="c3">date<br/>int[DMY]</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">exposure</td>
         <td class="c2">
           Esposure at date "t". Amount that lender can lose in case of obligor's default 
@@ -1060,7 +1060,7 @@
         </td>
         <td class="c3">double<br/>string</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">recovery</td>
         <td class="c2">
           The portion of loss that will be recovered in case of default at date "t". 
@@ -1147,12 +1147,12 @@
     <h3>Dprob Attributes</h3>
 
     <table cellpadding="3">
-      <tr class="b">
+      <tr class="a">
         <th>Name</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">rating</td>
         <td class="c2">
          This value must be a credit rating identifier, see 'name' attribute in the 
@@ -1160,7 +1160,7 @@
         </td>
         <td class="c3">string</td>
       </tr>
-      <tr class="b">
+      <tr class="a">
         <td class="c1">t</td>
         <td class="c2">
           Time. Can be a date (in format 'DD/MM/YYYY') bigger or equal than <i>time.0</i> 
@@ -1170,7 +1170,7 @@
         </td>
         <td class="c3">date<br/>int[DMY]</td>
       </tr>
-      <tr class="a">
+      <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
           Probability that an obligor with initial rating <i>rating</i> 
@@ -1188,7 +1188,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 06-Nov-2012
+          Last modified: 13-Nov-2012
         </td>
       </tr></table>
     </div>
