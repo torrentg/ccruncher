@@ -28,6 +28,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="filename">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid gray</string>
+       </property>
+       <property name="frame">
+        <bool>false</bool>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -230,8 +236,14 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid gray</string>
+          </property>
           <property name="text">
            <string>20000</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -268,8 +280,14 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid gray</string>
+          </property>
           <property name="text">
            <string>100.01</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -309,8 +327,14 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid gray</string>
+          </property>
           <property name="text">
            <string>100.01</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -350,8 +374,14 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid gray</string>
+          </property>
           <property name="text">
            <string>100.01</string>
+          </property>
+          <property name="frame">
+           <bool>false</bool>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

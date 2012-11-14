@@ -89,6 +89,10 @@ void ccruncher::Logger::flood(char c)
 //===========================================================================
 Logger& ccruncher::operator<<(Logger& os, char c)
 {
+  if (c != '\n' && os.curcol+1 > os.numcols) {
+    static_cast<ostream&>(os) << '\n';
+    os.curcol = 0;
+  }
   if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
   static_cast<ostream&>(os) << c;
   if (c == '\n') os.curcol = 0;
