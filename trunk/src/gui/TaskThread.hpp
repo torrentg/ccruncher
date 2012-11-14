@@ -6,6 +6,7 @@
 #include <QThread>
 #include "kernel/IData.hpp"
 #include "kernel/MonteCarlo.hpp"
+#include "utils/Logger.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -29,6 +30,8 @@ class TaskThread : public QThread
 
   private:
 
+    // logger
+    Logger log;
     // input filename
     string ifile;
     // output directory
@@ -52,9 +55,11 @@ class TaskThread : public QThread
   public:
 
     // constructor
-    TaskThread();
+    TaskThread(streambuf *s=NULL);
     // destructor
     ~TaskThread();
+    // set streambuf
+    void setStreamBuf(streambuf *);
     // set data info
     void setData(const string &, const map<string,string> &, const string &);
     // task

@@ -51,7 +51,7 @@ class Utils
     // returns compilation options
     static string getCompilationOptions();
     // returns random value based on current time
-    static long trand();
+    static unsigned long trand();
     // return the number of cores
     static int getNumCores();
     // copyright info

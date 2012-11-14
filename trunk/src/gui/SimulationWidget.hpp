@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QString>
 #include <QTimer>
-#include "gui/QDebugStream.hpp"
+#include "gui/QStreamBuf.hpp"
 #include "gui/TaskThread.hpp"
 
 using namespace std;
@@ -30,9 +30,7 @@ class SimulationWidget : public QWidget
     // defines
     map<string,string> defines;
     // stdout redirect
-    QDebugStream qout;
-    // stderr redirect
-    QDebugStream qerr;
+    QStreamBuf qstream;
 
   private:
 

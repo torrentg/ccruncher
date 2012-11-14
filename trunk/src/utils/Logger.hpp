@@ -27,7 +27,11 @@
 
 #include "utils/config.h"
 #include <string>
+#include <ostream>
+#include <streambuf>
+#include "utils/Utils.hpp"
 #include "utils/Timer.hpp"
+#include "utils/Date.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -37,50 +41,116 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Logger
+class Logger : public ostream
 {
 
   private:
 
-    // verbosity level (0=none, 1=verbose)
-    static bool verbose;
+    // indent size;
+    size_t isize;
     // current indentation level
-    static int ilevel;
-    // internal columns counter
-    static int curcol;
-
-  private:
-
-    // private constructor (non-instantiable class)
-    Logger();
+    size_t ilevel;
+    // number od columns
+    size_t numcols;
+    // current column
+    size_t curcol;
 
   public:
 
-    // set verbosity
-    static void setVerbosity(bool verbose_);
-    // set ilevel = ilevel+1
-    static void newIndentLevel();
-    // set ilevel = ilevel-1
-    static void previousIndentLevel();
-    // add a blank line
-    static void addBlankLine();
-    // trace a message
-    static void append(const string &msg);
-    // trace a message
-    static void trace(const string &msg);
-    // trace a message
-    static void trace(const string &msg, const string &value);
-    // trace a message
-    static void trace(const string &msg, Timer &timer);
-    // trace a message
-    static void trace(const string &msg, char c);
-    // flush content
-    static void flush();
-    // header info
-    static void header();
-    // footer info
-    static void footer(Timer &);
+    // default constructor
+    explicit Logger(streambuf *s=NULL);
+    // indentation size
+    void setIndentSize(size_t v);
+    // number of columns
+    void setNumCols(size_t);
+    // return numcols
+    size_t getNumCols() const { return numcols; }
+    // return curcol
+    size_t getCurCol() const { return curcol; }
+    // increase/decrease indent levels
+    size_t indent(int v=1);
+    // repeat fill char n times
+    void repeat(size_t n, char c=0);
+    // flood
+    void flood(char c);
 
+    // formated output
+    Logger& operator<<(bool val) { static_cast<ostream&>(*this) << (val?"true":"false"); return *this; }
+    Logger& operator<<(short val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned short val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(int val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned int val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(long val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned long val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(float val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(double val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(long double val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(const void* val) { static_cast<ostream&>(*this) << val; return *this; }
+
+    // manipulators calls
+    Logger& operator<<(Logger& ( *pf )(Logger&)) { return pf(*this); }
+    Logger& operator<<(ios& ( *pf )(ios&)) { pf(*this); return *this; }
+    Logger& operator<<(ios_base& ( *pf )(ios_base&)) { pf(*this); return *this; }
+
+    // friend functions
+    friend Logger& operator<<(Logger& os, const char* s);
+    friend Logger& operator<<(Logger& os, char c);
+    friend Logger& operator<<(Logger& os, const string &);
+    friend Logger& operator<<(Logger& os, const Date &);
+    friend Logger& operator<<(Logger& os, Timer &);
+
+};
+
+//---------------------------------------------------------------------------
+
+// manipulator
+Logger& split(Logger &logger);
+
+// manipulator
+Logger& endl(Logger &logger);
+
+// manipulator
+Logger& header(Logger &log);
+
+// manipulator
+struct flood
+{
+  const char fill ;
+  explicit flood(char c) : fill(c) {}
+  inline friend Logger& operator<<(Logger& logger, const flood& manip)
+  {
+    logger.flood(manip.fill);
+    return logger;
+  }
+};
+
+// manipulator
+struct indent
+{
+  int delta;
+  explicit indent(int n=1) : delta(n) {}
+  inline friend Logger& operator<<(Logger& logger, const indent& manip)
+  {
+    logger.indent(manip.delta);
+    return logger;
+  }
+};
+
+// manipulator
+struct footer
+{
+  Timer &timer;
+  explicit footer(Timer &t) : timer(t) {}
+  inline friend Logger& operator<<(Logger& log, const footer& manip)
+  {
+    log << "general information" << flood('*') << endl;
+    log << indent(+1);
+    log << "end time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
+    log << "total elapsed time" << split << manip.timer << endl;
+    log << indent(-1);
+    log << endl;
+    return log;
+  }
 };
 
 //---------------------------------------------------------------------------

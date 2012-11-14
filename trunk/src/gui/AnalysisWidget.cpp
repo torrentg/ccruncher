@@ -256,7 +256,7 @@ void AnalysisWidget::computeES(vector<double> &values, double percentile)
 void AnalysisWidget::drawHistogram(const vector<double> &values, size_t numbins)
 {
   ui->plot->detachItems();
-cout << "drawing histogram ..." << endl;
+
   QwtPlotGrid *grid = new QwtPlotGrid;
   grid->enableX(true);
   grid->enableY(true);

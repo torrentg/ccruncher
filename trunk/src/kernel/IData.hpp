@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <iostream>
+#include <streambuf>
 #include <string>
 #include <map>
 #include "params/Params.hpp"
@@ -40,6 +40,7 @@
 #include "portfolio/Portfolio.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
+#include "utils/Logger.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -56,6 +57,8 @@ class IData : public ExpatHandlers
 
   private:
 
+    // logger
+    Logger log;
     // configuration filename
     string filename;
     // simulation title
@@ -89,8 +92,6 @@ class IData : public ExpatHandlers
 
   private:
   
-    // intialize class
-    void init();
     // validate simulation data
     void validate() throw(Exception);
     // parse data
@@ -112,9 +113,9 @@ class IData : public ExpatHandlers
   public:
 
     // default constructor
-    IData();
-    // constructor
-    IData(const string &xmlfilename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
+    IData(streambuf *s=NULL);
+    // initialize content
+    void init(const string &xmlfilename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
     // returns simulation title
     const string &getTitle() const;
     // returns simulation description

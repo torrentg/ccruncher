@@ -7,7 +7,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-TaskThread::TaskThread() : QThread(), montecarlo(NULL)
+TaskThread::TaskThread(streambuf *s) : QThread(), log(s), montecarlo(NULL)
 {
   ifile = "";
   odir = "";
@@ -35,6 +35,14 @@ void TaskThread::deletemc()
 }
 
 //===========================================================================
+// set streambuf
+//===========================================================================
+void TaskThread::setStreamBuf(streambuf *s)
+{
+  log.rdbuf(s);
+}
+
+//===========================================================================
 // run
 //===========================================================================
 void TaskThread::run()
@@ -48,17 +56,18 @@ void TaskThread::run()
   {
     stop_ = false;
 
-    // copyright info
-    cout << Utils::copyright() << endl;
-    Logger::header();
+    // header
+    log << Utils::copyright() << endl;
+    log << header << endl;
 
     // parsing input file
     setStatus(parsing);
-    idata = new IData(ifile, defines, &stop_);
+    idata = new IData(log.rdbuf());
+    idata->init(ifile, defines, &stop_);
 
     // creating simulation object
     setStatus(simulating);
-    montecarlo = new MonteCarlo();
+    montecarlo = new MonteCarlo(log.rdbuf());
     montecarlo->setFilePath(odir, true);
     montecarlo->setData(*idata);
     delete idata;
@@ -66,15 +75,14 @@ void TaskThread::run()
     // simulating
     montecarlo->run(Utils::getNumCores(), 1000, &stop_);
 
-    // tracing some execution info
-    Logger::footer(timer);
-
+    // footer
+    log << footer(timer) << endl;
     setStatus(finished);
   }
   catch(std::exception &e)
   {
-    cout << endl;
-    cout << e.what() << endl;
+    log << indent(-100) << endl;
+    log << e.what() << endl;
     setStatus(failed);
     if (idata != NULL) delete idata;
   }

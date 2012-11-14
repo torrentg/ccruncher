@@ -317,15 +317,17 @@ void run() throw(Exception)
     }
   }
 
-  // license info
-  cout << endl << Utils::copyright() << endl;
-  Logger::header();
+  // header
+  Logger log(cout.rdbuf());
+  log << Utils::copyright() << endl;
+  log << header << endl;
 
   // parsing input file
-  IData *idata = new IData(sfilename, defines, &stop);
+  IData *idata = new IData(cout.rdbuf());
+  idata->init(sfilename, defines, &stop);
 
   // creating simulation object
-  MonteCarlo montecarlo;
+  MonteCarlo montecarlo(cout.rdbuf());
   montecarlo.setFilePath(spath, bforce);
   montecarlo.setData(*idata);
   delete idata;
@@ -333,8 +335,8 @@ void run() throw(Exception)
   // running simulation
   montecarlo.run(ithreads, ihash, &stop);
 
-  // tracing some execution info
-  Logger::footer(timer);
+  // footer
+  log << footer(timer) << endl;
 }
 
 //===========================================================================

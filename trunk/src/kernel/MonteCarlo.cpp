@@ -36,14 +36,14 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo() : assets(NULL), chol(NULL), stop(NULL)
+ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
   numiterations = 0;
   maxiterations = 0;
   antithetic = false;
-  seed = 0L;
+  seed = 0UL;
   hash = 0;
   fpath = "path not set";
   bforce = false;
@@ -124,9 +124,9 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
 
   try
   {
-    Logger::addBlankLine();
-    Logger::trace("initialization procedure", '*');
-    Logger::newIndentLevel();
+    log << endl;
+    log << "initialization procedure" << flood('*') << endl;
+    log << indent(+1);
 
     // initializing model
     initModel(idata);
@@ -141,7 +141,7 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
     initAggregators(idata);
 
     // exit function
-    Logger::previousIndentLevel();
+    log << indent(-1);
   }
   catch(Exception &e)
   {
@@ -156,8 +156,8 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
 void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
 {
   // setting logger header
-  Logger::trace("setting parameters", '-');
-  Logger::newIndentLevel();
+  log << "setting parameters" << flood('-') << endl;
+  log << indent(+1);
 
   // reading properties
   maxseconds = idata.getParams().maxseconds;
@@ -166,33 +166,33 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   timeT = idata.getParams().timeT;
   antithetic = idata.getParams().antithetic;
   seed = idata.getParams().rng_seed;
-  if (seed == 0L) {
+  if (seed == 0UL) {
     // use a seed based on clock
     seed = Utils::trand();
   }
 
   // setting logger info
-  Logger::trace("initial date", Format::toString(time0));
-  Logger::trace("end date", Format::toString(timeT));
-  Logger::trace("number of ratings", Format::toString(idata.getRatings().size()));
-  Logger::trace("number of sectors", Format::toString(idata.getSectors().size()));
-  Logger::trace("copula type", idata.getParams().copula_type);
+  log << "initial date" << split << time0 << endl;
+  log << "end date" << split << timeT << endl;
+  log << "number of ratings" << split << idata.getRatings().size() << endl;
+  log << "number of sectors" << split << idata.getSectors().size() << endl;
+  log << "copula type" << split << idata.getParams().copula_type << endl;
 
   DefaultProbabilities dprobs;
 
   if (idata.hasDefaultProbabilities())
   {
-    Logger::trace("default probability functions", "user defined");
+    log << "default probability functions" << split << "user defined" << endl;
     dprobs = idata.getDefaultProbabilities();
   }
   else
   {
     // setting logger info
-    Logger::trace("transition matrix period (months)", Format::toString(idata.getTransitions().getPeriod()));
+    log << "transition matrix period (months)" << split << idata.getTransitions().getPeriod() << endl;
     Transitions tone = idata.getTransitions().scale(1);
     double rerror = tone.getRegularizationError();
-    Logger::trace("transition matrix regularization error (1M)", Format::toString(rerror));
-    Logger::trace("default probability functions", string("computed"));
+    log << "transition matrix regularization error (1M)" << split << rerror << endl;
+    log << "default probability functions" << split << "computed" << endl;
 
     // computing default probability functions using transition matrix
     int months = (int) ceil(diff(time0, timeT, 'M'));
@@ -209,7 +209,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   for(int i=0; i<dprobs.size(); i++) {
     strsplines += dprobs.getInterpolationType(i)[0];
   }
-  Logger::trace("default probability splines (linear, cubic, none)", strsplines);
+  log << "default probability splines (linear, cubic, none)" << split << strsplines << endl;
 
   // model parameters
   inverses.init(ndf, timeT, dprobs);
@@ -234,7 +234,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::previousIndentLevel();
+  log << indent(-1);
 }
 
 //===========================================================================
@@ -246,8 +246,8 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   assert(obligors.empty());
 
   // setting logger header
-  Logger::trace("setting obligors to simulate", '-');
-  Logger::newIndentLevel();
+  log << "setting obligors to simulate" << flood('-') << endl;
+  log << indent(+1);
 
   // checking limits (see SimulatedObligor fields)
   if (idata.getRatings().size() == 0 || UCHAR_MAX < idata.getRatings().size()) {
@@ -258,8 +258,8 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   }
 
   // setting logger info
-  Logger::trace("simulate only active obligors", Format::toString(idata.getParams().onlyactive));
-  Logger::trace("number of initial obligors", Format::toString(idata.getPortfolio().getObligors().size()));
+  log << "simulate only active obligors" << split << idata.getParams().onlyactive << endl;
+  log << "number of obligors" << split << idata.getPortfolio().getObligors().size() << endl;
 
   // determining the obligors to simulate
   bool onlyactive = idata.getParams().onlyactive;
@@ -282,7 +282,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   
   // important: sorting obligors list by sector and rating
   sort(obligors.begin(), obligors.end());
-  Logger::trace("number of simulated obligors", Format::toString(obligors.size()));
+  log << "number of simulated obligors" << split << obligors.size() << endl;
 
   // checking that exist obligors to simulate
   if (obligors.empty())
@@ -291,7 +291,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::previousIndentLevel();
+  log << indent(-1);
 }
 
 //===========================================================================
@@ -310,8 +310,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   }
 
   // setting logger header
-  Logger::trace("setting assets to simulate", '-');
-  Logger::newIndentLevel();
+  log << "setting assets to simulate" << flood('-') << endl;
+  log << indent(+1);
 
   // note: this is the place where it must have the asset losses precomputation.
   // Asset losses has been moved to Obligor:insertAsset() with the purpose of 
@@ -335,8 +335,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       }
     }
   }
-  Logger::trace("number of initial assets", Format::toString(cont));
-  Logger::trace("number of simulated assets", Format::toString(numassets));
+  log << "number of assets" << split << cont << endl;
+  log << "number of simulated assets" << split << numassets << endl;
 
   // checking that exist assets to simulate
   if (numassets == 0)
@@ -400,7 +400,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::previousIndentLevel();
+  log << indent(-1);
 }
 
 //===========================================================================
@@ -413,12 +413,12 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   assert(aggregators.empty()); 
 
   // setting logger header
-  Logger::trace("initializing aggregators", '-');
-  Logger::newIndentLevel();
+  log << "initializing aggregators" << flood('-') << endl;
+  log << indent(+1);
 
   // setting logger info
-  Logger::trace("output data directory", fpath);
-  Logger::trace("number of segmentations", Format::toString(idata.getSegmentations().size()));
+  log << "output data directory" << split << fpath << endl;
+  log << "number of segmentations" << split << idata.getSegmentations().size() << endl;
 
   // allocating and initializing aggregators
   aggregators.clear();
@@ -430,7 +430,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   }
 
   // exit function
-  Logger::previousIndentLevel();
+  log << indent(-1);
 }
 
 //===========================================================================
@@ -457,19 +457,21 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   hash = nhash;
 
   // setting logger header
-  Logger::addBlankLine();
-  Logger::trace("Monte Carlo", '*');
-  Logger::newIndentLevel();
-  Logger::trace("configuration", '-');
-  Logger::newIndentLevel();
-  Logger::trace("seed used to initialize randomizer", Format::toString(seed));
-  Logger::trace("maximum execution time (seconds)", Format::toString(maxseconds));
-  Logger::trace("maximum number of iterations", Format::toString(maxiterations));
-  Logger::trace("antithetic mode", Format::toString(antithetic));
-  Logger::trace("number of threads", Format::toString((int)numthreads));
-  Logger::previousIndentLevel();
-  Logger::trace("running Monte Carlo" + (hash==0?"": " [" + Format::toString(hash) + " simulations per hash]"), '-');
-  Logger::newIndentLevel();
+  log << endl;
+  log << "Monte Carlo" << flood('*') << endl;
+  log << indent(+1);
+  log << "configuration" << flood('-') << endl;
+  log << indent(+1);
+  log << "seed used to initialize randomizer" << split << seed << endl;
+  log << "maximum execution time (seconds)" << split << maxseconds << endl;
+  log << "maximum number of iterations" << split << maxiterations << endl;
+  log << "antithetic mode" << split << antithetic << endl;
+  log << "number of threads" << split << (int)numthreads << endl;
+  log << indent(-1);
+  log << "running Monte Carlo";
+  if (hash != 0) log << " [" << Format::toString(hash) << " simulations per hash]";
+  log << flood('-') << endl;
+  log << indent(+1);
 
   // creating and launching simulation threads
   timer.start();
@@ -503,15 +505,13 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer3.stop();
 
   // exit function
-  Logger::addBlankLine();
-  Logger::trace("simulations realized", Format::toString(numiterations));
-  Logger::trace("elapsed time creating random numbers", Timer::format(etime1/numthreads));
-  Logger::trace("elapsed time simulating obligors", Timer::format(etime2/numthreads));
-  Logger::trace("elapsed time writing data to disk", timer3);
-  Logger::trace("total simulation time", Timer::format(timer.read()));
-  Logger::addBlankLine();
-  Logger::previousIndentLevel();
-  Logger::previousIndentLevel();
+  log << endl;
+  log << "simulations realized" << split <<numiterations << endl;
+  log << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
+  log << "elapsed time simulating obligors" << split << Timer::format(etime2/numthreads) << endl;
+  log << "elapsed time writing data to disk" << split << timer3 << endl;
+  log << "total simulation time" << split << timer << endl;
+  log << indent(-2) << endl;
 }
 
 //===========================================================================
@@ -538,7 +538,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
     // printing hashes
     if (hash > 0 && numiterations%hash == 0)
     {
-      Logger::append(".");
+      log << '.';
     }
 
     // checking stop criterias
@@ -553,7 +553,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
   }
   catch(Exception &e)
   {
-    cerr << "error: " << e << endl;
+    cerr << "error: " << e << std::endl;
     more = false;
   }
 

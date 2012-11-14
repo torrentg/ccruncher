@@ -1,27 +1,17 @@
-#include "QDebugStream.hpp"
+#include "QStreamBuf.hpp"
 
 //===========================================================================
 // constructor
 //===========================================================================
-QDebugStream::QDebugStream(std::ostream &stream, QObject *parent) :
-  QObject(parent), std::basic_streambuf<char>(), m_stream(stream)
+QStreamBuf::QStreamBuf(QObject *parent) : QObject(parent), std::basic_streambuf<char>()
 {
-  m_old_buf = stream.rdbuf();
-  stream.rdbuf(this);
-}
-
-//===========================================================================
-// destructor
-//===========================================================================
-QDebugStream::~QDebugStream()
-{
-  m_stream.rdbuf(m_old_buf);
+  // nothing to do
 }
 
 //===========================================================================
 // inherited from streambuf
 //===========================================================================
-int QDebugStream::overflow(int v)
+int QStreamBuf::overflow(int v)
 {
   emit print(QString(QChar(v)));
   return v;
@@ -30,8 +20,9 @@ int QDebugStream::overflow(int v)
 //===========================================================================
 // inherited from streambuf
 //===========================================================================
-std::streamsize QDebugStream::xsputn(const char *p, std::streamsize n)
+std::streamsize QStreamBuf::xsputn(const char *p, std::streamsize n)
 {
   emit print(QString::fromUtf8(p,n));
   return n;
 }
+
