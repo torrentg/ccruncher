@@ -505,7 +505,6 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer3.stop();
 
   // exit function
-  log << endl;
   log << "simulations realized" << split <<numiterations << endl;
   log << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
   log << "elapsed time simulating obligors" << split << Timer::format(etime2/numthreads) << endl;

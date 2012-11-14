@@ -73,7 +73,7 @@ void TaskThread::run()
     delete idata;
 
     // simulating
-    montecarlo->run(Utils::getNumCores(), 1000, &stop_);
+    montecarlo->run(Utils::getNumCores(), 0, &stop_);
 
     // footer
     log << footer(timer) << endl;
