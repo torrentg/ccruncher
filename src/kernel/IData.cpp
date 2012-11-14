@@ -30,31 +30,22 @@
 #include <cassert>
 
 //===========================================================================
-// inicialitzador
-//===========================================================================
-void ccruncher::IData::init()
-{
-   hasmaintag = false;
-   hasdefinestag = 0;
-   title = "";
-   description = "";
-   stop = NULL;
-}
-
-//===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::IData::IData()
+ccruncher::IData::IData(streambuf *s) : log(s)
 {
-  init();
+  hasmaintag = false;
+  hasdefinestag = 0;
+  title = "";
+  description = "";
+  stop = NULL;
 }
 
 //===========================================================================
-// constructor
+// init
 //===========================================================================
-ccruncher::IData::IData(const string &xmlfilename, const map<string,string> &m, bool *stop_) throw(Exception)
+void ccruncher::IData::init(const string &xmlfilename, const map<string,string> &m, bool *stop_) throw(Exception)
 {
-  init();
   filename = xmlfilename;
   stop = stop_;
 
@@ -83,22 +74,21 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
   try
   {
     // output header
-    Logger::addBlankLine();
-    Logger::trace("reading input file", '*');
-    Logger::newIndentLevel();
+    log << "reading input file" << flood('*') << endl;
+    log << indent(+1);
 
     // trace file info
-    Logger::trace("file name", filename);
+    log << "file name" << split << filename << endl;
     if (filename != STDIN_FILENAME)
     {
-      Logger::trace("file size", Format::bytes(File::filesize(filename)));
+      log << "file size" << split << Format::bytes(File::filesize(filename)) << endl;
     }
 
     // trace defines
     map<string,string>::const_iterator it;
     for (it=m.begin() ; it != m.end(); it++) {
       checkDefine((*it).first, (*it).second);
-      Logger::trace("define (command line)", (*it).first+"="+(*it).second);
+      log << "define (command line)" << split << (*it).first+"="+(*it).second << endl;
     }
 
     // parsing
@@ -106,8 +96,8 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(is, this, stop);
-    Logger::trace("elapsed time parsing data", timer);
-    Logger::previousIndentLevel();
+    log << "elapsed time parsing data" << split << timer << endl;
+    log << indent(-1);
   }
   catch(std::exception &e)
   {
@@ -147,7 +137,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     string value = getStringAttribute(attributes, "value");
     checkDefine(key, value);
     if (eu.defines.find(key) == eu.defines.end()) {
-      Logger::trace("define (configuration file)", key+"="+value);
+      log << "define (configuration file)" << split << key+"="+value << endl;
       eu.defines[key] = value;
     }
   }
@@ -360,8 +350,8 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       }
       else
       {
-        Logger::trace("included file name", filepath);
-        Logger::trace("included file size", Format::bytes(File::filesize(filepath)));
+        log << "included file name" << split << filepath << endl;
+        log << "included file size" << split << Format::bytes(File::filesize(filepath)) << endl;
         ExpatParser parser;
         parser.setDefines(eu.defines);
         parser.parse(xmlstream, &portfolio, stop);

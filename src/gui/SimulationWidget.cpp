@@ -14,13 +14,13 @@
 // constructor
 //===========================================================================
 SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
-    QWidget(parent), ui(new Ui::SimulationWidget), qout(cout), qerr(cerr)
+    QWidget(parent), ui(new Ui::SimulationWidget)
 {
   ui->setupUi(this);
+  task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(refresh()));
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
-  connect(&qout, SIGNAL(print(QString)), this, SLOT(print(QString)), Qt::QueuedConnection);
-  connect(&qerr, SIGNAL(print(QString)), this, SLOT(print(QString)), Qt::QueuedConnection);
+  connect(&qstream, SIGNAL(print(QString)), this, SLOT(print(QString)), Qt::QueuedConnection);
   ui->ifile->setText(filename);
   //TODO: check exceptions
   setFile();
@@ -81,7 +81,7 @@ void SimulationWidget::check(bool clear)
   if (clear)
   {
     ui->log->clear();
-    cout << Utils::copyright() << endl;
+    ui->log->textCursor().insertText(Utils::copyright().c_str());
     ui->progress->setValue(0);
   }
 

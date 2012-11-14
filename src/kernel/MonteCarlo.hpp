@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <vector>
+#include <streambuf>
 #include <pthread.h>
 #include "kernel/IData.hpp"
 #include "kernel/Inverses.hpp"
@@ -36,6 +37,7 @@
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
+#include "utils/Logger.hpp"
 #include "utils/Exception.hpp"
 
 //---------------------------------------------------------------------------
@@ -56,6 +58,8 @@ class MonteCarlo
 
   private:
 
+    // logger
+    Logger log;
     // list of simulated obligors
     vector<SimulatedObligor> obligors;
     // list of simulated assets
@@ -87,7 +91,7 @@ class MonteCarlo
     // antithetic method flag
     bool antithetic;
     // rng seed
-    long seed;
+    unsigned long seed;
     // hash (0=non show hashes) (default=0)
     size_t hash;
     // directory for output files
@@ -133,7 +137,7 @@ class MonteCarlo
   public:
 
     // constructor
-    MonteCarlo();
+    MonteCarlo(streambuf *s=NULL);
     // destructor
     ~MonteCarlo();
     // set path for output files

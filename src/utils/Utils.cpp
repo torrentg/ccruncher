@@ -60,11 +60,11 @@ string ccruncher::Utils::timestamp()
 //===========================================================================
 // returns a random value based on current time
 //===========================================================================
-long ccruncher::Utils::trand()
+unsigned long ccruncher::Utils::trand()
 {
   timeval tv;
   gettimeofday(&tv,NULL);
-  return tv.tv_sec*1000000L + long(tv.tv_usec);
+  return (unsigned long)(tv.tv_sec)*1000000UL + (unsigned long)(tv.tv_usec);
 }
 
 //===========================================================================

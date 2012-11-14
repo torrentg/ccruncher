@@ -35,7 +35,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
 {
   assert(chol != NULL);
   rng = gsl_rng_alloc(gsl_rng_mt19937);
-  gsl_rng_set(rng, (unsigned long) seed);
+  gsl_rng_set(rng, seed);
   factors = gsl_vector_alloc(chol->size1);
   assetsize = mc.assetsize;
   ndf = mc.ndf;

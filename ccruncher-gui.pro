@@ -6,7 +6,7 @@ CONFIG += qwt
 HEADERS += \
     src/gui/MainWindow.hpp \
     src/gui/DefinesDialog.hpp \
-    src/gui/QDebugStream.hpp \
+    src/gui/QStreamBuf.hpp \
     src/gui/FindDefines.hpp \
     src/gui/TaskThread.hpp \
     src/gui/SimulationWidget.hpp \
@@ -54,7 +54,7 @@ SOURCES += \
     src/ccruncher-gui.cpp \
     src/gui/DefinesDialog.cpp \
     src/gui/MainWindow.cpp \
-    src/gui/QDebugStream.cpp \
+    src/gui/QStreamBuf.cpp \
     src/gui/FindDefines.cpp \
     src/gui/TaskThread.cpp \
     src/gui/SimulationWidget.cpp \

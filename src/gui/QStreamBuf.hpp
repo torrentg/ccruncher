@@ -1,5 +1,5 @@
-#ifndef _QDebugStream_
-#define _QDebugStream_
+#ifndef _QStreamBuf_
+#define _QStreamBuf_
 
 #include <iostream>
 #include <streambuf>
@@ -10,27 +10,20 @@
 //---------------------------------------------------------------------------
 
 /*
-  class to redirect std:ccout and std::cerr to a TextEdit widget
+  convert streambuf call to signals
   based on http://lists.trolltech.com/qt-interest/2005-06/thread00166-0.html
   caution: it is not performance optimal
   causes: string usage + string by value as argument
 */
 
-class QDebugStream : public QObject, public std::basic_streambuf<char>
+class QStreamBuf : public QObject, public std::basic_streambuf<char>
 {
     Q_OBJECT
-
-  private:
-
-    std::ostream &m_stream;
-    std::streambuf *m_old_buf;
 
   public:
 
     // constructor
-    QDebugStream(std::ostream &stream, QObject *parent=NULL);
-    // destructor
-    ~QDebugStream();
+    QStreamBuf(QObject *parent=NULL);
 
   protected:
 

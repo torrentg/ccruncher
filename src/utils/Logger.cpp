@@ -20,203 +20,167 @@
 //
 //===========================================================================
 
-#include <iostream>
+#include <cstring>
 #include "utils/Logger.hpp"
 #include "utils/Strings.hpp"
 #include "utils/Utils.hpp"
 #include <cassert>
 
-// --------------------------------------------------------------------------
-
-#define DEFAULT_INDENTATION_LEVEL 1
-#define INDENTSIZE 2
-#define MAXCOLS 79
-
-//---------------------------------------------------------------------------
-
-int ccruncher::Logger::ilevel = DEFAULT_INDENTATION_LEVEL;
-int ccruncher::Logger::curcol = -1;
-bool ccruncher::Logger::verbose = true;
-
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Logger::Logger()
+ccruncher::Logger::Logger(streambuf *s) : ostream(s)
 {
-  verbose = true;
-  ilevel = DEFAULT_INDENTATION_LEVEL;
-  curcol = -1;
+  isize = 2;
+  ilevel = 0;
+  numcols = 80;
+  curcol = 0;
 }
 
 //===========================================================================
-// constructor
+// setIndentSize
 //===========================================================================
-void ccruncher::Logger::setVerbosity(bool verbose_)
+void ccruncher::Logger::setIndentSize(size_t v)
 {
-  verbose = verbose_;
+  isize = v;
 }
 
 //===========================================================================
-// newIndentLevel
+// setNumCols
 //===========================================================================
-void ccruncher::Logger::newIndentLevel()
+void ccruncher::Logger::setNumCols(size_t v)
 {
-  flush();
-  ilevel++;
+  numcols = v;
 }
 
 //===========================================================================
-// previousIndentLevel
+// indent
 //===========================================================================
-void ccruncher::Logger::previousIndentLevel()
+size_t ccruncher::Logger::indent(int v)
 {
-  assert(ilevel > 0);
-  flush();
-  if (ilevel > 0) ilevel--;
+  ilevel = std::max(0, (int)(ilevel)+v);
+  return ilevel;
 }
 
 //===========================================================================
-// addBlankLine
+// repeat fill char n times
 //===========================================================================
-void ccruncher::Logger::addBlankLine()
+void ccruncher::Logger::repeat(size_t n, char c)
 {
-  // none if non-verbose mode enabled
-  if (verbose == false) return;
-
-  flush();
-  cout << std::endl << std::flush;
-}
-
-//===========================================================================
-// trace
-//===========================================================================
-void ccruncher::Logger::trace(const string &msg)
-{
-  trace(msg, false);
-}
-
-//===========================================================================
-// trace
-//===========================================================================
-void ccruncher::Logger::trace(const string &msg, char c)
-{
-  // none if non-verbose mode enabled
-  if (verbose == false) return;
-
-  // flushing previous message
-  flush();
-
-  // defining indentator
-  string indentator = Strings::blanks(ilevel*INDENTSIZE);
-
-  // setting status values
-  curcol = indentator.size() + msg.size();
-
-  // tracing msg
-  cout << indentator + msg << std::flush;
-
-  // post trace actions
-  cout << " " << Strings::filler(max(0,MAXCOLS-curcol-1), c) << std::endl << std::flush;
-  curcol = -1;
-}
-
-//===========================================================================
-// trace
-//===========================================================================
-void ccruncher::Logger::trace(const string &msg, const string &value)
-{
-  // none if non-verbose mode enabled
-  if (verbose == false) return;
-
-  // flushing previous message
-  flush();
-
-  // defining indentator
-  string indentator = Strings::blanks(ilevel*INDENTSIZE);
-
-  // creating intermediate filler
-  int fsize = ilevel*INDENTSIZE + msg.size() + 1 + value.size();
-  string sfill = Strings::blanks(max(0,MAXCOLS-fsize));
-
-  // showing output
-  cout << indentator << msg << " " << sfill << value << std::endl << std::flush;
-
-  // setting status values
-  curcol = -1;
-}
-
-//===========================================================================
-// trace
-//===========================================================================
-void ccruncher::Logger::trace(const string &msg, Timer &timer)
-{
-  trace(msg, Timer::format(timer.read()));
-}
-
-//===========================================================================
-// append
-//===========================================================================
-void ccruncher::Logger::append(const string &msg)
-{
-  // none if non-verbose mode enabled
-  if (verbose == false) return;
-
-  // checking if we need indentator
-  if (curcol < 0)
-  {
-    cout << Strings::blanks(ilevel*INDENTSIZE) << std::flush;
-    curcol = ilevel*INDENTSIZE;
-  }
-
-  // appending msg
-  cout << msg << std::flush;
-  curcol += msg.size();
-
-  // checking bounds
-  if (curcol >= MAXCOLS)
-  {
-    cout << std::endl << std::flush;
-    curcol = -1;
+  if (c==0) c = fill();
+  for(size_t i=0; i<n; i++) {
+    ostream::put(c);
+    curcol++;
   }
 }
 
 //===========================================================================
-// flush
+// flood
 //===========================================================================
-void ccruncher::Logger::flush()
+void ccruncher::Logger::flood(char c)
 {
-  // none if non-verbose mode enabled
-  if (verbose == false) return;
+  if (curcol == 0) repeat(ilevel*isize, ' ');
+  else *this << ' ';
+  repeat(numcols-curcol,c);
+}
 
-  // new-line if non-terminated line
-  if (curcol >= 0)
+//===========================================================================
+// global function
+//===========================================================================
+Logger& ccruncher::operator<<(Logger& os, char c)
+{
+  if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
+  static_cast<ostream&>(os) << c;
+  if (c == '\n') os.curcol = 0;
+  else os.curcol++;
+  return os;
+}
+
+//===========================================================================
+// global function
+//===========================================================================
+Logger& ccruncher::operator<<(Logger& os, const char* s)
+{
+  const char *ptr = strchr(s, '\n');
+
+  while(ptr != NULL)
   {
-    cout << std::endl << std::flush;
+    if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
+    size_t l = ptr - s;
+    static_cast<ostream&>(os) << string(s, l);
+    os.curcol += l;
+    os << '\n';
+    os.curcol = 0;
+    s = ptr+1;
+    ptr = strchr(s, '\n');
   }
+
+  if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
+  static_cast<ostream&>(os) << string(s);
+  os.curcol += strlen(s);
+  return os;
 }
 
 //===========================================================================
-// header info
+// global function
 //===========================================================================
-void ccruncher::Logger::header()
+Logger& ccruncher::operator<<(Logger& os, const string& str)
 {
-  trace("general information", '*');
-  newIndentLevel();
-  trace("ccruncher version", string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")");
-  trace("start time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-  previousIndentLevel();
+  os << str.c_str();
+  return os;
 }
 
 //===========================================================================
-// footer info
+// global function
 //===========================================================================
-void ccruncher::Logger::footer(Timer &timer)
+Logger& ccruncher::operator<<(Logger& os, const Date &date)
 {
-  trace("general information", '*');
-  newIndentLevel();
-  trace("end time (dd/MM/yyyy hh:mm:ss)", Utils::timestamp());
-  trace("total elapsed time", timer);
-  previousIndentLevel();
-  addBlankLine();
+  os << date.toString().c_str();
+  return os;
+}
+
+//===========================================================================
+// global function
+//===========================================================================
+Logger& ccruncher::operator<<(Logger& os, Timer &timer)
+{
+  os << Timer::format(timer.read()).c_str();
+  return os;
+}
+
+//===========================================================================
+// endl manipulator
+//===========================================================================
+Logger& ccruncher::endl(Logger &os)
+{
+  os << '\n';
+  os.flush();
+  return os;
+}
+
+//===========================================================================
+// split manipulator
+//===========================================================================
+Logger& ccruncher::split(Logger &logger)
+{
+  if (logger.getCurCol() > 0) logger << ' ';
+  size_t len = std::max(size_t(0), logger.getNumCols() - logger.getCurCol());
+  logger.width(len);
+  logger.fill(' ');
+  logger.setf(ios_base::right, ios_base::adjustfield);
+  return logger;
+}
+
+//===========================================================================
+// header manipulator
+//===========================================================================
+Logger& ccruncher::header(Logger &log)
+{
+  log << "general information" << flood('*') << endl;
+  log << indent(+1);
+  log << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")" << endl;
+  log << "start time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
+  log << indent(-1);
+  return log;
 }
 
