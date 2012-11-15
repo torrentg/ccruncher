@@ -56,10 +56,16 @@
      <item>
       <widget class="QGroupBox" name="params">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>175</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="title">
         <string>Parameters</string>
@@ -195,6 +201,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>175</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="title">
         <string>Results</string>
