@@ -185,6 +185,7 @@ void AnalysisWidget::computeVaR(vector<double> &values, double percentile)
   for (size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
+    //TODO: considere partial sort instead of full sort
     sort(values.begin(), values.begin()+n);
     int m = (int)(n*percentile+0.5);
     double c1=0, c2=0;
@@ -230,6 +231,7 @@ void AnalysisWidget::computeES(vector<double> &values, double percentile)
   for (size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
+    //TODO: considere partial sort instead of full sort
     sort(values.begin(), values.begin()+n);
     int m = (int)(n*percentile+0.5);
 
@@ -378,9 +380,9 @@ void AnalysisWidget::drawStatistic()
   ui->plot->replot();
 
   ui->statistic_str->setText(name + ":");
-  ui->statistic->setText(QString::number(statvals.back().value));
-  ui->interval->setText(QString(QChar(177)) + " " + QString::number(quantile*statvals.back().std_err));
-  ui->std_err->setText(QString::number(statvals.back().std_err));
+  ui->statistic->setText(QString::number(statvals.back().value, 'f', 2));
+  ui->interval->setText(QString(QChar(177)) + " " + QString::number(quantile*statvals.back().std_err, 'f', 2));
+  ui->std_err->setText(QString::number(statvals.back().std_err, 'f', 2));
 }
 
 //===========================================================================
