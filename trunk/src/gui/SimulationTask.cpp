@@ -12,7 +12,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s), montecarlo(NUL
   ifile = "";
   odir = "";
   setStatus(inactive);
-  connect(this, SIGNAL(terminated()), this, SLOT(setTerminated()));
+  setTerminationEnabled(false);
 }
 
 //===========================================================================
@@ -91,7 +91,7 @@ void SimulationTask::run()
 }
 
 //===========================================================================
-// run
+// stop
 //===========================================================================
 void SimulationTask::stop()
 {
@@ -118,14 +118,6 @@ void SimulationTask::setStatus(status s)
 }
 
 //===========================================================================
-// setTerminated
-//===========================================================================
-void SimulationTask::setTerminated()
-{
-  setStatus(aborted);
-}
-
-//===========================================================================
 // return status
 //===========================================================================
 SimulationTask::status SimulationTask::getStatus() const
@@ -147,7 +139,6 @@ int SimulationTask::getProgress()
     case simulating:
       return (int)(100.0*((float)montecarlo->getNumIterations()/(float)montecarlo->getMaxIterations()));
     case failed:
-    case aborted:
     case finished:
       return 100;
     default:

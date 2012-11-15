@@ -11,6 +11,7 @@ HEADERS += \
     src/gui/SimulationTask.hpp \
     src/gui/SimulationWidget.hpp \
     src/gui/AnalysisWidget.hpp \
+    src/gui/AnalysisTask.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -59,6 +60,7 @@ SOURCES += \
     src/gui/SimulationTask.cpp \
     src/gui/SimulationWidget.cpp \
     src/gui/AnalysisWidget.cpp \
+    src/gui/AnalysisTask.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \

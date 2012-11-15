@@ -17,15 +17,14 @@ class SimulationTask : public QThread
 
   public:
 
-    // recovery types
+    // status types
     enum status
     {
       inactive=1,
       parsing=2,
       simulating=3,
       failed=4,
-      aborted=5,
-      finished=6
+      finished=5
     };
 
   private:
@@ -70,11 +69,6 @@ class SimulationTask : public QThread
     status getStatus() const;
     // return progress
     int getProgress();
-
-  public slots:
-
-    // set aborted status
-    void setTerminated();
 
   signals:
 

@@ -1,8 +1,6 @@
 #include <cmath>
 #include <vector>
-#include <algorithm>
 #include <gsl/gsl_histogram.h>
-#include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_cdf.h>
 #include <QMessageBox>
 #include <qwt_plot_grid.h>
@@ -22,7 +20,8 @@
 // constructor
 //===========================================================================
 AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
-  QWidget(parent), ui(new Ui::AnalysisWidget), magnifier(NULL), panner(NULL)
+  QWidget(parent), ui(new Ui::AnalysisWidget), magnifier(NULL), panner(NULL),
+  nsamples(0)
 {
   ui->setupUi(this);
 
@@ -57,11 +56,15 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   this->addAction(actionRefresh);
 
   // open file & display
-  csv.open(filename.toStdString());
-  vector<string> segments = csv.getHeaders();
+  //TODO: catch exceptions
+  task.setFilename(filename);
+  vector<string> segments = task.getCsvFile().getHeaders();
   for(size_t i=0; i<segments.size(); i++) {
     ui->segments->addItem(segments[i].c_str());
   }
+
+  // signals & slots
+  connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
 }
 
 //===========================================================================
@@ -87,16 +90,15 @@ void AnalysisWidget::setZoomY(bool checked)
 }
 
 //===========================================================================
-// refresh current content
+// reset results
 //===========================================================================
-void AnalysisWidget::refresh(int)
+void AnalysisWidget::reset()
 {
-  int isegment = ui->segments->currentIndex();
   int iview = ui->view->currentIndex();
-  if (isegment < 0 || iview < 0) return;
+  if (iview < 0) return;
 
-  ui->percentile->setVisible(iview==0?false:true);
-  ui->percentile_str->setVisible(iview==0?false:true);
+  ui->percentile->setVisible(iview<=1?false:true);
+  ui->percentile_str->setVisible(iview<=1?false:true);
   ui->confidence->setVisible(iview==0?false:true);
   ui->confidence_str->setVisible(iview==0?false:true);
   ui->numbins->setVisible(iview==0?true:false);
@@ -109,153 +111,76 @@ void AnalysisWidget::refresh(int)
   ui->std_err->setVisible(iview==0?false:true);
   ui->std_err_str->setVisible(iview==0?false:true);
 
+  ui->statistic_str->setText(ui->view->currentText() + ":");
+
+  ui->plot->detachItems();
   ui->plot->setAxisAutoScale(QwtPlot::xBottom);
   ui->plot->setAxisAutoScale(QwtPlot::yLeft);
+  ui->plot->setAxisTitle(QwtPlot::yLeft, "");
+  ui->plot->setAxisTitle(QwtPlot::xBottom, "");
 
-  vector<double> values;
-  csv.getValues(isegment, values);
-  ui->numiterations->setText(QString::number(values.size()));
-  if (values.empty()) {
-    ui->statistic->setText("");
-    ui->interval->setText("");
-    ui->std_err->setText("");
-    return;
-  }
+  ui->numiterations->setText("");
+  ui->statistic->setText("");
+  ui->interval->setText("");
+  ui->std_err->setText("");
+}
+
+//===========================================================================
+// submit task
+//===========================================================================
+void AnalysisWidget::submit(size_t numbins)
+{
+  if (task.isRunning()) task.stop();
+  reset();
+
+  int isegment = ui->segments->currentIndex();
+  int iview = ui->view->currentIndex();
+  if (isegment < 0 || iview < 0) return;
 
   switch(iview)
   {
     case 0:
-      drawHistogram(values);
+      task.setData(AnalysisTask::histogram, isegment, numbins);
       break;
     case 1:
-      computeEL(values);
-      drawStatistic();
+      task.setData(AnalysisTask::expected_loss, isegment);
       break;
     case 2:
-      computeVaR(values, ui->percentile->value()/100.0);
-      drawStatistic();
+      task.setData(AnalysisTask::value_at_risk, isegment, ui->percentile->value()/100.0);
       break;
     case 3:
-      computeES(values, ui->percentile->value()/100.0);
-      drawStatistic();
+      task.setData(AnalysisTask::expected_shortfall, isegment, ui->percentile->value()/100.0);
       break;
     default:
       assert(false);
   }
+  task.wait();
+  task.start();
 }
 
 //===========================================================================
-// computeEL
+// draw
 //===========================================================================
-void AnalysisWidget::computeEL(const vector<double> &values)
+void AnalysisWidget::draw()
 {
-  size_t numpoints = std::min(values.size(), (size_t)2048);
-  double step = values.size()/(double)numpoints;
-  statvals.resize(numpoints);
-  double s1=0, s2=0;
+  if (nsamples == task.getNumSamples()) return;
+  else nsamples = task.getNumSamples();
 
-  for (size_t i=0,n=0; i<numpoints; i++)
+  switch(task.getMode())
   {
-    double x = (i+1)*step;
-
-    while(n < (size_t)(x+0.5)) {
-      s1 += values[n];
-      s2 += values[n]*values[n];
-      n++;
-    }
-
-    double mean = s1/n;
-    double stdev = sqrt((n*s2-s1*s1)/(n*(n-1.0)));
-
-    statvals[i].iteration = n;
-    statvals[i].value = mean;
-    statvals[i].std_err = stdev/sqrt(n);
-  }
-}
-
-//===========================================================================
-// computeVaR
-//===========================================================================
-void AnalysisWidget::computeVaR(vector<double> &values, double percentile)
-{
-  size_t numpoints = std::min(values.size(), (size_t)100); //2048
-  double step = values.size()/(double)numpoints;
-  statvals.resize(numpoints);
-
-  for (size_t i=0; i<numpoints; i++)
-  {
-    int n = (int)((i+1)*step+0.5);
-    //TODO: considere partial sort instead of full sort
-    sort(values.begin(), values.begin()+n);
-    int m = (int)(n*percentile+0.5);
-    double c1=0, c2=0;
-
-    if (m < n)
-    {
-      // quantile stderr (Maritz-Jarret)
-      double a = m - 1.0;
-      double b = n - m;
-
-      for(int j=m; j<n-1; j++) {
-        double w =  gsl_sf_beta_inc(a, b, (double)(j+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(j+1)/(double)(n));
-        c1 += w * values[j];
-        c2 += w * values[j]*values[j];
-        if (w < 1e-14) break;
-        //TODO: considere threshold on c1, c2 variations (not w)
-      }
-
-      for(int j=m-1; j>=0; j--) {
-        double w =  gsl_sf_beta_inc(a, b, (double)(j+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(j+1)/(double)(n));
-        c1 += w * values[j];
-        c2 += w * values[j]*values[j];
-        if (w < 1e-14) break;
-        //TODO: considere threshold on c1, c2 variations (not w)
-      }
-    }
-
-    statvals[i].iteration = n;
-    statvals[i].value = values[m-1];
-    statvals[i].std_err = sqrt(c2 - c1*c1);
-  }
-}
-
-//===========================================================================
-// computeES
-//===========================================================================
-void AnalysisWidget::computeES(vector<double> &values, double percentile)
-{
-  size_t numpoints = std::min(values.size(), (size_t)100); //2048
-  double step = values.size()/(double)numpoints;
-  statvals.resize(numpoints);
-
-  for (size_t i=0; i<numpoints; i++)
-  {
-    int n = (int)((i+1)*step+0.5);
-    //TODO: considere partial sort instead of full sort
-    sort(values.begin(), values.begin()+n);
-    int m = (int)(n*percentile+0.5);
-
-    int k=0;
-    double s1=0, s2=0;
-    for(int j=m; j<n; j++) {
-      s1 += values[j];
-      s2 += values[j]*values[j];
-      k++;
-    }
-
-    double mean = s1/k;
-    double stdev = sqrt((k*s2-s1*s1)/(k*(k-1.0)));
-
-    statvals[i].iteration = n;
-    statvals[i].value = mean;
-    statvals[i].std_err = stdev/sqrt(k);
+    case AnalysisTask::histogram:
+      drawHistogram();
+      break;
+    default:
+      drawStatistic();
+      break;
   }
 }
 
 //===========================================================================
 // draw histogram
 //===========================================================================
-void AnalysisWidget::drawHistogram(const vector<double> &values, size_t numbins)
+void AnalysisWidget::drawHistogram()
 {
   ui->plot->detachItems();
 
@@ -270,21 +195,9 @@ void AnalysisWidget::drawHistogram(const vector<double> &values, size_t numbins)
   ui->plot->setAxisTitle(QwtPlot::yLeft, "Frequency");
   ui->plot->setAxisTitle(QwtPlot::xBottom, "Portfolio Loss");
 
-  double minval = values[0];
-  double maxval = values[0];
-  for (size_t i=1; i<values.size(); i++)
-  {
-    if (values[i] > maxval) maxval = values[i];
-    else if (values[i] < minval) minval = values[i];
-  }
-
-  if (numbins == 0) {
-    numbins = std::max((int)sqrt(values.size()), 10);
-  }
+  const gsl_histogram *hist = task.getHistogram();
+  size_t numbins = gsl_histogram_bins(hist);
   ui->numbins->setValue(numbins);
-  gsl_histogram *hist = gsl_histogram_alloc(numbins);
-  gsl_histogram_set_ranges_uniform(hist, minval, maxval+1e-10);
-  for(size_t i=0; i<values.size(); i++) gsl_histogram_increment(hist, values[i]);
 
   QVector<QwtIntervalSample> samples(numbins);
   for(size_t i=0; i<numbins; i++)
@@ -295,7 +208,6 @@ void AnalysisWidget::drawHistogram(const vector<double> &values, size_t numbins)
     interval.setBorderFlags(QwtInterval::ExcludeMaximum);
     samples[i] = QwtIntervalSample(gsl_histogram_get(hist, i), interval);
   }
-  gsl_histogram_free(hist);
 
   QwtPlotHistogram *qhist = new QwtPlotHistogram("title");
   qhist->setStyle(QwtPlotHistogram::Columns); //Outline,Lines,Columns
@@ -305,7 +217,7 @@ void AnalysisWidget::drawHistogram(const vector<double> &values, size_t numbins)
   qhist->setBrush(QBrush(color));
 
   QwtColumnSymbol *symbol = new QwtColumnSymbol(QwtColumnSymbol::Box);
-  symbol->setFrameStyle(QwtColumnSymbol::Raised);
+  symbol->setFrameStyle(QwtColumnSymbol::Plain); //Raised
   symbol->setLineWidth(2);
   symbol->setPalette(QPalette(color));
   qhist->setSymbol(symbol);
@@ -336,6 +248,7 @@ void AnalysisWidget::drawStatistic()
   ui->plot->setAxisTitle(QwtPlot::yLeft, name);
   ui->plot->setAxisTitle(QwtPlot::xBottom, "Iteration");
 
+  const vector<statval> &statvals = task.getStatVals();
   int numpoints = statvals.size();
   QVector<QPointF> values(numpoints);
   QVector<QwtIntervalSample> ranges(numpoints);
@@ -386,16 +299,35 @@ void AnalysisWidget::drawStatistic()
 }
 
 //===========================================================================
+// segment changed
+//===========================================================================
+void AnalysisWidget::changeSegment()
+{
+  submit();
+}
+
+//===========================================================================
+// view changed
+//===========================================================================
+void AnalysisWidget::changeView()
+{
+  submit();
+}
+
+//===========================================================================
+// confidence changed
+//===========================================================================
+void AnalysisWidget::changeConfidence()
+{
+  drawStatistic();
+}
+
+//===========================================================================
 // numbins changed
 //===========================================================================
 void AnalysisWidget::changeNumbins()
 {
-  int numbins = ui->numbins->value();
-  int isegment = ui->segments->currentIndex();
-  vector<double> values;
-  csv.getValues(isegment, values);
-  ui->plot->detachItems();
-  drawHistogram(values, numbins);
+  submit(ui->numbins->value());
 }
 
 //===========================================================================
@@ -403,6 +335,6 @@ void AnalysisWidget::changeNumbins()
 //===========================================================================
 void AnalysisWidget::changePercentile()
 {
-  refresh();
+  submit();
 }
 
