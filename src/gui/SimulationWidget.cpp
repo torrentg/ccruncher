@@ -193,7 +193,7 @@ void SimulationWidget::setDefines()
 
 //===========================================================================
 // set status
-// see TaskThread::status
+// see SimulationTask::status
 //===========================================================================
 void SimulationWidget::setStatus(int val)
 {

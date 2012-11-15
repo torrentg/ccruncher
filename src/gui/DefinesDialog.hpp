@@ -1,5 +1,5 @@
-#ifndef DEFINESDIALOG_HPP
-#define DEFINESDIALOG_HPP
+#ifndef _DefinesDialog_
+#define _DefinesDialog_
 
 #include <map>
 #include <QDialog>

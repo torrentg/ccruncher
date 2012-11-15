@@ -8,7 +8,7 @@ HEADERS += \
     src/gui/DefinesDialog.hpp \
     src/gui/QStreamBuf.hpp \
     src/gui/FindDefines.hpp \
-    src/gui/TaskThread.hpp \
+    src/gui/SimulationTask.hpp \
     src/gui/SimulationWidget.hpp \
     src/gui/AnalysisWidget.hpp \
     src/params/Correlations.hpp \
@@ -56,7 +56,7 @@ SOURCES += \
     src/gui/MainWindow.cpp \
     src/gui/QStreamBuf.cpp \
     src/gui/FindDefines.cpp \
-    src/gui/TaskThread.cpp \
+    src/gui/SimulationTask.cpp \
     src/gui/SimulationWidget.cpp \
     src/gui/AnalysisWidget.cpp \
     src/params/Correlations.cpp \
