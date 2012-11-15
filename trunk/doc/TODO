@@ -17,6 +17,7 @@ Current works
   * add menu to ccruncher-gui
   * add file hash (CRC32 - cksum - http://www.opensource.apple.com/source/xnu/xnu-1456.1.26/bsd/libkern/crc32.c)
   * allow to aggregators to append data to file
+  * implement simulation pause
 
 Future works
 -------------------

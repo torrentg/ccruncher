@@ -1,5 +1,5 @@
 #include <QMessageBox>
-#include "DefinesDialog.hpp"
+#include "gui/DefinesDialog.hpp"
 #include "ui_DefinesDialog.h"
 
 //===========================================================================

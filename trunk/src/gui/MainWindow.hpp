@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#ifndef _MainWindow_
+#define _MainWindow_
 
 #include <QMainWindow>
 #include <QString>

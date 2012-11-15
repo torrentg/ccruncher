@@ -1,4 +1,4 @@
-#include "gui/TaskThread.hpp"
+#include "gui/SimulationTask.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Format.hpp"
@@ -7,7 +7,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-TaskThread::TaskThread(streambuf *s) : QThread(), log(s), montecarlo(NULL)
+SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s), montecarlo(NULL)
 {
   ifile = "";
   odir = "";
@@ -18,7 +18,7 @@ TaskThread::TaskThread(streambuf *s) : QThread(), log(s), montecarlo(NULL)
 //===========================================================================
 // destructor
 //===========================================================================
-TaskThread::~TaskThread()
+SimulationTask::~SimulationTask()
 {
   deletemc();
 }
@@ -26,7 +26,7 @@ TaskThread::~TaskThread()
 //===========================================================================
 // deletemc
 //===========================================================================
-void TaskThread::deletemc()
+void SimulationTask::deletemc()
 {
   if (montecarlo != NULL) {
     delete montecarlo;
@@ -37,7 +37,7 @@ void TaskThread::deletemc()
 //===========================================================================
 // set streambuf
 //===========================================================================
-void TaskThread::setStreamBuf(streambuf *s)
+void SimulationTask::setStreamBuf(streambuf *s)
 {
   log.rdbuf(s);
 }
@@ -45,7 +45,7 @@ void TaskThread::setStreamBuf(streambuf *s)
 //===========================================================================
 // run
 //===========================================================================
-void TaskThread::run()
+void SimulationTask::run()
 {
   IData *idata = NULL;
   if (montecarlo != NULL) return;
@@ -93,7 +93,7 @@ void TaskThread::run()
 //===========================================================================
 // run
 //===========================================================================
-void TaskThread::stop()
+void SimulationTask::stop()
 {
   stop_ = true;
 }
@@ -101,7 +101,7 @@ void TaskThread::stop()
 //===========================================================================
 // set data info
 //===========================================================================
-void TaskThread::setData(const string &f_, const map<string,string> &m_, const string &d_)
+void SimulationTask::setData(const string &f_, const map<string,string> &m_, const string &d_)
 {
   ifile = f_;
   defines = m_;
@@ -111,7 +111,7 @@ void TaskThread::setData(const string &f_, const map<string,string> &m_, const s
 //===========================================================================
 // setStatus
 //===========================================================================
-void TaskThread::setStatus(status s)
+void SimulationTask::setStatus(status s)
 {
   status_ = s;
   emit statusChanged((int)s);
@@ -120,7 +120,7 @@ void TaskThread::setStatus(status s)
 //===========================================================================
 // setTerminated
 //===========================================================================
-void TaskThread::setTerminated()
+void SimulationTask::setTerminated()
 {
   setStatus(aborted);
 }
@@ -128,7 +128,7 @@ void TaskThread::setTerminated()
 //===========================================================================
 // return status
 //===========================================================================
-TaskThread::status TaskThread::getStatus() const
+SimulationTask::status SimulationTask::getStatus() const
 {
   return status_;
 }
@@ -136,7 +136,7 @@ TaskThread::status TaskThread::getStatus() const
 //===========================================================================
 // return progress
 //===========================================================================
-int TaskThread::getProgress()
+int SimulationTask::getProgress()
 {
   switch(status_)
   {

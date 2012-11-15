@@ -1,5 +1,5 @@
-#ifndef TASKTHREAD_HPP
-#define TASKTHREAD_HPP
+#ifndef _SimulationTask_
+#define _SimulationTask_
 
 #include <string>
 #include <map>
@@ -11,7 +11,7 @@
 using namespace std;
 using namespace ccruncher;
 
-class TaskThread : public QThread
+class SimulationTask : public QThread
 {
     Q_OBJECT
 
@@ -55,9 +55,9 @@ class TaskThread : public QThread
   public:
 
     // constructor
-    TaskThread(streambuf *s=NULL);
+    SimulationTask(streambuf *s=NULL);
     // destructor
-    ~TaskThread();
+    ~SimulationTask();
     // set streambuf
     void setStreamBuf(streambuf *);
     // set data info

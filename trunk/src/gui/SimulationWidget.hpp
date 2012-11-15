@@ -1,5 +1,5 @@
-#ifndef SIMULATIONWIDGET_HPP
-#define SIMULATIONWIDGET_HPP
+#ifndef _SimulationWidget_
+#define _SimulationWidget_
 
 #include <map>
 #include <vector>
@@ -7,7 +7,7 @@
 #include <QString>
 #include <QTimer>
 #include "gui/QStreamBuf.hpp"
-#include "gui/TaskThread.hpp"
+#include "gui/SimulationTask.hpp"
 
 using namespace std;
 
@@ -26,7 +26,7 @@ class SimulationWidget : public QWidget
     // internal timer
     QTimer timer;
     // task thread
-    TaskThread task;
+    SimulationTask task;
     // defines
     map<string,string> defines;
     // stdout redirect
