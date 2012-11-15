@@ -211,8 +211,7 @@ void SimulationWidget::setStatus(int val)
       break;
     case 1: // inactive
     case 4: // failed
-    case 5: // aborted
-    case 6: // finished
+    case 5: // finished
       timer.stop();
       refresh();
       ui->ifile->setEnabled(true);

@@ -438,7 +438,7 @@
    <sender>view</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>AnalysisWidget</receiver>
-   <slot>refresh(int)</slot>
+   <slot>changeView()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>639</x>
@@ -454,7 +454,7 @@
    <sender>segments</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>AnalysisWidget</receiver>
-   <slot>refresh(int)</slot>
+   <slot>changeSegment()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>639</x>
@@ -470,7 +470,7 @@
    <sender>confidence</sender>
    <signal>editingFinished()</signal>
    <receiver>AnalysisWidget</receiver>
-   <slot>drawStatistic()</slot>
+   <slot>changeConfidence()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>552</x>
@@ -502,7 +502,7 @@
    <sender>percentile</sender>
    <signal>editingFinished()</signal>
    <receiver>AnalysisWidget</receiver>
-   <slot>refresh()</slot>
+   <slot>changePercentile()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>520</x>
@@ -516,10 +516,10 @@
   </connection>
  </connections>
  <slots>
-  <slot>refresh(int)</slot>
-  <slot>drawStatistic()</slot>
   <slot>changeNumbins()</slot>
   <slot>changePercentile()</slot>
-  <slot>refresh()</slot>
+  <slot>changeSegment()</slot>
+  <slot>changeConfidence()</slot>
+  <slot>changeView()</slot>
  </slots>
 </ui>

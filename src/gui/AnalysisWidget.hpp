@@ -2,9 +2,10 @@
 #define _AnalysisWidget_
 
 #include <vector>
+#include <QTimer>
 #include <QWidget>
 #include <QString>
-#include "utils/CsvFile.hpp"
+#include "gui/AnalysisTask.hpp"
 
 using namespace std;
 
@@ -22,37 +23,29 @@ class AnalysisWidget: public QWidget
 
   private:
 
-    // internal struct
-    struct statval
-    {
-      int iteration;
-      double value;
-      double std_err;
-    };
-
-  private:
-
     // interface widget
     Ui::AnalysisWidget *ui;
-    // csv file
-    CsvFile csv;
+    // internal timer
+    QTimer timer;
+    // task thread
+    AnalysisTask task;
     // plot magnifier
     QwtPlotMagnifier *magnifier;
     // plot panner
     QwtPlotPanner *panner;
-    // statistic values
-    vector<statval> statvals;
+    // number of simulations
+    size_t nsamples;
 
   private:
 
+    // reset results
+    void reset();
     // draw histogram
-    void drawHistogram(const vector<double> &, size_t numbins=0);
-    // compute EL
-    void computeEL(const vector<double> &);
-    // compute VaR
-    void computeVaR(vector<double> &, double);
-    // compute ES
-    void computeES(vector<double> &, double);
+    void drawHistogram();
+    // draw statistic
+    void drawStatistic();
+    // submit task
+    void submit(size_t numbins=0);
 
   public:
 
@@ -63,18 +56,22 @@ class AnalysisWidget: public QWidget
 
   public slots:
 
-    // refresh current content
-    void refresh(int i=-1);
+    // draw results
+    void draw();
     // enable zoom on axis x
     void setZoomX(bool checked);
     // enable zoom on axis y
     void setZoomY(bool checked);
-    // draw statistic
-    void drawStatistic();
+    // segment changed
+    void changeSegment();
+    // view changed
+    void changeView();
     // numbins changed
     void changeNumbins();
     // percentile changed
     void changePercentile();
+    // confidence changed
+    void changeConfidence();
 
 };
 
