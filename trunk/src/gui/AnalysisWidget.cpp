@@ -14,6 +14,7 @@
 #include <qwt_symbol.h>
 #include "ui_AnalysisWidget.h"
 #include "gui/AnalysisWidget.hpp"
+#include "utils/Format.hpp"
 #include <cassert>
 
 #define REFRESH_MS 250
@@ -22,10 +23,13 @@
 // constructor
 //===========================================================================
 AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
-  QWidget(parent), ui(new Ui::AnalysisWidget), magnifier(NULL), panner(NULL),
-  nsamples(0)
+  QWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
+  magnifier(NULL), panner(NULL), nsamples(0)
 {
   ui->setupUi(this);
+  progress = new ProgressWidget(ui->frame);
+  progress->setWindowFlags(Qt::WindowStaysOnTopHint);
+  ui->frame->addLayer(progress);
 
   blockSignals(true);
 
@@ -56,7 +60,7 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QKeySequence keys_refresh(QKeySequence::Refresh);
   QAction* actionRefresh = new QAction(this);
   actionRefresh->setShortcut(keys_refresh);
-  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(draw()));
+  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
   this->addAction(actionRefresh);
 
   // open file & display
@@ -177,9 +181,19 @@ void AnalysisWidget::submit(size_t numbins)
 //===========================================================================
 void AnalysisWidget::draw()
 {
-cout << "draw [" << nsamples << "=?=" << task.getNumSamples() << "]" << endl;
-  if (nsamples == task.getNumSamples()) return;
+  if (task.getStatus() == AnalysisTask::reading) {
+    size_t totalbytes = task.getCsvFile().getFileSize();
+    size_t readedbytes = task.getCsvFile().getReadedSize();
+    float pct = 100.0 * (float)(readedbytes)/(float)(totalbytes);
+    QString str = Format::bytes(readedbytes).c_str();
+    progress->ui->progress->setValue(pct+0.5);
+    progress->ui->progress->setFormat(str);
+    progress->show();
+    return;
+  }
 
+  if (nsamples == task.getNumSamples()) return;
+cout << "draw.nsamples=" << nsamples << endl;
   mutex.lock();
   nsamples = task.getNumSamples();
   switch(task.getMode())
@@ -213,6 +227,7 @@ void AnalysisWidget::drawHistogram()
   ui->plot->setAxisTitle(QwtPlot::xBottom, "Portfolio Loss");
 
   const gsl_histogram *hist = task.getHistogram();
+  if (hist == NULL) return;
   size_t numbins = gsl_histogram_bins(hist);
   ui->numbins->setValue(numbins);
 
@@ -272,6 +287,7 @@ void AnalysisWidget::drawStatistic()
 
   const vector<statval> &statvals = task.getStatVals();
   int numpoints = statvals.size();
+  if (numpoints == 0) return;
   QVector<QPointF> values(numpoints);
   QVector<QwtIntervalSample> ranges(numpoints);
 
@@ -322,6 +338,14 @@ void AnalysisWidget::drawStatistic()
 }
 
 //===========================================================================
+// refresh
+//===========================================================================
+void AnalysisWidget::refresh()
+{
+  submit();
+}
+
+//===========================================================================
 // segment changed
 //===========================================================================
 void AnalysisWidget::changeSegment()
@@ -369,14 +393,19 @@ void AnalysisWidget::changePercentile()
 //===========================================================================
 void AnalysisWidget::setStatus(int val)
 {
+cout << "analysis.status=" << val << endl;
   switch(val)
   {
-    case 1: // inactive
-    case 2: // reading
-    case 3: // running
+    case AnalysisTask::reading:
+      progress->show();
       break;
-    case 4: // failed
-    case 5: // finished
+    case AnalysisTask::running:
+      progress->fade(1000);
+      break;
+    case AnalysisTask::stopped:
+    case AnalysisTask::failed:
+    case AnalysisTask::finished:
+      progress->fade();
       timer.stop();
       draw();
       break;

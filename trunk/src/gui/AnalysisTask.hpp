@@ -37,9 +37,9 @@ class AnalysisTask : public QThread
     // status types
     enum status
     {
-      inactive=1,
-      reading=2,
-      running=3,
+      reading=1,
+      running=2,
+      stopped=3,
       failed=4,
       finished=5
     };

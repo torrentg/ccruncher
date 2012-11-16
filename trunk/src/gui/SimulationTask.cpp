@@ -11,7 +11,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s), montecarlo(NUL
 {
   ifile = "";
   odir = "";
-  setStatus(inactive);
+  setStatus(finished);
   setTerminationEnabled(false);
 }
 
@@ -61,7 +61,7 @@ void SimulationTask::run()
     log << header << endl;
 
     // parsing input file
-    setStatus(parsing);
+    setStatus(reading);
     idata = new IData(log.rdbuf());
     idata->init(ifile, defines, &stop_);
 
@@ -83,7 +83,8 @@ void SimulationTask::run()
   {
     log << indent(-100) << endl;
     log << e.what() << endl;
-    setStatus(failed);
+    if (stop_) setStatus(stopped);
+    else setStatus(failed);
     if (idata != NULL) delete idata;
   }
 
@@ -128,22 +129,21 @@ SimulationTask::status SimulationTask::getStatus() const
 //===========================================================================
 // return progress
 //===========================================================================
-int SimulationTask::getProgress()
+float SimulationTask::getProgress()
 {
   switch(status_)
   {
-    case inactive:
-      return 0;
-    case parsing:
-      return -1;
+    case reading:
+      return 0.0;
     case simulating:
-      return (int)(100.0*((float)montecarlo->getNumIterations()/(float)montecarlo->getMaxIterations()));
+      return 100.0*((float)montecarlo->getNumIterations()/(float)montecarlo->getMaxIterations());
+    case stopped:
     case failed:
     case finished:
-      return 100;
+      return 100.0;
     default:
       assert(false);
-      return 0;
+      return 0.0;
   }
 }
 

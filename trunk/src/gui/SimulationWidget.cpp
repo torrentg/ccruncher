@@ -149,16 +149,16 @@ void SimulationWidget::print(const QString str)
 //===========================================================================
 void SimulationWidget::refresh()
 {
-  int val = task.getProgress();
-  if (val < 0) {
+  float val = task.getProgress();
+  if (val < 0.0) {
     ui->progress->setTextVisible(false);
     val = ui->progress->value();
-    val = (val+1)%100;
+    //val = (val+1)%100;
   }
   else {
     ui->progress->setTextVisible(true);
   }
-  ui->progress->setValue(val);
+  ui->progress->setValue(val+0.5);
 }
 
 //===========================================================================
@@ -186,7 +186,7 @@ void SimulationWidget::setDefines()
   map<string,string>::iterator it;
   for (it=defines.begin(); it != defines.end(); it++)
   {
-      str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
+    str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
   }
   ui->defines->setText(str);
 }
@@ -199,8 +199,8 @@ void SimulationWidget::setStatus(int val)
 {
   switch(val)
   {
-    case 2: // parsing
-    case 3: // simulating
+    case SimulationTask::reading:
+    case SimulationTask::simulating:
       ui->progress->setValue(0);
       ui->ifile->setEnabled(true);
       ui->odir->setEnabled(false);
@@ -209,9 +209,9 @@ void SimulationWidget::setStatus(int val)
       ui->definesButton->setEnabled(false);
       ui->runButton->setText(tr("Stop"));
       break;
-    case 1: // inactive
-    case 4: // failed
-    case 5: // finished
+    case SimulationTask::stopped:
+    case SimulationTask::failed:
+    case SimulationTask::finished:
       timer.stop();
       refresh();
       ui->ifile->setEnabled(true);
