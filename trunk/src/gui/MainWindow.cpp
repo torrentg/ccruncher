@@ -107,7 +107,13 @@ void MainWindow::openFile()
     else {
       child = new AnalysisWidget(filename, this);
     }
-    mdiArea->addSubWindow(child);
+
+    try {
+      mdiArea->addSubWindow(child);
+    } catch(std::exception &e) {
+      //see http://qt-project.org/forums/viewthread/18819/
+    }
+
     QFileInfo pathInfo(filename);
     child->setWindowTitle(pathInfo.fileName());
     child->setWindowFilePath(filename);

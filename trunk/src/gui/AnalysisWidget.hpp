@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QString>
+#include <QMutex>
 #include "gui/AnalysisTask.hpp"
 
 using namespace std;
@@ -35,6 +36,8 @@ class AnalysisWidget: public QWidget
     QwtPlotPanner *panner;
     // number of simulations
     size_t nsamples;
+    // mutex
+    QMutex mutex;
 
   private:
 
@@ -72,6 +75,8 @@ class AnalysisWidget: public QWidget
     void changePercentile();
     // confidence changed
     void changeConfidence();
+    // set status
+    void setStatus(int);
 
 };
 
