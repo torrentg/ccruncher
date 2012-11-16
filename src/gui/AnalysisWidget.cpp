@@ -16,6 +16,8 @@
 #include "gui/AnalysisWidget.hpp"
 #include <cassert>
 
+#define REFRESH_MS 250
+
 //===========================================================================
 // constructor
 //===========================================================================
@@ -24,6 +26,8 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   nsamples(0)
 {
   ui->setupUi(this);
+
+  blockSignals(true);
 
   ui->filename->setText(filename);
   ui->plot->canvas()->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
@@ -52,7 +56,7 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QKeySequence keys_refresh(QKeySequence::Refresh);
   QAction* actionRefresh = new QAction(this);
   actionRefresh->setShortcut(keys_refresh);
-  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
+  QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(draw()));
   this->addAction(actionRefresh);
 
   // open file & display
@@ -65,6 +69,8 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 
   // signals & slots
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
+  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
+  blockSignals(false);
 }
 
 //===========================================================================
@@ -72,7 +78,9 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 //===========================================================================
 AnalysisWidget::~AnalysisWidget()
 {
+  task.stop();
   delete ui;
+  task.wait(250);
 }
 
 //===========================================================================
@@ -130,8 +138,9 @@ void AnalysisWidget::reset()
 //===========================================================================
 void AnalysisWidget::submit(size_t numbins)
 {
+  mutex.lock();
   if (task.isRunning()) task.stop();
-  reset();
+  timer.stop();
 
   int isegment = ui->segments->currentIndex();
   int iview = ui->view->currentIndex();
@@ -154,8 +163,13 @@ void AnalysisWidget::submit(size_t numbins)
     default:
       assert(false);
   }
+
   task.wait();
+  reset();
+  nsamples = 0;
   task.start();
+  timer.start(REFRESH_MS);
+  mutex.unlock();
 }
 
 //===========================================================================
@@ -163,9 +177,11 @@ void AnalysisWidget::submit(size_t numbins)
 //===========================================================================
 void AnalysisWidget::draw()
 {
+cout << "draw [" << nsamples << "=?=" << task.getNumSamples() << "]" << endl;
   if (nsamples == task.getNumSamples()) return;
-  else nsamples = task.getNumSamples();
 
+  mutex.lock();
+  nsamples = task.getNumSamples();
   switch(task.getMode())
   {
     case AnalysisTask::histogram:
@@ -175,6 +191,7 @@ void AnalysisWidget::draw()
       drawStatistic();
       break;
   }
+  mutex.unlock();
 }
 
 //===========================================================================
@@ -200,13 +217,16 @@ void AnalysisWidget::drawHistogram()
   ui->numbins->setValue(numbins);
 
   QVector<QwtIntervalSample> samples(numbins);
+  size_t numiterations = 0;
   for(size_t i=0; i<numbins; i++)
   {
     double lower, upper;
     gsl_histogram_get_range(hist, i, &lower, &upper);
     QwtInterval interval(lower, upper);
     interval.setBorderFlags(QwtInterval::ExcludeMaximum);
-    samples[i] = QwtIntervalSample(gsl_histogram_get(hist, i), interval);
+    double val = gsl_histogram_get(hist, i);
+    samples[i] = QwtIntervalSample(val, interval);
+    numiterations += (int)(val+0.5);
   }
 
   QwtPlotHistogram *qhist = new QwtPlotHistogram("title");
@@ -227,6 +247,8 @@ void AnalysisWidget::drawHistogram()
 
   if (panner != NULL) panner->setOrientations(Qt::Horizontal);
   ui->plot->replot();
+
+  ui->numiterations->setText(QString::number(numiterations));
 }
 
 //===========================================================================
@@ -293,6 +315,7 @@ void AnalysisWidget::drawStatistic()
   ui->plot->replot();
 
   ui->statistic_str->setText(name + ":");
+  ui->numiterations->setText(QString::number(statvals.back().iteration));
   ui->statistic->setText(QString::number(statvals.back().value, 'f', 2));
   ui->interval->setText(QString(QChar(177)) + " " + QString::number(quantile*statvals.back().std_err, 'f', 2));
   ui->std_err->setText(QString::number(statvals.back().std_err, 'f', 2));
@@ -319,7 +342,9 @@ void AnalysisWidget::changeView()
 //===========================================================================
 void AnalysisWidget::changeConfidence()
 {
+  mutex.lock();
   drawStatistic();
+  mutex.unlock();
 }
 
 //===========================================================================
@@ -336,5 +361,27 @@ void AnalysisWidget::changeNumbins()
 void AnalysisWidget::changePercentile()
 {
   submit();
+}
+
+//===========================================================================
+// set status
+// see SimulationTask::status
+//===========================================================================
+void AnalysisWidget::setStatus(int val)
+{
+  switch(val)
+  {
+    case 1: // inactive
+    case 2: // reading
+    case 3: // running
+      break;
+    case 4: // failed
+    case 5: // finished
+      timer.stop();
+      draw();
+      break;
+    default:
+      assert(false);
+  }
 }
 

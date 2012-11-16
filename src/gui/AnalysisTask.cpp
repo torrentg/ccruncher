@@ -108,6 +108,11 @@ void AnalysisTask::run()
     stop_ = false;
     progress = 0.0;
 
+    statvals.clear();
+    nsamples = 0;
+
+    //TODO: avoid re-read if isegment anf fsorted unchanged (implies values as member)
+
     setStatus(reading);
     vector<double> values;
     //TODO: set csv:getValues as cancelable task (&stop)
