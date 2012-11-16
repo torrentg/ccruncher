@@ -12,7 +12,7 @@ AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
   mode_ = none;
   nsamples = 0;
   progress = 0;
-  setStatus(inactive);
+  setStatus(finished);
   setTerminationEnabled(false);
 }
 
@@ -107,16 +107,17 @@ void AnalysisTask::run()
   {
     stop_ = false;
     progress = 0.0;
-
     statvals.clear();
     nsamples = 0;
 
-    //TODO: avoid re-read if isegment anf fsorted unchanged (implies values as member)
-
     setStatus(reading);
     vector<double> values;
-    //TODO: set csv:getValues as cancelable task (&stop)
-    csv.getValues(isegment, values);
+    csv.getValues(isegment, values, &stop_);
+cout << "task.numregs=" << values.size() << endl;
+    if (stop_) {
+      setStatus(stopped);
+      return;
+    }
 
     setStatus(running);
     switch(mode_)
@@ -136,7 +137,8 @@ void AnalysisTask::run()
       default:
         assert(false);
     }
-    setStatus(finished);
+    if (stop_) setStatus(stopped);
+    else setStatus(finished);
   }
   catch(std::exception &e)
   {
@@ -155,6 +157,8 @@ void AnalysisTask::runHistogram(const vector<double> &values)
     gsl_histogram_free(hist);
     hist = NULL;
   }
+
+  if (values.empty()) return;
 
   double minval = values[0];
   double maxval = values[0];
@@ -180,7 +184,6 @@ void AnalysisTask::runHistogram(const vector<double> &values)
       progress = 100.0*(float)(i+1)/(float)(values.size());
     }
     if (stop_) return;
-    //TODO: set timer to refresh
   }
   progress = 100.0;
 }
@@ -216,7 +219,6 @@ void AnalysisTask::runExpectedLoss(const vector<double> &values)
       progress = 100.0*(float)(i+1)/(float)(numpoints);
     }
     if (stop_) return;
-    //TODO: set timer to refresh
   }
 
   progress = 100.0;
@@ -271,7 +273,6 @@ void AnalysisTask::runValueAtRisk(vector<double> &values)
 
     progress = 100.0*(float)(i+1)/(float)(numpoints);
     if (stop_) return;
-    //TODO: set timer to refresh
   }
 
   progress = 100.0;
@@ -310,7 +311,6 @@ void AnalysisTask::runExpectedShortfall(vector<double> &values)
 
     progress = 100.0*(float)(i+1)/(float)(numpoints);
     if (stop_) return;
-    //TODO: set timer to refresh
   }
   progress = 100.0;
 }

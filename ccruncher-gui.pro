@@ -12,6 +12,8 @@ HEADERS += \
     src/gui/SimulationWidget.hpp \
     src/gui/AnalysisWidget.hpp \
     src/gui/AnalysisTask.hpp \
+    src/gui/ProgressWidget.hpp \
+    src/gui/FrameOverlay.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -61,6 +63,7 @@ SOURCES += \
     src/gui/SimulationWidget.cpp \
     src/gui/AnalysisWidget.cpp \
     src/gui/AnalysisTask.cpp \
+    src/gui/ProgessWidget.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
@@ -103,7 +106,8 @@ FORMS += \
     src/gui/MainWindow.ui \
     src/gui/DefinesDialog.ui \
     src/gui/SimulationWidget.ui \
-    src/gui/AnalysisWidget.ui
+    src/gui/AnalysisWidget.ui \
+    src/gui/ProgressWidget.ui
 
 INCLUDEPATH += \
     $$PWD/src \

@@ -6,7 +6,9 @@
 #include <QWidget>
 #include <QString>
 #include <QMutex>
+#include <QResizeEvent>
 #include "gui/AnalysisTask.hpp"
+#include "gui/ProgressWidget.hpp"
 
 using namespace std;
 
@@ -26,6 +28,8 @@ class AnalysisWidget: public QWidget
 
     // interface widget
     Ui::AnalysisWidget *ui;
+    // progress widget
+    ProgressWidget *progress;
     // internal timer
     QTimer timer;
     // task thread
@@ -59,6 +63,8 @@ class AnalysisWidget: public QWidget
 
   public slots:
 
+    // refresh
+    void refresh();
     // draw results
     void draw();
     // enable zoom on axis x

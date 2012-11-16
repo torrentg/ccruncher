@@ -20,9 +20,9 @@ class SimulationTask : public QThread
     // status types
     enum status
     {
-      inactive=1,
-      parsing=2,
-      simulating=3,
+      reading=1,
+      simulating=2,
+      stopped=3,
       failed=4,
       finished=5
     };
@@ -68,7 +68,7 @@ class SimulationTask : public QThread
     // return status
     status getStatus() const;
     // return progress
-    int getProgress();
+    float getProgress();
 
   signals:
 

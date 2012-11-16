@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
+#include <cstdio>
 #include <fstream>
 #include "utils/Exception.hpp"
 
@@ -49,14 +50,18 @@ class CsvFile
     // file name
     string filename;
     // stream
-    ifstream file;
+    FILE *file;
     // column headers
     vector<string> headers;
     // buffer
     char buffer[256];
+    // file size (in bytes)
+    size_t filesize;
 
   private:
 
+    // returns file size
+    size_t getNumBytes();
     // parse a field
     int read() throw(Exception);
     // parse a double
@@ -68,12 +73,20 @@ class CsvFile
 
     // constructor
     CsvFile(const string &fname="", const string sep=",") throw(Exception);
+    // destructor
+    ~CsvFile();
     // open a file
     void open(const string &fname, const string sep=",") throw(Exception);
+    // close file
+    void close();
     // returns headers
-    const vector<string> getHeaders() const;
+    const vector<string>& getHeaders();
     // returns column values
-    void getValues(size_t col, vector<double> &ret) throw(Exception);
+    void getValues(size_t col, vector<double> &ret, bool *stop=NULL) throw(Exception);
+    // returns file size (in bytes)
+    size_t getFileSize() const;
+    // returns readed bytes
+    size_t getReadedSize() const;
 
 };
 

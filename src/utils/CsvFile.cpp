@@ -32,11 +32,32 @@
 // default constructor
 //===========================================================================
 ccruncher::CsvFile::CsvFile(const string &fname, const string sep) throw(Exception)
-  : filename("")
+    : filename(""), file(NULL), filesize(0)
 {
   if (fname != "") {
-      open(fname, sep);
+    open(fname, sep);
   }
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+ccruncher::CsvFile::~CsvFile()
+{
+  close();
+}
+
+//===========================================================================
+// returns file size
+//===========================================================================
+size_t ccruncher::CsvFile::getNumBytes()
+{
+  if (file == NULL) return 0;
+  long pos0 = ftell(file);
+  fseek(file, 0, SEEK_END);
+  size_t size = ftell(file);
+  fseek(file, pos0, SEEK_SET);
+  return size;
 }
 
 //===========================================================================
@@ -44,21 +65,42 @@ ccruncher::CsvFile::CsvFile(const string &fname, const string sep) throw(Excepti
 //===========================================================================
 void ccruncher::CsvFile::open(const string &fname, const string sep) throw(Exception)
 {
+  close();
+
   filename = fname;
   separators = sep;
 
-  // resseting content
-  if (file.is_open()) file.close();
-  headers.clear();
-
-  // opening file
-  file.open(fname.c_str(), std::ios_base::in);
-  if (!file.is_open()) {
+  file = fopen(fname.c_str(), "r");
+  if (file == NULL) {
     throw Exception("error opening file " + fname);
   }
-  //file.exceptions(ios::failbit | ios::badbit);
 
-  // parsing headers
+  filesize = getNumBytes();
+}
+
+//===========================================================================
+// close file
+//===========================================================================
+void ccruncher::CsvFile::close()
+{
+  if (file != NULL) {
+    fclose(file);
+    file = NULL;
+  }
+  headers.clear();
+  filesize = 0;
+}
+
+//===========================================================================
+// returns headers
+//===========================================================================
+const vector<string>& ccruncher::CsvFile::getHeaders()
+{
+  if (file != NULL && !headers.empty()) return headers;
+
+  headers.clear();
+  if (file != NULL) open(filename, separators);
+
   int rc;
   do
   {
@@ -71,13 +113,7 @@ void ccruncher::CsvFile::open(const string &fname, const string sep) throw(Excep
     headers.push_back(string(str));
   }
   while(rc == 1);
-}
 
-//===========================================================================
-// returns headers
-//===========================================================================
-const vector<string> ccruncher::CsvFile::getHeaders() const
-{
   return headers;
 }
 
@@ -94,9 +130,10 @@ int ccruncher::CsvFile::read() throw(Exception)
 
   do
   {
-    file.get(buffer[pos]);
+    //TODO: use fread and a read buffer
+    buffer[pos] = fgetc(file);
 
-    if (file.eof()) {
+    if (buffer[pos] == EOF) { //feof(file)
       buffer[pos] = 0;
       return 3;
     }
@@ -104,12 +141,11 @@ int ccruncher::CsvFile::read() throw(Exception)
       buffer[pos] = 0;
       return 2;
     }
-    else if (strchr(separators.c_str(), buffer[pos]) != NULL)
-    {
+    else if (buffer[pos] == ',') { //strchr(separators.c_str(), buffer[pos]) != NULL
       buffer[pos] = 0;
       return 1;
     }
-    else if (pos >= sizeof(buffer)-1) {
+    else if (pos >= 255) { //sizeof(buffer)-1
       throw Exception("field to long");
     }
     else {
@@ -152,7 +188,7 @@ char* ccruncher::CsvFile::trim(char *ptr)
 //===========================================================================
 // returns column values
 //===========================================================================
-void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret) throw(Exception)
+void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) throw(Exception)
 {
   ret.clear();
 
@@ -161,11 +197,9 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret) throw(Except
   }
 
   int rc;
+  filesize = getNumBytes();
+  rewind(file);
   size_t numlines = 0;
-
-  // rewind file
-  file.clear();
-  file.seekg(0, ios::beg);
 
   // skip headers
   while(read() == 1);
@@ -201,7 +235,27 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret) throw(Except
     // reading the rest of fields
     while (rc == 1) rc = read();
     numlines++;
+
+    // check stop flag
+    if (stop != NULL && *stop) break;
   }
   while(rc != 3);
+}
+
+//===========================================================================
+// returns file size (in bytes)
+//===========================================================================
+size_t ccruncher::CsvFile::getFileSize() const
+{
+  return filesize;
+}
+
+//===========================================================================
+// returns readed bytes
+//===========================================================================
+size_t ccruncher::CsvFile::getReadedSize() const
+{
+  if (file == NULL) return 0;
+  else return ftell(file);
 }
 
