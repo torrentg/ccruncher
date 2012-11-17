@@ -113,7 +113,6 @@ void AnalysisTask::run()
     setStatus(reading);
     vector<double> values;
     csv.getValues(isegment, values, &stop_);
-cout << "task.numregs=" << values.size() << endl;
     if (stop_) {
       setStatus(stopped);
       return;

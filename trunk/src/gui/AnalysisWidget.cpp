@@ -144,7 +144,6 @@ void AnalysisWidget::submit(size_t numbins)
 {
   mutex.lock();
   if (task.isRunning()) task.stop();
-  timer.stop();
 
   int isegment = ui->segments->currentIndex();
   int iview = ui->view->currentIndex();
@@ -172,7 +171,6 @@ void AnalysisWidget::submit(size_t numbins)
   reset();
   nsamples = 0;
   task.start();
-  timer.start(REFRESH_MS);
   mutex.unlock();
 }
 
@@ -181,7 +179,10 @@ void AnalysisWidget::submit(size_t numbins)
 //===========================================================================
 void AnalysisWidget::draw()
 {
-  if (task.getStatus() == AnalysisTask::reading) {
+  mutex.lock();
+
+  if (task.getStatus() == AnalysisTask::reading)
+  {
     size_t totalbytes = task.getCsvFile().getFileSize();
     size_t readedbytes = task.getCsvFile().getReadedSize();
     float pct = 100.0 * (float)(readedbytes)/(float)(totalbytes);
@@ -189,22 +190,29 @@ void AnalysisWidget::draw()
     progress->ui->progress->setValue(pct+0.5);
     progress->ui->progress->setFormat(str);
     progress->show();
-    return;
+  }
+  else
+  {
+    if (nsamples == task.getNumSamples())
+    {
+      // nothing to do
+    }
+    else
+    {
+      ui->plot->setEnabled(true);
+      nsamples = task.getNumSamples();
+      switch(task.getMode())
+      {
+        case AnalysisTask::histogram:
+          drawHistogram();
+          break;
+        default:
+          drawStatistic();
+          break;
+      }
+    }
   }
 
-  if (nsamples == task.getNumSamples()) return;
-cout << "draw.nsamples=" << nsamples << endl;
-  mutex.lock();
-  nsamples = task.getNumSamples();
-  switch(task.getMode())
-  {
-    case AnalysisTask::histogram:
-      drawHistogram();
-      break;
-    default:
-      drawStatistic();
-      break;
-  }
   mutex.unlock();
 }
 
@@ -393,19 +401,29 @@ void AnalysisWidget::changePercentile()
 //===========================================================================
 void AnalysisWidget::setStatus(int val)
 {
-cout << "analysis.status=" << val << endl;
   switch(val)
   {
     case AnalysisTask::reading:
+      ui->plot->setEnabled(false);
+      //TODO: set fadein instead of show
+      progress->ui->progress->setValue(0);
+      progress->ui->progress->setFormat("");
       progress->show();
+      timer.start(REFRESH_MS);
       break;
-    case AnalysisTask::running:
-      progress->fade(1000);
-      break;
+    case AnalysisTask::running: {
+      size_t readedbytes = task.getCsvFile().getReadedSize();
+      QString str = Format::bytes(readedbytes).c_str();
+      progress->ui->progress->setValue(100);
+      progress->ui->progress->setFormat(str);
+      progress->fade();
+      ui->plot->setEnabled(true);
+      break; }
     case AnalysisTask::stopped:
     case AnalysisTask::failed:
     case AnalysisTask::finished:
       progress->fade();
+      ui->plot->setEnabled(true);
       timer.stop();
       draw();
       break;
