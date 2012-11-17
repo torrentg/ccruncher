@@ -63,7 +63,7 @@ SOURCES += \
     src/gui/SimulationWidget.cpp \
     src/gui/AnalysisWidget.cpp \
     src/gui/AnalysisTask.cpp \
-    src/gui/ProgessWidget.cpp \
+    src/gui/ProgressWidget.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
