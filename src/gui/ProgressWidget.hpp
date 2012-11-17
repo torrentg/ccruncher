@@ -23,12 +23,6 @@ class ProgressWidget : public QWidget
     // fade duration
     int duration;
 
-
-  protected:
-
-    // paint event
-    void paintEvent(QPaintEvent *event);
-
   public:
 
     // constructor
@@ -44,6 +38,8 @@ class ProgressWidget : public QWidget
 
     // overwrite
     void show();
+    // decrease
+    void decrease();
 
 };
 

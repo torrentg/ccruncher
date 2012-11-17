@@ -8,10 +8,10 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
 {
   ui->setupUi(this);
   ui->progress->setValue(0);
-  setAttribute(Qt::WA_TransparentForMouseEvents);
-  opacity = 1.0;
+  //setAttribute(Qt::WA_TransparentForMouseEvents);
+  setOpacity(1.0);
   duration = 333;
-  connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+  connect(&timer, SIGNAL(timeout()), this, SLOT(decrease()));
 }
 
 //===========================================================================
@@ -37,7 +37,7 @@ void ProgressWidget::show()
 //===========================================================================
 void ProgressWidget::fade(int millis)
 {
-  if (!isVisible()) return;
+  if (!isVisible() || timer.isActive()) return;
   if (millis > 0) {
     duration = millis;
   }
@@ -49,21 +49,21 @@ void ProgressWidget::fade(int millis)
   if (num > 255) {
     duration = 40*255;
   }
-  opacity = 1.0;
+  setOpacity(1.0);
   timer.start(40);
-  show();
 }
 
 //===========================================================================
-// paintEvent
+// decrease
 //===========================================================================
-void ProgressWidget::paintEvent(QPaintEvent * /* event */)
+void ProgressWidget::decrease()
 {
   opacity -= 40.0/(double)(duration);
   if (opacity > 0.0) {
     setOpacity(opacity);
   }
   else {
+    setOpacity(0.0);
     timer.stop();
     setVisible(false);
   }
@@ -76,10 +76,5 @@ void ProgressWidget::setOpacity(double val)
 {
   opacity = val;
   setWindowOpacity(val);
-  /*
-  ui->frame->setWindowOpacity(val);
-  ui->label->setWindowOpacity(val);
-  ui->progress->setWindowOpacity(val);
-  */
 }
 
