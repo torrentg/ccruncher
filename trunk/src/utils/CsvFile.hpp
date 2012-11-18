@@ -53,8 +53,12 @@ class CsvFile
     FILE *file;
     // column headers
     vector<string> headers;
-    // buffer
-    char buffer[256];
+    // buffer (32KB)
+    char buffer[32768];
+    // current position in buffer
+    char *ptr0;
+    // next position in buffer
+    char *ptr1;
     // file size (in bytes)
     size_t filesize;
 
@@ -62,6 +66,8 @@ class CsvFile
 
     // returns file size
     size_t getNumBytes();
+    // fills buffer
+    void getChunk(char *ptr);
     // parse a field
     int read() throw(Exception);
     // parse a double

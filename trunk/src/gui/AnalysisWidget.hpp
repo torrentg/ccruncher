@@ -42,6 +42,12 @@ class AnalysisWidget: public QWidget
     size_t nsamples;
     // mutex
     QMutex mutex;
+    // numbins
+    size_t numbins;
+    // percentile
+    double percentile;
+    // confidence
+    double confidence;
 
   private:
 

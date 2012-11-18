@@ -17,15 +17,16 @@ Current works
   * add file hash (CRC32 - cksum - http://www.opensource.apple.com/source/xnu/xnu-1456.1.26/bsd/libkern/crc32.c)
   * allow to aggregators to append data to file
   * implement simulation pause
-  * implement gui-analysis thread
+  * analysis: set fadein + fadeout
+  * try to use cstdio instead of ifstream in xml parsing
 
 Future works
 -------------------
   * technical features
      - input file in binary format
-     - allow evaluation in multiple time horizons
   * improve model
      - add grouped t-copula support
+     - allow evaluation in multiple time horizons
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
      - consider that a obligor could belong to a weighted sum of sectors
   * improve functional tests
