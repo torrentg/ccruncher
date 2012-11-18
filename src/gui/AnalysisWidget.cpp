@@ -26,12 +26,17 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
   magnifier(NULL), panner(NULL), nsamples(0)
 {
+  blockSignals(true);
+
   ui->setupUi(this);
+
+  numbins = ui->numbins->value();
+  percentile = ui->percentile->value();
+  confidence = ui->confidence->value();
+
   progress = new ProgressWidget(ui->frame);
   progress->setWindowFlags(Qt::WindowStaysOnTopHint);
   ui->frame->addLayer(progress);
-
-  blockSignals(true);
 
   ui->filename->setText(filename);
   ui->plot->canvas()->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
@@ -237,6 +242,7 @@ void AnalysisWidget::drawHistogram()
   const gsl_histogram *hist = task.getHistogram();
   if (hist == NULL) return;
   size_t numbins = gsl_histogram_bins(hist);
+  this->numbins = numbins;
   ui->numbins->setValue(numbins);
 
   QVector<QwtIntervalSample> samples(numbins);
@@ -374,9 +380,12 @@ void AnalysisWidget::changeView()
 //===========================================================================
 void AnalysisWidget::changeConfidence()
 {
-  mutex.lock();
-  drawStatistic();
-  mutex.unlock();
+  if (ui->confidence->value() != confidence) {
+    mutex.lock();
+    confidence = ui->confidence->value();
+    drawStatistic();
+    mutex.unlock();
+  }
 }
 
 //===========================================================================
@@ -384,7 +393,10 @@ void AnalysisWidget::changeConfidence()
 //===========================================================================
 void AnalysisWidget::changeNumbins()
 {
-  submit(ui->numbins->value());
+  if (ui->numbins->value() != (int)numbins) {
+    numbins = ui->numbins->value();
+    submit(ui->numbins->value());
+  }
 }
 
 //===========================================================================
@@ -392,12 +404,14 @@ void AnalysisWidget::changeNumbins()
 //===========================================================================
 void AnalysisWidget::changePercentile()
 {
-  submit();
+  if (ui->percentile->value() != percentile) {
+    percentile = ui->percentile->value();
+    submit();
+  }
 }
 
 //===========================================================================
 // set status
-// see SimulationTask::status
 //===========================================================================
 void AnalysisWidget::setStatus(int val)
 {

@@ -28,6 +28,9 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
+#define BUFFER_SIZE 32768
+#define MAX_FIELD_SIZE 255
+
 //===========================================================================
 // default constructor
 //===========================================================================
@@ -75,6 +78,9 @@ void ccruncher::CsvFile::open(const string &fname, const string sep) throw(Excep
     throw Exception("error opening file " + fname);
   }
 
+  ptr0 = NULL;
+  ptr1 = NULL;
+  buffer[0] = 0;
   filesize = getNumBytes();
 }
 
@@ -88,6 +94,9 @@ void ccruncher::CsvFile::close()
     file = NULL;
   }
   headers.clear();
+  ptr0 = NULL;
+  ptr1 = NULL;
+  buffer[0] = 0;
   filesize = 0;
 }
 
@@ -105,7 +114,7 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
   do
   {
     rc = read();
-    char *str = trim(buffer);
+    char *str = trim(ptr0);
     if (*str == '"') str++;
     size_t l = strlen(str);
     if (l>0 && *(str+l-1)=='"') *(str+l-1) = 0;
@@ -118,6 +127,37 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
 }
 
 //===========================================================================
+// moves content pointed by ptr to the begining of buffer
+// and appends content to end
+//===========================================================================
+void ccruncher::CsvFile::getChunk(char *ptr)
+{
+  size_t len = 0;
+  char *aux = NULL;
+
+  // move data pointed by ptr to the begining of buffer
+  if (ptr != NULL) {
+    assert(buffer <= ptr && ptr < buffer+BUFFER_SIZE);
+    len = buffer + BUFFER_SIZE - ptr;
+    memcpy(buffer, ptr, len);
+    aux = buffer + len;
+  }
+  else {
+    aux = buffer;
+  }
+
+  // read data from file preserving unreaded content
+  len = buffer + BUFFER_SIZE - aux;
+  size_t rc = fread(aux, sizeof(char), len, file);
+  if (rc < len) {
+    aux[rc] = 0;
+  }
+
+  ptr0 = buffer;
+  ptr1 = buffer;
+}
+
+//===========================================================================
 // read a field to buffer
 // return value is the right-hand character
 //   1: field separator
@@ -126,30 +166,33 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
 //===========================================================================
 int ccruncher::CsvFile::read() throw(Exception)
 {
-  size_t pos = 0;
+  if (ptr1 == NULL) getChunk(NULL);
+  ptr0 = ptr1;
+  assert(buffer <= ptr0 && ptr0 < buffer+BUFFER_SIZE);
 
   do
   {
-    //TODO: use fread and a read buffer
-    buffer[pos] = fgetc(file);
+    ptr1++;
+    assert(buffer <= ptr1 && ptr1 <= buffer+BUFFER_SIZE);
 
-    if (buffer[pos] == EOF) { //feof(file)
-      buffer[pos] = 0;
+    if (buffer+BUFFER_SIZE-1 <= ptr1) {
+      getChunk(ptr0);
+    }
+    else if (*ptr1 == 0) {
       return 3;
     }
-    else if (buffer[pos] == '\n') {
-      buffer[pos] = 0;
+    else if (*ptr1 == '\n') {
+      *ptr1 = 0;
+      ptr1++;
       return 2;
     }
-    else if (buffer[pos] == ',') { //strchr(separators.c_str(), buffer[pos]) != NULL
-      buffer[pos] = 0;
+    else if (*ptr1 == ',') { //strchr(separators.c_str(), buffer[pos]) != NULL
+      *ptr1 = 0;
+      ptr1++;
       return 1;
     }
-    else if (pos >= 255) { //sizeof(buffer)-1
+    else if (ptr1-ptr0 > MAX_FIELD_SIZE) {
       throw Exception("field to long");
-    }
-    else {
-      pos++;
     }
   }
   while(true);
@@ -192,14 +235,12 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
 {
   ret.clear();
 
-  if (col >= headers.size()) {
-    throw Exception("invalid column index");
-  }
-
   int rc;
   filesize = getNumBytes();
   rewind(file);
   size_t numlines = 0;
+  ptr0 = NULL;
+  ptr1 = NULL;
 
   // skip headers
   while(read() == 1);
@@ -211,7 +252,7 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
     // read first field
     rc = read();
     if (rc != 1) {
-      char *ptr = trim(buffer);
+      char *ptr = trim(ptr0);
       if (*ptr == 0) {
         // skip blank line
         numlines++;
@@ -229,7 +270,7 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
     }
 
     // read col-th field
-    double val = parse(trim(buffer));
+    double val = parse(trim(ptr0));
     ret.push_back(val);
 
     // reading the rest of fields
