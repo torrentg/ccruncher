@@ -55,12 +55,12 @@ void SimulationTask::run()
     idata->init(ifile, defines, &stop_);
 
     // creating simulation object
-    setStatus(simulating);
     montecarlo = new MonteCarlo(log.rdbuf());
     montecarlo->setFilePath(odir, true);
     montecarlo->setData(*idata);
 
     // simulating
+    setStatus(simulating);
     montecarlo->run(Utils::getNumCores(), 0, &stop_);
 
     // footer

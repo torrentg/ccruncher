@@ -94,9 +94,10 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 //===========================================================================
 AnalysisWidget::~AnalysisWidget()
 {
+  blockSignals(true);
   task.stop();
-  delete ui;
   task.wait(250);
+  delete ui;
 }
 
 //===========================================================================
