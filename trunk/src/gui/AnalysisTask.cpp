@@ -12,6 +12,7 @@ AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
   mode_ = none;
   nsamples = 0;
   progress = 0;
+  msgerr = "";
   setStatus(finished);
   setTerminationEnabled(false);
 }
@@ -109,6 +110,7 @@ void AnalysisTask::run()
     progress = 0.0;
     statvals.clear();
     nsamples = 0;
+    msgerr = "";
 
     setStatus(reading);
     vector<double> values;
@@ -141,6 +143,7 @@ void AnalysisTask::run()
   }
   catch(std::exception &e)
   {
+    msgerr = e.what();
     setStatus(failed);
   }
 }
@@ -173,7 +176,7 @@ void AnalysisTask::runHistogram(const vector<double> &values)
   }
 
   hist = gsl_histogram_alloc(numbins);
-  gsl_histogram_set_ranges_uniform(hist, minval, maxval+1e-10);
+  gsl_histogram_set_ranges_uniform(hist, minval, maxval+0.01);
 
   for(size_t i=0; i<values.size(); i++)
   {
@@ -345,5 +348,13 @@ AnalysisTask::status AnalysisTask::getStatus() const
 float AnalysisTask::getProgress()
 {
   return progress;
+}
+
+//===========================================================================
+// return error
+//===========================================================================
+const string & AnalysisTask::getMsgErr() const
+{
+  return msgerr;
 }
 

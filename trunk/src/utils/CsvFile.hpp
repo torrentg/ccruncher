@@ -54,7 +54,7 @@ class CsvFile
     // column headers
     vector<string> headers;
     // buffer (32KB)
-    char buffer[32768];
+    char buffer[128*1024];
     // current position in buffer
     char *ptr0;
     // next position in buffer

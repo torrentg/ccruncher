@@ -28,8 +28,8 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
-#define BUFFER_SIZE 32768
-#define MAX_FIELD_SIZE 255
+#define BUFFER_SIZE 128*1024
+#define MAX_FIELD_SIZE 40
 
 //===========================================================================
 // default constructor
@@ -82,6 +82,7 @@ void ccruncher::CsvFile::open(const string &fname, const string sep) throw(Excep
   ptr1 = NULL;
   buffer[0] = 0;
   filesize = getNumBytes();
+  //TODO: move getNumBytes() content here?
 }
 
 //===========================================================================
@@ -108,7 +109,7 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
   if (file != NULL && !headers.empty()) return headers;
 
   headers.clear();
-  if (file != NULL) open(filename, separators);
+  open(filename, separators);
 
   int rc;
   do
@@ -169,6 +170,7 @@ int ccruncher::CsvFile::read() throw(Exception)
   if (ptr1 == NULL) getChunk(NULL);
   ptr0 = ptr1;
   assert(buffer <= ptr0 && ptr0 < buffer+BUFFER_SIZE);
+  if (ptr0 == 0) return 3;
 
   do
   {
@@ -192,7 +194,8 @@ int ccruncher::CsvFile::read() throw(Exception)
       return 1;
     }
     else if (ptr1-ptr0 > MAX_FIELD_SIZE) {
-      throw Exception("field to long");
+cout << "ptr0=" << ptr0 << ", ptr1=" << ptr1 << endl;
+      throw Exception("field too long");
     }
   }
   while(true);
@@ -233,54 +236,58 @@ char* ccruncher::CsvFile::trim(char *ptr)
 //===========================================================================
 void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) throw(Exception)
 {
-  ret.clear();
-
   int rc;
-  filesize = getNumBytes();
-  rewind(file);
   size_t numlines = 0;
-  ptr0 = NULL;
-  ptr1 = NULL;
 
-  // skip headers
-  while(read() == 1);
-  numlines++;
+  ret.clear();
+  open(filename, separators);
 
-  // read lines
-  do
+  try
   {
-    // read first field
-    rc = read();
-    if (rc != 1) {
-      char *ptr = trim(ptr0);
-      if (*ptr == 0) {
-        // skip blank line
-        numlines++;
-        continue;
-      }
-    }
-
-    // read previous fields
-    for(size_t i=1; i<=col; i++)
-    {
-      rc = read();
-      if (rc != 1 && i<col) {
-        throw Exception("line with invalid format");
-      }
-    }
-
-    // read col-th field
-    double val = parse(trim(ptr0));
-    ret.push_back(val);
-
-    // reading the rest of fields
-    while (rc == 1) rc = read();
+    // skip headers
+    while(read() == 1);
     numlines++;
 
-    // check stop flag
-    if (stop != NULL && *stop) break;
+    // read lines
+    do
+    {
+      // read first field
+      rc = read();
+      if (rc != 1) {
+        char *ptr = trim(ptr0);
+        if (*ptr == 0) {
+          // skip blank line
+          numlines++;
+          continue;
+        }
+      }
+
+      // read previous fields
+      for(size_t i=1; i<=col; i++)
+      {
+        rc = read();
+        if (rc != 1 && i<col) {
+          throw Exception("line with invalid format");
+        }
+      }
+
+      // read col-th field
+      double val = parse(trim(ptr0));
+      ret.push_back(val);
+
+      // reading the rest of fields
+      while (rc == 1) rc = read();
+      numlines++;
+
+      // check stop flag
+      if (stop != NULL && *stop) break;
+    }
+    while(rc != 3);
   }
-  while(rc != 3);
+  catch(Exception &e)
+  {
+    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+  }
 }
 
 //===========================================================================
