@@ -7,7 +7,8 @@
 //===========================================================================
 // constructor
 //===========================================================================
-SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s), montecarlo(NULL)
+SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
+    idata(NULL), montecarlo(NULL)
 {
   ifile = "";
   odir = "";
@@ -20,18 +21,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s), montecarlo(NUL
 //===========================================================================
 SimulationTask::~SimulationTask()
 {
-  deletemc();
-}
-
-//===========================================================================
-// deletemc
-//===========================================================================
-void SimulationTask::deletemc()
-{
-  if (montecarlo != NULL) {
-    delete montecarlo;
-    montecarlo = NULL;
-  }
+  free();
 }
 
 //===========================================================================
@@ -47,10 +37,9 @@ void SimulationTask::setStreamBuf(streambuf *s)
 //===========================================================================
 void SimulationTask::run()
 {
-  IData *idata = NULL;
-  if (montecarlo != NULL) return;
-
   Timer timer(true);
+
+  free();
 
   try
   {
@@ -70,7 +59,6 @@ void SimulationTask::run()
     montecarlo = new MonteCarlo(log.rdbuf());
     montecarlo->setFilePath(odir, true);
     montecarlo->setData(*idata);
-    delete idata;
 
     // simulating
     montecarlo->run(Utils::getNumCores(), 0, &stop_);
@@ -85,10 +73,7 @@ void SimulationTask::run()
     log << e.what() << endl;
     if (stop_) setStatus(stopped);
     else setStatus(failed);
-    if (idata != NULL) delete idata;
   }
-
-  deletemc();
 }
 
 //===========================================================================
@@ -127,23 +112,33 @@ SimulationTask::status SimulationTask::getStatus() const
 }
 
 //===========================================================================
-// return progress
+// return idata
 //===========================================================================
-float SimulationTask::getProgress()
+IData* SimulationTask::getIData()
 {
-  switch(status_)
-  {
-    case reading:
-      return 0.0;
-    case simulating:
-      return 100.0*((float)montecarlo->getNumIterations()/(float)montecarlo->getMaxIterations());
-    case stopped:
-    case failed:
-    case finished:
-      return 100.0;
-    default:
-      assert(false);
-      return 0.0;
+  return idata;
+}
+
+//===========================================================================
+// return MonteCarlo
+//===========================================================================
+MonteCarlo* SimulationTask::getMonteCarlo()
+{
+  return  montecarlo;
+}
+
+//===========================================================================
+// free memory (1=idata, 2=montecarlo, other=all)
+//===========================================================================
+void SimulationTask::free(int obj)
+{
+  if (obj != 2 && idata != NULL) {
+    delete idata;
+    idata = NULL;
+  }
+  if (obj != 1 && montecarlo != NULL) {
+    delete montecarlo;
+    montecarlo = NULL;
   }
 }
 

@@ -8,6 +8,7 @@
 #include <QTimer>
 #include "gui/QStreamBuf.hpp"
 #include "gui/SimulationTask.hpp"
+#include "gui/ProgressWidget.hpp"
 
 using namespace std;
 
@@ -31,6 +32,8 @@ class SimulationWidget : public QWidget
     map<string,string> defines;
     // stdout redirect
     QStreamBuf qstream;
+    // progress widget
+    ProgressWidget *progress;
 
   private:
 
@@ -38,8 +41,10 @@ class SimulationWidget : public QWidget
     void setFile();
     // fill widget defines
     void setDefines();
-    // check dialog status
-    void check(bool clear);
+    // update widgets status
+    void updateControls();
+    // clear log area
+    void clearLog();
 
   public:
 
@@ -54,12 +59,12 @@ class SimulationWidget : public QWidget
     void selectDir();
     // set ooutput directory
     void setDir();
-    // run ccruncher
-    void run();
+    // submit task
+    void submit();
     // print message to log
-    void print(const QString);
-    // refresh progress bar
-    void refresh();
+    void log(const QString);
+    // draw widget
+    void draw();
     // defines dialog
     void showDefines();
     // set status

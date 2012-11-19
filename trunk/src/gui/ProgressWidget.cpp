@@ -7,6 +7,7 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
     QWidget(parent), ui(new Ui::ProgressWidget)
 {
   ui->setupUi(this);
+  setVisible(false);
   ui->progress->setValue(0);
   //setAttribute(Qt::WA_TransparentForMouseEvents);
   setOpacity(1.0);
