@@ -20,14 +20,16 @@
 //
 //===========================================================================
 
+#include <cstdio>
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/File.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
-#include <gzstream.h>
 #include <cassert>
+
+#define BUFFER_SIZE 128*1024
 
 //===========================================================================
 // default constructor
@@ -44,32 +46,40 @@ ccruncher::IData::IData(streambuf *s) : log(s)
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::IData::init(const string &xmlfilename, const map<string,string> &m, bool *stop_) throw(Exception)
+void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *stop_) throw(Exception)
 {
-  filename = xmlfilename;
+  gzFile file = NULL;
+  filename = f;
   stop = stop_;
 
-  if (filename == STDIN_FILENAME)
+  try
   {
-    // using standard input
-    parse(cin, m);
-  }
-  else
-  {
-    // gziped file stream, if file isn't a gzip, is like a ifstream
-    igzstream xmlstream((const char *) filename.c_str());
-    if (xmlstream.peek() == EOF) 
-    {
-      throw Exception("can't open file " + filename);
+    if (filename == STDIN_FILENAME) {
+      file = gzdopen(fileno(stdin), "rb");
     }
-    parse(xmlstream, m);
+    else {
+      // gzFile reads gziped files an not-gziped files
+      file = gzopen(filename.c_str(), "rb");
+      if (file == NULL) {
+        throw Exception("can't open file " + filename);
+      }
+    }
+
+    // big buffer to increase the speed of decompression
+    gzbuffer(file, BUFFER_SIZE);
+    parse(file, m);
+  }
+  catch(std::exception &e)
+  {
+    if (file != NULL) gzclose(file);
+    throw;
   }
 }
 
 //===========================================================================
 // parse
 //===========================================================================
-void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exception)
+void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exception)
 {
   try
   {
@@ -95,7 +105,7 @@ void ccruncher::IData::parse(istream &is, const map<string,string> &m) throw(Exc
     Timer timer(true);
     ExpatParser parser;
     parser.setDefines(m);
-    parser.parse(is, this, stop);
+    parser.parse(file, this, stop);
     log << "elapsed time parsing data" << split << timer << endl;
     log << indent(-1);
   }
@@ -336,6 +346,8 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
   }
   else
   {
+    gzFile file = NULL;
+
     try
     {
       string path;
@@ -343,22 +355,23 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       else path = File::dirname(filename);
 
       string filepath = File::filepath(path, ref);
-      igzstream xmlstream((const char *) filepath.c_str());
-      if (xmlstream.peek() == EOF)
-      {
+
+      file = gzopen(filepath.c_str(), "rb");
+      if (file == NULL) {
         throw Exception("can't open file " + filepath);
       }
-      else
-      {
+      else {
+        gzbuffer(file, BUFFER_SIZE);
         log << "included file name" << split << filepath << endl;
         log << "included file size" << split << Format::bytes(File::filesize(filepath)) << endl;
         ExpatParser parser;
         parser.setDefines(eu.defines);
-        parser.parse(xmlstream, &portfolio, stop);
+        parser.parse(file, &portfolio, stop);
       }
     }
     catch(std::exception &e)
     {
+      if (file != NULL) gzclose(file);
       throw Exception(e, "error parsing file '" + ref + "'");
     }
   }

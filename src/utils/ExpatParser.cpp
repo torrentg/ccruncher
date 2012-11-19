@@ -30,7 +30,7 @@
 
 // --------------------------------------------------------------------------
 
-#define BUFSIZE 32768
+#define BUFFER_SIZE 32*1024
 
 // expat versions previous to 1.95.x don't have defined these macros
 #ifndef XML_STATUS_OK
@@ -143,26 +143,37 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len)
 }
 
 //===========================================================================
-// parse
+// parse a string
 //===========================================================================
 void ccruncher::ExpatParser::parse(const string &xmlcontent, ExpatHandlers *eh, bool *stop) throw(Exception)
 {
-  istringstream iss (xmlcontent, istringstream::in);
-  parse(iss, eh, stop);
+  reset();
+  userdata.setCurrentHandlers("", eh);
+  parse(NULL, const_cast<char*>(xmlcontent.c_str()), xmlcontent.length(), stop);
+}
+
+//===========================================================================
+// parse a file
+//===========================================================================
+void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop) throw(Exception)
+{
+  reset();
+  userdata.setCurrentHandlers("", eh);
+  char buf[BUFFER_SIZE];
+  buf[0] = 0;
+  parse(file, buf, BUFFER_SIZE, stop);
 }
 
 //===========================================================================
 // parse
 //===========================================================================
-void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh, bool *stop) throw(Exception)
+void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception)
 {
-  char buf[BUFSIZE+1];
-  streamsize len=0;
+  unsigned len=0;
   int done;
 
-  // pushing handlers to stack
-  reset();
-  userdata.setCurrentHandlers("", eh);
+  assert(buf != NULL);
+  assert(buffer_size > 0);
 
   // parsing doc
   try
@@ -173,10 +184,14 @@ void ccruncher::ExpatParser::parse(istream &xmlcontent, ExpatHandlers *eh, bool 
         throw Exception("parser stopped");
       }
 
-      xmlcontent.read(buf, BUFSIZE);
-      len = xmlcontent.gcount();
-      buf[len] = 0;
-      done = (len < BUFSIZE);
+      if (file != NULL) {
+        len = gzread(file, buf, buffer_size);
+        done = (len < buffer_size);
+      }
+      else {
+        len = buffer_size;
+        done = true;
+      }
 
       if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
       {

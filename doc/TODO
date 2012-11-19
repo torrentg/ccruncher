@@ -14,12 +14,10 @@ Current works
   * bulk output to file
   * ad-hoc xml editor see http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter)
   * add configuration file to ccruncher-gui
-  * add file hash (CRC32 - cksum - http://www.opensource.apple.com/source/xnu/xnu-1456.1.26/bsd/libkern/crc32.c)
+  * add file hash (CRC32 - see zlib library)
   * allow to aggregators to append data to file
   * implement simulation pause
   * analysis: set fadein + fadeout
-  * try to use cstdio instead of ifstream in xml parsing (gzopen+gzbuffer+gzread+gzclose+crc32 remove gzstream)
-  * trap and report csvfile errors in gui
 
 Future works
 -------------------

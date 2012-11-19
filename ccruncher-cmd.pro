@@ -42,8 +42,7 @@ HEADERS += \
     src/utils/ExpatHandlers.hpp \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
-    src/utils/config.h \
-    deps/gzstream-1.5/gzstream.h
+    src/utils/config.h
 
 SOURCES += \
     src/ccruncher-cmd.cpp \
@@ -81,12 +80,10 @@ SOURCES += \
     src/utils/ExpatParser.cpp \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
-    src/utils/Date.cpp \
-    deps/gzstream-1.5/gzstream.cpp
+    src/utils/Date.cpp
 
 INCLUDEPATH += \
-    $$PWD/src \
-    $$PWD/deps/gzstream-1.5
+    $$PWD/src
 
 LIBS += \
     -lm \

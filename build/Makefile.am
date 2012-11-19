@@ -8,7 +8,6 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
     ../deps/MiniCppUnit-2.5\
-    ../deps/gzstream-1.5\
     ../src/win32
 
 bin_PROGRAMS = ccruncher
@@ -21,7 +20,6 @@ TESTS = tests
 # ccruncher
 # -------------------------------------------------------------
 ccruncher_SOURCES = \
-    ../deps/gzstream-1.5/gzstream.cpp\
     ../src/ccruncher-cmd.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -105,7 +103,6 @@ ccruncher_LDFLAGS =
 # -------------------------------------------------------------
 tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
-    ../deps/gzstream-1.5/gzstream.cpp\
     ../src/ccruncher-tests.cpp\
     ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\

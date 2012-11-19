@@ -132,7 +132,7 @@ dnl -------------------------------------------------------------
 dnl setting preprocessor options
 dnl -------------------------------------------------------------
 AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/MiniCppUnit-2.5 -I$(top_srcdir)/deps/gzstream-1.5'])
+         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/MiniCppUnit-2.5'])
 
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h

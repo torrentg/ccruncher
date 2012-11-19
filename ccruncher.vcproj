@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;&quot;deps\pthread-win32\include&quot;;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\pthread-win32\include&quot;;src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="1"
@@ -128,7 +128,7 @@
 				FavorSizeOrSpeed="1"
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\gzstream-1.5&quot;;&quot;deps\pthread-win32\include&quot;;src"
+				AdditionalIncludeDirectories="&quot;deps\gsl-1.11\win32\include&quot;;&quot;deps\MiniCppUnit-2.5&quot;;&quot;deps\expat-2.0.1\Source\lib&quot;;&quot;deps\zlib-1.2.3\include&quot;;&quot;deps\pthread-win32\include&quot;;src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;BUILD_GETOPT;BUILD_DIRENT;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
@@ -531,18 +531,6 @@
 				</File>
 				<File
 					RelativePath="src\win32\winconfig.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="gzstream"
-				>
-				<File
-					RelativePath="deps\gzstream-1.5\gzstream.cpp"
-					>
-				</File>
-				<File
-					RelativePath="deps\gzstream-1.5\gzstream.h"
 					>
 				</File>
 			</Filter>

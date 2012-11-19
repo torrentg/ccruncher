@@ -12,6 +12,7 @@ version 2.1 (???. 2012)
   * attribute values@at renamed to values@t
   * tag property renamed to parameter
   * parameter copula.seed renamed to rng.seed
+  * improved xml parsing speed
 
 version 2.0 (Oct. 2012)
 --------------------------

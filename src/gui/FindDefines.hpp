@@ -17,11 +17,6 @@ class FindDefines : public ExpatHandlers
     // defines found
     map<string,string> defines;
 
-  private:
-
-    // parse data
-    void parse(istream &is);
-
   protected:
 
     // ExpatHandlers method
