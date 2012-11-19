@@ -29,6 +29,7 @@
 #include <streambuf>
 #include <string>
 #include <map>
+#include <zlib.h>
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
 #include "params/Ratings.hpp"
@@ -95,7 +96,7 @@ class IData : public ExpatHandlers
     // validate simulation data
     void validate() throw(Exception);
     // parse data
-    void parse(istream &is, const map<string,string> &m) throw(Exception);
+    void parse(gzFile file, const map<string,string> &m) throw(Exception);
     // parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
     // check define
@@ -115,7 +116,7 @@ class IData : public ExpatHandlers
     // default constructor
     IData(streambuf *s=NULL);
     // initialize content
-    void init(const string &xmlfilename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
+    void init(const string &filename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
     // returns simulation title
     const string &getTitle() const;
     // returns simulation description

@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <expat.h>
+#include <zlib.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
@@ -50,6 +51,8 @@ class ExpatParser
 
   private:
 
+    // parse xml
+    void parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception);
     // startElement function catcher
     static void startElement(void *ud, const char *name, const char **atts);
     // endElement function catcher
@@ -68,7 +71,7 @@ class ExpatParser
     // parse xml
     void parse(const string &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
     // parse xml
-    void parse(istream &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
+    void parse(gzFile file, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
     // returns main object
     void * getObject();
     // returns defines

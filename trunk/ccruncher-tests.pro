@@ -70,7 +70,6 @@ HEADERS += \
     src/utils/ExpatUserDataTest.hpp \
     src/utils/ExceptionTest.hpp \
     src/utils/DateTest.hpp \
-    deps/gzstream-1.5/gzstream.h \
     deps/MiniCppUnit-2.5/MiniCppUnit.hxx
 
 SOURCES += \
@@ -137,12 +136,10 @@ SOURCES += \
     src/utils/ExpatUserDataTest.cpp \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
-    deps/gzstream-1.5/gzstream.cpp \
     deps/MiniCppUnit-2.5/MiniCppUnit.cxx
 
 INCLUDEPATH += \
     $$PWD/src \
-    $$PWD/deps/gzstream-1.5 \
     $$PWD/deps/MiniCppUnit-2.5
 
 LIBS += \

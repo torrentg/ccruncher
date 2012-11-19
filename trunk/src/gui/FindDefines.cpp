@@ -1,31 +1,22 @@
-#include <gzstream.h>
+#include <zlib.h>
 #include "gui/FindDefines.hpp"
 #include "utils/ExpatParser.hpp"
-
 
 //===========================================================================
 // constructor
 //===========================================================================
 FindDefines::FindDefines(const string &filename)
 {
-  igzstream xmlstream((const char *) filename.c_str());
-  if (xmlstream.peek() == EOF) return;
-  parse(xmlstream);
-}
+  gzFile file = NULL;
 
-//===========================================================================
-// parse
-//===========================================================================
-void FindDefines::parse(istream &is)
-{
-  try
-  {
+  try {
+    file = gzopen(filename.c_str(), "rb");
+    if (file == NULL) return;
     ExpatParser parser;
-    parser.parse(is, this);
+    parser.parse(file, this);
   }
-  catch(std::exception &e)
-  {
-    // nothing to do
+  catch(...) {
+    if (file != NULL) gzclose(file);
   }
 }
 

@@ -50,8 +50,7 @@ HEADERS += \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
     src/utils/CsvFile.hpp \
-    src/utils/config.h \
-    deps/gzstream-1.5/gzstream.h
+    src/utils/config.h
 
 SOURCES += \
     src/ccruncher-gui.cpp \
@@ -99,8 +98,7 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
-    src/utils/CsvFile.cpp \
-    deps/gzstream-1.5/gzstream.cpp
+    src/utils/CsvFile.cpp
 
 FORMS += \
     src/gui/MainWindow.ui \
@@ -110,8 +108,7 @@ FORMS += \
     src/gui/ProgressWidget.ui
 
 INCLUDEPATH += \
-    $$PWD/src \
-    $$PWD/deps/gzstream-1.5
+    $$PWD/src
 
 LIBS += \
     -lm \
