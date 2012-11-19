@@ -174,9 +174,6 @@ int ccruncher::CsvFile::read() throw(Exception)
 
   do
   {
-    ptr1++;
-    assert(buffer <= ptr1 && ptr1 <= buffer+BUFFER_SIZE);
-
     if (buffer+BUFFER_SIZE-1 <= ptr1) {
       getChunk(ptr0);
     }
@@ -194,9 +191,11 @@ int ccruncher::CsvFile::read() throw(Exception)
       return 1;
     }
     else if (ptr1-ptr0 > MAX_FIELD_SIZE) {
-cout << "ptr0=" << ptr0 << ", ptr1=" << ptr1 << endl;
       throw Exception("field too long");
     }
+
+    ptr1++;
+    assert(buffer <= ptr1 && ptr1 <= buffer+BUFFER_SIZE);
   }
   while(true);
 }
