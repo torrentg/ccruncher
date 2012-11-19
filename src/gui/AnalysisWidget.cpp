@@ -17,7 +17,7 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
-#define REFRESH_MS 250
+#define REFRESH_MS 100
 
 //===========================================================================
 // constructor
@@ -432,9 +432,11 @@ void AnalysisWidget::setStatus(int val)
       progress->ui->progress->setFormat(str);
       progress->fade();
       ui->plot->setEnabled(true);
-      break; }
-    case AnalysisTask::stopped:
+      break;
+    }
     case AnalysisTask::failed:
+      QMessageBox::warning(this, "error reading data", task.getMsgErr().c_str());
+    case AnalysisTask::stopped:
     case AnalysisTask::finished:
       progress->fade();
       ui->plot->setEnabled(true);

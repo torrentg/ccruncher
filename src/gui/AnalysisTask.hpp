@@ -1,6 +1,7 @@
 #ifndef _AnalysisTask_
 #define _AnalysisTask_
 
+#include <string>
 #include <vector>
 #include <QThread>
 #include <gsl/gsl_histogram.h>
@@ -68,6 +69,8 @@ class AnalysisTask : public QThread
     status status_;
     // stop flag
     bool stop_;
+    // message error (if any)
+    string msgerr;
 
   private:
 
@@ -110,6 +113,8 @@ class AnalysisTask : public QThread
     status getStatus() const;
     // return progress
     float getProgress();
+    // return error
+    const string &getMsgErr() const;
 
   signals:
 

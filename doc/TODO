@@ -18,7 +18,8 @@ Current works
   * allow to aggregators to append data to file
   * implement simulation pause
   * analysis: set fadein + fadeout
-  * try to use cstdio instead of ifstream in xml parsing
+  * try to use cstdio instead of ifstream in xml parsing (gzopen+gzbuffer+gzread+gzclose+crc32 remove gzstream)
+  * trap and report csvfile errors in gui
 
 Future works
 -------------------
