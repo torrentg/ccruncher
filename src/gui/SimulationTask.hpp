@@ -37,6 +37,8 @@ class SimulationTask : public QThread
     string odir;
     // defines
     map<string,string> defines;
+    // data
+    IData *idata;
     // simulator
     MonteCarlo *montecarlo;
     // status
@@ -67,8 +69,12 @@ class SimulationTask : public QThread
     void stop();
     // return status
     status getStatus() const;
-    // return progress
-    float getProgress();
+    // return idata
+    IData* getIData();
+    // return MonteCarlo
+    MonteCarlo* getMonteCarlo();
+    // free memory (1=idata, 2=montecarlo, other=all)
+    void free(int obj=0);
 
   signals:
 

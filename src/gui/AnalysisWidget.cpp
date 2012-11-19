@@ -68,6 +68,13 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
   this->addAction(actionRefresh);
 
+  // stop action
+  QKeySequence keys_stop(Qt::Key_Escape);
+  QAction* actionStop = new QAction(this);
+  actionStop->setShortcut(keys_stop);
+  QObject::connect(actionStop, SIGNAL(triggered()), this, SLOT(stop()));
+  this->addAction(actionStop);
+
   // open file & display
   //TODO: catch exceptions
   task.setFilename(filename);
@@ -192,8 +199,8 @@ void AnalysisWidget::draw()
     size_t readedbytes = task.getCsvFile().getReadedSize();
     float pct = 100.0 * (float)(readedbytes)/(float)(totalbytes);
     QString str = Format::bytes(readedbytes).c_str();
-    progress->ui->progress->setValue(pct+0.5);
     progress->ui->progress->setFormat(str);
+    progress->ui->progress->setValue(pct+0.5);
     progress->show();
   }
   else
@@ -420,16 +427,16 @@ void AnalysisWidget::setStatus(int val)
     case AnalysisTask::reading:
       ui->plot->setEnabled(false);
       //TODO: set fadein instead of show
-      progress->ui->progress->setValue(0);
       progress->ui->progress->setFormat("");
+      progress->ui->progress->setValue(0);
       progress->show();
       timer.start(REFRESH_MS);
       break;
     case AnalysisTask::running: {
       size_t readedbytes = task.getCsvFile().getReadedSize();
       QString str = Format::bytes(readedbytes).c_str();
-      progress->ui->progress->setValue(100);
       progress->ui->progress->setFormat(str);
+      progress->ui->progress->setValue(100);
       progress->fade();
       ui->plot->setEnabled(true);
       break;
@@ -437,6 +444,7 @@ void AnalysisWidget::setStatus(int val)
     case AnalysisTask::failed:
       QMessageBox::warning(this, "error reading data", task.getMsgErr().c_str());
     case AnalysisTask::stopped:
+      //TODO: indicates that user stoped
     case AnalysisTask::finished:
       progress->fade();
       ui->plot->setEnabled(true);
@@ -446,5 +454,13 @@ void AnalysisWidget::setStatus(int val)
     default:
       assert(false);
   }
+}
+
+//===========================================================================
+// stop current action
+//===========================================================================
+void AnalysisWidget::stop()
+{
+  task.stop();
 }
 

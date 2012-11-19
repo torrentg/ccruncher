@@ -89,6 +89,8 @@ class AnalysisWidget: public QWidget
     void changeConfidence();
     // set status
     void setStatus(int);
+    // stop current action
+    void stop();
 
 };
 
