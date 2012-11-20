@@ -119,6 +119,8 @@ void SimulationWidget::updateControls()
       ui->runButton->setEnabled(false);
     }
   }
+  ui->odir->setEnabled(true);
+  ui->odirButton->setEnabled(true);
 }
 
 //===========================================================================
@@ -187,7 +189,7 @@ void SimulationWidget::draw()
 
     int val = 0;
     if (msims > 0) {
-      val = (int)((float)(nsims)/(float)(msims) + 0.5);
+      val = (int)(100.0*(float)(nsims)/(float)(msims) + 0.5);
     }
     else {
       val = ui->progress->value();
