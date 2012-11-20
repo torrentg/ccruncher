@@ -202,7 +202,6 @@ void AnalysisWidget::draw()
     QString str = Format::bytes(readedbytes).c_str();
     progress->ui->progress->setFormat(str);
     progress->ui->progress->setValue(pct+0.5);
-    progress->show();
   }
   else
   {
@@ -427,10 +426,9 @@ void AnalysisWidget::setStatus(int val)
   {
     case AnalysisTask::reading:
       ui->plot->setEnabled(false);
-      //TODO: set fadein instead of show
       progress->ui->progress->setFormat("");
       progress->ui->progress->setValue(0);
-      progress->show();
+      progress->fadein();
       timer.start(REFRESH_MS);
       break;
     case AnalysisTask::running: {
@@ -438,7 +436,7 @@ void AnalysisWidget::setStatus(int val)
       QString str = Format::bytes(readedbytes).c_str();
       progress->ui->progress->setFormat(str);
       progress->ui->progress->setValue(100);
-      progress->fade();
+      progress->fadeout();
       ui->plot->setEnabled(true);
       break;
     }
@@ -447,7 +445,7 @@ void AnalysisWidget::setStatus(int val)
     case AnalysisTask::stopped:
       //TODO: indicates that user stoped
     case AnalysisTask::finished:
-      progress->fade();
+      progress->fadeout();
       ui->plot->setEnabled(true);
       timer.stop();
       draw();

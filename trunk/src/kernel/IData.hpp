@@ -29,6 +29,7 @@
 #include <streambuf>
 #include <string>
 #include <map>
+#include <pthread.h>
 #include <zlib.h>
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
@@ -90,6 +91,12 @@ class IData : public ExpatHandlers
     int hasdefinestag;
     // stop flag
     bool *stop;
+    // ensures data consistence
+    mutable pthread_mutex_t mutex;
+    // current file
+    gzFile curfile;
+    // current file size
+    size_t cursize;
 
   private:
   
@@ -115,6 +122,8 @@ class IData : public ExpatHandlers
 
     // default constructor
     IData(streambuf *s=NULL);
+    // destructor
+    ~IData();
     // initialize content
     void init(const string &filename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
     // returns simulation title
@@ -141,6 +150,10 @@ class IData : public ExpatHandlers
     Portfolio & getPortfolio();
     // indicates if dprobs tag is defined
     bool hasDefaultProbabilities() const;
+    // returns file size (in bytes)
+    size_t getFileSize() const;
+    // returns readed bytes
+    size_t getReadedSize() const;
 
 };
 

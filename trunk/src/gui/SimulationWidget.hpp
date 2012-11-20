@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QString>
 #include <QTimer>
+#include <QMutex>
 #include "gui/QStreamBuf.hpp"
 #include "gui/SimulationTask.hpp"
 #include "gui/ProgressWidget.hpp"
@@ -34,6 +35,8 @@ class SimulationWidget : public QWidget
     QStreamBuf qstream;
     // progress widget
     ProgressWidget *progress;
+    // mutex
+    QMutex mutex;
 
   private:
 
@@ -45,6 +48,11 @@ class SimulationWidget : public QWidget
     void updateControls();
     // clear log area
     void clearLog();
+
+  protected:
+
+    // close
+    void closeEvent(QCloseEvent *event);
 
   public:
 

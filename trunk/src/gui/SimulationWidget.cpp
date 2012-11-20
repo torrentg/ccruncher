@@ -2,10 +2,12 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QDir>
+#include <QMessageBox>
 #include "ui_SimulationWidget.h"
 #include "gui/SimulationWidget.hpp"
 #include "gui/DefinesDialog.hpp"
 #include "gui/FindDefines.hpp"
+#include "utils/Format.hpp"
 #include "utils/Utils.hpp"
 
 #define REFRESH_MS 100
@@ -137,12 +139,6 @@ void SimulationWidget::submit()
     ui->log->clear();
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
-    ui->progress->setValue(0);
-    ui->odir->setEnabled(false);
-    ui->odirButton->setEnabled(false);
-    ui->defines->setEnabled(false);
-    ui->definesButton->setEnabled(false);
-    ui->runButton->setText(tr("Stop"));
     task.setData(ifile, defines, odir);
     task.start();
   }
@@ -165,18 +161,19 @@ void SimulationWidget::log(const QString str)
 //===========================================================================
 void SimulationWidget::draw()
 {
+  mutex.lock();
+
   if (task.getStatus() == SimulationTask::reading)
   {
-    /*
-    size_t totalbytes = task.getCsvFile().getFileSize();
-    size_t readedbytes = task.getCsvFile().getReadedSize();
-    float pct = 100.0 * (float)(readedbytes)/(float)(totalbytes);
-    QString str = Format::bytes(readedbytes).c_str();
-    progress->ui->progress->setValue(pct+0.5);
+    if (task.getIData() == NULL) return;
+    size_t mbytes = task.getIData()->getFileSize();
+    size_t nbytes = task.getIData()->getReadedSize();
+
+    QString str = Format::bytes(nbytes).c_str();
     progress->ui->progress->setFormat(str);
-    */
-    //TODO: complete code
-    progress->show();
+
+    int val = (int)(100.0*(float)(nbytes)/(float)(mbytes) + 0.5);
+    progress->ui->progress->setValue(val);
   }
   else
   {
@@ -201,6 +198,8 @@ void SimulationWidget::draw()
     }
     ui->progress->setValue(val);
   }
+
+  mutex.unlock();
 }
 
 //===========================================================================
@@ -235,29 +234,46 @@ void SimulationWidget::setDefines()
 }
 
 //===========================================================================
+// close
+//===========================================================================
+void SimulationWidget::closeEvent(QCloseEvent *event)
+{
+  if (task.isRunning()) {
+    QMessageBox::StandardButton rc = QMessageBox::question(this, "title",
+       "There is a Monte Carlo simulation in progress.\nDo you want to stop it?",
+       QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+    if (rc != QMessageBox::Yes) {
+      event->ignore();
+      return;
+    }
+  }
+  event->accept();
+}
+
+//===========================================================================
 // set status
-// see SimulationTask::status
 //===========================================================================
 void SimulationWidget::setStatus(int val)
 {
+  mutex.lock();
   switch(val)
   {
     case SimulationTask::reading:
-      //TODO: set fadein instead of show
+      ui->progress->setValue(0);
+      ui->odir->setEnabled(false);
+      ui->odirButton->setEnabled(false);
+      ui->defines->setEnabled(false);
+      ui->definesButton->setEnabled(false);
+      ui->runButton->setText(tr("Stop"));
       progress->ui->progress->setValue(0);
       progress->ui->progress->setFormat("");
-      progress->show();
+      progress->fadein();
       timer.start(REFRESH_MS);
       break;
     case SimulationTask::simulating: {
-      /*
-      size_t readedbytes = task.getCsvFile().getReadedSize();
-      QString str = Format::bytes(readedbytes).c_str();
-      progress->ui->progress->setFormat(str);
-      */
-      //TODO: complete this
+      progress->ui->progress->setFormat("");
       progress->ui->progress->setValue(100);
-      progress->fade();
+      progress->fadeout();
       task.free(1);
       break;
     }
@@ -265,6 +281,7 @@ void SimulationWidget::setStatus(int val)
       // set progressbar to 100% and red color
     case SimulationTask::stopped:
       // let progress bar unchanged (if maxsims>0), 100% otherwise
+      progress->fadeout();
     case SimulationTask::finished:
       timer.stop();
       task.free();
@@ -276,5 +293,6 @@ void SimulationWidget::setStatus(int val)
     default:
       assert(false);
   }
+  mutex.unlock();
 }
 
