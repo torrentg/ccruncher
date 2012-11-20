@@ -34,13 +34,25 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::IData::IData(streambuf *s) : log(s)
+ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
 {
+  pthread_mutex_init(&mutex, NULL);
   hasmaintag = false;
   hasdefinestag = 0;
   title = "";
   description = "";
   stop = NULL;
+  cursize = 0;
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+ccruncher::IData::~IData()
+{
+  assert(curfile == NULL);
+  if (curfile != NULL) gzclose(curfile);
+  pthread_mutex_destroy(&mutex);
 }
 
 //===========================================================================
@@ -49,6 +61,7 @@ ccruncher::IData::IData(streambuf *s) : log(s)
 void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *stop_) throw(Exception)
 {
   gzFile file = NULL;
+  size_t bytes = 0;
   filename = f;
   stop = stop_;
 
@@ -56,22 +69,40 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
   {
     if (filename == STDIN_FILENAME) {
       file = gzdopen(fileno(stdin), "rb");
+      bytes = 0;
     }
     else {
       // gzFile reads gziped files an not-gziped files
       file = gzopen(filename.c_str(), "rb");
-      if (file == NULL) {
-        throw Exception("can't open file " + filename);
-      }
+      bytes = File::filesize(filename);
     }
+
+    if (file == NULL) {
+      throw Exception("can't open file " + filename);
+    }
+
+    pthread_mutex_lock(&mutex);
+    curfile = file;
+    cursize = bytes;
+    pthread_mutex_unlock(&mutex);
 
     // big buffer to increase the speed of decompression
     gzbuffer(file, BUFFER_SIZE);
     parse(file, m);
+
+    pthread_mutex_lock(&mutex);
+    curfile = NULL;
+    pthread_mutex_unlock(&mutex);
+    gzclose(file);
   }
   catch(std::exception &e)
   {
-    if (file != NULL) gzclose(file);
+    if (file != NULL) {
+      pthread_mutex_lock(&mutex);
+      curfile = NULL;
+      pthread_mutex_unlock(&mutex);
+      gzclose(file);
+    }
     throw;
   }
 }
@@ -355,23 +386,38 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       else path = File::dirname(filename);
 
       string filepath = File::filepath(path, ref);
-
       file = gzopen(filepath.c_str(), "rb");
       if (file == NULL) {
         throw Exception("can't open file " + filepath);
       }
-      else {
-        gzbuffer(file, BUFFER_SIZE);
-        log << "included file name" << split << filepath << endl;
-        log << "included file size" << split << Format::bytes(File::filesize(filepath)) << endl;
-        ExpatParser parser;
-        parser.setDefines(eu.defines);
-        parser.parse(file, &portfolio, stop);
-      }
+
+      size_t bytes = File::filesize(filepath);
+      pthread_mutex_lock(&mutex);
+      curfile = file;
+      cursize = bytes;
+      pthread_mutex_unlock(&mutex);
+
+      gzbuffer(file, BUFFER_SIZE);
+      log << "included file name" << split << filepath << endl;
+      log << "included file size" << split << Format::bytes(bytes) << endl;
+
+      ExpatParser parser;
+      parser.setDefines(eu.defines);
+      parser.parse(file, &portfolio, stop);
+
+      pthread_mutex_lock(&mutex);
+      curfile = NULL;
+      pthread_mutex_unlock(&mutex);
+      gzclose(file);
     }
     catch(std::exception &e)
     {
-      if (file != NULL) gzclose(file);
+      if (file != NULL) {
+        pthread_mutex_lock(&mutex);
+        curfile = NULL;
+        pthread_mutex_unlock(&mutex);
+        gzclose(file);
+      }
       throw Exception(e, "error parsing file '" + ref + "'");
     }
   }
@@ -520,5 +566,26 @@ void ccruncher::IData::checkDefine(const string &key, const string &value) const
   if (value.find_first_of("&<>\"'") != string::npos) {
     throw Exception("invalid define value '" + value + "'");
   }
+}
+
+//===========================================================================
+// returns file size (in bytes)
+//===========================================================================
+size_t ccruncher::IData::getFileSize() const
+{
+  return cursize;
+}
+
+//===========================================================================
+// returns readed bytes
+//===========================================================================
+size_t ccruncher::IData::getReadedSize() const
+{
+  size_t ret = 0;
+  pthread_mutex_lock(&mutex);
+  if (curfile == NULL) ret = cursize;
+  else ret = gzoffset(curfile);
+  pthread_mutex_unlock(&mutex);
+  return ret;
 }
 

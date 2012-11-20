@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QWidget>
+#include <QMutex>
 #include <QPaintEvent>
 #include "ui_ProgressWidget.h"
 
@@ -22,6 +23,10 @@ class ProgressWidget : public QWidget
     double opacity;
     // fade duration
     int duration;
+    // fade direction
+    bool isin;
+    // mutex
+    QMutex mutex;
 
   public:
 
@@ -29,17 +34,17 @@ class ProgressWidget : public QWidget
     explicit ProgressWidget(QWidget *parent = 0);
     // destructor
     ~ProgressWidget();
-    // fade
-    void fade(int millis=0);
+    // fadein (0->1)
+    void fadein(size_t millis=0);
+    // fadeout (1->0)
+    void fadeout(size_t millis=0);
     // set opacity
     void setOpacity(double);
 
   public slots:
 
-    // overwrite
-    void show();
-    // decrease
-    void decrease();
+    // change opacity
+    void changeOpacity();
 
 };
 
