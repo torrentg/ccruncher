@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 #include <QThread>
 #include "kernel/IData.hpp"
 #include "kernel/MonteCarlo.hpp"
@@ -35,6 +36,8 @@ class SimulationTask : public QThread
     string ifile;
     // output directory
     string odir;
+    // output files
+    vector<pair<string,string> > ofiles;
     // defines
     map<string,string> defines;
     // data
@@ -73,6 +76,8 @@ class SimulationTask : public QThread
     IData* getIData();
     // return MonteCarlo
     MonteCarlo* getMonteCarlo();
+    // return output filenames
+    const vector<pair<string,string> >& getSegmentationsFilenames() const;
     // free memory (1=idata, 2=montecarlo, other=all)
     void free(int obj=0);
 

@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
   setWindowTitle(tr("CCruncher"));
   setUnifiedTitleAndToolBarOnMac(true);
 
-  connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(openFile()));
+  connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
 
@@ -81,9 +81,9 @@ void MainWindow::about()
 }
 
 //===========================================================================
-// open file
+// select file
 //===========================================================================
-void MainWindow::openFile()
+void MainWindow::selectFile()
 {
   QString filename = QFileDialog::getOpenFileName(
               this,
@@ -91,6 +91,17 @@ void MainWindow::openFile()
               "", //ui->ifile->text(),
               tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
 
+  if (!filename.isEmpty()) {
+    openFile(filename);
+  }
+}
+
+//===========================================================================
+// open file
+//===========================================================================
+void MainWindow::openFile(const QString &filename)
+{
+  //TODO: replace filename by QUrl
   if (!filename.isEmpty())
   {
     QMdiSubWindow *existing = findMdiChild(filename);
@@ -103,6 +114,7 @@ void MainWindow::openFile()
     QWidget *child = NULL;
     if (!filename.toLower().endsWith("csv")) {
       child = new SimulationWidget(filename, this);
+      connect(child, SIGNAL(anchorClicked(const QString &)), this, SLOT(openFile(const QString &)));
     }
     else {
       child = new AnalysisWidget(filename, this);

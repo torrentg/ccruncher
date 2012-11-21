@@ -424,7 +424,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   aggregators.clear();
   for(int i=0; i<idata.getSegmentations().size(); i++)
   {
-    string filename = File::normalizePath(fpath) + idata.getSegmentations().getSegmentation(i).name + ".csv";
+    string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
     Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations().getSegmentation(i), filename, bforce);
     aggregators.push_back(aggregator);
   }
@@ -505,6 +505,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer3.stop();
 
   // exit function
+  if (nhash > 0) log << endl;
   log << "simulations realized" << split <<numiterations << endl;
   log << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
   log << "elapsed time simulating obligors" << split << Timer::format(etime2/numthreads) << endl;

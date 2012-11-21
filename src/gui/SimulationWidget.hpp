@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <QUrl>
 #include <QWidget>
 #include <QString>
 #include <QTimer>
@@ -48,10 +49,12 @@ class SimulationWidget : public QWidget
     void updateControls();
     // clear log area
     void clearLog();
+    // append output files
+    void appendLinksToLog();
 
   protected:
 
-    // close
+    // override close
     void closeEvent(QCloseEvent *event);
 
   public:
@@ -77,6 +80,13 @@ class SimulationWidget : public QWidget
     void showDefines();
     // set status
     void setStatus(int);
+    // open link
+    void openLink(const QUrl &);
+
+  signals:
+
+    // anchor clicked
+    void anchorClicked(const QString &filename);
 
 };
 

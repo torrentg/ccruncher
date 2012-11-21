@@ -22,6 +22,7 @@
 
 #include "params/Segmentation.hpp"
 #include "utils/Strings.hpp"
+#include "utils/File.hpp"
 #include <cassert>
 
 //===========================================================================
@@ -184,6 +185,14 @@ void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
 bool ccruncher::Segmentation::isEnabled() const
 {
   return enabled;
+}
+
+//===========================================================================
+// return filename
+//===========================================================================
+string ccruncher::Segmentation::getFilename(const string &path) const
+{
+  return File::normalizePath(path) + name + ".csv";
 }
 
 //===========================================================================

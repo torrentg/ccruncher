@@ -27,6 +27,8 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
   connect(&qstream, SIGNAL(print(QString)), this, SLOT(log(QString)), Qt::QueuedConnection);
+  connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openLink(const QUrl &)));
+  //TODO: link log->anchorCliked to parent->openFile directly (remove openLink slot)
   ui->ifile->setText(filename);
   //TODO: check exceptions
   setFile();
@@ -149,6 +151,7 @@ void SimulationWidget::submit()
 //===========================================================================
 void SimulationWidget::log(const QString str)
 {
+  //TODO: set anchors on https and files
   QTextCursor cursor = ui->log->textCursor();
   cursor.movePosition(QTextCursor::End);
   cursor.insertText(str);
@@ -251,6 +254,35 @@ void SimulationWidget::closeEvent(QCloseEvent *event)
 }
 
 //===========================================================================
+// appendFilesToLog
+//===========================================================================
+void SimulationWidget::appendLinksToLog()
+{
+  const vector<pair<string,string> > &ofiles = task.getSegmentationsFilenames();
+  if (ofiles.empty()) return;
+
+  //TODO: set header info
+  QString str = "<ul>";
+  for(size_t i=0; i<ofiles.size(); i++)
+  {
+    QString sname = ofiles[i].first.c_str();
+    QString filename = ofiles[i].second.c_str();
+    str += "<li><a href='file:///" + filename + "'>" + sname + "</a></li>";
+  }
+  str += "</ul>"; //"<br/>link: <a href='http://www.ccruncher.net'>www.ccruncher.net</a>";
+  ui->log->textCursor().insertHtml(str);
+}
+
+//===========================================================================
+// open link
+//===========================================================================
+void SimulationWidget::openLink(const QUrl &link)
+{
+  //assert(link.scheme() == "file");
+  emit anchorClicked(link.toLocalFile());
+}
+
+//===========================================================================
 // set status
 //===========================================================================
 void SimulationWidget::setStatus(int val)
@@ -285,6 +317,7 @@ void SimulationWidget::setStatus(int val)
     case SimulationTask::finished:
       timer.stop();
       task.free();
+      appendLinksToLog();
       ui->runButton->setText(tr("Run"));
       ui->progress->setFormat("");
       ui->progress->setValue(100);
