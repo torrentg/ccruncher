@@ -156,7 +156,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     return;
   }
   else if (hasmaintag == false) {
-    throw Exception("ccruncher tag expected but not found");
+    throw Exception("ccruncher tag not found");
   }
 
   // title tag

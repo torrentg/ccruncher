@@ -14,15 +14,14 @@ Current works
   * bulk output to file
   * ad-hoc xml editor see http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter)
   * add configuration file to ccruncher-gui
-  * add file hash (CRC32 - see zlib library)
   * allow to aggregators to append data to file
   * implement simulation pause
-  * analysis: set fadein + fadeout
 
 Future works
 -------------------
   * technical features
      - input file in binary format
+     - add file hash (CRC32 - see zlib library)
   * improve model
      - add grouped t-copula support
      - allow evaluation in multiple time horizons

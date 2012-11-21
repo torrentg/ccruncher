@@ -87,13 +87,10 @@ void catchsignal(int signal)
 //===========================================================================
 void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
-  UNUSED(file);
-  UNUSED(line);
-  UNUSED(gsl_errno);
   string msg = reason;
   msg += " (file=" + string(file);
   msg += ", line=" + Format::toString(line);
-  msg += ", errno=" + Format::toString(errno) + ")";
+  msg += ", errno=" + Format::toString(gsl_errno) + ")";
   Exception gsl_exception(msg);
   throw Exception(gsl_exception, "gsl exception");
 }

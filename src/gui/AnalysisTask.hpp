@@ -74,6 +74,11 @@ class AnalysisTask : public QThread
 
   private:
 
+    // value at risk
+    statval valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last);
+    // expected shortfall
+    static statval expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last);
+
     // set status
     void setStatus(status);
     // compute histogram
