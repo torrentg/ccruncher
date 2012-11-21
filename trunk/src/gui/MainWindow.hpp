@@ -38,8 +38,10 @@ class MainWindow : public QMainWindow
 
     // about dialog
     void about();
+    // select file
+    void selectFile();
     // open file
-    void openFile();
+    void openFile(const QString &filename);
     // exit app
     void exit();
 

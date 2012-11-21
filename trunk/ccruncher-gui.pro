@@ -14,6 +14,7 @@ HEADERS += \
     src/gui/AnalysisTask.hpp \
     src/gui/ProgressWidget.hpp \
     src/gui/FrameOverlay.hpp \
+    src/gui/TextBrowser.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \

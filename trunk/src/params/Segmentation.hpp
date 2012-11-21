@@ -93,6 +93,8 @@ class Segmentation : public ExpatHandlers
     void reset();
     // returns enabled flag
     bool isEnabled() const;
+    // return filename
+    string getFilename(const string &path) const;
 
 };
 
