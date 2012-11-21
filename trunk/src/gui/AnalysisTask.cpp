@@ -4,6 +4,8 @@
 #include "gui/AnalysisTask.hpp"
 #include <cassert>
 
+#define MJ_EPSILON 1e-6
+
 //===========================================================================
 // constructor
 //===========================================================================
@@ -51,6 +53,7 @@ void AnalysisTask::setData(mode m, size_t s, double p)
     case value_at_risk:
     case expected_shortfall:
       percentile = p;
+      assert(0.0 < p && p < 1.0);
       break;
     default:
       assert(false);
@@ -238,46 +241,115 @@ void AnalysisTask::runValueAtRisk(vector<double> &values)
   double step = values.size()/(double)numpoints;
   statvals.reserve(numpoints);
 
+  // negate values (used in partial_sort)
+  for(size_t i=0; i<values.size(); i++) {
+    values[i] = -values[i];
+  }
+
   for (size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
-    //TODO: considere partial sort instead of full sort
-    sort(values.begin(), values.begin()+n);
-    int m = (int)(n*percentile+0.5);
-    double c1=0, c2=0;
-
-    if (m < n)
-    {
-      // quantile stderr (Maritz-Jarret)
-      double a = m - 1.0;
-      double b = n - m;
-
-      for(int j=m; j<n-1; j++) {
-        double w =  gsl_sf_beta_inc(a, b, (double)(j+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(j+1)/(double)(n));
-        c1 += w * values[j];
-        c2 += w * values[j]*values[j];
-        if (w < 1e-14) break;
-        //TODO: considere threshold on c1, c2 variations (not w)
-      }
-
-      for(int j=m-1; j>=0; j--) {
-        double w =  gsl_sf_beta_inc(a, b, (double)(j+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(j+1)/(double)(n));
-        c1 += w * values[j];
-        c2 += w * values[j]*values[j];
-        if (w < 1e-14) break;
-        //TODO: considere threshold on c1, c2 variations (not w)
-      }
-    }
-
-    double var = values[m-1];
-    double std_err = sqrt(c2 - c1*c1);
-    statvals.push_back(statval(n, var, std_err));
-
+    statval var = valueAtRisk(1.0-percentile, values.begin(), values.begin()+n);
+    var.value = -var.value;
+//cout << "var.n=" << var.iteration << ", var.val=" << var.value << ", var.stderr=" << var.std_err << endl;
+    statvals.push_back(var);
     progress = 100.0*(float)(i+1)/(float)(numpoints);
     if (stop_) return;
   }
 
   progress = 100.0;
+}
+
+//===========================================================================
+// Value at Risk of range [first,last)
+//===========================================================================
+statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+{
+  assert(0.0 < percentile && percentile < 1.0);
+  assert(first < last);
+
+  int n = last - first;
+  int m = (int)(percentile*n + 0.5);
+
+  if (m < 2) {
+    return statval(n, *first, 0.0);
+  }
+
+  vector<double>::iterator middle = first + m;
+  // sort in such a way that [first,middle) contains the smallest elements
+  partial_sort(first, middle, last);
+
+  // quantile stderr (Maritz-Jarret)
+  double w, val;
+  double d1=0.0, d2=0.0;
+  double c1=0.0, c2=0.0;
+  double a = m - 1.0;
+  double b = n - m;
+
+  // ibeta fails when a,b values are too big (requires too much continued fractions sums)
+  // in order to grant ibeta convergence we scale a,b values
+  if (a > 50000) {
+    b *= 50000/a;
+    a = 50000;
+  }
+  if (b > 50000) {
+    a *= 50000/b;
+    b = 50000;
+  }
+
+  int i1=0;
+  for(i1=m-1; i1>=0; i1--) {
+    try {
+      // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
+      w =  gsl_sf_beta_inc(a, b, (double)(i1+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i1+1)/(double)(n));
+    }
+    catch(Exception &e) {
+      // ibeta convergence not achieved
+      w = 0.0;
+    }
+    val = *(first+i1);
+    d1 = w*val;
+    d2 = w*val*val;
+    c2 += d2;
+    c1 += d1;
+    if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
+        //cout << "i1=" << m-i1 << ", " << flush;
+        break;
+    }
+  }
+
+  // we need to be sorted around the percentile in order
+  // to compute the maritz-jarret estimator
+  // test realized shows that with MJ_EPSILON=1e-6,
+  // then the needed upper size is approx the lower size
+  int m2 = std::min((int)(1.2*(m-i1)), n-m);
+  partial_sort(middle, middle+m2, last);
+
+  int i2=0;
+  for(i2=m; i2<n; i2++) {
+    try {
+      // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
+      w =  gsl_sf_beta_inc(a, b, (double)(i2+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i2+1)/(double)(n));
+    }
+    catch(Exception &e) {
+      // ibeta convergence not achieved
+      w = 0.0;
+    }
+    val = *(first+i2);
+    d1 = w*val;
+    d2 = w*val*val;
+    c2 += d2;
+    c1 += d1;
+    if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
+        //cout << "i2=" << i2-m+1 << endl;
+        break;
+    }
+  }
+
+  double var = *(middle-1);
+  double std_err = sqrt(c2 - c1*c1);
+
+  return statval(n, var, std_err);
 }
 
 //===========================================================================
@@ -291,30 +363,54 @@ void AnalysisTask::runExpectedShortfall(vector<double> &values)
   double step = values.size()/(double)numpoints;
   statvals.reserve(numpoints);
 
+  // negate values (used in partial_sort)
+  for(size_t i=0; i<values.size(); i++) {
+    values[i] = -values[i];
+  }
+
   for (size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
-    //TODO: considere partial sort instead of full sort
-    sort(values.begin(), values.begin()+n);
-    int m = (int)(n*percentile+0.5);
-
-    int k=0;
-    double s1=0, s2=0;
-    for(int j=m; j<n; j++) {
-      s1 += values[j];
-      s2 += values[j]*values[j];
-      k++;
-    }
-
-    double mean = s1/k;
-    double stdev = sqrt((k*s2-s1*s1)/(k*(k-1.0)));
-    double std_err = stdev/sqrt(k);
-    statvals.push_back(statval(n, mean, std_err));
-
+    statval es = expectedShortfall(1.0-percentile, values.begin(), values.begin()+n);
+    es.value = -es.value;
+    statvals.push_back(es);
     progress = 100.0*(float)(i+1)/(float)(numpoints);
     if (stop_) return;
   }
   progress = 100.0;
+}
+
+//===========================================================================
+// Expected Shortfall of range [first,last)
+//===========================================================================
+statval AnalysisTask::expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+{
+  assert(0.0 < percentile && percentile < 1.0);
+  assert(first < last);
+
+  int n = last - first;
+  int m = (int)(percentile*n + 0.5);
+
+  if (m < 2) {
+    return statval(n, *first, 0.0);
+  }
+
+  vector<double>::iterator middle = first + m;
+  // sort in such a way that [first,middle) contains the smallest elements
+  partial_sort(first, middle, last);
+
+  double s1=0.0, s2=0.0;
+  for(vector<double>::iterator it=first; it<middle; it++) {
+    s1 += *it;
+    s2 += (*it)*(*it);
+  }
+
+  double mean = s1/m;
+  // see http://en.wikipedia.org/wiki/Standard_deviation#Rapid_calculation_methods
+  double stdev = sqrt((m*s2-s1*s1)/(m*(m-1.0)));
+  double std_err = stdev/sqrt(m);
+
+  return statval(n, mean, std_err);
 }
 
 //===========================================================================
