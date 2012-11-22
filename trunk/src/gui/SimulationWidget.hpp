@@ -49,8 +49,8 @@ class SimulationWidget : public QWidget
     void updateControls();
     // clear log area
     void clearLog();
-    // append output files
-    void appendLinksToLog();
+    // linkify a token
+    void linkify(QString &);
 
   protected:
 
@@ -73,7 +73,7 @@ class SimulationWidget : public QWidget
     // submit task
     void submit();
     // print message to log
-    void log(const QString);
+    void log(const QString &);
     // draw widget
     void draw();
     // defines dialog

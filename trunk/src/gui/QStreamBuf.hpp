@@ -35,7 +35,7 @@ class QStreamBuf : public QObject, public std::basic_streambuf<char>
   signals:
 
     // print
-    void print(const QString);
+    void print(const QString &);
 
 };
 

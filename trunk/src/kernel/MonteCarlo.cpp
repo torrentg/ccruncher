@@ -427,6 +427,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
     Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations().getSegmentation(i), filename, bforce);
     aggregators.push_back(aggregator);
+    log << "segmentation" << split << filename << endl;
   }
 
   // exit function
