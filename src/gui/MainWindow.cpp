@@ -104,7 +104,8 @@ void MainWindow::openFile(const QUrl &url)
 {
   QString filename = url.toLocalFile();
 
-  //TODO: replace filename by QUrl
+  //TODO: check that it is a readable regular file
+
   if (!filename.isEmpty())
   {
     QMdiSubWindow *existing = findMdiChild(filename);
@@ -122,6 +123,7 @@ void MainWindow::openFile(const QUrl &url)
     else {
       child = new AnalysisWidget(filename, this);
     }
+    //TODO: unrecognized filename -> send to system
 
     try {
       mdiArea->addSubWindow(child);

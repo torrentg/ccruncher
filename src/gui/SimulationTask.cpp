@@ -40,7 +40,6 @@ void SimulationTask::run()
   Timer timer(true);
 
   free();
-  ofiles.clear();
 
   try
   {
@@ -59,13 +58,6 @@ void SimulationTask::run()
     montecarlo = new MonteCarlo(log.rdbuf());
     montecarlo->setFilePath(odir, true);
     montecarlo->setData(*idata);
-
-    // obtaining output files names
-    for(int i=0; i<idata->getSegmentations().size(); i++) {
-      string name = idata->getSegmentations().getSegmentation(i).name;
-      string filename = idata->getSegmentations().getSegmentation(i).getFilename(odir);
-      ofiles.push_back(pair<string,string>(name,filename));
-    }
 
     // simulating
     setStatus(simulating);
@@ -133,14 +125,6 @@ IData* SimulationTask::getIData()
 MonteCarlo* SimulationTask::getMonteCarlo()
 {
   return  montecarlo;
-}
-
-//===========================================================================
-// return output filenames
-//===========================================================================
-const vector<pair<string,string> >& SimulationTask::getSegmentationsFilenames() const
-{
-  return ofiles;
 }
 
 //===========================================================================

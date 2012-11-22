@@ -60,6 +60,8 @@ class Segmentation : public ExpatHandlers
   
     // inserts a segment into the list
     int insertSegment(const string &) throw(Exception);
+    // check name
+    bool isValidName(const string &);
 
   protected:
   

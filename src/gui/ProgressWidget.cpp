@@ -13,7 +13,7 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
   setVisible(false);
   isin = true;
   ui->progress->setValue(0);
-  //setAttribute(Qt::WA_TransparentForMouseEvents);
+  setAttribute(Qt::WA_TransparentForMouseEvents);
   setOpacity(1.0);
   duration = 333;
   connect(&timer, SIGNAL(timeout()), this, SLOT(changeOpacity()));

@@ -26,7 +26,7 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
-  connect(&qstream, SIGNAL(print(QString)), this, SLOT(log(QString)), Qt::QueuedConnection);
+  connect(&qstream, SIGNAL(print(const QString &)), this, SLOT(log(const QString &)), Qt::QueuedConnection);
   connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SIGNAL(anchorClicked(const QUrl &)));
   ui->ifile->setText(filename);
   //TODO: check exceptions
@@ -88,8 +88,9 @@ void SimulationWidget::setDir()
 void SimulationWidget::clearLog()
 {
   ui->log->clear();
-  ui->log->textCursor().insertText(Utils::copyright().c_str());
+  ui->progress->setPalette(QPalette());
   ui->progress->setValue(0);
+  log(Utils::copyright().c_str());
 }
 
 //===========================================================================
@@ -146,18 +147,75 @@ void SimulationWidget::submit()
 }
 
 //===========================================================================
+// linkify
+//===========================================================================
+/*
+bool SimulationWidget::linkify(QString &token)
+{
+  if (token.startsWith("http://")) {
+    token = QString("<a href='%1'>%1</a>").arg(token);
+    return true;
+  }
+  else if (QFile(token).exists()) {
+    token = QString("<a href='file:///%1'>%1</a>").arg(token);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+*/
+void SimulationWidget::linkify(QString &line)
+{
+  QStringList list = line.split(" ", QString::SkipEmptyParts);
+  for(int i=0; i<list.size(); i++)
+  {
+    QString token = list.at(i);
+    bool changed = true;
+    if (token.startsWith("http://")) {
+      token = QString("<a href='%1'>%1</a>").arg(token);
+    }
+    else if (QFile(token).exists() && !QDir(token).exists()) {
+      QUrl url = QUrl::fromLocalFile(token);
+      token = QString("<a href='%1'>%2</a>").arg(url.toString()).arg(token.replace('\\', '/'));
+    }
+    else {
+      changed = false;
+    }
+    if (changed) {
+      line.replace(list.at(i), token);
+    }
+  }
+}
+
+//===========================================================================
 // log a message
 //===========================================================================
-void SimulationWidget::log(const QString str)
+void SimulationWidget::log(const QString &str)
 {
-  //TODO: set anchors on https and files
+  if (str.length() == 0) return;
+
   QTextCursor cursor = ui->log->textCursor();
   bool isatend = cursor.atBlockEnd();
   cursor.movePosition(QTextCursor::End);
-  cursor.insertText(str);
+
+  //TODO: replace static by member variable
+  static QString line="";
+
+  int pos0 = 0;
+  int pos1 = str.indexOf('\n');
+  while(pos1 >= 0)
+  {
+    line += str.mid(pos0, pos1-pos0);
+    linkify(line);
+    cursor.insertHtml(QString("<pre>%1<br/></pre>").arg(line));
+    line = "";
+    pos0 = pos1+1;
+    pos1 = str.indexOf('\n', pos0);
+  }
+  line += str.mid(pos0);
+
   if (isatend) ui->log->setTextCursor(cursor);
-  //ui->log->setTextCursor(cursor);
-  //ui->log->textCursor().insertText(str);
 }
 
 //===========================================================================
@@ -256,31 +314,6 @@ void SimulationWidget::closeEvent(QCloseEvent *event)
 }
 
 //===========================================================================
-// appendFilesToLog
-//===========================================================================
-void SimulationWidget::appendLinksToLog()
-{
-  const vector<pair<string,string> > &ofiles = task.getSegmentationsFilenames();
-  if (ofiles.empty()) return;
-
-  //TODO: set header info
-  QString str = "<ul>";
-  for(size_t i=0; i<ofiles.size(); i++)
-  {
-    QString sname = ofiles[i].first.c_str();
-    QString filename = ofiles[i].second.c_str();
-    str += "<li><a href='file:///" + filename + "'>" + sname + "</a></li>";
-  }
-  str += "</ul><br/><br/><br/>"; //<br/>link: <a href='http://www.ccruncher.net'>www.ccruncher.net</a>";
-  //ui->log->textCursor().insertHtml(str);
-
-  QTextCursor cursor = ui->log->textCursor();
-  cursor.movePosition(QTextCursor::End);
-  cursor.insertHtml(str);
-  ui->log->setTextCursor(cursor);
-}
-
-//===========================================================================
 // set status
 //===========================================================================
 void SimulationWidget::setStatus(int val)
@@ -295,6 +328,7 @@ void SimulationWidget::setStatus(int val)
       ui->defines->setEnabled(false);
       ui->definesButton->setEnabled(false);
       ui->runButton->setText(tr("Stop"));
+      ui->progress->setPalette(QPalette());
       progress->ui->progress->setValue(0);
       progress->ui->progress->setFormat("");
       progress->fadein();
@@ -307,19 +341,22 @@ void SimulationWidget::setStatus(int val)
       task.free(1);
       break;
     }
-    case SimulationTask::failed:
-      // set progressbar to 100% and red color
+    case SimulationTask::failed: {
+      QPalette pal = ui->progress->palette();
+      pal.setColor(QPalette::Highlight, Qt::red);
+      ui->progress->setPalette(pal);
+    }
     case SimulationTask::stopped:
       // let progress bar unchanged (if maxsims>0), 100% otherwise
       progress->fadeout();
     case SimulationTask::finished:
       timer.stop();
       task.free();
-      appendLinksToLog();
       ui->runButton->setText(tr("Run"));
       ui->progress->setFormat("");
       ui->progress->setValue(100);
       updateControls();
+      //cout << "HTML" << endl << ui->log->toHtml().toStdString() << endl;
       break;
     default:
       assert(false);

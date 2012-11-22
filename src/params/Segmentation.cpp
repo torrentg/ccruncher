@@ -101,6 +101,20 @@ void ccruncher::Segmentation::reset()
 }
 
 //===========================================================================
+// isValidIdentifier
+//===========================================================================
+bool ccruncher::Segmentation::isValidName(const string &str)
+{
+  if (str.length() == 0) return false;
+  for(size_t i=0; i<str.length(); i++) {
+    if (!isalnum(str[i]) && strchr("+-._",str[i]) == NULL) {
+      return false;
+    }
+  }
+  return true;
+}
+
+//===========================================================================
 // insertSegment
 //===========================================================================
 int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
@@ -141,6 +155,9 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
       throw Exception("incorrect number of attributes in tag segmentation");
     }
     name = getStringAttribute(attributes, "name");
+    if (!isValidName(name)) {
+      throw Exception("segmentation name '" + name + "' is not valid");
+    }
     enabled = getBooleanAttribute(attributes, "enabled", true);
     string strcomp = getStringAttribute(attributes, "components");
     // filling components variable
