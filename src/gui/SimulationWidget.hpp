@@ -80,13 +80,11 @@ class SimulationWidget : public QWidget
     void showDefines();
     // set status
     void setStatus(int);
-    // open link
-    void openLink(const QUrl &);
 
   signals:
 
     // anchor clicked
-    void anchorClicked(const QString &filename);
+    void anchorClicked(const QUrl &);
 
 };
 
