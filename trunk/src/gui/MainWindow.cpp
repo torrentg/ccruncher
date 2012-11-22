@@ -92,15 +92,18 @@ void MainWindow::selectFile()
               tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
 
   if (!filename.isEmpty()) {
-    openFile(filename);
+    QUrl url = QUrl::fromLocalFile(filename);
+    openFile(url);
   }
 }
 
 //===========================================================================
 // open file
 //===========================================================================
-void MainWindow::openFile(const QString &filename)
+void MainWindow::openFile(const QUrl &url)
 {
+  QString filename = url.toLocalFile();
+
   //TODO: replace filename by QUrl
   if (!filename.isEmpty())
   {
@@ -114,7 +117,7 @@ void MainWindow::openFile(const QString &filename)
     QWidget *child = NULL;
     if (!filename.toLower().endsWith("csv")) {
       child = new SimulationWidget(filename, this);
-      connect(child, SIGNAL(anchorClicked(const QString &)), this, SLOT(openFile(const QString &)));
+      connect(child, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openFile(const QUrl &)));
     }
     else {
       child = new AnalysisWidget(filename, this);

@@ -27,8 +27,7 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
   connect(&qstream, SIGNAL(print(QString)), this, SLOT(log(QString)), Qt::QueuedConnection);
-  connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openLink(const QUrl &)));
-  //TODO: link log->anchorCliked to parent->openFile directly (remove openLink slot)
+  connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SIGNAL(anchorClicked(const QUrl &)));
   ui->ifile->setText(filename);
   //TODO: check exceptions
   setFile();
@@ -153,8 +152,10 @@ void SimulationWidget::log(const QString str)
 {
   //TODO: set anchors on https and files
   QTextCursor cursor = ui->log->textCursor();
+  bool isatend = cursor.atBlockEnd();
   cursor.movePosition(QTextCursor::End);
   cursor.insertText(str);
+  if (isatend) ui->log->setTextCursor(cursor);
   //ui->log->setTextCursor(cursor);
   //ui->log->textCursor().insertText(str);
 }
@@ -195,6 +196,7 @@ void SimulationWidget::draw()
       val = ui->progress->value();
       val += 1.0;
       if (val > 100) {
+        //TODO: review linux case (don't invert?)
         ui->progress->setInvertedAppearance(!ui->progress->invertedAppearance());
         val = 0;
       }
@@ -269,17 +271,13 @@ void SimulationWidget::appendLinksToLog()
     QString filename = ofiles[i].second.c_str();
     str += "<li><a href='file:///" + filename + "'>" + sname + "</a></li>";
   }
-  str += "</ul>"; //"<br/>link: <a href='http://www.ccruncher.net'>www.ccruncher.net</a>";
-  ui->log->textCursor().insertHtml(str);
-}
+  str += "</ul><br/><br/><br/>"; //<br/>link: <a href='http://www.ccruncher.net'>www.ccruncher.net</a>";
+  //ui->log->textCursor().insertHtml(str);
 
-//===========================================================================
-// open link
-//===========================================================================
-void SimulationWidget::openLink(const QUrl &link)
-{
-  //assert(link.scheme() == "file");
-  emit anchorClicked(link.toLocalFile());
+  QTextCursor cursor = ui->log->textCursor();
+  cursor.movePosition(QTextCursor::End);
+  cursor.insertHtml(str);
+  ui->log->setTextCursor(cursor);
 }
 
 //===========================================================================

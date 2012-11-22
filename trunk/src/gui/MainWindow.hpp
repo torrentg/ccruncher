@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QMdiArea>
+#include <QUrl>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ class MainWindow : public QMainWindow
     // select file
     void selectFile();
     // open file
-    void openFile(const QString &filename);
+    void openFile(const QUrl &url);
     // exit app
     void exit();
 
