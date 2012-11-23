@@ -38,6 +38,8 @@ class SimulationWidget : public QWidget
     ProgressWidget *progress;
     // mutex
     QMutex mutex;
+    // log line
+    QString logline;
 
   private:
 

@@ -149,22 +149,6 @@ void SimulationWidget::submit()
 //===========================================================================
 // linkify
 //===========================================================================
-/*
-bool SimulationWidget::linkify(QString &token)
-{
-  if (token.startsWith("http://")) {
-    token = QString("<a href='%1'>%1</a>").arg(token);
-    return true;
-  }
-  else if (QFile(token).exists()) {
-    token = QString("<a href='file:///%1'>%1</a>").arg(token);
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-*/
 void SimulationWidget::linkify(QString &line)
 {
   QStringList list = line.split(" ", QString::SkipEmptyParts);
@@ -176,6 +160,8 @@ void SimulationWidget::linkify(QString &line)
       token = QString("<a href='%1'>%1</a>").arg(token);
     }
     else if (QFile(token).exists() && !QDir(token).exists()) {
+      //TODO: remove path in displayed name (but preserve length!!)
+      //TODO: set Utils::copyright centered
       QUrl url = QUrl::fromLocalFile(token);
       token = QString("<a href='%1'>%2</a>").arg(url.toString()).arg(token.replace('\\', '/'));
     }
@@ -198,22 +184,22 @@ void SimulationWidget::log(const QString &str)
   QTextCursor cursor = ui->log->textCursor();
   bool isatend = cursor.atBlockEnd();
   cursor.movePosition(QTextCursor::End);
-
-  //TODO: replace static by member variable
-  static QString line="";
+  QTextBlockFormat blockFormat = cursor.blockFormat();
+  blockFormat.setAlignment(Qt::AlignCenter);
+  cursor.setBlockFormat(blockFormat);
 
   int pos0 = 0;
   int pos1 = str.indexOf('\n');
   while(pos1 >= 0)
   {
-    line += str.mid(pos0, pos1-pos0);
-    linkify(line);
-    cursor.insertHtml(QString("<pre>%1<br/></pre>").arg(line));
-    line = "";
+    logline += str.mid(pos0, pos1-pos0);
+    linkify(logline);
+    cursor.insertHtml(QString("<pre>%1<br/></pre>").arg(logline));
+    logline = "";
     pos0 = pos1+1;
     pos1 = str.indexOf('\n', pos0);
   }
-  line += str.mid(pos0);
+  logline += str.mid(pos0);
 
   if (isatend) ui->log->setTextCursor(cursor);
 }
