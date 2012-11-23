@@ -75,6 +75,8 @@ class SimulationTask : public QThread
     MonteCarlo* getMonteCarlo();
     // free memory (1=idata, 2=montecarlo, other=all)
     void free(int obj=0);
+    // return logger
+    Logger& getLogger();
 
   signals:
 

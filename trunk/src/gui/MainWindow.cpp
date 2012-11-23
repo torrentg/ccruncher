@@ -6,6 +6,7 @@
 #include "gui/MainWindow.hpp"
 #include "gui/SimulationWidget.hpp"
 #include "gui/AnalysisWidget.hpp"
+#include "gui/XmlEditWidget.hpp"
 #include "utils/Utils.hpp"
 #include "utils/config.h"
 
@@ -103,6 +104,7 @@ void MainWindow::selectFile()
 void MainWindow::openFile(const QUrl &url)
 {
   QString filename = url.toLocalFile();
+  QFileInfo pathInfo(filename);
 
   //TODO: check that it is a readable regular file
 
@@ -116,14 +118,26 @@ void MainWindow::openFile(const QUrl &url)
 
     //TODO: catch exceptions
     QWidget *child = NULL;
-    if (!filename.toLower().endsWith("csv")) {
-      child = new SimulationWidget(filename, this);
-      connect(child, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openFile(const QUrl &)));
+
+    try
+    {
+      if (!filename.toLower().endsWith("csv")) {
+        /*
+        child = new SimulationWidget(filename, this);
+        connect(child, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openFile(const QUrl &)));
+        */
+        child = new XmlEditWidget(filename, this);
+      }
+      else {
+        child = new AnalysisWidget(filename, this);
+      }
+      //TODO: unrecognized filename -> send to system
     }
-    else {
-      child = new AnalysisWidget(filename, this);
+    catch(std::exception &e)
+    {
+      QMessageBox::warning(this, "error opening " + pathInfo.fileName(), e.what());
+      return;
     }
-    //TODO: unrecognized filename -> send to system
 
     try {
       mdiArea->addSubWindow(child);
@@ -131,7 +145,6 @@ void MainWindow::openFile(const QUrl &url)
       //see http://qt-project.org/forums/viewthread/18819/
     }
 
-    QFileInfo pathInfo(filename);
     child->setWindowTitle(pathInfo.fileName());
     child->setWindowFilePath(filename);
     child->show();

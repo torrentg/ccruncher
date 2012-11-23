@@ -15,6 +15,8 @@ HEADERS += \
     src/gui/ProgressWidget.hpp \
     src/gui/FrameOverlay.hpp \
     src/gui/TextBrowser.hpp \
+    src/gui/XmlEditWidget.hpp \
+    src/gui/xmlhighlighter.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -64,6 +66,8 @@ SOURCES += \
     src/gui/AnalysisWidget.cpp \
     src/gui/AnalysisTask.cpp \
     src/gui/ProgressWidget.cpp \
+    src/gui/XmlEditWidget.cpp \
+    src/gui/xmlhighlighter.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
@@ -106,7 +110,8 @@ FORMS += \
     src/gui/DefinesDialog.ui \
     src/gui/SimulationWidget.ui \
     src/gui/AnalysisWidget.ui \
-    src/gui/ProgressWidget.ui
+    src/gui/ProgressWidget.ui \
+    src/gui/XmlEditWidget.ui
 
 INCLUDEPATH += \
     $$PWD/src

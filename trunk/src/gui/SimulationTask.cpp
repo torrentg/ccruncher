@@ -46,7 +46,6 @@ void SimulationTask::run()
     stop_ = false;
 
     // header
-    log << Utils::copyright() << endl;
     log << header << endl;
 
     // parsing input file
@@ -125,6 +124,14 @@ IData* SimulationTask::getIData()
 MonteCarlo* SimulationTask::getMonteCarlo()
 {
   return  montecarlo;
+}
+
+//===========================================================================
+// return logger
+//===========================================================================
+Logger& SimulationTask::getLogger()
+{
+  return log;
 }
 
 //===========================================================================

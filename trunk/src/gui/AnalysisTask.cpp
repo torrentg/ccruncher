@@ -176,17 +176,27 @@ void AnalysisTask::runHistogram(const vector<double> &values)
 
   if (values.empty()) return;
 
+  double intpart;
+  bool areints = true;
   double minval = values[0];
   double maxval = values[0];
   for (size_t i=1; i<values.size(); i++)
   {
+    if (areints && fabs(modf(values[i],&intpart)) > 1e-14) areints = false;
     if (values[i] > maxval) maxval = values[i];
     else if (values[i] < minval) minval = values[i];
     if (stop_) return;
   }
 
   if (numbins == 0) {
-    numbins = std::max((int)sqrt(values.size()), 10);
+    if (areints && maxval-minval+1 < 5000) {
+      numbins = maxval - minval + 1;
+      minval -= 0.5;
+      maxval += 0.5;
+    }
+    else {
+      numbins = std::max((int)sqrt(values.size()), 10);
+    }
   }
 
   hist = gsl_histogram_alloc(numbins);

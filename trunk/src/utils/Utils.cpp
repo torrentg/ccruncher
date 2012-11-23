@@ -121,28 +121,3 @@ int ccruncher::Utils::getNumCores()
 #endif
 }
 
-//===========================================================================
-// copyright
-//===========================================================================
-string ccruncher::Utils::copyright()
-{
-  return
-    "        ccruncher is Copyright (C) 2004-2012 Gerard Torrent and licensed\n"
-    "          under the GNU General Public License, version 2. More info at\n"
-    "                          http://www.ccruncher.net\n";
-}
-
-//===========================================================================
-// version
-//===========================================================================
-string ccruncher::Utils::version()
-{
-  ostringstream oss;
-  oss << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
-  oss << "build host: " << BUILD_HOST << endl;
-  oss << "build date: " << BUILD_DATE << endl;
-  oss << "build author: " << BUILD_USER << endl;
-  oss << "build options: " << Utils::getCompilationOptions() << endl;
-  return oss.str();
-}
-

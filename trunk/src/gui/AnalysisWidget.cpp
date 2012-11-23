@@ -75,17 +75,17 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   QObject::connect(actionStop, SIGNAL(triggered()), this, SLOT(stop()));
   this->addAction(actionStop);
 
+  // signals & slots
+  connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
+  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
+
   // open file & display
-  //TODO: catch exceptions
   task.setFilename(filename);
   vector<string> segments = task.getCsvFile().getHeaders();
   for(size_t i=0; i<segments.size(); i++) {
     ui->segments->addItem(segments[i].c_str());
   }
 
-  // signals & slots
-  connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
-  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
   blockSignals(false);
 }
 

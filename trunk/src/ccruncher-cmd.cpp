@@ -164,7 +164,11 @@ int main(int argc, char *argv[])
           break;
 
       case 301: // --version (show version and exit)
-          cout << Utils::version() << endl;
+          cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
+          cout << "build host: " << BUILD_HOST << endl;
+          cout << "build date: " << BUILD_DATE << endl;
+          cout << "build author: " << BUILD_USER << endl;
+          cout << "build options: " << Utils::getCompilationOptions() << endl;
           return 0;
 
       case 302: // --path=dir (set output files path)
@@ -316,7 +320,7 @@ void run() throw(Exception)
 
   // header
   Logger log(cout.rdbuf());
-  log << Utils::copyright() << endl;
+  log << copyright << endl;
   log << header << endl;
 
   // parsing input file

@@ -54,10 +54,6 @@ class Utils
     static unsigned long trand();
     // return the number of cores
     static int getNumCores();
-    // copyright info
-    static string copyright();
-    // version info
-    static string version();
 
 };
 
