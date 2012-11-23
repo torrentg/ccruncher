@@ -117,10 +117,20 @@ void AnalysisTask::run()
 
     setStatus(reading);
     vector<double> values;
-    csv.getValues(isegment, values, &stop_);
-    if (stop_) {
-      setStatus(stopped);
-      return;
+    try {
+      csv.getValues(isegment, values, &stop_);
+      if (stop_) {
+        setStatus(stopped);
+        return;
+      }
+    }
+    catch(Exception &e) {
+      if (values.size() > 100) {
+        msgerr = e.toString();
+      }
+      else {
+        throw;
+      }
     }
 
     setStatus(running);
@@ -142,11 +152,12 @@ void AnalysisTask::run()
         assert(false);
     }
     if (stop_) setStatus(stopped);
-    else setStatus(finished);
+    else if (msgerr.empty()) setStatus(finished);
+    else setStatus(failed);
   }
   catch(std::exception &e)
   {
-    msgerr = e.what();
+    msgerr += (msgerr.empty()?"":"\n") + string(e.what());
     setStatus(failed);
   }
 }
