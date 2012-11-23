@@ -50,7 +50,7 @@ class Logger : public ostream
     size_t isize;
     // current indentation level
     size_t ilevel;
-    // number od columns
+    // number of columns
     size_t numcols;
     // current column
     size_t curcol;
@@ -73,6 +73,8 @@ class Logger : public ostream
     void repeat(size_t n, char c=0);
     // flood
     void flood(char c);
+    // center text
+    void center(const string &);
 
     // formated output
     Logger& operator<<(bool val) { static_cast<ostream&>(*this) << (val?"true":"false"); return *this; }
@@ -113,6 +115,9 @@ Logger& endl(Logger &logger);
 Logger& header(Logger &log);
 
 // manipulator
+Logger& copyright(Logger &log);
+
+// manipulator
 struct flood
 {
   const char fill ;
@@ -150,6 +155,18 @@ struct footer
     log << indent(-1);
     log << endl;
     return log;
+  }
+};
+
+// manipulator
+struct center
+{
+  string str;
+  explicit center(const string &s) : str(s) {}
+  inline friend Logger& operator<<(Logger& logger, const center& manip)
+  {
+    logger.center(manip.str);
+    return logger;
   }
 };
 

@@ -85,6 +85,30 @@ void ccruncher::Logger::flood(char c)
 }
 
 //===========================================================================
+// center
+//===========================================================================
+void ccruncher::Logger::center(const string &str)
+{
+  vector<string> lines;
+  Strings::tokenize(str, lines, "\n");
+  for(size_t i=0; i<lines.size(); i++)
+  {
+    string line = Strings::trim(lines[i]);
+    if (line.empty()) {
+      *this << endl;
+      continue;
+    }
+    int len2 = line.length();
+    int len1 = std::max((numcols-len2)/2, 0U);
+    int len3 = std::max(numcols-len1-len2, 0U);
+    repeat(len1, ' ');
+    *this << line;
+    repeat(len3, ' ');
+    *this << endl;
+  }
+}
+
+//===========================================================================
 // global function
 //===========================================================================
 Logger& ccruncher::operator<<(Logger& os, char c)
@@ -185,6 +209,19 @@ Logger& ccruncher::header(Logger &log)
   log << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")" << endl;
   log << "start time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
   log << indent(-1);
+  return log;
+}
+
+//===========================================================================
+// copyright manipulator
+//===========================================================================
+Logger& ccruncher::copyright(Logger &log)
+{
+  string str =
+    "ccruncher is Copyright (C) 2004-2012 Gerard Torrent and licensed\n"
+    "under the GNU General Public License, version 2. More info at\n"
+    "http://www.ccruncher.net\n";
+  log.center(str);
   return log;
 }
 

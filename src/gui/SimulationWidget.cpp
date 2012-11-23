@@ -88,9 +88,14 @@ void SimulationWidget::setDir()
 void SimulationWidget::clearLog()
 {
   ui->log->clear();
+  task.getLogger() << copyright << endl;
+  logcursor = ui->log->textCursor();
+  logcursor.movePosition(QTextCursor::End);
+  QTextBlockFormat blockFormat = logcursor.blockFormat();
+  blockFormat.setAlignment(Qt::AlignCenter);
+  logcursor.setBlockFormat(blockFormat);
   ui->progress->setPalette(QPalette());
   ui->progress->setValue(0);
-  log(Utils::copyright().c_str());
 }
 
 //===========================================================================
@@ -138,7 +143,7 @@ void SimulationWidget::submit()
   }
   else {
     task.wait();
-    ui->log->clear();
+    clearLog();
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
     task.setData(ifile, defines, odir);
@@ -152,24 +157,41 @@ void SimulationWidget::submit()
 void SimulationWidget::linkify(QString &line)
 {
   QStringList list = line.split(" ", QString::SkipEmptyParts);
+  //TODO: apply only to last element
   for(int i=0; i<list.size(); i++)
   {
     QString token = list.at(i);
-    bool changed = true;
+
     if (token.startsWith("http://")) {
       token = QString("<a href='%1'>%1</a>").arg(token);
     }
     else if (QFile(token).exists() && !QDir(token).exists()) {
-      //TODO: remove path in displayed name (but preserve length!!)
-      //TODO: set Utils::copyright centered
+      QString filename = QFileInfo(token).fileName();
+      size_t ncols = task.getLogger().getNumCols();
+      int len = token.length();
+      if (line.length() > (int)ncols) {
+        len = std::max(0U, token.length()-(line.length()-ncols));
+      }
+      QString padding = "";
+      for(int i=0; i<len-filename.length(); i++) padding += "&nbsp;";
       QUrl url = QUrl::fromLocalFile(token);
-      token = QString("<a href='%1'>%2</a>").arg(url.toString()).arg(token.replace('\\', '/'));
+      token = padding + QString("<a href='%1'>%2</a>").arg(url.toString()).arg(filename);
     }
-    else {
-      changed = false;
-    }
-    if (changed) {
+
+    if (token != list.at(i)) {
       line.replace(list.at(i), token);
+    }
+  }
+  // replace ending spaces by &nbsp;
+  size_t num = 0;
+  for(size_t i=line.length()-1; i>=0; i--) {
+    if (line[i] == ' ') num++;
+    else break;
+  }
+  if (num > 0) {
+    line = line.mid(0, line.length()-num);
+    for(size_t i=0; i<num; i++) {
+      line += "&nbsp;";
     }
   }
 }
@@ -181,27 +203,23 @@ void SimulationWidget::log(const QString &str)
 {
   if (str.length() == 0) return;
 
-  QTextCursor cursor = ui->log->textCursor();
-  bool isatend = cursor.atBlockEnd();
-  cursor.movePosition(QTextCursor::End);
-  QTextBlockFormat blockFormat = cursor.blockFormat();
-  blockFormat.setAlignment(Qt::AlignCenter);
-  cursor.setBlockFormat(blockFormat);
-
   int pos0 = 0;
   int pos1 = str.indexOf('\n');
   while(pos1 >= 0)
   {
     logline += str.mid(pos0, pos1-pos0);
     linkify(logline);
-    cursor.insertHtml(QString("<pre>%1<br/></pre>").arg(logline));
+
+    QTextBlockFormat blockFormat = logcursor.blockFormat();
+    blockFormat.setAlignment(Qt::AlignCenter);
+    logcursor.setBlockFormat(blockFormat);
+    logcursor.insertHtml(QString("<pre>%1<br/></pre>").arg(logline));
+
     logline = "";
     pos0 = pos1+1;
     pos1 = str.indexOf('\n', pos0);
   }
   logline += str.mid(pos0);
-
-  if (isatend) ui->log->setTextCursor(cursor);
 }
 
 //===========================================================================
@@ -338,6 +356,8 @@ void SimulationWidget::setStatus(int val)
     case SimulationTask::finished:
       timer.stop();
       task.free();
+      // moves log to end
+      ui->log->setTextCursor(logcursor);
       ui->runButton->setText(tr("Run"));
       ui->progress->setFormat("");
       ui->progress->setValue(100);

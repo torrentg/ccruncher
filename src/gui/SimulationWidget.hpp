@@ -8,6 +8,7 @@
 #include <QString>
 #include <QTimer>
 #include <QMutex>
+#include <QTextCursor>
 #include "gui/QStreamBuf.hpp"
 #include "gui/SimulationTask.hpp"
 #include "gui/ProgressWidget.hpp"
@@ -40,6 +41,8 @@ class SimulationWidget : public QWidget
     QMutex mutex;
     // log line
     QString logline;
+    // log cursor
+    QTextCursor logcursor;
 
   private:
 
