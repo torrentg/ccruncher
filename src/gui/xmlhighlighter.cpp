@@ -15,8 +15,6 @@
 ****************************************************************************/
 #include "xmlhighlighter.hpp"
 
-//TODO: review case CDATA + comment before + uncomment (CDATA colored as comment?)
-
 static const QColor DEFAULT_SYNTAX_CHAR		= Qt::blue;
 static const QColor DEFAULT_ELEMENT_NAME	= Qt::darkRed;
 static const QColor DEFAULT_COMMENT			= Qt::darkGreen;
@@ -58,7 +56,7 @@ XmlHighlighter::~XmlHighlighter()
 void XmlHighlighter::init()
 {
 	fmtSyntaxChar.setForeground(DEFAULT_SYNTAX_CHAR);
-    fmtElementName.setForeground(DEFAULT_ELEMENT_NAME);
+	fmtElementName.setForeground(DEFAULT_ELEMENT_NAME);
 	fmtComment.setForeground(DEFAULT_COMMENT);
 	fmtAttributeName.setForeground(DEFAULT_ATTRIBUTE_NAME);
 	fmtAttributeValue.setForeground(DEFAULT_ATTRIBUTE_VALUE);
@@ -116,7 +114,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
 	if (previousBlockState() == InComment)
 	{
 		// search for the end of the comment
-        QRegExp expression(EXPR_COMMENT_END);
+		QRegExp expression(EXPR_COMMENT_END);
 		pos = expression.indexIn(text, i);
 
 		if (pos >= 0)
@@ -125,13 +123,13 @@ void XmlHighlighter::highlightBlock(const QString& text)
 			setFormat(i, pos-i, fmtComment);
 			setFormat(pos, 3, fmtSyntaxChar);
 			i = pos+3; // skip comment
-			state = NoState;
+			state = ExpectAttributeOrEndOfElement;
 			setCurrentBlockState(InElement);
 		}
 		else
 		{
 			// in comment
-			setFormat(0, text.length(), fmtComment);
+			setFormat(i, text.length(), fmtComment);
 			setCurrentBlockState(InComment);
 			return;
 		}
@@ -283,10 +281,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
 		}
 	}
 
-	if (state == ExpectAttributeOrEndOfElement)
-	{
-		setCurrentBlockState(InElement);
-	}
+	setCurrentBlockState(InElement);
 }
 
 int XmlHighlighter::processDefaultText(int i, const QString& text)

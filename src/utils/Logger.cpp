@@ -99,8 +99,8 @@ void ccruncher::Logger::center(const string &str)
       continue;
     }
     int len2 = line.length();
-    int len1 = std::max((numcols-len2)/2, 0U);
-    int len3 = std::max(numcols-len1-len2, 0U);
+    int len1 = std::max((numcols-len2)/2, (size_t)0);
+    int len3 = std::max(numcols-len1-len2, (size_t)0);
     repeat(len1, ' ');
     *this << line;
     repeat(len3, ' ');
