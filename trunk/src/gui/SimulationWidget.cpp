@@ -170,7 +170,7 @@ void SimulationWidget::linkify(QString &line)
       size_t ncols = task.getLogger().getNumCols();
       int len = token.length();
       if (line.length() > (int)ncols) {
-        len = std::max(0U, token.length()-(line.length()-ncols));
+        len = std::max((size_t)0, token.length()-(line.length()-ncols));
       }
       QString padding = "";
       for(int i=0; i<len-filename.length(); i++) padding += "&nbsp;";
@@ -184,8 +184,8 @@ void SimulationWidget::linkify(QString &line)
   }
   // replace ending spaces by &nbsp;
   size_t num = 0;
-  for(size_t i=line.length()-1; i>=0; i--) {
-    if (line[i] == ' ') num++;
+  for(int i=line.length()-1; i>=0; i--) {
+    if (line.at(i) == ' ') num++;
     else break;
   }
   if (num > 0) {
