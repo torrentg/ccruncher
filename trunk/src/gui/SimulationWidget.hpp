@@ -71,6 +71,8 @@ class SimulationWidget : public QWidget
 
   public slots:
 
+    // edit current file
+    void editFile();
     // selects output directory
     void selectDir();
     // set ooutput directory

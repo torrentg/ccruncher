@@ -44,6 +44,15 @@ SimulationWidget::~SimulationWidget()
 }
 
 //===========================================================================
+// edit current file
+//===========================================================================
+void SimulationWidget::editFile()
+{
+  QUrl url = QUrl::fromLocalFile(ui->ifile->text());
+  emit anchorClicked(url);
+}
+
+//===========================================================================
 // set input file
 //===========================================================================
 void SimulationWidget::setFile()

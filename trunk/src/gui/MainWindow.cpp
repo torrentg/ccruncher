@@ -94,6 +94,9 @@ void MainWindow::selectFile()
 
   if (!filename.isEmpty()) {
     QUrl url = QUrl::fromLocalFile(filename);
+    if (!filename.toLower().endsWith("csv")) {
+      url.setScheme("exec");
+    }
     openFile(url);
   }
 }
@@ -103,29 +106,26 @@ void MainWindow::selectFile()
 //===========================================================================
 void MainWindow::openFile(const QUrl &url)
 {
-  QString filename = url.toLocalFile();
-  QFileInfo pathInfo(filename);
+  QString filename = url.toString(QUrl::RemoveScheme);
+  QFileInfo fileinfo(filename);
 
-  //TODO: check that it is a readable regular file
-
-  if (!filename.isEmpty())
+  if (fileinfo.exists() && fileinfo.isReadable())
   {
-    QMdiSubWindow *existing = findMdiChild(filename);
+    QMdiSubWindow *existing = findMdiChild(url.toString());
     if (existing) {
       mdiArea->setActiveSubWindow(existing);
       return;
     }
 
-    //TODO: catch exceptions
     QWidget *child = NULL;
 
     try
     {
-      if (!filename.toLower().endsWith("csv")) {
-        /*
+      if (url.scheme() == "exec") {
         child = new SimulationWidget(filename, this);
         connect(child, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openFile(const QUrl &)));
-        */
+      }
+      else if (!filename.toLower().endsWith("csv")) {
         child = new XmlEditWidget(filename, this);
       }
       else {
@@ -135,7 +135,7 @@ void MainWindow::openFile(const QUrl &url)
     }
     catch(std::exception &e)
     {
-      QMessageBox::warning(this, "error opening " + pathInfo.fileName(), e.what());
+      QMessageBox::warning(this, "error opening " + fileinfo.fileName(), e.what());
       return;
     }
 
@@ -145,8 +145,8 @@ void MainWindow::openFile(const QUrl &url)
       //see http://qt-project.org/forums/viewthread/18819/
     }
 
-    child->setWindowTitle(pathInfo.fileName());
-    child->setWindowFilePath(filename);
+    child->setWindowTitle(fileinfo.fileName());
+    child->setWindowFilePath(url.toString());
     child->show();
   }
 }
