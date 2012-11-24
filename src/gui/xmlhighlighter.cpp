@@ -15,6 +15,8 @@
 ****************************************************************************/
 #include "xmlhighlighter.hpp"
 
+//TODO: detect CDATA section + colorize errors (errorFormat=background red, review cases)
+
 static const QColor DEFAULT_SYNTAX_CHAR		= Qt::blue;
 static const QColor DEFAULT_ELEMENT_NAME	= Qt::darkRed;
 static const QColor DEFAULT_COMMENT			= Qt::darkGreen;
