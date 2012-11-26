@@ -89,7 +89,7 @@ void MainWindow::selectFile()
   QString filename = QFileDialog::getOpenFileName(
               this,
               tr("Open File ..."),
-              "", //ui->ifile->text(),
+              "",
               tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
 
   if (!filename.isEmpty()) {
@@ -106,7 +106,8 @@ void MainWindow::selectFile()
 //===========================================================================
 void MainWindow::openFile(const QUrl &url)
 {
-  QString filename = url.toString(QUrl::RemoveScheme);
+  QString filename = url.path();
+  if (filename.startsWith("/")) filename = filename.mid(1);
   QFileInfo fileinfo(filename);
 
   if (fileinfo.exists() && fileinfo.isReadable())
