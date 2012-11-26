@@ -89,6 +89,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
   int pos = 0;
   int iLength = 0;
   int brackets = 0;
+  ParsingState state = NoState;
 
   if (previousBlockState() == InComment)
   {
@@ -98,7 +99,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
       setFormat(pos, 3, fmtSyntaxChar);
       i = pos+3;
       setCurrentBlockState(InElement);
-      state = ExpectAttributeOrEndOfElement;
+      state = NoState; // setting default state
     }
     else
     {
@@ -115,7 +116,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
       setFormat(pos, 3, fmtSyntaxChar);
       i = pos+3;
       setCurrentBlockState(InElement);
-      state = ExpectAttributeOrEndOfElement;
+      state = NoState;
     }
     else
     {
@@ -124,13 +125,9 @@ void XmlHighlighter::highlightBlock(const QString& text)
       return;
     }
   }
-  else if (previousBlockState() == InElement)
-  {
-    state = ExpectAttributeOrEndOfElement;
-  }
   else
   {
-    state = NoState;
+    state = (ParsingState) previousBlockState();
   }
 
   for (; i < text.length(); i++)
@@ -169,7 +166,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
           setFormat(i, 1, fmtSyntaxChar);
         }
         else {
-          processDefaultText(i, text);
+          setFormat(i, 1, fmtOther);
         }
         break;
 
@@ -181,7 +178,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
         }
         else
         {
-          processDefaultText(i, text);
+          setFormat(i, 1, fmtOther);
         }
         break;
 
@@ -200,12 +197,12 @@ void XmlHighlighter::highlightBlock(const QString& text)
           }
           else
           {
-            processDefaultText(i, text);
+            setFormat(i, 1, fmtOther);
           }
         }
         else
         {
-          processDefaultText(i, text);
+          setFormat(i, 1, fmtOther);
         }
         break;
 
@@ -254,31 +251,31 @@ void XmlHighlighter::highlightBlock(const QString& text)
           }
           else
           {
-            processDefaultText(i, text);
+            setFormat(i, 1, fmtOther);
           }
         }
         else
         {
-          processDefaultText(i, text);
+          setFormat(i, 1, fmtOther);
         }
         break;
 
       default:
       {
-        iLength = processDefaultText(i, text);
+        iLength = processDefaultText(i, text, state);
         if (iLength > 0) i += iLength - 1;
         break;
       }
     }
   }
 
-  setCurrentBlockState(InElement);
+  setCurrentBlockState(state);
 }
 
 //===========================================================================
 // processDefaultText
 //===========================================================================
-int XmlHighlighter::processDefaultText(int i, const QString& text)
+int XmlHighlighter::processDefaultText(int i, const QString& text, ParsingState &state)
 {
   int pos = 0;
   int iLength = 0;
