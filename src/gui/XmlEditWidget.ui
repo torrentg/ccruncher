@@ -16,6 +16,11 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QTextEdit" name="editor">
+     <property name="font">
+      <font>
+       <family>Courier</family>
+      </font>
+     </property>
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOn</enum>
      </property>

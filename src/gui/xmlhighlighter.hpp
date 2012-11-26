@@ -18,63 +18,89 @@
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
+#include <QRegExp>
 #include <QColor>
 
 class XmlHighlighter : public QSyntaxHighlighter
 {
-public:
-	XmlHighlighter(QObject* parent);
-	XmlHighlighter(QTextDocument* parent);
-	XmlHighlighter(QTextEdit* parent);
-	~XmlHighlighter();
 
-    enum HighlightType
-	{
-		SyntaxChar,
-        ElementName,
-		Comment,
-		AttributeName,
-		AttributeValue,
-		Error,
-		Other
-	};
+  private:
 
-	void setHighlightColor(HighlightType type, QColor color, bool foreground = true);
-	void setHighlightFormat(HighlightType type, QTextCharFormat format);
+    // internal enum
+    enum ParsingState
+    {
+      NoState = 0,
+      ExpectElementNameOrSlash,
+      ExpectElementName,
+      ExpectAttributeOrEndOfElement,
+      ExpectEqual,
+      ExpectAttributeValue
+    };
 
-protected:
-	void highlightBlock(const QString& rstrText);
-	int  processDefaultText(int i, const QString& rstrText);
+    // internal enum
+    enum BlockState
+    {
+      NoBlock = -1,
+      InComment,
+      InCdata,
+      InElement
+    };
 
-private:
-	void init();
+  private:
 
-	QTextCharFormat fmtSyntaxChar;
+    // formatters
+    QTextCharFormat fmtSyntaxChar;
     QTextCharFormat fmtElementName;
-	QTextCharFormat fmtComment;
-	QTextCharFormat fmtAttributeName;
-	QTextCharFormat fmtAttributeValue;
-	QTextCharFormat fmtError;
-	QTextCharFormat fmtOther;
+    QTextCharFormat fmtComment;
+    QTextCharFormat fmtAttributeName;
+    QTextCharFormat fmtAttributeValue;
+    QTextCharFormat fmtError;
+    QTextCharFormat fmtOther;
+    // parser state
+    ParsingState state;
+    // regular expressions
+    QRegExp regexp_comment;
+    QRegExp regexp_comment_begin;
+    QRegExp regexp_comment_end;
+    QRegExp regexp_cdata;
+    QRegExp regexp_cdata_begin;
+    QRegExp regexp_cdata_end;
+    QRegExp regexp_attrib;
+    QRegExp regexp_name;
 
-	enum ParsingState
-	{
-		NoState = 0,
-		ExpectElementNameOrSlash,
-		ExpectElementName,
-		ExpectAttributeOrEndOfElement,
-		ExpectEqual,
-		ExpectAttributeValue
-	};
+  private:
 
-	enum BlockState
-	{
-		NoBlock = -1,
-		InComment,
-		InElement
-	};
+    // initialization
+    void init();
 
-	ParsingState state;
+  protected:
+
+    // overrided method
+    void highlightBlock(const QString& rstrText);
+    // overrided method
+    int  processDefaultText(int i, const QString& rstrText);
+
+public:
+
+    // constructor
+	XmlHighlighter(QObject* parent);
+    // constructor
+    XmlHighlighter(QTextDocument* parent);
+    // constructor
+    XmlHighlighter(QTextEdit* parent);
+/*
+    enum HighlightType
+    {
+      SyntaxChar,
+      ElementName,
+      Comment,
+      AttributeName,
+      AttributeValue,
+      Error,
+      Other
+    };
+*/
 };
 
-#endif // XMLHIGHLIGHTER_H
+#endif
+
