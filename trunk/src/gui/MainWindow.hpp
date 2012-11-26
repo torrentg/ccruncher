@@ -5,6 +5,7 @@
 #include <QString>
 #include <QMdiArea>
 #include <QUrl>
+#include <QCloseEvent>
 
 using namespace std;
 
@@ -28,6 +29,11 @@ class MainWindow : public QMainWindow
     // find mdi child
     QMdiSubWindow *findMdiChild(const QString &filename);
 
+  protected:
+
+    // close event
+    void closeEvent(QCloseEvent *event);
+
   public:
 
     // constructor
@@ -43,8 +49,6 @@ class MainWindow : public QMainWindow
     void selectFile();
     // open file
     void openFile(const QUrl &url);
-    // exit app
-    void exit();
 
 };
 
