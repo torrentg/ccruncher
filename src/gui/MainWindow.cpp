@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(exit()));
+  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
 
   /*
     tema menu contextual dels tabs (restore/close), pe. afeguir entrada
@@ -58,12 +58,17 @@ MainWindow::~MainWindow()
 }
 
 //===========================================================================
-// close app
+// close event
 //===========================================================================
-void MainWindow::exit()
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-  //TODO: check that any simulation is running
-  this->close();
+  mdiArea->closeAllSubWindows();
+  if (mdiArea->currentSubWindow()) {
+    event->ignore();
+  } else {
+    //TODO: save settings
+    event->accept();
+  }
 }
 
 //===========================================================================
@@ -90,7 +95,10 @@ void MainWindow::selectFile()
               this,
               tr("Open File ..."),
               "",
-              tr("ccruncher files (*.xml *.gz *.csv);;input files (*.xml *.gz);;output files (*.csv);;All files (*.*)"));
+              tr("ccruncher files (*.xml *.gz *.csv);;"
+                 "input files (*.xml *.gz);;"
+                 "output files (*.csv);;All files (*.*)")
+            );
 
   if (!filename.isEmpty()) {
     QUrl url = QUrl::fromLocalFile(filename);
@@ -106,6 +114,7 @@ void MainWindow::selectFile()
 //===========================================================================
 void MainWindow::openFile(const QUrl &url)
 {
+  QWidget *child = NULL;
   QString filename = url.path();
   if (filename.startsWith("/")) filename = filename.mid(1);
   QFileInfo fileinfo(filename);
@@ -117,8 +126,6 @@ void MainWindow::openFile(const QUrl &url)
       mdiArea->setActiveSubWindow(existing);
       return;
     }
-
-    QWidget *child = NULL;
 
     try
     {
@@ -136,6 +143,7 @@ void MainWindow::openFile(const QUrl &url)
     }
     catch(std::exception &e)
     {
+      //TODO: resolve double-messages (eg. XmlEditWidget crash)
       QMessageBox::warning(this, "error opening " + fileinfo.fileName(), e.what());
       return;
     }
@@ -146,7 +154,9 @@ void MainWindow::openFile(const QUrl &url)
       //see http://qt-project.org/forums/viewthread/18819/
     }
 
-    child->setWindowTitle(fileinfo.fileName());
+    if (child->windowTitle().isEmpty()) {
+      child->setWindowTitle(fileinfo.fileName());
+    }
     child->setWindowFilePath(url.toString());
     child->show();
   }

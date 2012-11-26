@@ -10,9 +10,6 @@
     <height>554</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>AnalysisWidget</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
@@ -441,15 +438,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>FrameOverlay</class>
    <extends>QFrame</extends>
    <header location="global">gui/FrameOverlay.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QwtPlot</class>
+   <extends>QFrame</extends>
+   <header>qwt_plot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
