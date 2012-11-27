@@ -17,6 +17,7 @@ HEADERS += \
     src/gui/TextBrowser.hpp \
     src/gui/XmlEditWidget.hpp \
     src/gui/xmlhighlighter.hpp \
+    src/gui/MdiChildWidget.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -153,3 +154,6 @@ DESTDIR = $$PWD/build
 
 OTHER_FILES += \
   src/gui/ccruncher-gui.rc
+
+RESOURCES += \
+    src/gui/ccruncher.qrc

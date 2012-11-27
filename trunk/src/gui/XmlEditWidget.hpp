@@ -4,13 +4,16 @@
 #include <QWidget>
 #include <QString>
 #include <QCloseEvent>
+#include <QToolBar>
+#include <QUrl>
+#include "gui/MdiChildWidget.hpp"
 #include "gui/xmlhighlighter.hpp"
 
 namespace Ui {
 class XmlEditWidget;
 }
 
-class XmlEditWidget : public QWidget
+class XmlEditWidget : public MdiChildWidget
 {
     Q_OBJECT
 
@@ -22,6 +25,8 @@ class XmlEditWidget : public QWidget
     XmlHighlighter *highlighter;
     // filename
     QString filename;
+    // toolbar
+    QToolBar *toolbar;
 
   private:
 
@@ -39,15 +44,24 @@ class XmlEditWidget : public QWidget
     explicit XmlEditWidget(const QString &filename, QWidget *parent=0);
     // destructor
     ~XmlEditWidget();
-    // load file
-    bool load(const QString &fileName);
+    // virtual method implementation
+    QToolBar* getToolBar() { return toolbar; }
 
-  private slots:
+  public slots:
 
     // set modified flag
     void documentWasModified();
+    // load file
+    bool load(const QString &fileName=QString());
     // save file
     bool save(const QString &fileName=QString());
+    // simule current file
+    void runFile();
+
+  signals:
+
+    // anchor clicked
+    void anchorClicked(const QUrl &);
 
 };
 

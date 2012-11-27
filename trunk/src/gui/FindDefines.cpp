@@ -14,6 +14,7 @@ FindDefines::FindDefines(const string &filename)
     if (file == NULL) return;
     ExpatParser parser;
     parser.parse(file, this);
+    gzclose(file);
   }
   catch(...) {
     if (file != NULL) gzclose(file);

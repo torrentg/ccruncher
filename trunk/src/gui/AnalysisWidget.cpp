@@ -23,8 +23,8 @@
 // constructor
 //===========================================================================
 AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
-  QWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
-  magnifier(NULL), panner(NULL), nsamples(0)
+  MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
+    magnifier(NULL), panner(NULL), nsamples(0), toolbar(NULL)
 {
   blockSignals(true);
 
@@ -40,40 +40,46 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 
   ui->filename->setText(filename);
   ui->plot->canvas()->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
+  ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
 
   magnifier = new QwtPlotMagnifier(ui->plot->canvas());
   magnifier->setMouseFactor(1.0);
   panner = new QwtPlotPanner(ui->plot->canvas());
 
   // magnifie x-axis
-  QAction *actionZoomX = new QAction("Zoom axis X", this);
+  QAction *actionZoomX = new QAction(tr("Zoom axis X"), this);
   actionZoomX->setCheckable(true);
   actionZoomX->setChecked(true);
   connect(actionZoomX, SIGNAL(triggered(bool)), this, SLOT(setZoomX(bool)));
   ui->plot->addAction(actionZoomX);
 
   // magnifie y-axis
-  QAction *actionZoomY = new QAction("Zoom axis Y", this);
+  QAction *actionZoomY = new QAction(tr("Zoom axis Y"), this);
   actionZoomY->setCheckable(true);
   actionZoomY->setChecked(true);
   connect(actionZoomY, SIGNAL(triggered(bool)), this, SLOT(setZoomY(bool)));
   ui->plot->addAction(actionZoomY);
 
-  ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
-
   // refresh action
   QKeySequence keys_refresh(QKeySequence::Refresh);
-  QAction* actionRefresh = new QAction(this);
+  QAction* actionRefresh = new QAction(QIcon(":/images/refresh.png"), tr("&Refresh"), this);
+  actionRefresh->setStatusTip(tr("Refresh current analysis"));
   actionRefresh->setShortcut(keys_refresh);
   QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
   this->addAction(actionRefresh);
 
   // stop action
   QKeySequence keys_stop(Qt::Key_Escape);
-  QAction* actionStop = new QAction(this);
+  QAction* actionStop = new QAction(QIcon(":/images/stop.png"), tr("&Stop"), this);
+  actionStop->setStatusTip(tr("Stops current analysis"));
   actionStop->setShortcut(keys_stop);
   QObject::connect(actionStop, SIGNAL(triggered()), this, SLOT(stop()));
   this->addAction(actionStop);
+
+  // creating toolbar
+  toolbar = new QToolBar(tr("Analysis"), this);
+  toolbar->addAction(actionRefresh);
+  toolbar->addAction(actionStop);
 
   // signals & slots
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
@@ -97,6 +103,7 @@ AnalysisWidget::~AnalysisWidget()
   blockSignals(true);
   task.stop();
   task.wait(250);
+  if (toolbar != NULL) delete toolbar;
   delete ui;
 }
 

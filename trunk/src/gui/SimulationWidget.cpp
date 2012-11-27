@@ -16,12 +16,46 @@
 // constructor
 //===========================================================================
 SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
-    QWidget(parent), ui(new Ui::SimulationWidget), progress(NULL)
+    MdiChildWidget(parent), ui(new Ui::SimulationWidget), progress(NULL),
+    toolbar(NULL)
 {
   ui->setupUi(this);
   progress = new ProgressWidget(ui->frame);
   progress->setWindowFlags(Qt::WindowStaysOnTopHint);
   ui->frame->addLayer(progress);
+
+  // edit action
+  actionEdit = new QAction(QIcon(":/images/edit.png"), tr("&Edit"), this);
+  actionEdit->setStatusTip(tr("Edit xml file"));
+  connect(actionEdit, SIGNAL(triggered()), this, SLOT(editFile()));
+
+  // defines action
+  actionDefines = new QAction(QIcon(":/images/properties.png"), tr("&Defines"), this);
+  actionDefines->setStatusTip(tr("Set current defines"));
+  connect(actionDefines, SIGNAL(triggered()), this, SLOT(showDefines()));
+
+  // run action
+  actionRun = new QAction(QIcon(":/images/run.png"), tr("&Run"), this);
+  actionRun->setStatusTip(tr("Run simulation"));
+  connect(actionRun, SIGNAL(triggered()), this, SLOT(submit()));
+
+  // stop action
+  actionStop = new QAction(QIcon(":/images/stop.png"), tr("&Stop"), this);
+  actionStop->setStatusTip(tr("Stops current simulation"));
+  connect(actionStop, SIGNAL(triggered()), this, SLOT(submit()));
+
+  // analysis action
+  actionAnal = new QAction(QIcon(":/images/chart.png"), tr("&Analysis"), this);
+  actionAnal->setStatusTip(tr("Data analysis"));
+  connect(actionAnal, SIGNAL(triggered()), this, SLOT(submit())); //TODO: review this
+
+  // creating toolbar
+  toolbar = new QToolBar(tr("Simulation"), this);
+  toolbar->addAction(actionEdit);
+  toolbar->addAction(actionAnal);
+  toolbar->addAction(actionDefines);
+  toolbar->addAction(actionRun);
+  toolbar->addAction(actionStop);
 
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
@@ -40,6 +74,7 @@ SimulationWidget::~SimulationWidget()
 {
   task.stop();
   task.wait();
+  if (toolbar != NULL) delete toolbar;
   delete ui;
 }
 
@@ -77,7 +112,7 @@ void SimulationWidget::selectDir()
               QFileDialog::ShowDirsOnly);
 
   if (dirpath != "") {
-    ui->odir->setText(dirpath);
+    ui->odir->setText(QDir::fromNativeSeparators(dirpath));
     setDir();
   }
 }
@@ -87,6 +122,7 @@ void SimulationWidget::selectDir()
 //===========================================================================
 void SimulationWidget::setDir()
 {
+  //TODO: check if odir changed
   updateControls();
   clearLog();
 }
