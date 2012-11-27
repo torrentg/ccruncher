@@ -112,6 +112,9 @@ Logger& split(Logger &logger);
 Logger& endl(Logger &logger);
 
 // manipulator
+Logger& flush(Logger &logger);
+
+// manipulator
 Logger& header(Logger &log);
 
 // manipulator
