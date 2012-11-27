@@ -35,10 +35,10 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 //===========================================================================
 XmlEditWidget::~XmlEditWidget()
 {
-  delete ui;
   if (highlighter != NULL) {
     delete highlighter;
   }
+  delete ui;
 }
 
 //===========================================================================

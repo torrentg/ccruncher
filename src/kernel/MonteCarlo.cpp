@@ -539,7 +539,7 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
     // printing hashes
     if (hash > 0 && numiterations%hash == 0)
     {
-      log << '.';
+      log << '.' << flush;
     }
 
     // checking stop criterias
