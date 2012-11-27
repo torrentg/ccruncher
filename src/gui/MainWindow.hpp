@@ -6,6 +6,7 @@
 #include <QMdiArea>
 #include <QUrl>
 #include <QCloseEvent>
+#include <QToolBar>
 
 using namespace std;
 
@@ -23,6 +24,10 @@ class MainWindow : public QMainWindow
     Ui::MainWindow *ui;
     // mdi area
     QMdiArea *mdiArea;
+    // main tool bar
+    QToolBar *mainToolBar;
+    // child tool bar
+    QToolBar *childToolBar;
 
   private:
 
@@ -49,6 +54,8 @@ class MainWindow : public QMainWindow
     void selectFile();
     // open file
     void openFile(const QUrl &url);
+    // update tool bars
+    void updateToolBars(QMdiSubWindow *window);
 
 };
 

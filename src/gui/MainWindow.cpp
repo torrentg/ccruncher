@@ -13,27 +13,31 @@
 //===========================================================================
 // constructor
 //===========================================================================
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
+    ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL)
 {
   ui->setupUi(this);
 
+  // setting mdi area
   mdiArea = new QMdiArea;
   mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  setCentralWidget(mdiArea);
-
   mdiArea->setViewMode(QMdiArea::TabbedView);
   mdiArea->setTabsClosable(true);
   mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
   mdiArea->setTabsMovable(true);
+  setCentralWidget(mdiArea);
+
+  // creating toolbar
+  mainToolBar = addToolBar(tr("Main"));
+  mainToolBar->addAction(ui->actionOpen);
 
   setWindowTitle(tr("CCruncher"));
-  setUnifiedTitleAndToolBarOnMac(true);
 
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateToolBars(QMdiSubWindow*)));
 
   /*
     tema menu contextual dels tabs (restore/close), pe. afeguir entrada
@@ -45,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     menu->addAction(closeAll);
     connect(closeAll, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
   */
-
+  statusBar()->showMessage(tr("Ready"));
 }
 
 //===========================================================================
@@ -68,6 +72,37 @@ void MainWindow::closeEvent(QCloseEvent *event)
   } else {
     //TODO: save settings
     event->accept();
+  }
+}
+
+//===========================================================================
+// updateToolBars
+//===========================================================================
+void MainWindow::updateToolBars(QMdiSubWindow *window)
+{
+  if (window == NULL) {
+    if (childToolBar != NULL) {
+      removeToolBar(childToolBar);
+      childToolBar = NULL;
+    }
+  }
+  else {
+    MdiChildWidget* child = dynamic_cast<MdiChildWidget*>(window->widget());
+    if (child == NULL) {
+      removeToolBar(childToolBar);
+      childToolBar = NULL;
+    }
+    else {
+      QToolBar *toolbar = child->getToolBar();
+      if (childToolBar != toolbar) {
+        if (childToolBar != NULL) removeToolBar(childToolBar);
+        childToolBar = toolbar;
+        if (childToolBar != NULL) {
+          addToolBar(childToolBar);
+          childToolBar->setVisible(true);
+        }
+      }
+    }
   }
 }
 
@@ -103,6 +138,7 @@ void MainWindow::selectFile()
   if (!filename.isEmpty()) {
     QUrl url = QUrl::fromLocalFile(filename);
     if (!filename.toLower().endsWith("csv")) {
+      url.setPath(url.toLocalFile());
       url.setScheme("exec");
     }
     openFile(url);
@@ -116,7 +152,7 @@ void MainWindow::openFile(const QUrl &url)
 {
   QWidget *child = NULL;
   QString filename = url.path();
-  if (filename.startsWith("/")) filename = filename.mid(1);
+  if (url.scheme() == "file") filename = url.toLocalFile();
   QFileInfo fileinfo(filename);
 
   if (fileinfo.exists() && fileinfo.isReadable())
@@ -135,6 +171,7 @@ void MainWindow::openFile(const QUrl &url)
       }
       else if (!filename.toLower().endsWith("csv")) {
         child = new XmlEditWidget(filename, this);
+        connect(child, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(openFile(const QUrl &)));
       }
       else {
         child = new AnalysisWidget(filename, this);

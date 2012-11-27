@@ -13,7 +13,8 @@ using namespace ccruncher;
 // constructor
 //===========================================================================
 XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
-    QWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL)
+    MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL),
+    toolbar(NULL)
 {
   ui->setupUi(this);
   highlighter = new XmlHighlighter(ui->editor);
@@ -24,10 +25,33 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 
   // save action
   QKeySequence keys_save(QKeySequence::Save);
-  QAction* actionSave = new QAction(this);
+  QAction* actionSave = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
+  actionSave->setStatusTip(tr("Save changes"));
   actionSave->setShortcut(keys_save);
   QObject::connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
   this->addAction(actionSave);
+
+  // undo action
+  QAction *actionUndo = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
+  actionUndo->setStatusTip(tr("Undo changes"));
+  connect(actionUndo, SIGNAL(triggered()), ui->editor, SLOT(undo()));
+
+  // reload action
+  QAction *actionReload = new QAction(QIcon(":/images/refresh.png"), tr("&Reload"), this);
+  actionReload->setStatusTip(tr("Reload file"));
+  connect(actionReload, SIGNAL(triggered()), this, SLOT(load()));
+
+  // run action
+  QAction *actionRun = new QAction(QIcon(":/images/gear.png"), tr("&Monte Carlo"), this);
+  actionRun->setStatusTip(tr("Monte Carlo dialog"));
+  connect(actionRun, SIGNAL(triggered()), this, SLOT(runFile()));
+
+  // creating toolbar
+  toolbar = new QToolBar(tr("Editor"), this);
+  toolbar->addAction(actionRun);
+  toolbar->addAction(actionReload);
+  toolbar->addAction(actionUndo);
+  toolbar->addAction(actionSave);
 }
 
 //===========================================================================
@@ -35,9 +59,8 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 //===========================================================================
 XmlEditWidget::~XmlEditWidget()
 {
-  if (highlighter != NULL) {
-    delete highlighter;
-  }
+  if (toolbar != NULL) delete toolbar;
+  if (highlighter != NULL) delete highlighter;
   delete ui;
 }
 
@@ -64,8 +87,17 @@ void XmlEditWidget::setCurrentFile(const QString &fileName)
 //===========================================================================
 // load file
 //===========================================================================
-bool XmlEditWidget::load(const QString &fileName)
+bool XmlEditWidget::load(const QString &str)
 {
+  QString fileName = str;
+  if (fileName.isEmpty()) {
+    fileName = filename;
+  }
+
+  QCloseEvent event;
+  closeEvent(&event);
+  if (!event.isAccepted()) return false;
+
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
@@ -121,6 +153,7 @@ bool XmlEditWidget::save(const QString &str)
   out << ui->editor->toPlainText();
   QApplication::restoreOverrideCursor();
   setWindowModified(false);
+  ui->editor->document()->setModified(false);
   return true;
 }
 
@@ -154,5 +187,16 @@ void XmlEditWidget::closeEvent(QCloseEvent *event)
   {
     event->accept();
   }
+}
+
+//===========================================================================
+// run current file
+//===========================================================================
+void XmlEditWidget::runFile()
+{
+  QUrl url = QUrl::fromLocalFile(filename);
+  url.setPath(url.toLocalFile());
+  url.setScheme("exec");
+  emit anchorClicked(url);
 }
 

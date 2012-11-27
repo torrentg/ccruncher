@@ -9,6 +9,9 @@
 #include <QTimer>
 #include <QMutex>
 #include <QTextCursor>
+#include <QToolBar>
+#include <QAction>
+#include "gui/MdiChildWidget.hpp"
 #include "gui/QStreamBuf.hpp"
 #include "gui/SimulationTask.hpp"
 #include "gui/ProgressWidget.hpp"
@@ -19,7 +22,7 @@ namespace Ui {
 class SimulationWidget;
 }
 
-class SimulationWidget : public QWidget
+class SimulationWidget : public MdiChildWidget
 {
     Q_OBJECT
 
@@ -43,6 +46,14 @@ class SimulationWidget : public QWidget
     QString logline;
     // log cursor
     QTextCursor logcursor;
+    // toolbar
+    QToolBar *toolbar;
+    // actions
+    QAction *actionEdit;
+    QAction *actionDefines;
+    QAction *actionRun;
+    QAction *actionStop;
+    QAction *actionAnal;
 
   private:
 
@@ -68,6 +79,8 @@ class SimulationWidget : public QWidget
     explicit SimulationWidget(const QString &filename, QWidget *parent = 0);
     // destructor
     ~SimulationWidget();
+    // virtual method implementation
+    QToolBar* getToolBar() { return toolbar; }
 
   public slots:
 

@@ -7,6 +7,8 @@
 #include <QString>
 #include <QMutex>
 #include <QResizeEvent>
+#include <QToolBar>
+#include "gui/MdiChildWidget.hpp"
 #include "gui/AnalysisTask.hpp"
 #include "gui/ProgressWidget.hpp"
 
@@ -20,7 +22,7 @@ namespace Ui {
 class AnalysisWidget;
 }
 
-class AnalysisWidget: public QWidget
+class AnalysisWidget: public MdiChildWidget
 {
     Q_OBJECT
 
@@ -48,6 +50,8 @@ class AnalysisWidget: public QWidget
     double percentile;
     // confidence
     double confidence;
+    // toolbar
+    QToolBar *toolbar;
 
   private:
 
@@ -66,6 +70,8 @@ class AnalysisWidget: public QWidget
     AnalysisWidget(const QString &filename, QWidget *parent=0);
     // destructor
     ~AnalysisWidget();
+    // virtual method implementation
+    QToolBar* getToolBar() { return toolbar; }
 
   public slots:
 
