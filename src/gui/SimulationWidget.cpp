@@ -30,7 +30,7 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   connect(actionEdit, SIGNAL(triggered()), this, SLOT(editFile()));
 
   // defines action
-  actionDefines = new QAction(QIcon(":/images/properties.png"), tr("&Defines"), this);
+  actionDefines = new QAction(QIcon(":/images/config.png"), tr("&Defines"), this);
   actionDefines->setStatusTip(tr("Set current defines"));
   connect(actionDefines, SIGNAL(triggered()), this, SLOT(showDefines()));
 
@@ -47,12 +47,13 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   // analysis action
   actionAnal = new QAction(QIcon(":/images/chart.png"), tr("&Analysis"), this);
   actionAnal->setStatusTip(tr("Data analysis"));
-  connect(actionAnal, SIGNAL(triggered()), this, SLOT(submit())); //TODO: review this
+  connect(actionAnal, SIGNAL(triggered()), this, SLOT(openData()));
 
   // creating toolbar
   toolbar = new QToolBar(tr("Simulation"), this);
   toolbar->addAction(actionEdit);
   toolbar->addAction(actionAnal);
+  toolbar->addSeparator();
   toolbar->addAction(actionDefines);
   toolbar->addAction(actionRun);
   toolbar->addAction(actionStop);
@@ -85,6 +86,23 @@ void SimulationWidget::editFile()
 {
   QUrl url = QUrl::fromLocalFile(ui->ifile->text());
   emit anchorClicked(url);
+}
+
+//===========================================================================
+// open csv data files
+//===========================================================================
+void SimulationWidget::openData()
+{
+  QString html = ui->log->document()->toHtml();
+  QRegExp regexp("href=[\"'](file://[^\"']*\\.csv)[\"']");
+  int pos = 0;
+
+  while ((pos = regexp.indexIn(html, pos)) != -1)
+  {
+    QUrl url(regexp.cap(1));
+    emit anchorClicked(url);
+    pos += regexp.matchedLength();
+  }
 }
 
 //===========================================================================
@@ -132,6 +150,7 @@ void SimulationWidget::setDir()
 //===========================================================================
 void SimulationWidget::clearLog()
 {
+  actionAnal->setEnabled(false);
   ui->log->clear();
   task.getLogger() << copyright << endl;
   logcursor = ui->log->textCursor();
@@ -154,6 +173,7 @@ void SimulationWidget::updateControls()
     ui->definesButton->setEnabled(false);
     ui->progress->setEnabled(false);
     ui->runButton->setEnabled(false);
+    actionRun->setEnabled(false);
     ui->progress->setValue(0);
     ui->defines->clear();
   }
@@ -166,15 +186,18 @@ void SimulationWidget::updateControls()
     {
       ui->progress->setEnabled(true);
       ui->runButton->setEnabled(true);
+      actionRun->setEnabled(true);
     }
     else
     {
       ui->progress->setEnabled(false);
       ui->runButton->setEnabled(false);
+      actionRun->setEnabled(false);
     }
   }
   ui->odir->setEnabled(true);
   ui->odirButton->setEnabled(true);
+  actionStop->setEnabled(false);
 }
 
 //===========================================================================
@@ -184,11 +207,12 @@ void SimulationWidget::submit()
 {
   if (task.isRunning()) {
     task.stop();
-    return;
   }
   else {
     task.wait();
     clearLog();
+    actionRun->setEnabled(false);
+    actionStop->setEnabled(true);
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
     task.setData(ifile, defines, odir);
@@ -319,6 +343,16 @@ void SimulationWidget::draw()
 //===========================================================================
 void SimulationWidget::showDefines()
 {
+  // checking for new defines in xml file ...
+  FindDefines finder = FindDefines(ui->ifile->text().toStdString());
+  map<string,string> aux = finder.getDefines();
+  map<string,string>::iterator it;
+  for (it=aux.begin(); it != aux.end(); it++) {
+    if (defines.find(it->first) == defines.end()) {
+      defines[it->first] = it->second;
+    }
+  }
+
   DefinesDialog dialog(this, defines);
   int rc = dialog.exec();
 
@@ -408,6 +442,7 @@ void SimulationWidget::setStatus(int val)
       ui->progress->setValue(100);
       updateControls();
       //cout << "HTML" << endl << ui->log->toHtml().toStdString() << endl;
+      if (task.getStatus() == SimulationTask::finished) actionAnal->setEnabled(true);
       break;
     default:
       assert(false);

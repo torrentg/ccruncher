@@ -7,8 +7,8 @@
         <file>images/save.png</file>
         <file>images/undo.png</file>
         <file>images/stop.png</file>
-        <file>images/properties.png</file>
         <file>images/chart.png</file>
-        <file>images/gear.png</file>
+        <file>images/config.png</file>
+        <file>images/exec.png</file>
     </qresource>
 </RCC>

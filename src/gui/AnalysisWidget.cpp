@@ -47,14 +47,14 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   panner = new QwtPlotPanner(ui->plot->canvas());
 
   // magnifie x-axis
-  QAction *actionZoomX = new QAction(tr("Zoom axis X"), this);
+  actionZoomX = new QAction(tr("Zoom axis X"), this);
   actionZoomX->setCheckable(true);
   actionZoomX->setChecked(true);
   connect(actionZoomX, SIGNAL(triggered(bool)), this, SLOT(setZoomX(bool)));
   ui->plot->addAction(actionZoomX);
 
   // magnifie y-axis
-  QAction *actionZoomY = new QAction(tr("Zoom axis Y"), this);
+  actionZoomY = new QAction(tr("Zoom axis Y"), this);
   actionZoomY->setCheckable(true);
   actionZoomY->setChecked(true);
   connect(actionZoomY, SIGNAL(triggered(bool)), this, SLOT(setZoomY(bool)));
@@ -62,7 +62,7 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 
   // refresh action
   QKeySequence keys_refresh(QKeySequence::Refresh);
-  QAction* actionRefresh = new QAction(QIcon(":/images/refresh.png"), tr("&Refresh"), this);
+  actionRefresh = new QAction(QIcon(":/images/refresh.png"), tr("&Refresh"), this);
   actionRefresh->setStatusTip(tr("Refresh current analysis"));
   actionRefresh->setShortcut(keys_refresh);
   QObject::connect(actionRefresh, SIGNAL(triggered()), this, SLOT(refresh()));
@@ -70,7 +70,7 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 
   // stop action
   QKeySequence keys_stop(Qt::Key_Escape);
-  QAction* actionStop = new QAction(QIcon(":/images/stop.png"), tr("&Stop"), this);
+  actionStop = new QAction(QIcon(":/images/stop.png"), tr("&Stop"), this);
   actionStop->setStatusTip(tr("Stops current analysis"));
   actionStop->setShortcut(keys_stop);
   QObject::connect(actionStop, SIGNAL(triggered()), this, SLOT(stop()));
@@ -432,6 +432,7 @@ void AnalysisWidget::setStatus(int val)
   switch(val)
   {
     case AnalysisTask::reading:
+      actionStop->setEnabled(true);
       ui->plot->setEnabled(false);
       progress->ui->progress->setFormat("");
       progress->ui->progress->setValue(0);
@@ -448,10 +449,11 @@ void AnalysisWidget::setStatus(int val)
       break;
     }
     case AnalysisTask::failed:
-      QMessageBox::warning(this, "error reading data", task.getMsgErr().c_str());
+      QMessageBox::warning(this, "CCruncher", QString("Error reading data.\n") + task.getMsgErr().c_str());
     case AnalysisTask::stopped:
       //TODO: indicates that user stoped
     case AnalysisTask::finished:
+      actionStop->setEnabled(false);
       progress->fadeout();
       ui->plot->setEnabled(true);
       timer.stop();

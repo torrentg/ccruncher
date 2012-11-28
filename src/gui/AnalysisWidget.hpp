@@ -8,6 +8,7 @@
 #include <QMutex>
 #include <QResizeEvent>
 #include <QToolBar>
+#include <QAction>
 #include "gui/MdiChildWidget.hpp"
 #include "gui/AnalysisTask.hpp"
 #include "gui/ProgressWidget.hpp"
@@ -52,6 +53,11 @@ class AnalysisWidget: public MdiChildWidget
     double confidence;
     // toolbar
     QToolBar *toolbar;
+    // actions
+    QAction *actionZoomX;
+    QAction *actionZoomY;
+    QAction *actionRefresh;
+    QAction *actionStop;
 
   private:
 

@@ -25,30 +25,31 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 
   // save action
   QKeySequence keys_save(QKeySequence::Save);
-  QAction* actionSave = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
+  actionSave = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
   actionSave->setStatusTip(tr("Save changes"));
   actionSave->setShortcut(keys_save);
   QObject::connect(actionSave, SIGNAL(triggered()), this, SLOT(save()));
   this->addAction(actionSave);
 
   // undo action
-  QAction *actionUndo = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
+  actionUndo = new QAction(QIcon(":/images/undo.png"), tr("&Undo"), this);
   actionUndo->setStatusTip(tr("Undo changes"));
   connect(actionUndo, SIGNAL(triggered()), ui->editor, SLOT(undo()));
 
   // reload action
-  QAction *actionReload = new QAction(QIcon(":/images/refresh.png"), tr("&Reload"), this);
+  actionReload = new QAction(QIcon(":/images/refresh.png"), tr("&Reload"), this);
   actionReload->setStatusTip(tr("Reload file"));
   connect(actionReload, SIGNAL(triggered()), this, SLOT(load()));
 
   // run action
-  QAction *actionRun = new QAction(QIcon(":/images/gear.png"), tr("&Monte Carlo"), this);
+  actionRun = new QAction(QIcon(":/images/exec.png"), tr("&Monte Carlo"), this);
   actionRun->setStatusTip(tr("Monte Carlo dialog"));
   connect(actionRun, SIGNAL(triggered()), this, SLOT(runFile()));
 
   // creating toolbar
   toolbar = new QToolBar(tr("Editor"), this);
   toolbar->addAction(actionRun);
+  toolbar->addSeparator();
   toolbar->addAction(actionReload);
   toolbar->addAction(actionUndo);
   toolbar->addAction(actionSave);
