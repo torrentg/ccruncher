@@ -100,6 +100,8 @@ class SimulationWidget : public MdiChildWidget
     void showDefines();
     // set status
     void setStatus(int);
+    // open csv files
+    void openData();
 
   signals:
 

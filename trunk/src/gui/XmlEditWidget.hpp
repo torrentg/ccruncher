@@ -6,6 +6,7 @@
 #include <QCloseEvent>
 #include <QToolBar>
 #include <QUrl>
+#include <QAction>
 #include "gui/MdiChildWidget.hpp"
 #include "gui/xmlhighlighter.hpp"
 
@@ -27,6 +28,11 @@ class XmlEditWidget : public MdiChildWidget
     QString filename;
     // toolbar
     QToolBar *toolbar;
+    // actions
+    QAction* actionSave;
+    QAction *actionUndo;
+    QAction *actionReload;
+    QAction *actionRun;
 
   private:
 

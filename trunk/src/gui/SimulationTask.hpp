@@ -42,7 +42,7 @@ class SimulationTask : public QThread
     // simulator
     MonteCarlo *montecarlo;
     // status
-    status status_;
+    volatile status status_;
     // stop flag
     bool stop_;
 
