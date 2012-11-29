@@ -19,6 +19,32 @@ struct statval
   statval(size_t n, double v, double e) : iteration(n), value(v), std_err(e) {}
 };
 
+// see http://en.wikipedia.org/wiki/Kahan_summation_algorithm
+class kahan
+{
+  private:
+
+    // current working sum
+    double sum;
+    // carry from the previous operation
+    double carry;
+
+  public:
+
+    // constructor
+    kahan(double val=0.0) : sum(val), carry(0.0) {}
+    // add value
+    void add(double val) {
+      double y = val - carry;
+      double t = sum + y;
+      carry = (t - sum) - y;
+      sum = t;
+    }
+    // return value
+    double value() const { return sum; }
+
+};
+
 class AnalysisTask : public QThread
 {
     Q_OBJECT

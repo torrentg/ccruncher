@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
+#include <QCleanlooksStyle>
 #include "ui_SimulationWidget.h"
 #include "gui/SimulationWidget.hpp"
 #include "gui/DefinesDialog.hpp"
@@ -20,6 +21,7 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
     toolbar(NULL)
 {
   ui->setupUi(this);
+  ui->progress->setStyle(new QCleanlooksStyle()); //QCleanlooksStyle, QMacStyle, QPlastiqueStyle, QWindowsXPStyle
   progress = new ProgressWidget(ui->frame);
   progress->setWindowFlags(Qt::WindowStaysOnTopHint);
   ui->frame->addLayer(progress);
@@ -171,6 +173,7 @@ void SimulationWidget::updateControls()
   {
     ui->defines->setEnabled(false);
     ui->definesButton->setEnabled(false);
+    actionDefines->setEnabled(false);
     ui->progress->setEnabled(false);
     ui->runButton->setEnabled(false);
     actionRun->setEnabled(false);
@@ -181,6 +184,7 @@ void SimulationWidget::updateControls()
   {
     ui->defines->setEnabled(true);
     ui->definesButton->setEnabled(true);
+    actionDefines->setEnabled(true);
     QString odir = ui->odir->text();
     if (odir.trimmed().length() > 0 && QDir(odir).exists())
     {
@@ -209,8 +213,19 @@ void SimulationWidget::submit()
     task.stop();
   }
   else {
+    if (SimulationTask::getNumRunningSims() > 0)
+    {
+      QMessageBox::StandardButton rc = QMessageBox::warning(this, "CCruncher",
+           "There is already another simulation in progress.\n Are you sure to continue?",
+           QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+      if (rc != QMessageBox::Yes) {
+        return;
+      }
+    }
+
     task.wait();
     clearLog();
+    actionDefines->setEnabled(false);
     actionRun->setEnabled(false);
     actionStop->setEnabled(true);
     string ifile = ui->ifile->text().toStdString();
@@ -385,7 +400,7 @@ void SimulationWidget::setDefines()
 void SimulationWidget::closeEvent(QCloseEvent *event)
 {
   if (task.isRunning()) {
-    QMessageBox::StandardButton rc = QMessageBox::question(this, "title",
+    QMessageBox::StandardButton rc = QMessageBox::question(this, "CCruncher",
        "There is a Monte Carlo simulation in progress.\nDo you want to stop it?",
        QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
     if (rc != QMessageBox::Yes) {
@@ -420,6 +435,7 @@ void SimulationWidget::setStatus(int val)
     case SimulationTask::simulating: {
       progress->ui->progress->setFormat("");
       progress->ui->progress->setValue(100);
+      actionAnal->setEnabled(true);
       progress->fadeout();
       task.free(1);
       break;
@@ -442,7 +458,6 @@ void SimulationWidget::setStatus(int val)
       ui->progress->setValue(100);
       updateControls();
       //cout << "HTML" << endl << ui->log->toHtml().toStdString() << endl;
-      if (task.getStatus() == SimulationTask::finished) actionAnal->setEnabled(true);
       break;
     default:
       assert(false);

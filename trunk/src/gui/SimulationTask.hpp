@@ -45,6 +45,8 @@ class SimulationTask : public QThread
     volatile status status_;
     // stop flag
     bool stop_;
+    // number of running simulations
+    static size_t num_running_sims;
 
   private:
 
@@ -77,6 +79,8 @@ class SimulationTask : public QThread
     void free(int obj=0);
     // return logger
     Logger& getLogger();
+    // number of running simulations
+    static size_t getNumRunningSims();
 
   signals:
 

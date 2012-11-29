@@ -230,26 +230,17 @@ makeBinDist() {
 # -------------------------------------------------------------
 makeWinDist() {
 
-  if [ ! -f $pathexes/ccruncher.exe ]; then 
-    echo "file $pathexes/ccruncher.exe not found" 
-    return;
-  fi
-  if [ ! -f $pathexes/pthreadGC2.dll ]; then 
-    echo "file $pathexes/pthreadGC2.dll not found" 
-    return;
-  fi
-  if [ ! -f $pathexes/mingwm10.dll ]; then 
-    echo "file $pathexes/mingwm10.dll not found" 
-    return;
-  fi
-  if [ ! -f $pathexes/libgcc_s_dw2-1.dll ]; then 
-    echo "file $pathexes/libgcc_s_dw2-1.dll not found" 
-    return;
-  fi
-
   # local variables
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
+  winfiles = "ccruncher-gui.exe
+              pthreadGC2.dll
+              mingwm10.dll
+              libgcc_s_dw2-1.dll
+              QtCore4.dll
+              QtGui4.dll
+              QtSvg4.dll
+              qwt.dll"
 
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
@@ -258,11 +249,16 @@ makeWinDist() {
   prepare $workpath;
   cd $workpath;
 
-  # creating binaries
-  cp $pathexes/ccruncher.exe bin/
-  cp $pathexes/mingwm10.dll bin/
-  cp $pathexes/pthreadGC2.dll bin/
-  cp $pathexes/libgcc_s_dw2-1.dll bin/
+  # copying binaries
+  for file in $winfiles
+  do
+    if [ ! -f $pathexes/$file ]; then 
+      echo "error: file $pathexes/$file not found" 
+      exit 1;
+    else
+      cp $pathexes/$file bin/
+    fi
+  done
 
   # dropping unused files
   bin/src2bin.sh -y;

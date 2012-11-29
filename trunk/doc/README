@@ -110,42 +110,6 @@ Using CCruncher
      > quit(save='no')
 
 
-Notes for Windows developers (MSVC9)
-------------------------------------
-
-1. install a subversion client
-   (eg. http://tortoisesvn.tigris.org/)
-
-2. retrieve repository content
-   (checkout from http://www.ccruncher.net/svn/trunk/)
-
-3. download expat package from http://www.libexpat.org/
-   and unpack at $CCRUNCHER\deps\expat-X.Y.Z directory
-
-4. download zlib package from http://www.zlib.net/
-   and unpack at $CCRUNCHER\deps\zlib-X.Y.Z directory
-
-5. download gsl package from http://alexlaier.org/me/index.php?option=com_content&view=article&id=26:gsl-111-port-microsoft-visual-studio-2008-vc90&catid=3:stuff&Itemid=4
-   or from http://www.miscdebris.net/blog/2009/04/20/mingw-345-binaries-of-gnu-scientific-library-112-for-use-with-mingw-and-visual-c/
-   and unpack at $CCRUNCHER\deps\gsl-1.11 directory
-
-6. download pthreads-win32 package from http://sourceware.org/pthreads-win32/
-   and unpack at $CCRUNCHER\deps\pthread-win32 directory
-
-7. copy zlib1.dll, libexpat.dll and pthreadVCE2.dll (installed in steps 3, 4 and 6) to
-   $CCRUNCHER\bin (required to execute bin\ccruncher.exe)
-
-8. double-click ccruncher.vcproj (opens MSVC9)
-
-9. execute compile option
-
-Microsoft Visual C++ versions:
- - MSVC6: don't work at all
- - MSVC7: possibly works, but need to create the file project
- - MSVC8: possibly works, but need to create the file project
- - MSVC9: works. see current file project
-
-
 Notes for Windows developers (QT+MINGW)
 ---------------------------------------
 

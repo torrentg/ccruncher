@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
   mdiArea->setTabsClosable(true);
   mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
   mdiArea->setTabsMovable(true);
+  mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
   setCentralWidget(mdiArea);
 
   // creating toolbar
@@ -80,27 +81,30 @@ void MainWindow::closeEvent(QCloseEvent *event)
 //===========================================================================
 void MainWindow::updateToolBars(QMdiSubWindow *window)
 {
-  if (window == NULL) {
-    if (childToolBar != NULL) {
-      removeToolBar(childToolBar);
-      childToolBar = NULL;
+  if (window == NULL)
+  {
+    if (!mdiArea->hasFocus() && mdiArea->subWindowList().size() > 0) {
+      // mdiarea has lost focus, nothing to do
     }
-  }
-  else {
-    MdiChildWidget* child = dynamic_cast<MdiChildWidget*>(window->widget());
-    if (child == NULL) {
-      removeToolBar(childToolBar);
+    else if (childToolBar != NULL) {
+      // last subwindow removed
+      //removeToolBar(childToolBar);
       childToolBar = NULL;
     }
     else {
-      QToolBar *toolbar = child->getToolBar();
-      if (childToolBar != toolbar) {
-        if (childToolBar != NULL) removeToolBar(childToolBar);
-        childToolBar = toolbar;
-        if (childToolBar != NULL) {
-          addToolBar(childToolBar);
-          childToolBar->setVisible(true);
-        }
+      // nothing to do
+    }
+  }
+  else
+  {
+    MdiChildWidget* child = dynamic_cast<MdiChildWidget*>(window->widget());
+    QToolBar *toolbar = (child?child->getToolBar():NULL);
+    if (childToolBar != toolbar) {
+      removeToolBar(childToolBar);
+      childToolBar = toolbar;
+      if (childToolBar != NULL) {
+        addToolBar(childToolBar);
+        childToolBar->setVisible(true);
       }
     }
   }

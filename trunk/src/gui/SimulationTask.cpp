@@ -4,6 +4,8 @@
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 
+size_t SimulationTask::num_running_sims = 0;
+
 //===========================================================================
 // constructor
 //===========================================================================
@@ -12,7 +14,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
 {
   ifile = "";
   odir = "";
-  setStatus(finished);
+  status_ = finished;
   setTerminationEnabled(false);
 }
 
@@ -99,6 +101,24 @@ void SimulationTask::setData(const string &f_, const map<string,string> &m_, con
 void SimulationTask::setStatus(status s)
 {
   status_ = s;
+
+  switch(status_)
+  {
+    case reading:
+      num_running_sims++;
+      break;
+    case simulating:
+      break;
+    case stopped:
+    case failed:
+    case finished:
+      assert(num_running_sims > 0);
+      num_running_sims--;
+      break;
+    default:
+      assert(false);
+  }
+
   emit statusChanged((int)s);
 }
 
@@ -147,5 +167,13 @@ void SimulationTask::free(int obj)
     delete montecarlo;
     montecarlo = NULL;
   }
+}
+
+//===========================================================================
+// number of running simulations
+//===========================================================================
+size_t SimulationTask::getNumRunningSims()
+{
+  return num_running_sims;
 }
 
