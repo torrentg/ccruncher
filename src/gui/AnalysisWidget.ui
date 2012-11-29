@@ -10,6 +10,10 @@
     <height>554</height>
    </rect>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ccruncher.qrc">
+    <normaloff>:/images/chart.png</normaloff>:/images/chart.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
@@ -450,7 +454,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="ccruncher.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>view</sender>

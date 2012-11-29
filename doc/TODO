@@ -5,14 +5,12 @@ CCRUNCHER TODO
 Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
-  * remove MSVC support (vcproj, src/win32, doc)
   * review functional tests (because --trace removed)
   * rename sector to factor
     - add loading+ndf in factor tag
     - remove param copula.type
     - remove correlations diagonal
   * bulk output to file
-  * ad-hoc xml editor see http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter)
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file
   * implement simulation pause

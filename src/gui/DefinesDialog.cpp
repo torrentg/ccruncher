@@ -96,11 +96,11 @@ void DefinesDialog::submit()
     string value = ui->table->item(i, 1)->text().trimmed().toStdString();
 
     if (key == "") {
-      QMessageBox::warning(this, "Invalid name", "Found a void name");
+      QMessageBox::critical(this, "CCruncher", "Found a void name");
       return;
     }
     if (defines.find(key) != defines.end()) {
-      QMessageBox::warning(this, "Repeated name", "Found a repeated name");
+      QMessageBox::critical(this, "CCruncher", "Found a repeated name");
       return;
     }
 

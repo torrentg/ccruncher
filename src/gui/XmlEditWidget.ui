@@ -10,6 +10,10 @@
     <height>382</height>
    </rect>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ccruncher.qrc">
+    <normaloff>:/images/edit.png</normaloff>:/images/edit.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QTextEdit" name="editor">
@@ -28,6 +32,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="ccruncher.qrc"/>
+ </resources>
  <connections/>
 </ui>

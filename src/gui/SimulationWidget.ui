@@ -10,6 +10,10 @@
     <height>493</height>
    </rect>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ccruncher.qrc">
+    <normaloff>:/images/exec.png</normaloff>:/images/exec.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
@@ -200,7 +204,9 @@
   <tabstop>definesButton</tabstop>
   <tabstop>runButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="ccruncher.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>odirButton</sender>

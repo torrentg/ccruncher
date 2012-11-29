@@ -38,12 +38,10 @@ fi
 # drops development files
 #-------------------------------------------------------------
 if [ -f $CCRUNCHER/build/ccruncher ]; then
-  cp $CCRUNCHER/build/ccruncher $CCRUNCHER/bin/;
+  cp `find $CCRUNCHER/build/ccruncher -type f -executable` $CCRUNCHER/bin/;
 fi
-rm -f  $CCRUNCHER/ccruncher.sln;
-rm -f  $CCRUNCHER/ccruncher.vcproj;
-rm -f  $CCRUNCHER/ccruncher.pro*;
-rm -f  $CCRUNCHER/ccruncher-tests.pro*;
+rm -f  $CCRUNCHER/ccruncher*.pro;
+rm -f  $CCRUNCHER/ccruncher*.pro.user;
 rm -f  $CCRUNCHER/aclocal.m4;
 rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;
@@ -56,4 +54,3 @@ rm -rf $CCRUNCHER/build;
 rm -rf $CCRUNCHER/deps;
 rm -f  $CCRUNCHER/doc/INSTALL;
 rm -f  $CCRUNCHER/bin/src2bin.sh;
-

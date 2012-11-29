@@ -132,6 +132,9 @@ void AnalysisTask::run()
         throw;
       }
     }
+    catch(...) {
+      throw;
+    }
 
     setStatus(running);
     switch(mode_)
@@ -224,18 +227,20 @@ void AnalysisTask::runExpectedLoss(const vector<double> &values)
   size_t numpoints = std::min(values.size(), (size_t)2048);
   double step = values.size()/(double)numpoints;
   statvals.reserve(numpoints);
-  double s1=0, s2=0;
+  kahan sum1, sum2;
 
   for (size_t i=0,n=0; i<numpoints; i++)
   {
     double x = (i+1)*step;
 
     while(n < (size_t)(x+0.5)) {
-      s1 += values[n];
-      s2 += values[n]*values[n];
+      sum1.add(values[n]);
+      sum2.add(values[n]*values[n]);
       n++;
     }
 
+    double s1 = sum1.value();
+    double s2 = sum2.value();
     double mean = s1/n;
     double stdev = sqrt((n*s2-s1*s1)/(n*(n-1.0)));
 
@@ -272,7 +277,7 @@ void AnalysisTask::runValueAtRisk(vector<double> &values)
     int n = (int)((i+1)*step+0.5);
     statval var = valueAtRisk(1.0-percentile, values.begin(), values.begin()+n);
     var.value = -var.value;
-//cout << "var.n=" << var.iteration << ", var.val=" << var.value << ", var.stderr=" << var.std_err << endl;
+
     statvals.push_back(var);
     progress = 100.0*(float)(i+1)/(float)(numpoints);
     if (stop_) return;
@@ -420,12 +425,14 @@ statval AnalysisTask::expectedShortfall(double percentile, vector<double>::itera
   // sort in such a way that [first,middle) contains the smallest elements
   partial_sort(first, middle, last);
 
-  double s1=0.0, s2=0.0;
+  kahan sum1, sum2;
   for(vector<double>::iterator it=first; it<middle; it++) {
-    s1 += *it;
-    s2 += (*it)*(*it);
+    sum1.add(*it);
+    sum2.add((*it)*(*it));
   }
 
+  double s1 = sum1.value();
+  double s2 = sum2.value();
   double mean = s1/m;
   // see http://en.wikipedia.org/wiki/Standard_deviation#Rapid_calculation_methods
   double stdev = sqrt((m*s2-s1*s1)/(m*(m-1.0)));
