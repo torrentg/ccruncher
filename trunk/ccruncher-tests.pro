@@ -11,14 +11,14 @@ HEADERS += \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Ratings.hpp \
-    src/params/Sectors.hpp \
+    src/params/Factors.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
     src/params/TransitionsTest.hpp \
     src/params/SegmentationTest.hpp \
     src/params/SegmentationsTest.hpp \
-    src/params/SectorsTest.hpp \
+    src/params/FactorsTest.hpp \
     src/params/RatingsTest.hpp \
     src/params/ParamsTest.hpp \
     src/params/InterestTest.hpp \
@@ -78,14 +78,14 @@ SOURCES += \
     src/params/Interest.cpp \
     src/params/Params.cpp \
     src/params/Ratings.cpp \
-    src/params/Sectors.cpp \
+    src/params/Factors.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Transitions.cpp \
     src/params/TransitionsTest.cpp \
     src/params/SegmentationTest.cpp \
     src/params/SegmentationsTest.cpp \
-    src/params/SectorsTest.cpp \
+    src/params/FactorsTest.cpp \
     src/params/RatingsTest.cpp \
     src/params/ParamsTest.cpp \
     src/params/InterestTest.cpp \

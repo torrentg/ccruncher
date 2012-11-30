@@ -27,7 +27,7 @@
 
 #include "utils/config.h"
 #include <MiniCppUnit.hxx>
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ class CorrelationsTest : public TestFixture<CorrelationsTest>
 
   private:
 
-    Sectors getSectors();
+    Factors getFactors();
 
     void test1();
     void test2();

@@ -33,7 +33,7 @@
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "params/Ratings.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "params/Interest.hpp"
 #include "params/Segmentations.hpp"
 #include "portfolio/Obligor.hpp"
@@ -55,8 +55,8 @@ class Portfolio : public ExpatHandlers
     vector<Obligor *> vobligors;
     // list of ratings (used by parser)
     const Ratings *ratings;
-    // list of sectors (used by parser)
-    const Sectors *sectors;
+    // list of factors (used by parser)
+    const Factors *factors;
     // list of segmentations (used by parser)
     Segmentations *segmentations;
     // list of interest (used by parser)
@@ -91,9 +91,9 @@ class Portfolio : public ExpatHandlers
     // default constructor
     Portfolio();
     // constructor
-    Portfolio(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
+    Portfolio(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
     // initialize portfolio object
-    void init(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
+    void init(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
     // destructor
     ~Portfolio();
     // returns the obligors list

@@ -79,7 +79,7 @@
     <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
     <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
     <a href="#transitions">&lt;transitions&gt;</a>    ...    <a href="#transitions">&lt;/transitions&gt;</a>
-    <a href="#sectors">&lt;sectors&gt;</a>        ...        <a href="#sectors">&lt;/sectors&gt;</a>
+    <a href="#factors">&lt;factors&gt;</a>        ...        <a href="#factors">&lt;/factors&gt;</a>
     <a href="#correlations">&lt;correlations&gt;</a>   ...   <a href="#correlations">&lt;/correlations&gt;</a>
     <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
     <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
@@ -546,30 +546,30 @@
     </table>
 
 <!-- ==================================================== -->
-<!--    sectors section                                   -->
+<!--    factors section                                   -->
 <!-- ==================================================== -->
-    <a name="sectors"></a>
-    <h2>Section Sectors</h2>
+    <a name="factors"></a>
+    <h2>Section Factors</h2>
 
     <p>
-      This section shows how to define the sectors. A minimum of one sector
-      is required. The maximum number of sectors is 256.
+      This section shows how to define the factors. A minimum of one factor
+      is required. The maximum number of factors is 256.
     </p>
 
     <h3>Example</h3>
 
     <pre>
 
-  &lt;sectors&gt;
-    &lt;sector name="S1" description="Consumer/service sector"/&gt;
-    &lt;sector name="S2" description="Forest/building products"/&gt;
-    &lt;sector name="S3" description="High technology"/&gt;
-    &lt;sector name="S4" description="Utilities"/&gt;
-    &lt;sector name="S5" description="Other sectors"/&gt;
-  &lt;/sectors&gt;
+  &lt;factors&gt;
+    &lt;factor name="S1" description="Consumer/service sector"/&gt;
+    &lt;factor name="S2" description="Forest/building products"/&gt;
+    &lt;factor name="S3" description="High technology"/&gt;
+    &lt;factor name="S4" description="Utilities"/&gt;
+    &lt;factor name="S5" description="Other sectors"/&gt;
+  &lt;/factors&gt;
     </pre>
 
-    <h3>Sector Attributes</h3>
+    <h3>Factor Attributes</h3>
 
     <table cellpadding="3">
       <tr class="a">
@@ -580,15 +580,15 @@
       <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
-          Sector identifier. All references to a sector, eg. obligor 
-          sector, are made using this field.
+          Factor identifier. All references to a factor, eg. obligor 
+          factor, are made using this field.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">description</td>
         <td class="c2">
-          Sector description. This value is only used in reports.
+          Factor description. This value is only used in reports.
           This description must be unique.
         </td>
         <td class="c3">string</td>
@@ -603,13 +603,13 @@
 
     <p>
       This section shows how to define the correlation matrix between 
-      sectors, <i>R</i>, and the factor loadings, <i>w<sub>i</sub></i>,
+      factors, <i>R</i>, and the factor loadings, <i>w<sub>i</sub></i>,
       of the <a href="technical.html#multifactor-model">multi-factor model</a>. 
       Diagonal elements correspond to the factor loadings. The 
       non-diagonal elements are the correlation matrix coefficients 
       (diagonal elements aren't reported because they are allways 
       <i>1</i>'s). You only need to set up the upper triangle elements. 
-      The number of elements to set up is (numsectors+1) x numsectors / 2.
+      The number of elements to set up is (numfactors+1) x numfactors / 2.
     </p>
 
     <h3>Example</h3>
@@ -617,21 +617,21 @@
     <pre>
 
   &lt;correlations&gt;
-    &lt;correlation sector1="S1" sector2="S1" value="15.1%"/&gt;
-    &lt;correlation sector1="S1" sector2="S2" value="6.2%"/&gt;
-    &lt;correlation sector1="S1" sector2="S3" value="8.6%"/&gt;
-    &lt;correlation sector1="S1" sector2="S4" value="3.9%"/&gt;
-    &lt;correlation sector1="S1" sector2="S5" value="9.1%"/&gt;
-    &lt;correlation sector1="S2" sector2="S2" value="17.9%"/&gt;
-    &lt;correlation sector1="S2" sector2="S3" value="6.3%"/&gt;
-    &lt;correlation sector1="S2" sector2="S4" value="10.2%"/&gt;
-    &lt;correlation sector1="S2" sector2="S5" value="8.8%"/&gt;
-    &lt;correlation sector1="S3" sector2="S3" value="17.5%"/&gt;
-    &lt;correlation sector1="S3" sector2="S4" value="7.3%"/&gt;
-    &lt;correlation sector1="S3" sector2="S5" value="7.1%"/&gt;
-    &lt;correlation sector1="S4" sector2="S4" value="12.8%"/&gt;
-    &lt;correlation sector1="S4" sector2="S5" value="6.4%"/&gt;
-    &lt;correlation sector1="S5" sector2="S5" value="15.0%"/&gt;
+    &lt;correlation factor1="S1" factor2="S1" value="15.1%"/&gt;
+    &lt;correlation factor1="S1" factor2="S2" value="6.2%"/&gt;
+    &lt;correlation factor1="S1" factor2="S3" value="8.6%"/&gt;
+    &lt;correlation factor1="S1" factor2="S4" value="3.9%"/&gt;
+    &lt;correlation factor1="S1" factor2="S5" value="9.1%"/&gt;
+    &lt;correlation factor1="S2" factor2="S2" value="17.9%"/&gt;
+    &lt;correlation factor1="S2" factor2="S3" value="6.3%"/&gt;
+    &lt;correlation factor1="S2" factor2="S4" value="10.2%"/&gt;
+    &lt;correlation factor1="S2" factor2="S5" value="8.8%"/&gt;
+    &lt;correlation factor1="S3" factor2="S3" value="17.5%"/&gt;
+    &lt;correlation factor1="S3" factor2="S4" value="7.3%"/&gt;
+    &lt;correlation factor1="S3" factor2="S5" value="7.1%"/&gt;
+    &lt;correlation factor1="S4" factor2="S4" value="12.8%"/&gt;
+    &lt;correlation factor1="S4" factor2="S5" value="6.4%"/&gt;
+    &lt;correlation factor1="S5" factor2="S5" value="15.0%"/&gt;
   &lt;/correlations&gt;
     </pre>
 
@@ -644,32 +644,32 @@
         <th>Type</th>
       </tr>
       <tr class="b">
-        <td class="c1">sector1</td>
+        <td class="c1">factor1</td>
         <td class="c2">
-          First sector.
-          This value must be a sector identifier, see 'name' attribute in sector tag.
+          First factor.
+          This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="a">
-        <td class="c1">sector2</td>
+        <td class="c1">factor2</td>
         <td class="c2">
-          Second sector.
-          This value must be a sector identifier, see 'name' attribute in sector tag.
+          Second factor.
+          This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
-          Sector factor loading or correlation between sectors.
+          Factor loading or correlation between factors.
           <ul>
             <li>
-              if sector1 = sector2: factor loading. <br/>
+              if factor1 = factor2: factor loading. <br/>
               A value in the range [0%,100%].
             </li>
             <li>
-              if sector1 &ne; sector2: correlation between sector1 and sector2. <br/>
+              if factor1 &ne; factor2: correlation between factor1 and factor2. <br/>
               A value in the range [-100%,+100%]
             </li>
           </ul>
@@ -822,7 +822,7 @@
     <pre>
 
   &lt;portfolio&gt;
-    &lt;obligor rating="A" sector="S1" id="000001"&gt;
+    &lt;obligor rating="A" factor="S1" id="000001"&gt;
       &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
       &lt;asset id="op1" date="01/01/2005" recovery="80%"&gt;
@@ -853,7 +853,7 @@
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
-    &lt;obligor rating="B" sector="S2" id="000002" recovery="20%"&gt;
+    &lt;obligor rating="B" factor="S2" id="000002" recovery="20%"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="large"/&gt;
       &lt;asset id="op3" date="01/06/2003"&gt;
@@ -868,7 +868,7 @@
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
-    &lt;obligor rating="CCC" sector="S2" id="000003"&gt;
+    &lt;obligor rating="CCC" factor="S2" id="000003"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
       &lt;asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
@@ -941,10 +941,10 @@
         <td class="c3">string</td>
       </tr>
       <tr class="b">
-        <td class="c1">sector</td>
+        <td class="c1">factor</td>
         <td class="c2">
-          Sector where this obligor is included.
-          This value must be a sector identifier, see 'name' attribute in sector tag.
+          Factor where this obligor is included.
+          This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -1188,7 +1188,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 13-Nov-2012
+          Last modified: 30-Nov-2012
         </td>
       </tr></table>
     </div>

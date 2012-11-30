@@ -125,33 +125,33 @@
   </transitions>
 
   <!-- ============================================================== -->
-  <!--                           SECTORS                              -->
+  <!--                           FACTORS                              -->
   <!-- ============================================================== -->
-  <sectors>
-    <sector name="tech" description="technology"/>
-    <sector name="util" description="utilities"/>
-    <sector name="energ" description="energy"/>
-    <sector name="bank" description="banking"/>
-  </sectors>
+  <factors>
+    <factor name="tech" description="technology"/>
+    <factor name="util" description="utilities"/>
+    <factor name="energ" description="energy"/>
+    <factor name="bank" description="banking"/>
+  </factors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <correlations>
 
-    <correlation sector1="tech" sector2="tech" value="20%"/>
-    <correlation sector1="tech" sector2="util" value="1%"/>
-    <correlation sector1="tech" sector2="energ" value="2%"/>
-    <correlation sector1="tech" sector2="bank" value="-3%"/>
+    <correlation factor1="tech" factor2="tech" value="20%"/>
+    <correlation factor1="tech" factor2="util" value="1%"/>
+    <correlation factor1="tech" factor2="energ" value="2%"/>
+    <correlation factor1="tech" factor2="bank" value="-3%"/>
 
-    <correlation sector1="util" sector2="util" value="35%"/>
-    <correlation sector1="util" sector2="energ" value="-4%"/>
-    <correlation sector1="util" sector2="bank" value="-1%"/>
+    <correlation factor1="util" factor2="util" value="35%"/>
+    <correlation factor1="util" factor2="energ" value="-4%"/>
+    <correlation factor1="util" factor2="bank" value="-1%"/>
 
-    <correlation sector1="energ" sector2="energ" value="20%"/>
-    <correlation sector1="energ" sector2="bank" value="-6%"/>
+    <correlation factor1="energ" factor2="energ" value="20%"/>
+    <correlation factor1="energ" factor2="bank" value="-6%"/>
 
-    <correlation sector1="bank" sector2="bank" value="40%"/>
+    <correlation factor1="bank" factor2="bank" value="40%"/>
 
   </correlations>
 
@@ -166,7 +166,7 @@
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="A" sector="bank" id="001">
+    <obligor rating="A" factor="bank" id="001">
       <asset id="op1" date="15/01/2005">
         <data>
           <values t="15/01/2005" exposure="5000.0" recovery="50%" />

@@ -52,24 +52,24 @@ Ratings ccruncher_test::SimulatedDataTest::getRatings()
 }
 
 //===========================================================================
-// getSectors
+// getFactors
 //===========================================================================
-Sectors ccruncher_test::SimulatedDataTest::getSectors()
+Factors ccruncher_test::SimulatedDataTest::getFactors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='others'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='others'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors list creation
+  Factors factors;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &factors));
 
-  return sectors;
+  return factors;
 }
 
 //===========================================================================
@@ -143,7 +143,7 @@ Interest ccruncher_test::SimulatedDataTest::getInterest(const Date &date)
 vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
 {
   string xmlcontent1 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='C' sector='S1' id='cif1'>\n\
+    <obligor rating='C' factor='S1' id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
@@ -152,7 +152,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent2 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='D' sector='S2' id='cif2'>\n\
+    <obligor rating='D' factor='S2' id='cif2'>\n\
       <asset id='op2' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
@@ -161,7 +161,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent3 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S1' id='cif3'>\n\
+    <obligor rating='A' factor='S1' id='cif3'>\n\
       <asset id='op3' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
@@ -170,7 +170,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent4 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='B' sector='S1' id='cif4'>\n\
+    <obligor rating='B' factor='S1' id='cif4'>\n\
       <asset id='op4' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
@@ -179,7 +179,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
     </obligor>";
 
   string xmlcontent5 = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' id='cif5'>\n\
+    <obligor rating='A' factor='S2' id='cif5'>\n\
       <asset id='op5' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2001' exposure='10.0' recovery='80%' />\n\
@@ -191,29 +191,29 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
   Date timeT("01/01/2005");
   Obligor *bp = NULL;
   Ratings ratings = getRatings();
-  Sectors sectors = getSectors();
+  Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
   ExpatParser xmlparser;
   vector<Obligor*> obligors;
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent2, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent3, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent4, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent5, bp));
   obligors.push_back(bp);
 
@@ -239,19 +239,19 @@ void ccruncher_test::SimulatedDataTest::test1()
   ASSERT_EQUALS(sobligors[3].irating, (unsigned char) 1);
   ASSERT_EQUALS(sobligors[4].irating, (unsigned char) 0);
 
-  ASSERT_EQUALS(sobligors[0].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[1].isector, (unsigned char) 1);
-  ASSERT_EQUALS(sobligors[2].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[3].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[4].isector, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[0].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[1].ifactor, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[2].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[3].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[4].ifactor, (unsigned char) 1);
   
   sort(sobligors.begin(), sobligors.end());
 
-  ASSERT_EQUALS(sobligors[0].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[1].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[2].isector, (unsigned char) 0);
-  ASSERT_EQUALS(sobligors[3].isector, (unsigned char) 1);
-  ASSERT_EQUALS(sobligors[4].isector, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[0].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[1].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[2].ifactor, (unsigned char) 0);
+  ASSERT_EQUALS(sobligors[3].ifactor, (unsigned char) 1);
+  ASSERT_EQUALS(sobligors[4].ifactor, (unsigned char) 1);
   
   ASSERT_EQUALS(sobligors[0].irating, (unsigned char) 0);
   ASSERT_EQUALS(sobligors[1].irating, (unsigned char) 1);

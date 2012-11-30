@@ -30,21 +30,21 @@
 #define EPSILON 1E-14
 
 //===========================================================================
-// getSectors
+// getFactors
 //===========================================================================
-Sectors ccruncher_test::CorrelationsTest::getSectors()
+Factors ccruncher_test::CorrelationsTest::getFactors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='others'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='others'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors ret;
+  // factors list creation
+  Factors ret;
   xmlparser.parse(xmlcontent, &ret);
 
   return ret;
@@ -57,9 +57,9 @@ void ccruncher_test::CorrelationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
-      <correlation sector1='S1' sector2='S2' value='0.05'/>\n\
-      <correlation sector1='S2' sector2='S2' value='0.3'/>\n\
+      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
+      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
+      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>";
   double vmatrix[] = {
     0.25, 0.05,
@@ -69,11 +69,11 @@ void ccruncher_test::CorrelationsTest::test1()
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors = getSectors();
+  // factors list creation
+  Factors factors = getFactors();
 
   // correlation matrix creation
-  Correlations crm(sectors);
+  Correlations crm(factors);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   ASSERT(2 == crm.size());
@@ -92,22 +92,22 @@ void ccruncher_test::CorrelationsTest::test1()
 //===========================================================================
 void ccruncher_test::CorrelationsTest::test2()
 {
-  // non valid xml (undefined sector S4)
+  // non valid xml (undefined factor S4)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
-      <correlation sector1='S1' sector2='S2' value='0.05'/>\n\
-      <correlation sector1='S2' sector2='S4' value='0.3'/>\n\
+      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
+      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
+      <correlation factor1='S2' factor2='S4' value='0.3'/>\n\
     </correlations>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors = getSectors();
+  // factors list creation
+  Factors factors = getFactors();
 
   // correlation matrix creation
-  Correlations crm(sectors);
+  Correlations crm(factors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -119,18 +119,18 @@ void ccruncher_test::CorrelationsTest::test3()
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
-      <correlation sector1='S1' sector2='S2' value='0.05'/>\n\
+      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
+      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
     </correlations>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors = getSectors();
+  // factors list creation
+  Factors factors = getFactors();
 
   // correlation matrix creation
-  Correlations crm(sectors);
+  Correlations crm(factors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -142,18 +142,18 @@ void ccruncher_test::CorrelationsTest::test4()
   // non valid correlation matrix (elements not belonging to (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
-      <correlation sector1='S1' sector2='S2' value='1.1'/>\n\
-      <correlation sector1='S2' sector2='S2' value='0.3'/>\n\
+      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
+      <correlation factor1='S1' factor2='S2' value='1.1'/>\n\
+      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors = getSectors();
+  // factors list creation
+  Factors factors = getFactors();
 
   // correlation matrix creation
-  Correlations crm(sectors);
+  Correlations crm(factors);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }

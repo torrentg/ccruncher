@@ -108,10 +108,10 @@
 					</xsd:complexType>
 				</xsd:element>
 			</xsd:choice>
-			<xsd:element name="sectors" minOccurs="1" maxOccurs="1">
+			<xsd:element name="factors" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="sector" minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="factor" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
 								<xsd:attribute name="description" type="xsd:string" use="required"/>
@@ -125,8 +125,8 @@
 					<xsd:sequence>
 						<xsd:element name="correlation" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
-								<xsd:attribute name="sector1" type="xsd:string" use="required"/>
-								<xsd:attribute name="sector2" type="xsd:string" use="required"/>
+								<xsd:attribute name="factor1" type="xsd:string" use="required"/>
+								<xsd:attribute name="factor2" type="xsd:string" use="required"/>
 								<xsd:attribute name="value" type="double" use="required"/>
 							</xsd:complexType>
 						</xsd:element>
@@ -196,7 +196,7 @@
 								</xsd:sequence>
 								<xsd:attribute name="id" type="xsd:string" use="required"/>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
-								<xsd:attribute name="sector" type="xsd:string" use="required"/>
+								<xsd:attribute name="factor" type="xsd:string" use="required"/>
 								<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>

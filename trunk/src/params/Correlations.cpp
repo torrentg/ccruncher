@@ -38,72 +38,72 @@ ccruncher::Correlations::Correlations()
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Correlations::Correlations(const Sectors &sectors_) throw(Exception)
+ccruncher::Correlations::Correlations(const Factors &factors_) throw(Exception)
 {
-  setSectors(sectors_);
+  setFactors(factors_);
 }
 
 //===========================================================================
-// set sectors
+// set factors
 //===========================================================================
-void ccruncher::Correlations::setSectors(const Sectors &sectors_) throw(Exception)
+void ccruncher::Correlations::setFactors(const Factors &factors_) throw(Exception)
 {
-  if (sectors_.size() <= 0) {
-    throw Exception("sectors not found");
+  if (factors_.size() <= 0) {
+    throw Exception("factors not found");
   }
   else {
-    sectors = sectors_;
+    factors = factors_;
     matrix.assign(size(), vector<double>(size(), NAN));
   }
 }
 
 //===========================================================================
-// return sectors
+// return factors
 //===========================================================================
-const Sectors & ccruncher::Correlations::getSectors() const
+const Factors & ccruncher::Correlations::getFactors() const
 {
-  return sectors;
+  return factors;
 }
 
 //===========================================================================
-// returns size (number of sectors)
+// returns size (number of factors)
 //===========================================================================
 int ccruncher::Correlations::size() const
 {
-  return sectors.size();
+  return factors.size();
 }
 
 //===========================================================================
 // inserts an element into matrix
 //===========================================================================
-void ccruncher::Correlations::insertCorrelation(const string &sector1, const string &sector2, double value) throw(Exception)
+void ccruncher::Correlations::insertCorrelation(const string &factor1, const string &factor2, double value) throw(Exception)
 {
-  int row = sectors.getIndex(sector1);
-  int col = sectors.getIndex(sector2);
+  int row = factors.getIndex(factor1);
+  int col = factors.getIndex(factor2);
 
-  // checking index sector
+  // checking index factor
   if (row < 0 || col < 0)
   {
-    string msg = "undefined sector at <correlation>, sector1=" + sector1 + ", sector2=" + sector2;
+    string msg = "undefined factor at <correlation>, factor1=" + factor1 + ", factor2=" + factor2;
     throw Exception(msg);
   }
 
   // checking value
   if (row == col && (value < 0.0 || 1.0 < value) )
   {
-    string msg = "factor loading [" + sector1 + "][" + sector2 + "] out of range [0,1]";
+    string msg = "factor loading [" + factor1 + "][" + factor2 + "] out of range [0,1]";
     throw Exception(msg);
   }
   if (row != col && (value < -1.0 || 1.0 < value) )
   {
-    string msg = "correlation value[" + sector1 + "][" + sector2 + "] out of range [-1,+1]";
+    string msg = "correlation value[" + factor1 + "][" + factor2 + "] out of range [-1,+1]";
     throw Exception(msg);
   }
 
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [" + sector1 + "][" + sector2 + "] in <correlation>";
+    string msg = "redefined correlation [" + factor1 + "][" + factor2 + "] in <correlation>";
     throw Exception(msg);
   }
 
@@ -123,10 +123,10 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
     }
   }
   else if (isEqual(name,"correlation")) {
-    string sector1 = getStringAttribute(attributes, "sector1");
-    string sector2 = getStringAttribute(attributes, "sector2");
+    string factor1 = getStringAttribute(attributes, "factor1");
+    string factor2 = getStringAttribute(attributes, "factor2");
     double value = getDoubleAttribute(attributes, "value");
-    insertCorrelation(sector1, sector2, value);
+    insertCorrelation(factor1, factor2, value);
   }
   else {
     throw Exception("unexpected tag " + string(name));
@@ -185,8 +185,8 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
     for(int j=i;j<size();j++)
     {
       ret += spc2 + "<correlation ";
-      ret += "sector1='" + sectors.getName(i) + "' ";
-      ret += "sector2='" + sectors.getName(j) + "' ";
+      ret += "factor1='" + factors.getName(i) + "' ";
+      ret += "factor2='" + factors.getName(j) + "' ";
       ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
       ret += "/>\n";
     }

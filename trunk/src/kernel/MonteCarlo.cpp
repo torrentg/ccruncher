@@ -175,7 +175,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   log << "initial date" << split << time0 << endl;
   log << "end date" << split << timeT << endl;
   log << "number of ratings" << split << idata.getRatings().size() << endl;
-  log << "number of sectors" << split << idata.getSectors().size() << endl;
+  log << "number of factors" << split << idata.getFactors().size() << endl;
   log << "copula type" << split << idata.getParams().copula_type << endl;
 
   DefaultProbabilities dprobs;
@@ -216,9 +216,9 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   chol = idata.getCorrelations().getCholesky();
   floadings = idata.getCorrelations().getFactorLoadings();
 
-  assert((int)chol->size1 == idata.getSectors().size());
+  assert((int)chol->size1 == idata.getFactors().size());
   assert(chol->size1 == chol->size2);
-  assert((int)floadings.size() == idata.getSectors().size());
+  assert((int)floadings.size() == idata.getFactors().size());
 
   // performance tip: chol contains the w·chol (to avoid multiplications)
   // in simulation time and w contaings sqrt(1-w^2) (to avoid sqrt
@@ -253,8 +253,8 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   if (idata.getRatings().size() == 0 || UCHAR_MAX < idata.getRatings().size()) {
     throw Exception("invalid number of ratings");
   }
-  if (idata.getSectors().size() == 0 || UCHAR_MAX < idata.getSectors().size()) {
-    throw Exception("invalid number of sectors");
+  if (idata.getFactors().size() == 0 || UCHAR_MAX < idata.getFactors().size()) {
+    throw Exception("invalid number of factors");
   }
 
   // setting logger info
@@ -280,7 +280,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
     }
   }
   
-  // important: sorting obligors list by sector and rating
+  // important: sorting obligors list by factor and rating
   sort(obligors.begin(), obligors.end());
   log << "number of simulated obligors" << split << obligors.size() << endl;
 

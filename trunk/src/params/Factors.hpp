@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Sectors_
-#define _Sectors_
+#ifndef _Factors_
+#define _Factors_
 
 //---------------------------------------------------------------------------
 
@@ -39,31 +39,31 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Sectors : public ExpatHandlers
+class Factors : public ExpatHandlers
 {
 
   private:
 
     // internal struct
-    struct Sector
+    struct Factor
     {
-        // sector name
+        // factor name
         string name;
-        // sector description
+        // factor description
         string desc;
         // constructor
-        Sector(const string &n="", const string &d="") : name(n), desc(d) {}
+        Factor(const string &n="", const string &d="") : name(n), desc(d) {}
     };
 
   private:
 
-    // list of sectors
-    vector<Sector> vsectors;
+    // list of factors
+    vector<Factor> vfactors;
 
   private:
   
-    // add a sector to list
-    void insertSector(const Sector &) throw(Exception);
+    // add a factor to list
+    void insertFactor(const Factor &) throw(Exception);
     // validate list
     void validations() throw(Exception);
 
@@ -77,15 +77,15 @@ class Sectors : public ExpatHandlers
   public:
 
     // default constructor
-    Sectors();
-    // return the number of sectors
+    Factors();
+    // return the number of factors
     int size() const;
-    // return the index of the sector
+    // return the index of the factor
     int getIndex(const char *name) const;
     int getIndex(const string &name) const;
-    // return sector name
+    // return factor name
     const string& getName(int i) const;
-    // return sector description
+    // return factor description
     const string& getDescription(int i) const;
     // returns object content as xml
     string getXML(int) const throw(Exception);

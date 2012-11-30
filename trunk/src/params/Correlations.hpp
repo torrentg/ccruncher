@@ -30,7 +30,7 @@
 #include <gsl/gsl_matrix.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -45,8 +45,8 @@ class Correlations : public ExpatHandlers
 
   private:
 
-    // list of sectors
-    Sectors sectors;
+    // list of factors
+    Factors factors;
     // matrix values
     vector<vector<double> > matrix;
 
@@ -69,12 +69,12 @@ class Correlations : public ExpatHandlers
     // constructor
     Correlations();
     // constructor
-    Correlations(const Sectors &) throw(Exception);
+    Correlations(const Factors &) throw(Exception);
     // initialize object
-    void setSectors(const Sectors &) throw(Exception);
-    // return sectors
-    const Sectors &getSectors() const;
-    // matrix size (= number of sector)
+    void setFactors(const Factors &) throw(Exception);
+    // return factors
+    const Factors &getFactors() const;
+    // matrix size (= number of factors)
     int size() const;
     // matrix element access
     const vector<double>& operator[] (int row) const;

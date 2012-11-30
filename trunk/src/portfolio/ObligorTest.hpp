@@ -29,7 +29,7 @@
 #include <vector>
 #include <MiniCppUnit.hxx>
 #include "params/Ratings.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "params/Interest.hpp"
 #include "utils/Date.hpp"
 #include "params/Segmentations.hpp"
@@ -47,7 +47,7 @@ class ObligorTest : public TestFixture<ObligorTest>
   private:
 
     Ratings getRatings();
-    Sectors getSectors();
+    Factors getFactors();
     Segmentations getSegmentations();
     Interest getInterest(const Date &);
 

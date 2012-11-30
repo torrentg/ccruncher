@@ -51,24 +51,24 @@ Ratings ccruncher_test::ObligorTest::getRatings()
 }
 
 //===========================================================================
-// getSectors
+// getFactors
 //===========================================================================
-Sectors ccruncher_test::ObligorTest::getSectors()
+Factors ccruncher_test::ObligorTest::getFactors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='others'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='others'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors list creation
-  Sectors sectors;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors list creation
+  Factors factors;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &factors));
 
-  return sectors;
+  return factors;
 }
 
 //===========================================================================
@@ -143,7 +143,7 @@ void ccruncher_test::ObligorTest::test1()
 {
   // obligor definition
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' id='cif1'>\n\
+    <obligor rating='A' factor='S2' id='cif1'>\n\
       <belongs-to segmentation='sectors' segment='S2'/>\n\
       <belongs-to segmentation='size' segment='big'/>\n\
       <asset id='op1' date='01/01/1999'>\n\
@@ -179,17 +179,17 @@ void ccruncher_test::ObligorTest::test1()
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
   Ratings ratings = getRatings();
-  Sectors sectors = getSectors();
+  Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
   // assertions
   ASSERT(obligor.id == "cif1");
   ASSERT(obligor.irating == 0);
-  ASSERT(obligor.isector == 1);
+  ASSERT(obligor.ifactor == 1);
   ASSERT(!Recovery::valid(obligor.recovery));
   ASSERT(!obligor.hasRecovery());
 
@@ -210,7 +210,7 @@ void ccruncher_test::ObligorTest::test2()
 {
   // obligor definition with invalid rating
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='K' sector='S2'id='cif1'>\n\
+    <obligor rating='K' factor='S2'id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
@@ -240,10 +240,10 @@ void ccruncher_test::ObligorTest::test2()
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
   Ratings ratings = getRatings();
-  Sectors sectors = getSectors();
+  Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -254,7 +254,7 @@ void ccruncher_test::ObligorTest::test3()
 {
   // obligor definition with invalid asset (data repeated)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' id='cif1'>\n\
+    <obligor rating='A' factor='S2' id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
@@ -284,10 +284,10 @@ void ccruncher_test::ObligorTest::test3()
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
   Ratings ratings = getRatings();
-  Sectors sectors = getSectors();
+  Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -298,7 +298,7 @@ void ccruncher_test::ObligorTest::test4()
 {
   // checks that obligor recovery works
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' sector='S2' id='cif1' recovery='50%'>\n\
+    <obligor rating='A' factor='S2' id='cif1' recovery='50%'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
           <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
@@ -328,10 +328,10 @@ void ccruncher_test::ObligorTest::test4()
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
   Ratings ratings = getRatings();
-  Sectors sectors = getSectors();
+  Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, sectors, segmentations, interest, time0, timeT);
+  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 

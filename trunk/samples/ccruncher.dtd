@@ -16,7 +16,7 @@
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
     (title?, description?, defines?, parameters, interest, ratings, 
-     (transitions|dprobs), sectors, correlations, segmentations, 
+     (transitions|dprobs), factors, correlations, segmentations, 
      portfolio)
 )>
 
@@ -125,16 +125,16 @@
 >
 
 <!-- .............................................................. -->
-<!--                         sectors                                -->
+<!--                         factors                                -->
 <!-- .............................................................. -->
-<!ELEMENT sectors (
-    sector+
+<!ELEMENT factors (
+    factor+
 )>
 
-<!ELEMENT sector
+<!ELEMENT factor
     EMPTY
 >
-<!ATTLIST sector
+<!ATTLIST factor
     name ID #REQUIRED
     description CDATA #REQUIRED
 >
@@ -150,8 +150,8 @@
     EMPTY
 >
 <!ATTLIST correlation
-    sector1 IDREF #REQUIRED
-    sector2 IDREF #REQUIRED
+    factor1 IDREF #REQUIRED
+    factor2 IDREF #REQUIRED
     value CDATA #REQUIRED
 >
 
@@ -194,7 +194,7 @@
 <!ATTLIST obligor
     id CDATA #REQUIRED
     rating IDREF #REQUIRED
-    sector IDREF #REQUIRED
+    factor IDREF #REQUIRED
     recovery CDATA #IMPLIED
 >
 

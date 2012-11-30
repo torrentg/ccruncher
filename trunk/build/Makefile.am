@@ -31,7 +31,7 @@ ccruncher_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Transitions.cpp\
-    ../src/params/Sectors.cpp\
+    ../src/params/Factors.cpp\
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
@@ -67,7 +67,7 @@ ccruncher_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Transitions.hpp\
-    ../src/params/Sectors.hpp\
+    ../src/params/Factors.hpp\
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
@@ -125,7 +125,7 @@ tests_SOURCES = \
     ../src/params/ParamsTest.cpp\
     ../src/params/CorrelationsTest.cpp\
     ../src/params/RatingsTest.cpp\
-    ../src/params/SectorsTest.cpp\
+    ../src/params/FactorsTest.cpp\
     ../src/params/TransitionsTest.cpp\
     ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
@@ -152,7 +152,7 @@ tests_SOURCES = \
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/Recovery.cpp\
     ../src/portfolio/Exposure.cpp\
-    ../src/params/Sectors.cpp\
+    ../src/params/Factors.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Params.cpp\
     ../src/params/Transitions.cpp\
@@ -189,7 +189,7 @@ tests_SOURCES = \
     ../src/params/SegmentationsTest.hpp\
     ../src/params/ParamsTest.hpp\
     ../src/params/RatingsTest.hpp\
-    ../src/params/SectorsTest.hpp\
+    ../src/params/FactorsTest.hpp\
     ../src/params/TransitionsTest.hpp\
     ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
@@ -216,7 +216,7 @@ tests_SOURCES = \
     ../src/portfolio/Exposure.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
-    ../src/params/Sectors.hpp\
+    ../src/params/Factors.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Params.hpp\
     ../src/params/Transitions.hpp\

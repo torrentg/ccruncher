@@ -68,8 +68,8 @@ class SimulatedObligor
 
     // obligor's rating index
     unsigned char irating;
-    // obligor's sector index
-    unsigned char isector;
+    // obligor's factor index
+    unsigned char ifactor;
     // obligor's recovery
     Recovery recovery;
     // number of assets

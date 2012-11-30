@@ -122,30 +122,30 @@
     <transition from="D" to="D" value="100%" />
   </transitions>
 
-  <sectors>
-    <sector name="S1" description="Consumer/service sector"/>
-    <sector name="S2" description="Forest/building products"/>
-    <sector name="S3" description="High technology"/>
-    <sector name="S4" description="Utilities"/>
-    <sector name="S5" description="Other sectors"/>
-  </sectors>
+  <factors>
+    <factor name="S1" description="Consumer/service sector"/>
+    <factor name="S2" description="Forest/building products"/>
+    <factor name="S3" description="High technology"/>
+    <factor name="S4" description="Utilities"/>
+    <factor name="S5" description="Other sectors"/>
+  </factors>
 
   <correlations>
-    <correlation sector1="S1" sector2="S1" value="15.1%"/>
-    <correlation sector1="S1" sector2="S2" value="6.2%"/>
-    <correlation sector1="S1" sector2="S3" value="8.6%"/>
-    <correlation sector1="S1" sector2="S4" value="3.9%"/>
-    <correlation sector1="S1" sector2="S5" value="9.1%"/>
-    <correlation sector1="S2" sector2="S2" value="17.9%"/>
-    <correlation sector1="S2" sector2="S3" value="6.3%"/>
-    <correlation sector1="S2" sector2="S4" value="10.2%"/>
-    <correlation sector1="S2" sector2="S5" value="8.8%"/>
-    <correlation sector1="S3" sector2="S3" value="17.5%"/>
-    <correlation sector1="S3" sector2="S4" value="7.3%"/>
-    <correlation sector1="S3" sector2="S5" value="7.1%"/>
-    <correlation sector1="S4" sector2="S4" value="12.8%"/>
-    <correlation sector1="S4" sector2="S5" value="6.4%"/>
-    <correlation sector1="S5" sector2="S5" value="15.0%"/>
+    <correlation factor1="S1" factor2="S1" value="15.1%"/>
+    <correlation factor1="S1" factor2="S2" value="6.2%"/>
+    <correlation factor1="S1" factor2="S3" value="8.6%"/>
+    <correlation factor1="S1" factor2="S4" value="3.9%"/>
+    <correlation factor1="S1" factor2="S5" value="9.1%"/>
+    <correlation factor1="S2" factor2="S2" value="17.9%"/>
+    <correlation factor1="S2" factor2="S3" value="6.3%"/>
+    <correlation factor1="S2" factor2="S4" value="10.2%"/>
+    <correlation factor1="S2" factor2="S5" value="8.8%"/>
+    <correlation factor1="S3" factor2="S3" value="17.5%"/>
+    <correlation factor1="S3" factor2="S4" value="7.3%"/>
+    <correlation factor1="S3" factor2="S5" value="7.1%"/>
+    <correlation factor1="S4" factor2="S4" value="12.8%"/>
+    <correlation factor1="S4" factor2="S5" value="6.4%"/>
+    <correlation factor1="S5" factor2="S5" value="15.0%"/>
   </correlations>
 
   <segmentations>
@@ -179,7 +179,7 @@
   </segmentations>
 
   <portfolio>
-    <obligor rating="A" sector="S1" id="000001" recovery="80%">
+    <obligor rating="A" factor="S1" id="000001" recovery="80%">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
       <asset id="op1" date="01/01/2005" recovery="80%">
@@ -210,7 +210,7 @@
         </data>
       </asset>
     </obligor>
-    <obligor rating="B" sector="S2" id="000002" recovery="20%">
+    <obligor rating="B" factor="S2" id="000002" recovery="20%">
       <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="large"/>
       <asset id="op3" date="01/06/2003">
@@ -225,7 +225,7 @@
         </data>
       </asset>
     </obligor>
-    <obligor rating="CCC" sector="S2" id="000003">
+    <obligor rating="CCC" factor="S2" id="000003">
       <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="medium"/>
       <asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)">
