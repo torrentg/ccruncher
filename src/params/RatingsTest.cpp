@@ -94,14 +94,10 @@ void ccruncher_test::RatingsTest::test2()
 //===========================================================================
 void ccruncher_test::RatingsTest::test3()
 {
-  // note that ratings are incorrect (descriptions repeated)
+  // error because only 1 rating (required a minimum of 2 ratings)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <ratings>\n\
       <rating name='A' description='very good'/>\n\
-      <rating name='B' description='very good'/>\n\
-      <rating name='D' description='very bad'/>\n\
-      <rating name='C' description='bad'/>\n\
-      <rating name='E' description='defaulted'/>\n\
     </ratings>";
 
   // creating xml

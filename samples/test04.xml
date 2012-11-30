@@ -97,15 +97,13 @@ How to check results?
   <!--                           FACTORS                              -->
   <!-- ============================================================== -->
   <factors>
-    <factor name="S1" description="sector 1"/>
+    <factor name="S1" loading="20%" description="sector 1"/>
   </factors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <correlations>
-    <correlation factor1="S1" factor2="S1" value="20%"/>
-  </correlations>
+  <correlations/>
 
   <!-- ============================================================== -->
   <!--                       SEGMENTATIONS                            -->

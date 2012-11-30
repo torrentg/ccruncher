@@ -123,29 +123,24 @@
   </transitions>
 
   <factors>
-    <factor name="S1" description="Consumer/service sector"/>
-    <factor name="S2" description="Forest/building products"/>
-    <factor name="S3" description="High technology"/>
-    <factor name="S4" description="Utilities"/>
-    <factor name="S5" description="Other sectors"/>
+    <factor name="S1" loading="15.1%" description="Consumer/service sector"/>
+    <factor name="S2" loading="17.9%" description="Forest/building products"/>
+    <factor name="S3" loading="17.5%" description="High technology"/>
+    <factor name="S4" loading="12.8%" description="Utilities"/>
+    <factor name="S5" loading="15.0%" description="Other sectors"/>
   </factors>
 
   <correlations>
-    <correlation factor1="S1" factor2="S1" value="15.1%"/>
     <correlation factor1="S1" factor2="S2" value="6.2%"/>
     <correlation factor1="S1" factor2="S3" value="8.6%"/>
     <correlation factor1="S1" factor2="S4" value="3.9%"/>
     <correlation factor1="S1" factor2="S5" value="9.1%"/>
-    <correlation factor1="S2" factor2="S2" value="17.9%"/>
     <correlation factor1="S2" factor2="S3" value="6.3%"/>
     <correlation factor1="S2" factor2="S4" value="10.2%"/>
     <correlation factor1="S2" factor2="S5" value="8.8%"/>
-    <correlation factor1="S3" factor2="S3" value="17.5%"/>
     <correlation factor1="S3" factor2="S4" value="7.3%"/>
     <correlation factor1="S3" factor2="S5" value="7.1%"/>
-    <correlation factor1="S4" factor2="S4" value="12.8%"/>
     <correlation factor1="S4" factor2="S5" value="6.4%"/>
-    <correlation factor1="S5" factor2="S5" value="15.0%"/>
   </correlations>
 
   <segmentations>

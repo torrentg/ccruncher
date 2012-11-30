@@ -6,10 +6,6 @@ Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
   * review functional tests (because --trace removed)
-  * rename sector to factor
-    - add loading+ndf in factor tag
-    - remove param copula.type
-    - remove correlations diagonal
   * bulk output to file ?
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file

@@ -31,8 +31,8 @@ void ccruncher_test::FactorsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S2' description='others'/>\n\
+      <factor name='S1' loading='10%' description='retail'/>\n\
+      <factor name='S2' loading='20%'/>\n\
     </factors>";
 
   // creating xml
@@ -50,8 +50,11 @@ void ccruncher_test::FactorsTest::test1()
   ASSERT("S1" == factors.getName(0));
   ASSERT("S2" == factors.getName(1));
 
+  ASSERT_EQUALS_EPSILON(factors.getLoading(0), 0.1, 1e-14)
+  ASSERT_EQUALS_EPSILON(factors.getLoading(1), 0.2, 1e-14)
+
   ASSERT("retail" == factors.getDescription(0));
-  ASSERT("others" == factors.getDescription(1));
+  ASSERT("" == factors.getDescription(1));
 
   ASSERT(factors.getName(0) == "S1");
   ASSERT(factors.getName(1) == "S2");
@@ -65,8 +68,8 @@ void ccruncher_test::FactorsTest::test2()
   // xml with error (repeated factor)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S1' description='others'/>\n\
+      <factor name='S1' loading='10%' description='retail'/>\n\
+      <factor name='S1' loading='20%' description='others'/>\n\
     </factors>";
 
   // creating xml
@@ -82,11 +85,11 @@ void ccruncher_test::FactorsTest::test2()
 //===========================================================================
 void ccruncher_test::FactorsTest::test3()
 {
-  // xml with error (repeated description)
+  // xml with error (loading out of range)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S2' description='retail'/>\n\
+      <factor name='S1' loading='10%' description='retail'/>\n\
+      <factor name='S2' loading='120%' description='retail'/>\n\
     </factors>";
 
   // creating xml
@@ -102,11 +105,11 @@ void ccruncher_test::FactorsTest::test3()
 //===========================================================================
 void ccruncher_test::FactorsTest::test4()
 {
-  // xml with error (tag sectir)
+  // xml with error (tag factir)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <sectir name='S2' description='others'/>\n\
+      <factor name='S1' loading='10%' description='retail'/>\n\
+      <factir name='S2' loading='20%' description='others'/>\n\
     </factors>";
 
   // creating xml

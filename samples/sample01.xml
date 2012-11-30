@@ -128,10 +128,10 @@
   <!--                           FACTORS                              -->
   <!-- ============================================================== -->
   <factors>
-    <factor name="tech" description="technology"/>
-    <factor name="util" description="utilities"/>
-    <factor name="energ" description="energy"/>
-    <factor name="bank" description="banking"/>
+    <factor name="tech" loading="20%" description="technology"/>
+    <factor name="util" loading="35%" description="utilities"/>
+    <factor name="energ" loading="20%" description="energy"/>
+    <factor name="bank" loading="40%" description="banking"/>
   </factors>
 
   <!-- ============================================================== -->
@@ -139,20 +139,12 @@
   <!-- ============================================================== -->
   <correlations>
 
-    <correlation factor1="tech" factor2="tech" value="20%"/>
     <correlation factor1="tech" factor2="util" value="1%"/>
     <correlation factor1="tech" factor2="energ" value="2%"/>
     <correlation factor1="tech" factor2="bank" value="-3%"/>
-
-    <correlation factor1="util" factor2="util" value="35%"/>
     <correlation factor1="util" factor2="energ" value="-4%"/>
     <correlation factor1="util" factor2="bank" value="-1%"/>
-
-    <correlation factor1="energ" factor2="energ" value="20%"/>
     <correlation factor1="energ" factor2="bank" value="-6%"/>
-
-    <correlation factor1="bank" factor2="bank" value="40%"/>
-
   </correlations>
 
   <!-- ============================================================== -->

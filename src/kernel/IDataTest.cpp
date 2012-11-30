@@ -102,13 +102,11 @@ void ccruncher_test::IDataTest::test1()
       <dprob rating='E' t='12M' value='100%'/>\n\
     </dprobs>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S2' description='others'/>\n\
+      <factor name='S1' loading='0.25' description='retail'/>\n\
+      <factor name='S2' loading='0.3' description='others'/>\n\
     </factors>\n\
     <correlations>\n\
-      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
       <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
-      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
