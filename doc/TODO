@@ -14,6 +14,7 @@ Current works
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file
   * implement simulation pause
+  * gui: allow spaces in files and links
 
 Future works
 -------------------
