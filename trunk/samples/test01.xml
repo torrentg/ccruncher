@@ -103,15 +103,13 @@ How to check results?
   <!--                           FACTORS                              -->
   <!-- ============================================================== -->
   <factors>
-    <factor name="S1" description="unique sector"/>
+    <factor name="S1" loading="0%" description="unique sector"/>
   </factors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
-  <correlations>
-    <correlation factor1="S1" factor2="S1" value="0%"/>
-  </correlations>
+  <correlations/>
 
   <!-- ============================================================== -->
   <!--                       SEGMENTATIONS                            -->

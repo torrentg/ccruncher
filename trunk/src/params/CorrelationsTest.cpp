@@ -36,8 +36,8 @@ Factors ccruncher_test::CorrelationsTest::getFactors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S2' description='others'/>\n\
+      <factor name='S1' loading='0.25' description='retail'/>\n\
+      <factor name='S2' loading='0.3' description='others'/>\n\
     </factors>";
 
   // creating xml
@@ -57,13 +57,11 @@ void ccruncher_test::CorrelationsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
       <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
-      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>";
   double vmatrix[] = {
-    0.25, 0.05,
-    0.05, 0.30
+    1.00, 0.05,
+    0.05, 1.00
   };
 
   // creating xml
@@ -77,6 +75,9 @@ void ccruncher_test::CorrelationsTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   ASSERT(2 == crm.size());
+
+  ASSERT_EQUALS_EPSILON(0.25, crm.getFactors().getLoading(0), 1e-12);
+  ASSERT_EQUALS_EPSILON(0.30, crm.getFactors().getLoading(1), 1e-12);
 
   for(int i=0; i<2; i++)
   {
@@ -95,9 +96,7 @@ void ccruncher_test::CorrelationsTest::test2()
   // non valid xml (undefined factor S4)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
-      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
-      <correlation factor1='S2' factor2='S4' value='0.3'/>\n\
+      <correlation factor1='S1' factor2='S4' value='0.05'/>\n\
     </correlations>";
 
   // creating xml
@@ -118,10 +117,7 @@ void ccruncher_test::CorrelationsTest::test3()
 {
   // incomplete matrix
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <correlations>\n\
-      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
-      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
-    </correlations>";
+    <correlations/>";
 
   // creating xml
   ExpatParser xmlparser;
@@ -139,12 +135,10 @@ void ccruncher_test::CorrelationsTest::test3()
 //===========================================================================
 void ccruncher_test::CorrelationsTest::test4()
 {
-  // non valid correlation matrix (elements not belonging to (-1,1))
+  // non valid correlation matrix (elements out of range (-1,1))
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations>\n\
-      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
       <correlation factor1='S1' factor2='S2' value='1.1'/>\n\
-      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>";
 
   // creating xml

@@ -59,12 +59,21 @@ const string& ccruncher::Factors::getDescription(int i) const
 }
 
 //===========================================================================
+// return factor loading
+//===========================================================================
+double ccruncher::Factors::getLoading(int i) const
+{
+  assert(i >= 0 && i < (int) vfactors.size());
+  return vfactors[i].loading;
+}
+
+//===========================================================================
 // return the index of the factor (-1 if not found)
 //===========================================================================
 int ccruncher::Factors::getIndex(const char *name) const
 {
   assert(name != NULL);
-  for (unsigned int i=0;i<vfactors.size();i++)
+  for (size_t i=0; i<vfactors.size(); i++)
   {
     if (vfactors[i].name.compare(name) == 0)
     {
@@ -88,7 +97,7 @@ int ccruncher::Factors::getIndex(const string &name) const
 void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vfactors.size();i++)
+  for (size_t i=0; i<vfactors.size(); i++)
   {
     Factor aux = vfactors[i];
 
@@ -96,10 +105,13 @@ void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
     {
       throw Exception("factor name " + val.name + " repeated");
     }
-    else if (aux.desc == val.desc)
-    {
-      throw Exception("factor description " + val.desc + " repeated");
-    }
+  }
+
+  // checking factor loading
+  if (val.loading < 0.0 || 1.0 < val.loading)
+  {
+    string msg = "factor loading [" + val.name + "] out of range [0,1]";
+    throw Exception(msg);
   }
 
   try
@@ -123,13 +135,14 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
     }
   }
   else if (isEqual(name_,"factor")) {
-    if (getNumAttributes(attributes) != 2) {
+    if (getNumAttributes(attributes) < 2 || getNumAttributes(attributes) > 3) {
       throw Exception("invalid number of attributes at factor");
     }
     else {
       string name = getStringAttribute(attributes, "name");
-      string desc = getStringAttribute(attributes, "description");
-      insertFactor(Factor(name,desc));
+      string desc = getStringAttribute(attributes, "description", "");
+      double loading = getDoubleAttribute(attributes, "loading");
+      insertFactor(Factor(name,desc,loading));
     }
   }
   else {
@@ -180,6 +193,7 @@ string ccruncher::Factors::getXML(int ilevel) const throw(Exception)
     ret += Strings::blanks(ilevel+2);
     ret += "<factor ";
     ret += "name='" + vfactors[i].name + "' ";
+    if (vfactors[i].desc != "")
     ret += "description='" + vfactors[i].desc + "'";
     ret += "/>\n";
   }

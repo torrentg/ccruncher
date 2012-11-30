@@ -129,13 +129,11 @@
     <transition from="D" to="D" value="100.0%"/>
   </transitions>
   <factors>
-    <factor name="S1" description='Consumer/service sector'/>
-    <factor name="S2" description='Forest/building products'/>
+    <factor name="S1" loading="9.931%" description='Consumer/service sector'/>
+    <factor name="S2" loading="12.55%" description='Forest/building products'/>
   </factors>
   <correlations>
-    <correlation factor1="S1" factor2="S1" value="9.931%"/>
     <correlation factor1="S1" factor2="S2" value="10.94%"/>
-    <correlation factor1="S2" factor2="S2" value="12.55%"/>
   </correlations>
   <segmentations>
     <segmentation name='portfolio' components='asset'/>

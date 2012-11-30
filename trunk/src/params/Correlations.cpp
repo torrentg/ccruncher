@@ -54,6 +54,9 @@ void ccruncher::Correlations::setFactors(const Factors &factors_) throw(Exceptio
   else {
     factors = factors_;
     matrix.assign(size(), vector<double>(size(), NAN));
+    for(int i=0; i<size(); i++) {
+      matrix[i][i] = 1.0;
+    }
   }
 }
 
@@ -84,17 +87,23 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
   // checking index factor
   if (row < 0 || col < 0)
   {
-    string msg = "undefined factor at <correlation>, factor1=" + factor1 + ", factor2=" + factor2;
+    string msg = "unknow factor at <correlation>, factor1=" + factor1 + ", factor2=" + factor2;
     throw Exception(msg);
   }
 
-  // checking value
-  if (row == col && (value < 0.0 || 1.0 < value) )
+  // checking for digonal value
+  if (row == col)
   {
-    string msg = "factor loading [" + factor1 + "][" + factor2 + "] out of range [0,1]";
-    throw Exception(msg);
+    if (value != 1.0) {
+      throw Exception("correlation matrix with diagonal value distrinct than 1");
+    }
+    else {
+      return;
+    }
   }
-  if (row != col && (value < -1.0 || 1.0 < value) )
+
+  // checking non-diagonal value range
+  if (value < -1.0 || 1.0 < value)
   {
     string msg = "correlation value[" + factor1 + "][" + factor2 + "] out of range [-1,+1]";
     throw Exception(msg);
@@ -107,7 +116,7 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
     throw Exception(msg);
   }
 
-  // insering value into matrix
+  // inserting value into matrix
   matrix[row][col] = value;
   matrix[col][row] = value;
 }
@@ -155,9 +164,9 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 void ccruncher::Correlations::validate() throw(Exception)
 {
   // checking that all matrix elements exists
-  for (int i=0;i<size();i++)
+  for (int i=0; i<size(); i++)
   {
-    for (int j=0;j<size();j++)
+    for (int j=0; j<size(); j++)
     {
       if (isnan(matrix[i][j]))
       {
@@ -180,9 +189,9 @@ string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
 
   ret += spc1 + "<correlations>\n";
 
-  for(int i=0;i<size();i++)
+  for(int i=0; i<size(); i++)
   {
-    for(int j=i;j<size();j++)
+    for(int j=i+1; j<size(); j++)
     {
       ret += spc2 + "<correlation ";
       ret += "factor1='" + factors.getName(i) + "' ";
@@ -243,12 +252,10 @@ gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
 vector<double> ccruncher::Correlations::getFactorLoadings() const
 {
   vector<double> w(size(), NAN);
-
   for(int i=0; i<size(); i++)
   {
-    w[i] = matrix[i][i];
+    w[i] = factors.getLoading(i);
   }
-
   return w;
 }
 

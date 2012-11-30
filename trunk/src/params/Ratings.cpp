@@ -96,10 +96,6 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
     {
       throw Exception("rating name " + val.name + " repeated");
     }
-    else if (aux.desc == val.desc)
-    {
-      throw Exception("rating description " + val.desc + " repeated");
-    }
   }
 
   try
@@ -128,7 +124,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char 
     }
     else {
       string name = getStringAttribute(attributes, "name");
-      string desc = getStringAttribute(attributes, "description");
+      string desc = getStringAttribute(attributes, "description", "");
       insertRating(Rating(name,desc));
     }
   }
@@ -158,10 +154,10 @@ void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::Ratings::validations() throw(Exception)
 {
-  // checking number of ratings
-  if (vratings.empty())
+  // checking number of ratings (minimum: default+non-default)
+  if (vratings.size() < 2)
   {
-    throw Exception("ratings have no elements");
+    throw Exception("required a minimum of 2 ratings");
   }
 }
 
@@ -180,6 +176,7 @@ string ccruncher::Ratings::getXML(int ilevel) const throw(Exception)
     ret += Strings::blanks(ilevel+2);
     ret += "<rating ";
     ret += "name='" + vratings[i].name + "' ";
+    if (vratings[i].desc != "")
     ret += "description='" + vratings[i].desc + "'";
     ret += "/>\n";
   }

@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
+#include <cmath>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
@@ -51,8 +52,10 @@ class Factors : public ExpatHandlers
         string name;
         // factor description
         string desc;
+        // factor loading
+        double loading;
         // constructor
-        Factor(const string &n="", const string &d="") : name(n), desc(d) {}
+        Factor(const string &n="", const string &d="", double v=NAN) : name(n), desc(d), loading(v) {}
     };
 
   private:
@@ -87,6 +90,8 @@ class Factors : public ExpatHandlers
     const string& getName(int i) const;
     // return factor description
     const string& getDescription(int i) const;
+    // return factor loading
+    double getLoading(int i) const;
     // returns object content as xml
     string getXML(int) const throw(Exception);
 

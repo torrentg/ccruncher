@@ -385,15 +385,14 @@
         <td class="c1">name</td>
         <td class="c2">
           Credit rating identifier. All references to a credit rating, eg. obligor rating, 
-          are made using this field. Includes default rating in this list.
+          are made using this value. Include default rating in this list.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="a">
         <td class="c1">description</td>
         <td class="c2">
-          Credit rating description. This value is only used in reports. This
-          description must be unique.
+          Credit rating description. This attribute is optional.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -561,11 +560,11 @@
     <pre>
 
   &lt;factors&gt;
-    &lt;factor name="S1" description="Consumer/service sector"/&gt;
-    &lt;factor name="S2" description="Forest/building products"/&gt;
-    &lt;factor name="S3" description="High technology"/&gt;
-    &lt;factor name="S4" description="Utilities"/&gt;
-    &lt;factor name="S5" description="Other sectors"/&gt;
+    &lt;factor name="S1" loading="15.1%" description="Consumer/service sector"/&gt;
+    &lt;factor name="S2" loading="17.9%" description="Forest/building products"/&gt;
+    &lt;factor name="S3" loading="17.5%" description="High technology"/&gt;
+    &lt;factor name="S4" loading="12.8%" description="Utilities"/&gt;
+    &lt;factor name="S5" loading="15.0%" description="Other sectors"/&gt;
   &lt;/factors&gt;
     </pre>
 
@@ -581,15 +580,25 @@
         <td class="c1">name</td>
         <td class="c2">
           Factor identifier. All references to a factor, eg. obligor 
-          factor, are made using this field.
+          factor, are made using this value.
         </td>
         <td class="c3">string</td>
       </tr>
       <tr class="a">
+        <td class="c1">loading</td>
+        <td class="c2">
+          Factor loading value (<i>w<sub>i</sub></i> in the 
+          <a href="technical.html#multifactor-model">multi-factor model</a>). 
+          A value in the range [0%,100%].
+          The value can be set as percentage (eg. 5.3%) or absolute 
+          value (eg. 0.053).
+        </td>
+        <td class="c3">double</td>
+      </tr>
+      <tr class="b">
         <td class="c1">description</td>
         <td class="c2">
-          Factor description. This value is only used in reports.
-          This description must be unique.
+          Factor description. This attribute is optional.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -603,13 +612,13 @@
 
     <p>
       This section shows how to define the correlation matrix between 
-      factors, <i>R</i>, and the factor loadings, <i>w<sub>i</sub></i>,
-      of the <a href="technical.html#multifactor-model">multi-factor model</a>. 
-      Diagonal elements correspond to the factor loadings. The 
-      non-diagonal elements are the correlation matrix coefficients 
-      (diagonal elements aren't reported because they are allways 
-      <i>1</i>'s). You only need to set up the upper triangle elements. 
-      The number of elements to set up is (numfactors+1) x numfactors / 2.
+      factors, <i>R</i> in the <a href="technical.html#multifactor-model">multi-factor model</a>. 
+      The diagonal values are always <i>1</i> and don't need to be specified.
+      The non-diagonal elements are the correlation matrix coefficients 
+      You only need to set up the upper triangle elements. 
+      The number of elements to set up is <i>(numfactors-1) x numfactors / 2</i>.
+      If you only have <i>1</i> factor you can set <code>&lt;correlations/&gt;</code> and
+      jump to the following section.
     </p>
 
     <h3>Example</h3>
@@ -617,21 +626,16 @@
     <pre>
 
   &lt;correlations&gt;
-    &lt;correlation factor1="S1" factor2="S1" value="15.1%"/&gt;
     &lt;correlation factor1="S1" factor2="S2" value="6.2%"/&gt;
     &lt;correlation factor1="S1" factor2="S3" value="8.6%"/&gt;
     &lt;correlation factor1="S1" factor2="S4" value="3.9%"/&gt;
     &lt;correlation factor1="S1" factor2="S5" value="9.1%"/&gt;
-    &lt;correlation factor1="S2" factor2="S2" value="17.9%"/&gt;
     &lt;correlation factor1="S2" factor2="S3" value="6.3%"/&gt;
     &lt;correlation factor1="S2" factor2="S4" value="10.2%"/&gt;
     &lt;correlation factor1="S2" factor2="S5" value="8.8%"/&gt;
-    &lt;correlation factor1="S3" factor2="S3" value="17.5%"/&gt;
     &lt;correlation factor1="S3" factor2="S4" value="7.3%"/&gt;
     &lt;correlation factor1="S3" factor2="S5" value="7.1%"/&gt;
-    &lt;correlation factor1="S4" factor2="S4" value="12.8%"/&gt;
     &lt;correlation factor1="S4" factor2="S5" value="6.4%"/&gt;
-    &lt;correlation factor1="S5" factor2="S5" value="15.0%"/&gt;
   &lt;/correlations&gt;
     </pre>
 
@@ -662,19 +666,9 @@
       <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
-          Factor loading or correlation between factors.
-          <ul>
-            <li>
-              if factor1 = factor2: factor loading. <br/>
-              A value in the range [0%,100%].
-            </li>
-            <li>
-              if factor1 &ne; factor2: correlation between factor1 and factor2. <br/>
-              A value in the range [-100%,+100%]
-            </li>
-          </ul>
+          Correlation between factor1 and factor2. A value in the range [-100%,+100%]. 
           The value can be set as percentage (eg. 5.3%) or absolute 
-          value (eg. 0.053)
+          value (eg. 0.053).
         </td>
         <td class="c3">double</td>
       </tr>
@@ -751,7 +745,7 @@
         <td class="c1">name</td>
         <td class="c2">
           Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
-          are made using this field.
+          are made using this value.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -787,7 +781,7 @@
         <td class="c2">
           Segment name. Different segmentations can have segments with
           the same name. All references to a segment, eg. belongs-to tag,
-          are made using this field and always in conjunction with the segmentation. 
+          are made using this value and always in conjunction with the segmentation. 
           If a segmentation doesn't have any segments, all the elements belong to
           the 'unassigned' segment.
         </td>

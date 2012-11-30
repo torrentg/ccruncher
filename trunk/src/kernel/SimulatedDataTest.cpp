@@ -58,8 +58,8 @@ Factors ccruncher_test::SimulatedDataTest::getFactors()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <factors>\n\
-      <factor name='S1' description='retail'/>\n\
-      <factor name='S2' description='others'/>\n\
+      <factor name='S1' loading='10%' description='retail'/>\n\
+      <factor name='S2' loading='20%' description='others'/>\n\
     </factors>";
 
   // creating xml

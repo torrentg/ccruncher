@@ -86,7 +86,7 @@
 >
 <!ATTLIST rating 
     name ID #REQUIRED
-    description CDATA #REQUIRED
+    description CDATA #IMPLIED
 >
 
 <!-- .............................................................. -->
@@ -136,7 +136,8 @@
 >
 <!ATTLIST factor
     name ID #REQUIRED
-    description CDATA #REQUIRED
+    description CDATA #IMPLIED
+    loading CDATA #REQUIRED
 >
 
 <!-- .............................................................. -->

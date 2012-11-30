@@ -7,10 +7,13 @@ version 2.1 (???. 2012)
   * added graphic interface
   * improved accuracy
   * removed implicit segmentations
-  * replaced survival by default probability
+  * replaced concept survival by default probability
   * attribute values@at renamed to values@t
-  * tag property renamed to parameter
-  * parameter copula.seed renamed to rng.seed
+  * tag 'property' renamed to 'parameter'
+  * parameter 'copula.seed' renamed to 'rng.seed'
+  * 'description' attribute changed to optional
+  * section 'sectors' renamed as 'factors'
+  * factor loading values moved to 'factor' section
 
 version 2.0 (Oct. 2012)
 --------------------------
