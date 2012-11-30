@@ -233,14 +233,14 @@ makeWinDist() {
   # local variables
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
-  winfiles = "ccruncher-gui.exe
-              pthreadGC2.dll
-              mingwm10.dll
-              libgcc_s_dw2-1.dll
-              QtCore4.dll
-              QtGui4.dll
-              QtSvg4.dll
-              qwt.dll"
+  winfiles="ccruncher-gui.exe
+            pthreadGC2.dll
+            mingwm10.dll
+            libgcc_s_dw2-1.dll
+            QtCore4.dll
+            QtGui4.dll
+            QtSvg4.dll
+            qwt.dll"
 
   # obtaining a clean environement
   chmod -R +w $workpath > /dev/null 2> /dev/null;
