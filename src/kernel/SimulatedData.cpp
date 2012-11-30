@@ -30,12 +30,12 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   if (obligor != NULL) {
     irating = static_cast<unsigned char>(obligor->irating);
-    isector = static_cast<unsigned char>(obligor->isector);
+    ifactor = static_cast<unsigned char>(obligor->ifactor);
     recovery = obligor->recovery;
   }
   else {
     irating = 0;
-    isector = 0;
+    ifactor = 0;
     //recovery = Recovery();
   }
   numassets = 0;
@@ -44,16 +44,16 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 
 //===========================================================================
 // less-than operator
-// sort SimulatedObligor by sector and rating
+// sort SimulatedObligor by factor and rating
 // caution: ref contains obligor, not assets
 //===========================================================================
 bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
 {
-  if (isector < c.isector)
+  if (ifactor < c.ifactor)
   {
     return true;
   }
-  else if (isector == c.isector)
+  else if (ifactor == c.ifactor)
   {
     if (irating < c.irating)
     {

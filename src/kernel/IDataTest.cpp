@@ -101,14 +101,14 @@ void ccruncher_test::IDataTest::test1()
       <dprob rating='D' t='12M' value='4%'/>\n\
       <dprob rating='E' t='12M' value='100%'/>\n\
     </dprobs>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='others'/>\n\
-    </sectors>\n\
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='others'/>\n\
+    </factors>\n\
     <correlations>\n\
-      <correlation sector1='S1' sector2='S1' value='0.25'/>\n\
-      <correlation sector1='S1' sector2='S2' value='0.05'/>\n\
-      <correlation sector1='S2' sector2='S2' value='0.3'/>\n\
+      <correlation factor1='S1' factor2='S1' value='0.25'/>\n\
+      <correlation factor1='S1' factor2='S2' value='0.05'/>\n\
+      <correlation factor1='S2' factor2='S2' value='0.3'/>\n\
     </correlations>\n\
     <segmentations>\n\
       <segmentation name='portfolio' components='asset'/>\n\
@@ -131,7 +131,7 @@ void ccruncher_test::IDataTest::test1()
       </segmentation>\n\
     </segmentations>\n\
     <portfolio>\n\
-      <obligor rating='A' sector='S2' id='cif1'>\n\
+      <obligor rating='A' factor='S2' id='cif1'>\n\
         <asset id='op1' date='01/01/1999'>\n\
           <belongs-to segmentation='products' segment='bond'/>\n\
           <belongs-to segmentation='offices' segment='0001'/>\n\

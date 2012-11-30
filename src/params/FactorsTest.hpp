@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _SectorsTest_
-#define _SectorsTest_
+#ifndef _FactorsTest_
+#define _FactorsTest_
 
 //---------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class SectorsTest : public TestFixture<SectorsTest>
+class FactorsTest : public TestFixture<FactorsTest>
 {
 
   private:
@@ -48,7 +48,7 @@ class SectorsTest : public TestFixture<SectorsTest>
 
   public:
 
-    TEST_FIXTURE(SectorsTest)
+    TEST_FIXTURE(FactorsTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -58,7 +58,7 @@ class SectorsTest : public TestFixture<SectorsTest>
 
 };
 
-REGISTER_FIXTURE(SectorsTest)
+REGISTER_FIXTURE(FactorsTest)
 
 //---------------------------------------------------------------------------
 

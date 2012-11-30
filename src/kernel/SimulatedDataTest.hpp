@@ -29,7 +29,7 @@
 #include <vector>
 #include <MiniCppUnit.hxx>
 #include "params/Ratings.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "params/Interest.hpp"
 #include "portfolio/Obligor.hpp"
 #include "params/Segmentations.hpp"
@@ -47,7 +47,7 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
   private:
 
     Ratings getRatings();
-    Sectors getSectors();
+    Factors getFactors();
     Segmentations getSegmentations();
     Interest getInterest(const Date &);
     vector<Obligor*> getObligors();

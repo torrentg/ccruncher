@@ -237,25 +237,25 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eppush(eu, &dprobs, name_, attributes);
     }
   }
-  // section sectors
-  else if (isEqual(name_,"sectors")) {
-    if (sectors.size() != 0) {
-      throw Exception("tag sectors repeated");
+  // section factors
+  else if (isEqual(name_,"factors")) {
+    if (factors.size() != 0) {
+      throw Exception("tag factors repeated");
     }
     else {
-      eppush(eu, &sectors, name_, attributes);
+      eppush(eu, &factors, name_, attributes);
     }
   }
   // section correlation matrix
   else if (isEqual(name_,"correlations")) {
-    if (sectors.size() == 0) {
-      throw Exception("tag <correlations> defined before <sectors> tag");
+    if (factors.size() == 0) {
+      throw Exception("tag <correlations> defined before <factors> tag");
     }
     else if (correlations.size() > 0) {
       throw Exception("tag correlations repeated");
     }
     else {
-      correlations.setSectors(sectors);
+      correlations.setFactors(factors);
       eppush(eu, &correlations, name_, attributes);
     }
   }
@@ -276,8 +276,8 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     else if (ratings.size() == 0) {
       throw Exception("tag <portfolio> defined before <ratings> tag");
     }
-    else if (sectors.size() == 0) {
-      throw Exception("tag <portfolio> defined before <sectors> tag");
+    else if (factors.size() == 0) {
+      throw Exception("tag <portfolio> defined before <factors> tag");
     }
     else if (segmentations.size() == 0) {
       throw Exception("tag <portfolio> defined before <segmentations> tag");
@@ -346,7 +346,7 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"dprobs")) {
     // nothing to do
   }
-  else if (isEqual(name_,"sectors")) {
+  else if (isEqual(name_,"factors")) {
     // nothing to do
   }
   else if (isEqual(name_,"correlations")) {
@@ -368,7 +368,7 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
-  portfolio.init(ratings, sectors, segmentations, interest, params.time0, params.timeT);
+  portfolio.init(ratings, factors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 
   if (ref == "")
@@ -398,7 +398,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       pthread_mutex_unlock(&mutex);
 
       gzbuffer(file, BUFFER_SIZE);
-      log << "included file name" << split << filepath << endl;
+      log << "included file name" << split << "["+filepath+"]" << endl;
       log << "included file size" << split << Format::bytes(bytes) << endl;
 
       ExpatParser parser;
@@ -440,8 +440,8 @@ void ccruncher::IData::validate() throw(Exception)
   else if (transitions.size() == 0 && dprobs.size() == 0) {
     throw Exception("transitions or dprobs section not defined");
   }
-  else if (sectors.size() == 0) {
-    throw Exception("sectors section not defined");
+  else if (factors.size() == 0) {
+    throw Exception("factors section not defined");
   }
   else if (correlations.size() == 0) {
     throw Exception("correlation matrix section not defined");
@@ -511,11 +511,11 @@ DefaultProbabilities &ccruncher::IData::getDefaultProbabilities()
 }
 
 //===========================================================================
-// getSectors
+// getFactors
 //===========================================================================
-Sectors & ccruncher::IData::getSectors()
+Factors & ccruncher::IData::getFactors()
 {
-  return sectors;
+  return factors;
 }
 
 //===========================================================================

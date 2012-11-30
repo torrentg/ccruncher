@@ -115,8 +115,8 @@ void ccruncher::SimulationThread::rmvnorm()
     // simulate multivariate normal
     for(size_t i=0; i<obligors.size(); i++)
     {
-      size_t isector = obligors[i].isector;
-      uvalues[i] = gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng);
+      size_t ifactor = obligors[i].ifactor;
+      uvalues[i] = gsl_vector_get(factors, ifactor) + floadings[ifactor]*gsl_ran_ugaussian(rng);
     }
   }
   else
@@ -129,8 +129,8 @@ void ccruncher::SimulationThread::rmvnorm()
     // simulate multivariate t-Student
     for(size_t i=0; i<obligors.size(); i++)
     {
-      size_t isector = obligors[i].isector;
-      uvalues[i] = chival * (gsl_vector_get(factors, isector) + floadings[isector]*gsl_ran_ugaussian(rng));
+      size_t ifactor = obligors[i].ifactor;
+      uvalues[i] = chival * (gsl_vector_get(factors, ifactor) + floadings[ifactor]*gsl_ran_ugaussian(rng));
     }
   }
 }

@@ -33,7 +33,7 @@
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "params/Ratings.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "params/Interest.hpp"
 #include "params/Segmentations.hpp"
 #include <cassert>
@@ -57,8 +57,8 @@ class Obligor : public ExpatHandlers
     vector<Asset *> vassets;
     // pointer to ratings object (used by parser)
     const Ratings *ratings;
-    // pointer to sectors object (used by parser)
-    const Sectors *sectors;
+    // pointer to factors object (used by parser)
+    const Factors *factors;
     // pointer to segmentations object (used by parser)
     Segmentations *segmentations;
     // pointer to interest object (used by parser)
@@ -84,8 +84,8 @@ class Obligor : public ExpatHandlers
 
     // obligor rating
     int irating;
-    // obligor sector
-    int isector;
+    // obligor factor
+    int ifactor;
     // obligor identifier
     string id;
     // default recovery
@@ -96,7 +96,7 @@ class Obligor : public ExpatHandlers
     // copy constructor
     Obligor(const Obligor &);
     // constructor
-    Obligor(const Ratings &, const Sectors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
+    Obligor(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
     // destructor
     ~Obligor();
     // assignment operator

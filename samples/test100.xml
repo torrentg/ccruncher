@@ -128,14 +128,14 @@
     <transition from="D" to="CCC" value="0.0%"/>
     <transition from="D" to="D" value="100.0%"/>
   </transitions>
-  <sectors>
-    <sector name="S1" description='Consumer/service sector'/>
-    <sector name="S2" description='Forest/building products'/>
-  </sectors>
+  <factors>
+    <factor name="S1" description='Consumer/service sector'/>
+    <factor name="S2" description='Forest/building products'/>
+  </factors>
   <correlations>
-    <correlation sector1="S1" sector2="S1" value="9.931%"/>
-    <correlation sector1="S1" sector2="S2" value="10.94%"/>
-    <correlation sector1="S2" sector2="S2" value="12.55%"/>
+    <correlation factor1="S1" factor2="S1" value="9.931%"/>
+    <correlation factor1="S1" factor2="S2" value="10.94%"/>
+    <correlation factor1="S2" factor2="S2" value="12.55%"/>
   </correlations>
   <segmentations>
     <segmentation name='portfolio' components='asset'/>

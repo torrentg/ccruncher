@@ -70,8 +70,8 @@ f_{p,w}(x) =
     </p>
     <p>
       File <code>samples/test04.xml</code> contains a portfolio composed of 1000 
-      identical obligors (same rating and sector) where every one of them owe 1&euro; 
-      to 1 year. The common default probability is 10% and the sector/factor 
+      identical obligors (same rating and factor) where every one of them owe 1&euro; 
+      to 1 year. The common default probability is 10% and the factor 
       loading is 20%. This problem fulfills the LHP approach. 
       We use CCruncher to determine the distribution of this case and compare 
       it with the analytical solution:
@@ -144,7 +144,7 @@ dev.off()
       You can try to force the remaining assumptions with similar results.
       Fortunately, CCruncher don't rely on rigid assumptions and has
       some additional features that make it appealing such as: 
-      1) allows multiple sectors,
+      1) allows multiple factors,
       2) allows multiple rating levels,
       3) an obligor can have multiple assets, 
       4) each of them with they own exposures and recoveries, 
@@ -170,7 +170,7 @@ dev.off()
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 17-Oct-2012
+          Last modified: 30-Nov-2012
         </td>
       </tr></table>
     </div>

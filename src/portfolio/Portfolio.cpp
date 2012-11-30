@@ -27,7 +27,7 @@
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio() : ratings(NULL), sectors(NULL),
+ccruncher::Portfolio::Portfolio() : ratings(NULL), factors(NULL),
     segmentations(NULL), interest(NULL), auxobligor(NULL)
 {
   date1 = NAD;
@@ -37,11 +37,11 @@ ccruncher::Portfolio::Portfolio() : ratings(NULL), sectors(NULL),
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Sectors &sectors_,
+ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Factors &factors_,
              Segmentations &segmentations_, const Interest &interest_, 
              const Date &date1_, const Date &date2_)
 {
-  init(ratings_, sectors_, segmentations_, interest_, date1_, date2_);
+  init(ratings_, factors_, segmentations_, interest_, date1_, date2_);
 }
 
 //===========================================================================
@@ -63,7 +63,7 @@ ccruncher::Portfolio::~Portfolio()
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::Portfolio::init(const Ratings &ratings_, const Sectors &sectors_,
+void ccruncher::Portfolio::init(const Ratings &ratings_, const Factors &factors_,
              Segmentations &segmentations_, const Interest &interest_,
              const Date &date1_, const Date &date2_)
 {
@@ -71,7 +71,7 @@ void ccruncher::Portfolio::init(const Ratings &ratings_, const Sectors &sectors_
   vobligors.clear();
   // setting external objects
   ratings = &ratings_;
-  sectors = &sectors_;
+  factors = &factors_;
   segmentations = &segmentations_;
   interest = &interest_;
   date1 = date1_;
@@ -151,7 +151,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
   }
   else if (isEqual(name_,"obligor")) {
     assert(auxobligor == NULL);
-    auxobligor = new Obligor(*ratings, *sectors, *segmentations, *interest, date1, date2);
+    auxobligor = new Obligor(*ratings, *factors, *segmentations, *interest, date1, date2);
     eppush(eu, auxobligor, name_, attributes);
   }
   else {

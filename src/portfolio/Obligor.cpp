@@ -35,13 +35,13 @@ ccruncher::Obligor::Obligor(const Obligor &o)
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
+ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
                Segmentations &segmentations_, const Interest &interest_,
                const Date &d1, const Date &d2) : vsegments(), vassets()
 {
   // setting external objects references
   ratings = &(ratings_);
-  sectors = &(sectors_);
+  factors = &(factors_);
   segmentations = &(segmentations_);
   interest = &(interest_);
   date1 = d1;
@@ -50,7 +50,7 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Sectors &sectors_,
   // setting default values
   vsegments = vector<int>(segmentations_.size(), 0);
   irating = -1;
-  isector = -1;
+  ifactor = -1;
   id = "NON_ID";
   recovery = Recovery(Recovery::Fixed,NAN);
 }
@@ -73,13 +73,13 @@ ccruncher::Obligor::~Obligor()
 Obligor& ccruncher::Obligor::operator=(const Obligor &o)
 {
   irating = o.irating;
-  isector = o.isector;
+  ifactor = o.ifactor;
   id = o.id;
   recovery = o.recovery;
 
   vsegments = o.vsegments;
   ratings = o.ratings;
-  sectors = o.sectors;
+  factors = o.factors;
   segmentations = o.segmentations;
   interest = o.interest;
   date1 = o.date1;
@@ -158,9 +158,9 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
     irating = ratings->getIndex(str);
     if (irating < 0) throw Exception("rating not found");
 
-    str = getAttributeValue(attributes, "sector");
-    isector = sectors->getIndex(str);
-    if (isector < 0) throw Exception("sector not found");
+    str = getAttributeValue(attributes, "factor");
+    ifactor = factors->getIndex(str);
+    if (ifactor < 0) throw Exception("factor not found");
 
     str = getAttributeValue(attributes, "recovery", NULL);
     if (str != NULL) {

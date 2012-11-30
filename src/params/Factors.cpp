@@ -20,14 +20,14 @@
 //
 //===========================================================================
 
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "utils/Strings.hpp"
 #include <cassert>
 
 //===========================================================================
 // private constructor
 //===========================================================================
-ccruncher::Sectors::Sectors()
+ccruncher::Factors::Factors()
 {
   // nothing to do
 }
@@ -35,38 +35,38 @@ ccruncher::Sectors::Sectors()
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::Sectors::size() const
+int ccruncher::Factors::size() const
 {
-  return vsectors.size();
+  return vfactors.size();
 }
 
 //===========================================================================
 // return rating name
 //===========================================================================
-const string& ccruncher::Sectors::getName(int i) const
+const string& ccruncher::Factors::getName(int i) const
 {
-  assert(i >= 0 && i < (int) vsectors.size());
-  return vsectors[i].name;
+  assert(i >= 0 && i < (int) vfactors.size());
+  return vfactors[i].name;
 }
 
 //===========================================================================
 // return rating description
 //===========================================================================
-const string& ccruncher::Sectors::getDescription(int i) const
+const string& ccruncher::Factors::getDescription(int i) const
 {
-  assert(i >= 0 && i < (int) vsectors.size());
-  return vsectors[i].desc;
+  assert(i >= 0 && i < (int) vfactors.size());
+  return vfactors[i].desc;
 }
 
 //===========================================================================
-// return the index of the sector (-1 if rating not found)
+// return the index of the factor (-1 if not found)
 //===========================================================================
-int ccruncher::Sectors::getIndex(const char *name) const
+int ccruncher::Factors::getIndex(const char *name) const
 {
   assert(name != NULL);
-  for (unsigned int i=0;i<vsectors.size();i++)
+  for (unsigned int i=0;i<vfactors.size();i++)
   {
-    if (vsectors[i].name.compare(name) == 0)
+    if (vfactors[i].name.compare(name) == 0)
     {
       return i;
     }
@@ -75,36 +75,36 @@ int ccruncher::Sectors::getIndex(const char *name) const
 }
 
 //===========================================================================
-// return the index of the sector (-1 if rating not found)
+// return the index of the factor (-1 if not found)
 //===========================================================================
-int ccruncher::Sectors::getIndex(const string &name) const
+int ccruncher::Factors::getIndex(const string &name) const
 {
   return getIndex(name.c_str());
 }
 
 //===========================================================================
-// inserts a sector in list
+// inserts a factor in list
 //===========================================================================
-void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
+void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
 {
   // checking coherence
-  for (unsigned int i=0;i<vsectors.size();i++)
+  for (unsigned int i=0;i<vfactors.size();i++)
   {
-    Sector aux = vsectors[i];
+    Factor aux = vfactors[i];
 
     if (aux.name == val.name)
     {
-      throw Exception("sector name " + val.name + " repeated");
+      throw Exception("factor name " + val.name + " repeated");
     }
     else if (aux.desc == val.desc)
     {
-      throw Exception("sector description " + val.desc + " repeated");
+      throw Exception("factor description " + val.desc + " repeated");
     }
   }
 
   try
   {
-    vsectors.push_back(val);
+    vfactors.push_back(val);
   }
   catch(std::exception &e)
   {
@@ -115,21 +115,21 @@ void ccruncher::Sectors::insertSector(const Sector &val) throw(Exception)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sectors::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"sectors")) {
+  if (isEqual(name_,"factors")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag sectors");
+      throw Exception("attributes are not allowed in tag factors");
     }
   }
-  else if (isEqual(name_,"sector")) {
+  else if (isEqual(name_,"factor")) {
     if (getNumAttributes(attributes) != 2) {
-      throw Exception("invalid number of attributes at sector");
+      throw Exception("invalid number of attributes at factor");
     }
     else {
       string name = getStringAttribute(attributes, "name");
       string desc = getStringAttribute(attributes, "description");
-      insertSector(Sector(name,desc));
+      insertFactor(Factor(name,desc));
     }
   }
   else {
@@ -140,12 +140,12 @@ void ccruncher::Sectors::epstart(ExpatUserData &, const char *name_, const char 
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
+void ccruncher::Factors::epend(ExpatUserData &, const char *name_)
 {
-  if (isEqual(name_,"sectors")) {
+  if (isEqual(name_,"factors")) {
     validations();
   }
-  else if (isEqual(name_,"sector")) {
+  else if (isEqual(name_,"factor")) {
     // nothing to do
   }
   else {
@@ -154,37 +154,37 @@ void ccruncher::Sectors::epend(ExpatUserData &, const char *name_)
 }
 
 //===========================================================================
-// validacions de la llista de sectors recollida
+// validations
 //===========================================================================
-void ccruncher::Sectors::validations() throw(Exception)
+void ccruncher::Factors::validations() throw(Exception)
 {
-  // checking number of sectors
-  if (vsectors.empty())
+  // checking number of factors
+  if (vfactors.empty())
   {
-    throw Exception("sectors have no elements");
+    throw Exception("factors have no elements");
   }
 }
 
 //===========================================================================
 // getXML
 //===========================================================================
-string ccruncher::Sectors::getXML(int ilevel) const throw(Exception)
+string ccruncher::Factors::getXML(int ilevel) const throw(Exception)
 {
   string spc = Strings::blanks(ilevel);
   string ret = "";
 
-  ret += spc + "<sectors>\n";
+  ret += spc + "<factors>\n";
 
-  for (unsigned int i=0;i<vsectors.size();i++)
+  for (unsigned int i=0;i<vfactors.size();i++)
   {
     ret += Strings::blanks(ilevel+2);
-    ret += "<sector ";
-    ret += "name='" + vsectors[i].name + "' ";
-    ret += "description='" + vsectors[i].desc + "'";
+    ret += "<factor ";
+    ret += "name='" + vfactors[i].name + "' ";
+    ret += "description='" + vfactors[i].desc + "'";
     ret += "/>\n";
   }
 
-  ret += spc + "</sectors>\n";
+  ret += spc + "</factors>\n";
 
   return ret;
 }

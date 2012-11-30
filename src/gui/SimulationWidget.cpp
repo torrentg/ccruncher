@@ -260,7 +260,7 @@ void SimulationWidget::linkify(QString &line)
       for(int i=0; i<len-filename.length(); i++) padding += "&nbsp;";
       QUrl url = QUrl::fromLocalFile(token);
       token = padding + QString("<a href='%1'>%2</a>").arg(url.toString()).arg(filename);
-      line.replace(pos, len, token);
+      line.replace(regexp1.cap(), token);
     }
   }
 

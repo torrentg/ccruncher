@@ -34,7 +34,7 @@
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
 #include "params/Ratings.hpp"
-#include "params/Sectors.hpp"
+#include "params/Factors.hpp"
 #include "params/Transitions.hpp"
 #include "params/DefaultProbabilities.hpp"
 #include "params/Correlations.hpp"
@@ -77,8 +77,8 @@ class IData : public ExpatHandlers
     Transitions transitions;
     // inverse functions
     DefaultProbabilities dprobs;
-    // simulation sectors
-    Sectors sectors;
+    // simulation factors
+    Factors factors;
     // simulation correlations
     Correlations correlations;
     // simulation segmentations
@@ -140,8 +140,8 @@ class IData : public ExpatHandlers
     Transitions & getTransitions();
     // returns default probabilities functions
     DefaultProbabilities & getDefaultProbabilities();
-    // returns simulation sectors
-    Sectors & getSectors();
+    // returns simulation factors
+    Factors & getFactors();
     // returns simulation correlation matrix
     Correlations & getCorrelations();
     // returns simulation correlations

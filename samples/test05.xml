@@ -91,20 +91,20 @@ Expected Results:
   </transitions>
 
   <!-- ============================================================== -->
-  <!--                           SECTORS                              -->
+  <!--                           FACTORS                              -->
   <!-- ============================================================== -->
-  <sectors>
-    <sector name="S1" description="sector 1"/>
-    <sector name="S2" description="sector 2"/>
-  </sectors>
+  <factors>
+    <factor name="S1" description="sector 1"/>
+    <factor name="S2" description="sector 2"/>
+  </factors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <correlations>
-    <correlation sector1="S1" sector2="S1" value="10%"/>
-    <correlation sector1="S1" sector2="S2" value="5%"/>
-    <correlation sector1="S2" sector2="S2" value="15%"/>
+    <correlation factor1="S1" factor2="S1" value="10%"/>
+    <correlation factor1="S1" factor2="S2" value="5%"/>
+    <correlation factor1="S2" factor2="S2" value="15%"/>
   </correlations>
 
   <!-- ============================================================== -->
@@ -122,7 +122,7 @@ Expected Results:
   <!--                         PORTFOLIO                              -->
   <!-- ============================================================== -->
   <portfolio>
-    <obligor rating="A" sector="S1" id="001">
+    <obligor rating="A" factor="S1" id="001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op01">
         <data>
@@ -130,7 +130,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="002">
+    <obligor rating="A" factor="S2" id="002">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op02">
         <data>
@@ -138,7 +138,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="003">
+    <obligor rating="A" factor="S1" id="003">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op03">
         <data>
@@ -146,7 +146,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="004">
+    <obligor rating="A" factor="S2" id="004">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op04">
         <data>
@@ -154,7 +154,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="005">
+    <obligor rating="A" factor="S1" id="005">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op05">
         <data>
@@ -162,7 +162,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="006">
+    <obligor rating="A" factor="S2" id="006">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op06">
         <data>
@@ -170,7 +170,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="007">
+    <obligor rating="A" factor="S1" id="007">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op07">
         <data>
@@ -178,7 +178,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="008">
+    <obligor rating="A" factor="S2" id="008">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op08">
         <data>
@@ -186,7 +186,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="009">
+    <obligor rating="A" factor="S1" id="009">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op09">
         <data>
@@ -194,7 +194,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="010">
+    <obligor rating="A" factor="S2" id="010">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op10">
         <data>
@@ -202,7 +202,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="011">
+    <obligor rating="A" factor="S1" id="011">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op11">
         <data>
@@ -210,7 +210,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="012">
+    <obligor rating="A" factor="S2" id="012">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op12">
         <data>
@@ -218,7 +218,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="013">
+    <obligor rating="A" factor="S1" id="013">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op13">
         <data>
@@ -226,7 +226,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="014">
+    <obligor rating="A" factor="S2" id="014">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op14">
         <data>
@@ -234,7 +234,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="015">
+    <obligor rating="A" factor="S1" id="015">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op15">
         <data>
@@ -242,7 +242,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="016">
+    <obligor rating="A" factor="S2" id="016">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op16">
         <data>
@@ -250,7 +250,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="017">
+    <obligor rating="A" factor="S1" id="017">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op17">
         <data>
@@ -258,7 +258,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="018">
+    <obligor rating="A" factor="S2" id="018">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op18">
         <data>
@@ -266,7 +266,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="019">
+    <obligor rating="A" factor="S1" id="019">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op19">
         <data>
@@ -274,7 +274,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="020">
+    <obligor rating="A" factor="S2" id="020">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op20">
         <data>
@@ -282,7 +282,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="021">
+    <obligor rating="A" factor="S1" id="021">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op21">
         <data>
@@ -290,7 +290,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="022">
+    <obligor rating="A" factor="S2" id="022">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op22">
         <data>
@@ -298,7 +298,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="023">
+    <obligor rating="A" factor="S1" id="023">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op23">
         <data>
@@ -306,7 +306,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="024">
+    <obligor rating="A" factor="S2" id="024">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op24">
         <data>
@@ -314,7 +314,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="025">
+    <obligor rating="A" factor="S1" id="025">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op25">
         <data>
@@ -322,7 +322,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="026">
+    <obligor rating="A" factor="S2" id="026">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op26">
         <data>
@@ -330,7 +330,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="027">
+    <obligor rating="A" factor="S1" id="027">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op27">
         <data>
@@ -338,7 +338,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="028">
+    <obligor rating="A" factor="S2" id="028">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op28">
         <data>
@@ -346,7 +346,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="029">
+    <obligor rating="A" factor="S1" id="029">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op29">
         <data>
@@ -354,7 +354,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="030">
+    <obligor rating="A" factor="S2" id="030">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op30">
         <data>
@@ -362,7 +362,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="031">
+    <obligor rating="A" factor="S1" id="031">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op31">
         <data>
@@ -370,7 +370,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="032">
+    <obligor rating="A" factor="S2" id="032">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op32">
         <data>
@@ -378,7 +378,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="033">
+    <obligor rating="A" factor="S1" id="033">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op33">
         <data>
@@ -386,7 +386,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="034">
+    <obligor rating="A" factor="S2" id="034">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op34">
         <data>
@@ -394,7 +394,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="035">
+    <obligor rating="A" factor="S1" id="035">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op35">
         <data>
@@ -402,7 +402,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="036">
+    <obligor rating="A" factor="S2" id="036">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op36">
         <data>
@@ -410,7 +410,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="037">
+    <obligor rating="A" factor="S1" id="037">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op37">
         <data>
@@ -418,7 +418,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="038">
+    <obligor rating="A" factor="S2" id="038">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op38">
         <data>
@@ -426,7 +426,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="039">
+    <obligor rating="A" factor="S1" id="039">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op39">
         <data>
@@ -434,7 +434,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="040">
+    <obligor rating="A" factor="S2" id="040">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op40">
         <data>
@@ -442,7 +442,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="041">
+    <obligor rating="A" factor="S1" id="041">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op41">
         <data>
@@ -450,7 +450,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="042">
+    <obligor rating="A" factor="S2" id="042">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op42">
         <data>
@@ -458,7 +458,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="043">
+    <obligor rating="A" factor="S1" id="043">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op43">
         <data>
@@ -466,7 +466,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="044">
+    <obligor rating="A" factor="S2" id="044">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op44">
         <data>
@@ -474,7 +474,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="045">
+    <obligor rating="A" factor="S1" id="045">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op45">
         <data>
@@ -482,7 +482,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="046">
+    <obligor rating="A" factor="S2" id="046">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op46">
         <data>
@@ -490,7 +490,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="047">
+    <obligor rating="A" factor="S1" id="047">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op47">
         <data>
@@ -498,7 +498,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="048">
+    <obligor rating="A" factor="S2" id="048">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op48">
         <data>
@@ -506,7 +506,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="049">
+    <obligor rating="A" factor="S1" id="049">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op49">
         <data>
@@ -514,7 +514,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="050">
+    <obligor rating="A" factor="S2" id="050">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op50">
         <data>
@@ -522,7 +522,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="051">
+    <obligor rating="A" factor="S1" id="051">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op51">
         <data>
@@ -530,7 +530,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="052">
+    <obligor rating="A" factor="S2" id="052">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op52">
         <data>
@@ -538,7 +538,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="053">
+    <obligor rating="A" factor="S1" id="053">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op53">
         <data>
@@ -546,7 +546,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="054">
+    <obligor rating="A" factor="S2" id="054">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op54">
         <data>
@@ -554,7 +554,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="055">
+    <obligor rating="A" factor="S1" id="055">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op55">
         <data>
@@ -562,7 +562,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="056">
+    <obligor rating="A" factor="S2" id="056">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op56">
         <data>
@@ -570,7 +570,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="057">
+    <obligor rating="A" factor="S1" id="057">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op57">
         <data>
@@ -578,7 +578,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="058">
+    <obligor rating="A" factor="S2" id="058">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op58">
         <data>
@@ -586,7 +586,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="059">
+    <obligor rating="A" factor="S1" id="059">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op59">
         <data>
@@ -594,7 +594,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="060">
+    <obligor rating="A" factor="S2" id="060">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op60">
         <data>
@@ -602,7 +602,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="061">
+    <obligor rating="A" factor="S1" id="061">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op61">
         <data>
@@ -610,7 +610,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="062">
+    <obligor rating="A" factor="S2" id="062">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op62">
         <data>
@@ -618,7 +618,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="063">
+    <obligor rating="A" factor="S1" id="063">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op63">
         <data>
@@ -626,7 +626,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="064">
+    <obligor rating="A" factor="S2" id="064">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op64">
         <data>
@@ -634,7 +634,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="065">
+    <obligor rating="A" factor="S1" id="065">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op65">
         <data>
@@ -642,7 +642,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="066">
+    <obligor rating="A" factor="S2" id="066">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op66">
         <data>
@@ -650,7 +650,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="067">
+    <obligor rating="A" factor="S1" id="067">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op67">
         <data>
@@ -658,7 +658,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="068">
+    <obligor rating="A" factor="S2" id="068">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op68">
         <data>
@@ -666,7 +666,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="069">
+    <obligor rating="A" factor="S1" id="069">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op69">
         <data>
@@ -674,7 +674,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="070">
+    <obligor rating="A" factor="S2" id="070">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op70">
         <data>
@@ -682,7 +682,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="071">
+    <obligor rating="A" factor="S1" id="071">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op71">
         <data>
@@ -690,7 +690,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="072">
+    <obligor rating="A" factor="S2" id="072">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op72">
         <data>
@@ -698,7 +698,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="073">
+    <obligor rating="A" factor="S1" id="073">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op73">
         <data>
@@ -706,7 +706,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="074">
+    <obligor rating="A" factor="S2" id="074">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op74">
         <data>
@@ -714,7 +714,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="075">
+    <obligor rating="A" factor="S1" id="075">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op75">
         <data>
@@ -722,7 +722,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="076">
+    <obligor rating="A" factor="S2" id="076">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op76">
         <data>
@@ -730,7 +730,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="077">
+    <obligor rating="A" factor="S1" id="077">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op77">
         <data>
@@ -738,7 +738,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="078">
+    <obligor rating="A" factor="S2" id="078">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op78">
         <data>
@@ -746,7 +746,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="079">
+    <obligor rating="A" factor="S1" id="079">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op79">
         <data>
@@ -754,7 +754,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="080">
+    <obligor rating="A" factor="S2" id="080">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op80">
         <data>
@@ -762,7 +762,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="081">
+    <obligor rating="A" factor="S1" id="081">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op81">
         <data>
@@ -770,7 +770,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="082">
+    <obligor rating="A" factor="S2" id="082">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op82">
         <data>
@@ -778,7 +778,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="083">
+    <obligor rating="A" factor="S1" id="083">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op83">
         <data>
@@ -786,7 +786,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="084">
+    <obligor rating="A" factor="S2" id="084">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op84">
         <data>
@@ -794,7 +794,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="085">
+    <obligor rating="A" factor="S1" id="085">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op85">
         <data>
@@ -802,7 +802,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="086">
+    <obligor rating="A" factor="S2" id="086">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op86">
         <data>
@@ -810,7 +810,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="087">
+    <obligor rating="A" factor="S1" id="087">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op87">
         <data>
@@ -818,7 +818,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="088">
+    <obligor rating="A" factor="S2" id="088">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op88">
         <data>
@@ -826,7 +826,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="089">
+    <obligor rating="A" factor="S1" id="089">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op89">
         <data>
@@ -834,7 +834,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="090">
+    <obligor rating="A" factor="S2" id="090">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op90">
         <data>
@@ -842,7 +842,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="091">
+    <obligor rating="A" factor="S1" id="091">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op91">
         <data>
@@ -850,7 +850,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="092">
+    <obligor rating="A" factor="S2" id="092">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op92">
         <data>
@@ -858,7 +858,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="093">
+    <obligor rating="A" factor="S1" id="093">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op93">
         <data>
@@ -866,7 +866,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="094">
+    <obligor rating="A" factor="S2" id="094">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op94">
         <data>
@@ -874,7 +874,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="095">
+    <obligor rating="A" factor="S1" id="095">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op95">
         <data>
@@ -882,7 +882,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="096">
+    <obligor rating="A" factor="S2" id="096">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op96">
         <data>
@@ -890,7 +890,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="097">
+    <obligor rating="A" factor="S1" id="097">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op97">
         <data>
@@ -898,7 +898,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="098">
+    <obligor rating="A" factor="S2" id="098">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op98">
         <data>
@@ -906,7 +906,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S1" id="099">
+    <obligor rating="A" factor="S1" id="099">
       <belongs-to segmentation="sectors" segment="S1"/>
       <asset date="01/01/2005" id="op99">
         <data>
@@ -914,7 +914,7 @@ Expected Results:
         </data>
       </asset>
     </obligor>
-    <obligor rating="A" sector="S2" id="100">
+    <obligor rating="A" factor="S2" id="100">
       <belongs-to segmentation="sectors" segment="S2"/>
       <asset date="01/01/2005" id="op100">
         <data>

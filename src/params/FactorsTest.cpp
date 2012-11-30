@@ -20,99 +20,99 @@
 //
 //===========================================================================
 
-#include "params/Sectors.hpp"
-#include "params/SectorsTest.hpp"
+#include "params/Factors.hpp"
+#include "params/FactorsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
 //===========================================================================
 // test1
 //===========================================================================
-void ccruncher_test::SectorsTest::test1()
+void ccruncher_test::FactorsTest::test1()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='others'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='others'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors creation
-  Sectors sectors;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors creation
+  Factors factors;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &factors));
 
-  ASSERT(2 == sectors.size());
+  ASSERT(2 == factors.size());
 
-  ASSERT_EQUALS(0, sectors.getIndex("S1"));
-  ASSERT_EQUALS(1, sectors.getIndex("S2"));
+  ASSERT_EQUALS(0, factors.getIndex("S1"));
+  ASSERT_EQUALS(1, factors.getIndex("S2"));
 
-  ASSERT("S1" == sectors.getName(0));
-  ASSERT("S2" == sectors.getName(1));
+  ASSERT("S1" == factors.getName(0));
+  ASSERT("S2" == factors.getName(1));
 
-  ASSERT("retail" == sectors.getDescription(0));
-  ASSERT("others" == sectors.getDescription(1));
+  ASSERT("retail" == factors.getDescription(0));
+  ASSERT("others" == factors.getDescription(1));
 
-  ASSERT(sectors.getName(0) == "S1");
-  ASSERT(sectors.getName(1) == "S2");
+  ASSERT(factors.getName(0) == "S1");
+  ASSERT(factors.getName(1) == "S2");
 }
 
 //===========================================================================
 // test2
 //===========================================================================
-void ccruncher_test::SectorsTest::test2()
+void ccruncher_test::FactorsTest::test2()
 {
-  // xml with error (repeated sector)
+  // xml with error (repeated factor)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S1' description='others'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S1' description='others'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors creation
-  Sectors sectors;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors creation
+  Factors factors;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &factors));
 }
 
 //===========================================================================
 // test3
 //===========================================================================
-void ccruncher_test::SectorsTest::test3()
+void ccruncher_test::FactorsTest::test3()
 {
   // xml with error (repeated description)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
-      <sector name='S2' description='retail'/>\n\
-    </sectors>";
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
+      <factor name='S2' description='retail'/>\n\
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors creation
-  Sectors sectors;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors creation
+  Factors factors;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &factors));
 }
 
 //===========================================================================
 // test4
 //===========================================================================
-void ccruncher_test::SectorsTest::test4()
+void ccruncher_test::FactorsTest::test4()
 {
   // xml with error (tag sectir)
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <sectors>\n\
-      <sector name='S1' description='retail'/>\n\
+    <factors>\n\
+      <factor name='S1' description='retail'/>\n\
       <sectir name='S2' description='others'/>\n\
-    </sectors>";
+    </factors>";
 
   // creating xml
   ExpatParser xmlparser;
 
-  // sectors creation
-  Sectors sectors;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &sectors));
+  // factors creation
+  Factors factors;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &factors));
 }
