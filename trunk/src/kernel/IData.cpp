@@ -119,7 +119,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
     log << indent(+1);
 
     // trace file info
-    log << "file name" << split << filename << endl;
+    log << "file name" << split << "["+filename+"]" << endl;
     if (filename != STDIN_FILENAME)
     {
       log << "file size" << split << Format::bytes(File::filesize(filename)) << endl;

@@ -240,32 +240,40 @@ void SimulationWidget::submit()
 //===========================================================================
 void SimulationWidget::linkify(QString &line)
 {
-  QStringList list = line.split(" ", QString::SkipEmptyParts);
-  //TODO: apply only to last element
-  for(int i=0; i<list.size(); i++)
-  {
-    QString token = list.at(i);
+  int pos;
 
-    if (token.startsWith("http://")) {
-      token = QString("<a href='%1'>%1</a>").arg(token);
-    }
-    else if (QFile(token).exists() && !QDir(token).exists()) {
+  // linkifying files
+  QRegExp regexp1("\\[(.*)\\]");
+  pos = regexp1.indexIn(line, 0);
+  if (pos != -1)
+  {
+    QString token = regexp1.cap(1).trimmed();
+    if (QFile(token).exists() && !QDir(token).exists())
+    {
       QString filename = QFileInfo(token).fileName();
       size_t ncols = task.getLogger().getNumCols();
-      int len = token.length();
+      int len = regexp1.matchedLength();
       if (line.length() > (int)ncols) {
-        len = std::max((size_t)0, token.length()-(line.length()-ncols));
+        len = std::max((size_t)0, len-(line.length()-ncols));
       }
       QString padding = "";
       for(int i=0; i<len-filename.length(); i++) padding += "&nbsp;";
       QUrl url = QUrl::fromLocalFile(token);
       token = padding + QString("<a href='%1'>%2</a>").arg(url.toString()).arg(filename);
-    }
-
-    if (token != list.at(i)) {
-      line.replace(list.at(i), token);
+      line.replace(pos, len, token);
     }
   }
+
+  // linkifying http refs
+  QRegExp regexp2("http://([^ \t\n]*)");
+  pos = regexp2.indexIn(line, 0);
+  if (pos != -1)
+  {
+    int len = regexp2.matchedLength();
+    QString token = QString("<a href='%1'>%1</a>").arg(regexp2.cap());
+    line.replace(pos, len, token);
+  }
+
   // replace ending spaces by &nbsp;
   size_t num = 0;
   for(int i=line.length()-1; i>=0; i--) {

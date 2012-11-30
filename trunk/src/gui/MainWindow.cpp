@@ -184,8 +184,7 @@ void MainWindow::openFile(const QUrl &url)
     }
     catch(std::exception &e)
     {
-      //TODO: resolve double-messages (eg. XmlEditWidget crash)
-      QMessageBox::warning(this, "error opening " + fileinfo.fileName(), e.what());
+      cout << "error opening '" << fileinfo.fileName().toStdString() << "': " << e.what() << endl;
       return;
     }
 

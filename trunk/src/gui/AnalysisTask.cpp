@@ -339,8 +339,9 @@ statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator fi
     c2 += d2;
     c1 += d1;
     if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
-        //cout << "i1=" << m-i1 << ", " << flush;
-        break;
+      //TODO: consider to use relative error respect VaR
+      //cout << "i1=" << m-i1 << ", " << flush;
+      break;
     }
   }
 
@@ -367,8 +368,9 @@ statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator fi
     c2 += d2;
     c1 += d1;
     if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
-        //cout << "i2=" << i2-m+1 << endl;
-        break;
+      //TODO: consider to use relative error respect VaR
+      //cout << "i2=" << i2-m+1 << endl;
+      break;
     }
   }
 

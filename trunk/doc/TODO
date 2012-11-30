@@ -10,11 +10,10 @@ Current works
     - add loading+ndf in factor tag
     - remove param copula.type
     - remove correlations diagonal
-  * bulk output to file
+  * bulk output to file ?
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file
   * implement simulation pause
-  * gui: allow spaces in files and links
 
 Future works
 -------------------
