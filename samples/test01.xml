@@ -53,16 +53,25 @@ How to check results?
   </description>
 
   <!-- ============================================================== -->
+  <!--                         DEFINES                                -->
+  <!-- ============================================================== -->
+  <defines>
+    <define name="numsims" value="200000"/>
+    <define name="copula" value="gaussian"/>
+    <define name="antithetic" value="true"/>
+  </defines>
+
+  <!-- ============================================================== -->
   <!--                       PARAMETERS                               -->
   <!-- ============================================================== -->
   <parameters>
     <parameter name="time.0" value="01/01/2005"/>
     <parameter name="time.T" value="01/01/2006"/>
-    <parameter name="stopcriteria.maxiterations" value="20000"/>
+    <parameter name="stopcriteria.maxiterations" value="$numsims"/>
     <parameter name="stopcriteria.maxseconds" value="30000000"/>
-    <parameter name="copula.type" value="gaussian"/>
+    <parameter name="copula.type" value="$copula"/>
     <parameter name="rng.seed" value="0"/>
-    <parameter name="montecarlo.antithetic" value="false"/>
+    <parameter name="montecarlo.antithetic" value="$antithetic"/>
     <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 

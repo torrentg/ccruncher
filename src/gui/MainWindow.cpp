@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMdiSubWindow>
+#include <QPixmap>
 #include "ui_MainWindow.h"
 #include "gui/MainWindow.hpp"
 #include "gui/SimulationWidget.hpp"
@@ -115,14 +116,21 @@ void MainWindow::updateToolBars(QMdiSubWindow *window)
 //===========================================================================
 void MainWindow::about()
 {
-  QMessageBox::about(NULL, tr("About ..."),
-    "<h3>ccruncher-" VERSION " (" SVN_VERSION ")</h3>"
-    //"<p>Open-Source Tool for<br/> Credit Risk Modeling </p>"
-    "<p>"
-      "copyright: Gerard Torrent<br/><br/>"
-      "license: GPL<br/><br/>"
-      "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a>"
-    "</p>");
+  QMessageBox about;
+
+  about.setWindowTitle("About ...");
+  about.setText("<h3>CCruncher</h3>");
+  about.setInformativeText(
+        "<p>"
+        "version: " VERSION " [" SVN_VERSION "]<br/><br/>"
+        "copyright: Gerard Torrent<br/><br/>"
+        "license: GPL<br/><br/>"
+        "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
+        "</p>");
+  about.setStandardButtons(QMessageBox::Ok);
+  about.setDefaultButton(QMessageBox::Ok);
+  about.setIconPixmap(QPixmap(":/images/logo.png"));
+  about.exec();
 }
 
 //===========================================================================
@@ -189,7 +197,8 @@ void MainWindow::openFile(const QUrl &url)
     }
 
     try {
-      mdiArea->addSubWindow(child);
+      QMdiSubWindow *subwindow = mdiArea->addSubWindow(child);
+      subwindow->setWindowIcon(child->windowIcon());
     } catch(std::exception &e) {
       //see http://qt-project.org/forums/viewthread/18819/
     }

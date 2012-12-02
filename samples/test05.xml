@@ -38,9 +38,9 @@ Expected Results:
   <!--                        DEFINES                                 -->
   <!-- ============================================================== -->
   <defines>
-    <define name="numsims" value="20000"/>
+    <define name="numsims" value="200000"/>
     <define name="copula" value="t(3)"/>
-    <define name="antithetic" value="false"/>
+    <define name="antithetic" value="true"/>
   </defines>
 
   <!-- ============================================================== -->
