@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>CCruncher</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="ccruncher.qrc">
+    <normaloff>:/images/logo.png</normaloff>:/images/logo.png</iconset>
+  </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>
   </property>

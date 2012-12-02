@@ -10,5 +10,6 @@
         <file>images/chart.png</file>
         <file>images/config.png</file>
         <file>images/exec.png</file>
+        <file>images/logo.png</file>
     </qresource>
 </RCC>
