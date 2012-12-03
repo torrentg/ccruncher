@@ -10,7 +10,6 @@ Current works
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file
   * implement simulation pause
-  * add line and col in xml editor
   * remove segments from SimulatedAsset
 
 Future works

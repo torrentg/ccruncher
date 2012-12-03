@@ -18,6 +18,7 @@ HEADERS += \
     src/gui/XmlEditWidget.hpp \
     src/gui/xmlhighlighter.hpp \
     src/gui/MdiChildWidget.hpp \
+    src/gui/CodeEditor.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -69,6 +70,7 @@ SOURCES += \
     src/gui/ProgressWidget.cpp \
     src/gui/XmlEditWidget.cpp \
     src/gui/xmlhighlighter.cpp \
+    src/gui/CodeEditor.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \

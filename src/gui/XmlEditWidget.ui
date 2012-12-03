@@ -16,7 +16,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QPlainTextEdit" name="editor">
+    <widget class="CodeEditor" name="editor">
      <property name="font">
       <font>
        <family>Courier New</family>
@@ -32,6 +32,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CodeEditor</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">gui/CodeEditor.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="ccruncher.qrc"/>
  </resources>

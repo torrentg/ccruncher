@@ -97,33 +97,54 @@ bool XmlEditWidget::load(const QString &str)
     fileName = filename;
   }
 
+  // check if file is compressed
+  if (fileName.endsWith(".gz"))
+  {
+    QMessageBox::warning(this, tr("CCruncher"),
+        tr("The edition of compressed files is not supported."));
+    return false;
+  }
+
   QCloseEvent event;
   closeEvent(&event);
   if (!event.isAccepted()) return false;
 
   QFile file(fileName);
+
+  // opening file
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
     QMessageBox::warning(this, tr("CCruncher"),
-                         tr("Cannot read file %1:\n%2.")
-                         .arg(fileName)
-                         .arg(file.errorString()));
+        tr("Cannot read file %1:\n%2.")
+        .arg(fileName)
+        .arg(file.errorString()));
     return false;
   }
 
-  if (file.size() > 1*1024*1024) // reject file if bigger than 1 MB
+  // reject file if bigger than 1 MB
+  if (file.size() > 1*1024*1024)
   {
-     QMessageBox::warning(this, tr("CCruncher"),
-                         tr("File %1 too big.\nTry to open it using an external editor.")
-                         .arg(fileName));
-     return false;
+    QMessageBox::warning(this, tr("CCruncher"),
+        tr("File %1 too big.\nTry to open it using an external editor.")
+        .arg(fileName));
+    return false;
   }
-
-  //TODO: check that is a text file
 
   QTextStream in(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  ui->editor->setPlainText(in.readAll());
+  QString content = in.readAll();
+
+  // reject non-ccruncher input files
+  if (!content.contains("<ccruncher") && !content.contains("<portfolio"))
+  {
+    QApplication::restoreOverrideCursor();
+    QMessageBox::warning(this, tr("CCruncher"),
+        tr("File %1\nis not a valid input file.")
+        .arg(fileName));
+    return false;
+  }
+
+  ui->editor->setPlainText(content);
   QApplication::restoreOverrideCursor();
 
   setCurrentFile(fileName);
