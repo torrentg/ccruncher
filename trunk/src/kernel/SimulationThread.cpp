@@ -30,14 +30,14 @@
 // constructor
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed) : Thread(),
-  montecarlo(mc), obligors(mc.obligors), assets(mc.assets), rng(NULL), factors(NULL),
-  chol(mc.chol), floadings(mc.floadings), inverses(mc.inverses), losses(0), uvalues(0)
+  montecarlo(mc), obligors(mc.obligors), assets(mc.assets), segments(mc.segments), rng(NULL),
+  factors(NULL), chol(mc.chol), floadings(mc.floadings), inverses(mc.inverses), losses(0),
+  uvalues(0)
 {
   assert(chol != NULL);
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
   factors = gsl_vector_alloc(chol->size1);
-  assetsize = mc.assetsize;
   ndf = mc.ndf;
   time0 = mc.time0;
   timeT = mc.timeT;
@@ -170,7 +170,7 @@ inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
   }
   else
   {
-    return uvalues[iobligor];
+    return +uvalues[iobligor];
   }
 }
 
@@ -187,11 +187,9 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
 
   // evalue obligor losses
   double obligor_recovery = NAN;
-  char *p = (char*)(obligors[iobligor].ref.assets);
   for(unsigned short i=0; i<obligors[iobligor].numassets; i++)
   {
-    SimulatedAsset *asset = (SimulatedAsset*)(p);
-    p += assetsize;
+    SimulatedAsset *asset = obligors[iobligor].ref.assets + i;
 
     // evalue asset loss
     if (dtime <= asset->maxdate && asset->mindate <= dtime)
@@ -215,10 +213,9 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
       double loss = exposure * (1.0 - recovery);
 
       // aggregate asset loss
-      unsigned short *segments = &(asset->segments);
       for(int j=0; j<numsegmentations; j++)
       {
-        unsigned short isegment = segments[j];
+        unsigned short isegment = segments[iobligor*numsegmentations + j];
         assert(isegment < losses[j].size());
         losses[j][isegment] += loss;
       }

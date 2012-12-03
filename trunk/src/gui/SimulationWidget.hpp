@@ -54,6 +54,8 @@ class SimulationWidget : public MdiChildWidget
     QAction *actionRun;
     QAction *actionStop;
     QAction *actionAnal;
+    // output directory
+    QString odir;
 
   private:
 
@@ -88,7 +90,7 @@ class SimulationWidget : public MdiChildWidget
     void editFile();
     // selects output directory
     void selectDir();
-    // set ooutput directory
+    // set output directory
     void setDir();
     // submit task
     void submit();

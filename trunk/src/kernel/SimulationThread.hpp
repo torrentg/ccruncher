@@ -60,9 +60,9 @@ class SimulationThread : public Thread
     // list of simulated obligors
     const vector<SimulatedObligor> &obligors;
     // list of simulated assets
-    const char *assets;
-    // asset size
-    int assetsize;
+    const vector<SimulatedAsset> &assets;
+    // segmentations indexes per asset
+    const vector<unsigned short> &segments;
     // degrees of freedom
     double ndf;
     // random number generator

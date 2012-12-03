@@ -84,11 +84,11 @@ class Segmentation : public ExpatHandlers
     // return the number of segments
     int size() const;
     // returns i-th segment
-    const string& getSegment(int i);
+    const string& getSegment(int i) const;
     // return the index of the given segment
-    int indexOfSegment(const string &sname) throw(Exception);
+    int indexOfSegment(const string &sname) const throw(Exception);
     // return the index of the given segment
-    int indexOfSegment(const char *sname) throw(Exception);
+    int indexOfSegment(const char *sname) const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
     // reset object content

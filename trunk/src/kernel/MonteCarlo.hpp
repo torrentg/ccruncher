@@ -63,11 +63,9 @@ class MonteCarlo
     // list of simulated obligors
     vector<SimulatedObligor> obligors;
     // list of simulated assets
-    char *assets;
-    // simulated asset size
-    int assetsize;
-    // number of simulated assets
-    int numassets;
+    vector<SimulatedAsset> assets;
+    // segmentations indexes per asset
+    vector<unsigned short> segments;
     // datevalues list
     vector<DateValues> datevalues;
     // list of aggregators

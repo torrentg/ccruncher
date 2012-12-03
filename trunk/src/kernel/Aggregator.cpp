@@ -31,17 +31,26 @@
 // note: we don't diferentiate between asset-segmentations or obligor-segmentations
 // because obligor segments has been recoded as asset segments (see Obligor code)
 //===========================================================================
-ccruncher::Aggregator::Aggregator(char *assets, int numassets, int assetsize, int isegmentation, 
-    Segmentation &segmentation_, const string &filename, bool force) 
-    throw(Exception) : segmentation(segmentation_)
+ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
+    int isegmentation, const Segmentations &segmentations,
+    const string &filename, bool force) throw(Exception)
 {
+  assert(segmentations.size() > 0);
+  assert(segments.size() > 0);
+  assert(0 <= isegmentation && isegmentation < segmentations.size());
+
   // initialization
-  numsegments = segmentation.size();
+  numsegments = segmentations.getSegmentation(isegmentation).size();
+  segmentation = segmentations.getSegmentation(isegmentation);
   printUnassignedSegment = false;
-  for(int i=0; i<numassets; i++)
+
+  // setting printUnassignedSegment value
+  size_t numsegmentations = segmentations.size();
+  size_t numassets = segments.size()/numsegmentations;
+  assert(numassets*numsegmentations == segments.size());
+  for(size_t i=0; i<numassets; i++)
   {
-    SimulatedAsset *asset = (SimulatedAsset*) &(assets[i*assetsize]);
-    if ((&(asset->segments))[isegmentation] == 0) 
+    if (segments[i*numsegmentations + isegmentation] == 0)
     {
       printUnassignedSegment = true;
       break;

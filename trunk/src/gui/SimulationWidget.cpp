@@ -142,9 +142,14 @@ void SimulationWidget::selectDir()
 //===========================================================================
 void SimulationWidget::setDir()
 {
-  //TODO: check if odir changed
-  updateControls();
-  clearLog();
+  if (ui->odir->text() == odir) {
+    return;
+  }
+  else {
+    odir = ui->odir->text();
+    updateControls();
+    clearLog();
+  }
 }
 
 //===========================================================================

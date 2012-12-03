@@ -36,7 +36,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
+ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
@@ -47,8 +47,6 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NUL
   hash = 0;
   fpath = "path not set";
   bforce = false;
-  assetsize = 0;
-  numassets = 0;
   nfthreads = 0;
   time0 = NAD;
   timeT = NAD;
@@ -69,14 +67,6 @@ ccruncher::MonteCarlo::~MonteCarlo()
 //===========================================================================
 void ccruncher::MonteCarlo::release()
 {
-  // deallocating assets
-  if (assets != NULL)
-  {
-    delete [] assets;
-    assets = NULL;
-  }
-  numassets = 0;
-
   // removing threads
   for(unsigned int i=0; i<threads.size(); i++) {
     if (threads[i] != NULL) {
@@ -103,6 +93,8 @@ void ccruncher::MonteCarlo::release()
   }
 
   // flushing memory
+  vector<unsigned short>(0).swap(segments);
+  vector<SimulatedAsset>(0).swap(assets);
   vector<SimulatedObligor>(0).swap(obligors);
   vector<DateValues>(0).swap(datevalues);
   floadings.clear();
@@ -299,10 +291,8 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 {
-  UNUSED(idata);
-  
   // doing assertions
-  assert(assets == NULL);
+  assert(assets.empty());
 
   // checking limits (see SimulatedAsset::segments field)
   if (idata.getSegmentations().size() == 0 || USHRT_MAX < idata.getSegmentations().size()) {
@@ -320,7 +310,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 
   // determining the assets to simulate
   int cont = 0;
-  numassets = 0;
+  int numassets = 0;
   int numdatevalues = 0;
   for(unsigned int i=0; i<obligors.size(); i++)
   {
@@ -346,8 +336,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 
   // creating the simulated assets array
   datevalues.resize(numdatevalues);
-  assetsize = sizeof(SimulatedAsset) + sizeof(int)*(idata.getSegmentations().size()-1);
-  assets = new char[assetsize*numassets];
+  assets.resize(numassets);
+  segments.reserve(numassets*idata.getSegmentations().size());
   
   numassets = 0;
   numdatevalues = 0;
@@ -362,10 +352,9 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       if (vassets[j]->isActive(time0, timeT)) 
       {
         // creating asset
-        SimulatedAsset *p = (SimulatedAsset *)(assets+numassets*assetsize);
-        p->mindate = vassets[j]->getMinDate();
-        p->maxdate = vassets[j]->getMaxDate();
-        p->begin = datevalues.begin() + numdatevalues;
+        assets[numassets].mindate = vassets[j]->getMinDate();
+        assets[numassets].maxdate = vassets[j]->getMaxDate();
+        assets[numassets].begin = datevalues.begin() + numdatevalues;
 
         // setting asset datevalues
         for(size_t k=0; k<vassets[j]->getData().size(); k++)
@@ -373,19 +362,18 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
           datevalues[numdatevalues] = vassets[j]->getData()[k];
           numdatevalues++;
         }
-        p->end = datevalues.begin() + numdatevalues;
+        assets[numassets].end = datevalues.begin() + numdatevalues;
 
         // setting asset segments
-        unsigned short *segments = &(p->segments);
         for(int k=0; k<idata.getSegmentations().size(); k++)
         {
-          segments[k] = static_cast<unsigned short>(vassets[j]->getSegment(k));
+          segments.push_back(static_cast<unsigned short>(vassets[j]->getSegment(k)));
         }
 
         // assigning asset to obligor
         if (obligors[i].ref.assets == NULL)
         {
-          obligors[i].ref.assets = p;
+          obligors[i].ref.assets = &(assets[numassets]);
         }
 
         // incrementing num assets counters
@@ -425,7 +413,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   for(int i=0; i<idata.getSegmentations().size(); i++)
   {
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
-    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations().getSegmentation(i), filename, bforce);
+    Aggregator *aggregator = new Aggregator(segments, i, idata.getSegmentations(), filename, bforce);
     aggregators.push_back(aggregator);
     log << "segmentation" << split << "["+filename+"]" << endl;
   }
