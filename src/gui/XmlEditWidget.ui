@@ -16,17 +16,17 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QTextEdit" name="editor">
+    <widget class="QPlainTextEdit" name="editor">
      <property name="font">
       <font>
-       <family>Courier</family>
+       <family>Courier New</family>
       </font>
      </property>
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOn</enum>
      </property>
      <property name="lineWrapMode">
-      <enum>QTextEdit::NoWrap</enum>
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
    </item>
