@@ -17,11 +17,13 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
     toolbar(NULL)
 {
   ui->setupUi(this);
-  highlighter = new XmlHighlighter(ui->editor);
 
   if(!load(f)) {
     throw Exception("cannot read file " + filename.toStdString());
   }
+
+  highlighter = new XmlHighlighter(ui->editor);
+  highlighter->setDocument(ui->editor->document());
 
   // save action
   QKeySequence keys_save(QKeySequence::Save);
