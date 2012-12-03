@@ -76,9 +76,8 @@ bool stop = false;
 //===========================================================================
 // catchsignal
 //===========================================================================
-void catchsignal(int signal)
+void catchsignal(int)
 {
-  UNUSED(signal);
   stop = true;
 } 
 

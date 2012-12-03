@@ -71,11 +71,11 @@ class Segmentations : public ExpatHandlers
     // return the number of enabled segmentations
     int size() const;
     // [] operator (i>=0 -> enabled, i<0 -> disabled)
-    Segmentation& getSegmentation(int i);
+    const Segmentation& getSegmentation(int i) const;
     // return the index of the given segmentation
-    int indexOfSegmentation(const string &sname) throw(Exception);
+    int indexOfSegmentation(const string &sname) const throw(Exception);
     // return the index of the given segmentation
-    int indexOfSegmentation(const char *sname) throw(Exception);
+    int indexOfSegmentation(const char *sname) const throw(Exception);
     // serialize object content as xml
     string getXML(int) const throw(Exception);
 

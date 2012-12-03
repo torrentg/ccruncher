@@ -43,7 +43,7 @@ int ccruncher::Segmentations::size() const
 //===========================================================================
 // [] operator
 //===========================================================================
-Segmentation& ccruncher::Segmentations::getSegmentation(int i)
+const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
 {
   // assertions
   if (i >= 0) {
@@ -59,7 +59,7 @@ Segmentation& ccruncher::Segmentations::getSegmentation(int i)
 //===========================================================================
 // return the index of the given segmentation
 //===========================================================================
-int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exception)
+int ccruncher::Segmentations::indexOfSegmentation(const string &sname) const throw(Exception)
 {
   for (size_t i=0; i<enabled.size(); i++)
   {
@@ -81,7 +81,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const string &sname) throw(Exc
 //===========================================================================
 // return the index of the given segmentation
 //===========================================================================
-int ccruncher::Segmentations::indexOfSegmentation(const char *sname) throw(Exception)
+int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw(Exception)
 {
   for (size_t i=0; i<enabled.size(); i++)
   {

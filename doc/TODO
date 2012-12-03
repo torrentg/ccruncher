@@ -9,8 +9,6 @@ Current works
   * bulk output to file ?
   * add configuration file to ccruncher-gui
   * allow to aggregators to append data to file
-  * implement simulation pause
-  * remove segments from SimulatedAsset
 
 Future works
 -------------------

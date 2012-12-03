@@ -54,8 +54,6 @@ class SimulatedAsset
     vector<DateValues>::const_iterator begin;
     // reference to asset data
     vector<DateValues>::const_iterator end;
-    // segmentations indexes
-    unsigned short segments;
 
 };
 
