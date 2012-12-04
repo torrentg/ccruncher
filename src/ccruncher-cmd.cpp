@@ -66,7 +66,7 @@ void catchsignal(int signal);
 
 string sfilename = "";
 string spath = "";
-bool bforce = false;
+char cmode = 'n';
 int inice = -999;
 size_t ihash = 1000;
 unsigned char ithreads = 0;
@@ -100,24 +100,27 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "hfD:" ;
+  const char* const options1 = "hawD:o:" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
   {
       { "help",         0,  NULL,  'h' },
+      { "append",       0,  NULL,  'a' },
+      { "overwrite",    0,  NULL,  'w' },
+      { "define",       1,  NULL,  'D' },
+      { "path",         1,  NULL,  'o' },
       { "version",      0,  NULL,  301 },
-      { "path",         1,  NULL,  302 },
-      { "nice",         1,  NULL,  303 },
-      { "hash",         1,  NULL,  304 },
-      { "threads",      1,  NULL,  305 },
+      { "nice",         1,  NULL,  302 },
+      { "hash",         1,  NULL,  303 },
+      { "threads",      1,  NULL,  304 },
       { NULL,           0,  NULL,   0  }
   };
 
   // parsing options
   while (1)
   {
-    int curropt = getopt_long (argc, argv, options1, options2, NULL);
+    int curropt = getopt_long(argc, argv, options1, options2, NULL);
 
     if (curropt == -1)
     {
@@ -135,10 +138,6 @@ int main(int argc, char *argv[])
       case 'h': // -h or --help (show help and exit)
           usage();
           return 0;
-
-      case 'f': // -f (force overwriting)
-          bforce = true;
-          break;
 
       case 'D': // -D key=val (define)
           {
@@ -162,6 +161,19 @@ int main(int argc, char *argv[])
           }
           break;
 
+      case 'a': // -a --append
+      case 'w': // -w --overwrite
+          if (cmode != 'n') {
+            cerr << "error: found more than one output files mode" << endl;
+            return 1;
+          }
+          cmode = curropt;
+          break;
+
+      case 'o': // -o dir, --path=dir (set output files path)
+          spath = string(optarg);
+          break;
+
       case 301: // --version (show version and exit)
           cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
           cout << "build host: " << BUILD_HOST << endl;
@@ -170,11 +182,7 @@ int main(int argc, char *argv[])
           cout << "build options: " << Utils::getCompilationOptions() << endl;
           return 0;
 
-      case 302: // --path=dir (set output files path)
-          spath = string(optarg);
-          break;
-
-      case 303: // --nice=val (set nice value)
+      case 302: // --nice=val (set nice value)
           try
           {
             string snice = string(optarg);
@@ -187,7 +195,7 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 304: // --hash=val (set hash value)
+      case 303: // --hash=val (set hash value)
           try
           {
             string shash = string(optarg);
@@ -200,7 +208,7 @@ int main(int argc, char *argv[])
           }
           break;
 
-      case 305: // --threads=val (set number of threads)
+      case 304: // --threads=val (set number of threads)
           try
           {
             string sthreads = string(optarg);
@@ -273,15 +281,16 @@ int main(int argc, char *argv[])
     // running simulation
     run();
   }
-  catch(Exception &e)
+  catch(std::exception &e)
   {
-    cerr << endl << e << endl;
+    cerr << endl << e.what() << endl;
     return 1;
   }
   catch(...)
   {
-    cerr << "uncatched exception. please report this bug sending input file, \n"
-            "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+    cerr << endl <<
+        "uncatched exception. please report this bug sending input file, \n"
+        "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
     return 1;
   }
 
@@ -307,14 +316,7 @@ void run() throw(Exception)
   // checking output directory
   if (!File::existDir(spath))
   {
-    if (bforce == false)
-    {
-      throw Exception("path " + spath + " not exist");
-    }
-    else
-    {
-      File::makeDir(spath);
-    }
+    throw Exception("path " + spath + " not exist");
   }
 
   // header
@@ -328,7 +330,7 @@ void run() throw(Exception)
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());
-  montecarlo.setFilePath(spath, bforce);
+  montecarlo.setFilePath(spath, cmode);
   montecarlo.setData(*idata);
   delete idata;
 
@@ -372,30 +374,38 @@ void usage()
 {
   cout <<
   "  usage:\n"
-  "    ccruncher [options] <file>\n"
+  "    ccruncher --path=dir [options] [FILE]\n"
   "  description:\n"
   "    ccruncher is a tool used to simulate a portfolio of credits using\n"
   "    the Monte Carlo method. More info at http://www.ccruncher.net\n"
   "  arguments:\n"
   "    file           xml file containing the problem to be solved. This\n"
   "                   file can be gziped (caution, zip format not suported).\n"
-  "                   You can omit this parameter an enter data from stdin.\n"
+  "                   With no FILE read standard input.\n"
   "  options:\n"
-  "    -f             force output files overwrite\n"
+  "    --define key=val\n"
   "    -D key=val     declare a define named key with value val\n"
+  "    -a\n"
+  "    --append       output data is appended to existing files, if any\n"
+  "    -w\n"
+  "    --overwrite    existing output files are overwritten\n"
+  "    -o dir\n"
   "    --path=dir     directory where output files will be placed (required)\n"
-  "    --nice=num     set nice priority to num (optional)\n"
+#if !defined(_WIN32)
+  "    --nice=num     set priority to num (default=" + Format::toString(getpriority(PRIO_PROCESS,0)) + ", min=" + Format::toString(PRIO_MIN) + ", max=" + Format::toString(PRIO_MAX) + ")\n"
+#endif
   "    --threads=num  number of threads (default=" + Format::toString(Utils::getNumCores()) + ")\n"
   "    --hash=num     print '.' for each num simulations (default=" + Format::toString(ihash) + ")\n"
-  "    --help -h      show this message and exit\n"
+  "    -h\n"
+  "    --help         show this message and exit\n"
   "    --version      show version and exit\n"
   "  return codes:\n"
   "    0              OK. finished without errors\n"
   "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher -qf --path=data/sample01 samples/sample01.xml\n"
-  "    ccruncher -f --hash=1000 --path=data/ samples/test100.xml\n"
-  "    ccruncher -f --hash=1000 --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
+  "    ccruncher --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher -w --hash=5000 --path=data/ samples/test100.xml\n"
+  "    ccruncher --append --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
   << endl;
 }
 

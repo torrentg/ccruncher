@@ -96,7 +96,7 @@ Using CCruncher
 2. run CCruncher
      > cd $CCRUNCHER
      > bin/ccruncher --help
-     > bin/ccruncher -f --hash=100 --path=data samples/test01.xml
+     > bin/ccruncher -w --path=data samples/test01.xml
 
 3. compute risk indicators typing:
      > bin/ccreport.sh data/portfolio.csv

@@ -33,8 +33,9 @@
 //===========================================================================
 ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
     int isegmentation, const Segmentations &segmentations,
-    const string &filename, bool force) throw(Exception)
+    const string &filename, char mode) throw(Exception)
 {
+  assert(mode=='a' || mode=='w' || mode=='n');
   assert(segmentations.size() > 0);
   assert(segments.size() > 0);
   assert(0 <= isegmentation && isegmentation < segmentations.size());
@@ -57,34 +58,42 @@ ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
     }
   }
   
-  // file creation
-  if (force == false && access(filename.c_str(), W_OK) == 0)
+  // checking file creation mode
+  bool force_creation = (mode!='a' && mode!='w');
+  if (force_creation == true && access(filename.c_str(), W_OK) == 0)
   {
     throw Exception("file " + filename + " already exist");
   }
+
   try
   {
+    // opening/creating file
     fout.exceptions(ios::failbit | ios::badbit);
-    fout.open(filename.c_str(), ios::out|ios::trunc); //ios.app
+    fout.open(filename.c_str(), ios::out|(mode=='a'?(ios::app):(ios::trunc)));
     fout.setf(ios::fixed);
     fout.setf(ios::showpoint);
     fout.precision(2);
-    if (numsegments == 1)
+
+    // printing header
+    if (mode != 'a')
     {
-      fout << "\"" << segmentation.name << "\"";
-    }
-    else
-    {
-      for(int i=1; i<numsegments; i++)
+      if (numsegments == 1)
       {
-        fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
+        fout << "\"" << segmentation.name << "\"";
       }
-      if (printUnassignedSegment)
+      else
       {
-        fout << ", \"" << segmentation.getSegment(0) << "\"";
+        for(int i=1; i<numsegments; i++)
+        {
+          fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
+        }
+        if (printUnassignedSegment)
+        {
+          fout << ", \"" << segmentation.getSegment(0) << "\"";
+        }
       }
+      fout << endl;
     }
-    fout << endl;
   }
   catch(std::exception &e)
   {
@@ -111,7 +120,7 @@ ccruncher::Aggregator::~Aggregator()
 //===========================================================================
 // append
 //===========================================================================
-void ccruncher::Aggregator::append(vector<double> &losses) throw(Exception)
+void ccruncher::Aggregator::append(const vector<double> &losses) throw(Exception)
 {
   assert((int)losses.size() == numsegments);
 

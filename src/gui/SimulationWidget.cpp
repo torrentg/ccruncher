@@ -230,13 +230,16 @@ void SimulationWidget::submit()
 
     task.wait();
     clearLog();
-    actionDefines->setEnabled(false);
-    actionRun->setEnabled(false);
-    actionStop->setEnabled(true);
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
     task.setData(ifile, defines, odir);
-    task.start();
+    bool rc = task.checkConflicts();
+    if (rc) {
+      actionDefines->setEnabled(false);
+      actionRun->setEnabled(false);
+      actionStop->setEnabled(true);
+      task.start();
+    }
   }
 }
 
@@ -355,7 +358,6 @@ void SimulationWidget::draw()
       val = ui->progress->value();
       val += 1.0;
       if (val > 100) {
-        //TODO: review linux case (don't invert?)
         ui->progress->setInvertedAppearance(!ui->progress->invertedAppearance());
         val = 0;
       }

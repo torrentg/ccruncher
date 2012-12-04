@@ -66,11 +66,11 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(const vector<unsigned short> &, int , const Segmentations &, const string &, bool) throw(Exception);
+    Aggregator(const vector<unsigned short> &, int , const Segmentations &, const string &, char) throw(Exception);
     // destructor
     ~Aggregator();
     // append data to aggregator
-    void append(vector<double> &) throw(Exception);
+    void append(const vector<double> &) throw(Exception);
     // force flush data to disk
     void flush() throw(Exception);
     // return the number of segments
