@@ -123,7 +123,7 @@ void MainWindow::about()
   about.setInformativeText(
         "<p>"
         "version: " VERSION " [" SVN_VERSION "]<br/><br/>"
-        "copyright: Gerard Torrent<br/><br/>"
+        "copyright: <a href='http://www.tatine.es'>Tatine</a><br/><br/>"
         "license: GPL<br/><br/>"
         "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
         "</p>");
@@ -172,6 +172,8 @@ void MainWindow::openFile(const QUrl &url)
     QMdiSubWindow *existing = findMdiChild(url.toString());
     if (existing) {
       mdiArea->setActiveSubWindow(existing);
+      AnalysisWidget *analysis = dynamic_cast<AnalysisWidget*>(existing->widget());
+      if (analysis != NULL) analysis->refresh();
       return;
     }
 
