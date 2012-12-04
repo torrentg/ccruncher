@@ -97,6 +97,8 @@ class IData : public ExpatHandlers
     gzFile curfile;
     // current file size
     size_t cursize;
+    // parse portfolio flag
+    bool parse_portfolio;
 
   private:
   
@@ -125,7 +127,7 @@ class IData : public ExpatHandlers
     // destructor
     ~IData();
     // initialize content
-    void init(const string &filename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL) throw(Exception);
+    void init(const string &filename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
     // returns simulation title
     const string &getTitle() const;
     // returns simulation description

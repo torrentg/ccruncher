@@ -43,6 +43,7 @@ ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
   description = "";
   stop = NULL;
   cursize = 0;
+  parse_portfolio = true;
 }
 
 //===========================================================================
@@ -58,12 +59,13 @@ ccruncher::IData::~IData()
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *stop_) throw(Exception)
+void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *s, bool p) throw(Exception)
 {
   gzFile file = NULL;
   size_t bytes = 0;
   filename = f;
-  stop = stop_;
+  stop = s;
+  parse_portfolio = p;
 
   try
   {
@@ -368,6 +370,8 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
+  if (!parse_portfolio) throw 999;
+
   portfolio.init(ratings, factors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 
