@@ -119,7 +119,7 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
     if (*str == '"') str++;
     size_t l = strlen(str);
     if (l>0 && *(str+l-1)=='"') *(str+l-1) = 0;
-    str = trim(str);
+    //str = trim(str);
     headers.push_back(string(str));
   }
   while(rc == 1);
@@ -130,8 +130,9 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
 //===========================================================================
 // moves content pointed by ptr to the begining of buffer
 // and appends content to end
+// returns the number of available chars in buffer
 //===========================================================================
-void ccruncher::CsvFile::getChunk(char *ptr)
+size_t ccruncher::CsvFile::getChunk(char *ptr)
 {
   size_t len = 0;
   char *aux = NULL;
@@ -147,15 +148,21 @@ void ccruncher::CsvFile::getChunk(char *ptr)
     aux = buffer;
   }
 
+  // initializing pointers
+  ptr0 = buffer;
+  ptr1 = buffer;
+
   // read data from file preserving unreaded content
   len = buffer + BUFFER_SIZE - aux;
   size_t rc = fread(aux, sizeof(char), len, file);
+
   if (rc < len) {
     aux[rc] = 0;
+    return (aux+rc) - buffer;
   }
-
-  ptr0 = buffer;
-  ptr1 = buffer;
+  else {
+    return BUFFER_SIZE;
+  }
 }
 
 //===========================================================================
@@ -224,9 +231,11 @@ char* ccruncher::CsvFile::trim(char *ptr)
   if (ptr == NULL) return ptr;
   char *ret = ptr;
   while (isspace(*ret)) ret++;
+  if (*ret == 0) return ret;
   char *aux = ret;
-  while (!isspace(*aux) && *aux!=0) aux++;
-  *aux = 0;
+  aux += strlen(aux)-1;
+  while (aux >= ret && isspace(*aux)) aux--;
+  *(aux+1) = 0;
   return ret;
 }
 
@@ -258,6 +267,9 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
           // skip blank line
           numlines++;
           continue;
+        }
+        if (col > 0) {
+          throw Exception("value not found");
         }
       }
 
@@ -304,5 +316,30 @@ size_t ccruncher::CsvFile::getReadedSize() const
 {
   if (file == NULL) return 0;
   else return ftell(file);
+}
+
+//===========================================================================
+// returns the number of lines
+//===========================================================================
+size_t ccruncher::CsvFile::getNumLines()
+{
+  size_t numlines = 0;
+  size_t rc = 0;
+
+  open(filename, separators);
+
+  do
+  {
+    rc = getChunk(NULL);
+    for(size_t i=0; i<rc; i++) {
+      if (buffer[i] == '\n') {
+        numlines++;
+      }
+    }
+  }
+  while(rc == BUFFER_SIZE);
+
+  numlines++;
+  return numlines;
 }
 

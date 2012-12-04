@@ -8,7 +8,6 @@ Current works
   * review functional tests (because --trace removed)
   * bulk output to file ?
   * add configuration file to ccruncher-gui
-  * allow to aggregators to append data to file
 
 Future works
 -------------------

@@ -74,7 +74,7 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
       bytes = 0;
     }
     else {
-      // gzFile reads gziped files an not-gziped files
+      // gzFile reads both gziped and not-gziped files
       file = gzopen(filename.c_str(), "rb");
       bytes = File::filesize(filename);
     }
@@ -97,7 +97,7 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
     pthread_mutex_unlock(&mutex);
     gzclose(file);
   }
-  catch(std::exception &e)
+  catch(...)
   {
     if (file != NULL) {
       pthread_mutex_lock(&mutex);
@@ -187,7 +187,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section params
   else if (isEqual(name_,"parameters")) {
     if (params.maxiterations >= 0) {
-      throw Exception("tag parameters repeated");
+      throw Exception("tag <parameters> repeated");
     }
     else {
       eppush(eu, &params, name_, attributes);
@@ -196,7 +196,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section interest
   else if (isEqual(name_,"interest")) {
     if (interest.size() != 0) {
-      throw Exception("tag interest repeated");
+      throw Exception("tag <interest> repeated");
     }
     else {
       interest.setDate(params.time0);
@@ -206,7 +206,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section ratings
   else if (isEqual(name_,"ratings")) {
     if (ratings.size() != 0) {
-      throw Exception("tag ratings repeated");
+      throw Exception("tag <ratings> repeated");
     }
     else {
       eppush(eu, &ratings, name_, attributes);
@@ -218,7 +218,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag <mtransition> defined before <ratings> tag");
     }
     else if (transitions.size() > 0) {
-      throw Exception("tag transitions repeated");
+      throw Exception("tag <transitions> repeated");
     }
     else {
       transitions.setRatings(ratings);
@@ -231,7 +231,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag <dprobs> defined before <ratings> tag");
     }
     else if (dprobs.size() != 0) {
-      throw Exception("tag dprobs repeated");
+      throw Exception("tag <dprobs> repeated");
     }
     else {
       dprobs.setRatings(ratings);
@@ -242,7 +242,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section factors
   else if (isEqual(name_,"factors")) {
     if (factors.size() != 0) {
-      throw Exception("tag factors repeated");
+      throw Exception("tag <factors> repeated");
     }
     else {
       eppush(eu, &factors, name_, attributes);
@@ -254,7 +254,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag <correlations> defined before <factors> tag");
     }
     else if (correlations.size() > 0) {
-      throw Exception("tag correlations repeated");
+      throw Exception("tag <correlations> repeated");
     }
     else {
       correlations.setFactors(factors);
@@ -264,7 +264,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   // section segmentations
   else if (isEqual(name_,"segmentations")) {
     if (segmentations.size() > 0) {
-      throw Exception("tag segmentations repeated");
+      throw Exception("tag <segmentations> repeated");
     }
     else {
       eppush(eu, &segmentations, name_, attributes);
@@ -288,6 +288,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       throw Exception("tag <portfolio> repeated");
     }
     else {
+      if (!parse_portfolio) epstop(eu);
       parsePortfolio(eu, name_, attributes);
     }
   }
@@ -370,8 +371,6 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 //===========================================================================
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
-  if (!parse_portfolio) throw 999;
-
   portfolio.init(ratings, factors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 

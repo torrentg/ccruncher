@@ -4,7 +4,7 @@
 #include "gui/AnalysisTask.hpp"
 #include <cassert>
 
-#define MJ_EPSILON 1e-6
+#define MJ_EPSILON 1e-12
 
 //===========================================================================
 // constructor
@@ -308,74 +308,71 @@ statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator fi
   // quantile stderr (Maritz-Jarret)
   double w, val;
   double d1=0.0, d2=0.0;
-  double c1=0.0, c2=0.0;
+  kahan c1=0.0, c2=0.0;
   double a = m - 1.0;
   double b = n - m;
 
   // ibeta fails when a,b values are too big (requires too much continued fractions sums)
   // in order to grant ibeta convergence we scale a,b values
-  if (a > 50000) {
+  if (a > b && a > 50000) {
     b *= 50000/a;
     a = 50000;
   }
-  if (b > 50000) {
+  else if (b >= a && b > 50000) {
     a *= 50000/b;
     b = 50000;
   }
 
-  int i1=0;
-  for(i1=m-1; i1>=0; i1--) {
+  for(int i=m-1; i>=0; i--) {
     try {
       // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
-      w =  gsl_sf_beta_inc(a, b, (double)(i1+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i1+1)/(double)(n));
+      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
     }
     catch(Exception &e) {
       // ibeta convergence not achieved
       w = 0.0;
     }
-    val = *(first+i1);
+    val = *(first+i);
     d1 = w*val;
     d2 = w*val*val;
-    c2 += d2;
-    c1 += d1;
-    if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
-      //TODO: consider to use relative error respect VaR
-      //cout << "i1=" << m-i1 << ", " << flush;
+    c2.add(d2);
+    c1.add(d1);
+    if (fabs(w) < MJ_EPSILON) {
       break;
     }
   }
 
-  // we need to be sorted around the percentile in order
-  // to compute the maritz-jarret estimator
-  // test realized shows that with MJ_EPSILON=1e-6,
-  // then the needed upper size is approx the lower size
-  int m2 = std::min((int)(1.2*(m-i1)), n-m);
-  partial_sort(middle, middle+m2, last);
-
-  int i2=0;
-  for(i2=m; i2<n; i2++) {
+  vector<double> ws;
+  for(int i=m; i<n; i++) {
     try {
       // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
-      w =  gsl_sf_beta_inc(a, b, (double)(i2+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i2+1)/(double)(n));
+      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
+      ws.push_back(w);
     }
     catch(Exception &e) {
       // ibeta convergence not achieved
-      w = 0.0;
-    }
-    val = *(first+i2);
-    d1 = w*val;
-    d2 = w*val*val;
-    c2 += d2;
-    c1 += d1;
-    if (fabs(d1) < MJ_EPSILON && fabs(d2) < MJ_EPSILON) {
-      //TODO: consider to use relative error respect VaR
-      //cout << "i2=" << i2-m+1 << endl;
       break;
+    }
+    if (fabs(w) < MJ_EPSILON) {
+      break;
+    }
+  }
+
+  if (ws.size() > 0)
+  {
+    partial_sort(middle, middle+ws.size(), last);
+    for(size_t i=0; i<ws.size(); i++) {
+      w = ws[i];
+      val = *(first+m+i);
+      d1 = w*val;
+      d2 = w*val*val;
+      c2.add(d2);
+      c1.add(d1);
     }
   }
 
   double var = *(middle-1);
-  double std_err = sqrt(c2 - c1*c1);
+  double std_err = sqrt(c2.value() - c1.value()*c1.value());
 
   return statval(n, var, std_err);
 }

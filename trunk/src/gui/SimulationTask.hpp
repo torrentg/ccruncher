@@ -37,6 +37,8 @@ class SimulationTask : public QThread
     string odir;
     // defines
     map<string,string> defines;
+    // output file creation mode
+    char fmode;
     // data
     IData *idata;
     // simulator
@@ -81,6 +83,8 @@ class SimulationTask : public QThread
     Logger& getLogger();
     // number of running simulations
     static size_t getNumRunningSims();
+    // check conflicts
+    bool checkConflicts();
 
   signals:
 

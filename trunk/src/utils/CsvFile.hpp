@@ -67,7 +67,7 @@ class CsvFile
     // returns file size
     size_t getNumBytes();
     // fills buffer
-    void getChunk(char *ptr);
+    size_t getChunk(char *ptr);
     // parse a field
     int read() throw(Exception);
     // parse a double
@@ -93,6 +93,8 @@ class CsvFile
     size_t getFileSize() const;
     // returns readed bytes
     size_t getReadedSize() const;
+    // returns the number of lines
+    size_t getNumLines();
 
 };
 

@@ -46,7 +46,7 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
   seed = 0UL;
   hash = 0;
   fpath = "path not set";
-  bforce = false;
+  fmode = 'n';
   nfthreads = 0;
   time0 = NAD;
   timeT = NAD;
@@ -135,7 +135,7 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
     // exit function
     log << indent(-1);
   }
-  catch(Exception &e)
+  catch(std::exception &e)
   {
     release();
     throw Exception(e, "error initializing Monte Carlo");
@@ -406,14 +406,13 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // setting logger info
   log << "output data directory" << split << "["+fpath+"]" << endl;
-  log << "number of segmentations" << split << idata.getSegmentations().size() << endl;
 
   // allocating and initializing aggregators
   aggregators.clear();
   for(int i=0; i<idata.getSegmentations().size(); i++)
   {
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
-    Aggregator *aggregator = new Aggregator(segments, i, idata.getSegmentations(), filename, bforce);
+    Aggregator *aggregator = new Aggregator(segments, i, idata.getSegmentations(), filename, fmode);
     aggregators.push_back(aggregator);
     log << "segmentation" << split << "["+filename+"]" << endl;
   }
@@ -506,7 +505,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
+bool ccruncher::MonteCarlo::append(const vector<vector<double> > &losses) throw()
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
@@ -556,10 +555,10 @@ bool ccruncher::MonteCarlo::append(vector<vector<double> > &losses) throw()
 //===========================================================================
 // setFilePath
 //===========================================================================
-void ccruncher::MonteCarlo::setFilePath(const string &path, bool force)
+void ccruncher::MonteCarlo::setFilePath(const string &path, char mode)
 {
   fpath = path;
-  bforce = force;
+  fmode = mode;
 }
 
 //===========================================================================

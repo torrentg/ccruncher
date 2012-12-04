@@ -94,8 +94,8 @@ class MonteCarlo
     size_t hash;
     // directory for output files
     string fpath;
-    // force file overwriting flag
-    bool bforce;
+    // output file mode (a=append, w=overwrite, n=new)
+    char fmode;
     // time account
     Timer timer;
     // ellapsed time writting data to disk
@@ -126,7 +126,7 @@ class MonteCarlo
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // append simulation result
-    bool append(vector<vector<double> > &) throw();
+    bool append(const vector<vector<double> > &) throw();
     // non-copyable class
     MonteCarlo(const MonteCarlo &);
     // non-copyable class
@@ -139,7 +139,7 @@ class MonteCarlo
     // destructor
     ~MonteCarlo();
     // set path for output files
-    void setFilePath(const string &path, bool force);
+    void setFilePath(const string &path, char mode);
     // initiliaze this class
     void setData(IData &) throw(Exception);
     // execute Monte Carlo
