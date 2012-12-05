@@ -18,13 +18,6 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 {
   ui->setupUi(this);
 
-  if(!load(f)) {
-    throw Exception("cannot read file " + filename.toStdString());
-  }
-
-  highlighter = new XmlHighlighter(ui->editor);
-  highlighter->setDocument(ui->editor->document());
-
   // save action
   QKeySequence keys_save(QKeySequence::Save);
   actionSave = new QAction(QIcon(":/images/save.png"), tr("&Save"), this);
@@ -55,6 +48,15 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
   toolbar->addAction(actionReload);
   toolbar->addAction(actionUndo);
   toolbar->addAction(actionSave);
+
+  // load file
+  if(!load(f)) {
+    throw Exception("cannot read file " + filename.toStdString());
+  }
+
+  // enable highlighter
+  highlighter = new XmlHighlighter(ui->editor);
+  highlighter->setDocument(ui->editor->document());
 }
 
 //===========================================================================
@@ -73,6 +75,8 @@ XmlEditWidget::~XmlEditWidget()
 void XmlEditWidget::documentWasModified()
 {
   setWindowModified(ui->editor->document()->isModified());
+  actionSave->setEnabled(ui->editor->document()->isModified());
+  actionUndo->setEnabled(ui->editor->document()->availableUndoSteps()>0);
 }
 
 //===========================================================================
@@ -83,6 +87,8 @@ void XmlEditWidget::setCurrentFile(const QString &fileName)
   filename = QFileInfo(fileName).canonicalFilePath();
   ui->editor->document()->setModified(false);
   setWindowModified(false);
+  actionSave->setEnabled(false);
+  actionUndo->setEnabled(ui->editor->document()->availableUndoSteps()>0);
   QString name = QFileInfo(filename).fileName();
   setWindowTitle(name + " [*]");
 }
@@ -178,6 +184,8 @@ bool XmlEditWidget::save(const QString &str)
   QApplication::restoreOverrideCursor();
   setWindowModified(false);
   ui->editor->document()->setModified(false);
+  actionSave->setEnabled(false);
+  actionUndo->setEnabled(ui->editor->document()->availableUndoSteps()>0);
   return true;
 }
 
