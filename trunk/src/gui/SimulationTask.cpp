@@ -204,7 +204,7 @@ bool SimulationTask::checkConflicts()
     idata.init(ifile, defines, NULL, false);
   }
   catch(...) {
-    return false;
+    return true;
   }
 
   vector<string> nonfiles;

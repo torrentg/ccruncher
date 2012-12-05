@@ -220,8 +220,8 @@ void SimulationWidget::submit()
   else {
     if (SimulationTask::getNumRunningSims() > 0)
     {
-      QMessageBox::StandardButton rc = QMessageBox::warning(this, "CCruncher",
-           "There is already another simulation in progress.\n Are you sure to continue?",
+      QMessageBox::StandardButton rc = QMessageBox::warning(this, tr("CCruncher"),
+           tr("There is already another simulation in progress.\n Are you sure to continue?"),
            QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
       if (rc != QMessageBox::Yes) {
         return;
@@ -415,8 +415,8 @@ void SimulationWidget::setDefines()
 void SimulationWidget::closeEvent(QCloseEvent *event)
 {
   if (task.isRunning()) {
-    QMessageBox::StandardButton rc = QMessageBox::question(this, "CCruncher",
-       "There is a Monte Carlo simulation in progress.\nDo you want to stop it?",
+    QMessageBox::StandardButton rc = QMessageBox::question(this, tr("CCruncher"),
+       tr("There is a Monte Carlo simulation in progress.\nDo you want to stop it?"),
        QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
     if (rc != QMessageBox::Yes) {
       event->ignore();
