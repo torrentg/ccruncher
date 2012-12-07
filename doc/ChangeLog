@@ -14,6 +14,7 @@ version 2.1 (???. 2012)
   * 'description' attribute changed to optional
   * section 'sectors' renamed as 'factors'
   * factor loading values moved to 'factor' section
+  * section 'interest' changed to optional
 
 version 2.0 (Oct. 2012)
 --------------------------

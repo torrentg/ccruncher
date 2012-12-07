@@ -15,7 +15,7 @@
 <!--                           ccruncher                            -->
 <!-- .............................................................. -->
 <!ELEMENT ccruncher (
-    (title?, description?, defines?, parameters, interest, ratings, 
+    (title?, description?, defines?, parameters, interest?, ratings, 
      (transitions|dprobs), factors, correlations, segmentations, 
      portfolio)
 )>

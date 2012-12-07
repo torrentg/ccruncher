@@ -272,10 +272,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   }
   // section portfolio
   else if (isEqual(name_,"portfolio")) {
-    if (interest.size() == 0) {
-      throw Exception("tag <portfolio> defined before <interest> tag");
-    }
-    else if (ratings.size() == 0) {
+    if (ratings.size() == 0) {
       throw Exception("tag <portfolio> defined before <ratings> tag");
     }
     else if (factors.size() == 0) {
@@ -433,9 +430,6 @@ void ccruncher::IData::validate() throw(Exception)
 {
   if (params.maxiterations < 0) {
     throw Exception("parameters section not defined");
-  }
-  else if (interest.size() == 0) {
-    throw Exception("interest section not defined");
   }
   else if (ratings.size() == 0) {
     throw Exception("ratings section not defined");
