@@ -28,6 +28,7 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
+#include <gsl/gsl_spline.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 
@@ -82,6 +83,12 @@ class Interest : public ExpatHandlers
     Date date;
     // rate values
     vector<Rate> rates;
+    // spline type
+    bool is_cubic_spline;
+    // spline curve
+    gsl_spline *spline;
+    // spline accelerator
+    gsl_interp_accel *accel;
 
   private:
 
@@ -89,6 +96,8 @@ class Interest : public ExpatHandlers
     void insertRate(const Rate &) throw(Exception);
     // given a time, returns the rate (interpolated)
     void getValues(int, double *, double *) const;
+    // set spline
+    void setSpline() throw(Exception);
 
   protected:
   
@@ -101,6 +110,12 @@ class Interest : public ExpatHandlers
 
     // default constructor
     explicit Interest(const Date &date_=NAD, InterestType type=Compound);
+    // copy constructor
+    Interest(const Interest &);
+    // destructor
+    ~Interest();
+    // assignment operator
+    Interest & operator=(const Interest &);
     // return interest type
     InterestType getType() const;
     // numbers of rates

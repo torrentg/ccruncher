@@ -31,10 +31,63 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Interest::Interest(const Date &date_, InterestType type_)
+ccruncher::Interest::Interest(const Date &date_, InterestType type_) :
+    spline(NULL), accel(NULL)
 {
   type = type_;
   date = date_;
+  is_cubic_spline = false;
+}
+
+//===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::Interest::Interest(const Interest &o)
+{
+  *this = o;
+}
+
+//===========================================================================
+// destructor
+//===========================================================================
+ccruncher::Interest::~Interest()
+{
+  if (spline != NULL) {
+    gsl_spline_free(spline);
+  }
+
+  if (accel != NULL) {
+    gsl_interp_accel_free(accel);
+  }
+}
+
+//===========================================================================
+// assignment operator
+//===========================================================================
+Interest & ccruncher::Interest::operator=(const Interest &o)
+{
+  type = o.type;
+  date = o.date;
+  rates = o.rates;
+  is_cubic_spline = o.is_cubic_spline;
+
+  if (o.spline != NULL) {
+    spline = gsl_spline_alloc(o.spline->interp->type, o.spline->size);
+    gsl_spline_init(spline, o.spline->x, o.spline->y, o.spline->size);
+  }
+  else {
+    spline = NULL;
+  }
+
+  if (o.accel != NULL) {
+    accel = gsl_interp_accel_alloc();
+    gsl_interp_accel_reset(accel);
+  }
+  else {
+    accel = NULL;
+  }
+
+  return *this;
 }
 
 //===========================================================================
@@ -42,6 +95,7 @@ ccruncher::Interest::Interest(const Date &date_, InterestType type_)
 //===========================================================================
 void ccruncher::Interest::setDate(const Date &d)
 {
+  //TODO: check that time.0 and time.T are covered by curve
   date = d;
 }
 
@@ -179,6 +233,43 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
 }
 
 //===========================================================================
+// setSpline
+// assumed than rates are sorted by date
+//===========================================================================
+void ccruncher::Interest::setSpline() throw(Exception)
+{
+  assert(spline == NULL && accel == NULL);
+  size_t n = rates.size();
+
+  if (!is_cubic_spline && n < gsl_interp_type_min_size(gsl_interp_linear)) {
+    throw Exception("insuficient number of rates to define a linear spline");
+  }
+  if (is_cubic_spline && n < gsl_interp_type_min_size(gsl_interp_cspline)) {
+    throw Exception("insuficient number of rates to define a cubic spline");
+  }
+
+  vector<double> x(n);
+  vector<double> y(n);
+
+  for(size_t i=0; i<n; i++)
+  {
+    x[i] = rates[i].d;
+    y[i] = rates[i].r;
+  }
+
+  if (is_cubic_spline) {
+    spline = gsl_spline_alloc(gsl_interp_cspline, n);
+  }
+  else {
+    spline = gsl_spline_alloc(gsl_interp_linear, n);
+  }
+
+  gsl_spline_init(spline, &(x[0]), &(y[0]), n);
+  assert(spline->size == n);
+  accel = gsl_interp_accel_alloc();
+}
+
+//===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
 void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char **attributes)
@@ -188,7 +279,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
     if (getNumAttributes(attributes) == 0) {
       type = Compound;
     }
-    else if (getNumAttributes(attributes) == 1)
+    else if (getNumAttributes(attributes) <= 2)
     {
       string str = Strings::trim(getStringAttribute(attributes, "type"));
       str = Strings::lowercase(str);
@@ -203,6 +294,13 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
       }
       else  {
         throw Exception("invalid type value at <interest>");
+      }
+
+      str = getStringAttribute(attributes, "spline", "linear");
+      if (str == "cubic") is_cubic_spline = true;
+      else if (str == "linear") is_cubic_spline = false;
+      else {
+        throw Exception("unrecognized spline type: " + str + ". allowed types are: linear, cubic");
       }
     }
     else {
@@ -248,9 +346,8 @@ void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
     if (rates.empty()) {
       throw Exception("interest has no rates");
     }
-    else {
-      sort(rates.begin(), rates.end());
-    }
+    sort(rates.begin(), rates.end());
+    setSpline();
   }
   else if (isEqual(name_,"rate")) {
     // nothing to do
