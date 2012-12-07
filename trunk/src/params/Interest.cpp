@@ -116,7 +116,7 @@ double ccruncher::Interest::getValue(const Date &d) const
 //===========================================================================
 double ccruncher::Interest::getFactor(const Date &date1) const
 {
-  if (date1 <= date) return 1.0;
+  if (date == NAD || rates.size() == 0 || date1 <= date) return 1.0;
 
   int d = date1 - date;
   double r, t; // t = time in years
@@ -154,11 +154,6 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
   if (val.d < 0)
   {
     throw Exception("rate with invalid time");
-  }
-
-  if (val.d == 0 && val.r != 0.0)
-  {
-    throw Exception("rate at t=0 distinct than 0");
   }
 
   // checking if previously defined

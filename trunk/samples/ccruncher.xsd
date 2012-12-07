@@ -54,7 +54,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="interest" minOccurs="1" maxOccurs="1">
+			<xsd:element name="interest" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="rate" minOccurs="1" maxOccurs="unbounded">
@@ -235,7 +235,7 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="simple"/>
 			<xsd:enumeration value="compound"/>
-			<xsd:enumeration value="continous"/>
+			<xsd:enumeration value="continuous"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
