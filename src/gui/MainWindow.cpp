@@ -210,6 +210,7 @@ void MainWindow::openFile(const QUrl &url)
     }
     child->setWindowFilePath(url.toString());
     child->show();
+    child->nextInFocusChain()->setFocus();
   }
 }
 
