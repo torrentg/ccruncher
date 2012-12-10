@@ -116,46 +116,8 @@ int ccruncher::Interest::size() const
 }
 
 //===========================================================================
-// returns linear interpolated interest rate at day d from date
-// we don't use cubic splines because curve can oscillate depending on
-// entered points
+// returns interpolated interest rate at day d from date
 //===========================================================================
-/*
-void ccruncher::Interest::getValues(int d, double *t, double *r) const
-{
-  size_t n = rates.size();
-
-  if (n == 0 || d <= 0)
-  {
-    *t = 0.0;
-    *r = 0.0;
-  }
-  else if (d <= rates[0].d)
-  {
-    int diff = d - 0;
-    int delta = rates[0].d - 0;
-    *t = 0.0 + diff*(rates[0].y - 0)/delta;
-    *r = 1.0 + diff*(rates[0].r - 1.0)/delta;
-  }
-  else if (rates[n-1].d <= d)
-  {
-    *t = rates[n-1].y;
-    *r = rates[n-1].r;
-  }
-  else
-  {
-    vector<Rate>::const_iterator it2 = lower_bound(rates.begin(), rates.end(), Rate(d));
-    assert(it2 != rates.begin());
-    assert(it2 != rates.end());
-    vector<Rate>::const_iterator it1 = it2-1;
-    int diff = d - it1->d;
-    int delta = it2->d - it1->d;
-    *t = it1->y + diff*(it2->y - it1->y)/delta;
-    *r = it1->r + diff*(it2->r - it1->r)/delta;
-  }
-}
-*/
-
 void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
   assert(0 <= d);
@@ -169,7 +131,7 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
   }
   else if (d <= spline->x[0]) {
     double df = gsl_spline_eval_deriv(spline, spline->x[0], accel);
-    *r = spline->y[0] - df*(d-spline->x[0]);
+    *r = spline->y[0] + df*(d-spline->x[0]);
     *t = rates[0].y * (double)(d)/(double)(rates[0].d);
   }
   else {
@@ -184,7 +146,7 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
 //===========================================================================
 double ccruncher::Interest::getValue(const Date &d) const
 {
-  if (date == NAD || rates.size() == 0 || d <= date) return 1.0;
+  if (date == NAD || rates.size() == 0 || d <= date) return 0.0;
 
   double r, t;
   getValues(d-date, &t, &r);

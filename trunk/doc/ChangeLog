@@ -15,6 +15,7 @@ version 2.1 (???. 2012)
   * section 'sectors' renamed as 'factors'
   * factor loading values moved to 'factor' section
   * section 'interest' changed to optional
+  * added cubic spline option to interest curve
 
 version 2.0 (Oct. 2012)
 --------------------------
