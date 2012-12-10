@@ -43,7 +43,7 @@ void ccruncher_test::InterestTest::test1()
     0.910747 };
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <interest type='simple'>\n\
+      <interest type='simple' spline='linear'>\n\
         <rate t='0M' r='0.0'/>\n\
         <rate t='1M' r='0.04'/>\n\
         <rate t='2M' r='0.041'/>\n\
@@ -62,7 +62,7 @@ void ccruncher_test::InterestTest::test1()
   Interest interest(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
 
-  for (int i=0;i<25;i++)
+  for (int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = interest.getFactor(aux);
@@ -102,7 +102,7 @@ void ccruncher_test::InterestTest::test2()
   Interest iobj(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
-  for (int i=0;i<25;i++)
+  for (int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = iobj.getFactor(aux);
@@ -143,7 +143,7 @@ void ccruncher_test::InterestTest::test3()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
 
-  for (int i=0;i<25;i++)
+  for (int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = iobj.getFactor(aux);
