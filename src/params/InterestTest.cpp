@@ -150,3 +150,40 @@ void ccruncher_test::InterestTest::test3()
     ASSERT_EQUALS_EPSILON(vactual[i], val, EPSILON);
   }
 }
+
+//===========================================================================
+// cubic spline option test
+// obs: not defined at t=0
+//===========================================================================
+void ccruncher_test::InterestTest::test4()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+      <interest type='simple' spline='cubic'>\n\
+        <rate t='1M' r='4%'/>\n\
+        <rate t='6M' r='4.5%'/>\n\
+        <rate t='2Y' r='5%'/>\n\
+        <rate t='10Y' r='5.2%'/>\n\
+      </interest>";
+
+  // creating xml
+  ExpatParser xmlparser;
+
+  Date date0 = Date("18/02/2003");
+  Interest interest(date0);
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
+
+  /*
+  for(int i=0; i<365*10.5; i++) {
+    Date d = date0 + i;
+    cout << d.toString() << "\t" << i << "\t" << interest.getValue(d) << "\t" << interest.getFactor(d) << endl;
+  }
+  */
+
+  ASSERT_EQUALS_EPSILON(0.0, interest.getValue(date0), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0390481, interest.getValue(date0+1), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.04, interest.getValue(add(date0, 1, 'M')), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.045, interest.getValue(add(date0, 6, 'M')), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.05, interest.getValue(add(date0, 2, 'Y')), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.052, interest.getValue(add(date0, 10, 'Y')), EPSILON);
+}
+

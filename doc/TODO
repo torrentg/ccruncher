@@ -8,7 +8,6 @@ Current works
   * review functional tests (because --trace removed)
   * bulk output to file ?
   * add configuration file to ccruncher-gui
-  * use spline in interest curve
 
 Future works
 -------------------
