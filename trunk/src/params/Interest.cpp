@@ -95,7 +95,7 @@ Interest & ccruncher::Interest::operator=(const Interest &o)
 //===========================================================================
 void ccruncher::Interest::setDate(const Date &d)
 {
-  //TODO: check that time.0 and time.T are covered by curve
+  //TODO: check that time.0 and time.T are covered by this curve
   date = d;
 }
 
@@ -120,6 +120,7 @@ int ccruncher::Interest::size() const
 // we don't use cubic splines because curve can oscillate depending on
 // entered points
 //===========================================================================
+/*
 void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
   size_t n = rates.size();
@@ -153,12 +154,38 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
     *r = it1->r + diff*(it2->r - it1->r)/delta;
   }
 }
+*/
+
+void ccruncher::Interest::getValues(int d, double *t, double *r) const
+{
+  assert(0 <= d);
+
+  int n = spline->size - 1;
+
+  if (spline->x[n] <= d) {
+    double df = gsl_spline_eval_deriv(spline, spline->x[n], accel);
+    *r = spline->y[n] + df*(d-spline->x[n]);
+    *t = rates[n].y + (double)(d-rates[n].d)/365.0;
+  }
+  else if (d <= spline->x[0]) {
+    double df = gsl_spline_eval_deriv(spline, spline->x[0], accel);
+    *r = spline->y[0] - df*(d-spline->x[0]);
+    *t = rates[0].y * (double)(d)/(double)(rates[0].d);
+  }
+  else {
+    *r = gsl_spline_eval(spline, d, accel);
+    size_t pos = accel->cache;
+    *t = rates[pos].y + (double)(d-rates[pos].d)/(double)(rates[pos+1].d-rates[pos].d) * (rates[pos+1].y-rates[pos].y);
+  }
+}
 
 //===========================================================================
 // returns rate at date
 //===========================================================================
 double ccruncher::Interest::getValue(const Date &d) const
 {
+  if (date == NAD || rates.size() == 0 || d <= date) return 1.0;
+
   double r, t;
   getValues(d-date, &t, &r);
   return r;
@@ -168,14 +195,12 @@ double ccruncher::Interest::getValue(const Date &d) const
 // returns factor to aply to transport a money value from date1 to date0
 // where date0 is the interest curve date
 //===========================================================================
-double ccruncher::Interest::getFactor(const Date &date1) const
+double ccruncher::Interest::getFactor(const Date &d) const
 {
-  if (date == NAD || rates.size() == 0 || date1 <= date) return 1.0;
+  if (date == NAD || rates.size() == 0 || d <= date) return 1.0;
 
-  int d = date1 - date;
-  double r, t; // t = time in years
-
-  getValues(d, &t, &r);
+  double r, t;
+  getValues(d-date, &t, &r);
 
   if (type == Simple)
   {
