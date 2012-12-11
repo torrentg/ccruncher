@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <fstream>
 #include <QUrl>
 #include <QWidget>
 #include <QString>
@@ -56,6 +57,8 @@ class SimulationWidget : public MdiChildWidget
     QAction *actionAnal;
     // output directory
     QString odir;
+    // log file output
+    ofstream fout;
 
   private:
 

@@ -6,7 +6,6 @@ Current works
 -------------------
   * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
   * review functional tests (because --trace removed)
-  * bulk output to file ?
   * add configuration file to ccruncher-gui
 
 Future works
