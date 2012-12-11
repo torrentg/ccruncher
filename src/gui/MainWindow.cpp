@@ -152,7 +152,6 @@ void MainWindow::selectFile()
 //===========================================================================
 void MainWindow::openFile(const QUrl &url)
 {
-  QWidget *child = NULL;
   QString filename = url.path();
   if (url.scheme() == "file") filename = url.toLocalFile();
   QFileInfo fileinfo(filename);
@@ -167,6 +166,7 @@ void MainWindow::openFile(const QUrl &url)
       return;
     }
 
+    QWidget *child = NULL;
     try
     {
       if (url.scheme() == "exec") {

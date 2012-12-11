@@ -182,7 +182,8 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
   // simule default time
   double x = getRandom(iobligor);
   int r = obligors[iobligor].irating;
-  Date dtime = inverses.evalueAsDate(r, x);
+  double days = inverses.evalue(r, x);
+  Date dtime = time0 + (long)ceil(days);
   if (timeT < dtime) return;
 
   // evalue obligor losses
