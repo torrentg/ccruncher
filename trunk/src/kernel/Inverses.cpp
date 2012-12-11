@@ -273,7 +273,7 @@ int ccruncher::Inverses::getWorstDay(int irating, vector<double> &cache)
   for(int i=d1+1; i<d2; i++)
   {
     double x = cache[i];
-    double days = evalueAsNum(irating, x);
+    double days = evalue(irating, x);
     double err = fabs(days-i);
     if (err > MAX_ERROR && err > val) {
       val = err;

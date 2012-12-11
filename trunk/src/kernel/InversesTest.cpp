@@ -75,8 +75,8 @@ void ccruncher_test::InversesTest::test1()
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
   Inverses inverses(0.0, date1, dprobs);
 
-  double minday = inverses.evalueAsNum(0, -1e100);
-  double maxday = inverses.evalueAsNum(0, +1e100);
+  double minday = inverses.evalue(0, -1e100);
+  double maxday = inverses.evalue(0, +1e100);
   double minval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, minday));
   double maxval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, maxday));
 
@@ -85,7 +85,7 @@ void ccruncher_test::InversesTest::test1()
     double x = minval + i*(maxval-minval)/10000.0;
     double u = gsl_cdf_ugaussian_P(x);
     double days1 = dprobs.inverse(0, u);
-    double days2 = inverses.evalueAsNum(0, x);
+    double days2 = inverses.evalue(0, x);
     ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
   }
 
@@ -94,7 +94,7 @@ void ccruncher_test::InversesTest::test1()
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);
     double x = gsl_cdf_ugaussian_Pinv(u);
-    double d = inverses.evalueAsNum(0, x);
+    double d = inverses.evalue(0, x);
     ASSERT_EQUALS((date-date0), (long)(d+0.5));
   }
 }
@@ -111,8 +111,8 @@ void ccruncher_test::InversesTest::test2()
   DefaultProbabilities dprobs = getDefaultProbabilities(date0);
   Inverses inverses(ndf, date1, dprobs);
 
-  double minday = inverses.evalueAsNum(0, -1e100);
-  double maxday = inverses.evalueAsNum(0, +1e100);
+  double minday = inverses.evalue(0, -1e100);
+  double maxday = inverses.evalue(0, +1e100);
   double minval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, minday), ndf);
   double maxval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, maxday), ndf);
 
@@ -121,7 +121,7 @@ void ccruncher_test::InversesTest::test2()
     double x = minval + i*(maxval-minval)/10000.0;
     double u = gsl_cdf_tdist_P(x, ndf);
     double days1 = dprobs.inverse(0, u);
-    double days2 = inverses.evalueAsNum(0, x);
+    double days2 = inverses.evalue(0, x);
     ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
   }
 
@@ -130,7 +130,7 @@ void ccruncher_test::InversesTest::test2()
     Date date = date0 + i;
     double u = dprobs.evalue(0, date);
     double x = gsl_cdf_tdist_Pinv(u, ndf);
-    double d = inverses.evalueAsNum(0, x);
+    double d = inverses.evalue(0, x);
     ASSERT_EQUALS((date-date0), (long)(d+0.5));
   }
 }

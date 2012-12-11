@@ -62,7 +62,7 @@ class Inverses
     // initialize
     void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
     // evalue (return days from t0)
-    double evalueAsNum(int irating, double val) const;
+    double evalue(int irating, double val) const;
     // evalue (return date)
     Date evalueAsDate(int irating, double val) const;
 
@@ -71,33 +71,35 @@ class Inverses
 //---------------------------------------------------------------------------
 
 //===========================================================================
-// evalueAsNum
+// evalue
 //===========================================================================
-inline double ccruncher::Inverses::evalueAsNum(int irating, double val) const
+inline double ccruncher::Inverses::evalue(int irating, double val) const
 {
   assert(irating < (int)splines.size());
 
-  if (splines[irating] == NULL)
+  gsl_spline *spline = splines[irating];
+
+  if (spline == NULL)
   {
     // default rating
     return 0.0;
   }
 
-  size_t n = splines[irating]->size-1;
-  if (splines[irating]->x[n] < val)
+  size_t n = spline->size-1;
+  if (spline->x[n] < val)
   {
     // default date bigger than maximum date
-    return splines[irating]->y[n] + 100.0;
+    return spline->y[n] + 100.0;
   }
-  else if (val <= splines[irating]->x[0])
+  else if (val <= spline->x[0])
   {
     // default in less than 1 day (or minday)
-    return splines[irating]->y[0];
+    return spline->y[0];
   }
   else
   {
     // we don't use accel because values are random
-    return gsl_spline_eval(splines[irating], val, NULL);
+    return gsl_spline_eval(spline, val, NULL);
   }
 }
 
@@ -106,7 +108,7 @@ inline double ccruncher::Inverses::evalueAsNum(int irating, double val) const
 //===========================================================================
 inline Date ccruncher::Inverses::evalueAsDate(int irating, double val) const
 {
-  double days = evalueAsNum(irating, val);
+  double days = evalue(irating, val);
   return t0 + (long)ceil(days);
 }
 

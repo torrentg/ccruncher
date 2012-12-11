@@ -19,6 +19,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
   odir = "";
   status_ = finished;
   fmode = 'w';
+  stop_ = false;
   setTerminationEnabled(false);
 }
 
