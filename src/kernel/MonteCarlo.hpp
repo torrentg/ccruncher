@@ -94,7 +94,7 @@ class MonteCarlo
     size_t hash;
     // directory for output files
     string fpath;
-    // output file mode (a=append, w=overwrite, n=new)
+    // output file mode (a=append, w=overwrite, c=create)
     char fmode;
     // time account
     Timer timer;

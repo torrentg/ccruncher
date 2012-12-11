@@ -66,7 +66,7 @@ void catchsignal(int signal);
 
 string sfilename = "";
 string spath = "";
-char cmode = 'n';
+char cmode = 'c';
 int inice = -999;
 size_t ihash = 1000;
 unsigned char ithreads = 0;
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 
       case 'a': // -a --append
       case 'w': // -w --overwrite
-          if (cmode != 'n') {
+          if (cmode != 'c') {
             cerr << "error: found more than one output files mode" << endl;
             return 1;
           }
@@ -384,7 +384,7 @@ void usage()
   "                   With no FILE read standard input.\n"
   "  options:\n"
   "    --define key=val\n"
-  "    -D key=val     declare a define named key with value val\n"
+  "    -D key=val     declare a define named 'key' with value 'val'\n"
   "    -a\n"
   "    --append       output data is appended to existing files, if any\n"
   "    -w\n"

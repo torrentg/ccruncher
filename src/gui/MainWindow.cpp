@@ -41,16 +41,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateToolBars(QMdiSubWindow*)));
 
-  /*
-    tema menu contextual dels tabs (restore/close), pe. afeguir entrada
-    http://www.qtcentre.org/threads/25207-QMdiArea-context-menu-for-tabs
-
-    QMdiAreaSubWindow *subWindow = mdiArea->addSubWindow(some_widget);
-    QMenu *menu = child->systemMenu();
-    QAction *closeAll = new QAction(tr("Close All"),menu);
-    menu->addAction(closeAll);
-    connect(closeAll, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
-  */
   statusBar()->showMessage(tr("Ready"));
 }
 

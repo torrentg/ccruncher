@@ -46,7 +46,7 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
   seed = 0UL;
   hash = 0;
   fpath = "path not set";
-  fmode = 'n';
+  fmode = 'c';
   nfthreads = 0;
   time0 = NAD;
   timeT = NAD;
