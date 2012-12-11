@@ -35,7 +35,7 @@ ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
     int isegmentation, const Segmentations &segmentations,
     const string &filename, char mode) throw(Exception)
 {
-  assert(mode=='a' || mode=='w' || mode=='n');
+  assert(mode=='a' || mode=='w' || mode=='c');
   assert(segmentations.size() > 0);
   assert(segments.size() > 0);
   assert(0 <= isegmentation && isegmentation < segmentations.size());
