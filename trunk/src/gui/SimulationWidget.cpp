@@ -229,12 +229,15 @@ void SimulationWidget::submit()
     }
 
     task.wait();
-    clearLog();
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
     task.setData(ifile, defines, odir);
     bool rc = task.checkConflicts();
     if (rc) {
+      if (fout.is_open()) fout.close();
+      string filename = odir + "/ccruncher.out";
+      fout.open(filename.c_str());
+      clearLog();
       actionDefines->setEnabled(false);
       actionRun->setEnabled(false);
       actionStop->setEnabled(true);
@@ -302,6 +305,10 @@ void SimulationWidget::linkify(QString &line)
 void SimulationWidget::log(const QString &str)
 {
   if (str.length() == 0) return;
+
+  if (fout.is_open()) {
+    fout << str.toStdString();
+  }
 
   int pos0 = 0;
   int pos1 = str.indexOf('\n');
@@ -466,6 +473,7 @@ void SimulationWidget::setStatus(int val)
     case SimulationTask::finished:
       timer.stop();
       task.free();
+      if (fout.is_open()) fout.close();
       // moves log to end
       ui->log->setTextCursor(logcursor);
       ui->runButton->setText(tr("Run"));
