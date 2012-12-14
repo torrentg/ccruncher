@@ -41,56 +41,7 @@
     </p>
 
     <div class="gray-box">
-      2. What is the project's maturity ?
-    </div>
-    <p>
-      ccruncher-2.1 is a stable version. If you have any bug or suggestion to report, 
-      please send an email to <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>
-      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
-    </p>
-
-    <div class="gray-box">
-      3. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
-    </div>
-    <p>
-      The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
-      source. You can download a gzip tool for windows from
-      <a href="http://www.7-zip.org/">7-zip</a>. UNIX environments
-      have the gzip/gunzip commands out of the box. You can read more at the <a href="http://www.gzip.org/">gzip website</a>.
-    </p>
-
-    <div class="gray-box">
-      4. Is there a company that provides support for CCruncher ?
-    </div>
-    <p>
-      Yes. <a href="http://www.tatine.es">Tatine.es</a> provides consulting services for the 
-      analysis of SME loan portfolios using CCruncher. It also provides support services such as integration, 
-      maintenance and ad-hoc development related to CCruncher.
-    </p>
-
-    <div class="gray-box">
-      5. Can an obligor belong to a weighted sum of factors ?
-    </div>
-    <p>
-      Currently not. CCruncher was designed to work with portfolios of SMEs. 
-      Usually, in these portfolios each obligor belongs to a single sector. 
-      We can add this feature if there are several people who request it.
-    </p>
-
-    <div class="gray-box">
-      6. I don't have the transition matrix. What can I do ?
-    </div>
-    <p>
-      You can assume that the default probability along the time for each rating is an
-      <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential distribution</a>.
-      In this case set all the transition matrix values to <i>0</i> except the diagonal
-      values, that contains the probability of non-default, <i>(1-p<sub>r</sub>)</i>, 
-      and the 'default' column values that contains the probability of default, 
-      <i>p<sub>r</sub></i>.
-    </p>
-
-    <div class="gray-box">
-      7. Why this logo ?
+      2. Why this logo ?
     </div>
     <p>
       The CCruncher logo is based on a sculpture from 
@@ -104,6 +55,67 @@
       from the threshold.
     </p>
 
+    <div class="gray-box">
+      3. What is the project's maturity ?
+    </div>
+    <p>
+      ccruncher-2.1 is a stable version. If you have any bug or suggestion to report, 
+      please send an email to <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>
+      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+    </p>
+
+    <div class="gray-box">
+      4. Is there a company that provides support for CCruncher ?
+    </div>
+    <p>
+      Yes. <a href="http://www.tatine.es">Tatine.es</a> provides consulting services for the 
+      analysis of SME loan portfolios using CCruncher. It also provides support services such as integration, 
+      maintenance and ad-hoc development related to CCruncher.
+    </p>
+    
+    <div class="gray-box">
+      5. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
+    </div>
+    <p>
+      The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
+      source. You can download a gzip tool for windows from
+      <a href="http://www.7-zip.org/">7-zip</a>. UNIX environments
+      have the gzip/gunzip commands out of the box. You can read more at the <a href="http://www.gzip.org/">gzip website</a>.
+    </p>
+
+    <div class="gray-box">
+      6. Can an obligor belong to a weighted sum of factors ?
+    </div>
+    <p>
+      Currently not. CCruncher was designed to work with portfolios of SMEs. 
+      Usually, in these portfolios each obligor belongs to a single sector. 
+      We can add this feature if there are several people who request it.
+    </p>
+
+    <div class="gray-box">
+      7. I don't have the transition matrix. What can I do ?
+    </div>
+    <p>
+      You can assume that the default probability along the time for each rating is an
+      <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential distribution</a>.
+      In this case set all the transition matrix values to <i>0</i> except the diagonal
+      values, that contains the probability of non-default, <i>(1-p<sub>r</sub>)</i>, 
+      and the 'default' column values that contains the probability of default, 
+      <i>p<sub>r</sub></i>.
+    </p>
+
+    <div class="gray-box">
+      8. Some samples exhibits strange behavior. What it is happening ?
+    </div>
+    <p>
+      1) Standard Error of VaR increase when the number of simulations increases:
+      We use the Maritz-Jarret to obtain these values. To reduce the computational 
+      cost we truncate the involved sum to a given relative error. In some cases, 
+      this action causes the observed behavior.<br/>
+      2) VaR plot has jumps: This happens because the resulting portfolio loss 
+      distribution is discrete with few values.
+    </p>
+
     <br/>
     <div id="page-footer">
       <table style="width:100%; height:100%"><tr>
@@ -111,7 +123,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 13-Dec-2012
+          Last modified: 14-Dec-2012
         </td>
       </tr></table>
     </div>
