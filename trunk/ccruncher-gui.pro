@@ -142,7 +142,10 @@ win32 {
     C:/MinGW/msys/1.0/local/lib/libexpat.a \
     C:/MinGW/msys/1.0/local/lib/libgsl.a \
     C:/MinGW/msys/1.0/local/lib/libgslcblas.a
-  RC_FILE = $$PWD/src/gui/ccruncher-gui.rc
+  RC_FILE = \
+    $$PWD/src/gui/ccruncher-gui.rc
+  OTHER_FILES += \
+    $$PWD/src/gui/ccruncher-gui.rc
 }
 
 CONFIG(release, debug|release) {
@@ -153,9 +156,6 @@ UI_DIR = $$PWD/build
 MOC_DIR = $$PWD/build
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
-
-OTHER_FILES += \
-  src/gui/ccruncher-gui.rc
 
 RESOURCES += \
     src/gui/ccruncher.qrc

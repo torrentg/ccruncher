@@ -44,14 +44,14 @@
       2. Why this logo ?
     </div>
     <p>
-      The CCruncher logo is based on a sculpture from 
+      The CCruncher logo is based on a sculpture by 
       <a href="http://www.robertllimos.es">Robert Llimós</a>,
       a catalan artist. The original work is named 
       <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=16">Threshold</a> 
       and is located in Atlanta. It has a twin version named 
       <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=17">Marc</a> 
-      that is located at Barcelona. The sculpture has a powerful symbolic charge that can be 
-      interpreted in many ways. We do it as a man conceiving a new level of wisdom
+      that is located in Barcelona. The sculpture has a powerful symbolic charge that can be 
+      interpreted in many ways. One one them is a man envisioning a new level of wisdom
       from the threshold.
     </p>
 
@@ -74,7 +74,19 @@
     </p>
     
     <div class="gray-box">
-      5. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
+      5. What about performance ?
+    </div>
+    <p>
+      CCruncher is designed to be fast. It does <i>1000000</i> 
+      simulations in seconds for 10 obligors. When the number of obligors is <i>50000</i> 
+      then elapses approx. 1 hour to do the same task.
+      CCruncher execution time depends on multiple factors: machine (processor, L1/L2 caches, cores, etc.),
+      number of simulations, number of obligors, number of ratings, number of factors, number of segmentations,
+      and number of assets. 
+    </p>
+    
+    <div class="gray-box">
+      6. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
     </div>
     <p>
       The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
@@ -84,7 +96,7 @@
     </p>
 
     <div class="gray-box">
-      6. Can an obligor belong to a weighted sum of factors ?
+      7. Can an obligor belong to a weighted sum of factors ?
     </div>
     <p>
       Currently not. CCruncher was designed to work with portfolios of SMEs. 
@@ -93,7 +105,7 @@
     </p>
 
     <div class="gray-box">
-      7. I don't have the transition matrix. What can I do ?
+      8. I don't have the transition matrix. What can I do ?
     </div>
     <p>
       You can assume that the default probability along the time for each rating is an
@@ -105,7 +117,7 @@
     </p>
 
     <div class="gray-box">
-      8. Some samples exhibits strange behavior. What it is happening ?
+      9. Some samples exhibits strange behavior. What it is happening ?
     </div>
     <p>
       1) Standard Error of VaR increase when the number of simulations increases:
@@ -113,7 +125,7 @@
       cost we truncate the involved sum to a given relative error. In some cases, 
       this action causes the observed behavior.<br/>
       2) VaR plot has jumps: This happens because the resulting portfolio loss 
-      distribution is discrete with few values.
+      distribution is discrete with a support composed of few values.
     </p>
 
     <br/>
