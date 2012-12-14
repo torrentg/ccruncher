@@ -337,7 +337,6 @@ void AnalysisWidget::drawStatistic()
     if (ranges[i].interval.minValue() < ymin) ymin = ranges[i].interval.minValue();
     if (ranges[i].interval.maxValue() > ymax) ymax = ranges[i].interval.maxValue();
   }
-  ui->plot->setAxisScale(QwtPlot::yLeft, ymin, ymax);
 
   QwtPlotCurve *d_curve = new QwtPlotCurve("title");
   d_curve->setRenderHint(QwtPlotItem::RenderAntialiased);
@@ -345,15 +344,20 @@ void AnalysisWidget::drawStatistic()
   d_curve->setSamples(values);
   d_curve->attach(ui->plot);
 
-  QwtPlotIntervalCurve *d_intervalCurve = new QwtPlotIntervalCurve("title");
-  d_intervalCurve->setRenderHint(QwtPlotItem::RenderAntialiased);
-  d_intervalCurve->setPen(QPen(Qt::white));
-  QColor bg(Qt::blue);
-  bg.setAlpha(150);
-  d_intervalCurve->setBrush(QBrush(bg));
-  d_intervalCurve->setStyle(QwtPlotIntervalCurve::Tube);
-  d_intervalCurve->setSamples(ranges);
-  d_intervalCurve->attach(ui->plot);
+  if (ymin < ymax)
+  {
+    ui->plot->setAxisScale(QwtPlot::yLeft, ymin, ymax);
+
+    QwtPlotIntervalCurve *d_intervalCurve = new QwtPlotIntervalCurve("title");
+    d_intervalCurve->setRenderHint(QwtPlotItem::RenderAntialiased);
+    d_intervalCurve->setPen(QPen(Qt::white));
+    QColor bg(Qt::blue);
+    bg.setAlpha(150);
+    d_intervalCurve->setBrush(QBrush(bg));
+    d_intervalCurve->setStyle(QwtPlotIntervalCurve::Tube);
+    d_intervalCurve->setSamples(ranges);
+    d_intervalCurve->attach(ui->plot);
+  }
 
   if (panner != NULL) panner->setOrientations(Qt::Horizontal | Qt::Vertical);
   ui->plot->replot();
