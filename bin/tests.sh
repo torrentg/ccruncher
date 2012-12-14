@@ -24,7 +24,7 @@
 CCRUNCHER=`dirname $0`/..
 progname=tests.sh
 numversion="2.1"
-svnversion="R877"
+svnversion="R945"
 
 #-------------------------------------------------------------
 # version function
@@ -115,10 +115,11 @@ readconf() {
 #-------------------------------------------------------------
 runcc() {
 
-  rm -rf data/$1;
+  mkdir -p data/$1;
+  rm -f data/$1/*;
   echo "running ccruncher on $1 ...";
-  ./build/ccruncher -fq --trace --path=data/$1 samples/$1.xml;
-  
+  ./build/ccruncher -w --path=data/$1 samples/$1.xml;
+
 }
 
 #-------------------------------------------------------------

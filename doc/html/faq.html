@@ -29,7 +29,7 @@
     <h1>Frequently Asked Questions</h1>
 
     <div class="gray-box">
-      1. Why this ugly name ?
+      1. Why this project name ?
     </div>
     <p>
       CCruncher calculates the credit portfolio risk valuation with intensive numerical 
@@ -69,12 +69,39 @@
     </p>
 
     <div class="gray-box">
-      5. Can an obligor belong to a weighted sum of factors?
+      5. Can an obligor belong to a weighted sum of factors ?
     </div>
     <p>
       Currently not. CCruncher was designed to work with portfolios of SMEs. 
       Usually, in these portfolios each obligor belongs to a single sector. 
       We can add this feature if there are several people who request it.
+    </p>
+
+    <div class="gray-box">
+      6. I don't have the transition matrix. What can I do ?
+    </div>
+    <p>
+      You can assume that the default probability along the time for each rating is an
+      <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential distribution</a>.
+      In this case set all the transition matrix values to <i>0</i> except the diagonal
+      values, that contains the probability of non-default, <i>(1-p<sub>r</sub>)</i>, 
+      and the 'default' column values that contains the probability of default, 
+      <i>p<sub>r</sub></i>.
+    </p>
+
+    <div class="gray-box">
+      7. Why this logo ?
+    </div>
+    <p>
+      The CCruncher logo is based on a sculpture from 
+      <a href="http://www.robertllimos.es">Robert Llimós</a>,
+      a catalan artist. The original work is named 
+      <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=16">Threshold</a> 
+      and is located in Atlanta. It has a twin version named 
+      <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=17">Marc</a> 
+      that is located at Barcelona. The sculpture has a powerful symbolic charge that can be 
+      interpreted in many ways. We do it as a man conceiving a new level of wisdom
+      from the threshold.
     </p>
 
     <br/>
@@ -84,7 +111,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 30-Nov-2012
+          Last modified: 13-Dec-2012
         </td>
       </tr></table>
     </div>
