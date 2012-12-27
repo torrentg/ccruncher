@@ -54,11 +54,21 @@ Required libraries installation
    package from http://www.gnu.org/software/gsl/ and install it. 
    Also you can install from gsl and gsl-devel rpm packages.
 
-4. CCruncher use a statistical package named R to compute
-   risk indicators. Install it from http://www.r-project.org/
-   or install from R rpm package.
+4. (only gui version)
+   check that you have libQtCore.so in a lib directory and
+   check that you have QtCore in an include directory. If
+   you don't found some of these files you can download 
+   package from http://qt-project.org/ and install it. 
+   Also you can install from qt and qt-devel rpm packages.
+   
+5. (only gui version)
+   check that you have libqwt.so in a lib directory and
+   check that you have qwt.h in an include directory. If
+   you don't found some of these files you can download 
+   package from  	http://qwt.sourceforge.net/ and install it. 
+   Also you can install from qwt and qwt-devel rpm packages.
 
-
+   
 Installation from source package
 --------------------------------
 
@@ -69,13 +79,19 @@ Installation from source package
 
 3. execute commands (read INSTALL file):
      > cd ccruncher-X.Y
-     > configure
+     > ./configure 
      > make
      > bin/src2bin.sh
 
    supported ./configure options:
      --enable-debug:    add debug instructions
      --enable-profiler: add profiler instructions
+
+4. you can use the qmake build process instead of the 
+   automake build process doing:
+     > qmake-qt4 ccruncher-xxx.pro
+     > make
+     > bin/src2bin.sh
 
 
 Installation from binary package
@@ -93,21 +109,18 @@ Using CCruncher
 1. create your input file. Read documentation to perform this step.
    Use any file in samples directory as template.
 
-2. run CCruncher
+2. run CCruncher (gui version)
+     > # gui version
+     > cd $CCRUNCHER
+     > bin/ccruncher-gui &
+     > # cmd version
      > cd $CCRUNCHER
      > bin/ccruncher --help
      > bin/ccruncher -w --path=data samples/test01.xml
 
-3. compute risk indicators typing:
-     > bin/ccreport.sh data/portfolio.csv
-     > firefox data/portfolio.html
-   
-   or open a R console and type:
-     > source("bin/ccreport.R")
-     > ccruncher.summary("data/portfolio.csv")
-     > x <- ccruncher.read("data/portfolio.csv")
-     > ccruncher.plot(x[[1]], alpha=0.95, var=0.99, show="all")
-     > quit(save='no')
+3. compute risk indicators:
+     > bin/ccruncher-gui &
+     # open output data file
 
 
 Notes for Windows developers (QT+MINGW)
