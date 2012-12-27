@@ -27,6 +27,9 @@
     </div>
 
     <h1>Getting Started - First steps</h1>
+    <p>
+      Follow these steps to install CCruncher and discover its capabilities.
+    </p>
     <ol>
       <li>
         Download your binary package from 
@@ -45,7 +48,7 @@
         Open file <code>samples/test03.xml</code>.
       </li>
       <li>
-        Click on the 'Edit' button or the 'Edit' icon to view the input file content.
+        Click on the 'Edit' button, or the 'Edit' icon, to view the input file content.
       </li>
       <li>
         Return to the simulation tab.
@@ -54,7 +57,7 @@
         Set <code>data/</code> as output directory.
       </li>
       <li>
-        Click the 'Run' button or the 'Run' icon to execute the Monte Carlo simulation.
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
       </li>
       <li>
         Read the execution trace.
@@ -69,141 +72,174 @@
         Return to CCruncher.
       </li>
       <li>
-        Open output data files clicking the links in trace or clicking the 'Data analysis' icon or using the 'File > Open file' dialog.
+        Open output data files clicking the links in the trace, or clicking the 
+        'Data analysis' icon, or using the 'File > Open file' dialog.
       </li>
       <li>
         Do your risk analysis.
       </li>
     </ol>
+
+    <h1>Getting Started - Using segmentations</h1>
+    <p>
+      Segmentations are a powerful mechanism to define subportfolios.
+      This feature can be used to disaggregate the risk of the whole
+      portfolio. CCruncher evalues all the subportfolios defined 
+      in the <code>&lt;segmentations&gt;</code> section in the input
+      file and creates an output file for each one of them.
+    </p>
+    <ol>
+      <li>
+        Open file <code>samples/test03.xml</code>.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Edit the input file pressing the 'Edit' button.
+      </li>
+      <li>
+        Locate the <code>&lt;segmentations&gt;</code> sections.
+      </li>
+      <li>
+        Enable the 'offices' segmentation.
+      </li>
+      <li>
+        Save the changes made in input file.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation. 
+      </li>
+      <li>
+        Open a file browser and review the content of the <code>data/</code> directory.
+        Observe the new file named <code>offices.csv</code>. Open it and inspect
+        its content. The 'unassigned' segment is because the obligor '100' isn't
+        assigned to any segment of the 'offices' segmentation.
+      </li>
+      <li>
+        Click the 'Data analysis' icon to open an analysis tab for each enabled
+        segmentation. 
+      </li>
+    </ol>
     
-    <h1>Getting Started - Framework</h1>
+    <h1>Getting Started - Using defines</h1>
     <p>
-      CCruncher is designed to work in batch mode, without graphical support.
-      The user creates a <a href="sample.xml">xml file</a> with the description of the
-      portfolio. CCruncher takes this file and simulates the portfolio <i>N</i> times.
-      The simulated values are stored in a 
-      <a href="http://en.wikipedia.org/wiki/Comma-separated_values">csv file</a>.
-      Finally, a <a href="http://www.r-project.org/">R script</a> takes the simulated
-      values and calculates some statistics on them to generate the graphs and the risk 
-      indicators, such as the Expected Loss, Standard deviation, Value at Risk and 
-      Expected Shortfall.
-      <br />
-      <br />
-      <img style="display:block; margin:auto;" src="processes.png" alt="processes"/>
-      <br />
+      The 'defines' mechanism allows modifying the input file in easy way.
+      This is useful if you desire to evaluate the same input file modifying slightly
+      a parameter each time.
     </p>
-
-    <h1>Getting Started - Installation</h1>
+    <ol>
+      <li>
+        Open file <code>samples/test03.xml</code>.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Edit the input file pressing the 'Edit' button.
+      </li>
+      <li>
+        Create a new define adding the following line into the <code>&lt;defines&gt;</code> tag:<br/>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;define name="numsecs" value="20" /&gt;</code>
+      </li>
+      <li>
+        Go to the <code>stopcriteria.maxseconds</code> parameter and replace its
+        value by <code>$numsecs</code>.
+      </li>
+      <li>
+        Save the changes made in input file.
+      </li>
+      <li>
+        Click on the 'Set ...' defines button.
+      </li>
+      <li>
+        Set <code>numsims</code> value to <i>0</i> (unbounded number of simulations).
+      </li>
+      <li>
+        Set <code>numsecs</code> value to <i>30</i>.
+      </li>
+      <li>
+        Close defines dialog pressing the 'Ok' button.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
+      </li>
+      <li>
+        Check that the simulation has elapsed 30 secs before to stop.
+      </li>
+    </ol>
+    
+    <h1>Getting Started - Command line</h1>
     <p>
-      <b>Step 1.</b> If you have selected a packaged distribution, unpack it.<br />
+      Sometimes we need to explore a range of parameters or evaluate
+      a lot of scenarios in order to do a stress-test evaluation. In
+      these cases it is better to do it in batch mode. CCruncher has
+      a command line incarnation that allows tuning the process priority,
+      number of used cores, etc. We provide the steps to compile the
+      command line version:
     </p>
-    <pre>
-
-&nbsp;&nbsp;tar -xvzf ccruncher-X.Y_ZZZ.tgz
-&nbsp;&nbsp;cd ccruncher-X.Y
-    </pre>
+    <ol>
+      <li>
+        Download the src package from 
+        <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+      </li>
+      <li>
+        Unpack it in a folder.
+      </li>
+      <li>
+        Install <b>gsl</b> (both binary and dev files) in your system.
+      </li>
+      <li>
+        Install <b>expat</b> (both binary and dev files) in your system.
+      </li>
+      <li>
+        Install <b>zlib</b> (both binary and dev files) in your system.
+      </li>
+      <li>
+        Open a console and type (unix-like systems):<br/>
+        <pre>
+        
+  ./configure
+  make
+  bin/src2bin.sh
+        </pre>
+      </li>
+      <li>
+        Run CCruncher:
+        <pre>
+        
+  bin/ccruncher-cmd --help
+  bin/ccruncher-cmd -w --path=data --threads=4 -D numsims=0 -D numsecs=30 samples/test03.xml
+        </pre>
+      </li>
+    </ol>
     <p>
-      <b>Step 2.</b> CCruncher uses a library named <b>gsl</b> not included in CCruncher 
-      distribution packages. Check that you have gsl installed (find file <code>libgsl.so</code> 
-      , usually in folder <code>/usr/lib</code>). In case you don't have 
-      it, install it from the <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM 
-      system, install the package named gsl). CCruncher source distribution requires that 
-      you have gsl-devel installed (find file <code>gsl_math.h</code>, usually in folder 
-      <code>/usr/include/gsl</code>). In case you don't have it, install it from 
-      <a href="http://www.gnu.org/software/gsl/">gsl site</a> (if you use a RPM system, install 
-      the package named gsl-devel).
+      Windows compilation it is not described here, but you 
+      can find all the info relative to the build process in the 
+      <code>$CCRUNCHER/doc/README</code> file.
     </p>
+    
+    <h1>Getting Started - Flying solo</h1>
     <p>
-      <b>Step 3.</b> CCruncher uses a library named <b>expat</b> not included in CCruncher 
-      distribution packages. Check that you have expat installed (find file <code>libexpat.so</code> 
-      or <code>libexpat.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
-      it, install it from <a href="http://www.libexpat.org/">expat site</a> (if you use a RPM 
-      system, install the package named expat). CCruncher source distribution requires that 
-      you have expat-devel installed (find file <code>expat.h</code>, usually in folder 
-      <code>/usr/include</code>). In case you don't have it, install it from 
-      <a href="http://www.libexpat.org/">expat site</a> (if you use a RPM system, install 
-      the package named expat-devel).
+      We have revised the main features. 
+      Some final words before you move by yourself.
     </p>
-    <p>
-      <b>Step 4.</b> CCruncher uses a library named <b>zlib</b> not included in CCruncher 
-      distribution packages. Check that you have zlib installed (find file <code>libz.so</code>
-      or <code>zlib1.dll</code>, usually in folder <code>/usr/lib</code>). In case you don't have 
-      it, install it from <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM
-      system, install the package named zlib). CCruncher source distribution require that 
-      you have zlib-devel installed (find file <code>zlib.h</code>, usually in folder 
-      <code>/usr/include</code>). In case you don't have it, install it from 
-      <a href="http://www.zlib.net/">zlib site</a> (if you use a RPM system, install 
-      the package named zlib-devel).
-    </p>
-    <p>
-      <b>Step 5.</b> CCruncher uses a statistical package named <b>R</b> to compute risk 
-      indicators. Install it from the <a href="http://www.r-project.org/">R project site</a>.
-      If you plan to realize the statistical computations with your own tools (eg. Excel) you can
-      skip this step. If you use a RPM system, install package R.
-    </p>
-    <p>
-      <b>Step 6.</b> If you have a source distribution, run the following commands from within the CCruncher directory:
-    </p>
-    <pre>
-
-&nbsp;&nbsp;./configure       # prepare compilation
-&nbsp;&nbsp;make              # compile ccruncher
-&nbsp;&nbsp;bin/src2bin.sh    # install and clean
-    </pre>
-
-    <br/>
-    <h1>Getting Started - Usage</h1>
-    <p>
-      <b>Step 1.</b> Create a XML ccruncher input file. First, read the
-      <a href="technical.html">Technical Info</a> and the 
-      <a href="ifileref.html">Input File Format</a> document. You can
-      use a file from directory <code>samples</code> as a template. Take into
-      consideration that xml input can be gzipped (gz extension) to reduce
-      the file size. Caution, gzip is a compression algorithm different
-      from zip.
-    </p>
-    <p>
-      <b>Step 2.</b> Run ccruncher
-    </p>
-    <pre>
-
-&nbsp;&nbsp;bin/ccruncher --help
-&nbsp;&nbsp;bin/ccruncher -w --path=data/ samples/test03.xml
-    </pre>
-
-    <p>
-      <b>Step 3.</b> Check the output files, which are the csv files. Each column has 
-      the simulated segment values. The first line is a header that contains the 
-      segments names.
-    </p>
-    <pre>
-
-&nbsp;&nbsp;ls -l data/*
-&nbsp;&nbsp;more data/portfolio.csv
-    </pre>
-    <p>
-      <b>Step 4.</b> Use your prefered data analysis tool to compute the risk indicators.
-    </p>
-    <p>
-      CCruncher provides a basic <a href="http://www.r-project.org">R</a> script 
-      located in <code>$CCRUNCHER/bin/ccreport.R</code> that implements the risk 
-      indicators described in documentation. To run it, open a R console and type:
-    </p>
-    <pre>
-
-&nbsp;&nbsp;source("bin/ccreport.R")
-&nbsp;&nbsp;ccruncher.summary("data/portfolio.csv")
-&nbsp;&nbsp;ccruncher.graphic("data/portfolio.csv")
-&nbsp;&nbsp;quit(save='no')
-    </pre>
-    <p>
-      Linux/UNIX version has an additional script to create a report:
-    </p>
-    <pre>
-
-&nbsp;&nbsp;bin/ccreport.sh data/portfolio.csv
-&nbsp;&nbsp;firefox data/portfolio.html
-    </pre>
+    <ul>
+      <li>
+        Read carefully the <a href="ifileref.html">input file documentation</a>.
+      </li>
+      <li>
+        Create your own input files using some file from samples directory as template.
+      </li>
+      <li>
+        Be tidy. Save the input and output files of a problem in the same directory.
+        In this way you will can know the meaning of the output data sometime after.
+      </li>
+      <li>
+        Report any doubt, suggestion, improvement, bug, etc. to the 
+        <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>.
+      </li>
+    </ul>
 
     <div id="page-footer">
       <table style="width:100%; height:100%"><tr>
@@ -211,7 +247,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 14-Dec-2012
+          Last modified: 27-Dec-2012
         </td>
       </tr></table>
     </div>

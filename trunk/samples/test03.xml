@@ -120,6 +120,13 @@ How to check results?
   <!-- ============================================================== -->
   <segmentations>
     <segmentation name="portfolio" components="asset"/>
+    <segmentation name="offices" components="obligor" enabled="false">
+      <segment name="O1" />
+      <segment name="O2" />
+      <segment name="O3" />
+      <segment name="O4" />
+      <segment name="O5" />
+    </segmentation>
   </segmentations>
 
   <!-- ============================================================== -->
@@ -127,6 +134,7 @@ How to check results?
   <!-- ============================================================== -->
   <portfolio>
     <obligor rating="A" factor="S1" id="001">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op01">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -134,6 +142,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="002">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op02">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -141,6 +150,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="003">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op03">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -148,6 +158,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="004">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op04">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -155,6 +166,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="005">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op05">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -162,6 +174,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="006">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op06">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -169,6 +182,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="007">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op07">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -176,6 +190,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="008">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op08">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -183,6 +198,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="009">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op09">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -190,6 +206,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="010">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op10">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -197,6 +214,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="011">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op11">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -204,6 +222,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="012">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op12">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -211,6 +230,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="013">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op13">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -218,6 +238,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="014">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op14">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -225,6 +246,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="015">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op15">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -232,6 +254,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="016">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op16">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -239,6 +262,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="017">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op17">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -246,6 +270,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="018">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op18">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -253,6 +278,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="019">
+      <belongs-to segmentation="offices" segment="O1"/>
       <asset date="01/01/2005" id="op19">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -260,6 +286,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="020">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op20">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -267,6 +294,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="021">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op21">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -274,6 +302,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="022">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op22">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -281,6 +310,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="023">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op23">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -288,6 +318,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="024">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op24">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -295,6 +326,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="025">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op25">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -302,6 +334,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="026">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op26">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -309,6 +342,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="027">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op27">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -316,6 +350,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="028">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op28">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -323,6 +358,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="029">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op29">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -330,6 +366,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="030">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op30">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -337,6 +374,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="031">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op31">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -344,6 +382,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="032">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op32">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -351,6 +390,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="033">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op33">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -358,6 +398,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="034">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op34">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -365,6 +406,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="035">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op35">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -372,6 +414,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="036">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op36">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -379,6 +422,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="037">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op37">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -386,6 +430,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="038">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op38">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -393,6 +438,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="039">
+      <belongs-to segmentation="offices" segment="O2"/>
       <asset date="01/01/2005" id="op39">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -400,6 +446,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="040">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op40">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -407,6 +454,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="041">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op41">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -414,6 +462,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="042">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op42">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -421,6 +470,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="043">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op43">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -428,6 +478,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="044">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op44">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -435,6 +486,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="045">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op45">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -442,6 +494,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="046">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op46">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -449,6 +502,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="047">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op47">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -456,6 +510,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="048">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op48">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -463,6 +518,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="049">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op49">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -470,6 +526,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="050">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op50">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -477,6 +534,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="051">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op51">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -484,6 +542,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="052">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op52">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -491,6 +550,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="053">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op53">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -498,6 +558,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="054">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op54">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -505,6 +566,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="055">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op55">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -512,6 +574,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="056">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op56">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -519,6 +582,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="057">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op57">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -526,6 +590,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="058">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op58">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -533,6 +598,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="059">
+      <belongs-to segmentation="offices" segment="O3"/>
       <asset date="01/01/2005" id="op59">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -540,6 +606,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="060">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op60">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -547,6 +614,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="061">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op61">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -554,6 +622,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="062">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op62">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -561,6 +630,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="063">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op63">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -568,6 +638,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="064">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op64">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -575,6 +646,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="065">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op65">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -582,6 +654,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="066">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op66">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -589,6 +662,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="067">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op67">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -596,6 +670,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="068">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op68">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -603,6 +678,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="069">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op69">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -610,6 +686,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="070">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op70">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -617,6 +694,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="071">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op71">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -624,6 +702,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="072">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op72">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -631,6 +710,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="073">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op73">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -638,6 +718,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="074">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op74">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -645,6 +726,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="075">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op75">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -652,6 +734,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="076">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op76">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -659,6 +742,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="077">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op77">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -666,6 +750,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="078">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op78">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -673,6 +758,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="079">
+      <belongs-to segmentation="offices" segment="O4"/>
       <asset date="01/01/2005" id="op79">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -680,6 +766,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="080">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op80">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -687,6 +774,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="081">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op81">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -694,6 +782,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="082">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op82">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -701,6 +790,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="083">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op83">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -708,6 +798,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="084">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op84">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -715,6 +806,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="085">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op85">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -722,6 +814,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="086">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op86">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -729,6 +822,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="087">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op87">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -736,6 +830,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="088">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op88">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -743,6 +838,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="089">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op89">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -750,6 +846,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="090">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op90">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -757,6 +854,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="091">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op91">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -764,6 +862,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="092">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op92">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -771,6 +870,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="093">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op93">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -778,6 +878,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="094">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op94">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -785,6 +886,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="095">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op95">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -792,6 +894,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="096">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op96">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -799,6 +902,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="097">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op97">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -806,6 +910,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="098">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op98">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
@@ -813,6 +918,7 @@ How to check results?
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="099">
+      <belongs-to segmentation="offices" segment="O5"/>
       <asset date="01/01/2005" id="op99">
         <data>
           <values t="01/01/2006" exposure="1.0" recovery="0%" />
