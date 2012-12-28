@@ -8,18 +8,19 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
     ../deps/MiniCppUnit-2.5\
-    ../src/win32
+    ../src/win32\
+    ../src/gui
 
-bin_PROGRAMS = ccruncher
+bin_PROGRAMS = ccruncher-cmd
 
-check_PROGRAMS = tests
+check_PROGRAMS = ccruncher-tests
 
-TESTS = tests 
+TESTS = ccruncher-tests 
 
 # -------------------------------------------------------------
-# ccruncher
+# ccruncher-cmd
 # -------------------------------------------------------------
-ccruncher_SOURCES = \
+ccruncher-cmd_SOURCES = \
     ../src/ccruncher-cmd.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -94,14 +95,14 @@ ccruncher_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/utils/config.h
 
-ccruncher_CXXFLAGS =
-ccruncher_LDADD =
-ccruncher_LDFLAGS =
+ccruncher-cmd_CXXFLAGS =
+ccruncher-cmd_LDADD =
+ccruncher-cmd_LDFLAGS =
 
 # -------------------------------------------------------------
-# tests
+# ccruncher-tests
 # -------------------------------------------------------------
-tests_SOURCES = \
+ccruncher-tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../src/ccruncher-tests.cpp\
     ../src/utils/StringsTest.cpp\
@@ -233,7 +234,7 @@ tests_SOURCES = \
     ../src/kernel/Inverses.hpp\
     ../src/utils/config.h
 
-tests_CXXFLAGS =
-tests_LDADD =
-tests_LDFLAGS =
+ccruncher-tests_CXXFLAGS =
+ccruncher-tests_LDADD =
+ccruncher-tests_LDFLAGS =
 

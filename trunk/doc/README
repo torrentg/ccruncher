@@ -115,8 +115,8 @@ Using CCruncher
      > bin/ccruncher-gui &
      > # cmd version
      > cd $CCRUNCHER
-     > bin/ccruncher --help
-     > bin/ccruncher -w --path=data samples/test01.xml
+     > bin/ccruncher-cmd --help
+     > bin/ccruncher-cmd -w --path=data samples/test01.xml
 
 3. compute risk indicators:
      > bin/ccruncher-gui &
@@ -216,9 +216,9 @@ Developers tips & tricks
 
 9. profiling executable (only if configure is called with option --enable-profiler)
      ccruncher writes gmon.out because we compiled with -pg flag
-     > gprof bin/ccruncher gmon.out
+     > gprof bin/ccruncher-cmd gmon.out
      > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
-     > valgrind --tool=callgrind bin/ccruncher
+     > valgrind --tool=callgrind bin/ccruncher-cmd
      > kcachegrind callgrind.out.99999
      > # with oprofile (as root)
      > modprobe oprofile

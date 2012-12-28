@@ -1,7 +1,7 @@
 QT -= core
 QT -= gui
 
-TARGET = ccruncher
+TARGET = ccruncher-cmd
 
 CONFIG -= qt
 CONFIG += console thread
