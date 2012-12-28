@@ -207,7 +207,8 @@ makeBinDist() {
   automake -avcf;
   ./configure --prefix=$PWD;
   make -j4;
-  make install;
+  qmake-qt4 ccruncher-gui.pro
+  make -j4
   
   # dropping unused files
   bin/src2bin.sh -y;
@@ -231,6 +232,7 @@ makeWinDist() {
   currpath=$(pwd);
   workpath=/tmp/$PACKAGE-${numversion}
   winfiles="ccruncher-gui.exe
+            ccruncher-cmd.exe
             pthreadGC2.dll
             mingwm10.dll
             libgcc_s_dw2-1.dll

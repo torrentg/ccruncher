@@ -118,7 +118,7 @@ runcc() {
   mkdir -p data/$1;
   rm -f data/$1/*;
   echo "running ccruncher on $1 ...";
-  ./build/ccruncher -w --path=data/$1 samples/$1.xml;
+  ./build/ccruncher-cmd -w --path=data/$1 samples/$1.xml;
 
 }
 
