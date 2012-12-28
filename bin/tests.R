@@ -35,6 +35,152 @@
 
 #===========================================================================
 # description
+#   reads a ccruncher csv output file
+# arguments
+#   filename: string. csv ccruncher output filename
+# returns
+#   a data frame with file content
+# example
+#   segments <- ccruncher.read("data/segments.csv")
+#   names(segments)
+#   segments[,"S1"]
+#   segments[,1]
+#   ccruncher.summary(segments, "segments")
+#===========================================================================
+ccruncher.read <- function(filename)
+{
+  df <- read.csv(filename, header=TRUE, sep=",");
+  return(df);
+}
+
+#===========================================================================
+# description
+#   Computes risk indicators
+# arguments
+#   x: vector. simulated segment losses
+#   percentiles: vector. VaR percentiles
+# returns
+#   list: risk statistics
+# example
+#   df <- ccruncher.read("data/portfolio.csv")
+#   risk <- ccruncher.summary(df[,1])
+#   risk
+#   risk$n
+#   risk$min
+#   risk$max
+#   risk$mean
+#   risk$mean_stderr
+#   risk$sd
+#   risk$sd_stderr
+#   risk$VAR
+#   risk$ES
+#===========================================================================
+ccruncher.risk <- function(x, percentiles=c(0.90, 0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 0.9999))
+{
+  #VaR and ES tables (column1=percentile, column2=value, column3=stderr)
+  table1 <- matrix(NaN, length(percentiles), 3);
+  table2 <- matrix(NaN, length(percentiles), 3);
+
+  #size, min, max
+  n <- length(x);
+  minx <- min(x);
+  maxx <- max(x);
+
+  #standar deviation and its standar error
+  stddev <- sqrt(var(x));
+  stderr2 <- stddev/sqrt(2*n);
+
+  #mean and its standar error
+  mu <- mean(x);
+  stderr1 <- stddev/sqrt(n);
+
+  #computing VaR (Value at Risk)
+  for(i in 1:length(percentiles))
+  {
+    table1[i,1] <- percentiles[i];
+    table1[i,2] <- quantile(x, percentiles[i], names=FALSE);
+    table1[i,3] <- ccruncher.quantstderr(x, percentiles[i]);
+  }
+
+  #computing ES (Expected Shortfall)
+  for(i in 1:length(percentiles))
+  {
+    #retrieving simulations with value great than VaR
+    aux <- x[x >= table1[i,2]];
+    #computing aux mean (=ES) and related stderr
+    table2[i,1] <- percentiles[i];
+    table2[i,2] <- mean(aux);
+    table2[i,3] <- sqrt(var(aux))/sqrt(length(aux));
+  }
+
+  #exit function
+  ret <- list(n=n, min=minx, max=maxx, 
+              mean=mu, mean_stderr=stderr1, sd=stddev, sd_stderr=stderr2,
+              VAR=table1, ES=table2);
+  return(ret);
+}
+
+#===========================================================================
+# description
+#   Internal function
+#   Computes the standar error of a quantile using the Maritz-Jarrett method
+# arguments
+#   x: vector with values
+#   prob: numeric. probability with value in [0,1]
+#   sorted: boolean. TRUE={x is sorted}, FALSE={otherwise}
+# returns
+#   numeric: the standar error for the prob quantile
+# example
+#   x <- rnorm(5000)
+#   ccruncher.quantstderr(x, 0.01)
+#===========================================================================
+ccruncher.quantstderr <- function(x, prob, sorted=FALSE)
+{
+  #sorting x
+  if (sorted == FALSE) {
+    y <- sort(x);
+  }
+  else {
+    y <- x;
+  }
+
+  #initializing values
+  N <- length(y);
+  M <- trunc(N*prob+0.5);
+  A <- M-1;
+  B <- N-M;
+
+  #checking feaseability
+  if (A <= 0 || B <= 0) {
+    return(NA);
+  }
+
+  #initializing coeficients
+  W <- vector(length=N);
+  W[] <- 0;
+
+  #computing coeficients
+  for(i in M:N)
+  {
+    W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
+    if (W[i] < 1e-10) { break };
+  }
+  for(i in (M-1):1)
+  {
+    W[i] <- pbeta((i+1)/N,A,B) - pbeta(i/N,A,B);
+    if (W[i] < 1e-10) { break };
+  }
+
+  #computing C1 and C2
+  C1 <- sum(W*y);
+  C2 <- sum(W*y*y);
+
+  #returning quantile standar error
+  return(sqrt(C2-C1^2));
+}
+
+#===========================================================================
+# description
 #   checks that two segmentations sums the same
 # arguments
 #   segmentation1: segmentation1 data frame
