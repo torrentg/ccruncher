@@ -374,7 +374,7 @@ void usage()
 {
   cout <<
   "  usage:\n"
-  "    ccruncher --path=dir [options] [FILE]\n"
+  "    ccruncher-cmd --path=dir [options] [FILE]\n"
   "  description:\n"
   "    ccruncher is a tool used to simulate a portfolio of credits using\n"
   "    the Monte Carlo method. More info at http://www.ccruncher.net\n"
@@ -403,9 +403,9 @@ void usage()
   "    0              OK. finished without errors\n"
   "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher --path=data/sample01 samples/sample01.xml\n"
-  "    ccruncher -w --hash=5000 --path=data/ samples/test100.xml\n"
-  "    ccruncher --append --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
+  "    ccruncher-cmd --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher-cmd -w --hash=5000 --path=data/ samples/test100.xml\n"
+  "    ccruncher-cmd --append --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
   << endl;
 }
 
