@@ -169,60 +169,10 @@
       </li>
     </ol>
     
-    <h1>Getting Started - Command line</h1>
-    <p>
-      Sometimes we need to explore a range of parameters or evaluate
-      a lot of scenarios in order to do a stress-test evaluation. In
-      these cases it is better to do it in batch mode. CCruncher has
-      a command line incarnation that allows tuning the process priority,
-      number of used cores, etc. We provide the steps to compile the
-      command line version:
-    </p>
-    <ol>
-      <li>
-        Download the src package from 
-        <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
-      </li>
-      <li>
-        Unpack it in a folder.
-      </li>
-      <li>
-        Install <b>gsl</b> (both binary and dev files) in your system.
-      </li>
-      <li>
-        Install <b>expat</b> (both binary and dev files) in your system.
-      </li>
-      <li>
-        Install <b>zlib</b> (both binary and dev files) in your system.
-      </li>
-      <li>
-        Open a console and type (unix-like systems):<br/>
-        <pre>
-        
-  ./configure
-  make
-  bin/src2bin.sh
-        </pre>
-      </li>
-      <li>
-        Run CCruncher:
-        <pre>
-        
-  bin/ccruncher-cmd --help
-  bin/ccruncher-cmd -w --path=data --threads=4 -D numsims=0 -D numsecs=30 samples/test03.xml
-        </pre>
-      </li>
-    </ol>
-    <p>
-      Windows compilation it is not described here, but you 
-      can find all the info relative to the build process in the 
-      <code>$CCRUNCHER/doc/README</code> file.
-    </p>
-    
     <h1>Getting Started - Flying solo</h1>
     <p>
       We have revised the main features. 
-      Some final words before you move by yourself.
+      Some final words before you move by yourself:
     </p>
     <ul>
       <li>
@@ -236,8 +186,8 @@
         In this way you will can know the meaning of the output data sometime after.
       </li>
       <li>
-        Report any doubt, suggestion, improvement, bug, etc. to the 
-        <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>.
+        Don't hesitate to send your questions, suggestions, improvements, bugs, 
+        etc. to the <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>.
       </li>
     </ul>
 
@@ -247,7 +197,7 @@
           Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 27-Dec-2012
+          Last modified: 28-Dec-2012
         </td>
       </tr></table>
     </div>
