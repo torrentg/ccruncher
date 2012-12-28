@@ -139,7 +139,6 @@ runcc test04;
 runcc test05;
 
 R --vanilla --slave << _EOF_
-    source("./bin/ccreport.R", echo=FALSE);
     source("./bin/tests.R", echo=FALSE);
     options(warn=-1)
     test01();

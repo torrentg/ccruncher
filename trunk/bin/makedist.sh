@@ -2,10 +2,7 @@
 
 #=============================================================
 # description: 
-#   Create a CreditCruncher distribution package
-#   Command to create the tag in the repo:
-#     > svn -r xxx cp http://www.ccruncher.net/svn/trunk \
-#     >  http://www.ccruncher.net/svn/tags/ccruncher-X.Y
+#   Create a CCruncher distribution package
 #
 # dependencies:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
@@ -262,7 +259,6 @@ makeWinDist() {
 
   # dropping unused files
   bin/src2bin.sh -y;
-  rm bin/ccreport.sh
 
   # setting windows end-line
   unix2dos doc/AUTHORS;
@@ -271,8 +267,6 @@ makeWinDist() {
   unix2dos doc/COPYING;
   unix2dos doc/ChangeLog;
   unix2dos doc/index.html;
-  unix2dos bin/ccreport.R;
-  unix2dos bin/ccreport.xsl;
   unix2dos samples/*.xml;
   unix2dos samples/*.dtd;
   unix2dos samples/*.xsd;
