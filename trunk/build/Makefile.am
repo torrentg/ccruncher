@@ -15,12 +15,12 @@ bin_PROGRAMS = ccruncher-cmd
 
 check_PROGRAMS = ccruncher-tests
 
-TESTS = ccruncher-tests 
+TESTS = ccruncher-tests
 
 # -------------------------------------------------------------
 # ccruncher-cmd
 # -------------------------------------------------------------
-ccruncher-cmd_SOURCES = \
+ccruncher_cmd_SOURCES = \
     ../src/ccruncher-cmd.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulationThread.cpp\
@@ -95,14 +95,14 @@ ccruncher-cmd_SOURCES = \
     ../src/utils/Thread.hpp\
     ../src/utils/config.h
 
-ccruncher-cmd_CXXFLAGS =
-ccruncher-cmd_LDADD =
-ccruncher-cmd_LDFLAGS =
+ccruncher_cmd_CXXFLAGS =
+ccruncher_cmd_LDADD =
+ccruncher_cmd_LDFLAGS =
 
 # -------------------------------------------------------------
 # ccruncher-tests
 # -------------------------------------------------------------
-ccruncher-tests_SOURCES = \
+ccruncher_tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../src/ccruncher-tests.cpp\
     ../src/utils/StringsTest.cpp\
@@ -234,7 +234,7 @@ ccruncher-tests_SOURCES = \
     ../src/kernel/Inverses.hpp\
     ../src/utils/config.h
 
-ccruncher-tests_CXXFLAGS =
-ccruncher-tests_LDADD =
-ccruncher-tests_LDFLAGS =
+ccruncher_tests_CXXFLAGS =
+ccruncher_tests_LDADD =
+ccruncher_tests_LDFLAGS =
 
