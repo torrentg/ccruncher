@@ -7,9 +7,11 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../deps/MiniCppUnit-2.5\
-    ../src/win32\
-    ../src/gui
+    ../deps\
+    ../src\
+    ../ccruncher-cmd.pro\
+    ../ccruncher-gui.pro\
+    ../ccruncher-tests.pro
 
 bin_PROGRAMS = ccruncher-cmd
 

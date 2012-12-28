@@ -207,8 +207,8 @@ makeBinDist() {
   automake -avcf;
   ./configure --prefix=$PWD;
   make -j4;
-  qmake-qt4 ccruncher-gui.pro
-  make -j4
+  qmake-qt4 ccruncher-gui.pro;
+  make -j4;
   
   # dropping unused files
   bin/src2bin.sh -y;
