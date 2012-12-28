@@ -20,7 +20,7 @@
 CCRUNCHER=`dirname $0`/..
 progname=src2bin.sh
 numversion="2.1"
-svnversion="R877"
+svnversion="R954"
 
 #-------------------------------------------------------------
 # checking arguments
@@ -35,13 +35,20 @@ if [ "$1" != "-y" ]; then
 fi
 
 #-------------------------------------------------------------
+# copy executables to bin directory
+#-------------------------------------------------------------
+cp `find $CCRUNCHER/build -name ccruncher-\* -type f -executable` $CCRUNCHER/bin/;
+if [ $? != 0 ]; then
+  echo "error: executable files not found";
+  exit 1;
+fi
+
+#-------------------------------------------------------------
 # drops development files
 #-------------------------------------------------------------
-if [ -f $CCRUNCHER/build/ccruncher ]; then
-  cp `find $CCRUNCHER/build/ccruncher -type f -executable` $CCRUNCHER/bin/;
-fi
 rm -f  $CCRUNCHER/ccruncher*.pro;
 rm -f  $CCRUNCHER/ccruncher*.pro.user;
+rm -f  $CCRUNCHER/qrc_*.cpp;
 rm -f  $CCRUNCHER/aclocal.m4;
 rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;
