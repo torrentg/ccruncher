@@ -35,13 +35,9 @@ if [ "$1" != "-y" ]; then
 fi
 
 #-------------------------------------------------------------
-# copy executables to bin directory
+# copy executables to bin directory (if exists)
 #-------------------------------------------------------------
 cp `find $CCRUNCHER/build -name ccruncher-\* -type f -executable` $CCRUNCHER/bin/;
-if [ $? != 0 ]; then
-  echo "error: executable files not found";
-  exit 1;
-fi
 
 #-------------------------------------------------------------
 # drops development files
