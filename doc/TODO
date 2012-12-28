@@ -4,7 +4,7 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * update ui in doc (readme, dependencies, screenshots, gstarted, ...)
+  * none
 
 Future works
 -------------------
@@ -18,7 +18,7 @@ Future works
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
-     - consider that a obligor could belong to a weighted sum of sectors
+     - consider that a obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data
      - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling') 
