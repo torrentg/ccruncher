@@ -27,7 +27,7 @@
 #-------------------------------------------------------------
 progname=tex2png.sh
 numversion="2.1"
-svnversion="R877"
+svnversion="R957"
 retcode=0
 xslfile=$(dirname "$0")/tex2png.xsl;
 xslfile=$(readlink -f "$xslfile");

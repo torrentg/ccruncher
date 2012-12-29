@@ -432,7 +432,7 @@ void ccruncher_test::TransitionsTest::test6()
     ASSERT(dprobs.inverse(0,u)<=365.0);
   }
 
-  for(int i=0; i<100; i++)
+  for(int i=1; i<100; i++)
   {
     double u = 0.1 + 0.001*i;
     ASSERT(dprobs.inverse(0,u)>365.0);
