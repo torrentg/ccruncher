@@ -289,11 +289,14 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
-	<xs:element name="date_interval">
-		<xs:simpleType>
-			<xs:union memberTypes="date interval" />
-		</xs:simpleType>
-	</xs:element>
+	<xsd:simpleType name="date_interval">
+		<xsd:annotation>
+		<xsd:documentation>
+			A date or a interval
+		</xsd:documentation>
+		</xsd:annotation>
+		<xsd:union memberTypes="date interval" />
+	</xsd:simpleType>
 
 	<xsd:simpleType name="double">
 		<xsd:annotation>

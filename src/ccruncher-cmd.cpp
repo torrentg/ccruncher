@@ -403,7 +403,7 @@ void usage()
   "    0              OK. finished without errors\n"
   "    1              KO. finished with errors\n"
   "  examples:\n"
-  "    ccruncher-cmd --path=data/sample01 samples/sample01.xml\n"
+  "    ccruncher-cmd --path=data/ samples/test04.xml\n"
   "    ccruncher-cmd -w --hash=5000 --path=data/ samples/test100.xml\n"
   "    ccruncher-cmd --append --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
   << endl;
