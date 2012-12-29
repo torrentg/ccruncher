@@ -12,6 +12,7 @@ Future works
      - input file in binary format
      - add file hash (CRC32 - see zlib library)
      - add configuration file to ccruncher-gui
+     - move to Qt5
   * improve documentation
      - add architecture diagrams
   * improve model
