@@ -204,7 +204,7 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R877"
+#define SVN_VERSION "R957"
 
 /* unused argument macro */
 #define UNUSED(x) (void)x;
