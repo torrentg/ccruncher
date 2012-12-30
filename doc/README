@@ -65,7 +65,7 @@ Required libraries installation
    check that you have libqwt.so in a lib directory and
    check that you have qwt.h in an include directory. If
    you don't found some of these files you can download 
-   package from  	http://qwt.sourceforge.net/ and install it. 
+   package from http://qwt.sourceforge.net/ and install it. 
    Also you can install from qwt and qwt-devel rpm packages.
 
    
