@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Dependencies</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body class="composite">
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Dependencies</h1>
+
+    <p style="text-align:justify;">
+      CCruncher uses projects wich are already existing. The selection criteria
+      have been: well tested, simplicity, efficiency and open source.
+    </p>
+
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>GSL</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.15</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. 
+          It is free software under the GNU General Public License. The library provides a 
+          wide range of mathematical routines such as random number generators, special 
+          functions and least-squares fitting. There are over 1000 functions in total with 
+          an extensive test suite.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this library is used to generate random numbers, evaluate random
+          number distributions, spline interpolation, find eigenvalues, 
+          cholesky decomposition, and solve linear systems.
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>expat</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.1.0</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.libexpat.org/">http://www.libexpat.org/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>MIT License</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Expat is an XML parser library written in C. It is a stream-oriented
+          parser in which an application registers handlers for things the
+          parser might find in the XML document, like start tags.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher expat is used to read XML files.
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>zlib</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>1.2.7</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://www.zlib.net/">http://www.zlib.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>Free license, see declaration at the home site</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          zlib is designed to be a free, general-purpose, legally unencumbered
+          -- that is, not covered by any patents -- lossless data-compression
+          library for use on virtually any computer hardware and operating system.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher this module allows the usage of gzipped input files, such 
+          that the size of xml input files reduces drastically.
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>MiniCppUnit</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>2.5</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>GNU GPL</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          MiniCppUnit is a C++ unit testing framework.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher MiniCppUnit is used to test all basic classes.
+          All classes that match the pattern <code>*Test.?pp</code> are unit tests.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Notes</b></td>
+        <td style="text-align:justify;">
+          Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 
+          to UTF-8) and <code>assertTrue()</code>, <code>assertTrueMissatge()</code> 
+          methods. 
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>Qt</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>4.7.4</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://qt-project.org/">http://qt-project.org/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>LGPL v2.1</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          Qt is a cross-platform application and UI framework for developers 
+          using C++ or QML, a CSS &amp; JavaScript like language. Qt Creator is the 
+          supporting Qt IDE.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required (only gui version)
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher is used to create the gui version.
+        </td>
+      </tr>
+    </table>
+
+    <br/>
+    <table cellpadding="5" style="border:1px solid gray;">
+      <tr class="a">
+        <td style="width:75px;"><b>Name</b></td>
+        <td><b>Qwt</b></td>
+      </tr>
+      <tr class="b">
+        <td><b>Version</b></td>
+        <td>6.0</td>
+      </tr>
+      <tr class="a">
+        <td><b>URL</b></td>
+        <td>
+          <a href="http://qwt.sourceforge.net/">http://qwt.sourceforge.net/</a>
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>License</b></td>
+        <td>Qwt License, Version 1.0 [LGPL with exceptions]</td>
+      </tr>
+      <tr class="a">
+        <td><b>Description</b></td>
+        <td style="text-align:justify;">
+          The Qwt library contains GUI Components and utility classes which are 
+          primarily useful for programs with a technical background. Beside a 2D 
+          plot widget it provides scales, sliders, dials, compasses, thermometers, 
+          wheels and knobs to control or display values, arrays, or ranges of 
+          type double.
+        </td>
+      </tr>
+      <tr class="b">
+        <td><b>Type</b></td>
+        <td style="text-align:justify;">
+          Required (only gui version)
+        </td>
+      </tr>
+      <tr class="a">
+        <td><b>Usage</b></td>
+        <td style="text-align:justify;">
+          In ccruncher is used to draw histograms and plots in the analysis tab.
+        </td>
+      </tr>
+    </table>
+
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 27-Dec-2012
+        </td>
+      </tr></table>
+    </div>
+
+  </div>
+  </body>
+</html>
+

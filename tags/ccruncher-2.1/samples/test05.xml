@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher>
+
+  <title>test05</title>
+  <description>
+  <![CDATA[
+
+Description:
+-------------------------------
+  100 obligors
+  2 sectors
+  Odds obligors (50) belongs to S1 and even obligors (50) belongs to S2
+  correlated defaults
+    correl(S1,S1) = 0.10
+    correl(S1,S2) = 0.05
+    correl(S2,S2) = 0.15
+  2 ratings (dead and alive)
+  transition values:
+    P(alive->alive) = 0.9
+    P(alive->dead)  = 0.1
+    P(dead->alive)  = 0.0
+    P(dead->dead)   = 1.0
+  12 months
+  Each obligor has an asset with this profile:
+    asset value at t=12 is 1 if obligor is alive and
+    asset value at t=12 is 0 if obligor dead (default)
+
+Expected Results:
+-------------------------------
+  We don't know explicit solution for this problem (if you know, please
+  report it).
+
+  ]]>
+  </description>
+
+  <!-- ============================================================== -->
+  <!--                        DEFINES                                 -->
+  <!-- ============================================================== -->
+  <defines>
+    <define name="numsims" value="200000"/>
+    <define name="copula" value="t(3)"/>
+    <define name="antithetic" value="true"/>
+    <define name="seed" value="0"/>
+  </defines>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <parameter name="time.0" value="01/01/2005"/>
+    <parameter name="time.T" value="01/01/2006"/>
+    <parameter name="stopcriteria.maxiterations" value="$numsims"/>
+    <parameter name="stopcriteria.maxseconds" value="30000000"/>
+    <parameter name="copula.type" value="$copula"/>
+    <parameter name="rng.seed" value="$seed"/>
+    <parameter name="montecarlo.antithetic" value="$antithetic"/>
+    <parameter name="portfolio.onlyActiveObligors" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                       INTERESTS                                -->
+  <!-- ============================================================== -->
+  <interest type="compound">
+    <rate t="0D" r="0%"/>
+    <rate t="1M" r="0%"/>
+    <rate t="2M" r="0%"/>
+    <rate t="3M" r="0%"/>
+    <rate t="6M" r="0%"/>
+    <rate t="1Y" r="0%"/>
+    <rate t="2Y" r="0%"/>
+    <rate t="5Y" r="0%"/>
+    <rate t="10Y" r="0%"/>
+  </interest>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="dead"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <transitions period="12">
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
+  </transitions>
+
+  <!-- ============================================================== -->
+  <!--                           FACTORS                              -->
+  <!-- ============================================================== -->
+  <factors>
+    <factor name="S1" loading="10%" description="sector 1"/>
+    <factor name="S2" loading="15%" description="sector 2"/>
+  </factors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <correlations>
+    <correlation factor1="S1" factor2="S2" value="5%"/>
+  </correlations>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="sectors" components="obligor">
+      <segment name="S1"/>
+      <segment name="S2"/>
+    </segmentation>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+    <obligor rating="A" factor="S1" id="001">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op01">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="002">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op02">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="003">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op03">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="004">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op04">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="005">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op05">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="006">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op06">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="007">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op07">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="008">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op08">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="009">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op09">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="010">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op10">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="011">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op11">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="012">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op12">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="013">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op13">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="014">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op14">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="015">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op15">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="016">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op16">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="017">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op17">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="018">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op18">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="019">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op19">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="020">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op20">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="021">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op21">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="022">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op22">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="023">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op23">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="024">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op24">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="025">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op25">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="026">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op26">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="027">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op27">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="028">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op28">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="029">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op29">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="030">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op30">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="031">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op31">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="032">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op32">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="033">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op33">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="034">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op34">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="035">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op35">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="036">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op36">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="037">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op37">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="038">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op38">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="039">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op39">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="040">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op40">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="041">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op41">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="042">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op42">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="043">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op43">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="044">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op44">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="045">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op45">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="046">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op46">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="047">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op47">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="048">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op48">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="049">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op49">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="050">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op50">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="051">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op51">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="052">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op52">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="053">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op53">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="054">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op54">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="055">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op55">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="056">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op56">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="057">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op57">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="058">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op58">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="059">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op59">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="060">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op60">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="061">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op61">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="062">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op62">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="063">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op63">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="064">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op64">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="065">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op65">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="066">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op66">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="067">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op67">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="068">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op68">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="069">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op69">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="070">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op70">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="071">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op71">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="072">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op72">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="073">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op73">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="074">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op74">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="075">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op75">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="076">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op76">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="077">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op77">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="078">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op78">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="079">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op79">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="080">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op80">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="081">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op81">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="082">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op82">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="083">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op83">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="084">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op84">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="085">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op85">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="086">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op86">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="087">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op87">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="088">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op88">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="089">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op89">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="090">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op90">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="091">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op91">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="092">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op92">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="093">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op93">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="094">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op94">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="095">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op95">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="096">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op96">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="097">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op97">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="098">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op98">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S1" id="099">
+      <belongs-to segmentation="sectors" segment="S1"/>
+      <asset date="01/01/2005" id="op99">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    <obligor rating="A" factor="S2" id="100">
+      <belongs-to segmentation="sectors" segment="S2"/>
+      <asset date="01/01/2005" id="op100">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+  </portfolio>
+
+</ccruncher>

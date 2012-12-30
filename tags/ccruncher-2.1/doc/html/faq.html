@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - FAQ</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="gray-box">
+      1. Why this project name ?
+    </div>
+    <p>
+      CCruncher calculates the credit portfolio risk valuation with intensive numerical 
+      computation. These kind of programs are called number crunchers.
+      The mix between the terms 'credit' and 'number cruncher' generates 
+      the name 'credit cruncher'. CCruncher is not related to the recent 
+      <a href="http://en.wikipedia.org/wiki/Credit_crunch">credit crunch</a>, but is
+      a tool that can aid to control the risks involved in this crisis.
+    </p>
+
+    <div class="gray-box">
+      2. Why this logo ?
+    </div>
+    <p>
+      The CCruncher logo is based on a sculpture by 
+      <a href="http://www.robertllimos.es">Robert Llimós</a>,
+      a catalan artist. The original work is named 
+      <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=16">Threshold</a> 
+      and is located in Atlanta. It has a twin version named 
+      <a href="http://www.robertllimos.es/index.php?option=com_content&amp;view=article&amp;id=88&amp;Itemid=583&amp;lang=en&amp;vsig1_0=17">Marc</a> 
+      that is located in Barcelona. The sculpture has a powerful symbolic charge that can be 
+      interpreted in many ways. One of them is a man envisioning a new level of wisdom
+      from the threshold.
+    </p>
+
+    <div class="gray-box">
+      3. What is the project's maturity ?
+    </div>
+    <p>
+      ccruncher-2.1 is a stable version. If you have any bug or suggestion to report, 
+      please send an email to <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>
+      or post it to <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+    </p>
+
+    <div class="gray-box">
+      4. Is there a company that provides support for CCruncher ?
+    </div>
+    <p>
+      Yes. <a href="http://www.tatine.es">Tatine.es</a> provides consulting services for the 
+      analysis of SME loan portfolios using CCruncher. It also provides support services such as integration, 
+      maintenance and ad-hoc development related to CCruncher.
+    </p>
+    
+    <div class="gray-box">
+      5. What about performance ?
+    </div>
+    <p>
+      CCruncher is designed to be fast. It does <i>1000000</i> 
+      simulations in seconds for 10 obligors. When the number of obligors is <i>50000</i> 
+      then elapses approx. 1 hour to do the same task.
+      CCruncher execution time depends on multiple factors: machine (processor, L1/L2 caches, cores, etc.),
+      number of simulations, number of obligors, number of ratings, number of factors, number of segmentations,
+      and number of assets. 
+    </p>
+    
+    <div class="gray-box">
+      6. Why can the input files be gzipped (*.gz) but not zipped (<span style="text-decoration:line-through">*.zip</span>) ?
+    </div>
+    <p>
+      The zip algorithm is covered by patents, but gzip is not; furthermore gzip is open
+      source. You can download a gzip tool for windows from
+      <a href="http://www.7-zip.org/">7-zip</a>. UNIX environments
+      have the gzip/gunzip commands out of the box. You can read more at the <a href="http://www.gzip.org/">gzip website</a>.
+    </p>
+
+    <div class="gray-box">
+      7. Can an obligor belong to a weighted sum of factors ?
+    </div>
+    <p>
+      Currently not. CCruncher was designed to work with portfolios of SMEs. 
+      Usually, in these portfolios each obligor belongs to a single sector. 
+      We can add this feature if there are several people who request it.
+    </p>
+
+    <div class="gray-box">
+      8. I don't have the transition matrix. What can I do ?
+    </div>
+    <p>
+      You can assume that the default probability along the time for each rating is an
+      <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential distribution</a>.
+      In this case set all the transition matrix values to <i>0</i> except the diagonal
+      values, that contains the probability of non-default, <i>(1-p<sub>r</sub>)</i>, 
+      and the 'default' column values that contains the probability of default, 
+      <i>p<sub>r</sub></i>.
+    </p>
+
+    <div class="gray-box">
+      9. Some samples exhibits strange behavior. What it is happening ?
+    </div>
+    <p>
+      1) Standard Error of VaR increase when the number of simulations increases:
+      We use the Maritz-Jarret to obtain these values. To reduce the computational 
+      cost we truncate the involved sum to a given relative error. In some cases, 
+      this action causes the observed behavior.<br/>
+      2) VaR plot has jumps: This happens because the resulting portfolio loss 
+      distribution is discrete with a support composed of few values.
+    </p>
+
+    <br/>
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2012 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 14-Dec-2012
+        </td>
+      </tr></table>
+    </div>
+
+  </div>
+  </body>
+</html>
