@@ -13,6 +13,9 @@ Future works
      - add file hash (CRC32 - see zlib library)
      - add configuration file to ccruncher-gui
      - move to Qt5
+     - multi-currency support or expression evaluator
+       <values t="01/07/2015" exposure="2960.0" recovery="60%" currency="dolars"/>
+       <values t="01/07/2015" exposure="2960.0*DOLAR_EURO" recovery="60%" />
   * improve documentation
      - add architecture diagrams
   * improve model
