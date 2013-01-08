@@ -211,8 +211,19 @@ Z, S, \varepsilon_i^j \textrm{ independents } \ \forall i,j
       latent variables, <i>k</i> is the number of factors/sectors, <i>n<sub>i</sub></i>
       is the number of obligors in the sector <i>i</i>, <i>w<sub>i</sub></i> are the
       factor loadings of factor <i>i</i>, and <i>R</i> is the correlation matrix between 
-      factors. 
+      factors. The correlation between two obligors in the gaussian case, 
+      <i>&nu;=&infin;</i>, is:
     </p>
+    <object class="equation" type="image/png" data="ocorrel.png" style="display:block; margin-left:auto; margin-right:auto">
+Corr\left(X_{i_1}^{j_1}, X_{i_2}^{j_2}\right) = 
+\left\{
+\begin{array}{ll}
+1 & \textrm{ if } i_1 = i_2 \textrm{, } j_1 = j_2 \\
+w_{i_1}^2 & \textrm{ if } i_1 = i_2 \textrm{, } j_1 \ne j_2 \\
+w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2} & \textrm{ if } i_1 \ne i_2
+\end{array}
+\right.
+    </object>
     <p>
       The combination of the characterization of the default times as a multivariate 
       t-Student distribution and the interpretation of this as a multi-factor model 
@@ -327,7 +338,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 04-Jan-2013
+          Last modified: 08-Jan-2013
         </td>
       </tr></table>
     </div>
