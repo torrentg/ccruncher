@@ -470,7 +470,12 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   for(int i=0; i<numthreads; i++)
   {
     threads[i] = new SimulationThread(*this, seed+i);
-    threads[i]->start(); // to work without threads use run() instead of start()
+    if (numthreads == 1) {
+      threads[i]->run();
+    }
+    else {
+      threads[i]->start();
+    }
   }
 
   // awaiting threads
