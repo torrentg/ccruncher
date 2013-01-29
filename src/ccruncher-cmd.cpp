@@ -71,6 +71,7 @@ int inice = -999;
 size_t ihash = 1000;
 unsigned char ithreads = 0;
 map<string,string> defines;
+bool indexes = false;
 bool stop = false;
 
 //===========================================================================
@@ -100,7 +101,7 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "hawD:o:" ;
+  const char* const options1 = "hawiD:o:" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
@@ -108,6 +109,7 @@ int main(int argc, char *argv[])
       { "help",         0,  NULL,  'h' },
       { "append",       0,  NULL,  'a' },
       { "overwrite",    0,  NULL,  'w' },
+      { "indexes",      0,  NULL,  'i' },
       { "define",       1,  NULL,  'D' },
       { "path",         1,  NULL,  'o' },
       { "version",      0,  NULL,  301 },
@@ -168,6 +170,10 @@ int main(int argc, char *argv[])
             return 1;
           }
           cmode = curropt;
+          break;
+
+      case 'i': // -i --indexes
+          indexes = true;
           break;
 
       case 'o': // -o dir, --path=dir (set output files path)
@@ -330,7 +336,7 @@ void run() throw(Exception)
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());
-  montecarlo.setFilePath(spath, cmode);
+  montecarlo.setFilePath(spath, cmode, indexes);
   montecarlo.setData(*idata);
   delete idata;
 
@@ -391,6 +397,8 @@ void usage()
   "    --overwrite    existing output files are overwritten\n"
   "    -o dir\n"
   "    --path=dir     directory where output files will be placed (required)\n"
+  "    -i\n"
+  "    --indexes      create file indexes.csv with info about simulated values\n"
 #if !defined(_WIN32)
   "    --nice=num     set priority to num (default=" + Format::toString(getpriority(PRIO_PROCESS,0)) + ", min=" + Format::toString(PRIO_MIN) + ", max=" + Format::toString(PRIO_MAX) + ")\n"
 #endif

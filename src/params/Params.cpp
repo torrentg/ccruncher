@@ -46,6 +46,7 @@ void ccruncher::Params::init()
   copula_type = "";
   rng_seed = 0L;
   antithetic = false;
+  lhs_size = 1;
   onlyactive = false;
 }
 
@@ -181,9 +182,25 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   {
     rng_seed = getLongAttribute(attributes, "value");
   }
-  else if (name == "montecarlo.antithetic")
+  else if (name == "antithetic")
   {
     antithetic = getBooleanAttribute(attributes, "value");
+  }
+  else if (name == "lhs")
+  {
+    try
+    {
+      if (getBooleanAttribute(attributes, "value") == false) {
+        lhs_size = 1;
+      }
+      else {
+        lhs_size = 1000;
+      }
+    }
+    catch(Exception &e)
+    {
+      lhs_size = getIntAttribute(attributes, "value");
+    }
   }
   else if (name == "portfolio.onlyActiveObligors")
   {
@@ -239,6 +256,11 @@ void ccruncher::Params::validate() const throw(Exception)
   {
     throw Exception("non finite stop criteria");
   }
+
+  if (lhs_size < 1)
+  {
+    throw Exception("parameter lhs not defined or less than 1");
+  }
 }
 
 //===========================================================================
@@ -257,7 +279,8 @@ string ccruncher::Params::getXML(int ilevel) const throw(Exception)
   ret += spc2 + "<parameter name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
   ret += spc2 + "<parameter name='copula.type' value='" + copula_type + "'/>\n";
   ret += spc2 + "<parameter name='rng.seed' value='" + Format::toString(rng_seed) + "'/>\n";
-  ret += spc2 + "<parameter name='montecarlo.antithetic' value='" + Format::toString(antithetic) + "'/>\n";
+  ret += spc2 + "<parameter name='antithetic' value='" + Format::toString(antithetic) + "'/>\n";
+  ret += spc2 + "<parameter name='lhs' value='" + (lhs_size==1?"false":Format::toString(lhs_size)) + "'/>\n";
   ret += spc2 + "<parameter name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
   ret += spc1 + "</parameters>\n";
 

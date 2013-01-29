@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <vector>
+#include <fstream>
 #include <streambuf>
 #include <pthread.h>
 #include "kernel/IData.hpp"
@@ -84,10 +85,14 @@ class MonteCarlo
     Inverses inverses;
     // factors cholesky matrix
     gsl_matrix *chol;
-    // factor loadings
-    vector<double> floadings;
+    // factor loadings (w_i)
+    vector<double> floadings1;
+    // factor loadings (sqrt(1-w_i^2))
+    vector<double> floadings2;
     // antithetic method flag
     bool antithetic;
+    // latin hypercube sample size
+    size_t lhs_size;
     // rng seed
     unsigned long seed;
     // hash (0=non show hashes) (default=0)
@@ -110,6 +115,8 @@ class MonteCarlo
     pthread_mutex_t mutex;
     // stop flag
     bool *stop;
+    // indexes.csv file
+    ofstream findexes;
 
   private:
   
@@ -126,7 +133,7 @@ class MonteCarlo
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // append simulation result
-    bool append(const vector<vector<double> > &) throw();
+    bool append(int ithread, size_t ilhs, bool reversed, const vector<vector<double> > &) throw();
     // non-copyable class
     MonteCarlo(const MonteCarlo &);
     // non-copyable class
@@ -139,7 +146,7 @@ class MonteCarlo
     // destructor
     ~MonteCarlo();
     // set path for output files
-    void setFilePath(const string &path, char mode);
+    void setFilePath(const string &path, char mode, bool indexes=false) throw(std::exception);
     // initiliaze this class
     void setData(IData &) throw(Exception);
     // execute Monte Carlo

@@ -557,7 +557,7 @@ void ccruncher::IData::checkDefine(const string &key, const string &value) const
 
   for(size_t i=0; i<key.length(); i++)
   {
-    if (!isalnum(key[i])) throw Exception("invalid define name '" + key + "'");
+      if (!isalnum(key[i]) && key[i] != '_') throw Exception("invalid define name '" + key + "'");
   }
 
   if (value.find_first_of("&<>\"'") != string::npos) {

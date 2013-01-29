@@ -66,8 +66,10 @@ class Params : public ExpatHandlers
     string copula_type; // gaussian, t(4)
     // rng.seed param value
     long rng_seed;
-    // montecarlo.antithetic param value
+    // antithetic param value
     bool antithetic;
+    // lhs size param value
+    size_t lhs_size;
     // portfolio.onlyActiveClients param value
     bool onlyactive;
 
