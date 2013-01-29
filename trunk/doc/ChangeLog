@@ -2,6 +2,16 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 2.2 (???. 2013)
+--------------------------
+  * added Latin Hypercube Sampling variance reduction method
+  * added info about simulated values (indexes.csv)
+  * parameter 'montecarlo.antithetic' renamed to 'antithetic'
+  * avoid thread creation if threads=1
+  * solved bug: header in csv files in append mode
+  * allowed char '_' in defines names
+  * minor changes in documentation
+    
 version 2.1 (Dec. 2012)
 --------------------------
   * added graphic interface

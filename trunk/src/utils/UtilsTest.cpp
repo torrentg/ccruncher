@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <ctime>
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"
 
@@ -34,10 +35,11 @@ void ccruncher_test::UtilsTest::test1()
   ASSERT(Utils::timestamp().size() == 19);
 
   // testing random value based on time
-  double x = 0.1;
   long val1 = Utils::trand();
-  for(int i=0;i<100000; i++) x = cos(x);
-  if (x > 1000.0) ASSERT(false);
+  // waiting 1 second
+  time_t time1 = time(0) + 1;
+  while (time(0) < time1);
+  // 1 second ellapsed
   long val2 = Utils::trand();
   ASSERT(val1 != val2);
 }

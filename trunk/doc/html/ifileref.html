@@ -137,7 +137,7 @@
         <td class="c2">
           Define identifier. Any occurrence of this identifier preceded by '$' 
           (eg. $numsims) in the configuration file will be replaced by its value (eg. 30000). 
-          The define name can only consist of letters and numbers.
+          The define name can only consist of letters, numbers and the character '_'.
         </td>
         <td class="c3">string</td>
       </tr>
@@ -173,7 +173,8 @@
     &lt;parameter name="stopcriteria.maxseconds" value="3600"/&gt;
     &lt;parameter name="copula.type" value="t($ndf)"/&gt;
     &lt;parameter name="rng.seed" value="0"/&gt;
-    &lt;parameter name="montecarlo.antithetic" value="true"/&gt;
+    &lt;parameter name="antithetic" value="true"/&gt;
+    &lt;parameter name="lhs" value="false"/&gt;
     &lt;parameter name="portfolio.onlyActiveObligors" value="true"/&gt;
   &lt;/parameters&gt;
     </pre>
@@ -248,15 +249,33 @@
         <td class="c3">long</td>
       </tr>
       <tr class="b">
-        <td class="c1">montecarlo.antithetic</td>
+        <td class="c1">antithetic</td>
         <td class="c2">
           Specifies whether or not to use a variance reduction technique 
           named antithetic. If you have doubts about setting this 
           parameter then set it to 'false', otherwise set it to 'true'.
+          Optional file <code>indexes.csv</code> contains info about the 
+          simulated values.
         </td>
         <td class="c3">boolean</td>
       </tr>
       <tr class="a">
+        <td class="c1">lhs</td>
+        <td class="c2">
+          This is an experimental feature. 
+          Specifies whether or not to use a variance reduction technique 
+          named Latin Hypercube Sampling on random variables <i>S</i> and <i>Z</i>. 
+          If you have doubts about setting this parameter then set it to 'false', 
+          otherwise set the sample size. If LHS is set and there is more than one 
+          factor, then make sure that the sample size is high enought (eg. 1000),
+          otherwise you can obtain incorrect results.
+          This parameter is optional. Default value is 'false'. 
+          Optional file <code>indexes.csv</code> contains info about the 
+          simulated values.
+        </td>
+        <td class="c3">boolean<br/>integer</td>
+      </tr>
+      <tr class="b">
         <td class="c1">portfolio.onlyActiveObligors</td>
         <td class="c2">
           If you want to simulate all the obligors, including obligors without
@@ -1191,7 +1210,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 04-Jan-2013
+          Last modified: 29-Jan-2013
         </td>
       </tr></table>
     </div>

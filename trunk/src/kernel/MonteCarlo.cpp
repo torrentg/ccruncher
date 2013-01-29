@@ -43,6 +43,7 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
   numiterations = 0;
   maxiterations = 0;
   antithetic = false;
+  lhs_size = 1;
   seed = 0UL;
   hash = 0;
   fpath = "path not set";
@@ -97,7 +98,8 @@ void ccruncher::MonteCarlo::release()
   vector<SimulatedAsset>(0).swap(assets);
   vector<SimulatedObligor>(0).swap(obligors);
   vector<DateValues>(0).swap(datevalues);
-  floadings.clear();
+  floadings1.clear();
+  floadings2.clear();
 }
 
 //===========================================================================
@@ -157,6 +159,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   time0 = idata.getParams().time0;
   timeT = idata.getParams().timeT;
   antithetic = idata.getParams().antithetic;
+  lhs_size = idata.getParams().lhs_size;
   seed = idata.getParams().rng_seed;
   if (seed == 0UL) {
     // use a seed based on clock
@@ -191,12 +194,13 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
     dprobs = tone.getDefaultProbabilities(time0, months+1);
   }
 
-  // setting inverses
+  // setting degrees of freedom
   ndf = -1.0; // gaussian case
   if (idata.getParams().getCopulaType() == "t") {
     ndf = idata.getParams().getCopulaParam();
   }
 
+  // setting default probs info
   string strsplines;
   for(int i=0; i<dprobs.size(); i++) {
     strsplines += dprobs.getInterpolationType(i)[0];
@@ -206,24 +210,15 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   // model parameters
   inverses.init(ndf, timeT, dprobs);
   chol = idata.getCorrelations().getCholesky();
-  floadings = idata.getCorrelations().getFactorLoadings();
+  floadings1 = idata.getCorrelations().getFactorLoadings();
+  floadings2 = floadings1;
+  for(size_t i=0; i<floadings2.size(); i++) {
+    floadings2[i] = sqrt(1.0 - floadings1[i]*floadings1[i]);
+  }
 
   assert((int)chol->size1 == idata.getFactors().size());
   assert(chol->size1 == chol->size2);
-  assert((int)floadings.size() == idata.getFactors().size());
-
-  // performance tip: chol contains the w·chol (to avoid multiplications)
-  // in simulation time and w contaings sqrt(1-w^2) (to avoid sqrt
-  // and multiplications)
-  for(unsigned int i=0; i<chol->size1; i++)
-  {
-    for(unsigned int j=0; j<chol->size2; j++)
-    {
-      double val = gsl_matrix_get(chol, i, j) * floadings[i];
-      gsl_matrix_set(chol, i, j, val);
-    }
-    floadings[i] = sqrt(1.0-floadings[i]*floadings[i]);
-  }
+  assert((int)floadings1.size() == idata.getFactors().size());
 
   // exit function
   log << indent(-1);
@@ -454,6 +449,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   log << "maximum execution time (seconds)" << split << maxseconds << endl;
   log << "maximum number of iterations" << split << maxiterations << endl;
   log << "antithetic mode" << split << antithetic << endl;
+  log << "latin hypercube sampling" << split << (lhs_size==1?"false":Format::toString(lhs_size)) << endl;
   log << "number of threads" << split << (int)numthreads << endl;
   log << indent(-1);
   log << "running Monte Carlo";
@@ -469,7 +465,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
   {
-    threads[i] = new SimulationThread(*this, seed+i);
+    threads[i] = new SimulationThread(i+1, *this, seed+i);
     if (numthreads == 1) {
       threads[i]->run();
     }
@@ -490,6 +486,10 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 
   // closing aggregators
   timer3.resume();
+  if (findexes.is_open())
+  {
+    findexes.close();
+  }
   for(unsigned int i=0; i<aggregators.size(); i++)
   {
     delete aggregators[i];
@@ -510,7 +510,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(const vector<vector<double> > &losses) throw()
+bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, const vector<vector<double> > &losses) throw()
 {
   assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
@@ -519,6 +519,11 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double> > &losses) throw(
 
   try
   {
+    // trace indexes (if required)
+    if (findexes.is_open()) {
+      findexes << ithread << ", " << ilhs << ", " << (reversed?1:0) << "\n";
+    }
+
     // aggregating simulation result
     for(unsigned int i=0; i<aggregators.size(); i++) 
     {
@@ -560,10 +565,20 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double> > &losses) throw(
 //===========================================================================
 // setFilePath
 //===========================================================================
-void ccruncher::MonteCarlo::setFilePath(const string &path, char mode)
+void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool indexes) throw(std::exception)
 {
   fpath = path;
   fmode = mode;
+
+  if (indexes)
+  {
+    string filename = File::normalizePath(fpath) + "indexes.csv";
+    findexes.exceptions(ios::failbit | ios::badbit);
+    findexes.open(filename.c_str(), ios::out|(fmode=='a'?(ios::app):(ios::trunc)));
+    if (fmode != 'a' || (fmode == 'a' && File::filesize(filename) == 0)) {
+      findexes << "\"thread\", \"lhs\", \"antithetic\"" << std::endl;
+    }
+  }
 }
 
 //===========================================================================

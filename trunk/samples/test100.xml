@@ -35,10 +35,10 @@
     <parameter name='time.0' value='18/02/2003'/>
     <parameter name='time.T' value='18/02/2005'/>
     <parameter name='stopcriteria.maxiterations' value='$numsims'/>
-    <parameter name='stopcriteria.maxseconds' value='30000000'/>
+    <parameter name='stopcriteria.maxseconds' value='86400'/>
     <parameter name='copula.type' value='t($ndf)'/>
     <parameter name='rng.seed' value='$seed'/>
-    <parameter name='montecarlo.antithetic' value='false'/>
+    <parameter name='antithetic' value='false'/>
     <parameter name='portfolio.onlyActiveObligors' value='true'/>
   </parameters>
   <interest type='compound'>

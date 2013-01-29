@@ -45,7 +45,8 @@ How to check results?
   <defines>
     <define name="numsims" value="200000"/>
     <define name="copula" value="gaussian"/>
-    <define name="antithetic" value="true"/>
+    <define name="antithetic" value="false"/>
+    <define name="lhs" value="false"/>
   </defines>
 
   <!-- ============================================================== -->
@@ -55,10 +56,11 @@ How to check results?
     <parameter name="time.0" value="01/01/2005"/>
     <parameter name="time.T" value="01/01/2006"/>
     <parameter name="stopcriteria.maxiterations" value="$numsims"/>
-    <parameter name="stopcriteria.maxseconds" value="30000000"/>
+    <parameter name="stopcriteria.maxseconds" value="86400"/>
     <parameter name="copula.type" value="$copula"/>
     <parameter name="rng.seed" value="0"/>
-    <parameter name="montecarlo.antithetic" value="$antithetic"/>
+    <parameter name="antithetic" value="$antithetic"/>
+    <parameter name="lhs" value="$lhs"/>
     <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 

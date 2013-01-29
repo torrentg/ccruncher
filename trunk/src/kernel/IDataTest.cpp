@@ -42,7 +42,7 @@ void ccruncher_test::IDataTest::test1()
       <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='montecarlo.antithetic' value='true'/>\n\
+      <parameter name='antithetic' value='true'/>\n\
     </parameters>\n\
     <interest type='compound'>\n\
       <rate t='0M' r='0.0'/>\n\

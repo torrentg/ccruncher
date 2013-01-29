@@ -37,7 +37,9 @@ void ccruncher_test::ParamsTest::test1()
       <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='montecarlo.antithetic' value='true'/>\n\
+      <parameter name='antithetic' value='true'/>\n\
+      <parameter name='lhs' value='false'/>\n\
+      <parameter name='portfolio.onlyActiveObligors' value='false'/>\n\
     </parameters>";
 
   ExpatParser xmlparser;
@@ -52,6 +54,8 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT("gaussian" == params.getCopulaType());
   ASSERT(38765874L == params.rng_seed);
   ASSERT(true == params.antithetic);
+  ASSERT(1 == params.lhs_size);
+  ASSERT(false == params.onlyactive);
 }
 
 //===========================================================================
@@ -68,7 +72,7 @@ void ccruncher_test::ParamsTest::test2()
       <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='montecarlo.antithetic' value='true'/>\n\
+      <parameter name='antithetic' value='true'/>\n\
     </parameters>";
 
   ExpatParser xmlparser;
@@ -90,7 +94,7 @@ void ccruncher_test::ParamsTest::test3()
       <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='t(3)'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='montecarlo.antithetic' value='true'/>\n\
+      <parameter name='antithetic' value='true'/>\n\
     </parameters>";
 
   ExpatParser xmlparser;

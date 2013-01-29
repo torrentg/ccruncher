@@ -168,16 +168,20 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
     <p>
       <i>Proposition (characterization of the default times)</i>. 
       Let <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> the joint distribution of default times 
-      with t-Student copula <i>C=(U<sub>1</sub>,…,U<sub>n</sub>)</i> and marginals 
-      <i>F<sub>i</sub></i>, and <i>X=(X<sub>1</sub>,…,X<sub>n</sub>)</i> a multivariate 
-      t-Student distribution with the same <i>R</i> and <i>&nu;</i> than <i>C</i>. Then,
+      with a t-Student(&nu;,R) copula and marginals <i>F<sub>i</sub></i>. Then,
     </p>
     <p style="text-align:center;">
-      <i>P{T<sub>i</sub> ≤ t} = P{X<sub>i</sub> ≤ t<sub>&nu;</sub><sup>-1</sup>(F<sub>i</sub>(t))}</i>
+      <i>F(t<sub>1</sub>, ..., t<sub>n</sub>) = H(t<sub>&nu;</sub><sup>-1</sup>(F<sub>1</sub>(t<sub>1</sub>)), ..., t<sub>&nu;</sub><sup>-1</sup>(F<sub>n</sub>(t<sub>n</sub>)))</i>
     </p>
     <p>
-      where <i>t<sub>&nu;</sub><sup>-1</sup></i> is the inverse of the univariate t-Student
-      distribution with <i>&nu;</i> degrees of freedom.
+      where <i>F</i> is the CDF of the multivariate default times, <i>H</i> is the CDF
+      of the multivariate t-Student with <i>&nu;</i> degrees of freedom and correlation
+      matrix <i>R</i>,
+      <i>t<sub>&nu;</sub><sup>-1</sup></i> is the inverse of the univariate t-Student
+      distribution with <i>&nu;</i> degrees of freedom,
+      and <i>F<sub>i</sub></i> are the PD over the time. 
+      <br/>
+      
       This result is widely used both in the parameters estimation as the simulation 
       of the default times. In the following section we see that this copula model can be 
       interpreted as a t-Student multi-factor model.
@@ -338,7 +342,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 08-Jan-2013
+          Last modified: 22-Jan-2013
         </td>
       </tr></table>
     </div>

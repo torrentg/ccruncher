@@ -34,6 +34,7 @@ void ccruncher_test::ExpatUserDataTest::test1()
   eud.defines["var1"] = "abc";
   eud.defines["var2"] = "def";
   eud.defines["var3"] = "123456789012345";
+  eud.defines["var_4"] = "coco";
 
   const char *str0 = "string without defines";
   ASSERT(str0 == eud.applyDefines(str0));
@@ -58,7 +59,14 @@ void ccruncher_test::ExpatUserDataTest::test1()
   const char *str6 = eud.applyDefines("12$var1 34");
   ASSERT_EQUALS(string("12abc 34"), string(str6));
 
+  const char *str7 = eud.applyDefines("abc $var_4");
+  ASSERT_EQUALS(string("abc coco"), string(str7));
+
+  // exception throw because exceeds buffer size
   ASSERT_THROW(eud.applyDefines("1234567$var1"));
   ASSERT_THROW(eud.applyDefines("$var3"));
+
+  // exception because define not found
+  ASSERT_THROW(eud.applyDefines("$var1a"));
 }
 

@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include "kernel/Aggregator.hpp"
+#include "utils/File.hpp"
 #ifndef _MSC_VER
 #include <unistd.h>
 #endif
@@ -75,7 +76,7 @@ ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
     fout.precision(2);
 
     // printing header
-    if (mode != 'a')
+    if (mode != 'a' || (mode == 'a' && File::filesize(filename) == 0))
     {
       if (numsegments == 1)
       {

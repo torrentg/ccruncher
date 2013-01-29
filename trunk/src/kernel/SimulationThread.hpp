@@ -55,6 +55,18 @@ class SimulationThread : public Thread
 
   private:
 
+    // used by random_shuffle function
+    struct frand
+    {
+      const gsl_rng *rng;
+      frand(const gsl_rng *r) : rng(r) {}
+      int operator()(int limit) const { return gsl_rng_uniform_int(rng, limit); }
+    };
+
+  private:
+
+    // thread identifier
+    int id;
     // Monte Carlo parent
     MonteCarlo &montecarlo;
     // list of simulated obligors
@@ -63,16 +75,18 @@ class SimulationThread : public Thread
     const vector<SimulatedAsset> &assets;
     // segmentations indexes per asset
     const vector<unsigned short> &segments;
+    // number of factors
+    size_t numfactors;
     // degrees of freedom
     double ndf;
     // random number generator
     gsl_rng *rng;
-    // simulated factors
-    gsl_vector *factors;
     // cholesky matrix
     const gsl_matrix *chol;
-    // factor loadings
-    const vector<double> &floadings;
+    // factor loadings [w_i]
+    const vector<double> &floadings1;
+    // factor loadings [sqrt(1-w_i^2)]
+    const vector<double> &floadings2;
     // inverse functions
     const Inverses &inverses;
     // initial date
@@ -91,19 +105,37 @@ class SimulationThread : public Thread
     Timer timer1;
     // ellapsed time simulating obligors & segmentations
     Timer timer2;
-    // multivariate normal simulated values
-    vector<double> uvalues;
+    // lhs sample size
+    size_t lhs_size;
+    // lhs current trial
+    size_t lhs_pos;
+    // number of lhs samples
+    size_t lhs_num;
+    // lh sample multivariate normal (factors)
+    vector<double> lhs_values_z;
+    // lh sample chi square
+    vector<double> lhs_values_s;
+    // auxiliar vector
+    vector<pair<double,size_t> > lhs_aux;
+    // current simulated multivariate distribution
+    vector<double> xvalues;
 
   private:
-  
+
+    // comparator used to obtain ranks
+    static bool pcomparator(const pair<double,size_t> &o1, const pair<double,size_t> &o2);
     // generate random numbers
     void randomize() throw();
     // simule obligor
     void simule(int) throw();
     // returns the simulated value
-    double getRandom(int ibobligor) throw();
-    // simulate a multivariate normal
-    void rmvnorm();
+    double getRandom(int iobligor) throw();
+    // simulate a multivariate distribution (normal or t-student)
+    void rmvdist();
+    // chi-square random generation
+    void rchisq();
+    // factors random generation
+    void rfactors();
     // non-copyable class
     SimulationThread(const SimulationThread &);
     // non-copyable class
@@ -112,7 +144,7 @@ class SimulationThread : public Thread
   public:
 
     // constructor
-    SimulationThread(MonteCarlo &, unsigned long seed);
+    SimulationThread(int, MonteCarlo &, unsigned long seed);
     // destructor
     ~SimulationThread();
     // thread main function

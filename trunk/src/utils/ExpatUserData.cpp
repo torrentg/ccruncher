@@ -161,7 +161,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
     else ret = bufferAppend(p1, p2-p1);
 
     p1 = p2 = p2+1; // skips '$'
-    while(isalnum(*p2)) p2++;
+    while(isalnum(*p2) || *p2=='_') p2++;
     string key(p1, p2-p1);
 
     map<string,string>::const_iterator it = defines.find(key);
