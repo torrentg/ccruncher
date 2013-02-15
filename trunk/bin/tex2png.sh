@@ -38,6 +38,7 @@ xslfile=$(readlink -f "$xslfile");
 if [ ! -f $xslfile ]
 then
   echo "aborting: file $xslfile does not exist";
+  exit 1;
 fi
 command -v xsltproc >/dev/null 2>&1 || { echo "aborting: xsltproc command not found" >&2; exit 1; }
 command -v latex >/dev/null 2>&1 || { echo "aborting: latex command not found" >&2; exit 1; }
