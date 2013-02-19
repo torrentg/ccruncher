@@ -11,6 +11,8 @@ version 2.2 (???. 2013)
   * solved bug: header in csv files in append mode
   * allowed char '_' in defines names
   * minor changes in documentation
+  * option --path renamed to --output
+  * POSIX compliance in help option
     
 version 2.1 (Dec. 2012)
 --------------------------
