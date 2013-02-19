@@ -116,7 +116,7 @@ Using CCruncher
      > # cmd version
      > cd $CCRUNCHER
      > bin/ccruncher-cmd --help
-     > bin/ccruncher-cmd -w --path=data samples/test01.xml
+     > bin/ccruncher-cmd -w --output=data samples/test01.xml
 
 3. compute risk indicators:
      > bin/ccruncher-gui &
@@ -241,7 +241,11 @@ Developers tips & tricks
        >> backtrace
        >> quit
 
-11. making source distribution package
+11. creating man pages
+      > help2man --no-info -n "simule the loss distribution of a credit portfolio using de \
+        Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
+
+12. making source distribution package
       > make distcheck
       > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
@@ -249,7 +253,7 @@ Developers tips & tricks
       > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
-12. create a tag in subversion repository
+13. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"
@@ -257,3 +261,4 @@ Developers tips & tricks
 
 CCruncher Team
 http://www.ccruncher.net
+

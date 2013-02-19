@@ -53,14 +53,11 @@ using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 
-#define MAX_NUM_THREADS 16
-
-//---------------------------------------------------------------------------
-
-void usage();
+void help();
+void info();
+void version();
 void setnice(int) throw(Exception);
 void run() throw(Exception);
-void catchsignal(int signal);
 
 //---------------------------------------------------------------------------
 
@@ -111,11 +108,12 @@ int main(int argc, char *argv[])
       { "overwrite",    0,  NULL,  'w' },
       { "indexes",      0,  NULL,  'i' },
       { "define",       1,  NULL,  'D' },
-      { "path",         1,  NULL,  'o' },
+      { "output",       1,  NULL,  'o' },
       { "version",      0,  NULL,  301 },
       { "nice",         1,  NULL,  302 },
       { "hash",         1,  NULL,  303 },
       { "threads",      1,  NULL,  304 },
+      { "info",         0,  NULL,  305 },
       { NULL,           0,  NULL,   0  }
   };
 
@@ -138,7 +136,7 @@ int main(int argc, char *argv[])
           return 1;
 
       case 'h': // -h or --help (show help and exit)
-          usage();
+          help();
           return 0;
 
       case 'D': // -D key=val (define)
@@ -176,16 +174,12 @@ int main(int argc, char *argv[])
           indexes = true;
           break;
 
-      case 'o': // -o dir, --path=dir (set output files path)
+      case 'o': // -o dir, --output=dir (set output files path)
           spath = string(optarg);
           break;
 
       case 301: // --version (show version and exit)
-          cout << "ccruncher-" << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
-          cout << "build host: " << BUILD_HOST << endl;
-          cout << "build date: " << BUILD_DATE << endl;
-          cout << "build author: " << BUILD_USER << endl;
-          cout << "build options: " << Utils::getCompilationOptions() << endl;
+          version();
           return 0;
 
       case 302: // --nice=val (set nice value)
@@ -196,7 +190,7 @@ int main(int argc, char *argv[])
           }
           catch(Exception &)
           {
-            cerr << "invalid nice value" << endl;
+            cerr << "error: invalid nice value" << endl;
             return 1;
           }
           break;
@@ -209,7 +203,7 @@ int main(int argc, char *argv[])
           }
           catch(Exception &)
           {
-            cerr << "invalid hash value" << endl;
+            cerr << "error: invalid hash value" << endl;
             return 1;
           }
           break;
@@ -219,13 +213,20 @@ int main(int argc, char *argv[])
           {
             string sthreads = string(optarg);
             ithreads = Parser::intValue(sthreads);
+            if (ithreads <= 0 || Utils::getNumCores() < ithreads) {
+              throw Exception();
+            }
           }
           catch(Exception &)
           {
-            cerr << "invalid threads value" << endl;
+            cerr << "error: invalid threads value" << endl;
             return 1;
           }
           break;
+
+      case 305: // --info (show info and exit)
+          info();
+          return 0;
 
       default: // unexpected error
           cerr << 
@@ -242,7 +243,7 @@ int main(int argc, char *argv[])
   }
   else if (argc - optind > 1)
   {
-    cerr << "last argument will be the xml input file" << endl;
+    cerr << "error: last argument will be the xml input file" << endl;
     cerr << "use --help option for more information" << endl;
     return 1;
   }
@@ -255,7 +256,7 @@ int main(int argc, char *argv[])
     }
     catch(Exception &) 
     {
-      cerr << "can't open file " << sfilename << endl;
+      cerr << "error: can't open file '" << sfilename << "'" << endl;
       return 1;
     }
   }
@@ -263,13 +264,8 @@ int main(int argc, char *argv[])
   // checking arguments consistency
   if (spath == "")
   {
-    cerr << "--path is a required argument" << endl;
+    cerr << "error: --output is a required argument" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
-  }
-  if (MAX_NUM_THREADS < ithreads)
-  {
-    cerr << "error: invalid number of threads" << endl;
     return 1;
   }
   if (ithreads == 0)
@@ -322,7 +318,7 @@ void run() throw(Exception)
   // checking output directory
   if (!File::existDir(spath))
   {
-    throw Exception("path " + spath + " not exist");
+    throw Exception("output '" + spath + "' not exist");
   }
 
   // header
@@ -374,46 +370,83 @@ void setnice(int niceval) throw(Exception)
 }
 
 //===========================================================================
-// usage
+// help
+// follows POSIX guidelines as described in:
+// http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
+// you can create man pages using help2man (http://www.gnu.org/software/help2man/)
 //===========================================================================
-void usage()
+void help()
 {
   cout <<
-  "  usage:\n"
-  "    ccruncher-cmd --path=dir [options] [FILE]\n"
-  "  description:\n"
-  "    ccruncher is a tool used to simulate a portfolio of credits using\n"
-  "    the Monte Carlo method. More info at http://www.ccruncher.net\n"
-  "  arguments:\n"
-  "    file           xml file containing the problem to be solved. This\n"
-  "                   file can be gziped (caution, zip format not suported).\n"
-  "                   With no FILE read standard input.\n"
-  "  options:\n"
-  "    --define key=val\n"
-  "    -D key=val     declare a define named 'key' with value 'val'\n"
-  "    -a\n"
-  "    --append       output data is appended to existing files, if any\n"
-  "    -w\n"
-  "    --overwrite    existing output files are overwritten\n"
-  "    -o dir\n"
-  "    --path=dir     directory where output files will be placed (required)\n"
-  "    -i\n"
-  "    --indexes      create file indexes.csv with info about simulated values\n"
+  "Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]\n"
+  "\n"
+  "Simule the loss distribution of the credit portfolio described in the xml\n"
+  "input FILE using the  Monte Carlo method. FILE can be gziped. If no one is\n"
+  "given, then STDIN is considered. The input file format description and the\n"
+  "details of the simulation procedure can  be found at http://www.ccruncher.net.\n"
+  "\n"
+  "Mandatory arguments to long options are mandatory for short options too.\n"
+  "\n"
+  "  -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file\n"
+  "  -a, --append            output data is appended to existing files\n"
+  "  -w, --overwrite         existing output files are overwritten\n"
+  "  -o, --output=DIRECTORY  directory where output files will be placed\n"
+  "  -i, --indexes           create file indexes.csv with info about simulation\n"
 #if !defined(_WIN32)
-  "    --nice=num     set priority to num (default=" + Format::toString(getpriority(PRIO_PROCESS,0)) + ", min=" + Format::toString(PRIO_MIN) + ", max=" + Format::toString(PRIO_MAX) + ")\n"
+  "      --nice=NICEVAL      set process priority to NICEVAL (see nice command)\n"
 #endif
-  "    --threads=num  number of threads (default=" + Format::toString(Utils::getNumCores()) + ")\n"
-  "    --hash=num     print '.' for each num simulations (default=" + Format::toString(ihash) + ")\n"
-  "    -h\n"
-  "    --help         show this message and exit\n"
-  "    --version      show version and exit\n"
-  "  return codes:\n"
-  "    0              OK. finished without errors\n"
-  "    1              KO. finished with errors\n"
-  "  examples:\n"
-  "    ccruncher-cmd --path=data/ samples/test04.xml\n"
-  "    ccruncher-cmd -w --hash=5000 --path=data/ samples/test100.xml\n"
-  "    ccruncher-cmd --append --path=data/ --threads=4 -D ndf=8 samples/sample.xml\n"
+  "      --threads=NTHREADS  number of threads to use (default=number of cores)\n"
+  "      --hash=HASHNUM      print '.' for each HASHNUM simulations (default=" + Format::toString(ihash) + ")\n"
+  "      --info              show build parameters and exit\n"
+  "  -h, --help              show this message and exit\n"
+  "      --version           show version and exit\n"
+  "\n"
+  "Exit status:\n"
+  "  0   finished without errors\n"
+  "  1   finished with errors\n"
+  "\n"
+  "Examples:\n"
+  "ccruncher-cmd -o data/ samples/test04.xml\n\n"
+  "ccruncher-cmd -w --hash=5000 --output=data/ samples/test100.xml\n\n"
+  "ccruncher-cmd --append --output=data/ --threads=4 -D ndf=8 samples/sample.xml\n\n"
+  "\n"
+  "Report bugs to gtorrent@ccruncher.net. Please include the output of\n"
+  "'ccruncher-cmd --info' in the body of your report and attach the input\n"
+  "file if at all possible.\n"
   << endl;
+}
+
+//===========================================================================
+// version
+// follows POSIX guidelines as described in:
+// http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
+// you can create man pages using help2man (http://www.gnu.org/software/help2man/)
+//===========================================================================
+void version()
+{
+  cout <<
+  "ccruncher-cmd " << PACKAGE_VERSION << " (" << SVN_VERSION << ")\n"
+  "Copyright (c) 2013 Gerard Torrent.\n"
+  "License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>\n"
+  "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\n"
+  "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+  "See the GNU General Public License for more details."
+  << endl;
+}
+
+//===========================================================================
+// info
+//===========================================================================
+void info()
+{
+  cout << "ccruncher-cmd " << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
+  cout << "build host: " << BUILD_HOST << endl;
+  cout << "build date: " << BUILD_DATE << endl;
+  cout << "build author: " << BUILD_USER << endl;
+  cout << "build options: " << Utils::getCompilationOptions() << endl;
+#if !defined(_WIN32)
+  cout << "nice value: default=" << getpriority(PRIO_PROCESS,0) << ", min=" << PRIO_MIN << ", max=" << PRIO_MAX << endl;
+#endif
+  cout << "num cores: " << Utils::getNumCores() << endl;
 }
 
