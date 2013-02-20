@@ -6,7 +6,6 @@
 #include <QWidget>
 #include <QString>
 #include <QMutex>
-#include <QResizeEvent>
 #include <QToolBar>
 #include <QAction>
 #include "gui/MdiChildWidget.hpp"

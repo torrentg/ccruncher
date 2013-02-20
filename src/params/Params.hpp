@@ -27,7 +27,6 @@
 
 #include "utils/config.h"
 #include <string>
-#include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"

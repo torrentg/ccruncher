@@ -1,9 +1,7 @@
 #ifndef _QStreamBuf_
 #define _QStreamBuf_
 
-#include <iostream>
 #include <streambuf>
-#include <string>
 #include <QObject>
 #include <QString>
 

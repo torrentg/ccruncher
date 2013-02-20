@@ -36,7 +36,6 @@
 #include "params/Factors.hpp"
 #include "params/Interest.hpp"
 #include "params/Segmentations.hpp"
-#include <cassert>
 
 //---------------------------------------------------------------------------
 

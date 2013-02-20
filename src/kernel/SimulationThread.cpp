@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_blas.h>
-#include <gsl/gsl_randist.h>
 #include "kernel/SimulationThread.hpp"
 #include <cassert>
 

@@ -13,6 +13,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
+#include <QColor>
 #include "xmlhighlighter.hpp"
 
 //TODO: colorize errors (errorFormat=background red, review cases)

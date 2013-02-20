@@ -8,7 +8,6 @@
 #include "gui/SimulationWidget.hpp"
 #include "gui/AnalysisWidget.hpp"
 #include "gui/XmlEditWidget.hpp"
-#include "utils/Utils.hpp"
 #include "utils/config.h"
 
 using namespace std;

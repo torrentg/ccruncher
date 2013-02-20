@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include "utils/Exception.hpp"
-#include <cstdlib>
 
 using namespace std;
 

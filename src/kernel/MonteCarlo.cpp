@@ -26,7 +26,6 @@
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Logger.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
 #include <cassert>

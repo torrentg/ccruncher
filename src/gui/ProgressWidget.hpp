@@ -4,7 +4,6 @@
 #include <QTimer>
 #include <QWidget>
 #include <QMutex>
-#include <QPaintEvent>
 #include "ui_ProgressWidget.h"
 
 class ProgressWidget : public QWidget

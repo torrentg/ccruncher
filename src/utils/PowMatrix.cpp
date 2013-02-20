@@ -21,10 +21,10 @@
 //===========================================================================
 
 #include <cmath>
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_eigen.h>
+#include <gsl/gsl_errno.h>
 #include "utils/PowMatrix.hpp"
 #include "utils/Format.hpp"
 
