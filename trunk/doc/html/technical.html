@@ -169,25 +169,32 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
        5) it can be expressed as a multi-factor model.
     </p>
     <p>
-      <i>Proposition (characterization of the default times)</i>. 
-      Let <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> the joint distribution of default times 
-      with a t-Student(&nu;,R) copula and marginals <i>F<sub>i</sub></i>. Then,
+      The following proposition determines the default times distribution relating it
+      to the multivariate Student-t distribution. This result is widely used both in 
+      the parameters estimation as the simulation of the default times.
+    </p>
+    <p>
+      <b><i>Proposition (multivariate default times distribution)</i></b>. 
+      Let <i>T=(T<sub>1</sub>,…,T<sub>n</sub>)</i> a multivariate random variable
+      representing the default times marginals <i>F<sub>i</sub></i> and a copula
+      t-Student(<i>&nu;,R</i>). Then its distribution is,
     </p>
     <p style="text-align:center;">
       <i>F(t<sub>1</sub>, ..., t<sub>n</sub>) = H(t<sub>&nu;</sub><sup>-1</sup>(F<sub>1</sub>(t<sub>1</sub>)), ..., t<sub>&nu;</sub><sup>-1</sup>(F<sub>n</sub>(t<sub>n</sub>)))</i>
     </p>
     <p>
-      where <i>F</i> is the CDF of the multivariate default times, <i>H</i> is the CDF
+      where <i>n</i> is the number of obligors in the portfolio,
+      <i>F</i> is the CDF of the multivariate default times, <i>H</i> is the CDF
       of the multivariate t-Student with <i>&nu;</i> degrees of freedom and correlation
       matrix <i>R</i>,
       <i>t<sub>&nu;</sub><sup>-1</sup></i> is the inverse of the univariate t-Student
       distribution with <i>&nu;</i> degrees of freedom,
       and <i>F<sub>i</sub></i> are the PD over the time. 
-      <br/>
-      
-      This result is widely used both in the parameters estimation as the simulation 
-      of the default times. In the following section we see that this copula model can be 
-      interpreted as a t-Student multi-factor model.
+    </p>
+    <p>
+      Working with a matrix of dimension <i>n&times;n</i> is not practical. 
+      For this reason we work with the multivariate Student-t distribution expressed 
+      as a multi-factor model.
     </p>
     
     <a name="multifactor-model"></a>
@@ -198,7 +205,7 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
       can be expressed by a multi-factor model like:
     </p>
     <object class="equation" type="image/png" data="mfmodel.png" style="display:block; margin-left:auto; margin-right:auto">
-X_i^j = \sqrt{\frac{\nu}{S}} \cdot \left( w_i  \cdot Z_i + \sqrt{1-w_i^2} \cdot \varepsilon_i^j \right)
+X_i^j = \sqrt{\frac{\nu}{V}} \cdot \left( w_i  \cdot Z_i + \sqrt{1-w_i^2} \cdot \varepsilon_i^j \right)
 \quad \textrm{ where }
 \left\{
 \begin{array}{l}
@@ -207,17 +214,17 @@ j=1, \cdots, n_i \\
 w_i \in (0,1) \ \forall i \\
 2 \le \nu \\
 Z \sim N(0,R) \\
-S \sim \chi^2_{\nu} \\
+V \sim \chi^2_{\nu} \\
 \varepsilon_i^j \sim N(0,1) \textrm{ i.i.d} \ \forall i,j \\
-Z, S, \varepsilon_i^j \textrm{ independents } \ \forall i,j
+Z, V, \varepsilon_i^j \textrm{ independents } \ \forall i,j
 \end{array}
 \right.
     </object>
     <p>
-      where <i>S</i>, <i>Z</i> and <i>&epsilon;<sub>i</sub><sup>j</sup></i> are
+      where <i>V</i>, <i>Z</i> and <i>&epsilon;<sub>i</sub><sup>j</sup></i> are
       latent variables, <i>k</i> is the number of factors/sectors, <i>n<sub>i</sub></i>
-      is the number of obligors in the sector <i>i</i>, <i>w<sub>i</sub></i> are the
-      factor loadings of factor <i>i</i>, and <i>R</i> is the correlation matrix between 
+      is the number of obligors in the sector <i>i</i>, <i>w<sub>i</sub></i> is the
+      factor loading of factor <i>i</i>, and <i>R</i> is the correlation matrix between 
       factors. The correlation between two obligors in the gaussian case, 
       <i>&nu;=&infin;</i>, is:
     </p>
@@ -232,31 +239,31 @@ w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2} &amp; \textrm{ if } i_1 \ne i_2
 \right.
     </object>
     <p>
-      The combination of the characterization of the default times as a multivariate 
-      t-Student distribution and the interpretation of this as a multi-factor model 
-      lead to the multi-factor Merton model. This considers that a default occurs 
-      if the marginal distribution, the default time in our case, falls below a 
-      certain level.
+      The multivariate default times distribution using a multivariate t-Student 
+      distribution expressed as a multi-factor model leads to the multi-factor Merton 
+      model. This considers that the <i>i</i>-th obligor defaults in a given period 
+      if the component <i>i</i>-th of the multivariate t-Student distribution falls 
+      below a certain level.
     </p>
     <p>
       The estimation of the model parameters (<i>&nu;</i>, <i>w<sub>i</sub></i>, 
       <i>R</i>) is outside the scope of this document. See [1] [2] [9] [10] 
-      for additional information.
+      for additional information, or contact with <a href="http://www.tatine.es">Tatine</a>.
     </p>
     
     <a name="lossdist"></a>
     <h2>Portfolio Loss Distribution</h2>
     <p>
       We define the portfolio loss distribution at time <i>t</i>, <i>L<sub>t</sub></i>, 
-      from the multivariate distribution of default times, <i>T</i>, as:
+      recurring to the multivariate distribution of default times, <i>T</i>, as:
     </p>
     <p style="text-align:center;">
       <i>L<sub>t</sub> = &sum; 1(T<sub>i</sub> &lt; t)·(1-Recovery<sub>i</sub>(T<sub>i</sub>))·Exposure<sub>i</sub>(T<sub>i</sub>)</i>
     </p>
     <p>
       We use the Monte Carlo method to estimate the portfolio loss distribution 
-      simulating the default times of obligors. The loss is computed using the 
-      following formulas:
+      simulating the default times of obligors. The portfolio loss is computed 
+      using the following formulas:
     </p>
     <object class="equation" type="image/png" data="losses.png" style="display:block; margin-left:auto; margin-right:auto">
 \begin{array}{rcl}
@@ -274,20 +281,19 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
 \end{array}
     </object>
     <p>
-      <i>Algorithm (default times simulation)</i>. 
-      We use the characterization of the default times to simulate the <i>T</i> 
-      distribution from their marginals <i>F<sub>1</sub>,...,F<sub>n</sub></i> 
-      and the t-Student copula with <i>&nu;</i> degrees of freedom and 
-      correlation matrix <i>R</i>:
+      <b><i>Algorithm (default times simulation)</i></b>. 
+      We simulate the default times distribution <i>T</i> using their marginals 
+      <i>F<sub>1</sub>,...,F<sub>n</sub></i> and the t-Student copula with 
+      <i>&nu;</i> degrees of freedom and correlation matrix <i>R</i>:
     </p>
     <ol>
       <li>Simulate a t-Student copula with <i>&nu;</i> degrees of freedom and correlation <i>R</i> -see below-: <i>(u<sub>1</sub>,…,u<sub>n</sub>)</i></li> 
       <li>Apply the inverse sampling method to obtain the default times: <i>(F<sub>1</sub><sup>-1</sup>(u<sub>1</sub>),…, F<sub>n</sub><sup>-1</sup>(u<sub>n</sub>))</i></li>
     </ol>
     <p>
-      <i>Algorithm (t-Student copula simulation)</i>. 
-      We combine the t-Student multi-factor formulation and the standard gaussian 
-      simulation algorithm:
+      <b><i>Algorithm (t-Student copula simulation)</i></b>. 
+      We combine the t-Student multi-factor formulation and the standard  
+      t-Student copula simulation algorithm:
     </p>
     <ol>
       <li>Obtain the Cholesky decomposition, <i>L</i>, of <i>R</i></li>
@@ -345,7 +351,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 18-Feb-2013
+          Last modified: 20-Feb-2013
         </td>
       </tr></table>
     </div>
