@@ -33,8 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -75,7 +73,7 @@ class Recovery
     // constructor
     Recovery(const char *) throw(Exception);
     // constructor
-    Recovery(const string &) throw(Exception);
+    Recovery(const std::string &) throw(Exception);
     // constructor
     Recovery(RecoveryType, double a, double b=NAN) throw(Exception);
     // returns type
@@ -89,7 +87,7 @@ class Recovery
     // check if is a Non-A-Recovery value
     static bool valid(const Recovery &);
     // to string
-    string toString() const;
+    std::string toString() const;
 
 };
 

@@ -32,6 +32,8 @@
 #include <sys/time.h>
 #endif
 
+using namespace std;
+
 //===========================================================================
 // Create an instance of a Stopwatch, with its own internal counter
 //===========================================================================

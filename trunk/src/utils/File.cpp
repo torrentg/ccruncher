@@ -42,6 +42,8 @@
   #define PATHSEPARATOR string("/")
 #endif
 
+using namespace std;
+
 //===========================================================================
 // normalize a string
 // in win32 replaces '/' by '\'

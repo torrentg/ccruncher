@@ -65,8 +65,6 @@ static const long nad[1] = { 1721026L };
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -91,10 +89,10 @@ class Date
     Date();
     Date(const int iDay, const int iMonth, const int iYear) throw(Exception);
     explicit Date(const time_t tSysTime);
-    Date(const string &str) throw(Exception);
+    Date(const std::string &str) throw(Exception);
     Date(const char *str) throw(Exception);
 
-    string toString() const;
+    std::string toString() const;
     static bool valid(const int d, const int m, const int y);
     static int numDaysInMonth(int m, int y);
     static int numDaysInYear(int);
@@ -135,7 +133,7 @@ class Date
 //---------------------------------------------------------------------------
 
 // output operator
-ostream& operator << (ostream& os, const Date& d);
+std::ostream& operator << (std::ostream& os, const Date& d);
 // increment n number of days/months/years
 Date add(const Date &d, int num, char units);
 // difference between 2 dates  in days/months/years
@@ -146,10 +144,6 @@ Date min(const Date&, const Date&);
 Date max(const Date&, const Date&);
 // check if has format ([+-])?([0-9])+[DMY]
 bool isInterval(const char *str);
-
-//---------------------------------------------------------------------------
-
-}
 
 //===========================================================================
 // Constructor. constructs a new object with non-valid date (NAD)
@@ -171,13 +165,13 @@ inline Date& ccruncher::Date::operator=( const Date& Orig )
 //===========================================================================
 // adds the number of days in the integral type to the Date
 //===========================================================================
-inline Date ccruncher::operator+( const Date& Left, const long Right )
+inline Date operator+( const Date& Left, const long Right )
 {
     Date Temp = Left;
     Temp.lJulianDay += Right;
     return Temp;
 }
-inline Date ccruncher::operator+( const long Left, const Date& Right )
+inline Date operator+( const long Left, const Date& Right )
 {
     Date Temp = Right;
     Temp.lJulianDay += Left;
@@ -203,13 +197,13 @@ inline Date ccruncher::Date::operator++( int )
 //===========================================================================
 // subtracts two dates yields the difference between them in days.
 //===========================================================================
-inline Date ccruncher::operator-( const Date& Left, const long Right )
+inline Date operator-( const Date& Left, const long Right )
 {
     Date Temp = Left;
     Temp.lJulianDay -= Right;
     return Temp;
 }
-inline Date ccruncher::operator-( const long Left, const Date& Right )
+inline Date operator-( const long Left, const Date& Right )
 {
     Date Temp = Right;
     Temp.lJulianDay -= Left;
@@ -263,6 +257,10 @@ inline bool ccruncher::Date::operator>( const Date& Right ) const
 inline bool ccruncher::Date::operator>=( const Date& Right ) const
 {
     return lJulianDay >= Right.lJulianDay;
+}
+
+//---------------------------------------------------------------------------
+
 }
 
 //---------------------------------------------------------------------------

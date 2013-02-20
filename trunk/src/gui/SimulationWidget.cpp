@@ -11,6 +11,9 @@
 #include "utils/Format.hpp"
 #include "utils/Utils.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 #define REFRESH_MS 100
 
 //===========================================================================

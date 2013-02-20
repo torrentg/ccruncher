@@ -8,9 +8,6 @@
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Logger.hpp"
 
-using namespace std;
-using namespace ccruncher;
-
 class SimulationTask : public QThread
 {
     Q_OBJECT
@@ -30,19 +27,19 @@ class SimulationTask : public QThread
   private:
 
     // logger
-    Logger log;
+    ccruncher::Logger log;
     // input filename
-    string ifile;
+    std::string ifile;
     // output directory
-    string odir;
+    std::string odir;
     // defines
-    map<string,string> defines;
+    std::map<std::string,std::string> defines;
     // output file creation mode
     char fmode;
     // data
-    IData *idata;
+    ccruncher::IData *idata;
     // simulator
-    MonteCarlo *montecarlo;
+    ccruncher::MonteCarlo *montecarlo;
     // status
     volatile status status_;
     // stop flag
@@ -60,13 +57,13 @@ class SimulationTask : public QThread
   public:
 
     // constructor
-    SimulationTask(streambuf *s=NULL);
+    SimulationTask(std::streambuf *s=NULL);
     // destructor
     ~SimulationTask();
     // set streambuf
-    void setStreamBuf(streambuf *);
+    void setStreamBuf(std::streambuf *);
     // set data info
-    void setData(const string &, const map<string,string> &, const string &);
+    void setData(const std::string &, const std::map<std::string,std::string> &, const std::string &);
     // task
     void run();
     // stop current execution
@@ -74,13 +71,13 @@ class SimulationTask : public QThread
     // return status
     status getStatus() const;
     // return idata
-    IData* getIData();
+    ccruncher::IData* getIData();
     // return MonteCarlo
-    MonteCarlo* getMonteCarlo();
+    ccruncher::MonteCarlo* getMonteCarlo();
     // free memory (1=idata, 2=montecarlo, other=all)
     void free(int obj=0);
     // return logger
-    Logger& getLogger();
+    ccruncher::Logger& getLogger();
     // number of running simulations
     static size_t getNumRunningSims();
     // check conflicts

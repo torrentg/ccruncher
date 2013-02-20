@@ -7,6 +7,9 @@
 #include "utils/Timer.hpp"
 #include "utils/CsvFile.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 size_t SimulationTask::num_running_sims = 0;
 
 //===========================================================================

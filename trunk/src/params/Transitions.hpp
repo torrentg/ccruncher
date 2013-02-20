@@ -35,8 +35,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -49,7 +47,7 @@ class Transitions : public ExpatHandlers
     // period (in months) that this transition matrix covers
     int period;
     // matrix values
-    vector<vector<double> > matrix;
+    std::vector<std::vector<double> > matrix;
     // list of ratings
     Ratings ratings;
     // index of default rating
@@ -60,13 +58,13 @@ class Transitions : public ExpatHandlers
   private:
 
     // matrix product (M12 = M1·M2)
-    static void prod(const vector<vector<double> > &M1, const vector<vector<double> > &M2, vector<vector<double> > &M12);
+    static void prod(const std::vector<std::vector<double> > &M1, const std::vector<std::vector<double> > &M2, std::vector<std::vector<double> > &M12);
     // insert a transition value into the matrix
-    void insertTransition(const string &r1, const string &r2, double val) throw(Exception);
+    void insertTransition(const std::string &r1, const std::string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
     // computes Cumulated Default Forward Rate
-    void cdfr(int numrows, vector<vector<double> > &ret) const throw(Exception);
+    void cdfr(int numrows, std::vector<std::vector<double> > &ret) const throw(Exception);
 
   protected:
 
@@ -82,7 +80,7 @@ class Transitions : public ExpatHandlers
     // constructor
     Transitions(const Ratings &) throw(Exception);
     // constructor
-    Transitions(const Ratings &, const vector<vector<double> > &, int) throw(Exception);
+    Transitions(const Ratings &, const std::vector<std::vector<double> > &, int) throw(Exception);
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)
@@ -100,9 +98,9 @@ class Transitions : public ExpatHandlers
     // regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
     // matrix element access
-    const vector<double>& operator[] (int row) const;
+    const std::vector<double>& operator[] (int row) const;
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

@@ -23,6 +23,9 @@
 #include "utils/Strings.hpp"
 #include "utils/StringsTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define XLENGTH 5

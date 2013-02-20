@@ -33,8 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -69,15 +67,15 @@ class ExpatParser
     // destructor
     ~ExpatParser();
     // parse xml
-    void parse(const string &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
+    void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
     // parse xml
     void parse(gzFile file, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
     // returns main object
     void * getObject();
     // returns defines
-    const map<string,string>& getDefines() const;
+    const std::map<std::string,std::string>& getDefines() const;
     // set defines
-    void setDefines(const map<string,string>&);
+    void setDefines(const std::map<std::string,std::string>&);
 
 };
 

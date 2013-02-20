@@ -25,6 +25,9 @@
 #include "kernel/Inverses.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // getRatings
 //===========================================================================

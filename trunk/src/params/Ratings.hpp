@@ -33,8 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -48,17 +46,17 @@ class Ratings : public ExpatHandlers
     struct Rating
     {
         // rating name
-        string name;
+        std::string name;
         // rating description
-        string desc;
+        std::string desc;
         // constructor
-        Rating(const string &n="", const string &d="") : name(n), desc(d) {}
+        Rating(const std::string &n="", const std::string &d="") : name(n), desc(d) {}
     };
 
   private:
 
     // ratings list
-    vector<Rating> vratings;
+    std::vector<Rating> vratings;
 
   private:
   
@@ -82,13 +80,13 @@ class Ratings : public ExpatHandlers
     int size() const;
     // return the index of the rating
     int getIndex(const char *name) const;
-    int getIndex(const string &name) const;
+    int getIndex(const std::string &name) const;
     // return rating name
-    const string& getName(int i) const;
+    const std::string& getName(int i) const;
     // return rating description
-    const string& getDescription(int i) const;
+    const std::string& getDescription(int i) const;
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

@@ -32,7 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -42,8 +41,8 @@ class InversesTest : public TestFixture<InversesTest>
 
   private:
 
-    Ratings getRatings();
-    DefaultProbabilities getDefaultProbabilities(const Date &date);
+    ccruncher::Ratings getRatings();
+    ccruncher::DefaultProbabilities getDefaultProbabilities(const ccruncher::Date &date);
 
     void test1();
     void test2();

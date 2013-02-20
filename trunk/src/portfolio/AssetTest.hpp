@@ -32,7 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -42,8 +41,8 @@ class AssetTest : public TestFixture<AssetTest>
 
   private:
 
-    Segmentations getSegmentations();
-    Interest getInterest(const Date &date);
+    ccruncher::Segmentations getSegmentations();
+    ccruncher::Interest getInterest(const ccruncher::Date &date);
 
     void test1();
     void test2();

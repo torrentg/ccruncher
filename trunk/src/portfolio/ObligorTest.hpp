@@ -36,7 +36,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -46,10 +45,10 @@ class ObligorTest : public TestFixture<ObligorTest>
 
   private:
 
-    Ratings getRatings();
-    Factors getFactors();
-    Segmentations getSegmentations();
-    Interest getInterest(const Date &);
+    ccruncher::Ratings getRatings();
+    ccruncher::Factors getFactors();
+    ccruncher::Segmentations getSegmentations();
+    ccruncher::Interest getInterest(const ccruncher::Date &);
 
     void test1();
     void test2();

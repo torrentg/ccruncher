@@ -24,6 +24,9 @@
 #include "utils/PowMatrix.hpp"
 #include "utils/PowMatrixTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 0.00175

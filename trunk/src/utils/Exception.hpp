@@ -32,7 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -59,11 +58,11 @@ class Exception : public std::exception
     // constructor
     Exception(const std::string&);
     // constructor
-    Exception(const ccruncher::Exception &);
+    Exception(const Exception &);
     // constructor
     Exception(const std::exception &);
     // constructor
-    Exception(const ccruncher::Exception &, const std::string&);
+    Exception(const Exception &, const std::string&);
     // constructor
     Exception(const std::exception &, const std::string&);
     // constructor

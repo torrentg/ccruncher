@@ -35,13 +35,11 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Logger : public ostream
+class Logger : public std::ostream
 {
 
   private:
@@ -58,7 +56,7 @@ class Logger : public ostream
   public:
 
     // default constructor
-    explicit Logger(streambuf *s=NULL);
+    explicit Logger(std::streambuf *s=NULL);
     // indentation size
     void setIndentSize(size_t v);
     // number of columns
@@ -74,30 +72,30 @@ class Logger : public ostream
     // flood
     void flood(char c);
     // center text
-    void center(const string &);
+    void center(const std::string &);
 
     // formated output
-    Logger& operator<<(bool val) { static_cast<ostream&>(*this) << (val?"true":"false"); return *this; }
-    Logger& operator<<(short val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned short val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(int val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned int val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(long val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned long val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(float val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(double val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(long double val) { static_cast<ostream&>(*this) << val; return *this; }
-    Logger& operator<<(const void* val) { static_cast<ostream&>(*this) << val; return *this; }
+    Logger& operator<<(bool val) { static_cast<std::ostream&>(*this) << (val?"true":"false"); return *this; }
+    Logger& operator<<(short val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned short val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(int val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned int val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(long val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(unsigned long val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(float val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(double val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(long double val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(const void* val) { static_cast<std::ostream&>(*this) << val; return *this; }
 
     // manipulators calls
     Logger& operator<<(Logger& ( *pf )(Logger&)) { return pf(*this); }
-    Logger& operator<<(ios& ( *pf )(ios&)) { pf(*this); return *this; }
-    Logger& operator<<(ios_base& ( *pf )(ios_base&)) { pf(*this); return *this; }
+    Logger& operator<<(std::ios& ( *pf )(std::ios&)) { pf(*this); return *this; }
+    Logger& operator<<(std::ios_base& ( *pf )(std::ios_base&)) { pf(*this); return *this; }
 
     // friend functions
     friend Logger& operator<<(Logger& os, const char* s);
     friend Logger& operator<<(Logger& os, char c);
-    friend Logger& operator<<(Logger& os, const string &);
+    friend Logger& operator<<(Logger& os, const std::string &);
     friend Logger& operator<<(Logger& os, const Date &);
     friend Logger& operator<<(Logger& os, Timer &);
 
@@ -164,8 +162,8 @@ struct footer
 // manipulator
 struct center
 {
-  string str;
-  explicit center(const string &s) : str(s) {}
+  std::string str;
+  explicit center(const std::string &s) : str(s) {}
   inline friend Logger& operator<<(Logger& logger, const center& manip)
   {
     logger.center(manip.str);

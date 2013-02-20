@@ -41,6 +41,8 @@
 #include <unistd.h>
 #endif
 
+using namespace std;
+
 //===========================================================================
 // return the current timestamp in format dd/mm/yyyy hh:mm:ss
 //===========================================================================

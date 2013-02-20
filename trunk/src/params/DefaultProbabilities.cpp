@@ -29,6 +29,9 @@
 #include "utils/Strings.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 // --------------------------------------------------------------------------
 
 #define EPSILON 1e-12

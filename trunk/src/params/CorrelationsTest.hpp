@@ -31,7 +31,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -41,7 +40,7 @@ class CorrelationsTest : public TestFixture<CorrelationsTest>
 
   private:
 
-    Factors getFactors();
+    ccruncher::Factors getFactors();
 
     void test1();
     void test2();

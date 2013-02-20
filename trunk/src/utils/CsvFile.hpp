@@ -34,8 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -46,13 +44,13 @@ class CsvFile
   private:
 
     // filed separator/s
-    string separators;
+    std::string separators;
     // file name
-    string filename;
+    std::string filename;
     // stream
-    FILE *file;
+    std::FILE *file;
     // column headers
-    vector<string> headers;
+    std::vector<std::string> headers;
     // buffer (32KB)
     char buffer[128*1024];
     // current position in buffer
@@ -78,17 +76,17 @@ class CsvFile
   public:
 
     // constructor
-    CsvFile(const string &fname="", const string sep=",") throw(Exception);
+    CsvFile(const std::string &fname="", const std::string sep=",") throw(Exception);
     // destructor
     ~CsvFile();
     // open a file
-    void open(const string &fname, const string sep=",") throw(Exception);
+    void open(const std::string &fname, const std::string sep=",") throw(Exception);
     // close file
     void close();
     // returns headers
-    const vector<string>& getHeaders();
+    const std::vector<std::string>& getHeaders();
     // returns column values
-    void getValues(size_t col, vector<double> &ret, bool *stop=NULL) throw(Exception);
+    void getValues(size_t col, std::vector<double> &ret, bool *stop=NULL) throw(Exception);
     // returns file size (in bytes)
     size_t getFileSize() const;
     // returns readed bytes

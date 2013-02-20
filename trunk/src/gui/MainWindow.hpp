@@ -8,8 +8,6 @@
 #include <QCloseEvent>
 #include <QToolBar>
 
-using namespace std;
-
 namespace Ui {
 class MainWindow;
 }

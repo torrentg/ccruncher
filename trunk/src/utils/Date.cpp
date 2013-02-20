@@ -54,6 +54,9 @@
 #include "utils/Strings.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // Constructor
 //===========================================================================

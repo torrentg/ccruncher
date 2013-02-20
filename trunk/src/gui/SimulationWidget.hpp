@@ -17,8 +17,6 @@
 #include "gui/SimulationTask.hpp"
 #include "gui/ProgressWidget.hpp"
 
-using namespace std;
-
 namespace Ui {
 class SimulationWidget;
 }
@@ -36,7 +34,7 @@ class SimulationWidget : public MdiChildWidget
     // task thread
     SimulationTask task;
     // defines
-    map<string,string> defines;
+    std::map<std::string,std::string> defines;
     // stdout redirect
     QStreamBuf qstream;
     // progress widget
@@ -58,7 +56,7 @@ class SimulationWidget : public MdiChildWidget
     // output directory
     QString odir;
     // log file output
-    ofstream fout;
+    std::ofstream fout;
 
   private:
 

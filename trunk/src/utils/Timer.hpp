@@ -30,7 +30,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -68,7 +67,7 @@ class Timer
      // reset the timer
      void reset();
      // format seconds in format hh:mm:ss.mmm
-     static string format(double seconds_);
+     static std::string format(double seconds_);
      
 };
 

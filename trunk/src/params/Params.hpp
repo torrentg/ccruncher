@@ -34,8 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -63,7 +61,7 @@ class Params : public ExpatHandlers
     // stopcriteria.maxseconds param value
     int maxseconds;
     // copula.type param value
-    string copula_type; // gaussian, t(4)
+    std::string copula_type; // gaussian, t(4)
     // rng.seed param value
     long rng_seed;
     // antithetic param value
@@ -85,15 +83,15 @@ class Params : public ExpatHandlers
     // constructor
     Params();
     // returns copula type as string (gaussian or t)
-    static string getCopulaType(const string &str) throw(Exception);
+    static std::string getCopulaType(const std::string &str) throw(Exception);
     // returns copula type as string (gaussian or t)
-    string getCopulaType() const throw(Exception);
+    std::string getCopulaType() const throw(Exception);
     // returns copula param (if exists)
-    static double getCopulaParam(const string &str) throw(Exception);
+    static double getCopulaParam(const std::string &str) throw(Exception);
     // returns copula param (if exists)
     double getCopulaParam() const throw(Exception);
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

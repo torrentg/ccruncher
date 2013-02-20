@@ -29,6 +29,9 @@
 #include "utils/Timer.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 #define MAX_NBREAKS 256
 // maximum error = 1 hour
 #define MAX_ERROR 1.0/24.0
@@ -63,7 +66,7 @@ ccruncher::Inverses::Inverses(const Inverses &o)
 //===========================================================================
 // destructor
 //===========================================================================
-Inverses::~Inverses()
+ccruncher::Inverses::~Inverses()
 {
   for(size_t i=0; i<splines.size(); i++) {
     if (splines[i] != NULL) {

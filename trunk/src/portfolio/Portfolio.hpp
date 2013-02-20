@@ -40,8 +40,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -52,7 +50,7 @@ class Portfolio : public ExpatHandlers
   private:
 
     // list of obligors
-    vector<Obligor *> vobligors;
+    std::vector<Obligor *> vobligors;
     // list of ratings (used by parser)
     const Ratings *ratings;
     // list of factors (used by parser)
@@ -68,9 +66,9 @@ class Portfolio : public ExpatHandlers
     // auxiliar obligor (used by parser)
     Obligor *auxobligor;
     // map used to check id obligor oneness
-    map<string,bool> idobligors;
+    std::map<std::string,bool> idobligors;
     // map used to check id asset oneness
-    map<string,bool> idassets;
+    std::map<std::string,bool> idassets;
 
   private:
   
@@ -97,7 +95,7 @@ class Portfolio : public ExpatHandlers
     // destructor
     ~Portfolio();
     // returns the obligors list
-    vector<Obligor *> &getObligors();
+    std::vector<Obligor *> &getObligors();
 
 };
 

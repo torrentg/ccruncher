@@ -40,8 +40,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -52,9 +50,9 @@ class Obligor : public ExpatHandlers
   private:
 
     // segmentation-segment relations
-    vector<int> vsegments;
+    std::vector<int> vsegments;
     // obligor assets list
-    vector<Asset *> vassets;
+    std::vector<Asset *> vassets;
     // pointer to ratings object (used by parser)
     const Ratings *ratings;
     // pointer to factors object (used by parser)
@@ -87,7 +85,7 @@ class Obligor : public ExpatHandlers
     // obligor factor
     int ifactor;
     // obligor identifier
-    string id;
+    std::string id;
     // default recovery
     Recovery recovery;
 
@@ -102,7 +100,7 @@ class Obligor : public ExpatHandlers
     // assignment operator
     Obligor& operator=(const Obligor &);
     // return the asset list
-    vector<Asset *> & getAssets();
+    std::vector<Asset *> & getAssets();
     // indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // add a segmentation-segment relation

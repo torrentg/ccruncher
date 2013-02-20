@@ -33,8 +33,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -78,7 +76,7 @@ class Exposure
     // constructor
     Exposure(const char *) throw(Exception);
     // constructor
-    Exposure(const string &) throw(Exception);
+    Exposure(const std::string &) throw(Exception);
     // constructor
     Exposure(ExposureType, double a, double b=NAN) throw(Exception);
     // returns type
@@ -92,7 +90,7 @@ class Exposure
     // check if is a Non-A-Exposure value
     static bool valid(const Exposure &);
     // to string
-    string toString() const;
+    std::string toString() const;
     // apply current net value factor
     void mult(double);
 

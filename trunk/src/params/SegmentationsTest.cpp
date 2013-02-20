@@ -24,6 +24,9 @@
 #include "params/SegmentationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // test1
 //===========================================================================

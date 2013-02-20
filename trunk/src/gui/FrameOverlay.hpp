@@ -1,10 +1,9 @@
 #ifndef _FrameOverlay_
 #define _FrameOverlay_
 
+#include <vector>
 #include <QFrame>
 #include <QResizeEvent>
-
-using namespace std;
 
 namespace Ui {
 class FrameOverlay;
@@ -16,7 +15,7 @@ class FrameOverlay : public QFrame
   private:
 
     // layers
-    vector<QWidget*> layers;
+    std::vector<QWidget*> layers;
 
   protected:
 

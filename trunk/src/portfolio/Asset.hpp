@@ -40,8 +40,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -52,13 +50,13 @@ class Asset : public ExpatHandlers
   private:
 
     // segmentation-segment relations
-    vector<int> vsegments;
+    std::vector<int> vsegments;
     // asset identifier
-    string id;
+    std::string id;
     // asset creation date
     Date date;
     // exposure-recovery values
-    vector<DateValues> data;
+    std::vector<DateValues> data;
     // default recovery
     Recovery drecovery;
     // pointer to segmentations list (used by parser)
@@ -78,7 +76,7 @@ class Asset : public ExpatHandlers
     // constructor
     Asset(Segmentations *);
     // return asset id
-    string getId() const;
+    std::string getId() const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precpare data
@@ -98,7 +96,7 @@ class Asset : public ExpatHandlers
     // says if use obligor recovery
     bool hasObligorRecovery() const;
     // returns reference to data
-    const vector<DateValues>& getData() const;
+    const std::vector<DateValues>& getData() const;
 
 };
 

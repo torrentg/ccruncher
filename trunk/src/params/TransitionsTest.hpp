@@ -31,7 +31,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -41,7 +40,7 @@ class TransitionsTest : public TestFixture<TransitionsTest>
 
   private:
 
-    Ratings getRatings();
+    ccruncher::Ratings getRatings();
 
     void test1();
     void test2();

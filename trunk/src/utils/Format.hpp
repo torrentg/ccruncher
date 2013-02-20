@@ -31,8 +31,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -48,19 +46,19 @@ class Format
   public:
 
     // converts int to string
-    static string toString(const int val);
+    static std::string toString(const int val);
     // converts long to string
-    static string toString(const long val);
+    static std::string toString(const long val);
     // converts double to string
-    static string toString(const double val, int n=-1);
+    static std::string toString(const double val, int n=-1);
     // converts date to string
-    static string toString(const ccruncher::Date &val);
+    static std::string toString(const Date &val);
     // converts boolean to string
-    static string toString(const bool val);
+    static std::string toString(const bool val);
     // converts size_t to string
-    static string toString(const size_t val);
+    static std::string toString(const size_t val);
     // returns bytes as string (B, KB, MB)
-    static string bytes(const size_t val);
+    static std::string bytes(const size_t val);
 
 };
 

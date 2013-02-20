@@ -35,8 +35,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -51,9 +49,9 @@ class SimulatedAsset
     // maximum event date (restricted to simulation time horizon)
     Date maxdate;
     // reference to asset data
-    vector<DateValues>::const_iterator begin;
+    std::vector<DateValues>::const_iterator begin;
     // reference to asset data
-    vector<DateValues>::const_iterator end;
+    std::vector<DateValues>::const_iterator end;
 
 };
 

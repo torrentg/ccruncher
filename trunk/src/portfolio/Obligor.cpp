@@ -24,6 +24,9 @@
 #include <cmath>
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // copy constructor
 //===========================================================================

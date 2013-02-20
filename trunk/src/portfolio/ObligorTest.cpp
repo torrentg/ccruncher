@@ -24,6 +24,11 @@
 #include "portfolio/ObligorTest.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
+//---------------------------------------------------------------------------
+
 #define EPSILON 0.000001
 
 //===========================================================================

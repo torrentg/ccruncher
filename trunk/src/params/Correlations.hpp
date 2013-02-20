@@ -34,8 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -48,12 +46,12 @@ class Correlations : public ExpatHandlers
     // list of factors
     Factors factors;
     // matrix values
-    vector<vector<double> > matrix;
+    std::vector<std::vector<double> > matrix;
 
   private:
 
     // insert a new matrix value
-    void insertCorrelation(const string &r1, const string &r2, double val) throw(Exception);
+    void insertCorrelation(const std::string &r1, const std::string &r2, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
 
@@ -77,13 +75,13 @@ class Correlations : public ExpatHandlers
     // matrix size (= number of factors)
     int size() const;
     // matrix element access
-    const vector<double>& operator[] (int row) const;
+    const std::vector<double>& operator[] (int row) const;
     // return cholesky matrix of factors
     gsl_matrix * getCholesky() const throw(Exception);
     // return factor loadings
-    vector<double> getFactorLoadings() const;
+    std::vector<double> getFactorLoadings() const;
     // serializes object content as xml
-    string getXML(int) throw(Exception);
+    std::string getXML(int) throw(Exception);
 
 };
 

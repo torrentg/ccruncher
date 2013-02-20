@@ -32,8 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -52,16 +50,16 @@ class Segmentation : public ExpatHandlers
   private:
 
     // list of segments
-    vector<string> vsegments;
+    std::vector<std::string> vsegments;
     // enabled flag (true by default)
     bool enabled;
 
   private:
   
     // inserts a segment into the list
-    int insertSegment(const string &) throw(Exception);
+    int insertSegment(const std::string &) throw(Exception);
     // check name
-    bool isValidName(const string &);
+    bool isValidName(const std::string &);
 
   protected:
   
@@ -73,7 +71,7 @@ class Segmentation : public ExpatHandlers
   public:
 
     // segmentation name
-    string name;
+    std::string name;
     // type of components (obligors/assets)
     components_t components;
 
@@ -84,19 +82,19 @@ class Segmentation : public ExpatHandlers
     // return the number of segments
     int size() const;
     // returns i-th segment
-    const string& getSegment(int i) const;
+    const std::string& getSegment(int i) const;
     // return the index of the given segment
-    int indexOfSegment(const string &sname) const throw(Exception);
+    int indexOfSegment(const std::string &sname) const throw(Exception);
     // return the index of the given segment
     int indexOfSegment(const char *sname) const throw(Exception);
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
     // reset object content
     void reset();
     // returns enabled flag
     bool isEnabled() const;
     // return filename
-    string getFilename(const string &path) const;
+    std::string getFilename(const std::string &path) const;
 
 };
 

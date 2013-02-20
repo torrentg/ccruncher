@@ -31,8 +31,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -48,30 +46,30 @@ class File
   private:
 
     // normalize a string
-    static string normalize(const string &);
+    static std::string normalize(const std::string &);
 
   public:
 
     // normalize path
-    static string normalizePath(const string &) throw(Exception);
+    static std::string normalizePath(const std::string &) throw(Exception);
     // returns working directory
-    static string getWorkDir() throw(Exception);
+    static std::string getWorkDir() throw(Exception);
     // indicates if exist a directory
-    static bool existDir(const string &);
+    static bool existDir(const std::string &);
     // create a directory
-    static void makeDir(const string &) throw(Exception);
+    static void makeDir(const std::string &) throw(Exception);
     // indicates if a path is absolute
-    static bool isAbsolutePath(const string &);
+    static bool isAbsolutePath(const std::string &);
     // check file status
-    static void checkFile(const string &pathname, const string &smode) throw(Exception);
+    static void checkFile(const std::string &pathname, const std::string &smode) throw(Exception);
     // directory part of a filepath
-    static string dirname(const string &pathname);
+    static std::string dirname(const std::string &pathname);
     // file part of a filepath
-    static string filename(const string &pathname);
+    static std::string filename(const std::string &pathname);
     // create a file path using path and a file name
-    static string filepath(const string &path, const string &name);
+    static std::string filepath(const std::string &path, const std::string &name);
     // return file size in bytes
-    static size_t filesize(const string &filename);
+    static size_t filesize(const std::string &filename);
     
 };
 

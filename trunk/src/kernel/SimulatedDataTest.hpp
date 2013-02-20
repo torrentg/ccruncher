@@ -36,7 +36,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace ccruncher;
 namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
@@ -46,11 +45,11 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
 
   private:
 
-    Ratings getRatings();
-    Factors getFactors();
-    Segmentations getSegmentations();
-    Interest getInterest(const Date &);
-    vector<Obligor*> getObligors();
+    ccruncher::Ratings getRatings();
+    ccruncher::Factors getFactors();
+    ccruncher::Segmentations getSegmentations();
+    ccruncher::Interest getInterest(const ccruncher::Date &);
+    std::vector<ccruncher::Obligor*> getObligors();
     
     void test1();
 

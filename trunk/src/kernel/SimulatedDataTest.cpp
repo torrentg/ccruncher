@@ -27,6 +27,9 @@
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulatedDataTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // getRatings
 //===========================================================================

@@ -24,6 +24,9 @@
 #include "portfolio/Portfolio.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // default constructor
 //===========================================================================
