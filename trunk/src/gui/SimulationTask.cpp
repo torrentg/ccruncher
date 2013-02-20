@@ -2,8 +2,6 @@
 #include <QMessageBox>
 #include "gui/SimulationTask.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Logger.hpp"
-#include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/CsvFile.hpp"
 

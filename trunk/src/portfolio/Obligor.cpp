@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#include "portfolio/Obligor.hpp"
 #include <cmath>
+#include "portfolio/Obligor.hpp"
 #include <cassert>
 
 using namespace std;

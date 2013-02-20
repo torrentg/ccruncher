@@ -59,13 +59,13 @@
 
 //---------------------------------------------------------------------------
 
-// NAD = Not A Date = Date(0,0,0)
-static const long nad[1] = { 1721026L };
-#define NAD (*(const Date *) nad)
+namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-namespace ccruncher {
+// NAD = Not A Date = Date(0,0,0)
+static const long nad[1] = { 1721026L };
+#define NAD (*(const ccruncher::Date *) nad)
 
 //---------------------------------------------------------------------------
 

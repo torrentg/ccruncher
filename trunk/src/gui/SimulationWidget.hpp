@@ -2,7 +2,6 @@
 #define _SimulationWidget_
 
 #include <map>
-#include <vector>
 #include <fstream>
 #include <QUrl>
 #include <QWidget>

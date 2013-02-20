@@ -28,11 +28,10 @@
 #include "utils/config.h"
 #include <string>
 #include <vector>
-#include <iostream>
 #include <fstream>
-#include "kernel/SimulatedData.hpp"
 #include "utils/Exception.hpp"
 #include "params/Segmentation.hpp"
+#include "params/Segmentations.hpp"
 
 //---------------------------------------------------------------------------
 

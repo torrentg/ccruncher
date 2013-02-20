@@ -9,7 +9,6 @@
 #include "gui/DefinesDialog.hpp"
 #include "gui/FindDefines.hpp"
 #include "utils/Format.hpp"
-#include "utils/Utils.hpp"
 
 using namespace std;
 using namespace ccruncher;

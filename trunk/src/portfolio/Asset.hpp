@@ -26,9 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <cmath>
 #include <vector>
-#include <algorithm>
 #include "params/Interest.hpp"
 #include "params/Segmentations.hpp"
 #include "utils/Exception.hpp"
@@ -36,7 +34,6 @@
 #include "utils/ExpatHandlers.hpp"
 #include "portfolio/DateValues.hpp"
 #include "portfolio/Recovery.hpp"
-#include <cassert>
 
 //---------------------------------------------------------------------------
 

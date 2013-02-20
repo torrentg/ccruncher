@@ -22,7 +22,6 @@
 
 #include <cmath>
 #include <algorithm>
-#include <gsl/gsl_linalg.h>
 #include <gsl/gsl_cdf.h>
 #include "kernel/Inverses.hpp"
 #include "utils/Format.hpp"
