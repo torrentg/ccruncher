@@ -38,34 +38,35 @@ using namespace ccruncher;
 void ccruncher_test::TimerTest::test1()
 {
   double t1;
-  double x = 2.1;
   Timer timer;
 
   ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
   timer.start();
 
-  // making some stuff
-  for(int i=0;i<NUMOPS;i++)
-  {
-    x = cos(x);
-  }
+  /*
+    waiting 1 second.
+    this is not exactly true because time_t has a
+    resolution of 1 second and trunc/round current
+    value. eg: 1043832.4 sec -> 1043832
+    if we add 1 second and wait, then we observe
+    an ellapsed time of 0.6 seconds.
+  */
+  time_t time1 = time(0) + 1;
+  while (time(0) < time1);
 
   timer.stop();
   t1 = timer.read();
-  ASSERT(x != 2.1);
   ASSERT(0.0 < t1);
 
-  // reusing the timer (without lost acumulated time)
+  // reusing the timer (without lossing acumulated time)
   timer.resume();
 
-  // making more stuff
-  for(int i=0;i<NUMOPS;i++) {
-    x = cos(x);
-  }
+  // waiting 1 second
+  time_t time2 = time(0) + 1;
+  while (time(0) < time2);
 
   // stopping the timer
   timer.stop();
-  ASSERT(x != 2.1);
   ASSERT(t1 < timer.read());
 
   // reseting timer (acumulated time = 0 seconds)
