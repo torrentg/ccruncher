@@ -36,8 +36,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -71,20 +69,20 @@ class DefaultProbabilities : public ExpatHandlers
     // initial date
     Date date;
     // default probabilities for each rating
-    vector<vector<pd> > ddata;
+    std::vector<std::vector<pd> > ddata;
     // ratings table
     Ratings ratings;
     // index of default rating
     int indexdefault;
     // cubic spline engines
-    vector<gsl_spline *> splines;
+    std::vector<gsl_spline *> splines;
     // splines accelerators
-    vector<gsl_interp_accel *> accels;
+    std::vector<gsl_interp_accel *> accels;
 
   private:
 
     // insert a data value
-    void insertValue(const string &r1, const Date &t, double val) throw(Exception);
+    void insertValue(const std::string &r1, const Date &t, double val) throw(Exception);
     // validate object content
     void validate() throw(Exception);
     // set splines
@@ -116,7 +114,7 @@ class DefaultProbabilities : public ExpatHandlers
     // constructor
     DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
     // constructor
-    DefaultProbabilities(const Ratings &, const Date &d, const vector<Date> &dates, const vector<vector<double> > &values) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double> > &values) throw(Exception);
     // destructor
     ~DefaultProbabilities();
     // assignment operator
@@ -142,11 +140,11 @@ class DefaultProbabilities : public ExpatHandlers
     // return maximum defined date
     Date getMaxDate(int irating) const;
     // return days where dprob is defined
-    vector<int> getDays(int irating) const;
+    std::vector<int> getDays(int irating) const;
     // return type of interpolation
-    string getInterpolationType(int i) const;
+    std::string getInterpolationType(int i) const;
     // serialize object content as xml
-    string getXML(int) throw(Exception);
+    std::string getXML(int) throw(Exception);
 
 };
 

@@ -28,6 +28,8 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
+using namespace std;
+
 #define BUFFER_SIZE 128*1024
 #define MAX_FIELD_SIZE 40
 

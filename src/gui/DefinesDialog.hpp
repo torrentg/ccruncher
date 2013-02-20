@@ -2,9 +2,8 @@
 #define _DefinesDialog_
 
 #include <map>
+#include <string>
 #include <QDialog>
-
-using namespace std;
 
 namespace Ui {
 class DefinesDialog;
@@ -19,16 +18,16 @@ class DefinesDialog : public QDialog
     // dialog widgets
     Ui::DefinesDialog *ui;
     // defines
-    map<string,string> defines;
+    std::map<std::string,std::string> defines;
 
   public:
 
     // constructor
-    explicit DefinesDialog(QWidget *parent, const map<string, string> &);
+    explicit DefinesDialog(QWidget *parent, const std::map<std::string, std::string> &);
     // destructor
     ~DefinesDialog();
     // return content
-    const map<string,string> & getDefines() const;
+    const std::map<std::string,std::string> & getDefines() const;
 
   public slots:
 

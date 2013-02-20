@@ -32,8 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -44,9 +42,9 @@ class Segmentations : public ExpatHandlers
   private:
 
     // list of enabled segmentations
-    vector<Segmentation> enabled;
+    std::vector<Segmentation> enabled;
     // list of disabled segmentations
-    vector<Segmentation> disabled;
+    std::vector<Segmentation> disabled;
     // auxiliary variable (used by parser)
     Segmentation auxsegmentation;
 
@@ -73,11 +71,11 @@ class Segmentations : public ExpatHandlers
     // [] operator (i>=0 -> enabled, i<0 -> disabled)
     const Segmentation& getSegmentation(int i) const;
     // return the index of the given segmentation
-    int indexOfSegmentation(const string &sname) const throw(Exception);
+    int indexOfSegmentation(const std::string &sname) const throw(Exception);
     // return the index of the given segmentation
     int indexOfSegmentation(const char *sname) const throw(Exception);
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

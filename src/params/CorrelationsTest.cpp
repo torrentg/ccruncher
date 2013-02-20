@@ -25,6 +25,9 @@
 #include "params/CorrelationsTest.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-14

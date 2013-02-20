@@ -29,6 +29,9 @@
 #include "utils/ExpatParser.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 #define BUFFER_SIZE 128*1024
 
 //===========================================================================

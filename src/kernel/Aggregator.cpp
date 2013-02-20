@@ -27,6 +27,8 @@
 #endif
 #include <cassert>
 
+using namespace std;
+
 //===========================================================================
 // constructor
 // note: we don't diferentiate between asset-segmentations or obligor-segmentations

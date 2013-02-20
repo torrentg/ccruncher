@@ -24,11 +24,12 @@
 #include "portfolio/Exposure.hpp"
 #include "portfolio/ExposureTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-14
-
-using namespace ccruncher;
 
 //===========================================================================
 // test1. constructors

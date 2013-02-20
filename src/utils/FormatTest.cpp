@@ -25,6 +25,7 @@
 #include "utils/FormatTest.hpp"
 
 using namespace std;
+using namespace ccruncher;
 
 //---------------------------------------------------------------------------
 

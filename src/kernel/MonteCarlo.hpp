@@ -43,8 +43,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -62,15 +60,15 @@ class MonteCarlo
     // logger
     Logger log;
     // list of simulated obligors
-    vector<SimulatedObligor> obligors;
+    std::vector<SimulatedObligor> obligors;
     // list of simulated assets
-    vector<SimulatedAsset> assets;
+    std::vector<SimulatedAsset> assets;
     // segmentations indexes per asset
-    vector<unsigned short> segments;
+    std::vector<unsigned short> segments;
     // datevalues list
-    vector<DateValues> datevalues;
+    std::vector<DateValues> datevalues;
     // list of aggregators
-    vector<Aggregator *> aggregators;
+    std::vector<Aggregator *> aggregators;
     // maximum number of iterations
     int maxiterations;
     // maximum execution time
@@ -86,9 +84,9 @@ class MonteCarlo
     // factors cholesky matrix
     gsl_matrix *chol;
     // factor loadings (w_i)
-    vector<double> floadings1;
+    std::vector<double> floadings1;
     // factor loadings (sqrt(1-w_i^2))
-    vector<double> floadings2;
+    std::vector<double> floadings2;
     // antithetic method flag
     bool antithetic;
     // latin hypercube sample size
@@ -98,7 +96,7 @@ class MonteCarlo
     // hash (0=non show hashes) (default=0)
     size_t hash;
     // directory for output files
-    string fpath;
+    std::string fpath;
     // output file mode (a=append, w=overwrite, c=create)
     char fmode;
     // time account
@@ -106,7 +104,7 @@ class MonteCarlo
     // ellapsed time writting data to disk
     Timer timer3;
     // simulation threads
-    vector<SimulationThread*> threads;
+    std::vector<SimulationThread*> threads;
     // number of iterations done
     int numiterations;
     // number of finished threads
@@ -116,7 +114,7 @@ class MonteCarlo
     // stop flag
     bool *stop;
     // indexes.csv file
-    ofstream findexes;
+    std::ofstream findexes;
 
   private:
   
@@ -133,7 +131,7 @@ class MonteCarlo
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // append simulation result
-    bool append(int ithread, size_t ilhs, bool reversed, const vector<vector<double> > &) throw();
+    bool append(int ithread, size_t ilhs, bool reversed, const std::vector<std::vector<double> > &) throw();
     // non-copyable class
     MonteCarlo(const MonteCarlo &);
     // non-copyable class
@@ -142,11 +140,11 @@ class MonteCarlo
   public:
 
     // constructor
-    MonteCarlo(streambuf *s=NULL);
+    MonteCarlo(std::streambuf *s=NULL);
     // destructor
     ~MonteCarlo();
     // set path for output files
-    void setFilePath(const string &path, char mode, bool indexes=false) throw(std::exception);
+    void setFilePath(const std::string &path, char mode, bool indexes=false) throw(std::exception);
     // initiliaze this class
     void setData(IData &) throw(Exception);
     // execute Monte Carlo

@@ -2,6 +2,9 @@
 #include "gui/FindDefines.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // constructor
 //===========================================================================

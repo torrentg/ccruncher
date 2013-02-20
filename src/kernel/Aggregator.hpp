@@ -36,8 +36,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -50,7 +48,7 @@ class Aggregator
     // segmentation object
     Segmentation segmentation;
     // output file stream
-    ofstream fout;
+    std::ofstream fout;
     // number of segments
     int numsegments;
     // indicates if unassigned segment is used
@@ -66,11 +64,11 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(const vector<unsigned short> &, int , const Segmentations &, const string &, char) throw(Exception);
+    Aggregator(const std::vector<unsigned short> &, int , const Segmentations &, const std::string &, char) throw(Exception);
     // destructor
     ~Aggregator();
     // append data to aggregator
-    void append(const vector<double> &) throw(Exception);
+    void append(const std::vector<double> &) throw(Exception);
     // force flush data to disk
     void flush() throw(Exception);
     // return the number of segments

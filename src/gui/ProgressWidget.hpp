@@ -7,8 +7,6 @@
 #include <QPaintEvent>
 #include "ui_ProgressWidget.h"
 
-using namespace std;
-
 class ProgressWidget : public QWidget
 {
     Q_OBJECT

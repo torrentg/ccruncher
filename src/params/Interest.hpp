@@ -34,8 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -59,7 +57,7 @@ class Interest : public ExpatHandlers
       public:
 
         // time (as string)
-        string t_str;
+        std::string t_str;
         // time (in days from interest curve date)
         int d;
         // time (in years from interest curve date)
@@ -70,7 +68,7 @@ class Interest : public ExpatHandlers
       public:
 
         // constructor
-        Rate(int d_, double y_=0.0, double r_=0.0, const string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
+        Rate(int d_, double y_=0.0, double r_=0.0, const std::string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
         // comparator
         bool operator< (const Rate &right ) const { return (d < right.d); }
     };
@@ -82,7 +80,7 @@ class Interest : public ExpatHandlers
     // interest curve date
     Date date;
     // rate values
-    vector<Rate> rates;
+    std::vector<Rate> rates;
     // spline type
     bool is_cubic_spline;
     // spline curve
@@ -127,7 +125,7 @@ class Interest : public ExpatHandlers
     // returns upsilon value
     double getFactor(const Date &date1) const;
     // serialize object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

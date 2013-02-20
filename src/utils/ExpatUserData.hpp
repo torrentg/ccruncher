@@ -34,7 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -63,7 +62,7 @@ class ExpatUserData
     // expat xml parser
     XML_Parser xmlparser;
     // stack of handlers
-    vector<ExpatUserDataToken> pila;
+    std::vector<ExpatUserDataToken> pila;
     // current handler
     int pila_pos;
     // current tag (used by ExpatParser)
@@ -85,7 +84,7 @@ class ExpatUserData
   public:
 
     // user replaces
-    map<string,string> defines;
+    std::map<std::string,std::string> defines;
     // apply defines to the given string
     const char* applyDefines(const char *str);
 

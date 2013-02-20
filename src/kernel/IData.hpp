@@ -48,8 +48,6 @@
 
 #define STDIN_FILENAME "<stdin>"
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -62,11 +60,11 @@ class IData : public ExpatHandlers
     // logger
     Logger log;
     // configuration filename
-    string filename;
+    std::string filename;
     // simulation title
-    string title;
+    std::string title;
     // simulation description
-    string description;
+    std::string description;
     // simulation parameters
     Params params;
     // simulation yield interest
@@ -105,11 +103,11 @@ class IData : public ExpatHandlers
     // validate simulation data
     void validate() throw(Exception);
     // parse data
-    void parse(gzFile file, const map<string,string> &m) throw(Exception);
+    void parse(gzFile file, const std::map<std::string,std::string> &m) throw(Exception);
     // parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
     // check define
-    void checkDefine(const string &key, const string &value) const throw(Exception);
+    void checkDefine(const std::string &key, const std::string &value) const throw(Exception);
 
   protected:
   
@@ -123,15 +121,15 @@ class IData : public ExpatHandlers
   public:
 
     // default constructor
-    IData(streambuf *s=NULL);
+    IData(std::streambuf *s=NULL);
     // destructor
     ~IData();
     // initialize content
-    void init(const string &filename, const map<string,string> &m=map<string,string>(), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
+    void init(const std::string &filename, const std::map<std::string,std::string> &m=std::map<std::string,std::string>(), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
     // returns simulation title
-    const string &getTitle() const;
+    const std::string &getTitle() const;
     // returns simulation description
-    const string & getDescription() const;
+    const std::string & getDescription() const;
     // returns simulation params
     Params & getParams();
     // returns simulation yield interest

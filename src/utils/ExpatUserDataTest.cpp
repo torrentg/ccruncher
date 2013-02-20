@@ -23,6 +23,7 @@
 #include "utils/ExpatUserData.hpp"
 #include "utils/ExpatUserDataTest.hpp"
 
+using namespace std;
 using namespace ccruncher;
 
 //===========================================================================

@@ -24,6 +24,9 @@
 #include "utils/ExpatUserData.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // void constructor (don't use)
 //===========================================================================

@@ -13,8 +13,6 @@
 #include "gui/AnalysisTask.hpp"
 #include "gui/ProgressWidget.hpp"
 
-using namespace std;
-
 // forward definitions
 class QwtPlotMagnifier;
 class QwtPlotPanner;

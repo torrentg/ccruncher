@@ -24,11 +24,12 @@
 #include "portfolio/Recovery.hpp"
 #include "portfolio/RecoveryTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-14
-
-using namespace ccruncher;
 
 //===========================================================================
 // test1. constructors

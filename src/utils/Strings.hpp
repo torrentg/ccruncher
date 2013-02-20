@@ -31,7 +31,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -47,17 +46,17 @@ class Strings
   public:
 
     // tokenize a string
-    static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ");
+    static void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters = " ");
     // trim
-    static string trim(const string &s);
+    static std::string trim(const std::string &s);
     // converts to upper case
-    static string uppercase(const string &str);
+    static std::string uppercase(const std::string &str);
     // converts to lower case
-    static string lowercase(const string &str);
+    static std::string lowercase(const std::string &str);
     // creates a filler with the given char
-    static string filler(int, char);
+    static std::string filler(int, char);
     // returns a blank string with the given length
-    static string blanks(int);
+    static std::string blanks(int);
 };
 
 //---------------------------------------------------------------------------

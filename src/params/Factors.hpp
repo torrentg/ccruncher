@@ -34,8 +34,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -49,19 +47,19 @@ class Factors : public ExpatHandlers
     struct Factor
     {
         // factor name
-        string name;
+        std::string name;
         // factor description
-        string desc;
+        std::string desc;
         // factor loading
         double loading;
         // constructor
-        Factor(const string &n="", const string &d="", double v=NAN) : name(n), desc(d), loading(v) {}
+        Factor(const std::string &n="", const std::string &d="", double v=NAN) : name(n), desc(d), loading(v) {}
     };
 
   private:
 
     // list of factors
-    vector<Factor> vfactors;
+    std::vector<Factor> vfactors;
 
   private:
   
@@ -85,15 +83,15 @@ class Factors : public ExpatHandlers
     int size() const;
     // return the index of the factor
     int getIndex(const char *name) const;
-    int getIndex(const string &name) const;
+    int getIndex(const std::string &name) const;
     // return factor name
-    const string& getName(int i) const;
+    const std::string& getName(int i) const;
     // return factor description
-    const string& getDescription(int i) const;
+    const std::string& getDescription(int i) const;
     // return factor loading
     double getLoading(int i) const;
     // returns object content as xml
-    string getXML(int) const throw(Exception);
+    std::string getXML(int) const throw(Exception);
 
 };
 

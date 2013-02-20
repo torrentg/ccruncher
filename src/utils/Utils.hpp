@@ -30,8 +30,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -47,9 +45,9 @@ class Utils
   public:
 
     // returns current timestamp in format dd/mm/yyyy hh:mm:ss
-    static string timestamp();
+    static std::string timestamp();
     // returns compilation options
-    static string getCompilationOptions();
+    static std::string getCompilationOptions();
     // returns random value based on current time
     static unsigned long trand();
     // return the number of cores

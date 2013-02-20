@@ -39,8 +39,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -70,11 +68,11 @@ class SimulationThread : public Thread
     // Monte Carlo parent
     MonteCarlo &montecarlo;
     // list of simulated obligors
-    const vector<SimulatedObligor> &obligors;
+    const std::vector<SimulatedObligor> &obligors;
     // list of simulated assets
-    const vector<SimulatedAsset> &assets;
+    const std::vector<SimulatedAsset> &assets;
     // segmentations indexes per asset
-    const vector<unsigned short> &segments;
+    const std::vector<unsigned short> &segments;
     // number of factors
     size_t numfactors;
     // degrees of freedom
@@ -84,9 +82,9 @@ class SimulationThread : public Thread
     // cholesky matrix
     const gsl_matrix *chol;
     // factor loadings [w_i]
-    const vector<double> &floadings1;
+    const std::vector<double> &floadings1;
     // factor loadings [sqrt(1-w_i^2)]
-    const vector<double> &floadings2;
+    const std::vector<double> &floadings2;
     // inverse functions
     const Inverses &inverses;
     // initial date
@@ -100,7 +98,7 @@ class SimulationThread : public Thread
     // number of segmentations
     int numsegmentations;
     // asset loss values by segmentation
-    vector<vector<double> > losses;
+    std::vector<std::vector<double> > losses;
     // elapsed time creating random numbers
     Timer timer1;
     // ellapsed time simulating obligors & segmentations
@@ -112,18 +110,18 @@ class SimulationThread : public Thread
     // number of lhs samples
     size_t lhs_num;
     // lh sample multivariate normal (factors)
-    vector<double> lhs_values_z;
+    std::vector<double> lhs_values_z;
     // lh sample chi square
-    vector<double> lhs_values_s;
+    std::vector<double> lhs_values_s;
     // auxiliar vector
-    vector<pair<double,size_t> > lhs_aux;
+    std::vector<std::pair<double,size_t> > lhs_aux;
     // current simulated multivariate distribution
-    vector<double> xvalues;
+    std::vector<double> xvalues;
 
   private:
 
     // comparator used to obtain ranks
-    static bool pcomparator(const pair<double,size_t> &o1, const pair<double,size_t> &o2);
+    static bool pcomparator(const std::pair<double,size_t> &o1, const std::pair<double,size_t> &o2);
     // generate random numbers
     void randomize() throw();
     // simule obligor

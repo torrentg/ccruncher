@@ -26,6 +26,9 @@
 #include "utils/ExpatParser.hpp"
 #include "utils/Date.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 0.00001

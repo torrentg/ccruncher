@@ -8,9 +8,6 @@
 #include "utils/CsvFile.hpp"
 #include "utils/Exception.hpp"
 
-using namespace std;
-using namespace ccruncher;
-
 struct statval
 {
   size_t iteration;
@@ -74,7 +71,7 @@ class AnalysisTask : public QThread
   private:
 
     // csv file
-    CsvFile csv;
+    ccruncher::CsvFile csv;
     // segment index
     size_t isegment;
     // number of bins (hist)
@@ -82,7 +79,7 @@ class AnalysisTask : public QThread
     // percentile (var, es)
     double percentile;
     // computed statistics (result)
-    vector<statval> statvals;
+    std::vector<statval> statvals;
     // histogram (result)
     gsl_histogram *hist;
     // number of procesed samples
@@ -96,25 +93,25 @@ class AnalysisTask : public QThread
     // stop flag
     bool stop_;
     // message error (if any)
-    string msgerr;
+    std::string msgerr;
 
   private:
 
     // value at risk
-    statval valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last);
+    statval valueAtRisk(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
     // expected shortfall
-    static statval expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last);
+    static statval expectedShortfall(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
 
     // set status
     void setStatus(status);
     // compute histogram
-    void runHistogram(const vector<double> &);
+    void runHistogram(const std::vector<double> &);
     // compute EL
-    void runExpectedLoss(const vector<double> &);
+    void runExpectedLoss(const std::vector<double> &);
     // compute VaR
-    void runValueAtRisk(vector<double> &);
+    void runValueAtRisk(std::vector<double> &);
     // compute ES
-    void runExpectedShortfall(vector<double> &);
+    void runExpectedShortfall(std::vector<double> &);
 
   public:
 
@@ -123,17 +120,17 @@ class AnalysisTask : public QThread
     // destructor
     ~AnalysisTask();
     // set csv filename
-    void setFilename(const QString &) throw(Exception);
+    void setFilename(const QString &) throw(ccruncher::Exception);
     // set data
     void setData(mode m, size_t isegment, double param=0.0);
     // return mode
     mode getMode() const;
     // return csvfile object
-    CsvFile& getCsvFile();
+    ccruncher::CsvFile& getCsvFile();
     // return histogram
     const gsl_histogram *getHistogram() const;
     // return statvals
-    const vector<statval>& getStatVals() const;
+    const std::vector<statval>& getStatVals() const;
     // return the current number of samples
     size_t getNumSamples() const;
     // task
@@ -145,7 +142,7 @@ class AnalysisTask : public QThread
     // return progress
     float getProgress();
     // return error
-    const string &getMsgErr() const;
+    const std::string &getMsgErr() const;
 
   signals:
 

@@ -4,6 +4,9 @@
 #include "gui/AnalysisTask.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 #define MJ_EPSILON 1e-12
 
 //===========================================================================

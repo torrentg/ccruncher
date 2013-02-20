@@ -14,8 +14,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -32,7 +30,7 @@ class Inverses
     // degrees of freedom (gaussian = negative or 0)
     double ndf;
     // cubic splines
-    vector<gsl_spline*> splines;
+    std::vector<gsl_spline*> splines;
 
   private:
 
@@ -43,9 +41,9 @@ class Inverses
     // set splines
     void setSplines(const DefaultProbabilities &dprobs) throw(Exception);
     // set spline
-    void setSpline(int irating, vector<int> &days, vector<double> &cache);
+    void setSpline(int irating, std::vector<int> &days, std::vector<double> &cache);
     // return the worst unaccurate day
-    int getWorstDay(int irating, vector<double> &cache);
+    int getWorstDay(int irating, std::vector<double> &cache);
 
   public:
 

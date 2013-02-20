@@ -26,6 +26,9 @@
 #include "params/DefaultProbabilitiesTest.hpp"
 #include "utils/ExpatParser.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 2E-5

@@ -32,8 +32,6 @@
 
 //---------------------------------------------------------------------------
 
-using namespace std;
-using namespace ccruncher;
 namespace ccruncher {
 
 //---------------------------------------------------------------------------
@@ -49,15 +47,15 @@ class Parser
   public:
 
     // convert string to int
-    static int intValue(const string &) throw(Exception);
+    static int intValue(const std::string &) throw(Exception);
     // convert string to long
-    static long longValue(const string &) throw(Exception);
+    static long longValue(const std::string &) throw(Exception);
     // convert string to double
-    static double doubleValue(const string &) throw(Exception);
+    static double doubleValue(const std::string &) throw(Exception);
     // convert string to date
-    static Date dateValue(const string &) throw(Exception);
+    static Date dateValue(const std::string &) throw(Exception);
     // convert string to bool
-    static bool boolValue(const string &) throw(Exception);
+    static bool boolValue(const std::string &) throw(Exception);
     
     // convert string to int
     static int intValue(const char *) throw(Exception);

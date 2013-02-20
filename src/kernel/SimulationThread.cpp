@@ -27,6 +27,8 @@
 #include "kernel/SimulationThread.hpp"
 #include <cassert>
 
+using namespace std;
+
 /*
    Note on LHS method
    ------------------

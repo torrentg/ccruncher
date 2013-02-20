@@ -24,6 +24,9 @@
 #include "utils/Timer.hpp"
 #include "utils/TimerTest.hpp"
 
+using namespace std;
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-14

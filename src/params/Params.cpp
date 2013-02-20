@@ -26,6 +26,9 @@
 #include "utils/Parser.hpp"
 #include <cassert>
 
+using namespace std;
+using namespace ccruncher;
+
 //===========================================================================
 // constructor
 //===========================================================================
