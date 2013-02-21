@@ -32,7 +32,6 @@ HEADERS += \
     src/utils/Utils.hpp \
     src/utils/Timer.hpp \
     src/utils/Thread.hpp \
-    src/utils/Strings.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
     src/utils/Format.hpp \
@@ -71,7 +70,6 @@ SOURCES += \
     src/utils/Utils.cpp \
     src/utils/Timer.cpp \
     src/utils/Thread.cpp \
-    src/utils/Strings.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \
     src/utils/Format.cpp \

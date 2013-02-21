@@ -143,8 +143,6 @@ class DefaultProbabilities : public ExpatHandlers
     std::vector<int> getDays(int irating) const;
     // return type of interpolation
     std::string getInterpolationType(int i) const;
-    // serialize object content as xml
-    std::string getXML(int) throw(Exception);
 
 };
 

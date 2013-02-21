@@ -20,8 +20,10 @@
 //
 //===========================================================================
 
-#include <cstdio>
 #include <ctime>
+#include <cctype>
+#include <cstdio>
+#include <algorithm>
 #include "utils/Utils.hpp"
 #include <cassert>
 
@@ -120,5 +122,101 @@ int ccruncher::Utils::getNumCores()
 #else
     return sysconf(_SC_NPROCESSORS_ONLN);
 #endif
+}
+
+//===========================================================================
+// tokenize
+//===========================================================================
+void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const string& delimiters)
+{
+  // Skip delimiters at beginning.
+  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  // Find first "non-delimiter".
+  string::size_type pos = str.find_first_of(delimiters, lastPos);
+
+  while (string::npos != pos || string::npos != lastPos)
+  {
+     // Found a token, add it to the vector.
+     tokens.push_back(str.substr(lastPos, pos - lastPos));
+     // Skip delimiters.  Note the "not_of"
+     lastPos = str.find_first_not_of(delimiters, pos);
+     // Find next "non-delimiter"
+     pos = str.find_first_of(delimiters, lastPos);
+  }
+}
+
+//===========================================================================
+// trim
+//===========================================================================
+string ccruncher::Utils::trim(const string &s)
+{
+  if (s.length() == 0) return "";
+
+  int pos1 = s.length()-1;
+  for(int i=0; i<(int)s.length(); i++) {
+    if (!isspace(s[i])) {
+      pos1=i;
+      break;
+    }
+  }
+
+  int pos2 = 0;
+  for(int i=(int)s.length()-1; i>=0; i--) {
+    if (!isspace(s[i])) {
+      pos2=i;
+      break;
+    }
+  }
+
+  if (pos2 < pos1) {
+    return "";
+  }
+  else if (pos1 == pos2) {
+    if (isspace(s[pos1])) return "";
+    else return s.substr(pos1,1);
+  }
+  else {
+    return s.substr(pos1,pos2-pos1+1);
+  }
+}
+
+//===========================================================================
+// uppercase
+//===========================================================================
+string ccruncher::Utils::uppercase(const string &str)
+{
+  string res = str;
+
+  transform(res.begin(), res.end(), res.begin(), (int(*)(int)) toupper);
+
+  return res;
+}
+
+//===========================================================================
+// lowercase
+//===========================================================================
+string ccruncher::Utils::lowercase(const string &str)
+{
+  string res = str;
+
+  transform(res.begin(), res.end(), res.begin(), (int(*)(int)) tolower);
+
+  return res;
+}
+
+//===========================================================================
+// filler
+//===========================================================================
+string ccruncher::Utils::filler(int n, char c)
+{
+  return string(n, c);
+}
+
+//===========================================================================
+// blanks
+//===========================================================================
+string ccruncher::Utils::blanks(int n)
+{
+  return filler(n, ' ');
 }
 

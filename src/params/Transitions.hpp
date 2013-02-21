@@ -99,8 +99,6 @@ class Transitions : public ExpatHandlers
     double getRegularizationError() const;
     // matrix element access
     const std::vector<double>& operator[] (int row) const;
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 

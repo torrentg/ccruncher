@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include "params/Segmentation.hpp"
-#include "utils/Strings.hpp"
 #include "utils/File.hpp"
 #include <cassert>
 
@@ -214,27 +213,3 @@ string ccruncher::Segmentation::getFilename(const string &path) const
   return File::normalizePath(path) + name + ".csv";
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Segmentation::getXML(int ilevel) const throw(Exception)
-{
-  string spc = Strings::blanks(ilevel);
-  string ret = "";
-
-  ret += spc + "<segmentation name='" + name + "' components='";
-  ret += (components==asset?"asset":"obligor");
-  ret += "'>\n";
-
-  for (unsigned int i=0;i<vsegments.size();i++)
-  {
-    if (vsegments[i] != "unassigned")
-    {
-      ret += Strings::blanks(ilevel+2) + "<segment name='" + vsegments[i] + "'/>\n";
-    }
-  }
-
-  ret += spc + "</segmentation>\n";
-
-  return ret;
-}

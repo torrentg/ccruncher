@@ -27,6 +27,7 @@
 
 #include "utils/config.h"
 #include <string>
+#include <vector>
 
 //---------------------------------------------------------------------------
 
@@ -52,6 +53,18 @@ class Utils
     static unsigned long trand();
     // return the number of cores
     static int getNumCores();
+    // tokenize a string
+    static void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters = " ");
+    // trims a string
+    static std::string trim(const std::string &s);
+    // converts to upper case
+    static std::string uppercase(const std::string &str);
+    // converts to lower case
+    static std::string lowercase(const std::string &str);
+    // creates a filler with the given char
+    static std::string filler(int, char);
+    // returns a blank string with the given length
+    static std::string blanks(int);
 
 };
 

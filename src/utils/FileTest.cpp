@@ -23,6 +23,7 @@
 #include "utils/File.hpp"
 #include "utils/FileTest.hpp"
 
+using namespace std;
 using namespace ccruncher;
 
 //===========================================================================

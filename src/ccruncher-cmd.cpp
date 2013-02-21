@@ -43,7 +43,6 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 //---------------------------------------------------------------------------
@@ -148,8 +147,8 @@ int main(int argc, char *argv[])
               cerr << "use --help option for more information" << endl;
               return 1;
             }
-            string key = Strings::trim(str.substr(0, pos));
-            string value = Strings::trim(str.substr(pos+1));
+            string key = Utils::trim(str.substr(0, pos));
+            string value = Utils::trim(str.substr(pos+1));
             if (key.length() == 0 || value.length() == 0) {
               cerr << "error parsing arguments (define with invalid format)" << endl;
               cerr << "use --help option for more information" << endl;
@@ -230,8 +229,8 @@ int main(int argc, char *argv[])
 
       default: // unexpected error
           cerr << 
-                  "unexpected error parsing arguments. Please report this bug sending input\n"
-                  "file, ccruncher version and arguments at gtorrent@ccruncher.net\n" << endl;
+            "unexpected error parsing arguments. Please report this bug sending input\n"
+            "file, ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
           return 1;
     }
   }
@@ -381,9 +380,9 @@ void help()
   "Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]\n"
   "\n"
   "Simule the loss distribution of the credit portfolio described in the xml\n"
-  "input FILE using the  Monte Carlo method. FILE can be gziped. If no one is\n"
-  "given, then STDIN is considered. The input file format description and the\n"
-  "details of the simulation procedure can  be found at http://www.ccruncher.net.\n"
+  "input FILE using the Monte Carlo method. FILE can be gziped. If no one is\n"
+  "given, then STDIN is considered. The input file format description and\n"
+  "details of the simulation procedure can be found at http://www.ccruncher.net.\n"
   "\n"
   "Mandatory arguments to long options are mandatory for short options too.\n"
   "\n"

@@ -87,8 +87,6 @@ class Segmentation : public ExpatHandlers
     int indexOfSegment(const std::string &sname) const throw(Exception);
     // return the index of the given segment
     int indexOfSegment(const char *sname) const throw(Exception);
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
     // reset object content
     void reset();
     // returns enabled flag

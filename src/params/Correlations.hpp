@@ -80,8 +80,6 @@ class Correlations : public ExpatHandlers
     gsl_matrix * getCholesky() const throw(Exception);
     // return factor loadings
     std::vector<double> getFactorLoadings() const;
-    // serializes object content as xml
-    std::string getXML(int) throw(Exception);
 
 };
 

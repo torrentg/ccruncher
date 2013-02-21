@@ -22,7 +22,6 @@
 
 #include <cstring>
 #include "utils/Logger.hpp"
-#include "utils/Strings.hpp"
 #include "utils/Utils.hpp"
 #include <cassert>
 
@@ -93,10 +92,10 @@ void ccruncher::Logger::flood(char c)
 void ccruncher::Logger::center(const string &str)
 {
   vector<string> lines;
-  Strings::tokenize(str, lines, "\n");
+  Utils::tokenize(str, lines, "\n");
   for(size_t i=0; i<lines.size(); i++)
   {
-    string line = Strings::trim(lines[i]);
+    string line = Utils::trim(lines[i]);
     if (line.empty()) {
       *this << endl;
       continue;

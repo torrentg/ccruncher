@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include "params/Ratings.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 using namespace std;
@@ -163,27 +162,3 @@ void ccruncher::Ratings::validations() throw(Exception)
   }
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Ratings::getXML(int ilevel) const throw(Exception)
-{
-  string spc = Strings::blanks(ilevel);
-  string ret = "";
-
-  ret += spc + "<ratings>\n";
-
-  for (unsigned int i=0;i<vratings.size();i++)
-  {
-    ret += Strings::blanks(ilevel+2);
-    ret += "<rating ";
-    ret += "name='" + vratings[i].name + "' ";
-    if (vratings[i].desc != "")
-    ret += "description='" + vratings[i].desc + "'";
-    ret += "/>\n";
-  }
-
-  ret += spc + "</ratings>\n";
-
-  return ret;
-}

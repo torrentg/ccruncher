@@ -124,8 +124,6 @@ class Interest : public ExpatHandlers
     double getValue(const Date &date1) const;
     // returns upsilon value
     double getFactor(const Date &date1) const;
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 

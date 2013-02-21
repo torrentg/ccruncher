@@ -26,7 +26,6 @@
 #include <gsl/gsl_errno.h>
 #include "params/DefaultProbabilities.hpp"
 #include "utils/Format.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 using namespace std;
@@ -675,34 +674,6 @@ double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, doub
   else {
     return inverse_linear(spline, y, accel);
   }
-}
-
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::DefaultProbabilities::getXML(int ilevel) throw(Exception)
-{
-  string spc1 = Strings::blanks(ilevel);
-  string spc2 = Strings::blanks(ilevel+2);
-  string ret = "";
-
-  ret += spc1 + "<dprobs>\n";
-
-  for(int i=0; i<ratings.size(); i++)
-  {
-    for(unsigned int j=0; j<ddata[i].size(); j++)
-    {
-      ret += spc2 + "<dprob ";
-      ret += "rating='" + ratings.getName(i) + "' ";
-      ret += "t='" + Format::toString(ddata[i][j].day) + "D' ";
-      ret += "value='" + Format::toString(100.0*ddata[i][j].prob) + "%'";
-      ret += "/>\n";
-    }
-  }
-
-  ret += spc1 + "</dprobs>\n";
-
-  return ret;
 }
 
 //===========================================================================

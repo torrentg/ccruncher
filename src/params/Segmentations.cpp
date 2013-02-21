@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include "params/Segmentations.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 using namespace std;
@@ -204,26 +203,3 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Segmentations::getXML(int ilevel) const throw(Exception)
-{
-  string spc = Strings::blanks(ilevel);
-  string ret = "";
-
-  ret += spc + "<segmentations>\n";
-
-  for (size_t i=0; i<enabled.size(); i++)
-  {
-    ret += enabled[i].getXML(ilevel+2);
-  }
-  for (size_t i=0; i<disabled.size(); i++)
-  {
-    ret += disabled[i].getXML(ilevel+2);
-  }
-
-  ret += spc + "</segmentations>\n";
-
-  return ret;
-}
