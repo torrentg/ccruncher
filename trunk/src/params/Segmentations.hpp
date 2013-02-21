@@ -26,9 +26,11 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <string>
+#include <vector>
+#include "params/Segmentation.hpp"
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "params/Segmentation.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -74,8 +76,6 @@ class Segmentations : public ExpatHandlers
     int indexOfSegmentation(const std::string &sname) const throw(Exception);
     // return the index of the given segmentation
     int indexOfSegmentation(const char *sname) const throw(Exception);
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 

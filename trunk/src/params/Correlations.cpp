@@ -24,7 +24,6 @@
 #include <gsl/gsl_linalg.h>
 #include "params/Correlations.hpp"
 #include "utils/Format.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 using namespace std;
@@ -179,34 +178,6 @@ void ccruncher::Correlations::validate() throw(Exception)
       }
     }
   }
-}
-
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Correlations::getXML(int ilevel) throw(Exception)
-{
-  string spc1 = Strings::blanks(ilevel);
-  string spc2 = Strings::blanks(ilevel+2);
-  string ret = "";
-
-  ret += spc1 + "<correlations>\n";
-
-  for(int i=0; i<size(); i++)
-  {
-    for(int j=i+1; j<size(); j++)
-    {
-      ret += spc2 + "<correlation ";
-      ret += "factor1='" + factors.getName(i) + "' ";
-      ret += "factor2='" + factors.getName(j) + "' ";
-      ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
-      ret += "/>\n";
-    }
-  }
-
-  ret += spc1 + "</correlations>\n";
-
-  return ret;
 }
 
 //===========================================================================

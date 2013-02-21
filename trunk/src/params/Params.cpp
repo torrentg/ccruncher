@@ -21,8 +21,6 @@
 //===========================================================================
 
 #include "params/Params.hpp"
-#include "utils/Strings.hpp"
-#include "utils/Format.hpp"
 #include "utils/Parser.hpp"
 #include <cassert>
 
@@ -266,26 +264,3 @@ void ccruncher::Params::validate() const throw(Exception)
   }
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Params::getXML(int ilevel) const throw(Exception)
-{
-  string spc1 = Strings::blanks(ilevel);
-  string spc2 = Strings::blanks(ilevel+2);
-  string ret = "";
-
-  ret += spc1 + "<parameters>\n";
-  ret += spc2 + "<parameter name='time.0' value='" + Format::toString(time0) + "'/>\n";
-  ret += spc2 + "<parameter name='time.T' value='" + Format::toString(timeT) + "'/>\n";
-  ret += spc2 + "<parameter name='stopcriteria.maxiterations' value='" + Format::toString(maxiterations) + "'/>\n";
-  ret += spc2 + "<parameter name='stopcriteria.maxseconds' value='" + Format::toString(maxseconds) + "'/>\n";
-  ret += spc2 + "<parameter name='copula.type' value='" + copula_type + "'/>\n";
-  ret += spc2 + "<parameter name='rng.seed' value='" + Format::toString(rng_seed) + "'/>\n";
-  ret += spc2 + "<parameter name='antithetic' value='" + Format::toString(antithetic) + "'/>\n";
-  ret += spc2 + "<parameter name='lhs' value='" + (lhs_size==1?"false":Format::toString(lhs_size)) + "'/>\n";
-  ret += spc2 + "<parameter name='portfolio.onlyActiveObligors' value='" + Format::toString(onlyactive) + "'/>\n";
-  ret += spc1 + "</parameters>\n";
-
-  return ret;
-}

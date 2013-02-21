@@ -125,6 +125,7 @@ ostream & ccruncher::operator << (ostream& os, const Exception &e)
 #include <execinfo.h>    // Needed for backtrace
 #include <cxxabi.h>      // Needed for __cxa_demangle
 #include <unistd.h>
+#include <cstdlib>
 //===========================================================================
 // retrieveStackTrace
 //===========================================================================

@@ -40,6 +40,7 @@ class UtilsTest : public TestFixture<UtilsTest>
   private:
 
     void test1();
+    void test2();
 
 
   public:
@@ -47,6 +48,7 @@ class UtilsTest : public TestFixture<UtilsTest>
     TEST_FIXTURE(UtilsTest)
     {
       TEST_CASE(test1);
+      TEST_CASE(test2);
     }
 
 };

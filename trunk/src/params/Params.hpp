@@ -89,8 +89,6 @@ class Params : public ExpatHandlers
     static double getCopulaParam(const std::string &str) throw(Exception);
     // returns copula param (if exists)
     double getCopulaParam() const throw(Exception);
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 

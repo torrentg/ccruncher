@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include "params/Factors.hpp"
-#include "utils/Strings.hpp"
 #include <cassert>
 
 using namespace std;
@@ -180,27 +179,3 @@ void ccruncher::Factors::validations() throw(Exception)
   }
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Factors::getXML(int ilevel) const throw(Exception)
-{
-  string spc = Strings::blanks(ilevel);
-  string ret = "";
-
-  ret += spc + "<factors>\n";
-
-  for (unsigned int i=0;i<vfactors.size();i++)
-  {
-    ret += Strings::blanks(ilevel+2);
-    ret += "<factor ";
-    ret += "name='" + vfactors[i].name + "' ";
-    if (vfactors[i].desc != "")
-    ret += "description='" + vfactors[i].desc + "'";
-    ret += "/>\n";
-  }
-
-  ret += spc + "</factors>\n";
-
-  return ret;
-}

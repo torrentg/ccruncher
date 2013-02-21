@@ -23,7 +23,6 @@
 #include <cmath>
 #include "params/Transitions.hpp"
 #include "utils/Format.hpp"
-#include "utils/Strings.hpp"
 #include "utils/PowMatrix.hpp"
 #include <cassert>
 
@@ -236,34 +235,6 @@ void ccruncher::Transitions::validate() throw(Exception)
 int ccruncher::Transitions::getIndexDefault() const
 {
   return indexdefault;
-}
-
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Transitions::getXML(int ilevel) const throw(Exception)
-{
-  string spc1 = Strings::blanks(ilevel);
-  string spc2 = Strings::blanks(ilevel+2);
-  string ret = "";
-
-  ret += spc1 + "<transitions period='" + Format::toString(period) + "' >\n";
-
-  for(int i=0; i<size(); i++)
-  {
-    for(int j=0; j<size(); j++)
-    {
-      ret += spc2 + "<transition ";
-      ret += "from='" + ratings.getName(i) + "' ";
-      ret += "to='" + ratings.getName(j) + "' ";
-      ret += "value='" + Format::toString(100.0*matrix[i][j]) + "%'";
-      ret += "/>\n";
-    }
-  }
-
-  ret += spc1 + "</transitions>\n";
-
-  return ret;
 }
 
 //===========================================================================

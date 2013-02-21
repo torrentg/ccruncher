@@ -52,7 +52,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/File.cpp\
     ../src/utils/Date.cpp\
     ../src/utils/Timer.cpp\
-    ../src/utils/Strings.cpp\
     ../src/utils/ExpatParser.cpp\
     ../src/utils/ExpatUserData.cpp\
     ../src/utils/ExpatHandlers.cpp\
@@ -88,7 +87,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/File.hpp\
     ../src/utils/Date.hpp\
     ../src/utils/Timer.hpp\
-    ../src/utils/Strings.hpp\
     ../src/utils/ExpatParser.hpp\
     ../src/utils/ExpatUserData.hpp\
     ../src/utils/ExpatHandlers.hpp\
@@ -107,7 +105,6 @@ ccruncher_cmd_LDFLAGS =
 ccruncher_tests_SOURCES = \
     ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../src/ccruncher-tests.cpp\
-    ../src/utils/StringsTest.cpp\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
     ../src/utils/ParserTest.cpp\
@@ -135,7 +132,6 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/SimulatedDataTest.cpp\
     ../src/kernel/InversesTest.cpp\
     \
-    ../src/utils/Strings.cpp\
     ../src/utils/Timer.cpp\
     ../src/utils/Parser.cpp\
     ../src/utils/Logger.cpp\
@@ -171,7 +167,6 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/Aggregator.cpp\
     ../src/kernel/Inverses.cpp\
     \
-    ../src/utils/StringsTest.hpp\
     ../src/utils/TimerTest.hpp\
     ../src/utils/DateTest.hpp\
     ../src/utils/ParserTest.hpp\
@@ -199,7 +194,6 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/SimulatedDataTest.hpp\
     ../src/kernel/InversesTest.hpp\
     \
-    ../src/utils/Strings.hpp\
     ../src/utils/Timer.hpp\
     ../src/utils/Parser.hpp\
     ../src/utils/Logger.hpp\

@@ -23,7 +23,7 @@
 #include <cmath>
 #include <algorithm>
 #include "params/Interest.hpp"
-#include "utils/Strings.hpp"
+#include "utils/Utils.hpp"
 #include "utils/Format.hpp"
 #include <cassert>
 
@@ -270,8 +270,8 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
     }
     else if (getNumAttributes(attributes) <= 2)
     {
-      string str = Strings::trim(getStringAttribute(attributes, "type"));
-      str = Strings::lowercase(str);
+      string str = Utils::trim(getStringAttribute(attributes, "type"));
+      str = Utils::lowercase(str);
       if (str == "simple") {
         type = Simple;
       }
@@ -346,31 +346,3 @@ void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// getXML
-//===========================================================================
-string ccruncher::Interest::getXML(int ilevel) const throw(Exception)
-{
-  string spc = Strings::blanks(ilevel);
-  string ret = "";
-  string strtype = "";
-  
-  if (type == Simple) strtype = "simple";
-  else if (type == Continuous) strtype = "continuous";
-  else strtype = "compound";  
-  
-  ret += spc + "<interest type='" + strtype + "'>\n";;
-
-  for (unsigned int i=0; i<rates.size(); i++)
-  {
-    ret += Strings::blanks(ilevel+2);
-    ret += "<rate ";
-    ret += "t='" + rates[i].t_str + "' ";
-    ret += "r='" + Format::toString(100.0*rates[i].r) + "%'";
-    ret += "/>\n";
-  }
-
-  ret += spc + "</interest>\n";
-
-  return ret;
-}

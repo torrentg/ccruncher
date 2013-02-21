@@ -26,6 +26,7 @@
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"
 
+using namespace std;
 using namespace ccruncher;
 
 //===========================================================================
@@ -45,3 +46,31 @@ void ccruncher_test::UtilsTest::test1()
   long val2 = Utils::trand();
   ASSERT(val1 != val2);
 }
+
+//===========================================================================
+// test2
+//===========================================================================
+void ccruncher_test::UtilsTest::test2()
+{
+  vector<string> tokens;
+  string str1 = "  I Am A String Ready For Sacrifice  ";
+
+  Utils::tokenize(str1, tokens, " ");
+
+  ASSERT(7 == tokens.size());
+
+  ASSERT(tokens[0] == "I");
+  ASSERT(tokens[1] == "Am");
+  ASSERT(tokens[2] == "A");
+  ASSERT(tokens[3] == "String");
+  ASSERT(tokens[4] == "Ready");
+  ASSERT(tokens[5] == "For");
+  ASSERT(tokens[6] == "Sacrifice");
+
+  ASSERT("I Am A String Ready For Sacrifice" == Utils::trim(str1));
+  ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Utils::uppercase(str1));
+  ASSERT("  i am a string ready for sacrifice  " == Utils::lowercase(str1));
+  ASSERT("   " == Utils::blanks(3));
+  ASSERT("" == Utils::trim(" "));
+}
+

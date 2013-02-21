@@ -90,8 +90,6 @@ class Factors : public ExpatHandlers
     const std::string& getDescription(int i) const;
     // return factor loading
     double getLoading(int i) const;
-    // returns object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 

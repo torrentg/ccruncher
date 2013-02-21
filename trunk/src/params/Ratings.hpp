@@ -85,8 +85,6 @@ class Ratings : public ExpatHandlers
     const std::string& getName(int i) const;
     // return rating description
     const std::string& getDescription(int i) const;
-    // serialize object content as xml
-    std::string getXML(int) const throw(Exception);
 
 };
 
