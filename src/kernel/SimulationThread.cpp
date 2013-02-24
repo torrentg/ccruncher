@@ -179,7 +179,7 @@ void ccruncher::SimulationThread::rmvdist()
 //===========================================================================
 // comparator used to obtain rank
 //===========================================================================
-bool ccruncher::SimulationThread::pcomparator(const pair<double,size_t> &o1, const pair<double,size_t> &o2)
+inline bool ccruncher::SimulationThread::pcomparator(const pair<double,size_t> &o1, const pair<double,size_t> &o2)
 {
   return o1.first < o2.first;
 }

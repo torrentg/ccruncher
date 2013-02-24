@@ -1,3 +1,25 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004-2013 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//===========================================================================
+
 #include <iostream>
 #include <QFileDialog>
 #include <QFile>
@@ -6,9 +28,13 @@
 #include <QCleanlooksStyle>
 #include "ui_SimulationWidget.h"
 #include "gui/SimulationWidget.hpp"
+#include "gui/MainWindow.hpp"
 #include "gui/DefinesDialog.hpp"
 #include "gui/FindDefines.hpp"
+#include "kernel/MonteCarlo.hpp"
+#include "kernel/IData.hpp"
 #include "utils/Format.hpp"
+#include "utils/Utils.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -61,6 +87,9 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
   toolbar->addAction(actionDefines);
   toolbar->addAction(actionRun);
   toolbar->addAction(actionStop);
+
+  MainWindow *main = dynamic_cast<MainWindow*>(parent);
+  if (main != NULL) properties = main->getProperties();
 
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
@@ -231,9 +260,18 @@ void SimulationWidget::submit()
     }
 
     task.wait();
+
+    unsigned char ithreads = Utils::getNumCores();
+    if (properties.find("ithreads") != properties.end()) {
+      ithreads = (unsigned char)(properties["ithreads"].toInt());
+    }
+    bool indexes = false;
+    if (properties.find("indexes") != properties.end()) {
+      indexes = properties["indexes"].toBool();
+    }
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
-    task.setData(ifile, defines, odir);
+    task.setData(ifile, defines, odir, ithreads, indexes);
     bool rc = task.checkConflicts();
     if (rc) {
       if (fout.is_open()) fout.close();
