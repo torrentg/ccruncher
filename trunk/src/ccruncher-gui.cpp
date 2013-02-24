@@ -33,6 +33,8 @@
 #include <gsl/gsl_errno.h>
 #include <QApplication>
 #include <QTextCodec>
+#include <QVariant>
+#include <QMap>
 #include "gui/MainWindow.hpp"
 #include "gui/Application.hpp"
 #include "utils/Utils.hpp"
@@ -47,6 +49,7 @@ using namespace ccruncher;
 void help();
 void info();
 void version();
+void setnice(int niceval) throw(Exception);
 
 //===========================================================================
 // gsl error handler
@@ -67,8 +70,7 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 int main(int argc, char *argv[])
 {
   int inice = -999;
-  unsigned char ithreads = 0;
-  bool indexes = false;
+  QMap<QString,QVariant> properties;
 
   // short options
   const char* const options1 = "hi" ;
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
           return 0;
 
       case 'i': // -i --indexes
-          indexes = true;
+          properties["indexes"] = QVariant(true);
           break;
 
       case 301: // --version (show version and exit)
@@ -132,9 +134,12 @@ int main(int argc, char *argv[])
           try
           {
             string sthreads = string(optarg);
-            ithreads = Parser::intValue(sthreads);
+            int ithreads = Parser::intValue(sthreads);
             if (ithreads <= 0 || Utils::getNumCores() < ithreads) {
               throw Exception();
+            }
+            else {
+              properties["ithreads"] = QVariant(ithreads);
             }
           }
           catch(Exception &)
@@ -156,8 +161,7 @@ int main(int argc, char *argv[])
     }
   }
 
-
-  chdir("..");
+  //chdir("..");
 
   Application app(argc, argv);
   QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
@@ -168,8 +172,26 @@ int main(int argc, char *argv[])
   // run application
   try
   {
-    MainWindow w;
+    // setting new nice value (modify scheduling priority)
+    if (inice != -999) {
+      setnice(inice);
+    }
+
+    MainWindow w(properties);
     w.show();
+
+    // opening files given as argument
+    for(int i=optind; i<argc; i++)
+    {
+      QString filename(argv[i]);
+      QUrl url = QUrl::fromLocalFile(filename);
+      if (!filename.toLower().endsWith("csv")) {
+        url.setPath(url.toLocalFile());
+        url.setScheme("exec");
+      }
+      w.openFile(url);
+    }
+
     return app.exec();
   }
   catch (std::exception &e)
@@ -187,6 +209,32 @@ int main(int argc, char *argv[])
 }
 
 //===========================================================================
+// setnice
+//===========================================================================
+void setnice(int niceval) throw(Exception)
+{
+#if !defined(_WIN32)
+  if (niceval < PRIO_MIN || niceval > PRIO_MAX)
+  {
+    throw Exception("nice value out of range [" + Format::toString(PRIO_MIN) +
+                    ".." + Format::toString(PRIO_MAX) + "]");
+  }
+  else
+  {
+    if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
+    {
+      string msg = Format::toString(errno);
+      msg = (errno==ESRCH?"ESRCH":msg);
+      msg = (errno==EINVAL?"EINVAL":msg);
+      msg = (errno==EPERM?"EPERM":msg);
+      msg = (errno==EACCES?"EACCES":msg);
+      throw Exception("error changing process priority [" + msg + "]");
+    }
+  }
+#endif
+}
+
+//===========================================================================
 // help
 // follows POSIX guidelines as described in:
 // http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
@@ -201,7 +249,7 @@ void help()
   "Usage: ccruncher-gui [OPTION]... [FILE]...\n"
   "\n"
   "Simule the loss distribution of the credit portfolio described in the xml\n"
-  "input FILE using the Monte Carlo method. The input file format description and\n"
+  "input FILEs using the Monte Carlo method. The input file format description and\n"
   "details of the simulation procedure can be found at http://www.ccruncher.net.\n"
   "\n"
   "Mandatory arguments to long options are mandatory for short options too.\n"

@@ -1,3 +1,25 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004-2013 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//===========================================================================
+
 #ifndef _SimulationWidget_
 #define _SimulationWidget_
 
@@ -8,6 +30,8 @@
 #include <QString>
 #include <QTimer>
 #include <QMutex>
+#include <QMap>
+#include <QVariant>
 #include <QTextCursor>
 #include <QToolBar>
 #include <QAction>
@@ -56,6 +80,8 @@ class SimulationWidget : public MdiChildWidget
     QString odir;
     // log file output
     std::ofstream fout;
+    // default properties
+    QMap<QString,QVariant> properties;
 
   private:
 
@@ -78,7 +104,7 @@ class SimulationWidget : public MdiChildWidget
   public:
 
     // constructor
-    explicit SimulationWidget(const QString &filename, QWidget *parent = 0);
+    explicit SimulationWidget(const QString &filename, QWidget *parent=0);
     // destructor
     ~SimulationWidget();
     // virtual method implementation

@@ -1,12 +1,38 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004-2013 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//===========================================================================
+
 #ifndef _SimulationTask_
 #define _SimulationTask_
 
 #include <string>
 #include <map>
 #include <QThread>
-#include "kernel/IData.hpp"
-#include "kernel/MonteCarlo.hpp"
 #include "utils/Logger.hpp"
+
+// forward declaration
+namespace ccruncher {
+  class MonteCarlo;
+  class IData;
+}
 
 class SimulationTask : public QThread
 {
@@ -36,6 +62,10 @@ class SimulationTask : public QThread
     std::map<std::string,std::string> defines;
     // output file creation mode
     char fmode;
+    // indexes creation flag
+    bool indexes;
+    // number of threads
+    unsigned char ithreads;
     // data
     ccruncher::IData *idata;
     // simulator
@@ -63,7 +93,7 @@ class SimulationTask : public QThread
     // set streambuf
     void setStreamBuf(std::streambuf *);
     // set data info
-    void setData(const std::string &, const std::map<std::string,std::string> &, const std::string &);
+    void setData(const std::string &, const std::map<std::string,std::string> &, const std::string &, unsigned char, bool );
     // task
     void run();
     // stop current execution
