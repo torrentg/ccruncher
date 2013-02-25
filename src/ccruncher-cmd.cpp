@@ -211,9 +211,12 @@ int main(int argc, char *argv[])
           try
           {
             string sthreads = string(optarg);
-            ithreads = Parser::intValue(sthreads);
-            if (ithreads <= 0 || Utils::getNumCores() < ithreads) {
+            int num = Parser::intValue(sthreads);
+            if (num <= 0 || Utils::getNumCores() < num) {
               throw Exception();
+            }
+            else {
+              ithreads = (unsigned char)(num);
             }
           }
           catch(Exception &)

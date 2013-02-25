@@ -132,7 +132,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
 
     // trace defines
     map<string,string>::const_iterator it;
-    for (it=m.begin() ; it != m.end(); it++) {
+    for (it=m.begin() ; it != m.end(); ++it) {
       checkDefine((*it).first, (*it).second);
       log << "define (command line)" << split << (*it).first+"="+(*it).second << endl;
     }

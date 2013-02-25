@@ -171,10 +171,10 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
     }
 
     vector<int> nodes = dprobs.getDays(irating);
-    while(nodes.size() > 0 && nodes[0] < minday) nodes.erase(nodes.begin());
-    if (nodes.size() == 0 || nodes[0] != minday) nodes.insert(nodes.begin(), minday);
-    while(nodes.size() > 0 && nodes.back() > maxday) nodes.erase(nodes.end()-1);
-    if (nodes.size() == 0 || nodes.back() != maxday) nodes.insert(nodes.end(), maxday);
+    while(!nodes.empty() && nodes[0] < minday) nodes.erase(nodes.begin());
+    if (nodes.empty() || nodes[0] != minday) nodes.insert(nodes.begin(), minday);
+    while(!nodes.empty() && nodes.back() > maxday) nodes.erase(nodes.end()-1);
+    if (nodes.empty() || nodes.back() != maxday) nodes.insert(nodes.end(), maxday);
     assert(nodes.size() >= 2);
 
     vector<int> days(1, minday);

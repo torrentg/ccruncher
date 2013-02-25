@@ -383,7 +383,7 @@ statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator fi
     }
   }
 
-  if (ws.size() > 0)
+  if (!ws.empty())
   {
     partial_sort(middle, middle+ws.size(), last);
     for(size_t i=0; i<ws.size(); i++) {
@@ -450,7 +450,7 @@ statval AnalysisTask::expectedShortfall(double percentile, vector<double>::itera
   partial_sort(first, middle, last);
 
   kahan sum1, sum2;
-  for(vector<double>::iterator it=first; it<middle; it++) {
+  for(vector<double>::iterator it=first; it<middle; ++it) {
     sum1.add(*it);
     sum2.add((*it)*(*it));
   }

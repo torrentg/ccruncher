@@ -424,7 +424,7 @@ void SimulationWidget::showDefines()
   FindDefines finder = FindDefines(ui->ifile->text().toStdString());
   map<string,string> aux = finder.getDefines();
   map<string,string>::iterator it;
-  for (it=aux.begin(); it != aux.end(); it++) {
+  for (it=aux.begin(); it != aux.end(); ++it) {
     if (defines.find(it->first) == defines.end()) {
       defines[it->first] = it->second;
     }
@@ -449,7 +449,7 @@ void SimulationWidget::setDefines()
 {
   QString str;
   map<string,string>::iterator it;
-  for (it=defines.begin(); it != defines.end(); it++)
+  for (it=defines.begin(); it != defines.end(); ++it)
   {
     str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
   }

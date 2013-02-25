@@ -42,7 +42,7 @@ DefinesDialog::DefinesDialog(QWidget *parent, const map<string,string> &defines_
     ui->table->removeRow(i);
   }
   map<string,string>::iterator it;
-  for (it=defines.begin(); it != defines.end(); it++)
+  for (it=defines.begin(); it != defines.end(); ++it)
   {
     int row = ui->table->rowCount();
     ui->table->insertRow(row);

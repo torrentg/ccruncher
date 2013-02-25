@@ -147,12 +147,12 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
     ret = getWorkDir();
   }
 
-  if (ret.substr(0,2) == "." + PATHSEPARATOR)
+  if (ret.substr(0,2) == ("." + PATHSEPARATOR))
   {
     ret = getWorkDir() + ret.substr(2);
   }
 
-  if (ret.substr(0,3) == ".." + PATHSEPARATOR)
+  if (ret.substr(0,3) == (".." + PATHSEPARATOR))
   {
     ret = getWorkDir() + ret;
   }

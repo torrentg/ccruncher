@@ -48,7 +48,7 @@ ccruncher::Thread::~Thread()
 //===========================================================================
 void* ccruncher::Thread::launcher(void *d)
 {
-  Thread *x = (Thread *)d;
+  Thread *x = static_cast<Thread *>(d);
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
