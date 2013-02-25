@@ -241,9 +241,12 @@ Developers tips & tricks
        >> backtrace
        >> quit
 
-11. creating man pages
+11. other minor tasks
+      > # man pages creation
       > help2man --no-info -n "simule the loss distribution of a credit portfolio using de \
         Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
+      > # lines of code
+      > cloc src
 
 12. making source distribution package
       > make distcheck
