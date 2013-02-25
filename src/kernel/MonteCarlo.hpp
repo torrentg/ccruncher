@@ -65,6 +65,8 @@ class MonteCarlo
     std::vector<SimulatedAsset> assets;
     // segmentations indexes per asset
     std::vector<unsigned short> segments;
+    // number of segments for each segmentation
+    std::vector<unsigned short> numsegments;
     // datevalues list
     std::vector<DateValues> datevalues;
     // list of aggregators
@@ -131,7 +133,7 @@ class MonteCarlo
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // append simulation result
-    bool append(int ithread, size_t ilhs, bool reversed, const std::vector<std::vector<double> > &) throw();
+    bool append(int ithread, size_t ilhs, bool reversed, const std::vector<double> &) throw();
     // non-copyable class
     MonteCarlo(const MonteCarlo &);
     // non-copyable class

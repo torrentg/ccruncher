@@ -123,9 +123,9 @@ ccruncher::Aggregator::~Aggregator()
 //===========================================================================
 // append
 //===========================================================================
-void ccruncher::Aggregator::append(const vector<double> &losses) throw(Exception)
+void ccruncher::Aggregator::append(const double *losses) throw(Exception)
 {
-  assert((int)losses.size() == numsegments);
+  assert(losses != NULL);
 
   try
   {

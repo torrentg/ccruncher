@@ -67,7 +67,7 @@ class Aggregator
     // destructor
     ~Aggregator();
     // append data to aggregator
-    void append(const std::vector<double> &) throw(Exception);
+    void append(const double *) throw(Exception);
     // force flush data to disk
     void flush() throw(Exception);
     // return the number of segments

@@ -59,8 +59,9 @@ using namespace std;
 //===========================================================================
 ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed) :
   Thread(), id(ti), montecarlo(mc), obligors(mc.obligors), assets(mc.assets),
-  segments(mc.segments), rng(NULL), chol(mc.chol), floadings1(mc.floadings1),
-  floadings2(mc.floadings2), inverses(mc.inverses), losses(0)
+  segments(mc.segments), numsegments(mc.numsegments), rng(NULL), chol(mc.chol),
+  floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
+  losses(0)
 {
   assert(chol != NULL);
   rng = gsl_rng_alloc(gsl_rng_mt19937);
@@ -71,12 +72,10 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
   timeT = mc.timeT;
   antithetic = mc.antithetic;
   reversed = true;
-  numsegmentations = mc.aggregators.size();
-  losses.resize(numsegmentations);
-  for(int i=0; i<numsegmentations; i++)
-  {
-    losses[i] = vector<double>(mc.aggregators[i]->size());
-  }
+
+  int num = 0;
+  for(size_t i=0; i<numsegments.size(); i++) num += numsegments[i];
+  losses.resize(num, 0.0);
 
   lhs_num = 0;
   lhs_size = mc.lhs_size;
@@ -112,12 +111,9 @@ void ccruncher::SimulationThread::run()
   while(more)
   {
     // initialize aggregated values
-    for(int i=0; i<numsegmentations; i++)
+    for(vector<double>::iterator it=losses.begin(); it!=losses.end(); ++it)
     {
-      for(int j=losses[i].size()-1; j>=0; j--)
-      {
-        losses[i][j] = 0.0;
-      }
+      *it = 0.0;
     }
 
     // generating random numbers
@@ -381,12 +377,17 @@ void ccruncher::SimulationThread::simule(int iobligor) throw()
       // compute asset loss
       double loss = exposure * (1.0 - recovery);
 
-      // aggregate asset loss
-      for(int j=0; j<numsegmentations; j++)
+      // aggregate asset loss to each segmentation
+      // in the correspondent segment
+      size_t numsegmentations = numsegments.size();
+      const unsigned short *ptr_segments = static_cast<const unsigned short*>(&(segments[iobligor*numsegmentations]));
+      double *ptr_losses = static_cast<double*>(&(losses[0]));
+      for(size_t j=0; j<numsegmentations; j++)
       {
-        unsigned short isegment = segments[iobligor*numsegmentations + j];
-        assert(isegment < losses[j].size());
-        losses[j][isegment] += loss;
+        unsigned short isegment = ptr_segments[j];
+        assert(isegment < numsegments[j]);
+        ptr_losses[isegment] += loss;
+        ptr_losses += numsegments[j];
       }
     }
   }

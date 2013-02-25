@@ -403,12 +403,21 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   log << "output data directory" << split << "["+fpath+"]" << endl;
 
   // allocating and initializing aggregators
-  aggregators.clear();
-  for(int i=0; i<idata.getSegmentations().size(); i++)
+  int numsegmentations = idata.getSegmentations().size();
+  numsegments.resize(numsegmentations, 0);
+  aggregators.resize(numsegmentations, (Aggregator*)(NULL));
+  for(int i=0; i<numsegmentations; i++)
   {
+    if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
+      throw Exception("segmentation '" +
+                      idata.getSegmentations().getSegmentation(i).name +
+                      "' exceeds the maximum number of segments");
+    }
+
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
     Aggregator *aggregator = new Aggregator(segments, i, idata.getSegmentations(), filename, fmode);
-    aggregators.push_back(aggregator);
+    aggregators[i] = aggregator;
+    numsegments[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
     log << "segmentation" << split << "["+filename+"]" << endl;
   }
 
@@ -510,9 +519,8 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, const vector<vector<double> > &losses) throw()
+bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, const vector<double> &losses) throw()
 {
-  assert(losses.size() == aggregators.size());
   pthread_mutex_lock(&mutex);
   timer3.resume();
   bool more = true;
@@ -525,10 +533,13 @@ bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, cons
     }
 
     // aggregating simulation result
-    for(unsigned int i=0; i<aggregators.size(); i++) 
+    const double *ptr_losses = &(losses[0]);
+    for(unsigned int i=0; i<aggregators.size(); i++)
     {
-      aggregators[i]->append(losses[i]);
+      aggregators[i]->append(ptr_losses);
+      ptr_losses += numsegments[i];
     }
+    assert((ptr_losses-&(losses[0])) == int(losses.size()));
 
     // counter increment
     numiterations++;
