@@ -73,6 +73,8 @@ class SimulationThread : public Thread
     const std::vector<SimulatedAsset> &assets;
     // segmentations indexes per asset
     const std::vector<unsigned short> &segments;
+    // number of segments for each segmentation
+    const std::vector<unsigned short> &numsegments;
     // number of factors
     size_t numfactors;
     // degrees of freedom
@@ -95,10 +97,8 @@ class SimulationThread : public Thread
     bool antithetic;
     // management flag for antithetic method (default=false)
     bool reversed;
-    // number of segmentations
-    int numsegmentations;
-    // asset loss values by segmentation
-    std::vector<std::vector<double> > losses;
+    // asset loss values (length = numsegments_1 + ... + numsegments_n)
+    std::vector<double> losses;
     // elapsed time creating random numbers
     Timer timer1;
     // ellapsed time simulating obligors & segmentations
