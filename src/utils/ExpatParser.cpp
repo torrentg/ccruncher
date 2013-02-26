@@ -80,6 +80,9 @@ void ccruncher::ExpatParser::reset()
 
   // setting characterdata handler
   XML_SetCharacterDataHandler(xmlparser, characterData);
+
+  // checksum value initialization
+  checksum = adler32(0L, Z_NULL, 0);
 }
 
 //===========================================================================
@@ -195,6 +198,8 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
         done = true;
       }
 
+      checksum = adler32(checksum, (Bytef*)(buf), len);
+
       if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
       {
         char aux[512];
@@ -261,5 +266,13 @@ const map<string,string>& ccruncher::ExpatParser::getDefines() const
 void ccruncher::ExpatParser::setDefines(const map<string,string> &m)
 {
   userdata.defines = m;
+}
+
+//===========================================================================
+// return check value
+//===========================================================================
+unsigned long ccruncher::ExpatParser::getChecksum() const
+{
+  return checksum;
 }
 

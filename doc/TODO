@@ -9,7 +9,6 @@ Future works
 -------------------
   * technical features
      - input file in binary format
-     - add file hash (CRC32 - see zlib library)
      - move to Qt5
      - multi-currency support or expression evaluator
        <values t="01/07/2015" exposure="2960.0" recovery="60%" currency="dolars"/>

@@ -46,6 +46,8 @@ class ExpatParser
     XML_Parser xmlparser;
     // user data
     ExpatUserData userdata;
+    // checksum value
+    unsigned long checksum;
 
   private:
 
@@ -76,6 +78,8 @@ class ExpatParser
     const std::map<std::string,std::string>& getDefines() const;
     // set defines
     void setDefines(const std::map<std::string,std::string>&);
+    // return check value
+    unsigned long getChecksum() const;
 
 };
 

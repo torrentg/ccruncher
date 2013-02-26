@@ -142,6 +142,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(file, this, stop);
+    log << "file checksum" << split << parser.getChecksum() << endl;
     log << "elapsed time parsing data" << split << timer << endl;
     log << indent(-1);
   }
@@ -380,6 +381,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
   }
   else
   {
+    gzFile prevfile = curfile;
     gzFile file = NULL;
 
     try
@@ -408,8 +410,10 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       parser.setDefines(eu.defines);
       parser.parse(file, &portfolio, stop);
 
+      log << "included file checksum" << split << parser.getChecksum() << endl;
+
       pthread_mutex_lock(&mutex);
-      curfile = NULL;
+      curfile = prevfile;
       pthread_mutex_unlock(&mutex);
       gzclose(file);
     }
@@ -417,7 +421,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
     {
       if (file != NULL) {
         pthread_mutex_lock(&mutex);
-        curfile = NULL;
+        curfile = prevfile;
         pthread_mutex_unlock(&mutex);
         gzclose(file);
       }
