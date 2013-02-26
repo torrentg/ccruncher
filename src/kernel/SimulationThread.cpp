@@ -287,14 +287,15 @@ void ccruncher::SimulationThread::rfactors()
           LHS_VALUES_Z(pos,i) = gsl_cdf_ugaussian_Pinv(u);
         }
       }
-    }
-  }
 
-  // multiplying factors by loadings to reduce the number of mults
-  for(size_t n=0; n<lhs_size; n++) {
-    for(size_t i=0; i<numfactors; i++) {
-      LHS_VALUES_Z(n,i) *= floadings1[i];
-      assert(!isnan(LHS_VALUES_Z(n,i)) && !isinf(LHS_VALUES_Z(n,i)));
+      // multiplying factors by loadings to reduce the number of mults
+      // because is not multiplied by w when lhs>1 to allow previous step
+      for(size_t n=0; n<lhs_size; n++) {
+        for(size_t i=0; i<numfactors; i++) {
+          LHS_VALUES_Z(n,i) *= floadings1[i];
+          assert(!isnan(LHS_VALUES_Z(n,i)) && !isinf(LHS_VALUES_Z(n,i)));
+        }
+      }
     }
   }
 }

@@ -211,9 +211,22 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   inverses.init(ndf, timeT, dprobs);
   chol = idata.getCorrelations().getCholesky();
   floadings1 = idata.getCorrelations().getFactorLoadings();
+
+  // performance tip: contaings sqrt(1-w^2) (to avoid sqrt and multiplication)
   floadings2 = floadings1;
   for(size_t i=0; i<floadings2.size(); i++) {
     floadings2[i] = sqrt(1.0 - floadings1[i]*floadings1[i]);
+  }
+
+  // performance tip: chol contains w·chol (to avoid multiplications)
+  // if LHS>1 this is not possible and mults are done in SimulationThread
+  if (lhs_size == 1) {
+    for(size_t i=0; i<chol->size1; i++) {
+      for(size_t j=0; j<chol->size2; j++) {
+        double val = gsl_matrix_get(chol, i, j)*floadings1[i];
+        gsl_matrix_set(chol, i, j, val);
+      }
+    }
   }
 
   assert((int)chol->size1 == idata.getFactors().size());
