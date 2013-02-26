@@ -16,6 +16,7 @@ version 2.2 (???. 2013)
   * POSIX compliance in help option
   * improved aggregation performance
   * improved file parsing performance
+  * added file checksum computation
 
 version 2.1 (Dec. 2012)
 --------------------------
