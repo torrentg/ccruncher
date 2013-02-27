@@ -82,7 +82,7 @@ void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 //===========================================================================
 // size
 //===========================================================================
-int ccruncher::Transitions::size() const
+size_t ccruncher::Transitions::size() const
 {
   return ratings.size();
 }
@@ -177,9 +177,9 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 void ccruncher::Transitions::validate() throw(Exception)
 {
   // checking that all elements exists
-  for (int i=0; i<size(); i++)
+  for (size_t i=0; i<size(); i++)
   {
-    for (int j=0; j<size(); j++)
+    for (size_t j=0; j<size(); j++)
     {
       if (isnan(matrix[i][j]))
       {
@@ -189,11 +189,11 @@ void ccruncher::Transitions::validate() throw(Exception)
   }
 
   // checking that all rows sum 1
-  for (int i=0; i<size(); i++)
+  for (size_t i=0; i<size(); i++)
   {
     double sum = 0.0;
 
-    for (int j=0; j<size(); j++)
+    for (size_t j=0; j<size(); j++)
     {
       sum += matrix[i][j];
     }
@@ -207,7 +207,7 @@ void ccruncher::Transitions::validate() throw(Exception)
   // finding default rating
   indexdefault = -1;
 
-  for (int i=0; i<size(); i++)
+  for (size_t i=0; i<size(); i++)
   {
     if (matrix[i][i] > (1.0-EPSILON) && matrix[i][i] < (1.0+EPSILON))
     {
@@ -249,10 +249,10 @@ void ccruncher::Transitions::regularize() throw(Exception)
   // computes the regularization error (sub-inf matrix norm)
   // note: regularized matrix has sub-inf norm = 1
   rerror = 0.0;
-  for(int i=0; i<size(); i++)
+  for(size_t i=0; i<size(); i++)
   {
     double sum = 0.0;
-    for(int j=0; j<size(); j++)
+    for(size_t j=0; j<size(); j++)
     {
       sum += abs(matrix[i][j]);
     }
@@ -263,7 +263,7 @@ void ccruncher::Transitions::regularize() throw(Exception)
   }
 
   // matrix regularization
-  for(int i=0; i<size(); i++)
+  for(size_t i=0; i<size(); i++)
   {
     bool stop = false;
     double lambda = 0.0;
@@ -271,12 +271,12 @@ void ccruncher::Transitions::regularize() throw(Exception)
     {
       // step 1. find the row projection on the hyperplane
       lambda = 0.0;
-      for(int j=0; j<size(); j++)
+      for(size_t j=0; j<size(); j++)
       {
         lambda += matrix[i][j];
       }
       lambda = (lambda-1.0)/(double)(size());
-      for(int j=0; j<size(); j++)
+      for(size_t j=0; j<size(); j++)
       {
         if (matrix[i][j] != 0.0)
         {
@@ -286,7 +286,7 @@ void ccruncher::Transitions::regularize() throw(Exception)
 
       // step 2 + step 3'. checking termination criteria
       stop = true;
-      for(int j=0; j<size(); j++)
+      for(size_t j=0; j<size(); j++)
       {
         if (matrix[i][j] < 0.0) 
         {
@@ -323,16 +323,20 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 //===========================================================================
 // Given a transition matrix return the Cumulated Forward Default Rate
 //===========================================================================
-void ccruncher::Transitions::cdfr(int numrows, vector<vector<double> > &ret) const throw(Exception)
+void ccruncher::Transitions::cdfr(size_t numrows, vector<vector<double> > &ret) const throw(Exception)
 {
   // making assertions
   assert(indexdefault >= 0);
   assert(numrows > 1);
   assert(numrows < 15000);
+  assert(ret.size() == size());
+  for(size_t i=0; i<size(); i++) {
+    assert(ret[i].size() == numrows);
+  }
 
   // building Id-matrix of size nxn
   vector<vector<double> > aux(size(), vector<double>(size(),0.0));
-  for(int i=0; i<size(); i++) {
+  for(size_t i=0; i<size(); i++) {
     aux[i][i] = 1.0;
   }
 
@@ -340,22 +344,22 @@ void ccruncher::Transitions::cdfr(int numrows, vector<vector<double> > &ret) con
   vector<vector<double> > tmp(size(), vector<double>(size(),0.0));
 
   // filling CDFR(.,0)
-  for(int i=0; i<size(); i++)
+  for(size_t i=0; i<size(); i++)
   {
     ret[i][0] = aux[i][indexdefault];
   }
 
   // filling CDFR(.,t)
-  for(int t=1; t<numrows; t++)
+  for(size_t t=1; t<numrows; t++)
   {
     prod(aux, matrix, tmp);
 
-    for(int i=0; i<size(); i++)
+    for(size_t i=0; i<size(); i++)
     {
       ret[i][t] = tmp[i][indexdefault];
     }
 
-    for(int i=0; i<size(); i++) for(int j=0; j<size(); j++) aux[i][j] = tmp[i][j];
+    for(size_t i=0; i<size(); i++) for(size_t j=0; j<size(); j++) aux[i][j] = tmp[i][j];
   }
 }
 

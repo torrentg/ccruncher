@@ -64,7 +64,7 @@ class Transitions : public ExpatHandlers
     // validate object content
     void validate() throw(Exception);
     // computes Cumulated Default Forward Rate
-    void cdfr(int numrows, std::vector<std::vector<double> > &ret) const throw(Exception);
+    void cdfr(size_t numrows, std::vector<std::vector<double> > &ret) const throw(Exception);
 
   protected:
 
@@ -84,7 +84,7 @@ class Transitions : public ExpatHandlers
     // set ratings
     void setRatings(const Ratings &);
     // returns n (number of ratings)
-    int size() const;
+    size_t size() const;
     // returns period that covers this matrix
     int getPeriod() const;
     // returns default rating index

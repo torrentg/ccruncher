@@ -23,11 +23,11 @@
 #include "utils/Parser.hpp"
 #include "utils/ParserTest.hpp"
 
+using namespace ccruncher;
+
 //---------------------------------------------------------------------------
 
 #define EPSILON 1E-14
-
-using namespace ccruncher;
 
 //===========================================================================
 // test_int

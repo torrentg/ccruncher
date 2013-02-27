@@ -59,6 +59,7 @@ HEADERS += \
     src/utils/ExpatHandlers.hpp \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
+    src/utils/Expr.hpp \
     src/utils/config.h \
     src/utils/UtilsTest.hpp \
     src/utils/TimerTest.hpp \
@@ -68,6 +69,7 @@ HEADERS += \
     src/utils/ExpatUserDataTest.hpp \
     src/utils/ExceptionTest.hpp \
     src/utils/DateTest.hpp \
+    src/utils/ExprTest.hpp \
     deps/MiniCppUnit-2.5/MiniCppUnit.hxx
 
 SOURCES += \
@@ -124,6 +126,7 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
+    src/utils/Expr.cpp \
     src/utils/UtilsTest.cpp \
     src/utils/TimerTest.cpp \
     src/utils/ParserTest.cpp \
@@ -132,6 +135,7 @@ SOURCES += \
     src/utils/ExpatUserDataTest.cpp \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
+    src/utils/ExprTest.cpp \
     deps/MiniCppUnit-2.5/MiniCppUnit.cxx
 
 INCLUDEPATH += \
