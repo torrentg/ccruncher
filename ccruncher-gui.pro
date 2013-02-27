@@ -54,6 +54,7 @@ HEADERS += \
     src/utils/ExpatHandlers.hpp \
     src/utils/Exception.hpp \
     src/utils/Date.hpp \
+    src/utils/Expr.hpp \
     src/utils/CsvFile.hpp \
     src/utils/config.h
 
@@ -105,6 +106,7 @@ SOURCES += \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
     src/utils/Date.cpp \
+    src/utils/Expr.cpp \
     src/utils/CsvFile.cpp
 
 FORMS += \
