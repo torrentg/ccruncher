@@ -86,7 +86,7 @@ class ExpatHandlers
     // handler for open tag
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
     // handler for closed tag
-    virtual void epend(ExpatUserData &eud, const char *name) {}
+    virtual void epend(ExpatUserData &/*eud*/, const char */*name*/) {}
     // handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
 

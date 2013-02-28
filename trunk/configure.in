@@ -59,6 +59,7 @@ AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
 AC_CHECK_HEADERS([float.h malloc.h])
 AC_CHECK_HEADERS([pthread.h])
 AC_CHECK_HEADERS([sys/time.h])
+AC_CHECK_HEADERS([sys/param.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
@@ -84,6 +85,7 @@ AC_C_CONST
 AC_C_INLINE
 AC_STRUCT_TM
 AC_TYPE_SIZE_T
+AC_TYPE_UINT32_T
 
 dnl -------------------------------------------------------------
 dnl setting debug/optimization options

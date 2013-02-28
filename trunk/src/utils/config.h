@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-02-23 08:46:28+01:00"
+#define BUILD_DATE "2013-02-28 10:40:06+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -127,6 +127,9 @@
    */
 /* #undef HAVE_SYS_NDIR_H */
 
+/* Define to 1 if you have the <sys/param.h> header file. */
+#define HAVE_SYS_PARAM_H 1
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
 
@@ -189,6 +192,11 @@
 /* Version number of package */
 #define VERSION "2.2"
 
+/* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
+   #define below would cause a syntax error. */
+/* #undef _UINT32_T */
+
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
 
@@ -200,6 +208,10 @@
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
+
+/* Define to the type of an unsigned integer type of width exactly 32 bits if
+   such a type exists and the standard includes do not define it. */
+/* #undef uint32_t */
 
 
 
