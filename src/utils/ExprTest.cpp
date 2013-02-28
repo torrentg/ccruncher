@@ -31,22 +31,13 @@ using namespace ccruncher;
 
 #define EPSILON 1e-12
 
-struct row
-{
-  string formula;
-  double result;
-  int num_tokens;
-  int stack_size;
-  row(const string &s, double v, int n1, int n2) : formula(s), result(v), num_tokens(n1), stack_size(n2) {}
-};
-
 //===========================================================================
 // test1. check error detection
 //===========================================================================
 void ccruncher_test::ExprTest::test1()
 {
-  vector<variable> variables;
-  vector<token> tokens;
+  vector<Expr::variable> variables;
+  vector<Expr::token> tokens;
 
   // void expression
   ASSERT_THROW(Expr::compile("", variables, tokens));
@@ -112,8 +103,8 @@ void ccruncher_test::ExprTest::test1()
 //===========================================================================
 void ccruncher_test::ExprTest::test2()
 {
-  vector<variable> variables;
-  vector<token> tokens;
+  vector<Expr::variable> variables;
+  vector<Expr::token> tokens;
 
   variables.clear();
   ASSERT_NO_THROW(Expr::compile("a", variables, tokens));
@@ -136,13 +127,13 @@ void ccruncher_test::ExprTest::test2()
 void ccruncher_test::ExprTest::test3()
 {
   double x=1.0, y=2.0, z=3.0;
-  vector<variable> variables;
-  vector<token> tokens;
+  vector<Expr::variable> variables;
+  vector<Expr::token> tokens;
   vector<row> formulas;
 
-  variables.push_back(variable("x", &x));
-  variables.push_back(variable("y", &y));
-  variables.push_back(variable("z", &z));
+  variables.push_back(Expr::variable("x", &x));
+  variables.push_back(Expr::variable("y", &y));
+  variables.push_back(Expr::variable("z", &z));
 
   formulas.push_back(row(" 3 ", 3.0, 2, 1));
   formulas.push_back(row(" 1 + 2 ", 3.0, 2, 1));
@@ -222,8 +213,8 @@ void ccruncher_test::ExprTest::test3()
 //===========================================================================
 void ccruncher_test::ExprTest::test4()
 {
-  vector<variable> variables;
-  vector<token> tokens;
+  vector<Expr::variable> variables;
+  vector<Expr::token> tokens;
 
   Expr::compile("x+y", variables, tokens);
 
@@ -236,8 +227,8 @@ void ccruncher_test::ExprTest::test4()
 
   // stack size too low
   double x=0.0;
-  variables.push_back(variable("x", &x));
-  variables.push_back(variable("y", &x));
+  variables.push_back(Expr::variable("x", &x));
+  variables.push_back(Expr::variable("y", &x));
   ASSERT_NO_THROW(Expr::link(tokens, variables));
   ASSERT_THROW(Expr::eval(tokens, 1));
 }

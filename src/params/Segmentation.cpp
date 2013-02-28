@@ -182,22 +182,6 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
-void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
-{
-  if (isEqual(name_,"segmentation")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"segment")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
-}
-
-//===========================================================================
 // returns enabled flag
 //===========================================================================
 bool ccruncher::Segmentation::isEnabled() const

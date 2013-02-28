@@ -163,12 +163,6 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"transitions")) {
     validate();
   }
-  else if (isEqual(name,"transition")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name));
-  }
 }
 
 //===========================================================================

@@ -37,7 +37,7 @@ using namespace std;
 //===========================================================================
 // constructor
 //===========================================================================
-MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
+ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
   ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL), properties(map)
 {
   ui->setupUi(this);
@@ -70,7 +70,7 @@ MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QM
 //===========================================================================
 // destructor
 //===========================================================================
-MainWindow::~MainWindow()
+ccruncher_gui::MainWindow::~MainWindow()
 {
   delete ui;
   delete mdiArea;
@@ -79,7 +79,7 @@ MainWindow::~MainWindow()
 //===========================================================================
 // close event
 //===========================================================================
-void MainWindow::closeEvent(QCloseEvent *event)
+void ccruncher_gui::MainWindow::closeEvent(QCloseEvent *event)
 {
   mdiArea->closeAllSubWindows();
   if (mdiArea->currentSubWindow()) {
@@ -93,7 +93,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 //===========================================================================
 // updateToolBars
 //===========================================================================
-void MainWindow::updateToolBars(QMdiSubWindow *window)
+void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
 {
   if (window == NULL)
   {
@@ -127,7 +127,7 @@ void MainWindow::updateToolBars(QMdiSubWindow *window)
 //===========================================================================
 // about dialog
 //===========================================================================
-void MainWindow::about()
+void ccruncher_gui::MainWindow::about()
 {
   QMessageBox about;
 
@@ -149,7 +149,7 @@ void MainWindow::about()
 //===========================================================================
 // select file
 //===========================================================================
-void MainWindow::selectFile()
+void ccruncher_gui::MainWindow::selectFile()
 {
   QString filename = QFileDialog::getOpenFileName(
               this,
@@ -173,7 +173,7 @@ void MainWindow::selectFile()
 //===========================================================================
 // open file
 //===========================================================================
-void MainWindow::openFile(const QUrl &url)
+void ccruncher_gui::MainWindow::openFile(const QUrl &url)
 {
   QString filename = url.path();
   if (url.scheme() == "file") filename = url.toLocalFile();
@@ -230,7 +230,7 @@ void MainWindow::openFile(const QUrl &url)
 //===========================================================================
 // find mdi child
 //===========================================================================
-QMdiSubWindow* MainWindow::findMdiChild(const QString &filename)
+QMdiSubWindow* ccruncher_gui::MainWindow::findMdiChild(const QString &filename)
 {
   foreach (QMdiSubWindow *child, mdiArea->subWindowList()) {
     if (child->widget()->windowFilePath() == filename) {
@@ -243,7 +243,7 @@ QMdiSubWindow* MainWindow::findMdiChild(const QString &filename)
 //===========================================================================
 // return properties
 //===========================================================================
-const QMap<QString,QVariant>& MainWindow::getProperties() const
+const QMap<QString,QVariant>& ccruncher_gui::MainWindow::getProperties() const
 {
   return properties;
 }

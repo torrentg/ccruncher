@@ -22,12 +22,10 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-#ifndef _MSC_VER
 #include <unistd.h>
 #include <dirent.h>
 #include <locale>
 #include <libgen.h>
-#endif
 #include <cstdio>
 #include <fstream>
 #include <cerrno>

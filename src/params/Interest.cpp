@@ -338,11 +338,5 @@ void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
     sort(rates.begin(), rates.end());
     setSpline();
   }
-  else if (isEqual(name_,"rate")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
 }
 

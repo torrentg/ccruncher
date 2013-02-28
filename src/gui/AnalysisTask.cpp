@@ -28,13 +28,14 @@
 
 using namespace std;
 using namespace ccruncher;
+using namespace ccruncher_gui;
 
 #define MJ_EPSILON 1e-12
 
 //===========================================================================
 // constructor
 //===========================================================================
-AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
+ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
 {
   mode_ = none;
   nsamples = 0;
@@ -47,7 +48,7 @@ AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
 //===========================================================================
 // destructor
 //===========================================================================
-AnalysisTask::~AnalysisTask()
+ccruncher_gui::AnalysisTask::~AnalysisTask()
 {
   if (hist != NULL) gsl_histogram_free(hist);
 }
@@ -55,7 +56,7 @@ AnalysisTask::~AnalysisTask()
 //===========================================================================
 // set csv filename
 //===========================================================================
-void AnalysisTask::setFilename(const QString &filename) throw(Exception)
+void ccruncher_gui::AnalysisTask::setFilename(const QString &filename) throw(Exception)
 {
   csv.open(filename.toStdString());
 }
@@ -63,7 +64,7 @@ void AnalysisTask::setFilename(const QString &filename) throw(Exception)
 //===========================================================================
 // set data
 //===========================================================================
-void AnalysisTask::setData(mode m, size_t s, double p)
+void ccruncher_gui::AnalysisTask::setData(mode m, size_t s, double p)
 {
   //TODO: stop current execution + progress=0
   mode_ = m;
@@ -88,7 +89,7 @@ void AnalysisTask::setData(mode m, size_t s, double p)
 //===========================================================================
 // return mode
 //===========================================================================
-AnalysisTask::mode AnalysisTask::getMode() const
+AnalysisTask::mode ccruncher_gui::AnalysisTask::getMode() const
 {
   return mode_;
 }
@@ -96,7 +97,7 @@ AnalysisTask::mode AnalysisTask::getMode() const
 //===========================================================================
 // return csvfile object
 //===========================================================================
-CsvFile& AnalysisTask::getCsvFile()
+CsvFile& ccruncher_gui::AnalysisTask::getCsvFile()
 {
   return csv;
 }
@@ -104,7 +105,7 @@ CsvFile& AnalysisTask::getCsvFile()
 //===========================================================================
 // return histogram
 //===========================================================================
-const gsl_histogram* AnalysisTask::getHistogram() const
+const gsl_histogram* ccruncher_gui::AnalysisTask::getHistogram() const
 {
   return hist;
 }
@@ -112,7 +113,7 @@ const gsl_histogram* AnalysisTask::getHistogram() const
 //===========================================================================
 // return statvals
 //===========================================================================
-const vector<statval>& AnalysisTask::getStatVals() const
+const vector<statval>& ccruncher_gui::AnalysisTask::getStatVals() const
 {
   return statvals;
 }
@@ -120,7 +121,7 @@ const vector<statval>& AnalysisTask::getStatVals() const
 //===========================================================================
 // return the current number of samples
 //===========================================================================
-size_t AnalysisTask::getNumSamples() const
+size_t ccruncher_gui::AnalysisTask::getNumSamples() const
 {
   if (mode_ == histogram) return nsamples;
   else if (!statvals.empty()) return statvals.back().iteration;
@@ -130,7 +131,7 @@ size_t AnalysisTask::getNumSamples() const
 //===========================================================================
 // run
 //===========================================================================
-void AnalysisTask::run()
+void ccruncher_gui::AnalysisTask::run()
 {
   try
   {
@@ -193,7 +194,7 @@ void AnalysisTask::run()
 //===========================================================================
 // run histogram
 //===========================================================================
-void AnalysisTask::runHistogram(const vector<double> &values)
+void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
 {
   nsamples = 0;
 
@@ -245,7 +246,7 @@ void AnalysisTask::runHistogram(const vector<double> &values)
 //===========================================================================
 // runExpectedLoss
 //===========================================================================
-void AnalysisTask::runExpectedLoss(const vector<double> &values)
+void ccruncher_gui::AnalysisTask::runExpectedLoss(const vector<double> &values)
 {
   statvals.clear();
 
@@ -284,7 +285,7 @@ void AnalysisTask::runExpectedLoss(const vector<double> &values)
 //===========================================================================
 // runValueAtRisk
 //===========================================================================
-void AnalysisTask::runValueAtRisk(vector<double> &values)
+void ccruncher_gui::AnalysisTask::runValueAtRisk(vector<double> &values)
 {
   statvals.clear();
 
@@ -314,7 +315,7 @@ void AnalysisTask::runValueAtRisk(vector<double> &values)
 //===========================================================================
 // Value at Risk of range [first,last)
 //===========================================================================
-statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last)
 {
   assert(0.0 < percentile && percentile < 1.0);
   assert(first < last);
@@ -405,7 +406,7 @@ statval AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator fi
 //===========================================================================
 // runExpectedShortfall
 //===========================================================================
-void AnalysisTask::runExpectedShortfall(vector<double> &values)
+void ccruncher_gui::AnalysisTask::runExpectedShortfall(vector<double> &values)
 {
   statvals.clear();
 
@@ -433,7 +434,7 @@ void AnalysisTask::runExpectedShortfall(vector<double> &values)
 //===========================================================================
 // Expected Shortfall of range [first,last)
 //===========================================================================
-statval AnalysisTask::expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last)
 {
   assert(0.0 < percentile && percentile < 1.0);
   assert(first < last);
@@ -468,7 +469,7 @@ statval AnalysisTask::expectedShortfall(double percentile, vector<double>::itera
 //===========================================================================
 // stop
 //===========================================================================
-void AnalysisTask::stop()
+void ccruncher_gui::AnalysisTask::stop()
 {
   stop_ = true;
 }
@@ -476,7 +477,7 @@ void AnalysisTask::stop()
 //===========================================================================
 // setStatus
 //===========================================================================
-void AnalysisTask::setStatus(status s)
+void ccruncher_gui::AnalysisTask::setStatus(status s)
 {
   status_ = s;
   emit statusChanged((int)s);
@@ -485,7 +486,7 @@ void AnalysisTask::setStatus(status s)
 //===========================================================================
 // return status
 //===========================================================================
-AnalysisTask::status AnalysisTask::getStatus() const
+AnalysisTask::status ccruncher_gui::AnalysisTask::getStatus() const
 {
   return status_;
 }
@@ -493,7 +494,7 @@ AnalysisTask::status AnalysisTask::getStatus() const
 //===========================================================================
 // return progress
 //===========================================================================
-float AnalysisTask::getProgress()
+float ccruncher_gui::AnalysisTask::getProgress()
 {
   return progress;
 }
@@ -501,7 +502,7 @@ float AnalysisTask::getProgress()
 //===========================================================================
 // return error
 //===========================================================================
-const string & AnalysisTask::getMsgErr() const
+const string & ccruncher_gui::AnalysisTask::getMsgErr() const
 {
   return msgerr;
 }

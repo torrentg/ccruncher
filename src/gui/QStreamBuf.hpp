@@ -29,6 +29,8 @@
 
 //---------------------------------------------------------------------------
 
+namespace ccruncher_gui {
+
 /*
   convert streambuf call to signals
   based on http://lists.trolltech.com/qt-interest/2005-06/thread00166-0.html
@@ -58,6 +60,8 @@ class QStreamBuf : public QObject, public std::basic_streambuf<char>
     void print(const QString &);
 
 };
+
+}
 
 #endif
 

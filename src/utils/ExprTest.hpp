@@ -39,6 +39,17 @@ class ExprTest : public TestFixture<ExprTest>
 
 private:
 
+  struct row
+  {
+    std::string formula;
+    double result;
+    int num_tokens;
+    int stack_size;
+    row(const std::string &s, double v, int n1, int n2) : formula(s), result(v), num_tokens(n1), stack_size(n2) {}
+  };
+
+private:
+
   void test1();
   void test2();
   void test3();

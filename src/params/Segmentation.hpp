@@ -36,16 +36,17 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-enum components_t {
-  asset,
-  obligor,
-  undefined
-};
-
-//---------------------------------------------------------------------------
-
 class Segmentation : public ExpatHandlers
 {
+
+  public:
+
+    enum ComponentsType
+    {
+      asset,
+      obligor,
+      undefined
+    };
 
   private:
 
@@ -65,15 +66,13 @@ class Segmentation : public ExpatHandlers
   
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
-    void epend(ExpatUserData &, const char *);
 
   public:
 
     // segmentation name
     std::string name;
     // type of components (obligors/assets)
-    components_t components;
+    ComponentsType components;
 
   public:
   

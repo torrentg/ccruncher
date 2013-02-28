@@ -184,9 +184,6 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
   if (isEqual(name_,"asset")) {
     prepareLastAsset();
   }
-  else if (isEqual(name_,"belongs-to")) {
-    // nothing to do
-  }
   else if (isEqual(name_,"obligor")) {
 
     // check recovery values
@@ -199,15 +196,12 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
 
     // important: coding obligor-segments as asset-segments
     for (int i=0; i<(int)segmentations->size(); i++) {
-      if (segmentations->getSegmentation(i).components == obligor) {
+      if (segmentations->getSegmentation(i).components == Segmentation::obligor) {
         for(int j=0; j<(int)vassets.size(); j++) {
           vassets[j]->addBelongsTo(i, vsegments[i]);
         }
       }
     }
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

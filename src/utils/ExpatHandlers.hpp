@@ -31,6 +31,7 @@
 #include "utils/ExpatUserData.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ class ExpatHandlers
     // handler for open tag
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
     // handler for closed tag
-    virtual void epend(ExpatUserData &eud, const char *name) = 0;
+    virtual void epend(ExpatUserData &eud, const char *name) {}
     // handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
 
@@ -108,13 +109,15 @@ class ExpatHandlers
 //===========================================================================
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
-  if (pchr == NULL)
+  assert(str != NULL);
+
+  if (pchr != NULL)
   {
-    return false;
+    return (std::strcmp(str, pchr) == 0);
   }
   else
   {
-    return (std::strcmp(str, pchr) == 0);
+    return false;
   }
 }
 

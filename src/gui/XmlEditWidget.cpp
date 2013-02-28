@@ -34,7 +34,7 @@ using namespace ccruncher;
 //===========================================================================
 // constructor
 //===========================================================================
-XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
+ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
     MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL),
     toolbar(NULL)
 {
@@ -84,7 +84,7 @@ XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 //===========================================================================
 // destructor
 //===========================================================================
-XmlEditWidget::~XmlEditWidget()
+ccruncher_gui::XmlEditWidget::~XmlEditWidget()
 {
   if (toolbar != NULL) delete toolbar;
   if (highlighter != NULL) delete highlighter;
@@ -94,7 +94,7 @@ XmlEditWidget::~XmlEditWidget()
 //===========================================================================
 // documentWasModified
 //===========================================================================
-void XmlEditWidget::documentWasModified()
+void ccruncher_gui::XmlEditWidget::documentWasModified()
 {
   setWindowModified(ui->editor->document()->isModified());
   actionSave->setEnabled(ui->editor->document()->isModified());
@@ -104,7 +104,7 @@ void XmlEditWidget::documentWasModified()
 //===========================================================================
 // setCurrentFile
 //===========================================================================
-void XmlEditWidget::setCurrentFile(const QString &fileName)
+void ccruncher_gui::XmlEditWidget::setCurrentFile(const QString &fileName)
 {
   filename = QFileInfo(fileName).canonicalFilePath();
   ui->editor->document()->setModified(false);
@@ -118,7 +118,7 @@ void XmlEditWidget::setCurrentFile(const QString &fileName)
 //===========================================================================
 // load file
 //===========================================================================
-bool XmlEditWidget::load(const QString &str)
+bool ccruncher_gui::XmlEditWidget::load(const QString &str)
 {
   QString fileName = str;
   if (fileName.isEmpty()) {
@@ -183,7 +183,7 @@ bool XmlEditWidget::load(const QString &str)
 //===========================================================================
 // save current content to file
 //===========================================================================
-bool XmlEditWidget::save(const QString &str)
+bool ccruncher_gui::XmlEditWidget::save(const QString &str)
 {
   QString fileName = str;
   if (fileName.isEmpty()) {
@@ -214,7 +214,7 @@ bool XmlEditWidget::save(const QString &str)
 //===========================================================================
 // close
 //===========================================================================
-void XmlEditWidget::closeEvent(QCloseEvent *event)
+void ccruncher_gui::XmlEditWidget::closeEvent(QCloseEvent *event)
 {
   if (ui->editor->document()->isModified())
   {
@@ -246,7 +246,7 @@ void XmlEditWidget::closeEvent(QCloseEvent *event)
 //===========================================================================
 // run current file
 //===========================================================================
-void XmlEditWidget::runFile()
+void ccruncher_gui::XmlEditWidget::runFile()
 {
   QUrl url = QUrl::fromLocalFile(filename);
   url.setPath(url.toLocalFile());

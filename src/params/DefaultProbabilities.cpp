@@ -294,12 +294,6 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
     validate();
     setSplines();
   }
-  else if (isEqual(name,"dprob")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name));
-  }
 }
 
 //===========================================================================

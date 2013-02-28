@@ -28,6 +28,8 @@
 #include <QMutex>
 #include "ui_ProgressWidget.h"
 
+namespace ccruncher_gui {
+
 class ProgressWidget : public QWidget
 {
     Q_OBJECT
@@ -66,5 +68,7 @@ class ProgressWidget : public QWidget
     void changeOpacity();
 
 };
+
+}
 
 #endif

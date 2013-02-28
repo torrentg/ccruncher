@@ -20,11 +20,9 @@
 //
 //===========================================================================
 
+#include <unistd.h>
 #include "kernel/Aggregator.hpp"
 #include "utils/File.hpp"
-#ifndef _MSC_VER
-#include <unistd.h>
-#endif
 #include <cassert>
 
 using namespace std;

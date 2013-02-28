@@ -47,7 +47,7 @@ using namespace ccruncher;
 //===========================================================================
 // constructor
 //===========================================================================
-AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
+ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
     magnifier(NULL), panner(NULL), nsamples(0), toolbar(NULL)
 {
@@ -123,7 +123,7 @@ AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
 //===========================================================================
 // destructor
 //===========================================================================
-AnalysisWidget::~AnalysisWidget()
+ccruncher_gui::AnalysisWidget::~AnalysisWidget()
 {
   blockSignals(true);
   task.stop();
@@ -135,12 +135,12 @@ AnalysisWidget::~AnalysisWidget()
 //===========================================================================
 // set zoom on axis
 //===========================================================================
-void AnalysisWidget::setZoomX(bool checked)
+void ccruncher_gui::AnalysisWidget::setZoomX(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::xBottom, checked);
 }
-void AnalysisWidget::setZoomY(bool checked)
+void ccruncher_gui::AnalysisWidget::setZoomY(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::yLeft, checked);
@@ -149,7 +149,7 @@ void AnalysisWidget::setZoomY(bool checked)
 //===========================================================================
 // reset results
 //===========================================================================
-void AnalysisWidget::reset()
+void ccruncher_gui::AnalysisWidget::reset()
 {
   int iview = ui->view->currentIndex();
   if (iview < 0) return;
@@ -185,7 +185,7 @@ void AnalysisWidget::reset()
 //===========================================================================
 // submit task
 //===========================================================================
-void AnalysisWidget::submit(size_t numbins)
+void ccruncher_gui::AnalysisWidget::submit(size_t numbins)
 {
   mutex.lock();
   if (task.isRunning()) task.stop();
@@ -222,7 +222,7 @@ void AnalysisWidget::submit(size_t numbins)
 //===========================================================================
 // draw
 //===========================================================================
-void AnalysisWidget::draw()
+void ccruncher_gui::AnalysisWidget::draw()
 {
   mutex.lock();
 
@@ -263,7 +263,7 @@ void AnalysisWidget::draw()
 //===========================================================================
 // draw histogram
 //===========================================================================
-void AnalysisWidget::drawHistogram()
+void ccruncher_gui::AnalysisWidget::drawHistogram()
 {
   ui->plot->detachItems();
 
@@ -322,7 +322,7 @@ void AnalysisWidget::drawHistogram()
 //===========================================================================
 // draw statistic
 //===========================================================================
-void AnalysisWidget::drawStatistic()
+void ccruncher_gui::AnalysisWidget::drawStatistic()
 {
   ui->plot->detachItems();
 
@@ -397,7 +397,7 @@ void AnalysisWidget::drawStatistic()
 //===========================================================================
 // refresh
 //===========================================================================
-void AnalysisWidget::refresh()
+void ccruncher_gui::AnalysisWidget::refresh()
 {
   submit();
 }
@@ -405,7 +405,7 @@ void AnalysisWidget::refresh()
 //===========================================================================
 // segment changed
 //===========================================================================
-void AnalysisWidget::changeSegment()
+void ccruncher_gui::AnalysisWidget::changeSegment()
 {
   submit();
 }
@@ -413,7 +413,7 @@ void AnalysisWidget::changeSegment()
 //===========================================================================
 // view changed
 //===========================================================================
-void AnalysisWidget::changeView()
+void ccruncher_gui::AnalysisWidget::changeView()
 {
   submit();
 }
@@ -421,7 +421,7 @@ void AnalysisWidget::changeView()
 //===========================================================================
 // confidence changed
 //===========================================================================
-void AnalysisWidget::changeConfidence()
+void ccruncher_gui::AnalysisWidget::changeConfidence()
 {
   if (ui->confidence->value() != confidence) {
     mutex.lock();
@@ -434,7 +434,7 @@ void AnalysisWidget::changeConfidence()
 //===========================================================================
 // numbins changed
 //===========================================================================
-void AnalysisWidget::changeNumbins()
+void ccruncher_gui::AnalysisWidget::changeNumbins()
 {
   if (ui->numbins->value() != (int)numbins) {
     numbins = ui->numbins->value();
@@ -445,7 +445,7 @@ void AnalysisWidget::changeNumbins()
 //===========================================================================
 // percentile changed
 //===========================================================================
-void AnalysisWidget::changePercentile()
+void ccruncher_gui::AnalysisWidget::changePercentile()
 {
   if (ui->percentile->value() != percentile) {
     percentile = ui->percentile->value();
@@ -456,7 +456,7 @@ void AnalysisWidget::changePercentile()
 //===========================================================================
 // set status
 //===========================================================================
-void AnalysisWidget::setStatus(int val)
+void ccruncher_gui::AnalysisWidget::setStatus(int val)
 {
   switch(val)
   {
@@ -496,7 +496,7 @@ void AnalysisWidget::setStatus(int val)
 //===========================================================================
 // stop current action
 //===========================================================================
-void AnalysisWidget::stop()
+void ccruncher_gui::AnalysisWidget::stop()
 {
   task.stop();
 }

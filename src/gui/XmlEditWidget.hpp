@@ -32,6 +32,8 @@
 #include "gui/MdiChildWidget.hpp"
 #include "gui/xmlhighlighter.hpp"
 
+namespace ccruncher_gui {
+
 namespace Ui {
 class XmlEditWidget;
 }
@@ -92,6 +94,8 @@ class XmlEditWidget : public MdiChildWidget
     void anchorClicked(const QUrl &);
 
 };
+
+}
 
 #endif
 

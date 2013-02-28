@@ -152,12 +152,6 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"correlations")) {
     validate();
   }
-  else if (isEqual(name,"correlation")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name));
-  }
 }
 
 //===========================================================================

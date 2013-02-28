@@ -38,37 +38,7 @@ using namespace ccruncher;
 #define CHAR_PARENTHESIS_CLOSE ')'
 #define CHAR_ARGUMENT_SEPARATOR ','
 
-//=============================================================
-// declarations
-//=============================================================
-
-typedef double (*ffunc1)(double);
-typedef double (*ffunc2)(double,double);
-typedef double (*ffunc3)(double,double,double);
-
-struct constant
-{
-  const char *id;
-  double x;
-};
-
-//TODO: consider logical operators (eg. &&, ||, etc.)
-struct operador
-{
-  const char *id; // operator identifier
-  char prec; // operator precedence, see http://en.wikipedia.org/wiki/Order_of_operations
-  bool left; // operator associativity, see http://en.wikipedia.org/wiki/Operator_associativity
-  ffunc2 func; // pointer to function
-};
-
-//TODO: afeguir flag force_eval (eg. rand())
-struct function
-{
-  const char *id; // function identifier
-  int args; // number of arguments, 0 is used for minus and plus signs functions
-  void *ptr; // pointer to function
-};
-
+namespace ccruncher {
 
 //=============================================================
 // supported functions & constants
@@ -87,23 +57,26 @@ double fsum(double x, double y) { return x+y; }
 double frest(double x, double y) { return x-y; }
 double fprod(double x, double y) { return x*y; }
 double fdiv(double x, double y) { return x/y; }
-double fpow(double x, double y) { return pow(x,y); }
+double fpow1(double x, double y) { return pow(x,y); }
 double fmin(double x, double y) { return min(x,y); }
 double fmax(double x, double y) { return max(x,y); }
 double fif(double x, double y, double z) { return (x!=0.0?y:z); }
 
-static operador operators[] =
+}
+
+//TODO: consider logical operators (eg. &&, ||, etc.)
+Expr::operador ccruncher::Expr::operators[] =
 {
   { "+", 0, true, &fsum },
   { "-", 0, true, &frest },
   { "*", 1, true, &fprod },
   { "/", 1, true, &fdiv },
-  { "^", 2, true, &fpow } // left associativity (like octave) 2^3^4=(2^3)^4
+  { "^", 2, true, &fpow1 } // left associativity (like octave) 2^3^4=(2^3)^4
 };
 
 #define NUMOPERATORS (sizeof(operators)/sizeof(operador))
 
-function functions[] =
+Expr::function ccruncher::Expr::functions[] =
 {
   { "+", 0, (void*) &fplus },
   { "-", 0, (void*) &fminus },
@@ -116,20 +89,19 @@ function functions[] =
   { "log", 1, (void*) &flog },
   { "min", 2, (void*) &fmin },
   { "max", 2, (void*) &fmax },
-  { "pow", 2, (void*) &fpow },
+  { "pow", 2, (void*) &fpow1 },
   { "if", 3, (void*) &fif }
 };
 
 #define NUMFUNCTIONS (sizeof(functions)/sizeof(function))
 
-constant constants[] =
+Expr::constant ccruncher::Expr::constants[] =
 {
   { "Pi", M_PI },
   { "E", 2.71828182845904523536 }
 };
 
 #define NUMCONSTANTS (sizeof(constants)/sizeof(constant))
-
 
 //=============================================================
 // isFunction
@@ -289,7 +261,7 @@ void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, vector<va
 //=============================================================
 // isValue
 //=============================================================
-inline bool isValue(toktype type)
+inline bool ccruncher::Expr::isValue(TokenType type)
 {
   if (type == NUMBER || type == VARIABLE || type == CONSTANT) return true;
   else return false;
@@ -769,7 +741,7 @@ double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exceptio
 //=============================================================
 // toString
 //=============================================================
-const char *getFunctionName(const void *ptr)
+const char *ccruncher::Expr::getFunctionName(const void *ptr)
 {
   for(int i=0; i<int(NUMFUNCTIONS); i++) {
     if (functions[i].ptr == ptr) {
@@ -832,9 +804,9 @@ void ccruncher::Expr::debug(const vector<token> &tokens, const vector<variable> 
         break;
       case VALREF:
         cout << "VALREF\t";
-        for(int i=0; i<(int)variables.size(); i++) {
-          if (variables[i].ptr == tokens[i].dat.ptr) {
-            cout << variables[i].id;
+        for(size_t j=0; j<variables.size(); j++) {
+          if (variables[j].ptr == tokens[j].dat.ptr) {
+            cout << variables[j].id;
             break;
           }
         }

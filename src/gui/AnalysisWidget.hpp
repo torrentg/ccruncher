@@ -34,9 +34,11 @@
 #include "gui/AnalysisTask.hpp"
 #include "gui/ProgressWidget.hpp"
 
-// forward definitions
+// forward declarations
 class QwtPlotMagnifier;
 class QwtPlotPanner;
+
+namespace ccruncher_gui {
 
 namespace Ui {
 class AnalysisWidget;
@@ -124,5 +126,7 @@ class AnalysisWidget: public MdiChildWidget
     void stop();
 
 };
+
+}
 
 #endif

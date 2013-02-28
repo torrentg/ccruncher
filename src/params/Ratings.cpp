@@ -142,12 +142,6 @@ void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
   if (isEqual(name_,"ratings")) {
     validations();
   }
-  else if (isEqual(name_,"rating")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
 }
 
 //===========================================================================

@@ -27,6 +27,8 @@
 #include <QToolBar>
 #include <QMainWindow>
 
+namespace ccruncher_gui {
+
 class MdiChildWidget: public QWidget
 {
 
@@ -45,6 +47,8 @@ class MdiChildWidget: public QWidget
     virtual QToolBar* getToolBar() { return NULL; }
 
 };
+
+}
 
 #endif
 

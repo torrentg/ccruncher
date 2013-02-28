@@ -122,11 +122,10 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
   // setting current tag
   ud->setCurrentTag(NULL);
 
-  // if current handler = name use epend as finish event
   // calling current handler
   eh->epend(*ud, name);
 
-  // checking handlers domain
+  // if current handler = name then set new handler
   if (strcmp(name,ud->getCurrentName()) == 0)
   {
     // restore parent handlers
