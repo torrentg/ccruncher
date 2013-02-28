@@ -30,6 +30,8 @@
 #include "utils/CsvFile.hpp"
 #include "utils/Exception.hpp"
 
+namespace ccruncher_gui {
+
 struct statval
 {
   size_t iteration;
@@ -172,6 +174,8 @@ class AnalysisTask : public QThread
     void statusChanged(int);
 
 };
+
+}
 
 #endif
 

@@ -198,8 +198,5 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
     validate();
     auxsegmentation.reset();
   }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
 }
 

@@ -60,6 +60,7 @@ HEADERS += \
 
 SOURCES += \
     src/ccruncher-gui.cpp \
+    src/gui/Application.cpp \
     src/gui/DefinesDialog.cpp \
     src/gui/MainWindow.cpp \
     src/gui/QStreamBuf.cpp \

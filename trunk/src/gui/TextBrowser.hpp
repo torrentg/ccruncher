@@ -25,6 +25,9 @@
 
 #include <QTextBrowser>
 
+namespace ccruncher_gui {
+
+// referenced in SimulationWidget.ui
 class TextBrowser : public QTextBrowser
 {
 
@@ -39,6 +42,8 @@ class TextBrowser : public QTextBrowser
     TextBrowser(QWidget *parent=0) : QTextBrowser(parent) {}
 
 };
+
+}
 
 #endif
 

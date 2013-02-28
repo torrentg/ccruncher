@@ -33,19 +33,19 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-enum ThreadStatus 
-{ 
-    fresh,     // thread not started
-    running,   // running thread (see start method)
-    aborted,   // aborted thread (problem during execution)
-    cancelled, // cancelled thread (see cabcel method)
-    finished   // finished thread (run method finish)
-};
-
-//---------------------------------------------------------------------------
-
 class Thread
 {
+
+  public:
+
+    enum ThreadStatus
+    {
+        fresh,     // thread not started
+        running,   // running thread (see start method)
+        aborted,   // aborted thread (problem during execution)
+        cancelled, // cancelled thread (see cabcel method)
+        finished   // finished thread (run method finish)
+    };
 
   private:
   

@@ -20,31 +20,39 @@
 //
 //===========================================================================
 
-#include "QStreamBuf.hpp"
+#include <iostream>
+#include <exception>
+#include "Application.hpp"
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher_gui::QStreamBuf::QStreamBuf(QObject *parent) : QObject(parent), std::basic_streambuf<char>()
+ccruncher_gui::Application::Application(int &argc, char** argv) : QApplication(argc, argv)
 {
   // nothing to do
 }
 
 //===========================================================================
-// inherited from streambuf
+// notify method
 //===========================================================================
-int ccruncher_gui::QStreamBuf::overflow(int v)
+bool ccruncher_gui::Application::notify(QObject *rec, QEvent *ev)
 {
-  emit print(QString(QChar(v)));
-  return v;
-}
-
-//===========================================================================
-// inherited from streambuf
-//===========================================================================
-std::streamsize ccruncher_gui::QStreamBuf::xsputn(const char *p, std::streamsize n)
-{
-  emit print(QString::fromUtf8(p,n));
-  return n;
+  try
+  {
+    return QApplication::notify(rec, ev);
+  }
+  catch (std::exception &e)
+  {
+    cerr << "error: " << e.what() << endl;
+    this->exit(1);
+  }
+  catch(...)
+  {
+    cerr <<
+      "panic: unexpected error. Please report this bug sending input\n"
+      "file, ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+    this->exit(1);
+  }
+  return false;
 }
 

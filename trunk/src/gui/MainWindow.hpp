@@ -31,6 +31,8 @@
 #include <QCloseEvent>
 #include <QToolBar>
 
+namespace ccruncher_gui {
+
 namespace Ui {
 class MainWindow;
 }
@@ -83,5 +85,7 @@ class MainWindow : public QMainWindow
     void updateToolBars(QMdiSubWindow *window);
 
 };
+
+}
 
 #endif

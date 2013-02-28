@@ -26,7 +26,7 @@
 //===========================================================================
 // constructor
 //===========================================================================
-ProgressWidget::ProgressWidget(QWidget *parent) :
+ccruncher_gui::ProgressWidget::ProgressWidget(QWidget *parent) :
     QWidget(parent), ui(new Ui::ProgressWidget)
 {
   ui->setupUi(this);
@@ -44,7 +44,7 @@ ProgressWidget::ProgressWidget(QWidget *parent) :
 //===========================================================================
 // destructor
 //===========================================================================
-ProgressWidget::~ProgressWidget()
+ccruncher_gui::ProgressWidget::~ProgressWidget()
 {
   delete ui;
 }
@@ -52,7 +52,7 @@ ProgressWidget::~ProgressWidget()
 //===========================================================================
 // fadein (0->1)
 //===========================================================================
-void ProgressWidget::fadein(size_t millis)
+void ccruncher_gui::ProgressWidget::fadein(size_t millis)
 {
   mutex.lock();
 
@@ -86,7 +86,7 @@ void ProgressWidget::fadein(size_t millis)
 //===========================================================================
 // fadeout (1->0)
 //===========================================================================
-void ProgressWidget::fadeout(size_t millis)
+void ccruncher_gui::ProgressWidget::fadeout(size_t millis)
 {
   mutex.lock();
 
@@ -118,7 +118,7 @@ void ProgressWidget::fadeout(size_t millis)
 //===========================================================================
 // changeOpacity
 //===========================================================================
-void ProgressWidget::changeOpacity()
+void ccruncher_gui::ProgressWidget::changeOpacity()
 {
   mutex.lock();
   opacity += (isin?+1:-1) * 40.0/(double)(duration);
@@ -140,7 +140,7 @@ void ProgressWidget::changeOpacity()
 //===========================================================================
 // setOpacity
 //===========================================================================
-void ProgressWidget::setOpacity(double val)
+void ccruncher_gui::ProgressWidget::setOpacity(double val)
 {
   opacity = val;
   QGraphicsOpacityEffect *effect = dynamic_cast<QGraphicsOpacityEffect*>(graphicsEffect());

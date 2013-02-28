@@ -34,6 +34,8 @@ namespace ccruncher {
   class IData;
 }
 
+namespace ccruncher_gui {
+
 class SimulationTask : public QThread
 {
     Q_OBJECT
@@ -119,6 +121,8 @@ class SimulationTask : public QThread
     void statusChanged(int);
 
 };
+
+}
 
 #endif
 

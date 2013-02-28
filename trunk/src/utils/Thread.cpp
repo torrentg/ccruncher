@@ -107,7 +107,7 @@ void ccruncher::Thread::cancel()
 //===========================================================================
 // getStatus
 //===========================================================================
-ccruncher::ThreadStatus ccruncher::Thread::getStatus() const
+ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
 {
   return status;
 }

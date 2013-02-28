@@ -27,6 +27,8 @@
 #include <string>
 #include <QDialog>
 
+namespace ccruncher_gui {
+
 namespace Ui {
 class DefinesDialog;
 }
@@ -59,6 +61,8 @@ class DefinesDialog : public QDialog
     void submit();
 
 };
+
+}
 
 #endif
 

@@ -31,13 +31,14 @@
 
 using namespace std;
 using namespace ccruncher;
+using namespace ccruncher_gui;
 
-size_t SimulationTask::num_running_sims = 0;
+size_t ccruncher_gui::SimulationTask::num_running_sims = 0;
 
 //===========================================================================
 // constructor
 //===========================================================================
-SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
+ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
     idata(NULL), montecarlo(NULL)
 {
   ifile = "";
@@ -51,7 +52,7 @@ SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
 //===========================================================================
 // destructor
 //===========================================================================
-SimulationTask::~SimulationTask()
+ccruncher_gui::SimulationTask::~SimulationTask()
 {
   if (isRunning()) {
     stop();
@@ -63,7 +64,7 @@ SimulationTask::~SimulationTask()
 //===========================================================================
 // set streambuf
 //===========================================================================
-void SimulationTask::setStreamBuf(streambuf *s)
+void ccruncher_gui::SimulationTask::setStreamBuf(streambuf *s)
 {
   log.rdbuf(s);
 }
@@ -71,7 +72,7 @@ void SimulationTask::setStreamBuf(streambuf *s)
 //===========================================================================
 // run
 //===========================================================================
-void SimulationTask::run()
+void ccruncher_gui::SimulationTask::run()
 {
   Timer timer(true);
 
@@ -120,7 +121,7 @@ void SimulationTask::run()
 //===========================================================================
 // stop
 //===========================================================================
-void SimulationTask::stop()
+void ccruncher_gui::SimulationTask::stop()
 {
   stop_ = true;
 }
@@ -128,7 +129,7 @@ void SimulationTask::stop()
 //===========================================================================
 // set data info
 //===========================================================================
-void SimulationTask::setData(const string &f_, const map<string,string> &m_, const string &d_, unsigned char n, bool i)
+void ccruncher_gui::SimulationTask::setData(const string &f_, const map<string,string> &m_, const string &d_, unsigned char n, bool i)
 {
   ifile = f_;
   defines = m_;
@@ -141,7 +142,7 @@ void SimulationTask::setData(const string &f_, const map<string,string> &m_, con
 //===========================================================================
 // setStatus
 //===========================================================================
-void SimulationTask::setStatus(status s)
+void ccruncher_gui::SimulationTask::setStatus(status s)
 {
   status_ = s;
 
@@ -168,7 +169,7 @@ void SimulationTask::setStatus(status s)
 //===========================================================================
 // return status
 //===========================================================================
-SimulationTask::status SimulationTask::getStatus() const
+SimulationTask::status ccruncher_gui::SimulationTask::getStatus() const
 {
   return status_;
 }
@@ -176,7 +177,7 @@ SimulationTask::status SimulationTask::getStatus() const
 //===========================================================================
 // return idata
 //===========================================================================
-IData* SimulationTask::getIData()
+IData* ccruncher_gui::SimulationTask::getIData()
 {
   return idata;
 }
@@ -184,7 +185,7 @@ IData* SimulationTask::getIData()
 //===========================================================================
 // return MonteCarlo
 //===========================================================================
-MonteCarlo* SimulationTask::getMonteCarlo()
+MonteCarlo* ccruncher_gui::SimulationTask::getMonteCarlo()
 {
   return  montecarlo;
 }
@@ -192,7 +193,7 @@ MonteCarlo* SimulationTask::getMonteCarlo()
 //===========================================================================
 // return logger
 //===========================================================================
-Logger& SimulationTask::getLogger()
+Logger& ccruncher_gui::SimulationTask::getLogger()
 {
   return log;
 }
@@ -200,7 +201,7 @@ Logger& SimulationTask::getLogger()
 //===========================================================================
 // free memory (1=idata, 2=montecarlo, other=all)
 //===========================================================================
-void SimulationTask::free(int obj)
+void ccruncher_gui::SimulationTask::free(int obj)
 {
   if (obj != 2 && idata != NULL) {
     delete idata;
@@ -215,7 +216,7 @@ void SimulationTask::free(int obj)
 //===========================================================================
 // number of running simulations
 //===========================================================================
-size_t SimulationTask::getNumRunningSims()
+size_t ccruncher_gui::SimulationTask::getNumRunningSims()
 {
   return num_running_sims;
 }
@@ -224,7 +225,7 @@ size_t SimulationTask::getNumRunningSims()
 // check for conflicts
 // return true = continue, false = stop
 //===========================================================================
-bool SimulationTask::checkConflicts()
+bool ccruncher_gui::SimulationTask::checkConflicts()
 {
   fmode = 'w';
   IData idata;

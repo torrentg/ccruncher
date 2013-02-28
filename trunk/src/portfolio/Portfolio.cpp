@@ -176,8 +176,5 @@ void ccruncher::Portfolio::epend(ExpatUserData &, const char *name_)
     insertObligor(auxobligor);
     auxobligor = NULL;
   }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
 }
 

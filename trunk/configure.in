@@ -149,11 +149,6 @@ AH_BOTTOM([
 /* subversion identifier */
 #define SVN_VERSION "R957"
 
-/* required by Microsoft project */
-#ifdef _MSC_VER
-#include "../win32/winconfig.h"
-#endif
-
 ])
 
 dnl -------------------------------------------------------------

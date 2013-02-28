@@ -49,7 +49,7 @@ void ccruncher_test::SegmentationTest::test1()
 
   ASSERT(sobj.isEnabled());
   ASSERT("office" == sobj.name);
-  ASSERT(asset == sobj.components);
+  ASSERT(Segmentation::asset == sobj.components);
 
   ASSERT(5 == sobj.size());
 

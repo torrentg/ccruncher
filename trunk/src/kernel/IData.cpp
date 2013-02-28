@@ -300,7 +300,8 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
+// epdata - ExpatHandlers method implementation
+// TODO: catch cdata sections using XML_SetCdataSectionHandler
 //===========================================================================
 void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
 {
@@ -323,47 +324,8 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   if (isEqual(name_,"ccruncher")) {
     validate();
   }
-  else if (isEqual(name_,"title")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"description")) {
-    // nothing to do
-  }
   else if (isEqual(name_,"defines")) {
     hasdefinestag = 2;
-  }
-  else if (isEqual(name_,"define")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"parameters")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"interest")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"ratings")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"transitions")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"dprobs")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"factors")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"correlations")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"segmentations")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"portfolio")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected tag " + string(name_));
   }
 }
 

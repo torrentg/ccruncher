@@ -205,12 +205,5 @@
 /* subversion identifier */
 #define SVN_VERSION "R957"
 
-/* unused argument macro */
-#define UNUSED(x) (void)x;
-
-/* required by Microsoft project */
-#ifdef _MSC_VER
-#include "../win32/winconfig.h"
-#endif
 
 

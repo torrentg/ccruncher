@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>XmlEditWidget</class>
+ <class>ccruncher_gui::XmlEditWidget</class>
  <widget class="QWidget" name="XmlEditWidget">
   <property name="geometry">
    <rect>

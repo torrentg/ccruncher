@@ -78,12 +78,6 @@ void ccruncher::Params::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"parameters")) {
     validate();
   }
-  else if (isEqual(name,"parameter")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name));
-  }
 }
 
 //===========================================================================

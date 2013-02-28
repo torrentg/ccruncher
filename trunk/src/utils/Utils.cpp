@@ -26,12 +26,7 @@
 #include <algorithm>
 #include "utils/Utils.hpp"
 #include <cassert>
-
-#ifdef _MSC_VER
-#include "win32/gettimeofday.h"
-#else
 #include <sys/time.h>
-#endif
 
 #ifdef _WIN32
 #include <windows.h>

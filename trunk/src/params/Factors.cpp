@@ -159,12 +159,6 @@ void ccruncher::Factors::epend(ExpatUserData &, const char *name_)
   if (isEqual(name_,"factors")) {
     validations();
   }
-  else if (isEqual(name_,"factor")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
-  }
 }
 
 //===========================================================================

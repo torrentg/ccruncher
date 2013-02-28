@@ -30,7 +30,7 @@ using namespace ccruncher;
 //===========================================================================
 // constructor
 //===========================================================================
-FindDefines::FindDefines(const string &filename)
+ccruncher_gui::FindDefines::FindDefines(const string &filename)
 {
   gzFile file = NULL;
 
@@ -49,7 +49,7 @@ FindDefines::FindDefines(const string &filename)
 //===========================================================================
 // epstart - ExpatHandlers method implementation
 //===========================================================================
-void FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ccruncher")) {
     // nothing to do
@@ -80,7 +80,7 @@ void FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **att
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void FindDefines::epend(ExpatUserData &, const char *)
+void ccruncher_gui::FindDefines::epend(ExpatUserData &, const char *)
 {
   // nothing to do
 }
@@ -88,7 +88,7 @@ void FindDefines::epend(ExpatUserData &, const char *)
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-void FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
+void ccruncher_gui::FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
 {
   // nothing to do
 }
@@ -96,7 +96,7 @@ void FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
 //===========================================================================
 // epend - ExpatHandlers method implementation
 //===========================================================================
-const map<string,string>& FindDefines::getDefines() const
+const map<string,string>& ccruncher_gui::FindDefines::getDefines() const
 {
   return defines;
 }

@@ -38,13 +38,14 @@
 
 using namespace std;
 using namespace ccruncher;
+using namespace ccruncher_gui;
 
 #define REFRESH_MS 100
 
 //===========================================================================
 // constructor
 //===========================================================================
-SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
+ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
     MdiChildWidget(parent), ui(new Ui::SimulationWidget), progress(NULL),
     toolbar(NULL)
 {
@@ -104,7 +105,7 @@ SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
 //===========================================================================
 // destructor
 //===========================================================================
-SimulationWidget::~SimulationWidget()
+ccruncher_gui::SimulationWidget::~SimulationWidget()
 {
   task.stop();
   task.wait();
@@ -115,7 +116,7 @@ SimulationWidget::~SimulationWidget()
 //===========================================================================
 // edit current file
 //===========================================================================
-void SimulationWidget::editFile()
+void ccruncher_gui::SimulationWidget::editFile()
 {
   QUrl url = QUrl::fromLocalFile(ui->ifile->text());
   emit anchorClicked(url);
@@ -124,7 +125,7 @@ void SimulationWidget::editFile()
 //===========================================================================
 // open csv data files
 //===========================================================================
-void SimulationWidget::openData()
+void ccruncher_gui::SimulationWidget::openData()
 {
   QString html = ui->log->document()->toHtml();
   QRegExp regexp("href=[\"'](file://[^\"']*\\.csv)[\"']");
@@ -141,7 +142,7 @@ void SimulationWidget::openData()
 //===========================================================================
 // set input file
 //===========================================================================
-void SimulationWidget::setFile()
+void ccruncher_gui::SimulationWidget::setFile()
 {
   string filename = ui->ifile->text().toStdString();
   FindDefines finder = FindDefines(filename);
@@ -154,7 +155,7 @@ void SimulationWidget::setFile()
 //===========================================================================
 // select output directory
 //===========================================================================
-void SimulationWidget::selectDir()
+void ccruncher_gui::SimulationWidget::selectDir()
 {
   QString dirpath = QFileDialog::getExistingDirectory(
               this,
@@ -171,7 +172,7 @@ void SimulationWidget::selectDir()
 //===========================================================================
 // select output directory
 //===========================================================================
-void SimulationWidget::setDir()
+void ccruncher_gui::SimulationWidget::setDir()
 {
   if (ui->odir->text() == odir) {
     return;
@@ -186,7 +187,7 @@ void SimulationWidget::setDir()
 //===========================================================================
 // clear log area
 //===========================================================================
-void SimulationWidget::clearLog()
+void ccruncher_gui::SimulationWidget::clearLog()
 {
   actionAnal->setEnabled(false);
   ui->log->clear();
@@ -203,7 +204,7 @@ void SimulationWidget::clearLog()
 //===========================================================================
 // review widget enabled/disabled
 //===========================================================================
-void SimulationWidget::updateControls()
+void ccruncher_gui::SimulationWidget::updateControls()
 {
   if (!QFile::exists(ui->ifile->text()))
   {
@@ -243,7 +244,7 @@ void SimulationWidget::updateControls()
 //===========================================================================
 // submit task
 //===========================================================================
-void SimulationWidget::submit()
+void ccruncher_gui::SimulationWidget::submit()
 {
   if (task.isRunning()) {
     task.stop();
@@ -289,7 +290,7 @@ void SimulationWidget::submit()
 //===========================================================================
 // linkify
 //===========================================================================
-void SimulationWidget::linkify(QString &line)
+void ccruncher_gui::SimulationWidget::linkify(QString &line)
 {
   int pos;
 
@@ -342,7 +343,7 @@ void SimulationWidget::linkify(QString &line)
 //===========================================================================
 // log a message
 //===========================================================================
-void SimulationWidget::log(const QString &str)
+void ccruncher_gui::SimulationWidget::log(const QString &str)
 {
   if (str.length() == 0) return;
 
@@ -372,7 +373,7 @@ void SimulationWidget::log(const QString &str)
 //===========================================================================
 // draw
 //===========================================================================
-void SimulationWidget::draw()
+void ccruncher_gui::SimulationWidget::draw()
 {
   mutex.lock();
 
@@ -418,7 +419,7 @@ void SimulationWidget::draw()
 //===========================================================================
 // show the defines dialog
 //===========================================================================
-void SimulationWidget::showDefines()
+void ccruncher_gui::SimulationWidget::showDefines()
 {
   // checking for new defines in xml file ...
   FindDefines finder = FindDefines(ui->ifile->text().toStdString());
@@ -445,7 +446,7 @@ void SimulationWidget::showDefines()
 //===========================================================================
 // show the defines dialog
 //===========================================================================
-void SimulationWidget::setDefines()
+void ccruncher_gui::SimulationWidget::setDefines()
 {
   QString str;
   map<string,string>::iterator it;
@@ -459,7 +460,7 @@ void SimulationWidget::setDefines()
 //===========================================================================
 // close
 //===========================================================================
-void SimulationWidget::closeEvent(QCloseEvent *event)
+void ccruncher_gui::SimulationWidget::closeEvent(QCloseEvent *event)
 {
   if (task.isRunning()) {
     QMessageBox::StandardButton rc = QMessageBox::question(this, tr("CCruncher"),
@@ -476,7 +477,7 @@ void SimulationWidget::closeEvent(QCloseEvent *event)
 //===========================================================================
 // set status
 //===========================================================================
-void SimulationWidget::setStatus(int val)
+void ccruncher_gui::SimulationWidget::setStatus(int val)
 {
   mutex.lock();
   switch(val)

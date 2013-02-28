@@ -40,6 +40,8 @@
 #include "gui/SimulationTask.hpp"
 #include "gui/ProgressWidget.hpp"
 
+namespace ccruncher_gui {
+
 namespace Ui {
 class SimulationWidget;
 }
@@ -137,5 +139,7 @@ class SimulationWidget : public MdiChildWidget
     void anchorClicked(const QUrl &);
 
 };
+
+}
 
 #endif

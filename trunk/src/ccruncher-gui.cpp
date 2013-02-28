@@ -24,10 +24,7 @@
   #include <sys/resource.h>
 #endif
 
-#ifndef _MSC_VER
-  #include <getopt.h>
-#endif
-
+#include <getopt.h>
 #include <unistd.h>
 #include <iostream>
 #include <gsl/gsl_errno.h>
@@ -43,6 +40,7 @@
 
 using namespace std;
 using namespace ccruncher;
+using namespace ccruncher_gui;
 
 //---------------------------------------------------------------------------
 

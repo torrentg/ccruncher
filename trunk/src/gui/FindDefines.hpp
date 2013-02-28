@@ -28,6 +28,8 @@
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
+namespace ccruncher_gui {
+
 class FindDefines : public ccruncher::ExpatHandlers
 {
 
@@ -53,6 +55,8 @@ class FindDefines : public ccruncher::ExpatHandlers
     const std::map<std::string,std::string> &getDefines() const;
 
 };
+
+}
 
 #endif
 

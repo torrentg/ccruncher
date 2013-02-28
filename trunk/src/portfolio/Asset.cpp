@@ -156,13 +156,7 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
 //===========================================================================
 void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
 {
-  if (isEqual(name_,"values")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"belongs-to")) {
-    // nothing to do
-  }
-  else if (isEqual(name_,"asset")) 
+  if (isEqual(name_,"asset"))
   {
     // checking data size
     if (data.empty()) {
@@ -186,12 +180,6 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
         throw Exception("asset with repeated date");
       }
     }
-  }
-  else if (isEqual(name_,"data")) {
-    // nothing to do
-  }
-  else {
-    throw Exception("unexpected end tag " + string(name_));
   }
 }
 

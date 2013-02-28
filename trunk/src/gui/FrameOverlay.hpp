@@ -28,9 +28,7 @@
 #include <QWidget>
 #include <QResizeEvent>
 
-namespace Ui {
-class FrameOverlay;
-}
+namespace ccruncher_gui {
 
 class FrameOverlay : public QFrame
 {
@@ -59,6 +57,8 @@ class FrameOverlay : public QFrame
     void addLayer(QWidget *w) { layers.push_back(w); }
 
 };
+
+}
 
 #endif
 

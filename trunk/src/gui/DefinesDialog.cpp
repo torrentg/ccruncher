@@ -29,7 +29,7 @@ using namespace std;
 //===========================================================================
 // constructor
 //===========================================================================
-DefinesDialog::DefinesDialog(QWidget *parent, const map<string,string> &defines_) :
+ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent, const map<string,string> &defines_) :
     QDialog(parent), ui(new Ui::DefinesDialog)
 {
   ui->setupUi(this);
@@ -59,7 +59,7 @@ DefinesDialog::DefinesDialog(QWidget *parent, const map<string,string> &defines_
 //===========================================================================
 // destructor
 //===========================================================================
-DefinesDialog::~DefinesDialog()
+ccruncher_gui::DefinesDialog::~DefinesDialog()
 {
   delete ui;
 }
@@ -67,7 +67,7 @@ DefinesDialog::~DefinesDialog()
 //===========================================================================
 // return content
 //===========================================================================
-const map<string,string> & DefinesDialog::getDefines() const
+const map<string,string> & ccruncher_gui::DefinesDialog::getDefines() const
 {
   return defines;
 }
@@ -75,7 +75,7 @@ const map<string,string> & DefinesDialog::getDefines() const
 //===========================================================================
 // cell content changed
 //===========================================================================
-void DefinesDialog::cellChanged(int row, int col)
+void ccruncher_gui::DefinesDialog::cellChanged(int row, int col)
 {
   Q_UNUSED(row)
   Q_UNUSED(col)
@@ -110,7 +110,7 @@ void DefinesDialog::cellChanged(int row, int col)
 //===========================================================================
 // submit dialog content
 //===========================================================================
-void DefinesDialog::submit()
+void ccruncher_gui::DefinesDialog::submit()
 {
   defines.clear();
 

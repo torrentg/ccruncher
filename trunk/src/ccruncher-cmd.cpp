@@ -26,10 +26,7 @@
   #include <sys/resource.h>
 #endif
 
-#ifndef _MSC_VER
-  #include <getopt.h>
-#endif
-
+#include <getopt.h>
 #include <cerrno>
 #include <iostream>
 #include <csignal>
