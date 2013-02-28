@@ -26,6 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
+#include <cmath>
 #include "utils/Date.hpp"
 #include "portfolio/Exposure.hpp"
 #include "portfolio/Recovery.hpp"
@@ -49,13 +50,9 @@ class DateValues
     Recovery recovery;
 
   public:
-  
-    // default constructor
-    DateValues();
+
     // constructor
-    DateValues(Date date);
-    // constructor
-    DateValues(Date date, const Exposure &, const Recovery &);
+    DateValues(Date d=NAD, const Exposure &e=Exposure(Exposure::Fixed,NAN), const Recovery &r=Recovery(Recovery::Fixed,NAN));
     // less-than operator
     bool operator<(const DateValues &) const;
 
@@ -66,7 +63,8 @@ class DateValues
 //===========================================================================
 // constructor
 //===========================================================================
-inline ccruncher::DateValues::DateValues(Date date_) : date(date_), exposure(), recovery()
+inline ccruncher::DateValues::DateValues(Date d, const Exposure &e, const Recovery &r) :
+    date(d), exposure(e), recovery(r)
 {
   // nothing to do
 }

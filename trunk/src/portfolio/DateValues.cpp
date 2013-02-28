@@ -20,26 +20,5 @@
 //
 //===========================================================================
 
-#include <cmath>
-#include "portfolio/DateValues.hpp"
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::DateValues::DateValues()
-{
-  date = NAD;
-  exposure = Exposure(Exposure::Fixed,NAN);
-  recovery = Recovery(Recovery::Fixed,NAN);
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::DateValues::DateValues(Date date_, const Exposure &exposure_, const Recovery &recovery_)
-{
-  date = date_;
-  exposure = exposure_;
-  recovery = recovery_;
-}
 

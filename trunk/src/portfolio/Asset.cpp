@@ -103,9 +103,9 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
     const char *str;
     DateValues values;
 
-    values.date = date;
     str = getAttributeValue(attributes, "t");
     if (isInterval(str)) {
+      values.date = date;
       values.date.add(str);
     }
     else {
