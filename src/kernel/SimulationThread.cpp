@@ -158,8 +158,10 @@ void ccruncher::SimulationThread::rmvdist()
   double *wz = (double *) &(LHS_VALUES_Z(lhs_pos,0));
   for(size_t i=0; i<obligors.size(); i++)
   {
+    // we use the ziggurat algorithm because is much fast
+    // than Box-Muller method and the ratio method
     size_t ifactor = obligors[i].ifactor;
-    xvalues[i] = wz[ifactor] + floadings2[ifactor]*gsl_ran_ugaussian(rng);
+    xvalues[i] = wz[ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0);
   }
 
   // simulate multivariate t-student
@@ -229,11 +231,12 @@ void ccruncher::SimulationThread::rfactors()
     for(size_t n=0; n<lhs_size; n++)
     {
       double u = gsl_ran_flat(rng, double(n)/double(lhs_size), double(n+1)/double(lhs_size));
-      lhs_values_z[n] = gsl_cdf_ugaussian_Pinv(u);
+      // we multiply by factor loading to reduce the number of mults in rmvdist
+      lhs_values_z[n] = gsl_cdf_ugaussian_Pinv(u) * floadings1[0];
     }
     std::random_shuffle(lhs_values_z.begin(), lhs_values_z.end(), f_rand);
   }
-  else
+  else // numfactors > 1 || lhs_size == 1
   {
     gsl_vector z;
     z.size = numfactors;
@@ -248,7 +251,7 @@ void ccruncher::SimulationThread::rfactors()
     {
       // simulating N(0,R)
       for(size_t i=0; i<numfactors; i++) {
-        z_ptr[i] = gsl_ran_ugaussian(rng);
+        z_ptr[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
       }
       z.data = z_ptr;
       gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &z);
