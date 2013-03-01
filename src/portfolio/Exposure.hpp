@@ -67,7 +67,7 @@ class Exposure
     // set values
     void init(ExposureType, double, double) throw(Exception);
     // check params
-    static void checkParams(ExposureType, double, double) throw(Exception);
+    static bool valid(ExposureType, double, double);
 
   public:
   
@@ -88,7 +88,7 @@ class Exposure
     // returns exposure
     double getValue(const gsl_rng *rng=NULL) const;
     // check if is a Non-A-Exposure value
-    static bool valid(const Exposure &);
+    static bool isvalid(const Exposure &);
     // to string
     std::string toString() const;
     // apply current net value factor

@@ -52,7 +52,7 @@ class DateValues
   public:
 
     // constructor
-    DateValues(Date d=NAD, const Exposure &e=Exposure(Exposure::Fixed,NAN), const Recovery &r=Recovery(Recovery::Fixed,NAN));
+    DateValues(Date d=NAD, const Exposure &e=Exposure(), const Recovery &r=Recovery());
     // less-than operator
     bool operator<(const DateValues &) const;
 

@@ -67,7 +67,7 @@ class Obligor : public ExpatHandlers
 
   private: 
   
-    // insert a asset    
+    // insert a asset
     void prepareLastAsset() throw(Exception);
 
   protected:

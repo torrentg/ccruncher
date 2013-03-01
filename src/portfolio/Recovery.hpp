@@ -64,7 +64,7 @@ class Recovery
     // set values
     void init(RecoveryType, double, double) throw(Exception);
     // check params
-    static void checkParams(RecoveryType, double, double) throw(Exception);
+    static bool valid(RecoveryType, double, double);
 
   public:
 
@@ -85,7 +85,7 @@ class Recovery
     // returns recovery (includes Beta)
     double getValue(const gsl_rng *rng=NULL) const;
     // check if is a Non-A-Recovery value
-    static bool valid(const Recovery &);
+    static bool isvalid(const Recovery &);
     // to string
     std::string toString() const;
 

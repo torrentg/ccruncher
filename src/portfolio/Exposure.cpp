@@ -111,30 +111,39 @@ ccruncher::Exposure::Exposure(ExposureType t, double a, double b) throw(Exceptio
 }
 
 //===========================================================================
-// checkParams
+// valid
 //===========================================================================
-void ccruncher::Exposure::checkParams(ExposureType t, double a, double b) throw(Exception)
+bool ccruncher::Exposure::valid(ExposureType t, double a, double b)
 {
-  if (t == Fixed && (a < 0.0 || isnan(a))) {
-    throw Exception("exposure value out of range");
-  }
-  else if (t == Lognormal && (a < 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
-    throw Exception("lognormal parameters out of range");
-  }
-  else if (t == Exponential && (a <= 0.0 || isnan(a))) {
-    throw Exception("exponential parameter out of range");
-  }
-  else if (t == Uniform && (a < 0.0 || b <= a || isnan(a) || isnan(b))) {
-    throw Exception("uniform parameters out of range");
-  }
-  else if (t == Gamma && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
-    throw Exception("gamma parameters out of range");
-  }
-  else if (t == Normal && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
-    throw Exception("normal parameters out of range");
-  }
-  else if (t < 1 || t > 6) {
-    throw Exception("unknow exposure type");
+  switch(t)
+  {
+    case Fixed:
+      if (a < 0.0 || isnan(a)) return false;
+      else return true;
+
+    case Lognormal:
+      if (a < 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    case Exponential:
+      if (a <= 0.0 || isnan(a)) return false;
+      else return true;
+
+    case Uniform:
+      if (a < 0.0 || b <= a || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    case Gamma:
+      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    case Normal:
+      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    default:
+      assert(false);
+      return false;
   }
 }
 
@@ -145,7 +154,7 @@ void ccruncher::Exposure::init(ExposureType t, double a, double b) throw(Excepti
 {
   if (t != Fixed || !isnan(a))
   {
-    checkParams(t, a, b);  
+    if (!valid(t, a, b)) throw Exception("invalid exposure parameters");
   }
 
   type = t;
@@ -172,17 +181,9 @@ double ccruncher::Exposure::getValue2() const
 //===========================================================================
 // check if is a Non-A-Exposure value
 //===========================================================================
-bool ccruncher::Exposure::valid(const Exposure &x)
+bool ccruncher::Exposure::isvalid(const Exposure &x)
 {
-  try
-  {
-    checkParams(x.type, x.value1, x.value2);
-    return true;
-  }
-  catch(Exception &)
-  {
-    return false;
-  }
+  return valid(x.type, x.value1, x.value2);
 }
 
 //===========================================================================

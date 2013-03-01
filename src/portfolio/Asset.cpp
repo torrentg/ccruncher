@@ -40,6 +40,8 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
   have_data = false;
   date = NAD;
   drecovery = Recovery(Recovery::Fixed,NAN);
+  // initial reserve to avoid continuous reallocation
+  data.reserve(256);
 }
 
 //===========================================================================
@@ -271,7 +273,7 @@ bool ccruncher::Asset::hasObligorRecovery() const
 {
   for(unsigned int i=0; i<data.size(); i++)
   {
-    if (!Recovery::valid(data[i].recovery))
+    if (!Recovery::isvalid(data[i].recovery))
     {
       return true;
     }

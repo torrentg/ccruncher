@@ -347,7 +347,7 @@ inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 //===========================================================================
 // simule iobligor
 //===========================================================================
-void ccruncher::SimulationThread::simule(int iobligor) throw()
+inline void ccruncher::SimulationThread::simule(int iobligor) throw()
 {
   // simule default time
   double x = getRandom(iobligor);

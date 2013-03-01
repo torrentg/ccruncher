@@ -195,7 +195,7 @@ void ccruncher_test::ObligorTest::test1()
   ASSERT(obligor.id == "cif1");
   ASSERT(obligor.irating == 0);
   ASSERT(obligor.ifactor == 1);
-  ASSERT(!Recovery::valid(obligor.recovery));
+  ASSERT(!Recovery::isvalid(obligor.recovery));
   ASSERT(!obligor.hasRecovery());
 
   ASSERT(obligor.belongsTo(1, 2));
