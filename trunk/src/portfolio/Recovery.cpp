@@ -87,21 +87,27 @@ ccruncher::Recovery::Recovery(RecoveryType t, double a, double b) throw(Exceptio
 }
 
 //===========================================================================
-// checkParams
+// valid
 //===========================================================================
-void ccruncher::Recovery::checkParams(RecoveryType t, double a, double b) throw(Exception)
+bool ccruncher::Recovery::valid(RecoveryType t, double a, double b)
 {
-  if (t == Fixed && (a < 0.0 || a > 1.0 || isnan(a) )) {
-    throw Exception("recovery value out of range");
-  }
-  else if (t == Beta && (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b))) {
-    throw Exception("beta parameters out of range");
-  }
-  else if (t == Uniform && (a < 0.0 || 1.0 < b || b <= a || isnan(a) || isnan(b))) {
-    throw Exception("uniform parameters out of range");
-  }
-  else if (t < 1 || t > 3) {
-    throw Exception("unknow recovery type");
+  switch(t)
+  {
+    case Fixed:
+      if (a < 0.0 || a > 1.0 || isnan(a)) return false;
+      else return true;
+
+    case Beta:
+      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    case Uniform:
+      if (a < 0.0 || 1.0 < b || b <= a || isnan(a) || isnan(b)) return false;
+      else return true;
+
+    default:
+      assert(false);
+      return false;
   }
 }
 
@@ -112,7 +118,7 @@ void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Excepti
 {
   if (t != Fixed || !isnan(a))
   {
-    checkParams(t, a, b);  
+    if (!valid(t, a, b)) throw Exception("invalid recovery parameters");
   }
   
   type = t;
@@ -139,17 +145,9 @@ double ccruncher::Recovery::getValue2() const
 //===========================================================================
 // check if is a Non-A-Recovery value
 //===========================================================================
-bool ccruncher::Recovery::valid(const Recovery &x)
+bool ccruncher::Recovery::isvalid(const Recovery &x)
 {
-  try
-  {
-    checkParams(x.type, x.value1, x.value2);
-    return true;
-  }
-  catch(Exception &)
-  {
-    return false;
-  }
+  return valid(x.type, x.value1, x.value2);
 }
 
 //===========================================================================

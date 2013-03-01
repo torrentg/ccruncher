@@ -112,7 +112,7 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
   int ila = vassets.size()-1;
 
   // checking coherence
-  for (int i=0;i<ila;i++)
+  for (int i=0; i<ila; i++)
   {
     if (vassets[i]->getId() == vassets[ila]->getId())
     {
@@ -187,7 +187,7 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
   else if (isEqual(name_,"obligor")) {
 
     // check recovery values
-    if (hasRecovery() && !Recovery::valid(recovery)) {
+    if (hasRecovery() && !Recovery::isvalid(recovery)) {
       throw Exception("obligor hasn't recovery, but has asset that assumes obligor recovery");
     }
     

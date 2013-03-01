@@ -272,12 +272,12 @@ void ccruncher_test::AssetTest::test4()
   
   // doing assertions
   ASSERT(asset.hasObligorRecovery());
-  ASSERT(!Recovery::valid(asset.getValues(Date("10/01/2007")).recovery));
-  ASSERT(!Recovery::valid(asset.getValues(Date("15/01/2007")).recovery));
-  ASSERT(Recovery::valid(asset.getValues(Date("10/01/2008")).recovery));
-  ASSERT(!Recovery::valid(asset.getValues(Date("10/01/2009")).recovery));
-  ASSERT(!Recovery::valid(asset.getValues(Date("15/01/2009")).recovery));
-  ASSERT(Recovery::valid(asset.getValues(Date("10/01/2010")).recovery));
+  ASSERT(!Recovery::isvalid(asset.getValues(Date("10/01/2007")).recovery));
+  ASSERT(!Recovery::isvalid(asset.getValues(Date("15/01/2007")).recovery));
+  ASSERT(Recovery::isvalid(asset.getValues(Date("10/01/2008")).recovery));
+  ASSERT(!Recovery::isvalid(asset.getValues(Date("10/01/2009")).recovery));
+  ASSERT(!Recovery::isvalid(asset.getValues(Date("15/01/2009")).recovery));
+  ASSERT(Recovery::isvalid(asset.getValues(Date("10/01/2010")).recovery));
 }
 
 //===========================================================================
