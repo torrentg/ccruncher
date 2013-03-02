@@ -125,9 +125,9 @@ class SimulationThread : public Thread
     // generate random numbers
     void randomize() throw();
     // simule obligor
-    void simule(int) throw();
+    void simule(size_t, Date) throw();
     // returns the simulated value
-    double getRandom(int iobligor) throw();
+    double getRandom(size_t iobligor) throw();
     // simulate a multivariate distribution (normal or t-student)
     void rmvdist();
     // chi-square random generation

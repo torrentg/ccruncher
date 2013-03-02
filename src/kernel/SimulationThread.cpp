@@ -113,10 +113,7 @@ void ccruncher::SimulationThread::run()
   while(more)
   {
     // initialize aggregated values
-    for(vector<double>::iterator it=losses.begin(); it!=losses.end(); ++it)
-    {
-      *it = 0.0;
-    }
+    fill(losses.begin(), losses.end(), 0.0);
 
     // generating random numbers
     timer1.resume();
@@ -127,7 +124,12 @@ void ccruncher::SimulationThread::run()
     timer2.resume();
     for(size_t i=0; i<obligors.size(); i++)
     {
-      simule(i);
+      // simule default time
+      double x = getRandom(i);
+      int r = obligors[i].irating;
+      double days = inverses.evalue(r, x);
+      Date dtime = time0 + (long)ceil(days);
+      if (dtime <= timeT) simule(i, dtime);
     }
     timer2.stop();
 
@@ -308,7 +310,7 @@ void ccruncher::SimulationThread::rfactors()
 //===========================================================================
 // generate random numbers
 //===========================================================================
-void ccruncher::SimulationThread::randomize() throw()
+inline void ccruncher::SimulationThread::randomize() throw()
 {
   if (!antithetic)
   {
@@ -332,7 +334,7 @@ void ccruncher::SimulationThread::randomize() throw()
 // getRandom. Returns i-th component of the simulated multivariate normal
 // encapsules antithetic management
 //===========================================================================
-inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
+inline double ccruncher::SimulationThread::getRandom(size_t iobligor) throw()
 {
   if (antithetic && reversed)
   {
@@ -345,19 +347,12 @@ inline double ccruncher::SimulationThread::getRandom(int iobligor) throw()
 }
 
 //===========================================================================
-// simule iobligor
+// simule obligor losses at dtime
 //===========================================================================
-inline void ccruncher::SimulationThread::simule(int iobligor) throw()
+void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
 {
-  // simule default time
-  double x = getRandom(iobligor);
-  int r = obligors[iobligor].irating;
-  double days = inverses.evalue(r, x);
-  Date dtime = time0 + (long)ceil(days);
-  if (timeT < dtime) return;
-
-  // evalue obligor losses
   double obligor_recovery = NAN;
+
   for(unsigned short i=0; i<obligors[iobligor].numassets; i++)
   {
     SimulatedAsset *asset = obligors[iobligor].ref.assets + i;
