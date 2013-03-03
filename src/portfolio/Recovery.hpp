@@ -30,6 +30,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utils/Exception.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -86,8 +87,6 @@ class Recovery
     double getValue(const gsl_rng *rng=NULL) const;
     // check if is a Non-A-Recovery value
     static bool isvalid(const Recovery &);
-    // to string
-    std::string toString() const;
 
 };
 
@@ -113,19 +112,22 @@ inline ccruncher::Recovery::RecoveryType ccruncher::Recovery::getType() const
 //===========================================================================
 inline double ccruncher::Recovery::getValue(const gsl_rng *rng) const
 {
-  if (type == Fixed) return value1;
-  else if (rng == NULL) return NAN;
-  else 
+  switch(type)
   {
-    switch(type)
-    {
-      case Beta:
-        return gsl_ran_beta(rng, value1, value2);
-      case Uniform:
-        return gsl_ran_flat(rng, value1, value2);
-      default:
-        return NAN;
-    }
+    case Fixed:
+      return value1;
+
+    case Beta:
+      assert(rng != NULL);
+      return gsl_ran_beta(rng, value1, value2);
+
+    case Uniform:
+      assert(rng != NULL);
+      return gsl_ran_flat(rng, value1, value2);
+
+    default:
+      assert(false);
+      return NAN;
   }
 }
 

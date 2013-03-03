@@ -395,6 +395,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
     }
   }
 
+  assert(segments.size() == numassets*idata.getSegmentations().size());
+
   // exit function
   log << indent(-1);
 }

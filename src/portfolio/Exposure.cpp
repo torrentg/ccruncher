@@ -187,30 +187,6 @@ bool ccruncher::Exposure::isvalid(const Exposure &x)
 }
 
 //===========================================================================
-// to string
-//===========================================================================
-string ccruncher::Exposure::toString() const
-{
-  switch(type)
-  {
-    case Fixed:
-      return Format::toString(value1);
-    case Lognormal:
-      return "lognormal(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    case Exponential:
-      return "exponential(" + Format::toString(value1) + ")";
-    case Uniform:
-      return "uniform(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    case Gamma:
-      return "gamma(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    case Normal:
-      return "normal(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    default:
-      return "NAN";
-  }
-}
-
-//===========================================================================
 // apply current net value factor to exposure
 //===========================================================================
 void ccruncher::Exposure::mult(double factor)
@@ -220,33 +196,39 @@ void ccruncher::Exposure::mult(double factor)
     case Fixed:
       value1 *= factor;
       break;
+
     case Lognormal:
       // http://en.wikipedia.org/wiki/Log-normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
       value1 += log(factor);
       break;
+
     case Exponential:
       // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
       // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
       value1 *= factor;
       break;
+
     case Uniform:
       // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
       value1 *= factor;
       value2 *= factor;
       break;
+
     case Gamma:
       // http://en.wikipedia.org/wiki/Gamma_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
       value2 *= factor;
       break;
+
     case Normal:
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
       value1 *= factor;
       value2 *= factor*factor;
       break;
+
     default:
       assert(false);
       break;

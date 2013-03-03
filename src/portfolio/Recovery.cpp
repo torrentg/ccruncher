@@ -150,20 +150,3 @@ bool ccruncher::Recovery::isvalid(const Recovery &x)
   return valid(x.type, x.value1, x.value2);
 }
 
-//===========================================================================
-// to string
-//===========================================================================
-string ccruncher::Recovery::toString() const
-{
-  switch(type)
-  {
-    case Fixed:
-      return Format::toString(value1*100.0) + "%";
-    case Beta:
-      return "beta(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    case Uniform:
-      return "uniform(" + Format::toString(value1) + "," + Format::toString(value2) + ")";
-    default:
-      return "NAN";
-  }
-}

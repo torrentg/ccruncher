@@ -30,6 +30,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utils/Exception.hpp"
+#include <cassert>
 
 //---------------------------------------------------------------------------
 
@@ -89,8 +90,6 @@ class Exposure
     double getValue(const gsl_rng *rng=NULL) const;
     // check if is a Non-A-Exposure value
     static bool isvalid(const Exposure &);
-    // to string
-    std::string toString() const;
     // apply current net value factor
     void mult(double);
 
@@ -118,25 +117,34 @@ inline ccruncher::Exposure::ExposureType ccruncher::Exposure::getType() const
 //===========================================================================
 inline double ccruncher::Exposure::getValue(const gsl_rng *rng) const
 {
-  if (type == Fixed) return value1;
-  else if (rng == NULL) return NAN;
-  else 
+  switch(type)
   {
-    switch(type)
-    {
-      case Lognormal:
-        return gsl_ran_lognormal(rng, value1, value2);
-      case Exponential:
-        return gsl_ran_exponential(rng, value1);
-      case Uniform:
-        return gsl_ran_flat(rng, value1, value2);
-      case Gamma:
-        return gsl_ran_gamma(rng, value1, value2);
-      case Normal:
-        return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
-      default:
-        return NAN;
-    }
+    case Fixed:
+      return value1;
+
+    case Lognormal:
+      assert(rng != NULL);
+      return gsl_ran_lognormal(rng, value1, value2);
+
+    case Exponential:
+      assert(rng != NULL);
+      return gsl_ran_exponential(rng, value1);
+
+    case Uniform:
+      assert(rng != NULL);
+      return gsl_ran_flat(rng, value1, value2);
+
+    case Gamma:
+      assert(rng != NULL);
+      return gsl_ran_gamma(rng, value1, value2);
+
+    case Normal:
+      assert(rng != NULL);
+      return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
+
+    default:
+      assert(false);
+      return NAN;
   }
 }
 
