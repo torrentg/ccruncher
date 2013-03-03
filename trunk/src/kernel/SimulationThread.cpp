@@ -362,8 +362,8 @@ void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
     {
       const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
       assert(dtime <= (asset->end-1)->date);
-      double recovery = values.recovery.getValue(rng);
       double exposure = values.exposure.getValue(rng);
+      double recovery = values.recovery.getValue(rng);
 
       // non-recovery means that is inherited from obligor
       if (isnan(recovery))
