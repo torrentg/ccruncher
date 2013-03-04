@@ -38,13 +38,14 @@ class Thread
 
   public:
 
+    // thread status
     enum ThreadStatus
     {
-        fresh,     // thread not started
-        running,   // running thread (see start method)
-        aborted,   // aborted thread (problem during execution)
-        cancelled, // cancelled thread (see cabcel method)
-        finished   // finished thread (run method finish)
+      fresh,     // thread not started
+      running,   // running thread (see start method)
+      aborted,   // aborted thread (problem during execution)
+      cancelled, // cancelled thread (see cabcel method)
+      finished   // finished thread (run method finish)
     };
 
   private:
@@ -53,6 +54,8 @@ class Thread
     pthread_t thread;
     // thread status
     ThreadStatus status;
+    // ensures data consistence
+    mutable pthread_mutex_t mutex;
 
   private:
 
@@ -62,6 +65,8 @@ class Thread
     Thread(const Thread &);
     // non-copyable class
     Thread& operator=(const Thread &);
+    // set thread status
+    void setStatus(ThreadStatus s);
 
   public:
 
