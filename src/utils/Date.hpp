@@ -148,7 +148,7 @@ bool isInterval(const char *str);
 //===========================================================================
 // Constructor. constructs a new object with non-valid date (NAD)
 //===========================================================================
-inline ccruncher::Date::Date() : lJulianDay(nad[0])
+inline ccruncher::Date::Date() : lJulianDay(1721026L)
 {
   // nothing to do
 }

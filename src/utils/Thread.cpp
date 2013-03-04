@@ -27,7 +27,8 @@
 //===========================================================================
 ccruncher::Thread::Thread()
 {
-  status = fresh;
+  pthread_mutex_init(&mutex, NULL);
+  setStatus(fresh);
 }
 
 //===========================================================================
@@ -36,11 +37,13 @@ ccruncher::Thread::Thread()
 ccruncher::Thread::~Thread()
 {
   cancel();
-  
-  if (status != fresh)
+
+  if (getStatus() != fresh)
   {
     pthread_detach(thread);
   }
+
+  pthread_mutex_destroy(&mutex);
 }
 
 //===========================================================================
@@ -54,13 +57,13 @@ void* ccruncher::Thread::launcher(void *d)
 
   try 
   {
-    x->status = running;
+    x->setStatus(running);
     x->run();
-    x->status = finished;
+    x->setStatus(finished);
   }
   catch(...) 
   {
-    x->status = aborted;
+    x->setStatus(aborted);
     throw;
   }
 
@@ -72,10 +75,10 @@ void* ccruncher::Thread::launcher(void *d)
 //===========================================================================
 void ccruncher::Thread::start()
 {
-  if (status == running) return;
-  status = running;
+  if (getStatus() == running) return;
+  setStatus(running);
   int rc = pthread_create(&thread, NULL, Thread::launcher, (void*)this);
-  if (rc != 0) status = aborted;
+  if (rc != 0) setStatus(aborted);
 }
 
 //===========================================================================
@@ -83,11 +86,11 @@ void ccruncher::Thread::start()
 //===========================================================================
 void ccruncher::Thread::wait()
 {
-  if (status == running) 
+  if (getStatus() == running)
   {
     int rc = pthread_join(thread, NULL);
-    if (rc != 0) status = aborted;
-    else status = finished;
+    if (rc != 0) setStatus(aborted);
+    else setStatus(finished);
   }
 }
 
@@ -96,11 +99,11 @@ void ccruncher::Thread::wait()
 //===========================================================================
 void ccruncher::Thread::cancel()
 {
-  if (status == running) 
+  if (getStatus() == running)
   {
     pthread_cancel(thread);
     pthread_join(thread, NULL);
-    status = cancelled;
+    setStatus(cancelled);
   }
 }
 
@@ -109,6 +112,19 @@ void ccruncher::Thread::cancel()
 //===========================================================================
 ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
 {
-  return status;
+  pthread_mutex_lock(&mutex);
+  ThreadStatus s = status;
+  pthread_mutex_unlock(&mutex);
+  return s;
+}
+
+//===========================================================================
+// setStatus
+//===========================================================================
+void ccruncher::Thread::setStatus(ThreadStatus s)
+{
+  pthread_mutex_lock(&mutex);
+  status = s;
+  pthread_mutex_unlock(&mutex);
 }
 
