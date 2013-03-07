@@ -360,7 +360,7 @@ void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
     // evalue asset loss
     if (dtime <= asset->maxdate && asset->mindate <= dtime)
     {
-      const DateValues &values = *(lower_bound(asset->begin, asset->end, DateValues(dtime)));
+      const DateValues &values = *(lower_bound(asset->begin, asset->end, dtime));
       assert(dtime <= (asset->end-1)->date);
       double exposure = values.exposure.getValue(rng);
       double recovery = values.recovery.getValue(rng);

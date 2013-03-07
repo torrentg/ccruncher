@@ -68,12 +68,15 @@ class Thread
     // set thread status
     void setStatus(ThreadStatus s);
 
-  public:
+  protected:
 
     // constructor
     Thread();
     // destructor
     virtual ~Thread();
+
+  public:
+
     // executes main procedure as a thread
     virtual void run() = 0;
     // starts the thread

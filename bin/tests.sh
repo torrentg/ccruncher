@@ -5,7 +5,7 @@
 #   Executes ccruncher functional tests
 #
 # dependencies:
-#   ccruncher, R
+#   ccruncher-cmd, R
 #
 # input:
 #   none
@@ -101,10 +101,10 @@ readconf() {
     exit 1;
   fi
 
-  which $CCRUNCHER/build/ccruncher > /dev/null 2> /dev/null;
+  which $CCRUNCHER/build/ccruncher-cmd > /dev/null 2> /dev/null;
 
   if [ $? != 0 ]; then
-    echo "error: ccruncher not found in build/ directory";
+    echo "error: ccruncher-cmd not found in build/ directory";
     exit 1;
   fi
 
@@ -118,7 +118,7 @@ runcc() {
   mkdir -p data/$1;
   rm -f data/$1/*;
   echo "running ccruncher on $1 ...";
-  ./build/ccruncher-cmd -w --path=data/$1 samples/$1.xml;
+  ./build/ccruncher-cmd -w -o data/$1 samples/$1.xml;
 
 }
 
@@ -147,3 +147,4 @@ R --vanilla --slave << _EOF_
     test04();
     test05();
 _EOF_
+
