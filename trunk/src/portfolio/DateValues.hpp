@@ -52,9 +52,11 @@ class DateValues
   public:
 
     // constructor
-    DateValues(Date d=Date(), const Exposure &e=Exposure(), const Recovery &r=Recovery());
+    explicit DateValues(Date d=Date(), const Exposure &e=Exposure(), const Recovery &r=Recovery());
     // less-than operator
     bool operator<(const DateValues &) const;
+    // less-than operator
+    bool operator<(const Date &) const;
 
 };
 
@@ -75,6 +77,14 @@ inline ccruncher::DateValues::DateValues(Date d, const Exposure &e, const Recove
 inline bool ccruncher::DateValues::operator<(const DateValues &right) const
 {
   return (date < right.date);
+}
+
+//===========================================================================
+// less-than operador (needed by sort functions)
+//===========================================================================
+inline bool ccruncher::DateValues::operator<(const Date &right) const
+{
+  return (date < right);
 }
 
 //---------------------------------------------------------------------------

@@ -17,6 +17,8 @@ version 2.2 (???. 2013)
   * improved aggregation performance
   * improved file parsing performance
   * added file checksum computation
+  * added logo in doc header
+  * code refactoring
 
 version 2.1 (Dec. 2012)
 --------------------------

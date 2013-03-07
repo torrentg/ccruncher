@@ -89,9 +89,8 @@ class ExpatHandlers
     virtual void epend(ExpatUserData &/*eud*/, const char */*name*/) {}
     // handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
-
-  public:
-
+    // constructor
+    ExpatHandlers() {}
     // destructor
     virtual ~ExpatHandlers();
     
