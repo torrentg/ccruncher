@@ -73,7 +73,7 @@ class Asset : public ExpatHandlers
     // constructor
     Asset(Segmentations *);
     // return asset id
-    std::string getId() const;
+    const std::string& getId() const;
     // add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
     // precpare data
@@ -98,6 +98,14 @@ class Asset : public ExpatHandlers
 };
 
 //---------------------------------------------------------------------------
+
+//===========================================================================
+// getId
+//===========================================================================
+inline const std::string& ccruncher::Asset::getId() const
+{
+  return id;
+}
 
 }
 

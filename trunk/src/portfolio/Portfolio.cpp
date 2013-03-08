@@ -97,7 +97,7 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
   // checking if obligor id is previously defined
   if(idobligors.find(val->id) != idobligors.end())
   {
-    string msg = "obligor id " + val->id + " repeated";
+    string msg = "obligor id '" + val->id + "' repeated";
     throw Exception(msg);
   }
   else
@@ -108,15 +108,15 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
   // checking if assets id are previously defined
   for(int i=0; i<(int)val->getAssets().size(); i++)
   {
-    string id = val->getAssets()[i]->getId();
-    if (idassets.find(id) != idassets.end())
+    const string &id = val->getAssets()[i]->getId();
+    if (idassets.find(id) == idassets.end())
     {
-       string msg = "asset id " + id + " repeated";
-       throw Exception(msg);
+      idassets[id] = true;
     }
     else 
     {
-      idassets[id] = true;
+      string msg = "asset id '" + id + "' repeated";
+      throw Exception(msg);
     }
   }
 

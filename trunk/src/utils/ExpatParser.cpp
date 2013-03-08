@@ -90,11 +90,8 @@ void ccruncher::ExpatParser::reset()
 //===========================================================================
 void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
-  // retrieving current handler
-  ExpatUserData *ud = (ExpatUserData *) ud_;
-  ExpatHandlers *eh = ud->getCurrentHandlers();
-
   // setting current tag
+  ExpatUserData *ud = (ExpatUserData *) ud_;
   ud->setCurrentTag(name);
 
   // replacing defines
@@ -107,6 +104,7 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
   }
 
   // calling current handler
+  ExpatHandlers *eh = ud->getCurrentHandlers();
   eh->epstart(*ud, name, atts);
 }
 

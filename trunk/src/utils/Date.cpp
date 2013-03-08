@@ -108,21 +108,44 @@ ccruncher::Date::Date(const char *str) throw(Exception)
 //===========================================================================
 void ccruncher::Date::parse(const char *str) throw(Exception)
 {
+  assert(str != NULL);
+
   int d, m, y;
-  char buf[10];
+  const char *ptr1 = str;
+  const char *ptr2 = str;
 
-  int l = strlen(str);
-  if (l < 8 || 10 < l)
-  {
+  // parsing day
+  while (isdigit(*ptr2)) ptr2++;
+  if (ptr2-ptr1 < 1 || ptr2-ptr1 > 2 || *ptr2 != '/') {
     throw Exception("invalid date: " + string(str) + " (non valid format)");
   }
-
-  int rc = sscanf(str, "%d/%d/%d%8s", &d, &m, &y, buf);
-  if (rc != 3)
-  {
-    throw Exception("invalid date: " + string(str) + " (non valid format)");
+  else {
+    d = atoi(ptr1);
+    ptr2++;
+    ptr1 = ptr2;
   }
 
+  // parsing month
+  while (isdigit(*ptr2)) ptr2++;
+  if (ptr2-ptr1 < 1 || ptr2-ptr1 > 2 || *ptr2 != '/') {
+    throw Exception("invalid date: " + string(str) + " (non valid format)");
+  }
+  else {
+    m = atoi(ptr1);
+    ptr2++;
+    ptr1 = ptr2;
+  }
+
+  // parsing year
+  while (isdigit(*ptr2)) ptr2++;
+  if (ptr2-ptr1 != 4 || *ptr2 != 0) {
+    throw Exception("invalid date: " + string(str) + " (non valid format)");
+  }
+  else {
+    y = atoi(ptr1);
+  }
+
+  // setting date
   if (!valid(d, m, y))
   {
     throw Exception("invalid Date: " + string(str) + " (non valid date)");
