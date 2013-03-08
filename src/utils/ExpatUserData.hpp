@@ -51,10 +51,10 @@ class ExpatUserData
     // internal struct
     struct ExpatUserDataToken
     {
-        // token name related to handler
-        char name[20];
-        // pointer to class handlers container
-        ExpatHandlers *handlers;
+      // token name related to handler
+      char name[20];
+      // pointer to class handlers container
+      ExpatHandlers *handlers;
     };
 
   private:
@@ -78,7 +78,9 @@ class ExpatUserData
 
   private:
 
+    // push str to buffer
     const char* bufferPush(const char *str, size_t n);
+    // append str to buffer
     const char* bufferAppend(const char *str, size_t n);
 
   public:

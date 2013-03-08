@@ -93,11 +93,11 @@ void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandler
   assert(pila_pos<10);
   pila[pila_pos].handlers = eh;
   assert(strlen(name)<20);
-  strncpy(pila[pila_pos].name, name, 20);
+  strncpy(pila[pila_pos].name, name, 19);
 }
 
 //===========================================================================
-//
+// bufferPush
 //===========================================================================
 const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
 {
@@ -122,7 +122,7 @@ const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
 }
 
 //===========================================================================
-//
+// bufferAppend
 //===========================================================================
 const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
 {
@@ -150,7 +150,7 @@ const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
 }
 
 //===========================================================================
-//
+// applyDefines
 //===========================================================================
 const char* ccruncher::ExpatUserData::applyDefines(const char *str)
 {
