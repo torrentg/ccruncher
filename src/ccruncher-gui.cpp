@@ -240,9 +240,6 @@ void setnice(int niceval) throw(Exception)
 //===========================================================================
 void help()
 {
-  //TODO: change description
-  //TODO: use options + open files passed as argument
-
   cout <<
   "Usage: ccruncher-gui [OPTION]... [FILE]...\n"
   "\n"
@@ -268,7 +265,7 @@ void help()
   "Examples:\n"
   "ccruncher-gui samples/test04.xml\n\n"
   "ccruncher-gui data/portfolio.csv\n\n"
-  "ccruncher-gui samples/test04.xml data/*.csv\n\n"
+  "ccruncher-gui -i --threads=2 samples/test04.xml data/*.csv\n\n"
   "\n"
   "Report bugs to gtorrent@ccruncher.net. Please include the output of\n"
   "'ccruncher-gui --info' in the body of your report and attach the input\n"

@@ -317,13 +317,13 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
-  int cont = 0;
-  int numassets = 0;
-  int numdatevalues = 0;
-  for(unsigned int i=0; i<obligors.size(); i++)
+  size_t cont = 0;
+  size_t numassets = 0;
+  size_t numdatevalues = 0;
+  for(size_t i=0; i<obligors.size(); i++)
   {
     vector<Asset*> &vassets = obligors[i].ref.obligor->getAssets();
-    for(unsigned int j=0; j<vassets.size(); j++)
+    for(size_t j=0; j<vassets.size(); j++)
     {
       cont++;
       if (vassets[j]->isActive(time0, timeT)) 
@@ -395,6 +395,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
     }
   }
 
+  assert(datevalues.size() == numdatevalues);
   assert(segments.size() == numassets*idata.getSegmentations().size());
 
   // exit function
