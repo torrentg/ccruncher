@@ -5,6 +5,9 @@ CCRUNCHER TODO
 Current works
 -------------------
 
+  * performance tip: loop obligor-simulations instead of simulation-obligors
+  * check for unused segments (in Aggregator class?)
+
 Future works
 -------------------
   * technical features
@@ -23,4 +26,5 @@ Future works
      - consider that a obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data
-     - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling') 
+     - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling')
+ 

@@ -52,6 +52,8 @@ ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
   assert(numassets*numsegmentations == segments.size());
   for(size_t i=0; i<numassets; i++)
   {
+    //TODO: check for unused segments (not only 'unassigned')
+    //TODO: report unused segments as warning
     if (segments[i*numsegmentations + isegmentation] == 0)
     {
       printUnassignedSegment = true;
