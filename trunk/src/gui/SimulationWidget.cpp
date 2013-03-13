@@ -300,7 +300,7 @@ void ccruncher_gui::SimulationWidget::linkify(QString &line)
   if (pos != -1)
   {
     QString token = regexp1.cap(1).trimmed();
-    if (QFile(token).exists() && !QDir(token).exists())
+    if (QFile(token).exists()) // && !QDir(token).exists())
     {
       QString filename = QFileInfo(token).fileName();
       size_t ncols = task.getLogger().getNumCols();

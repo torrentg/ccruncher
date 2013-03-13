@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QMdiSubWindow>
 #include <QPixmap>
+#include <QDesktopServices>
 #include "ui_MainWindow.h"
 #include "gui/MainWindow.hpp"
 #include "gui/SimulationWidget.hpp"
@@ -181,6 +182,12 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
 
   if (fileinfo.exists() && fileinfo.isReadable())
   {
+    if (QDir(filename).exists()) {
+      QString path = QDir::toNativeSeparators(filename);
+      QDesktopServices::openUrl(QUrl("file:///" + path));
+      return;
+    }
+
     QMdiSubWindow *existing = findMdiChild(url.toString());
     if (existing) {
       mdiArea->setActiveSubWindow(existing);
