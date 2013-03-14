@@ -23,6 +23,7 @@
 #include <cmath>
 #include <cfloat>
 #include <climits>
+#include <cstdlib>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Utils.hpp"
@@ -36,7 +37,7 @@ using namespace ccruncher;
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
+ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
@@ -44,6 +45,7 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
   maxiterations = 0;
   antithetic = false;
   lhs_size = 1;
+  blocksize = 1;
   seed = 0UL;
   hash = 0;
   fpath = "path not set";
@@ -52,6 +54,8 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), chol(NULL), stop(NULL)
   time0 = NAD;
   timeT = NAD;
   ndf = NAN;
+  assetsize = 0;
+  numassets = 0;
 }
 
 //===========================================================================
@@ -78,6 +82,13 @@ void ccruncher::MonteCarlo::release()
   }
   threads.clear();
 
+  // deallocating assets
+  if (assets != NULL)
+  {
+    delete [] assets;
+    assets = NULL;
+  }
+
   // dropping aggregators elements
   for(unsigned int i=0; i<aggregators.size(); i++) {
     if (aggregators[i] != NULL) {
@@ -87,15 +98,13 @@ void ccruncher::MonteCarlo::release()
   }
   aggregators.clear();
 
-  // deallocating choleky matrix
+  // deallocating cholesky matrix
   if (chol != NULL) {
     gsl_matrix_free(chol);
     chol = NULL;
   }
 
   // flushing memory
-  vector<unsigned short>(0).swap(segments);
-  vector<SimulatedAsset>(0).swap(assets);
   vector<SimulatedObligor>(0).swap(obligors);
   vector<DateValues>(0).swap(datevalues);
   floadings1.clear();
@@ -160,6 +169,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   timeT = idata.getParams().timeT;
   antithetic = idata.getParams().antithetic;
   lhs_size = idata.getParams().lhs_size;
+  blocksize = idata.getParams().blocksize;
   seed = idata.getParams().rng_seed;
   if (seed == 0UL) {
     // use a seed based on clock
@@ -299,9 +309,6 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 {
-  // doing assertions
-  assert(assets.empty());
-
   // checking limits (see SimulatedAsset::segments field)
   if (idata.getSegmentations().size() == 0 || USHRT_MAX < idata.getSegmentations().size()) {
     throw Exception("invalid number of segmentations");
@@ -317,8 +324,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
+  numassets = 0;
   size_t cont = 0;
-  size_t numassets = 0;
   size_t numdatevalues = 0;
   for(size_t i=0; i<obligors.size(); i++)
   {
@@ -343,9 +350,10 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   }
 
   // creating the simulated assets array
+  assert(assets == NULL);
+  assetsize = sizeof(SimulatedAsset) + sizeof(unsigned short)*(idata.getSegmentations().size()-1);
+  assets = new char[assetsize*numassets];
   datevalues.resize(numdatevalues);
-  assets.resize(numassets);
-  segments.reserve(numassets*idata.getSegmentations().size());
   
   numassets = 0;
   numdatevalues = 0;
@@ -359,10 +367,19 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
     {
       if (vassets[j]->isActive(time0, timeT)) 
       {
+        // checking ranges
+        if (obligors[i].numassets == USHRT_MAX)
+        {
+          throw Exception("exceeded maximum number of assets by obligor");
+        }
+
+        // setting asset
+        SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
+
         // creating asset
-        assets[numassets].mindate = vassets[j]->getMinDate();
-        assets[numassets].maxdate = vassets[j]->getMaxDate();
-        assets[numassets].begin = datevalues.begin() + numdatevalues;
+        p->mindate = vassets[j]->getMinDate();
+        p->maxdate = vassets[j]->getMaxDate();
+        p->begin = datevalues.begin() + numdatevalues;
 
         // setting asset datevalues
         for(size_t k=0; k<vassets[j]->getData().size(); k++)
@@ -370,25 +387,23 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
           datevalues[numdatevalues] = vassets[j]->getData()[k];
           numdatevalues++;
         }
-        assets[numassets].end = datevalues.begin() + numdatevalues;
+
+        p->end = datevalues.begin() + numdatevalues;
 
         // setting asset segments
+        unsigned short *segments = &(p->segments);
         for(int k=0; k<idata.getSegmentations().size(); k++)
         {
-          segments.push_back(static_cast<unsigned short>(vassets[j]->getSegment(k)));
+          segments[k] = static_cast<unsigned short>(vassets[j]->getSegment(k));
         }
 
-        // assigning asset to obligor
+        // assigning obligor.assets to first asset
         if (obligors[i].ref.assets == NULL)
         {
-          obligors[i].ref.assets = &(assets[numassets]);
+          obligors[i].ref.assets = p;
         }
 
         // incrementing num assets counters
-        if (obligors[i].numassets == USHRT_MAX)
-        {
-          throw Exception("exceeded maximum number of assets by obligor");
-        }
         obligors[i].numassets++;
         numassets++;
       }
@@ -396,7 +411,6 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   }
 
   assert(datevalues.size() == numdatevalues);
-  assert(segments.size() == numassets*idata.getSegmentations().size());
 
   // exit function
   log << indent(-1);
@@ -419,8 +433,9 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   log << "output data directory" << split << "["+fpath+"]" << endl;
 
   // allocating and initializing aggregators
+  numsegments = 0;
   int numsegmentations = idata.getSegmentations().size();
-  numsegments.resize(numsegmentations, 0);
+  numSegmentsBySegmentation.resize(numsegmentations, 0);
   aggregators.resize(numsegmentations, (Aggregator*)(NULL));
   for(int i=0; i<numsegmentations; i++)
   {
@@ -431,9 +446,10 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
     }
 
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
-    Aggregator *aggregator = new Aggregator(segments, i, idata.getSegmentations(), filename, fmode);
+    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations(), filename, fmode);
     aggregators[i] = aggregator;
-    numsegments[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
+    numSegmentsBySegmentation[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
+    numsegments += numSegmentsBySegmentation[i];
     log << "segmentation" << split << "["+filename+"]" << endl;
   }
 
@@ -448,9 +464,6 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 {
   stop = stop_;
   if (stop != NULL && *stop) return;
-
-  double etime1=0.0; // ellapsed time generating random numbers
-  double etime2=0.0; // ellapsed time simulating obligors & segmentations
 
   // assertions
   assert(fpath != "" && fpath != "path not set");
@@ -474,8 +487,9 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   log << "maximum execution time (seconds)" << split << maxseconds << endl;
   log << "maximum number of iterations" << split << maxiterations << endl;
   log << "antithetic mode" << split << antithetic << endl;
-  log << "latin hypercube sampling" << split << (lhs_size==1?"false":Format::toString(lhs_size)) << endl;
-  log << "number of threads" << split << (int)numthreads << endl;
+  log << "latin hypercube sampling" << split << (lhs_size==1?"false":Format::toString(size_t(lhs_size))) << endl;
+  log << "thread block size" << split << blocksize << endl;
+  log << "number of threads" << split << int(numthreads) << endl;
   log << indent(-1);
   log << "running Monte Carlo";
   if (hash != 0) log << " [" << Format::toString(hash) << " simulations per hash]";
@@ -486,11 +500,10 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer.start();
   nfthreads = numthreads;
   numiterations = 0;
-  timer3.reset();
   threads.assign(numthreads, (SimulationThread*)NULL);
   for(int i=0; i<numthreads; i++)
   {
-    threads[i] = new SimulationThread(i+1, *this, seed+i);
+    threads[i] = new SimulationThread(i+1, *this, seed+i, blocksize);
     if (numthreads == 1) {
       threads[i]->run();
     }
@@ -500,17 +513,22 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   }
 
   // awaiting threads
+  double etime1 = 0.0; // elapsed time generating random numbers
+  double etime2 = 0.0; // elapsed time simulating losses
+  double etime3 = 0.0; // elapsed time writting to disk
+
   for(int i=0; i<numthreads; i++)
   {
     threads[i]->wait();
-    etime1 += threads[i]->getEllapsedTime1();
-    etime2 += threads[i]->getEllapsedTime2();
+    etime1 += threads[i]->getElapsedTime1();
+    etime2 += threads[i]->getElapsedTime2();
+    etime3 += threads[i]->getElapsedTime3();
     delete threads[i];
     threads[i] = NULL;
   }
 
   // closing aggregators
-  timer3.resume();
+  Timer timer3_aux(true);
   if (findexes.is_open())
   {
     findexes.close();
@@ -520,14 +538,14 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
     delete aggregators[i];
     aggregators[i] = NULL;
   }
-  timer3.stop();
+  etime3 += timer3_aux.stop();
 
   // exit function
   if (nhash > 0) log << endl;
   log << "simulations realized" << split <<numiterations << endl;
   log << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
   log << "elapsed time simulating obligors" << split << Timer::format(etime2/numthreads) << endl;
-  log << "elapsed time writing data to disk" << split << timer3 << endl;
+  log << "elapsed time writing data to disk" << split << Timer::format(etime3/numthreads) << endl;
   log << "total simulation time" << split << timer << endl;
   log << indent(-2) << endl;
 }
@@ -535,45 +553,50 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 //===========================================================================
 // append a simulation result
 //===========================================================================
-bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, const vector<double> &losses) throw()
+bool ccruncher::MonteCarlo::append(int ithread, const vector<short> &vi, const double *losses) throw()
 {
+  assert(losses != NULL);
+  assert(vi.size() == blocksize);
+
   pthread_mutex_lock(&mutex);
-  timer3.resume();
   bool more = true;
 
   try
   {
-    // trace indexes (if required)
-    if (findexes.is_open()) {
-      findexes << ithread << ", " << ilhs << ", " << (reversed?1:0) << "\n";
-    }
-
-    // aggregating simulation result
-    const double *ptr_losses = &(losses[0]);
-    for(unsigned int i=0; i<aggregators.size(); i++)
+    for(size_t iblock=0; iblock<vi.size(); iblock++)
     {
-      aggregators[i]->append(ptr_losses);
-      ptr_losses += numsegments[i];
-    }
-    assert((ptr_losses-&(losses[0])) == int(losses.size()));
+      // trace indexes (if required)
+      if (findexes.is_open()) {
+        findexes << ithread << ", " << std::abs(int(vi[iblock])) << ", " << (vi[iblock]<0?1:0) << "\n";
+      }
 
-    // counter increment
-    numiterations++;
+      // aggregating simulation result
+      for(unsigned int i=0; i<aggregators.size(); i++)
+      {
+        aggregators[i]->append(losses);
+        losses += numSegmentsBySegmentation[i];
+      }
 
-    // printing hashes
-    if (hash > 0 && numiterations%hash == 0)
-    {
-      log << '.' << flush;
-    }
+      // counter increment
+      numiterations++;
 
-    // checking stop criterias
-    if (
-         (maxiterations > 0 && numiterations > maxiterations-nfthreads) ||
-         (maxseconds > 0 && timer.read() >  maxseconds) ||
-         (stop != NULL && *stop)
-       )
-    {
-      more = false;
+      // printing hashes
+      if (hash > 0 && numiterations%hash == 0)
+      {
+        log << '.' << flush;
+      }
+
+      // checking stop criterias
+      assert(nfthreads > 0);
+      if (
+           (maxiterations > 0 && numiterations + (nfthreads-1)*blocksize >= maxiterations) ||
+           (maxseconds > 0 && timer.read() >  maxseconds) ||
+           (stop != NULL && *stop)
+         )
+      {
+        more = false;
+        break;
+      }
     }
   }
   catch(Exception &e)
@@ -584,7 +607,6 @@ bool ccruncher::MonteCarlo::append(int ithread, size_t ilhs, bool reversed, cons
 
   // exit function
   if (!more) nfthreads--;
-  timer3.stop();
   pthread_mutex_unlock(&mutex);
   return(more);
 }

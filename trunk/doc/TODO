@@ -5,9 +5,10 @@ CCRUNCHER TODO
 Current works
 -------------------
 
-  * performance tip: loop obligor-simulations instead of simulation-obligors
   * check for unused segments (in Aggregator class?)
-
+  * check in gui-win32 if output dir opens in default browser
+  * check in gui-win32 xml edit encoding
+  
 Future works
 -------------------
   * technical features

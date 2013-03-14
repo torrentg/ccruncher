@@ -43,6 +43,7 @@ void ccruncher_test::ParamsTest::test1()
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='lhs' value='false'/>\n\
       <parameter name='portfolio.onlyActiveObligors' value='false'/>\n\
+      <parameter name='blocksize' value='256'/>\n\
     </parameters>";
 
   ExpatParser xmlparser;
@@ -59,6 +60,7 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(true == params.antithetic);
   ASSERT(1 == params.lhs_size);
   ASSERT(false == params.onlyactive);
+  ASSERT(256 == params.blocksize);
 }
 
 //===========================================================================
@@ -106,5 +108,30 @@ void ccruncher_test::ParamsTest::test3()
 
   ASSERT(params.getCopulaType() == "t");
   ASSERT(params.getCopulaParam() == 3.0);
+}
+
+//===========================================================================
+// test4
+// antithetic + blocksize even = exception
+//===========================================================================
+void ccruncher_test::ParamsTest::test4()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <parameters>\n\
+      <parameter name='time.0' value='18/02/2003'/>\n\
+      <parameter name='time.T' value='18/02/2008'/>\n\
+      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
+      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='rng.seed' value='38765874'/>\n\
+      <parameter name='antithetic' value='true'/>\n\
+      <parameter name='lhs' value='false'/>\n\
+      <parameter name='portfolio.onlyActiveObligors' value='false'/>\n\
+      <parameter name='blocksize' value='257'/>\n\
+    </parameters>";
+
+  ExpatParser xmlparser;
+  Params params;
+  ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
 }
 

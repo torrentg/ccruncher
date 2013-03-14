@@ -68,7 +68,8 @@
       This document describes the xml input file for ccruncher-2.2.
       In the distribution package you can find the DTD, the XSD and some XML 
       samples into the $CCRUNCHER/samples directory. The xml used as
-      example in this section can be found <a href="sample.xml">here</a>.
+      <a href="sample.xml">example</a> is not intended to reflect a real 
+      case, but to see the CCruncher configuration options.
       <br /><br />
       The XML input file structure is as follows:
     </p>
@@ -180,6 +181,7 @@
     &lt;parameter name="rng.seed" value="0"/&gt;
     &lt;parameter name="antithetic" value="true"/&gt;
     &lt;parameter name="lhs" value="false"/&gt;
+    &lt;parameter name="blocksize" value="128"/&gt;
     &lt;parameter name="portfolio.onlyActiveObligors" value="true"/&gt;
   &lt;/parameters&gt;
     </pre>
@@ -249,6 +251,7 @@
         <td class="c2">
           Seed used to initialize a random number generator. If it has value 0
           then a random number based on the current time will be used.
+          <br/>
           This parameter is optional. Default value is 0.
         </td>
         <td class="c3">long</td>
@@ -259,7 +262,7 @@
           Specifies whether or not to use a variance reduction technique 
           named antithetic. If you have doubts about setting this 
           parameter then set it to 'false', otherwise set it to 'true'.
-          Optional file <code>indexes.csv</code> contains info about the 
+          File <code>indexes.csv</code> contains info about the 
           simulated values.
         </td>
         <td class="c3">boolean</td>
@@ -274,19 +277,35 @@
           otherwise set the sample size. If LHS is set and there is more than one 
           factor, then make sure that the sample size is high enought (eg. 1000),
           otherwise you can obtain incorrect results.
+          File <code>indexes.csv</code> contains info about the simulated values.
+          <br/>
           This parameter is optional. Default value is 'false'. 
-          Optional file <code>indexes.csv</code> contains info about the 
-          simulated values.
         </td>
         <td class="c3">boolean<br/>integer</td>
       </tr>
       <tr class="b">
+        <td class="c1">blocksize</td>
+        <td class="c2">
+          Number of simultaneous simulations realized for each thread. 
+          This parameter allows to tune the amount of data managed by the CPU in 
+          each iteration. Note that fitting data in the L1/L2 data cache boosts 
+          performance. If you observe a lack of performance when your problem 
+          dimensions are high then try to reduce this parameter value.
+          If you enable antithetic mode then <code>blocksize</code> needs to be 
+          a multiple of 2. It is desirable that the number of simulations be a 
+          multiple of <code>blocksize&times;numthreads</code>.
+          <br/>
+          This parameter is optional. Default value is 128. 
+        </td>
+        <td class="c3">integer</td>
+      </tr>
+      <tr class="a">
         <td class="c1">portfolio.onlyActiveObligors</td>
         <td class="c2">
           If you want to simulate all the obligors, including obligors without
           risk along the time range, type 'false'. If you want to simulate
           only active obligors along the simulation period type 'true'. We 
-          suggest writing always 'true'.
+          suggest to set 'true'.
         </td>
         <td class="c3">boolean</td>
       </tr>
@@ -1215,7 +1234,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 06-Mar-2013
+          Last modified: 14-Mar-2013
         </td>
       </tr></table>
     </div>

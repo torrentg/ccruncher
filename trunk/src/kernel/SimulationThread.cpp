@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <numeric>
 #include <algorithm>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_blas.h>
@@ -54,18 +55,21 @@ using namespace ccruncher;
 
 // --------------------------------------------------------------------------
 
+#define GAUSSIAN_POOL_SIZE 512
 #define LHS_VALUES_Z(i,j) lhs_values_z[(i)*numfactors+(j)]
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed) :
-  Thread(), id(ti), montecarlo(mc), obligors(mc.obligors), assets(mc.assets),
-  segments(mc.segments), numsegments(mc.numsegments), rng(NULL), chol(mc.chol),
-  floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
-  losses(0)
+ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed, unsigned short bs) :
+  Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation),
+  chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
+  rng(NULL), losses(0)
 {
   assert(chol != NULL);
+  assert(bs > 0);
+
+  id = ti;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
   numfactors = chol->size1;
@@ -73,23 +77,30 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
   time0 = mc.time0;
   timeT = mc.timeT;
   antithetic = mc.antithetic;
-  reversed = true;
+  assetsize = mc.assetsize;
+  numsegments = mc.numsegments;
+  blocksize = bs;
 
-  int num = 0;
-  for(size_t i=0; i<numsegments.size(); i++) num += numsegments[i];
-  losses.resize(num, 0.0);
+  assert(antithetic?(blocksize%2!=0?false:true):true);
+
+  losses.resize(numsegments*blocksize, 0.0);
+  indexes.resize(blocksize);
 
   lhs_num = 0;
   lhs_size = mc.lhs_size;
-  lhs_pos = lhs_size; // to force an initial sample
+  lhs_pos = lhs_size;
   lhs_values_z.resize(lhs_size*numfactors);
-  if (ndf > 0.0) {
-    lhs_values_s.resize(lhs_size);
-  }
+  lhs_values_s.resize(lhs_size);
   if (lhs_size > 1 && numfactors > 1) {
     lhs_aux.resize(lhs_size);
   }
-  xvalues.resize(obligors.size());
+
+  rngpool.resize(GAUSSIAN_POOL_SIZE);
+  rngpool_pos = GAUSSIAN_POOL_SIZE;
+
+  x.resize(blocksize/(antithetic?2:1));
+  z.resize((blocksize*numfactors)/(antithetic?2:1));
+  s.resize(blocksize/(antithetic?2:1));
 }
 
 //===========================================================================
@@ -106,74 +117,116 @@ ccruncher::SimulationThread::~SimulationThread()
 void ccruncher::SimulationThread::run()
 {
   bool more = true;
+
   timer1.reset();
   timer2.reset();
-  reversed = (antithetic?true:false);
-  
+  timer3.reset();
+
+  lhs_num = 0;
+  lhs_pos = lhs_size;
+  rngpool_pos = GAUSSIAN_POOL_SIZE;
+
   while(more)
   {
-    // initialize aggregated values
-    fill(losses.begin(), losses.end(), 0.0);
-
-    // generating random numbers
+    // simulating latent values (fill arrays z and s)
     timer1.resume();
-    randomize();
+    simuleLatentVars();
     timer1.stop();
 
-    // simulating default times & evalue losses & aggregate
     timer2.resume();
-    for(size_t i=0; i<obligors.size(); i++)
+    for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
-      // simule default time
-      double x = getRandom(i);
-      int r = obligors[i].irating;
-      double days = inverses.evalue(r, x);
-      Date dtime = time0 + (long)ceil(days);
-      if (dtime <= timeT) simule(i, dtime);
+      unsigned char ifactor = obligors[iobligor].ifactor;
+
+      // simulating default times
+      for(size_t j=0; j<x.size(); j++)
+      {
+        // TODO: store z as: 1111222233334444 (eg. 4-factors)
+        //       instead of: 1234123412341234 (num=ith-factor)
+        //       to take advantage of cache line size
+        x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*rnorm());
+      }
+
+      double val = NAN;
+
+      // simulating obligor loss
+      for(size_t j=0; j<blocksize; j++)
+      {
+        if (!antithetic) {
+          val = x[j];
+        }
+        else {
+          if (j%2) {
+            val = +x[j/2];
+          }
+          else {
+            val = -x[j/2];
+          }
+        }
+
+        assert(!isnan(val));
+        int r = obligors[iobligor].irating;
+        double days = inverses.evalue(r, val);
+        Date ddate = time0 + (long)ceil(days);
+
+        if (ddate <= timeT)
+        {
+          simuleObligorLoss(obligors[iobligor], ddate, (double*) &(losses[j*numsegments]));
+        }
+      }
     }
     timer2.stop();
 
+    timer3.resume();
     // data transfer
-    more = montecarlo.append(id, lhs_num, reversed, losses);
+    more = montecarlo.append(id, indexes, (double*) &(losses[0]));
+    // reset aggregated values
+    fill(losses.begin(), losses.end(), 0.0);
+    timer3.stop();
   }
 }
 
 //===========================================================================
-// simulate the multivariate distribution (normal o t-student)
+// rlatent
+// fills z and s arrays
 //===========================================================================
-void ccruncher::SimulationThread::rmvdist()
+inline void ccruncher::SimulationThread::simuleLatentVars()
 {
-  // latin hypercube sample management
-  if (lhs_pos+1 >= lhs_size)
-  {
-    lhs_num++;
-    lhs_pos = 0;
-    rchisq();
-    rfactors();
-  }
-  else
-  {
-    lhs_pos++;
-  }
+  double *ptrz = &(z[0]);
 
-  // simulate multivariate normal
-  double *wz = (double *) &(LHS_VALUES_Z(lhs_pos,0));
-  for(size_t i=0; i<obligors.size(); i++)
+  // simulating latent variables
+  for(size_t j=0; j<s.size(); j++)
   {
-    // we use the ziggurat algorithm because is much fast
-    // than Box-Muller method and the ratio method
-    size_t ifactor = obligors[i].ifactor;
-    xvalues[i] = wz[ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0);
-  }
+    // latin hypercube sample management
+    if (lhs_pos+1 >= lhs_size) {
+      lhs_num++;
+      lhs_pos = 0;
+      rchisq();
+      rmvnorm();
+    }
+    else {
+      lhs_pos++;
+    }
 
-  // simulate multivariate t-student
-  if (ndf > 0.0)
-  {
-    double chisq = lhs_values_s[lhs_pos];
-    if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
-    double chival = sqrt(ndf/chisq);
-    for(size_t i=0; i<obligors.size(); i++) {
-      xvalues[i] *= chival;
+    double *auxz = (double *) &(LHS_VALUES_Z(lhs_pos,0));
+    memcpy(ptrz, auxz, numfactors*sizeof(double));
+    ptrz += numfactors;
+
+    if (ndf > 0) {
+      double chisq = lhs_values_s[lhs_pos];
+      if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
+      s[j] = sqrt(ndf/chisq);
+    }
+    else {
+      s[j] = 1.0;
+    }
+
+    if (!antithetic) {
+      indexes[j] = +lhs_num;
+    }
+    else {
+      indexes[2*j+0] = +lhs_num;
+      indexes[2*j+1] = -lhs_num;
     }
   }
 }
@@ -204,8 +257,6 @@ void ccruncher::SimulationThread::rchisq()
       frand f_rand(rng);
 
       // Latin Hypercube Sampling (chisq variable)
-      // see 'A user's guide to LHS: Sandia's Latin Hypercube Sampling Software'
-      // by Gregory D. Wyss, Kelly H. Jorgensen
       for(size_t n=0; n<lhs_size; n++)
       {
         double u = gsl_ran_flat(rng, double(n)/double(lhs_size), double(n+1)/double(lhs_size));
@@ -220,7 +271,7 @@ void ccruncher::SimulationThread::rchisq()
 //===========================================================================
 // generate lhs_size random factors
 //===========================================================================
-void ccruncher::SimulationThread::rfactors()
+void ccruncher::SimulationThread::rmvnorm()
 {
   if (numfactors == 1 && lhs_size > 1)
   {
@@ -228,8 +279,6 @@ void ccruncher::SimulationThread::rfactors()
     frand f_rand(rng);
 
     // Latin Hypercube Sampling (1-factor variable)
-    // see 'A user's guide to LHS: Sandia's Latin Hypercube Sampling Software'
-    // by Gregory D. Wyss, Kelly H. Jorgensen
     for(size_t n=0; n<lhs_size; n++)
     {
       double u = gsl_ran_flat(rng, double(n)/double(lhs_size), double(n+1)/double(lhs_size));
@@ -240,24 +289,22 @@ void ccruncher::SimulationThread::rfactors()
   }
   else // numfactors > 1 || lhs_size == 1
   {
-    gsl_vector z;
-    z.size = numfactors;
-    z.stride = 1;
-    z.data = NULL;
-    z.block = NULL;
-    z.owner = 0;
+    gsl_vector auxz;
+    auxz.size = numfactors;
+    auxz.stride = 1;
+    auxz.data = (double *) &(lhs_values_z[0]);
+    auxz.block = NULL;
+    auxz.owner = 0;
 
     // creating sample of size lhs_size
-    double *z_ptr = (double *) &(lhs_values_z[0]);
     for(size_t n=0; n<lhs_size; n++)
     {
       // simulating N(0,R)
       for(size_t i=0; i<numfactors; i++) {
-        z_ptr[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
+        auxz.data[i] = rnorm();
       }
-      z.data = z_ptr;
-      gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &z);
-      z_ptr += numfactors;
+      gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &auxz);
+      auxz.data += numfactors;
     }
 
     // if lhs enabled and numfactors>1
@@ -308,54 +355,18 @@ void ccruncher::SimulationThread::rfactors()
 }
 
 //===========================================================================
-// generate random numbers
+// simule obligor losses at dtime and adds it to ptr_losses
 //===========================================================================
-inline void ccruncher::SimulationThread::randomize() throw()
+void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor, Date dtime, double *ptr_losses) const throw()
 {
-  if (!antithetic)
-  {
-    rmvdist();
-  }
-  else // antithetic == true
-  {
-    if (reversed)
-    {
-      rmvdist();
-      reversed = false;
-    }
-    else
-    {
-      reversed = true;
-    }
-  }
-}
+  assert(ptr_losses != NULL);
 
-//===========================================================================
-// getRandom. Returns i-th component of the simulated multivariate normal
-// encapsules antithetic management
-//===========================================================================
-inline double ccruncher::SimulationThread::getRandom(size_t iobligor) throw()
-{
-  if (antithetic && reversed)
-  {
-    return -xvalues[iobligor];
-  }
-  else
-  {
-    return +xvalues[iobligor];
-  }
-}
-
-//===========================================================================
-// simule obligor losses at dtime
-//===========================================================================
-void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
-{
   double obligor_recovery = NAN;
+  char *p = (char*)(obligor.ref.assets);
 
-  for(unsigned short i=0; i<obligors[iobligor].numassets; i++)
+  for(unsigned short i=0; i<obligor.numassets; i++)
   {
-    SimulatedAsset *asset = obligors[iobligor].ref.assets + i;
+    SimulatedAsset *asset = (SimulatedAsset*)(p+i*assetsize);
 
     // evalue asset loss
     if (dtime <= asset->maxdate && asset->mindate <= dtime)
@@ -370,7 +381,7 @@ void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
       {
         if (isnan(obligor_recovery))
         {
-          obligor_recovery = obligors[iobligor].recovery.getValue(rng);
+          obligor_recovery = obligor.recovery.getValue(rng);
         }
         recovery = obligor_recovery;
       }
@@ -378,35 +389,74 @@ void ccruncher::SimulationThread::simule(size_t iobligor, Date dtime) throw()
       // compute asset loss
       double loss = exposure * (1.0 - recovery);
 
-      // aggregate asset loss to each segmentation
-      // in the correspondent segment
-      size_t numsegmentations = numsegments.size();
-      const unsigned short *ptr_segments = static_cast<const unsigned short*>(&(segments[iobligor*numsegmentations]));
-      double *ptr_losses = static_cast<double*>(&(losses[0]));
-      for(size_t j=0; j<numsegmentations; j++)
+      // aggregate asset loss in the correspondent segment
+      unsigned short *segments = &(asset->segments);
+      double *closses = ptr_losses;
+      for(size_t j=0; j<numSegmentsBySegmentation.size(); j++)
       {
-        unsigned short isegment = ptr_segments[j];
-        assert(isegment < numsegments[j]);
-        ptr_losses[isegment] += loss;
-        ptr_losses += numsegments[j];
+        unsigned short isegment = segments[j];
+        assert(isegment < numSegmentsBySegmentation[j]);
+        closses[isegment] += loss;
+        closses += numSegmentsBySegmentation[j];
       }
     }
   }
 }
 
 //===========================================================================
-// returns ellapsed time creating random numbers
+// returns elapsed time creating random numbers
 //===========================================================================
-double ccruncher::SimulationThread::getEllapsedTime1()
+double ccruncher::SimulationThread::getElapsedTime1()
 {
   return timer1.read();
 }
 
 //===========================================================================
-// returns ellapsed time simulating default times
+// returns elapsed time simulating default times
 //===========================================================================
-double ccruncher::SimulationThread::getEllapsedTime2()
+double ccruncher::SimulationThread::getElapsedTime2()
 {
   return timer2.read();
+}
+
+//===========================================================================
+// returns elapsed time writing to disk
+//===========================================================================
+double ccruncher::SimulationThread::getElapsedTime3()
+{
+  return timer3.read();
+}
+
+//===========================================================================
+// returns a uniform gaussian variate
+// we use the ziggurat algorithm because is very fast but only if it is
+// called consecutively
+//===========================================================================
+inline double ccruncher::SimulationThread::rnorm()
+{
+  rngpool_pos++;
+  if (rngpool_pos >= GAUSSIAN_POOL_SIZE) fillGaussianPool();
+  return rngpool[rngpool_pos];
+}
+
+//===========================================================================
+// fills gaussian variates pool
+//===========================================================================
+void ccruncher::SimulationThread::fillGaussianPool()
+{
+  Timer timer(false);
+  if (timer2.isRunning()) timer.start();
+
+  for(size_t i=0; i<GAUSSIAN_POOL_SIZE; i++)
+  {
+    rngpool[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
+  }
+  rngpool_pos = 0;
+
+  if (timer.isRunning()) {
+    timer.stop();
+    timer1 += timer.read();
+    timer2 -= timer.read();
+  }
 }
 

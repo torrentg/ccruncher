@@ -72,6 +72,13 @@ void ccruncher_test::TimerTest::test1()
   // reseting timer (acumulated time = 0 seconds)
   timer.reset();
   ASSERT_EQUALS_EPSILON(0.0, timer.read(), EPSILON);
+
+  // checking operators
+  timer += 10.0;
+  ASSERT(0.0 <= 10.0-timer.read());
+
+  timer -= 10.0;
+  ASSERT(timer.read() < 1.0);
 }
 
 //===========================================================================

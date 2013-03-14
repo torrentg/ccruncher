@@ -22,6 +22,7 @@
 
 #include "params/Params.hpp"
 #include "utils/Parser.hpp"
+#include <climits>
 #include <cassert>
 
 using namespace std;
@@ -49,6 +50,7 @@ void ccruncher::Params::init()
   antithetic = false;
   lhs_size = 1;
   onlyactive = false;
+  blocksize = 128;
 }
 
 //===========================================================================
@@ -175,7 +177,8 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   }
   else if (name == "rng.seed")
   {
-    rng_seed = getLongAttribute(attributes, "value");
+    long aux = getLongAttribute(attributes, "value");
+    rng_seed = *((unsigned long *)(&aux));
   }
   else if (name == "antithetic")
   {
@@ -194,12 +197,28 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
     }
     catch(Exception &e)
     {
-      lhs_size = getIntAttribute(attributes, "value");
+      int aux = getIntAttribute(attributes, "value");
+      if (aux <= 0 || USHRT_MAX < aux) {
+        throw Exception("parameter lhs out of range");
+      }
+      else {
+        lhs_size = aux;
+      }
     }
   }
   else if (name == "portfolio.onlyActiveObligors")
   {
     onlyactive = getBooleanAttribute(attributes, "value");
+  }
+  else if (name == "blocksize")
+  {
+    int aux = getIntAttribute(attributes, "value");
+    if (aux <= 0 || USHRT_MAX < aux) {
+      throw Exception("parameter blocksize out of range");
+    }
+    else {
+      blocksize = (unsigned short)(aux);
+    }
   }
   else
   {
@@ -255,6 +274,16 @@ void ccruncher::Params::validate() const throw(Exception)
   if (lhs_size < 1)
   {
     throw Exception("parameter lhs not defined or less than 1");
+  }
+
+  if (blocksize < 1)
+  {
+    throw Exception("parameter blocksize not defined or less than 1");
+  }
+
+  if (antithetic && blocksize%2 != 0)
+  {
+    throw Exception("blocksize must be multiple of 2 when antithetic is enabled");
   }
 }
 

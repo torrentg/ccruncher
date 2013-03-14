@@ -52,7 +52,7 @@
     EMPTY
 >
 <!ATTLIST parameter 
-    name (time.0|time.T|stopcriteria.maxiterations|stopcriteria.maxseconds|copula.type|rng.seed|antithetic|lhs|portfolio.onlyActiveObligors) #REQUIRED
+    name (time.0|time.T|stopcriteria.maxiterations|stopcriteria.maxseconds|copula.type|rng.seed|antithetic|lhs|blocksize|portfolio.onlyActiveObligors) #REQUIRED
     value CDATA #REQUIRED
 >
 
@@ -229,3 +229,4 @@
     exposure CDATA #REQUIRED
     recovery CDATA #IMPLIED
 >
+

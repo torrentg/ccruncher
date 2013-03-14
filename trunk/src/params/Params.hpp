@@ -62,13 +62,15 @@ class Params : public ExpatHandlers
     // copula.type param value
     std::string copula_type; // gaussian, t(4)
     // rng.seed param value
-    long rng_seed;
+    unsigned long rng_seed;
     // antithetic param value
     bool antithetic;
     // lhs size param value
-    size_t lhs_size;
+    unsigned short lhs_size;
     // portfolio.onlyActiveClients param value
     bool onlyactive;
+    // simulation block size
+    unsigned short blocksize;
 
   protected:
 

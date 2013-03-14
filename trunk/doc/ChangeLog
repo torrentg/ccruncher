@@ -7,15 +7,18 @@ version 2.2 (???. 2013)
   * added Latin Hypercube Sampling variance reduction method
   * added info about simulated values (indexes.csv)
   * parameter 'montecarlo.antithetic' renamed to 'antithetic'
+  * added parameter blocksize to tune Monte Carlo performance
+  * improved aggregation performance
+  * improved file parsing performance
   * avoid thread creation if threads=1
   * fix: header in csv files
+  * fix: in aggregation when more than 1 asset per obligor
+  * set output data directory clickable in simulation dialog
   * allowed char '_' in defines names
   * minor changes in documentation
   * ccruncher-cmd option --path renamed to --output
+  * POSIX compliance in --help option
   * added command line options to ccruncher-gui
-  * POSIX compliance in help option
-  * improved aggregation performance
-  * improved file parsing performance
   * added file checksum computation
   * added logo in doc header
   * code refactoring

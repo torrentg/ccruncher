@@ -72,6 +72,7 @@ How to check results?
     <parameter name="copula.type" value="$copula"/>
     <parameter name="rng.seed" value="0"/>
     <parameter name="antithetic" value="$antithetic"/>
+    <parameter name="blocksize" value="128"/>
     <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 

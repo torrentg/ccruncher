@@ -62,11 +62,15 @@ class MonteCarlo
     // list of simulated obligors
     std::vector<SimulatedObligor> obligors;
     // list of simulated assets
-    std::vector<SimulatedAsset> assets;
-    // segmentations indexes per asset
-    std::vector<unsigned short> segments;
+    char *assets;
+    // simulated asset size
+    size_t assetsize;
+    // number of simulated assets
+    size_t numassets;
     // number of segments for each segmentation
-    std::vector<unsigned short> numsegments;
+    std::vector<unsigned short> numSegmentsBySegmentation;
+    // total number of segments
+    size_t numsegments;
     // datevalues list
     std::vector<DateValues> datevalues;
     // list of aggregators
@@ -92,7 +96,9 @@ class MonteCarlo
     // antithetic method flag
     bool antithetic;
     // latin hypercube sample size
-    size_t lhs_size;
+    unsigned short lhs_size;
+    // block size
+    unsigned short blocksize;
     // rng seed
     unsigned long seed;
     // hash (0=non show hashes) (default=0)
@@ -103,8 +109,6 @@ class MonteCarlo
     char fmode;
     // time account
     Timer timer;
-    // ellapsed time writting data to disk
-    Timer timer3;
     // simulation threads
     std::vector<SimulationThread*> threads;
     // number of iterations done
@@ -133,7 +137,7 @@ class MonteCarlo
     // initialize aggregators
     void initAggregators(IData &) throw(Exception);
     // append simulation result
-    bool append(int ithread, size_t ilhs, bool reversed, const std::vector<double> &) throw();
+    bool append(int ithread, const std::vector<short> &, const double *) throw();
     // non-copyable class
     MonteCarlo(const MonteCarlo &);
     // non-copyable class

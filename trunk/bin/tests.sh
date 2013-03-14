@@ -137,6 +137,7 @@ runcc test02;
 runcc test03;
 runcc test04;
 runcc test05;
+runcc test06;
 
 R --vanilla --slave << _EOF_
     source("./bin/tests.R", echo=FALSE);
@@ -146,5 +147,6 @@ R --vanilla --slave << _EOF_
     test03();
     test04();
     test05();
+    test06();
 _EOF_
 

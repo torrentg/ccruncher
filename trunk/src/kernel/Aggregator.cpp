@@ -22,6 +22,7 @@
 
 #include <unistd.h>
 #include "kernel/Aggregator.hpp"
+#include "kernel/SimulatedData.hpp"
 #include "utils/File.hpp"
 #include <cassert>
 
@@ -32,29 +33,24 @@ using namespace std;
 // note: we don't diferentiate between asset-segmentations or obligor-segmentations
 // because obligor segments has been recoded as asset segments (see Obligor code)
 //===========================================================================
-ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
+ccruncher::Aggregator::Aggregator(const char *assets, size_t numassets, size_t assetsize,
     int isegmentation, const Segmentations &segmentations,
-    const string &filename, char mode) throw(Exception)
+    const string &filename_, char mode) throw(Exception)
 {
+  assert(assets != NULL && assetsize > 0);
   assert(mode=='a' || mode=='w' || mode=='c');
-  assert(segmentations.size() > 0);
-  assert(segments.size() > 0);
   assert(0 <= isegmentation && isegmentation < segmentations.size());
 
-  // initialization
-  numsegments = segmentations.getSegmentation(isegmentation).size();
-  segmentation = segmentations.getSegmentation(isegmentation);
-  printUnassignedSegment = false;
+  Segmentation segmentation = segmentations.getSegmentation(isegmentation);
 
-  // setting printUnassignedSegment value
-  size_t numsegmentations = segmentations.size();
-  size_t numassets = segments.size()/numsegmentations;
-  assert(numassets*numsegmentations == segments.size());
+  // initialization
+  filename = filename_;
+  numsegments = segmentations.getSegmentation(isegmentation).size();
+  printUnassignedSegment = false;
   for(size_t i=0; i<numassets; i++)
   {
-    //TODO: check for unused segments (not only 'unassigned')
-    //TODO: report unused segments as warning
-    if (segments[i*numsegmentations + isegmentation] == 0)
+    SimulatedAsset *asset = (SimulatedAsset*) &(assets[i*assetsize]);
+    if ((&(asset->segments))[isegmentation] == 0)
     {
       printUnassignedSegment = true;
       break;
@@ -100,7 +96,7 @@ ccruncher::Aggregator::Aggregator(const vector<unsigned short> &segments,
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "error opening file " + filename);
+    throw Exception(e, "error opening file '" + filename + "'");
   }
 
 }
@@ -141,7 +137,7 @@ void ccruncher::Aggregator::append(const double *losses) throw(Exception)
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "error flushing content for aggregator " + segmentation.name);
+    throw Exception(e, "error writing in '" + filename + "'");
   }
 }
 
@@ -156,7 +152,7 @@ void ccruncher::Aggregator::flush() throw(Exception)
   }
   catch(std::exception &e)
   {
-    throw Exception(e, "error flushing segmentation " + segmentation.name);
+    throw Exception(e, "error writing in '" + filename + "'");
   }
 }
 
