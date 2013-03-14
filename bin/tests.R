@@ -355,3 +355,40 @@ test05 <- function()
   }
   
 }
+
+#===========================================================================
+# test06
+#===========================================================================
+test06 <- function()
+{
+  cat("test06\n");
+  
+  #reading data
+  portfolio <- ccruncher.read("data/test06/portfolio.csv");
+  obligors <- ccruncher.read("data/test06/obligors.csv");
+  assets <- ccruncher.read("data/test06/assets.csv");
+  n = nrow(portfolio)
+
+  # checking aggregation
+  defaulted = (obligors[,]!=0)
+  aux = matrix(nrow=n, ncol=4, 0)
+  aux[,1] = defaulted[,1]*10 + defaulted[,2]*100
+  aux[,2] = defaulted[,1]*20 + defaulted[,2]*200
+  aux[,3] = defaulted[,1]*30 + defaulted[,2]*300
+  aux[,4] = defaulted[,3]*6
+  
+  cat("  segments values: ")
+  if (sum(obligors[,1]!=0 & obligors[,1]!= 60) != 0) {
+    cat("FAILED\n"); 
+  } else if (sum(obligors[,2]!=0 & obligors[,2]!= 600) != 0) {
+    cat("FAILED\n"); 
+  } else if (sum(obligors[,3]!=0 & obligors[,3]!= 6) != 0) {
+    cat("FAILED\n"); 
+  } else if (sum(aux != assets) != 0) {
+    cat("FAILED\n"); 
+  } else {
+    cat("OK\n"); 
+  }
+  
+}
+

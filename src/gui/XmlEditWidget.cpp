@@ -159,6 +159,7 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
   }
 
   QTextStream in(&file);
+  in.setCodec("UTF-8");
   QApplication::setOverrideCursor(Qt::WaitCursor);
   QString content = in.readAll();
 

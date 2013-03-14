@@ -158,6 +158,7 @@ UI_DIR = $$PWD/build
 MOC_DIR = $$PWD/build
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
+RCC_DIR = $$PWD/build
 
 RESOURCES += \
     src/gui/ccruncher.qrc

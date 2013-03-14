@@ -43,7 +43,7 @@ class Timer
      bool running_;
      // start time (if running)
      double start_time_;
-     // acumulated time
+     // acumulated time in seconds
      double total_;
      //double secs_per_tick;
 
@@ -66,9 +66,15 @@ class Timer
      void resume();
      // reset the timer
      void reset();
+     // indicates if timer is running
+     bool isRunning() const { return running_; }
      // format seconds in format hh:mm:ss.mmm
      static std::string format(double seconds_);
-     
+     // operator overload
+     Timer& operator+=(double secs) { total_ += secs; return *this; }
+     // operator overload
+     Timer& operator-=(double secs) { total_ -= secs; return *this; }
+
 };
 
 //---------------------------------------------------------------------------

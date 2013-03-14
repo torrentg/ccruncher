@@ -51,6 +51,8 @@ class SimulatedAsset
     std::vector<DateValues>::const_iterator begin;
     // reference to asset data
     std::vector<DateValues>::const_iterator end;
+    // segmentations indexes
+    unsigned short segments;
 
 };
 
@@ -61,10 +63,10 @@ class SimulatedObligor
 
   public:
 
-    // obligor's rating index
-    unsigned char irating;
     // obligor's factor index
     unsigned char ifactor;
+    // obligor's rating index
+    unsigned char irating;
     // obligor's recovery
     Recovery recovery;
     // number of assets
@@ -75,7 +77,7 @@ class SimulatedObligor
       // obligor
       Obligor *obligor;
       // simulated assets
-      SimulatedAsset *assets;
+      void *assets;
     } ref;
 
   public:

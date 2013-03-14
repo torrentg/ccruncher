@@ -42,7 +42,7 @@ class ParamsTest : public TestFixture<ParamsTest>
     void test1();
     void test2();
     void test3();
-
+    void test4();
 
   public:
 
@@ -51,6 +51,7 @@ class ParamsTest : public TestFixture<ParamsTest>
       TEST_CASE(test1);
       TEST_CASE(test2);
       TEST_CASE(test3);
+      TEST_CASE(test4);
     }
 
 };

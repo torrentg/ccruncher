@@ -44,8 +44,8 @@ class Aggregator
 
   private:
 
-    // segmentation object
-    Segmentation segmentation;
+    // segmentation name
+    std::string filename;
     // output file stream
     std::ofstream fout;
     // number of segments
@@ -63,7 +63,7 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(const std::vector<unsigned short> &, int , const Segmentations &, const std::string &, char) throw(Exception);
+    Aggregator(const char *, size_t, size_t, int , const Segmentations &, const std::string &, char) throw(Exception);
     // destructor
     ~Aggregator();
     // append data to aggregator

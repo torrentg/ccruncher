@@ -44,7 +44,6 @@ cp `find $CCRUNCHER/build -name ccruncher-\* -type f -executable` $CCRUNCHER/bin
 #-------------------------------------------------------------
 rm -f  $CCRUNCHER/ccruncher*.pro;
 rm -f  $CCRUNCHER/ccruncher*.pro.user;
-rm -f  $CCRUNCHER/qrc_*.cpp;
 rm -f  $CCRUNCHER/aclocal.m4;
 rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;

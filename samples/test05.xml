@@ -57,6 +57,7 @@ Expected Results:
     <parameter name="rng.seed" value="$seed"/>
     <parameter name="antithetic" value="$antithetic"/>
     <parameter name="lhs" value="$lhs"/>
+    <parameter name="blocksize" value="128"/>
     <parameter name="portfolio.onlyActiveObligors" value="true"/>
   </parameters>
 
