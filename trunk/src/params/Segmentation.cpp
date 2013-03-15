@@ -24,6 +24,8 @@
 #include "utils/File.hpp"
 #include <cassert>
 
+#define UNASSIGNED "unassigned"
+
 using namespace std;
 
 //===========================================================================
@@ -40,7 +42,7 @@ ccruncher::Segmentation::Segmentation()
 //===========================================================================
 int ccruncher::Segmentation::size() const
 {
-  return vsegments.size();
+  return segments.size();
 }
 
 //===========================================================================
@@ -49,10 +51,10 @@ int ccruncher::Segmentation::size() const
 const string& ccruncher::Segmentation::getSegment(int i) const
 {
   // assertions
-  assert(i >= 0 && i < (int) vsegments.size());
+  assert(i >= 0 && i < (int) segments.size());
 
   // return i-th segment
-  return vsegments[i];
+  return segments[i];
 }
 
 //===========================================================================
@@ -60,9 +62,9 @@ const string& ccruncher::Segmentation::getSegment(int i) const
 //===========================================================================
 int ccruncher::Segmentation::indexOfSegment(const string &sname) const throw(Exception)
 {
-  for (unsigned int i=0; i<vsegments.size(); i++)
+  for (unsigned int i=0; i<segments.size(); i++)
   {
-    if (vsegments[i] == sname)
+    if (segments[i] == sname)
     {
       return (int)i;
     }
@@ -78,9 +80,9 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Excep
 {
   assert(sname != NULL);
 
-  for (unsigned int i=0; i<vsegments.size(); i++)
+  for (unsigned int i=0; i<segments.size(); i++)
   {
-    if (vsegments[i].compare(sname) == 0)
+    if (segments[i].compare(sname) == 0)
     {
       return (int)i;
     }
@@ -94,9 +96,11 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Excep
 //===========================================================================
 void ccruncher::Segmentation::reset()
 {
-  vsegments.clear();
+  segments.clear();
+  numcomponents.clear();
+  recode_map.clear();
   enabled = true;
-  insertSegment("unassigned"); // adding catcher segment
+  insertSegment(UNASSIGNED); // adding catcher segment
   name = "";
   components = obligor;
 }
@@ -126,19 +130,20 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   }
 
   // checking coherence
-  for (unsigned int i=0; i<vsegments.size(); i++)
+  for (unsigned int i=0; i<segments.size(); i++)
   {
-    if (vsegments[i] == sname)
+    if (segments[i] == sname)
     {
-      throw Exception("segment " + vsegments[i] + " repeated");
+      throw Exception("segment " + segments[i] + " repeated");
     }
   }
 
   // inserting value
   try
   {
-    vsegments.push_back(sname);
-    return vsegments.size()-1;
+    segments.push_back(sname);
+    numcomponents.push_back(0);
+    return segments.size()-1;
   }
   catch(std::exception &e)
   {
@@ -195,5 +200,62 @@ bool ccruncher::Segmentation::isEnabled() const
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
   return File::normalizePath(path) + name + ".csv";
+}
+
+//===========================================================================
+// add components to segmentation stats
+//===========================================================================
+void ccruncher::Segmentation::addComponent(int isegment)
+{
+  assert(0 <= isegment && isegment < (int)numcomponents.size());
+  if (0 <= isegment && isegment < (int)numcomponents.size()) {
+    numcomponents[isegment]++;
+  }
+}
+
+//===========================================================================
+// remove unused segments
+//===========================================================================
+void ccruncher::Segmentation::removeUnusedSegments()
+{
+  assert(segments.size() == numcomponents.size());
+
+  int pos = 0;
+  recode_map.clear();
+  for(size_t i=0; i<segments.size(); i++)
+  {
+    if (numcomponents[i] == 0) {
+      recode_map.push_back(-1);
+      segments.erase(segments.begin()+i);
+      numcomponents.erase(numcomponents.begin()+i);
+      i--;
+    }
+    else {
+      recode_map.push_back(pos);
+      pos++;
+    }
+  }
+
+  // moving unassigned segment at the end
+  if (segments.size() > 1 && segments[0] == UNASSIGNED)
+  {
+    segments.push_back(UNASSIGNED);
+    segments.erase(segments.begin());
+    numcomponents.push_back(numcomponents[0]);
+    numcomponents.erase(numcomponents.begin());
+    recode_map[0] = pos;
+    for(size_t i=0; i<recode_map.size(); i++) {
+      if (recode_map[i] > 0) recode_map[i]--;
+    }
+  }
+}
+
+//===========================================================================
+// recode segments removing unused segments
+//===========================================================================
+int ccruncher::Segmentation::recode(int isegment) const
+{
+  assert(0 <= isegment && isegment < (int)recode_map.size());
+  return recode_map[isegment];
 }
 

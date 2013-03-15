@@ -33,11 +33,9 @@ using namespace std;
 // note: we don't diferentiate between asset-segmentations or obligor-segmentations
 // because obligor segments has been recoded as asset segments (see Obligor code)
 //===========================================================================
-ccruncher::Aggregator::Aggregator(const char *assets, size_t numassets, size_t assetsize,
-    int isegmentation, const Segmentations &segmentations,
+ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmentations,
     const string &filename_, char mode) throw(Exception)
 {
-  assert(assets != NULL && assetsize > 0);
   assert(mode=='a' || mode=='w' || mode=='c');
   assert(0 <= isegmentation && isegmentation < segmentations.size());
 
@@ -46,16 +44,7 @@ ccruncher::Aggregator::Aggregator(const char *assets, size_t numassets, size_t a
   // initialization
   filename = filename_;
   numsegments = segmentations.getSegmentation(isegmentation).size();
-  printUnassignedSegment = false;
-  for(size_t i=0; i<numassets; i++)
-  {
-    SimulatedAsset *asset = (SimulatedAsset*) &(assets[i*assetsize]);
-    if ((&(asset->segments))[isegmentation] == 0)
-    {
-      printUnassignedSegment = true;
-      break;
-    }
-  }
+  assert(numsegments > 0);
   
   // checking file creation mode
   bool force_creation = (mode!='a' && mode!='w');
@@ -76,20 +65,9 @@ ccruncher::Aggregator::Aggregator(const char *assets, size_t numassets, size_t a
     // printing header
     if (mode != 'a' || (mode == 'a' && File::filesize(filename) == 0))
     {
-      if (numsegments == 1)
+      for(int i=0; i<numsegments; i++)
       {
-        fout << "\"" << segmentation.name << "\"";
-      }
-      else
-      {
-        for(int i=1; i<numsegments; i++)
-        {
-          fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
-        }
-        if (printUnassignedSegment)
-        {
-          fout << ", \"" << segmentation.getSegment(0) << "\"";
-        }
+        fout << "\"" << segmentation.getSegment(i) << "\"" << (i<numsegments-1?", ":"");
       }
       fout << endl;
     }
@@ -122,18 +100,15 @@ ccruncher::Aggregator::~Aggregator()
 void ccruncher::Aggregator::append(const double *losses) throw(Exception)
 {
   assert(losses != NULL);
+  assert(numsegments > 0);
 
   try
   {
-    for (int i=1; i<numsegments; i++)
+    for (int i=0; i<numsegments-1; i++)
     {
-      fout << losses[i] << (i<numsegments-1?", ":"");
+      fout << losses[i] << ", ";
     }
-    if (printUnassignedSegment)
-    {
-      fout << (numsegments>1?", ":"") << losses[0];
-    }
-    fout << "\n"; // endl not used because force to flush in disk
+    fout << losses[numsegments-1] << "\n"; // endl not used because force to flush in disk
   }
   catch(std::exception &e)
   {

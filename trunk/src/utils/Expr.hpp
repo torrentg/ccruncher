@@ -50,14 +50,14 @@ class Expr
     // internal struct
     struct constant
     {
-      const char *id;
+      const char id[3];
       double x;
     };
 
     // internal struct
     struct operador
     {
-      const char *id; // operator identifier
+      const char id[2]; // operator identifier
       char prec; // operator precedence, see http://en.wikipedia.org/wiki/Order_of_operations
       bool left; // operator associativity, see http://en.wikipedia.org/wiki/Operator_associativity
       ffunc2 func; // pointer to function
@@ -66,7 +66,7 @@ class Expr
     // internal struct
     struct function
     {
-      const char *id; // function identifier
+      const char id[5]; // function identifier
       int args; // number of arguments, 0 is used for minus and plus signs functions
       void *ptr; // pointer to function
       //TODO: add flag force_eval (eg. rand())
@@ -113,11 +113,11 @@ class Expr
   private:
 
     // list of operators
-    static operador operators[];
+    static const operador operators[];
     // list of functions
-    static function functions[];
+    static const function functions[];
     // list of constants
-    static constant constants[];
+    static const constant constants[];
 
   private:
 

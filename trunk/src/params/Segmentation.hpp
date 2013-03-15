@@ -51,7 +51,11 @@ class Segmentation : public ExpatHandlers
   private:
 
     // list of segments
-    std::vector<std::string> vsegments;
+    std::vector<std::string> segments;
+    // number of components per segments
+    std::vector<size_t> numcomponents;
+    // recode map
+    std::vector<int> recode_map;
     // enabled flag (true by default)
     bool enabled;
 
@@ -92,6 +96,12 @@ class Segmentation : public ExpatHandlers
     bool isEnabled() const;
     // return filename
     std::string getFilename(const std::string &path) const;
+    // add components to segmentations stats
+    void addComponent(int);
+    // remove unused segments
+    void removeUnusedSegments();
+    // recode segments removing unused segments
+    int recode(int) const;
 
 };
 

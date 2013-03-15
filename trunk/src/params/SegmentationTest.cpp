@@ -58,4 +58,23 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT(2 == sobj.indexOfSegment("0002"));
   ASSERT(3 == sobj.indexOfSegment("0003"));
   ASSERT(4 == sobj.indexOfSegment("0004"));
+
+  sobj.addComponent(0);
+  sobj.addComponent(0);
+  sobj.addComponent(0);
+  sobj.addComponent(3);
+  sobj.addComponent(3);
+  sobj.addComponent(3);
+  sobj.addComponent(3);
+
+  sobj.removeUnusedSegments();
+
+  ASSERT(0 == sobj.indexOfSegment("0003"));
+  ASSERT(1 == sobj.indexOfSegment("unassigned"));
+
+  ASSERT( 1 == sobj.recode(0));
+  ASSERT(-1 == sobj.recode(1));
+  ASSERT(-1 == sobj.recode(2));
+  ASSERT( 0 == sobj.recode(3));
+  ASSERT(-1 == sobj.recode(4));
 }

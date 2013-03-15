@@ -8,9 +8,9 @@ version 2.2 (???. 2013)
   * added info about simulated values (indexes.csv)
   * parameter 'montecarlo.antithetic' renamed to 'antithetic'
   * added parameter blocksize to tune Monte Carlo performance
-  * improved aggregation performance
+  * removed unused segments of the segmentations
   * improved file parsing performance
-  * avoid thread creation if threads=1
+  * avoid thread creation if --threads=1
   * fix: header in csv files
   * fix: in aggregation when more than 1 asset per obligor
   * set output data directory clickable in simulation dialog

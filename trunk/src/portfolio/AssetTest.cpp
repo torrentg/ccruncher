@@ -134,6 +134,10 @@ void ccruncher_test::AssetTest::test1()
   ASSERT(asset.belongsTo(3, 1)); // product-bond
   ASSERT(asset.belongsTo(4, 3)); // office-0003
 
+  ASSERT(asset.getSegment(4) == 3);
+  asset.setSegment(4, 10);
+  ASSERT(asset.getSegment(4) == 10);
+
   ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).exposure.getValue(), EPSILON);
   ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).recovery.getValue(), EPSILON);
   

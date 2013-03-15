@@ -50,8 +50,6 @@ class Aggregator
     std::ofstream fout;
     // number of segments
     int numsegments;
-    // indicates if unassigned segment is used
-    bool printUnassignedSegment;
 
   private:
 
@@ -63,7 +61,7 @@ class Aggregator
   public:
 
     // constructor
-    Aggregator(const char *, size_t, size_t, int , const Segmentations &, const std::string &, char) throw(Exception);
+    Aggregator(int , const Segmentations &, const std::string &, char) throw(Exception);
     // destructor
     ~Aggregator();
     // append data to aggregator

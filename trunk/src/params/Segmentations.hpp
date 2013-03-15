@@ -38,6 +38,9 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
+// forward declaration
+class Asset;
+
 class Segmentations : public ExpatHandlers
 {
 
@@ -76,6 +79,12 @@ class Segmentations : public ExpatHandlers
     int indexOfSegmentation(const std::string &sname) const throw(Exception);
     // return the index of the given segmentation
     int indexOfSegmentation(const char *sname) const throw(Exception);
+    // add components to segmentations stats
+    void addComponents(const Asset *);
+    // remove unused segments
+    void removeUnusedSegments();
+    // recode segments removing unused segments
+    void recodeSegments(Asset *);
 
 };
 

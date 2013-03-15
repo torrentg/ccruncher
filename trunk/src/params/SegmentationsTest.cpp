@@ -22,6 +22,7 @@
 
 #include "params/Segmentations.hpp"
 #include "params/SegmentationsTest.hpp"
+#include "portfolio/Asset.hpp"
 #include "utils/ExpatParser.hpp"
 
 using namespace std;
@@ -74,4 +75,20 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT(sobj.getSegmentation(-3).name == "offices");
   ASSERT(sobj.getSegmentation(0).name == "sectors");
   ASSERT(sobj.getSegmentation(1).name == "products");
+
+  Asset asset(&sobj);
+
+  asset.setSegment(0, 2);
+  asset.setSegment(1, 0);
+  sobj.addComponents(&asset);
+
+  asset.setSegment(0, 1);
+  asset.setSegment(1, 1);
+  sobj.addComponents(&asset);
+
+  sobj.removeUnusedSegments();
+
+  sobj.recodeSegments(&asset);
+  ASSERT(asset.getSegment(0) == 0);
+  ASSERT(asset.getSegment(1) == 0);
 }
