@@ -65,7 +65,7 @@ double fif(double x, double y, double z) { return (x!=0.0?y:z); }
 }
 
 //TODO: consider logical operators (eg. &&, ||, etc.)
-Expr::operador ccruncher::Expr::operators[] =
+const Expr::operador ccruncher::Expr::operators[] =
 {
   { "+", 0, true, &fsum },
   { "-", 0, true, &frest },
@@ -76,7 +76,7 @@ Expr::operador ccruncher::Expr::operators[] =
 
 #define NUMOPERATORS (sizeof(operators)/sizeof(operador))
 
-Expr::function ccruncher::Expr::functions[] =
+const Expr::function ccruncher::Expr::functions[] =
 {
   { "+", 0, (void*) &fplus },
   { "-", 0, (void*) &fminus },
@@ -95,7 +95,7 @@ Expr::function ccruncher::Expr::functions[] =
 
 #define NUMFUNCTIONS (sizeof(functions)/sizeof(function))
 
-Expr::constant ccruncher::Expr::constants[] =
+const Expr::constant ccruncher::Expr::constants[] =
 {
   { "Pi", M_PI },
   { "E", 2.71828182845904523536 }

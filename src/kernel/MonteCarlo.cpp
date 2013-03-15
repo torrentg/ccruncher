@@ -176,6 +176,11 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
     seed = Utils::trand();
   }
 
+  // checking limits (see SimulatedAsset::segments field)
+  if (idata.getSegmentations().size() == 0 || USHRT_MAX < idata.getSegmentations().size()) {
+    throw Exception("invalid number of segmentations");
+  }
+
   // setting logger info
   log << "initial date" << split << time0 << endl;
   log << "end date" << split << timeT << endl;
@@ -309,11 +314,6 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 //===========================================================================
 void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 {
-  // checking limits (see SimulatedAsset::segments field)
-  if (idata.getSegmentations().size() == 0 || USHRT_MAX < idata.getSegmentations().size()) {
-    throw Exception("invalid number of segmentations");
-  }
-
   // setting logger header
   log << "setting assets to simulate" << flood('-') << endl;
   log << indent(+1);
@@ -337,6 +337,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       {
         numassets++;
         numdatevalues += vassets[j]->getData().size();
+        idata.getSegmentations().addComponents(vassets[j]);
       }
     }
   }
@@ -348,6 +349,9 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   {
     throw Exception("error initializing assets: 0 assets to simulate");
   }
+
+  // remove unused segments
+  idata.getSegmentations().removeUnusedSegments();
 
   // creating the simulated assets array
   assert(assets == NULL);
@@ -372,6 +376,9 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         {
           throw Exception("exceeded maximum number of assets by obligor");
         }
+
+        // recode segments
+        idata.getSegmentations().recodeSegments(vassets[j]);
 
         // setting asset
         SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
@@ -446,7 +453,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
     }
 
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
-    Aggregator *aggregator = new Aggregator(assets, numassets, assetsize, i, idata.getSegmentations(), filename, fmode);
+    Aggregator *aggregator = new Aggregator(i, idata.getSegmentations(), filename, fmode);
     aggregators[i] = aggregator;
     numSegmentsBySegmentation[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
     numsegments += numSegmentsBySegmentation[i];

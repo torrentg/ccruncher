@@ -82,6 +82,8 @@ class Asset : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment) const;
     // given a segmentation returns the segment
     int getSegment(int isegmentation) const;
+    // set the given segment to segmentation
+    void setSegment(int isegmentation, int isegment);
     // indicates if this asset has info in date1-date2
     bool isActive(const Date &, const Date &) throw(Exception);
     // returns minimum event date (restricted to precomputed events)

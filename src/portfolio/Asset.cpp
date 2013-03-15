@@ -214,6 +214,15 @@ int ccruncher::Asset::getSegment(int isegmentation) const
 }
 
 //===========================================================================
+// set the given segment to segmentation
+//===========================================================================
+void ccruncher::Asset::setSegment(int isegmentation, int isegment)
+{
+  assert(0 <= isegmentation && isegmentation < (int)vsegments.size());
+  vsegments[isegmentation] = isegment;
+}
+
+//===========================================================================
 // getMinDate
 // be sure that prepare() is called before the execution of this method
 //===========================================================================

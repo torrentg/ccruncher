@@ -5,7 +5,6 @@ CCRUNCHER TODO
 Current works
 -------------------
 
-  * check for unused segments (in Aggregator class?)
   * check in gui-win32 if output dir opens in default browser
   * check in gui-win32 xml edit encoding
   

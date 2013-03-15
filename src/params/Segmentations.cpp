@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include "params/Segmentations.hpp"
+#include "portfolio/Asset.hpp"
 #include <cassert>
 
 using namespace std;
@@ -198,5 +199,42 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
     validate();
     auxsegmentation.reset();
   }
+}
+
+//===========================================================================
+// add components to segmentations stats
+//===========================================================================
+void ccruncher::Segmentations::addComponents(const Asset *asset)
+{
+  assert(asset != NULL);
+  for(size_t i=0; i<enabled.size(); i++)
+  {
+    enabled[i].addComponent(asset->getSegment(i));
+  }
+}
+
+//===========================================================================
+// remove unused segments
+//===========================================================================
+void ccruncher::Segmentations::removeUnusedSegments()
+{
+  for(size_t i=0; i<enabled.size(); i++)
+  {
+    enabled[i].removeUnusedSegments();
+  }
+}
+
+//===========================================================================
+// recode segments removing unused segments
+//===========================================================================
+void ccruncher::Segmentations::recodeSegments(Asset *asset)
+{
+  assert(asset != NULL);
+  for(size_t i=0; i<enabled.size(); i++)
+  {
+    int old = asset->getSegment(i);
+    asset->setSegment(i, enabled[i].recode(old));
+  }
+
 }
 

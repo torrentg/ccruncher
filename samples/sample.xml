@@ -208,7 +208,6 @@
       </asset>
     </obligor>
     <obligor rating="B" factor="S2" id="000002" recovery="20%">
-      <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="large"/>
       <asset id="op3" date="01/06/2003">
         <belongs-to segmentation="offices" segment="0003"/>
