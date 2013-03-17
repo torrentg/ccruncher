@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-03-06 08:14:59+01:00"
+#define BUILD_DATE "2013-03-16 08:56:54+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -10,30 +10,8 @@
 /* build user */
 #define BUILD_USER "gerard"
 
-/* Define to 1 if the `closedir' function returns void instead of `int'. */
-/* #undef CLOSEDIR_VOID */
-
-/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
-   systems. This function is required for `alloca.c' support on those systems.
-   */
-/* #undef CRAY_STACKSEG_END */
-
-/* Define to 1 if using `alloca.c'. */
-/* #undef C_ALLOCA */
-
 /* Define to 1 if you have the `alarm' function. */
 #define HAVE_ALARM 1
-
-/* Define to 1 if you have `alloca', as a function or macro. */
-#define HAVE_ALLOCA 1
-
-/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
-   */
-#define HAVE_ALLOCA_H 1
-
-/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
-   */
-#define HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1
@@ -74,26 +52,17 @@
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
 
-/* Define to 1 if you have the <limits.h> header file. */
-#define HAVE_LIMITS_H 1
-
-/* Define to 1 if you have the <malloc.h> header file. */
-#define HAVE_MALLOC_H 1
-
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
 
-/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
-/* #undef HAVE_NDIR_H */
+/* Define to 1 if you have the `modf' function. */
+#define HAVE_MODF 1
 
 /* Define to 1 if you have the `pow' function. */
 #define HAVE_POW 1
-
-/* Define to 1 if you have the <pthread.h> header file. */
-#define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `sqrt' function. */
 #define HAVE_SQRT 1
@@ -118,14 +87,6 @@
 
 /* Define to 1 if you have the `strtol' function. */
 #define HAVE_STRTOL 1
-
-/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
-   */
-/* #undef HAVE_SYS_DIR_H */
-
-/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
-   */
-/* #undef HAVE_SYS_NDIR_H */
 
 /* Define to 1 if you have the <sys/param.h> header file. */
 #define HAVE_SYS_PARAM_H 1
@@ -172,22 +133,11 @@
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
 
-/* If using the C implementation of alloca, define if you know the
-   direction of stack growth for your system; otherwise it will be
-   automatically deduced at runtime.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
-/* #undef STACK_DIRECTION */
-
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #define TIME_WITH_SYS_TIME 1
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-/* #undef TM_IN_SYS_TIME */
 
 /* Version number of package */
 #define VERSION "2.2"
@@ -196,9 +146,6 @@
    <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
    #define below would cause a syntax error. */
 /* #undef _UINT32_T */
-
-/* Define to empty if `const' does not conform to ANSI C. */
-/* #undef const */
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */

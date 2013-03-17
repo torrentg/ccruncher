@@ -52,12 +52,7 @@ dnl -------------------------------------------------------------
 dnl checks for header
 dnl -------------------------------------------------------------
 AC_HEADER_STDBOOL
-AC_HEADER_DIRENT
-AC_HEADER_STDC
-AC_HEADER_TIME
-AC_CHECK_HEADERS([limits.h stdlib.h unistd.h])
-AC_CHECK_HEADERS([float.h malloc.h])
-AC_CHECK_HEADERS([pthread.h])
+AC_CHECK_HEADERS([float.h])
 AC_CHECK_HEADERS([sys/time.h])
 AC_CHECK_HEADERS([sys/param.h])
 
@@ -72,18 +67,14 @@ AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([floor])
 AC_CHECK_FUNCS([strchr])
 AC_CHECK_FUNCS([gettimeofday])
-AC_FUNC_CLOSEDIR_VOID
-AC_FUNC_ERROR_AT_LINE
+AC_CHECK_FUNCS([modf])
 AC_FUNC_STRTOD
 AC_FUNC_MKTIME
-AC_FUNC_ALLOCA
 
 dnl -------------------------------------------------------------
 dnl other checks (consts, structs, types)
 dnl -------------------------------------------------------------
-AC_C_CONST
 AC_C_INLINE
-AC_STRUCT_TM
 AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
 
@@ -158,3 +149,4 @@ dnl makefile's to be built
 dnl -------------------------------------------------------------
 AC_CONFIG_FILES([Makefile build/Makefile])
 AC_OUTPUT
+

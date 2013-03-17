@@ -80,6 +80,8 @@ Installation from source package
 3. execute commands (read INSTALL file):
      > cd ccruncher-X.Y
      > ./configure 
+     > make check
+     > qmake-qt4 ccruncher-gui.pro
      > make
      > bin/src2bin.sh
 

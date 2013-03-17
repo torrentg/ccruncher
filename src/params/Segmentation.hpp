@@ -70,6 +70,8 @@ class Segmentation : public ExpatHandlers
   
     // ExpatHandlers method
     void epstart(ExpatUserData &, const char *, const char **);
+    // ExpatHandlers method
+    void epend(ExpatUserData &, const char *);
 
   public:
 
