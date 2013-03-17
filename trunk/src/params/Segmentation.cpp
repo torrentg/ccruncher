@@ -187,6 +187,18 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
 }
 
 //===========================================================================
+// epend - ExpatHandlers method implementation
+//===========================================================================
+void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
+{
+  if (isEqual(name_,"segmentation")) {
+    if (segments.size() == 1) {
+      segments[0] = name;
+    }
+  }
+}
+
+//===========================================================================
 // returns enabled flag
 //===========================================================================
 bool ccruncher::Segmentation::isEnabled() const
