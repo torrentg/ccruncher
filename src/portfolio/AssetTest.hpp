@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 
 #include "utils/config.h"
-#include <MiniCppUnit.hxx>
+#include "utils/MiniCppUnit.hxx"
 #include "params/Segmentations.hpp"
 #include "params/Interest.hpp"
 

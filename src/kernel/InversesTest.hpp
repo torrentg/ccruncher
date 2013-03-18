@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include "params/Ratings.hpp"
 #include "params/DefaultProbabilities.hpp"
-#include <MiniCppUnit.hxx>
+#include "utils/MiniCppUnit.hxx"
 
 //---------------------------------------------------------------------------
 

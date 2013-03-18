@@ -20,7 +20,7 @@
 CCRUNCHER=`dirname $0`/..
 progname=src2bin.sh
 numversion="2.2"
-svnversion="R957"
+svnversion="R999"
 
 #-------------------------------------------------------------
 # checking arguments

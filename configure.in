@@ -124,8 +124,7 @@ AC_SUBST(CXXFLAGS)
 dnl -------------------------------------------------------------
 dnl setting preprocessor options
 dnl -------------------------------------------------------------
-AC_SUBST([AM_CPPFLAGS], 
-         ['-I$(top_srcdir)/src -I$(top_srcdir)/deps/MiniCppUnit-2.5'])
+AC_SUBST([AM_CPPFLAGS], ['-I$(top_srcdir)/src'])
 
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h
@@ -140,7 +139,7 @@ dnl -------------------------------------------------------------
 AH_BOTTOM([
 
 /* subversion identifier */
-#define SVN_VERSION "R957"
+#define SVN_VERSION "R999"
 
 ])
 

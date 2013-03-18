@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 2.2 (???. 2013)
+version 2.2 (Mar. 2013)
 --------------------------
   * added Latin Hypercube Sampling variance reduction method
   * added info about simulated values (indexes.csv)

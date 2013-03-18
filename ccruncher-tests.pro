@@ -70,7 +70,7 @@ HEADERS += \
     src/utils/ExceptionTest.hpp \
     src/utils/DateTest.hpp \
     src/utils/ExprTest.hpp \
-    deps/MiniCppUnit-2.5/MiniCppUnit.hxx
+    src/utils/MiniCppUnit.hxx
 
 SOURCES += \
     src/ccruncher-tests.cpp \
@@ -136,11 +136,10 @@ SOURCES += \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
     src/utils/ExprTest.cpp \
-    deps/MiniCppUnit-2.5/MiniCppUnit.cxx
+    src/utils/MiniCppUnit.cxx
 
 INCLUDEPATH += \
-    $$PWD/src \
-    $$PWD/deps/MiniCppUnit-2.5
+    $$PWD/src
 
 LIBS += \
     -lm \
