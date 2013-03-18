@@ -53,6 +53,5 @@ rm -rf $CCRUNCHER/autom4te.cache;
 rm -f  $CCRUNCHER/Makefile*;
 rm -rf $CCRUNCHER/src;
 rm -rf $CCRUNCHER/build;
-rm -rf $CCRUNCHER/deps;
 rm -f  $CCRUNCHER/doc/INSTALL;
 rm -f  $CCRUNCHER/bin/src2bin.sh;
