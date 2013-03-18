@@ -158,10 +158,17 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
     return false;
   }
 
+  QApplication::setOverrideCursor(Qt::WaitCursor);
   QTextStream in(&file);
   in.setCodec("UTF-8");
-  QApplication::setOverrideCursor(Qt::WaitCursor);
   QString content = in.readAll();
+
+  QString codec = getEncoding(content);
+  if (codec.toUpper() != "UTF-8") {
+    in.seek(0);
+    in.setCodec(codec.toStdString().c_str());
+    content = in.readAll();
+  }
 
   // reject non-ccruncher input files
   if (!content.contains("<ccruncher") && !content.contains("<portfolio"))
@@ -201,9 +208,12 @@ bool ccruncher_gui::XmlEditWidget::save(const QString &str)
      return false;
   }
 
-  QTextStream out(&file);
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  out << ui->editor->toPlainText();
+  QString txt = ui->editor->toPlainText();
+  QString codec = getEncoding(txt);
+  QTextStream out(&file);
+  out.setCodec(codec.toStdString().c_str());
+  out << txt;
   QApplication::restoreOverrideCursor();
   setWindowModified(false);
   ui->editor->document()->setModified(false);
@@ -253,5 +263,18 @@ void ccruncher_gui::XmlEditWidget::runFile()
   url.setPath(url.toLocalFile());
   url.setScheme("exec");
   emit anchorClicked(url);
+}
+
+//===========================================================================
+// getEncoding
+//===========================================================================
+QString ccruncher_gui::XmlEditWidget::getEncoding(const QString &txt) const
+{
+  QRegExp regexp("encoding\\s*=\\s*[\"']([^\"']+)[\"']");
+  QString codec = "UTF-8";
+  if (regexp.indexIn(txt) >= 0) {
+    codec = regexp.cap(1);
+  }
+  return codec;
 }
 

@@ -14,14 +14,13 @@ version 2.2 (???. 2013)
   * fix: header in csv files
   * fix: in aggregation when more than 1 asset per obligor
   * set output data directory clickable in simulation dialog
+  * open/save takes in account xml encoding
   * allowed char '_' in defines names
   * minor changes in documentation
   * ccruncher-cmd option --path renamed to --output
-  * POSIX compliance in --help option
-  * added command line options to ccruncher-gui
+  * POSIX compliance command line options
   * added file checksum computation
   * added logo in doc header
-  * code refactoring
 
 version 2.1 (Dec. 2012)
 --------------------------

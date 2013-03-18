@@ -62,6 +62,8 @@ class XmlEditWidget : public MdiChildWidget
 
     // set filename
     void setCurrentFile(const QString &fileName);
+    // returns xml encoding
+    QString getEncoding(const QString &txt) const;
 
   protected:
 
