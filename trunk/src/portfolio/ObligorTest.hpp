@@ -27,7 +27,7 @@
 
 #include "utils/config.h"
 #include <vector>
-#include <MiniCppUnit.hxx>
+#include "utils/MiniCppUnit.hxx"
 #include "params/Ratings.hpp"
 #include "params/Factors.hpp"
 #include "params/Interest.hpp"

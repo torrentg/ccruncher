@@ -154,6 +154,8 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+QMAKE_CXXFLAGS_RELEASE -= -g
+
 UI_DIR = $$PWD/build
 MOC_DIR = $$PWD/build
 OBJECTS_DIR = $$PWD/build
@@ -162,3 +164,4 @@ RCC_DIR = $$PWD/build
 
 RESOURCES += \
     src/gui/ccruncher.qrc
+

@@ -7,7 +7,6 @@
 AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
-    ../deps\
     ../src\
     ../ccruncher-cmd.pro\
     ../ccruncher-gui.pro\
@@ -105,8 +104,8 @@ ccruncher_cmd_LDFLAGS =
 # ccruncher-tests
 # -------------------------------------------------------------
 ccruncher_tests_SOURCES = \
-    ../deps/MiniCppUnit-2.5/MiniCppUnit.cxx\
     ../src/ccruncher-tests.cpp\
+    ../src/utils/MiniCppUnit.cxx\
     ../src/utils/TimerTest.cpp\
     ../src/utils/DateTest.cpp\
     ../src/utils/ExprTest.cpp\
@@ -171,6 +170,7 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/Aggregator.cpp\
     ../src/kernel/Inverses.cpp\
     \
+    ../src/utils/MiniCppUnit.hxx\
     ../src/utils/TimerTest.hpp\
     ../src/utils/DateTest.hpp\
     ../src/utils/ExprTest.hpp\

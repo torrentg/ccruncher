@@ -112,6 +112,8 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+QMAKE_CXXFLAGS_RELEASE -= -g
+
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
 
