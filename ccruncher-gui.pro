@@ -1,7 +1,7 @@
 QT += core gui
 TARGET = ccruncher-gui
 TEMPLATE = app
-CONFIG += console qwt thread
+CONFIG += qwt
 
 HEADERS += \
     src/gui/Application.hpp \
