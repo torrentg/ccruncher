@@ -235,7 +235,7 @@ test01 <- function()
   obs <- tabulate(portfolio[,1]+1, 2);
   prob <- c(0.9, 0.1);
   cst <- chisq.test(obs, p=prob);
-  if (cst$p.value > 0.01) { 
+  if (cst$p.value > 0.1) { 
     cat("OK\n");
   } else { 
     cat("FAILED\n"); 
@@ -258,7 +258,7 @@ test02 <- function()
   obs <- tabulate(portfolio[,1]+1, 3);
   prob <- c(0.9*0.9, 0.9*0.1+0.1*0.9, 0.1*0.1);
   cst <- chisq.test(obs, p=prob)
-  if (cst$p.value > 0.01) { 
+  if (cst$p.value > 0.1) { 
     cat("OK\n");
   } else { 
     cat("FAILED\n"); 
@@ -281,7 +281,7 @@ test03 <- function()
   obs <- tabulate(portfolio[,1]+1, 101);
   prob <- dbinom(0:100, 100, 0.1);
   cst <- chisq.test(obs, p=prob);
-  if (cst$p.value > 0.01) { 
+  if (cst$p.value > 0.1) { 
     cat("OK\n");
   } else { 
     cat("FAILED\n"); 
@@ -308,13 +308,16 @@ test04 <- function()
     cat("OK\n");
   }
   
+  # cumulative distribution function (cdf)
+  pf <- function(x, p, w) {
+    ifelse(x <=0|x>=1, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
+  }
+  
   #check portfolio loss distribution
   cat("  portfolio loss distribution: ")
-  pf <- function(x, p, w) {
-    ifelse(x <= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
-  }
-  kstest = ks.test(portfolio[1:1000,1]/1000, pf, p=0.1, w=0.2)
-  if (kstest$p.value < 0.05) {
+  numobligors = 1000
+  kstest = ks.test(portfolio[1:1000,1]/numobligors, pf, p=0.1, w=0.2)
+  if (kstest$p.value < 0.1) {
     cat("FAILED\n");
   } else {
     cat("OK\n");
@@ -344,11 +347,11 @@ test05 <- function()
   
   #reading data
   portfolio <- ccruncher.read("data/test05/portfolio.csv");
-  sectors <- ccruncher.read("data/test05/sectors.csv");
+  secrat <- ccruncher.read("data/test05/sector-rating.csv");
 
   #checking segmention completeness
   cat("  segmentations consistency: ")
-  if (isComplete(portfolio, sectors)) {
+  if (isComplete(portfolio, secrat)) {
     cat("OK\n");
   } else {
     cat("FAILED\n"); 

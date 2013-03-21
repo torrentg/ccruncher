@@ -251,6 +251,11 @@
         <td class="c2">
           Seed used to initialize a random number generator. If it has value 0
           then a random number based on the current time will be used.
+          If you're planning to do multiple simultaneous simulations of the same 
+          input file and merge the outputs in order to accelerate the computation, 
+          note that you need to set distinct and non-consecutive seeds. It requires 
+          to be non-consecutive because each thread has its how RNG seeded with the 
+          given value plus the thread index starting at 0.
           <br/>
           This parameter is optional. Default value is 0.
         </td>
@@ -1234,7 +1239,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 18-Mar-2013
+          Last modified: 20-Mar-2013
         </td>
       </tr></table>
     </div>

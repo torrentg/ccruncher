@@ -25,6 +25,7 @@ CCRUNCHER=`dirname $0`/..
 progname=tests.sh
 numversion="2.2"
 svnversion="R999"
+TESTS="test01 test02 test03 test04 test05 test06"
 
 #-------------------------------------------------------------
 # version function
@@ -51,47 +52,9 @@ _EOF_
 }
 
 #-------------------------------------------------------------
-# usage function
+# check installed apps
 #-------------------------------------------------------------
-usage() {
-
-  cat << _EOF_
-  usage: $progname [options]
-
-  description:
-    $progname runs some functional tests to check that ccruncher
-    runs fine. More info at http://www.ccruncher.net
-  options
-    -h       show this message and exit
-    -v       show version and exit
-  return code:
-    val      number of failed tests (0 = OK)
-  examples:
-    $progname
-
-_EOF_
-
-}
-
-#-------------------------------------------------------------
-# readconf function
-#-------------------------------------------------------------
-readconf() {
-
-  while getopts 'hv' opt
-  do
-    case $opt in
-      v) version;
-         exit 0;;
-      h) usage;
-         exit 0;;
-     \?) echo "unknow option. use -h for more information";
-         exit 1;;
-      *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gtorrent@ccruncher.net";
-         exit 1;;
-    esac
-  done
+checkapps() {
 
   which R > /dev/null 2> /dev/null;
 
@@ -118,7 +81,7 @@ runcc() {
   mkdir -p data/$1;
   rm -f data/$1/*;
   echo "running ccruncher on $1 ...";
-  ./build/ccruncher-cmd -w -o data/$1 samples/$1.xml;
+  ./build/ccruncher-cmd -w -o data/$1 -Dantithetic=true samples/$1.xml > /dev/null;
 
 }
 
@@ -126,27 +89,30 @@ runcc() {
 # main function
 #-------------------------------------------------------------
 
-readconf $@;
-
-#copyright;
+checkapps;
+copyright;
 
 cd $CCRUNCHER;
 
-runcc test01;
-runcc test02;
-runcc test03;
-runcc test04;
-runcc test05;
-runcc test06;
+if [ $# = 0 ]; then
+  INPUT=$TESTS
+else
+  INPUT=$*
+fi
+
+for i in $INPUT; do
+  if [[ $TESTS =~ $i ]]; then
+    runcc $i;
+    FUNCS="$FUNCS $i();"
+  else
+    echo "error: test '"$i"' not found"
+    exit 1;
+  fi
+done
 
 R --vanilla --slave << _EOF_
-    source("./bin/tests.R", echo=FALSE);
-    options(warn=-1)
-    test01();
-    test02();
-    test03();
-    test04();
-    test05();
-    test06();
+  source("./bin/tests.R", echo=FALSE);
+  options(warn=-1)
+  $FUNCS
 _EOF_
 
