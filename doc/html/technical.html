@@ -172,7 +172,7 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
     </p>
     <p>
       The following proposition determines the default times distribution relating it
-      to the multivariate Student-t distribution. This result is widely used both in 
+      to the multivariate t-Student distribution. This result is widely used both in 
       the parameters estimation as the simulation of the default times.
     </p>
     <p>
@@ -195,7 +195,7 @@ M_{\frac{T}{k}} &amp; = &amp; \sqrt[k]{M_{T}}
     </p>
     <p>
       Working with a matrix of dimension <i>n&times;n</i> is not practical. 
-      For this reason we work with the multivariate Student-t distribution expressed 
+      For this reason we work with the multivariate t-Student distribution expressed 
       as a multi-factor model.
     </p>
     
@@ -301,10 +301,9 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
       <li>Obtain the Cholesky decomposition, <i>L</i>, of <i>R</i></li>
       <li>Simulate <i>k</i> independent random variates <i>v<sub>1</sub>,&hellip;,v<sub>k</sub></i> from <i>N(0,1)</i></li>
       <li>Let <i>z = L·v</i></li>
-      <li>Simulate <i>n</i> independent random variates <i>&epsilon;<sub>i</sub><sup>j</sup></i> from <i>N(0,1)</i></li>
-      <li>Let <i>y<sub>i</sub><sup>j</sup> = w<sub>i</sub>·z<sub>i</sub>+&radic;(1- w<sub>i</sub><sup>2</sup>)·&epsilon;<sub>i</sub><sup>j</sup></i></li>
       <li>Simulate a random variate <i>s</i> from <i>&chi;<sub>&nu;</sub><sup>2</sup></i></li>
-      <li>Set <i>x<sub>i</sub><sup>j</sup> = &radic;(&nu;/s)·y<sub>i</sub><sup>j</sup></i></li>
+      <li>Simulate <i>n</i> independent random variates <i>&epsilon;<sub>i</sub><sup>j</sup></i> from <i>N(0,1)</i></li>
+      <li>Let <i>x<sub>i</sub><sup>j</sup> = &radic;(&nu;/s)·[w<sub>i</sub>·z<sub>i</sub> + &radic;(1- w<sub>i</sub><sup>2</sup>)·&epsilon;<sub>i</sub><sup>j</sup>]</i></li>
       <li>Set <i>u<sub>i</sub><sup>j</sup> = t<sub>&nu;</sub>(x<sub>i</sub><sup>j</sup>)</i></li>
     </ol>
     
@@ -353,7 +352,7 @@ exposure(t) \cdot \left[ 1-recovery(t) \right] &amp; \textrm{ if } t \le T \\
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 06-Mar-2013
+          Last modified: 21-Mar-2013
         </td>
       </tr></table>
     </div>
