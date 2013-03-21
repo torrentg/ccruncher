@@ -407,7 +407,7 @@ void help()
   "Examples:\n"
   "  basic example      ccruncher-cmd -o data/ samples/test04.xml\n"
   "  forcing overwrite  ccruncher-cmd -w -o data/ samples/test100.xml\n"
-  "  redefining values  ccruncher-cmd -w -o data/ -D ndf=8 -Dnumsims=1000 samples/sample.xml\n"
+  "  redefining values  ccruncher-cmd -w -o data/ -D ndf=8 samples/sample.xml\n"
   "\n"
   "Report bugs to gtorrent@ccruncher.net. Please include the output of\n"
   "'ccruncher-cmd --info' in the body of your report and attach the input\n"
@@ -427,9 +427,9 @@ void version()
   "ccruncher-cmd " << PACKAGE_VERSION << " (" << SVN_VERSION << ")\n"
   "Copyright (c) 2013 Gerard Torrent.\n"
   "License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>.\n"
-  "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\n"
-  "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-  "See the GNU General Public License for more details."
+  "This program is distributed in the hope that it will be useful, but WITHOUT ANY\n"
+  "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A\n"
+  "PARTICULAR PURPOSE. See the GNU General Public License for more details."
   << endl;
 }
 
