@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-03-18 16:56:12+01:00"
+#define BUILD_DATE "2013-03-21 17:33:00+01:00"
 
 /* build host name */
-#define BUILD_HOST "fobos.generacio.com"
+#define BUILD_HOST "fobos.ccruncher.net"
 
 /* build user */
-#define BUILD_USER "gerard"
+#define BUILD_USER "gtorrent"
 
 /* Define to 1 if you have the `alarm' function. */
 #define HAVE_ALARM 1
@@ -163,6 +163,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R999"
+#define SVN_VERSION "R1005"
 
 

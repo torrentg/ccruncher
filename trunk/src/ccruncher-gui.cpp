@@ -284,9 +284,9 @@ void version()
   "ccruncher-gui " << PACKAGE_VERSION << " (" << SVN_VERSION << ")\n"
   "Copyright (c) 2013 Gerard Torrent.\n"
   "License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>.\n"
-  "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;\n"
-  "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-  "See the GNU General Public License for more details."
+  "This program is distributed in the hope that it will be useful, but WITHOUT ANY\n"
+  "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A\n"
+  "PARTICULAR PURPOSE. See the GNU General Public License for more details."
   << endl;
 }
 
