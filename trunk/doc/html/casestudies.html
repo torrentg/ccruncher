@@ -107,7 +107,8 @@ f_{p,w}(x) =
   # computing densities
   numsims = nrow(portfolio)
   numobligors = 1000
-  h = hist(portfolio[,1], breaks=100)
+  numbreaks = min(100,length(tabulate(portfolio[,1]+1)))
+  h = hist(portfolio[,1], breaks=numbreaks)
   x = h$mids/numobligors
   y1 = h$counts/numsims
   y2 = df(x,0.1,0.2)
@@ -120,15 +121,6 @@ f_{p,w}(x) =
   legend(0.20, 0.01, c("ccruncher", "theoretical"), lty=c(1,1), col= 1:2, bg="white", cex=0.7)
   grid()
 
-
-  pf &lt;- function(x, p, w) {
-    ifelse(x &lt;= 0, 0, pnorm((qnorm(x)*sqrt(1-w^2)-qnorm(p))/w))
-  }
-
-  df &lt;- function(x, p, w) {
-    ifelse(x &lt;= 0, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
-  }
-  
   # kolmogorov-Smirnof test
   kstest = ks.test(portfolio[1:1000,1]/numobligors, pf, p=0.1, w=0.2)
   kstest$p.value
@@ -143,7 +135,7 @@ dev.off()
     <p>
       We use the Kolmogorov-Smirnof test to check that the distribution 
       estimated by CCruncher is similar to the theoretical distribution. 
-      The first 1000 simulations gives a p-value bigger than 0.25,
+      The first 1000 simulations gives a p-value bigger than 0.1,
       sufficient to assert that it is a good approximation. If we consider
       more simulations (eg. 100000) in the Kolmogorov-Smirnov test then the 
       p-value drops to 0. The reason is that the simulated portfolio is 
@@ -195,7 +187,7 @@ dev.off()
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 19-Mar-2013
+          Last modified: 21-Mar-2013
         </td>
       </tr></table>
     </div>

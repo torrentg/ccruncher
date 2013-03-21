@@ -125,7 +125,7 @@
 			<xsd:element name="correlations" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="correlation" minOccurs="1" maxOccurs="unbounded">
+						<xsd:element name="correlation" minOccurs="0" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="factor1" type="xsd:string" use="required"/>
 								<xsd:attribute name="factor2" type="xsd:string" use="required"/>

@@ -145,7 +145,7 @@
 <!--                        correlations                            -->
 <!-- .............................................................. -->
 <!ELEMENT correlations (
-    correlation+
+    correlation*
 )>
 
 <!ELEMENT correlation
