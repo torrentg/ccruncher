@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Features</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        th {
+            background-color: #005080;
+            color: white;
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid gray;
+        }
+        td.c1 {
+            text-align: left;
+            padding: 8px;
+            width: 350px;
+        }
+        td.c2 {
+            text-align: center;
+            padding: 8px;
+            width: 150px;
+        }
+        @media print {
+            td.c1, td.c2, td.c3
+            {
+                border: 1px solid gray;
+            }
+        }
+    </style>
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+        <td style="vertical-align: middle;">
+          <a href="index.html">
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px;"/>
+          </a>
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Features</h1>
+
+    <!-- model features -->
+    <table cellpadding="2" style="margin-left:auto; margin-right:auto;">
+      <tr>
+        <th class="" colspan="2">MODEL</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">Model type</td>
+        <td class="c2">multi-factor<br/> Merton model</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Risk measures</td>
+        <td class="c2">Expected Loss,<br/> Value at Risk,<br/> Expected Shortfall,<br/> Other (user defined)</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Resolution method</td>
+        <td class="c2">Monte Carlo</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Simulated values</td>
+        <td class="c2">default times,<br/> exposures, <br/>recoveries</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Supported copulas</td>
+        <td class="c2">gaussian,<br/> t-Student</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Default probabilities defined over time</td>
+        <td class="c2">transition matrix,<br/> user defined</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Exposures defined over time</td>
+        <td class="c2">yes</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Exposures</td>
+        <td class="c2">fixed, lognormal, exponential, uniform, gamma, normal</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Recoveries defined over time</td>
+        <td class="c2">yes</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Recoveries</td>
+        <td class="c2">fixed, beta, uniform</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Portfolio disaggregation</td>
+        <td class="c2">yes</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Variance reduction methods</td>
+        <td class="c2">
+          antithetic,<br/>
+          latin hypercube sampling
+        </td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Multiple time horizons</td>
+        <td class="c2">no</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Multiple factors by obligor</td>
+        <td class="c2">no</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Multiple assets by obligor</td>
+        <td class="c2">yes</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Current net value support</td>
+        <td class="c2">yes</td>
+      </tr>
+    </table>
+    <br/>
+
+    <!-- technical features -->
+    <table cellpadding="2" style="margin-left:auto; margin-right:auto;">
+      <tr>
+        <th class="" colspan="2">TECHNICAL</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">Time unit</td>
+        <td class="c2">1 day</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Default times simulation accuracy</td>
+        <td class="c2">&lt; 1 hour</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Multi-thread support</td>
+        <td class="c2">yes</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Input data format</td>
+        <td class="c2">XML</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Output data format</td>
+        <td class="c2">CSV</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Operating systems</td>
+        <td class="c2">Windows, Linux</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Operating modes</td>
+        <td class="c2">graphic, batch</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Compression algorithms</td>
+        <td class="c2">gzip</td>
+      </tr>
+    </table>
+    <br/>
+
+    <!-- limits -->
+    <table cellpadding="2" style="margin-left:auto; margin-right:auto;">
+      <tr>
+        <th class="" colspan="2">LIMITS</th>
+      </tr>
+      <tr class="b">
+        <td class="c1">Maximum number of ratings</td>
+        <td class="c2">256</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Maximum number of factors</td>
+        <td class="c2">256</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Maximum number of segmentations</td>
+        <td class="c2">65535</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Maximum number of segments in a segmentation</td>
+        <td class="c2">65535</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Maximum number of obligors</td>
+        <td class="c2">4294967295</td>
+      </tr>
+      <tr class="a">
+        <td class="c1">Maximum number of assets by obligor</td>
+        <td class="c2">65535</td>
+      </tr>
+      <tr class="b">
+        <td class="c1">Maximum number of exposures/recoveries</td>
+        <td class="c2">4294967295</td>
+      </tr>
+    </table>
+
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 21-Mar-2013
+        </td>
+      </tr></table>
+    </div>
+
+  </div>
+  </body>
+</html>
+

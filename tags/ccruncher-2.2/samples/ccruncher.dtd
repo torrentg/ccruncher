@@ -1,0 +1,232 @@
+<!-- ============================================================== -->
+<!--                       CCRUNCHER DTD                            -->
+<!-- ============================================================== -->
+
+<!--
+    if you desire debug your xml add these lines just after xml declaration:
+    <!DOCTYPE ccruncher SYSTEM "ccruncher.dtd">
+
+    export CLASSPATH=$CLASSPATH:xercesImpl.jar:xml-apis.jar:xercesSamples.jar
+    java dom.Writer -v sample01.xml
+    java sax.Writer -v sample01.xml
+-->
+
+<!-- .............................................................. -->
+<!--                           ccruncher                            -->
+<!-- .............................................................. -->
+<!ELEMENT ccruncher (
+    (title?, description?, defines?, parameters, interest?, ratings, 
+     (transitions|dprobs), factors, correlations, segmentations, 
+     portfolio)
+)>
+
+<!-- .............................................................. -->
+<!--                         descriptives                           -->
+<!-- .............................................................. -->
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+<!-- .............................................................. -->
+<!--                            defines                             -->
+<!-- .............................................................. -->
+<!ELEMENT defines (
+    define+
+)>
+
+<!ELEMENT define 
+    EMPTY
+>
+<!ATTLIST define 
+    name CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                           parameters                           -->
+<!-- .............................................................. -->
+<!ELEMENT parameters (
+    parameter+
+)>
+
+<!ELEMENT parameter 
+    EMPTY
+>
+<!ATTLIST parameter 
+    name (time.0|time.T|stopcriteria.maxiterations|stopcriteria.maxseconds|copula.type|rng.seed|antithetic|lhs|blocksize|portfolio.onlyActiveObligors) #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                          interest                              -->
+<!-- .............................................................. -->
+<!ELEMENT interest (
+    rate+
+)>
+<!ATTLIST interest
+    type (simple|compound|continuous) "compound"
+    spline (linear|cubic) "linear"
+>
+
+<!ELEMENT rate
+    EMPTY
+>
+<!ATTLIST rate
+    t CDATA #REQUIRED
+    r CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                           ratings                              -->
+<!-- .............................................................. -->
+<!ELEMENT ratings (
+    rating+
+)>
+
+<!ELEMENT rating
+    EMPTY
+>
+<!ATTLIST rating 
+    name ID #REQUIRED
+    description CDATA #IMPLIED
+>
+
+<!-- .............................................................. -->
+<!--                          transition                            -->
+<!-- .............................................................. -->
+<!ELEMENT transitions (
+    transition+
+)>
+<!ATTLIST transitions
+    period CDATA #REQUIRED
+>
+
+<!ELEMENT transition
+    EMPTY
+>
+<!ATTLIST transition
+    from IDREF #REQUIRED
+    to IDREF #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                           dprobs                               -->
+<!-- .............................................................. -->
+<!ELEMENT dprobs (
+    dprob+
+)>
+
+<!ELEMENT dprob
+    EMPTY
+>
+<!ATTLIST dprob
+    rating IDREF #REQUIRED
+    t CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         factors                                -->
+<!-- .............................................................. -->
+<!ELEMENT factors (
+    factor+
+)>
+
+<!ELEMENT factor
+    EMPTY
+>
+<!ATTLIST factor
+    name ID #REQUIRED
+    description CDATA #IMPLIED
+    loading CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                        correlations                            -->
+<!-- .............................................................. -->
+<!ELEMENT correlations (
+    correlation*
+)>
+
+<!ELEMENT correlation
+    EMPTY
+>
+<!ATTLIST correlation
+    factor1 IDREF #REQUIRED
+    factor2 IDREF #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                         segmentations                          -->
+<!-- .............................................................. -->
+<!ELEMENT segmentations (
+    segmentation*
+)>
+
+<!ELEMENT segmentation (
+    segment*
+)>
+<!ATTLIST segmentation
+    name CDATA #REQUIRED
+    components (asset|obligor) #REQUIRED
+    enabled (true|false) "true"
+>
+
+<!ELEMENT segment
+    EMPTY
+>
+<!ATTLIST segment 
+    name CDATA #REQUIRED
+>
+
+<!-- .............................................................. -->
+<!--                        portfolio                               -->
+<!-- .............................................................. -->
+<!ELEMENT portfolio (
+    obligor+
+)>
+<!ATTLIST portfolio
+    include CDATA #IMPLIED
+>
+
+<!ELEMENT obligor (
+    (belongs-to*, asset*)
+)>
+<!ATTLIST obligor
+    id CDATA #REQUIRED
+    rating IDREF #REQUIRED
+    factor IDREF #REQUIRED
+    recovery CDATA #IMPLIED
+>
+
+<!ELEMENT asset (
+    (belongs-to*, data)
+)>
+<!ATTLIST asset
+    id CDATA #REQUIRED
+    date CDATA #REQUIRED
+    recovery CDATA #IMPLIED
+>
+
+<!ELEMENT belongs-to
+    EMPTY
+>
+<!ATTLIST belongs-to 
+    segmentation CDATA #REQUIRED
+    segment CDATA #REQUIRED
+>
+
+<!ELEMENT data (
+    values+
+)>
+
+<!ELEMENT values
+    EMPTY
+>
+<!ATTLIST values
+    t CDATA #REQUIRED
+    exposure CDATA #REQUIRED
+    recovery CDATA #IMPLIED
+>
+

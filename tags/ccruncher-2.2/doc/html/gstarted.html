@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>CCruncher - Getting started</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  </head>
+
+  <body>
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table style="height:100%"><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
+          Open-Source Tool for<br/>Credit Risk Modeling
+        </td>
+        <td style="vertical-align: middle;">
+          <a href="index.html">
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px;"/>
+          </a>
+        </td>
+      </tr></table>
+    </div>
+
+    <h1>Getting Started - First steps</h1>
+    <p>
+      Follow these steps to install CCruncher and discover its capabilities.
+    </p>
+    <ol>
+      <li>
+        Download your binary package from 
+        <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>.
+      </li>
+      <li>
+        Unpack it in a folder.
+      </li>
+      <li>
+        Take a time to inspect the directory contents (<code>bin, data, doc, samples</code>)
+      </li>
+      <li>
+        Execute CCruncher double-clicking <code>bin/ccruncher-gui</code>.
+      </li>
+      <li>
+        Open file <code>samples/test05.xml</code>.
+      </li>
+      <li>
+        Click on the 'Edit' button, or the 'Edit' icon, to view the input file content.
+      </li>
+      <li>
+        Return to the simulation tab.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
+      </li>
+      <li>
+        Read the execution trace.
+      </li>
+      <li>
+        Open a file browser and review the content of the <code>data/</code> directory.
+        Observe the new file named <code>portfolio.csv</code>. Open it and inspect
+        its content. The values are the simulated portfolio losses. Rows are simulations
+        and columns are segments.
+      </li>
+      <li>
+        Return to CCruncher.
+      </li>
+      <li>
+        Open output data files clicking the links in the trace, or clicking the 
+        'Data analysis' icon, or using the 'File > Open file' dialog.
+      </li>
+      <li>
+        Do your risk analysis.
+      </li>
+    </ol>
+
+    <h1>Getting Started - Using segmentations</h1>
+    <p>
+      Segmentations are a powerful mechanism to define subportfolios.
+      This feature can be used to disaggregate the risk of the whole
+      portfolio. CCruncher evalues all the subportfolios defined 
+      in the <code>&lt;segmentations&gt;</code> section in the input
+      file and creates an output file for each one of them.
+    </p>
+    <ol>
+      <li>
+        Open file <code>samples/test03.xml</code>.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Edit the input file pressing the 'Edit' button.
+      </li>
+      <li>
+        Locate the <code>&lt;segmentations&gt;</code> sections.
+      </li>
+      <li>
+        Enable the 'offices' segmentation.
+      </li>
+      <li>
+        Save the changes made in input file.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation. 
+      </li>
+      <li>
+        Open a file browser and review the content of the <code>data/</code> directory.
+        Observe the new file named <code>offices.csv</code>. Open it and inspect
+        its content. The 'unassigned' segment is because the obligor '100' isn't
+        assigned to any segment of the 'offices' segmentation.
+      </li>
+      <li>
+        Click the 'Data analysis' icon to open an analysis tab for each enabled
+        segmentation. 
+      </li>
+    </ol>
+    
+    <h1>Getting Started - Using defines</h1>
+    <p>
+      The 'defines' mechanism allows modifying the input file in easy way.
+      This is useful if you desire to evaluate the same input file modifying slightly
+      a parameter each time.
+    </p>
+    <ol>
+      <li>
+        Open file <code>samples/test03.xml</code>.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Edit the input file pressing the 'Edit' button.
+      </li>
+      <li>
+        Create a new define adding the following line into the <code>&lt;defines&gt;</code> tag:<br/>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;define name="numsecs" value="20" /&gt;</code>
+      </li>
+      <li>
+        Go to the <code>stopcriteria.maxseconds</code> parameter and replace its
+        value by <code>$numsecs</code>.
+      </li>
+      <li>
+        Save the changes made in input file.
+      </li>
+      <li>
+        Click on the 'Set ...' defines button.
+      </li>
+      <li>
+        Set <code>numsims</code> value to <i>0</i> (unbounded number of simulations).
+      </li>
+      <li>
+        Set <code>numsecs</code> value to <i>30</i>.
+      </li>
+      <li>
+        Close defines dialog pressing the 'Ok' button.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
+      </li>
+      <li>
+        Check that the simulation has elapsed ~30 secs before to stop.
+      </li>
+    </ol>
+    
+    <h1>Getting Started - Flying solo</h1>
+    <p>
+      We have revised the main features. 
+      Some final words before you move by yourself:
+    </p>
+    <ul>
+      <li>
+        Read carefully the <a href="ifileref.html">input file documentation</a>.
+      </li>
+      <li>
+        Create your own input files using some file from samples directory as template.
+      </li>
+      <li>
+        Be tidy. Save the input and output files of a problem in the same directory.
+        In this way you will can know the meaning of the output data sometime after.
+      </li>
+      <li>
+        Don't hesitate to send your questions, suggestions, improvements, bugs, 
+        etc. to the <a href="mailto:gtorrent@ccruncher.net">ccruncher team</a>.
+      </li>
+    </ul>
+
+    <div id="page-footer">
+      <table style="width:100%; height:100%"><tr>
+        <td style="width:100%; text-align:center;">
+          Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </td>
+        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
+          Last modified: 21-Mar-2013
+        </td>
+      </tr></table>
+    </div>
+
+  </div>
+  </body>
+</html>

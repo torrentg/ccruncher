@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ccruncher>
+
+  <title>test06</title>
+  <description>
+    Example used to test aggregations
+  </description>
+
+  <!-- ============================================================== -->
+  <!--                         DEFINES                                -->
+  <!-- ============================================================== -->
+  <defines>
+    <define name="numsims" value="100000"/>
+    <define name="copula" value="gaussian"/>
+    <define name="antithetic" value="true"/>
+    <define name="lhs" value="false"/>
+    <define name="blocksize" value="128"/>
+  </defines>
+
+  <!-- ============================================================== -->
+  <!--                       PARAMETERS                               -->
+  <!-- ============================================================== -->
+  <parameters>
+    <parameter name="time.0" value="01/01/2005"/>
+    <parameter name="time.T" value="01/01/2006"/>
+    <parameter name="stopcriteria.maxiterations" value="$numsims"/>
+    <parameter name="stopcriteria.maxseconds" value="86400"/>
+    <parameter name="copula.type" value="$copula"/>
+    <parameter name="rng.seed" value="0"/>
+    <parameter name="antithetic" value="$antithetic"/>
+    <parameter name="lhs" value="$lhs"/>
+    <parameter name="blocksize" value="$blocksize"/>
+    <parameter name="portfolio.onlyActiveObligors" value="true"/>
+  </parameters>
+
+  <!-- ============================================================== -->
+  <!--                           RATINGS                              -->
+  <!-- ============================================================== -->
+  <ratings>
+    <rating name="A" description="alive"/>
+    <rating name="E" description="dead"/>
+  </ratings>
+
+  <!-- ============================================================== -->
+  <!--                     TRANSITION MATRIX                          -->
+  <!-- ============================================================== -->
+  <transitions period="12">
+    <transition from="A" to="A" value="90%"/>
+    <transition from="A" to="E" value="10%"/>
+    <transition from="E" to="A" value="0%"/>
+    <transition from="E" to="E" value="100%"/>
+  </transitions>
+
+  <!-- ============================================================== -->
+  <!--                           FACTORS                              -->
+  <!-- ============================================================== -->
+  <factors>
+    <factor name="S1" loading="40%"/>
+    <factor name="S2" loading="35%"/>
+  </factors>
+
+  <!-- ============================================================== -->
+  <!--                        CORRELATIONS                            -->
+  <!-- ============================================================== -->
+  <correlations>
+    <correlation factor1="S1" factor2="S2" value="25%"/>
+  </correlations>
+
+  <!-- ============================================================== -->
+  <!--                       SEGMENTATIONS                            -->
+  <!-- ============================================================== -->
+  <segmentations>
+    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="obligors" components="obligor">
+      <segment name="1"/>
+      <segment name="2"/>
+    </segmentation>
+    <segmentation name="assets" components="asset">
+      <segment name="1"/>
+      <segment name="2"/>
+      <segment name="3"/>
+    </segmentation>
+  </segmentations>
+
+  <!-- ============================================================== -->
+  <!--                         PORTFOLIO                              -->
+  <!-- ============================================================== -->
+  <portfolio>
+  
+    <obligor rating="A" factor="S1" id="0">
+      <asset id="0-1" date="01/01/2005">
+        <data>
+          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="0-2" date="01/01/2005">
+        <data>
+          <values t="01/01/2006" exposure="2.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="0-3" date="01/01/2005">
+        <data>
+          <values t="01/01/2006" exposure="3.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    
+    <obligor rating="A" factor="S1" id="1">
+      <belongs-to segmentation="obligors" segment="1"/>
+      <asset id="1-1" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="1"/>
+        <data>
+          <values t="01/01/2006" exposure="10.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="1-2" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="2"/>
+        <data>
+          <values t="01/01/2006" exposure="20.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="1-3" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="3"/>
+        <data>
+          <values t="01/01/2006" exposure="30.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+    
+    <obligor rating="A" factor="S1" id="2">
+      <belongs-to segmentation="obligors" segment="2"/>
+      <asset id="2-1" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="1"/>
+        <data>
+          <values t="01/01/2006" exposure="100.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="2-2" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="2"/>
+        <data>
+          <values t="01/01/2006" exposure="200.0" recovery="0%" />
+        </data>
+      </asset>
+      <asset id="2-3" date="01/01/2005">
+        <belongs-to segmentation="assets" segment="3"/>
+        <data>
+          <values t="01/01/2006" exposure="300.0" recovery="0%" />
+        </data>
+      </asset>
+    </obligor>
+  </portfolio>
+
+</ccruncher>
+
