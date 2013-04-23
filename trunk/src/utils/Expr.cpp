@@ -153,7 +153,7 @@ bool ccruncher::Expr::isOperator(const char *ptr, token *tok, char **endptr)
     {
       tok->type = OPERATOR;
       tok->dat.n = i;
-      *endptr = const_cast<char*>(ptr+1);
+      *endptr = const_cast<char*>(ptr+len);
       return true;
     }
   }
@@ -265,23 +265,6 @@ inline bool ccruncher::Expr::isValue(TokenType type)
 {
   if (type == NUMBER || type == VARIABLE || type == CONSTANT) return true;
   else return false;
-}
-
-//=============================================================
-// rewrite rules
-//=============================================================
-bool ccruncher::Expr::rewrite(token *prevtok, token *curtok)
-{
-  // special cases: '+' and '-' functions
-  if (curtok->type == OPERATOR && functions[curtok->dat.n].args == 0)
-  {
-    if (prevtok->type == END || prevtok->type == PARENTHESIS_OPEN || prevtok->type == ARGUMENT_SEPARATOR)
-    {
-      curtok->type = FUNCTION;
-      return true;
-    }
-  }
-  return false;
 }
 
 //=============================================================
@@ -491,7 +474,16 @@ void ccruncher::Expr::compile(const string &str, vector<variable> &variables, ve
     while(true)
     {
       next(ptr, &curtok, &endptr,variables);
-      rewrite(&prevtok, &curtok);
+
+      // special cases: '+' and '-' functions
+      if (curtok.type == OPERATOR && (curtok.dat.n == 0 || curtok.dat.n == 1))
+      {
+        if (prevtok.type == END || prevtok.type == PARENTHESIS_OPEN || prevtok.type == ARGUMENT_SEPARATOR)
+        {
+          curtok.type = FUNCTION;
+        }
+      }
+
       check(&prevtok, &curtok);
 
       if (isValue(curtok.type))

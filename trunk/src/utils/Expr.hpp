@@ -133,8 +133,6 @@ class Expr
     static bool isVariable(const char *, token *, char **, std::vector<variable> &);
     // parse the next token
     static void next(const char *, token *, char **, std::vector<variable> &) throw(Exception);
-    // rewrite the current token (if needed)
-    static bool rewrite(token *, token *);
     // syntax checking
     static void check(token *, token *) throw(Exception);
     // push token to RPN instructions pile
