@@ -66,6 +66,7 @@
 % added by GTG
 \usepackage{verbatim}
 \usepackage{parskip}
+\usepackage{enumitem}
 %\setlength{\parindent}{0ex}
 %\setlength{\parskip}{\baselineskip}
 
@@ -109,16 +110,6 @@ Using CCruncher\par
 \noindent 
 This work is licensed to the public under Creative Commons Attribution-ShareAlike 3.0 Unported License. 
 To view a copy of this license visit \url{http://creativecommons.org/licenses/by-sa/3.0/}.
-
-\begin{comment}
-Licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License 
-(the ``License''). You may not use this file except in compliance with the License. 
-You may obtain a copy of the License at \url{http://creativecommons.org/licenses/by-sa/3.0/}. 
-Unless required by applicable law or agreed to in writing, software distributed under 
-the License is distributed on an \textsc{``AS IS'' BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-OF ANY KIND}, either express or implied. See the License for the specific language governing 
-permissions and limitations under the License.\\ % License information
-\end{comment}
 
 %\noindent \textit{First printing, March 2013} % Printing/edition date
 
@@ -374,22 +365,48 @@ Treatment 3 & 0.0009271 & 0.296 \\
 %----------------------------------------------------------------------------------------
 % MODEL
 %----------------------------------------------------------------------------------------
-\chapter{Model}
-\section{Model}\index{Model}
+\chapter{Modeling Default Times}
 
-%----------------------------------------------------------------------------------------
-% PARAMETERS ESTIMATION
-%----------------------------------------------------------------------------------------
-\chapter{Parameters Estimation}
-\section{Parameters Estimation}\index{Parameters Estimation}
+\section{Mathematics}\index{Mathematics}
 
+\subsection{t-Student Distribution}\index{Mathematics!t-Student Distribution}
 
-%----------------------------------------------------------------------------------------
-% APPENDICES
-%----------------------------------------------------------------------------------------
-\chapter{Appendices}
+\begin{definition}[Multivariate t-Student distribution]
+The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
+(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
+mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
+denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
+\begin{displaymath}
+f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
+\left(
+1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
+\right)^{-\frac{\nu+d}{2}}
+\end{displaymath}
+\noindent where $|\Sigma|$ represents the absolute value of the determinant of the matrix. 
+\end{definition}
 
-\section{Introduction to copulas}\index{Introduction to copulas}
+\begin{proposition}[Gaussian as limit of the t-Student]
+The t-Student distribution converges to a Gaussian distribution 
+when $\nu$ tend to $\infty$.
+\begin{displaymath}
+\lim_{\nu \to \infty} t_d(\nu,\mu,\Sigma) = N(\mu,\Sigma)
+\end{displaymath}
+\end{proposition}
+
+\begin{proposition}[Multivariate t-Student characterization]
+A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
+\begin{displaymath}
+T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
+\quad \textrm { where } Z \sim N(0,\Sigma) \textrm{ and } V \sim \chi_{\nu}^2
+\end{displaymath}
+\end{proposition}
+
+\begin{proposition}[Multivariate t-Student marginals]
+Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
+$X_i \sim t_1(\nu,0,R_{ii})$.
+\end{proposition}
+
+\subsection{t-Student Copula}\index{Mathematics!t-Student Copula}
 
 It is common to use correlation as a measure of dependency between random 
 variables. In most cases, this measure does not fully reflect the structure 
@@ -397,7 +414,6 @@ of dependence between them. The mathematical concept that does reflect the
 structure of dependence between random variables, however, is the copula, 
 which we define below \cite{McNeil:2005qf}.
 
-%TODO: POSAR REFERENCIA
 \begin{definition}[Copula]
 A copula function, $C$, is a multivariate distribution defined on the 
 unit hypercube $[0,1]^d$ with standard uniform marginals. 
@@ -436,14 +452,6 @@ Then its copula is:
 C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
 \end{displaymath}
 \end{corollary}
-\begin{proof}
-This is a direct application of Sklar's theorem:
-\begin{displaymath}
-C(F_1(x_1), \dots, F_d(x_d)) = 
-F(F_1^{-1}(F_1(x_1)), \dots, F_d^{-1}(F_d(x_d))) = 
-F(x_1, \dots, x_d)
-\end{displaymath}
-\end{proof}
 
 
 \begin{corollary}[Copula simulation]
@@ -455,9 +463,6 @@ its copula $C$ using:
 (U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
 \end{displaymath}
 \end{corollary}
-\begin{proof}
-TODO: The probability integral transform
-\end{proof}
 
 
 \begin{corollary}[Multivariate distribution simulation]
@@ -469,41 +474,7 @@ procedure to simulate $C$ then we can simulate $X$ using:
 \end{displaymath}
 where $U_i$ are the copula components.
 \end{corollary}
-\begin{proof}
-TODO
-\end{proof}
 
-
-\begin{definition}[Multivariate t-Student distribution]
-The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
-(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
-mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
-denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
-\begin{displaymath}
-f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
-\left(
-1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
-\right)^{-\frac{\nu+d}{2}}
-\end{displaymath}
-\noindent where $|\Sigma|$ represents the absolute value of the determinant of the matrix. 
-\end{definition}
-
-\begin{proposition}[Multivariate t-Student characterization]
-A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
-\begin{displaymath}
-T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
-\quad \textrm { where } Z \sim N(0,\Sigma) \textrm{ and } V \sim \chi_{\nu}^2
-\end{displaymath}
-\end{proposition}
-
-\begin{proposition}[Multivariate t-Student marginals]
-Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is $X_i \sim t_1(\nu,0,R_{ii})$.
-\end{proposition}
-
-Note that the above proposition is also valid for the case $\nu=\infty$
-corresponding to the multivariate Gaussian distribution.
-
-We use the corollary XXX and the definition XXX to define the t-Student copula.
 
 \begin{definition}[t-Student copula]
 The t-Student copula, $C_{\nu,\Sigma}^d$, is the copula of the multivariate 
@@ -539,11 +510,213 @@ c_{\nu,R}^d(u_1,\dots,u_d) = %\\
 where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of the t-student 
 univariate inverse distribution functions.
 \end{proposition}
-\begin{comment}
-\begin{proof}
-see ageeva
-\end{proof}
-\end{comment}
+
+
+\section{Default Times Distribution}\index{Default Times Distribution}
+
+We assume that obligors default times $(T_1, \dots, T_n)$ are modeled 
+by a multivariate distribution $F$ such that:
+\begin{displaymath}
+F(t_1, \dots, t_n) = \Pr \{T_1 \le t_1, \dots, T_n \le t_n\}
+\end{displaymath}
+where $n$ is the number of obligors in the portfolio, $T_i$ is the time 
+(in years) when the i-th obligor defaults, and $F$ is the multivariate
+distribution. Applying the Sklar's theorem to the above distribution 
+we obtain:
+\begin{displaymath}
+F(t_1, \dots, t_n) = C\left(F_1(t_1), \dots, F_n(t_n)\right) 
+\end{displaymath}
+where $F_i(t) = \Pr\{T_i < t\}$ are the marginal distributions, 
+and $C$ is the underlying copula.
+
+\subsection{Default Times Marginals}\index{Default Times Distribution!Default Times Marginals}
+
+Marginal distributions are the individual probabilities of default 
+(PD) over time. Each obligor has its own PD depending on its rating,
+sector, etc. In the following section we infere the PD over time from 
+the transition matrix. This approach implies that transition 
+probabilities remains contants over time undermining the economic 
+cicle effect. In practice, it is equivalent to consider an averaged 
+economic cicle.
+
+\begin{definition}[Transition matrix] 
+The $T$-years transition matrix gives the probability of changing 
+from rating $r_i$ to rating $r_j$ in a period of $T$ years:
+\begin{displaymath}
+M_T = \left(
+\begin{array}{ccc}
+m_{1,1} & \dots  & m_{1,n} \\
+\vdots & \ddots & \vdots   \\
+m_{n,1} & \dots  & m_{n,n} \\
+\end{array}
+\right)
+\qquad
+m_{i,j} = P(r_i \to r_j;T)
+\end{displaymath}
+where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
+obligor with rating $r_i$ changes to rating $r_j$ in $T$ years.
+\end{definition}
+
+\begin{example}
+The following table shows a transition matrix in which the probability that 
+a obligor with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
+Note that last column contains the 1-year default probabilities for each 
+rating, and the last row corresponds to the \emph{defaulted} rating.
+
+\begin{figure}[!hb]
+\begin{center}
+\begin{tabular}[]{l|rrrrrrrr}
+        &      AAA &       AA &        A &      BBB &       BB &        B &      CCC &  Default \\
+\hline
+AAA     &  $90.81$ &   $8.33$ &   $0.68$ &   $0.06$ &   $0.12$ &   $0.00$ &   $0.00$ &   $0.00$ \\
+ AA     &   $0.70$ &  $90.65$ &   $7.79$ &   $0.64$ &   $0.06$ &   $\underline{0.14}$ &   $0.02$ &   $0.00$ \\
+  A     &   $0.09$ &   $2.27$ &  $91.05$ &   $5.52$ &   $0.74$ &   $0.26$ &   $0.01$ &   $0.06$ \\
+BBB     &   $0.02$ &   $0.33$ &   $5.95$ &  $86.93$ &   $5.30$ &   $1.17$ &   $0.12$ &   $0.18$ \\
+ BB     &   $0.03$ &   $0.14$ &   $0.67$ &   $7.73$ &  $80.53$ &   $8.84$ &   $1.00$ &   $1.06$ \\
+  B     &   $0.00$ &   $0.11$ &   $0.24$ &   $0.43$ &   $6.48$ &  $83.46$ &   $4.07$ &   $5.21$ \\
+CCC     &   $0.22$ &   $0.00$ &   $0.22$ &   $1.30$ &   $2.38$ &  $11.24$ &  $64.86$ &  $19.78$ \\
+Default &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ &   $0.00$ & $100.00$ \\
+\end{tabular}
+\caption{One-year transition matrix}
+\label{tmatrix1}
+\end{center}
+\end{figure}
+\end{example}
+
+\begin{proposition}[Scaled transition matrix]
+The transition matrix can be scaled in time by using the following rules:
+\begin{equation}
+\label{sttm}
+\begin{array}{l}
+M_{T_1+T_2} = M_{T_1} \cdot M_{T_2} \nonumber \\
+M_{k \cdot T} = M_{T}^k \nonumber \\
+M_{\frac{T}{k}} = \sqrt[k]{M_{T}} \nonumber
+\end{array}
+\end{equation}
+\end{proposition}
+
+The root of a matrix $M$ can be obtained using the spectral decomposition
+$M = P \cdot D \cdot P^{-1}$, where $P$ and $D$ are the eigenvectors and
+eigenvalues matrices of $M$, doing $M^{\gamma} = P \cdot D^{\gamma} \cdot P^{-1}$
+
+Sometimes, the scaled transition matrix does not satisfy the Markov conditions
+(the row sum is equal to one, and all elements are non-negatives). In this case, 
+we need to transform this matrix to the relevant Markov matrix. This process is 
+called regularization. Below is exposed the QOM regularization algorithm 
+extracted from XXX.
+
+\begin{algorithm}[Transition matrix regularization]
+The QOM (Quasi-Optimization of the root Matrix) algorithm regularizes a 
+transition matrix, $m_{ij}$, of dimension $n$ row by row. The steps to 
+regularize the $i$-th row are:
+\begin{enumerate}
+\item Compute the difference between the row sum and one. 
+Divide by $n$ and subtract this value from all non-zero components:
+\begin{displaymath}
+m_{ij} \ne 0 
+\Longrightarrow 
+m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{j=1}^{n} m_{ij} - 1\right)
+\end{displaymath}
+\item If all the row elements are non-negative and sum to one, 
+then stop, as the row is regularized.
+\item Fix any negative row element to zero and go to Step 1.
+\end{enumerate}
+
+Apply the previous algorithm for every row. The algorithm stops after $m$ 
+steps, where $m \le n$ (Merkoulovitch 2000). The final matrix is a regularized
+matrix. 
+\end{algorithm}
+
+
+\begin{proposition}[PD over time derived from transition matrix]
+Let $M_T$ a transition matrix, then the PD over time, or marginal default
+time distribution, for an obligor with rating $r_j$ is:
+\begin{displaymath}
+\Pr\{T_. \le t\} = \left( M_t \right)_{j, n}
+\end{displaymath}
+where $T_.$ is the obligor default time, $j$ is the index of the obligor's
+rating, $M_t$ is the transition matrix scaled to time $t$, and $n$ is the 
+index of the \emph{defaulted} rating, $r_n$.
+\end{proposition}
+
+In some circumstances there is no transition matrix but it is only available
+a single value representing the T-period PD of each rating, $p_i$. In these 
+cases we can considerer the following diagonal transition matrix:
+\begin{displaymath}
+M_T = \left(
+\begin{array}{cccc}
+1-p_1  & \dots  & 0         & p_1     \\
+\vdots & \ddots & \vdots    & \vdots  \\
+0      & \dots  & 1-p_{n-1} & p_{n-1} \\
+0      & \dots  & 0         & 1       \\
+\end{array}
+\right)
+\end{displaymath}
+This case is equivalent to considere that the PD over time, or marginal default
+time distribution, for an obligor with rating $r_j$ is an exponential 
+distribution:
+\begin{displaymath}
+\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
+\quad \textrm{ where } \lambda = -\ln(1-p_j)
+\end{displaymath}
+
+
+\subsection{Default Times Copula}\index{Default Times Distribution!Default Times Copula}
+
+There are several proposals on the copula of the default times
+distribution such as the Gaussian copula, the t-Student copula, 
+the double-t copula or the Clayton copula [15]. We select the
+t-Student copula for the following reasons:
+
+\begin{itemize}
+\item because it is an elliptical copula it is determined by the correlation matrix [??].
+\item because it is an elliptical copula it is symmetrical, allowing to 
+      apply the antithetic reduction variance technique in the Monte Carlo 
+      simulation.
+\item allows a wide range of dependence structures through parameter $\nu$.
+\item when $\nu \ne \infty$ it exhibits tail dependence.
+\item exist a simulation algorithm easy to implement for higher dimensions.
+\item the Gaussiana case ($\nu = \infty$) is the implicit copula used by 
+      CreditMetrics\texttrademark, the de-facto standard.
+\item it is the underlying copula in the multi-factor model.
+\end{itemize}
+
+We assume that exist a reduced number $k$ of industrial sectors and that
+each obligor belong to a unique sector. Default times dependence between 
+obligors only depends on the involved industrials sectors. With these
+assumptions, if we sort the obligors by sector, the default times
+correlation matrix $R$ is a matrix composed by blocks with $1$'s in the 
+diagonal.
+\begin{displaymath}
+R =
+\left(
+\begin{array}{ccccccc}
+1           & \dots    & \rho_{1,1}  &                & \rho_{1,m}  & \dots      & \rho_{1,m}  \\
+\vdots      & \ddots   & \vdots      &      \dots     & \vdots      &            & \vdots      \\
+\rho_{1,1}  & \dots    & 1           &                & \rho_{1,m}  & \dots      & \rho_{1,m}  \\
+
+            &  \vdots  &             &      \ddots    &             & \vdots     &             \\
+
+\rho_{1,m}  & \dots    & \rho_{1,m}  &                & 1           & \dots      & \rho_{m,m}  \\
+\vdots      &          & \vdots      &      \dots     & \vdots      & \ddots     & \vdots      \\
+\rho_{1,m}  & \dots    & \rho_{1,m}  &                & \rho_{m,m}  & \dots      & 1           \\
+\end{array}
+\right)
+\end{displaymath}
+
+
+
+%----------------------------------------------------------------------------------------
+% PARAMETERS ESTIMATION
+%----------------------------------------------------------------------------------------
+\chapter{Parameters Estimation}
+\section{Parameters Estimation}\index{Parameters Estimation}
+
+
+%----------------------------------------------------------------------------------------
+% APPENDICES
+%----------------------------------------------------------------------------------------
+\chapter{Appendices}
 
 
 \section{Metropolis-Hastings}\index{Metropolis-Hastings}
@@ -560,7 +733,7 @@ in the $t$-th iteration of the algorithm:
 \item Set $x=x^{(t-1)}$
 \item Let $x'$ a random value from the proposal distribution $q(x \to x’)=q(x'|x)$
 \item Calculate the acceptance rate 
-      $\alpha = \textrm{min}\left(1,\frac{f(x') \cdot q(x|x')}{f(x) \cdot q(x'|x)}\right)$
+      $\alpha = \min\left(1,\frac{f(x') \cdot q(x|x')}{f(x) \cdot q(x'|x)}\right)$
 \item Update $x^{(t)}=\left\{
   \begin{array}{ll}
   x' & \textrm{ with probability } \alpha \\
@@ -574,6 +747,7 @@ in the $t$-th iteration of the algorithm:
 %TODO: referenciar llibre WinBugs
 
 
+\textbf{Bayesian inference}.
 Bayesian statistics differ from the classical statistical theory since all 
 unknown parameters are considered as random variables.
 We want calculate the distribution $f(\theta|y)$ of the parameters $\theta$ 
@@ -597,26 +771,79 @@ Bayesian inference by substituting $x$ by the unknow parameters, $\theta$, and
 the target distribution $f(x)$ by the posterior distribution $f(\theta|y)$. Then 
 the acceptance rate becomes:
 \begin{displaymath}
-\alpha = \textrm{min}\left(1,\frac{f(\theta'|y) \cdot q(\theta|\theta')}{f(\theta|y) \cdot q(\theta'|\theta)}\right) = \textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right)
+\alpha = \min\left(1,\frac{f(\theta'|y) \cdot q(\theta|\theta')}{f(\theta|y) \cdot q(\theta'|\theta)}\right) = \min\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right)
 \end{displaymath}
 
-Random-walk Metropolis-Hastings is a special case with symmetric proposals
+
+\textbf{Random-walk Metropolis-Hastings} is a special case with symmetric proposals
 $q(\theta'|\theta) = q(\theta|\theta')$ where $q(\theta'|\theta) \equiv N(\theta,S)$. 
-In this case the acceptance probability depends only on the posterior distribution
+In this case the acceptance rate depends only on the posterior distribution
 and, in the Bayesian inference Metropolis-Hastings case, becomes:
 \begin{displaymath}
 \alpha = 
-\textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right) = 
-\textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta)  \cdot f(\theta)}\right)
+\min\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right) = 
+\min\left(1,\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta) \cdot f(\theta)}\right)
 \end{displaymath}
 
-\begin{comment}
-  A continuación se adapta el algoritmo descrito. Como proposal distribution q se usa q(θ’|θ)=N(θ,σ) que tiene la propiedad que q(θ’|θ)= q(θ|θ’) y simplifica la expresión α. También se modifica para operar con parámetros de dimensión d.
-\end{comment}
+
+\textbf{Metropolis-Hastings using logarithms}.
+The product of functions involves complicated expressions and accuracy 
+problems. For this reason it is usual to operate with logarithms. The 
+logarithmic version of the acceptance rate, in the Bayesian inference 
+Metropolis-Hastings case, becomes:
+\begin{displaymath}
+\ln(\alpha) = \min \left( \ln(1),  
+  \ln \left(\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta) \cdot f(\theta)}\right)
+\right) = 
+\min \left( 0,
+  \ln f(y|\theta') + \ln f(\theta') - \ln f(y|\theta) - \ln f(\theta)
+\right)
+\end{displaymath}
+
+
+\textbf{Single-component Metropolis-Hastings} algorithm consist in update sequentially 
+univariate components using Metropolis-Hastings steps. 
+One generated observation $\theta^{(t)}$ is obtained after updating all 
+components of the parameter vector. Generally, the sequence of updating the 
+elements of $\theta$ does not influence the convergence of the algorithm.
+We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$ 
+excluding its j-th component [ i.e., $\theta_{\backslash j} = 
+(\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
+
+
+\begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
+\begin{enumerate}
+\item Set initial values $\theta^{(0)}$
+\item For $t=1,\dots,T$ repeat the following steps
+\begin{itemize}
+\item Set $\theta=\theta^{(t-1)}$
+\item For $j=1,\dots,d$ repeat the following steps
+\begin{enumerate}[label=\alph*.]
+\item $\theta_j' = N(\theta_j,S_j)$
+\item Calculate the logarithm of the acceptance rate \\
+      $\ln(\alpha) = \min \left( 0,
+          \ln f(y|\theta_j',\theta_{\backslash j}) + 
+          \ln f(\theta_j',\theta_{\backslash j}) - 
+          \ln f(y|\theta_j,\theta_{\backslash j}) - 
+          \ln f(\theta_j,\theta_{\backslash j})
+       \right)$
+\item Simulate $u \sim U(0,1)$
+\item Update $\theta_j=\left\{
+  \begin{array}{ll}
+  \theta_j' & \textrm{ if } \ln(u) < \ln(\alpha) \\
+  \theta_j  & \textrm{ otherwise }
+  \end{array}\right.$ 
+\end{enumerate}
+\item Set $\theta^{(t)}=\theta$
+\end{itemize}
+\end{enumerate}
+\end{algorithm}
+
 
 \section{Constructing marginals}\index{Constructing marginals}
 
 \begin{comment}
+COCOCOCOC
 \end{comment}
 
 %----------------------------------------------------------------------------------------
