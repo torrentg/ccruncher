@@ -5,14 +5,12 @@ CCRUNCHER TODO
 Current works
 -------------------
 
-  * check in gui-win32 if output dir opens in default browser
-  * check in gui-win32 xml edit encoding
-  
+ 
 Future works
 -------------------
   * technical features
-     - input file in binary format
      - move to Qt5
+     - input file in binary format
      - multi-currency support or expression evaluator
        <values t="01/07/2015" exposure="2960.0" recovery="60%" currency="dolars"/>
        <values t="01/07/2015" exposure="2960.0*$DOLAR_EURO" recovery="60%" />
@@ -20,11 +18,12 @@ Future works
   * improve documentation
      - add architecture diagrams
   * improve model
+     - multiple PDs/Transitions
+     - bucketing option
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
      - consider that a obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data
-     - do test04.xml but using t-copula (see 2.54+2.65 in 'Introduction to Credit Risk Modeling')
  

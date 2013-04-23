@@ -1,0 +1,644 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The Legrand Orange Book
+% LaTeX Template
+% Version 1.1 (11/4/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Mathias Legrand (legrand.mathias@gmail.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Compiling this template:
+% This template uses biber for its bibliography and makeindex for its index.
+% This means that to update the bibliography and index in this template you
+% will need to run the following sequence of commands in the template
+% directory:
+%
+% 1) pdflatex main
+% 2) makeindex main.idx -s StyleInd.ist
+% 3) biber main
+% 4) pdflatex main
+%
+% This template also uses a number of packages which may need to be
+% updated to the newest versions for the template to compile. It is strongly
+% recommended you update your LaTeX distribution if you have any
+% compilation errors.
+%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,fleqn]{book} % Default font size and left-justified equations
+
+\usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,a4paper]{geometry} % Page margins
+
+\usepackage{xcolor} % Required for specifying colors by name
+\definecolor{ocre}{RGB}{243,102,25} % Define the orange color used for highlighting throughout the book
+
+% Font Settings
+\usepackage{avant} % Use the Avantgarde font for headings
+%\usepackage{times} % Use the Times font for headings
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+
+% Bibliography
+\usepackage[style=alphabetic,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
+\addbibresource{bibliography.bib} % BibTeX bibliography file
+\defbibheading{bibempty}{}
+
+% Index
+\usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
+\usepackage{makeidx} % Required to make an index
+\makeindex % Tells LaTeX to create the files required for indexing
+
+% added by GTG
+\usepackage{verbatim}
+\usepackage{parskip}
+%\setlength{\parindent}{0ex}
+%\setlength{\parskip}{\baselineskip}
+
+%----------------------------------------------------------------------------------------
+
+\input{structure} % Insert the commands.tex file which contains the majority of the structure behind the template
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\thispagestyle{empty}
+\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}} % Image background
+\centering
+\vspace*{8cm}
+\par\normalfont\fontsize{35}{35}\sffamily\selectfont
+Credit Risk Modeling \par % Book title
+\par\normalfont\fontsize{25}{25}\sffamily\selectfont
+Using CCruncher\par
+\vspace*{2cm}
+{\Huge Gerard Torrent}\par % Author name
+\endgroup
+
+%----------------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%----------------------------------------------------------------------------------------
+
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+\noindent Copyright \copyright\ 2013 Gerard Torrent\\ % Copyright notice
+
+\noindent \textsc{Version 2.3 [R1023]}\\ 
+
+\noindent \textsc{www.ccruncher.net}\\ % URL
+
+\noindent 
+This work is licensed to the public under Creative Commons Attribution-ShareAlike 3.0 Unported License. 
+To view a copy of this license visit \url{http://creativecommons.org/licenses/by-sa/3.0/}.
+
+\begin{comment}
+Licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License 
+(the ``License''). You may not use this file except in compliance with the License. 
+You may obtain a copy of the License at \url{http://creativecommons.org/licenses/by-sa/3.0/}. 
+Unless required by applicable law or agreed to in writing, software distributed under 
+the License is distributed on an \textsc{``AS IS'' BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+OF ANY KIND}, either express or implied. See the License for the specific language governing 
+permissions and limitations under the License.\\ % License information
+\end{comment}
+
+%\noindent \textit{First printing, March 2013} % Printing/edition date
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_1.pdf} % Table of contents heading image
+
+\pagestyle{empty} % No headers
+
+\tableofcontents % Print the table of contents itself
+
+\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
+
+\pagestyle{fancy} % Print headers again
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 1
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\chapter{Text Chapter}
+
+\section{Paragraphs of Text}\index{Paragraphs of Text}
+
+\lipsum[1-7] % Dummy text
+
+%------------------------------------------------
+
+\section{Citation}\index{Citation}
+
+This statement requires citation \cite{book_key}; this one is more specific \cite[122]{article_key}.
+
+%------------------------------------------------
+
+\section{Lists}\index{Lists}
+
+Lists are useful to present information in a concise and/or ordered way\footnote{Footnote example...}.
+
+\subsection{Numbered List}\index{Lists!Numbered List}
+
+\begin{enumerate}
+\item The first item
+\item The second item
+\item The third item
+\end{enumerate}
+
+\subsection{Bullet Points}\index{Lists!Bullet Points}
+
+\begin{itemize}
+\item The first item
+\item The second item
+\item The third item
+\end{itemize}
+
+\subsection{Descriptions and Definitions}\index{Lists!Descriptions and Definitions}
+
+\begin{description}
+\item[Name] Description
+\item[Word] Definition
+\item[Comment] Elaboration
+\end{description}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 2
+%----------------------------------------------------------------------------------------
+
+\chapter{In-text Elements}
+
+\section{Theorems}\index{Theorems}
+
+This is an example of theorems.
+
+\subsection{Several equations}\index{Theorems!Several Equations}
+
+\begin{theorem}
+In $E=\mathbb{R}^n$ all norms are equivalent. It has the properties:
+\begin{align}
+& \big| ||\mathbf{x}|| - ||\mathbf{y}|| \big|\leq || \mathbf{x}- \mathbf{y}||\\
+&  ||\sum_{i=1}^n\mathbf{x}_i||\leq \sum_{i=1}^n||\mathbf{x}_i||\quad\text{where $n$ is a finite integer}
+\end{align}
+\end{theorem}
+
+\subsection{Single Line}\index{Theorems!Single Line}
+
+\begin{theorem}
+A set $\mathcal{D}(G)$ in dense in $L^2(G)$, $|\cdot|_0$. 
+\end{theorem}
+
+%------------------------------------------------
+
+\section{Definitions}\index{Definitions}
+
+This is an example of a definition. A definition could be mathematical or it could define a concept.
+
+\begin{definition}[Definition name]
+Given a vector space $E$, a norm on $E$ is an application, denoted $||\cdot||$, $E$ in $\mathbb{R}^+=[0,+\infty[$ such that:
+\begin{align}
+& ||\mathbf{x}||=0\ \Rightarrow\ \mathbf{x}=\mathbf{0}\\
+& ||\lambda \mathbf{x}||=|\lambda|\cdot ||\mathbf{x}||\\
+& ||\mathbf{x}+\mathbf{y}||\leq ||\mathbf{x}||+||\mathbf{y}||
+\end{align}
+\end{definition}
+
+%------------------------------------------------
+
+\section{Notations}\index{Notations}
+
+\begin{notation}
+Given an open subset $G$ of $\mathbb{R}^n$, the set of functions $\varphi$ are:
+\begin{enumerate}
+\item Bounded support $G$;
+\item Infinitely differentiable;
+\end{enumerate}
+a vector space is denoted by $\mathcal{D}(G)$. 
+\end{notation}
+
+%------------------------------------------------
+
+\section{Remarks}\index{Remarks}
+
+This is an example of a remark.
+
+\begin{remark}
+The concepts presented here are now in conventional employment in mathematics. Vector spaces are taken over the field $\mathbb{K}=\mathbb{R}$, however, established properties are easily extended to $\mathbb{K}=\mathbb{C}$.
+\end{remark}
+
+%------------------------------------------------
+
+\section{Corollaries}\index{Corollaries}
+
+This is an example of a corollary.
+
+\begin{corollary}[Corollary name]
+The concepts presented here are now in conventional employment in mathematics. Vector spaces are taken over the field $\mathbb{K}=\mathbb{R}$, however, established properties are easily extended to $\mathbb{K}=\mathbb{C}$.
+\end{corollary}
+
+%------------------------------------------------
+
+\section{Propositions}\index{Propositions}
+
+This is an example of propositions.
+
+\subsection{Several equations}\index{Propositions!Several Equations}
+
+\begin{proposition}[Proposition name]
+It has the properties:
+\begin{align}
+& \big| ||\mathbf{x}|| - ||\mathbf{y}|| \big|\leq || \mathbf{x}- \mathbf{y}||\\
+&  ||\sum_{i=1}^n\mathbf{x}_i||\leq \sum_{i=1}^n||\mathbf{x}_i||\quad\text{where $n$ is a finite integer}
+\end{align}
+\end{proposition}
+
+\subsection{Single Line}\index{Propositions!Single Line}
+
+\begin{proposition} 
+Let $f,g\in L^2(G)$; if $\forall \varphi\in\mathcal{D}(G)$, $(f,\varphi)_0=(g,\varphi)_0$ then $f = g$. 
+\end{proposition}
+
+%------------------------------------------------
+
+\section{Examples}\index{Examples}
+
+This is an example of examples.
+
+\subsection{Equation and Text}\index{Examples!Equation and Text}
+
+\begin{example}
+Let $G=\{x\in\mathbb{R}^2:|x|<3\}$ and denoted by: $x^0=(1,1)$; consider the function:
+\begin{equation}
+f(x)=\left\{\begin{aligned} & \mathrm{e}^{|x|} & & \text{si $|x-x^0|\leq 1/2$}\\
+& 0 & & \text{si $|x-x^0|> 1/2$}\end{aligned}\right.
+\end{equation}
+The function $f$ has bounded support, we can take $A=\{x\in\mathbb{R}^2:|x-x^0|\leq 1/2+\epsilon\}$ for all $\epsilon\in\intoo{0}{5/2-\sqrt{2}}$.
+\end{example}
+
+\subsection{Paragraph of Text}\index{Examples!Paragraph of Text}
+
+\begin{example}[Example name]
+\lipsum[2]
+\end{example}
+
+%------------------------------------------------
+
+\section{Exercises}\index{Exercises}
+
+This is an example of an exercise.
+
+\begin{exercise}
+This is a good place to ask a question to test learning progress or further cement ideas into students' minds.
+\end{exercise}
+
+%------------------------------------------------
+
+\section{Problems}\index{Problems}
+
+\begin{problem}
+What is the average airspeed velocity of an unladen swallow?
+\end{problem}
+
+%------------------------------------------------
+
+\section{Vocabulary}\index{Vocabulary}
+
+Define a word to improve a students' vocabulary.
+
+\begin{vocabulary}[Word]
+Definition of word.
+\end{vocabulary}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 3
+%----------------------------------------------------------------------------------------
+
+\chapterimage{chapter_head_1.pdf} % Chapter heading image
+
+\chapter{Presenting Information}
+
+\section{Table}\index{Table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l l l}
+\toprule
+\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
+\midrule
+Treatment 1 & 0.0003262 & 0.562 \\
+Treatment 2 & 0.0015681 & 0.910 \\
+Treatment 3 & 0.0009271 & 0.296 \\
+\bottomrule
+\end{tabular}
+\caption{Table caption}
+\end{table}
+
+%------------------------------------------------
+
+\section{Figure}\index{Figure}
+
+\begin{figure}[h]
+\centering\includegraphics[scale=0.5]{placeholder}
+\caption{Figure caption}
+\end{figure}
+
+
+%----------------------------------------------------------------------------------------
+% INTRODUCTION
+%----------------------------------------------------------------------------------------
+\chapter{Introduction}
+\section{Introduction}\index{Introduction}
+
+%----------------------------------------------------------------------------------------
+% MODEL
+%----------------------------------------------------------------------------------------
+\chapter{Model}
+\section{Model}\index{Model}
+
+%----------------------------------------------------------------------------------------
+% PARAMETERS ESTIMATION
+%----------------------------------------------------------------------------------------
+\chapter{Parameters Estimation}
+\section{Parameters Estimation}\index{Parameters Estimation}
+
+
+%----------------------------------------------------------------------------------------
+% APPENDICES
+%----------------------------------------------------------------------------------------
+\chapter{Appendices}
+
+\section{Introduction to copulas}\index{Introduction to copulas}
+
+It is common to use correlation as a measure of dependency between random 
+variables. In most cases, this measure does not fully reflect the structure 
+of dependence between them. The mathematical concept that does reflect the 
+structure of dependence between random variables, however, is the copula, 
+which we define below \cite{McNeil:2005qf}.
+
+%TODO: POSAR REFERENCIA
+\begin{definition}[Copula]
+A copula function, $C$, is a multivariate distribution defined on the 
+unit hypercube $[0,1]^d$ with standard uniform marginals. 
+More precisely,
+\begin{displaymath}
+C(u_1, \dots, u_d) = Pr\{U_1 \le u_1, \dots, U_d \le u_d\}
+\end{displaymath}
+where $U_i \sim \textrm{Uniform}(0,1) \textrm{ for } i = 1,\dots, d$.
+\end{definition}
+
+Sklar's theorem \cite{sklar:1959} states that any multivariate 
+distribution with continuous marginals can be decomposed into the marginals and 
+a copula that reflects the structure of dependence between them. Later, we will 
+use this statement to define and simulate the t-Student copula.
+
+%%TODO: POSAR REFERENCIA
+\begin{theorem}[Sklar's theorem]
+Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
+Then there exists an $d$-copula $C$ such that for all $x \in \mathbb{R}^d$,
+\begin{displaymath}
+F(x_1,\dots,x_d) = C(F_1(x_1),\dots,F_d(x_d))
+\end{displaymath}
+If $F_1,\dots,F_d$ are all continuous, the $C$ is unique; otherwise $C$ is uniquely
+determined on $\textrm{Ran}F_1 \times \dots \times \textrm{Ran}F_d$.
+Conversely, if $C$ is an $d$-copula and $F_1,\dots,F_d$ are distributions functions,
+then the function $F$ defined above is an $d$-dimensional distribution function
+with margins $F_1,\dots,F_d$.
+\end{theorem}
+
+
+\begin{corollary}[Copula of a multivariate distribution]
+Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
+Then its copula is:
+\begin{displaymath}
+C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
+\end{displaymath}
+\end{corollary}
+\begin{proof}
+This is a direct application of Sklar's theorem:
+\begin{displaymath}
+C(F_1(x_1), \dots, F_d(x_d)) = 
+F(F_1^{-1}(F_1(x_1)), \dots, F_d^{-1}(F_d(x_d))) = 
+F(x_1, \dots, x_d)
+\end{displaymath}
+\end{proof}
+
+
+\begin{corollary}[Copula simulation]
+Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+distribution $F$ and continuous marginals $F_1, \dots, F_n$.
+If we have a procedure to simulate $X$ then we can simulate 
+its copula $C$ using:
+\begin{displaymath}
+(U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
+\end{displaymath}
+\end{corollary}
+\begin{proof}
+TODO: The probability integral transform
+\end{proof}
+
+
+\begin{corollary}[Multivariate distribution simulation]
+Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
+and continuous marginals $F_1, \dots, F_n$. If we have a
+procedure to simulate $C$ then we can simulate $X$ using:
+\begin{displaymath}
+(X_1, \dots, X_d) = (F_1^{-1}(U_1), \dots, F_d^{-1}(U_d))
+\end{displaymath}
+where $U_i$ are the copula components.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{definition}[Multivariate t-Student distribution]
+The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
+(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
+mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
+denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
+\begin{displaymath}
+f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
+\left(
+1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
+\right)^{-\frac{\nu+d}{2}}
+\end{displaymath}
+\noindent where $|\Sigma|$ represents the absolute value of the determinant of the matrix. 
+\end{definition}
+
+\begin{proposition}[Multivariate t-Student characterization]
+A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
+\begin{displaymath}
+T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
+\quad \textrm { where } Z \sim N(0,\Sigma) \textrm{ and } V \sim \chi_{\nu}^2
+\end{displaymath}
+\end{proposition}
+
+\begin{proposition}[Multivariate t-Student marginals]
+Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is $X_i \sim t_1(\nu,0,R_{ii})$.
+\end{proposition}
+
+Note that the above proposition is also valid for the case $\nu=\infty$
+corresponding to the multivariate Gaussian distribution.
+
+We use the corollary XXX and the definition XXX to define the t-Student copula.
+
+\begin{definition}[t-Student copula]
+The t-Student copula, $C_{\nu,\Sigma}^d$, is the copula of the multivariate 
+t-Student distribution $t_d(\nu,\mu,\Sigma)$.
+\end{definition}
+
+\begin{proposition}[t-Student copula invariance]
+The copula of $t_d(\nu,\mu,\Sigma)$ is identical of that of $t_d(\nu,\vec{0},R)$
+where $R$ is the correlation matrix implied by the dispersion matrix $\Sigma$.
+\end{proposition}
+
+\begin{proposition}[t-Student copula density]
+The t-Student copula, $C_{\nu,R}^d$, where $R$ is a correlation matrix,
+has the following distribution:
+\begin{displaymath}
+C_{\nu,R}^d(u_1, \dots, u_d) = 
+\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) dx
+\end{displaymath}
+where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ denotes the 
+quantile function of the univariate distribution $t_1(\nu,0,1)$. 
+The copula density is
+\begin{displaymath}
+\label{eq:density}
+%\begin{array}{l}
+c_{\nu,R}^d(u_1,\dots,u_d) = %\\
+|R|^{-\frac{1}{2}} 
+\displaystyle\frac{\Gamma{\left(\frac{\nu+d}{2}\right)}}{\Gamma{\left(\frac{\nu}{2}\right)}}
+\displaystyle\left[ \frac{\Gamma{\left(\frac{\nu}{2}\right)}}{\Gamma{\left(\frac{\nu+1}{2}\right)}} \right]^d
+\frac{\displaystyle\left( 1+\frac{\zeta' R^{-1} \zeta}{\nu}\right)^{-\frac{\nu+d}{2}}}{\displaystyle\prod_{i=1}^d \left( 1+\frac{\zeta_i^2}{\nu} \right)^{-\frac{\nu+1}{2}}}
+%\end{array}
+\end{displaymath}
+\noindent
+where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of the t-student 
+univariate inverse distribution functions.
+\end{proposition}
+\begin{comment}
+\begin{proof}
+see ageeva
+\end{proof}
+\end{comment}
+
+
+\section{Metropolis-Hastings}\index{Metropolis-Hastings}
+
+\begin{algorithm}[Metropolis-Hastings]
+Let us assume a target distribution $f(x)$ from which we wish to generate a 
+sample of size $T$. The Metropolis-Hastings algorithm can be described by the 
+following iterative steps; where $x^{(t)}$ is the vector of generated values 
+in the $t$-th iteration of the algorithm:
+\begin{enumerate}
+\item Set initial values $x^{(0)}$
+\item For $t=1,\dots,T$ repeat the following steps
+\begin{itemize}
+\item Set $x=x^{(t-1)}$
+\item Let $x'$ a random value from the proposal distribution $q(x \to x’)=q(x'|x)$
+\item Calculate the acceptance rate 
+      $\alpha = \textrm{min}\left(1,\frac{f(x') \cdot q(x|x')}{f(x) \cdot q(x'|x)}\right)$
+\item Update $x^{(t)}=\left\{
+  \begin{array}{ll}
+  x' & \textrm{ with probability } \alpha \\
+  x^{(t-1)}  & \textrm{ with probability } 1-\alpha
+  \end{array}\right.$ 
+\end{itemize}
+\end{enumerate}
+\end{algorithm}
+
+%TODO: list ergodic properties
+%TODO: referenciar llibre WinBugs
+
+
+Bayesian statistics differ from the classical statistical theory since all 
+unknown parameters are considered as random variables.
+We want calculate the distribution $f(\theta|y)$ of the parameters $\theta$ 
+given the observed data $y$. According to the Bayes theorem, this can be 
+written as:
+\begin{displaymath}
+f(\theta|y) = \frac{f(y|\theta) \cdot f(\theta)}{f(y)} \propto f(y|\theta) \cdot f(\theta)
+\end{displaymath}
+
+We call \emph{posterior distribution} to $f(\theta|y)$ and \emph{prior distribution} 
+to $f(y)$. This prior distribution expresses the information available to the 
+researcher before any data are involved in the statistical analysis. 
+$f(y|\theta)$ is the probability of observing $y$ given $\theta$, and is also 
+known as the likelihood.
+\begin{displaymath}
+f(y|\theta) = \prod_{i=1}^n f(y_i|\theta)
+\end{displaymath}
+
+The Metropolis-Hastings algorithm outlined above can be directly implemented to do
+Bayesian inference by substituting $x$ by the unknow parameters, $\theta$, and 
+the target distribution $f(x)$ by the posterior distribution $f(\theta|y)$. Then 
+the acceptance rate becomes:
+\begin{displaymath}
+\alpha = \textrm{min}\left(1,\frac{f(\theta'|y) \cdot q(\theta|\theta')}{f(\theta|y) \cdot q(\theta'|\theta)}\right) = \textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right)
+\end{displaymath}
+
+Random-walk Metropolis-Hastings is a special case with symmetric proposals
+$q(\theta'|\theta) = q(\theta|\theta')$ where $q(\theta'|\theta) \equiv N(\theta,S)$. 
+In this case the acceptance probability depends only on the posterior distribution
+and, in the Bayesian inference Metropolis-Hastings case, becomes:
+\begin{displaymath}
+\alpha = 
+\textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right) = 
+\textrm{min}\left(1,\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta)  \cdot f(\theta)}\right)
+\end{displaymath}
+
+\begin{comment}
+  A continuación se adapta el algoritmo descrito. Como proposal distribution q se usa q(θ’|θ)=N(θ,σ) que tiene la propiedad que q(θ’|θ)= q(θ|θ’) y simplifica la expresión α. También se modifica para operar con parámetros de dimensión d.
+\end{comment}
+
+\section{Constructing marginals}\index{Constructing marginals}
+
+\begin{comment}
+\end{comment}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\chapter*{Bibliography}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
+\section*{Books}
+\addcontentsline{toc}{section}{Books}
+\printbibliography[heading=bibempty,type=book]
+\section*{Articles}
+\addcontentsline{toc}{section}{Articles}
+\printbibliography[heading=bibempty,type=article]
+
+%----------------------------------------------------------------------------------------
+%	INDEX
+%----------------------------------------------------------------------------------------
+\cleardoublepage
+\setlength{\columnsep}{0.75cm}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}}
+\printindex
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
