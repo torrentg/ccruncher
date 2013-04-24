@@ -54,6 +54,8 @@
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 % Bibliography
+%\usepackage{hyperref} %added by GTG
+\usepackage{csquotes} %added by GTG
 \usepackage[style=alphabetic,sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backref=true,backend=biber]{biblatex}
 \addbibresource{bibliography.bib} % BibTeX bibliography file
 \defbibheading{bibempty}{}
@@ -445,8 +447,8 @@ then the function $F$ defined above is an $d$-dimensional distribution function
 with margins $F_1,\dots,F_d$.
 \end{theorem}
 
-
 \begin{corollary}[Copula of a multivariate distribution]
+\label{cor:cop1}
 Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
 distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
 Then its copula is:
@@ -454,9 +456,17 @@ Then its copula is:
 C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
 \end{displaymath}
 \end{corollary}
-
+%\begin{proof}
+%This is a direct application of Sklar's theorem:
+%\begin{displaymath}
+%C(F_1(x_1), \dots, F_d(x_d)) = 
+%F(F_1^{-1}(F_1(x_1)), \dots, F_d^{-1}(F_d(x_d))) = 
+%F(x_1, \dots, x_d)
+%\end{displaymath}
+%\end{proof}
 
 \begin{corollary}[Copula simulation]
+\label{cor:cop2}
 Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
 distribution $F$ and continuous marginals $F_1, \dots, F_n$.
 If we have a procedure to simulate $X$ then we can simulate 
@@ -466,8 +476,8 @@ its copula $C$ using:
 \end{displaymath}
 \end{corollary}
 
-
 \begin{corollary}[Multivariate distribution simulation]
+\label{cor:cop3}
 Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
 and continuous marginals $F_1, \dots, F_n$. If we have a
 procedure to simulate $C$ then we can simulate $X$ using:
@@ -512,6 +522,77 @@ c_{\nu,R}^d(u_1,\dots,u_d) = %\\
 where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of the t-student 
 univariate inverse distribution functions.
 \end{proposition}
+
+
+\subsection{Covariance Block Matrix}\index{Mathematics!Covariance Block Matrix}
+
+\begin{definition}[Covariance Block Matrix]
+We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
+\begin{itemize}
+\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
+\item $d=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
+\item $M$ is a $k \times k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
+\end{itemize}
+when
+\begin{itemize}
+\item each block $B_{ij}$ is a $n_i \times n_j$ constant matrix with value $M_{ij}$
+\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
+\item A is definite-positive
+\end{itemize}
+\end{definition}
+
+\begin{example}[Correlation Block Matrix]
+\label{example1}
+We have $6$ obligors sorted by sector. The first three belong to the 
+banking sector, the next two belong to the energy sector 
+and the last one belongs to the services sector. The correlations are 
+determined by sectors, where $m_{ij}$ is the correlation between two 
+obligors belonging to sectors $i$ and $j$. Then the correlation matrix 
+between obligors is:
+\begin{displaymath}
+R=
+\left(
+\begin{array}{ccc|cc|c} 
+1   & 0.5 & 0.5 & 0.2  & 0.2  & 0.1 \\ 
+0.5 & 1   & 0.5 & 0.2  & 0.2  & 0.1 \\ 
+0.5 & 0.5 & 1   & 0.2  & 0.2  & 0.1 \\ 
+\hline
+0.2 & 0.2 & 0.2 & 1    & 0.4  & 0.15 \\ 
+0.2 & 0.2 & 0.2 & 0.4  & 1    & 0.15 \\ 
+\hline
+0.1 & 0.1 & 0.1 & 0.15 & 0.15 & 1
+\end{array} 
+\right)
+\end{displaymath}
+\end{example}
+
+\begin{proposition}[Covariance block matrix eigenvalues]
+\label{prop1}
+Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k \times k$ 
+deflated matrix
+\begin{displaymath}
+G =
+\left( \begin{array}{cccc}
+d_1+(n_1-1)\cdot m_{11} & n_2 \cdot m_{12}        & \dots  & n_k \cdot m_{1k} \\
+n_1\cdot m_{21}         & d_2+(n_2-1)\cdot m_{22} & \dots  & n_k \cdot m_{2k} \\
+\vdots                  & \vdots                  & \ddots & \vdots \\
+n_1\cdot m_{k1}         & n_2 \cdot m_{k2}        & \dots  & d_k+(n_k-1)\cdot m_{kk} \\
+\end{array} \right)
+\end{displaymath}
+Then, the eigenvalues of $A$ are as follows:
+\begin{itemize}
+\item $d_{r}-m_{rr}$ with multiplicity $n_r-1$ for $r=1,\dots,k$.
+\item $\lambda_r$, the eigenvalues of $G$ with multiplicity $1$.
+\end{itemize}
+\end{proposition}
+
+\begin{corollary}
+A covariance block matrix $B_k(n,d,M)$ is definite-positive if
+\begin{itemize}
+\item $d_r > m_{rr}$ for all $r=1,\dots,k$, and
+\item the deflated matrix $G$ is definite-positive.
+\end{itemize}
+\end{corollary}
 
 
 \section{Default Times Distribution}\index{Default Times Distribution}
@@ -706,20 +787,181 @@ R =
 \right)
 \end{displaymath}
 
+Work directly with the t-Student copula is not practical. For this reason 
+we express the distribution of default times according to the Student-t 
+distribution instead of the t-Student copula.
 
+\begin{proposition}[Default Times Distribution]
+Let $T=(T_1,\dots,T_n)$ the obligors default times with a t-Student copula 
+$C_{\nu,R}^d$, and marginals $F_i$. 
+Then, the default times distribution $F$ is:
+\begin{displaymath}
+F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
+\end{displaymath}
+where $F$ is the cdf of the multivariate default times, $H$ is the cdf of 
+the multivariate t-Student distribution $t_d(\nu,0,R)$, $t_\nu^{-1}$ is the 
+inverse of the univariate t-Student distribution $t_1(\nu,0,1)$, and $F_i$ 
+is the default probabilities over time of the i-th obligor.
+\end{proposition}
+\begin{proof}
+We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
+distribution $t_{\nu,R}^d$, and we use $(U_1,\dots,U_n)$ to represent
+the components of the copula $C_{\nu,R}^d$.
+\begin{displaymath}
+\begin{array}{rl}
+F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
+  & \textrm{we use the corollary \ref{cor:cop3}: }
+    (T_1,\dots,T_n) = (F_1^{-1}(U_1),\dots,F_n^{-1}(U_n)) \\
+= & \Pr\{ F_1^{-1}(U_1) \le t_1 , \dots , F_n^{-1}(U_n) \le t_n \} = \\
+  & \textrm{we use the corollary \ref{cor:cop2}: }
+  (U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
+= & \Pr\{ F_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , F_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
+= & \Pr\{ t_\nu(X_1) \le F_1(t_1) , \dots , t_\nu(X_n) \le F_n(t_n) \} = \\
+= & \Pr\{ X_1 \le t_\nu^{-1}(F_1(t_1)) , \dots , X_n \le t_\nu^{-1}(F_n(t_n)) \} = \\
+= & H(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))) \\
+\end{array}
+\end{displaymath}
+\end{proof}
+
+Working with the multivariate t-Student distribution with a correlation
+matrix of dimension $n \times n$ is not practical to simulate it or for
+estimate the parameters. For this reasons we introduce the multi-factor 
+models.
+
+\begin{definition}[Gaussian multi-factor model]
+We say that a multivariate distribution $X$ follows a Gaussian multi-factor
+model if it can be expressed in the form:
+\begin{displaymath}
+X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
+\quad \textrm{ where } \left\{
+\begin{array}{l}
+i = 1, \dots, k \quad \textrm{ and $k$ is the number of blocks} \\
+j = 1, \dots, n_i \quad \textrm{ and $n_i$ is i-th block size} \\
+Z \sim N(0,R), \textrm{ and $R$ a $k \times k$ correlation matrix} \\
+w_i \in (0,1), \textrm{ are the factor loadings } \\
+\epsilon_i^j \sim N(0,1) \textrm { iid } \forall i,j \\
+Z, \epsilon_i^j \textrm{ independents } \forall i,j \\
+\end{array}
+\right.
+\end{displaymath}
+\end{definition}
+
+\begin{proposition}[The Gaussian multi-factor model is a Gaussian distribution]
+\label{prop:gmfigs}
+The Gaussian multi-factor model defined by factor loadings 
+$w_1,\dots,w_k$, the $k \times k$ correlation matrix $R$, and
+$n_1,\dots,n_k$ with $\sum_{i=1}^k n_i = n$ is a 
+multivariate Gaussian distribution with a $n \times n$ correlation
+matrix $\bar{R}$ composed by blocks with values
+$\bar{R}_{i,j} = w_a \cdot w_b \cdot R_{a,b}$ where $a$ and $b$ 
+are the blocks of the indexes $i$ and $j$.
+\end{proposition}
+\begin{proof}
+We check that the correlations between Gaussian multi-factor model
+components is a matrix composed by blocks that fulfill the equivalence.
+\begin{displaymath}
+\begin{array}{rl}
+\textrm{Var}(X_i^j) = &
+  w_i \cdot \textrm{Var}(Z_i) + (1-w_i^2) \cdot \textrm{Var}(\epsilon_i^j) +
+  2 \cdot w_i \cdot \sqrt{1-w_i^2} \cdot \textrm{Cov}(Z_i, \epsilon_i^j) \\
+= & w_i + (1-w_i^2) = 1 \\
+ & \\
+\textrm{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \textrm{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2}) \\
+= & w_{i_1} \cdot w_{i_2} \cdot \textrm{Cov}(Z_{i_1},Z_{i_2}) + \\
+&   + w_{i_1} \cdot \sqrt{1-w_{i_2}^2} \cdot \textrm{Cov}(Z_{i_1}, \epsilon_{i_2}^{j_2}) + \\
+&   + \sqrt{1-w_{i_1}^2} \cdot w_{i_2} \cdot \textrm{Cov}(Z_{i_2}, \epsilon_{i_1}^{j_1}) + \\
+&   + \sqrt{1-w_{i_1}^2} \cdot \sqrt{1-w_{i_2}^2} \cdot \textrm{Cov}(\epsilon_{i_1}^{j_1}, \epsilon_{i_2}^{j_2}) \\
+= & w_{i_1} \cdot w_{i_2} \cdot \textrm{Cov}(Z_{i_1}, Z_{i_2}) \\
+= & w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2} \\
+\end{array}
+\end{displaymath}
+The caracterization of the multivariate Gaussian [31, thm 2.6.2]
+states that if every linear combination of the components of a 
+vector $X$ is normally distributed, then $X$ is normally distributed.
+It is straightforward to check that the multi-factor Gaussian model 
+fulfills this property and consequently it is a multivariate Normal.
+\end{proof}
+
+\begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
+Any multi-factor model can be expressed as a multivariate normal 
+block, but there are multivariate normal block that can not be 
+expressed as a Gaussian multi-factor model.
+\end{proposition}
+\begin{proof}
+Proposition \ref{prop:gmfigs} states that any multi-factor model 
+can be expressed as a multivariate normal composed by blocks.
+Next we see that reciprocal is false. We use the equivalence 
+$\bar{R}_{i,j} = w_a \cdot w_b \cdot R_{a,b}$ between
+the multi-factor correlation matrix $R$ and the multivariate block
+Gaussian correlation matrix $\bar{R}$.
+
+\textbf{Counterexample 1}. Factor loading with imaginary value.
+\begin{displaymath}
+\bar{R} = \left(
+\begin{array}{cc|c}
+ 1   & -0.5 & 0 \\
+-0.5 &  1   & 0 \\
+\hline
+ 0   &  0   & 1 \\
+\end{array}
+\right) 
+\longrightarrow
+R = \left(
+\begin{array}{cc}
+ 1 & 0 \\
+ 0 & 1 \\
+\end{array}
+\right)
+\textrm{ , }
+w = (\sqrt{-0.5}, 1)
+\textrm{ !!}
+\end{displaymath}
+
+\textbf{Counterexample 2}. Correlation with absolute value > 1.
+\begin{displaymath}
+\bar{R} = \left(
+\begin{array}{cc|cc}
+1   & 0.5 & 0.6 & 0.6 \\
+0.5 & 1   & 0.6 & 0.6 \\
+\hline
+0.6 & 0.6 & 1   & 0.5 \\
+0.6 & 0.6 & 0.5 & 1   \\
+\end{array}
+\right) 
+\longrightarrow
+R = \left(
+\begin{array}{cc}
+ 1 & \frac{0.6}{0.5} \\
+ \frac{0.6}{0.5} & 1 \\
+\end{array}
+\right)
+\textrm{ , }
+w = (\sqrt{0.5}, \sqrt{0.5})
+\textrm{ !!}
+\end{displaymath}
+\end{proof}
+
+It's disturbing that exist multivariate block Gaussian distributions 
+that can't be expressed as a multi-factor model. Fortunately the 
+cases where that ocurre haven't practical interest in credit risk
+modeling where the number of obligors in each block are higher. 
+The following proposition clarifies this theme.
+
+\begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
+Let $X \sim N(0,\bar{R})$ with $\bar{R}$ a correlation block matrix 
+$B_2(n,\vec{1},M)$. Then $X$ can be expressed as a multi-factor 
+Gaussian model if $n_1$ and $n_2$ are large enough.
+\end{proposition}
+\begin{proof}
+We use the proposition \ref{prop1} to prove the statement Usamos la caracterización de las matrices de covarianzas por bloques (Simulation of High-Dimensional t-Student Copulas, Gerard Torrent-Gironella and Josep Fortiana) PONER REFERENCIA para demostrar la proposición en los dos casos posibles.
+
+COMPLETE THIS DEMO!!!
+\end{proof}
 
 %----------------------------------------------------------------------------------------
 % PARAMETERS ESTIMATION
 %----------------------------------------------------------------------------------------
 \chapter{Parameters Estimation}
-\section{Parameters Estimation}\index{Parameters Estimation}
-
-
-%----------------------------------------------------------------------------------------
-% APPENDICES
-%----------------------------------------------------------------------------------------
-\chapter{Appendices}
-
 
 \section{Metropolis-Hastings}\index{Metropolis-Hastings}
 
@@ -842,11 +1084,6 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 \end{algorithm}
 
 
-\section{Constructing marginals}\index{Constructing marginals}
-
-\begin{comment}
-COCOCOCOC
-\end{comment}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
