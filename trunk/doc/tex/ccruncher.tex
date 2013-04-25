@@ -955,7 +955,46 @@ Gaussian model if $n_1$ and $n_2$ are large enough.
 \begin{proof}
 We use the proposition \ref{prop1} to prove the statement Usamos la caracterización de las matrices de covarianzas por bloques (Simulation of High-Dimensional t-Student Copulas, Gerard Torrent-Gironella and Josep Fortiana) PONER REFERENCIA para demostrar la proposición en los dos casos posibles.
 
-COMPLETE THIS DEMO!!!
+\textbf{Case 1}. Factor loading $w_i$ with imaginary value is caused by a negative 
+$m_{ii}$ value ($m_{ii} = w_i^2$). We use the proposition \ref{prop1} to determine
+the restrictions about $m_{ii}$. Because $\bar{R}$ is covariance block matrix 
+definite-positive, the deflated matrix has a positive determinant. Then,
+\begin{displaymath}
+\begin{array}{l}
+1 + (n_1-1) \cdot m_{11} + (n_2-1) \cdot m_{22} + 
+(n_1-1) \cdot (n_2-1) \cdot m_{11} \cdot m_{22} -
+n_1 \cdot n_2 \cdot m_{12}^2 > 0
+\\
+m_{11} > \frac{n_1 \cdot n_2 \cdot m_{12}^2 -1 -(n_2-1) \cdot m_{22}}
+              {(n_1-1) + (n_1-1) \cdot (n_2-1) \cdot m_{11}}
+\\
+\textrm{tending } n_1 \to \infty
+\\
+m_{11} \ge 0
+\end{array}
+\end{displaymath}
+
+\textbf{Case 2}. Multi-factor model correlation bigger than $1$ is caused
+by $m_{12} = w_1 \cdot w_2 \cdot R_{12} = \sqrt{m_{11}} \cdot \sqrt{m_{22}} \cdot R_{12}$
+causing $R_{12} = \frac{m_{12}}{\sqrt{m_{11} \cdot m_{22}}}$.
+\begin{displaymath}
+\begin{array}{l}
+1 + (n_1-1) \cdot m_{11} + (n_2-1) \cdot m_{22} + 
+(n_1-1) \cdot (n_2-1) \cdot m_{11} \cdot m_{22} -
+n_1 \cdot n_2 \cdot m_{12}^2 > 0
+\\
+m_{12}^2 < 
+\frac{1}{n_1 \cdot n_2} +
+\frac{(n_1-1)}{n_1 \cdot n_2} \cdot m_{11} +
+\frac{(n_2-1)}{n_1 \cdot n_2} \cdot m_{22} +
+\frac{(n_1-1) \cdot (n_2-1)}{n_1 \cdot n_2} \cdot m_{11} \cdot m_{22}
+\\
+\textrm{tending } n_1 \to \infty \textrm{ and } n_2 \to \infty
+\\
+m_{12}^2 \le m_{11} \cdot m_{22}
+\end{array}
+\end{displaymath}
+
 \end{proof}
 
 %----------------------------------------------------------------------------------------
