@@ -69,7 +69,8 @@
 \usepackage{verbatim}
 \usepackage{parskip}
 \usepackage{enumitem}
-%\usepackage{mdframed}
+\usepackage{changepage}
+\usepackage[official]{eurosym}
 
 %----------------------------------------------------------------------------------------
 
@@ -102,34 +103,6 @@ Using CCruncher\par
 ~\vfill
 \thispagestyle{empty}
 
-\begin{mdframed}
-\footnotesize
-\begin{verbatim}
-To cite R in publications use:
-
-  R Core Team (2012). R: A language and environment for statistical
-  computing. R Foundation for Statistical Computing, Vienna, Austria.
-  ISBN 3-900051-07-0, URL http://www.R-project.org/.
-
-A BibTeX entry for LaTeX users is
-
-  \@Manual\{,
-    title = \{R: A Language and Environment for Statistical Computing\},
-    author = \{\{R Core Team\}\},
-    organization = \{R Foundation for Statistical Computing\},
-    address = \{Vienna, Austria\},
-    year = \{2012\},
-    note = \{\{ISBN\} 3-900051-07-0\},
-    url = \{http://www.R-project.org/\},
-  \}
-
-We have invested a lot of time and effort in creating R, please cite it
-when using it for data analysis. See also citation("pkgname") for
-citing R packages.
-\end{verbatim}
-\end{mdframed}
-\vspace{4cm}
-
 \noindent Copyright \copyright\ 2013 Gerard Torrent\\ % Copyright notice
 
 \noindent \textsc{Version 2.3 [R1023]}\\ 
@@ -137,9 +110,32 @@ citing R packages.
 \noindent \textsc{www.ccruncher.net}\\ % URL
 
 \noindent 
-This work is licensed to the public under Creative Commons Attribution-ShareAlike 
-3.0 Unported License. To view a copy of this license visit 
+This work is licensed to the public under Creative Commons 
+Attribution-ShareAlike 3.0 Unported License. To view a copy 
+of this license visit 
 \url{http://creativecommons.org/licenses/by-sa/3.0/}.
+We have invested a lot of time and effort in creating CCruncher, 
+please cite it when using it for credit risk analysis.
+
+% To cite CCruncher in publications use:
+% \begin{adjustwidth}{2.5em}{0pt}
+  % Gerard Torrent (2013). Credit risk modeling using CCruncher.
+  % Tatine, Barcelona, Spain. URL http://www.ccruncher.net/.
+% \end{adjustwidth}
+
+% A BibTeX entry for LaTeX users is
+% \begin{adjustwidth}{2.5em}{0pt}
+% \begin{verbatim}
+% @manual{ccruncher,
+    % title = {{Credit risk modeling using CCruncher}},
+    % author = {Torrent, Gerard},
+    % organization = {Tatine},
+    % address = {Barcelona, Spain},
+    % year = {2013},
+    % url = {http://www.ccruncher.net/},
+% }
+% \end{verbatim}
+% \end{adjustwidth}
 
 %\noindent \textit{First printing, March 2013} % Printing/edition date
 
@@ -157,7 +153,93 @@ This work is licensed to the public under Creative Commons Attribution-ShareAlik
 % INTRODUCTION
 %----------------------------------------------------------------------------------------
 \chapter{Introduction}
-\section{Introduction}\index{Introduction}
+%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Introduction}}
+
+\section{Basic Concepts}
+
+\begin{definition}[Probability of Default (PD)]
+The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
+indicates the probability that this obligor defaults in the time 
+interval $(0,t]$.
+\begin{displaymath}
+\text{PD}_i(t) = \Pr\{T_i \le t\} = \Pr\{\text{i-th obligor defaults before $t$ years}\}
+\end{displaymath}
+where $T_i$ is a random variable that represents the default
+time of the i-th obligor. Note that the PD defined in this way 
+is the cdf of $T_i$.
+\end{definition}
+
+\begin{definition}[Exposure At Default (EAD)]
+The Exposure At Default of the j-th asset at time $t$ indicates 
+the total amount that bank is exposed if the obligor defaults:
+\begin{displaymath}
+\text{EAD}_j(t) = \left\{
+\begin{array}{c}
+\text{amount in risk of the j-th asset if the obligor} \\
+\text{defaults at time $t$, measured in currency}
+\end{array}
+\right\}
+\end{displaymath}
+EAD can be a function dependent of time when these amounts are
+fixed and know in advance (eg. loan), or can be a distribution
+defined over time when we have a model that support it 
+(eg. line of credit).
+\end{definition}
+
+\begin{definition}[Loss Given Default (LGD)]
+The Loss Given Default of the j-th asset at time $t$ indicates 
+the percentage of efective loss over the total exposure:
+\begin{displaymath}
+\text{LGD}_j(t) = \left\{
+\begin{array}{c}
+\text{percentage of the $\text{EAD}_j(t)$ that is definitively} \\
+\text{lost if the obligor defaults at time $t$}
+\end{array}
+\right\}
+\end{displaymath}
+LGD can be a function dependent of time, or can be a distribution
+defined over time when we have a model that support it.
+\end{definition}
+
+\begin{example}[Bond]
+Let a 10-years fixed rate bond with an annual coupon of the
+$4\%$ issued by a company rated BB on 01/01/2012. The credit
+rating agency reports us the following PD over time for this
+obligor and rating:
+\begin{figure}[h]
+\centering\includegraphics[width=7cm]{bond_pd}
+\end{figure}
+\end{example}
+
+% # R script to create PD in the Bond example
+% ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
+% A = matrix(ncol=8, nrow=8, data=c(
+% 90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
+% 8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
+% 0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
+% 0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
+% 0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
+% 0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
+% 0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
+% 0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
+% )/100)
+% n=201
+% B = diag(8)
+% T = matrix(nrow=n, ncol=8, 0)
+% colnames(T) <- ratings
+% for(i in 2:n)
+% {
+  % B = B %*% A
+  % T[i,] = B[,8]
+% }
+% pdf(file="bond_pd.pdf")
+% plot(0:150, T[1:151,5], type='l', xlab="Time in years", 
+ % ylab="PD", main="Probability of Default rating BB")
+% grid()
+% dev.off();
+
+
+
 \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
 \cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997}
 \cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001}
@@ -906,9 +988,9 @@ to the multi-factor formulation.
 			                                                                                                                              \\
 			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr} | v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R\} = \\
 			                                                                                                                              \\
-			= \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot                                                      
-			H_{ij}(v,z_i)^{k_{ij}} \cdot                                                                                                  
-			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}                                                                              
+			= \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
+			H_{ij}(v,z_i)^{k_{ij}} \cdot
+			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}
 		\end{array}
 	\end{displaymath}
 	where
@@ -927,18 +1009,18 @@ to the multi-factor formulation.
 \begin{proof}
 	Let $H_{sr}$ the probability that an obligor belonging to sector $s$
 	with initial rating $r$ defaults conditioned to $z_s$ and $v$.
-	We use the pdf of the default times distribution (see proposition \ref{prop:dtd})
-	to assess it value:
+	We use the pdf of the default times distribution (see proposition 
+	\ref{prop:dtd}) to assess it value:
 	\begin{displaymath}
 		H_{sr} = 
 		\Pr\{T_i \le 1; v, z_s\} = 
 		\Pr\{ X_i \le t_{\nu}^{-1}(F_i(1)); v, z_s\} = 
 		\Pr\{ X_i \le t_{\nu}^{-1}(p_r); v, z_s\}
 	\end{displaymath}
-	wehre $T_i$ is the i-th component of the multivariate default times,
-	$F_i$ is PD over time of the i-th obligor (that has rating r),
-	and $X_i$ is the i-th component of the multivariate t-Student.
-	Now express $X$ in the multi-factor form:
+	wehre $T_i$ is the i-th component of the multivariate default 
+	times, $F_i$ is PD over time of the i-th obligor (that has 
+	rating r), and $X_i$ is the i-th component of the multivariate 
+	t-Student. Now express $X$ in the multi-factor form:
 	\begin{displaymath}
 		H_{sr} = \Pr \left\{ 
 		\sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon\right)
@@ -951,18 +1033,19 @@ to the multi-factor formulation.
 		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
 		\right)
 	\end{displaymath}
-	Once the probability of default by one obligor, the probability of observing 
-	$k$ failures in a set of $n$ independent obligors follows a binomial distribution:
+	Once the probability of default by one obligor, the probability of 
+	observing $k$ failures in a set of $n$ independent obligors follows 
+	a binomial distribution:
 	\begin{displaymath}
 		\text{Bin}(k;n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
 	\end{displaymath}
-	The product for all sectors and ratings gives the stated formula. We can do the product
-	because $v$ and $z_s$ are fixed.
+	The product for all sectors and ratings gives the stated formula. 
+	We can do the product because $v$ and $z_s$ are fixed.
 \end{proof}
 
 \begin{corollary}[Density of the annual number of defaults (II)]
-	We can express the density of the annual number of defaults using the
-	conditioned density:
+	We can express the density of the annual number of defaults using 
+	the conditioned density:
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} ; \nu, w_1,\dots,w_k, R) =                \\
@@ -974,6 +1057,92 @@ to the multi-factor formulation.
 	\end{displaymath}
 	where $\psi$ is the $\chi_{\nu}^2$ pdf, and $\phi$ is the $N(0,R)$ pdf.
 \end{corollary}
+
+\begin{definition}[Conditioned likelihood]
+Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
+and $K^t$ are vectors representing the number of obligors and defaulted 
+obligors in each sector-rating bucket. We define the conditional 
+likelihood of these observations as:
+\begin{displaymath}
+	\begin{array}{l}
+		L(\nu,\vec{w},R | v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t | v^t,\vec{z^t}; \nu,\vec{w},R) = \\
+		\displaystyle
+		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
+		\binom{n_{ij}^t}{k_{ij}^t} \cdot
+		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
+		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
+	\end{array}
+\end{displaymath}
+Note that the parameters to be infered are $\nu,\vec{w},R$ and the
+latent variables $v^1,\vec{z^1},\dots,v^T,\vec{z^T}$.
+\end{definition}
+
+\begin{proposition}[Parameters estimation]
+	We can estimate the parameters of the conditioned likelihood using
+	the Bayessian framework and Metropolis-Hastings algorithm 
+	(see algorithm \ref{alg:bimh}) with the following rules:
+	\begin{itemize}
+		\item parameters $\theta \equiv \{ \nu,w_1,\dots,w_k,R,v^1,\vec{z^1},\dots,v^T,\vec{z^T}\}$
+		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
+		\item likelihood $f(y|\theta) \equiv L(\nu,\vec{w},R | v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T)$
+		\item proposal distributions $q(\theta_j|\theta_j') \sim N(\theta,\sigma_j)$
+		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
+		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
+		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
+		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
+		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
+	\end{itemize}
+	For the prior distributions of $r_{ij}$ we select the one that 
+	maximize the probability to observe the latent variables. The 
+	pdf of the distribution $\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
+	%hyperparameters, hyperdistributions
+	\begin{displaymath}
+		f(r_{ij}) = f(r; i,j,R) = \frac
+		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
+		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
+	\end{displaymath}
+	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
+	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
+	replaced by $r$. We don't need to know the limits of the integral
+	because this is constant and cancels into the M-H algorithm.
+\end{proposition}
+
+\begin{proposition}[Robbins-Monro process]
+CAL MILLORAR MOLT AIXO. 
+proceso de Robbins-Monro tal como se indica en [¿24?].
+	\begin{displaymath}
+		\sigma_{i+1} = \left\{
+		\begin{array}{ll}
+			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
+			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
+		\end{array}
+		\right.
+	\end{displaymath}
+	we take an arbitrary starting value $\sigma_0$.
+\end{proposition}
+
+\section{Bayessian Inference}\index{Bayessian Inference}
+
+Bayesian statistics differ from the classical statistical 
+theory since all unknown parameters are considered as random 
+variables. We want calculate the distribution $f(\theta|y)$ 
+of the parameters $\theta$ given the observed data $y$. 
+According to the Bayes theorem, this can be written as:
+\begin{displaymath}
+	f(\theta|y) = \frac{f(y|\theta) \cdot f(\theta)}{f(y)} \propto f(y|\theta) \cdot f(\theta)
+\end{displaymath}
+
+We call \emph{posterior distribution} to $f(\theta|y)$ and 
+\emph{prior distribution} to $f(y)$. This prior distribution 
+expresses the information available to the researcher before 
+any data are involved in the statistical analysis. $f(y|\theta)$ 
+is the probability of observing $y$ given $\theta$, and is also 
+known as the likelihood.
+\begin{displaymath}
+	f(y|\theta) = \prod_{i=1}^n f(y_i|\theta)
+\end{displaymath}
+
 
 \section{Metropolis-Hastings}\index{Metropolis-Hastings}
 
@@ -1004,24 +1173,6 @@ to the multi-factor formulation.
 
 
 \textbf{Bayesian inference}.
-Bayesian statistics differ from the classical statistical theory since all 
-unknown parameters are considered as random variables.
-We want calculate the distribution $f(\theta|y)$ of the parameters $\theta$ 
-given the observed data $y$. According to the Bayes theorem, this can be 
-written as:
-\begin{displaymath}
-	f(\theta|y) = \frac{f(y|\theta) \cdot f(\theta)}{f(y)} \propto f(y|\theta) \cdot f(\theta)
-\end{displaymath}
-
-We call \emph{posterior distribution} to $f(\theta|y)$ and \emph{prior distribution} 
-to $f(y)$. This prior distribution expresses the information available to the 
-researcher before any data are involved in the statistical analysis. 
-$f(y|\theta)$ is the probability of observing $y$ given $\theta$, and is also 
-known as the likelihood.
-\begin{displaymath}
-	f(y|\theta) = \prod_{i=1}^n f(y_i|\theta)
-\end{displaymath}
-
 The Metropolis-Hastings algorithm outlined above can be directly implemented to do
 Bayesian inference by substituting $x$ by the unknow parameters, $\theta$, and 
 the target distribution $f(x)$ by the posterior distribution $f(\theta|y)$. Then 
@@ -1068,6 +1219,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 
 
 \begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
+\label{alg:bimh}
 	\begin{enumerate}
 		\item Set initial values $\theta^{(0)}$
 		\item For $t=1,\dots,T$ repeat the following steps
@@ -1096,21 +1248,37 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 \end{algorithm}
 
 
+%----------------------------------------------------------------------------------------
+% MODELING PORTFOLIO LOSS
+%----------------------------------------------------------------------------------------
+\chapter{Modeling Portfolio Loss}
+
+\section{Portfolio Loss Distribution}
+
+Let a portfolio where we have the obligor default times
+$(T_1,\dots,T_n)$ modeled by its PD over time and a
+t-Student copula. For each obligor we know its exposure
+
+OLALA
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 \chapter*{Bibliography}
 \addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
-\section*{Books}
-\addcontentsline{toc}{section}{Books}
-\printbibliography[heading=bibempty,type=book]
-\section*{Articles}
-\addcontentsline{toc}{section}{Articles}
-\printbibliography[heading=bibempty,type=article]
-\section*{Others}
-\addcontentsline{toc}{section}{Others}
-\printbibliography[heading=bibempty,type=techreport]
+% \section*{Books}
+% \addcontentsline{toc}{section}{Books}
+% \printbibliography[heading=bibempty,type=book]
+% \section*{Articles}
+% \addcontentsline{toc}{section}{Articles}
+% \printbibliography[heading=bibempty,type=article]
+% \section*{Others}
+% \addcontentsline{toc}{section}{Others}
+% \printbibliography[heading=bibempty,type=techreport]
+
+\section*{References}
+%\addcontentsline{toc}{section}{References}
+\printbibliography[heading=bibempty]
 
 %----------------------------------------------------------------------------------------
 %	INDEX
@@ -1123,4 +1291,3 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 %----------------------------------------------------------------------------------------
 
 \end{document}
-
