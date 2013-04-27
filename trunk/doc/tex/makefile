@@ -28,6 +28,9 @@ pdf: ccruncher.tex bibliography.bib
 	./biber ccruncher
 	pdflatex ccruncher
 
+graphics: graphics.R
+	R --vanilla --slave < graphics.R
+
 rtf: ccruncher.tex bibliography.bib
 	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
 	latex ccruncher-iso88591
@@ -41,6 +44,7 @@ clean:
 	rm -f *.ilg *.ind *.ptc *.toc *.log
 	rm -f *.run.xml
 	rm -f *~
+	rm -f Pictures/bond_pd1.pdf
 
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
 
