@@ -45,6 +45,9 @@ clean:
 	rm -f *.run.xml
 	rm -f *~
 	rm -f Pictures/bond_pd1.pdf
+	rm -f Pictures/bond_pd2.pdf
+	rm -f Pictures/bond_ead.pdf
+	rm -f Pictures/bond_lgd.pdf
 
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
 
