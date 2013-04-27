@@ -71,6 +71,7 @@
 \usepackage{enumitem}
 \usepackage{changepage}
 \usepackage[official]{eurosym}
+\usepackage[lofdepth,lotdepth]{subfig}
 
 %----------------------------------------------------------------------------------------
 
@@ -204,40 +205,28 @@ defined over time when we have a model that support it.
 \begin{example}[Bond]
 Let a 10-years fixed rate bond with an annual coupon of the
 $4\%$ issued by a company rated BB on 01/01/2012. The credit
-rating agency reports us the following PD over time for this
-obligor and rating:
+rating agency reports the PD over time displayed below for this
+obligor and rating. The EAD of this asset can be obtained from
+its expected cashflow known in advance. We supose that the bank
+internal models indicate that in this case the LGD is a 
+$\text{Beta}(5,2)$ distribution regardless of the default time.
 \begin{figure}[h]
-\centering\includegraphics[width=7cm]{bond_pd}
+\centering
+\subfloat{
+    \includegraphics[width=7cm]{bond_pd1}
+}
+\subfloat{
+    \includegraphics[width=7cm]{bond_pd2}
+}
+\\
+\subfloat{
+    \includegraphics[width=7cm]{bond_ead}
+}
+\subfloat{
+    \includegraphics[width=7cm]{bond_lgd}
+}
 \end{figure}
 \end{example}
-
-% # R script to create PD in the Bond example
-% ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
-% A = matrix(ncol=8, nrow=8, data=c(
-% 90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
-% 8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
-% 0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
-% 0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
-% 0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
-% 0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
-% 0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
-% 0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
-% )/100)
-% n=201
-% B = diag(8)
-% T = matrix(nrow=n, ncol=8, 0)
-% colnames(T) <- ratings
-% for(i in 2:n)
-% {
-  % B = B %*% A
-  % T[i,] = B[,8]
-% }
-% pdf(file="bond_pd.pdf")
-% plot(0:150, T[1:151,5], type='l', xlab="Time in years", 
- % ylab="PD", main="Probability of Default rating BB")
-% grid()
-% dev.off();
-
 
 
 \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
