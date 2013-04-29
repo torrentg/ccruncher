@@ -72,6 +72,8 @@
 \usepackage{changepage}
 \usepackage[official]{eurosym}
 \usepackage[lofdepth,lotdepth]{subfig}
+\def\numversion{2.3}
+\def\svnversion{R1024}
 
 %----------------------------------------------------------------------------------------
 
@@ -86,15 +88,21 @@
 \begingroup
 \thispagestyle{empty}
 \AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}} % Image background
+\vspace*{-1cm}
+\centerline{\includegraphics[angle=0]{./Pictures/logo.png}}
 \centering
-\vspace*{8cm}
+\vspace*{1cm}
 \par\normalfont\fontsize{35}{35}\sffamily\selectfont
 Credit Risk Modeling \par % Book title
 \par\normalfont\fontsize{25}{25}\sffamily\selectfont
 Using CCruncher\par
 \vspace*{2cm}
 {\Huge Gerard Torrent}\par % Author name
+\vspace*{5cm}
+\par\normalfont\fontsize{14}{14}\sffamily\selectfont
+Version \numversion\ [\svnversion]\par
 \endgroup
+
 
 %----------------------------------------------------------------------------------------
 %	COPYRIGHT PAGE
@@ -106,7 +114,7 @@ Using CCruncher\par
 
 \noindent Copyright \copyright\ 2013 Gerard Torrent\\ % Copyright notice
 
-\noindent \textsc{Version 2.3 [R1023]}\\ 
+\noindent \textsc{Version \numversion\ [\svnversion]}\\ 
 
 \noindent \textsc{www.ccruncher.net}\\ % URL
 
@@ -155,6 +163,17 @@ please cite it when using it for credit risk analysis.
 %----------------------------------------------------------------------------------------
 \chapter{Introduction}
 %\addcontentsline{toc}{chapter}{\textcolor{ocre}{Introduction}}
+
+\setlength{\fboxsep}{15pt}
+\framebox[\textwidth]{
+  CCruncher determines the loss distribution of a portfolio of credits.
+}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=12cm]{creditvar}
+\end{figure}
+
 
 \section{Basic Concepts}
 

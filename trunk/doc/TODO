@@ -4,7 +4,11 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-
+  * rename exposure to ead
+  * rename recovery to lgd
+  * interest is useful? (exposure depends on interest)
+  * rename dprobs to pds
+  * pds can have multiple transtions, and pd into
  
 Future works
 -------------------
