@@ -81,10 +81,9 @@
 
 \begin{document}
 
-%----------------------------------------------------------------------------------------
-%	TITLE PAGE
-%----------------------------------------------------------------------------------------
-
+%==============================================================================
+% TITLE PAGE
+%==============================================================================
 \begingroup
 \thispagestyle{empty}
 \AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}} % Image background
@@ -104,20 +103,16 @@ Version \numversion\ [\svnversion]\par
 \endgroup
 
 
-%----------------------------------------------------------------------------------------
-%	COPYRIGHT PAGE
-%----------------------------------------------------------------------------------------
-
+%==============================================================================
+% COPYRIGHT PAGE
+%==============================================================================
 \newpage
 ~\vfill
 \thispagestyle{empty}
-
+\noindent Version \numversion\ [\svnversion]\\ 
+\\
 \noindent Copyright \copyright\ 2013 Gerard Torrent\\ % Copyright notice
-
-\noindent \textsc{Version \numversion\ [\svnversion]}\\ 
-
-\noindent \textsc{www.ccruncher.net}\\ % URL
-
+\\
 \noindent 
 This work is licensed to the public under Creative Commons 
 Attribution-ShareAlike 3.0 Unported License. To view a copy 
@@ -148,9 +143,9 @@ please cite it when using it for credit risk analysis.
 
 %\noindent \textit{First printing, March 2013} % Printing/edition date
 
-%----------------------------------------------------------------------------------------
-%	TABLE OF CONTENTS
-%----------------------------------------------------------------------------------------
+%==============================================================================
+% TABLE OF CONTENTS
+%==============================================================================
 \chapterimage{chapter_head_1.pdf} % Table of contents heading image
 \pagestyle{empty} % No headers
 \tableofcontents % Print the table of contents itself
@@ -158,78 +153,149 @@ please cite it when using it for credit risk analysis.
 \pagestyle{fancy} % Print headers again
 
 
-%----------------------------------------------------------------------------------------
+%==============================================================================
 % INTRODUCTION
-%----------------------------------------------------------------------------------------
+%==============================================================================
 \chapter{Introduction}
-%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Introduction}}
 
-\setlength{\fboxsep}{15pt}
-\framebox[\textwidth]{
-  CCruncher determines the loss distribution of a portfolio of credits.
-}
+CCruncher is a computer software to calculate the credit risk of a portfolio. 
+This document details the concepts, model and algorithms used in it.
+CCruncher is developed and mantained by Tatine, %\href{http://www.tatine.es}{Tatine}, 
+a quantitative consulting firm located at Barcelona (Spain). As much computer 
+software as documentation are licensed with open-source type licenses. Take 
+advantage of them but always remember to mention the source. You can download 
+the latest version of this document and the computer software from the 
+CCruncher's site, \url{http://www.ccruncher.net}. 
+
+Portfolio credit risk try to respond to questions like: what is my 
+expected loss for the next year?, how much could I lose in a really 
+bad year?. There are several approaches to answer these questions. 
+All of them try to do the same: obtain the portfolio loss distribution
+and measure the credit risk using a set of selected statistics. They 
+differ on how to obtain this distribution. Let's start by defining 
+what we mean by portfolio loss.
+
+\begin{definition}[Portfolio Loss at time $T$]
+	The Portfolio Loss at time $T$ is the cumulated losses in the time 
+	range $[0,T]$ caused by obligors that defaults (fails to make 
+	payments which they are obligated to do).
+	\begin{displaymath}
+		L_T = \left\{
+		\begin{array}{c}
+			\text{sum of portfolio losses in time range $[0,T]$}
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
 
 \begin{figure}[ht]
-\centering
-\includegraphics[width=12cm]{creditvar}
+	\centering
+	\includegraphics[width=12cm]{creditvar}
+	\caption{Portfolio Loss Distribution at time $T$}
 \end{figure}
 
+The portfolio credit risk is measured considering some statistics on 
+the portfolio loss distribution. In the following section we define
+the more usuals.
 
+%------------------------------------------------------------------------------
+% CREDIT RISK MEASURES
+%------------------------------------------------------------------------------
+\section{Credit Risk Measures}
+
+The portfolio credit risk is measured considering some statistics on 
+the portfolio loss distribution. Next we define the most used.
+
+\begin{definition}[Expected Loss (EL)]
+	The Expected Loss of a portfolio at time horizon $T$ is the 
+	mean of the portfolio loss distribution.
+	\begin{displaymath}
+		\text{EL}(L_T) = E(L_T)
+	\end{displaymath}
+\end{definition}
+
+\begin{definition}[Value At Risk (VAR)]
+	The Value At Risk of a portfolio at time horizon $T$ and 
+	confidence level $\alpha$ is the $\alpha$-quantile of the portfolio loss 
+	distribution.
+	\begin{displaymath}
+		\text{VAR}_\alpha(L_T) = \inf\{x \in \mathbb{R} \mid F(x) \ge \alpha \}
+	\end{displaymath}
+	where $F(x)=\Pr\{L_T \le x\}$ is the portfolio loss distribution at time $T$.
+\end{definition}
+
+\begin{definition}[Expected Shortfall (ES)]
+	The Expected Shortfall of a portfolio at time horizon $T$ and 
+	confidence level $\alpha$ is the average of the worst $\alpha\%$ losses.
+	\begin{displaymath}
+		\text{ES}_\alpha(L_T) = \text{E}(L_t \mid L_T \ge \text{VAR}_\alpha(L_T))
+	\end{displaymath}
+\end{definition}
+
+%------------------------------------------------------------------------------
+% BASIC CONCEPTS
+%------------------------------------------------------------------------------
 \section{Basic Concepts}
 
 \begin{definition}[Probability of Default (PD)]
-The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
-indicates the probability that this obligor defaults in the time 
-interval $(0,t]$.
-\begin{displaymath}
-\text{PD}_i(t) = \Pr\{T_i \le t\} = \Pr\{\text{i-th obligor defaults before $t$ years}\}
-\end{displaymath}
-where $T_i$ is a random variable that represents the default
-time of the i-th obligor. Note that the PD defined in this way 
-is the cdf of $T_i$.
+	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
+	indicates the probability that this obligor defaults in the time 
+	interval $(0,t]$.
+	\begin{displaymath}
+		\text{PD}_i(t) = \Pr\{T_i \le t\} = 
+		\Pr\{\text{i-th obligor defaults before $t$ years}\}
+	\end{displaymath}
+	where $T_i$ is a random variable that represents the default
+	time of the i-th obligor. Note that the PD defined in this way 
+	is the cdf of $T_i$.
 \end{definition}
 
 \begin{definition}[Exposure At Default (EAD)]
-The Exposure At Default of the j-th asset at time $t$ indicates 
-the total amount that bank is exposed if the obligor defaults:
-\begin{displaymath}
-\text{EAD}_j(t) = \left\{
-\begin{array}{c}
-\text{amount in risk of the j-th asset if the obligor} \\
-\text{defaults at time $t$, measured in currency}
-\end{array}
-\right\}
-\end{displaymath}
-EAD can be a function dependent of time when these amounts are
-fixed and know in advance (eg. loan), or can be a distribution
-defined over time when we have a model that support it 
-(eg. line of credit).
+	The Exposure At Default of the j-th asset at time $t$ indicates 
+	the total amount that bank is exposed if the obligor defaults:
+	\begin{displaymath}
+		\text{EAD}_j(t) = \left\{
+		\begin{array}{c}
+			\text{amount in risk of the j-th asset if the obligor} \\
+			\text{defaults at time $t$, measured in currency}
+		\end{array}
+		\right\}
+	\end{displaymath}
+	EAD can be a function dependent of time when these amounts are
+	fixed and know in advance (eg. loan), or can be a distribution
+	defined over time when we have a model that support it 
+	(eg. line of credit).
 \end{definition}
 
 \begin{definition}[Loss Given Default (LGD)]
-The Loss Given Default of the j-th asset at time $t$ indicates 
-the percentage of efective loss over the total exposure:
-\begin{displaymath}
-\text{LGD}_j(t) = \left\{
-\begin{array}{c}
-\text{percentage of the $\text{EAD}_j(t)$ that is definitively} \\
-\text{lost if the obligor defaults at time $t$}
-\end{array}
-\right\}
-\end{displaymath}
-LGD can be a function dependent of time, or can be a distribution
-defined over time when we have a model that support it.
+	The Loss Given Default of the j-th asset at time $t$ indicates 
+	the percentage of efective loss over the total exposure. This
+	value depends on endorsements, guarantees, type of asset, 
+	default time, etc.
+	\begin{displaymath}
+		\text{LGD}_j(t) = \left\{
+		\begin{array}{c}
+			\text{percentage of the $\text{EAD}_j(t)$ that is definitively} \\
+			\text{lost if the obligor defaults at time $t$}
+		\end{array}
+		\right\}
+	\end{displaymath}
+	LGD can be a function dependent of time, or can be a distribution
+	defined over time when we have a model that support it.
 \end{definition}
 
 \begin{example}[Bond]
 Let a 10-years fixed rate bond with an annual coupon of the
-$4\%$ issued by a company rated BB on 01/01/2012. The credit
-rating agency reports the PD over time displayed below for this
-obligor and rating. The EAD of this asset can be obtained from
-its expected cashflow known in advance. We supose that the bank
+$4\%$ issued by a company rated BB. The credit rating agency 
+reports, for this obligor and rating, the PD over time displayed 
+in figure \ref{figure:bond} with a $\text{PD}(1)=1.06\%$. 
+The EAD for this asset can be obtained from its expected cashflows 
+because they are known in advance. We supose that the bank 
 internal models indicate that in this case the LGD is a 
 $\text{Beta}(5,2)$ distribution regardless of the default time.
-\begin{figure}[h]
+Figure \ref{figure:bond} ilustrates the defined basic concepts 
+applied to this bond.
+\begin{figure}[h!]
 \centering
 \subfloat[Probability of Default]{
     \includegraphics[width=7cm]{bond_pd1}
@@ -244,243 +310,27 @@ $\text{Beta}(5,2)$ distribution regardless of the default time.
 \subfloat[Loss Given Default]{
     \includegraphics[width=7cm]{bond_lgd}
 }
+\caption{Basic concepts bond example}
+\label{figure:bond} 
 \end{figure}
 \end{example}
 
+
+The CCruncher's purpose is to 
+obtain the portfolio loss distribution at a fixed time horizon. The 
+portfolio credit risk is determined by calculating some measures 
+(eg. mean, percentile) on this distribution.
 
 \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
 \cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997}
 \cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001}
 \cite{meissner:2006}, \cite{bis:2006}
 
-%----------------------------------------------------------------------------------------
-% MODEL
-%----------------------------------------------------------------------------------------
+
+%==============================================================================
+% MODELING DEFAULT TIMES
+%==============================================================================
 \chapter{Modeling Default Times}
-
-\section{Mathematics}\index{Mathematics}
-
-\subsection{t-Student Distribution}\index{Mathematics!t-Student Distribution}
-
-\begin{definition}[Multivariate t-Student distribution]
-	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
-	(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
-	mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
-	denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
-	\begin{displaymath}
-		f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
-		\left(
-		1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
-		\right)^{-\frac{\nu+d}{2}}
-	\end{displaymath}
-	\noindent where $\Gamma$ is the gamma function, and $|\Sigma|$ is the 
-	determinant of the matrix.
-\end{definition}
-
-\begin{proposition}[Gaussian as limit of the t-Student]
-	The t-Student distribution converges to a Gaussian distribution 
-	when $\nu$ tend to $\infty$.
-	\begin{displaymath}
-		\lim_{\nu \to \infty} t_d(\nu,\mu,\Sigma) = N(\mu,\Sigma)
-	\end{displaymath}
-\end{proposition}
-
-\begin{proposition}[Multivariate t-Student characterization]
-	\label{prop:mtschar}
-	A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
-	\begin{displaymath}
-		T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
-		\quad \text{ where } Z \sim N(0,\Sigma) \text{ and } V \sim \chi_{\nu}^2
-	\end{displaymath}
-\end{proposition}
-
-\begin{proposition}[Multivariate t-Student marginals]
-	Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
-	$X_i \sim t_1(\nu,0,R_{ii})$.
-\end{proposition}
-
-\subsection{t-Student Copula}\index{Mathematics!t-Student Copula}
-
-It is common to use correlation as a measure of dependency between random 
-variables. In most cases, this measure does not fully reflect the structure 
-of dependence between them. The mathematical concept that does reflect the 
-structure of dependence between random variables, however, is the copula, 
-which we define below \cite{mcneil:2005}.
-
-\begin{definition}[Copula]
-	A copula function, $C$, is a multivariate distribution defined on the 
-	unit hypercube $[0,1]^d$ with standard uniform marginals. 
-	More precisely,
-	\begin{displaymath}
-		C(u_1, \dots, u_d) = Pr\{U_1 \le u_1, \dots, U_d \le u_d\}
-	\end{displaymath}
-	where $U_i \sim \text{Uniform}(0,1) \text{ for } i = 1,\dots, d$.
-\end{definition}
-
-Sklar's theorem \cite{sklar:1959} states that any multivariate 
-distribution with continuous marginals can be decomposed into the marginals and 
-a copula that reflects the structure of dependence between them. Later, we will 
-use this statement to define and simulate the t-Student copula.
-
-%%TODO: POSAR REFERENCIA
-\begin{theorem}[Sklar's theorem]
-	Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
-	Then there exists an $d$-copula $C$ such that for all $x \in \mathbb{R}^d$,
-	\begin{displaymath}
-		F(x_1,\dots,x_d) = C(F_1(x_1),\dots,F_d(x_d))
-	\end{displaymath}
-	If $F_1,\dots,F_d$ are all continuous, the $C$ is unique; otherwise $C$ is uniquely
-	determined on $\text{Ran}F_1 \times \dots \times \text{Ran}F_d$.
-	Conversely, if $C$ is an $d$-copula and $F_1,\dots,F_d$ are distributions functions,
-	then the function $F$ defined above is an $d$-dimensional distribution function
-	with margins $F_1,\dots,F_d$.
-\end{theorem}
-
-\begin{corollary}[Copula of a multivariate distribution]
-	\label{cor:cop1}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
-	distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
-	Then its copula is:
-	\begin{displaymath}
-		C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
-	\end{displaymath}
-\end{corollary}
-%\begin{proof}
-%This is a direct application of Sklar's theorem:
-%\begin{displaymath}
-%C(F_1(x_1), \dots, F_d(x_d)) = 
-%F(F_1^{-1}(F_1(x_1)), \dots, F_d^{-1}(F_d(x_d))) = 
-%F(x_1, \dots, x_d)
-%\end{displaymath}
-%\end{proof}
-
-\begin{corollary}[Copula simulation]
-	\label{cor:cop2}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
-	distribution $F$ and continuous marginals $F_1, \dots, F_n$.
-	If we have a procedure to simulate $X$ then we can simulate 
-	its copula $C$ using:
-	\begin{displaymath}
-		(U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
-	\end{displaymath}
-\end{corollary}
-
-\begin{corollary}[Multivariate distribution simulation]
-	\label{cor:cop3}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
-	and continuous marginals $F_1, \dots, F_n$. If we have a
-	procedure to simulate $C$ then we can simulate $X$ using:
-	\begin{displaymath}
-		(X_1, \dots, X_d) = (F_1^{-1}(U_1), \dots, F_d^{-1}(U_d))
-	\end{displaymath}
-	where $U_i$ are the copula components.
-\end{corollary}
-
-
-\begin{definition}[t-Student copula]
-	The t-Student copula, $C_{\nu,\Sigma}^d$, is the copula of the multivariate 
-	t-Student distribution $t_d(\nu,\mu,\Sigma)$.
-\end{definition}
-
-\begin{proposition}[t-Student copula invariance]
-	The copula of $t_d(\nu,\mu,\Sigma)$ is identical of that of $t_d(\nu,\vec{0},R)$
-	where $R$ is the correlation matrix implied by the dispersion matrix $\Sigma$.
-\end{proposition}
-
-\begin{proposition}[t-Student copula density]
-	The t-Student copula, $C_{\nu,R}^d$, where $R$ is a correlation matrix,
-	has the following distribution:
-	\begin{displaymath}
-		C_{\nu,R}^d(u_1, \dots, u_d) = 
-		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
-	\end{displaymath}
-	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
-	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
-	The copula density is
-	\begin{displaymath}
-		\label{eq:density}
-		c_{\nu,R}^d(u_1,\dots,u_d) =
-		|R|^{-\frac{1}{2}} 
-		\displaystyle\frac{\Gamma{\left(\frac{\nu+d}{2}\right)}}{\Gamma{\left(\frac{\nu}{2}\right)}}
-		\displaystyle\left[ \frac{\Gamma{\left(\frac{\nu}{2}\right)}}{\Gamma{\left(\frac{\nu+1}{2}\right)}} \right]^d
-		\frac{\displaystyle\left( 1+\frac{\zeta' R^{-1} \zeta}{\nu}\right)^{-\frac{\nu+d}{2}}}{\displaystyle\prod_{i=1}^d \left( 1+\frac{\zeta_i^2}{\nu} \right)^{-\frac{\nu+1}{2}}}
-	\end{displaymath}
-	\noindent
-	where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of 
-	the t-student univariate inverse distribution functions.
-\end{proposition}
-
-
-\subsection{Covariance Block Matrix}\index{Mathematics!Covariance Block Matrix}
-
-\begin{definition}[Covariance Block Matrix]
-	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
-	\begin{itemize}
-		\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
-		\item $d=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
-		\item $M$ is a $k \times k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
-	\end{itemize}
-	when
-	\begin{itemize}
-		\item each block $B_{ij}$ is a $n_i \times n_j$ constant matrix with value $M_{ij}$
-		\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
-		\item A is definite-positive
-	\end{itemize}
-\end{definition}
-
-\begin{example}[Correlation Block Matrix]
-	\label{example1}
-	We have $6$ obligors sorted by sector. The first three belong to the 
-	banking sector, the next two belong to the energy sector 
-	and the last one belongs to the services sector. The correlations are 
-	determined by sectors, where $m_{ij}$ is the correlation between two 
-	obligors belonging to sectors $i$ and $j$. Then the correlation matrix 
-	between obligors is:
-	\begin{displaymath}
-		R=
-		\left(
-		\begin{array}{ccc|cc|c} 
-			1   & 0.5 & 0.5 & 0.2  & 0.2  & 0.1  \\ 
-			0.5 & 1   & 0.5 & 0.2  & 0.2  & 0.1  \\ 
-			0.5 & 0.5 & 1   & 0.2  & 0.2  & 0.1  \\ 
-			\hline
-			0.2 & 0.2 & 0.2 & 1    & 0.4  & 0.15 \\ 
-			0.2 & 0.2 & 0.2 & 0.4  & 1    & 0.15 \\ 
-			\hline
-			0.1 & 0.1 & 0.1 & 0.15 & 0.15 & 1    
-		\end{array} 
-		\right)
-	\end{displaymath}
-\end{example}
-
-\begin{proposition}[Covariance block matrix eigenvalues]
-	\label{prop1}
-	Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k \times k$ 
-	deflated matrix
-	\begin{displaymath}
-		G =
-		\left( \begin{array}{cccc}
-		d_1+(n_1-1)\cdot m_{11} & n_2 \cdot m_{12}        & \dots  & n_k \cdot m_{1k} \\
-		n_1\cdot m_{21}         & d_2+(n_2-1)\cdot m_{22} & \dots  & n_k \cdot m_{2k} \\
-		\vdots                  & \vdots                  & \ddots & \vdots \\
-		n_1\cdot m_{k1}         & n_2 \cdot m_{k2}        & \dots  & d_k+(n_k-1)\cdot m_{kk} \\
-		\end{array} \right)
-	\end{displaymath}
-	Then, the eigenvalues of $A$ are as follows:
-	\begin{itemize}
-		\item $d_{r}-m_{rr}$ with multiplicity $n_r-1$ for $r=1,\dots,k$.
-		\item $\lambda_r$, the eigenvalues of $G$ with multiplicity $1$.
-	\end{itemize}
-\end{proposition}
-
-\begin{corollary}
-	A covariance block matrix $B_k(n,d,M)$ is definite-positive if
-	\begin{itemize}
-		\item $d_r > m_{rr}$ for all $r=1,\dots,k$, and
-		\item the deflated matrix $G$ is definite-positive.
-	\end{itemize}
-\end{corollary}
-
 
 \section{Default Times Distribution}\index{Default Times Distribution}
 
@@ -716,6 +566,637 @@ matrix of dimension $n \times n$ is not practical to simulate it or for
 estimate the parameters. For this reasons we introduce the multi-factor 
 models.
 
+\begin{definition}[t-Student multi-factor model]
+	We combine the t-Student characterization (proposition\ref{prop:mtschar})
+	and the multivariate Gaussian distribution expressed as a
+	Gaussian multi-factor model to define the t-Student multi-factor
+	model:
+	\begin{displaymath}
+		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
+		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
+		\quad \text{ where } \left\{
+		\begin{array}{l}
+			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
+			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
+			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}  \\
+			Z \sim N(0,R), \text{ and $R$ a $k \times k$ correlation matrix} \\
+			w_i \in (0,1), \text{ are the factor loadings }                  \\
+			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
+			V, Z, \epsilon_i^j \text{ independents } \forall i,j             \\
+		\end{array}
+		\right.
+	\end{displaymath}
+\end{definition}
+
+By contruction, the t-Student multi-factor model is a multivariate
+t-Student distribution with a block correlation matrix. With some
+minor exceptions (see proposition \ref{prop:gmfamgb}) we can 
+state that any multivariate t-Student distribution can be expressed
+as a t-Student multi-factor model.
+
+%==============================================================================
+% ESTIMATING DEPENDENCE PARAMETERS
+%==============================================================================
+\chapter{Estimating Dependence Parameters}
+
+We want to estimate the t-Student multi-factor parameters 
+($\nu, w_i, R$). The available information is:
+\begin{itemize}
+	\item $N_{srt}$ = Number of obligors in sector $s$, rating $r$ and year $t$
+	\item $K_{srt}$ = Number of defaults in sector $s$, rating $r$ and year $t$
+\end{itemize}
+
+
+\begin{notation}[1-year threshold]
+	We indicate as $p_i$ the probability that i-the obligor defaults in 
+	the first period.
+	\begin{displaymath}
+		p_i = \Pr\{T_i \le 1 \text{ year}\} = F_i(1) 
+	\end{displaymath}
+\end{notation}
+
+In most cases there is no historical records disaggregated at the rating
+level. In these cases, when the historical records are $N_{st}$ and 
+$K_{st}$ without the counts by rating, we can use the following approximation:
+\begin{displaymath}
+	K_{srt} = K_{st} \cdot \frac{p_r}{\displaystyle \sum_{i \ne default} p_i}
+\end{displaymath}
+
+%TODO: posar exemple?
+
+\begin{definition}[Annual number of defaults]
+	We define the annual number of defaults by sector and rating like a
+	discrete multivariate random variable 
+	$K=(K_{11}, \dots, K_{1r}, \dots, K_{k1}, \dots, K_{kr})$ where:
+	\\
+	$K_{ij}$ = number of obligors in the sector $i$ that defaults in a
+	period of 1-year having a rating $j$ at the begining of the period.
+\end{definition}
+
+\begin{proposition}[Density of the annual number of defaults (I)]
+	The density (pdf) of the annual number of defaults, assuming that these
+	are distributed according to a multivariate block t-Student distribution
+	with $\nu$ degrees of freedom, block correlation matrix $B_k(n,1,M)$, is:
+	\begin{displaymath}
+		\begin{array}{l}
+			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr}; B_k,\nu) =                                   \\
+			                                                                                              \\
+			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr}; B_k,\nu\} = \\
+			                                                                                              \\
+			= \left( \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
+			\displaystyle                                                                                 
+			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_1)}}_{k_{11} \text{ times}}                        
+			\underbrace{\int_{t_{\nu}^{-1}(p_1)}^{\infty}}_{n_{11}-k_{11} \text{ times}}                  
+			\dots                                                                                         
+			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{kr} \text{ times}}                        
+			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{kr}-k_{kr} \text{ times}}                  
+			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n                                                        
+		\end{array}
+	\end{displaymath}
+	where $n_{ij}$ is the number of obligors in the i-th sector with the 
+	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
+	with the j-th rating, $n = \sum n_{ij}$ is the number of obligor in the
+	portfolio, $f()$ is the $t_n(\nu,\bar{R})$ pdf, $t_{\nu}^{-1}$ is the
+	inverse of the univariate t-Student cdf. The combinatorial coeficients
+	takes in account all the combinations of interchangeable obligors.
+\end{proposition}
+
+We don't known an analitical expression for the density of the annual 
+number of defaults. For this reason we try to solve the problem recurring 
+to the multi-factor formulation.
+
+%TODO: canviar subindex K per S (en el cas de sectors)
+\begin{proposition}[Conditioned density of the annual number of defaults]
+	The conditioned density (pdf) of the annual number of defaults, assuming 
+	that these are distributed according to a t-Student multi-factor model
+	with $\nu$ degrees of freedom, factor loadings $w_i$, and correlations
+	$R$ is:
+	\begin{displaymath}
+		\begin{array}{l}
+			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} \mid v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R) =                                   \\
+			                                                                                                                                 \\
+			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr} \mid v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R\} = \\
+			                                                                                                                                 \\
+			= \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
+			H_{ij}(v,z_i)^{k_{ij}} \cdot
+			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}
+		\end{array}
+	\end{displaymath}
+	where
+	\begin{displaymath}
+		H_{sr}(v,z_s) = \phi\left(  
+		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
+		\right)
+	\end{displaymath}
+	and $n_{ij}$ is the number of obligors in the i-th sector with the 
+	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
+	with the j-th rating, $\phi$ is the pdf of the univariate $N(0,1)$
+	, and $t_{\nu}^{-1}$ is the inverse of the univariate t-Student cdf. 
+	The combinatorial coeficients takes in account all the combinations 
+	of interchangeable obligors.
+\end{proposition}
+\begin{proof}
+	Let $H_{sr}$ the probability that an obligor belonging to sector $s$
+	with initial rating $r$ defaults the first year conditioned to $z_s$ 
+	and $v$. We use the pdf of the default times distribution (see proposition 
+	\ref{prop:dtd}) to assess it value:
+	\begin{displaymath}
+		H_{sr}(v,z_s) = 
+		\Pr\{T_i \le 1 \mid v, z_s\} = 
+		\Pr\{ X_i \le t_{\nu}^{-1}(F_i(1)) \mid v, z_s\} = 
+		\Pr\{ X_i \le t_{\nu}^{-1}(p_r) \mid v, z_s\}
+	\end{displaymath}
+	where $T_i$ is the i-th component of the multivariate default 
+	times, $F_i$ is PD over time of the i-th obligor (that has 
+	rating r), and $X_i$ is the i-th component of the multivariate 
+	t-Student. Now express $X$ in the multi-factor form:
+	\begin{displaymath}
+		H_{sr}(v,z_s) = \Pr \left\{ 
+		\sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon\right)
+		\le t_{\nu}^{-1}(p_r)
+		\right\}
+	\end{displaymath}
+	Because $v$ and $z_s$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
+	\begin{displaymath}
+		H_{sr}(v,z_s) = \phi\left(  
+		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
+		\right)
+	\end{displaymath}
+	Once the probability of default by one obligor, the probability of 
+	observing $k$ failures in a set of $n$ independent obligors follows 
+	a binomial distribution:
+	\begin{displaymath}
+		\text{Bin}(k;n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
+	\end{displaymath}
+	The product for all sectors and ratings gives the stated formula. 
+	We can do the product because $v$ and $z_s$ are fixed.
+\end{proof}
+
+\begin{corollary}[Density of the annual number of defaults (II)]
+	We can express the density of the annual number of defaults using 
+	the conditioned density:
+	\begin{displaymath}
+		\begin{array}{l}
+			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} ; \nu, \vec{w}, R) =                \\
+			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
+			\psi(v) \cdot \phi(\vec{z}) \cdot                                                   
+			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} \mid v,\vec{z}; \nu,\vec{w}, R) 
+			\ud z_1 \dots \ud z_k \ud v                                                               
+		\end{array}
+	\end{displaymath}
+	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
+\end{corollary}
+
+\begin{definition}[Conditioned likelihood]
+Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
+and $K^t$ are vectors representing the number of obligors and defaulted 
+obligors in each sector-rating bucket. We define the conditional 
+likelihood of these observations as:
+\begin{displaymath}
+	\begin{array}{l}
+		L(\nu,\vec{w},R \mid v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z^t}; \nu,\vec{w},R) = \\
+		\displaystyle
+		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
+		\binom{n_{ij}^t}{k_{ij}^t} \cdot
+		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
+		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
+	\end{array}
+\end{displaymath}
+Note that the parameters to be infered are $\nu,\vec{w},R$ and the
+latent variables $v^1,\vec{z^1},\dots,v^T,\vec{z^T}$.
+\end{definition}
+
+\begin{proposition}[Parameters estimation]
+	We can estimate the parameters of the conditioned likelihood using
+	the Bayessian framework and Metropolis-Hastings algorithm 
+	(see algorithm \ref{alg:bimh}) with the following rules:
+	\begin{itemize}
+		\item parameters $\theta \equiv \{ \nu,w_1,\dots,w_k,R,v^1,\vec{z^1},\dots,v^T,\vec{z^T}\}$
+		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
+		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T)$
+		\item proposal distributions $q(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
+		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
+		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
+		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
+		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
+		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
+	\end{itemize}
+	For the prior distributions of $r_{ij}$ we select the one that 
+	maximize the probability to observe the latent variables. The 
+	pdf of the distribution $\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
+	%hyperparameters, hyperdistributions
+	\begin{displaymath}
+		f(r_{ij}) = f(r; i,j,R) = \frac
+		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
+		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
+	\end{displaymath}
+	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
+	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
+	replaced by $r$. We don't need to know the limits of the integral
+	because this is constant and cancels into the M-H algorithm.
+\end{proposition}
+
+\begin{proposition}[Robbins-Monro process]
+CAL MILLORAR MOLT AIXO. 
+proceso de Robbins-Monro tal como se indica en [¿24?].
+	\begin{displaymath}
+		\sigma_{i+1} = \left\{
+		\begin{array}{ll}
+			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
+			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
+		\end{array}
+		\right.
+	\end{displaymath}
+	we take an arbitrary starting value $\sigma_0$.
+\end{proposition}
+
+\section{Bayessian Inference}\index{Bayessian Inference}
+
+Bayesian statistics differ from the classical statistical 
+theory since all unknown parameters are considered as random 
+variables. We want calculate the distribution $f(\theta \mid y)$ 
+of the parameters $\theta$ given the observed data $y$. 
+According to the Bayes theorem, this can be written as:
+\begin{displaymath}
+	f(\theta \mid y) = \frac{f(y \mid \theta) \cdot f(\theta)}{f(y)} \propto f(y \mid \theta) \cdot f(\theta)
+\end{displaymath}
+
+We call \emph{posterior distribution} to $f(\theta \mid y)$ and 
+\emph{prior distribution} to $f(y)$. This prior distribution 
+expresses the information available to the researcher before 
+any data are involved in the statistical analysis. $f(y \mid \theta)$ 
+is the probability of observing $y$ given $\theta$, and is also 
+known as the likelihood.
+\begin{displaymath}
+	f(y \mid \theta) = \prod_{i=1}^n f(y_i \mid \theta)
+\end{displaymath}
+
+
+\section{Metropolis-Hastings}\index{Metropolis-Hastings}
+
+\begin{algorithm}[Metropolis-Hastings]
+	Let us assume a target distribution $f(x)$ from which we wish to generate a 
+	sample of size $T$. The Metropolis-Hastings algorithm can be described by the 
+	following iterative steps; where $x^{(t)}$ is the vector of generated values 
+	in the $t$-th iteration of the algorithm:
+	\begin{enumerate}
+		\item Set initial values $x^{(0)}$
+		\item For $t=1,\dots,T$ repeat the following steps
+		\begin{itemize}
+			\item Set $x=x^{(t-1)}$
+			\item Let $x'$ a random value from the proposal distribution $q(x \to x’)=q(x' \mid x)$
+			\item Calculate the acceptance rate 
+			$\alpha = \min\left(1,\frac{f(x') \cdot q(x \mid x')}{f(x) \cdot q(x' \mid x)}\right)$
+			\item Update $x^{(t)}=\left\{
+			\begin{array}{ll}
+				x'        & \text{ with probability } \alpha   \\
+				x^{(t-1)} & \text{ with probability } 1-\alpha 
+			\end{array}\right.$ 
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
+
+%TODO: list ergodic properties
+%TODO: referenciar llibre WinBugs
+
+
+\textbf{Bayesian inference}.
+The Metropolis-Hastings algorithm outlined above can be directly implemented to do
+Bayesian inference by substituting $x$ by the unknow parameters, $\theta$, and 
+the target distribution $f(x)$ by the posterior distribution $f(\theta \mid y)$. Then 
+the acceptance rate becomes:
+\begin{displaymath}
+	\alpha = \min\left(1,\frac{f(\theta' \mid y) \cdot q(\theta \mid \theta')}{f(\theta \mid y) \cdot q(\theta' \mid \theta)}\right) = \min\left(1,\frac{f(y \mid \theta') \cdot f(\theta') \cdot q(\theta \mid \theta')}{f(y \mid \theta)  \cdot f(\theta) \cdot q(\theta' \mid \theta)}\right)
+\end{displaymath}
+
+
+\textbf{Random-walk Metropolis-Hastings} is a special case with symmetric proposals
+$q(\theta' \mid \theta) = q(\theta \mid \theta')$ where $q(\theta' \mid \theta) \equiv N(\theta,S)$. 
+In this case the acceptance rate depends only on the posterior distribution
+and, in the Bayesian inference Metropolis-Hastings case, becomes:
+\begin{displaymath}
+	\alpha = 
+	\min\left(1,\frac{f(y \mid \theta') \cdot f(\theta') \cdot q(\theta \mid \theta')}{f(y \mid \theta)  \cdot f(\theta) \cdot q(\theta' \mid \theta)}\right) = 
+	\min\left(1,\frac{f(y \mid \theta') \cdot f(\theta')}{f(y \mid \theta) \cdot f(\theta)}\right)
+\end{displaymath}
+
+
+\textbf{Metropolis-Hastings using logarithms}.
+The product of functions involves complicated expressions and accuracy 
+problems. For this reason it is usual to operate with logarithms. The 
+logarithmic version of the acceptance rate, in the Bayesian inference 
+Metropolis-Hastings case, becomes:
+\begin{displaymath}
+	\ln(\alpha) = \min \left( \ln(1),  
+	\ln \left(\frac{f(y \mid \theta') \cdot f(\theta')}{f(y \mid \theta) \cdot f(\theta)}\right)
+	\right) = 
+	\min \left( 0,
+	\ln f(y \mid \theta') + \ln f(\theta') - \ln f(y \mid \theta) - \ln f(\theta)
+	\right)
+\end{displaymath}
+
+
+\textbf{Single-component Metropolis-Hastings} algorithm consist in update sequentially 
+univariate components using Metropolis-Hastings steps. 
+One generated observation $\theta^{(t)}$ is obtained after updating all 
+components of the parameter vector. Generally, the sequence of updating the 
+elements of $\theta$ does not influence the convergence of the algorithm.
+We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$ 
+excluding its j-th component [ i.e., $\theta_{\backslash j} = 
+(\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
+
+
+\begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
+\label{alg:bimh}
+	\begin{enumerate}
+		\item Set initial values $\theta^{(0)}$
+		\item For $t=1,\dots,T$ repeat the following steps
+		\begin{itemize}
+			\item Set $\theta=\theta^{(t-1)}$
+			\item For $j=1,\dots,d$ repeat the following steps
+			\begin{enumerate}[label=\alph*.]
+				\item $\theta_j' = N(\theta_j,S_j)$
+				\item Calculate the logarithm of the acceptance rate \\
+				$\ln(\alpha) = \min \left( 0,
+				\ln f(y \mid \theta_j',\theta_{\backslash j}) + 
+				\ln f(\theta_j',\theta_{\backslash j}) - 
+				\ln f(y \mid \theta_j,\theta_{\backslash j}) - 
+				\ln f(\theta_j,\theta_{\backslash j})
+				\right)$
+				\item Simulate $u \sim U(0,1)$
+				\item Update $\theta_j=\left\{
+				\begin{array}{ll}
+					\theta_j' & \text{ if } \ln(u) < \ln(\alpha) \\
+					\theta_j  & \text{ otherwise }               
+				\end{array}\right.$ 
+			\end{enumerate}
+			\item Set $\theta^{(t)}=\theta$
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
+
+
+%==============================================================================
+% MODELING PORTFOLIO LOSS
+%==============================================================================
+\chapter{Modeling Portfolio Loss}
+
+\section{Portfolio Loss Distribution}
+
+Let a portfolio where we have the obligor default times
+$(T_1,\dots,T_n)$ modeled by its PD over time and a
+t-Student copula. For each obligor we know its exposure
+
+Monte Carlo, risk statistics (el, var, es), standar error estimates,
+variance reduction methods (antithetic, Latin Hypercube Sampling),
+speed-up techniques (function composition), function approximation
+(splines linear/cubic)
+
+
+%==============================================================================
+% APPENDICES
+% TODO: create its own header, numeration, etc.
+%==============================================================================
+%\appendix
+\chapter{Appendices}
+
+%------------------------------------------------------------------------------
+% COPULA BASICS
+%------------------------------------------------------------------------------
+\section{Copula Basics}
+
+It is common to use correlation as a measure of dependency between random 
+variables. In most cases, this measure does not fully reflect the structure 
+of dependence between them. The mathematical concept that does reflect the 
+structure of dependence between random variables, however, is the copula, 
+which we define below \cite{mcneil:2005}.
+
+\begin{definition}[Copula]
+	A copula function, $C$, is a multivariate distribution defined on the 
+	unit hypercube $[0,1]^d$ with standard uniform marginals. 
+	More precisely,
+	\begin{displaymath}
+		C(u_1, \dots, u_d) = Pr\{U_1 \le u_1, \dots, U_d \le u_d\}
+	\end{displaymath}
+	where $U_i \sim \text{Uniform}(0,1) \text{ for } i = 1,\dots, d$.
+\end{definition}
+
+Sklar's theorem \cite{sklar:1959} states that any multivariate 
+distribution with continuous marginals can be decomposed into the marginals and 
+a copula that reflects the structure of dependence between them. Later, we will 
+use this statement to define and simulate the t-Student copula.
+
+%%TODO: POSAR REFERENCIA
+\begin{theorem}[Sklar's theorem]
+	Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
+	Then there exists an $d$-copula $C$ such that for all $x \in \mathbb{R}^d$,
+	\begin{displaymath}
+		F(x_1,\dots,x_d) = C(F_1(x_1),\dots,F_d(x_d))
+	\end{displaymath}
+	If $F_1,\dots,F_d$ are all continuous, the $C$ is unique; otherwise $C$ is uniquely
+	determined on $\text{Ran}F_1 \times \dots \times \text{Ran}F_d$.
+	Conversely, if $C$ is an $d$-copula and $F_1,\dots,F_d$ are distributions functions,
+	then the function $F$ defined above is an $d$-dimensional distribution function
+	with margins $F_1,\dots,F_d$.
+\end{theorem}
+
+\begin{corollary}[Copula of a multivariate distribution]
+	\label{cor:cop1}
+	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+	distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
+	Then its copula is:
+	\begin{displaymath}
+		C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
+	\end{displaymath}
+\end{corollary}
+%\begin{proof}
+%This is a direct application of Sklar's theorem:
+%\begin{displaymath}
+%C(F_1(x_1), \dots, F_d(x_d)) = 
+%F(F_1^{-1}(F_1(x_1)), \dots, F_d^{-1}(F_d(x_d))) = 
+%F(x_1, \dots, x_d)
+%\end{displaymath}
+%\end{proof}
+
+\begin{corollary}[Copula simulation]
+	\label{cor:cop2}
+	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+	distribution $F$ and continuous marginals $F_1, \dots, F_n$.
+	If we have a procedure to simulate $X$ then we can simulate 
+	its copula $C$ using:
+	\begin{displaymath}
+		(U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
+	\end{displaymath}
+\end{corollary}
+
+\begin{corollary}[Multivariate distribution simulation]
+	\label{cor:cop3}
+	Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
+	and continuous marginals $F_1, \dots, F_n$. If we have a
+	procedure to simulate $C$ then we can simulate $X$ using:
+	\begin{displaymath}
+		(X_1, \dots, X_d) = (F_1^{-1}(U_1), \dots, F_d^{-1}(U_d))
+	\end{displaymath}
+	where $U_i$ are the copula components.
+\end{corollary}
+
+%TODO: posar llibres de referencia
+%TODO: eliptical copulas
+
+%------------------------------------------------------------------------------
+% MULTIVARIATE t-STUDENT DISTRIBUTION
+%------------------------------------------------------------------------------
+\section{Multivariate t-Student Distribution}
+
+\begin{definition}[Multivariate t-Student distribution]
+	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
+	(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
+	mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
+	denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
+	\begin{displaymath}
+		f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
+		\left(
+		1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
+		\right)^{-\frac{\nu+d}{2}}
+	\end{displaymath}
+	\noindent where $\Gamma$ is the gamma function, and $|\Sigma|$ is the 
+	determinant of the matrix.
+\end{definition}
+
+\begin{proposition}[Gaussian as limit of the t-Student]
+	The t-Student distribution converges to a Gaussian distribution 
+	when $\nu$ tend to $\infty$.
+	\begin{displaymath}
+		\lim_{\nu \to \infty} t_d(\nu,\mu,\Sigma) = N(\mu,\Sigma)
+	\end{displaymath}
+\end{proposition}
+
+\begin{proposition}[Multivariate t-Student characterization]
+	\label{prop:mtschar}
+	A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
+	\begin{displaymath}
+		T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
+		\quad \text{ where } Z \sim N(0,\Sigma) \text{ and } V \sim \chi_{\nu}^2
+	\end{displaymath}
+\end{proposition}
+
+\begin{proposition}[Multivariate t-Student marginals]
+	Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
+	$X_i \sim t_1(\nu,0,R_{ii})$.
+\end{proposition}
+
+\begin{definition}[t-Student copula]
+	The t-Student copula, $C_{\nu,\Sigma}^d$, is the copula of the multivariate 
+	t-Student distribution $t_d(\nu,\mu,\Sigma)$.
+\end{definition}
+
+\begin{proposition}[t-Student copula invariance]
+	The copula of $t_d(\nu,\mu,\Sigma)$ is identical of that of $t_d(\nu,\vec{0},R)$
+	where $R$ is the correlation matrix implied by the dispersion matrix $\Sigma$.
+\end{proposition}
+
+\begin{proposition}[t-Student copula density]
+	The t-Student copula, $C_{\nu,R}^d$, where $R$ is a correlation matrix,
+	has the following distribution:
+	\begin{displaymath}
+		C_{\nu,R}^d(u_1, \dots, u_d) = 
+		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
+	\end{displaymath}
+	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
+	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
+	The copula density is
+	\begin{displaymath}
+		\label{eq:density}
+		c_{\nu,R}^d(u_1,\dots,u_d) =
+		|R|^{-\frac{1}{2}} 
+		\displaystyle\frac{\Gamma{\left(\frac{\nu+d}{2}\right)}}{\Gamma{\left(\frac{\nu}{2}\right)}}
+		\displaystyle\left[ \frac{\Gamma{\left(\frac{\nu}{2}\right)}}{\Gamma{\left(\frac{\nu+1}{2}\right)}} \right]^d
+		\frac{\displaystyle\left( 1+\frac{\zeta' R^{-1} \zeta}{\nu}\right)^{-\frac{\nu+d}{2}}}{\displaystyle\prod_{i=1}^d \left( 1+\frac{\zeta_i^2}{\nu} \right)^{-\frac{\nu+1}{2}}}
+	\end{displaymath}
+	\noindent
+	where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of 
+	the t-student univariate inverse distribution functions.
+\end{proposition}
+
+%------------------------------------------------------------------------------
+% COVARIANCE BLOCK MATRIX
+%------------------------------------------------------------------------------
+\section{Covariance Block Matrix}
+
+\begin{definition}[Covariance Block Matrix]
+	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
+	\begin{itemize}
+		\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
+		\item $d=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
+		\item $M$ is a $k \times k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
+	\end{itemize}
+	when
+	\begin{itemize}
+		\item each block $B_{ij}$ is a $n_i \times n_j$ constant matrix with value $M_{ij}$
+		\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
+		\item A is definite-positive
+	\end{itemize}
+\end{definition}
+
+\begin{example}[Correlation Block Matrix]
+	\label{example1}
+	We have $6$ obligors sorted by sector. The first three belong to the 
+	banking sector, the next two belong to the energy sector 
+	and the last one belongs to the services sector. The correlations are 
+	determined by sectors, where $m_{ij}$ is the correlation between two 
+	obligors belonging to sectors $i$ and $j$. Then the correlation matrix 
+	between obligors is:
+	\begin{displaymath}
+		R=
+		\left(
+		\begin{array}{ccc|cc|c} 
+			1   & 0.5 & 0.5 & 0.2  & 0.2  & 0.1  \\ 
+			0.5 & 1   & 0.5 & 0.2  & 0.2  & 0.1  \\ 
+			0.5 & 0.5 & 1   & 0.2  & 0.2  & 0.1  \\ 
+			\hline
+			0.2 & 0.2 & 0.2 & 1    & 0.4  & 0.15 \\ 
+			0.2 & 0.2 & 0.2 & 0.4  & 1    & 0.15 \\ 
+			\hline
+			0.1 & 0.1 & 0.1 & 0.15 & 0.15 & 1    
+		\end{array} 
+		\right)
+	\end{displaymath}
+\end{example}
+
+\begin{proposition}[Covariance block matrix eigenvalues]
+	\label{prop1}
+	Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k \times k$ 
+	deflated matrix
+	\begin{displaymath}
+		G =
+		\left( \begin{array}{cccc}
+		d_1+(n_1-1)\cdot m_{11} & n_2 \cdot m_{12}        & \dots  & n_k \cdot m_{1k} \\
+		n_1\cdot m_{21}         & d_2+(n_2-1)\cdot m_{22} & \dots  & n_k \cdot m_{2k} \\
+		\vdots                  & \vdots                  & \ddots & \vdots \\
+		n_1\cdot m_{k1}         & n_2 \cdot m_{k2}        & \dots  & d_k+(n_k-1)\cdot m_{kk} \\
+		\end{array} \right)
+	\end{displaymath}
+	Then, the eigenvalues of $A$ are as follows:
+	\begin{itemize}
+		\item $d_{r}-m_{rr}$ with multiplicity $n_r-1$ for $r=1,\dots,k$.
+		\item $\lambda_r$, the eigenvalues of $G$ with multiplicity $1$.
+	\end{itemize}
+\end{proposition}
+
+\begin{corollary}
+	A covariance block matrix $B_k(n,d,M)$ is definite-positive if
+	\begin{itemize}
+		\item $d_r > m_{rr}$ for all $r=1,\dots,k$, and
+		\item the deflated matrix $G$ is definite-positive.
+	\end{itemize}
+\end{corollary}
+
+%------------------------------------------------------------------------------
+% MULTI-FACTOR GAUSSIAN MODEL
+%------------------------------------------------------------------------------
+\section{Multi-Factor Gaussian Model}
+
 \begin{definition}[Gaussian multi-factor model]
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
 	model if it can be expressed in the form:
@@ -885,389 +1366,6 @@ The following proposition clarifies this theme.
 	\end{displaymath}
 \end{proof}
 
-\begin{definition}[t-Student multi-factor model]
-	We combine the t-Student characterization (proposition\ref{prop:mtschar})
-	and the multivariate Gaussian distribution expressed as a
-	Gaussian multi-factor model to define the t-Student multi-factor
-	model:
-	\begin{displaymath}
-		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
-		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
-		\quad \text{ where } \left\{
-		\begin{array}{l}
-			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
-			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
-			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}  \\
-			Z \sim N(0,R), \text{ and $R$ a $k \times k$ correlation matrix} \\
-			w_i \in (0,1), \text{ are the factor loadings }                  \\
-			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
-			V, Z, \epsilon_i^j \text{ independents } \forall i,j             \\
-		\end{array}
-		\right.
-	\end{displaymath}
-\end{definition}
-
-By contruction, the t-Student multi-factor model is a multivariate
-t-Student distribution with a block correlation matrix. With some
-minor exceptions (see proposition \ref{prop:gmfamgb}) we can 
-state that any multivariate t-Student distribution can be expressed
-as a t-Student multi-factor model.
-
-%----------------------------------------------------------------------------------------
-% PARAMETERS ESTIMATION
-%----------------------------------------------------------------------------------------
-\chapter{Parameters Estimation}
-
-We want to estimate the t-Student multi-factor parameters 
-($\nu, w_i, R$). The available information is:
-\begin{itemize}
-	\item $N_{srt}$ = Number of obligors in sector $s$, rating $r$ and year $t$
-	\item $K_{srt}$ = Number of defaults in sector $s$, rating $r$ and year $t$
-\end{itemize}
-
-
-\begin{notation}[1-year threshold]
-	We indicate as $p_i$ the probability that i-the obligor defaults in 
-	the first period.
-	\begin{displaymath}
-		p_i = \Pr\{T_i \le 1 \text{ year}\} = F_i(1) 
-	\end{displaymath}
-\end{notation}
-
-In most cases there is no historical records disaggregated at the rating
-level. In these cases, when the historical records are $N_{st}$ and 
-$K_{st}$ without the counts by rating, we can use the following approximation:
-\begin{displaymath}
-	K_{srt} = K_{st} \cdot \frac{p_r}{\displaystyle \sum_{i \ne default} p_i}
-\end{displaymath}
-
-%TODO: posar exemple?
-
-\begin{definition}[Annual number of defaults]
-	We define the annual number of defaults by sector and rating like a
-	discrete multivariate random variable 
-	$K=(K_{11}, \dots, K_{1r}, \dots, K_{k1}, \dots, K_{kr})$ where:
-	\\
-	$K_{ij}$ = number of obligors in the sector $i$ that defaults in a
-	period of 1-year having a rating $j$ at the begining of the period.
-\end{definition}
-
-\begin{proposition}[Density of the annual number of defaults (I)]
-	The density (pdf) of the annual number of defaults, assuming that these
-	are distributed according to a multivariate block t-Student distribution
-	with $\nu$ degrees of freedom, block correlation matrix $B_k(n,1,M)$, is:
-	\begin{displaymath}
-		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr}; B_k,\nu) =                                   \\
-			                                                                                              \\
-			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr}; B_k,\nu\} = \\
-			                                                                                              \\
-			= \left( \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
-			\displaystyle                                                                                 
-			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_1)}}_{k_{11} \text{ times}}                        
-			\underbrace{\int_{t_{\nu}^{-1}(p_1)}^{\infty}}_{n_{11}-k_{11} \text{ times}}                  
-			\dots                                                                                         
-			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{kr} \text{ times}}                        
-			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{kr}-k_{kr} \text{ times}}                  
-			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n                                                        
-		\end{array}
-	\end{displaymath}
-	where $n_{ij}$ is the number of obligors in the i-th sector with the 
-	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
-	with the j-th rating, $n = \sum n_{ij}$ is the number of obligor in the
-	portfolio, $f()$ is the $t_n(\nu,\bar{R})$ pdf, $t_{\nu}^{-1}$ is the
-	inverse of the univariate t-Student cdf. The combinatorial coeficients
-	takes in account all the combinations of interchangeable obligors.
-\end{proposition}
-
-We don't known an analitical expression for the density of the annual 
-number of defaults. For this reason we try to solve the problem recurring 
-to the multi-factor formulation.
-
-%TODO: canviar subindex K per S (en el cas de sectors)
-\begin{proposition}[Conditioned density of the annual number of defaults]
-	The conditioned density (pdf) of the annual number of defaults, assuming 
-	that these are distributed according to a t-Student multi-factor model
-	with $\nu$ degrees of freedom, factor loadings $w_i$, and correlations
-	$R$ is:
-	\begin{displaymath}
-		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} | v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R) =                                   \\
-			                                                                                                                              \\
-			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr} | v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R\} = \\
-			                                                                                                                              \\
-			= \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
-			H_{ij}(v,z_i)^{k_{ij}} \cdot
-			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}
-		\end{array}
-	\end{displaymath}
-	where
-	\begin{displaymath}
-		H_{sr}(v,z_s) = \phi\left(  
-		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
-		\right)
-	\end{displaymath}
-	and $n_{ij}$ is the number of obligors in the i-th sector with the 
-	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
-	with the j-th rating, $\phi$ is the pdf of the univariate $N(0,1)$
-	, and $t_{\nu}^{-1}$ is the inverse of the univariate t-Student cdf. 
-	The combinatorial coeficients takes in account all the combinations 
-	of interchangeable obligors.
-\end{proposition}
-\begin{proof}
-	Let $H_{sr}$ the probability that an obligor belonging to sector $s$
-	with initial rating $r$ defaults conditioned to $z_s$ and $v$.
-	We use the pdf of the default times distribution (see proposition 
-	\ref{prop:dtd}) to assess it value:
-	\begin{displaymath}
-		H_{sr} = 
-		\Pr\{T_i \le 1; v, z_s\} = 
-		\Pr\{ X_i \le t_{\nu}^{-1}(F_i(1)); v, z_s\} = 
-		\Pr\{ X_i \le t_{\nu}^{-1}(p_r); v, z_s\}
-	\end{displaymath}
-	wehre $T_i$ is the i-th component of the multivariate default 
-	times, $F_i$ is PD over time of the i-th obligor (that has 
-	rating r), and $X_i$ is the i-th component of the multivariate 
-	t-Student. Now express $X$ in the multi-factor form:
-	\begin{displaymath}
-		H_{sr} = \Pr \left\{ 
-		\sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon\right)
-		\le t_{\nu}^{-1}(p_r)
-		\right\}
-	\end{displaymath}
-	Because $v$ and $z_s$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
-	\begin{displaymath}
-		H_{sr}(v,z_s) = \phi\left(  
-		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
-		\right)
-	\end{displaymath}
-	Once the probability of default by one obligor, the probability of 
-	observing $k$ failures in a set of $n$ independent obligors follows 
-	a binomial distribution:
-	\begin{displaymath}
-		\text{Bin}(k;n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
-	\end{displaymath}
-	The product for all sectors and ratings gives the stated formula. 
-	We can do the product because $v$ and $z_s$ are fixed.
-\end{proof}
-
-\begin{corollary}[Density of the annual number of defaults (II)]
-	We can express the density of the annual number of defaults using 
-	the conditioned density:
-	\begin{displaymath}
-		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} ; \nu, w_1,\dots,w_k, R) =                \\
-			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
-			\psi(v) \cdot \phi(z_1,\dots,z_k) \cdot                                                   
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} | v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R) 
-			\ud z_1 \dots \ud z_k \ud v                                                               
-		\end{array}
-	\end{displaymath}
-	where $\psi$ is the $\chi_{\nu}^2$ pdf, and $\phi$ is the $N(0,R)$ pdf.
-\end{corollary}
-
-\begin{definition}[Conditioned likelihood]
-Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
-and $K^t$ are vectors representing the number of obligors and defaulted 
-obligors in each sector-rating bucket. We define the conditional 
-likelihood of these observations as:
-\begin{displaymath}
-	\begin{array}{l}
-		L(\nu,\vec{w},R | v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T) = \\
-		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t | v^t,\vec{z^t}; \nu,\vec{w},R) = \\
-		\displaystyle
-		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
-		\binom{n_{ij}^t}{k_{ij}^t} \cdot
-		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
-		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
-	\end{array}
-\end{displaymath}
-Note that the parameters to be infered are $\nu,\vec{w},R$ and the
-latent variables $v^1,\vec{z^1},\dots,v^T,\vec{z^T}$.
-\end{definition}
-
-\begin{proposition}[Parameters estimation]
-	We can estimate the parameters of the conditioned likelihood using
-	the Bayessian framework and Metropolis-Hastings algorithm 
-	(see algorithm \ref{alg:bimh}) with the following rules:
-	\begin{itemize}
-		\item parameters $\theta \equiv \{ \nu,w_1,\dots,w_k,R,v^1,\vec{z^1},\dots,v^T,\vec{z^T}\}$
-		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
-		\item likelihood $f(y|\theta) \equiv L(\nu,\vec{w},R | v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T)$
-		\item proposal distributions $q(\theta_j|\theta_j') \sim N(\theta,\sigma_j)$
-		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
-		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
-		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
-		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
-		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
-	\end{itemize}
-	For the prior distributions of $r_{ij}$ we select the one that 
-	maximize the probability to observe the latent variables. The 
-	pdf of the distribution $\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
-	%hyperparameters, hyperdistributions
-	\begin{displaymath}
-		f(r_{ij}) = f(r; i,j,R) = \frac
-		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
-		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
-	\end{displaymath}
-	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
-	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
-	replaced by $r$. We don't need to know the limits of the integral
-	because this is constant and cancels into the M-H algorithm.
-\end{proposition}
-
-\begin{proposition}[Robbins-Monro process]
-CAL MILLORAR MOLT AIXO. 
-proceso de Robbins-Monro tal como se indica en [¿24?].
-	\begin{displaymath}
-		\sigma_{i+1} = \left\{
-		\begin{array}{ll}
-			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
-			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
-		\end{array}
-		\right.
-	\end{displaymath}
-	we take an arbitrary starting value $\sigma_0$.
-\end{proposition}
-
-\section{Bayessian Inference}\index{Bayessian Inference}
-
-Bayesian statistics differ from the classical statistical 
-theory since all unknown parameters are considered as random 
-variables. We want calculate the distribution $f(\theta|y)$ 
-of the parameters $\theta$ given the observed data $y$. 
-According to the Bayes theorem, this can be written as:
-\begin{displaymath}
-	f(\theta|y) = \frac{f(y|\theta) \cdot f(\theta)}{f(y)} \propto f(y|\theta) \cdot f(\theta)
-\end{displaymath}
-
-We call \emph{posterior distribution} to $f(\theta|y)$ and 
-\emph{prior distribution} to $f(y)$. This prior distribution 
-expresses the information available to the researcher before 
-any data are involved in the statistical analysis. $f(y|\theta)$ 
-is the probability of observing $y$ given $\theta$, and is also 
-known as the likelihood.
-\begin{displaymath}
-	f(y|\theta) = \prod_{i=1}^n f(y_i|\theta)
-\end{displaymath}
-
-
-\section{Metropolis-Hastings}\index{Metropolis-Hastings}
-
-\begin{algorithm}[Metropolis-Hastings]
-	Let us assume a target distribution $f(x)$ from which we wish to generate a 
-	sample of size $T$. The Metropolis-Hastings algorithm can be described by the 
-	following iterative steps; where $x^{(t)}$ is the vector of generated values 
-	in the $t$-th iteration of the algorithm:
-	\begin{enumerate}
-		\item Set initial values $x^{(0)}$
-		\item For $t=1,\dots,T$ repeat the following steps
-		\begin{itemize}
-			\item Set $x=x^{(t-1)}$
-			\item Let $x'$ a random value from the proposal distribution $q(x \to x’)=q(x'|x)$
-			\item Calculate the acceptance rate 
-			$\alpha = \min\left(1,\frac{f(x') \cdot q(x|x')}{f(x) \cdot q(x'|x)}\right)$
-			\item Update $x^{(t)}=\left\{
-			\begin{array}{ll}
-				x'        & \text{ with probability } \alpha   \\
-				x^{(t-1)} & \text{ with probability } 1-\alpha 
-			\end{array}\right.$ 
-		\end{itemize}
-	\end{enumerate}
-\end{algorithm}
-
-%TODO: list ergodic properties
-%TODO: referenciar llibre WinBugs
-
-
-\textbf{Bayesian inference}.
-The Metropolis-Hastings algorithm outlined above can be directly implemented to do
-Bayesian inference by substituting $x$ by the unknow parameters, $\theta$, and 
-the target distribution $f(x)$ by the posterior distribution $f(\theta|y)$. Then 
-the acceptance rate becomes:
-\begin{displaymath}
-	\alpha = \min\left(1,\frac{f(\theta'|y) \cdot q(\theta|\theta')}{f(\theta|y) \cdot q(\theta'|\theta)}\right) = \min\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right)
-\end{displaymath}
-
-
-\textbf{Random-walk Metropolis-Hastings} is a special case with symmetric proposals
-$q(\theta'|\theta) = q(\theta|\theta')$ where $q(\theta'|\theta) \equiv N(\theta,S)$. 
-In this case the acceptance rate depends only on the posterior distribution
-and, in the Bayesian inference Metropolis-Hastings case, becomes:
-\begin{displaymath}
-	\alpha = 
-	\min\left(1,\frac{f(y|\theta') \cdot f(\theta') \cdot q(\theta|\theta')}{f(y|\theta)  \cdot f(\theta) \cdot q(\theta'|\theta)}\right) = 
-	\min\left(1,\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta) \cdot f(\theta)}\right)
-\end{displaymath}
-
-
-\textbf{Metropolis-Hastings using logarithms}.
-The product of functions involves complicated expressions and accuracy 
-problems. For this reason it is usual to operate with logarithms. The 
-logarithmic version of the acceptance rate, in the Bayesian inference 
-Metropolis-Hastings case, becomes:
-\begin{displaymath}
-	\ln(\alpha) = \min \left( \ln(1),  
-	\ln \left(\frac{f(y|\theta') \cdot f(\theta')}{f(y|\theta) \cdot f(\theta)}\right)
-	\right) = 
-	\min \left( 0,
-	\ln f(y|\theta') + \ln f(\theta') - \ln f(y|\theta) - \ln f(\theta)
-	\right)
-\end{displaymath}
-
-
-\textbf{Single-component Metropolis-Hastings} algorithm consist in update sequentially 
-univariate components using Metropolis-Hastings steps. 
-One generated observation $\theta^{(t)}$ is obtained after updating all 
-components of the parameter vector. Generally, the sequence of updating the 
-elements of $\theta$ does not influence the convergence of the algorithm.
-We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$ 
-excluding its j-th component [ i.e., $\theta_{\backslash j} = 
-(\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
-
-
-\begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
-\label{alg:bimh}
-	\begin{enumerate}
-		\item Set initial values $\theta^{(0)}$
-		\item For $t=1,\dots,T$ repeat the following steps
-		\begin{itemize}
-			\item Set $\theta=\theta^{(t-1)}$
-			\item For $j=1,\dots,d$ repeat the following steps
-			\begin{enumerate}[label=\alph*.]
-				\item $\theta_j' = N(\theta_j,S_j)$
-				\item Calculate the logarithm of the acceptance rate \\
-				$\ln(\alpha) = \min \left( 0,
-				\ln f(y|\theta_j',\theta_{\backslash j}) + 
-				\ln f(\theta_j',\theta_{\backslash j}) - 
-				\ln f(y|\theta_j,\theta_{\backslash j}) - 
-				\ln f(\theta_j,\theta_{\backslash j})
-				\right)$
-				\item Simulate $u \sim U(0,1)$
-				\item Update $\theta_j=\left\{
-				\begin{array}{ll}
-					\theta_j' & \text{ if } \ln(u) < \ln(\alpha) \\
-					\theta_j  & \text{ otherwise }               
-				\end{array}\right.$ 
-			\end{enumerate}
-			\item Set $\theta^{(t)}=\theta$
-		\end{itemize}
-	\end{enumerate}
-\end{algorithm}
-
-
-%----------------------------------------------------------------------------------------
-% MODELING PORTFOLIO LOSS
-%----------------------------------------------------------------------------------------
-\chapter{Modeling Portfolio Loss}
-
-\section{Portfolio Loss Distribution}
-
-Let a portfolio where we have the obligor default times
-$(T_1,\dots,T_n)$ modeled by its PD over time and a
-t-Student copula. For each obligor we know its exposure
-
-OLALA
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
