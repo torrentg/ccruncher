@@ -54,7 +54,7 @@
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 % Bibliography
-%\usepackage{hyperref} %added by GTG
+\usepackage{hyperref} %added by GTG
 \usepackage{csquotes} %added by GTG
 \usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
 \addbibresource{bibliography.bib} % BibTeX bibliography file
@@ -120,6 +120,7 @@ of this license visit
 \url{http://creativecommons.org/licenses/by-sa/3.0/}.
 We have invested a lot of time and effort in creating CCruncher, 
 please cite it when using it for credit risk analysis.
+\index{license}
 
 % To cite CCruncher in publications use:
 % \begin{adjustwidth}{2.5em}{0pt}
@@ -158,11 +159,11 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-CCruncher is a computer software to calculate the credit risk of a portfolio. 
+CCruncher\index{CCruncher} is a computer software to calculate the credit risk of a portfolio. 
 This document details the concepts, model and algorithms used in it.
-CCruncher is developed and mantained by Tatine, %\href{http://www.tatine.es}{Tatine}, 
-a quantitative consulting firm located at Barcelona (Spain). As much computer 
-software as documentation are licensed with open-source type licenses. Take 
+CCruncher is developed and mantained by \href{http://www.tatine.es}{Tatine}\index{Tatine}, 
+a quantitative consulting firm located at Barcelona\index{Barcelona} (Spain). As much computer 
+software as documentation are licensed with open-source\index{open-source} type licenses\index{license}. Take 
 advantage of them but always remember to mention the source. You can download 
 the latest version of this document and the computer software from the 
 CCruncher's site, \url{http://www.ccruncher.net}. 
@@ -322,9 +323,10 @@ portfolio credit risk is determined by calculating some measures
 (eg. mean, percentile) on this distribution.
 
 \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
-\cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997}
-\cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001}
-\cite{meissner:2006}, \cite{bis:2006}
+\cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997},
+\cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001},
+\cite{meissner:2006}, \cite{bis:2006}, \cite{bluhm:2002},
+\cite{frey:2001}, \cite{gossl:2005}, \cite{tarashev:2010},
 
 
 %==============================================================================
@@ -958,7 +960,8 @@ speed-up techniques (function composition), function approximation
 % APPENDICES
 % TODO: create its own header, numeration, etc.
 %==============================================================================
-%\appendix
+\appendix
+\chapterimage{chapter_head_1.pdf}
 \chapter{Appendices}
 
 %------------------------------------------------------------------------------
