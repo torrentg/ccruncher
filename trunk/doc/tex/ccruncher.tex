@@ -142,7 +142,7 @@ please cite it when using it for credit risk analysis.
 % \end{verbatim}
 % \end{adjustwidth}
 
-%\noindent \textit{First printing, March 2013} % Printing/edition date
+%TODO: set Acknowledgements paragraph
 
 %==============================================================================
 % TABLE OF CONTENTS
@@ -159,22 +159,63 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-CCruncher\index{CCruncher} is a computer software to calculate the credit risk of a portfolio. 
-This document details the concepts, model and algorithms used in it.
-CCruncher is developed and mantained by \href{http://www.tatine.es}{Tatine}\index{Tatine}, 
-a quantitative consulting firm located at Barcelona\index{Barcelona} (Spain). As much computer 
-software as documentation are licensed with open-source\index{open-source} type licenses\index{license}. Take 
-advantage of them but always remember to mention the source. You can download 
-the latest version of this document and the computer software from the 
-CCruncher's site, \url{http://www.ccruncher.net}. 
+CCruncher\index{CCruncher} is a computer software to calculate the credit 
+risk of a portfolio. This document details the concepts, model and algorithms 
+used in it. CCruncher is developed and mantained by 
+\href{http://www.tatine.es}{Tatine}\index{Tatine}, a quantitative consulting 
+firm located at Barcelona\index{Barcelona} (Spain). As much computer 
+software as documentation are licensed with open-source\index{open-source} 
+type licenses\index{license}. Take advantage of them but always remember to 
+mention the source. You can download the latest version of this document and 
+the computer software from the CCruncher's site, \url{http://www.ccruncher.net}.
 
 Portfolio credit risk try to respond to questions like: what is my 
 expected loss for the next year?, how much could I lose in a really 
 bad year?. There are several approaches to answer these questions. 
 All of them try to do the same: obtain the portfolio loss distribution
-and measure the credit risk using a set of selected statistics. They 
-differ on how to obtain this distribution. Let's start by defining 
-what we mean by portfolio loss.
+and measure the credit risk using a set of selected statistics (eg. mean, 
+quantile). They differ on how to obtain this distribution. Here we present 
+briefly the two most used approaches \cite{crouhy:2000} \cite{bluhm:2002}.
+
+\textbf{Actuarial approach}. This approach considere that the distribution of 
+the number of defaults is the proper way to interpret the observed defaults.
+Compounding defaults frequency with the obligors exposures gives the portfolio 
+loss distribution that can be approximated by Panjer\index{Panjer} recursion, 
+or by the FFT method. The main representative of this approach is the 
+CreditRisk+\index{CreditRisk+} model \cite{creditrisk+:1997}.
+
+\textbf{Merton based approach}. This approach considere that the obligors 
+probabilities of default are the proper way to explain the observed defaults.
+The sum of the obligors exposures weighted by the probability of default 
+gives the portfolio loss distribution. This distribution is approximated 
+using the Monte Carlo method. The main representative of this approach is the 
+CreditMetrics\texttrademark\index{CreditMetrics\texttrademark} \cite{cmetrics:1997} 
+model. Other representatives are the KMV\index{KMV} model, or the copula 
+approach \index{copula approach} \cite{li:2000}.
+
+Both approaches gives similar results \cite{koyluoglu:1998}.  
+There are other approaches (eg. econometric) not mentioned here due to 
+their minority status. By far, the most prolific approach is the Merton
+model. CCruncher implements the copula approach, a Merton model version.
+
+\textbf{Copula approach}. This approach considere that the obligors default 
+times are the proper way to explain the observed defaults. The dependence 
+between these default times is modeled using a copula. The sum of the 
+obligors exposures at the default times gives the portfolio loss distribution.
+David X. Li introduced this approach in the famous document
+\emph{On Default Correlation: A Copula Function Approach} \cite{li:2000}
+which stated that the CreditMetrics\texttrademark model can be interpreted 
+in the copula approach context and that has a Gaussian copula.
+
+%------------------------------------------------------------------------------
+% CREDIT RISK MEASURES
+%------------------------------------------------------------------------------
+\section{Credit Risk Measures}
+
+The portfolio credit risk is measured considering some statistics on 
+the portfolio loss distribution. Let's start by defining what we mean 
+by portfolio loss and then we define the most used measures. Figure 
+\ref{fig:lossdistr} ilustrates the concepts exposed in this section.
 
 \begin{definition}[Portfolio Loss at time $T$]
 	The Portfolio Loss at time $T$ is the cumulated losses in the time 
@@ -193,19 +234,8 @@ what we mean by portfolio loss.
 	\centering
 	\includegraphics[width=12cm]{creditvar}
 	\caption{Portfolio Loss Distribution at time $T$}
+	\label{fig:lossdistr}
 \end{figure}
-
-The portfolio credit risk is measured considering some statistics on 
-the portfolio loss distribution. In the following section we define
-the more usuals.
-
-%------------------------------------------------------------------------------
-% CREDIT RISK MEASURES
-%------------------------------------------------------------------------------
-\section{Credit Risk Measures}
-
-The portfolio credit risk is measured considering some statistics on 
-the portfolio loss distribution. Next we define the most used.
 
 \begin{definition}[Expected Loss (EL)]
 	The Expected Loss of a portfolio at time horizon $T$ is the 
@@ -214,6 +244,11 @@ the portfolio loss distribution. Next we define the most used.
 		\text{EL}(L_T) = E(L_T)
 	\end{displaymath}
 \end{definition}
+
+The Expected Loss responds to the question 'what is my expected loss for 
+the next year?'. The Value At Risk \cite{var:jorion} is the most commonly 
+used risk measure to respond the question 'how much could I lose in a really 
+bad year?'.
 
 \begin{definition}[Value At Risk (VAR)]
 	The Value At Risk of a portfolio at time horizon $T$ and 
@@ -224,6 +259,11 @@ the portfolio loss distribution. Next we define the most used.
 	\end{displaymath}
 	where $F(x)=\Pr\{L_T \le x\}$ is the portfolio loss distribution at time $T$.
 \end{definition}
+
+VAR is not a distance because it does not fulfil the sub-additive property 
+\cite{var:varbad}, $\text{VAR}(A+B) \nleq \text{VAR}(A)+\text{VAR}(B)$. 
+Similar to VAR, Expected Shortfall is a consistent risk measure 
+\cite{var:eshortfall}.
 
 \begin{definition}[Expected Shortfall (ES)]
 	The Expected Shortfall of a portfolio at time horizon $T$ and 
@@ -237,6 +277,15 @@ the portfolio loss distribution. Next we define the most used.
 % BASIC CONCEPTS
 %------------------------------------------------------------------------------
 \section{Basic Concepts}
+
+Here we define the key concepts used to model the credit risk.
+They are those of the Basel II accords \cite{basel2:2006}, the 
+de-facto international financial risk regulation framework. These
+directives are strongly influenced by the Merton based approach.
+We emphasize the temporal dimension because it is a key point in 
+further development. From now establish that the time unit is the 
+year in order to simplify the exposition without loss of generality
+(in fact, the time unit used internally by CCruncher is the day).
 
 \begin{definition}[Probability of Default (PD)]
 	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
@@ -316,17 +365,19 @@ applied to this bond.
 \end{figure}
 \end{example}
 
-
-The CCruncher's purpose is to 
-obtain the portfolio loss distribution at a fixed time horizon. The 
-portfolio credit risk is determined by calculating some measures 
-(eg. mean, percentile) on this distribution.
+%------------------------------------------------------------------------------
+% CONTENT ORGANIZATION
+%------------------------------------------------------------------------------
+\section{Content Organization}
 
 \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
 \cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997},
 \cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001},
 \cite{meissner:2006}, \cite{bis:2006}, \cite{bluhm:2002},
 \cite{frey:2001}, \cite{gossl:2005}, \cite{tarashev:2010},
+\cite{creditrisk+:1997}, \cite{crouhy:2000}, \cite{koyluoglu:1998},
+\cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
+\cite{basel2:2006}
 
 
 %==============================================================================
@@ -597,9 +648,9 @@ state that any multivariate t-Student distribution can be expressed
 as a t-Student multi-factor model.
 
 %==============================================================================
-% ESTIMATING DEPENDENCE PARAMETERS
+% ESTIMATING PARAMETERS
 %==============================================================================
-\chapter{Estimating Dependence Parameters}
+\chapter{Estimating Parameters}
 
 We want to estimate the t-Student multi-factor parameters 
 ($\nu, w_i, R$). The available information is:
