@@ -277,6 +277,7 @@ Similar to VAR, Expected Shortfall is a consistent risk measure
 % BASIC CONCEPTS
 %------------------------------------------------------------------------------
 \section{Basic Concepts}
+\label{basic_concepts}
 
 Here we define the key concepts used to model the credit risk.
 They are those of the Basel II accords \cite{basel2:2006}, the 
@@ -378,7 +379,7 @@ applied to this bond.
 \cite{creditrisk+:1997}, \cite{crouhy:2000}, \cite{koyluoglu:1998},
 \cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
 \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
-\cite{long:2012}
+\cite{long:2012}, \cite{kreinin:2001}
 
 
 %==============================================================================
@@ -386,28 +387,166 @@ applied to this bond.
 %==============================================================================
 \chapter{Modeling Default Times}
 
-\section{Default Times Distribution}\index{Default Times Distribution}
-
-We assume that obligors default times $(T_1, \dots, T_n)$ are modeled 
-by a multivariate distribution $F$ such that:
+The copula approach considere that the obligors default times are the 
+proper way to explain the observed defaults. This default times 
+$(T_1, \dots, T_n)$ are modeled by a multivariate distribution $F$ 
+such that:
 \begin{displaymath}
 	F(t_1, \dots, t_n) = \Pr \{T_1 \le t_1, \dots, T_n \le t_n\}
 \end{displaymath}
 where $n$ is the number of obligors in the portfolio, $T_i$ is the time 
 (in years) when the i-th obligor defaults, and $F$ is the multivariate
-distribution. Applying the Sklar's theorem to the above distribution 
-we obtain:
+default times distribution. Applying the Sklar's theorem to the above 
+distribution we obtain:
 \begin{displaymath}
-	F(t_1, \dots, t_n) = C\left(F_1(t_1), \dots, F_n(t_n)\right) 
+	F(t_1, \dots, t_n) = 
+	C\left(\text{PD}_1(t_1), \dots, \text{PD}_n(t_n)\right)
 \end{displaymath}
-where $F_i(t) = \Pr\{T_i < t\}$ are the marginal distributions, 
-and $C$ is the underlying copula.
+where marginals $\text{PD}_i(t) = \Pr\{T_i \le t\}$ are the Probability 
+of Default of the i-th obligor defined in section \ref{basic_concepts}, 
+and $C$ is a copula. There are several proposals on the copula to be 
+used [15]. CCruncher considere that it is a t-Student copula for the 
+following reasons:
 
-\subsection{Default Times Marginals}\index{Default Times Distribution!Default Times Marginals}
+%TODO: refs pending
+\begin{itemize}
+	\item is determined by the correlation matrix (elliptical). 
+	\item is symmetrical (elliptical), allowing to 
+	apply the antithetic reduction variance technique in the Monte Carlo 
+	simulation.
+	\item allows a wide range of dependence structures through parameter $\nu$.
+	\item it exhibits tail dependence when $\nu \ne \infty$.
+	\item exist an efficient simulation algorithm.
+	\item the Gaussiana case ($\nu = \infty$) is the copula used by 
+	CreditMetrics\texttrademark.
+	\item it can be expressed as a multi-factor model.
+\end{itemize}
 
-Marginal distributions are the individual probabilities of default 
-(PD) over time. Each obligor has its own PD depending on its rating,
-sector, etc. In the following section we infere the PD over time from 
+We assume that exist a reduced number $k$ of industrial sectors and that
+each obligor belong to a unique sector. Also that default times dependence
+between obligors only depends on the involved industrials sectors. With 
+these assumptions, if we sort the obligors by sector, the obligors default 
+times correlation matrix, $\bar{R}$, is a $n {\times} n$ correlation block 
+matrix $B_k(\vec{n},\vec{1},R)$. See appendix \ref{ap:cbm} for more 
+information about covariance block matrices. 
+\begin{displaymath}
+	\bar{R} = B_k(\vec{n},\vec{1},R) = 
+	\left(
+	\begin{array}{ccccccc}
+		1         & \dots  & \rho_{11} &        & \rho_{1k} & \dots  & \rho_{1k} \\
+		\vdots    & \ddots & \vdots    & \dots  & \vdots    &        & \vdots    \\
+		\rho_{11} & \dots  & 1         &        & \rho_{1k} & \dots  & \rho_{1k} \\
+		
+		          & \vdots &           & \ddots &           & \vdots &           \\
+		
+		\rho_{1k} & \dots  & \rho_{1k} &        & 1         & \dots  & \rho_{kk} \\
+		\vdots    &        & \vdots    & \dots  & \vdots    & \ddots & \vdots    \\
+		\rho_{1k} & \dots  & \rho_{1k} &        & \rho_{kk} & \dots  & 1         \\
+	\end{array}
+	\right)
+	\qquad 
+	\begin{array}{l}
+		R = 
+		\left(
+		\begin{array}{ccc}
+		\rho_{11} & \dots  & \rho_{1k} \\
+		\vdots    & \ddots & \vdots    \\
+		\rho_{1k} & \dots  & \rho_{kk}
+		\end{array}
+		\right) \\
+		\\
+		\vec{n} = (n_1,\dots,n_k)
+	\end{array}
+\end{displaymath}
+
+Up to this point we have clarified that the multivariate default times 
+distribution $F$ has marginals $PD_i$ and a t-Student copula, 
+$C_{\nu,\bar{R}}^n$ with a correlation block matrix
+$\bar{R} = B_k(\vec{n},\vec{1},R)$.
+The current formulation is not satisfactory because the dimension 
+$n {\times} n$ of the correlation matrix causes that any operation 
+(eg. simulate random value or estimate the parameters) can not be
+done in practice when $n$ is large. To avoid this problem, we reformulate
+$F$ in terms of the multivariate t-Student distribution expressed as a 
+multi-factor model.
+
+\begin{proposition}[Default Times Distribution]
+	\label{prop:dtd}
+	Let $T=(T_1,\dots,T_n)$ the obligors default times with marginals 
+	$\text{PD}_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$. Then, its 
+	distribution $F$ is:
+	\begin{displaymath}
+		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n))\right)
+	\end{displaymath}
+	where $H$ is the cdf of the multivariate t-Student distribution 
+	$t_n(\nu,0,\bar{R})$, and $t_\nu^{-1}$ is the inverse of the univariate 
+	t-Student distribution $t_1(\nu,0,1)$.
+\end{proposition}
+\begin{proof}
+	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
+	distribution $t_n(\nu,0,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
+	the components of the copula $C_{\nu,\bar{R}}^n$.
+	\begin{displaymath}
+		\begin{array}{rl}
+			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} =                                    \\
+			                   & \text{we use the corollary \ref{cor:cop3}: }                                   
+			(T_1,\dots,T_n) = (\text{PD}_1^{-1}(U_1),\dots,\text{PD}_n^{-1}(U_n)) \\
+			=                  & \Pr\{ \text{PD}_1^{-1}(U_1) \le t_1 , \dots , \text{PD}_n^{-1}(U_n) \le t_n \} =               \\
+			                   & \text{we use the corollary \ref{cor:cop2}: }                                   
+			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
+			=                  & \Pr\{ \text{PD}_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , \text{PD}_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
+			=                  & \Pr\{ t_\nu(X_1) \le \text{PD}_1(t_1) , \dots , t_\nu(X_n) \le \text{PD}_n(t_n) \} =           \\
+			=                  & \Pr\{ X_1 \le t_\nu^{-1}(\text{PD}_1(t_1)) , \dots , X_n \le t_\nu^{-1}(\text{PD}_n(t_n)) \} = \\
+			=                  & H(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n)))                           \\
+		\end{array}
+	\end{displaymath}
+\end{proof}
+
+We expressed $F$ in terms of the t-Student distribution but we continue to 
+have the problem of the dimension of the matrix $\bar{R}$. The next step is
+to express $t_n(\nu,0,\bar{R})$ as a multi-factor model.
+By contruction, the t-Student multi-factor model is a multivariate
+t-Student distribution with a block correlation matrix. With some
+minor exceptions (see proposition \ref{prop:gmfamgb}) we can 
+state that any multivariate t-Student distribution can be expressed
+as a t-Student multi-factor model.
+
+\begin{definition}[t-Student multi-factor model]
+	We combine the t-Student characterization (proposition\ref{prop:mtschar})
+	and the multivariate Gaussian distribution expressed as a
+	Gaussian multi-factor model to define the t-Student multi-factor
+	model:
+	\begin{displaymath}
+		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
+		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
+		\quad \text{ where } \left\{
+		\begin{array}{l}
+			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
+			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
+			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}  \\
+			Z \sim N(0,R), \text{ and $R$ a $k {\times} k$ correlation matrix} \\
+			w_i \in (0,1), \text{ are the factor loadings }                  \\
+			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
+			V, Z, \epsilon_i^j \text{ independents } \forall i,j             \\
+		\end{array}
+		\right.
+	\end{displaymath}
+\end{definition}
+
+
+%TODO: implications (fixed correlations, economic cicle)
+
+%------------------------------------------------------------------------------
+% DETERMINING THE PROBABILITIES OF DEFAULT
+%------------------------------------------------------------------------------
+\section{Determining the Probabilities of Default}
+
+Each obligor has its own PD depending on its rating and sector. These
+PD can be infered from information available in the Entity.
+
+\subsection{From the transition matrix}
+
+In the following section we infere the PD over time from 
 the transition matrix. This approach implies that transition 
 probabilities remains contants over time undermining the economic 
 cicle effect. In practice, it is equivalent to consider an averaged 
@@ -477,11 +616,11 @@ Sometimes, the scaled transition matrix does not satisfy the Markov conditions
 (the row sum is equal to one, and all elements are non-negatives). In this case, 
 we need to transform this matrix to the relevant Markov matrix. This process is 
 called regularization. Below is exposed the QOM regularization algorithm 
-extracted from XXX.
+extracted from \cite{kreinin:2001}.
 
 \begin{algorithm}[Transition matrix regularization]
 	The QOM (Quasi-Optimization of the root Matrix) algorithm regularizes a 
-	transition matrix, $m_{ij}$, of dimension $n$ row by row. The steps to 
+	$n {\times} n$ transition matrix $M$, row by row. The steps to 
 	regularize the $i$-th row are:
 	\begin{enumerate}
 		\item Compute the difference between the row sum and one. 
@@ -489,7 +628,7 @@ extracted from XXX.
 		\begin{displaymath}
 			m_{ij} \ne 0 
 			\Longrightarrow 
-			m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{j=1}^{n} m_{ij} - 1\right)
+			m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{k=1}^{n} m_{ik} - 1\right)
 		\end{displaymath}
 		\item If all the row elements are non-negative and sum to one, 
 		then stop, as the row is regularized.
@@ -500,7 +639,6 @@ extracted from XXX.
 	steps, where $m \le n$ (Merkoulovitch 2000). The final matrix is a regularized
 	matrix. 
 \end{algorithm}
-
 
 \begin{proposition}[PD over time derived from transition matrix]
 	Let $M_T$ a transition matrix, then the PD over time, or marginal default
@@ -513,9 +651,12 @@ extracted from XXX.
 	index of the \emph{defaulted} rating, $r_n$.
 \end{proposition}
 
-In some circumstances there is no transition matrix but it is only available
-a single value representing the T-period PD of each rating, $p_i$. In these 
-cases we can considerer the following diagonal transition matrix:
+\subsection{From a single value}
+
+In some circumstances the transition matrix is not available, and we only have
+the probabilities of default at T-years for each rating, $p_1,\dots,p_n$. In 
+the absence of more information, we can considerer the following diagonal 
+transition matrix:
 \begin{displaymath}
 	M_T = \left(
 	\begin{array}{cccc}
@@ -526,127 +667,18 @@ cases we can considerer the following diagonal transition matrix:
 	\end{array}
 	\right)
 \end{displaymath}
-This case is equivalent to considere that the PD over time, or marginal default
-time distribution, for an obligor with rating $r_j$ is an exponential 
-distribution:
+This case is equivalent to considere that the PD over time for an obligor 
+with rating $r_j$ is an exponential distribution:
 \begin{displaymath}
 	\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
 	\quad \text{ where } \lambda = -\ln(1-p_j)
 \end{displaymath}
 
+%------------------------------------------------------------------------------
+% DEFAULT TIMES COPULA
+%------------------------------------------------------------------------------
+\section{Default Times Copula}
 
-\subsection{Default Times Copula}\index{Default Times Distribution!Default Times Copula}
-
-There are several proposals on the copula of the default times
-distribution such as the Gaussian copula, the t-Student copula, 
-the double-t copula or the Clayton copula [15]. We select the
-t-Student copula for the following reasons:
-
-\begin{itemize}
-	\item because it is an elliptical copula it is determined by the correlation matrix [??].
-	\item because it is an elliptical copula it is symmetrical, allowing to 
-	apply the antithetic reduction variance technique in the Monte Carlo 
-	simulation.
-	\item allows a wide range of dependence structures through parameter $\nu$.
-	\item when $\nu \ne \infty$ it exhibits tail dependence.
-	\item exist a simulation algorithm easy to implement for higher dimensions.
-	\item the Gaussiana case ($\nu = \infty$) is the implicit copula used by 
-	CreditMetrics\texttrademark, the de-facto standard.
-	\item it is the underlying copula in the multi-factor model.
-\end{itemize}
-
-We assume that exist a reduced number $k$ of industrial sectors and that
-each obligor belong to a unique sector. Default times dependence between 
-obligors only depends on the involved industrials sectors. With these
-assumptions, if we sort the obligors by sector, the default times
-correlation matrix $R$ is a matrix composed by blocks with $1$'s in the 
-diagonal.
-\begin{displaymath}
-	R =
-	\left(
-	\begin{array}{ccccccc}
-		1          & \dots  & \rho_{1,1} &        & \rho_{1,m} & \dots  & \rho_{1,m} \\
-		\vdots     & \ddots & \vdots     & \dots  & \vdots     &        & \vdots     \\
-		\rho_{1,1} & \dots  & 1          &        & \rho_{1,m} & \dots  & \rho_{1,m} \\
-		
-		           & \vdots &            & \ddots &            & \vdots &            \\
-		
-		\rho_{1,m} & \dots  & \rho_{1,m} &        & 1          & \dots  & \rho_{m,m} \\
-		\vdots     &        & \vdots     & \dots  & \vdots     & \ddots & \vdots     \\
-		\rho_{1,m} & \dots  & \rho_{1,m} &        & \rho_{m,m} & \dots  & 1          \\
-	\end{array}
-	\right)
-\end{displaymath}
-
-Work directly with the t-Student copula is not practical. For this reason 
-we express the distribution of default times according to the Student-t 
-distribution instead of the t-Student copula.
-
-\begin{proposition}[Default Times Distribution]
-	\label{prop:dtd}
-	Let $T=(T_1,\dots,T_n)$ the obligors default times with a t-Student copula 
-	$C_{\nu,R}^d$, and marginals $F_i$. 
-	Then, the default times distribution $F$ is:
-	\begin{displaymath}
-		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
-	\end{displaymath}
-	where $F$ is the cdf of the multivariate default times, $H$ is the cdf of 
-	the multivariate t-Student distribution $t_d(\nu,0,R)$, $t_\nu^{-1}$ is the 
-	inverse of the univariate t-Student distribution $t_1(\nu,0,1)$, and $F_i$ 
-	is the default probabilities over time of the i-th obligor.
-\end{proposition}
-\begin{proof}
-	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_{\nu,R}^d$, and we use $(U_1,\dots,U_n)$ to represent
-	the components of the copula $C_{\nu,R}^d$.
-	\begin{displaymath}
-		\begin{array}{rl}
-			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} =                                    \\
-			                   & \text{we use the corollary \ref{cor:cop3}: }                                   
-			(T_1,\dots,T_n) = (F_1^{-1}(U_1),\dots,F_n^{-1}(U_n)) \\
-			=                  & \Pr\{ F_1^{-1}(U_1) \le t_1 , \dots , F_n^{-1}(U_n) \le t_n \} =               \\
-			                   & \text{we use the corollary \ref{cor:cop2}: }                                   
-			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
-			=                  & \Pr\{ F_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , F_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
-			=                  & \Pr\{ t_\nu(X_1) \le F_1(t_1) , \dots , t_\nu(X_n) \le F_n(t_n) \} =           \\
-			=                  & \Pr\{ X_1 \le t_\nu^{-1}(F_1(t_1)) , \dots , X_n \le t_\nu^{-1}(F_n(t_n)) \} = \\
-			=                  & H(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n)))                           \\
-		\end{array}
-	\end{displaymath}
-\end{proof}
-
-Working with the multivariate t-Student distribution with a correlation
-matrix of dimension $n \times n$ is not practical to simulate it or for
-estimate the parameters. For this reasons we introduce the multi-factor 
-models.
-
-\begin{definition}[t-Student multi-factor model]
-	We combine the t-Student characterization (proposition\ref{prop:mtschar})
-	and the multivariate Gaussian distribution expressed as a
-	Gaussian multi-factor model to define the t-Student multi-factor
-	model:
-	\begin{displaymath}
-		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
-		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
-		\quad \text{ where } \left\{
-		\begin{array}{l}
-			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
-			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
-			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}  \\
-			Z \sim N(0,R), \text{ and $R$ a $k \times k$ correlation matrix} \\
-			w_i \in (0,1), \text{ are the factor loadings }                  \\
-			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
-			V, Z, \epsilon_i^j \text{ independents } \forall i,j             \\
-		\end{array}
-		\right.
-	\end{displaymath}
-\end{definition}
-
-By contruction, the t-Student multi-factor model is a multivariate
-t-Student distribution with a block correlation matrix. With some
-minor exceptions (see proposition \ref{prop:gmfamgb}) we can 
-state that any multivariate t-Student distribution can be expressed
-as a t-Student multi-factor model.
 
 %==============================================================================
 % ESTIMATING PARAMETERS
@@ -1044,6 +1076,7 @@ use this statement to define and simulate the t-Student copula.
 
 %%TODO: POSAR REFERENCIA
 \begin{theorem}[Sklar's theorem]
+	\label{thm:sklar}
 	Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
 	Then there exists an $d$-copula $C$ such that for all $x \in \mathbb{R}^d$,
 	\begin{displaymath}
@@ -1178,17 +1211,18 @@ use this statement to define and simulate the t-Student copula.
 % COVARIANCE BLOCK MATRIX
 %------------------------------------------------------------------------------
 \section{Covariance Block Matrix}
+\label{ap:cbm}
 
 \begin{definition}[Covariance Block Matrix]
 	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
 	\begin{itemize}
 		\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
 		\item $d=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
-		\item $M$ is a $k \times k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
+		\item $M$ is a $k {\times} k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
 	\end{itemize}
 	when
 	\begin{itemize}
-		\item each block $B_{ij}$ is a $n_i \times n_j$ constant matrix with value $M_{ij}$
+		\item each block $B_{ij}$ is a $n_i {\times} n_j$ constant matrix with value $m_{ij}$
 		\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
 		\item A is definite-positive
 	\end{itemize}
@@ -1221,7 +1255,7 @@ use this statement to define and simulate the t-Student copula.
 
 \begin{proposition}[Covariance block matrix eigenvalues]
 	\label{prop1}
-	Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k \times k$ 
+	Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k {\times} k$ 
 	deflated matrix
 	\begin{displaymath}
 		G =
@@ -1261,7 +1295,7 @@ use this statement to define and simulate the t-Student copula.
 		\begin{array}{l}
 			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
 			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
-			Z \sim N(0,R), \text{ and $R$ a $k \times k$ correlation matrix} \\
+			Z \sim N(0,R), \text{ and $R$ a $k {\times} k$ correlation matrix} \\
 			w_i \in (0,1), \text{ are the factor loadings }                  \\
 			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
 			Z, \epsilon_i^j \text{ independents } \forall i,j                \\
@@ -1273,9 +1307,9 @@ use this statement to define and simulate the t-Student copula.
 \begin{proposition}[The Gaussian multi-factor model is a Gaussian distribution]
 	\label{prop:gmfigs}
 	The Gaussian multi-factor model defined by factor loadings 
-	$w_1,\dots,w_k$, the $k \times k$ correlation matrix $R$, and
+	$w_1,\dots,w_k$, the $k {\times} k$ correlation matrix $R$, and
 	$n_1,\dots,n_k$ with $\sum_{i=1}^k n_i = n$ is a 
-	multivariate Gaussian distribution with a $n \times n$ correlation
+	multivariate Gaussian distribution with a $n {\times} n$ correlation
 	matrix $\bar{R}$ composed by blocks with values
 	$\bar{R}_{i,j} = w_a \cdot w_b \cdot R_{a,b}$ where $a$ and $b$ 
 	are the blocks of the indexes $i$ and $j$.
