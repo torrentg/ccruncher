@@ -113,3 +113,112 @@ title3d(
 rgl.postscript("bond_lgd.pdf", fmt="pdf", drawText=TRUE)
 
 
+# ================================================
+# R script to create PDs from transition matrix
+# ================================================
+
+ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
+
+# 1-year transition matrix
+A = matrix(ncol=8, nrow=8, data=c(
+  90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
+  8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
+  0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
+  0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
+  0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
+  0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
+  0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
+  0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
+)/100)
+
+P = eigen(A12)$vectors
+D = diag(eigen(A)$values)
+# A = P %*% D %*% solve(P)
+
+# 1-month transition matrix
+A1 = P %*% (D^(1/12)) %*% solve(P)
+#round(A1*100, digits=4)
+
+qom <- function(A)
+{
+  n = nrow(A)
+  for(i in 1:n) {
+		repeat {
+			s = (sum(A[i,])-1)/n
+			for(j in 1:n) {
+				if (A[i,j] != 0) {
+					A[i,j] = A[i,j] - s
+				}
+			}
+			if(sum(A[i,]<0)==0 & abs(sum(A[i,])-1)<1e-14) {
+				break;
+			} else {
+				A[i,A[i,]<0]=0
+			}
+		}
+	}
+	return(A)
+}
+
+A2 = qom(A1)
+#round(A2*100,digits=4)
+
+n = nrow(A1)
+A3 = A2 %*% A2
+A3 = A3 %*% A3 %*% A3
+A3 = A3 %*% A3
+A4 = diag(n)
+PD = matrix(nrow=100+1, ncol=n)
+PD[1,] = 0
+PD[1,n] = 1
+for(t in 1:100) {
+	A4 = A4 %*% A3
+	PD[t+1,] = A4[,n]
+}
+pdf(file="pdftm1.pdf")
+matplot(0:100, PD, type='l', xlab='Time in years', ylab='PD', lty=1:8, col=1:6); 
+legend(80, 0.35, ratings, cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+
+PD = matrix(nrow=120+1, ncol=n)
+PD[1,] = 0
+PD[1,n] = 1
+A4 = diag(n)
+for(t in 1:(12*10)) {
+	A4 = A4 %*% A2
+	PD[t+1,] = A4[,n]
+}
+pdf(file="pdftm2.pdf")
+matplot(0:120, PD[1:121,1:7], type='l', xlab='Time in months', ylab='PD', lty=1:8, col=1:6); 
+legend(5, 0.65, ratings[1:7], cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+
+t = 0:100
+p = A3[,8]
+lambda = -log(1-p)
+PD = matrix(nrow=100+1, ncol=n)
+for(i in 1:n) {
+	PD[,i] = 1-exp(-lambda[i]*t)
+}
+PD[1,8] = 1
+pdf(file="pdfsv1.pdf")
+matplot(0:100, PD, type='l', xlab='Time in years', ylab='PD', lty=1:8, col=1:6); 
+legend(80, 0.55, ratings, cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+
+
+t = 0:120
+PD = matrix(nrow=121, ncol=n)
+for(i in 1:n) {
+	PD[,i] = 1-exp(-lambda[i]*(t/12))
+}
+PD[1,8] = 1
+pdf(file="pdfsv2.pdf")
+matplot(t, PD[,1:7], type='l', xlab='Time in months', ylab='PD', lty=1:8, col=1:6); 
+legend(5, 0.85, ratings[1:7], cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+

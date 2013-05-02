@@ -48,6 +48,10 @@ clean:
 	rm -f Pictures/bond_pd2.pdf
 	rm -f Pictures/bond_ead.pdf
 	rm -f Pictures/bond_lgd.pdf
+	rm -f Pictures/pdftm1.pdf
+	rm -f Pictures/pdftm2.pdf
+	rm -f Pictures/pdfsv1.pdf
+	rm -f Pictures/pdfsv2.pdf
 
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
 

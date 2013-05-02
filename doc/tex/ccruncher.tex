@@ -427,10 +427,10 @@ each obligor belong to a unique sector. Also that default times dependence
 between obligors only depends on the involved industrials sectors. With 
 these assumptions, if we sort the obligors by sector, the obligors default 
 times correlation matrix, $\bar{R}$, is a $n {\times} n$ correlation block 
-matrix $B_k(\vec{n},\vec{1},R)$. See appendix \ref{ap:cbm} for more 
+matrix $B_k(\vec{n},\vec{1},M)$. See appendix \ref{ap:cbm} for more 
 information about covariance block matrices. 
 \begin{displaymath}
-	\bar{R} = B_k(\vec{n},\vec{1},R) = 
+	\bar{R} = B_k(\vec{n},\vec{1},M) = 
 	\left(
 	\begin{array}{ccccccc}
 		1         & \dots  & \rho_{11} &        & \rho_{1k} & \dots  & \rho_{1k} \\
@@ -446,7 +446,7 @@ information about covariance block matrices.
 	\right)
 	\qquad 
 	\begin{array}{l}
-		R = 
+		M = 
 		\left(
 		\begin{array}{ccc}
 		\rho_{11} & \dots  & \rho_{1k} \\
@@ -462,7 +462,7 @@ information about covariance block matrices.
 Up to this point we have clarified that the multivariate default times 
 distribution $F$ has marginals $PD_i$ and a t-Student copula, 
 $C_{\nu,\bar{R}}^n$ with a correlation block matrix
-$\bar{R} = B_k(\vec{n},\vec{1},R)$.
+$\bar{R} = B_k(\vec{n},\vec{1},M)$.
 The current formulation is not satisfactory because the dimension 
 $n {\times} n$ of the correlation matrix causes that any operation 
 (eg. simulate random value or estimate the parameters) can not be
@@ -511,10 +511,10 @@ minor exceptions (see proposition \ref{prop:gmfamgb}) we can
 state that any multivariate t-Student distribution can be expressed
 as a t-Student multi-factor model.
 
-\begin{definition}[t-Student multi-factor model]
-	We combine the t-Student characterization (proposition\ref{prop:mtschar})
-	and the multivariate Gaussian distribution expressed as a
-	Gaussian multi-factor model to define the t-Student multi-factor
+\begin{proposition}
+	A random vector $(X_1,\dots,X_n)$ with a multivariate t-Student 
+	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
+	a correlation block matrix can be writed as a t-Student multi-factor 
 	model:
 	\begin{displaymath}
 		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
@@ -531,8 +531,27 @@ as a t-Student multi-factor model.
 		\end{array}
 		\right.
 	\end{displaymath}
-\end{definition}
+	where $w_1,\dots,w_k, R$ satisfy:
+	\begin{displaymath}
+		\begin{array}{l}
+			R_{ii} = 1 \quad i = 1,\dots,k \\
+			M_{ij} = w_i \cdot w_j \cdot R_{ij} \quad \forall i,j
+		\end{array}
+	\end{displaymath}
+\end{proposition}
 
+\begin{proof}
+	We use the t-Student characterization (proposition\ref{prop:mtschar}),
+	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
+	$Z \sim N(0,R)$ expressing $Z$ as a Gaussian multi-factor model 
+	(definition \ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
+	values comes from proposition \ref{prop:gmfigs}.
+\end{proof}
+
+Note that  we expressed the multi-factor model in terms of the factor 
+loadings and the correlation matrix, instead of the the more concise 
+covariance matrix. We do this because the factor loadings have a treatment 
+distinct than correlations in the estimation of parameters.
 
 %TODO: implications (fixed correlations, economic cicle)
 
@@ -571,6 +590,7 @@ economic cicle.
 \end{definition}
 
 \begin{example}
+	\label{ex:1ytm}
 	The following table shows a transition matrix in which the probability that 
 	a obligor with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
 	Note that last column contains the 1-year default probabilities for each 
@@ -641,6 +661,7 @@ extracted from \cite{kreinin:2001}.
 \end{algorithm}
 
 \begin{proposition}[PD over time derived from transition matrix]
+	\label{prop:pdftm}
 	Let $M_T$ a transition matrix, then the PD over time, or marginal default
 	time distribution, for an obligor with rating $r_j$ is:
 	\begin{displaymath}
@@ -650,6 +671,60 @@ extracted from \cite{kreinin:2001}.
 	rating, $M_t$ is the transition matrix scaled to time $t$, and $n$ is the 
 	index of the \emph{defaulted} rating, $r_n$.
 \end{proposition}
+
+\begin{example}
+	\label{ex:pdftm}
+	We derive the PD for each rating induced by the transition matrix exposed
+	in the example \ref{ex:1ytm}. As first step, we scale the 1-year transition 
+	matrix $M_1$ to the 1-month transition matrix $M_{\frac{1}{12}}$.
+	\begin{displaymath}
+		M_{\frac{1}{12}} = \left(
+		\small
+		\begin{array}{cccccccc}
+			99.1972 &  0.7588 &  0.0320 &  0.0020 &  0.0112 & -0.0011 & -0.0001 &   0.0000 \\
+			 0.0635 & 99.1744 &  0.7083 &  0.0392 &  0.0015 &  0.0120 &  0.0018 &  -0.0007 \\
+			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 & -0.0001 &   0.0042 \\
+			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
+			 0.0027 &  0.0113 &  0.0396 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
+			-0.0007 &  0.0098 &  0.0196 &  0.0111 &  0.6447 & 98.4443 &  0.4463 &   0.4240 \\
+			 0.0233 & -0.0023 &  0.0170 &  0.1287 &  0.2166 &  1.2298 & 96.4213 &   1.9667 \\
+			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}
+	We observe that $M_{\frac{1}{12}}$ is not a regular matrix due to negative
+	values. We apply the QOM algorithm to regularize it.
+	\begin{displaymath}
+		\bar{M}_{\frac{1}{12}} = \left(
+		\small
+		\begin{array}{cccccccc}
+			99.1969 &  0.7586 &  0.0317 &  0.0018 &  0.0110 &  0.0000 &  0.0000 &   0.0000 \\
+			 0.0634 & 99.1744 &  0.7082 &  0.0391 &  0.0014 &  0.0119 &  0.0017 &   0.0000 \\
+			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 &  0.0000 &   0.0041 \\
+			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
+			 0.0027 &  0.0112 &  0.0395 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
+			 0.0000 &  0.0099 &  0.0197 &  0.0111 &  0.6447 & 98.4444 &  0.4463 &   0.4240 \\
+			 0.0228 &  0.0000 &  0.0165 &  0.1282 &  0.2161 &  1.2293 & 96.4208 &   1.9663 \\
+			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}
+	The 1-year regularized transition matrix is $\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$.
+	Finally we use the proposition \ref{prop:pdftm} to determine the 
+	PD function for each rating. Results are displayed in figure 
+	\ref{fig:pdftm}.
+\end{example}
+\begin{figure}[ht]
+	\centering
+	\subfloat[Probability of Default]{
+		\includegraphics[width=7cm]{pdftm1}
+	}
+	\subfloat[Probability of Default (zoom)]{
+		\includegraphics[width=7cm]{pdftm2}
+	}
+	\caption{PDs derived from transition matrix}
+	\label{fig:pdftm}
+\end{figure}
 
 \subsection{From a single value}
 
@@ -674,10 +749,45 @@ with rating $r_j$ is an exponential distribution:
 	\quad \text{ where } \lambda = -\ln(1-p_j)
 \end{displaymath}
 
-%------------------------------------------------------------------------------
-% DEFAULT TIMES COPULA
-%------------------------------------------------------------------------------
-\section{Default Times Copula}
+\begin{example}
+	Suppose that we only know the annual probability of default for each
+	rating: $\text{PD}_{AAA}(1)=0.0009$, $\text{PD}_{AA}(1)=0.0077$, 
+	$\text{PD}_{A}(1)=0.0600$, $\text{PD}_{BBB}(1)=0.1800$, 
+	$\text{PD}_{BB}(1)=1.0599$, $\text{PD}_{B}(1)=5.2003$, 
+	$\text{PD}_{CCC}(1)=19.7846$, $\text{PD}_{default}(1)=100$.
+	In fact, these values are the $\text{PD}_i(1)$ of the annual
+	regularized matrix of the example \ref{ex:pdftm}. In this case, 
+	we considere the transition matrix:
+	\begin{displaymath}
+		M_1 = \left(
+		\small
+		\begin{array}{cccccccc}
+		99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
+		0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
+		0 & 0 & 99.9400 & 0 & 0 & 0 & 0 & 0.0600 \\
+		0 & 0 & 0 & 99.8200 & 0 & 0 & 0 & 0.1800 \\
+		0 & 0 & 0 & 0 & 98.9401 & 0 & 0 & 1.0599 \\
+		0 & 0 & 0 & 0 & 0 & 94.7997 & 0 & 5.2003 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 80.2154 & 19.7846 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}
+	To determine the PD function for each rating we can use 
+	the proposition \ref{prop:pdftm} or the exponential distribution.
+	Results are displayed in figure \ref{fig:pdfsv}.
+\end{example}
+\begin{figure}[ht]
+	\centering
+	\subfloat[Probability of Default]{
+		\includegraphics[width=7cm]{pdfsv1}
+	}
+	\subfloat[Probability of Default (zoom)]{
+		\includegraphics[width=7cm]{pdfsv2}
+	}
+	\caption{PDs derived from single values}
+	\label{fig:pdfsv}
+\end{figure}
 
 
 %==============================================================================
@@ -1287,6 +1397,7 @@ use this statement to define and simulate the t-Student copula.
 \section{Multi-Factor Gaussian Model}
 
 \begin{definition}[Gaussian multi-factor model]
+\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
 	model if it can be expressed in the form:
 	\begin{displaymath}
