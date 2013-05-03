@@ -298,7 +298,11 @@ year in order to simplify the exposition without loss of generality
 	\end{displaymath}
 	where $T_i$ is a random variable that represents the default
 	time of the i-th obligor. Note that the PD defined in this way 
-	is the cdf of $T_i$.
+	is the cdf of $T_i$. We indicate as $p_i$ the probability that 
+	i-the obligor defaults in the time range $[0,1]$.
+	\begin{displaymath}
+		p_i = \Pr\{T_i \le 1\} = \text{PD}_i(1) 
+	\end{displaymath}
 \end{definition}
 
 \begin{definition}[Exposure At Default (EAD)]
@@ -562,15 +566,8 @@ distinct than correlations in the estimation of parameters.
 \section{Determining the Probabilities of Default}
 
 Each obligor has its own PD depending on its rating and sector. These
-PD can be infered from information available in the Entity.
-
-\subsection{From the transition matrix}
-
-In the following section we infere the PD over time from 
-the transition matrix. This approach implies that transition 
-probabilities remains contants over time undermining the economic 
-cicle effect. In practice, it is equivalent to consider an averaged 
-economic cicle.
+PDs can be infered from the transition matrix, the object that contains
+the relationship between ratings.
 
 \begin{definition}[Transition matrix] 
 	The $T$-years transition matrix gives the probability of changing 
@@ -587,7 +584,7 @@ economic cicle.
 		m_{i,j} = P(r_i \to r_j;T)
 	\end{displaymath}
 	where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
-	obligor with rating $r_i$ changes to rating $r_j$ in $T$ years.
+	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
 \end{definition}
 
 \begin{example}
@@ -597,7 +594,7 @@ economic cicle.
 	rating $AA$ changes to rating $B$ in one year is $0.14\%$. Note that last 
 	column contains the 1-year default probabilities for each rating, and the 
 	last row corresponds to the \emph{defaulted} rating.
-	
+
 	\begin{figure}[!hb]
 		\begin{center}
 			\begin{tabular}[]{l|rrrrrrrr}
@@ -617,6 +614,125 @@ economic cicle.
 		\end{center}
 	\end{figure}
 \end{example}
+
+Note that row sums are $1$ and that if we have two consecutives transition 
+matrices, $M_{T_1}$ and $M_{T_2}$, then we can derive 
+$M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$. 
+Caution, this operation is not commutative.
+
+\subsection{From annual PDs}
+
+In some circumstances the complete transition matrix is not available, 
+and we only have the probabilities of default at T-years for each rating, 
+$p_1,\dots,p_n$. In the absence of more information, we can considerer 
+the following diagonal transition matrix:
+\begin{displaymath}
+	M_T = \left(
+	\begin{array}{cccc}
+		1-p_1  & \dots  & 0         & p_1     \\
+		\vdots & \ddots & \vdots    & \vdots  \\
+		0      & \dots  & 1-p_{n-1} & p_{n-1} \\
+		0      & \dots  & 0         & 1       \\
+	\end{array}
+	\right)
+\end{displaymath}
+
+We can derive the PDs from this matrix applying the following 
+section, or we can considere the continuous case stated in the 
+proposition that follows. Both cases gives similar results.
+
+\begin{proposition}
+A diagonal transition matrix in the continuous case leads to
+default times with exponential distributions:
+\begin{displaymath}
+	\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
+	\quad \text{ where } \lambda = -\ln(1-p_j)
+\end{displaymath}
+\end{proposition}
+\begin{proof}
+	We note that ratings are detached from each other. 
+	For this reason we do the proof for a generic rating and we
+	use the subscripts to indicate the time, not the rating.
+	Let $p_t$ the probability of default in the time range $[0,t]$ and
+	$q_t=1-p_t$ the probability of survival. We express $p_1$ in term
+	of $p_{\frac{1}{n}}$ using the geometric serie formula.
+	\begin{displaymath}
+		p_1 = p_{\frac{1}{n}} \cdot q_{\frac{1}{n}}^{(n-1)} + 
+			p_{\frac{1}{n}} \cdot q_{\frac{1}{n}}^{(n-2)} + \dots + 
+			p_{\frac{1}{n}} \cdot q_{\frac{1}{n}} + 
+			p_{\frac{1}{n}}
+		= p_{\frac{1}{n}} \cdot \frac{1-q_{\frac{1}{n}}^n}{1-q_{\frac{1}{n}}}
+		= 1 - q_{\frac{1}{n}}^n
+		= 1- (1-p_{\frac{1}{n}})^n
+	\end{displaymath}
+	This gives:
+	\begin{displaymath}
+		p_{\frac{1}{n}} = 1-(1-p_1)^{\frac{1}{n}}
+	\end{displaymath}
+	We use the limit definition of the logarithm function 
+	($\ln(x)=\lim_{n \to \infty} n \cdot(x^{\frac{1}{n}}-1)$) to
+	found the following limit:
+	\begin{displaymath}
+		\lim_{n \to \infty} n \cdot p_{\frac{1}{n}} = 
+		\lim_{n \to \infty} -n \cdot ((1-p_1)^{\frac{1}{n}} -1) =
+		-\ln(1-p_1) = \lambda
+	\end{displaymath}
+	We use this equivalence and the limit definition of the 
+	exponential function to determine the survival probability:
+	\begin{displaymath}
+		(1-p_1)^t 
+		= \left( \lim_{n \to \infty} (1-p_{\frac{1}{n}})^n \right)^t
+		= \left(\lim_{n \to \infty} (1-\frac{\lambda}{n})^n \right)^t
+		= e^{-\lambda \cdot t}
+	\end{displaymath}
+\end{proof}
+
+\begin{example}
+	\label{ex:pdfsv}
+	Supose that we only know the ratings annual probabilities of default 
+	and that these values are those from the 1-year regularized transition 
+	matrix of example \ref{ex:1ytm}. In this case, our diagonal transition 
+	matrix is:
+	\begin{displaymath}
+		M_1 = \left(
+		\small
+		\begin{array}{cccccccc}
+		99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
+		0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
+		0 & 0 & 99.9400 & 0 & 0 & 0 & 0 & 0.0600 \\
+		0 & 0 & 0 & 99.8200 & 0 & 0 & 0 & 0.1800 \\
+		0 & 0 & 0 & 0 & 98.9401 & 0 & 0 & 1.0599 \\
+		0 & 0 & 0 & 0 & 0 & 94.7997 & 0 & 5.2003 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 80.2154 & 19.7846 \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}
+	In this example we determine the PDs function for each rating using 
+	the proposition \ref{prop:pdftm}, that is, considering that default
+	times are exponential distributions. Results are displayed in figure 
+	\ref{fig:pdfsv}. Observe that values around $T=1$ are similar to those 
+	of example \ref{ex:pdftm}, but they differ as they move away from this.
+\end{example}
+\begin{figure}[ht]
+	\centering
+	\subfloat[Probability of Default]{
+		\includegraphics[width=7cm]{pdfsv1}
+	}
+	\subfloat[Probability of Default (zoom)]{
+		\includegraphics[width=7cm]{pdfsv2}
+	}
+	\caption{PDs derived from annual PDs}
+	\label{fig:pdfsv}
+\end{figure}
+
+\subsection{From transition matrix}
+
+In the transition matrix is available, then we can infere the PD over 
+time from it. This approach implies that transition 
+probabilities remains contants over time undermining the economic 
+cicle effect. In practice, it is equivalent to consider an averaged 
+economic cicle.
 
 \begin{proposition}[Scaled transition matrix]
 	The transition matrix can be scaled in time by using the following rules:
@@ -662,10 +778,10 @@ extracted from \cite{kreinin:2001}.
 	matrix. 
 \end{algorithm}
 
-\begin{proposition}[PD over time derived from transition matrix]
+\begin{proposition}[PDs derived from transition matrix]
 	\label{prop:pdftm}
-	Let $M_T$ a transition matrix, then the PD over time, or marginal default
-	time distribution, for an obligor with rating $r_j$ is:
+	Let $M_T$ a transition matrix, then the PD for an obligor with 
+	rating $r_j$ is:
 	\begin{displaymath}
 		\Pr\{T_. \le t\} = \left( M_t \right)_{j, n}
 	\end{displaymath}
@@ -728,68 +844,20 @@ extracted from \cite{kreinin:2001}.
 	\label{fig:pdftm}
 \end{figure}
 
-\subsection{From a single value}
+\subsection{From advanced transition matrix}
 
-In some circumstances the transition matrix is not available, and we only have
-the probabilities of default at T-years for each rating, $p_1,\dots,p_n$. In 
-the absence of more information, we can considerer the following diagonal 
-transition matrix:
+There are financial institutions that may have models to forecast 
+the transition matrix using some economic indicators like GDP
+or inflation. We note as $M_T(t)$ the T-period transition matrix
+at time $t$. This matrix depends of the forecasted indicators at 
+$t$ in the form $M_T(\theta_1(t),\dots,\theta_k(t))$. In these 
+cases, the PDs functions can be obtained composing successively
+the transition matrices for each T-period.
 \begin{displaymath}
-	M_T = \left(
-	\begin{array}{cccc}
-		1-p_1  & \dots  & 0         & p_1     \\
-		\vdots & \ddots & \vdots    & \vdots  \\
-		0      & \dots  & 1-p_{n-1} & p_{n-1} \\
-		0      & \dots  & 0         & 1       \\
-	\end{array}
-	\right)
+\Pr\{T_. \le k \cdot T\} = \left( \prod_{i=1}^{k} M_T(i) \right)_{j, n}
 \end{displaymath}
-This case is equivalent to considere that the PD over time for an obligor 
-with rating $r_j$ is an exponential distribution:
-\begin{displaymath}
-	\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
-	\quad \text{ where } \lambda = -\ln(1-p_j)
-\end{displaymath}
-
-\begin{example}
-	Suppose that we only know the annual probability of default for each
-	rating: $\text{PD}_{AAA}(1)=0.0009$, $\text{PD}_{AA}(1)=0.0077$, 
-	$\text{PD}_{A}(1)=0.0600$, $\text{PD}_{BBB}(1)=0.1800$, 
-	$\text{PD}_{BB}(1)=1.0599$, $\text{PD}_{B}(1)=5.2003$, 
-	$\text{PD}_{CCC}(1)=19.7846$, $\text{PD}_{default}(1)=100$.
-	In fact, these values are the $\text{PD}_i(1)$ of the annual
-	regularized matrix of the example \ref{ex:pdftm}. In this case, 
-	we considere the transition matrix:
-	\begin{displaymath}
-		M_1 = \left(
-		\small
-		\begin{array}{cccccccc}
-		99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
-		0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
-		0 & 0 & 99.9400 & 0 & 0 & 0 & 0 & 0.0600 \\
-		0 & 0 & 0 & 99.8200 & 0 & 0 & 0 & 0.1800 \\
-		0 & 0 & 0 & 0 & 98.9401 & 0 & 0 & 1.0599 \\
-		0 & 0 & 0 & 0 & 0 & 94.7997 & 0 & 5.2003 \\
-		0 & 0 & 0 & 0 & 0 & 0 & 80.2154 & 19.7846 \\
-		0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
-		\end{array}
-		\right)
-	\end{displaymath}
-	To determine the PD function for each rating we can use 
-	the proposition \ref{prop:pdftm} or the exponential distribution.
-	Results are displayed in figure \ref{fig:pdfsv}.
-\end{example}
-\begin{figure}[ht]
-	\centering
-	\subfloat[Probability of Default]{
-		\includegraphics[width=7cm]{pdfsv1}
-	}
-	\subfloat[Probability of Default (zoom)]{
-		\includegraphics[width=7cm]{pdfsv2}
-	}
-	\caption{PDs derived from single values}
-	\label{fig:pdfsv}
-\end{figure}
+where $T_.$ is the obligor default time, $j$ is the index of the obligor's
+rating, and $n$ is the index of the \emph{defaulted} rating, $r_n$.
 
 
 %==============================================================================
@@ -797,79 +865,106 @@ with rating $r_j$ is an exponential distribution:
 %==============================================================================
 \chapter{Estimating Parameters}
 
-We want to estimate the t-Student multi-factor parameters 
-($\nu, w_i, R$). The available information is:
-\begin{itemize}
-	\item $N_{sr}^t$ = Number of obligors in sector $s$, rating $r$ and year $t$
-	\item $K_{sr}^t$ = Number of defaults in sector $s$, rating $r$ and year $t$
-\end{itemize}
-
-
-\begin{notation}[1-year threshold]
-	We indicate as $p_i$ the probability that i-the obligor defaults in 
-	the first period.
-	\begin{displaymath}
-		p_i = \Pr\{T_i \le 1 \text{ year}\} = F_i(1) 
-	\end{displaymath}
-\end{notation}
-
-In most cases there is no historical records disaggregated at the rating
-level. In these cases, when the historical records are $N_{s}^t$ and 
-$K_{s}^t$ without the counts by rating, we can use the following approximation:
-\begin{displaymath}
-	K_{sr}^t = K_{s}^t \cdot \frac{p_r}{\displaystyle \sum_{i \ne default} p_i}
-\end{displaymath}
-
-%TODO: posar exemple?
+We want to estimate parameters of the multivariate default times model.
+All of them are known except those related to t-Student copula. The 
+parameters to be estimated are the degrees of freddom, $\nu$ and the 
+obligors correlation matrix, $\bar{R}$. Equivalently, considering the 
+multi-factor formulation, the parameters to be estimated are the degrees
+of freedom $\nu$, the factor loadings $w_i$, and the factors correlation
+$R$.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating like a
 	discrete multivariate random variable $K=(K_{11}, \dots, K_{sr})$ where:
 	\begin{displaymath}
-	    \begin{array}{l}
-	    N_{ij} = \left\{
-	    \begin{array}{c}
-	        \text{number of obligors in the sector $i$ in a period of} \\
-        	\text{1-year having a rating $j$ at the begining of the period}
-        \end{array}
-        \right\}
-        \\
-        \\
-	    K_{ij} = \left\{
-	    \begin{array}{c}
-	        \text{number of defaults in the sector $i$ in a period of} \\
-        	\text{1-year having a rating $j$ at the begining of the period}
-        \end{array}
-        \right\}
-        \end{array}
+		K_{ij} = \left\{
+		\begin{array}{c}
+			\text{number of defaults in the sector $i$ in a period of} \\
+			\text{1-year having a rating $j$ at the begining of the period}
+		\end{array}
+		\right\}
 	\end{displaymath}
+	taking in account that:
+	\begin{displaymath}
+		N_{ij} = \left\{
+		\begin{array}{c}
+			\text{number of obligors in the sector $i$ in a period of} \\
+			\text{1-year having a rating $j$ at the begining of the period}
+		\end{array}
+		\right\}
+	\end{displaymath}
+	Note that $K_{ij} \le N_{ij}$.
+	When the subscript only has one index ($K_{i}$ and $N_{i}$) this means 
+	that values are aggregated by sector. We use the superscript to indicate 
+	the observation at time $t$. Thus, $K_{ij}^t$ and $N_{ij}^t$ are the 
+	corresponding number of obligors and defaults by sector $i$ and rating 
+	$j$ observed at year $t$. 
 \end{definition}
+
+In most cases there is no historical records disaggregated at the rating
+level. In these cases, when the historical records are 
+$\left\{N_{s}^t, K_{s}^t \right\}_{t=1,\dots,T}$ without the counts by 
+rating, we can use the following approximation:
+\begin{displaymath}
+	K_{ij}^t = K_{i}^t \cdot \frac{\lambda_{ij}^t \cdot p_j}{\displaystyle \sum \lambda_{ik}^t \cdot p_k}
+	\quad \text{ where }
+	\lambda_{ij}^t = \frac{\text{\# obligors sector $i$ rating $j$}}{\text{\# obligors sector $i$}}
+\end{displaymath}
+Values $\lambda_{ij}^t$ depends on the economic cicle and requires to
+be estimated based on historical data.
+
+\begin{example}[]
+We have two sectors, $S1$ and $S2$, and four ratings, $A, B, C, D$ where 
+$D$ is the default status. We have collected the following observations:
+\begin{figure}[h!]
+	\centering
+	\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
+	\cline{3-8} \cline{10-15}
+	& & \multicolumn{6}{|c|}{N (\# obligors)} & & \multicolumn{6}{|c|}{K (\# defaults)} \\
+	\cline{3-8} \cline{10-15}
+	& & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} & & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\multicolumn{1}{|c|}{Year} & & A & B & C & A & B & C & & A & B & C & A & B & C \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\multicolumn{1}{|c|}{1} & & 529 & 932 & 293 & 685 & 1249 & 206 & & 3 & 12 & 15 & 3 & 25 & 10 \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\multicolumn{1}{|c|}{2} & & 522 & 977 & 278 & 638 & 1315 & 194 & & 1 & 18 & 13 & 7 & 28 & 8 \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\multicolumn{1}{|c|}{20} & & 492 & 962 & 310 & 602 & 1227 & 183 & & 6 & 28 & 21 & 4 & 31 & 16 \\
+	\cline{1-1} \cline{3-8} \cline{10-15}
+	\end{tabular}
+	\caption{Example of historical records}
+\end{figure}
+\end{example}
+
 
 \begin{proposition}[Density of the annual number of defaults (I)]
 	The density (pdf) of the annual number of defaults, assuming that these
 	are distributed according to a multivariate block t-Student distribution
-	with $\nu$ degrees of freedom, block correlation matrix $B_k(n,1,M)$, is:
+	with $\nu$ degrees of freedom, and $n {\times} n$ block correlation matrix 
+	$\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
 	\begin{displaymath}
 		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr}; B_k,\nu) =                                   \\
-			                                                                                              \\
-			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr}; B_k,\nu\} = \\
-			                                                                                              \\
-			= \left( \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
+			K(k_{11},\dots,k_{sr}; \nu, \bar{R}) = 
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr}; \nu, \bar{R}\} = \\
+			\\
+			= \left( \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
 			\displaystyle                                                                                 
 			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_1)}}_{k_{11} \text{ times}}                        
 			\underbrace{\int_{t_{\nu}^{-1}(p_1)}^{\infty}}_{n_{11}-k_{11} \text{ times}}                  
 			\dots                                                                                         
-			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{kr} \text{ times}}                        
-			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{kr}-k_{kr} \text{ times}}                  
+			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{sr} \text{ times}}                        
+			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{sr}-k_{sr} \text{ times}}                  
 			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n                                                        
 		\end{array}
 	\end{displaymath}
 	where $n_{ij}$ is the number of obligors in the i-th sector with the 
 	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
 	with the j-th rating, $n = \sum n_{ij}$ is the number of obligor in the
-	portfolio, $f()$ is the $t_n(\nu,\bar{R})$ pdf, $t_{\nu}^{-1}$ is the
-	inverse of the univariate t-Student cdf. The combinatorial coeficients
+	portfolio, $f()$ is the pdf of $t_n(\nu,\bar{R})$, and $t_{\nu}^{-1}$ is 
+	the inverse of the univariate t-Student cdf. The combinatorial coeficients
 	takes in account all the combinations of interchangeable obligors.
 \end{proposition}
 
@@ -1108,7 +1203,6 @@ Metropolis-Hastings case, becomes:
 	\right)
 \end{displaymath}
 
-
 \textbf{Single-component Metropolis-Hastings} algorithm consist in update sequentially 
 univariate components using Metropolis-Hastings steps. 
 One generated observation $\theta^{(t)}$ is obtained after updating all 
@@ -1117,7 +1211,6 @@ elements of $\theta$ does not influence the convergence of the algorithm.
 We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$ 
 excluding its j-th component [ i.e., $\theta_{\backslash j} = 
 (\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
-
 
 \begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
 \label{alg:bimh}
