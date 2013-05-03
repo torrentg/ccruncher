@@ -131,7 +131,7 @@ A = matrix(ncol=8, nrow=8, data=c(
   0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
 )/100)
 
-P = eigen(A12)$vectors
+P = eigen(A)$vectors
 D = diag(eigen(A)$values)
 # A = P %*% D %*% solve(P)
 

@@ -379,7 +379,8 @@ applied to this bond.
 \cite{creditrisk+:1997}, \cite{crouhy:2000}, \cite{koyluoglu:1998},
 \cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
 \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
-\cite{long:2012}, \cite{kreinin:2001}
+\cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
+\cite{anderson:1984}
 
 
 %==============================================================================
@@ -591,10 +592,11 @@ economic cicle.
 
 \begin{example}
 	\label{ex:1ytm}
-	The following table shows a transition matrix in which the probability that 
-	a obligor with rating $AA$ changes to rating $B$ in one year is $0.14\%$.
-	Note that last column contains the 1-year default probabilities for each 
-	rating, and the last row corresponds to the \emph{defaulted} rating.
+	The following table shows a transition matrix, extracted from 
+	\cite[p. 20]{cmetrics:1997} in which the probability that a obligor with 
+	rating $AA$ changes to rating $B$ in one year is $0.14\%$. Note that last 
+	column contains the 1-year default probabilities for each rating, and the 
+	last row corresponds to the \emph{defaulted} rating.
 	
 	\begin{figure}[!hb]
 		\begin{center}
@@ -610,7 +612,7 @@ economic cicle.
 				CCC     & $0.22$  & $0.00$  & $0.22$  & $1.30$  & $2.38$  & $11.24$            & $64.86$ & $19.78$  \\
 				Default & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$             & $0.00$  & $100.00$ \\
 			\end{tabular}
-			\caption{One-year transition matrix}
+			\caption{One-year transition matrix \%}
 			\label{tmatrix1}
 		\end{center}
 	\end{figure}
@@ -798,8 +800,8 @@ with rating $r_j$ is an exponential distribution:
 We want to estimate the t-Student multi-factor parameters 
 ($\nu, w_i, R$). The available information is:
 \begin{itemize}
-	\item $N_{srt}$ = Number of obligors in sector $s$, rating $r$ and year $t$
-	\item $K_{srt}$ = Number of defaults in sector $s$, rating $r$ and year $t$
+	\item $N_{sr}^t$ = Number of obligors in sector $s$, rating $r$ and year $t$
+	\item $K_{sr}^t$ = Number of defaults in sector $s$, rating $r$ and year $t$
 \end{itemize}
 
 
@@ -812,21 +814,35 @@ We want to estimate the t-Student multi-factor parameters
 \end{notation}
 
 In most cases there is no historical records disaggregated at the rating
-level. In these cases, when the historical records are $N_{st}$ and 
-$K_{st}$ without the counts by rating, we can use the following approximation:
+level. In these cases, when the historical records are $N_{s}^t$ and 
+$K_{s}^t$ without the counts by rating, we can use the following approximation:
 \begin{displaymath}
-	K_{srt} = K_{st} \cdot \frac{p_r}{\displaystyle \sum_{i \ne default} p_i}
+	K_{sr}^t = K_{s}^t \cdot \frac{p_r}{\displaystyle \sum_{i \ne default} p_i}
 \end{displaymath}
 
 %TODO: posar exemple?
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating like a
-	discrete multivariate random variable 
-	$K=(K_{11}, \dots, K_{1r}, \dots, K_{k1}, \dots, K_{kr})$ where:
-	\\
-	$K_{ij}$ = number of obligors in the sector $i$ that defaults in a
-	period of 1-year having a rating $j$ at the begining of the period.
+	discrete multivariate random variable $K=(K_{11}, \dots, K_{sr})$ where:
+	\begin{displaymath}
+	    \begin{array}{l}
+	    N_{ij} = \left\{
+	    \begin{array}{c}
+	        \text{number of obligors in the sector $i$ in a period of} \\
+        	\text{1-year having a rating $j$ at the begining of the period}
+        \end{array}
+        \right\}
+        \\
+        \\
+	    K_{ij} = \left\{
+	    \begin{array}{c}
+	        \text{number of defaults in the sector $i$ in a period of} \\
+        	\text{1-year having a rating $j$ at the begining of the period}
+        \end{array}
+        \right\}
+        \end{array}
+	\end{displaymath}
 \end{definition}
 
 \begin{proposition}[Density of the annual number of defaults (I)]
@@ -1444,7 +1460,7 @@ use this statement to define and simulate the t-Student copula.
 			=                                         & w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2}                                                                    \\
 		\end{array}
 	\end{displaymath}
-	The caracterization of the multivariate Gaussian [31, thm 2.6.2]
+	The caracterization of the multivariate Gaussian \cite[thm 2.6.2]{anderson:1984}
 	states that if every linear combination of the components of a 
 	vector $X$ is normally distributed, then $X$ is normally distributed.
 	It is straightforward to check that the multi-factor Gaussian model 
