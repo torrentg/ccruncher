@@ -941,14 +941,14 @@ $D$ is the default status. We have collected the following observations:
 
 
 \begin{proposition}[Density of the annual number of defaults (I)]
-	The density (pdf) of the annual number of defaults, assuming that these
-	are distributed according to a multivariate block t-Student distribution
-	with $\nu$ degrees of freedom, and $n {\times} n$ block correlation matrix 
-	$\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
+	The density (pdf) of the annual number of defaults, assuming that default 
+	times are distributed according to a multivariate block t-Student distribution
+	with $\nu$ degrees of freedom, and $n {\times} n$ obligors block correlation 
+	matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
 	\begin{displaymath}
 		\begin{array}{l}
-			K(k_{11},\dots,k_{sr}; \nu, \bar{R}) = 
-			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr}; \nu, \bar{R}\} = \\
+			K(k_{11},\dots,k_{sr}\ ;\ \nu, \bar{R}) = 
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr}\ ;\ \nu, \bar{R}\} = \\
 			\\
 			= \left( \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
 			\displaystyle                                                                                 
@@ -972,27 +972,25 @@ We don't known an analitical expression for the density of the annual
 number of defaults. For this reason we try to solve the problem recurring 
 to the multi-factor formulation.
 
-%TODO: canviar subindex K per S (en el cas de sectors)
 \begin{proposition}[Conditioned density of the annual number of defaults]
 	The conditioned density (pdf) of the annual number of defaults, assuming 
-	that these are distributed according to a t-Student multi-factor model
-	with $\nu$ degrees of freedom, factor loadings $w_i$, and correlations
-	$R$ is:
+	that default times are distributed according to a t-Student multi-factor 
+	model with $\nu$ degrees of freedom, factor loadings $w_i$, and 
+	factors correlations $R$ is:
 	\begin{displaymath}
 		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} \mid v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R) =                                   \\
+			K(k_{11},\dots,k_{sr} \mid v,\vec{z}\ ;\ \nu,\vec{w}, R) = 
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid v,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
 			                                                                                                                                 \\
-			= \Pr\{K_{11}=k_{11},\dots,K_{1r}=k_{1r},\dots,K_{k1}=k_{k1},\dots,K_{kr}=k_{kr} \mid v,z_1,\dots,z_k; \nu, w_1,\dots,w_k, R\} = \\
-			                                                                                                                                 \\
-			= \displaystyle \prod_{i=1}^k \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
+			= \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
 			H_{ij}(v,z_i)^{k_{ij}} \cdot
 			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}
 		\end{array}
 	\end{displaymath}
 	where
 	\begin{displaymath}
-		H_{sr}(v,z_s) = \phi\left(  
-		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_r) - w_s\cdot z_s}{\sqrt{1-w_s^2}}
+		H_{ij}(v,z_i) = \phi\left(  
+		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
 	and $n_{ij}$ is the number of obligors in the i-th sector with the 
@@ -1044,10 +1042,10 @@ to the multi-factor formulation.
 	the conditioned density:
 	\begin{displaymath}
 		\begin{array}{l}
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} ; \nu, \vec{w}, R) =                \\
+			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) =                \\
 			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
 			\psi(v) \cdot \phi(\vec{z}) \cdot                                                   
-			K(k_{11},\dots,k_{1r},\dots,k_{k1},\dots,k_{kr} \mid v,\vec{z}; \nu,\vec{w}, R) 
+			K(k_{11},\dots,k_{sr} \mid v,\vec{z}\ ;\ \nu,\vec{w}, R) 
 			\ud z_1 \dots \ud z_k \ud v                                                               
 		\end{array}
 	\end{displaymath}
@@ -1062,7 +1060,7 @@ likelihood of these observations as:
 \begin{displaymath}
 	\begin{array}{l}
 		L(\nu,\vec{w},R \mid v^1,\vec{z^1},\dots,v^T,\vec{z^T} ; K^1,\dots,K^T) = \\
-		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z^t}; \nu,\vec{w},R) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z^t}\ ;\ \nu,\vec{w},R) = \\
 		\displaystyle
 		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
 		\binom{n_{ij}^t}{k_{ij}^t} \cdot
