@@ -52,6 +52,7 @@ clean:
 	rm -f Pictures/pdftm2.pdf
 	rm -f Pictures/pdfsv1.pdf
 	rm -f Pictures/pdfsv2.pdf
+	rm -f Pictures/ccbnd.pdf
 
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
 
