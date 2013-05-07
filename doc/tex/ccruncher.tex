@@ -73,6 +73,7 @@
 \usepackage[official]{eurosym}
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage{nameref}
+\usepackage{wrapfig}
 \def\numversion{2.3}
 \def\svnversion{R1024}
 
@@ -176,7 +177,8 @@ bad year?. There are several approaches to answer these questions.
 All of them try to do the same: obtain the portfolio loss distribution
 and measure the credit risk using a set of selected statistics (eg. mean, 
 quantile). They differ on how to obtain this distribution. Here we present 
-briefly the two most used approaches \cite{crouhy:2000} \cite{bluhm:2002}.
+briefly the two most used approaches \cite{crouhy:2000} 
+\cite[chap. 2.4]{bluhm:2002}.
 
 \textbf{Actuarial approach}. This approach considere that the distribution of 
 the number of defaults is the proper way to interpret the observed defaults.
@@ -395,7 +397,7 @@ applied to this bond.
 \cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
 \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
 \cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
-\cite{anderson:1984}
+\cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951}
 
 
 %==============================================================================
@@ -413,6 +415,9 @@ We recommend taking a look at the appendices
 These contain definitions, results and details about subjects used 
 in this section.
 
+%------------------------------------------------------------------------------
+% THE MULTIVARIATE MODEL
+%------------------------------------------------------------------------------
 \section{The Multivariate Model}
 
 The copula approach considere that the obligors default times are the 
@@ -487,6 +492,10 @@ applying the following proposition.
 	\end{displaymath}
 \end{proof}
 
+The previous proposition can be stated by any other copula coming from
+a multivariate distribution an applied if this had an known distribution 
+and marginals (eg. the Gaussian copula).
+
 \subsection{The multi-factor formulation}
 
 The current formulation is not yet satisfactory because the dimension 
@@ -541,11 +550,11 @@ gives us the key to reformulate the problem as a multi-factor problem.
 % distribution with a block correlation matrix can be expressed as a t-Student 
 % multi-factor model.
 
-\begin{proposition}
-	A random vector $(X_1,\dots,X_n)$ with a multivariate t-Student 
+\begin{proposition}[t-Student multi-factor model]
+	Let a random vector $X=(X_1,\dots,X_n)$ with a multivariate t-Student 
 	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
-	is a correlation block matrix can be writed as a t-Student multi-factor 
-	model as follows:
+	is a correlation block matrix and $n_i$ sizes high-enough. 
+	Then $X$ can be writen as a t-Student multi-factor model as follows:
 	\begin{displaymath}
 		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
 		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
@@ -572,9 +581,10 @@ gives us the key to reformulate the problem as a multi-factor problem.
 \begin{proof}
 	We use the t-Student characterization (proposition\ref{prop:mtschar}),
 	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
-	$Z \sim N(0,R)$ expressing $Z$ as a Gaussian multi-factor model 
+	$Z \sim N(0,\bar{R})$ expressing $Z$ as a Gaussian multi-factor model 
 	(definition \ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
-	values comes from proposition \ref{prop:gmfigs}.
+	values comes from proposition \ref{prop:gmfigs}. The tag line '$n_i$ sizes
+	high-enough' is justified in proposition \ref{prop:gmfamgb}.
 \end{proof}
 
 Note that we expressed the multi-factor model in terms of the factor 
@@ -594,6 +604,10 @@ sector. This causes that all obligors with the same sector and rating be
 indistingibles together (they are exchangeables) and have the 
 same PD. These few PDs can be infered from the transition matrix, 
 the construct that contains the relationship between ratings.
+Below show three different ways of inferring the PD depending 
+upon the amount of information available. All of them give similar 
+results when the time unit and evaluation time is reduced (eg. 1 year) 
+but differ as this goes away.
 
 \begin{definition}[Transition matrix] 
 	The $T$-years transition matrix gives the probability of changing 
@@ -611,6 +625,9 @@ the construct that contains the relationship between ratings.
 	\end{displaymath}
 	where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
 	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
+	Note that row sums are $1$ and that if we have two consecutives transition 
+	matrices, $M_{T_1}$ and $M_{T_2}$, then we can derive 
+	$M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
 \end{definition}
 
 \begin{example}
@@ -620,8 +637,7 @@ the construct that contains the relationship between ratings.
 	rating $AA$ changes to rating $B$ in one year is $0.14\%$. Note that last 
 	column contains the 1-year default probabilities for each rating, and the 
 	last row corresponds to the \emph{defaulted} rating.
-
-	\begin{figure}[!hb]
+	\begin{figure}[!h]
 		\begin{center}
 			\begin{tabular}[]{l|rrrrrrrr}
 				        & AAA     & AA      & A       & BBB     & BB      & B                  & CCC     & Default  \\
@@ -640,10 +656,6 @@ the construct that contains the relationship between ratings.
 		\end{center}
 	\end{figure}
 \end{example}
-
-Note that row sums are $1$ and that if we have two consecutives transition 
-matrices, $M_{T_1}$ and $M_{T_2}$, then we can derive 
-$M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$ (this operation is not commutative).
 
 \subsection{From annual PDs}
 \label{pdfsv}
@@ -712,6 +724,21 @@ distributions:
 		= e^{-\lambda \cdot t}
 	\end{displaymath}
 \end{proof}
+
+If $T$ is a reduced time horizon (eg. 1 year), then the linear function
+can be a good-enought approximation. To see this we use the Taylor series
+of the exponential and the logarithm functions:
+\begin{displaymath}
+	\begin{array}{l}
+		e^x = 1 +x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots
+		\\
+		\ln(1-x) = -x - \frac{x^2}{2} - \frac{x^3}{3} + \dots
+		\\
+		\Pr\{T. \le t\} = 1-e^{-\lambda\cdot t} \approx
+		1 - (1-\lambda \cdot t) = \lambda \cdot t = 
+		- \ln(1-p) \cdot t \approx p \cdot t
+	\end{array}
+\end{displaymath}
 
 \begin{example}
 	\label{ex:pdfsv}
@@ -899,13 +926,13 @@ in the medium and long term.
 %==============================================================================
 \chapter{Estimating Parameters}
 
-We want to estimate parameters of the multivariate default times model.
+We want to estimate the parameters of the multivariate default times model.
 All of them are known except those related to t-Student copula. The 
 parameters to be estimated are the degrees of freedom $\nu$, and the 
 obligors correlation matrix $\bar{R}$. Equivalently, considering the 
 multi-factor formulation, the parameters to be estimated are the degrees
 of freedom $\nu$, the factor loadings $w_i$, and the factors correlation
-$R$.
+matrix $R$.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating like a
@@ -935,18 +962,18 @@ $R$.
 	$j$ observed at year $t$. 
 \end{definition}
 
-It is possible that the there is no historical records disaggregated at 
-the rating level. In these cases, when the historical records are 
-$\left\{N_{s}^t, K_{s}^t \right\}_{t=1,\dots,T}$ without the counts by 
-rating, we can use the following approximation:
-\begin{displaymath}
-	K_{ij}^t = K_{i}^t \cdot \frac{\lambda_{ij}^t \cdot p_j}{\displaystyle \sum \lambda_{ik}^t \cdot p_k}
-	\quad \text{ where }
-	\lambda_{ij}^t \approx \frac{\text{\# obligors sector $i$ rating $j$}}{\text{\# obligors sector $i$}}
-\end{displaymath}
-Values $\lambda_{ij}^t$ depends on the characteristics of the portfolio 
-and the economic cicle and requires to be estimated based on historical 
-data.
+% It is possible that the there is no historical records disaggregated at 
+% the rating level. In these cases, when the historical records are 
+% $\left\{N_{s}^t, K_{s}^t \right\}_{t=1,\dots,T}$ without the counts by 
+% rating, we can use the following approximation:
+% \begin{displaymath}
+	% K_{ij}^t = K_{i}^t \cdot \frac{\lambda_{ij}^t \cdot p_j}{\displaystyle \sum \lambda_{ik}^t \cdot p_k}
+	% \quad \text{ where }
+	% \lambda_{ij}^t \approx \frac{\text{\# obligors sector $i$ rating $j$}}{\text{\# obligors sector $i$}}
+% \end{displaymath}
+% Values $\lambda_{ij}^t$ depends on the characteristics of the portfolio 
+% and the economic cicle and requires to be estimated based on historical 
+% data and current PD models.
 
 \begin{example}[]
 We have two sectors, $S1$ and $S2$, and four ratings, $A, B, C, D$ where 
@@ -979,6 +1006,16 @@ in the width of the page).
 	\label{table:histdata}
 \end{table}
 \end{example}
+
+%------------------------------------------------------------------------------
+% DISTRIBUTION OF THE NUMBERS OF DEFAULTS
+%------------------------------------------------------------------------------
+\section{Distribution of the Number of Defaults}
+
+Before to proced to estimate the parameters we need to know the density
+of the number of observed defaults in order to define a likelihood 
+function. In this section we derive this distribution from the multivariate
+default times distribution. More info at \cite{gordy:2002} \cite{roncalli:2004}.
 
 \begin{proposition}[Density of the annual number of defaults (I)]
 	The density (pdf) of the annual number of defaults, assuming that default 
@@ -1094,71 +1131,44 @@ to the multi-factor formulation.
 	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
 \end{corollary}
 
-\begin{definition}[Conditioned likelihood]
-Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
-and $K^t$ are vectors representing the number of obligors and defaulted 
-obligors in each sector-rating bucket. We define the conditional 
-likelihood of these observations as:
-\begin{displaymath}
-	\begin{array}{l}
-		L(\nu,\vec{w},R \mid v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
-		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
-		\displaystyle
-		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
-		\binom{n_{ij}^t}{k_{ij}^t} \cdot
-		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
-		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
-	\end{array}
-\end{displaymath}
-Note that the parameters to be infered are $\nu,\vec{w},R$ and the
-latent variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
-\end{definition}
+%------------------------------------------------------------------------------
+% BAYESSIAN INFERENCE
+%------------------------------------------------------------------------------
+\section{Bayessian Inference}
 
-\begin{proposition}[Parameters estimation]
-	We can estimate the parameters of the conditioned likelihood using
-	the Bayessian framework and Metropolis-Hastings algorithm 
-	(see algorithm \ref{alg:bimh}) with the following rules:
-	\begin{itemize}
-		\item parameters $\theta \equiv \{ \nu,\vec{w},R,v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\}$
-		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
-		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
-		\item proposal distributions $q(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
-		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
-		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
-		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
-		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
-		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
-	\end{itemize}
-	For the prior distributions of $r_{ij}$ we set the likelihood distribution
-	of the latent variables $\vec{z}^t$. The pdf of the distribution 
-	$\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
-	%hyperparameters, hyperdistributions
-	\begin{displaymath}
-		f(r_{ij}) = f(r; i,j,R) = \frac
-		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
-		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
-	\end{displaymath}
-	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
-	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
-	replaced by $r$. We don't need to know the limits of the integral
-	because this is constant and cancels into the M-H algorithm.
-\end{proposition}
-
-\begin{proposition}[Robbins-Monro process]
-CAL MILLORAR MOLT AIXO. \cite{garthwaite:2010}
-proceso de Robbins-Monro tal como se indica en [¿24?].
-	\begin{displaymath}
-		\sigma_{i+1} = \left\{
-		\begin{array}{ll}
-			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
-			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
-		\end{array}
-		\right.
-	\end{displaymath}
-	we take an arbitrary starting value $\sigma_0$.
-\end{proposition}
-
-\section{Bayessian Inference}\index{Bayessian Inference}
+\begin{wrapfigure}{r}{0.4\textwidth}
+%\begin{figure}[!hbt]
+\vspace{-20pt}
+\begin{center}
+\includegraphics[width=0.38\textwidth]{ccbnd}
+\end{center}
+\vspace{-10pt}
+\caption{Distr. of correlation coefficient of the bivariate Normal with $\rho=0.2$ and sample size $20$.}
+\vspace{-10pt}
+\label{fig:ccbnd}
+%\end{figure}
+\end{wrapfigure}
+Parameters $w_i$ and $R$ are variances and correlations that must be 
+estimated. It is difficult to estimate this type of statistics. To ilustrate
+this we supose a simplified problem: estimate the correlation of a bivariate 
+Normal distribution with $\rho=0.2$ from a sample size of $20$. Figure 
+\ref{fig:ccbnd} displays the distribution of the correlation 
+coefficient \cite[pp. 217-221]{kenney:1951}. We observe that the 
+uncertainty is important. In fact, the probability that we observe 
+a negative correlation coefficient from a sample size of $20$ 
+bivariate Normals with $\rho=0.2$ is significative. Our goal
+is the inverse case, we have a correlation coefficient from a sample
+size of $20$ observations and we have to estimate the original $\rho$.
+The previous observation about the dispersion indicates that the 
+searched value will also have an important dispersion.
+This is exacerbated by the fact that some of our variables
+are latents, and that we are estimating from observations of type
+count-data. After this, considering the estimated parameters as 
+unique values, like the Maximum Likelihood estimator, is a naive and 
+risky positioning. The bayessian approach seems  more appropriate 
+\cite{gossl:2005} \cite{tarashev:2010} because it takes into account 
+the uncertainty of the parameters. Later we will see how to transfer 
+this uncertainty to the assessment of credit risk.
 
 Bayesian statistics differ from the classical statistical 
 theory since all unknown parameters are considered as random 
@@ -1179,8 +1189,12 @@ known as the likelihood.
 	f(y \mid \theta) = \prod_{i=1}^n f(y_i \mid \theta)
 \end{displaymath}
 
+%------------------------------------------------------------------------------
+% METROPOLIS-HASTINGS ALGORITHM
+%------------------------------------------------------------------------------
+\section{Metropolis-Hastings Algorithm}
 
-\section{Metropolis-Hastings}\index{Metropolis-Hastings}
+TODO \cite{ntzoufras:2009}
 
 \begin{algorithm}[Metropolis-Hastings]
 	Let us assume a target distribution $f(x)$ from which we wish to generate a 
@@ -1283,6 +1297,75 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	\end{enumerate}
 \end{algorithm}
 
+%------------------------------------------------------------------------------
+% ESTIMATION OF PARAMETERS
+%------------------------------------------------------------------------------
+\section{Estimation of Parameters}
+
+\begin{definition}[Conditioned likelihood]
+Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
+and $K^t$ are vectors representing the number of obligors and defaulted 
+obligors in each sector-rating bucket. We define the conditional 
+likelihood of these observations as:
+\begin{displaymath}
+	\begin{array}{l}
+		L(\nu,\vec{w},R \mid v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
+		\displaystyle
+		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
+		\binom{n_{ij}^t}{k_{ij}^t} \cdot
+		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
+		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
+	\end{array}
+\end{displaymath}
+Note that the parameters to be infered are $\nu,\vec{w},R$ and the
+latent variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
+\end{definition}
+
+\begin{proposition}[Parameters estimation]
+	We can estimate the parameters of the conditioned likelihood using
+	the Bayessian framework and Metropolis-Hastings algorithm 
+	(see algorithm \ref{alg:bimh}) with the following rules:
+	\begin{itemize}
+		\item parameters $\theta \equiv \{ \nu,\vec{w},R,v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\}$
+		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
+		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
+		\item proposal distributions $q(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
+		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
+		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
+		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
+		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
+		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
+	\end{itemize}
+	For the prior distributions of $r_{ij}$ we set the likelihood distribution
+	of the latent variables $\vec{z}^t$. The pdf of the distribution 
+	$\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
+	%hyperparameters, hyperdistributions
+	\begin{displaymath}
+		f(r_{ij}) = f(r; i,j,R) = \frac
+		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
+		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
+	\end{displaymath}
+	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
+	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
+	replaced by $r$. We don't need to know the limits of the integral
+	because this is constant and cancels into the M-H algorithm.
+\end{proposition}
+
+\begin{proposition}[Robbins-Monro process]
+CAL MILLORAR MOLT AIXO. \cite{garthwaite:2010}
+proceso de Robbins-Monro tal como se indica en [¿24?].
+	\begin{displaymath}
+		\sigma_{i+1} = \left\{
+		\begin{array}{ll}
+			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
+			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
+		\end{array}
+		\right.
+	\end{displaymath}
+	we take an arbitrary starting value $\sigma_0$.
+\end{proposition}
+
 
 %==============================================================================
 % MODELING PORTFOLIO LOSS
@@ -1319,7 +1402,7 @@ It is common to use correlation as a measure of dependency between random
 variables. In most cases, this measure does not fully reflect the structure 
 of dependence between them. Figure \ref{fig:copula_impact} displays two
 cases with the same mean, marginals and correlations but a distinct risk
-profile because its underlying  dependence structure is distinct(Gaussian 
+profile because its underlying  dependence structure is distinct (Gaussian 
 copula vs. t-Student(3) copula). The mathematical concept that does reflect 
 the structure of dependence between random variables, however, is the copula, 
 which we define below. The world of copulas is vast and very interesting. 
@@ -1600,11 +1683,10 @@ An alternative definition based on the covariance matrix is:
 	\label{prop:gmfigs}
 	The Gaussian multi-factor model defined by factor loadings 
 	$w_1,\dots,w_k$, the $k {\times} k$ factors correlation matrix $R$, and
-	$n_1,\dots,n_k$ with $\sum_{i=1}^k n_i = n$ is a 
-	multivariate Gaussian distribution with a $n {\times} n$ correlation
-	matrix $\bar{R}$ composed by blocks with values
-	$\bar{R}_{i,j} = w_a \cdot w_b \cdot R_{a,b}$ where $a$ and $b$ 
-	are the blocks of the indexes $i$ and $j$.
+	$n_1,\dots,n_k$ with $\sum_{i=1}^k n_i = n$ is a multivariate Gaussian 
+	distribution with a $n {\times} n$ block correlation matrix 
+	$\bar{R}=B_k(\vec{n},\vec{1},M)$ with values
+	$M_{ij} = w_i \cdot w_j \cdot R_{ij}$.
 \end{proposition}
 \begin{proof}
 	We check that the correlations between Gaussian multi-factor model
@@ -1633,19 +1715,26 @@ An alternative definition based on the covariance matrix is:
 \end{proof}
 
 \begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
-	Any multi-factor model can be expressed as a multivariate normal 
-	block, but there are multivariate normal block that can not be 
+	Any multi-factor model can be expressed as a multivariate Gaussian 
+	block, but there are multivariate Gaussian block that can not be 
 	expressed as a Gaussian multi-factor model.
 \end{proposition}
 \begin{proof}
 	Proposition \ref{prop:gmfigs} states that any multi-factor model 
 	can be expressed as a multivariate normal composed by blocks.
-	Next we see that reciprocal is false. We use the equivalence 
-	$\bar{R}_{i,j} = w_a \cdot w_b \cdot R_{a,b}$ between
-	the multi-factor correlation matrix $R$ and the multivariate block
-	Gaussian correlation matrix $\bar{R}$.
-	
-	\textbf{Counterexample 1}. Factor loading with imaginary value.
+	Next we see that reciprocal is false. Let 
+	$\bar{R} = B_k(\vec{n},\vec{1},M)$ the Gaussian distribution 
+	correlation matrix. We use the equivalence 
+	$M_{ij} = w_i \cdot w_i \cdot R_{ij}$ stated in proposition 
+	\ref{prop:gmfigs} to determine the cases that cannot be expressed 
+	as a multi-factor model.
+
+	\textbf{Case 1}. Factor loadings with imaginary values.
+	\begin{displaymath}
+		M_{ii} = w_i \cdot w_i \cdot R_{ii} = w_i^2
+	\end{displaymath}
+	If $M_{ii}$ is negative, then $w_i$ has an imaginary value.
+	By example:
 	\begin{displaymath}
 		\bar{R} = \left(
 		\begin{array}{cc|c}
@@ -1667,7 +1756,15 @@ An alternative definition based on the covariance matrix is:
 		\text{ !!}
 	\end{displaymath}
 	
-	\textbf{Counterexample 2}. Correlation with absolute value > 1.
+	\textbf{Case 2}. Factors correlation with absolute value > 1.
+	\begin{displaymath}
+		M_{ij} = w_i \cdot w_j \cdot R_{ij} \longrightarrow 
+		R_{ij} = \frac{M_{ij}}{w_i \cdot w_j} = 
+		\frac{M_{ij}}{\sqrt{M_{ii} \cdot M_{jj}}}
+	\end{displaymath}
+	If $M_{ii}^2 > M_{ii} \cdot M_{jj}$, then $R_{ij}$ has an absolute value
+	bigger than 1, which is not possible because $R_{ij}$ is a correlation
+	value. By example:
 	\begin{displaymath}
 		\bar{R} = \left(
 		\begin{array}{cc|cc}
@@ -1700,16 +1797,20 @@ The following proposition clarifies this theme.
 \begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
 	\label{prop:gmfamgb}
 	Let $X \sim N(0,\bar{R})$ with $\bar{R}$ a correlation block matrix 
-	$B_2(n,\vec{1},M)$. Then $X$ can be expressed as a multi-factor 
-	Gaussian model if $n_1$ and $n_2$ are large enough.
+	$B_k(\vec{n},\vec{1},M)$. Then $X$ can be expressed as a multi-factor 
+	Gaussian model if $n_i$ values are large enough.
 \end{proposition}
 \begin{proof}
-	We use the proposition \ref{prop1} to prove the statement Usamos la caracterización de las matrices de covarianzas por bloques (Simulation of High-Dimensional t-Student Copulas, Gerard Torrent-Gironella and Josep Fortiana) PONER REFERENCIA para demostrar la proposición en los dos casos posibles.
+	We revise the cases where the multivariate Gaussian distribution can't
+	be expressed as a multi-factor model and we use the proposition 
+	\ref{prop1} to check that if $n_i$ values are large enough, then 
+	that is indeed a valid multi-factor model.
 	
-	\textbf{Case 1}. Factor loading $w_i$ with imaginary value is caused by a negative 
-	$m_{ii}$ value ($m_{ii} = w_i^2$). We use the proposition \ref{prop1} to determine
-	the restrictions about $m_{ii}$. Because $\bar{R}$ is covariance block matrix 
-	definite-positive, the deflated matrix has a positive determinant. Then,
+	\textbf{Case 1}. Factor loading $w_i$ with imaginary value is caused by 
+	a negative $m_{ii}$ value ($m_{ii} = w_i^2$). We use the proposition 
+	\ref{prop1} to determine the restrictions about $m_{ii}$. Because 
+	$\bar{R}$ is covariance block matrix definite-positive, the deflated 
+	matrix has a positive determinant. Then,
 	\begin{displaymath}
 		\begin{array}{l}
 			1 + (n_1-1) \cdot m_{11} + (n_2-1) \cdot m_{22} +                     
@@ -1717,9 +1818,9 @@ The following proposition clarifies this theme.
 			n_1 \cdot n_2 \cdot m_{12}^2 > 0                                      
 			                                                                      \\
 			m_{11} > \frac{n_1 \cdot n_2 \cdot m_{12}^2 -1 -(n_2-1) \cdot m_{22}} 
-			{(n_1-1) + (n_1-1) \cdot (n_2-1) \cdot m_{11}}                        
+			{(n_1-1) + (n_1-1) \cdot (n_2-1) \cdot m_{22}}                        
 			                                                                      \\
-			\text{tending } n_1 \to \infty                                        
+			\text{tending } n_1 \to \infty \text{ and } n_2 \to \infty
 			                                                                      \\
 			m_{11} \ge 0                                                          
 		\end{array}
@@ -1728,6 +1829,9 @@ The following proposition clarifies this theme.
 	\textbf{Case 2}. Multi-factor model correlation bigger than $1$ is caused
 	by $m_{12} = w_1 \cdot w_2 \cdot R_{12} = \sqrt{m_{11}} \cdot \sqrt{m_{22}} \cdot R_{12}$
 	causing $R_{12} = \frac{m_{12}}{\sqrt{m_{11} \cdot m_{22}}}$.
+	We use the proposition \ref{prop1} to determine the restrictions about $m_{ij}$. 
+	Because $\bar{R}$ is covariance block matrix definite-positive, the deflated 
+	matrix has a positive determinant. Then,
 	\begin{displaymath}
 		\begin{array}{l}
 			1 + (n_1-1) \cdot m_{11} + (n_2-1) \cdot m_{22} +                     

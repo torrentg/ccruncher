@@ -222,3 +222,21 @@ legend(5, 0.85, ratings[1:7], cex=0.9, lty=1:8, col=1:6)
 grid();
 dev.off();
 
+# ================================================
+# R script to create Correlation Coefficient--Bivariate Normal Distribution
+# see http://mathworld.wolfram.com/CorrelationCoefficientBivariateNormalDistribution.html
+# ================================================
+f <- function(beta, r, rho, n){1/(cosh(beta)-rho*r)^(n-1)}
+
+ccbn <- function(r, rho, n)
+{
+  x = integrate(f, lower=0, upper=Inf, r, rho, n)$value
+  return(x/pi * (n-2) * (1-r^2)^((n-4)/2) * (1-rho^2)^((n-1)/2))
+}
+vccbn <- Vectorize(ccbn, "r")
+
+x = seq(-1,+1,0.01)
+pdf(file="ccbnd.pdf")
+plot(x,vccbn(x,0.2,20), type='l', xlab="correlation", ylab="density")
+grid()
+dev.off();
