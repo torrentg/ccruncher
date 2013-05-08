@@ -609,7 +609,8 @@ upon the amount of information available. All of them give similar
 results when the time unit and evaluation time is reduced (eg. 1 year) 
 but differ as this goes away.
 
-\begin{definition}[Transition matrix] 
+\begin{definition}[Transition matrix]
+	\label{def:tm}
 	The $T$-years transition matrix gives the probability of changing 
 	from rating $r_i$ to rating $r_j$ in a period of $T$ years:
 	\begin{displaymath}
@@ -1018,7 +1019,7 @@ function. In this section we derive this distribution from the multivariate
 default times distribution. More info at \cite{gordy:2002} \cite{roncalli:2004}.
 
 \begin{proposition}[Density of the annual number of defaults (I)]
-	The density (pdf) of the annual number of defaults, assuming that default 
+	The density of the annual number of defaults, assuming that default 
 	times are distributed according to a multivariate block t-Student distribution
 	with $\nu$ degrees of freedom, and $n {\times} n$ obligors block correlation 
 	matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
@@ -1037,12 +1038,12 @@ default times distribution. More info at \cite{gordy:2002} \cite{roncalli:2004}.
 			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n                                                        
 		\end{array}
 	\end{displaymath}
-	where $n_{ij}$ is the number of obligors in the i-th sector with the 
-	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
-	with the j-th rating, $n = \sum n_{ij}$ is the number of obligor in the
-	portfolio, $f()$ is the pdf of $t_n(\nu,\bar{R})$, and $t_{\nu}^{-1}$ is 
-	the inverse of the univariate t-Student cdf. The combinatorial coeficients
-	takes in account all the combinations of exchangeable obligors.
+	where $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
+	defaults in the i-th sector with the j-th rating, $p_i = \text{PD}_i(1)$ 
+	is the probability to default in 1-year of the i-th rating, $f()$ is the 
+	pdf of $t_n(\nu,\bar{R})$, and $t_{\nu}^{-1}$ is the inverse of the cdf
+	of the univariate t-Student. The combinatorial coeficients takes in 
+	account all the combinations of exchangeable obligors.
 \end{proposition}
 
 We don't known an analitical expression for the density of the annual 
@@ -1050,7 +1051,7 @@ number of defaults. For this reason we try to solve the problem recurring
 to the multi-factor formulation.
 
 \begin{proposition}[Conditioned density of the annual number of defaults]
-	The conditioned density (pdf) of the annual number of defaults, assuming 
+	The conditioned density of the annual number of defaults, assuming 
 	that default times are distributed according to a t-Student multi-factor 
 	model with $\nu$ degrees of freedom, factor loadings $w_i$, and 
 	factors correlations $R$ is:
@@ -1070,12 +1071,12 @@ to the multi-factor formulation.
 		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
-	and $n_{ij}$ is the number of obligors in the i-th sector with the 
-	j-th rating, $k_{ij}$ is the number of defaults in the i-th sector 
-	with the j-th rating, $\phi$ is the pdf of the univariate $N(0,1)$
-	, and $t_{\nu}^{-1}$ is the inverse of the univariate t-Student cdf. 
-	The combinatorial coeficients takes in account all the combinations 
-	of exchangeable obligors.
+	and $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
+	defaults in the i-th sector with the j-th rating, $p_i = \text{PD}_i(1)$ 
+	is the probability to default in 1-year of the i-th rating,
+	$\phi$ is the pdf of the univariate $N(0,1)$, and $t_{\nu}^{-1}$ is the 
+	inverse of the cdf of the univariate t-Student. The combinatorial coeficients 
+	takes in account all the combinations of exchangeable obligors.
 \end{proposition}
 \begin{proof}
 	Let $H_{ij}$ the probability that an obligor belonging to sector $i$
@@ -1085,18 +1086,17 @@ to the multi-factor formulation.
 	\begin{displaymath}
 		H_{ij}(v,z_i) = 
 		\Pr\{T_k \le 1 \mid v, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(F_k(1)) \mid v, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(\text{PD}_j(1)) \mid v, z_i\} = 
 		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid v, z_i\}
 	\end{displaymath}
 	where the k-th obligor belongs to sector $i$ and has rating $j$, 
 	$T_k$ is the k-th component of the multivariate default 
-	times, $F_k$ is PD of the k-th obligor, and $X_k$ is the 
-	k-th component of the multivariate t-Student. Now express 
-	$X$ in the multi-factor form:
+	times, and $X_k$ is the k-th component of the multivariate t-Student. 
+	Now express $X$ in the multi-factor form:
 	\begin{displaymath}
 		H_{ij}(v,z_i) = \Pr \left\{ 
 		\sqrt{\frac{\nu}{v}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon\right)
-		\le t_{\nu}^{-1}(p_j)
+		\le t_{\nu}^{-1}(p_j) \mid v, z_i
 		\right\}
 	\end{displaymath}
 	Because $v$ and $z_i$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
@@ -1109,7 +1109,7 @@ to the multi-factor formulation.
 	observing $k$ failures in a set of $n$ independent obligors follows 
 	a binomial distribution:
 	\begin{displaymath}
-		\text{Bin}(k;n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
+		\text{Bin}(k\ ;\ n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
 	\end{displaymath}
 	The product for all sectors and ratings gives the stated formula. 
 	We can do the product because $v$ and $z_i$ are fixed.
@@ -1155,8 +1155,7 @@ Normal distribution with $\rho=0.2$ from a sample size of $20$. Figure
 \ref{fig:ccbnd} displays the distribution of the correlation 
 coefficient \cite[pp. 217-221]{kenney:1951}. We observe that the 
 uncertainty is important. In fact, the probability that we observe 
-a negative correlation coefficient from a sample size of $20$ 
-bivariate Normals with $\rho=0.2$ is significative. Our goal
+a negative correlation coefficient is significative. Our goal
 is the inverse case, we have a correlation coefficient from a sample
 size of $20$ observations and we have to estimate the original $\rho$.
 The previous observation about the dispersion indicates that the 
@@ -1180,7 +1179,7 @@ According to the Bayes theorem, this can be written as:
 \end{displaymath}
 
 We call \emph{posterior distribution} to $f(\theta \mid y)$ and 
-\emph{prior distribution} to $f(y)$. This prior distribution 
+\emph{prior distribution} to $f(\theta)$. This prior distribution 
 expresses the information available to the researcher before 
 any data are involved in the statistical analysis. $f(y \mid \theta)$ 
 is the probability of observing $y$ given $\theta$, and is also 
@@ -1189,18 +1188,73 @@ known as the likelihood.
 	f(y \mid \theta) = \prod_{i=1}^n f(y_i \mid \theta)
 \end{displaymath}
 
+In our case, we can define an analytic likelihood function using the 
+conditional density of the number of defaults. Thus it implies that 
+the parameters to be infered are $\nu,\vec{w},R$ and the latent 
+variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
+
+\begin{definition}[Conditioned likelihood]
+Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
+and $K^t$ are vectors representing the number of obligors and defaulted 
+obligors in each sector-rating bucket. We define the conditional 
+likelihood of these observations as:
+\begin{displaymath}
+	\begin{array}{l}
+		L(\nu,\vec{w},R \mid v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
+		\displaystyle
+		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
+		\binom{n_{ij}^t}{k_{ij}^t} \cdot
+		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
+		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
+	\end{array}
+\end{displaymath}
+\end{definition}
+
 %------------------------------------------------------------------------------
 % METROPOLIS-HASTINGS ALGORITHM
 %------------------------------------------------------------------------------
 \section{Metropolis-Hastings Algorithm}
 
-TODO \cite{ntzoufras:2009}
+This section contains a brief introduction to Bayessian inference using the 
+Metropolis-Hastings algorithm and it is heavily influenced by the book 
+\emph{Bayesian Modeling Using WinBUGS} \cite{ntzoufras:2009}.
+
+We can find a closed-form of the posterior distribution only in a very few 
+cases. Usually this has to be determined by numerical methods. 
+One of the most used is the Metropolis-Hastings algorithm that belongs to 
+the family of Markov Chain Monte Carlo (MCMC) methods. These are based on 
+the construction of a Markov chain that converges to the target distribution 
+which, in our case, is the posterior distribution.
+
+\begin{definition}[Markov chain]
+	A Markov chain is a stochastic process 
+	$\left\{\theta^{(1)},\theta^{(2)},\dots,\theta^{(T)}\right\}$ such that
+	\begin{displaymath}
+		f\left(\theta^{(t+1)} \mid \theta^{(t)},\dots,\theta^{(1)}\right) = 
+		f\left(\theta^{(t+1)} \mid \theta^{(t)}\right)
+	\end{displaymath}
+	that is, the distribution of $\theta$ at sequence $t+1$ given all the 
+	preceding $\theta$ values depends only on the the previous value. 
+	When the Markov chain is irreducible, aperiodic, and positive-recurrent, 
+	as $t \to \infty$ the distribution of $\theta^{(t)}$ converges to its 
+	equilibrium distribution, which is independent of the initial values 
+	of the chain $\theta^{(0)}$.
+\end{definition}
+
+The Markov chain is not a strange concept to us because the transition 
+matrix (see definition \ref{def:tm}) is a Markov chain where its 
+equilibrium state is the \emph{default} rating (that is, just any 
+obligor ends up defaulting) allowing us to consider the PDs as cdfs.
+The Metropolis-Hastings algorithm generates a sample from $f(\theta)$ 
+by constructing a Markov chain that has $f(\theta)$ as the equilibrium 
+distribution.
 
 \begin{algorithm}[Metropolis-Hastings]
-	Let us assume a target distribution $f(x)$ from which we wish to generate a 
-	sample of size $T$. The Metropolis-Hastings algorithm can be described by the 
-	following iterative steps; where $x^{(t)}$ is the vector of generated values 
-	in the $t$-th iteration of the algorithm:
+	Let us assume a target distribution $f(x)$ from which we wish to 
+	generate a sample of size $T$. The Metropolis-Hastings algorithm can 
+	be described by the following iterative steps; where $x^{(t)}$ is the 
+	vector of generated values in the $t$-th iteration:
 	\begin{enumerate}
 		\item Set initial values $x^{(0)}$
 		\item For $t=1,\dots,T$ repeat the following steps
@@ -1218,9 +1272,13 @@ TODO \cite{ntzoufras:2009}
 	\end{enumerate}
 \end{algorithm}
 
-%TODO: list ergodic properties
-%TODO: referenciar llibre WinBugs
-
+As this is a Markov chain, it is irrelevant the chosen starting point 
+$x^{(0)}$ because the algorithm converges to the target distribution
+whatever the starting point. If the starting point has low probability 
+respect the target distribution, then the initial samples don't come 
+from the equilibrium distribution and need to be discarded until it is 
+not reached. We call \emph{burnin period} the first $B$ iterations 
+eliminated from the sample for this reason.
 
 \textbf{Bayesian inference}.
 The Metropolis-Hastings algorithm outlined above can be directly implemented to do
@@ -1231,9 +1289,8 @@ the acceptance rate becomes:
 	\alpha = \min\left(1,\frac{f(\theta' \mid y) \cdot q(\theta \mid \theta')}{f(\theta \mid y) \cdot q(\theta' \mid \theta)}\right) = \min\left(1,\frac{f(y \mid \theta') \cdot f(\theta') \cdot q(\theta \mid \theta')}{f(y \mid \theta)  \cdot f(\theta) \cdot q(\theta' \mid \theta)}\right)
 \end{displaymath}
 
-
 \textbf{Random-walk Metropolis-Hastings} is a special case with symmetric proposals
-$q(\theta' \mid \theta) = q(\theta \mid \theta')$ where $q(\theta' \mid \theta) \equiv N(\theta,S)$. 
+$q(\theta' \mid \theta) = q(\theta \mid \theta')$ where $q(\theta' \mid \theta) \equiv N(\theta,\sigma)$. 
 In this case the acceptance rate depends only on the posterior distribution
 and, in the Bayesian inference Metropolis-Hastings case, becomes:
 \begin{displaymath}
@@ -1242,6 +1299,29 @@ and, in the Bayesian inference Metropolis-Hastings case, becomes:
 	\min\left(1,\frac{f(y \mid \theta') \cdot f(\theta')}{f(y \mid \theta) \cdot f(\theta)}\right)
 \end{displaymath}
 
+The random-walk case fix the shape of the proposal distribution and
+requires to specify the value $\sigma$. This value has a direct impact on 
+the acceptance ratio, and consequently on the auto-correlation of the 
+generated values. Exists an optimal acceptance ratio that depends on the 
+target distribution, and in most cases relies in the interval $[0.234,0.44]$. 
+To avoid the  manual tuning of the scale parameter $\sigma$ we use the 
+Robbins-Monro algorithm \cite{garthwaite:2010} that performs an adaptative 
+scaling to achieve the desired acceptance ratio.
+
+\begin{proposition}[Robbins-Monro process]
+	In order to achieve an acceptance rate $p$ in the random-walk 
+	Metropolis-Hastings algorithm, considere the following adaptative
+	procedure:
+	\begin{displaymath}
+		\sigma^{(t+1)} = \left\{
+		\begin{array}{ll}
+			\sigma^{(t)} \cdot \left( 1 + \frac{1}{p \cdot t} \right) & \text{if $\theta'$ is accepted} \\
+			\sigma^{(t)} \cdot \left( 1 - \frac{1}{(1-p) \cdot t} \right) & \text{if $\theta'$ is rejected} \\
+		\end{array}
+		\right.
+	\end{displaymath}
+	were the starting value $\sigma_1$ has an arbitrary value.
+\end{proposition}
 
 \textbf{Metropolis-Hastings using logarithms}.
 The product of functions involves complicated expressions and accuracy 
@@ -1268,16 +1348,20 @@ We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$
 excluding its j-th component [ i.e., $\theta_{\backslash j} = 
 (\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
 
-\begin{algorithm}[Bayesian inference Metropolis-Hastings] \ 
-\label{alg:bimh}
+\begin{algorithm}[Bayesian inference Metropolis-Hastings] 
+	\label{alg:bimh}
+	Let $f(y \mid \theta)$ the likelihood function, with priors $f(\theta_j)$,
+	and desired acceptance ratios $p_j$. Then the parameters distribution
+	can be sampled using the following Metropolis-Hastings algorithm:
 	\begin{enumerate}
 		\item Set initial values $\theta^{(0)}$
+		\item Set initial values $\sigma^{(0)}$
 		\item For $t=1,\dots,T$ repeat the following steps
 		\begin{itemize}
 			\item Set $\theta=\theta^{(t-1)}$
 			\item For $j=1,\dots,d$ repeat the following steps
 			\begin{enumerate}[label=\alph*.]
-				\item $\theta_j' = N(\theta_j,S_j)$
+				\item $\theta_j' = N(\theta_j,\sigma_j)$
 				\item Calculate the logarithm of the acceptance rate \\
 				$\ln(\alpha) = \min \left( 0,
 				\ln f(y \mid \theta_j',\theta_{\backslash j}) + 
@@ -1291,36 +1375,48 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 					\theta_j' & \text{ if } \ln(u) < \ln(\alpha) \\
 					\theta_j  & \text{ otherwise }               
 				\end{array}\right.$ 
+				\item Update $\sigma_j^{(t)} = \left\{
+					\begin{array}{ll}
+						\sigma_j^{(t-1)} \cdot \left( 1 + \frac{1}{p_j \cdot t} \right) & \text{ if } \ln(u) < \ln(\alpha) \\
+						\sigma_j^{(t-1)} \cdot \left( 1 - \frac{1}{(1-p_j) \cdot t} \right) & \text{ otherwise } \\
+					\end{array}
+				\right.$
 			\end{enumerate}
 			\item Set $\theta^{(t)}=\theta$
 		\end{itemize}
 	\end{enumerate}
 \end{algorithm}
 
+\begin{example}[Beta distribution calibration]
+	We have a sample $\{y_1,\dots,y_{100}\}$ comming from a $\text{Beta}(2,5)$ 
+	distribution. We want to do Bayessian inference to determine the value of the 
+	parameters $\alpha$ and $\beta$ using the Metropolis-Hastings algorithm exposed 
+	above. The density of the Beta distribution is:
+	\begin{displaymath}
+		f(x\ ;\ \alpha, \beta) = 
+		\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha) \cdot \Gamma(\beta)} 
+		\cdot x^{(\alpha-1)} \cdot (1-x)^{(\beta-1)}
+	\end{displaymath}
+	Then, the log-likelihood function is:
+	\begin{displaymath}
+		\ln f(y \mid \alpha, \beta) = 
+		\displaystyle \sum_{i=1}^{100} 
+		\ln \Gamma(\alpha+\beta) - \ln \Gamma(\alpha) - \ln \Gamma(\beta) +
+		(\alpha-1) \cdot \ln(y_i) + (\beta-1) \cdot \ln(1-y_i)
+	\end{displaymath}
+	We known that both parameters are less than $10$. For this reason we considere 
+	that prior distributions are $\text{Unif}(0,10)$. We apply the algorithm
+	\ref{alg:bimh} with starting point $\left(\alpha^{(0)},\beta^{(0)}\right)=(1,1)$ and 
+	desired acceptance ratios $(p_{\alpha},p_{\beta})=(0.3,0.3)$.
+	
+	%TODO: CONTINUE
+	%POSAR GRAFIC M-H (pe. pag 41)
+\end{example}
+
 %------------------------------------------------------------------------------
 % ESTIMATION OF PARAMETERS
 %------------------------------------------------------------------------------
 \section{Estimation of Parameters}
-
-\begin{definition}[Conditioned likelihood]
-Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
-and $K^t$ are vectors representing the number of obligors and defaulted 
-obligors in each sector-rating bucket. We define the conditional 
-likelihood of these observations as:
-\begin{displaymath}
-	\begin{array}{l}
-		L(\nu,\vec{w},R \mid v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
-		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
-		\displaystyle
-		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
-		\binom{n_{ij}^t}{k_{ij}^t} \cdot
-		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
-		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
-	\end{array}
-\end{displaymath}
-Note that the parameters to be infered are $\nu,\vec{w},R$ and the
-latent variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
-\end{definition}
 
 \begin{proposition}[Parameters estimation]
 	We can estimate the parameters of the conditioned likelihood using
@@ -1350,20 +1446,6 @@ latent variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
 	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
 	replaced by $r$. We don't need to know the limits of the integral
 	because this is constant and cancels into the M-H algorithm.
-\end{proposition}
-
-\begin{proposition}[Robbins-Monro process]
-CAL MILLORAR MOLT AIXO. \cite{garthwaite:2010}
-proceso de Robbins-Monro tal como se indica en [¿24?].
-	\begin{displaymath}
-		\sigma_{i+1} = \left\{
-		\begin{array}{ll}
-			\sigma_i \cdot \left( 1 + \frac{1}{p \cdot i} \right) & \text{if $y$ is accepted} \\
-			\sigma_i \cdot \left( 1 - \frac{1}{(1-p) \cdot i} \right) & \text{if $y$ is rejected} \\
-		\end{array}
-		\right.
-	\end{displaymath}
-	we take an arbitrary starting value $\sigma_0$.
 \end{proposition}
 
 

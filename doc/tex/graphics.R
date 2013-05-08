@@ -5,7 +5,7 @@ library(rgl)
 setwd("./Pictures/")
 
 # ================================================
-# R script to create PD in the Bond example
+# PD in the Bond example
 # ================================================
 ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
 
@@ -114,7 +114,7 @@ rgl.postscript("bond_lgd.pdf", fmt="pdf", drawText=TRUE)
 
 
 # ================================================
-# R script to create PDs from transition matrix
+# PDs from transition matrix example
 # ================================================
 
 ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
@@ -223,7 +223,7 @@ grid();
 dev.off();
 
 # ================================================
-# R script to create Correlation Coefficient--Bivariate Normal Distribution
+# Correlation Coefficient--Bivariate Normal Distribution
 # see http://mathworld.wolfram.com/CorrelationCoefficientBivariateNormalDistribution.html
 # ================================================
 f <- function(beta, r, rho, n){1/(cosh(beta)-rho*r)^(n-1)}
@@ -240,3 +240,7 @@ pdf(file="ccbnd.pdf")
 plot(x,vccbn(x,0.2,20), type='l', xlab="correlation", ylab="density")
 grid()
 dev.off();
+
+# ================================================
+# Bayessian inference using Metropolis-Hastings example
+# ================================================
