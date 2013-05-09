@@ -244,3 +244,76 @@ dev.off();
 # ================================================
 # Bayessian inference using Metropolis-Hastings example
 # ================================================
+lnlik <- function(y, a, b)
+{
+	ret = length(y) * (lgamma(a+b) - lgamma(a) - lgamma(b))
+	ret = ret + (a-1)*sum(log(y))
+	ret = ret + (b-1)*sum(log(1-y))
+	return(ret)
+}
+
+bimh <- function(n, y, pa, pb)
+{
+	values = matrix(nrow=n, ncol=2, 0)
+	values[1,] = c(1, 1)
+	sigmas = matrix(nrow=n, ncol=2, 0)
+	sigmas[1,] = c(0.1, 0.1)
+	
+	for(i in 2:n)
+	{
+		x = values[i-1,]
+		
+		# param alpha
+		xa = rnorm(1, mean=x[1], sd=sigmas[i-1,1])
+		lnar = + lnlik(y, xa, x[2]) + dunif(xa, min=0, max=100, log=TRUE) -
+           lnlik(y, x[1], x[2]) - dunif(x[1], min=0, max=100, log=TRUE)
+		lnu = log(runif(1))
+		if (lnu < lnar) {
+			x[1] = xa
+			sigmas[i,1] = abs(sigmas[i-1,1] * (1 + 1/(pa*i)))
+		} else {
+			sigmas[i,1] = abs(sigmas[i-1,1] * (1 - 1/((1-pa)*i)))
+		}
+		
+		# param beta
+		xb = rnorm(1, mean=x[2], sd=sigmas[i-1,2])
+		lnar = + lnlik(y, x[1], xb) + dunif(xb, min=0, max=30, log=TRUE) -
+           lnlik(y, x[1], x[2]) - dunif(x[2], min=0, max=30, log=TRUE)
+		lnu = log(runif(1))
+		if (lnu < lnar) {
+			x[2] = xb
+			sigmas[i,2] = abs(sigmas[i-1,2] * (1 + 1/(pb*i)))
+		} else {
+			sigmas[i,2] = abs(sigmas[i-1,2] * (1 - 1/((1-pb)*i)))
+		}
+		
+		# simulated value
+		values[i,] = x
+	}
+	return(list(values=values,sigmas=sigmas))
+}
+
+y = rbeta(100, 2, 5)
+x = bimh(25000, y, 0.3, 0.3)
+#apply(x$values[5000:nrow(x$values),],2,mean)
+pdf(file="mhbd1.pdf", width=7, height=2)
+#par(oma=c(0,0,0,0))
+par(mar=c(2,2,1,1))
+matplot(x$values[1:1000,], type='l', xlab="iteration", ylab=""); grid()
+dev.off()
+
+pdf(file="mhbd2.pdf", width=7, height=2)
+par(mar=c(2,2,1,1))
+matplot(x$sigmas[1:1000,], type='l', xlab="iteration", ylab=""); grid()
+dev.off()
+
+pdf(file="mhbd3.pdf", width=7, height=3.5)
+par(mar=c(2,2,1,1))
+hist(x$values[5000:nrow(x$values),1],breaks=20,xlab="parameter" ~alpha, main="");
+dev.off()
+
+pdf(file="mhbd4.pdf", width=7, height=3.5)
+par(mar=c(2,2,1,1))
+hist(x$values[5000:nrow(x$values),2],breaks=20,xlab="parameter" ~beta, main="");
+dev.off()
+
