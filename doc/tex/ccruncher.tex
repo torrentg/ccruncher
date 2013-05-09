@@ -1299,14 +1299,15 @@ and, in the Bayesian inference Metropolis-Hastings case, becomes:
 	\min\left(1,\frac{f(y \mid \theta') \cdot f(\theta')}{f(y \mid \theta) \cdot f(\theta)}\right)
 \end{displaymath}
 
-The random-walk case fix the shape of the proposal distribution and
-requires to specify the value $\sigma$. This value has a direct impact on 
-the acceptance ratio, and consequently on the auto-correlation of the 
-generated values. Exists an optimal acceptance ratio that depends on the 
-target distribution, and in most cases relies in the interval $[0.234,0.44]$. 
-To avoid the  manual tuning of the scale parameter $\sigma$ we use the 
-Robbins-Monro algorithm \cite{garthwaite:2010} that performs an adaptative 
-scaling to achieve the desired acceptance ratio.
+The random-walk fix the shape of the proposal distribution and requires 
+to specify the value $\sigma$. This value has a direct non-linear impact 
+on the acceptance ratio (\#accepted/\#iterations), and consequently on the 
+auto-correlation of the generated values. Exists an optimal acceptance ratio 
+that depends on the target distribution, and in most cases relies in the 
+interval $[0.234,0.44]$. This optimal acceptance ratio generate samples whithout 
+drift and minimizes its auto-correlation. To avoid the  manual tuning of the 
+scale parameter $\sigma$ we use the Robbins-Monro algorithm \cite{garthwaite:2010} 
+that performs an adaptative scaling to achieve the desired acceptance ratio.
 
 \begin{proposition}[Robbins-Monro process]
 	In order to achieve an acceptance rate $p$ in the random-walk 
@@ -1339,8 +1340,8 @@ Metropolis-Hastings case, becomes:
 	\end{array}
 \end{displaymath}
 
-\textbf{Single-component Metropolis-Hastings} algorithm consist in update sequentially 
-univariate components using Metropolis-Hastings steps. 
+\textbf{Single-component Metropolis-Hastings} algorithm consist in update 
+sequentially univariate components using Metropolis-Hastings steps. 
 One generated observation $\theta^{(t)}$ is obtained after updating all 
 components of the parameter vector. Generally, the sequence of updating the 
 elements of $\theta$ does not influence the convergence of the algorithm.
@@ -1363,12 +1364,12 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 			\begin{enumerate}[label=\alph*.]
 				\item $\theta_j' = N(\theta_j,\sigma_j)$
 				\item Calculate the logarithm of the acceptance rate \\
-				$\ln(\alpha) = \min \left( 0,
-				\ln f(y \mid \theta_j',\theta_{\backslash j}) + 
-				\ln f(\theta_j',\theta_{\backslash j}) - 
-				\ln f(y \mid \theta_j,\theta_{\backslash j}) - 
-				\ln f(\theta_j,\theta_{\backslash j})
-				\right)$
+				$\ln(\alpha) = 
+					\ln f(y \mid \theta_j',\theta_{\backslash j}) + 
+					\ln f(\theta_j'\ ;\ \theta_{\backslash j}) - 
+					\ln f(y \mid \theta_j,\theta_{\backslash j}) - 
+					\ln f(\theta_j\ ; \ \theta_{\backslash j})
+				$
 				\item Simulate $u \sim U(0,1)$
 				\item Update $\theta_j=\left\{
 				\begin{array}{ll}
@@ -1404,13 +1405,43 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		\ln \Gamma(\alpha+\beta) - \ln \Gamma(\alpha) - \ln \Gamma(\beta) +
 		(\alpha-1) \cdot \ln(y_i) + (\beta-1) \cdot \ln(1-y_i)
 	\end{displaymath}
-	We known that both parameters are less than $10$. For this reason we considere 
-	that prior distributions are $\text{Unif}(0,10)$. We apply the algorithm
-	\ref{alg:bimh} with starting point $\left(\alpha^{(0)},\beta^{(0)}\right)=(1,1)$ and 
+	We known that $\alpha \in (0,10)$ and $\beta \in (0,30)$. For this reason we 
+	considere that prior distributions $f(\alpha)$ and $f(\beta)$ are uniform 
+	distributions. Then,
+	\begin{displaymath}
+		\begin{array}{l}
+			\ln f(\alpha \ ;\ \beta) = \ln(\frac{1}{10})
+			\\
+			\ln f(\beta \ ;\ \alpha) = \ln(\frac{1}{30})
+		\end{array}
+	\end{displaymath}
+	We apply the algorithm \ref{alg:bimh} with starting point 
+	$\left(\alpha^{(0)},\beta^{(0)}\right)=(1,1)$ and 
 	desired acceptance ratios $(p_{\alpha},p_{\beta})=(0.3,0.3)$.
-	
-	%TODO: CONTINUE
-	%POSAR GRAFIC M-H (pe. pag 41)
+	Figure \ref{fig:mhbd} display the results after 25000 iterations.
+	Observe that the first 500 iterations aren't valid because the Marchov 
+	chain hasn't achieved the equilibrium distribution. These have to be 
+	considered into the burnin period. The histogram of the sampled values
+	approximates the parameters distribution that we try to infer.
+	\begin{figure}[h!]
+		\centering
+		\subfloat[Iterations 1-1000 of parameters $\alpha$ and $\beta$]{
+			\includegraphics[width=\textwidth]{mhbd1}
+		}
+		\\
+		\subfloat[Histogram parameter $\alpha$]{
+			\includegraphics[width=7cm]{mhbd3}
+		}
+		\subfloat[Histogram parameter $\beta$]{
+			\includegraphics[width=7cm]{mhbd4}
+		}
+		\\
+		\subfloat[Iterations 1-1000 of scales $\sigma_{\alpha}$ and $\sigma_{\beta}$]{
+			\includegraphics[width=\textwidth]{mhbd2}
+		}
+		\caption{Metropolis-Hastings algorithm example}
+		\label{fig:mhbd}
+	\end{figure}
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -1439,8 +1470,8 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	%hyperparameters, hyperdistributions
 	\begin{displaymath}
 		f(r_{ij}) = f(r; i,j,R) = \frac
-		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right)}
-		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t; \vec{0}, R(r,i,j) \right) \ud r}
+		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r,i,j) \right)}
+		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(s,i,j) \right) \ud s}
 	\end{displaymath}
 	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
 	and $R(r,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
