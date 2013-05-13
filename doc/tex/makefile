@@ -59,4 +59,6 @@ clean:
 	rm -f Pictures/mhbd4.pdf
 	
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
+# yum install "tex(wrapfig.sty)"
+# yum install "tex(bbm.sty)"
 
