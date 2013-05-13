@@ -74,6 +74,7 @@
 \usepackage[lofdepth,lotdepth]{subfig}
 \usepackage{nameref}
 \usepackage{wrapfig}
+\usepackage{bbm}
 \def\numversion{2.3}
 \def\svnversion{R1024}
 
@@ -902,7 +903,7 @@ or inflation. We note as $M_T(t)$ the T-period transition matrix
 at time $t$. This matrix depends of the forecasted indicators at 
 $t$ in the form $M_T(\theta_1(t),\dots,\theta_k(t))$. In these 
 cases, the PDs functions can be obtained composing successively
-the transition matrices for each T-period. The P for an obligor
+the transition matrices for each T-period. The PD for an obligor
 with rating $r_j$ is:
 \begin{displaymath}
 \Pr\{T_. \le t\} = \left(
@@ -1301,11 +1302,9 @@ and, in the Bayesian inference Metropolis-Hastings case, becomes:
 
 The random-walk fix the shape of the proposal distribution and requires 
 to specify the value $\sigma$. This value has a direct non-linear impact 
-on the acceptance ratio (\#accepted/\#iterations), and consequently on the 
-auto-correlation of the generated values. Exists an optimal acceptance ratio 
-that depends on the target distribution, and in most cases relies in the 
-interval $[0.234,0.44]$. This optimal acceptance ratio generate samples whithout 
-drift and minimizes its auto-correlation. To avoid the  manual tuning of the 
+on the acceptance ratio (\#accepted/\#iterations). Exists an optimal 
+acceptance ratio that minimizes the auto-correlation, and in most cases 
+relies in the interval $[0.234,0.44]$. To avoid the  manual tuning of the 
 scale parameter $\sigma$ we use the Robbins-Monro algorithm \cite{garthwaite:2010} 
 that performs an adaptative scaling to achieve the desired acceptance ratio.
 
@@ -1351,7 +1350,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 
 \begin{algorithm}[Bayesian inference Metropolis-Hastings] 
 	\label{alg:bimh}
-	Let $f(y \mid \theta)$ the likelihood function, with priors $f(\theta_j)$,
+	Let $f(y \mid \theta)$ the likelihood function, with priors $f_j(\theta_j)$,
 	and desired acceptance ratios $p_j$. Then the parameters distribution
 	can be sampled using the following Metropolis-Hastings algorithm:
 	\begin{enumerate}
@@ -1366,9 +1365,9 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 				\item Calculate the logarithm of the acceptance rate \\
 				$\ln(\alpha) = 
 					\ln f(y \mid \theta_j',\theta_{\backslash j}) + 
-					\ln f(\theta_j'\ ;\ \theta_{\backslash j}) - 
+					\ln f_j(\theta_j'\ ;\ \theta_{\backslash j}) - 
 					\ln f(y \mid \theta_j,\theta_{\backslash j}) - 
-					\ln f(\theta_j\ ; \ \theta_{\backslash j})
+					\ln f_j(\theta_j\ ; \ \theta_{\backslash j})
 				$
 				\item Simulate $u \sim U(0,1)$
 				\item Update $\theta_j=\left\{
@@ -1406,13 +1405,13 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		(\alpha-1) \cdot \ln(y_i) + (\beta-1) \cdot \ln(1-y_i)
 	\end{displaymath}
 	We known that $\alpha \in (0,10)$ and $\beta \in (0,30)$. For this reason we 
-	considere that prior distributions $f(\alpha)$ and $f(\beta)$ are uniform 
-	distributions. Then,
+	considere that prior distributions $f_{\alpha}(\alpha)$ and $f_{\beta}(\beta)$ 
+	are uniform distributions. Then,
 	\begin{displaymath}
 		\begin{array}{l}
-			\ln f(\alpha \ ;\ \beta) = \ln(\frac{1}{10})
+			\ln f_{\alpha}(\alpha \ ;\ \beta) = \ln(\frac{1}{10})
 			\\
-			\ln f(\beta \ ;\ \alpha) = \ln(\frac{1}{30})
+			\ln f_{\beta}(\beta \ ;\ \alpha) = \ln(\frac{1}{30})
 		\end{array}
 	\end{displaymath}
 	We apply the algorithm \ref{alg:bimh} with starting point 
@@ -1422,7 +1421,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	Observe that the first 500 iterations aren't valid because the Marchov 
 	chain hasn't achieved the equilibrium distribution. These have to be 
 	considered into the burnin period. The histogram of the sampled values
-	approximates the parameters distribution that we try to infer.
+	approximates the parameters distribution that we are infering.
 	\begin{figure}[h!]
 		\centering
 		\subfloat[Iterations 1-1000 of parameters $\alpha$ and $\beta$]{
@@ -1458,19 +1457,19 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
 		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
 		\item proposal distributions $q(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
-		\item prior distribution $f(\nu) \sim \text{Unif}(2,1000)$
-		\item prior distribution $f(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
-		\item prior distribution $f(r_{ij}) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
-		\item prior distribution $f(\vec{z}^t) \sim N(\vec{0},R) \quad t=1,\dots,T$
-		\item prior distribution $f(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
+		\item prior distribution $f_{\nu}(\nu) \sim \text{Unif}(2,1000)$
+		\item prior distribution $f_{w}(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
+		\item prior distribution $f_{r}(r_{ij}\ ;\ R) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
+		\item prior distribution $f_z(\vec{z}^t\ ;\ R) \sim N(\vec{0},R) \quad t=1,\dots,T$
+		\item prior distribution $f_v(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
 	\end{itemize}
 	For the prior distributions of $r_{ij}$ we set the likelihood distribution
 	of the latent variables $\vec{z}^t$. The pdf of the distribution 
 	$\Upsilon(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
 	%hyperparameters, hyperdistributions
 	\begin{displaymath}
-		f(r_{ij}) = f(r; i,j,R) = \frac
-		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r,i,j) \right)}
+		f_r(r_{ij}\ ;\ R) = \frac
+		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r_{ij},i,j) \right)}
 		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(s,i,j) \right) \ud s}
 	\end{displaymath}
 	where $\phi$ is the pdf of the multivariate $N(0,R)$ distribution,
@@ -1478,6 +1477,13 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	replaced by $r$. We don't need to know the limits of the integral
 	because this is constant and cancels into the M-H algorithm.
 \end{proposition}
+
+\begin{example}[1000 observations]
+TODO
+\end{example}
+
+\begin{example}[Averaged rating]
+\end{example}
 
 
 %==============================================================================
@@ -1490,6 +1496,13 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 Let a portfolio where we have the obligor default times
 $(T_1,\dots,T_n)$ modeled by its PD over time and a
 t-Student copula. For each obligor we know its exposure
+
+\begin{displaymath}
+    L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{T_i < t}(T_i) \cdot 
+    \left( 
+    \sum_{j=1}^{n_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
+    \right)
+\end{displaymath}
 
 Monte Carlo, risk statistics (el, var, es), standar error estimates,
 variance reduction methods (antithetic, Latin Hypercube Sampling),
@@ -1511,6 +1524,16 @@ speed-up techniques (function composition), function approximation
 \section{Copula Basics}
 \label{ap:copula_basics}
 
+\begin{wrapfigure}{r}{0.5\textwidth}
+\vspace{-25pt}
+\begin{center}
+\includegraphics[width=0.48\textwidth]{ercim78}
+\end{center}
+\vspace{-10pt}
+\caption{Dependence structure impact}
+\vspace{-10pt}
+\label{fig:copula_impact}
+\end{wrapfigure}
 It is common to use correlation as a measure of dependency between random 
 variables. In most cases, this measure does not fully reflect the structure 
 of dependence between them. Figure \ref{fig:copula_impact} displays two
@@ -1519,9 +1542,9 @@ profile because its underlying  dependence structure is distinct (Gaussian
 copula vs. t-Student(3) copula). The mathematical concept that does reflect 
 the structure of dependence between random variables, however, is the copula, 
 which we define below. The world of copulas is vast and very interesting. 
-See \cite{embrechts:2002} \cite{mcneil:2005} for a pleasant and detailed 
+See \cite{embrechts:2002} \cite[chap. 5]{mcneil:2005} for a pleasant and detailed 
 introduction to copulas.
-
+\begin{comment}
 \begin{figure}[!hbt]
 \begin{center}
 \includegraphics[height=10cm]{ercim78}
@@ -1529,6 +1552,8 @@ introduction to copulas.
 \label{fig:copula_impact}
 \end{center}
 \end{figure}
+\end{comment}
+
 
 \begin{definition}[Copula]
 	A copula function, $C$, is a multivariate distribution defined on the 
