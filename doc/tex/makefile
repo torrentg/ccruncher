@@ -61,4 +61,6 @@ clean:
 # biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
 # yum install "tex(wrapfig.sty)"
 # yum install "tex(bbm.sty)"
+# miktex package manager -> mpm.exe
+# set draft in \documentclass properties
 

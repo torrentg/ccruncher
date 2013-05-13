@@ -354,34 +354,34 @@ year in order to simplify the exposition without loss of generality
 \end{definition}
 
 \begin{example}[Bond]
-Let a 10-years fixed rate bond with an annual coupon of the
-$4\%$ issued by a company rated BB. The credit rating agency 
-reports, for this obligor and rating, the PD over time displayed 
-in figure \ref{figure:bond} with a $\text{PD}(1)=1.06\%$. 
-The EAD for this asset can be obtained from its expected cashflows 
-because they are known in advance. We supose that the bank 
-internal models indicate that in this case the LGD is a 
-$\text{Beta}(5,2)$ distribution regardless of the default time.
-Figure \ref{figure:bond} ilustrates the defined basic concepts 
-applied to this bond.
-\begin{figure}[h!]
-\centering
-\subfloat[Probability of Default]{
-    \includegraphics[width=7cm]{bond_pd1}
-}
-\subfloat[Probability of Default (zoom)]{
-    \includegraphics[width=7cm]{bond_pd2}
-}
-\\
-\subfloat[Exposure At Default]{
-    \includegraphics[width=7cm]{bond_ead}
-}
-\subfloat[Loss Given Default]{
-    \includegraphics[width=7cm]{bond_lgd}
-}
-\caption{Basic concepts bond example}
-\label{figure:bond} 
-\end{figure}
+	Let a 10-years fixed rate bond with an annual coupon of the
+	$4\%$ issued by a company rated BB. The credit rating agency 
+	reports, for this obligor and rating, the PD over time displayed 
+	in figure \ref{figure:bond} with a $\text{PD}(1)=1.06\%$. 
+	The EAD for this asset can be obtained from its expected cashflows 
+	because they are known in advance. We supose that the bank 
+	internal models indicate that in this case the LGD is a 
+	$\text{Beta}(5,2)$ distribution regardless of the default time.
+	Figure \ref{figure:bond} ilustrates the defined basic concepts 
+	applied to this bond.
+	\begin{figure}[!ht]
+		\centering
+		\subfloat[Probability of Default]{
+			\includegraphics[width=7cm]{bond_pd1}
+		}
+		\subfloat[Probability of Default (zoom)]{
+			\includegraphics[width=7cm]{bond_pd2}
+		}
+		\\
+		\subfloat[Exposure At Default]{
+			\includegraphics[width=7cm]{bond_ead}
+		}
+		\subfloat[Loss Given Default]{
+			\includegraphics[width=7cm]{bond_lgd}
+		}
+		\caption{Basic concepts bond example}
+		\label{figure:bond} 
+	\end{figure}
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -475,7 +475,7 @@ applying the following proposition.
 \end{proposition}
 \begin{proof}
 	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_n(\nu,0,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
+	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
 	the components of the copula $C_{\nu,\bar{R}}^n$.
 	\begin{displaymath}
 		\begin{array}{rl}
@@ -559,7 +559,7 @@ gives us the key to reformulate the problem as a multi-factor problem.
 	\begin{displaymath}
 		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
 		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
-		\quad \text{ where } \left\{
+		\text{, where } \left\{
 		\begin{array}{l}
 			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
 			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
@@ -768,18 +768,18 @@ of the exponential and the logarithm functions:
 	distributions. Results are displayed in figure \ref{fig:pdfsv}. Observe 
 	that values around $T=1$ are similar to those of example \ref{ex:pdftm}, 
 	but they differ as they move away from this.
+	\begin{figure}[!ht]
+		\centering
+		\subfloat[Probability of Default]{
+			\includegraphics[width=7cm]{pdfsv1}
+		}
+		\subfloat[Probability of Default (zoom)]{
+			\includegraphics[width=7cm]{pdfsv2}
+		}
+		\caption{PDs derived from annual PDs}
+		\label{fig:pdfsv}
+	\end{figure}
 \end{example}
-\begin{figure}[ht]
-	\centering
-	\subfloat[Probability of Default]{
-		\includegraphics[width=7cm]{pdfsv1}
-	}
-	\subfloat[Probability of Default (zoom)]{
-		\includegraphics[width=7cm]{pdfsv2}
-	}
-	\caption{PDs derived from annual PDs}
-	\label{fig:pdfsv}
-\end{figure}
 
 \subsection{From transition matrix}
 \label{pdftm}
@@ -882,18 +882,18 @@ extracted from \cite{kreinin:2001}.
 	Finally we use the proposition \ref{prop:pdftm} to determine the 
 	PD function for each rating and month. Results are displayed in figure 
 	\ref{fig:pdftm}.
+	\begin{figure}[!ht]
+		\centering
+		\subfloat[Probability of Default]{
+			\includegraphics[width=7cm]{pdftm1}
+		}
+		\subfloat[Probability of Default (zoom)]{
+			\includegraphics[width=7cm]{pdftm2}
+		}
+		\caption{PDs derived from transition matrix}
+		\label{fig:pdftm}
+	\end{figure}
 \end{example}
-\begin{figure}[ht]
-	\centering
-	\subfloat[Probability of Default]{
-		\includegraphics[width=7cm]{pdftm1}
-	}
-	\subfloat[Probability of Default (zoom)]{
-		\includegraphics[width=7cm]{pdftm2}
-	}
-	\caption{PDs derived from transition matrix}
-	\label{fig:pdftm}
-\end{figure}
 
 \subsection{From advanced transition matrix model}
 
@@ -978,35 +978,34 @@ matrix $R$.
 % data and current PD models.
 
 \begin{example}[]
-We have two sectors, $S1$ and $S2$, and four ratings, $A, B, C, D$ where 
-$D$ is the defaulted status. We have collected the observations displayed
-in table \ref{table:histdata}.
-This example has a number of ratings and sectors less than the previous 
-examples for practical reasons (otherwise data tables do not fit 
-in the width of the page).
-\begin{table}[h!]
-	\centering
-	\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
-	%\centering
-	\cline{3-8} \cline{10-15}
-	& & \multicolumn{6}{|c|}{N (\# obligors)} & & \multicolumn{6}{|c|}{K (\# defaults)} \\
-	\cline{3-8} \cline{10-15}
-	& & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} & & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\multicolumn{1}{|c|}{Year} & & A & B & C & A & B & C & & A & B & C & A & B & C \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\multicolumn{1}{|c|}{1} & & 529 & 932 & 293 & 685 & 1249 & 206 & & 3 & 12 & 15 & 3 & 25 & 10 \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\multicolumn{1}{|c|}{2} & & 522 & 977 & 278 & 638 & 1315 & 194 & & 1 & 18 & 13 & 7 & 28 & 8 \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\multicolumn{1}{|c|}{20} & & 492 & 962 & 310 & 602 & 1227 & 183 & & 6 & 28 & 21 & 4 & 31 & 16 \\
-	\cline{1-1} \cline{3-8} \cline{10-15}
-	\end{tabular}
-	\caption{Example of historical records}
-	\label{table:histdata}
-\end{table}
+	We have two sectors, $S1$ and $S2$, and four ratings, $A, B, C, D$ where 
+	$D$ is the defaulted status. We have collected the observations displayed
+	in table \ref{table:histdata}.
+	This example has a number of ratings and sectors less than the previous 
+	examples for practical reasons (otherwise data tables do not fit 
+	in the width of the page).
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
+			\cline{3-8} \cline{10-15}
+			& & \multicolumn{6}{|c|}{N (\# obligors)} & & \multicolumn{6}{|c|}{K (\# defaults)} \\
+			\cline{3-8} \cline{10-15}
+			& & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} & & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{Year} & & A & B & C & A & B & C & & A & B & C & A & B & C \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{1} & & 529 & 932 & 293 & 685 & 1249 & 206 & & 3 & 12 & 15 & 3 & 25 & 10 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{2} & & 522 & 977 & 278 & 638 & 1315 & 194 & & 1 & 18 & 13 & 7 & 28 & 8 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{20} & & 492 & 962 & 310 & 602 & 1227 & 183 & & 6 & 28 & 21 & 4 & 31 & 16 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+		\end{tabular}
+		\caption{Example of historical records}
+		\label{table:histdata}
+	\end{table}
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -1422,10 +1421,10 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	chain hasn't achieved the equilibrium distribution. These have to be 
 	considered into the burnin period. The histogram of the sampled values
 	approximates the parameters distribution that we are infering.
-	\begin{figure}[h!]
+	\begin{figure}[!ht]
 		\centering
 		\subfloat[Iterations 1-1000 of parameters $\alpha$ and $\beta$]{
-			\includegraphics[width=\textwidth]{mhbd1}
+			\includegraphics[width=0.98\textwidth]{mhbd1}
 		}
 		\\
 		\subfloat[Histogram parameter $\alpha$]{
@@ -1436,7 +1435,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		}
 		\\
 		\subfloat[Iterations 1-1000 of scales $\sigma_{\alpha}$ and $\sigma_{\beta}$]{
-			\includegraphics[width=\textwidth]{mhbd2}
+			\includegraphics[width=0.98\textwidth]{mhbd2}
 		}
 		\caption{Metropolis-Hastings algorithm example}
 		\label{fig:mhbd}
@@ -1479,8 +1478,108 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 \end{proposition}
 
 \begin{example}[1000 observations]
-TODO
+	We simulate $1000$ observations of the escenario and then we infere the
+	parameters based only with the observations:
+	\begin{itemize}
+		\item Degrees of freedom of copula t-Student
+		\begin{displaymath}
+			\nu=20
+		\end{displaymath}
+		\item Three ratings A, B, and Default where
+		\begin{displaymath}
+			p_A=2\% \quad \text{ and } \quad p_B=8\%
+		\end{displaymath}
+		\item Three sectors S1, S2 and S3 with the following loadings and correlations:
+		\begin{displaymath}
+			\vec{w} = (0.4, 0.25, 0.3)
+			\qquad 
+			R = \left(
+			\begin{array}{ccc}
+				1 & 0.5 & 0.3 \\
+				0.5 & 11 & 0.4 \\
+				0.3 & 0.4 & 1 \\
+			\end{array}
+			\right) 
+		\end{displaymath}
+		\item The number of obligors by sector-rating is:\\
+		\newline
+		\begin{tabular}{cc|c|c||c|c||c|c|}
+			\cline{3-8}
+			& & \multicolumn{6}{|c|}{N (\# obligors)} \\
+			\cline{3-8}
+			& & \multicolumn{2}{|c||}{S1} & \multicolumn{2}{|c||}{S2} & \multicolumn{2}{|c|}{S3} \\
+			\cline{1-1} \cline{3-8}
+			\multicolumn{1}{|c|}{Obs} & & A & B & A & B & A & B \\
+			\cline{1-1} \cline{3-8}
+			\multicolumn{1}{|c|}{1} & & 250 & 750 & 500 & 500 & 750 & 250 \\
+			\cline{1-1} \cline{3-8}
+			\multicolumn{1}{|c|}{2} & & 250 & 750 & 500 & 500 & 750 & 250 \\
+			\cline{1-1} \cline{3-8}
+			\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+			\cline{1-1} \cline{3-8}
+			\multicolumn{1}{|c|}{1000} & & 250 & 750 & 500 & 500 & 750 & 250 \\
+			\cline{1-1} \cline{3-8}
+		\end{tabular}
+	\end{itemize}
+	
+	\begin{figure}[!ht]
+		\centering
+		\subfloat[\label{Simulated defaults}]{
+\begin{minipage}[c][1\width]{0.5\textwidth}
+\centering
+			\small
+			\begin{tabular}{cc|c|c||c|c||c|c|}
+				\cline{3-8}
+				& & \multicolumn{6}{|c|}{K (\# defaults)} \\
+				\cline{3-8}
+				& & \multicolumn{2}{|c||}{S1} & \multicolumn{2}{|c||}{S2} & \multicolumn{2}{|c|}{S3} \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{Obs} & & A & B & A & B & A & B \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{1} & & 1 & 14 & 11 & 50 & 11 & 14 \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{2} & & 2 & 67 & 8 & 26 & 3 & 10 \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{1000} & & 40 & 285 & 19 & 68 & 20 & 37 \\
+				\cline{1-1} \cline{3-8}
+			\end{tabular}
+\end{minipage}
+		}
+		~
+		\subfloat[\label{Degrees of freedom estimation}]{
+			\includegraphics[width=5cm]{calib11}
+		}
+		\\
+		\subfloat[\label{Factor loadings estimated distribution}]{
+			\includegraphics[width=0.98\textwidth]{calib12}
+		}
+		\\
+		\subfloat[\label{Factor correlations estimated distribution}]{
+			\includegraphics[width=0.98\textwidth]{calib13}
+		}
+		\caption{Parameters calibration example}
+		\label{fig:calib1}
+	\end{figure}
 \end{example}
+
+% # R script to generate ccbinf input files
+% w = c(0.4, 0.25, 0.3)
+% R = matrix(ncol=3, nrow=3, data=c(1.0,0.5,0.3, 0.5,1.0,0.4, 0.3,0.4,1.0))
+% nu = 20
+% p1 = c(0.02, 0.08)
+% D1 = matrix(ncol=2, nrow=3, data=c(250, 500, 750, 750, 500, 250))
+% rcount1 = ccruncher.rcount(1000, p1, D1, w, R, nu)
+% export(rcount1, "borrame1.txt")
+% p2 = c(0.035, 0.05, 0.065)
+% D2 = diag(1000, 3)
+% rcount2 = ccruncher.rcount(1000, p2, D2, w, R, nu)
+% rcount2$K[,1] = rcount1$K[,1] + rcount1$K[,2]
+% rcount2$K[,5] = rcount1$K[,3] + rcount1$K[,4]
+% rcount2$K[,9] = rcount1$K[,5] + rcount1$K[,6]
+% export(rcount2, "borrame2.txt")
+
 
 \begin{example}[Averaged rating]
 \end{example}

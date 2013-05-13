@@ -317,3 +317,32 @@ par(mar=c(2,2,1,1))
 hist(x$values[5000:nrow(x$values),2],breaks=20,xlab="parameter" ~beta, main="");
 dev.off()
 
+# ================================================
+# Bayessian inference example (1000 obs)
+# ================================================
+source('../bin/ccbinf.R')
+X <- import('borrame1.out')
+skip=2000
+n=nrow(X)-1
+
+pdf(file="calib11.pdf", width=2.3, height=2)
+par(mar=c(4,2,0.5,0))
+hist(X[(skip+1):n,1], breaks=20, freq=TRUE, xlab="Parameter "~nu, ylab="Frequency", main=""); 
+dev.off()
+
+pdf(file="calib12.pdf", width=7, height=2)
+par(mfrow=c(1,3));
+par(mar=c(4,2,0.5,0))
+hist(X[(skip+1):n,2], breaks=20, freq=TRUE, xlab="Parameter "~W[1], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,3], breaks=20, freq=TRUE, xlab="Parameter "~W[2], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,4], breaks=20, freq=TRUE, xlab="Parameter "~W[3], ylab="Frequency", main=""); 
+dev.off()
+
+
+pdf(file="calib13.pdf", width=7, height=2)
+par(mfrow=c(1,3));
+par(mar=c(4,2,1,0))
+hist(X[(skip+1):n,5], breaks=20, freq=TRUE, xlab="Parameter "~R[1][2], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,6], breaks=20, freq=TRUE, xlab="Parameter "~R[1][3], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,7], breaks=20, freq=TRUE, xlab="Parameter "~R[2][3], ylab="Frequency", main=""); 
+dev.off()
