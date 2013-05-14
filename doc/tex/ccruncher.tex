@@ -71,7 +71,7 @@
 \usepackage{enumitem}
 \usepackage{changepage}
 \usepackage[official]{eurosym}
-\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage{subcaption}
 \usepackage{nameref}
 \usepackage{wrapfig}
 \usepackage{bbm}
@@ -366,17 +366,17 @@ year in order to simplify the exposition without loss of generality
 	applied to this bond.
 	\begin{figure}[!ht]
 		\centering
-		\subfloat[Probability of Default]{
+		\subcaptionbox{Probability of Default}{
 			\includegraphics[width=7cm]{bond_pd1}
 		}
-		\subfloat[Probability of Default (zoom)]{
+		\subcaptionbox{Probability of Default (zoom)}{
 			\includegraphics[width=7cm]{bond_pd2}
 		}
 		\\
-		\subfloat[Exposure At Default]{
+		\subcaptionbox{Exposure At Default}{
 			\includegraphics[width=7cm]{bond_ead}
 		}
-		\subfloat[Loss Given Default]{
+		\subcaptionbox{Loss Given Default}{
 			\includegraphics[width=7cm]{bond_lgd}
 		}
 		\caption{Basic concepts bond example}
@@ -770,10 +770,10 @@ of the exponential and the logarithm functions:
 	but they differ as they move away from this.
 	\begin{figure}[!ht]
 		\centering
-		\subfloat[Probability of Default]{
+		\subcaptionbox{Probability of Default}{
 			\includegraphics[width=7cm]{pdfsv1}
 		}
-		\subfloat[Probability of Default (zoom)]{
+		\subcaptionbox{Probability of Default (zoom)}{
 			\includegraphics[width=7cm]{pdfsv2}
 		}
 		\caption{PDs derived from annual PDs}
@@ -884,10 +884,10 @@ extracted from \cite{kreinin:2001}.
 	\ref{fig:pdftm}.
 	\begin{figure}[!ht]
 		\centering
-		\subfloat[Probability of Default]{
+		\subcaptionbox{Probability of Default}{
 			\includegraphics[width=7cm]{pdftm1}
 		}
-		\subfloat[Probability of Default (zoom)]{
+		\subcaptionbox{Probability of Default (zoom)}{
 			\includegraphics[width=7cm]{pdftm2}
 		}
 		\caption{PDs derived from transition matrix}
@@ -1423,18 +1423,18 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	approximates the parameters distribution that we are infering.
 	\begin{figure}[!ht]
 		\centering
-		\subfloat[Iterations 1-1000 of parameters $\alpha$ and $\beta$]{
+		\subcaptionbox{Iterations 1-1000 of parameters $\alpha$ and $\beta$}{
 			\includegraphics[width=0.98\textwidth]{mhbd1}
 		}
 		\\
-		\subfloat[Histogram parameter $\alpha$]{
+		\subcaptionbox{Histogram parameter $\alpha$}{
 			\includegraphics[width=7cm]{mhbd3}
 		}
-		\subfloat[Histogram parameter $\beta$]{
+		\subcaptionbox{Histogram parameter $\beta$}{
 			\includegraphics[width=7cm]{mhbd4}
 		}
 		\\
-		\subfloat[Iterations 1-1000 of scales $\sigma_{\alpha}$ and $\sigma_{\beta}$]{
+		\subcaptionbox{Iterations 1-1000 of scales $\sigma_{\alpha}$ and $\sigma_{\beta}$}{
 			\includegraphics[width=0.98\textwidth]{mhbd2}
 		}
 		\caption{Metropolis-Hastings algorithm example}
@@ -1479,7 +1479,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 
 \begin{example}[1000 observations]
 	We simulate $1000$ observations of the escenario and then we infere the
-	parameters based only with the observations:
+	parameters based only with the observations: 
 	\begin{itemize}
 		\item Degrees of freedom of copula t-Student
 		\begin{displaymath}
@@ -1521,13 +1521,12 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 			\cline{1-1} \cline{3-8}
 		\end{tabular}
 	\end{itemize}
-	
+	We simulate the numbers of defaults by sector-rating using the multi-factor t-Student
+	and proposition. BLABLABLA. POSAR ALGORITME AQUI?. Figure \ref{fig:calib1}.
 	\begin{figure}[!ht]
 		\centering
-		\subfloat[\label{Simulated defaults}]{
-\begin{minipage}[c][1\width]{0.5\textwidth}
-\centering
-			\small
+		\subcaptionbox{Simulated defaults}{
+			%\small
 			\begin{tabular}{cc|c|c||c|c||c|c|}
 				\cline{3-8}
 				& & \multicolumn{6}{|c|}{K (\# defaults)} \\
@@ -1545,18 +1544,17 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 				\multicolumn{1}{|c|}{1000} & & 40 & 285 & 19 & 68 & 20 & 37 \\
 				\cline{1-1} \cline{3-8}
 			\end{tabular}
-\end{minipage}
 		}
-		~
-		\subfloat[\label{Degrees of freedom estimation}]{
+		\hfill
+		\subcaptionbox{Degrees of freedom estimation}{
 			\includegraphics[width=5cm]{calib11}
 		}
 		\\
-		\subfloat[\label{Factor loadings estimated distribution}]{
+		\subcaptionbox{Factor loadings estimated distribution}{
 			\includegraphics[width=0.98\textwidth]{calib12}
 		}
 		\\
-		\subfloat[\label{Factor correlations estimated distribution}]{
+		\subcaptionbox{Factor correlations estimated distribution}{
 			\includegraphics[width=0.98\textwidth]{calib13}
 		}
 		\caption{Parameters calibration example}
@@ -1565,20 +1563,25 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 \end{example}
 
 % # R script to generate ccbinf input files
+% source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
 % w = c(0.4, 0.25, 0.3)
 % R = matrix(ncol=3, nrow=3, data=c(1.0,0.5,0.3, 0.5,1.0,0.4, 0.3,0.4,1.0))
 % nu = 20
 % p1 = c(0.02, 0.08)
 % D1 = matrix(ncol=2, nrow=3, data=c(250, 500, 750, 750, 500, 250))
 % rcount1 = ccruncher.rcount(1000, p1, D1, w, R, nu)
-% export(rcount1, "borrame1.txt")
+% export(rcount1, "calib1.txt")
 % p2 = c(0.035, 0.05, 0.065)
 % D2 = diag(1000, 3)
 % rcount2 = ccruncher.rcount(1000, p2, D2, w, R, nu)
 % rcount2$K[,1] = rcount1$K[,1] + rcount1$K[,2]
 % rcount2$K[,5] = rcount1$K[,3] + rcount1$K[,4]
 % rcount2$K[,9] = rcount1$K[,5] + rcount1$K[,6]
-% export(rcount2, "borrame2.txt")
+% export(rcount2, "calib2.txt")
+% quit(save='no')
+% 
+% # bash commands
+% /home/gerard/projects/ccbinf/build/ccbinf -n 1000 borrame1.txt
 
 
 \begin{example}[Averaged rating]

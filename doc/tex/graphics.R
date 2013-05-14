@@ -320,13 +320,13 @@ dev.off()
 # ================================================
 # Bayessian inference example (1000 obs)
 # ================================================
-source('../bin/ccbinf.R')
-X <- import('borrame1.out')
+source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
+X <- import('calib1.out')
 skip=2000
 n=nrow(X)-1
 
-pdf(file="calib11.pdf", width=2.3, height=2)
-par(mar=c(4,2,0.5,0))
+pdf(file="calib11.pdf", width=2.3, height=1.8)
+par(mar=c(2,2,0.5,0))
 hist(X[(skip+1):n,1], breaks=20, freq=TRUE, xlab="Parameter "~nu, ylab="Frequency", main=""); 
 dev.off()
 
@@ -346,3 +346,4 @@ hist(X[(skip+1):n,5], breaks=20, freq=TRUE, xlab="Parameter "~R[1][2], ylab="Fre
 hist(X[(skip+1):n,6], breaks=20, freq=TRUE, xlab="Parameter "~R[1][3], ylab="Frequency", main=""); 
 hist(X[(skip+1):n,7], breaks=20, freq=TRUE, xlab="Parameter "~R[2][3], ylab="Frequency", main=""); 
 dev.off()
+
