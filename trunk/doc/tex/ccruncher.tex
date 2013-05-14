@@ -211,6 +211,9 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics\texttrademark model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
+%TODO: indicar treball original
+%TODO: indicar que permet fer CCruncher
+
 %------------------------------------------------------------------------------
 % CREDIT RISK MEASURES
 %------------------------------------------------------------------------------
@@ -456,9 +459,14 @@ reasons:
 	\item it can be expressed as a multi-factor model.
 \end{itemize}
 
-Working directly the t-Student copula is cumbersome, therefore we 
-reformulate $F$ in terms of the multivariate t-Student distribution 
-applying the following proposition.
+Previous versions of the CCruncher project implemented a simulation schema
+consisting in simulating the t-Student copula directly. This approach 
+requires an adapted simulation algorithm for high-dimensional problems and 
+dificults the estimation of the parameters. The current CCruncher version 
+relies in the following proposition that reformulate $F$ in terms of the 
+multivariate t-Student distribution. This result, combined with the t-Student
+multi-factor model, provides an efficient simulation algorithm and allows 
+to estimate the parameters.
 
 \begin{proposition}[Multivariate Default Times Distribution]
 	\label{prop:dtd}
@@ -546,12 +554,8 @@ distribution, $t_n(\nu,0,\bar{R})$ with a obligors correlation block
 matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition that follows 
 gives us the key to reformulate the problem as a multi-factor problem.
 
-% With some minor exceptions 
-% (see proposition \ref{prop:gmfamgb}) we can state that any multivariate t-Student 
-% distribution with a block correlation matrix can be expressed as a t-Student 
-% multi-factor model.
-
 \begin{proposition}[t-Student multi-factor model]
+	\label{prop:tmfm}
 	Let a random vector $X=(X_1,\dots,X_n)$ with a multivariate t-Student 
 	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
 	is a correlation block matrix and $n_i$ sizes high-enough. 
@@ -682,12 +686,12 @@ section \ref{pdftm}, but this simplified case has an explicit
 solution stated in the proposition that follows.
 
 \begin{proposition}
-A diagonal transition matrix leads to default times with exponential
-distributions:
-\begin{displaymath}
-	\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
-	\quad \text{ where } \lambda = -\ln(1-p_j)
-\end{displaymath}
+	A diagonal transition matrix leads to default times with exponential
+	distributions:
+	\begin{displaymath}
+		\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
+		\quad \text{ where } \lambda = -\ln(1-p_j)
+	\end{displaymath}
 \end{proposition}
 \begin{proof}
 	We note that ratings are detached from each other. 
@@ -906,10 +910,10 @@ cases, the PDs functions can be obtained composing successively
 the transition matrices for each T-period. The PD for an obligor
 with rating $r_j$ is:
 \begin{displaymath}
-\Pr\{T_. \le t\} = \left(
-	\left( \prod_{i=1}^{[t/T]} M_T(i) \right) \cdot 
-	M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
-	\right)_{j, n}
+	\Pr\{T_. \le t\} = \left(
+		\left( \prod_{i=1}^{[t/T]} M_T(i) \right) \cdot 
+		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
+		\right)_{j, n}
 \end{displaymath}
 where $[x]$ is the integer part of $x$, $T_.$ is the obligor default time, 
 $j$ is the index of the obligor's rating, $n$ is the index of the 
@@ -977,6 +981,37 @@ matrix $R$.
 % and the economic cicle and requires to be estimated based on historical 
 % data and current PD models.
 
+We provide an algorithm to simulate the number of defaults based on
+the multi-factor model. We will use it to generate samples with which 
+we can test the estimation algorithm. The following algorithm is 
+a direct application of the multivariate default times distribution
+and the t-Student multi-factor model (see propositions \ref{prop:dtd} 
+and \ref{prop:tmfm}).
+
+\begin{algorithm}[Simulating number of defaults]
+	\label{alg:snod}
+	Let a multivariate default times distribution with a t-Student copula
+	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
+	matrix $R$, degrees of freedom $\nu$, and annual probabilities of
+	default $p_j \quad j=1,\dots,m$. Then, we can simulate a sample of 
+	size $T$ of the annual number of defaults by factor and rating doing:
+	\begin{enumerate}
+		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
+		\item For $t=1,\dots,T$ repeat the following steps
+		\begin{itemize}
+			\item Simulate $k$ independent $N(0,1)$, $\vec{z}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}$
+			\item Simulate a $\chi_{\nu}^2$, $v$
+			\item For $i=1,\dots,k$ and $j=1,\dots,m$ repeat the following steps
+			\begin{itemize}
+				\item Simulate $n_{ij}$ independent $N(0,1)$, $\vec{\epsilon}$
+				\item Compute $\vec{x} = \sqrt{\frac{\nu}{v}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
+				\item $k_{ij} = \left\{ \text{number of components of $\vec{x}$ less than $t_{\nu}^{-1}(p_j)$} \right\} $
+			\end{itemize}
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
+
 \begin{example}[]
 	We have two sectors, $S1$ and $S2$, and four ratings, $A, B, C, D$ where 
 	$D$ is the defaulted status. We have collected the observations displayed
@@ -984,7 +1019,7 @@ matrix $R$.
 	This example has a number of ratings and sectors less than the previous 
 	examples for practical reasons (otherwise data tables do not fit 
 	in the width of the page).
-	\begin{table}[h!]
+	\begin{table}[!ht]
 		\centering
 		\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
 			\cline{3-8} \cline{10-15}
@@ -1137,16 +1172,14 @@ to the multi-factor formulation.
 \section{Bayessian Inference}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
-%\begin{figure}[!hbt]
-\vspace{-20pt}
-\begin{center}
-\includegraphics[width=0.38\textwidth]{ccbnd}
-\end{center}
-\vspace{-10pt}
-\caption{Distr. of correlation coefficient of the bivariate Normal with $\rho=0.2$ and sample size $20$.}
-\vspace{-10pt}
-\label{fig:ccbnd}
-%\end{figure}
+	\vspace{-20pt}
+	\begin{center}
+		\includegraphics[width=0.38\textwidth]{ccbnd}
+	\end{center}
+	\vspace{-10pt}
+	\caption{Distr. of correlation coefficient of the bivariate Normal with $\rho=0.2$ and sample size $20$.}
+	\vspace{-10pt}
+	\label{fig:ccbnd}
 \end{wrapfigure}
 Parameters $w_i$ and $R$ are variances and correlations that must be 
 estimated. It is difficult to estimate this type of statistics. To ilustrate
@@ -1343,9 +1376,10 @@ sequentially univariate components using Metropolis-Hastings steps.
 One generated observation $\theta^{(t)}$ is obtained after updating all 
 components of the parameter vector. Generally, the sequence of updating the 
 elements of $\theta$ does not influence the convergence of the algorithm.
-We use the notation $\theta_{\backslash j}$ to indicate the vector $\theta$ 
-excluding its j-th component [ i.e., $\theta_{\backslash j} = 
-(\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
+Nevertheless, to ensure randomness it is recommended a random selection of 
+the updating sequence. We use the notation $\theta_{\backslash j}$ to indicate 
+the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
+= (\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
 
 \begin{algorithm}[Bayesian inference Metropolis-Hastings] 
 	\label{alg:bimh}
@@ -1358,6 +1392,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		\item For $t=1,\dots,T$ repeat the following steps
 		\begin{itemize}
 			\item Set $\theta=\theta^{(t-1)}$
+			\item Shuffle update sequence
 			\item For $j=1,\dots,d$ repeat the following steps
 			\begin{enumerate}[label=\alph*.]
 				\item $\theta_j' = N(\theta_j,\sigma_j)$
@@ -1478,8 +1513,8 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 \end{proposition}
 
 \begin{example}[1000 observations]
-	We simulate $1000$ observations of the escenario and then we infere the
-	parameters based only with the observations: 
+	We simulate $1000$ observations of the escenario described below and then 
+	we infere the parameters based only with the simulated values: 
 	\begin{itemize}
 		\item Degrees of freedom of copula t-Student
 		\begin{displaymath}
@@ -1503,6 +1538,7 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 		\end{displaymath}
 		\item The number of obligors by sector-rating is:\\
 		\newline
+		\small
 		\begin{tabular}{cc|c|c||c|c||c|c|}
 			\cline{3-8}
 			& & \multicolumn{6}{|c|}{N (\# obligors)} \\
@@ -1521,8 +1557,23 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 			\cline{1-1} \cline{3-8}
 		\end{tabular}
 	\end{itemize}
-	We simulate the numbers of defaults by sector-rating using the multi-factor t-Student
-	and proposition. BLABLABLA. POSAR ALGORITME AQUI?. Figure \ref{fig:calib1}.
+
+	We simulate the numbers of defaults by sector-rating using the algoritm
+	\ref{alg:snod}. We infere the parameters distribution using the
+	Metropolis-Hastings algorithm \ref{alg:bimh}. Results are displayed
+	in figure \ref{fig:calib1}. 
+	
+	We may be tempted to consider an averaged PD by sector when we lack data 
+	disaggregated by rating. The tests we have done indicate that in the Gaussian 
+	case ($\nu = \infty$) this could be an option. By contrast, when $\nu \ne \infty$ 
+	this does not work in any way. The averaged PD by sectors, in this example, are:
+	\begin{displaymath}
+		\begin{array}{lll}
+			p_{S_1} = \frac{250}{1000} \cdot p_A + \frac{750}{1000} \cdot p_B = 6.5\% & \quad & N_{S_1} = 1000 \\
+			p_{S_2} = \frac{500}{1000} \cdot p_A + \frac{500}{1000} \cdot p_B = 5.0\% & \quad & N_{S_2} = 1000 \\
+			p_{S_3} = \frac{750}{1000} \cdot p_A + \frac{250}{1000} \cdot p_B = 3.5\% & \quad & N_{S_3} = 1000 \\
+		\end{array}
+	\end{displaymath}
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Simulated defaults}{
@@ -1562,31 +1613,44 @@ excluding its j-th component [ i.e., $\theta_{\backslash j} =
 	\end{figure}
 \end{example}
 
-% # R script to generate ccbinf input files
-% source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
-% w = c(0.4, 0.25, 0.3)
-% R = matrix(ncol=3, nrow=3, data=c(1.0,0.5,0.3, 0.5,1.0,0.4, 0.3,0.4,1.0))
-% nu = 20
-% p1 = c(0.02, 0.08)
-% D1 = matrix(ncol=2, nrow=3, data=c(250, 500, 750, 750, 500, 250))
-% rcount1 = ccruncher.rcount(1000, p1, D1, w, R, nu)
-% export(rcount1, "calib1.txt")
-% p2 = c(0.035, 0.05, 0.065)
-% D2 = diag(1000, 3)
-% rcount2 = ccruncher.rcount(1000, p2, D2, w, R, nu)
-% rcount2$K[,1] = rcount1$K[,1] + rcount1$K[,2]
-% rcount2$K[,5] = rcount1$K[,3] + rcount1$K[,4]
-% rcount2$K[,9] = rcount1$K[,5] + rcount1$K[,6]
-% export(rcount2, "calib2.txt")
-% quit(save='no')
-% 
-% # bash commands
-% /home/gerard/projects/ccbinf/build/ccbinf -n 1000 borrame1.txt
+\begin{comment}
+# R script to generate ccbinf input files
+source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
+w = c(0.4, 0.25, 0.3)
+R = matrix(ncol=3, nrow=3, data=c(1.0,0.5,0.3, 0.5,1.0,0.4, 0.3,0.4,1.0))
+nu = 20
 
+p1 = c(0.02, 0.08)
+D1 = matrix(ncol=2, nrow=3, data=c(250, 500, 750, 750, 500, 250))
+rcount1 = ccruncher.rcount(1000, p1, D1, w, R, nu)
+export(rcount1, "calib1.txt")
+
+D2 = diag(apply(D1,1,sum))
+p2 = (D1%*%p1)/diag(D2)
+rcount2 = rcount1
+rcount2$D = D2
+rcount2$p = p2
+rcount2$K = matrix(nrow=1000, ncol=3*3, 0)
+rcount2$K[,1] = rcount1$K[,1] + rcount1$K[,2]
+rcount2$K[,5] = rcount1$K[,3] + rcount1$K[,4]
+rcount2$K[,9] = rcount1$K[,5] + rcount1$K[,6]
+export(rcount2, "calib2.txt")
+
+rcount3 = rcount1
+rcount3$K = rcount1$K[1:20,]
+rcount3$Z = rcount1$Z[1:20,]
+rcount3$S = rcount1$S[1:20,]
+
+quit(save='no')
+
+# bash commands
+/home/gerard/projects/ccbinf/build/ccbinf -n 1000 borrame1.txt
+\end{comment}
 
 \begin{example}[Averaged rating]
 \end{example}
 
+TODO: number of dimensions: fix factor correlation, constrained model \cite{roncalli:2004}
 
 %==============================================================================
 % MODELING PORTFOLIO LOSS
@@ -1600,10 +1664,10 @@ $(T_1,\dots,T_n)$ modeled by its PD over time and a
 t-Student copula. For each obligor we know its exposure
 
 \begin{displaymath}
-    L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{T_i < t}(T_i) \cdot 
-    \left( 
-    \sum_{j=1}^{n_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
-    \right)
+	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{T_i < t}(T_i) \cdot 
+	\left( 
+	\sum_{j=1}^{n_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
+	\right)
 \end{displaymath}
 
 Monte Carlo, risk statistics (el, var, es), standar error estimates,
@@ -1627,14 +1691,14 @@ speed-up techniques (function composition), function approximation
 \label{ap:copula_basics}
 
 \begin{wrapfigure}{r}{0.5\textwidth}
-\vspace{-25pt}
-\begin{center}
-\includegraphics[width=0.48\textwidth]{ercim78}
-\end{center}
-\vspace{-10pt}
-\caption{Dependence structure impact}
-\vspace{-10pt}
-\label{fig:copula_impact}
+	\vspace{-25pt}
+	\begin{center}
+		\includegraphics[width=0.48\textwidth]{ercim78}
+	\end{center}
+	\vspace{-10pt}
+	\caption{Dependence structure impact}
+	\vspace{-10pt}
+	\label{fig:copula_impact}
 \end{wrapfigure}
 It is common to use correlation as a measure of dependency between random 
 variables. In most cases, this measure does not fully reflect the structure 
@@ -1646,16 +1710,6 @@ the structure of dependence between random variables, however, is the copula,
 which we define below. The world of copulas is vast and very interesting. 
 See \cite{embrechts:2002} \cite[chap. 5]{mcneil:2005} for a pleasant and detailed 
 introduction to copulas.
-\begin{comment}
-\begin{figure}[!hbt]
-\begin{center}
-\includegraphics[height=10cm]{ercim78}
-\caption{Impact of correlation and copula selection on portfolio loss distribution}
-\label{fig:copula_impact}
-\end{center}
-\end{figure}
-\end{comment}
-
 
 \begin{definition}[Copula]
 	A copula function, $C$, is a multivariate distribution defined on the 
@@ -1672,7 +1726,6 @@ distribution with continuous marginals can be decomposed into the marginals and
 a copula that reflects the structure of dependence between them. Later, we will 
 use this statement to define and simulate the t-Student copula.
 
-%%TODO: POSAR REFERENCIA
 \begin{theorem}[Sklar's theorem]
 	\label{thm:sklar}
 	Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
@@ -1887,7 +1940,7 @@ use this statement to define and simulate the t-Student copula.
 \label{ap:mfgm}
 
 \begin{definition}[Gaussian multi-factor model]
-\label{def:gmfm}
+	\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
 	model if it can be expressed in the form:
 	\begin{displaymath}
@@ -1903,7 +1956,7 @@ use this statement to define and simulate the t-Student copula.
 		\end{array}
 		\right.
 	\end{displaymath}
-An alternative definition based on the covariance matrix is:
+	An alternative definition based on the covariance matrix is:
 	\begin{displaymath}
 		X_i^j = Z_i + \sqrt{1-m_{ii}^2} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
