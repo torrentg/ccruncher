@@ -1141,10 +1141,11 @@ to the multi-factor formulation.
 		\right)
 	\end{displaymath}
 	Once the probability of default by one obligor, the probability of 
-	observing $k$ failures in a set of $n$ independent obligors follows 
-	a binomial distribution:
+	observing $k_{ij}$ failures in a set of $n_{ij}$ independent obligors 
+	follows a binomial distribution with default probability $H_{ij}$:
 	\begin{displaymath}
-		\text{Bin}(k\ ;\ n,p) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}
+		\text{Bin}(k_{ij}\ ;\ n_{ij},H_{ij}) = 
+		\binom{n_{ij}}{k_{ij}} \cdot H_{ij}^{k_{ij}} \cdot (1-H_{ij})^{n_{ij}-k_{ij}}
 	\end{displaymath}
 	The product for all sectors and ratings gives the stated formula. 
 	We can do the product because $v$ and $z_i$ are fixed.
@@ -1512,24 +1513,23 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 	because this is constant and cancels into the M-H algorithm.
 \end{proposition}
 
-\begin{example}[1000 observations]
+\begin{example}[Model parameters estimation]
 	\label{ex:calib}
 	Let consider the following scenario:
 	\begin{itemize}
-		\item Degrees of freedom of copula t-Student
+		\item t-Student copula with $\nu=20$.
+		\item Three ratings \{A, B, D\} and three sectors \{$S_1, S_2, S_3$\} 
+		having the following 1-year probabilities of default, factor loadings, 
+		and factors correlation matrix:
 		\begin{displaymath}
-			\nu=20
-		\end{displaymath}
-		\item Three ratings A, B, and Default where
-		\begin{displaymath}
-			p_A=2\% \quad \text{ and } \quad 
-			p_B=8\% \quad \text{ and } \quad 
-			p_{\text{Default}}=100\%
-		\end{displaymath}
-		\item Three sectors S1, S2 and S3 with the following loadings and correlations:
-		\begin{displaymath}
+			\begin{array}{l}
+				p_A=2\%     \\
+				p_B=8\%     \\
+				p_D=100\%   \\
+			\end{array}
+			\quad
 			\vec{w} = (0.4, 0.25, 0.3)
-			\qquad 
+			\quad 
 			R = \left(
 			\begin{array}{ccc}
 				1 & 0.5 & 0.3 \\
@@ -1540,6 +1540,7 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\end{displaymath}
 		\item The number of obligors by sector-rating is:\\
 		\newline
+		\hspace*{1cm}
 		\small
 		\begin{tabular}{cc|c|c||c|c||c|c|}
 			\cline{3-8}
@@ -1559,25 +1560,13 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 			\cline{1-1} \cline{3-8}
 		\end{tabular}
 	\end{itemize}
+	\vspace{11pt}
 
-	We simulate 1000 observations of the numbers of defaults by sector-rating 
-	using the algoritm \ref{alg:snod}. Then we infere the parameters 
-	distribution from this sample using the Metropolis-Hastings algorithm 
-	\ref{alg:bimh}. Results are displayed in figure \ref{fig:calib1}.
+	\textbf{1000 observations}. We simulate 1000 observations of the numbers of 
+	defaults by sector-rating using the algoritm \ref{alg:snod}. Then we infere 
+	the parameters distribution from this sample using the Metropolis-Hastings 
+	algorithm \ref{alg:bimh}. Results are displayed in figure \ref{fig:calib1}.
 	Note that variance of factor loadings is lower than factor correlations.
-	
-	We may be tempted to consider an averaged PD by sector when we lack data 
-	disaggregated by rating. The tests we have done indicate that in the Gaussian 
-	case ($\nu = \infty$) this could be an option. By contrast, when $\nu \ne \infty$ 
-	this does not work in any way. The averaged PD by sectors, in this example, are:
-	\begin{displaymath}
-		\begin{array}{lll}
-			p_{S_1} = \frac{250}{1000} \cdot p_A + \frac{750}{1000} \cdot p_B = 6.5\% & \quad & N_{S_1} = 1000 \\
-			p_{S_2} = \frac{500}{1000} \cdot p_A + \frac{500}{1000} \cdot p_B = 5.0\% & \quad & N_{S_2} = 1000 \\
-			p_{S_3} = \frac{750}{1000} \cdot p_A + \frac{250}{1000} \cdot p_B = 3.5\% & \quad & N_{S_3} = 1000 \\
-		\end{array}
-	\end{displaymath}
-	
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Simulated defaults}{
@@ -1616,6 +1605,14 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\label{fig:calib1}
 	\end{figure}
 
+	\textbf{20 observations}. To appreciate the impact of the number of 
+	observations in the final result we repeat the estimation procedure 
+	but considering only the first 20 observations instead of the 1000 
+	available. Results are displayed in figure \ref{fig:calib3}. Note 
+	that the parameter uncertainty increases dramatically. The scenario 
+	depicted here is the usual lack of data, where we have just a couple 
+	of decades of observations. Later we will see how to transfer this 
+	parameters uncertainty to the assessment of portfolio risk.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Simulated defaults}{
@@ -1693,10 +1690,50 @@ quit(save='no')
 /home/gerard/projects/ccbinf/build/ccbinf -n 500000 -r 1000 calib3.txt
 \end{comment}
 
-\begin{example}[Averaged rating]
-\end{example}
+\textbf{Averaged PDs}. We may be tempted to consider an averaged PD by sector 
+when we lack data disaggregated by rating. The tests we have done indicate that 
+in the Gaussian case ($\nu = \infty$) this could be an option as the estimated 
+parameters using the averaged PDs approximately match the expected values. By 
+contrast, when $\nu \ne \infty$ this does not work in any way. 
+In the example \ref{ex:calib} the averaged 1-year PDs by sectors are:
+\begin{displaymath}
+	\begin{array}{lll}
+		p_{S_1} = \frac{250}{1000} \cdot p_A + \frac{750}{1000} \cdot p_B = 6.5\% & \quad & N_{S_1} = 250 + 750 = 1000 \\
+		p_{S_2} = \frac{500}{1000} \cdot p_A + \frac{500}{1000} \cdot p_B = 5.0\% & \quad & N_{S_2} = 500 + 500 = 1000 \\
+		p_{S_3} = \frac{750}{1000} \cdot p_A + \frac{250}{1000} \cdot p_B = 3.5\% & \quad & N_{S_3} = 750 + 250 = 1000 \\
+	\end{array}
+\end{displaymath}
 
-TODO: number of dimensions: fix factor correlation, constrained model \cite{roncalli:2004}
+\textbf{Constrained model}. When we have a significant number of factors 
+(eg. 10) and a reduced set of observations (eg. 20), then uncertainty of 
+the factors correlation matrix can be very high. In these cases it is 
+justified to consider the constrained model \cite{roncalli:2004} that 
+assumes that all correlations have the same value, or similar assumptions 
+that reduces the number correlations to estimate from $k \cdot(k-1)/2$ to 
+a few ones.
+\begin{displaymath}
+	R = \left(
+	\begin{array}{cccc}
+		     1 &   \rho &  \dots &   \rho \\
+		  \rho &      1 & \ddots & \vdots \\
+		\vdots & \ddots & \ddots &   \rho \\
+		  \rho &  \dots &   \rho &      1 \\
+	\end{array}
+	\right)
+\end{displaymath}
+
+\textbf{Gaussian case}. In the general case we observe that
+correlation and the degrees of freedom are interleaved. When we move a value
+in one direction the others reacts to compensate the modification. This
+effect is dramatic when the number of observations is reduced and the amount 
+of information available is scarce causing that estimations of $\nu$ and $R$
+have a high incertainty. The gaussian case ($\nu = \infty$) avoids this 
+problem and reduces the number of parameters to estimate (we don't need to 
+estimate $\nu$ and $v^t$ where $t=1,\dots,T$). 
+The risk analyst must evaluate the appropriateness of gaussian model 
+considering the amount of information available, the number of factors, 
+renouncing to capture the tail dependence, etc.
+
 
 %==============================================================================
 % MODELING PORTFOLIO LOSS
@@ -1705,16 +1742,73 @@ TODO: number of dimensions: fix factor correlation, constrained model \cite{ronc
 
 \section{Portfolio Loss Distribution}
 
-Let a portfolio where we have the obligor default times
-$(T_1,\dots,T_n)$ modeled by its PD over time and a
-t-Student copula. For each obligor we know its exposure
+Let a credit portfolio where the obligors default times $(T_1,\dots,T_n)$ 
+is a multivariate distribution with marginals $\text{PD}_i$ and a 
+t-Student copula with $\nu$ degrees of freedom and a obligors correlation
+matrix $B_k(\vec{n},\vec{1},M)$. Also, each obligor $i$ has $m_i$ assets 
+with known EAD and LGD. Then, the portfolio loss distribution at time 
+horizon $t$ is:
 
 \begin{displaymath}
 	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{T_i < t}(T_i) \cdot 
 	\left( 
-	\sum_{j=1}^{n_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
+	\sum_{j=1}^{m_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
 	\right)
 \end{displaymath}
+
+The portfolio loss distribution $L_t$ does not have a closed-form except 
+for a few cases. One of them is the Large Homogeneous Pool (LHP).
+Vasicek \cite{vasicek:1987} derived an analytical formula for the loss 
+distribution of an infinitely large portfolio. Later, Schloegl and O'Kane 
+\cite{schloegl:2005} extended it to the t-Student case. The assumptions of 
+these approximations are: 1) one-factor model, 2) infinitely large portfolio, 
+3) equals PDs, 4) equals exposures. The density, in the Gaussian case, is
+\cite[chap. 2.5]{bluhm:2002}: 
+\begin{displaymath}
+	f_{p,w}(x) = 
+	\frac{\sqrt{1-w^2}}{w} \cdot \textrm{exp}\left( 
+		\frac{\left(N^{-1}(x)\right)^2}{2} -
+		\frac{\left(N^{-1}(p) - \sqrt{1-w^2} \cdot N^{-1}(x)\right)^2}{2 \cdot w^2}
+	\right)
+\end{displaymath}
+where $w$ is the factor loading, $p$ is the probability to 1-year horizon, 
+and $x \in [0,1]$ represents the percentage of loss in the portfolio. 
+
+CCruncher uses the Monte Carlo method to estimate the portfolio loss 
+distribution simulating the default times of obligors. It applies the proposition 
+\ref{prop:dtd} where the t-Student random values are sampled from the t-Student 
+multi-factor model exposed in proposition \ref{prop:tmfm}.
+
+\begin{algorithm}[Portfolio losses simulation]
+	\label{alg:pldmc}
+	Let a multivariate default times distribution with a t-Student copula
+	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
+	matrix $R$, degrees of freedom $\nu$, and annual probabilities of
+	default $p_j \quad j=1,\dots,m$. Then, we can simulate a sample of 
+	size $T$ of the annual number of defaults by factor and rating doing:
+	\begin{enumerate}
+		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
+		\item For $t=1,\dots,T$ repeat the following steps
+		\begin{itemize}
+			\item $\text{Loss}^t = 0$
+			\item Simulate $k$ independent $N(0,1)$, $\vec{z}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}$
+			\item Simulate a $\chi_{\nu}^2$, $v$
+			\item For $i=1,\dots,n$ repeat the following steps
+			\begin{itemize}
+				\item Set $s = $ obligor factor index
+				\item Set $r = $ obligor rating index
+				\item Simulate a $N(0,1)$, $\epsilon$
+				\item Compute $x_i = \sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)$
+				\item Compute $t_i = \text{PD}_r^{-1}\left(t_{\nu}(x_i)\right)$
+				\item if $t_i \le t$ then do for each asset $l$ belonging to i-th obligor
+				\begin{itemize}
+					\item $\text{Loss}^t = \text{Loss}^t + \text{EAD}_l(t_i) \cdot \text{LGD}_l(t_i)$
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
 
 Monte Carlo, risk statistics (el, var, es), standar error estimates,
 variance reduction methods (antithetic, Latin Hypercube Sampling),
