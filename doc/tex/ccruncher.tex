@@ -643,7 +643,7 @@ but differ as this goes away.
 	rating $AA$ changes to rating $B$ in one year is $0.14\%$. Note that last 
 	column contains the 1-year default probabilities for each rating, and the 
 	last row corresponds to the \emph{defaulted} rating.
-	\begin{figure}[!h]
+	\begin{figure}[!ht]
 		\begin{center}
 			\begin{tabular}[]{l|rrrrrrrr}
 				        & AAA     & AA      & A       & BBB     & BB      & B                  & CCC     & Default  \\
@@ -1293,7 +1293,7 @@ distribution.
 		\item For $t=1,\dots,T$ repeat the following steps
 		\begin{itemize}
 			\item Set $x=x^{(t-1)}$
-			\item Let $x'$ a random value from the proposal distribution $q(x \to x’)=q(x' \mid x)$
+			\item Let $x'$ a random value from the proposal distribution $q(x \to x')=q(x' \mid x)$
 			\item Calculate the acceptance rate 
 			$\alpha = \min\left(1,\frac{f(x') \cdot q(x \mid x')}{f(x) \cdot q(x' \mid x)}\right)$
 			\item Update $x^{(t)}=\left\{
@@ -1513,8 +1513,8 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 \end{proposition}
 
 \begin{example}[1000 observations]
-	We simulate $1000$ observations of the escenario described below and then 
-	we infere the parameters based only with the simulated values: 
+	\label{ex:calib}
+	Let consider the following scenario:
 	\begin{itemize}
 		\item Degrees of freedom of copula t-Student
 		\begin{displaymath}
@@ -1522,7 +1522,9 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\end{displaymath}
 		\item Three ratings A, B, and Default where
 		\begin{displaymath}
-			p_A=2\% \quad \text{ and } \quad p_B=8\%
+			p_A=2\% \quad \text{ and } \quad 
+			p_B=8\% \quad \text{ and } \quad 
+			p_{\text{Default}}=100\%
 		\end{displaymath}
 		\item Three sectors S1, S2 and S3 with the following loadings and correlations:
 		\begin{displaymath}
@@ -1531,7 +1533,7 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 			R = \left(
 			\begin{array}{ccc}
 				1 & 0.5 & 0.3 \\
-				0.5 & 11 & 0.4 \\
+				0.5 & 1 & 0.4 \\
 				0.3 & 0.4 & 1 \\
 			\end{array}
 			\right) 
@@ -1558,10 +1560,11 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\end{tabular}
 	\end{itemize}
 
-	We simulate the numbers of defaults by sector-rating using the algoritm
-	\ref{alg:snod}. We infere the parameters distribution using the
-	Metropolis-Hastings algorithm \ref{alg:bimh}. Results are displayed
-	in figure \ref{fig:calib1}. 
+	We simulate 1000 observations of the numbers of defaults by sector-rating 
+	using the algoritm \ref{alg:snod}. Then we infere the parameters 
+	distribution from this sample using the Metropolis-Hastings algorithm 
+	\ref{alg:bimh}. Results are displayed in figure \ref{fig:calib1}.
+	Note that variance of factor loadings is lower than factor correlations.
 	
 	We may be tempted to consider an averaged PD by sector when we lack data 
 	disaggregated by rating. The tests we have done indicate that in the Gaussian 
@@ -1574,6 +1577,7 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 			p_{S_3} = \frac{750}{1000} \cdot p_A + \frac{250}{1000} \cdot p_B = 3.5\% & \quad & N_{S_3} = 1000 \\
 		\end{array}
 	\end{displaymath}
+	
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Simulated defaults}{
@@ -1597,7 +1601,7 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 			\end{tabular}
 		}
 		\hfill
-		\subcaptionbox{Degrees of freedom estimation}{
+		\subcaptionbox{$\nu$ estimated distribution}{
 			\includegraphics[width=5cm]{calib11}
 		}
 		\\
@@ -1608,9 +1612,48 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\subcaptionbox{Factor correlations estimated distribution}{
 			\includegraphics[width=0.98\textwidth]{calib13}
 		}
-		\caption{Parameters calibration example}
+		\caption{Model parameters estimation (1000 obs.)}
 		\label{fig:calib1}
 	\end{figure}
+
+	\begin{figure}[!ht]
+		\centering
+		\subcaptionbox{Simulated defaults}{
+			%\small
+			\begin{tabular}{cc|c|c||c|c||c|c|}
+				\cline{3-8}
+				& & \multicolumn{6}{|c|}{K (\# defaults)} \\
+				\cline{3-8}
+				& & \multicolumn{2}{|c||}{S1} & \multicolumn{2}{|c||}{S2} & \multicolumn{2}{|c|}{S3} \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{Obs} & & A & B & A & B & A & B \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{1} & & 1 & 14 & 11 & 50 & 11 & 14 \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{2} & & 2 & 67 & 8 & 26 & 3 & 10 \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+				\cline{1-1} \cline{3-8}
+				\multicolumn{1}{|c|}{20} & & 24 & 190 & 35 & 84 & 65 & 50 \\
+				\cline{1-1} \cline{3-8}
+			\end{tabular}
+		}
+		\hfill
+		\subcaptionbox{$\nu$ estimated distribution}{
+			\includegraphics[width=5cm]{calib31}
+		}
+		\\
+		\subcaptionbox{Factor loadings estimated distribution}{
+			\includegraphics[width=0.98\textwidth]{calib32}
+		}
+		\\
+		\subcaptionbox{Factor correlations estimated distribution}{
+			\includegraphics[width=0.98\textwidth]{calib33}
+		}
+		\caption{Model parameters estimation (20 obs.)}
+		\label{fig:calib3}
+	\end{figure}
+
 \end{example}
 
 \begin{comment}
@@ -1639,12 +1682,15 @@ export(rcount2, "calib2.txt")
 rcount3 = rcount1
 rcount3$K = rcount1$K[1:20,]
 rcount3$Z = rcount1$Z[1:20,]
-rcount3$S = rcount1$S[1:20,]
+rcount3$S = rcount1$S[1:20]
+export(rcount3, "calib3.txt")
 
 quit(save='no')
 
 # bash commands
-/home/gerard/projects/ccbinf/build/ccbinf -n 1000 borrame1.txt
+/home/gerard/projects/ccbinf/build/ccbinf -n 500000 -r 1000 calib1.txt
+/home/gerard/projects/ccbinf/build/ccbinf -n 500000 -r 1000 calib2.txt
+/home/gerard/projects/ccbinf/build/ccbinf -n 500000 -r 1000 calib3.txt
 \end{comment}
 
 \begin{example}[Averaged rating]
