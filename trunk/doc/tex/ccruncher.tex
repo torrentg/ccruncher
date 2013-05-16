@@ -141,6 +141,7 @@ please cite it when using it for credit risk analysis.
     % address = {Barcelona, Spain},
     % year = {2013},
     % url = {http://www.ccruncher.net/},
+    % edition = {\svnversion}
 % }
 % \end{verbatim}
 % \end{adjustwidth}
@@ -218,6 +219,7 @@ in the copula approach context and that has a Gaussian copula.
 % CREDIT RISK MEASURES
 %------------------------------------------------------------------------------
 \section{Credit Risk Measures}
+\label{sec:crm}
 
 The portfolio credit risk is measured considering some statistics on 
 the portfolio loss distribution. Let's start by defining what we mean 
@@ -310,8 +312,8 @@ year in order to simplify the exposition without loss of generality
 	\begin{displaymath}
 		p_i = \Pr\{T_i \le 1\} = \text{PD}_i(1) 
 	\end{displaymath}
-	Some texts use the concept of survival instead of the PD. The 
-	survival is defines as:
+	Some texts \cite{li:2000} \cite{roncalli:2001} use the concept of 
+	survival instead of the PD. The survival is defines as:
 	\begin{displaymath}
 		\text{Survival}_i(t) = 1-\text{PD}_i(t)
 	\end{displaymath}
@@ -349,8 +351,8 @@ year in order to simplify the exposition without loss of generality
 	\end{displaymath}
 	LGD can be a function dependent of time, or can be a distribution
 	defined over time when we have a model that support it. 
-	Some texts use the concept of recovery instead of LGD. This is 
-	defined as:
+	Some texts \cite{creditrisk+:1997} use the concept of recovery rate
+	instead of LGD. This is defined as:
 	\begin{displaymath}
 		\text{Recovery}_j(t) = 1- \text{LGD}_j(t)
 	\end{displaymath}
@@ -366,7 +368,7 @@ year in order to simplify the exposition without loss of generality
 	internal models indicate that in this case the LGD is a 
 	$\text{Beta}(5,2)$ distribution regardless of the default time.
 	Figure \ref{figure:bond} ilustrates the defined basic concepts 
-	applied to this bond.
+	applied to this issuer and bond.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Probability of Default}{
@@ -401,7 +403,8 @@ year in order to simplify the exposition without loss of generality
 \cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
 \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
 \cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
-\cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951}
+\cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951},
+\cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor}
 
 
 %==============================================================================
@@ -410,7 +413,7 @@ year in order to simplify the exposition without loss of generality
 \chapter{Modeling Default Times}
 
 The model described in this section is the same as described in \cite{li:2000} 
-\cite{roncalli:2001} \cite{bluhm:2002} \cite{frey:2001}.
+\cite{roncalli:2001} \cite[chap. 2.6]{bluhm:2002} \cite{frey:2001}.
 We recommend taking a look at the appendices 
 \emph{\ref{ap:copula_basics}-\nameref{ap:copula_basics}},
 \emph{\ref{ap:mtsd}-\nameref{ap:mtsd}},
@@ -424,6 +427,7 @@ in this section.
 %------------------------------------------------------------------------------
 \section{The Multivariate Model}
 
+\subsection{The copula approach}
 The copula approach considere that the obligors default times are the 
 proper way to explain the observed defaults. This default times 
 $(T_1, \dots, T_n)$ are modeled by a multivariate distribution $F$ 
@@ -575,7 +579,7 @@ gives us the key to reformulate the problem as a multi-factor problem.
 		\end{array}
 		\right.
 	\end{displaymath}
-	where $w_1,\dots,w_k, R$ satisfy:
+	where $w_1,\dots,w_k$ and $R$ satisfy:
 	\begin{displaymath}
 		\begin{array}{l}
 			R_{ii} = 1 \quad i = 1,\dots,k \\
@@ -595,7 +599,7 @@ gives us the key to reformulate the problem as a multi-factor problem.
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the the more concise 
 covariance matrix. We do this because the factor loadings have a treatment 
-distinct than correlations in the estimation of parameters.
+distinct than factors correlation in the estimation of parameters.
 
 %TODO: implications (fixed correlations, economic cicle)
 
@@ -960,12 +964,12 @@ matrix $R$.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	Note that $K_{ij} \le N_{ij}$.
-	When the subscript only has one index ($K_{i}$ and $N_{i}$) this means 
-	that values are aggregated by sector. We use the superscript to indicate 
-	the observation at time $t$. Thus, $K_{ij}^t$ and $N_{ij}^t$ are the 
+	Note that $K_{ij} \le N_{ij}$. 	We use the superscript to indicate 
+	the observation at time $t$. Thus, $N_{ij}^t$ and $K_{ij}^t$ are the 
 	corresponding number of obligors and defaults by sector $i$ and rating 
 	$j$ observed at year $t$. 
+	%When the subscript only has one index ($K_{i}$ and $N_{i}$) this means 
+	%that values are aggregated by sector. 
 \end{definition}
 
 % It is possible that the there is no historical records disaggregated at 
@@ -1254,12 +1258,12 @@ This section contains a brief introduction to Bayessian inference using the
 Metropolis-Hastings algorithm and it is heavily influenced by the book 
 \emph{Bayesian Modeling Using WinBUGS} \cite{ntzoufras:2009}.
 
-We can find a closed-form of the posterior distribution only in a very few 
-cases. Usually this has to be determined by numerical methods. 
-One of the most used is the Metropolis-Hastings algorithm that belongs to 
-the family of Markov Chain Monte Carlo (MCMC) methods. These are based on 
-the construction of a Markov chain that converges to the target distribution 
-which, in our case, is the posterior distribution.
+When we do Bayessian inference we can find a closed-form of the posterior 
+distribution only in a very few cases. Usually this has to be determined 
+by numerical methods. One of the most used is the Metropolis-Hastings 
+algorithm that belongs to the family of Markov Chain Monte Carlo (MCMC) 
+methods. These are based on the construction of a Markov chain that converges 
+to the target distribution which, in our case, is the posterior distribution.
 
 \begin{definition}[Markov chain]
 	A Markov chain is a stochastic process 
@@ -1775,17 +1779,16 @@ where $w$ is the factor loading, $p$ is the probability to 1-year horizon,
 and $x \in [0,1]$ represents the percentage of loss in the portfolio. 
 
 CCruncher uses the Monte Carlo method to estimate the portfolio loss 
-distribution simulating the default times of obligors. It applies the proposition 
-\ref{prop:dtd} where the t-Student random values are sampled from the t-Student 
-multi-factor model exposed in proposition \ref{prop:tmfm}.
+distribution simulating the obligors default times. It applies the proposition 
+\ref{prop:dtd} where the multivariate t-Student random values are sampled 
+from the t-Student multi-factor model exposed in proposition \ref{prop:tmfm}.
 
-\begin{algorithm}[Portfolio losses simulation]
+\begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}
-	Let a multivariate default times distribution with a t-Student copula
-	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
-	matrix $R$, degrees of freedom $\nu$, and annual probabilities of
-	default $p_j \quad j=1,\dots,m$. Then, we can simulate a sample of 
-	size $T$ of the annual number of defaults by factor and rating doing:
+	Let a multivariate default times distribution with marginals $\text{PD}_i$
+	an a t-Student multi-factor model with $k$ factors, factor loadings $\vec{w}$, 
+	factors correlation matrix $R$, degrees of freedom $\nu$. Then, we can 
+	simulate a sample of size $T$ of the portfolio loss distribution by doing:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
 		\item For $t=1,\dots,T$ repeat the following steps
@@ -1810,10 +1813,146 @@ multi-factor model exposed in proposition \ref{prop:tmfm}.
 	\end{enumerate}
 \end{algorithm}
 
-Monte Carlo, risk statistics (el, var, es), standar error estimates,
-variance reduction methods (antithetic, Latin Hypercube Sampling),
-speed-up techniques (function composition), function approximation
-(splines linear/cubic)
+\subsection{Simulation internals}
+speed-up techniques (function composition), 
+function approximation (splines linear/cubic),
+how EAD and LGD are taked %(std::lower_bound)
+% segmentation
+\begin{example}
+\end{example}
+
+\subsection{Variance reduction}
+
+Monte Carlo method consist on sampling a distribution and average these
+values to approximate the mean of this distribution. The main drawback 
+of this method is the low rate of convergence that is of order $1/\sqrt{N}$.
+Variance reduction methods are procedures used to increase the precision 
+of the estimates of the Monte Carlo method. The main ones are: Common random 
+numbers, antithetic variates, control variates, importance sampling and 
+stratified sampling.
+
+CCruncher generate random samples from the portfolio loss distribution.
+This sample is used to estimate the risk measures (eg. VaR) using the 
+statistics described in section \ref{subsec:riskm} or any other required 
+by the analyst. Any of these measures, taked one by one, can be formulated 
+as a Monte Carlo problem and we can apply some variance reduction 
+techniques, but not simultaneously.
+
+For this reason the usage of the variance reduction techniques in CCruncher 
+don't aims the increase of precision, but improve the overall result in 
+some maner. The applied variance reduction procedures are the following.
+
+\textbf{Antithetic variates}. This method is based on the fact that
+\begin{displaymath}
+	\text{Var}(X_1+X_2) = \text{Var}(X_1) + \text{Var}(X_2) + 2 \cdot \text{Cov}(X_1,X_2)
+\end{displaymath}
+If we can express our simulated target distribution as $X_1+X_2$ so 
+that $X_1$ and $X_2$ are negatively correlated, then we can reduce the 
+variance of the estimated value.
+
+% see files lhsd.R and variance_reduction.R in directory C:\Users\gtorrent\Desktop\research\
+
+\textbf{Latin Hypercube Sampling (LHS)}. 
+variance reduction methods (antithetic, Latin Hypercube Sampling = stratified sampling)
+
+
+\subsection{Risk measurement}
+\label{subsec:riskm}
+
+After $N$ simulations (eg. $20000$, $500000$ or more) we have a list
+of values $\{x_1, ..., x_N\}$ sampled from the portfolio loss distribution. 
+We measure the portfolio credit risk computing the corresponding statistics 
+and its standard errors due to sample size. Following we provide the 
+formulas of the most usual credit risk measures (see section \ref{sec:crm}). 
+Any other risk measure can be estimated from the simulated sample and its 
+standard error can be obtained using resampling methods.
+
+\textbf{Expected Loss}. The Expected Loss at time $t$ is the mean of the 
+portfolio loss distribution at this time. 
+\begin{displaymath}
+	\text{EL} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
+	\quad \text{ being } \quad
+	\left\{
+	\begin{array}{l}
+		\displaystyle
+		\widehat{\mu} = \frac{1}{N} \sum_{i=1}^{N} x_i \\
+		\\
+		\displaystyle
+		\widehat{\sigma} =
+		\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2}
+	\end{array}
+	\right.
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, and $\widehat{\mu}$ and 
+$\widehat{\sigma}$ are the mean and standard deviation estimators.
+
+\textbf{Value At Risk}. The Value At Risk at time $t$ and confidence level 
+$\beta$ is the $\beta$-quantile of the portfolio loss distribution at this 
+time. 
+\begin{displaymath}
+	\begin{array}{lcl}
+		\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
+		& \text{ being } &
+		\left\{
+		\begin{array}{l}
+			\displaystyle
+			\frac{k}{N} \leq \beta < \frac{k+1}{N} \\
+			\\
+			\displaystyle
+			\widehat{q_{\beta}} = x_{k:N} \\
+		\end{array}
+		\right.
+		\\
+		& &
+		\\
+		\textrm{stderr}(q_{\beta}) = \sqrt{C_2 - C_1^2}
+		& \text{ being } &
+		\left\{
+		\begin{array}{rcl}
+			M   & = & [N \beta + 0.5]  \\
+			a   & = & M - 1            \\
+			b   & = & N - M            \\
+			W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \\
+			C_k & = & \sum_{i=1}^{N} W_i \cdot x_i^k \\
+		\end{array}
+		\right.
+		\\
+	\end{array}
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, $\widehat{q_{\beta}}$ is the 
+quantile estimator, $x_{k:N}$ is the $k$-th element of ascendant-sorted 
+values, $\textrm{stderr}(q_{\beta})$ is the estimation of the standard 
+error using the Maritz-Jarret method described in \cite{quant:algor},
+$[x]$ is the integer part of $x$, and $B(a,b,x)$ is the regularized 
+incomplete beta function.
+
+\textbf{Expected Shortfall}. The Expected Shortfall at time $t$ and confidence 
+level $\beta$ is the the average of the $\beta\%$ worst losses. We note as
+$\{y_1, ..., y_K\} = \{x_i \mid x_i \ge \text{VaR}_{\beta} \}_{i=1,\dots,N}$ 
+the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
+\begin{displaymath}
+	\text{ES}_{\beta} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{K}}
+	\quad \text{ being } \quad
+	\left\{
+	\begin{array}{l}
+		\displaystyle
+		\widehat{\mu} = \frac{1}{K} \sum_{i=1}^{K} y_i \\
+		\\
+		\displaystyle
+		\widehat{\sigma} =
+		\sqrt{\frac{1}{K-1} \sum_{i=1}^{K} \left( y_i - \widehat{\mu} \right)^2}
+	\end{array}
+	\right.
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, and $\widehat{\mu}$ and 
+$\widehat{\sigma}$ are the mean and standard deviation estimators.
+
+\section{Parameter uncertainty}
+K MCMC + 1 MC vs K MCMC + K MC
+\cite{tarashev:2010}, \cite{gossl:2005}
 
 
 %==============================================================================
@@ -2140,7 +2279,7 @@ use this statement to define and simulate the t-Student copula.
 			=                                         & w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2}                                                                    \\
 		\end{array}
 	\end{displaymath}
-	The caracterization of the multivariate Gaussian \cite[thm 2.6.2]{anderson:1984}
+	The caracterization of the multivariate Gaussian \cite[thm. 2.6.2]{anderson:1984}
 	states that if every linear combination of the components of a 
 	vector $X$ is normally distributed, then $X$ is normally distributed.
 	It is straightforward to check that the multi-factor Gaussian model 
