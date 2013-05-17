@@ -404,7 +404,9 @@ year in order to simplify the exposition without loss of generality
 \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
 \cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
 \cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951},
-\cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor}
+\cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor},
+\cite{kahan:1965}, \cite{wolfgang:2008}, \cite{jorgensen:1998}, 
+\cite{glasserman:1997}, \cite{cespedes:2002}
 
 
 %==============================================================================
@@ -507,7 +509,19 @@ to estimate the parameters.
 
 The previous proposition can be stated by any other copula coming from
 a multivariate distribution an applied if this had an known distribution 
-and marginals (eg. the Gaussian copula).
+and marginals (eg. the Gaussian copula). Also from the previous proposition
+is immediate to derive a method to sample the default times distribution.
+
+\begin{corollary}[Default times simulation]
+	\label{cor:dts}
+	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
+	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$. 
+	Then we can simulate this distribution using a multivariate t-Student 
+	distribution $X \sim t_n(\nu,\bar{R})$:
+	\begin{displaymath}
+		(T_1, \dots, T_n) = \left(\text{PD}_1^{-1}\left(t_{\nu}(X_1)\right), \dots, \text{PD}_1^{-1}\left(t_{\nu}(X_d)\right)\right)
+	\end{displaymath}
+\end{corollary}
 
 \subsection{The multi-factor formulation}
 
@@ -1744,6 +1758,9 @@ renouncing to capture the tail dependence, etc.
 %==============================================================================
 \chapter{Modeling Portfolio Loss}
 
+%------------------------------------------------------------------------------
+% PORTFOLIO LOSS DISTRIBUTION
+%------------------------------------------------------------------------------
 \section{Portfolio Loss Distribution}
 
 Let a credit portfolio where the obligors default times $(T_1,\dots,T_n)$ 
@@ -1752,9 +1769,8 @@ t-Student copula with $\nu$ degrees of freedom and a obligors correlation
 matrix $B_k(\vec{n},\vec{1},M)$. Also, each obligor $i$ has $m_i$ assets 
 with known EAD and LGD. Then, the portfolio loss distribution at time 
 horizon $t$ is:
-
 \begin{displaymath}
-	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{T_i < t}(T_i) \cdot 
+	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{[0,t]}(T_i) \cdot 
 	\left( 
 	\sum_{j=1}^{m_i} \text{EAD}_j(T_i) \cdot \text{LGD}_j(T_i)
 	\right)
@@ -1766,22 +1782,12 @@ Vasicek \cite{vasicek:1987} derived an analytical formula for the loss
 distribution of an infinitely large portfolio. Later, Schloegl and O'Kane 
 \cite{schloegl:2005} extended it to the t-Student case. The assumptions of 
 these approximations are: 1) one-factor model, 2) infinitely large portfolio, 
-3) equals PDs, 4) equals exposures. The density, in the Gaussian case, is
-\cite[chap. 2.5]{bluhm:2002}: 
-\begin{displaymath}
-	f_{p,w}(x) = 
-	\frac{\sqrt{1-w^2}}{w} \cdot \textrm{exp}\left( 
-		\frac{\left(N^{-1}(x)\right)^2}{2} -
-		\frac{\left(N^{-1}(p) - \sqrt{1-w^2} \cdot N^{-1}(x)\right)^2}{2 \cdot w^2}
-	\right)
-\end{displaymath}
-where $w$ is the factor loading, $p$ is the probability to 1-year horizon, 
-and $x \in [0,1]$ represents the percentage of loss in the portfolio. 
+3) equals PDs, 4) equals exposures. 
 
-CCruncher uses the Monte Carlo method to estimate the portfolio loss 
-distribution simulating the obligors default times. It applies the proposition 
-\ref{prop:dtd} where the multivariate t-Student random values are sampled 
-from the t-Student multi-factor model exposed in proposition \ref{prop:tmfm}.
+CCruncher generates samples of the portfolio loss distribution simulating 
+the obligors default times. It applies the corollary \ref{cor:dts} where the 
+multivariate t-Student random values are sampled from the t-Student 
+multi-factor model exposed in proposition \ref{prop:tmfm}.
 
 \begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}
@@ -1813,13 +1819,110 @@ from the t-Student multi-factor model exposed in proposition \ref{prop:tmfm}.
 	\end{enumerate}
 \end{algorithm}
 
+\begin{example}[Large Homogeneous Pool]
+	\label{ex:test04}
+	Let a portfolio composed of 1000 identical obligors (with same rating 
+	and sector) where every one of them owe 1\euro\ to 1 year. The common default 
+	1-year probability is $p=10\%$ and the factor loading is $20\%$. This 
+	problem fulfills the LHP assumptions. In the Gaussian case the density
+	is \cite[chap. 2.5]{bluhm:2002}: 
+	\begin{displaymath}
+		f_{p,w}(x) = 
+		\frac{\sqrt{1-w^2}}{w} \cdot \textrm{exp}\left( 
+			\frac{\left(N^{-1}(x)\right)^2}{2} -
+			\frac{\left(N^{-1}(p) - \sqrt{1-w^2} \cdot N^{-1}(x)\right)^2}{2 \cdot w^2}
+		\right)
+	\end{displaymath}
+	where $w$ is the factor loading, $p$ is the probability to 1-year horizon, 
+	and $x \in [0,1]$ represents the percentage of loss in the portfolio. 
+
+	File \texttt{\$CCRUNCHER/samples/test04.xml} contains the CCruncher input
+	file of this example. The figure \ref{fig:test04} display the theoretical
+	distribution provided by LHP approach and the approximated by CCruncher.
+	Both are very similar as expected. If we reduce the number of obligors from
+	1000 to 100, then the LHP assumptions are broken and the distribution 
+	provided by the LHP approach fails.
+	\begin{figure}[!ht]
+		\centering
+		\subcaptionbox{1000 obligors}{
+			\includegraphics[width=7cm]{test04-1}
+		}
+		\subcaptionbox{100 obligors}{
+			\includegraphics[width=7cm]{test04-2}
+		}
+		\caption{Large Homogeneous Pool example}
+		\label{fig:test04} 
+	\end{figure}
+\end{example}
+\begin{comment}
+# bash command
+bin/ccruncher-cmd -w -o data/test04-1000 samples/test04-1000.xml
+bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
+\end{comment}
+
+\begin{example}[2 factors]
+	\label{ex:test05}
+	Let a portfolio composed of 1000 obligors where every obligor owe 1\euro\ 
+	to 1 year, this means that $\text{EAD}(t) = \mathbbm{1}_{[0,1]}(t)$, with 
+	a LGD of $100\%$. There are 4 ratings \{A, B, C, D\} where D is the 
+	defaulted status and the other ones have the following 1-year default 
+	probability: $p_A = 5\%, p_B = 10\%, P_C = 20\%$. Factors loadings are 
+	$\vec{w} = (0.4, 0.35)$ and the factors correlation is 
+	$\text{Cor}(S_1,S_2) = 0.25$. The t-Student copula has $\nu=15$ degrees
+	of freedom and the number of obligors by sector and rating are:
+
+	\hspace*{1cm}
+	\begin{tabular}{|c|c|c||c|c|c|}
+		\hline
+		\multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
+		\hline
+		A & B & C & A & B & C \\
+		\hline
+		167 & 166 & 167 & 167 & 167 & 166 \\
+		\hline
+	\end{tabular}
+	
+	% We use the proposition \ref{prop:tmfm} to infere the correlations between
+	% obligors based on its sector belonging:
+	% \begin{displaymath}
+		% \begin{array}{l}
+			% \text{Cor}(S1,S1) = 0.4 \times 0.4 = 16\% \\
+			% \text{Cor}(S1,S2) = 0.4 \times 0.35 \times 0.25 = 3.5\% \\
+			% \text{Cor}(S2,S2) = 0.35 \times 0.35 = 12.25\%
+		% \end{array}
+	% \end{displaymath}
+
+	File \texttt{\$CCRUNCHER/samples/test05.xml} contains the CCruncher input
+	file of this example. The figure \ref{fig:test05} display the portfolio
+	loss density approximated using the random sample generated by CCruncher.
+	Observe the asymmetry of the distribution. This is more pronounced when 
+	$\nu$ is close to $0$, or factor loadings move away from $0$, or factor 
+	correlation move away from $0$.
+
+	It is dificult to check this example. Some authors \cite{cespedes:2002}
+	obtained quasi analytical expressions for the gaussian two-factors model 
+	with a common PD, but this is not aplicable to this example (t-Student, 
+	multiple PDs).
+	One way to check that the result is correct consist in disaggregate the
+	simulated portfolio losses by sector-rating (see section \ref{X}) and 
+	estimate the parameters $\nu, \vec{w}$, and $R$ with the first 1000 
+	simulations. If the estimated values matches the simulated values means 
+	we have a consistent simulation and estimation algorithms. Note that in 
+	this case the simulated losses can be equated to the number of defaults
+	because every defaulted obligor is computed as a 1\euro\ loss.
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.98\textwidth]{test05}
+		\caption{2-factors example}
+		\label{fig:test05}
+	\end{figure}
+\end{example}
+
 \subsection{Simulation internals}
 speed-up techniques (function composition), 
 function approximation (splines linear/cubic),
 how EAD and LGD are taked %(std::lower_bound)
-% segmentation
-\begin{example}
-\end{example}
+, segmentation, blocksize
 
 \subsection{Variance reduction}
 
@@ -1827,33 +1930,59 @@ Monte Carlo method consist on sampling a distribution and average these
 values to approximate the mean of this distribution. The main drawback 
 of this method is the low rate of convergence that is of order $1/\sqrt{N}$.
 Variance reduction methods are procedures used to increase the precision 
-of the estimates of the Monte Carlo method. The main ones are: Common random 
+of the estimates of the Monte Carlo method. The main ones are: common random 
 numbers, antithetic variates, control variates, importance sampling and 
 stratified sampling.
 
 CCruncher generate random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (eg. VaR) using the 
 statistics described in section \ref{subsec:riskm} or any other required 
-by the analyst. Any of these measures, taked one by one, can be formulated 
-as a Monte Carlo problem and we can apply some variance reduction 
-techniques, but not simultaneously.
+by the analyst. Anyone of these measures, taked one by one, can be 
+formulated as a Monte Carlo problem and we can apply some variance 
+reduction techniques, but not simultaneously. Should be noted that the
+Expected Loss is the only statistic that can be formulated directly as 
+a Monte Carlo formulation using the CCruncher simulated values.
 
 For this reason the usage of the variance reduction techniques in CCruncher 
 don't aims the increase of precision, but improve the overall result in 
-some maner. The applied variance reduction procedures are the following.
+some maner. The applied variance reduction procedures implemented in
+CCruncher are the following.
 
-\textbf{Antithetic variates}. This method is based on the fact that
+\textbf{Antithetic variates}. We are estimating $E(g(X))$ using the Monte 
+Carlo method. Let $Y_1$ and $Y_2$ random variables with the same distribution
+as $g(X)$ . This means that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$.
+Then,
 \begin{displaymath}
-	\text{Var}(X_1+X_2) = \text{Var}(X_1) + \text{Var}(X_2) + 2 \cdot \text{Cov}(X_1,X_2)
+	\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
+	\frac{\text{Var}(Y_1)+\text{Var}(Y_2)+2 \cdot \text{Cov}(Y_1,Y_2)}{4} = 
+	\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}
 \end{displaymath}
-If we can express our simulated target distribution as $X_1+X_2$ so 
-that $X_1$ and $X_2$ are negatively correlated, then we can reduce the 
-variance of the estimated value.
+If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$ 
+simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
+of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
+
+In CCruncher we use the fact that the n-dim multivariate t-Student 
+distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable 
+to $(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
+distribution is performed doing $g(X)$ where $X$ is a multivariate t-Student
+distribution and $g() = \text{PD}(t_{\nu}^{-1}())$, thus, $g(X)$ and $g(-X)$ 
+are equiprobables.
+The mean of the sampled values is the Expected Loss that can be 
+interpreted that it is approximated by a Monte Carlo schema and can
+benefits of the antithetic technique considering $X$ and $-X$ as
+variates. But rather than reducing the EL variance we are interested in 
+the reusing of the simulated random numbers. CCruncher uses the antithetic 
+technique in order reuse the simulated values and thus increase the 
+simulation speed, not to reduce the variance of risk statistics. In fact, 
+the only estimator that reduces the variance for this cause is the Expected 
+Loss.
+
+\textbf{Latin Hypercube Sampling (LHS)}. This variance reduction technique 
+belongs to the stratified sampling family.
+\cite{wolfgang:2008}, \cite{jorgensen:1998}, \cite{glasserman:1997}
+
 
 % see files lhsd.R and variance_reduction.R in directory C:\Users\gtorrent\Desktop\research\
-
-\textbf{Latin Hypercube Sampling (LHS)}. 
-variance reduction methods (antithetic, Latin Hypercube Sampling = stratified sampling)
 
 
 \subsection{Risk measurement}
@@ -1949,10 +2078,31 @@ the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
 where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
 inverse cumulative distribution function, and $\widehat{\mu}$ and 
 $\widehat{\sigma}$ are the mean and standard deviation estimators.
+Honestly, this estimator is not the best one because it assumes that
+the estimated $\text{VaR}_{\beta}$ value is the right one. Despite this, 
+if the sample size is high enought then the estimated value is good enough.
 
-\section{Parameter uncertainty}
+When loss values are high (eg. $\mathcal{O}(10^7)$ and the number of 
+simulations is high (eg. $\mathcal{O}(10^6)$) we can incurre in a loss of 
+precision when we do the sum of squares ($\mathcal{O}(10^{2 \cdot 7 + 6})$). 
+The usual type used to store these values have 15–17 significant decimal 
+digits precision that can be exceeded in the sum of squares. In this case it 
+is recommended to use the Kahan \cite{kahan:1965} summation algorithm.
+
+
+%------------------------------------------------------------------------------
+% PARAMETERS UNCERTAINTY
+%------------------------------------------------------------------------------
+\section{Parameters Uncertainty}
 K MCMC + 1 MC vs K MCMC + K MC
 \cite{tarashev:2010}, \cite{gossl:2005}
+
+
+%------------------------------------------------------------------------------
+% PARAMETERS UNCERTAINTY
+%------------------------------------------------------------------------------
+\section{CreditMetrics\texttrademark Subcase}
+\cite{cmetrics:1997}
 
 
 %==============================================================================

@@ -352,3 +352,64 @@ fcalib <- function(name)
 fcalib("calib1")
 fcalib("calib3")
 
+# ================================================
+# CCruncher example (test04)
+# ================================================
+# probability density function (pdf)
+df <- function(x, p, w) {
+	ifelse(x<=0|x>=1, 0, sqrt(1-w^2)/w * exp(qnorm(x)^2/2 - (qnorm(p)-sqrt(1-w^2)*qnorm(x))^2/(2*w^2)))
+}
+
+# reading simulated data
+portfolio = read.csv("data/test04-1000/portfolio.csv", header=TRUE, sep=",")
+
+numsims = nrow(portfolio)
+numobligors = 1000
+numbreaks = min(100,length(tabulate(portfolio[,1]+1)))
+h = hist(portfolio[,1], breaks=numbreaks)
+x = h$mids/numobligors
+y1 = h$counts/numsims
+y2 = df(x,0.1,0.2)
+y2 = y2 / sum(y2)
+
+# plotting data
+pdf(file="test04-1.pdf", width=7, height=4)
+par(mar=c(4,4,1,1))
+plot(x, y2, type='l', col=2, xlab="portfolio loss (%)", ylab="density", main="")
+grid()
+lines(x, y1, type='l', col=1)
+legend(0.25, 0.05, c("CCruncher", "LHP"), lty=c(1,1), col= 1:2, bg="white", cex=0.7)
+dev.off()
+
+# reading simulated data
+portfolio = read.csv("data/test04-100/portfolio.csv", header=TRUE, sep=",")
+
+numsims = nrow(portfolio)
+numobligors = 100
+numbreaks = min(100,length(tabulate(portfolio[,1]+1)))
+h = hist(portfolio[,1], breaks=numbreaks)
+x = h$mids/numobligors
+y1 = h$counts/numsims
+y2 = df(x,0.1,0.2)
+y2 = y2 / sum(y2)
+
+# plotting data
+pdf(file="test04-2.pdf", width=7, height=4)
+par(mar=c(4,4,1,1))
+plot(x, y2, type='l', col=2, xlab="portfolio loss (%)", ylab="density", main="")
+grid()
+lines(x, y1, type='l', col=1)
+legend(0.25, 0.1, c("CCruncher", "LHP"), lty=c(1,1), col= 1:2, bg="white", cex=0.7)
+dev.off()
+
+# ================================================
+# CCruncher example (test05)
+# ================================================
+portfolio = read.csv("data/test05/portfolio.csv", header=TRUE, sep=",")
+d = density(portfolio[,1])
+pdf(file="test05.pdf", width=7, height=3)
+par(mar=c(4,4,1,1))
+plot(d, main="", xlab="Portfolio Loss"); 
+grid()
+dev.off()
+
