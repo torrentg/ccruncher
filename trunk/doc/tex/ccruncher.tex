@@ -76,7 +76,7 @@
 \usepackage{wrapfig}
 \usepackage{bbm}
 \def\numversion{2.3}
-\def\svnversion{R1024}
+\def\svnversion{R1039}
 
 %----------------------------------------------------------------------------------------
 
@@ -770,9 +770,9 @@ of the exponential and the logarithm functions:
 	and that these values are those from the 1-year regularized transition 
 	matrix of example \ref{ex:1ytm}. In this case, the diagonal transition 
 	matrix is:
+	\small
 	\begin{displaymath}
 		M_1 = \left(
-		\small
 		\begin{array}{cccccccc}
 		99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
 		0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
@@ -868,9 +868,9 @@ extracted from \cite{kreinin:2001}.
 	We derive the PD for each rating induced by the transition matrix exposed
 	in the example \ref{ex:1ytm}. As first step, we scale the 1-year transition 
 	matrix $M_1$ to the 1-month transition matrix $M_{\frac{1}{12}}$.
+	\small
 	\begin{displaymath}
 		M_{\frac{1}{12}} = \left(
-		\small
 		\begin{array}{cccccccc}
 			99.1972 &  0.7588 &  0.0320 &  0.0020 &  0.0112 & -0.0011 & -0.0001 &   0.0000 \\
 			 0.0635 & 99.1744 &  0.7083 &  0.0392 &  0.0015 &  0.0120 &  0.0018 &  -0.0007 \\
@@ -886,9 +886,9 @@ extracted from \cite{kreinin:2001}.
 	We observe that $M_{\frac{1}{12}}$ is not a regular matrix due to negative
 	values. We apply the QOM algorithm to regularize it. We call the 1-year 
 	regularized transition matrix to $\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$.
+	\small
 	\begin{displaymath}
 		\bar{M}_{\frac{1}{12}} = \left(
-		\small
 		\begin{array}{cccccccc}
 			99.1969 &  0.7586 &  0.0317 &  0.0018 &  0.0110 &  0.0000 &  0.0000 &   0.0000 \\
 			 0.0634 & 99.1744 &  0.7082 &  0.0391 &  0.0014 &  0.0119 &  0.0017 &   0.0000 \\
