@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-04-05 06:32:17+02:00"
+#define BUILD_DATE "2013-05-18 17:19:24+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -119,7 +119,7 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 2.2"
+#define PACKAGE_STRING "ccruncher 2.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
@@ -128,7 +128,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.2"
+#define PACKAGE_VERSION "2.3"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -140,7 +140,7 @@
 #define TIME_WITH_SYS_TIME 1
 
 /* Version number of package */
-#define VERSION "2.2"
+#define VERSION "2.3"
 
 /* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
    <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
@@ -163,6 +163,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R999"
+#define SVN_VERSION "R1039"
 
 

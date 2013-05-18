@@ -9,6 +9,7 @@ Current works
   * interest is useful? (exposure depends on interest)
   * rename dprobs to pds
   * pds can have multiple transtions, and pd into
+  * add option 'copy data to clipboard' in graphics
  
 Future works
 -------------------
