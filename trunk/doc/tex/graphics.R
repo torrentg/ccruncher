@@ -413,3 +413,34 @@ plot(d, main="", xlab="Portfolio Loss");
 grid()
 dev.off()
 
+
+# ================================================
+# LHS example
+# ================================================
+
+ rlhs <- function(nblocks, icdf, ...) 
+ {
+   ret = rep(NA,nblocks)
+   for(i in 1:nblocks) {
+     u = runif(1, min=(i-1)/nblocks, max=i/nblocks)
+     ret[i] = icdf(u, ...)
+   }
+   ret = sample(ret)
+   return(ret)
+ }
+
+ x1 = rnorm(100, mean=0, sd=1)
+ cdf1 = ecdf(x1)
+ pdf(file="lhs1.pdf", width=7, height=3)
+ par(mar=c(2,2,1,1))
+ plot(cdf1, verticals=TRUE, pch=26, ylab="prob", main="");
+ grid()
+ dev.off()
+
+ x2 = rlhs(100, qnorm, mean=0, sd=1)
+ cdf2 = ecdf(x2)
+ pdf(file="lhs2.pdf", width=7, height=3)
+ par(mar=c(2,2,1,1))
+ plot(cdf2, verticals=TRUE, pch=26, ylab="prob", main="");
+ grid()
+ dev.off()

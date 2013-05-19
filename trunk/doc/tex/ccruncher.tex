@@ -75,6 +75,7 @@
 \usepackage{nameref}
 \usepackage{wrapfig}
 \usepackage{bbm}
+\usepackage{listings}
 \def\numversion{2.3}
 \def\svnversion{R1039}
 
@@ -1961,6 +1962,53 @@ If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$
 simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
 of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
 
+\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
+
+ f <- function(x) { 1/(1+x) }
+ result = matrix(nrow=4, ncol=3)
+ colnames(result) = c("N", "Mean", "Var")
+ rownames(result) = 1:4
+
+ rownames(result)[1] = "Exact";
+ result[1,1] = 0
+ result[1,2] = integrate(f, lower=0, upper=1)$value
+ result[1,3] = 0
+
+ u = runif(10000)
+ rownames(result)[2] = "Monte Carlo";
+ result[2,1] = length(u)
+ result[2,2] = mean(f(u))
+ result[2,3] = var(f(u))
+
+ u = runif(5000)
+ rownames(result)[3] = "Antithetic";
+ result[3,1] = length(u)
+ result[3,2] = mean((f(u)+f(1-u))/2)
+ result[3,3] = var((f(u)+f(1-u))/2)
+
+ u = runif(5000)
+ u = c(u, 1-u)
+ rownames(result)[4] = "CCruncher";
+ result[4,1] = length(u)
+ result[4,2] = mean(f(u))
+ result[4,3] = var(f(u))
+
+\end{lstlisting}
+\hspace*{1cm}
+\begin{tabular}{l|c|c|c|}
+	\cline{2-4}
+	& N & Mean & Var \\
+	\hline
+	\multicolumn{1}{|l|}{Exact} & 0 & 0.693147 & 0.000000 \\
+	\hline
+	\multicolumn{1}{|l|}{Monte Carlo} & 10000 & 0.695685 & 0.019624 \\
+	\hline
+	\multicolumn{1}{|l|}{Antithetic} & 5000 & 0.693404 & 0.000593 \\
+	\hline
+	\multicolumn{1}{|l|}{CCruncher} & 10000 & 0.693099 & 0.019508 \\
+	\hline
+\end{tabular}
+
 In CCruncher we use the fact that the n-dim multivariate t-Student 
 distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable 
 to $(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
@@ -1981,6 +2029,39 @@ Loss.
 belongs to the stratified sampling family.
 \cite{wolfgang:2008}, \cite{jorgensen:1998}, \cite{glasserman:1997}
 
+\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
+
+ rlhs <- function(nblocks, icdf, ...) 
+ {
+   ret = rep(NA,nblocks)
+   for(i in 1:nblocks) {
+     u = runif(1, min=(i-1)/nblocks, max=i/nblocks)
+     ret[i] = icdf(u, ...)
+   }
+   ret = sample(ret)
+   return(ret)
+ }
+
+ x1 = rnorm(100, mean=0, sd=1)
+ cdf1 = ecdf(x1)
+ plot(cdf1, verticals=TRUE, pch=26, ylab="prob", main="");
+ 
+ x2 = rlhs(100, qnorm, mean=0, sd=1)
+ cdf2 = ecdf(x2)
+ plot(cdf2, verticals=TRUE, pch=26, ylab="prob", main="");
+ 
+\end{lstlisting}
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Empirical cdf (without lhs)}{
+		\includegraphics[width=7cm]{lhs1}
+	}
+	\subcaptionbox{Empirical cdf (using lhs)}{
+		\includegraphics[width=7cm]{lhs2}
+	}
+	\caption{Latin Hypercube Sampling example}
+	\label{fig:test04} 
+\end{figure}
 
 % see files lhsd.R and variance_reduction.R in directory C:\Users\gtorrent\Desktop\research\
 

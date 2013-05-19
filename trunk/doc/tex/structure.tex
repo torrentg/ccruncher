@@ -326,3 +326,18 @@ linewidth=4pt]{aBox}
 \end{tikzpicture}}\par\vspace*{50\p@}
 }
 \makeatother
+
+%----------------------------------------------------------------------------------------
+%	SOURCE CODE LISTINGS (GTG)
+%----------------------------------------------------------------------------------------
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \small\sffamily
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-4pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=none, backgroundcolor=\color{black!5}, showlines=true, basicstyle=\footnotesize\ttfamily}
+% other lstlisting options:
+% frame=lrtbLRTB|none, rulecolor=\color{gray}, numbers=left, backgroundcolor=\color{gray},
+% framesep=10pt, xleftmargin=10pt, xrightmargin=-\fboxsep,
+% framexleftmargin=20pt, framerule=0pt
+
