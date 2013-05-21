@@ -31,7 +31,6 @@
 using namespace std;
 using namespace ccruncher;
 
-#define MAX_NBREAKS 256
 // maximum error = 1 hour
 #define MAX_ERROR 1.0/24.0
 
@@ -162,6 +161,7 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
     int maxday = t1-t0;
 
     if (maxday <= minday) {
+      // constant function
       splines[irating] = gsl_spline_alloc(gsl_interp_linear, 2);
       splines[irating]->x[0] = icdf(dprobs.evalue(irating, maxday));
       splines[irating]->x[1] = icdf(dprobs.evalue(irating, maxday));
