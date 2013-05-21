@@ -637,16 +637,17 @@ but differ as this goes away.
 	\label{def:tm}
 	The $T$-years transition matrix gives the probability of changing 
 	from rating $r_i$ to rating $r_j$ in a period of $T$ years:
+	\small
 	\begin{displaymath}
 		M_T = \left(
 		\begin{array}{ccc}
-			m_{1,1} & \dots  & m_{1,n} \\
-			\vdots  & \ddots & \vdots  \\
-			m_{n,1} & \dots  & m_{n,n} \\
+			m_{11} & \dots  & m_{1n} \\
+			\vdots & \ddots & \vdots \\
+			m_{n1} & \dots  & m_{nn} \\
 		\end{array}
 		\right)
 		\qquad
-		m_{i,j} = P(r_i \to r_j;T)
+		m_{ij} = P(r_i \to r_j\ ;\ T)
 	\end{displaymath}
 	where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
 	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
@@ -944,6 +945,8 @@ The PDs functions derived from an advanced transition matrix model may
 have more or less pronounced steps depending on the different stages of 
 the economic cycle. This approach is the most suitable for risk estimates 
 in the medium and long term.
+
+%TODO: resum final del model
 
 
 %==============================================================================
@@ -1441,6 +1444,13 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 	\end{enumerate}
 \end{algorithm}
 
+The simulated values from the posterior distribution have ergodic properties but
+they aren't independents. If you want independent values you can plot the 
+autocorrelation function and estimate the length, $B$, for wich the autocorrelation 
+is canceled. Then take only the values whose index is a multiple of $B$. Also
+note that the estimated parameters aren't independent of each other, in fact 
+they form a multivariate distribution.
+
 \begin{example}[Beta distribution calibration]
 	We have a sample $\{y_1,\dots,y_{100}\}$ comming from a $\text{Beta}(2,5)$ 
 	distribution. We want to do Bayessian inference to determine the value of the 
@@ -1510,7 +1520,7 @@ the vector $\theta$ excluding its j-th component [ i.e., $\theta_{\backslash j}
 		\item parameters $\theta \equiv \{ \nu,\vec{w},R,v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\}$
 		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
 		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
-		\item proposal distributions $q(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
+		\item proposal distributions $q_j(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
 		\item prior distribution $f_{\nu}(\nu) \sim \text{Unif}(2,1000)$
 		\item prior distribution $f_{w}(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
 		\item prior distribution $f_{r}(r_{ij}\ ;\ R) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
@@ -1783,7 +1793,9 @@ Vasicek \cite{vasicek:1987} derived an analytical formula for the loss
 distribution of an infinitely large portfolio. Later, Schloegl and O'Kane 
 \cite{schloegl:2005} extended it to the t-Student case. The assumptions of 
 these approximations are: 1) one-factor model, 2) infinitely large portfolio, 
-3) equals PDs, 4) equals exposures. 
+3) equals PDs, 4) equals exposures. These simplified models must be managed 
+with care as it can cause problems \cite{long:2012} when the assumptions 
+are not satisified.
 
 CCruncher generates samples of the portfolio loss distribution simulating 
 the obligors default times. It applies the corollary \ref{cor:dts} where the 
@@ -1905,7 +1917,7 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	with a common PD, but this is not aplicable to this example (t-Student, 
 	multiple PDs).
 	One way to check that the result is correct consist in disaggregate the
-	simulated portfolio losses by sector-rating (see section \ref{X}) and 
+	simulated portfolio losses by sector-rating (see section \ref{ss:ra}) and 
 	estimate the parameters $\nu, \vec{w}$, and $R$ with the first 1000 
 	simulations. If the estimated values matches the simulated values means 
 	we have a consistent simulation and estimation algorithms. Note that in 
@@ -1920,10 +1932,85 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 \end{example}
 
 \subsection{Simulation internals}
-speed-up techniques (function composition), 
-function approximation (splines linear/cubic),
-how EAD and LGD are taked %(std::lower_bound)
-, segmentation, blocksize
+
+\textbf{PD functions approximation}. CCruncher allows to define the PDs
+functions using the transition matrix or defining explicitelly the values
+at some fixed points. When the PDs are defined using the transition matrix 
+CCruncher uses the proposition \ref{prop:pdftm} to derive the PDs values 
+for each month and intermediate values are interpolated using cubic splines. 
+When the PDs values are defined explicitely at fixed time values, then 
+intermediate values are also interpolated using cubic splines but if the 
+resulting function is not strictly increasing, we use linear splines.
+
+\textbf{EAD and LGD interpolation}. CCruncher knows the EAD and LGD functions 
+at fixed times $\{t_1,\dots,t_n\}$ provided by user. When we evaluate these 
+functions in a time value distinct than those provided we use the following 
+piecewise constant interpolation:
+\begin{displaymath}
+	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
+\end{displaymath}
+\textbf{Function composition}. In order to speed-up the evaluation of the
+function $t=\text{PD}_r(t_{\nu}^{-1}(x))$ we approximate it using linear 
+splines at a selected set of days $\mathbb{S}$. 
+Let $\{t_1,\dots,t_n\}$ the days where $PD_r$ has known values (not 
+interpolated), and let $t=P(x)$ the function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ 
+linearly interpolated using the points of set $\mathbb{S}$. 
+Then, CCruncher determines the set of days $\mathbb{S}$ using the following 
+procedure:
+\begin{itemize}
+	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
+	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
+	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P^{-1}(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
+	\begin{itemize}
+		\item Let $d$ the day where maximum error is achieved
+		\item Let $t_i \le d \le t_{i+1}$ the nearest days where PD is defined
+		\item If $t_i$ is not contained in $S$, add $t_i$ to $S$
+		\item Else if $t_{i+1}$ is not contained in $S$, add $t_{i+1}$
+		\item Else add $d$ to $S$
+	\end{itemize}
+\end{itemize}
+
+\textbf{Interest rate}. CCruncher allows to considere the Net Present Value 
+of the simulated losses. This is computed using an interest rate curve 
+defined at fixed times and interpolated using linear or cubic splines 
+(selected by user). Allowed methods are simple interest, compound interest 
+and continuous interest. The formulas used to compute the present value are:
+\begin{center}
+	\begin{tabular}{ccccc}
+		$V_0 = \frac{V_t}{1+r \cdot \Delta t}$ & $\qquad$ &
+		$V_0 = \frac{V_t}{(1+r)^{\Delta t}}$ & $\qquad$ &
+		$V_0 = \frac{V_t}{\exp(r \cdot \Delta t)}$ \\
+		(Simple) & $\qquad$ & (Compound) & $\qquad$ & (Continuous)
+	\end{tabular}
+\end{center}
+where $V_t$ is the value at time $t$, and $r$ is the interest rate given 
+by the interest curve at time $t$.
+
+\textbf{Risk aggregation}. 
+\label{ss:ra}
+CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
+the same execution) the simulation of subportfolios losses. The name to refer
+a subportfolio is \emph{segment}. A segmentation is the disjoint union of some 
+segments that contitutes the whole portfolio so that an asset belongs to only 
+one segment of a given segmentation. By example, we can define a segmentation
+of types of assets where the segments are bonds, loans, leases, etc. Each asset
+belongs to only one segment. When an obligor defaults, the loss of its assets
+are aggregated to the whole portfolio loss, and the loss of each of its assets
+is aggregated to the corresponding segment. CCruncher allows to define and 
+manage multiple segmentations simultaneously. The segmentations can be 
+composed of obligors or assets. In the first case, the obligor loss is 
+aggregated to segment loss when the obligor defaults. In the second case, the 
+asset losses are aggregated to segments losses when the obligor defaults.
+
+\textbf{Parallel computing}. 
+CCruncher parallelize the portfolio loss sampling spawning multiple simulation
+threads, each of them with its own Mersenne twister Random Number Generator 
+seeded with consecutive values. When the number of obligors is high, data 
+don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
+operation that must be minimized. To achieve this CCruncher simule each 
+obligor \emph{blocksize} times (each of them with the correpsonding $\nu$ and 
+$\vec{z}$) before moving to the next obligor. This strategy can be considered 
+to implement CCruncher parallelization in CUDA-like architectures.
 
 \subsection{Variance reduction}
 
@@ -1961,6 +2048,22 @@ Then,
 If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$ 
 simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
 of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
+
+In CCruncher we use the fact that the n-dim multivariate t-Student 
+distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable 
+to $(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
+distribution is performed doing $g(X)$ where $X$ is a multivariate t-Student
+distribution and $g() = \text{PD}(t_{\nu}^{-1}())$, thus, $g(X)$ and $g(-X)$ 
+are equiprobables.
+The mean of the sampled values is the Expected Loss that can be 
+interpreted as a Monte Carlo schema and can benefits of the antithetic 
+technique considering $X$ and $-X$ as variates. 
+But rather than reducing the EL variance we are interested in 
+the reusing of the simulated random numbers. CCruncher uses the antithetic 
+technique in order reuse the simulated values and thus increase the 
+simulation speed, not to reduce the variance of risk statistics. In fact, 
+the only estimator that reduces the variance for this cause is the Expected 
+Loss.
 
 \begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
 
@@ -2008,26 +2111,29 @@ of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
 	\multicolumn{1}{|l|}{CCruncher} & 10000 & 0.693099 & 0.019508 \\
 	\hline
 \end{tabular}
-
-In CCruncher we use the fact that the n-dim multivariate t-Student 
-distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable 
-to $(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
-distribution is performed doing $g(X)$ where $X$ is a multivariate t-Student
-distribution and $g() = \text{PD}(t_{\nu}^{-1}())$, thus, $g(X)$ and $g(-X)$ 
-are equiprobables.
-The mean of the sampled values is the Expected Loss that can be 
-interpreted that it is approximated by a Monte Carlo schema and can
-benefits of the antithetic technique considering $X$ and $-X$ as
-variates. But rather than reducing the EL variance we are interested in 
-the reusing of the simulated random numbers. CCruncher uses the antithetic 
-technique in order reuse the simulated values and thus increase the 
-simulation speed, not to reduce the variance of risk statistics. In fact, 
-the only estimator that reduces the variance for this cause is the Expected 
-Loss.
+\vspace{11pt}
 
 \textbf{Latin Hypercube Sampling (LHS)}. This variance reduction technique 
-belongs to the stratified sampling family.
-\cite{wolfgang:2008}, \cite{jorgensen:1998}, \cite{glasserman:1997}
+belongs to the stratified sampling family. It consist in divide the total 
+probability range ($100\%$) in $N$ equispaced segments. Then we create a 
+sample of size $N$ picking a random value from each segment using a uniform 
+distribution and applying the inverse transform sampling. Finally we shuffle 
+the sample to obtain the desired distribution random values. When we have 
+two independent random variables, we repeat the above procedure for each of 
+them obtaining the Latin Square effect: the generated random points are in
+a reticle where each row and column has only one point. The procedure for
+three or more independent variables is exactly the same and its named Latin 
+Hypercube Sampling \cite{jorgensen:1998}, \cite{glasserman:1997}.
+
+When the random variables are dependent the previous schema don't work and
+it is reformulated recurring to copulas and the rank statistic 
+\cite{wolfgang:2008}. In this case the number of bins impact in the 
+quality of the generated values, the bigger the better.
+
+In CCruncher, the random variables that can be sampled using the LHS 
+technique are the degrees of freedom, $\nu$, and the factors, $\vec{z}$. 
+The aim is to ensure a uniform scanning of these variables so that the
+extreme cases are represented.
 
 \begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
 
@@ -2059,8 +2165,8 @@ belongs to the stratified sampling family.
 	\subcaptionbox{Empirical cdf (using lhs)}{
 		\includegraphics[width=7cm]{lhs2}
 	}
-	\caption{Latin Hypercube Sampling example}
-	\label{fig:test04} 
+	\caption{Latin Hypercube Sampling example (1-dim)}
+	\label{fig:lhs} 
 \end{figure}
 
 % see files lhsd.R and variance_reduction.R in directory C:\Users\gtorrent\Desktop\research\
@@ -2177,13 +2283,14 @@ is recommended to use the Kahan \cite{kahan:1965} summation algorithm.
 \section{Parameters Uncertainty}
 K MCMC + 1 MC vs K MCMC + K MC
 \cite{tarashev:2010}, \cite{gossl:2005}
-
+%TODO: complete section
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
 %------------------------------------------------------------------------------
 \section{CreditMetrics\texttrademark Subcase}
 \cite{cmetrics:1997}
+%TODO: complete section
 
 
 %==============================================================================
@@ -2374,6 +2481,8 @@ use this statement to define and simulate the t-Student copula.
 %------------------------------------------------------------------------------
 \section{Covariance Block Matrix}
 \label{ap:cbm}
+
+%TODO: add reference to Torrent-Fortiana
 
 \begin{definition}[Covariance Block Matrix]
 	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
