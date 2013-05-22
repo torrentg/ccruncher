@@ -444,3 +444,40 @@ dev.off()
  plot(cdf2, verticals=TRUE, pch=26, ylab="prob", main="");
  grid()
  dev.off()
+
+# ================================================
+# paramu example
+# ================================================
+X <- import("paramu.out"); n=nrow(X)
+skip = 5000
+pdf(file="paramu-1.pdf", width=7, height=2)
+par(mfrow=c(1,4));
+par(mar=c(4,2,0.5,0))
+hist(X[(skip+1):n,1], breaks=20, freq=TRUE, xlab="Parameter "~nu, ylab="Frequency", main=""); 
+hist(X[(skip+1):n,2], breaks=20, freq=TRUE, xlab="Parameter "~W[1], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,3], breaks=20, freq=TRUE, xlab="Parameter "~W[2], ylab="Frequency", main=""); 
+hist(X[(skip+1):n,4], breaks=20, freq=TRUE, xlab="Parameter "~R[1][2], ylab="Frequency", main=""); 
+dev.off()
+
+pdf(file="paramu-2.pdf", width=7, height=2)
+par(mfrow=c(1,4));
+par(mar=c(4,2,0.5,0))
+acf(X[(skip+1):n,1], lag.max=3000, xlab="Parameter "~nu, main=""); 
+acf(X[(skip+1):n,2], lag.max=3000, xlab="Parameter "~W[1], main=""); 
+acf(X[(skip+1):n,3], lag.max=3000, xlab="Parameter "~W[2], main=""); 
+acf(X[(skip+1):n,4], lag.max=3000, xlab="Parameter "~R[1][2], main=""); 
+dev.off()
+
+# prune values
+Y = X[skip:n,1:4]
+Y = Y[(1:nrow(Y))%%3000==0,]
+fprint <- function(i, params) {
+	str = "mkdir data/MH" %&% sprintf("%03d",i)
+	str = str %&% "; bin/ccruncher-cmd --path=data/MH" %&% sprintf("%03d",i)
+	str = str %&% " -D NU=" %&% params[1]
+	str = str %&% " -D W1=" %&% params[2]
+	str = str %&% " -D W2=" %&% params[3]
+	str = str %&% " -D R12=" %&% params[4]
+	str = str %&% " test05.xml;"
+	return(str)
+}

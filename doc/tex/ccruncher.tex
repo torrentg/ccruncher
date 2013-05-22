@@ -292,7 +292,8 @@ Similar to VAR, Expected Shortfall is a consistent risk measure
 Here we define the key concepts used to model the credit risk.
 They are those of the Basel II accords \cite{basel2:2006}, the 
 de-facto international financial risk regulation framework. These
-directives are strongly influenced by the Merton based approach.
+directives are strongly influenced by the Merton based approach
+\cite{cespedes:2002}.
 We emphasize the temporal dimension because it is a key point in 
 further development. From now establish that the time unit is the 
 year in order to simplify the exposition without loss of generality
@@ -1513,6 +1514,7 @@ they form a multivariate distribution.
 \section{Estimation of Parameters}
 
 \begin{proposition}[Parameters estimation]
+	\label{prop:pemh}
 	We can estimate the parameters of the conditioned likelihood using
 	the Bayessian framework and Metropolis-Hastings algorithm 
 	(see algorithm \ref{alg:bimh}) with the following rules:
@@ -2281,12 +2283,195 @@ is recommended to use the Kahan \cite{kahan:1965} summation algorithm.
 % PARAMETERS UNCERTAINTY
 %------------------------------------------------------------------------------
 \section{Parameters Uncertainty}
-K MCMC + 1 MC vs K MCMC + K MC
-\cite{tarashev:2010}, \cite{gossl:2005}
-%TODO: complete section
+
+The estimation of dependence parameters (degrees of freedom $\nu$, factor
+loadings $\vec{w}$, and factors correlation $R$) has an uncertainty that 
+can not be ignored \cite{tarashev:2010} \cite{gossl:2005}. The example
+\ref{ex:calib} ilustrates the phenomenon and its magnitude (see the 20
+observations case).
+
+The CCruncher framework encourage to incorporate the parameter uncertainty 
+in the credit risk valuation. This means that some credit risk measures
+(eg. $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are therefore regarded as 
+distributions instead of precise values. Note that the EL measure is not 
+afected by the uncertainty of dependence parameters because the expectation
+satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ is not statistically independent 
+of $Y$. These distributions depends directly on the distribution of the
+parameters. As example, in the Value at Risk case we can express it as:
+\begin{displaymath}
+	\text{VaR}_{99\%}(\nu,\vec{w},R) = \text{value}
+\end{displaymath}
+where $\nu,\vec{w}$ and $R$ are random variables.
+
+We are able to measure the credit risk of a portfolio presupposing that
+dependence parameters are fixed values. This is done sampling the portfolio
+loss (algorithm \ref{alg:pldmc}) and approximating the credit risk indicator
+using the appropiate statistic (see section \ref{subsec:riskm}). The risk 
+measure obtained by this procedure consist of an approximated value an
+a standard error that allows to define a confidence interval fixed level
+(eg. 95\%).
+
+On the other hand we have a procedure (see proposition \ref{prop:pemh}) that 
+generate random samples from the multivariate parameters distribution.
+These samples can be filtered in order to obtain a sample of independent
+parameters values. We note this sample of the parameters distribution as
+$\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
+
+The solution recomended by CCruncher to determine the distribution of a
+credit risk measure is the obvious. It is based in the same procedure 
+used to determine the distribution of the portfolio loss or the distribution 
+of the parameters: the random sampling of the distribution. We are able
+to simulate random values of the parameters distribution, and we can 
+compute the portfolio credit risk measure fixed these.
+
+\begin{algorithm}[Credit risk measure distribution]
+	\label{alg:crmd}
+	Let a portfolio (ratings, sectors, PDs, EADs, LGDs) and the numbers 
+	of defaults observed by sector-rating in the previous years. We can
+	determine the distribution of a credit risk measure 
+	(eg. $\text{VaR}_{99\%}$) doing:
+	\begin{enumerate}
+		\item Obtain an ergodic sample of the parameters applying the
+		Metropolis-Hastings algorithm (see proposition \ref{prop:pemh}).
+		\item Determine the length $B$ at which the autocorrelation is $0$.
+		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ the subsample
+		of the parameters distribution composed by the indexes multiples 
+		of $B$.
+		\item For each simulated parameters simule the portfolio loss 
+		distribution using the algorithm \ref{alg:pldmc}.
+		\item For each simulated portfolio loss distribution compute its 
+		risk measure using the statistic described in \ref{subsec:riskm}:
+		$\{\text{VaR}_{99\%}^t(\nu^t,\vec{w}^t,R^t)\}_{t=1,\dots,N}$.
+	\end{enumerate}
+\end{algorithm}
+
+\begin{example}[Credit risk considering parameters uncertainty]
+	\label{ex:paramu}
+	We use the same escenario that is described in the example \ref{ex:test05} 
+	and that correspond to CCruncher input file 
+	\texttt{\$CCRUNCHER/samples/test05.xml}. 
+	We generate 20 observations using the algorithm \ref{alg:snod}. In the real 
+	world these observations are extracted from the historical records. 
+	In this example we apply the algorithm \ref{alg:crmd} to estimate the 
+	$\text{ES}_{99\%}$ distribution taking into account the parameters 
+	uncertainty. 
+
+	The first step consist in the generation of a sample of the parameters 
+	distribution using the Metropolis-Hastings algorithm. We perform 1000000
+	of iterations. Figure \ref{fig:paramu1} displays the marginals of this 
+	distribution.
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.98\textwidth]{paramu-1}
+		\caption{Parameters simulation using M-H}
+		\label{fig:paramu1}
+	\end{figure}
+	
+	The second step consist in determine the thin interval using the 
+	autocorrelation functions. Figure \ref{fig:paramu2} shows the ACF for 
+	each parameter. A thin interval of 3000 is sufficient in this example. 
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=0.98\textwidth]{paramu-2}
+		\caption{Autocorrelation function of simulated parameters}
+		\label{fig:paramu2}
+	\end{figure}
+	
+	The third step consist in pruning the parameters sample preserving 
+	only the simulated values whose index is a multiple of 3000. Table
+	\ref{tab:paramu3} display part of the simulated values.
+	\begin{table}[!ht]
+		\centering
+		\begin{tabular}{cc|c|c|c|c|}
+			\cline{1-1} \cline{3-6}
+			\multicolumn{1}{|c|}{It} & & $\nu$ & $w_1$ & $w_2$ & $R_{12}$ \\
+			\cline{1-1} \cline{3-6}
+			\multicolumn{1}{|c|}{1} & & 12.54 & 0.29 & 0.48 & 0.21 \\
+			\cline{1-1} \cline{3-6}
+			\multicolumn{1}{|c|}{2} & & 10.77 & 0.28 & 0.32 & -0.28 \\
+			\cline{1-1} \cline{3-6}
+			\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots \\
+			\cline{1-1} \cline{3-6}
+			\multicolumn{1}{|c|}{300} & & 10.06 & 0.33 & 0.36 & 0.02 \\
+			\cline{1-1} \cline{3-6}
+		\end{tabular}
+		\caption{Simulated parameters}
+		\label{tab:paramu3}
+	\end{table}
+
+	The fourth step is the simulation of the portfolio loss distribution
+	for each simulated parameters. This is a very intensive computation.
+	CCruncher provides a command line incarnation and a macro expansion in
+	the input file that can help to do this step. If you have a cluster, a 
+	cloud or grid you can consider to execute multiple task in parallel using 
+	a framework like 
+	MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
+	or similar. Listing \ref{sc:paramu4} displays a very simple batch
+	script to execute secuentally the required simulations.
+	\begin{lstlisting}[language=bash, label={sc:paramu4}, 
+	caption={Execution of multiple CCrunchers (bash script)}]
+ 
+ mkdir data/MH001;
+ bin/ccruncher-cmd --path=data/MH001 -DNU=12.54 -DW1=0.29 \
+     -DW2=0.48 -DR12=0.21 test05.xml; 
+ 
+ mkdir data/MH002; 
+ bin/ccruncher-cmd --path=data/MH002 -DNU=10.77 -DW1=0.28 \
+     -DW2=0.32 -DR12=-0.28 test05.xml; 
+
+ ...
+
+ mkdir data/MH300; 
+ bin/ccruncher-cmd --path=data/MH300 -DNU=10.06 -DW1=0.33 \
+     -DW2=0.36 -DR12=0.02 test05.xml; 
+ 
+	\end{lstlisting}
+
+	\begin{lstlisting}[language=R, label={sc:paramu5}, 
+	caption={$ES_{99\%}$ distribution (R script)}]
+
+ "%&%" <- function(a, b) paste(a, b, sep="")
+
+ getRisk <- function(num)
+ {
+   filename = "data/MH" %&% sprintf("%03d",num) %&% "/portfolio.csv"
+   data <- read.csv(filename, header=T)
+   X = sort(data[,1])
+   n = length(X)
+   Y = X[as.integer(n*0.99):n]
+   ES99 = mean(Y)
+   sde = sqrt(var(Y)/length(Y))
+   return(c(ES99,sde))
+ }
+
+ dirs = dir(".", pattern="data/MH[:digit:]{3}")
+ n = length(dirs)
+ values = matrix(ncol=2,nrow=nummh)
+ colnames(values) = c("ES99", "stderr")
+ for(i in 1:n) {
+   values[i,] = getVals(i)
+ }
+ plot(density(values[,1]))
+
+	\end{lstlisting}
+\end{example}
+\begin{comment}
+# R script to simulate values
+source("../bin/ccbinf.R")
+p = c(0.05, 0.1, 0.2)
+w = c(0.4, 0.35)
+D = matrix(nrow=2, ncol=3, data=c(167, 167, 166, 167, 167, 166))
+R = matrix(ncol=2, nrow=2, data=c(1.0,0.25,0.25,1.0))
+nu = 15
+rcount = ccruncher.rcount(20, p, D, w, R, nu)
+export(rcount, "paramu.txt")
+
+# bash commands
+./bin/ccbinf -r 1000 -n 1000000 samples/paramu.txt
+\end{comment}
 
 %------------------------------------------------------------------------------
-% PARAMETERS UNCERTAINTY
+% CCRUNCHER VS. CREDITMETRICS
 %------------------------------------------------------------------------------
 \section{CreditMetrics\texttrademark Subcase}
 \cite{cmetrics:1997}
