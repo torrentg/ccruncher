@@ -481,3 +481,6 @@ fprint <- function(i, params) {
 	str = str %&% " test05.xml;"
 	return(str)
 }
+for(i in 1:nrow(Y)) {
+	cat(fprint(i, Y[i,]), "\n")
+}
