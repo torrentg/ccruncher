@@ -520,7 +520,7 @@ is immediate to derive a method to sample the default times distribution.
 	Then we can simulate this distribution using a multivariate t-Student 
 	distribution $X \sim t_n(\nu,\bar{R})$:
 	\begin{displaymath}
-		(T_1, \dots, T_n) = \left(\text{PD}_1^{-1}\left(t_{\nu}(X_1)\right), \dots, \text{PD}_1^{-1}\left(t_{\nu}(X_d)\right)\right)
+		(T_1, \dots, T_n) = \left(\text{PD}_1^{-1}\left(t_{\nu}(X_1)\right), \dots, \text{PD}_n^{-1}\left(t_{\nu}(X_n)\right)\right)
 	\end{displaymath}
 \end{corollary}
 
@@ -649,7 +649,7 @@ but differ as this goes away.
 		\qquad
 		m_{ij} = P(r_i \to r_j\ ;\ T)
 	\end{displaymath}
-	where $n$ is the number of ratings and $m_{i,j}$ is the probability that a
+	where $n$ is the number of ratings and $m_{ij}$ is the probability that a
 	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
 	Note that row sums are $1$ and that if we have two consecutives transition 
 	matrices, $M_{T_1}$ and $M_{T_2}$, then we can derive 
@@ -857,11 +857,11 @@ extracted from \cite{kreinin:2001}.
 	Let $M_T$ a transition matrix, then the PD for an obligor with 
 	rating $r_j$ is:
 	\begin{displaymath}
-		\Pr\{T_. \le t\} = \left( M_t \right)_{j,n}
+		\Pr\{T_. \le t\} = \left( M_t \right)_{jn}
 	\end{displaymath}
 	where $T_.$ is the obligor default time, $j$ is the index of the obligor's
 	rating, $n$ is the index of the \emph{defaulted} rating, $M_t$ is the 
-	transition matrix scaled to time $t$, and $(M)_{i,j}$ is the matrix element
+	transition matrix scaled to time $t$, and $(M)_{ij}$ is the matrix element
 	in the i-th row and j-th column.
 \end{proposition}
 
@@ -933,12 +933,12 @@ with rating $r_j$ is:
 	\Pr\{T_. \le t\} = \left(
 		\left( \prod_{i=1}^{[t/T]} M_T(i) \right) \cdot 
 		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
-		\right)_{j, n}
+		\right)_{jn}
 \end{displaymath}
 where $[x]$ is the integer part of $x$, $T_.$ is the obligor default time, 
 $j$ is the index of the obligor's rating, $n$ is the index of the 
 \emph{defaulted} rating, $M_t(i)$ is the T-period transition matrix 
-evaluated at time $i$ and scaled to time $t$, and $(M)_{i,j}$ is the 
+evaluated at time $i$ and scaled to time $t$, and $(M)_{ij}$ is the 
 matrix element in the i-th row and j-th column.
 
 The PDs functions derived from an advanced transition matrix model may 
@@ -1950,7 +1950,7 @@ piecewise constant interpolation:
 	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
 \end{displaymath}
 \textbf{Function composition}. In order to speed-up the evaluation of the
-function $t=\text{PD}_r(t_{\nu}^{-1}(x))$ we approximate it using linear 
+function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ we approximate it using linear 
 splines at a selected set of days $\mathbb{S}$. 
 Let $\{t_1,\dots,t_n\}$ the days where $PD_r$ has known values (not 
 interpolated), and let $t=P(x)$ the function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ 
@@ -1960,10 +1960,10 @@ procedure:
 \begin{itemize}
 	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
 	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
-	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P^{-1}(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
+	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
 	\begin{itemize}
 		\item Let $d$ the day where maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ the nearest days where PD is defined
+		\item Let $t_i \le d \le t_{i+1}$ the nearest days where $\text{PD}_r$ is defined
 		\item If $t_i$ is not contained in $S$, add $t_i$ to $S$
 		\item Else if $t_{i+1}$ is not contained in $S$, add $t_{i+1}$
 		\item Else add $d$ to $S$
