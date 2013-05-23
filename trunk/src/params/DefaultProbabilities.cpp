@@ -264,7 +264,7 @@ void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name,
 {
   if (isEqual(name,"dprobs")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes not allowed in tag dprobs");
+      throw Exception("attributes not allowed in tag 'dprobs'");
     }
   }
   else if (isEqual(name,"dprob")) {
@@ -281,7 +281,7 @@ void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name,
     insertValue(srating, t, value);
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw Exception("unexpected tag '" + string(name) + "'");
   }
 }
 
@@ -326,7 +326,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   {
     if (i == indexdefault) continue;
     if(ddata[i].size() == 0 || (ddata[i].size() == 1 && ddata[i][0].day == 0)) {
-      string msg = "rating " + ratings.getName(i) + " without dprob";
+      string msg = "rating " + ratings.getName(i) + " without 'dprob' tag";
       throw Exception(msg);
     }
   }

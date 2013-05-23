@@ -484,3 +484,30 @@ fprint <- function(i, params) {
 for(i in 1:nrow(Y)) {
 	cat(fprint(i, Y[i,]), "\n")
 }
+
+# plot density
+ getRisk <- function(dir)
+ {
+   filename = paste(dir, "/portfolio.csv", sep="")
+   data <- read.csv(filename, header=T)
+   X = sort(data[,1])
+   n = length(X)
+   Y = X[as.integer(n*0.99):n]
+   ES99 = mean(Y)
+   sde = sqrt(var(Y)/length(Y))
+   return(c(ES99,sde))
+ }
+
+ dirs = dir("data", pattern="MH[[:digit:]{3}]*", full.names=TRUE)
+ values = matrix(ncol=2,nrow=length(dirs))
+ colnames(values) = c("ES99", "stderr")
+ for(i in 1:length(dirs)) {
+   values[i,] = getRisk(dirs[i])
+ }
+ 
+ pdf(file="paramu-5.pdf", width=7, height=3)
+ par(mar=c(2,4,0.5,0))
+ plot(density(values[,1]), main="", ylab="Density")
+ grid()
+ dev.off()
+

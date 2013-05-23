@@ -213,6 +213,7 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics\texttrademark model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
+%TODO: indicar que no es contemplen perdues per migracions de ratings != default
 %TODO: indicar treball original
 %TODO: indicar que permet fer CCruncher
 
@@ -2360,7 +2361,7 @@ compute the portfolio credit risk measure fixed these.
 	distribution using the Metropolis-Hastings algorithm. We perform 1000000
 	of iterations. Figure \ref{fig:paramu1} displays the marginals of this 
 	distribution.
-	\begin{figure}[ht]
+	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=0.98\textwidth]{paramu-1}
 		\caption{Parameters simulation using M-H}
@@ -2412,29 +2413,31 @@ compute the portfolio credit risk measure fixed these.
 	caption={Execution of multiple CCrunchers (bash script)}]
  
  mkdir data/MH001;
- bin/ccruncher-cmd --path=data/MH001 -DNU=12.54 -DW1=0.29 \
-     -DW2=0.48 -DR12=0.21 test05.xml; 
+ bin/ccruncher-cmd -o data/MH001 -DNU=12.54 -DW1=0.29 \
+     -DW2=0.48 -DR12=0.21 samples/test05.xml; 
  
  mkdir data/MH002; 
- bin/ccruncher-cmd --path=data/MH002 -DNU=10.77 -DW1=0.28 \
-     -DW2=0.32 -DR12=-0.28 test05.xml; 
+ bin/ccruncher-cmd -o data/MH002 -DNU=10.77 -DW1=0.28 \
+     -DW2=0.32 -DR12=-0.28 samples/test05.xml; 
 
  ...
 
  mkdir data/MH300; 
- bin/ccruncher-cmd --path=data/MH300 -DNU=10.06 -DW1=0.33 \
-     -DW2=0.36 -DR12=0.02 test05.xml; 
+ bin/ccruncher-cmd -o data/MH300 -DNU=10.06 -DW1=0.33 \
+     -DW2=0.36 -DR12=0.02 samples/test05.xml; 
  
 	\end{lstlisting}
 
+	Finally, the fifth step is the computation of the risk statistic
+	for each portfolio loss distribution. The density of the $\text{ES}_{99\%}$ 
+	can be approximated using the estimated density. Listing \ref{sc:paramu5}
+	provides an R script to do this task. 
 	\begin{lstlisting}[language=R, label={sc:paramu5}, 
 	caption={$ES_{99\%}$ distribution (R script)}]
 
- "%&%" <- function(a, b) paste(a, b, sep="")
-
- getRisk <- function(num)
+ getRisk <- function(dir)
  {
-   filename = "data/MH" %&% sprintf("%03d",num) %&% "/portfolio.csv"
+   filename = paste(dir, "/portfolio.csv", sep="")
    data <- read.csv(filename, header=T)
    X = sort(data[,1])
    n = length(X)
@@ -2444,16 +2447,34 @@ compute the portfolio credit risk measure fixed these.
    return(c(ES99,sde))
  }
 
- dirs = dir(".", pattern="data/MH[:digit:]{3}")
- n = length(dirs)
- values = matrix(ncol=2,nrow=nummh)
+ dirs = dir("data", pattern="MH[[:digit:]{3}]*", full.names=TRUE)
+ values = matrix(ncol=2,nrow=length(dirs))
  colnames(values) = c("ES99", "stderr")
- for(i in 1:n) {
-   values[i,] = getVals(i)
+ for(i in 1:length(dirs)) {
+   values[i,] = getRisk(dirs[i])
  }
+ 
  plot(density(values[,1]))
-
+ 
 	\end{lstlisting}
+	
+	The exact value of the $\text{ES}_{99\%}$ assuming that parameters 
+	are fixed and known is $\approx 385$\ \euro. If we don't assume that 
+	parameters are known and we infere it from 20 observations of the
+	numbers of defaults, then we obtain the distribution displayed in
+	figure \ref{fig:paramu5}. This distribution is highly conditioned by
+	the 20 observations. In this example, the exact value is located in the
+	bottom of the statistics values, but other 20 simulated values can 
+	draw a density where the exact value is the upper part of the estimated 
+	density. The key point is to dispose a distribution indicating the 
+	feasible values that can take the risk measure $\text{ES}_{99\%}$.
+	In this example it's not crazy to consider that $\text{ES}_{99\%} < 450$.
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.98\textwidth]{paramu-5}
+		\caption{$\text{ES}_{99\%}$ distribution}
+		\label{fig:paramu5}
+	\end{figure}
 \end{example}
 \begin{comment}
 # R script to simulate values
