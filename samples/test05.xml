@@ -68,7 +68,11 @@ S.level = [0.44]
   <!-- ============================================================== -->
   <defines>
     <define name="numsims" value="200000"/>
-    <define name="copula" value="t(15)"/>
+    <define name="NU" value="15"/>
+    <define name="W1" value="40%"/>
+    <define name="W2" value="35%"/>
+    <define name="R12" value="25%"/>
+    <define name="copula" value="t($NU)"/>
     <define name="antithetic" value="true"/>
     <define name="lhs" value="1000"/>
     <define name="seed" value="0"/>

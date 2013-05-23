@@ -2457,7 +2457,7 @@ compute the portfolio credit risk measure fixed these.
 \end{example}
 \begin{comment}
 # R script to simulate values
-source("../bin/ccbinf.R")
+source("/home/gerard/projects/ccbinf/bin/ccbinf.R")
 p = c(0.05, 0.1, 0.2)
 w = c(0.4, 0.35)
 D = matrix(nrow=2, ncol=3, data=c(167, 167, 166, 167, 167, 166))
@@ -2467,7 +2467,7 @@ rcount = ccruncher.rcount(20, p, D, w, R, nu)
 export(rcount, "paramu.txt")
 
 # bash commands
-./bin/ccbinf -r 1000 -n 1000000 samples/paramu.txt
+/home/gerard/projects/ccbinf/build/ccbinf -r 1000 -n 1000000 paramu.txt
 \end{comment}
 
 %------------------------------------------------------------------------------
