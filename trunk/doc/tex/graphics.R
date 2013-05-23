@@ -473,12 +473,12 @@ Y = X[skip:n,1:4]
 Y = Y[(1:nrow(Y))%%3000==0,]
 fprint <- function(i, params) {
 	str = "mkdir data/MH" %&% sprintf("%03d",i)
-	str = str %&% "; bin/ccruncher-cmd --path=data/MH" %&% sprintf("%03d",i)
+	str = str %&% "; build/ccruncher-cmd -o data/MH" %&% sprintf("%03d",i)
 	str = str %&% " -D NU=" %&% params[1]
 	str = str %&% " -D W1=" %&% params[2]
 	str = str %&% " -D W2=" %&% params[3]
 	str = str %&% " -D R12=" %&% params[4]
-	str = str %&% " test05.xml;"
+	str = str %&% " samples/test05.xml;"
 	return(str)
 }
 for(i in 1:nrow(Y)) {
