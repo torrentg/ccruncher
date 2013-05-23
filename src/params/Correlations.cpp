@@ -130,7 +130,7 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
 {
   if (isEqual(name,"correlations")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes not allowed in tag correlations");
+      throw Exception("attributes not allowed in tag 'correlations'");
     }
   }
   else if (isEqual(name,"correlation")) {
@@ -140,7 +140,7 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
     insertCorrelation(factor1, factor2, value);
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw Exception("unexpected tag '" + string(name) + "'");
   }
 }
 
@@ -166,8 +166,8 @@ void ccruncher::Correlations::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "non defined correlation element [" + Format::toString(i+1) + 
-                     "][" + Format::toString(j+1) + "]";
+        string msg = "correlation [" + Format::toString(i+1) +
+                     "][" + Format::toString(j+1) + "] not defined";
         throw Exception(msg);
       }
     }

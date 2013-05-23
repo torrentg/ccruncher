@@ -132,12 +132,12 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
 {
   if (isEqual(name_,"factors")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes are not allowed in tag factors");
+      throw Exception("attributes are not allowed in tag 'factors'");
     }
   }
   else if (isEqual(name_,"factor")) {
     if (getNumAttributes(attributes) < 2 || getNumAttributes(attributes) > 3) {
-      throw Exception("invalid number of attributes at factor");
+      throw Exception("invalid number of attributes at tag 'factor'");
     }
     else {
       string name = getStringAttribute(attributes, "name");
@@ -169,7 +169,7 @@ void ccruncher::Factors::validations() throw(Exception)
   // checking number of factors
   if (vfactors.empty())
   {
-    throw Exception("factors have no elements");
+    throw Exception("'factors' have no elements");
   }
 }
 
