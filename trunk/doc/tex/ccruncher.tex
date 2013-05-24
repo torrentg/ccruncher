@@ -154,6 +154,7 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapterimage{chapter_head_1.pdf} % Table of contents heading image
 \pagestyle{empty} % No headers
+\setcounter{tocdepth}{1}
 \tableofcontents % Print the table of contents itself
 \cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
 \pagestyle{fancy} % Print headers again
@@ -199,7 +200,8 @@ CreditMetrics\texttrademark\index{CreditMetrics\texttrademark} \cite{cmetrics:19
 model. Other representatives are the KMV\index{KMV} model, or the copula 
 approach \index{copula approach} \cite{li:2000}.
 
-Both approaches gives similar results \cite{koyluoglu:1998}.  
+Both approaches gives similar results for simple cases \cite{koyluoglu:1998},
+but differs when we move away \cite{bluhm:2001}.  
 There are other approaches (eg. econometric) not mentioned here due to 
 their minority status. By far, the most prolific approach is the Merton
 model. CCruncher implements the copula approach, a Merton model version.
@@ -216,6 +218,7 @@ in the copula approach context and that has a Gaussian copula.
 %TODO: indicar que no es contemplen perdues per migracions de ratings != default
 %TODO: indicar treball original
 %TODO: indicar que permet fer CCruncher
+%TODO: remove index references
 
 %------------------------------------------------------------------------------
 % CREDIT RISK MEASURES
@@ -409,7 +412,7 @@ year in order to simplify the exposition without loss of generality
 \cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951},
 \cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor},
 \cite{kahan:1965}, \cite{wolfgang:2008}, \cite{jorgensen:1998}, 
-\cite{glasserman:1997}, \cite{cespedes:2002}
+\cite{glasserman:1997}, \cite{cespedes:2002}, \cite{bluhm:2001}
 
 
 %==============================================================================
@@ -2992,10 +2995,10 @@ The following proposition clarifies this theme.
 %----------------------------------------------------------------------------------------
 %	INDEX
 %----------------------------------------------------------------------------------------
-\cleardoublepage
-\setlength{\columnsep}{0.75cm}
-\addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}}
-\printindex
+% \cleardoublepage
+% \setlength{\columnsep}{0.75cm}
+% \addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}}
+% \printindex
 
 %----------------------------------------------------------------------------------------
 
