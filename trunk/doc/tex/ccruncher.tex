@@ -56,17 +56,19 @@
 % Bibliography
 \usepackage{hyperref} %added by GTG
 \usepackage{csquotes} %added by GTG
-\usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
-\addbibresource{bibliography.bib} % BibTeX bibliography file
-\defbibheading{bibempty}{}
+%\usepackage[backend=bibtex]{biblatex} %added by GTG
+%\usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
+%\addbibresource{bibliography.bib} % BibTeX bibliography file
+%\defbibheading{bibempty}{}
 
 % Index
-\usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
-\usepackage{makeidx} % Required to make an index
-\makeindex % Tells LaTeX to create the files required for indexing
+%\usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
+%\usepackage{makeidx} % Required to make an index
+%\makeindex % Tells LaTeX to create the files required for indexing
 
 % added by GTG
 \usepackage{verbatim}
+\usepackage{alltt}
 \usepackage{parskip}
 \usepackage{enumitem}
 \usepackage{changepage}
@@ -100,10 +102,10 @@ Credit Risk Modeling \par % Book title
 \par\normalfont\fontsize{25}{25}\sffamily\selectfont
 Using CCruncher\par
 \vspace*{2cm}
-{\Huge Gerard Torrent}\par % Author name
+{\Huge Gerard Torrent-Gironella}\par % Author name
 \vspace*{5cm}
 \par\normalfont\fontsize{14}{14}\sffamily\selectfont
-Version \numversion\ [\svnversion]\par
+Version \numversion\par
 \endgroup
 
 
@@ -111,11 +113,30 @@ Version \numversion\ [\svnversion]\par
 % COPYRIGHT PAGE
 %==============================================================================
 \newpage
+
+\section*{Acknowledgements}
+TODO: SET ACKNOWLEDGEMENTS HERE
+
+~\vfill
+The BibTeX entry of this document for \LaTeX\ users is:
+%\footnotesize 
+\begin{alltt}
+@manual\{ccruncher,
+    title = \{Credit Risk Modeling Using CCruncher\},
+    author = \{Torrent-Gironella, Gerard\},
+    organization = \{Tatine\},
+    address = \{Barcelona, Spain\},
+    year = \{2013\},
+    url = \{http://www.ccruncher.net/\},
+    edition = \{\numversion\}
+\}
+\end{alltt}
+
 ~\vfill
 \thispagestyle{empty}
 \noindent Version \numversion\ [\svnversion]\\ 
 \\
-\noindent Copyright \copyright\ 2013 Gerard Torrent\\ % Copyright notice
+\noindent Copyright \copyright\ 2013 Gerard Torrent\\
 \\
 \noindent 
 This work is licensed to the public under Creative Commons 
@@ -124,30 +145,7 @@ of this license visit
 \url{http://creativecommons.org/licenses/by-sa/3.0/}.
 We have invested a lot of time and effort in creating CCruncher, 
 please cite it when using it for credit risk analysis.
-\index{license}
 
-% To cite CCruncher in publications use:
-% \begin{adjustwidth}{2.5em}{0pt}
-  % Gerard Torrent (2013). Credit risk modeling using CCruncher.
-  % Tatine, Barcelona, Spain. URL http://www.ccruncher.net/.
-% \end{adjustwidth}
-
-% A BibTeX entry for LaTeX users is
-% \begin{adjustwidth}{2.5em}{0pt}
-% \begin{verbatim}
-% @manual{ccruncher,
-    % title = {{Credit risk modeling using CCruncher}},
-    % author = {Torrent, Gerard},
-    % organization = {Tatine},
-    % address = {Barcelona, Spain},
-    % year = {2013},
-    % url = {http://www.ccruncher.net/},
-    % edition = {\svnversion}
-% }
-% \end{verbatim}
-% \end{adjustwidth}
-
-%TODO: set Acknowledgements paragraph (mother+Marga+Fortiana+Stijn)
 
 %==============================================================================
 % TABLE OF CONTENTS
@@ -165,13 +163,13 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-CCruncher\index{CCruncher} is a computer software to calculate the credit 
+CCruncher is a computer software to calculate the credit 
 risk of a portfolio. This document details the concepts, model and algorithms 
 used in it. CCruncher is developed and mantained by 
-\href{http://www.tatine.es}{Tatine}\index{Tatine}, a quantitative consulting 
-firm located at Barcelona\index{Barcelona} (Spain). As much computer 
-software as documentation are licensed with open-source\index{open-source} 
-type licenses\index{license}. Take advantage of them but always remember to 
+\href{http://www.tatine.es}{Tatine}, a quantitative consulting 
+firm located at Barcelona (Spain). As much computer 
+software as documentation are licensed with open-source
+type licenses. Take advantage of them but always remember to 
 mention the source. You can download the latest version of this document and 
 the computer software from the CCruncher's site, \url{http://www.ccruncher.net}.
 
@@ -187,18 +185,18 @@ briefly the two most used approaches \cite{crouhy:2000}
 \textbf{Actuarial approach}. This approach considere that the distribution of 
 the number of defaults is the proper way to interpret the observed defaults.
 Compounding defaults frequency with the obligors exposures gives the portfolio 
-loss distribution that can be approximated by Panjer\index{Panjer} recursion, 
+loss distribution that can be approximated by Panjer recursion, 
 or by the FFT method. The main representative of this approach is the 
-CreditRisk+\index{CreditRisk+} model \cite{creditrisk+:1997}.
+CreditRisk+ model \cite{creditrisk+:1997}.
 
 \textbf{Merton based approach}. This approach considere that the obligors 
 probabilities of default are the proper way to explain the observed defaults.
 The sum of the obligors exposures weighted by the probability of default 
 gives the portfolio loss distribution. This distribution is approximated 
 using the Monte Carlo method. The main representative of this approach is the 
-CreditMetrics\texttrademark\index{CreditMetrics\texttrademark} \cite{cmetrics:1997} 
-model. Other representatives are the KMV\index{KMV} model, or the copula 
-approach \index{copula approach} \cite{li:2000}.
+CreditMetrics\texttrademark \cite{cmetrics:1997} 
+model. Other representatives are the KMV model, or the copula 
+approach \cite{li:2000}.
 
 Both approaches gives similar results for simple cases \cite{koyluoglu:1998},
 but differs when we move away \cite{bluhm:2001}.  
@@ -218,7 +216,7 @@ in the copula approach context and that has a Gaussian copula.
 %TODO: indicar que no es contemplen perdues per migracions de ratings != default
 %TODO: indicar treball original
 %TODO: indicar que permet fer CCruncher
-%TODO: remove index references
+%TODO: indicar factor loadings=intra, factor correlations=inter
 
 %------------------------------------------------------------------------------
 % CREDIT RISK MEASURES
@@ -318,8 +316,8 @@ year in order to simplify the exposition without loss of generality
 	\begin{displaymath}
 		p_i = \Pr\{T_i \le 1\} = \text{PD}_i(1) 
 	\end{displaymath}
-	Some texts \cite{li:2000} \cite{roncalli:2001} use the concept of 
-	survival instead of the PD. The survival is defines as:
+	Some texts \cite{li:2000,roncalli:2001} use the concept of 
+	survival instead of the PD. The survival is defined as:
 	\begin{displaymath}
 		\text{Survival}_i(t) = 1-\text{PD}_i(t)
 	\end{displaymath}
@@ -400,19 +398,19 @@ year in order to simplify the exposition without loss of generality
 %------------------------------------------------------------------------------
 \section{Content Organization}
 
-\cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
-\cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997},
-\cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001},
-\cite{meissner:2006}, \cite{bis:2006}, \cite{bluhm:2002},
-\cite{frey:2001}, \cite{gossl:2005}, \cite{tarashev:2010},
-\cite{creditrisk+:1997}, \cite{crouhy:2000}, \cite{koyluoglu:1998},
-\cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
-\cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
-\cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
-\cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951},
-\cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor},
-\cite{kahan:1965}, \cite{wolfgang:2008}, \cite{jorgensen:1998}, 
-\cite{glasserman:1997}, \cite{cespedes:2002}, \cite{bluhm:2001}
+% \cite{mcneil:2005}, \cite{sklar:1959}, \cite{li:2000}, 
+% \cite{roncalli:2001}, \cite{embrechts:2002}, \cite{cmetrics:1997},
+% \cite{ntzoufras:2009}, \cite{gordy:2002}, \cite{nagpal:2001},
+% \cite{meissner:2006}, \cite{bluhm:2002},
+% \cite{frey:2001}, \cite{gossl:2005}, \cite{tarashev:2010},
+% \cite{creditrisk+:1997}, \cite{crouhy:2000}, \cite{koyluoglu:1998},
+% \cite{var:varbad}, \cite{var:eshortfall}, \cite{var:jorion},
+% \cite{basel2:2006}, \cite{kotz:2004}, \cite{garthwaite:2010},
+% \cite{long:2012}, \cite{kreinin:2001}, \cite{roncalli:2004},
+% \cite{anderson:1984}, \cite{yi:2006}, \cite{kenney:1951},
+% \cite{vasicek:1987}, \cite{schloegl:2005}, \cite{quant:algor},
+% \cite{kahan:1965}, \cite{wolfgang:2008}, \cite{jorgensen:1998}, 
+% \cite{glasserman:1997}, \cite{cespedes:2002}, \cite{bluhm:2001}
 
 
 %==============================================================================
@@ -420,8 +418,8 @@ year in order to simplify the exposition without loss of generality
 %==============================================================================
 \chapter{Modeling Default Times}
 
-The model described in this section is the same as described in \cite{li:2000} 
-\cite{roncalli:2001} \cite[chap. 2.6]{bluhm:2002} \cite{frey:2001}.
+The model described in this section is the same as described in 
+\cite{li:2000,roncalli:2001,frey:2001} \cite[chap. 2.6]{bluhm:2002}.
 We recommend taking a look at the appendices 
 \emph{\ref{ap:copula_basics}-\nameref{ap:copula_basics}},
 \emph{\ref{ap:mtsd}-\nameref{ap:mtsd}},
@@ -457,7 +455,6 @@ and $C$ is a copula. There are several proposals on the copula to be
 used. CCruncher considere that it is a t-Student copula for the following 
 reasons:
 
-%TODO: refs pending
 \begin{itemize}
 	\item is determined by the correlation matrix (elliptical). 
 	\item is symmetrical (elliptical), allowing to 
@@ -1078,7 +1075,7 @@ and \ref{prop:tmfm}).
 Before to proced to estimate the parameters we need to know the density
 of the number of observed defaults in order to define a likelihood 
 function. In this section we derive this distribution from the multivariate
-default times distribution. More info at \cite{gordy:2002} \cite{roncalli:2004}.
+default times distribution. More info at \cite{gordy:2002,roncalli:2004}.
 
 \begin{proposition}[Density of the annual number of defaults (I)]
 	The density of the annual number of defaults, assuming that default 
@@ -1195,9 +1192,9 @@ to the multi-factor formulation.
 \end{corollary}
 
 %------------------------------------------------------------------------------
-% BAYESSIAN INFERENCE
+% BAYESIAN INFERENCE
 %------------------------------------------------------------------------------
-\section{Bayessian Inference}
+\section{Bayesian Inference}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
 	\vspace{-20pt}
@@ -1225,8 +1222,8 @@ This is exacerbated by the fact that some of our variables
 are latents, and that we are estimating from observations of type
 count-data. After this, considering the estimated parameters as 
 unique values, like the Maximum Likelihood estimator, is a naive and 
-risky positioning. The bayessian approach seems  more appropriate 
-\cite{gossl:2005} \cite{tarashev:2010} because it takes into account 
+risky positioning. The bayesian approach seems  more appropriate 
+\cite{gossl:2005,tarashev:2010} because it takes into account 
 the uncertainty of the parameters. Later we will see how to transfer 
 this uncertainty to the assessment of credit risk.
 
@@ -1277,11 +1274,11 @@ likelihood of these observations as:
 %------------------------------------------------------------------------------
 \section{Metropolis-Hastings Algorithm}
 
-This section contains a brief introduction to Bayessian inference using the 
+This section contains a brief introduction to Bayesian inference using the 
 Metropolis-Hastings algorithm and it is heavily influenced by the book 
 \emph{Bayesian Modeling Using WinBUGS} \cite{ntzoufras:2009}.
 
-When we do Bayessian inference we can find a closed-form of the posterior 
+When we do Bayesian inference we can find a closed-form of the posterior 
 distribution only in a very few cases. Usually this has to be determined 
 by numerical methods. One of the most used is the Metropolis-Hastings 
 algorithm that belongs to the family of Markov Chain Monte Carlo (MCMC) 
@@ -1458,7 +1455,7 @@ they form a multivariate distribution.
 
 \begin{example}[Beta distribution calibration]
 	We have a sample $\{y_1,\dots,y_{100}\}$ comming from a $\text{Beta}(2,5)$ 
-	distribution. We want to do Bayessian inference to determine the value of the 
+	distribution. We want to do Bayesian inference to determine the value of the 
 	parameters $\alpha$ and $\beta$ using the Metropolis-Hastings algorithm exposed 
 	above. The density of the Beta distribution is:
 	\begin{displaymath}
@@ -1520,7 +1517,7 @@ they form a multivariate distribution.
 \begin{proposition}[Parameters estimation]
 	\label{prop:pemh}
 	We can estimate the parameters of the conditioned likelihood using
-	the Bayessian framework and Metropolis-Hastings algorithm 
+	the Bayesian framework and Metropolis-Hastings algorithm 
 	(see algorithm \ref{alg:bimh}) with the following rules:
 	\begin{itemize}
 		\item parameters $\theta \equiv \{ \nu,\vec{w},R,v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\}$
@@ -2129,7 +2126,7 @@ two independent random variables, we repeat the above procedure for each of
 them obtaining the Latin Square effect: the generated random points are in
 a reticle where each row and column has only one point. The procedure for
 three or more independent variables is exactly the same and its named Latin 
-Hypercube Sampling \cite{jorgensen:1998}, \cite{glasserman:1997}.
+Hypercube Sampling \cite{jorgensen:1998,glasserman:1997}.
 
 When the random variables are dependent the previous schema don't work and
 it is reformulated recurring to copulas and the rank statistic 
@@ -2290,7 +2287,7 @@ is recommended to use the Kahan \cite{kahan:1965} summation algorithm.
 
 The estimation of dependence parameters (degrees of freedom $\nu$, factor
 loadings $\vec{w}$, and factors correlation $R$) has an uncertainty that 
-can not be ignored \cite{tarashev:2010} \cite{gossl:2005}. The example
+can not be ignored \cite{tarashev:2010,gossl:2005}. The example
 \ref{ex:calib} ilustrates the phenomenon and its magnitude (see the 20
 observations case).
 
@@ -2494,17 +2491,9 @@ export(rcount, "paramu.txt")
 /home/gerard/projects/ccbinf/build/ccbinf -r 1000 -n 1000000 paramu.txt
 \end{comment}
 
-%------------------------------------------------------------------------------
-% CCRUNCHER VS. CREDITMETRICS
-%------------------------------------------------------------------------------
-\section{CreditMetrics\texttrademark Subcase}
-\cite{cmetrics:1997}
-%TODO: complete section
-
 
 %==============================================================================
 % APPENDICES
-% TODO: create its own header, numeration, etc.
 %==============================================================================
 \appendix
 \chapterimage{chapter_head_1.pdf}
@@ -2534,8 +2523,8 @@ profile because its underlying  dependence structure is distinct (Gaussian
 copula vs. t-Student(3) copula). The mathematical concept that does reflect 
 the structure of dependence between random variables, however, is the copula, 
 which we define below. The world of copulas is vast and very interesting. 
-See \cite{embrechts:2002} \cite[chap. 5]{mcneil:2005} for a pleasant and detailed 
-introduction to copulas.
+See \cite[chap. 5]{mcneil:2005} for a pleasant and detailed introduction to 
+copulas.
 
 \begin{definition}[Copula]
 	A copula function, $C$, is a multivariate distribution defined on the 
@@ -2607,7 +2596,7 @@ use this statement to define and simulate the t-Student copula.
 \end{corollary}
 
 %TODO: posar llibres de referencia
-%TODO: eliptical copulas
+%TODO: elliptical copulas
 
 %------------------------------------------------------------------------------
 % MULTIVARIATE t-STUDENT DISTRIBUTION
@@ -2976,8 +2965,8 @@ The following proposition clarifies this theme.
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-\chapter*{Bibliography}
-\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
+%\chapter*{Bibliography}
+%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
 % \section*{Books}
 % \addcontentsline{toc}{section}{Books}
 % \printbibliography[heading=bibempty,type=book]
@@ -2988,9 +2977,12 @@ The following proposition clarifies this theme.
 % \addcontentsline{toc}{section}{Others}
 % \printbibliography[heading=bibempty,type=techreport]
 
-\section*{References}
-%\addcontentsline{toc}{section}{References}
-\printbibliography[heading=bibempty]
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+% \section*{References}
+% \addcontentsline{toc}{section}{References}
+% \printbibliography[heading=bibempty]
 
 %----------------------------------------------------------------------------------------
 %	INDEX
