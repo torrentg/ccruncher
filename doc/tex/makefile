@@ -24,8 +24,9 @@ all: pdf
 
 pdf: ccruncher.tex bibliography.bib
 	pdflatex ccruncher
-	makeindex ccruncher.idx -s StyleInd.ist
-	./biber ccruncher
+#	makeindex ccruncher.idx -s StyleInd.ist
+	bibtex ccruncher
+	pdflatex ccruncher
 	pdflatex ccruncher
 
 graphics: graphics.R
