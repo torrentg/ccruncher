@@ -86,8 +86,7 @@
 % Removes the header from odd empty pages at the end of chapters
 \makeatletter
 \renewcommand{\cleardoublepage}{
-\clearpage\ifodd\c@page\else
-\hbox{}
+\clearpage\ifodd\c@page\else\hbox{}
 \vspace*{\fill}
 \thispagestyle{empty}
 \newpage
@@ -99,9 +98,9 @@
 
 \usepackage{amsmath,amsfonts,amssymb,amsthm} % For including math equations, theorems, symbols, etc
 
-\newcommand{\intoo}[2]{\mathopen{]}#1\,;#2\mathclose{[}}
+%\newcommand{\intoo}[2]{\mathopen{]}#1\,;#2\mathclose{[}}
 \newcommand{\ud}{\mathop{\mathrm{{}d}}\mathopen{}}
-\newcommand{\intff}[2]{\mathopen{[}#1\,;#2\mathclose{]}}
+%\newcommand{\intff}[2]{\mathopen{[}#1\,;#2\mathclose{]}}
 \newtheorem{notation}{Notation}[chapter]
 
 \newtheoremstyle{ocrenum} % Theorem style name
@@ -254,10 +253,10 @@ linewidth=4pt]{aBox}
 \newenvironment{remark}{\par\vskip10pt\small % Vertical white space above the remark and smaller font size
 \begin{list}{}{
 \leftmargin=35pt % Indentation on the left
-\rightmargin=25pt}\item\ignorespaces % Indentation on the right
+\rightmargin=25pt}\item\ignorespaces% Indentation on the right
 \makebox[-2.5pt]{\begin{tikzpicture}[overlay]
 \node[draw=ocre!60,line width=1pt,circle,fill=ocre!25,font=\sffamily\bfseries,inner sep=2pt,outer sep=0pt] at (-15pt,0pt){\textcolor{ocre}{R}};\end{tikzpicture}} % Orange R in a circle
-\advance\baselineskip -1pt}{\end{list}\vskip5pt} % Tighter line spacing and white space after remark
+\advance\baselineskip-1pt}{\end{list}\vskip5pt} % Tighter line spacing and white space after remark
 
 %----------------------------------------------------------------------------------------
 %	SECTION NUMBERING IN THE MARGIN
@@ -266,19 +265,19 @@ linewidth=4pt]{aBox}
 \makeatletter
 \renewcommand{\@seccntformat}[1]{\llap{\textcolor{ocre}{\csname the#1\endcsname}\hspace{1em}}}                    
 \renewcommand{\section}{\@startsection{section}{1}{\z@}
-{-4ex \@plus -1ex \@minus -.4ex}
+{-4ex \@plus-1ex \@minus-.4ex}
 {1ex \@plus.2ex }
 {\normalfont\large\sffamily\bfseries}}
-\renewcommand{\subsection}{\@startsection {subsection}{2}{\z@}
-{-3ex \@plus -0.1ex \@minus -.4ex}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}
+{-3ex \@plus-0.1ex \@minus-.4ex}
 {0.5ex \@plus.2ex }
 {\normalfont\sffamily\bfseries}}
-\renewcommand{\subsubsection}{\@startsection {subsubsection}{3}{\z@}
-{-2ex \@plus -0.1ex \@minus -.2ex}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}
+{-2ex \@plus-0.1ex \@minus-.2ex}
 {0.2ex \@plus.2ex }
 {\normalfont\small\sffamily\bfseries}}                        
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}
-{-2ex \@plus-.2ex \@minus .2ex}
+{-2ex \@plus-.2ex \@minus.2ex}
 {0.1ex}
 {\normalfont\small\sffamily\bfseries}}
 
@@ -292,9 +291,8 @@ linewidth=4pt]{aBox}
 \def\@makechapterhead#1{
 \thispagestyle{empty}
 {\centering \normalfont\sffamily
-\ifnum \c@secnumdepth >\m@ne
-\if@mainmatter
-\startcontents
+\ifnum\c@secnumdepth>\m@ne
+\if@mainmatter\startcontents
 \begin{tikzpicture}[remember picture,overlay]
 \node at (current page.north west)
 {\begin{tikzpicture}[remember picture,overlay]
@@ -313,9 +311,8 @@ linewidth=4pt]{aBox}
 \def\@makeschapterhead#1{
 \thispagestyle{empty}
 {\centering \normalfont\sffamily
-\ifnum \c@secnumdepth >\m@ne
-\if@mainmatter
-\startcontents
+\ifnum\c@secnumdepth>\m@ne
+\if@mainmatter\startcontents
 \begin{tikzpicture}[remember picture,overlay]
 \node at (current page.north west)
 {\begin{tikzpicture}[remember picture,overlay]
