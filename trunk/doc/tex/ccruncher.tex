@@ -118,6 +118,10 @@ Version \numversion\par
 TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
+\section*{Contributors}
+TODO\@: SET CONTRIBUTORS HERE
+
+~\vfill
 The BibTeX entry of this document for \LaTeX\ users is:
 %\footnotesize 
 \begin{alltt}
@@ -163,46 +167,72 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-CCruncher is a computer software to calculate the credit 
+\begin{comment}
+\textbf{CCruncher} is a computer software to calculate the credit 
 risk of a portfolio. This document details the concepts, model and algorithms 
 used in it. CCruncher is developed and maintained by 
-\href{http://www.tatine.es}{Tatine}, a quantitative consulting 
-firm located at Barcelona (Spain). As much computer 
-software as documentation are licensed with open-source
-type licenses. Take advantage of them but always remember to 
-mention the source. You can download the latest version of this document and 
-the computer software from the CCruncher's site, \url{http://www.ccruncher.net}.
+\href{http://www.tatine.es}{Tatine}, a quantitative consulting firm located 
+in Barcelona (Spain). You can download the latest version of this document and 
+software from the CCruncher's site, \url{http://www.ccruncher.net}.
+\end{comment}
 
-Portfolio credit risk try to respond to questions like: what is my 
-expected loss for the next year?, how much could I lose in a really 
-bad year?. There are several approaches to answer these questions. 
-All of them try to do the same: obtain the portfolio loss distribution
-and measure the credit risk using a set of selected statistics (eg.\ mean, 
-quantile). They differ on how to obtain this distribution. Here we present 
-briefly the two most used approaches~\cite{crouhy:2000} 
-\cite[chap. 2.4]{bluhm:2002}.
+The \textbf{CCruncher} project provides a framework for quantify portfolio 
+credit risk. It is developed and maintained by 
+\href{http://www.tatine.es}{Tatine}, a quantitative consulting firm located 
+in Barcelona (Spain). You can download the latest version of the project from 
+the CCruncher's site, \url{http://www.ccruncher.net}.
+
+The framework consist of this document that explains the models and algorithms, 
+and a piece of software that implements it in an efficient way. 
+Both elements, documentation and software, are licensed with open-source type 
+licenses. CCruncher is an evolving project in which you can participate. You 
+can send your suggestions and contributions to 
+\href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
+Because it is an evolving project, it is recommended to mention the version
+identifier when you refer the project name (eg. CCruncher-\numversion).
+
+This document provides a comprehensive view of credit risk modeling 
+under the copula approach (t-Student case), emphasizing the practical aspects. 
+Care is taken to make short introductions about the methods and concepts used, 
+give examples, and to mention the small details of implementation.
+This document does not provide new basic results. Most exposed models and 
+algorithms are used for some time. There are two exceptions to this. First, 
+no references have been found about the internals of parameter estimation. 
+For this reason, the development of this section is original. Its validity 
+has been verified with tests listed in the document. And second, the minor 
+result that states that t-Student multi-factor model and multivariate 
+t-Student with correlation block matrix are quasi-equivalents when the 
+number of components in each factor are high.
+
+Portfolio credit risk try to respond to questions like: \enquote{what is the 
+portfolio expected loss for the next year?}, and \enquote{how much could I 
+lose in a really bad year?}. There are several approaches to answer these 
+questions. Here we present briefly the two most used approaches~\cite{crouhy:2000} 
+\cite[chap. 2.4]{bluhm:2002}. Both try to do the same: obtain the portfolio 
+loss distribution and measure the credit risk using a set of selected 
+statistics (eg.\ mean, quantile). They differ on how to obtain this 
+distribution. 
 
 \textbf{Actuarial approach}. This approach considers that the distribution of 
-the number of defaults is the proper way to interpret the observed defaults.
-Compounding defaults frequency with the obligors' exposures gives the portfolio 
-loss distribution that can be approximated by Panjer recursion, 
-or by the FFT method. The main representative of this approach is the 
-CreditRisk+ model~\cite{creditrisk+:1997}.
+the annual number of defaults (Poisson type) is the proper way to interpret the 
+observed defaults. Compounding defaults frequency with the obligors' exposures 
+gives the portfolio loss distribution that can be approximated by Panjer 
+recursion, or by the FFT method. The main representative of this approach is 
+the CreditRisk+ model~\cite{creditrisk+:1997}.
 
 \textbf{Merton based approach}. This approach considers that the obligors' 
 probabilities of default are the proper way to explain the observed defaults.
-The sum of the obligors exposures weighted by the probability of default 
+The sum of the obligors' exposures weighted by the probabilities of default 
 gives the portfolio loss distribution. This distribution is approximated 
 using the Monte Carlo method. The main representative of this approach is the 
-CreditMetrics\texttrademark~\cite{cmetrics:1997} 
-model. Other representatives are the KMV model, or the copula 
-approach~\cite{li:2000}.
+CreditMetrics\texttrademark~\cite{cmetrics:1997} model. Other representatives 
+are the KMV model, or the copula approach~\cite{li:2000}.
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
-but differ when we move away~\cite{bluhm:2001}.  
-There are other approaches (eg.\ econometric) not mentioned here due to 
-their minority status. By far, the most prolific approach is the Merton
-model. CCruncher implements the copula approach, a Merton model version.
+but differ when the dependence structure between obligors is distinct than
+the simplistic case~\cite{bluhm:2001}. CCruncher implements the copula 
+approach, a Merton model variant that put the focus on the dependence among 
+obligors, one of the key points in the credit risk quantification.
 
 \textbf{Copula approach}. This approach considers that the obligors default 
 times are the proper way to explain the observed defaults. The dependence 
@@ -213,48 +243,30 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics{\texttrademark} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
-%TODO: indicar que no es contemplen perdues per migracions de ratings != default
+CCruncher is intended to quantify the credit risk of portfolios with a 
+buy-and-hold policy. Also it is necessary that each obligor have an assigned 
+rating, belongs to an unique economic sector, and has known assets exposures 
+and recoveries. 
+Unlike CreditMetrics{\texttrademark}, CCruncher don't follows a mark-to-market 
+account, but follows a two-state model (default/no-default). Later we use the 
+transition matrix concept in order to determine the shape of PD functions, 
+not to perform an accounting type mark-to-market.
+
+
+
+
+CCruncher makes the following assumptions:
+\begin{enumerate}
+	\item The dependence between obligors depends only on the economic sectors.
+	\item Correlations remains constant over time.
+\end{enumerate}
+
+
 %TODO: indicar treball original
 %TODO: indicar que permet fer CCruncher
 %TODO: indicar factor loadings=intra, factor correlations=inter
 %TODO: set content organization
-
-%------------------------------------------------------------------------------
-% CREDIT RISK MEASURES
-%------------------------------------------------------------------------------
-\section{Credit Risk Measures}
-\label{sec:crm}
-
-The portfolio credit risk is measured considering some statistics on 
-the portfolio loss distribution. Let's start by defining what we mean 
-by portfolio loss and then we define the most used measures. Figure 
-\ref{fig:lossdistr} illustrates the concepts exposed in this section.
-
-\begin{definition}[Portfolio Loss at time $T$]
-	The Portfolio Loss at time $T$ is the cumulated losses in the time 
-	range $[0,T]$ caused by obligors that defaults (fails to make 
-	payments which they are obligated to do).
-	\begin{displaymath}
-		L_T = \left\{
-		\begin{array}{c}
-			\text{sum of portfolio losses in time range $[0,T]$}
-		\end{array}
-		\right\}
-	\end{displaymath}
-\end{definition}
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[width=12cm]{creditvar}
-	\caption{Portfolio Loss Distribution at time $T$}
-	\label{fig:lossdistr}
-\end{figure}
-
-%------------------------------------------------------------------------------
-% BASIC CONCEPTS
-%------------------------------------------------------------------------------
-\section{Basic Concepts}
-\label{basic_concepts}
+%TODO: identificar els suposits (cicle econ., rating 1-year, etc.)
 
 Here we define the key concepts used to model the credit risk.
 They are those of the Basel II accords~\cite{basel2:2006}, the 
@@ -265,6 +277,22 @@ We emphasize the temporal dimension because it is a key point in
 further development. From now establish that the time unit is the 
 year in order to simplify the exposition without loss of generality
 (in fact, the time unit used internally by CCruncher is the day).
+
+
+%==============================================================================
+% MODELING DEFAULT TIMES
+%==============================================================================
+\chapter{Modeling Default Times}
+
+The model described in this section is the same as described in 
+~\cite{li:2000,roncalli:2001,frey:2001}~\cite[chap. 2.6]{bluhm:2002}.
+We recommend taking a look at the appendices 
+\emph{\ref{ap:copula_basics}-\nameref{ap:copula_basics}},
+\emph{\ref{ap:mtsd}-\nameref{ap:mtsd}},
+\emph{\ref{ap:cbm}-\nameref{ap:cbm}},
+\emph{\ref{ap:mfgm}-\nameref{ap:mfgm}}.
+These contain definitions, results and details about subjects used 
+in this section.
 
 \begin{definition}[Probability of Default (PD)]
 	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
@@ -288,92 +316,6 @@ year in order to simplify the exposition without loss of generality
 	\end{displaymath}
 \end{definition}
 
-\begin{definition}[Exposure At Default (EAD)]
-	The Exposure At Default of the j-th asset at time $t$ indicates 
-	the total amount that bank is exposed if the obligor defaults:
-	\begin{displaymath}
-		\text{EAD}_j(t) = \left\{
-		\begin{array}{c}
-			\text{amount in risk of the j-th asset if the obligor} \\
-			\text{defaults at time $t$, measured in currency}
-		\end{array}
-		\right\}
-	\end{displaymath}
-	EAD can be a function dependent of time when these amounts are
-	fixed and know in advance (eg.\ loan), or can be a distribution
-	defined over time when we have a model that support it 
-	(eg.\ line of credit).
-\end{definition}
-
-\begin{definition}[Loss Given Default (LGD)]
-	The Loss Given Default of the j-th asset at time $t$ indicates 
-	the percentage of effective loss over the total exposure. This
-	value depends on endorsements, guarantees, type of asset, 
-	default time, etc.
-	\begin{displaymath}
-		\text{LGD}_j(t) = \left\{
-		\begin{array}{c}
-			\text{percentage of the $\text{EAD}_j(t)$ that is definitively} \\
-			\text{lost if the obligor defaults at time $t$}
-		\end{array}
-		\right\}
-	\end{displaymath}
-	LGD can be a function dependent of time, or can be a distribution
-	defined over time when we have a model that support it. 
-	Some texts~\cite{creditrisk+:1997} use the concept of recovery rate
-	instead of LGD\@. This is defined as:
-	\begin{displaymath}
-		\text{Recovery}_j(t) = 1- \text{LGD}_j(t)
-	\end{displaymath}
-\end{definition}
-
-\begin{example}[Bond]
-	Let a 10-years fixed rate bond with an annual coupon of the
-	$4\%$ issued by a company rated BB\@. The credit rating agency 
-	reports, for this obligor and rating, the PD over time displayed 
-	in figure~\ref{figure:bond} with a $\text{PD}(1)=1.06\%$. 
-	The EAD for this asset can be obtained from its expected cashflows 
-	because they are known in advance. We suppose that the bank 
-	internal models indicate that in this case the LGD is a 
-	$\text{Beta}(5,2)$ distribution regardless of the default time.
-	Figure~\ref{figure:bond} illustrates the defined basic concepts 
-	applied to this issuer and bond.
-	\begin{figure}[!ht]
-		\centering
-		\subcaptionbox{Probability of Default}{
-			\includegraphics[width=7cm]{bond_pd1}
-		}
-		\subcaptionbox{Probability of Default (zoom)}{
-			\includegraphics[width=7cm]{bond_pd2}
-		}
-		\\
-		\subcaptionbox{Exposure At Default}{
-			\includegraphics[width=7cm]{bond_ead}
-		}
-		\subcaptionbox{Loss Given Default}{
-			\includegraphics[width=7cm]{bond_lgd}
-		}
-		\caption{Basic concepts bond example}
-		\label{figure:bond} 
-	\end{figure}
-\end{example}
-
-
-%==============================================================================
-% MODELING DEFAULT TIMES
-%==============================================================================
-\chapter{Modeling Default Times}
-
-The model described in this section is the same as described in 
-~\cite{li:2000,roncalli:2001,frey:2001}~\cite[chap. 2.6]{bluhm:2002}.
-We recommend taking a look at the appendices 
-\emph{\ref{ap:copula_basics}-\nameref{ap:copula_basics}},
-\emph{\ref{ap:mtsd}-\nameref{ap:mtsd}},
-\emph{\ref{ap:cbm}-\nameref{ap:cbm}},
-\emph{\ref{ap:mfgm}-\nameref{ap:mfgm}}.
-These contain definitions, results and details about subjects used 
-in this section.
-
 %------------------------------------------------------------------------------
 % THE MULTIVARIATE MODEL
 %------------------------------------------------------------------------------
@@ -396,10 +338,9 @@ distribution we obtain:
 	C\left(\text{PD}_1(t_1), \dots, \text{PD}_n(t_n)\right)
 \end{displaymath}
 where marginal $\text{PD}_i(t) = \Pr\{T_i \le t\}$ is the Probability 
-of Default of the i-th obligor defined in section~\ref{basic_concepts}, 
-and $C$ is a copula. There are several proposals on the copula to be 
-used. CCruncher considers that it is a t-Student copula for the following
-reasons:
+of Default of the i-th obligor, and $C$ is a copula. There are several 
+proposals on the copula to be used. CCruncher considers that it is a 
+t-Student copula for the following reasons:
 
 \begin{itemize}
 	\item is determined by the correlation matrix (elliptical). 
@@ -1718,6 +1659,114 @@ renouncing to capture the tail dependence, etc.
 %==============================================================================
 \chapter{Modeling Portfolio Loss}
 
+\begin{definition}[Portfolio Loss at time $T$]
+	The Portfolio Loss at time $T$ is the cumulated losses in the time 
+	range $[0,T]$ caused by obligors that defaults (fails to make 
+	payments which they are obligated to do).
+	\begin{displaymath}
+		L_T = \left\{
+		\begin{array}{c}
+			\text{sum of portfolio losses in time range $[0,T]$}
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
+
+\begin{definition}[Exposure At Default (EAD)]
+	The Exposure At Default of the j-th asset at time $t$ indicates 
+	the total amount that bank is exposed if the obligor defaults:
+	\begin{displaymath}
+		\text{EAD}_j(t) = \left\{
+		\begin{array}{c}
+			\text{amount in risk of the j-th asset if the obligor} \\
+			\text{defaults at time $t$, measured in currency}
+		\end{array}
+		\right\}
+	\end{displaymath}
+	EAD can be a function dependent of time when these amounts are
+	fixed and know in advance (eg.\ loan), or can be a distribution
+	defined over time when we have a model that support it 
+	(eg.\ line of credit).
+\end{definition}
+
+\begin{definition}[Loss Given Default (LGD)]
+	The Loss Given Default of the j-th asset at time $t$ indicates 
+	the percentage of effective loss over the total exposure. This
+	value depends on endorsements, guarantees, type of asset, 
+	default time, etc.
+	\begin{displaymath}
+		\text{LGD}_j(t) = \left\{
+		\begin{array}{c}
+			\text{percentage of the $\text{EAD}_j(t)$ that is definitively} \\
+			\text{lost if the obligor defaults at time $t$}
+		\end{array}
+		\right\}
+	\end{displaymath}
+	LGD can be a function dependent of time, or can be a distribution
+	defined over time when we have a model that support it. 
+	Some texts~\cite{creditrisk+:1997} use the concept of recovery rate
+	instead of LGD\@. This is defined as:
+	\begin{displaymath}
+		\text{Recovery}_j(t) = 1- \text{LGD}_j(t)
+	\end{displaymath}
+\end{definition}
+
+\begin{example}[10-years Bond]
+	Let a 10-years fixed rate bond with an annual coupon of the
+	$4\%$ issued by a company rated BB\@.
+	The EAD for this asset can be obtained from its expected cashflows 
+	because they are known in advance. We suppose that the bank 
+	internal models indicate that in this case the LGD is a 
+	$\text{Beta}(5,2)$ distribution regardless of the default time.
+	Figure~\ref{figure:bond} illustrates the defined basic concepts 
+	applied to this asset.
+	\begin{figure}[!ht]
+		\centering
+		\subcaptionbox{Exposure At Default}{
+			\includegraphics[width=7cm]{bond_ead}
+		}
+		\subcaptionbox{Loss Given Default}{
+			\includegraphics[width=7cm]{bond_lgd}
+			\vspace{11pt}
+		}
+		\caption{10-years bond example}
+		\label{figure:bond} 
+	\end{figure}
+\end{example}
+
+\begin{comment}
+\begin{example}[Bond]
+	Let a 10-years fixed rate bond with an annual coupon of the
+	$4\%$ issued by a company rated BB\@. The credit rating agency 
+	reports, for this obligor and rating, the PD over time displayed 
+	in figure~\ref{figure:bond} with a $\text{PD}(1)=1.06\%$. 
+	The EAD for this asset can be obtained from its expected cashflows 
+	because they are known in advance. We suppose that the bank 
+	internal models indicate that in this case the LGD is a 
+	$\text{Beta}(5,2)$ distribution regardless of the default time.
+	Figure~\ref{figure:bond} illustrates the defined basic concepts 
+	applied to this issuer and bond.
+	\begin{figure}[!ht]
+		\centering
+		\subcaptionbox{Probability of Default}{
+			\includegraphics[width=7cm]{bond_pd1}
+		}
+		\subcaptionbox{Probability of Default (zoom)}{
+			\includegraphics[width=7cm]{bond_pd2}
+		}
+		\\
+		\subcaptionbox{Exposure At Default}{
+			\includegraphics[width=7cm]{bond_ead}
+		}
+		\subcaptionbox{Loss Given Default}{
+			\includegraphics[width=7cm]{bond_lgd}
+		}
+		\caption{Basic concepts bond example}
+		\label{figure:bond} 
+	\end{figure}
+\end{example}
+\end{comment}
+
 %------------------------------------------------------------------------------
 % PORTFOLIO LOSS DISTRIBUTION
 %------------------------------------------------------------------------------
@@ -1881,6 +1930,242 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 \end{example}
 
 %------------------------------------------------------------------------------
+% CREDIT RISK MEASUREMENT
+%------------------------------------------------------------------------------
+\section{Credit Risk Measurement}
+\label{sec:riskm}
+
+The portfolio credit risk is measured considering some statistics on 
+the portfolio loss distribution. Figure \ref{fig:lossdistr} illustrates 
+the concepts exposed in this section.
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=12cm]{creditvar}
+	\caption{Portfolio Loss Distribution at time $T$}
+	\label{fig:lossdistr}
+\end{figure}
+
+After $N$ simulations (eg.\ $20000$, $500000$ or more) we have a list
+of values $\{x_1, \ldots, x_N\}$ sampled from the portfolio loss distribution. 
+We measure the portfolio credit risk computing the corresponding statistics 
+and its standard errors due to sample size. Following we provide the 
+definitions and formulas of the most usual credit risk measures. 
+Any other risk measure can be estimated from the simulated sample and its 
+standard error can be obtained using resampling methods.
+
+When the loss values are high (eg.\ $\mathcal{O}(10^7)$) and the number of 
+simulations also are high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
+precision when we do the sum of squares ($\mathcal{O}(10^{2 \cdot 7 + 6})$). 
+The usual type used to store these values has 15--17 significant decimal 
+digits precision that can be exceeded in the sum of squares. In this case it 
+is recommended to use the Kahan~\cite{kahan:1965} summation algorithm.
+
+\subsection{Expected Loss}
+
+\begin{definition}[Expected Loss (EL)]
+	The Expected Loss of a portfolio at time horizon $T$ is the 
+	mean of the portfolio loss distribution.
+	\begin{displaymath}
+		\text{EL}(L_T) = E(L_T)
+	\end{displaymath}
+\end{definition}
+
+The Expected Loss responds try to the question \enquote{what is my expected 
+loss for the next year?}. It can be approximated using the following 
+statistic:
+\begin{displaymath}
+	\text{EL} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
+	\quad \text{ being } \quad
+	\left\{
+	\begin{array}{l}
+		\displaystyle
+		\widehat{\mu} = \frac{1}{N} \sum_{i=1}^{N} x_i \\
+		\\
+		\displaystyle
+		\widehat{\sigma} =
+		\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2}
+	\end{array}
+	\right.
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, and $\widehat{\mu}$ and 
+$\widehat{\sigma}$ are the mean and standard deviation estimators.
+
+\subsection{Value At Risk}
+
+\begin{definition}[Value at Risk (VaR)]
+	The Value At Risk of a portfolio at time horizon $T$ and 
+	confidence level $\beta$ is the $\beta$-quantile of the portfolio loss 
+	distribution.
+	\begin{displaymath}
+		\text{VaR}_\beta(L_T) = \inf\{x \in \mathbb{R} \mid F(x) \ge \beta \}
+	\end{displaymath}
+	where $F(x)=\Pr\{L_T \le x\}$ is the portfolio loss distribution at time $T$.
+\end{definition}
+
+The Value At Risk~\cite{var:jorion} is the most commonly 
+used risk measure to respond the question \enquote{how much could I lose in a 
+really bad year?}. It can be approximated using the following statistic:
+\begin{displaymath}
+	\begin{array}{lcl}
+		\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
+		& \text{ being } &
+		\left\{
+		\begin{array}{l}
+			\displaystyle
+			\frac{k}{N} \leq \beta < \frac{k+1}{N} \\
+			\\
+			\displaystyle
+			\widehat{q_{\beta}} = x_{k:N} \\
+		\end{array}
+		\right.
+		\\
+		& &
+		\\
+		\textrm{stderr}(q_{\beta}) = \sqrt{C_2 - C_1^2}
+		& \text{ being } &
+		\left\{
+		\begin{array}{rcl}
+			M   & = & [N \beta + 0.5]  \\
+			a   & = & M - 1            \\
+			b   & = & N - M            \\
+			W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \\
+			C_k & = & \sum_{i=1}^{N} W_i \cdot x_i^k \\
+		\end{array}
+		\right.
+		\\
+	\end{array}
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, $\widehat{q_{\beta}}$ is the 
+quantile estimator, $x_{k:N}$ is the $k$-th element of ascendant-sorted 
+values, $\textrm{stderr}(q_{\beta})$ is the estimation of the standard 
+error using the Maritz-Jarret method described in~\cite{quant:algor},
+$[x]$ is the integer part of $x$, and $B(a,b,x)$ is the regularized 
+incomplete beta function.
+
+\subsection{Expected Shortfall}
+
+\begin{definition}[Expected Shortfall (ES)]
+	The Expected Shortfall of a portfolio at time horizon $T$ and 
+	confidence level $\beta$ is the average of the worst $\beta\%$ losses.
+	\begin{displaymath}
+		\text{ES}_\beta(L_T) = \text{E}(L_t \mid L_t \ge \text{VaR}_\beta(L_T))
+	\end{displaymath}
+\end{definition}
+
+VaR is not a distance because it does not fulfill the sub-additive property 
+\cite{var:varbad}, $\text{VaR}(A+B) \nleq \text{VaR}(A)+\text{VaR}(B)$. 
+Similar to VaR, Expected Shortfall is a consistent risk measure 
+\cite{var:eshortfall}. We note as
+$\{y_1, \ldots, y_K\} = \{x_i \mid x_i \ge \text{VaR}_{\beta} \}_{i=1,\dots,N}$ 
+the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
+\begin{displaymath}
+	\text{ES}_{\beta} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{K}}
+	\quad \text{ being } \quad
+	\left\{
+	\begin{array}{l}
+		\displaystyle
+		\widehat{\mu} = \frac{1}{K} \sum_{i=1}^{K} y_i \\
+		\\
+		\displaystyle
+		\widehat{\sigma} =
+		\sqrt{\frac{1}{K-1} \sum_{i=1}^{K} \left( y_i - \widehat{\mu} \right)^2}
+	\end{array}
+	\right.
+\end{displaymath}
+where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+inverse cumulative distribution function, and $\widehat{\mu}$ and 
+$\widehat{\sigma}$ are the mean and standard deviation estimators.
+Honestly, this estimator is not the best one because it assumes that
+the estimated $\text{VaR}_{\beta}$ value is the right one. Despite this, 
+if the sample size is high enough then the estimated value is good enough.
+
+%------------------------------------------------------------------------------
+% SIMULATION INTERNALS
+%------------------------------------------------------------------------------
+\section{Simulation internals}
+
+\textbf{PD functions approximation}. CCruncher allows defining the PDs
+functions using the transition matrix or defining explicitly the values
+at some fixed points. When the PDs are defined using the transition matrix 
+CCruncher uses the proposition~\ref{prop:pdftm} to derive the PDs values 
+for each month and intermediate values are interpolated using cubic splines. 
+When the PDs values are defined explicitly at fixed time values, then 
+intermediate values are also interpolated using cubic splines but if the 
+resulting function is not strictly increasing, we use linear splines.
+
+\textbf{EAD and LGD interpolation}. CCruncher knows the EAD and LGD functions 
+at fixed times $\{t_1,\dots,t_n\}$ provided by user. When we evaluate these 
+functions in a time value distinct than those provided we use the following 
+piecewise constant interpolation:
+\begin{displaymath}
+	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
+\end{displaymath}
+\textbf{Function composition}. In order to speed-up the evaluation of the
+function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ we approximate it using linear 
+splines at a selected set of days $\mathbb{S}$. 
+Let $\{t_1,\dots,t_n\}$ the days where $\text{PD}_r$ has known values (not 
+interpolated), and let $t=P(x)$ the function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ 
+linearly interpolated using the points of set $\mathbb{S}$. 
+Then, CCruncher determines the set of days $\mathbb{S}$ using the following 
+procedure:
+\begin{itemize}
+	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
+	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
+	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
+	\begin{itemize}
+		\item Let $d$ the day where maximum error is achieved
+		\item Let $t_i \le d \le t_{i+1}$ the nearest days where $\text{PD}_r$ is defined
+		\item If $t_i$ is not contained in $S$, add $t_i$ to $\mathbb{S}$
+		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$
+		\item Else add $d$ to $\mathbb{S}$
+	\end{itemize}
+\end{itemize}
+
+\textbf{Interest rate}. CCruncher allows to consider the Net Present Value 
+of the simulated losses. This is computed using an interest rate curve 
+defined at fixed times and interpolated using linear or cubic splines 
+(selected by user). Allowed methods are simple interest, compound interest 
+and continuous interest. The formulas used to compute the present value are:
+\begin{center}
+	\begin{tabular}{ccccc}
+		$V_0 = \frac{V_t}{1+r \cdot \Delta t}$ & $\qquad$ &
+		$V_0 = \frac{V_t}{(1+r)^{\Delta t}}$ & $\qquad$ &
+		$V_0 = \frac{V_t}{\exp(r \cdot \Delta t)}$ \\
+		(Simple) & $\qquad$ & (Compound) & $\qquad$ & (Continuous)
+	\end{tabular}
+\end{center}
+where $V_t$ is the value at time $t$, and $r$ is the interest rate given 
+by the interest curve at time $t$.
+
+\textbf{Risk aggregation}. 
+\label{ss:ra}
+CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
+the same execution) the simulation of sub-portfolios losses. The name to refer
+a sub-portfolio is \emph{segment}. A segmentation is the disjoint union of some 
+segments that constitutes the whole portfolio so that an asset belongs to only 
+one segment of a given segmentation. By example, we can define a segmentation
+of types of assets where the segments are bonds, loans, leases, etc. Each asset
+belongs to only one segment. When an obligor defaults, the loss of its assets
+are aggregated to the whole portfolio loss, and the loss of each of its assets
+is aggregated to the corresponding segment. CCruncher allows defining and 
+managing multiple segmentations simultaneously. The segmentations can be 
+composed of obligors or assets. In the first case, the obligor loss is 
+aggregated to segment loss when the obligor defaults. In the second case, the 
+asset losses are aggregated to segments losses when the obligor defaults.
+
+\textbf{Parallel computing}. 
+CCruncher parallelize the portfolio loss sampling spawning multiple simulation
+threads, each of them with its own Mersenne twister Random Number Generator 
+seeded with consecutive values. When the number of obligors is high, data 
+don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
+operation that must be minimized. To achieve this, CCruncher simule each 
+obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and 
+$\vec{z}$) before moving to the next obligor. This strategy can be considered 
+to implement CCruncher parallelization in CUDA-like architectures.
+
+%------------------------------------------------------------------------------
 % VARIANCE REDUCTION
 %------------------------------------------------------------------------------
 \section{Variance Reduction}
@@ -2041,233 +2326,6 @@ extreme cases are represented.
 	\caption{Latin Hypercube Sampling example (1-dim)}
 	\label{fig:lhs} 
 \end{figure}
-
-
-%------------------------------------------------------------------------------
-% CREDIT RISK MEASUREMENT
-%------------------------------------------------------------------------------
-\section{Credit Risk Measurement}
-\label{sec:riskm}
-
-After $N$ simulations (eg.\ $20000$, $500000$ or more) we have a list
-of values $\{x_1, \ldots, x_N\}$ sampled from the portfolio loss distribution. 
-We measure the portfolio credit risk computing the corresponding statistics 
-and its standard errors due to sample size. Following we provide the 
-formulas of the most usual credit risk measures (see section~\ref{sec:crm}). 
-Any other risk measure can be estimated from the simulated sample and its 
-standard error can be obtained using resampling methods.
-
-When the loss values are high (eg.\ $\mathcal{O}(10^7)$) and the number of 
-simulations also are high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
-precision when we do the sum of squares ($\mathcal{O}(10^{2 \cdot 7 + 6})$). 
-The usual type used to store these values has 15--17 significant decimal 
-digits precision that can be exceeded in the sum of squares. In this case it 
-is recommended to use the Kahan~\cite{kahan:1965} summation algorithm.
-
-\subsection{Expected Loss}
-
-\begin{definition}[Expected Loss (EL)]
-	The Expected Loss of a portfolio at time horizon $T$ is the 
-	mean of the portfolio loss distribution.
-	\begin{displaymath}
-		\text{EL}(L_T) = E(L_T)
-	\end{displaymath}
-\end{definition}
-
-The Expected Loss responds try to the question \enquote{what is my expected 
-loss for the next year?}. It can be approximated using the following 
-statistic:
-\begin{displaymath}
-	\text{EL} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
-	\quad \text{ being } \quad
-	\left\{
-	\begin{array}{l}
-		\displaystyle
-		\widehat{\mu} = \frac{1}{N} \sum_{i=1}^{N} x_i \\
-		\\
-		\displaystyle
-		\widehat{\sigma} =
-		\sqrt{\frac{1}{N-1} \sum_{i=1}^{N} \left( x_i - \widehat{\mu} \right)^2}
-	\end{array}
-	\right.
-\end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
-inverse cumulative distribution function, and $\widehat{\mu}$ and 
-$\widehat{\sigma}$ are the mean and standard deviation estimators.
-
-\subsection{Value At Risk}
-
-\begin{definition}[Value At Risk (VAR)]
-	The Value At Risk of a portfolio at time horizon $T$ and 
-	confidence level $\beta$ is the $\beta$-quantile of the portfolio loss 
-	distribution.
-	\begin{displaymath}
-		\text{VAR}_\beta(L_T) = \inf\{x \in \mathbb{R} \mid F(x) \ge \beta \}
-	\end{displaymath}
-	where $F(x)=\Pr\{L_T \le x\}$ is the portfolio loss distribution at time $T$.
-\end{definition}
-
-The Value At Risk~\cite{var:jorion} is the most commonly 
-used risk measure to respond the question \enquote{how much could I lose in a 
-really bad year?}. It can be approximated using the following statistic:
-\begin{displaymath}
-	\begin{array}{lcl}
-		\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
-		& \text{ being } &
-		\left\{
-		\begin{array}{l}
-			\displaystyle
-			\frac{k}{N} \leq \beta < \frac{k+1}{N} \\
-			\\
-			\displaystyle
-			\widehat{q_{\beta}} = x_{k:N} \\
-		\end{array}
-		\right.
-		\\
-		& &
-		\\
-		\textrm{stderr}(q_{\beta}) = \sqrt{C_2 - C_1^2}
-		& \text{ being } &
-		\left\{
-		\begin{array}{rcl}
-			M   & = & [N \beta + 0.5]  \\
-			a   & = & M - 1            \\
-			b   & = & N - M            \\
-			W_i & = & B(a,b,\frac{i+1}{N}) - B(a,b,\frac{i}{N}) \\
-			C_k & = & \sum_{i=1}^{N} W_i \cdot x_i^k \\
-		\end{array}
-		\right.
-		\\
-	\end{array}
-\end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
-inverse cumulative distribution function, $\widehat{q_{\beta}}$ is the 
-quantile estimator, $x_{k:N}$ is the $k$-th element of ascendant-sorted 
-values, $\textrm{stderr}(q_{\beta})$ is the estimation of the standard 
-error using the Maritz-Jarret method described in~\cite{quant:algor},
-$[x]$ is the integer part of $x$, and $B(a,b,x)$ is the regularized 
-incomplete beta function.
-
-\subsection{Expected Shortfall}
-
-\begin{definition}[Expected Shortfall (ES)]
-	The Expected Shortfall of a portfolio at time horizon $T$ and 
-	confidence level $\beta$ is the average of the worst $\beta\%$ losses.
-	\begin{displaymath}
-		\text{ES}_\beta(L_T) = \text{E}(L_t \mid L_t \ge \text{VAR}_\beta(L_T))
-	\end{displaymath}
-\end{definition}
-
-VAR is not a distance because it does not fulfill the sub-additive property 
-\cite{var:varbad}, $\text{VAR}(A+B) \nleq \text{VAR}(A)+\text{VAR}(B)$. 
-Similar to VAR, Expected Shortfall is a consistent risk measure 
-\cite{var:eshortfall}. We note as
-$\{y_1, \ldots, y_K\} = \{x_i \mid x_i \ge \text{VaR}_{\beta} \}_{i=1,\dots,N}$ 
-the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
-\begin{displaymath}
-	\text{ES}_{\beta} = \widehat{\mu} \pm \phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{K}}
-	\quad \text{ being } \quad
-	\left\{
-	\begin{array}{l}
-		\displaystyle
-		\widehat{\mu} = \frac{1}{K} \sum_{i=1}^{K} y_i \\
-		\\
-		\displaystyle
-		\widehat{\sigma} =
-		\sqrt{\frac{1}{K-1} \sum_{i=1}^{K} \left( y_i - \widehat{\mu} \right)^2}
-	\end{array}
-	\right.
-\end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
-inverse cumulative distribution function, and $\widehat{\mu}$ and 
-$\widehat{\sigma}$ are the mean and standard deviation estimators.
-Honestly, this estimator is not the best one because it assumes that
-the estimated $\text{VaR}_{\beta}$ value is the right one. Despite this, 
-if the sample size is high enough then the estimated value is good enough.
-
-%------------------------------------------------------------------------------
-% SIMULATION INTERNALS
-%------------------------------------------------------------------------------
-\section{Simulation internals}
-
-\textbf{PD functions approximation}. CCruncher allows defining the PDs
-functions using the transition matrix or defining explicitly the values
-at some fixed points. When the PDs are defined using the transition matrix 
-CCruncher uses the proposition~\ref{prop:pdftm} to derive the PDs values 
-for each month and intermediate values are interpolated using cubic splines. 
-When the PDs values are defined explicitly at fixed time values, then 
-intermediate values are also interpolated using cubic splines but if the 
-resulting function is not strictly increasing, we use linear splines.
-
-\textbf{EAD and LGD interpolation}. CCruncher knows the EAD and LGD functions 
-at fixed times $\{t_1,\dots,t_n\}$ provided by user. When we evaluate these 
-functions in a time value distinct than those provided we use the following 
-piecewise constant interpolation:
-\begin{displaymath}
-	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
-\end{displaymath}
-\textbf{Function composition}. In order to speed-up the evaluation of the
-function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ we approximate it using linear 
-splines at a selected set of days $\mathbb{S}$. 
-Let $\{t_1,\dots,t_n\}$ the days where $\text{PD}_r$ has known values (not 
-interpolated), and let $t=P(x)$ the function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ 
-linearly interpolated using the points of set $\mathbb{S}$. 
-Then, CCruncher determines the set of days $\mathbb{S}$ using the following 
-procedure:
-\begin{itemize}
-	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
-	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
-	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
-	\begin{itemize}
-		\item Let $d$ the day where maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ the nearest days where $\text{PD}_r$ is defined
-		\item If $t_i$ is not contained in $S$, add $t_i$ to $\mathbb{S}$
-		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$
-		\item Else add $d$ to $\mathbb{S}$
-	\end{itemize}
-\end{itemize}
-
-\textbf{Interest rate}. CCruncher allows to consider the Net Present Value 
-of the simulated losses. This is computed using an interest rate curve 
-defined at fixed times and interpolated using linear or cubic splines 
-(selected by user). Allowed methods are simple interest, compound interest 
-and continuous interest. The formulas used to compute the present value are:
-\begin{center}
-	\begin{tabular}{ccccc}
-		$V_0 = \frac{V_t}{1+r \cdot \Delta t}$ & $\qquad$ &
-		$V_0 = \frac{V_t}{(1+r)^{\Delta t}}$ & $\qquad$ &
-		$V_0 = \frac{V_t}{\exp(r \cdot \Delta t)}$ \\
-		(Simple) & $\qquad$ & (Compound) & $\qquad$ & (Continuous)
-	\end{tabular}
-\end{center}
-where $V_t$ is the value at time $t$, and $r$ is the interest rate given 
-by the interest curve at time $t$.
-
-\textbf{Risk aggregation}. 
-\label{ss:ra}
-CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
-the same execution) the simulation of sub-portfolios losses. The name to refer
-a sub-portfolio is \emph{segment}. A segmentation is the disjoint union of some 
-segments that constitutes the whole portfolio so that an asset belongs to only 
-one segment of a given segmentation. By example, we can define a segmentation
-of types of assets where the segments are bonds, loans, leases, etc. Each asset
-belongs to only one segment. When an obligor defaults, the loss of its assets
-are aggregated to the whole portfolio loss, and the loss of each of its assets
-is aggregated to the corresponding segment. CCruncher allows defining and 
-managing multiple segmentations simultaneously. The segmentations can be 
-composed of obligors or assets. In the first case, the obligor loss is 
-aggregated to segment loss when the obligor defaults. In the second case, the 
-asset losses are aggregated to segments losses when the obligor defaults.
-
-\textbf{Parallel computing}. 
-CCruncher parallelize the portfolio loss sampling spawning multiple simulation
-threads, each of them with its own Mersenne twister Random Number Generator 
-seeded with consecutive values. When the number of obligors is high, data 
-don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
-operation that must be minimized. To achieve this, CCruncher simule each 
-obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and 
-$\vec{z}$) before moving to the next obligor. This strategy can be considered 
-to implement CCruncher parallelization in CUDA-like architectures.
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
@@ -2669,7 +2727,8 @@ use this statement to define and simulate the t-Student copula.
 \section{Covariance Block Matrix}
 \label{ap:cbm}
 
-%TODO: add reference to Torrent-Fortiana
+The content presented in this appendix is detailed and extended 
+in~\cite{torrent:2012}.
 
 \begin{definition}[Covariance Block Matrix]
 	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
@@ -2954,8 +3013,8 @@ The following proposition clarifies this theme.
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
-%\chapter*{Bibliography}
-%\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
+% \chapter*{Bibliography}
+\addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
 % \section*{Books}
 % \addcontentsline{toc}{section}{Books}
 % \printbibliography[heading=bibempty,type=book]
