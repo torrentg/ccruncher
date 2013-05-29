@@ -185,8 +185,8 @@ the CCruncher's site, \url{http://www.ccruncher.net}.
 The framework consist of this document that explains the models and algorithms, 
 and a piece of software that implements it in an efficient way. 
 Both elements, documentation and software, are licensed with open-source type 
-licenses. CCruncher is an evolving project in which you can participate. You 
-can send your suggestions and contributions to 
+licenses. CCruncher is an evolving project in which you can participate sending
+your suggestions and contributions to 
 \href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
 Because it is an evolving project, it is recommended to mention the version
 identifier when you refer the project name (eg. CCruncher-\numversion).
@@ -243,10 +243,9 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics{\texttrademark} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
-CCruncher is intended to quantify the credit risk of portfolios with a 
-buy-and-hold policy. Also it is necessary that each obligor have an assigned 
-rating, belongs to an unique economic sector, and has known assets exposures 
-and recoveries. 
+CCruncher quantifies the credit risk of portfolios with a buy-and-hold policy. 
+Also it is necessary that each obligor have an assigned rating, belongs to an 
+unique economic sector, and has known assets exposures and recoveries. 
 Unlike CreditMetrics{\texttrademark}, CCruncher don't follows a mark-to-market 
 account, but follows a two-state model (default/no-default). Later we use the 
 transition matrix concept in order to determine the shape of PD functions, 
@@ -357,8 +356,8 @@ t-Student copula for the following reasons:
 
 Previous versions of the CCruncher project implemented a simulation schema
 consisting in simulating the t-Student copula directly. This approach 
-requires an adapted simulation algorithm for high-dimensional problems and 
-difficult the estimation of the parameters. The current CCruncher version 
+requires an adapted simulation algorithm for high-dimensional problems~\cite{torrent:2012}
+and difficult the estimation of the parameters. The current CCruncher version 
 relies in the following proposition that reformulate $F$ in terms of the 
 multivariate t-Student distribution. This result, combined with the t-Student
 multi-factor model, provides an efficient simulation algorithm and allows 
@@ -540,9 +539,8 @@ but differ as this goes away.
 	\end{displaymath}
 	where $n$ is the number of ratings and $m_{ij}$ is the probability that a
 	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
-	Note that row sums are $1$ and that if we have two consecutives transition 
-	matrices, $M_{T_1}$ and $M_{T_2}$, then we can derive 
-	$M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
+	Note that row sums are $1$, and that two consecutives transition matrices, 
+	$M_{T_1}$ and $M_{T_2}$, gives $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
 \end{definition}
 
 \begin{example}
@@ -595,8 +593,8 @@ section~\ref{pdftm}, but this simplified case has an explicit
 solution stated in the proposition that follows.
 
 \begin{proposition}
-	A diagonal transition matrix leads to default times with exponential
-	distributions:
+	A diagonal transition matrix as above leads to default times with 
+	exponential distributions:
 	\begin{displaymath}
 		\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
 		\quad \text{ where } \lambda = -\ln(1-p_j)
@@ -661,7 +659,7 @@ of the exponential and the logarithm functions:
 	and that these values are those from the 1-year regularized transition 
 	matrix of example~\ref{ex:1ytm}. In this case, the diagonal transition 
 	matrix is:
-	\small
+	{\small
 	\begin{displaymath}
 		M_1 = \left(
 		\begin{array}{cccccccc}
@@ -675,7 +673,7 @@ of the exponential and the logarithm functions:
 		0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
 		\end{array}
 		\right)
-	\end{displaymath}
+	\end{displaymath}\par}
 	We determine the PDs function for each rating using the 
 	proposition~\ref{prop:pdftm}, that is, considering that default times are 
 	exponential distributions. Results are displayed in figure~\ref{fig:pdfsv}. 
@@ -759,7 +757,7 @@ extracted from~\cite{kreinin:2001}.
 	We derive the PD for each rating induced by the transition matrix exposed
 	in the example~\ref{ex:1ytm}. As first step, we scale the 1-year transition 
 	matrix $M_1$ to the 1-month transition matrix $M_{\frac{1}{12}}$.
-	\small
+	{\small
 	\begin{displaymath}
 		M_{\frac{1}{12}} = \left(
 		\begin{array}{cccccccc}
@@ -773,11 +771,11 @@ extracted from~\cite{kreinin:2001}.
 			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
 		\end{array}
 		\right)
-	\end{displaymath}
+	\end{displaymath}\par}
 	We observe that $M_{\frac{1}{12}}$ is not a regular matrix due to negative
 	values. We apply the QOM algorithm to regularize it. We call the 1-year 
 	regularized transition matrix to $\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$.
-	\small
+	{\small
 	\begin{displaymath}
 		\bar{M}_{\frac{1}{12}} = \left(
 		\begin{array}{cccccccc}
@@ -791,7 +789,7 @@ extracted from~\cite{kreinin:2001}.
 			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
 		\end{array}
 		\right)
-	\end{displaymath}
+	\end{displaymath}\par}
 	Finally we use the proposition~\ref{prop:pdftm} to determine the 
 	PD function for each rating and month. Results are displayed in 
 	figure~\ref{fig:pdftm}.
@@ -904,7 +902,7 @@ and~\ref{prop:tmfm}).
 	Let a multivariate default times distribution with a t-Student copula
 	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
 	matrix $R$, degrees of freedom $\nu$, and annual probabilities of
-	default $p_j \quad j=1,\dots,m$. Then, we can simulate a sample of 
+	default $p_j$ where $j=1,\dots,m$. Then, we can simulate a sample of 
 	size $T$ of the annual number of defaults by factor and rating doing:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
@@ -1630,16 +1628,16 @@ justified to consider the constrained model~\cite{roncalli:2004} that
 assumes that all correlations have the same value, or similar assumptions 
 that reduces the number correlations to estimate from $k \cdot(k-1)/2$ to 
 a few ones.
-\begin{displaymath}
-	R = \left(
-	\begin{array}{cccc}
-		     1 &   \rho & \cdots &   \rho \\
-		  \rho &      1 & \ddots & \vdots \\
-		\vdots & \ddots & \ddots &   \rho \\
-		  \rho & \cdots &   \rho &      1 \\
-	\end{array}
-	\right)
-\end{displaymath}
+% \begin{displaymath}
+% 	R = \left(
+% 	\begin{array}{cccc}
+% 		     1 &   \rho & \cdots &   \rho \\
+% 		  \rho &      1 & \ddots & \vdots \\
+% 		\vdots & \ddots & \ddots &   \rho \\
+% 		  \rho & \cdots &   \rho &      1 \\
+% 	\end{array}
+% 	\right)
+% \end{displaymath}
 
 \textbf{Gaussian case}. In the general case we observe that
 correlation and the degrees of freedom are interleaved. When we move a value
