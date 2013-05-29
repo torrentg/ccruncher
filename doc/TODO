@@ -10,6 +10,8 @@ Current works
   * rename dprobs to pds
   * pds can have multiple transtions, and pd into
   * add option 'copy data to clipboard' in graphics
+  * review asset data memory allocation
+  * -D == macro system
  
 Future works
 -------------------
