@@ -13,6 +13,7 @@ Current works
   * review asset data memory allocation
   * -D == macro system
   * support exponential distr. as PD?
+  * retrieve asset data attributes in Asset instead of ExpatHandlers
  
 Future works
 -------------------

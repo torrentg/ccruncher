@@ -79,6 +79,7 @@
 \usepackage{wrapfig}
 \usepackage{bbm}
 \usepackage{listings}
+
 \def\numversion{2.3}
 \def\svnversion{R1039}
 
@@ -120,7 +121,7 @@ TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
 \section*{Contributors}
-TODO\@: SET CONTRIBUTORS HERE
+Be the first!
 
 ~\vfill
 The BibTeX entry of this document for \LaTeX\ users is:
@@ -130,7 +131,7 @@ The BibTeX entry of this document for \LaTeX\ users is:
     title = \{Credit Risk Modeling Using CCruncher\},
     author = \{Torrent-Gironella, Gerard\},
     organization = \{Tatine\},
-    address = \{Barcelona, Spain\},
+    address = \{Barcelona, Catalonia, Spain\},
     year = \{2013\},
     url = \{http://www.ccruncher.net/\},
     edition = \{\numversion\}
@@ -168,26 +169,17 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-\begin{comment}
-\textbf{CCruncher} is a computer software to calculate the credit 
-risk of a portfolio. This document details the concepts, model and algorithms 
-used in it. CCruncher is developed and maintained by 
-\href{http://www.tatine.es}{Tatine}, a quantitative consulting firm located 
-in Barcelona (Spain). You can download the latest version of this document and 
-software from the CCruncher's site, \url{http://www.ccruncher.net}.
-\end{comment}
-
 The \textbf{CCruncher} project provides a framework for quantify portfolio 
 credit risk. It is developed and maintained by 
 \href{http://www.tatine.es}{Tatine}, a quantitative consulting firm located 
-in Barcelona (Spain). You can download the latest version of the project from 
-the CCruncher's site, \url{http://www.ccruncher.net}.
+in Barcelona (Catalonia, Spain). You can download the latest version of the 
+project from the CCruncher's site, \url{http://www.ccruncher.net}.
 
 The framework consist of this document that explains the models and algorithms, 
 and a piece of software that implements it in an efficient way. 
 Both elements, documentation and software, are licensed with open-source type 
-licenses. CCruncher is an evolving project in which you can participate sending
-your suggestions and contributions to 
+licenses. CCruncher is a mature and active project in which you can participate 
+sending your suggestions and contributions to 
 \href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
 Because it is an evolving project, it is recommended to mention the version
 identifier when you refer the project name (eg. CCruncher-\numversion).
@@ -198,12 +190,12 @@ Care is taken to make short introductions about the methods and concepts used,
 give examples, and to mention the small details of implementation.
 This document does not provide new basic results. Most exposed models and 
 algorithms are used for some time. There are two exceptions to this. First, 
-no references have been found about the internals of parameter estimation. 
-For this reason, the development of this section is original. Its validity 
-has been verified with tests listed in the document. And second, the minor 
-result that states that t-Student multi-factor model and multivariate 
-t-Student with correlation block matrix are quasi-equivalents when the 
-number of components in each factor are high.
+no references have been found about the internals of parameter estimation
+in the general case. For this reason, the development of this section is 
+original. Its validity has been verified with tests listed in the document. 
+And second, the minor result that states that t-Student multi-factor model 
+and multivariate t-Student with correlation block matrix are quasi-equivalents 
+when the number of components in each factor are high.
 
 Portfolio credit risk try to respond to questions like: \enquote{what is the 
 portfolio expected loss for the next year?}, and \enquote{how much could I 
@@ -214,8 +206,8 @@ loss distribution and measure the credit risk using a set of selected
 statistics (eg.\ mean, quantile). They differ on how to obtain this 
 distribution. 
 
-\textbf{Actuarial approach}. This approach considers that the distribution of 
-the annual number of defaults (Poisson type) is the proper way to interpret the 
+\textbf{Actuarial approach}. This approach considers that the frequency 
+distribution of defaults (Poisson type) is the proper way to interpret the 
 observed defaults. Compounding defaults frequency with the obligors' exposures 
 gives the portfolio loss distribution that can be approximated by Panjer 
 recursion, or by the FFT method. The main representative of this approach is 
@@ -227,7 +219,10 @@ The sum of the obligors' exposures weighted by the probabilities of default
 gives the portfolio loss distribution. This distribution is approximated 
 using the Monte Carlo method. The main representative of this approach is the 
 CreditMetrics\texttrademark~\cite{cmetrics:1997} model. Other representatives 
-are the KMV model, or the copula approach~\cite{li:2000}.
+are the KMV model, or the copula approach~\cite{li:2000}. The Basel II 
+accord~\cite{basel2:2006}, the de-facto international financial risk 
+regulation framework, is strongly influenced by this 
+approach~\cite{cespedes:2002}.
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
 but differ when the dependence structure between obligors is distinct than
@@ -244,40 +239,78 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics{\texttrademark} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
+CCruncher quantify the portfolio credit risk simulating the portfolio loss
+distribution multiple times and computing the appropriate statistics (EL, 
+VaR, ES) over this sample. The portfolio losses are obtained simulating 
+the obligors default times and the EADs and LGDs of its assets. These 
+default times are a multivariate distribution where its marginals are 
+the probabilities of default given by the obligors ratings, and dependence
+structure between obligors are determined by the obligors industrial sector.
+CCruncher assumes that the dependence structure is a t-Student copula.
+This document provides a guide to estimate the copula parameters using
+Bayesian inference and encourages to transfer the parameters uncertainty
+to the credit risk measures.
+
 CCruncher quantifies the credit risk of portfolios with a buy-and-hold policy. 
 Also it is necessary that each obligor have an assigned rating, belongs to an 
 unique economic sector, and has known assets exposures and recoveries. 
+An example of a credit portfolio that can benefit of CCruncher is a SMEs 
+loan portfolio (buy-and-hold, rated obligors, multiple sectors where each
+obligor belongs to a unique sector, known EADs and LGDs).
 Unlike CreditMetrics{\texttrademark}, CCruncher don't follows a mark-to-market 
 account, but follows a two-state model (default/no-default). Later we use the 
 transition matrix concept in order to determine the shape of PD functions, 
 not to perform an accounting type mark-to-market.
 
+The advantages of CCruncher are: 
+\begin{inparaenum}[1)]
+	\item avoids over-simplifications, 
+	\item supports multiple risk measures (eg. user defined),
+	\item don't presuppose uniform transition matrix,
+	\item correlations are considered suitably, 
+	\item allows to consider parameters uncertainty,
+	\item allows multiple sub-portfolios (risk disaggregation),
+	\item allows multiple factors,
+	\item allows multiple ratings,
+	\item obligors can have multiple assets,
+	\item each of them with their own EAD and LGD,
+	\item that can be stochastic values, and
+	\item vary over the time.
+\end{inparaenum}
 
+The disadvantages of CCruncher are: 
+\begin{inparaenum}[1)]
+	\item computationally intensive,
+	\item slow (requires a big amount of simulations),
+	\item lack of precision due to Monte Carlo barrier $1/\sqrt{N}$,
+	\item obligors can't belong to a weighted sum of factors,
+	\item correlations are constants over time,
+	\item dependence only rely on sector,
+	\item only a copula type is supported, and
+	\item mark-to-market not supported.
+\end{inparaenum}
+Despite this, CCruncher is designed to be very fast doing most simulations
+in seconds or minutes if the number of obligors in the portfolio is huge 
+(eg.\ 50000).
 
+The content is organized in three chapters. The first one details the 
+distribution used to simulate the obligors default times. It is easy to 
+understand and is recommended reading, specially the section where is 
+related the multivariate model. The second chapter penetrates into
+the parameters estimation. This topic can be rough for those not familiarized 
+with MCMC, for this reason it includes a detailed introduction to the 
+Metropolis-Hastings method. You can skip this chapter if you don't need 
+to estimate the parameters of the obligors default times model. Finally, the 
+third chapter contains the credit portfolio loss quantification and details 
+of the implementation. It is recommended reading. You can skip the last 
+section referred to parameters uncertainty if you are not concerned about 
+parameters estimation and its impact in the credit risk measures.
+There are four little appendices that covers aspects used in the first 
+chapter (default times modeling). They are a recommended reading because
+contains key statements and establish the used notation.
 
-% CCruncher makes the following assumptions:
-% \begin{enumerate}
-	% \item The dependence between obligors depends only on the economic sectors.
-	% \item Correlations remains constant over time.
-% \end{enumerate}
-
-
-%TODO: indicar treball original
-%TODO: indicar que permet fer CCruncher
-%TODO: indicar factor loadings=intra, factor correlations=inter
-%TODO: set content organization
 %TODO: identificar els suposits (cicle econ., rating 1-year, etc.)
 %TODO: implications (fixed correlations, economic cycle)
-
-Here we define the key concepts used to model the credit risk.
-They are those of the Basel II accords~\cite{basel2:2006}, the 
-de-facto international financial risk regulation framework. These
-directives are strongly influenced by the Merton based approach
-\cite{cespedes:2002}.
-We emphasize the temporal dimension because it is a key point in 
-further development. From now establish that the time unit is the 
-year in order to simplify the exposition without loss of generality
-(in fact, the time unit used internally by CCruncher is the day).
 
 
 %==============================================================================
@@ -287,13 +320,14 @@ year in order to simplify the exposition without loss of generality
 
 The model described in this section is the same as described in 
 ~\cite{li:2000,roncalli:2001,frey:2001}~\cite[chap. 2.6]{bluhm:2002}.
-We recommend taking a look at the appendices 
-\emph{\ref{ap:copula_basics}-\nameref{ap:copula_basics}},
-\emph{\ref{ap:mtsd}-\nameref{ap:mtsd}},
-\emph{\ref{ap:cbm}-\nameref{ap:cbm}},
-\emph{\ref{ap:mfgm}-\nameref{ap:mfgm}}.
-These contain definitions, results and details about subjects used 
-in this section.
+We recommend taking a look at the appendices before to proceed.
+These contain definitions, statements, notation and details about subjects 
+used in this chapter.
+
+%------------------------------------------------------------------------------
+% THE PROBABILITIES OF DEFAULT
+%------------------------------------------------------------------------------
+\section{The Probabilities of Default}
 
 \begin{definition}[Probability of Default (PD)]
 	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
@@ -317,242 +351,10 @@ in this section.
 	\end{displaymath}
 \end{definition}
 
-%------------------------------------------------------------------------------
-% THE MULTIVARIATE MODEL
-%------------------------------------------------------------------------------
-\section{The Multivariate Model}
-
-\subsection{The copula approach}
-The copula approach considers that the obligors default times are the 
-proper way to explain the observed defaults. This default times 
-$(T_1, \dots, T_n)$ are modeled by a multivariate distribution $F$ 
-such that:
-\begin{displaymath}
-	F(t_1, \dots, t_n) = \Pr \{T_1 \le t_1, \dots, T_n \le t_n\}
-\end{displaymath}
-where $n$ is the number of obligors in the portfolio, $T_i$ is the time 
-(in years) when the i-th obligor defaults, and $F$ is the multivariate
-default times distribution. Applying the Sklar's theorem to the above 
-distribution we obtain:
-\begin{displaymath}
-	F(t_1, \dots, t_n) = 
-	C\left(\text{PD}_1(t_1), \dots, \text{PD}_n(t_n)\right)
-\end{displaymath}
-where marginal $\text{PD}_i(t) = \Pr\{T_i \le t\}$ is the Probability 
-of Default of the i-th obligor, and $C$ is a copula. There are several 
-proposals on the copula to be used. CCruncher considers that it is a 
-t-Student copula for the following reasons:
-
-\begin{itemize}
-	\item is determined by the correlation matrix (elliptical). 
-	\item is symmetrical (elliptical), allowing to 
-	apply the antithetic reduction variance technique in the Monte Carlo 
-	simulation.
-	\item allows a wide range of dependence structures through parameter $\nu$.
-	\item it exhibits tail dependence when $\nu \ne \infty$.
-	\item exist an efficient simulation algorithm.
-	\item the Gaussiana case ($\nu = \infty$) is the copula used by 
-	CreditMetrics\texttrademark.
-	\item it can be expressed as a multi-factor model.
-\end{itemize}
-
-Previous versions of the CCruncher project implemented a simulation schema
-consisting in simulating the t-Student copula directly. This approach 
-requires an adapted simulation algorithm for high-dimensional problems~\cite{torrent:2012}
-and difficult the estimation of the parameters. The current CCruncher version 
-relies in the following proposition that reformulate $F$ in terms of the 
-multivariate t-Student distribution. This result, combined with the t-Student
-multi-factor model, provides an efficient simulation algorithm and allows 
-estimating the parameters.
-
-\begin{proposition}[Multivariate Default Times Distribution]
-	\label{prop:dtd}
-	Let $T=(T_1,\dots,T_n)$ the obligors default times with marginals 
-	$\text{PD}_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$ with $\nu$
-	degrees of freedom and a $n {\times} n$ obligors correlation matrix 
-	$\bar{R}$. Then, its distribution $F$ is:
-	\begin{displaymath}
-		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n))\right)
-	\end{displaymath}
-	where $H$ is the cdf of the multivariate t-Student distribution 
-	$t_n(\nu,0,\bar{R})$, and $t_\nu^{-1}$ is the inverse of the univariate 
-	t-Student distribution $t_1(\nu,0,1)$.
-\end{proposition}
-\begin{proof}
-	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
-	the components of the copula $C_{\nu,\bar{R}}^n$.
-	\begin{displaymath}
-		\begin{array}{rl}
-			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} =                                    \\
-			                   & \text{we use the corollary~\ref{cor:cop3}: }                                   
-			(T_1,\dots,T_n) = (\text{PD}_1^{-1}(U_1),\dots,\text{PD}_n^{-1}(U_n)) \\
-			=                  & \Pr\{ \text{PD}_1^{-1}(U_1) \le t_1 , \dots , \text{PD}_n^{-1}(U_n) \le t_n \} =               \\
-			                   & \text{we use the corollary~\ref{cor:cop2}: }                                   
-			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
-			=                  & \Pr\{ \text{PD}_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , \text{PD}_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
-			=                  & \Pr\{ t_\nu(X_1) \le \text{PD}_1(t_1) , \dots , t_\nu(X_n) \le \text{PD}_n(t_n) \} =           \\
-			=                  & \Pr\{ X_1 \le t_\nu^{-1}(\text{PD}_1(t_1)) , \dots , X_n \le t_\nu^{-1}(\text{PD}_n(t_n)) \} = \\
-			=                  & H(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n)))                           \\
-		\end{array}
-	\end{displaymath}
-\end{proof}
-
-The previous proposition can be stated by any other copula coming from
-a multivariate distribution an applied if this had a known distribution 
-and marginals (eg.\ the Gaussian copula). Also from the previous proposition
-is immediate to derive a method to sample the default times distribution.
-
-\begin{corollary}[Default times simulation (I)]
-	\label{cor:dts1}
-	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
-	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$. 
-	Then we can simulate this distribution using a multivariate t-Student 
-	distribution $X \sim t_n(\nu,\bar{R})$:
-	\begin{displaymath}
-		(T_1, \dots, T_n) = \left(\text{PD}_1^{-1}\left(t_{\nu}(X_1)\right), \dots, \text{PD}_n^{-1}\left(t_{\nu}(X_n)\right)\right)
-	\end{displaymath}
-\end{corollary}
-
-The current formulation is not yet satisfactory because the dimension 
-$n {\times} n$ of the obligors correlation matrix causes that any 
-operation (eg.\ simulate random value, or estimate the parameters) cannot 
-be done in practice when $n$ is large. For this reason we introduce the
-multi-factor formulation.
-
-\subsection{The multi-factor formulation}
-
-To bypass the dimension problem we assuming that exist a reduced number 
-$k$ of industrial sectors and that each obligor belong to a unique sector. 
-Also that default times dependence between obligors only depends on the 
-involved industrials sectors. With these restrictions, if we sort the 
-obligors by sector, the obligors default times correlation matrix, $\bar{R}$, 
-is a $n {\times} n$ correlation block matrix $B_k(\vec{n},\vec{1},M)$. See 
-appendix~\ref{ap:cbm} for more information about covariance block matrices. 
-\begin{displaymath}
-	\bar{R} = B_k(\vec{n},\vec{1},M) = 
-	\left(
-	\begin{array}{ccccccc}
-		1         & \cdots & \rho_{11} &        & \rho_{1k} & \cdots & \rho_{1k} \\
-		\vdots    & \ddots & \vdots    & \cdots & \vdots    &        & \vdots    \\
-		\rho_{11} & \cdots & 1         &        & \rho_{1k} & \cdots & \rho_{1k} \\
-		
-		          & \vdots &           & \ddots &           & \vdots &           \\
-		
-		\rho_{1k} & \cdots & \rho_{1k} &        & 1         & \cdots & \rho_{kk} \\
-		\vdots    &        & \vdots    & \cdots & \vdots    & \ddots & \vdots    \\
-		\rho_{1k} & \cdots & \rho_{1k} &        & \rho_{kk} & \cdots & 1         \\
-	\end{array}
-	\right)
-	\qquad 
-	\begin{array}{l}
-		M = 
-		\left(
-		\begin{array}{ccc}
-		\rho_{11} & \cdots & \rho_{1k} \\
-		\vdots    & \ddots & \vdots    \\
-		\rho_{1k} & \cdots & \rho_{kk}
-		\end{array}
-		\right) \\
-		\\
-		\vec{n} = (n_1,\dots,n_k)
-	\end{array}
-\end{displaymath}
-
-Up to this point the multivariate default times distribution $F$ can 
-be expressed by its marginals $\text{PD}_i$ and a multivariate t-Student 
-distribution, $t_n(\nu,0,\bar{R})$ with a obligors correlation block 
-matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition that follows 
-gives us the key to reformulate the problem as a multi-factor problem.
-
-\begin{proposition}[t-Student distr.\ as a multi-factor model]
-	\label{prop:tmfm}
-	Let a random vector $X=(X_1,\dots,X_n)$ with a multivariate t-Student 
-	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
-	is a correlation block matrix and $n_i$ sizes are high-enough. 
-	Then $X$ can be written as a t-Student multi-factor model as follows:
-	\begin{displaymath}
-		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
-		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
-		\text{, where } \left\{
-		\begin{array}{l}
-			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}    \\
-			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
-			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}  \\
-			Z \sim N(0,R), \text{ and $R$ a $k {\times} k$ correlation matrix} \\
-			w_i \in (0,1), \text{ are the factor loadings }                  \\
-			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
-			V, Z, \epsilon_i^j \text{ independents } \forall i,j             \\
-		\end{array}
-		\right.
-	\end{displaymath}
-	where $w_1,\dots,w_k$ and $R$ satisfy:
-	\begin{displaymath}
-		\begin{array}{l}
-			R_{ii} = 1 \quad i = 1,\dots,k \\
-			M_{ij} = w_i \cdot w_j \cdot R_{ij} \quad \forall i,j
-		\end{array}
-	\end{displaymath}
-\end{proposition}
-\begin{proof}
-	We use the t-Student characterization (proposition~\ref{prop:mtschar}),
-	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
-	$Z \sim N(0,\bar{R})$ expressing $Z$ as a Gaussian multi-factor model 
-	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
-	values can be found at proposition~\ref{prop:gmfigs}. The tag line '$n_i$ 
-	sizes are high-enough' is justified in proposition~\ref{prop:gmfamgb}.
-\end{proof}
-
-Note that we expressed the multi-factor model in terms of the factor 
-loadings and the factors correlation matrix, instead of the more concise 
-covariance matrix. We do this because the factor loadings have a treatment 
-distinct than factors correlation in the estimation of parameters.
-
-Factor loadings $\vec{w}$, measures the correlation between obligors 
-belonging the same industrial sector $i$, satisfying in the Gaussian case 
-that $\rho_i = w_i^2$. Factor correlations $R$ measures the correlation 
-between factors, and also the correlation between obligors belonging to 
-different sectors, satisfying in the Gaussian case that 
-$\rho_{ij} = w_i \cdot w_j \cdot R_{ij}$.
-
-The t-Student multi-factor model combined with the corollary~\ref{cor:dts1} 
-provides an efficient algorithm to simulate the obligors default times.
-
-\begin{corollary}[Default times simulation (II)]
-	\label{cor:dts2}
-	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
-	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$
-	coming from a multi-factor model with $\nu$ degrees of freedom, factor 
-	loadings $\vec{w}$, and factor correlations $R$.Then we can simulate this 
-	distribution doing:
-	\begin{enumerate}
-		\item Simule the factors, $\vec{z} \sim N(0,R)$.
-		\item Simule the degrees of freedom, $\nu \sim \chi_{\nu}^2$.
-		\item For each obligor repeat the following steps:
-		\begin{enumerate}
-			\item Simule $\epsilon \sim N(0,1)$.
-			\item Simule the multivariate t-Student component using the obligor's factor:
-			\begin{displaymath}
-				x = \sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)
-			\end{displaymath}
-			\item Obtain the obligor's default time using the obligor's rating:
-			\begin{displaymath}
-				t = \text{PD}_r^{-1}\left(t_{\nu}(x)\right)
-			\end{displaymath}
-		\end{enumerate}
-	\end{enumerate}
-\end{corollary}
-
-%------------------------------------------------------------------------------
-% DETERMINING THE PROBABILITIES OF DEFAULT
-%------------------------------------------------------------------------------
-\section{Determining the Probabilities of Default}
-
-Each obligor has its own PD depending on its rating and perhaps its
-sector. This causes that all obligors with the same sector and rating be
-indistinguishable together (they are exchangeable) and have the 
-same PD\@. These few PDs can be inferred from the transition matrix, 
-the construct that contains the relationship between ratings.
+Each obligor has its own PD depending on its rating. This causes that 
+all obligors with the same rating have the same PD\@. These few PDs can 
+be inferred from the transition matrix, the construct that contains the 
+relationship between ratings. 
 Below show three different ways of inferring the PD depending 
 upon the amount of information available. All of them give similar 
 results when the time unit and evaluation time is reduced (eg.\ 1 year) 
@@ -671,7 +473,12 @@ solution stated in the proposition that follows.
 		(1-p_1)^t 
 		= \left( \lim_{n \to \infty} (1-p_{\frac{1}{n}})^n \right)^t
 		= \left(\lim_{n \to \infty} (1-\frac{\lambda}{n})^n \right)^t
-		= e^{-\lambda \cdot t}
+		= e^{-\lambda t}
+	\end{displaymath}
+	Then,
+	\begin{displaymath}
+		\Pr\{T_. \le t\} = \text{PD}(t) = 
+		1 - \text{Survival}(t) = 1 - e^{-\lambda t}
 	\end{displaymath}
 \end{proof}
 
@@ -843,7 +650,7 @@ extracted from~\cite{kreinin:2001}.
 	\end{figure}
 \end{example}
 
-\subsection{From advanced transition matrix model}
+\subsection{From advanced models}
 
 There are financial institutions that may have models to forecast 
 the transition matrix using some economic indicators like GDP
@@ -870,7 +677,244 @@ have more or less pronounced steps depending on the different stages of
 the economic cycle. This approach is the most suitable for risk estimates 
 in the medium and long term.
 
-%TODO: resum final del model
+Finally, there may be models that do not come from a transition matrix.
+CCruncher allows to describe the PD for each rating specifying its value
+at given time points. These have to meet the cdf conditions:
+\begin{itemize}
+	\item $\text{PD}_r(0) = 0$,
+	\item strictly increasing, 
+	\item $\text{PD}_r(\infty) = 1$, and
+	\item $\text{PD}_{\text{default}}(t) = 1 \quad \forall\ t \ge 0$.
+\end{itemize}
+The functions specified in this way are interpolated using cubic splines
+when the above conditions are preserved or linear splines when not.
+
+%------------------------------------------------------------------------------
+% THE MULTIVARIATE MODEL
+%------------------------------------------------------------------------------
+\section{The Multivariate Model}
+
+\subsection{The copula approach}
+The copula approach considers that the obligors default times are the 
+proper way to explain the observed defaults. This default times 
+$(T_1, \dots, T_n)$ are modeled by a multivariate distribution $F$ 
+such that:
+\begin{displaymath}
+	F(t_1, \dots, t_n) = \Pr \{T_1 \le t_1, \dots, T_n \le t_n\}
+\end{displaymath}
+where $n$ is the number of obligors in the portfolio, $T_i$ is the time 
+(in years) when the i-th obligor defaults, and $F$ is the multivariate
+default times distribution. Applying the Sklar's theorem to the above 
+distribution we obtain:
+\begin{displaymath}
+	F(t_1, \dots, t_n) = 
+	C\left(\text{PD}_1(t_1), \dots, \text{PD}_n(t_n)\right)
+\end{displaymath}
+where marginal $\text{PD}_i(t) = \Pr\{T_i \le t\}$ is the Probability 
+of Default of the i-th obligor, and $C$ is a copula. There are several 
+proposals on the copula to be used. CCruncher considers that it is a 
+t-Student copula for the following reasons:
+
+\begin{itemize}
+	\item is determined by the correlation matrix (elliptical). 
+	\item is symmetrical (elliptical), allowing to 
+	apply the antithetic reduction variance technique in the Monte Carlo 
+	simulation.
+	\item allows a wide range of dependence structures through parameter $\nu$.
+	\item it exhibits tail dependence when $\nu \ne \infty$.
+	\item exist an efficient simulation algorithm.
+	\item the Gaussiana case ($\nu = \infty$) is the copula used by 
+	CreditMetrics\texttrademark.
+	\item it can be expressed as a multi-factor model.
+\end{itemize}
+
+Previous versions of the CCruncher project implemented a simulation schema
+consisting in simulating the t-Student copula directly. This approach 
+requires an adapted simulation algorithm for high-dimensional problems~\cite{torrent:2012}
+and difficult the estimation of the parameters. The current CCruncher version 
+relies in the following proposition that reformulate $F$ in terms of the 
+multivariate t-Student distribution. This result, combined with the t-Student
+multi-factor model, provides an efficient simulation algorithm and allows 
+estimating the parameters.
+
+\begin{proposition}[Multivariate Default Times Distribution]
+	\label{prop:dtd}
+	Let $T=(T_1,\dots,T_n)$ the obligors default times with marginals 
+	$\text{PD}_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$ with $\nu$
+	degrees of freedom and a $n {\times} n$ obligors correlation matrix 
+	$\bar{R}$. Then, its distribution $F$ is:
+	\begin{displaymath}
+		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n))\right)
+	\end{displaymath}
+	where $H$ is the cdf of the multivariate t-Student distribution 
+	$t_n(\nu,0,\bar{R})$, and $t_\nu^{-1}$ is the inverse of the univariate 
+	t-Student distribution $t_1(\nu,0,1)$.
+\end{proposition}
+\begin{proof}
+	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
+	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
+	the components of the copula $C_{\nu,\bar{R}}^n$.
+	\begin{displaymath}
+		\begin{array}{rl}
+			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} =                                    \\
+			                   & \text{we use the corollary~\ref{cor:cop3}: }                                   
+			(T_1,\dots,T_n) = (\text{PD}_1^{-1}(U_1),\dots,\text{PD}_n^{-1}(U_n)) \\
+			=                  & \Pr\{ \text{PD}_1^{-1}(U_1) \le t_1 , \dots , \text{PD}_n^{-1}(U_n) \le t_n \} =               \\
+			                   & \text{we use the corollary~\ref{cor:cop2}: }                                   
+			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
+			=                  & \Pr\{ \text{PD}_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , \text{PD}_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
+			=                  & \Pr\{ t_\nu(X_1) \le \text{PD}_1(t_1) , \dots , t_\nu(X_n) \le \text{PD}_n(t_n) \} =           \\
+			=                  & \Pr\{ X_1 \le t_\nu^{-1}(\text{PD}_1(t_1)) , \dots , X_n \le t_\nu^{-1}(\text{PD}_n(t_n)) \} = \\
+			=                  & H(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n)))                           \\
+		\end{array}
+	\end{displaymath}
+\end{proof}
+
+The previous proposition can be stated by any other copula coming from
+a multivariate distribution an applied if this had a known distribution 
+and marginals (eg.\ the Gaussian copula). Also from the previous proposition
+is immediate to derive a method to sample the default times distribution.
+
+\begin{corollary}[Default times simulation (I)]
+	\label{cor:dts1}
+	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
+	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$. 
+	Then we can simulate this distribution using a multivariate t-Student 
+	distribution $X \sim t_n(\nu,\bar{R})$:
+	\begin{displaymath}
+		(T_1, \dots, T_n) = \left(\text{PD}_1^{-1}\left(t_{\nu}(X_1)\right), \dots, \text{PD}_n^{-1}\left(t_{\nu}(X_n)\right)\right)
+	\end{displaymath}
+\end{corollary}
+
+The current formulation is not yet satisfactory because the dimension 
+$n {\times} n$ of the obligors correlation matrix causes that any 
+operation (eg.\ simulate random value, or estimate the parameters) cannot 
+be done in practice when $n$ is large. For this reason we introduce the
+multi-factor formulation.
+
+\subsection{The multi-factor formulation}
+
+To bypass the dimension problem we assuming that exist a reduced number 
+$k$ of industrial sectors and that each obligor belong to a unique sector. 
+Also that default times dependence between obligors only depends on the 
+involved industrials sectors. With these restrictions, if we sort the 
+obligors by sector, the obligors default times correlation matrix, $\bar{R}$, 
+is a $n {\times} n$ correlation block matrix $B_k(\vec{n},\vec{1},M)$. See 
+appendix~\ref{ap:cbm} for more information about covariance block matrices. 
+\begin{displaymath}
+	\bar{R} = B_k(\vec{n},\vec{1},M) = 
+	\left(
+	\begin{array}{ccccccc}
+		1         & \cdots & \rho_{11} &        & \rho_{1k} & \cdots & \rho_{1k} \\
+		\vdots    & \ddots & \vdots    & \cdots & \vdots    &        & \vdots    \\
+		\rho_{11} & \cdots & 1         &        & \rho_{1k} & \cdots & \rho_{1k} \\
+		
+		          & \vdots &           & \ddots &           & \vdots &           \\
+		
+		\rho_{1k} & \cdots & \rho_{1k} &        & 1         & \cdots & \rho_{kk} \\
+		\vdots    &        & \vdots    & \cdots & \vdots    & \ddots & \vdots    \\
+		\rho_{1k} & \cdots & \rho_{1k} &        & \rho_{kk} & \cdots & 1         \\
+	\end{array}
+	\right)
+	\qquad 
+	\begin{array}{l}
+		M = 
+		\left(
+		\begin{array}{ccc}
+		\rho_{11} & \cdots & \rho_{1k} \\
+		\vdots    & \ddots & \vdots    \\
+		\rho_{1k} & \cdots & \rho_{kk}
+		\end{array}
+		\right) \\
+		\\
+		\vec{n} = (n_1,\dots,n_k)
+	\end{array}
+\end{displaymath}
+
+Up to this point the multivariate default times distribution $F$ can 
+be expressed by its marginals $\text{PD}_i$ and a multivariate t-Student 
+distribution, $t_n(\nu,0,\bar{R})$ with a obligors correlation block 
+matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition that follows 
+gives us the key to reformulate the problem as a multi-factor problem.
+
+\begin{proposition}[t-Student distr.\ as a multi-factor model]
+	\label{prop:tmfm}
+	Let a random vector $X=(X_1,\dots,X_n)$ with a multivariate t-Student 
+	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
+	is a correlation block matrix and $n_i$ sizes are high-enough. 
+	Then $X$ can be written as a t-Student multi-factor model as follows:
+	\begin{displaymath}
+		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
+		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
+		\text{, where } \left\{
+		\begin{array}{l}
+			i = 1, \dots, k \quad \text{ and $k$ is the number of blocks}      \\
+			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}       \\
+			V \sim \chi_{\nu}^2, \quad 2 \le \nu \text{ degrees of freedom}    \\
+			Z \sim N(0,R), \text{ and $R$ a $k {\times} k$ correlation matrix} \\
+			w_i \in (0,1), \text{ are the factor loadings }                    \\
+			\epsilon_i^j \sim N(0,1) \text { iid } \forall\ i,j                \\
+			V, Z, \epsilon_i^j \text{ independents } \forall\ i,j              \\
+		\end{array}
+		\right.
+	\end{displaymath}
+	where $w_1,\dots,w_k$ and $R$ satisfy:
+	\begin{displaymath}
+		\begin{array}{l}
+			R_{ii} = 1 \quad i = 1,\dots,k \\
+			M_{ij} = w_i \cdot w_j \cdot R_{ij} \quad \forall\ i,j
+		\end{array}
+	\end{displaymath}
+\end{proposition}
+\begin{proof}
+	We use the t-Student characterization (proposition~\ref{prop:mtschar}),
+	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
+	$Z \sim N(0,\bar{R})$ expressing $Z$ as a Gaussian multi-factor model 
+	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
+	values can be found at proposition~\ref{prop:gmfigs}. The tag line 
+	\enquote{$n_i$ sizes are high-enough} is justified in 
+	proposition~\ref{prop:gmfamgb}.
+\end{proof}
+
+Note that we expressed the multi-factor model in terms of the factor 
+loadings and the factors correlation matrix, instead of the more concise 
+covariance matrix. We do this because the factor loadings have a treatment 
+distinct than factors correlation in the estimation of parameters.
+
+Factor loadings $\vec{w}$, measures the correlation between obligors 
+belonging the same industrial sector $i$, satisfying in the Gaussian case 
+that $\rho_i = w_i^2$. Factor correlations $R$ measures the correlation 
+between factors, and also the correlation between obligors belonging to 
+different sectors, satisfying in the Gaussian case that 
+$\rho_{ij} = w_i \cdot w_j \cdot R_{ij}$.
+
+The t-Student multi-factor model combined with the corollary~\ref{cor:dts1} 
+provides an efficient algorithm to simulate the obligors default times.
+
+\begin{corollary}[Default times simulation (II)]
+	\label{cor:dts2}
+	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
+	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$
+	coming from a t-Student multi-factor model with $\nu$ degrees of freedom, 
+	factor loadings $\vec{w}$, and factor correlations $R$. Then we can simulate 
+	this distribution doing:
+	\begin{enumerate}
+		\item Simule the factors, $\vec{z} \sim N(0,R)$.
+		\item Simule the degrees of freedom, $\nu \sim \chi_{\nu}^2$.
+		\item For each obligor repeat the following steps:
+		\begin{enumerate}
+			\item Simule $\epsilon \sim N(0,1)$.
+			\item Simule the multivariate t-Student component using the obligor's sector:
+			\begin{displaymath}
+				x = \sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)
+			\end{displaymath}
+			\item Obtain the obligor's default time using the obligor's rating:
+			\begin{displaymath}
+				t = \text{PD}_r^{-1}\left(t_{\nu}(x)\right)
+			\end{displaymath}
+		\end{enumerate}
+	\end{enumerate}
+\end{corollary}
 
 
 %==============================================================================
@@ -1011,7 +1055,7 @@ default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 			\dots                                                                                         
 			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{sr} \text{ times}}                        
 			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{sr}-k_{sr} \text{ times}}                  
-			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n                                                        
+			f(x_1,\dots,x_n)\ \ud x_1 \dots \ud x_n                                                        
 		\end{array}
 	\end{displaymath}
 	where $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
@@ -1103,7 +1147,7 @@ to solve the problem recurring to the multi-factor formulation.
 			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
 			\psi(v) \cdot \phi(\vec{z}) \cdot
 			K(k_{11},\dots,k_{sr} \mid v,\vec{z}\ ;\ \nu,\vec{w}, R) 
-			\ud z_1 \dots \ud z_k \ud v
+			\ \ud z_1 \dots \ud z_k \ud v
 		\end{array}
 	\end{displaymath}
 	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
@@ -1430,6 +1474,7 @@ they form a multivariate distribution.
 		\caption{Metropolis-Hastings algorithm example}
 		\label{fig:mhbd}
 	\end{figure}
+	%TODO: listing R script of this example?
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -1686,7 +1731,7 @@ problem and reduces the number of parameters to estimate (we don't need to
 estimate $\nu$ and $v^t$ where $t=1,\dots,T$). 
 The risk analyst must evaluate the appropriateness of the Gaussian model 
 considering the amount of information available, the number of factors, 
-renouncing to capture the tail dependence, etc.
+renouncing to capture the tail dependence, the AIC and BIC values, etc.
 
 
 %==============================================================================
@@ -1694,18 +1739,16 @@ renouncing to capture the tail dependence, etc.
 %==============================================================================
 \chapter{Modeling Portfolio Loss}
 
-\begin{definition}[Portfolio Loss at time $T$]
-	The Portfolio Loss at time $T$ is the cumulated losses in the time 
-	range $[0,T]$ caused by obligors that defaults (fails to make 
-	payments which they are obligated to do).
-	\begin{displaymath}
-		L_T = \left\{
-		\begin{array}{c}
-			\text{sum of portfolio losses in time range $[0,T]$}
-		\end{array}
-		\right\}
-	\end{displaymath}
-\end{definition}
+%------------------------------------------------------------------------------
+% PORTFOLIO LOSS DISTRIBUTION
+%------------------------------------------------------------------------------
+\section{Portfolio Loss Distribution}
+
+We define the key concepts used to model the credit risk emphasizing 
+the temporal dimension because it is a key point in further development. 
+These concepts and the probability of default, are those of the Basel II 
+accord~\cite{basel2:2006}, the de-facto international financial risk 
+regulation framework.
 
 \begin{definition}[Exposure At Default (EAD)]
 	The Exposure At Default of the j-th asset at time $t$ indicates 
@@ -1753,8 +1796,8 @@ renouncing to capture the tail dependence, etc.
 	because they are known in advance. We suppose that the bank 
 	internal models indicate that in this case the LGD is a 
 	$\text{Beta}(5,2)$ distribution regardless of the default time.
-	Figure~\ref{figure:bond} illustrates the defined basic concepts 
-	applied to this asset.
+	Figure~\ref{figure:bond} illustrates the defined concepts applied 
+	to this asset.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Exposure At Default}{
@@ -1802,10 +1845,18 @@ renouncing to capture the tail dependence, etc.
 \end{example}
 \end{comment}
 
-%------------------------------------------------------------------------------
-% PORTFOLIO LOSS DISTRIBUTION
-%------------------------------------------------------------------------------
-\section{Portfolio Loss Distribution}
+\begin{definition}[Portfolio Loss at time $T$]
+	The Portfolio Loss at time $T$ is the cumulated losses in the time 
+	range $[0,T]$ caused by obligors that defaults (fails to make 
+	payments which they are obligated to do).
+	\begin{displaymath}
+		L_T = \left\{
+		\begin{array}{c}
+			\text{sum of portfolio losses in time range $[0,T]$}
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
 
 Let a credit portfolio where the obligors default times $(T_1,\dots,T_n)$ 
 is a multivariate distribution with marginals $\text{PD}_i$ and a 
@@ -2237,20 +2288,16 @@ CCruncher are the following.
 \subsection{Antithetic variates}
 We are estimating $E(g(X))$ using the Monte 
 Carlo method. Let $Y_1$ and $Y_2$ random variables with the same distribution
-$g(X)$. This means that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$.
-Then,
-\begin{displaymath}
-	\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
-	\frac{\text{Var}(Y_1)+\text{Var}(Y_2)+2 \cdot \text{Cov}(Y_1,Y_2)}{4} = 
-	\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}
-\end{displaymath}
+$g(X)$. This means that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
+$\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
+\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}$.
 If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$ 
 simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
 of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
 
-In CCruncher we use the fact that the n-dim multivariate t-Student 
-distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable 
-to $(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
+In CCruncher we use the fact that the multivariate t-Student distribution 
+$X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable to 
+$(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
 distribution is performed doing $g(X)$ where $X$ is a multivariate t-Student
 distribution and $g(x) = \text{PD}^{-1}(t_{\nu}(x))$, thus, $g(X)$ and $g(-X)$ 
 are equiprobables. The only estimator that reduces the variance for this cause 
@@ -2676,9 +2723,6 @@ use this statement to define and simulate the t-Student copula.
 	where $U_i$ are the copula components.
 \end{corollary}
 
-%TODO: posar llibres de referencia
-%TODO: elliptical copulas
-
 %------------------------------------------------------------------------------
 % MULTIVARIATE t-STUDENT DISTRIBUTION
 %------------------------------------------------------------------------------
@@ -2737,7 +2781,7 @@ use this statement to define and simulate the t-Student copula.
 	has the following distribution:
 	\begin{displaymath}
 		C_{\nu,R}^d(u_1, \dots, u_d) = 
-		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
+		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x)\ \ud x
 	\end{displaymath}
 	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
 	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
@@ -2850,8 +2894,8 @@ in~\cite{torrent:2012}.
 			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
 			Z \sim N(0,R), \text{ and $R$ a $k {\times} k$ correlation matrix} \\
 			w_i \in (0,1), \text{ are the factor loadings }                  \\
-			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
-			Z, \epsilon_i^j \text{ independents } \forall i,j                \\
+			\epsilon_i^j \sim N(0,1) \text { iid } \forall\ i,j               \\
+			Z, \epsilon_i^j \text{ independents } \forall\ i,j                \\
 		\end{array}
 		\right.
 	\end{displaymath}
@@ -2864,8 +2908,8 @@ in~\cite{torrent:2012}.
 			j = 1, \dots, n_i \quad \text{ and $n_i$ is i-th block size}     \\
 			Z \sim N(0,M), \text{ and $M$ a $k {\times} k$ covariance matrix} \\
 			m_{ii} \in (0,1), \quad \text{diagonal values of $M$}            \\
-			\epsilon_i^j \sim N(0,1) \text { iid } \forall i,j               \\
-			Z, \epsilon_i^j \text{ independents } \forall i,j                \\
+			\epsilon_i^j \sim N(0,1) \text { iid } \forall\ i,j               \\
+			Z, \epsilon_i^j \text{ independents } \forall\ i,j                \\
 		\end{array}
 		\right.
 	\end{displaymath}
