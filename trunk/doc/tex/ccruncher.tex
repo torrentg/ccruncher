@@ -54,7 +54,7 @@
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 % Bibliography
-\usepackage{hyperref} %added by GTG
+\usepackage[hidelinks]{hyperref} %added by GTG
 \usepackage{csquotes} %added by GTG
 %\usepackage[backend=bibtex]{biblatex} %added by GTG
 %\usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
@@ -207,7 +207,7 @@ statistics (eg.\ mean, quantile). They differ on how to obtain this
 distribution. 
 
 \textbf{Actuarial approach}. This approach considers that the frequency 
-distribution of defaults (Poisson type) is the proper way to interpret the 
+of defaults (Poisson type distributions) is the proper way to interpret the 
 observed defaults. Compounding defaults frequency with the obligors' exposures 
 gives the portfolio loss distribution that can be approximated by Panjer 
 recursion, or by the FFT method. The main representative of this approach is 
@@ -217,12 +217,11 @@ the CreditRisk+ model~\cite{creditrisk+:1997}.
 probabilities of default are the proper way to explain the observed defaults.
 The sum of the obligors' exposures weighted by the probabilities of default 
 gives the portfolio loss distribution. This distribution is approximated 
-using the Monte Carlo method. The main representative of this approach is the 
-CreditMetrics\texttrademark~\cite{cmetrics:1997} model. Other representatives 
-are the KMV model, or the copula approach~\cite{li:2000}. The Basel II 
-accord~\cite{basel2:2006}, the de-facto international financial risk 
-regulation framework, is strongly influenced by this 
-approach~\cite{cespedes:2002}.
+using the Monte Carlo method. The Basel II accord~\cite{basel2:2006}, the 
+de-facto international financial risk regulation framework, is strongly 
+influenced by this approach~\cite{cespedes:2002}. The main representative of 
+this approach is the CreditMetrics\texttrademark~\cite{cmetrics:1997} model. 
+Other representatives are the KMV model, or the copula approach~\cite{li:2000}. 
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
 but differ when the dependence structure between obligors is distinct than
@@ -921,6 +920,7 @@ provides an efficient algorithm to simulate the obligors default times.
 % ESTIMATING PARAMETERS
 %==============================================================================
 \chapter{Estimating Parameters}
+\label{chap:estimation}
 
 We want to estimate the dependence parameters of the multivariate default 
 times model. These are the degrees of freedom $\nu$, the factor loadings 
@@ -1859,11 +1859,9 @@ regulation framework.
 \end{definition}
 
 Let a credit portfolio where the obligors default times $(T_1,\dots,T_n)$ 
-is a multivariate distribution with marginals $\text{PD}_i$ and a 
-t-Student copula with $\nu$ degrees of freedom and a obligors correlation
-matrix $B_k(\vec{n},\vec{1},M)$. Also, each obligor $i$ has $m_i$ assets 
-with known EAD and LGD\@. Then, the portfolio loss distribution at time 
-horizon $t$ is:
+is a multivariate distribution with marginals $\text{PD}_i$. Also, each 
+obligor $i$ has $m_i$ assets with known EAD and LGD\@. Then, the portfolio 
+loss distribution at time horizon $t$ is:
 \begin{displaymath}
 	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{[0,t]}(T_i) \cdot 
 	\left( 
@@ -1873,22 +1871,24 @@ horizon $t$ is:
 
 The portfolio loss distribution $L_t$ does not have a closed-form except 
 for a few cases. One of them is the Large Homogeneous Pool (LHP).
-Vasicek~\cite{vasicek:1987} derived an analytical formula for the loss 
-distribution of an infinitely large portfolio. Later, Schloegl and O'Kane 
-\cite{schloegl:2005} extended it to the t-Student case. The assumptions of 
-these approximations are: 
+Vasicek~\cite{vasicek:1987} derived an analytical formula in the Gaussian 
+case for the loss distribution of an infinitely large portfolio. Later, 
+Schloegl and O'Kane \cite{schloegl:2005} extended it to the t-Student 
+case. The assumptions of these approximations are: 
 \begin{inparaenum}[1)]
 	\item one-factor model, 
 	\item infinitely large portfolio, 
 	\item equals PDs, and
-	\item equals exposures
+	\item equals exposures.
 \end{inparaenum}
-. These simplified models must be managed 
+These simplified models must be managed 
 with care as it can cause problems~\cite{long:2012} when the assumptions 
 are not satisfied.
 
 CCruncher generates samples of the portfolio loss distribution simulating 
 the obligors default times applying the corollary~\ref{cor:dts2}.
+This method allows approximation of the density and the risk measurement 
+using the appropriate statistics.
 
 \begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}
@@ -2007,9 +2007,10 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	One way to check that the result is correct consist in disaggregate the
 	simulated portfolio losses by sector-rating (see section~\ref{ss:ra}) and 
 	estimate the parameters $\nu, \vec{w}$, and $R$ with the first 1000 
-	simulations. If the estimated values match the simulated values means 
+	simulations using the procedure described in chapter~\ref{chap:estimation}. 
+	If the estimated parameters match the parameters of the example means that 
 	we have a consistent simulation and estimation algorithms. Note that in 
-	this case the simulated losses can be equated to the number of defaults
+	this case the simulated losses can be equated to the number of defaults 
 	because every defaulted obligor is computed as a 1\euro\ loss.
 	\begin{figure}[ht]
 		\centering
@@ -2025,23 +2026,19 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 \section{Credit Risk Measurement}
 \label{sec:riskm}
 
-The portfolio credit risk is measured considering some statistics on 
-the portfolio loss distribution. Figure~\ref{fig:lossdistr} illustrates 
-the concepts exposed in this section.
+After $N$ simulations (eg.\ $20000$, $500000$ or more) of the portfolio loss
+we measure the portfolio credit risk computing the corresponding statistics 
+and its standard errors due to sample size. Following we provide the 
+definitions and formulas of the most usual credit risk measures. 
+Figure~\ref{fig:lossdistr} illustrates the concepts exposed in this section.
+Any other user-defined risk measure can be estimated from the simulated 
+sample and its standard error can be obtained using resampling methods.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=12cm]{creditvar}
 	\caption{Portfolio Loss Distribution at time $T$}
 	\label{fig:lossdistr}
 \end{figure}
-
-After $N$ simulations (eg.\ $20000$, $500000$ or more) we have a list
-of values $\{x_1, \ldots, x_N\}$ sampled from the portfolio loss distribution. 
-We measure the portfolio credit risk computing the corresponding statistics 
-and its standard errors due to sample size. Following we provide the 
-definitions and formulas of the most usual credit risk measures. 
-Any other risk measure can be estimated from the simulated sample and its 
-standard error can be obtained using resampling methods.
 
 When the loss values are high (eg.\ $\mathcal{O}(10^7)$) and the number of 
 simulations also are high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
@@ -2077,9 +2074,10 @@ statistic:
 	\end{array}
 	\right.
 \end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
-inverse cumulative distribution function, and $\widehat{\mu}$ and 
-$\widehat{\sigma}$ are the mean and standard deviation estimators.
+where $x_i$ are the simulated portfolio losses, $\alpha$ is the error 
+confidence level, $\phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution 
+function, and $\widehat{\mu}$ and $\widehat{\sigma}$ are the mean and standard 
+deviation estimators.
 
 \subsection{Value At Risk}
 
@@ -2126,13 +2124,13 @@ really bad year?}. It can be approximated using the following statistic:
 		\\
 	\end{array}
 \end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
-inverse cumulative distribution function, $\widehat{q_{\beta}}$ is the 
-quantile estimator, $x_{k:N}$ is the $k$-th element of ascendant-sorted 
-values, $\textrm{stderr}(q_{\beta})$ is the estimation of the standard 
-error using the Maritz-Jarret method described in~\cite{quant:algor},
-$[x]$ is the integer part of $x$, and $B(a,b,x)$ is the regularized 
-incomplete beta function.
+where $x_i$ are the simulated portfolio losses, $x_{k:N}$ is the $k$-th 
+element of ascendant-sorted values, $\alpha$ is the error confidence level, 
+$\phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution function, 
+$\widehat{q_{\beta}}$ is the quantile estimator, $\textrm{stderr}(q_{\beta})$ 
+is the estimation of the standard error using the Maritz-Jarret method 
+described in~\cite{quant:algor}, $[x]$ is the integer part of $x$, and 
+$B(a,b,x)$ is the regularized incomplete beta function.
 
 \subsection{Expected Shortfall}
 
@@ -2164,7 +2162,8 @@ the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
 	\end{array}
 	\right.
 \end{displaymath}
-where $\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
+where $y_i$ are the simulated portfolio losses bigger than $\text{VaR}_{\beta}$, 
+$\alpha$ is the error confidence level, $\phi^{-1}$ is the $N(0,1)$ 
 inverse cumulative distribution function, and $\widehat{\mu}$ and 
 $\widehat{\sigma}$ are the mean and standard deviation estimators.
 Honestly, this estimator is not the best one because it assumes that
@@ -2197,8 +2196,8 @@ function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ used in the default times simulation
 we approximate it using linear splines at a selected set of days $\mathbb{S}$. 
 Let $\{t_1,\dots,t_n\}$ the days where $\text{PD}_r$ has known values (not 
 interpolated), and let $t=P(x)$ the function $t=\text{PD}_r^{-1}(t_{\nu}(x))$ 
-linearly interpolated using the current points of set $\mathbb{S}$. 
-Then, CCruncher determines the set of days $\mathbb{S}$ using the following 
+linearly interpolated using the current points $\mathbb{S}$. 
+CCruncher determines the set of days $\mathbb{S}$ using the following 
 procedure:
 \begin{itemize}
 	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
@@ -2256,7 +2255,7 @@ don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
 operation that must be minimized. To achieve this, CCruncher simule each 
 obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and 
 $\vec{z}$) before moving to the next obligor. This strategy can be considered 
-to implement CCruncher parallelization in CUDA-like architectures.
+to implement parallelization in CUDA-like architectures.
 
 %------------------------------------------------------------------------------
 % VARIANCE REDUCTION
@@ -2275,10 +2274,8 @@ CCruncher generate random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (eg.\ VaR) using the 
 statistics described in section~\ref{sec:riskm} or any other required 
 by the analyst. Anyone of these measures, considered one by one, can be 
-formulated as a Monte Carlo problem and we apply some variance 
-reduction techniques, but not simultaneously. Expected Loss is the only 
-statistic that can be formulated directly as a Monte Carlo formulation 
-using the CCruncher simulated values.
+formulated as a Monte Carlo problem and apply some variance 
+reduction techniques, but not simultaneously. 
 
 For this reason the variance reduction techniques used in CCruncher 
 don't aims the increase of precision, but improve the overall result in 
@@ -2295,17 +2292,17 @@ If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$
 simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
 of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
 
-In CCruncher we use the fact that the multivariate t-Student distribution 
-$X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is equiprobable to 
-$(-x_1,\dots,-x_n)$. The random sampling of the portfolio loss 
-distribution is performed doing $g(X)$ where $X$ is a multivariate t-Student
-distribution and $g(x) = \text{PD}^{-1}(t_{\nu}(x))$, thus, $g(X)$ and $g(-X)$ 
-are equiprobables. The only estimator that reduces the variance for this cause 
-is the Expected Loss. But rather than reducing the variance we are interested 
+In CCruncher the random sampling of the portfolio loss distribution is 
+performed doing $g(X)$ where $X$ is a multivariate t-Student distribution 
+and $g(x) = \text{PD}^{-1}(t_{\nu}(x))$. We use the fact that the multivariate 
+t-Student distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is 
+equiprobable to $(-x_1,\dots,-x_n)$, to apply the the antithetic method. 
+Expected Loss is the unique statistic that benefits from the the variance 
+reduction. But rather than reducing the variance we are interested 
 in the reusing of the simulated random numbers to increase the simulation 
-speed. Please note, when there are stochastic EADs or LGDs and we use the
-antithetic method to sample the default times, we use a distinct random values
-of the EADs and LGDs for each variate.
+speed. Please note that when we use the antithetic method to sample the 
+default times and there are some stochastic EADs or LGDs, we use distinct 
+EADs and LGDs random values for each variate.
 
 \begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
 
@@ -2428,7 +2425,6 @@ in the credit risk valuation. This means that some credit risk measures
 distributions instead of precise values. As example, in the case of the Value 
 at Risk, we consider it as a distribution $\text{VaR}_{99\%}(\nu,\vec{w},R)$ 
 that depends on multivariate random variables $\nu, \vec{w}$ and $R$.
-
 Note that the EL measure is not affected by the uncertainty of dependence 
 parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ 
 is not statistically independent of $Y$.
@@ -2449,8 +2445,20 @@ confidence level (eg.\ 95\%).
 On the other hand we have a procedure (see proposition~\ref{prop:pemh}) that 
 generate random samples from the multivariate parameters distribution.
 These samples can be filtered in order to obtain a sample of independent
-parameters values. We note this sample of the parameters distribution as
-$\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
+parameters values.
+
+We combine both parts to define an algorithm that samples the desired
+credit risk measure. The empirical density given by this sample 
+approximate the risk measure distribution an allows to evaluate the 
+impact of the parameter uncertainty. Caution, this procedure unveils the 
+parameter uncertainty but other uncertainties remains undercovered:
+\begin{inparaenum}[1)]
+	\item copula family, 
+	\item PDs estimation,
+	\item factors/sectors selection,
+	\item EAD and LGD models accuracy,
+	\item and so on.
+\end{inparaenum}
 
 \begin{algorithm}[Credit risk measure distribution]
 	\label{alg:crmd}
@@ -2462,7 +2470,7 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 		\item Obtain an ergodic sample of the parameters applying the
 		Metropolis-Hastings algorithm (see proposition~\ref{prop:pemh}).
 		\item Remove the first iterations (burnin period) and determine
-		the length $B$ at which the autocorrelation is $0$.
+		the minimum common length $B$ at which the autocorrelation is $0$.
 		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ the subsample
 		of the parameters distribution composed by the indexes multiples 
 		of $B$.
@@ -2479,10 +2487,11 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 	We use the same scenario that is described in the example~\ref{ex:test05} 
 	and that correspond to CCruncher input file 
 	\texttt{\$CCRUNCHER/samples/test05.xml}. 
-	We generate 20 observations using the algorithm~\ref{alg:snod}. In the real 
-	world these observations are extracted from the historical records. 
-	In this example we apply the algorithm~\ref{alg:crmd} to estimate the 
-	$\text{ES}_{99\%}$ distribution taking into account the parameters 
+	We generate 20 observations of annual numbers of defaults using the 
+	algorithm~\ref{alg:snod} (in the real world these observations are 
+	extracted from the historical records). 
+	In the following lines we apply the algorithm~\ref{alg:crmd} to estimate 
+	the $\text{ES}_{99\%}$ distribution taking into account the parameters 
 	uncertainty. 
 
 	The first step consists in the generation of a sample of the parameters 
@@ -2513,7 +2522,7 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 		\centering
 		\begin{tabular}{cc|c|c|c|c|}
 			\cline{1-1} \cline{3-6}
-			\multicolumn{1}{|c|}{It} & & $\nu$ & $w_1$ & $w_2$ & $R_{12}$ \\
+			\multicolumn{1}{|c|}{N} & & $\nu$ & $w_1$ & $w_2$ & $R_{12}$ \\
 			\cline{1-1} \cline{3-6}
 			\multicolumn{1}{|c|}{1} & & 12.54 & 0.29 & 0.48 & 0.21 \\
 			\cline{1-1} \cline{3-6}
@@ -2530,13 +2539,13 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 
 	The fourth step is the simulation of the portfolio loss distribution
 	for each simulated parameters. This is a very intensive computation.
-	CCruncher provides a command line incarnation and a macro expansion in
+	CCruncher can be executed as a command line and has a macro expansion in
 	the input file that can help to do this step. If you have a cluster, a 
 	cloud or grid you can consider to execute multiple task in parallel using 
 	a framework like 
 	MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
 	or similar. Listing~\ref{sc:paramu4} displays a very simple batch
-	script to execute sequentally the required simulations.
+	script to execute sequentially the required simulations.
 	\begin{lstlisting}[language=bash, label={sc:paramu4}, 
 	caption={Execution of multiple CCrunchers (bash script)}]
  
@@ -2558,7 +2567,7 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 
 	Finally, the fifth step is the computation of the risk statistic
 	for each portfolio loss distribution. The density of the $\text{ES}_{99\%}$ 
-	can be approximated using the estimated density. Listing~\ref{sc:paramu5}
+	can be approximated using the empirical density. Listing~\ref{sc:paramu5}
 	provides an R script to do this task. 
 	\begin{lstlisting}[language=R, label={sc:paramu5}, 
 	caption={$ES_{99\%}$ distribution (R script)}]
@@ -2585,7 +2594,12 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
  plot(density(values[,1]))
  
 	\end{lstlisting}
-	
+	\begin{figure}[!ht]
+		\centering
+		\includegraphics[width=0.98\textwidth]{paramu-5}
+		\caption{$\text{ES}_{99\%}$ distribution}
+		\label{fig:paramu5}
+	\end{figure}
 	The exact value of the $\text{ES}_{99\%}$ assuming that parameters 
 	are fixed and known is $\approx 385$\ \euro. If we don't assume that 
 	parameters are known and we infer it from 20 observations of the
@@ -2597,12 +2611,6 @@ $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$.
 	density. The key point is to dispose a distribution indicating the 
 	feasible values that can take the risk measure $\text{ES}_{99\%}$.
 	In this example it's not crazy to consider that $\text{ES}_{99\%} < 450$.
-	\begin{figure}[!ht]
-		\centering
-		\includegraphics[width=0.98\textwidth]{paramu-5}
-		\caption{$\text{ES}_{99\%}$ distribution}
-		\label{fig:paramu5}
-	\end{figure}
 \end{example}
 \begin{comment}
 # R script to simulate values
