@@ -85,7 +85,7 @@
 
 %----------------------------------------------------------------------------------------
 
-\input{structure} % Insert the commands.tex file which contains the majority of the structure behind the template
+\input{structure}
 
 \begin{document}
 
@@ -94,17 +94,17 @@
 %==============================================================================
 \begingroup
 \thispagestyle{empty}
-\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}} % Image background
+\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}}
 \vspace*{-1cm}
 \centerline{\includegraphics[angle=0]{./Pictures/logo.png}}
 \centering
 \vspace*{0.5cm}
 \par\normalfont\fontsize{35}{35}\sffamily\selectfont
-Credit Risk Modeling \par % Book title
+Credit Risk Modeling \par
 \par\normalfont\fontsize{25}{25}\sffamily\selectfont
 Using CCruncher\par
 \vspace*{2cm}
-{\huge Gerard Torrent-Gironella}\par % Author name
+{\huge Gerard Torrent-Gironella}\par
 \vspace*{2cm}
 \par\normalfont\fontsize{14}{14}\sffamily\selectfont
 Version \numversion\par
@@ -289,8 +289,7 @@ The disadvantages of CCruncher are:
 	\item mark-to-market not supported.
 \end{inparaenum}
 Despite this, CCruncher is designed to be very fast doing most simulations
-in seconds or minutes if the number of obligors in the portfolio is huge 
-(eg.\ 50000).
+in seconds or minutes if the portfolio is really huge.
 
 The content is organized in three chapters. The first one details the 
 distribution used to simulate the obligors default times. It is easy to 
@@ -412,11 +411,11 @@ but differ as this goes away.
 \label{pdfsv}
 
 In some circumstances the complete transition matrix is not available, 
-and we only have the probabilities of default at T-years for each rating, 
+and we only have the probabilities of default at 1-year for each rating, 
 $p_1,\dots,p_n$. In the absence of more information, we can considerer 
 the following diagonal transition matrix:
 \begin{displaymath}
-	M_T = \left(
+	M_1 = \left(
 	\begin{array}{cccc}
 		1-p_1  & \cdots & 0         & p_1     \\
 		\vdots & \ddots & \vdots    & \vdots  \\
@@ -736,7 +735,7 @@ multivariate t-Student distribution. This result, combined with the t-Student
 multi-factor model, provides an efficient simulation algorithm and allows 
 estimating the parameters.
 
-\begin{proposition}[Multivariate Default Times Distribution]
+\begin{proposition}[Multivariate Default Times distribution]
 	\label{prop:dtd}
 	Let $T=(T_1,\dots,T_n)$ the obligors default times with marginals 
 	$\text{PD}_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$ with $\nu$
@@ -899,13 +898,13 @@ provides an efficient algorithm to simulate the obligors default times.
 	this distribution doing:
 	\begin{enumerate}
 		\item Simule the factors, $\vec{z} \sim N(0,R)$.
-		\item Simule the degrees of freedom, $\nu \sim \chi_{\nu}^2$.
+		\item Simule the degrees of freedom, $\upsilon \sim \chi_{\nu}^2$.
 		\item For each obligor repeat the following steps:
 		\begin{enumerate}
 			\item Simule $\epsilon \sim N(0,1)$.
 			\item Simule the multivariate t-Student component using the obligor's sector:
 			\begin{displaymath}
-				x = \sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)
+				x = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)
 			\end{displaymath}
 			\item Obtain the obligor's default time using the obligor's rating:
 			\begin{displaymath}
@@ -986,11 +985,11 @@ and~\ref{prop:tmfm}).
 		\begin{itemize}
 			\item Simulate $k$ independent $N(0,1)$, $\vec{z}$
 			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}$
-			\item Simulate a $\chi_{\nu}^2$, $v$
+			\item Simulate $\upsilon \sim \chi_{\nu}^2$
 			\item For $i=1,\dots,k$ and $j=1,\dots,m$ repeat the following steps
 			\begin{itemize}
 				\item Simulate $n_{ij}$ independent $N(0,1)$, $\vec{\epsilon}$
-				\item Compute $\vec{x} = \sqrt{\frac{\nu}{v}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
+				\item Compute $\vec{x} = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
 				\item $k_{ij} = \left\{ \text{number of components of $\vec{x}$ less than $t_{\nu}^{-1}(p_j)$} \right\} $
 			\end{itemize}
 		\end{itemize}
@@ -999,7 +998,7 @@ and~\ref{prop:tmfm}).
 
 \begin{example}[]
 	We have two sectors, S1 and S2, and four ratings, A, B, C, D, where 
-	D is the defaulted status. We have collected the observations displayed
+	D is the \emph{defaulted} status. We have collected the observations displayed
 	in table~\ref{table:histdata}.
 	This example has a number of ratings and sectors less than the previous 
 	examples for practical reasons (otherwise data tables do not fit 
@@ -1078,18 +1077,18 @@ to solve the problem recurring to the multi-factor formulation.
 	factors correlations $R$ is:
 	\begin{displaymath}
 		\begin{array}{l}
-			K(k_{11},\dots,k_{sr} \mid v,\vec{z}\ ;\ \nu,\vec{w}, R) = 
-			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid v,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
+			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) = 
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
 			                                                                                                                                 \\
 			= \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
-			H_{ij}(v,z_i)^{k_{ij}} \cdot
-			\left( 1 - H_{ij}(v,z_i) \right)^{n_{ij}-k_{ij}}
+			H_{ij}(\upsilon,z_i)^{k_{ij}} \cdot
+			\left( 1 - H_{ij}(\upsilon,z_i) \right)^{n_{ij}-k_{ij}}
 		\end{array}
 	\end{displaymath}
 	where
 	\begin{displaymath}
-		H_{ij}(v,z_i) = \phi\left(  
-		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
+		H_{ij}(\upsilon,z_i) = \phi\left(  
+		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
 	and $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
@@ -1102,28 +1101,28 @@ to solve the problem recurring to the multi-factor formulation.
 \begin{proof}
 	Let $H_{ij}$ the probability that an obligor belonging to sector $i$
 	with initial rating $j$ defaults the first year conditioned to $z_i$ 
-	and $v$. We use the pdf of the default times distribution (see 
+	and $\upsilon$. We use the pdf of the default times distribution (see 
 	proposition~\ref{prop:dtd}) to assess it value:
 	\begin{displaymath}
-		H_{ij}(v,z_i) = 
-		\Pr\{T_k \le 1 \mid v, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(\text{PD}_j(1)) \mid v, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid v, z_i\}
+		H_{ij}(\upsilon,z_i) = 
+		\Pr\{T_k \le 1 \mid \upsilon, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(\text{PD}_j(1)) \mid \upsilon, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
 	\end{displaymath}
 	where the k-th obligor belongs to sector $i$ and has rating $j$, 
 	$T_k$ is the k-th component of the multivariate default 
 	times, and $X_k$ is the k-th component of the multivariate t-Student. 
 	Now express $X$ in the multi-factor form:
 	\begin{displaymath}
-		H_{ij}(v,z_i) = \Pr \left\{ 
-		\sqrt{\frac{\nu}{v}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon\right)
-		\le t_{\nu}^{-1}(p_j) \mid v, z_i
+		H_{ij}(\upsilon,z_i) = \Pr \left\{ 
+		\sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon\right)
+		\le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i
 		\right\}
 	\end{displaymath}
-	Because $v$ and $z_i$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
+	Because $\upsilon$ and $z_i$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
 	\begin{displaymath}
-		H_{ij}(v,z_i) = \phi\left(  
-		\frac{\sqrt{\frac{v}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
+		H_{ij}(\upsilon,z_i) = \phi\left(  
+		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
 	Once the probability of default by one obligor, the probability of 
@@ -1134,7 +1133,7 @@ to solve the problem recurring to the multi-factor formulation.
 		\binom{n_{ij}}{k_{ij}} \cdot H_{ij}^{k_{ij}} \cdot (1-H_{ij})^{n_{ij}-k_{ij}}
 	\end{displaymath}
 	The product for all sectors and ratings gives the stated formula. 
-	We can do the product because $v$ and $z_i$ are fixed.
+	We can do the product because $\upsilon$ and $z_i$ are fixed.
 \end{proof}
 
 \begin{corollary}[Density of the annual number of defaults (II)]
@@ -1145,9 +1144,9 @@ to solve the problem recurring to the multi-factor formulation.
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) =                \\
 			\\
 			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
-			\psi(v) \cdot \phi(\vec{z}) \cdot
-			K(k_{11},\dots,k_{sr} \mid v,\vec{z}\ ;\ \nu,\vec{w}, R) 
-			\ \ud z_1 \dots \ud z_k \ud v
+			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
+			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) 
+			\ \ud z_1 \dots \ud z_k \ud \upsilon
 		\end{array}
 	\end{displaymath}
 	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
@@ -1216,7 +1215,7 @@ known as the likelihood.
 In our case, we can define an analytic likelihood function using the 
 conditional density of the number of defaults. Thus it implies that 
 the parameters to be inferred are $\nu,\vec{w},R$ and the latent 
-variables $v^1,\vec{z}^1,\dots,v^T,\vec{z}^T$.
+variables $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$.
 
 \begin{definition}[Conditioned likelihood]
 Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
@@ -1225,13 +1224,13 @@ obligors in each sector-rating bucket. We define the conditional
 likelihood of these observations as:
 \begin{displaymath}
 	\begin{array}{l}
-		L(\nu,\vec{w},R \mid v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
-		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid v^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
+		L(\nu,\vec{w},R \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
+		\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid \upsilon^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
 		\displaystyle
 		\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
 		\binom{n_{ij}^t}{k_{ij}^t} \cdot
-		H_{ij}(v^t,z_i^t)^{k_{ij}^t} \cdot
-		\left( 1 - H_{ij}(v^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
+		H_{ij}(\upsilon^t,z_i^t)^{k_{ij}^t} \cdot
+		\left( 1 - H_{ij}(\upsilon^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
 	\end{array}
 \end{displaymath}
 \end{definition}
@@ -1488,15 +1487,15 @@ they form a multivariate distribution.
 	the Bayesian framework and Metropolis-Hastings algorithm 
 	(see algorithm~\ref{alg:bimh}) with the following rules:
 	\begin{itemize}
-		\item parameters $\theta \equiv \{ \nu,\vec{w},R,v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\}$
+		\item parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$
 		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
-		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  v^1,\vec{z}^1,\dots,v^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
+		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
 		\item proposal distributions $q_j(\theta_j \mid \theta_j') \sim N(\theta,\sigma_j)$
 		\item prior distribution $f_{\nu}(\nu) \sim \text{Unif}(2,1000)$
 		\item prior distribution $f_{w}(w_i) \sim \text{Unif}(0,1) \quad i=1,\dots,k$
 		\item prior distribution $f_{r}(r_{ij}\ ;\ R) \sim \Upsilon(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,k, \quad j=(i+1),\dots,k$
 		\item prior distribution $f_z(\vec{z}^t\ ;\ R) \sim N(\vec{0},R) \quad t=1,\dots,T$
-		\item prior distribution $f_v(v^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
+		\item prior distribution $f_\upsilon(\upsilon^t) \sim \chi_{\nu}^2 \quad t=1,\dots,T$
 	\end{itemize}
 	For the prior distributions of $r_{ij}$ we set the likelihood distribution
 	of the latent variables $\vec{z}^t$. The pdf of the distribution 
@@ -1728,7 +1727,7 @@ effect is dramatic when the number of observations is reduced and the amount
 of information available is scarce causing that estimations of $\nu$ and $R$
 have a high uncertainty. The Gaussian case ($\nu = \infty$) avoids this 
 problem and reduces the number of parameters to estimate (we don't need to 
-estimate $\nu$ and $v^t$ where $t=1,\dots,T$). 
+estimate $\nu$ and $\upsilon^t$ where $t=1,\dots,T$). 
 The risk analyst must evaluate the appropriateness of the Gaussian model 
 considering the amount of information available, the number of factors, 
 renouncing to capture the tail dependence, the AIC and BIC values, etc.
@@ -1903,13 +1902,13 @@ using the appropriate statistics.
 			\item $\text{Loss}^t = 0$
 			\item Simulate $k$ independent $N(0,1)$, $\vec{z}$
 			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}$
-			\item Simulate $v \sim \chi_{\nu}^2$
+			\item Simulate $\upsilon \sim \chi_{\nu}^2$
 			\item For $i=1,\dots,n$ repeat the following steps
 			\begin{itemize}
 				\item Set $s = $ obligor factor index
 				\item Set $r = $ obligor rating index
 				\item Simulate $\epsilon \sim N(0,1)$
-				\item Compute $x_i = \sqrt{\frac{\nu}{v}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)$
+				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)$
 				\item Compute $t_i = \text{PD}_r^{-1}\left(t_{\nu}(x_i)\right)$
 				\item if $t_i \le t$ then do for each asset $l$ belonging to i-th obligor
 				\begin{itemize}
@@ -2079,7 +2078,7 @@ confidence level, $\phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution
 function, and $\widehat{\mu}$ and $\widehat{\sigma}$ are the mean and standard 
 deviation estimators.
 
-\subsection{Value At Risk}
+\subsection{Value at Risk}
 
 \begin{definition}[Value at Risk (VaR)]
 	The Value At Risk of a portfolio at time horizon $T$ and 
@@ -2173,7 +2172,7 @@ if the sample size is high enough then the estimated value is good enough.
 %------------------------------------------------------------------------------
 % SIMULATION INTERNALS
 %------------------------------------------------------------------------------
-\section{Simulation internals}
+\section{Simulation Internals}
 
 \textbf{PD functions approximation}. CCruncher allows defining the PDs
 functions using the transition matrix or defining explicitly the values
@@ -2453,8 +2452,8 @@ approximate the risk measure distribution an allows to evaluate the
 impact of the parameter uncertainty. Caution, this procedure unveils the 
 parameter uncertainty but other uncertainties remains undercovered:
 \begin{inparaenum}[1)]
-	\item copula family, 
-	\item PDs estimation,
+	\item copula selection, 
+	\item PDs uncertainty,
 	\item factors/sectors selection,
 	\item EAD and LGD models accuracy,
 	\item and so on.
@@ -2816,7 +2815,7 @@ use this statement to define and simulate the t-Student copula.
 The content presented in this appendix is detailed and extended 
 in~\cite{torrent:2012}.
 
-\begin{definition}[Covariance Block Matrix]
+\begin{definition}[Covariance block matrix]
 	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
 	\begin{itemize}
 		\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
@@ -2831,7 +2830,7 @@ in~\cite{torrent:2012}.
 	\end{itemize}
 \end{definition}
 
-\begin{example}[Correlation Block Matrix]
+\begin{example}[Correlation block matrix]
 	\label{example1}
 	We have $6$ obligors sorted by sector. The first three belong to the 
 	banking sector, the next two belong to the energy sector 
