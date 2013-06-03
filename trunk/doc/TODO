@@ -4,9 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * rename exposure to ead
-  * rename recovery to lgd
-  * interest is useful? (exposure depends on interest)
   * rename dprobs to pds
   * pds can have multiple transtions, and pd into
   * add option 'copy data to clipboard' in graphics
@@ -14,6 +11,8 @@ Current works
   * -D == macro system
   * support exponential distr. as PD?
   * retrieve asset data attributes in Asset instead of ExpatHandlers
+  * update Qwt version
+  * check version using http request
  
 Future works
 -------------------
@@ -21,9 +20,9 @@ Future works
      - move to Qt5
      - input file in binary format
      - multi-currency support or expression evaluator
-       <values t="01/07/2015" exposure="2960.0" recovery="60%" currency="dolars"/>
-       <values t="01/07/2015" exposure="2960.0*$DOLAR_EURO" recovery="60%" />
-     - allow equal number of sims by thread
+       <values t="01/07/2015" ead="2960.0" lgd="40%" currency="dolars"/>
+       <values t="01/07/2015" ead="2960.0*$DOLAR_EURO" lgd="40%" />
+     - force equal number of sims by thread
   * improve documentation
      - add architecture diagrams
   * improve model

@@ -155,24 +155,24 @@ void ccruncher_test::ObligorTest::test1()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='550.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='530.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='510.0' lgd='20%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' ead='590.0' lgd='30%' />\n\
+          <values t='01/07/2001' ead='575.0' lgd='30%' />\n\
+          <values t='01/01/2002' ead='560.0' lgd='30%' />\n\
+          <values t='01/07/2002' ead='545.0' lgd='30%' />\n\
+          <values t='01/01/2003' ead='530.0' lgd='30%' />\n\
+          <values t='01/07/2003' ead='515.0' lgd='30%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -195,8 +195,8 @@ void ccruncher_test::ObligorTest::test1()
   ASSERT(obligor.id == "cif1");
   ASSERT(obligor.irating == 0);
   ASSERT(obligor.ifactor == 1);
-  ASSERT(!Recovery::isvalid(obligor.recovery));
-  ASSERT(!obligor.hasRecovery());
+  ASSERT(!LGD::isvalid(obligor.lgd));
+  ASSERT(!obligor.hasLGD());
 
   ASSERT(obligor.belongsTo(1, 2));
   ASSERT(obligor.belongsTo(2, 1));
@@ -218,22 +218,22 @@ void ccruncher_test::ObligorTest::test2()
     <obligor rating='K' factor='S2'id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='550.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='530.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='510.0' lgd='20%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' ead='590.0' lgd='30%' />\n\
+          <values t='01/07/2001' ead='575.0' lgd='30%' />\n\
+          <values t='01/01/2002' ead='560.0' lgd='30%' />\n\
+          <values t='01/07/2002' ead='545.0' lgd='30%' />\n\
+          <values t='01/01/2003' ead='530.0' lgd='30%' />\n\
+          <values t='01/07/2003' ead='515.0' lgd='30%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -262,22 +262,22 @@ void ccruncher_test::ObligorTest::test3()
     <obligor rating='A' factor='S2' id='cif1'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2000' exposure='550.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2000' ead='550.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='530.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='510.0' lgd='20%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' ead='590.0' lgd='30%' />\n\
+          <values t='01/07/2001' ead='575.0' lgd='30%' />\n\
+          <values t='01/01/2002' ead='560.0' lgd='30%' />\n\
+          <values t='01/07/2002' ead='545.0' lgd='30%' />\n\
+          <values t='01/01/2003' ead='530.0' lgd='30%' />\n\
+          <values t='01/07/2003' ead='515.0' lgd='30%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -301,27 +301,27 @@ void ccruncher_test::ObligorTest::test3()
 //===========================================================================
 void ccruncher_test::ObligorTest::test4()
 {
-  // checks that obligor recovery works
+  // checks that obligor lgd works
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <obligor rating='A' factor='S2' id='cif1' recovery='50%'>\n\
+    <obligor rating='A' factor='S2' id='cif1' lgd='50%'>\n\
       <asset id='op1' date='01/01/1999'>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='550.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='530.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='510.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='550.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='530.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='510.0' lgd='20%' />\n\
         </data>\n\
       </asset>\n\
       <asset id='op2' date='01/01/2000'>\n\
         <data>\n\
-          <values t='01/01/2001' exposure='590.0' recovery='70%' />\n\
-          <values t='01/07/2001' exposure='575.0' recovery='70%' />\n\
-          <values t='01/01/2002' exposure='560.0' recovery='70%' />\n\
-          <values t='01/07/2002' exposure='545.0' recovery='70%' />\n\
-          <values t='01/01/2003' exposure='530.0' recovery='70%' />\n\
-          <values t='01/07/2003' exposure='515.0' recovery='70%' />\n\
+          <values t='01/01/2001' ead='590.0' lgd='30%' />\n\
+          <values t='01/07/2001' ead='575.0' lgd='30%' />\n\
+          <values t='01/01/2002' ead='560.0' lgd='30%' />\n\
+          <values t='01/07/2002' ead='545.0' lgd='30%' />\n\
+          <values t='01/01/2003' ead='530.0' lgd='30%' />\n\
+          <values t='01/07/2003' ead='515.0' lgd='30%' />\n\
         </data>\n\
       </asset>\n\
     </obligor>";
@@ -341,6 +341,6 @@ void ccruncher_test::ObligorTest::test4()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
   // assertions
-  ASSERT_EQUALS_EPSILON(obligor.recovery.getValue(), 0.5, EPSILON);
+  ASSERT_EQUALS_EPSILON(obligor.lgd.getValue(), 0.5, EPSILON);
 }
 

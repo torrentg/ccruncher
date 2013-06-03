@@ -39,7 +39,7 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
   vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   date = NAD;
-  drecovery = Recovery(Recovery::Fixed,NAN);
+  dlgd = LGD(LGD::Fixed,NAN);
   // initial reserve to avoid continuous reallocation
   data.reserve(256);
 }
@@ -83,7 +83,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   // computing Current Net Value
   for(unsigned int i=0; i<data.size(); i++)
   {
-    data[i].exposure.mult(interest.getFactor(data[i].date));
+    data[i].ead.mult(interest.getFactor(data[i].date));
   }
 }
 
@@ -106,12 +106,12 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
       values.date = Date(str);
     }
 
-    str = getAttributeValue(attributes, "exposure");
-    values.exposure = Exposure(str);
+    str = getAttributeValue(attributes, "ead");
+    values.ead = EAD(str);
 
-    str = getAttributeValue(attributes, "recovery", NULL);
-    if (str != NULL) values.recovery = Recovery(str);
-    else values.recovery = drecovery;
+    str = getAttributeValue(attributes, "lgd", NULL);
+    if (str != NULL) values.lgd = LGD(str);
+    else values.lgd = dlgd;
     
     data.push_back(values);
   }
@@ -129,9 +129,9 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   {
     id = getStringAttribute(attributes, "id");
     date = getDateAttribute(attributes, "date");
-    const char *str = getAttributeValue(attributes, "recovery", NULL);
+    const char *str = getAttributeValue(attributes, "lgd", NULL);
     if (str != NULL) {
-      drecovery = Recovery(str);
+      dlgd = LGD(str);
     }
   }
   else if (isEqual(name_,"data"))
@@ -268,13 +268,13 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
 }
 
 //===========================================================================
-// says if use obligor recovery
+// says if use obligor lgd
 //===========================================================================
-bool ccruncher::Asset::hasObligorRecovery() const
+bool ccruncher::Asset::hasObligorLGD() const
 {
   for(unsigned int i=0; i<data.size(); i++)
   {
-    if (!Recovery::isvalid(data[i].recovery))
+    if (!LGD::isvalid(data[i].lgd))
     {
       return true;
     }
@@ -301,7 +301,7 @@ const vector<DateValues>& ccruncher::Asset::getData() const
 //===========================================================================
 const DateValues& ccruncher::Asset::getValues(const Date t) const
 {
-  static const DateValues dvnf(NAD, Exposure(Exposure::Fixed,0.0), Recovery(Recovery::Fixed,1.0));
+  static const DateValues dvnf(NAD, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,1.0));
   
   if (t <= date || data.empty() || data.back().date < t)
   {

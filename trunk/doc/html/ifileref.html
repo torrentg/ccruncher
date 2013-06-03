@@ -856,16 +856,15 @@
       This section shows how to define the portfolio. 
       A portfolio is a set of assets, where assets are grouped by obligor 
       (with a maximum of 65535 assets per obligor).
-      The description of each asset is done by listing the expected exposures 
-      and recovery rates in case of default. 
+      The description of each asset is done by listing the expected Exposures 
+      At Default (EAD) and Loss Given Default rates (LGD). 
     </p>
     <p>
-      Recovery can be defined at 3 different levels: obligor, asset and data value. 
-      When a default occurs at time t, we get the recovery at time <i>t</i> (or the closest 
-      date above). If this recovery is not reported, we get the asset recovery. If 
-      this recovery is not reported, we get the obligor recovery. In the obligor 
-      level, the value is shared by all assets that have not defined a recovery 
-      at default time. 
+      LGD can be defined at 3 different levels: obligor, asset and data value. 
+      When a default occurs at time t, we get the LGD at time <i>t</i> (or the 
+      closest date above). If this value is not reported, we get the asset LGD. 
+      If this value is not reported, we get the obligor LGD. In the obligor 
+      level, the value is shared by all assets that haven't defined a LGD.
     </p>
 
     <h3>Example</h3>
@@ -876,70 +875,70 @@
     &lt;obligor rating="A" factor="S1" id="000001"&gt;
       &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset id="op1" date="01/01/2005" recovery="80%"&gt;
+      &lt;asset id="op1" date="01/01/2005" lgd="20%"&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;belongs-to segmentation="offices" segment="0001"/&gt;
         &lt;data&gt;
-          &lt;values t="01/06/2005" exposure="2000.0" /&gt;
-          &lt;values t="01/06/2006" exposure="1900.0" /&gt;
-          &lt;values t="01/06/2007" exposure="1800.0" /&gt;
-          &lt;values t="01/06/2008" exposure="1700.0" /&gt;
-          &lt;values t="01/06/2009" exposure="1600.0" /&gt;
-          &lt;values t="01/06/2010" exposure="1500.0" /&gt;
-          &lt;values t="01/06/2011" exposure="1400.0" /&gt;
-          &lt;values t="01/06/2012" exposure="1300.0" /&gt;
-          &lt;values t="01/06/2013" exposure="1200.0" /&gt;
-          &lt;values t="01/06/2014" exposure="1100.0" /&gt;
+          &lt;values t="01/06/2005" ead="2000.0" /&gt;
+          &lt;values t="01/06/2006" ead="1900.0" /&gt;
+          &lt;values t="01/06/2007" ead="1800.0" /&gt;
+          &lt;values t="01/06/2008" ead="1700.0" /&gt;
+          &lt;values t="01/06/2009" ead="1600.0" /&gt;
+          &lt;values t="01/06/2010" ead="1500.0" /&gt;
+          &lt;values t="01/06/2011" ead="1400.0" /&gt;
+          &lt;values t="01/06/2012" ead="1300.0" /&gt;
+          &lt;values t="01/06/2013" ead="1200.0" /&gt;
+          &lt;values t="01/06/2014" ead="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
       &lt;asset id="op2" date="01/06/2008"&gt;
         &lt;belongs-to segmentation="offices" segment="0004"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values t="01/07/2009" exposure="4400.0" recovery="75%" /&gt;
-          &lt;values t="01/07/2011" exposure="3920.0" recovery="70%" /&gt;
-          &lt;values t="01/07/2013" exposure="3340.0" recovery="65%" /&gt;
-          &lt;values t="01/07/2015" exposure="2960.0" recovery="60%" /&gt;
-          &lt;values t="01/07/2017" exposure="2480.0" recovery="55%" /&gt;
+          &lt;values t="01/07/2009" ead="4400.0" lgd="25%" /&gt;
+          &lt;values t="01/07/2011" ead="3920.0" lgd="30%" /&gt;
+          &lt;values t="01/07/2013" ead="3340.0" lgd="35%" /&gt;
+          &lt;values t="01/07/2015" ead="2960.0" lgd="40%" /&gt;
+          &lt;values t="01/07/2017" ead="2480.0" lgd="45%" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
-    &lt;obligor rating="B" factor="S2" id="000002" recovery="20%"&gt;
+    &lt;obligor rating="B" factor="S2" id="000002" lgd="20%"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="large"/&gt;
       &lt;asset id="op3" date="01/06/2003"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values t="01/01/2005" exposure="1750.0" /&gt;
-          &lt;values t="01/06/2007" exposure="1600.0" /&gt;
-          &lt;values t="01/01/2009" exposure="1450.0" /&gt;
-          &lt;values t="01/06/2011" exposure="1300.0" /&gt;
-          &lt;values t="01/01/2013" exposure="1150.0" /&gt;
+          &lt;values t="01/01/2005" ead="1750.0" /&gt;
+          &lt;values t="01/06/2007" ead="1600.0" /&gt;
+          &lt;values t="01/01/2009" ead="1450.0" /&gt;
+          &lt;values t="01/06/2011" ead="1300.0" /&gt;
+          &lt;values t="01/01/2013" ead="1150.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
     &lt;obligor rating="CCC" factor="S2" id="000003"&gt;
       &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
       &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)"&gt;
+      &lt;asset id="op4" date="01/01/1999" lgd="beta(2.5,2.7)"&gt;
         &lt;belongs-to segmentation="offices" segment="0003"/&gt;
         &lt;belongs-to segmentation="products" segment="bond"/&gt;
         &lt;data&gt;
-          &lt;values t="01/01/2000" exposure="2400.0" /&gt;
-          &lt;values t="01/01/2001" exposure="2300.0" /&gt;
-          &lt;values t="01/01/2002" exposure="2200.0" /&gt;
-          &lt;values t="01/01/2003" exposure="2100.0" /&gt;
-          &lt;values t="01/01/2004" exposure="lognormal(6.5,1.0)" /&gt;
-          &lt;values t="01/01/2005" exposure="1900.0" /&gt;
-          &lt;values t="01/01/2006" exposure="exponential(1800.0)" /&gt;
-          &lt;values t="01/01/2007" exposure="1700.0" /&gt;
-          &lt;values t="01/01/2008" exposure="uniform(1500.0,1700.0)" /&gt;
-          &lt;values t="01/01/2009" exposure="1500.0" /&gt;
-          &lt;values t="01/01/2010" exposure="gamma(2800.0,0.5)" /&gt;
-          &lt;values t="01/01/2011" exposure="1300.0" /&gt;
-          &lt;values t="01/01/2012" exposure="normal(1200.0,100.0)" /&gt;
-          &lt;values t="01/01/2013" exposure="1100.0" /&gt;
+          &lt;values t="01/01/2000" ead="2400.0" /&gt;
+          &lt;values t="01/01/2001" ead="2300.0" /&gt;
+          &lt;values t="01/01/2002" ead="2200.0" /&gt;
+          &lt;values t="01/01/2003" ead="2100.0" /&gt;
+          &lt;values t="01/01/2004" ead="lognormal(6.5,1.0)" /&gt;
+          &lt;values t="01/01/2005" ead="1900.0" /&gt;
+          &lt;values t="01/01/2006" ead="exponential(1800.0)" /&gt;
+          &lt;values t="01/01/2007" ead="1700.0" /&gt;
+          &lt;values t="01/01/2008" ead="uniform(1500.0,1700.0)" /&gt;
+          &lt;values t="01/01/2009" ead="1500.0" /&gt;
+          &lt;values t="01/01/2010" ead="gamma(2800.0,0.5)" /&gt;
+          &lt;values t="01/01/2011" ead="1300.0" /&gt;
+          &lt;values t="01/01/2012" ead="normal(1200.0,100.0)" /&gt;
+          &lt;values t="01/01/2013" ead="1100.0" /&gt;
         &lt;/data&gt;
       &lt;/asset&gt;
     &lt;/obligor&gt;
@@ -1000,12 +999,12 @@
         <td class="c3">string</td>
       </tr>
       <tr class="a">
-        <td class="c1">recovery</td>
+        <td class="c1">lgd</td>
         <td class="c2">
-          Default recovery used in absence of recovery in the description of assets.
-          Recovery can be a fixed value or a probability distribution. In the first case, 
+          Default LGD used in absence of LGD in the description of assets.
+          LGD can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the following distributions:<br/>
+          In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
@@ -1064,12 +1063,12 @@
         <td class="c3">date</td>
       </tr>
       <tr class="b">
-        <td class="c1">recovery</td>
+        <td class="c1">lgd</td>
         <td class="c2">
-          Default recovery used in absence of recovery in the description of assets.
-          Recovery can be a fixed value or a probability distribution. In the first case, 
+          Default LGD used in absence of LGD in the description of assets.
+          LGD can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the following distributions:<br/>
+          In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
           This attribute is optional.
@@ -1097,12 +1096,12 @@
         <td class="c3">date<br/>int[DMY]</td>
       </tr>
       <tr class="a">
-        <td class="c1">exposure</td>
+        <td class="c1">ead</td>
         <td class="c2">
-          Esposure at date "t". Amount that lender can lose in case of obligor's default 
-          on the indicated date. Exposure can be a fixed value or a probability distribution. 
-          In the first case, set the numeric value that represents the exposure (eg. 50000). 
-          In the second case, you can model recovery using the following distributions:<br/>
+          EAD at date "t". Amount that lender can lose in case of obligor's default 
+          on the indicated date. EAD can be a fixed value or a probability distribution. 
+          In the first case, set the numeric value that represents the EAD (eg. 50000). 
+          In the second case, you can model EAD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Log-normal_distribution">lognormal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Exponential_distribution">exponential(&beta;)</a>, where &beta; &gt; 0 is the <a href="http://en.wikipedia.org/wiki/Exponential_distribution#Alternative_parameterization">survival parameter</a><br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where a &gt; 0 and b &gt; 0<br/>
@@ -1112,14 +1111,14 @@
         <td class="c3">double<br/>string</td>
       </tr>
       <tr class="b">
-        <td class="c1">recovery</td>
+        <td class="c1">lgd</td>
         <td class="c2">
-          The portion of loss that will be recovered in case of default at date "t". 
+          The portion of loss that will not be recovered in case of default at date "t". 
           This value takes into account guarantees, the cost to take legal actions, 
           recovery rate based on historical data, etc.
-          Recovery can be a fixed value or a probability distribution. In the first case, 
+          LGD can be a fixed value or a probability distribution. In the first case, 
           the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
-          In the second case, you can model recovery using the following distributions:<br/>
+          In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
         </td>
@@ -1239,7 +1238,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 18-May-2013
+          Last modified: 03-Jun-2013
         </td>
       </tr></table>
     </div>

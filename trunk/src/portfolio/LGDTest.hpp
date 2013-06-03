@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _ExposureTest_
-#define _ExposureTest_
+#ifndef _LGDTest_
+#define _LGDTest_
 
 //---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class ExposureTest : public TestFixture<ExposureTest>
+class LGDTest : public TestFixture<LGDTest>
 {
 
   private:
@@ -45,7 +45,7 @@ class ExposureTest : public TestFixture<ExposureTest>
 
   public:
 
-    TEST_FIXTURE(ExposureTest)
+    TEST_FIXTURE(LGDTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -53,7 +53,7 @@ class ExposureTest : public TestFixture<ExposureTest>
 
 };
 
-REGISTER_FIXTURE(ExposureTest)
+REGISTER_FIXTURE(LGDTest)
 
 //---------------------------------------------------------------------------
 

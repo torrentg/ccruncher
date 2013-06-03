@@ -1,8 +1,5 @@
-QT -= core
-QT -= gui
-
+QT -= core gui
 TARGET = ccruncher-tests
-
 CONFIG -= qt
 CONFIG += console thread
 
@@ -34,15 +31,15 @@ HEADERS += \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverses.hpp \
     src/kernel/InversesTest.hpp \
-    src/portfolio/Recovery.hpp \
+    src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
-    src/portfolio/Exposure.hpp \
+    src/portfolio/EAD.hpp \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
-    src/portfolio/RecoveryTest.hpp \
+    src/portfolio/LGDTest.hpp \
     src/portfolio/ObligorTest.hpp \
-    src/portfolio/ExposureTest.hpp \
+    src/portfolio/EADTest.hpp \
     src/portfolio/DateValuesTest.hpp \
     src/portfolio/AssetTest.hpp \
     src/utils/PowMatrix.hpp \
@@ -101,15 +98,15 @@ SOURCES += \
     src/kernel/IDataTest.cpp \
     src/kernel/Inverses.cpp \
     src/kernel/InversesTest.cpp \
-    src/portfolio/Recovery.cpp \
+    src/portfolio/LGD.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
-    src/portfolio/Exposure.cpp \
+    src/portfolio/EAD.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
-    src/portfolio/RecoveryTest.cpp \
+    src/portfolio/LGDTest.cpp \
     src/portfolio/ObligorTest.cpp \
-    src/portfolio/ExposureTest.cpp \
+    src/portfolio/EADTest.cpp \
     src/portfolio/DateValuesTest.cpp \
     src/portfolio/AssetTest.cpp \
     src/utils/PowMatrix.cpp \

@@ -176,72 +176,72 @@
   </segmentations>
 
   <portfolio>
-    <obligor rating="A" factor="S1" id="000001" recovery="80%">
+    <obligor rating="A" factor="S1" id="000001">
       <belongs-to segmentation="sectors" segment="S1"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <asset id="op1" date="01/01/2005" recovery="80%">
+      <asset id="op1" date="01/01/2005" lgd="20%">
         <belongs-to segmentation="products" segment="bond"/>
         <belongs-to segmentation="offices" segment="0001"/>
         <data>
-          <values t="01/06/2005" exposure="2000.0" />
-          <values t="01/06/2006" exposure="1900.0" />
-          <values t="01/06/2007" exposure="1800.0" />
-          <values t="01/06/2008" exposure="1700.0" />
-          <values t="01/06/2009" exposure="1600.0" />
-          <values t="01/06/2010" exposure="1500.0" />
-          <values t="01/06/2011" exposure="1400.0" />
-          <values t="01/06/2012" exposure="1300.0" />
-          <values t="01/06/2013" exposure="1200.0" />
-          <values t="01/06/2014" exposure="1100.0" />
+          <values t="01/06/2005" ead="2000.0" />
+          <values t="01/06/2006" ead="1900.0" />
+          <values t="01/06/2007" ead="1800.0" />
+          <values t="01/06/2008" ead="1700.0" />
+          <values t="01/06/2009" ead="1600.0" />
+          <values t="01/06/2010" ead="1500.0" />
+          <values t="01/06/2011" ead="1400.0" />
+          <values t="01/06/2012" ead="1300.0" />
+          <values t="01/06/2013" ead="1200.0" />
+          <values t="01/06/2014" ead="1100.0" />
         </data>
       </asset>
       <asset id="op2" date="01/06/2008">
         <belongs-to segmentation="offices" segment="0004"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values t="01/07/2009" exposure="4400.0" recovery="75%" />
-          <values t="01/07/2011" exposure="3920.0" recovery="70%" />
-          <values t="01/07/2013" exposure="3340.0" recovery="65%" />
-          <values t="01/07/2015" exposure="2960.0" recovery="60%" />
-          <values t="01/07/2017" exposure="2480.0" recovery="55%" />
+          <values t="01/07/2009" ead="4400.0" lgd="25%" />
+          <values t="01/07/2011" ead="3920.0" lgd="30%" />
+          <values t="01/07/2013" ead="3340.0" lgd="35%" />
+          <values t="01/07/2015" ead="2960.0" lgd="40%" />
+          <values t="01/07/2017" ead="2480.0" lgd="45%" />
         </data>
       </asset>
     </obligor>
-    <obligor rating="B" factor="S2" id="000002" recovery="20%">
+    <obligor rating="B" factor="S2" id="000002" lgd="20%">
       <belongs-to segmentation="size" segment="large"/>
       <asset id="op3" date="01/06/2003">
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values t="01/01/2005" exposure="1750.0" />
-          <values t="01/06/2007" exposure="1600.0" />
-          <values t="01/01/2009" exposure="1450.0" />
-          <values t="01/06/2011" exposure="1300.0" />
-          <values t="01/01/2013" exposure="1150.0" />
+          <values t="01/01/2005" ead="1750.0" />
+          <values t="01/06/2007" ead="1600.0" />
+          <values t="01/01/2009" ead="1450.0" />
+          <values t="01/06/2011" ead="1300.0" />
+          <values t="01/01/2013" ead="1150.0" />
         </data>
       </asset>
     </obligor>
     <obligor rating="CCC" factor="S2" id="000003">
       <belongs-to segmentation="sectors" segment="S2"/>
       <belongs-to segmentation="size" segment="medium"/>
-      <asset id="op4" date="01/01/1999" recovery="beta(2.5,2.7)">
+      <asset id="op4" date="01/01/1999" lgd="beta(2.5,2.7)">
         <belongs-to segmentation="offices" segment="0003"/>
         <belongs-to segmentation="products" segment="bond"/>
         <data>
-          <values t="01/01/2000" exposure="2400.0" />
-          <values t="01/01/2001" exposure="2300.0" />
-          <values t="01/01/2002" exposure="2200.0" />
-          <values t="01/01/2003" exposure="2100.0" />
-          <values t="01/01/2004" exposure="lognormal(6.5,1.0)" />
-          <values t="01/01/2005" exposure="1900.0" />
-          <values t="01/01/2006" exposure="exponential(1800.0)" />
-          <values t="01/01/2007" exposure="1700.0" />
-          <values t="01/01/2008" exposure="uniform(1500.0,1700.0)" />
-          <values t="01/01/2009" exposure="1500.0" />
-          <values t="01/01/2010" exposure="gamma(2800.0,0.5)" />
-          <values t="01/01/2011" exposure="1300.0" />
-          <values t="01/01/2012" exposure="normal(1200.0,100.0)" />
-          <values t="01/01/2013" exposure="1100.0" />
+          <values t="01/01/2000" ead="2400.0" />
+          <values t="01/01/2001" ead="2300.0" />
+          <values t="01/01/2002" ead="2200.0" />
+          <values t="01/01/2003" ead="2100.0" />
+          <values t="01/01/2004" ead="lognormal(6.5,1.0)" />
+          <values t="01/01/2005" ead="1900.0" />
+          <values t="01/01/2006" ead="exponential(1800.0)" />
+          <values t="01/01/2007" ead="1700.0" />
+          <values t="01/01/2008" ead="uniform(1500.0,1700.0)" />
+          <values t="01/01/2009" ead="1500.0" />
+          <values t="01/01/2010" ead="gamma(2800.0,0.5)" />
+          <values t="01/01/2011" ead="1300.0" />
+          <values t="01/01/2012" ead="normal(1200.0,100.0)" />
+          <values t="01/01/2013" ead="1100.0" />
         </data>
       </asset>
     </obligor>

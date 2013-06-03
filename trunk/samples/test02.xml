@@ -134,14 +134,14 @@ How to check results?
     <obligor rating="A" factor="S1" id="001">
       <asset id="op1" date="01/01/2005">
         <data>
-          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" ead="1.0" lgd="100%" />
         </data>
       </asset>
     </obligor>
     <obligor rating="A" factor="S1" id="002">
       <asset id="op2" date="01/01/2005">
         <data>
-          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" ead="1.0" lgd="100%" />
         </data>
       </asset>
     </obligor>

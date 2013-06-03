@@ -55,7 +55,7 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
   irating = -1;
   ifactor = -1;
   id = "NON_ID";
-  recovery = Recovery(Recovery::Fixed,NAN);
+  lgd = LGD(LGD::Fixed,NAN);
 }
 
 //===========================================================================
@@ -78,7 +78,7 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   irating = o.irating;
   ifactor = o.ifactor;
   id = o.id;
-  recovery = o.recovery;
+  lgd = o.lgd;
 
   vsegments = o.vsegments;
   ratings = o.ratings;
@@ -165,9 +165,9 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
     ifactor = factors->getIndex(str);
     if (ifactor < 0) throw Exception("factor not found");
 
-    str = getAttributeValue(attributes, "recovery", NULL);
+    str = getAttributeValue(attributes, "lgd", NULL);
     if (str != NULL) {
-      recovery = Recovery(str);
+      lgd = LGD(str);
     }
   }
   else
@@ -186,9 +186,9 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
   }
   else if (isEqual(name_,"obligor")) {
 
-    // check recovery values
-    if (hasRecovery() && !Recovery::isvalid(recovery)) {
-      throw Exception("obligor hasn't recovery, but has asset that assumes obligor recovery");
+    // check lgd values
+    if (hasLGD() && !LGD::isvalid(lgd)) {
+      throw Exception("obligor hasn't lgd, but has asset that assumes obligor lgd");
     }
     
     // shrinking memory
@@ -266,13 +266,13 @@ int ccruncher::Obligor::getSegment(int isegmentation)
 }
 
 //===========================================================================
-// hasRecovery
+// hasLGD
 //===========================================================================
-bool ccruncher::Obligor::hasRecovery() const
+bool ccruncher::Obligor::hasLGD() const
 {
   for(unsigned int i=0; i<vassets.size(); i++)
   {
-    if (vassets[i]->hasObligorRecovery())
+    if (vassets[i]->hasObligorLGD())
     {
       return true;
     }

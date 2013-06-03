@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Exposure_
-#define _Exposure_
+#ifndef _LGD_
+#define _LGD_
 
 //---------------------------------------------------------------------------
 
@@ -38,26 +38,23 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Exposure
+class LGD
 {
 
   public:
 
-    // exposure types
-    enum ExposureType
+    // loss given default types
+    enum Type
     { 
       Fixed=1,
-      Lognormal=2,
-      Exponential=3,
-      Uniform=4,
-      Gamma=5,
-      Normal=6
+      Uniform=2,
+      Beta=3
     };
 
   private:
 
-    // exposure type
-    ExposureType type;
+    // lgd type
+    Type type;
     // depends on type
     double value1;
     // depends on type
@@ -66,32 +63,30 @@ class Exposure
   private:
   
     // set values
-    void init(ExposureType, double, double) throw(Exception);
+    void init(Type, double, double) throw(Exception);
     // check params
-    static bool valid(ExposureType, double, double);
+    static bool valid(Type, double, double);
 
   public:
-  
+
     // default constructor
-    Exposure();
+    LGD();
     // constructor
-    Exposure(const char *) throw(Exception);
+    LGD(const char *) throw(Exception);
     // constructor
-    Exposure(const std::string &) throw(Exception);
+    LGD(const std::string &) throw(Exception);
     // constructor
-    Exposure(ExposureType, double a, double b=NAN) throw(Exception);
+    LGD(Type, double a, double b=NAN) throw(Exception);
     // returns type
-    ExposureType getType() const;
+    Type getType() const;
     // retuns value1
     double getValue1() const;
     // returns value2
     double getValue2() const;
-    // returns exposure
+    // returns lgd (includes Beta)
     double getValue(const gsl_rng *rng=NULL) const;
-    // check if is a Non-A-Exposure value
-    static bool isvalid(const Exposure &);
-    // apply current net value factor
-    void mult(double);
+    // check if is a Non-A-LGD value
+    static bool isvalid(const LGD &);
 
 };
 
@@ -100,14 +95,14 @@ class Exposure
 //===========================================================================
 // default constructor
 //===========================================================================
-inline ccruncher::Exposure::Exposure() : type(Fixed), value1(NAN), value2(NAN)
+inline ccruncher::LGD::LGD() : type(Fixed), value1(NAN), value2(NAN)
 {
 }
 
 //===========================================================================
 // returns type
 //===========================================================================
-inline ccruncher::Exposure::ExposureType ccruncher::Exposure::getType() const
+inline ccruncher::LGD::Type ccruncher::LGD::getType() const
 {
   return type;
 }
@@ -115,32 +110,20 @@ inline ccruncher::Exposure::ExposureType ccruncher::Exposure::getType() const
 //===========================================================================
 // getValue
 //===========================================================================
-inline double ccruncher::Exposure::getValue(const gsl_rng *rng) const
+inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
 {
   switch(type)
   {
     case Fixed:
       return value1;
 
-    case Lognormal:
+    case Beta:
       assert(rng != NULL);
-      return gsl_ran_lognormal(rng, value1, value2);
-
-    case Exponential:
-      assert(rng != NULL);
-      return gsl_ran_exponential(rng, value1);
+      return gsl_ran_beta(rng, value1, value2);
 
     case Uniform:
       assert(rng != NULL);
       return gsl_ran_flat(rng, value1, value2);
-
-    case Gamma:
-      assert(rng != NULL);
-      return gsl_ran_gamma(rng, value1, value2);
-
-    case Normal:
-      assert(rng != NULL);
-      return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
 
     default:
       assert(false);

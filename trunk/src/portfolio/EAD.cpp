@@ -25,24 +25,25 @@
 #include <cstring>
 #include <cstdio>
 #include <cmath>
-#include "portfolio/Exposure.hpp"
+#include "portfolio/EAD.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include <cassert>
 
 using namespace std;
+using namespace ccruncher;
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
+ccruncher::EAD::EAD(const char *cstr) throw(Exception)
 {
-  if (cstr == NULL) throw Exception("null exposure value");
+  if (cstr == NULL) throw Exception("null ead value");
 
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
-  // parsing exposure value
+  // parsing ead value
   if (!isalpha(*cstr))
   {
     value1 = Parser::doubleValue(cstr);
@@ -52,7 +53,7 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "lognormal(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
-      throw Exception("invalid exposure value");
+      throw Exception("invalid ead value");
     }
     init(Lognormal, value1, value2);
   } 
@@ -60,7 +61,7 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "exponential(%lf)", &value1);
     if (rc != 1) {
-      throw Exception("invalid exposure value");
+      throw Exception("invalid ead value");
     }
     init(Exponential, value1, NAN);
   }
@@ -68,7 +69,7 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "uniform(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
-      throw Exception("invalid exposure value");
+      throw Exception("invalid ead value");
     }
     init(Uniform, value1, value2);
   }
@@ -76,7 +77,7 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "gamma(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
-      throw Exception("invalid exposure value");
+      throw Exception("invalid ead value");
     }
     init(Gamma, value1, value2);
   }
@@ -84,28 +85,28 @@ ccruncher::Exposure::Exposure(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "normal(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
-      throw Exception("invalid exposure value");
+      throw Exception("invalid ead value");
     }
     init(Normal, value1, value2);
   }
   else
   {
-    throw Exception("invalid exposure value");
+    throw Exception("invalid ead value");
   }
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exposure::Exposure(const string &str) throw(Exception)
+ccruncher::EAD::EAD(const string &str) throw(Exception)
 {
-  *this = Exposure(str.c_str());
+  *this = EAD(str.c_str());
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Exposure::Exposure(ExposureType t, double a, double b) throw(Exception)
+ccruncher::EAD::EAD(Type t, double a, double b) throw(Exception)
 {
   init(t, a, b);
 }
@@ -113,7 +114,7 @@ ccruncher::Exposure::Exposure(ExposureType t, double a, double b) throw(Exceptio
 //===========================================================================
 // valid
 //===========================================================================
-bool ccruncher::Exposure::valid(ExposureType t, double a, double b)
+bool ccruncher::EAD::valid(Type t, double a, double b)
 {
   switch(t)
   {
@@ -150,11 +151,11 @@ bool ccruncher::Exposure::valid(ExposureType t, double a, double b)
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::Exposure::init(ExposureType t, double a, double b) throw(Exception)
+void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
 {
   if (t != Fixed || !isnan(a))
   {
-    if (!valid(t, a, b)) throw Exception("invalid exposure parameters");
+    if (!valid(t, a, b)) throw Exception("invalid ead parameters");
   }
 
   type = t;
@@ -165,7 +166,7 @@ void ccruncher::Exposure::init(ExposureType t, double a, double b) throw(Excepti
 //===========================================================================
 // retuns value1
 //===========================================================================
-double ccruncher::Exposure::getValue1() const
+double ccruncher::EAD::getValue1() const
 {
   return value1;
 }
@@ -173,23 +174,23 @@ double ccruncher::Exposure::getValue1() const
 //===========================================================================
 // returns value2
 //===========================================================================
-double ccruncher::Exposure::getValue2() const
+double ccruncher::EAD::getValue2() const
 {
   return value2;
 }
 
 //===========================================================================
-// check if is a Non-A-Exposure value
+// check if is a Non-A-EAD value
 //===========================================================================
-bool ccruncher::Exposure::isvalid(const Exposure &x)
+bool ccruncher::EAD::isvalid(const EAD &x)
 {
   return valid(x.type, x.value1, x.value2);
 }
 
 //===========================================================================
-// apply current net value factor to exposure
+// apply current net value factor to ead
 //===========================================================================
-void ccruncher::Exposure::mult(double factor)
+void ccruncher::EAD::mult(double factor)
 {
   switch(type)
   {

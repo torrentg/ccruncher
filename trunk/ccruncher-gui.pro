@@ -35,10 +35,10 @@ HEADERS += \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverses.hpp \
-    src/portfolio/Recovery.hpp \
+    src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
-    src/portfolio/Exposure.hpp \
+    src/portfolio/EAD.hpp \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
     src/utils/PowMatrix.hpp \
@@ -88,10 +88,10 @@ SOURCES += \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
     src/kernel/Inverses.cpp \
-    src/portfolio/Recovery.cpp \
+    src/portfolio/LGD.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
-    src/portfolio/Exposure.cpp \
+    src/portfolio/EAD.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
     src/utils/PowMatrix.cpp \

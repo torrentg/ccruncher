@@ -182,8 +182,8 @@
 															<xsd:element name="values" minOccurs="1" maxOccurs="unbounded">
 																<xsd:complexType>
 																	<xsd:attribute name="t" type="date_interval" use="required"/>
-																	<xsd:attribute name="exposure" type="xsd:string" use="required"/>
-																	<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+																	<xsd:attribute name="ead" type="xsd:string" use="required"/>
+																	<xsd:attribute name="lgd" type="xsd:string" use="optional"/>
 																</xsd:complexType>
 															</xsd:element>
 														</xsd:sequence>
@@ -192,14 +192,14 @@
 											</xsd:sequence>
 											<xsd:attribute name="id" type="xsd:string" use="required"/>
 											<xsd:attribute name="date" type="date" use="required"/>
-											<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+											<xsd:attribute name="lgd" type="xsd:string" use="optional"/>
 										</xsd:complexType>
 									</xsd:element>
 								</xsd:sequence>
 								<xsd:attribute name="id" type="xsd:string" use="required"/>
 								<xsd:attribute name="rating" type="xsd:string" use="required"/>
 								<xsd:attribute name="factor" type="xsd:string" use="required"/>
-								<xsd:attribute name="recovery" type="xsd:string" use="optional"/>
+								<xsd:attribute name="lgd" type="xsd:string" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>

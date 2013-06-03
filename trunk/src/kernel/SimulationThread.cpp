@@ -361,7 +361,7 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
 {
   assert(ptr_losses != NULL);
 
-  double obligor_recovery = NAN;
+  double obligor_lgd = NAN;
   char *p = (char*)(obligor.ref.assets);
 
   for(unsigned short i=0; i<obligor.numassets; i++)
@@ -373,21 +373,21 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
     {
       const DateValues &values = *(lower_bound(asset->begin, asset->end, dtime));
       assert(dtime <= (asset->end-1)->date);
-      double exposure = values.exposure.getValue(rng);
-      double recovery = values.recovery.getValue(rng);
+      double ead = values.ead.getValue(rng);
+      double lgd = values.lgd.getValue(rng);
 
-      // non-recovery means that is inherited from obligor
-      if (isnan(recovery))
+      // non-lgd means that is inherited from obligor
+      if (isnan(lgd))
       {
-        if (isnan(obligor_recovery))
+        if (isnan(obligor_lgd))
         {
-          obligor_recovery = obligor.recovery.getValue(rng);
+          obligor_lgd = obligor.lgd.getValue(rng);
         }
-        recovery = obligor_recovery;
+        lgd = obligor_lgd;
       }
 
       // compute asset loss
-      double loss = exposure * (1.0 - recovery);
+      double loss = ead * lgd;
 
       // aggregate asset loss in the correspondent segment
       unsigned short *segments = &(asset->segments);

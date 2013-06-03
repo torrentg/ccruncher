@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _RecoveryTest_
-#define _RecoveryTest_
+#ifndef _EADTest_
+#define _EADTest_
 
 //---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace ccruncher_test {
 
 //---------------------------------------------------------------------------
 
-class RecoveryTest : public TestFixture<RecoveryTest>
+class EADTest : public TestFixture<EADTest>
 {
 
   private:
@@ -45,7 +45,7 @@ class RecoveryTest : public TestFixture<RecoveryTest>
 
   public:
 
-    TEST_FIXTURE(RecoveryTest)
+    TEST_FIXTURE(EADTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -53,7 +53,7 @@ class RecoveryTest : public TestFixture<RecoveryTest>
 
 };
 
-REGISTER_FIXTURE(RecoveryTest)
+REGISTER_FIXTURE(EADTest)
 
 //---------------------------------------------------------------------------
 
