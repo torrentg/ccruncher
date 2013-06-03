@@ -24,24 +24,25 @@
 #include <cctype>
 #include <cstring>
 #include <cstdio>
-#include "portfolio/Recovery.hpp"
+#include "portfolio/LGD.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include <cassert>
 
 using namespace std;
+using namespace ccruncher;
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
+ccruncher::LGD::LGD(const char *cstr) throw(Exception)
 {
-  if (cstr == NULL) throw Exception("null recovery value");
+  if (cstr == NULL) throw Exception("null lgd value");
   
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
-  // parsing recovery value  
+  // parsing lgd value
   if (!isalpha(*cstr))
   {
     value1 = Parser::doubleValue(cstr);
@@ -52,7 +53,7 @@ ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
     int rc = sscanf(cstr, "beta(%lf,%lf)", &value1, &value2);
     if (rc != 2) 
     {
-      throw Exception("invalid recovery value");
+      throw Exception("invalid lgd value");
     }
     init(Beta, value1, value2);
   }
@@ -60,28 +61,28 @@ ccruncher::Recovery::Recovery(const char *cstr) throw(Exception)
   {
     int rc = sscanf(cstr, "uniform(%lf,%lf)", &value1, &value2);
     if (rc != 2) {
-      throw Exception("invalid recovery value");
+      throw Exception("invalid lgd value");
     }
     init(Uniform, value1, value2);
   }
   else
   {
-    throw Exception("invalid recovery value");
+    throw Exception("invalid lgd value");
   }
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Recovery::Recovery(const string &str) throw(Exception)
+ccruncher::LGD::LGD(const string &str) throw(Exception)
 {
-  *this = Recovery(str.c_str());
+  *this = LGD(str.c_str());
 }
 
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::Recovery::Recovery(RecoveryType t, double a, double b) throw(Exception)
+ccruncher::LGD::LGD(Type t, double a, double b) throw(Exception)
 {
   init(t, a, b);
 }
@@ -89,7 +90,7 @@ ccruncher::Recovery::Recovery(RecoveryType t, double a, double b) throw(Exceptio
 //===========================================================================
 // valid
 //===========================================================================
-bool ccruncher::Recovery::valid(RecoveryType t, double a, double b)
+bool ccruncher::LGD::valid(Type t, double a, double b)
 {
   switch(t)
   {
@@ -114,11 +115,11 @@ bool ccruncher::Recovery::valid(RecoveryType t, double a, double b)
 //===========================================================================
 // init
 //===========================================================================
-void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Exception)
+void ccruncher::LGD::init(Type t, double a, double b) throw(Exception)
 {
   if (t != Fixed || !isnan(a))
   {
-    if (!valid(t, a, b)) throw Exception("invalid recovery parameters");
+    if (!valid(t, a, b)) throw Exception("invalid lgd parameters");
   }
   
   type = t;
@@ -129,7 +130,7 @@ void ccruncher::Recovery::init(RecoveryType t, double a, double b) throw(Excepti
 //===========================================================================
 // retuns value1
 //===========================================================================
-double ccruncher::Recovery::getValue1() const
+double ccruncher::LGD::getValue1() const
 {
   return value1;
 }
@@ -137,15 +138,15 @@ double ccruncher::Recovery::getValue1() const
 //===========================================================================
 // returns value2
 //===========================================================================
-double ccruncher::Recovery::getValue2() const
+double ccruncher::LGD::getValue2() const
 {
   return value2;
 }
 
 //===========================================================================
-// check if is a Non-A-Recovery value
+// check if is a Non-A-LGD value
 //===========================================================================
-bool ccruncher::Recovery::isvalid(const Recovery &x)
+bool ccruncher::LGD::isvalid(const LGD &x)
 {
   return valid(x.type, x.value1, x.value2);
 }

@@ -91,17 +91,17 @@
     <obligor rating="A" factor="S1" id="0">
       <asset id="0-1" date="01/01/2005">
         <data>
-          <values t="01/01/2006" exposure="1.0" recovery="0%" />
+          <values t="01/01/2006" ead="1.0" lgd="100%" />
         </data>
       </asset>
       <asset id="0-2" date="01/01/2005">
         <data>
-          <values t="01/01/2006" exposure="2.0" recovery="0%" />
+          <values t="01/01/2006" ead="2.0" lgd="100%" />
         </data>
       </asset>
       <asset id="0-3" date="01/01/2005">
         <data>
-          <values t="01/01/2006" exposure="3.0" recovery="0%" />
+          <values t="01/01/2006" ead="3.0" lgd="100%" />
         </data>
       </asset>
     </obligor>
@@ -111,19 +111,19 @@
       <asset id="1-1" date="01/01/2005">
         <belongs-to segmentation="assets" segment="1"/>
         <data>
-          <values t="01/01/2006" exposure="10.0" recovery="0%" />
+          <values t="01/01/2006" ead="10.0" lgd="100%" />
         </data>
       </asset>
       <asset id="1-2" date="01/01/2005">
         <belongs-to segmentation="assets" segment="2"/>
         <data>
-          <values t="01/01/2006" exposure="20.0" recovery="0%" />
+          <values t="01/01/2006" ead="20.0" lgd="100%" />
         </data>
       </asset>
       <asset id="1-3" date="01/01/2005">
         <belongs-to segmentation="assets" segment="3"/>
         <data>
-          <values t="01/01/2006" exposure="30.0" recovery="0%" />
+          <values t="01/01/2006" ead="30.0" lgd="100%" />
         </data>
       </asset>
     </obligor>
@@ -133,19 +133,19 @@
       <asset id="2-1" date="01/01/2005">
         <belongs-to segmentation="assets" segment="1"/>
         <data>
-          <values t="01/01/2006" exposure="100.0" recovery="0%" />
+          <values t="01/01/2006" ead="100.0" lgd="100%" />
         </data>
       </asset>
       <asset id="2-2" date="01/01/2005">
         <belongs-to segmentation="assets" segment="2"/>
         <data>
-          <values t="01/01/2006" exposure="200.0" recovery="0%" />
+          <values t="01/01/2006" ead="200.0" lgd="100%" />
         </data>
       </asset>
       <asset id="2-3" date="01/01/2005">
         <belongs-to segmentation="assets" segment="3"/>
         <data>
-          <values t="01/01/2006" exposure="300.0" recovery="0%" />
+          <values t="01/01/2006" ead="300.0" lgd="100%" />
         </data>
       </asset>
     </obligor>

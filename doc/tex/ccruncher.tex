@@ -81,7 +81,7 @@
 \usepackage{listings}
 
 \def\numversion{2.3}
-\def\svnversion{R1039}
+\def\svnversion{R1058}
 
 %----------------------------------------------------------------------------------------
 
@@ -182,7 +182,7 @@ licenses. CCruncher is a mature and active project in which you can participate
 sending your suggestions and contributions to 
 \href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
 Because it is an evolving project, it is recommended to mention the version
-identifier when you refer the project name (eg. CCruncher-\numversion).
+identifier when you refer the project name (eg.\ CCruncher-\numversion).
 
 This document provides a comprehensive view of credit risk modeling 
 under the copula approach (t-Student case), emphasizing the practical aspects. 
@@ -280,11 +280,11 @@ The advantages of CCruncher are:
 The disadvantages of CCruncher are: 
 \begin{inparaenum}[1)]
 	\item computationally intensive,
-	\item slow (requires a big amount of simulations),
+	\item requires a big amount of simulations,
 	\item lack of precision due to Monte Carlo barrier $1/\sqrt{N}$,
 	\item obligors can't belong to a weighted sum of factors,
 	\item correlations are constants over time,
-	\item dependence only rely on sector,
+	\item dependence only rely on sectors,
 	\item only a copula type is supported, and
 	\item mark-to-market not supported.
 \end{inparaenum}
@@ -1872,7 +1872,7 @@ The portfolio loss distribution $L_t$ does not have a closed-form except
 for a few cases. One of them is the Large Homogeneous Pool (LHP).
 Vasicek~\cite{vasicek:1987} derived an analytical formula in the Gaussian 
 case for the loss distribution of an infinitely large portfolio. Later, 
-Schloegl and O'Kane \cite{schloegl:2005} extended it to the t-Student 
+Schloegl and O'Kane~\cite{schloegl:2005} extended it to the t-Student 
 case. The assumptions of these approximations are: 
 \begin{inparaenum}[1)]
 	\item one-factor model, 

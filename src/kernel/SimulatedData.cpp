@@ -31,12 +31,12 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
   if (obligor != NULL) {
     irating = static_cast<unsigned char>(obligor->irating);
     ifactor = static_cast<unsigned char>(obligor->ifactor);
-    recovery = obligor->recovery;
+    lgd = obligor->lgd;
   }
   else {
     irating = 0;
     ifactor = 0;
-    //recovery = Recovery();
+    //lgd = LGD();
   }
   numassets = 0;
   ref.obligor = obligor;

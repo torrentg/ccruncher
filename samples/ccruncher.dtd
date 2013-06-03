@@ -197,7 +197,7 @@
     id CDATA #REQUIRED
     rating IDREF #REQUIRED
     factor IDREF #REQUIRED
-    recovery CDATA #IMPLIED
+    lgd CDATA #IMPLIED
 >
 
 <!ELEMENT asset (
@@ -206,7 +206,7 @@
 <!ATTLIST asset
     id CDATA #REQUIRED
     date CDATA #REQUIRED
-    recovery CDATA #IMPLIED
+    lgd CDATA #IMPLIED
 >
 
 <!ELEMENT belongs-to
@@ -226,7 +226,7 @@
 >
 <!ATTLIST values
     t CDATA #REQUIRED
-    exposure CDATA #REQUIRED
-    recovery CDATA #IMPLIED
+    ead CDATA #REQUIRED
+    lgd CDATA #IMPLIED
 >
 

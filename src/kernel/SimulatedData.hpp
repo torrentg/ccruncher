@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include <vector>
 #include "portfolio/Obligor.hpp"
-#include "portfolio/Recovery.hpp"
+#include "portfolio/LGD.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 
@@ -67,8 +67,8 @@ class SimulatedObligor
     unsigned char ifactor;
     // obligor's rating index
     unsigned char irating;
-    // obligor's recovery
-    Recovery recovery;
+    // obligor's lgd
+    LGD lgd;
     // number of assets
     unsigned short numassets;
     // pointer

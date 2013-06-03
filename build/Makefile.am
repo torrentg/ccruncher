@@ -42,8 +42,8 @@ ccruncher_cmd_SOURCES = \
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
-    ../src/portfolio/Recovery.cpp\
-    ../src/portfolio/Exposure.cpp\
+    ../src/portfolio/LGD.cpp\
+    ../src/portfolio/EAD.cpp\
     ../src/utils/PowMatrix.cpp\
     ../src/utils/Exception.cpp\
     ../src/utils/Logger.cpp\
@@ -78,8 +78,8 @@ ccruncher_cmd_SOURCES = \
     ../src/portfolio/Obligor.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
-    ../src/portfolio/Recovery.hpp\
-    ../src/portfolio/Exposure.hpp\
+    ../src/portfolio/LGD.hpp\
+    ../src/portfolio/EAD.hpp\
     ../src/utils/PowMatrix.hpp\
     ../src/utils/Exception.hpp\
     ../src/utils/Logger.hpp\
@@ -118,8 +118,8 @@ ccruncher_tests_SOURCES = \
     ../src/utils/PowMatrixTest.cpp\
     ../src/portfolio/AssetTest.cpp\
     ../src/portfolio/DateValuesTest.cpp\
-    ../src/portfolio/RecoveryTest.cpp\
-    ../src/portfolio/ExposureTest.cpp\
+    ../src/portfolio/LGDTest.cpp\
+    ../src/portfolio/EADTest.cpp\
     ../src/portfolio/ObligorTest.cpp\
     ../src/params/InterestTest.cpp\
     ../src/params/SegmentationTest.cpp\
@@ -152,8 +152,8 @@ ccruncher_tests_SOURCES = \
     ../src/portfolio/Obligor.cpp\
     ../src/portfolio/Asset.cpp\
     ../src/portfolio/DateValues.cpp\
-    ../src/portfolio/Recovery.cpp\
-    ../src/portfolio/Exposure.cpp\
+    ../src/portfolio/LGD.cpp\
+    ../src/portfolio/EAD.cpp\
     ../src/params/Factors.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Params.cpp\
@@ -183,8 +183,8 @@ ccruncher_tests_SOURCES = \
     ../src/utils/PowMatrixTest.hpp\
     ../src/portfolio/AssetTest.hpp\
     ../src/portfolio/DateValuesTest.hpp\
-    ../src/portfolio/RecoveryTest.hpp\
-    ../src/portfolio/ExposureTest.hpp\
+    ../src/portfolio/LGDTest.hpp\
+    ../src/portfolio/EADTest.hpp\
     ../src/portfolio/ObligorTest.hpp\
     ../src/params/CorrelationsTest.hpp\
     ../src/params/InterestTest.hpp\
@@ -215,8 +215,8 @@ ccruncher_tests_SOURCES = \
     ../src/utils/PowMatrix.hpp\
     ../src/portfolio/Asset.hpp\
     ../src/portfolio/DateValues.hpp\
-    ../src/portfolio/Recovery.hpp\
-    ../src/portfolio/Exposure.hpp\
+    ../src/portfolio/LGD.hpp\
+    ../src/portfolio/EAD.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
     ../src/params/Factors.hpp\

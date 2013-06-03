@@ -28,7 +28,7 @@
 #include "utils/config.h"
 #include <vector>
 #include "portfolio/Asset.hpp"
-#include "portfolio/Recovery.hpp"
+#include "portfolio/LGD.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -85,8 +85,8 @@ class Obligor : public ExpatHandlers
     int ifactor;
     // obligor identifier
     std::string id;
-    // default recovery
-    Recovery recovery;
+    // default lgd
+    LGD lgd;
 
   public:
   
@@ -108,8 +108,8 @@ class Obligor : public ExpatHandlers
     bool belongsTo(int isegmentation, int isegment);
     // given a segmentation returns the segment
     int getSegment(int isegmentation);
-    // says if this obligor has an asset that use obligor's recovery
-    bool hasRecovery() const;
+    // says if this obligor has an asset that use obligor's lgd
+    bool hasLGD() const;
 
 };
 

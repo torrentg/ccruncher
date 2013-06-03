@@ -33,8 +33,8 @@ using namespace ccruncher;
 //===========================================================================
 void ccruncher_test::DateValuesTest::test1()
 {
-  DateValues val1(Date(10,10,2001), Exposure(Exposure::Fixed,+1.0), Recovery(Recovery::Fixed,0.50));
-  DateValues val2(Date(01,01,2006), Exposure(Exposure::Fixed,+0.5), Recovery(Recovery::Fixed,0.25));
+  DateValues val1(Date(10,10,2001), EAD(EAD::Fixed,+1.0), LGD(LGD::Fixed,0.50));
+  DateValues val2(Date(01,01,2006), EAD(EAD::Fixed,+0.5), LGD(LGD::Fixed,0.75));
 
   // checking that sorts by date
   ASSERT(val1 < val2);

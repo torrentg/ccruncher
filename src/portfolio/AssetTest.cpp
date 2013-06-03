@@ -107,13 +107,13 @@ void ccruncher_test::AssetTest::test1()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 
@@ -128,7 +128,7 @@ void ccruncher_test::AssetTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   // doing assertions
-  ASSERT(!asset.hasObligorRecovery());
+  ASSERT(!asset.hasObligorLGD());
   
   ASSERT(asset.belongsTo(0, 0)); // portfolio-rest
   ASSERT(asset.belongsTo(3, 1)); // product-bond
@@ -138,47 +138,47 @@ void ccruncher_test::AssetTest::test1()
   asset.setSegment(4, 10);
   ASSERT(asset.getSegment(4) == 10);
 
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).lgd.getValue(), EPSILON);
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1999")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1999")).lgd.getValue(), EPSILON);
   
-  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("31/12/1999")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("31/12/1999")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("31/12/1999")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("31/12/1999")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2000")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2000")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("02/01/2000")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("02/01/2000")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("02/01/2000")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("02/01/2000")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("01/07/2000")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2000")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("01/07/2000")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2000")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(550.0, asset.getValues(Date("01/01/2001")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2001")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(550.0, asset.getValues(Date("01/01/2001")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2001")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(540.0, asset.getValues(Date("01/07/2001")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2001")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(540.0, asset.getValues(Date("01/07/2001")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2001")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(530.0, asset.getValues(Date("01/01/2002")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2002")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(530.0, asset.getValues(Date("01/01/2002")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2002")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(520.0, asset.getValues(Date("01/07/2002")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2002")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(520.0, asset.getValues(Date("01/07/2002")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2002")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2003")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2003")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2003")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2003")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2010")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/01/2010")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2010")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2010")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/07/2020")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("01/07/2020")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/07/2020")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2020")).lgd.getValue(), EPSILON);
 
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/07/2021")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/07/2021")).recovery.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/07/2021")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/07/2021")).lgd.getValue(), EPSILON);
 }
 
 //===========================================================================
@@ -191,13 +191,13 @@ void ccruncher_test::AssetTest::test2()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values t='01/01/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
+          <values t='01/01/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 
@@ -222,13 +222,13 @@ void ccruncher_test::AssetTest::test3()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0001'/>\n\
         <data>\n\
-          <values t='-5Y' exposure='570.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='-5Y' ead='570.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 
@@ -251,10 +251,10 @@ void ccruncher_test::AssetTest::test4()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <asset id='op1' date='01/01/2007'>\n\
         <data>\n\
-           <values t='15/01/2007' exposure='+1000.0' />\n\
-           <values t='15/01/2008' exposure='+1000.0' recovery='80%' />\n\
-           <values t='15/01/2009' exposure='+1000.0' />\n\
-           <values t='15/01/2010' exposure='+1000.0' recovery='80%' />\n\
+           <values t='15/01/2007' ead='+1000.0' />\n\
+           <values t='15/01/2008' ead='+1000.0' lgd='20%' />\n\
+           <values t='15/01/2009' ead='+1000.0' />\n\
+           <values t='15/01/2010' ead='+1000.0' lgd='20%' />\n\
            </data>\n\
       </asset>";
 
@@ -275,13 +275,13 @@ void ccruncher_test::AssetTest::test4()
   asset.prepare(time0, timeT, interest);
   
   // doing assertions
-  ASSERT(asset.hasObligorRecovery());
-  ASSERT(!Recovery::isvalid(asset.getValues(Date("10/01/2007")).recovery));
-  ASSERT(!Recovery::isvalid(asset.getValues(Date("15/01/2007")).recovery));
-  ASSERT(Recovery::isvalid(asset.getValues(Date("10/01/2008")).recovery));
-  ASSERT(!Recovery::isvalid(asset.getValues(Date("10/01/2009")).recovery));
-  ASSERT(!Recovery::isvalid(asset.getValues(Date("15/01/2009")).recovery));
-  ASSERT(Recovery::isvalid(asset.getValues(Date("10/01/2010")).recovery));
+  ASSERT(asset.hasObligorLGD());
+  ASSERT(!LGD::isvalid(asset.getValues(Date("10/01/2007")).lgd));
+  ASSERT(!LGD::isvalid(asset.getValues(Date("15/01/2007")).lgd));
+  ASSERT(LGD::isvalid(asset.getValues(Date("10/01/2008")).lgd));
+  ASSERT(!LGD::isvalid(asset.getValues(Date("10/01/2009")).lgd));
+  ASSERT(!LGD::isvalid(asset.getValues(Date("15/01/2009")).lgd));
+  ASSERT(LGD::isvalid(asset.getValues(Date("10/01/2010")).lgd));
 }
 
 //===========================================================================
@@ -290,14 +290,14 @@ void ccruncher_test::AssetTest::test4()
 void ccruncher_test::AssetTest::test5()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset id='op1' date='10/01/2005' recovery='50%'>\n\
+      <asset id='op1' date='10/01/2005' lgd='50%'>\n\
         <data>\n\
-           <values t='15/01/2005' exposure='5000.0' recovery='30%' />\n\
-           <values t='15/01/2006' exposure='5000.0' recovery='40%' />\n\
-           <values t='15/01/2007' exposure='4000.0' recovery='50%' />\n\
-           <values t='15/01/2008' exposure='3000.0' recovery='60%' />\n\
-           <values t='15/01/2009' exposure='2000.0' recovery='70%' />\n\
-           <values t='15/01/2010' exposure='1000.0' recovery='80%' />\n\
+           <values t='15/01/2005' ead='5000.0' lgd='70%' />\n\
+           <values t='15/01/2006' ead='5000.0' lgd='60%' />\n\
+           <values t='15/01/2007' ead='4000.0' lgd='50%' />\n\
+           <values t='15/01/2008' ead='3000.0' lgd='40%' />\n\
+           <values t='15/01/2009' ead='2000.0' lgd='30%' />\n\
+           <values t='15/01/2010' ead='1000.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 
@@ -315,18 +315,18 @@ void ccruncher_test::AssetTest::test5()
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   
-  ASSERT(!asset.hasObligorRecovery());
+  ASSERT(!asset.hasObligorLGD());
 
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("12/01/2005")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.3, asset.getValues(Date("12/01/2005")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("01/07/2005")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.4, asset.getValues(Date("01/07/2005")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1000.0, asset.getValues(Date("10/01/2010")).exposure.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.8, asset.getValues(Date("10/01/2010")).recovery.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("16/01/2010")).exposure.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("12/01/2005")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.7, asset.getValues(Date("12/01/2005")).lgd.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("01/07/2005")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.6, asset.getValues(Date("01/07/2005")).lgd.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getValues(Date("10/01/2010")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("10/01/2010")).lgd.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("16/01/2010")).ead.getValue(), EPSILON);
 }
 
 //===========================================================================
@@ -335,7 +335,7 @@ void ccruncher_test::AssetTest::test5()
 void ccruncher_test::AssetTest::test6()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset id='op1' date='10/01/2005' recovery='60%'>\n\
+      <asset id='op1' date='10/01/2005' lgd='40%'>\n\
         <data>\n\
         </data>\n\
       </asset>";
@@ -352,7 +352,7 @@ void ccruncher_test::AssetTest::test6()
 }
 
 //===========================================================================
-// test7. crash test (recovery not found)
+// test7. crash test (lgd not found)
 //===========================================================================
 void ccruncher_test::AssetTest::test7()
 {
@@ -361,13 +361,13 @@ void ccruncher_test::AssetTest::test7()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='570.0' />\n\
-          <values t='01/07/2000' exposure='560.0' />\n\
-          <values t='01/01/2001' exposure='550.0' />\n\
-          <values t='01/07/2001' exposure='540.0' />\n\
-          <values t='01/01/2002' exposure='530.0' />\n\
-          <values t='01/07/2002' exposure='520.0' />\n\
-          <values t='01/07/2020' exposure='10.0' />\n\
+          <values t='01/01/2000' ead='570.0' />\n\
+          <values t='01/07/2000' ead='560.0' />\n\
+          <values t='01/01/2001' ead='550.0' />\n\
+          <values t='01/07/2001' ead='540.0' />\n\
+          <values t='01/01/2002' ead='530.0' />\n\
+          <values t='01/07/2002' ead='520.0' />\n\
+          <values t='01/07/2020' ead='10.0' />\n\
         </data>\n\
       </asset>";
 
@@ -380,7 +380,7 @@ void ccruncher_test::AssetTest::test7()
   // asset object creation
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT(asset.hasObligorRecovery());
+  ASSERT(asset.hasObligorLGD());
 }
 
 //===========================================================================
@@ -393,13 +393,13 @@ void ccruncher_test::AssetTest::test8()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 
@@ -461,13 +461,13 @@ void ccruncher_test::AssetTest::test9()
         <belongs-to segmentation='products' segment='bond'/>\n\
         <belongs-to segmentation='offices' segment='0003'/>\n\
         <data>\n\
-          <values t='01/01/2000' exposure='570.0' recovery='80%' />\n\
-          <values t='01/07/2000' exposure='560.0' recovery='80%' />\n\
-          <values t='01/01/2001' exposure='550.0' recovery='80%' />\n\
-          <values t='01/07/2001' exposure='540.0' recovery='80%' />\n\
-          <values t='01/01/2002' exposure='530.0' recovery='80%' />\n\
-          <values t='01/07/2002' exposure='520.0' recovery='80%' />\n\
-          <values t='01/07/2020' exposure='10.0' recovery='80%' />\n\
+          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
+          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
+          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
+          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
+          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
+          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
+          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
         </data>\n\
       </asset>";
 

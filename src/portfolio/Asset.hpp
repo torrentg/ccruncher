@@ -33,7 +33,7 @@
 #include "utils/Date.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "portfolio/DateValues.hpp"
-#include "portfolio/Recovery.hpp"
+#include "portfolio/LGD.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -52,10 +52,10 @@ class Asset : public ExpatHandlers
     std::string id;
     // asset creation date
     Date date;
-    // exposure-recovery values
+    // ead-lgd values
     std::vector<DateValues> data;
-    // default recovery
-    Recovery drecovery;
+    // default lgd
+    LGD dlgd;
     // pointer to segmentations list (used by parser)
     Segmentations *segmentations;
     // auxiliary variable (used by parser)
@@ -92,8 +92,8 @@ class Asset : public ExpatHandlers
     Date getMaxDate() const;
     // used to test SimulationThread::simule lower_bound
     const DateValues& getValues(const Date t) const;
-    // says if use obligor recovery
-    bool hasObligorRecovery() const;
+    // says if use obligor lgd
+    bool hasObligorLGD() const;
     // returns reference to data
     const std::vector<DateValues>& getData() const;
 

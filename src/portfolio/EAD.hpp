@@ -20,8 +20,8 @@
 //
 //===========================================================================
 
-#ifndef _Recovery_
-#define _Recovery_
+#ifndef _EAD_
+#define _EAD_
 
 //---------------------------------------------------------------------------
 
@@ -38,23 +38,26 @@ namespace ccruncher {
 
 //---------------------------------------------------------------------------
 
-class Recovery
+class EAD
 {
 
   public:
 
-    // recovery types
-    enum RecoveryType
+    // exposure types
+    enum Type
     { 
       Fixed=1,
-      Uniform=2,
-      Beta=3
+      Lognormal=2,
+      Exponential=3,
+      Uniform=4,
+      Gamma=5,
+      Normal=6
     };
 
   private:
 
-    // recovery type
-    RecoveryType type;
+    // exposure type
+    Type type;
     // depends on type
     double value1;
     // depends on type
@@ -63,30 +66,32 @@ class Recovery
   private:
   
     // set values
-    void init(RecoveryType, double, double) throw(Exception);
+    void init(Type, double, double) throw(Exception);
     // check params
-    static bool valid(RecoveryType, double, double);
+    static bool valid(Type, double, double);
 
   public:
-
+  
     // default constructor
-    Recovery();
+    EAD();
     // constructor
-    Recovery(const char *) throw(Exception);
+    EAD(const char *) throw(Exception);
     // constructor
-    Recovery(const std::string &) throw(Exception);
+    EAD(const std::string &) throw(Exception);
     // constructor
-    Recovery(RecoveryType, double a, double b=NAN) throw(Exception);
+    EAD(Type, double a, double b=NAN) throw(Exception);
     // returns type
-    RecoveryType getType() const;
+    Type getType() const;
     // retuns value1
     double getValue1() const;
     // returns value2
     double getValue2() const;
-    // returns recovery (includes Beta)
+    // returns exposure
     double getValue(const gsl_rng *rng=NULL) const;
-    // check if is a Non-A-Recovery value
-    static bool isvalid(const Recovery &);
+    // check if is a Non-A-EAD value
+    static bool isvalid(const EAD &);
+    // apply current net value factor
+    void mult(double);
 
 };
 
@@ -95,14 +100,14 @@ class Recovery
 //===========================================================================
 // default constructor
 //===========================================================================
-inline ccruncher::Recovery::Recovery() : type(Fixed), value1(NAN), value2(NAN)
+inline ccruncher::EAD::EAD() : type(Fixed), value1(NAN), value2(NAN)
 {
 }
 
 //===========================================================================
 // returns type
 //===========================================================================
-inline ccruncher::Recovery::RecoveryType ccruncher::Recovery::getType() const
+inline ccruncher::EAD::Type ccruncher::EAD::getType() const
 {
   return type;
 }
@@ -110,20 +115,32 @@ inline ccruncher::Recovery::RecoveryType ccruncher::Recovery::getType() const
 //===========================================================================
 // getValue
 //===========================================================================
-inline double ccruncher::Recovery::getValue(const gsl_rng *rng) const
+inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
 {
   switch(type)
   {
     case Fixed:
       return value1;
 
-    case Beta:
+    case Lognormal:
       assert(rng != NULL);
-      return gsl_ran_beta(rng, value1, value2);
+      return gsl_ran_lognormal(rng, value1, value2);
+
+    case Exponential:
+      assert(rng != NULL);
+      return gsl_ran_exponential(rng, value1);
 
     case Uniform:
       assert(rng != NULL);
       return gsl_ran_flat(rng, value1, value2);
+
+    case Gamma:
+      assert(rng != NULL);
+      return gsl_ran_gamma(rng, value1, value2);
+
+    case Normal:
+      assert(rng != NULL);
+      return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
 
     default:
       assert(false);

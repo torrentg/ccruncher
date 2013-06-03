@@ -28,8 +28,8 @@
 #include "utils/config.h"
 #include <cmath>
 #include "utils/Date.hpp"
-#include "portfolio/Exposure.hpp"
-#include "portfolio/Recovery.hpp"
+#include "portfolio/EAD.hpp"
+#include "portfolio/LGD.hpp"
 
 //---------------------------------------------------------------------------
 
@@ -44,15 +44,15 @@ class DateValues
 
     // date where values take place
     Date date;
-    // exposure value
-    Exposure exposure;
-    // recovery value
-    Recovery recovery;
+    // exposure at default
+    EAD ead;
+    // loss given default
+    LGD lgd;
 
   public:
 
     // constructor
-    explicit DateValues(Date d=Date(), const Exposure &e=Exposure(), const Recovery &r=Recovery());
+    explicit DateValues(Date d=Date(), const EAD &e=EAD(), const LGD &r=LGD());
     // less-than operator
     bool operator<(const DateValues &) const;
     // less-than operator
@@ -65,8 +65,8 @@ class DateValues
 //===========================================================================
 // constructor
 //===========================================================================
-inline ccruncher::DateValues::DateValues(Date d, const Exposure &e, const Recovery &r) :
-    date(d), exposure(e), recovery(r)
+inline ccruncher::DateValues::DateValues(Date d, const EAD &e, const LGD &r) :
+    date(d), ead(e), lgd(r)
 {
   // nothing to do
 }
