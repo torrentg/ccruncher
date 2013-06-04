@@ -79,6 +79,9 @@ class AnalysisWidget: public MdiChildWidget
     QAction *actionZoomY;
     QAction *actionRefresh;
     QAction *actionStop;
+    QAction *actionCopy;
+    // plotted data as string
+    QByteArray strdata;
 
   private:
 
@@ -124,6 +127,8 @@ class AnalysisWidget: public MdiChildWidget
     void setStatus(int);
     // stop current action
     void stop();
+    // copy data to clipboard
+    void copyToClipboard();
 
 };
 
