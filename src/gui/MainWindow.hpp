@@ -30,6 +30,8 @@
 #include <QMap>
 #include <QCloseEvent>
 #include <QToolBar>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 namespace ccruncher_gui {
 
@@ -53,6 +55,8 @@ class MainWindow : public QMainWindow
     QToolBar *childToolBar;
     // dedfault properties
     QMap<QString,QVariant> properties;
+    // network manager
+    QNetworkAccessManager network;
 
   private:
 
@@ -83,6 +87,8 @@ class MainWindow : public QMainWindow
     void openFile(const QUrl &url);
     // update tool bars
     void updateToolBars(QMdiSubWindow *window);
+    // process http request
+    void processHttpRequest(QNetworkReply *);
 
 };
 

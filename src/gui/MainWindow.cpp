@@ -39,7 +39,8 @@ using namespace std;
 // constructor
 //===========================================================================
 ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
-  ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL), properties(map)
+  ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL), properties(map),
+  network(this)
 {
   ui->setupUi(this);
 
@@ -60,10 +61,15 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
 
   setWindowTitle(tr("CCruncher"));
 
+  connect(&network, SIGNAL(finished(QNetworkReply*)), this, SLOT(processHttpRequest(QNetworkReply*)));
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateToolBars(QMdiSubWindow*)));
+
+  // sending http request
+  QUrl url("http://www.ccruncher.net/version?m=gui&v=" VERSION);
+  network.get(QNetworkRequest(url));
 
   statusBar()->showMessage(tr("Ready"));
 }
@@ -139,7 +145,7 @@ void ccruncher_gui::MainWindow::about()
         "version: " VERSION " [" SVN_VERSION "]<br/><br/>"
         "copyright: <a href='http://www.tatine.es'>Tatine</a><br/><br/>"
         "license: GPL<br/><br/>"
-        "url: <a href = 'http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
+        "url: <a href='http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
         "</p>");
   about.setStandardButtons(QMessageBox::Ok);
   about.setDefaultButton(QMessageBox::Ok);
@@ -253,5 +259,51 @@ QMdiSubWindow* ccruncher_gui::MainWindow::findMdiChild(const QString &filename)
 const QMap<QString,QVariant>& ccruncher_gui::MainWindow::getProperties() const
 {
   return properties;
+}
+
+//===========================================================================
+// process http request
+//===========================================================================
+void ccruncher_gui::MainWindow::processHttpRequest(QNetworkReply *reply)
+{
+  // catching redirection
+  QUrl redirection = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+  if (!redirection.isEmpty()) {
+    reply->deleteLater();
+    network.get(QNetworkRequest(redirection));
+    return;
+  }
+
+  // reading status
+  QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+  if (!status.isValid() || reply->error() != QNetworkReply::NoError) {
+    reply->deleteLater();
+    return;
+  }
+
+  // process response
+  QString response(reply->readAll());
+  reply->deleteLater();
+
+  QString version = "";
+  QRegExp regexp_version("version:([^\\n]*)");
+  if (regexp_version.indexIn(response) >= 0) {
+    version = regexp_version.cap(1).trimmed();
+  }
+
+  QString msg = "";
+  QRegExp regexp_msg("msg:([^\\n]*)");
+  if (regexp_msg.indexIn(response) >= 0) {
+    msg = regexp_msg.cap(1).trimmed();
+  }
+
+  if (version != "" && VERSION < version)
+  {
+    QString str =
+      "<p>There is a new version available (" + version + ")!</p>"
+      "<p>Download it from <a href='http://www.ccruncher.net'>www.ccruncher.net</a>.</p>";
+    if (msg != "") str += msg;
+    QMessageBox::information(this, "CCruncher", str);
+  }
 }
 
