@@ -12,7 +12,6 @@ Current works
   * support exponential distr. as PD?
   * retrieve asset data attributes in Asset instead of ExpatHandlers
   * update Qwt version
-  * check version using http request
  
 Future works
 -------------------

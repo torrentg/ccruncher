@@ -6,6 +6,7 @@ version 2.3 (???. 2013)
 --------------------------
   * exposure renamed to ead
   * recovery changed to lgd
+  * gui checks if new version is available
 
 version 2.2 (Mar. 2013)
 --------------------------
