@@ -7,6 +7,7 @@ version 2.3 (???. 2013)
   * exposure renamed to ead
   * recovery changed to lgd
   * gui checks if new version is available
+  * added 'copy data to clipboard' in graphic
 
 version 2.2 (Mar. 2013)
 --------------------------

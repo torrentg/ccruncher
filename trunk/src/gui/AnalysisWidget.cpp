@@ -25,6 +25,8 @@
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_cdf.h>
 #include <QMessageBox>
+#include <QClipboard>
+#include <QMimeData>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_curve.h>
@@ -71,19 +73,25 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   magnifier->setMouseFactor(1.0);
   panner = new QwtPlotPanner(ui->plot->canvas());
 
-  // magnifie x-axis
+  // magnify x-axis
   actionZoomX = new QAction(tr("Zoom axis X"), this);
   actionZoomX->setCheckable(true);
   actionZoomX->setChecked(true);
   connect(actionZoomX, SIGNAL(triggered(bool)), this, SLOT(setZoomX(bool)));
   ui->plot->addAction(actionZoomX);
 
-  // magnifie y-axis
+  // magnify y-axis
   actionZoomY = new QAction(tr("Zoom axis Y"), this);
   actionZoomY->setCheckable(true);
   actionZoomY->setChecked(true);
   connect(actionZoomY, SIGNAL(triggered(bool)), this, SLOT(setZoomY(bool)));
   ui->plot->addAction(actionZoomY);
+
+  // copy data to clipboard
+  actionCopy = new QAction(tr("Copy data to clipboard"), this);
+  actionCopy->setShortcut(QKeySequence(QKeySequence::Copy));
+  connect(actionCopy, SIGNAL(triggered()), this, SLOT(copyToClipboard()));
+  ui->plot->addAction(actionCopy);
 
   // refresh action
   QKeySequence keys_refresh(QKeySequence::Refresh);
@@ -180,6 +188,8 @@ void ccruncher_gui::AnalysisWidget::reset()
   ui->statistic->setText("");
   ui->interval->setText("");
   ui->std_err->setText("");
+
+  strdata.clear();
 }
 
 //===========================================================================
@@ -193,6 +203,10 @@ void ccruncher_gui::AnalysisWidget::submit(size_t numbins)
   int isegment = ui->segments->currentIndex();
   int iview = ui->view->currentIndex();
   if (isegment < 0 || iview < 0) return;
+
+  task.wait();
+  reset();
+  nsamples = 0;
 
   switch(iview)
   {
@@ -212,9 +226,6 @@ void ccruncher_gui::AnalysisWidget::submit(size_t numbins)
       assert(false);
   }
 
-  task.wait();
-  reset();
-  nsamples = 0;
   task.start();
   mutex.unlock();
 }
@@ -266,6 +277,8 @@ void ccruncher_gui::AnalysisWidget::draw()
 void ccruncher_gui::AnalysisWidget::drawHistogram()
 {
   ui->plot->detachItems();
+  strdata.clear();
+  strdata.append("LOW\tUP\tFREQ\n");
 
   QwtPlotGrid *grid = new QwtPlotGrid;
   grid->enableX(true);
@@ -295,6 +308,9 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
     double val = gsl_histogram_get(hist, i);
     samples[i] = QwtIntervalSample(val, interval);
     numiterations += (int)(val+0.5);
+    strdata.append(QString::number(lower) + "\t" +
+                   QString::number(upper) + "\t" +
+                   QString::number(val) + "\n");
   }
 
   QwtPlotHistogram *qhist = new QwtPlotHistogram("title");
@@ -325,6 +341,8 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
 void ccruncher_gui::AnalysisWidget::drawStatistic()
 {
   ui->plot->detachItems();
+  strdata.clear();
+  strdata.append("IT\tVAL\tSTDERR\n");
 
   QwtPlotGrid *grid = new QwtPlotGrid;
   grid->enableX(true);
@@ -353,6 +371,9 @@ void ccruncher_gui::AnalysisWidget::drawStatistic()
     values[i] = QPointF(statvals[i].iteration, val);
     double delta = statvals[i].std_err * quantile;
     ranges[i] = QwtIntervalSample(statvals[i].iteration, QwtInterval(val-delta, val+delta));
+    strdata.append(QString::number(statvals[i].iteration) + "\t" +
+                   QString::number(statvals[i].value) + "\t" +
+                   QString::number(statvals[i].std_err) + "\n");
   }
 
   // adjusting vertical scale (avoids initial 5%)
@@ -499,5 +520,15 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
 void ccruncher_gui::AnalysisWidget::stop()
 {
   task.stop();
+}
+
+//===========================================================================
+// copyToClipboard
+//===========================================================================
+void ccruncher_gui::AnalysisWidget::copyToClipboard()
+{
+  QMimeData *mimeData = new QMimeData();
+  mimeData->setData("text/plain", strdata);
+  QApplication::clipboard()->setMimeData(mimeData);
 }
 
