@@ -292,6 +292,14 @@ const vector<DateValues>& ccruncher::Asset::getData() const
 }
 
 //===========================================================================
+// clears data
+//===========================================================================
+void ccruncher::Asset::clearData()
+{
+  vector<DateValues>(0).swap(data);
+}
+
+//===========================================================================
 // getValues
 // returns:
 //    > (NAD,0,1) if t <= asset creation date

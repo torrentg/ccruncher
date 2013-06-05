@@ -35,7 +35,6 @@
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
-#include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
@@ -71,8 +70,6 @@ class MonteCarlo
     std::vector<unsigned short> numSegmentsBySegmentation;
     // total number of segments
     size_t numsegments;
-    // datevalues list
-    std::vector<DateValues> datevalues;
     // list of aggregators
     std::vector<Aggregator *> aggregators;
     // maximum number of iterations

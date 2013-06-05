@@ -24,8 +24,10 @@
 #include <cfloat>
 #include <climits>
 #include <cstdlib>
+#include <cstring>
 #include <algorithm>
 #include "kernel/MonteCarlo.hpp"
+#include "portfolio/DateValues.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
@@ -85,9 +87,15 @@ void ccruncher::MonteCarlo::release()
   // deallocating assets
   if (assets != NULL)
   {
+    for (size_t i=0; i<numassets; i++) {
+      SimulatedAsset *p = (SimulatedAsset*) (assets+i*assetsize);
+      delete [] p->begin;
+      p->begin = NULL;
+    }
     delete [] assets;
     assets = NULL;
   }
+  numassets = 0;
 
   // dropping aggregators elements
   for(unsigned int i=0; i<aggregators.size(); i++) {
@@ -106,7 +114,6 @@ void ccruncher::MonteCarlo::release()
 
   // flushing memory
   vector<SimulatedObligor>(0).swap(obligors);
-  vector<DateValues>(0).swap(datevalues);
   floadings1.clear();
   floadings2.clear();
 }
@@ -326,7 +333,6 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // determining the assets to simulate
   numassets = 0;
   size_t cont = 0;
-  size_t numdatevalues = 0;
   for(size_t i=0; i<obligors.size(); i++)
   {
     vector<Asset*> &vassets = obligors[i].ref.obligor->getAssets();
@@ -336,7 +342,6 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       if (vassets[j]->isActive(time0, timeT)) 
       {
         numassets++;
-        numdatevalues += vassets[j]->getData().size();
         idata.getSegmentations().addComponents(vassets[j]);
       }
     }
@@ -357,10 +362,9 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   assert(assets == NULL);
   assetsize = sizeof(SimulatedAsset) + sizeof(unsigned short)*(idata.getSegmentations().size()-1);
   assets = new char[assetsize*numassets];
-  datevalues.resize(numdatevalues);
-  
+  memset(assets, 0, assetsize*numassets); // set pointers to NULL
+
   numassets = 0;
-  numdatevalues = 0;
   for(unsigned int i=0; i<obligors.size(); i++)
   {
     Obligor *obligor = obligors[i].ref.obligor;
@@ -386,16 +390,13 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         // creating asset
         p->mindate = vassets[j]->getMinDate();
         p->maxdate = vassets[j]->getMaxDate();
-        p->begin = datevalues.begin() + numdatevalues;
-
-        // setting asset datevalues
-        for(size_t k=0; k<vassets[j]->getData().size(); k++)
-        {
-          datevalues[numdatevalues] = vassets[j]->getData()[k];
-          numdatevalues++;
+        size_t len = vassets[j]->getData().size();
+        if (len > 0) {
+          p->begin = new DateValues[len];
+          p->end = p->begin + len;
+          memcpy(p->begin, &(vassets[j]->getData()[0]),len*sizeof(DateValues));
+          vassets[j]->clearData(); // too avoid memory exhaustion
         }
-
-        p->end = datevalues.begin() + numdatevalues;
 
         // setting asset segments
         unsigned short *segments = &(p->segments);
@@ -416,8 +417,6 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
       }
     }
   }
-
-  assert(datevalues.size() == numdatevalues);
 
   // exit function
   log << indent(-1);
