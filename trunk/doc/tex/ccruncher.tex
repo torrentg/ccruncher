@@ -81,7 +81,7 @@
 \usepackage{listings}
 
 \def\numversion{2.3}
-\def\svnversion{R1058}
+\def\svnversion{R1061}
 
 %----------------------------------------------------------------------------------------
 
@@ -156,12 +156,12 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 % TABLE OF CONTENTS
 %==============================================================================
-\chapterimage{chapter_head_1.pdf} % Table of contents heading image
-\pagestyle{empty} % No headers
+\chapterimage{chapter_head_1.pdf}
+\pagestyle{empty}
 \setcounter{tocdepth}{1}
-\tableofcontents % Print the table of contents itself
-\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
-\pagestyle{fancy} % Print headers again
+\tableofcontents
+\cleardoublepage
+\pagestyle{fancy}
 
 
 %==============================================================================
@@ -195,9 +195,9 @@ in the general case. For this reason, the development of this section is
 original. Its validity has been verified with tests listed in the document. 
 And second, the minor result that states that t-Student multi-factor model 
 and multivariate t-Student with correlation block matrix are quasi-equivalents 
-when the number of components in each factor are high.
+when the number of components in each factor is high.
 
-Portfolio credit risk try to respond to questions like: \enquote{what is the 
+Portfolio credit risk tries to respond to questions like: \enquote{what is the 
 portfolio expected loss for the next year?}, and \enquote{how much could I 
 lose in a really bad year?}. There are several approaches to answer these 
 questions. Here we present briefly the two most used approaches~\cite{crouhy:2000} 
@@ -226,7 +226,7 @@ Other representatives are the KMV model, or the copula approach~\cite{li:2000}.
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
 but differ when the dependence structure between obligors is distinct than
 the simplistic case~\cite{bluhm:2001}. CCruncher implements the copula 
-approach, a Merton model variant that put the focus on the dependence among 
+approach, a Merton model variant that puts the focus on the dependence among 
 obligors, one of the key points in the credit risk quantification.
 
 \textbf{Copula approach}. This approach considers that the obligors default 
@@ -238,25 +238,25 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics{\texttrademark} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
-CCruncher quantify the portfolio credit risk simulating the portfolio loss
+CCruncher quantifies the portfolio credit risk simulating the portfolio loss
 distribution multiple times and computing the appropriate statistics (EL, 
 VaR, ES) over this sample. The portfolio losses are obtained simulating 
 the obligors default times and the EADs and LGDs of its assets. These 
 default times are a multivariate distribution where its marginals are 
 the probabilities of default given by the obligors ratings, and dependence
-structure between obligors are determined by the obligors industrial sector.
+structure between obligors is determined by the obligors industrial sector.
 CCruncher assumes that the dependence structure is a t-Student copula.
 This document provides a guide to estimate the copula parameters using
 Bayesian inference and encourages to transfer the parameters uncertainty
 to the credit risk measures.
 
 CCruncher quantifies the credit risk of portfolios with a buy-and-hold policy. 
-Also it is necessary that each obligor have an assigned rating, belongs to an 
+Also it is necessary that each obligor has an assigned rating, belongs to an 
 unique economic sector, and has known assets exposures and recoveries. 
 An example of a credit portfolio that can benefit of CCruncher is a SMEs 
 loan portfolio (buy-and-hold, rated obligors, multiple sectors where each
 obligor belongs to a unique sector, known EADs and LGDs).
-Unlike CreditMetrics{\texttrademark}, CCruncher don't follows a mark-to-market 
+Unlike CreditMetrics{\texttrademark}, CCruncher doesn't follow a mark-to-market 
 account, but follows a two-state model (default/no-default). Later we use the 
 transition matrix concept in order to determine the shape of PD functions, 
 not to perform an accounting type mark-to-market.
@@ -283,8 +283,8 @@ The disadvantages of CCruncher are:
 	\item requires a big amount of simulations,
 	\item lack of precision due to Monte Carlo barrier $1/\sqrt{N}$,
 	\item obligors can't belong to a weighted sum of factors,
-	\item correlations are constants over time,
-	\item dependence only rely on sectors,
+	\item correlations are constant over time,
+	\item dependence only relies on sectors,
 	\item only a copula type is supported, and
 	\item mark-to-market not supported.
 \end{inparaenum}
@@ -293,19 +293,19 @@ in seconds or minutes if the portfolio is really huge.
 
 The content is organized in three chapters. The first one details the 
 distribution used to simulate the obligors default times. It is easy to 
-understand and is recommended reading, specially the section where is 
-related the multivariate model. The second chapter penetrates into
-the parameters estimation. This topic can be rough for those not familiarized 
+understand and is recommended reading, specially the section where the 
+multivariate model is related. The second chapter deals with the parameters 
+estimation. This topic can be rough for those not familiarized 
 with MCMC, for this reason it includes a detailed introduction to the 
 Metropolis-Hastings method. You can skip this chapter if you don't need 
 to estimate the parameters of the obligors default times model. Finally, the 
 third chapter contains the credit portfolio loss quantification and details 
-of the implementation. It is recommended reading. You can skip the last 
+of the implementation. Reading is recommended. You can skip the last 
 section referred to parameters uncertainty if you are not concerned about 
 parameters estimation and its impact in the credit risk measures.
-There are four little appendices that covers aspects used in the first 
-chapter (default times modeling). They are a recommended reading because
-contains key statements and establish the used notation.
+There are four little appendices that cover issues used in the first 
+chapter (default times modeling). These are a recommended reading because
+contain key statements and establish the used notation.
 
 %TODO: identificar els suposits (cicle econ., rating 1-year, etc.)
 %TODO: implications (fixed correlations, economic cycle)
@@ -375,7 +375,7 @@ but differ as this goes away.
 		m_{ij} = \Pr(r_i \to r_j\ ;\ T)
 	\end{displaymath}
 	where $n$ is the number of ratings and $m_{ij}$ is the probability that a
-	obligor with rating $r_i$ end up having the rating $r_j$ after $T$ years.
+	obligor with rating $r_i$ ends up having the rating $r_j$ after $T$ years.
 	Note that row sums are $1$, and that two consecutives transition matrices, 
 	$M_{T_1}$ and $M_{T_2}$, gives $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
 \end{definition}
@@ -383,7 +383,7 @@ but differ as this goes away.
 \begin{example}
 	\label{ex:1ytm}
 	Table~\ref{tmatrix1} shows a transition matrix, extracted 
-	from~\cite[p. 20]{cmetrics:1997}, in which the probability that a obligor 
+	from~\cite[p. 20]{cmetrics:1997}, in which the probability that an obligor 
 	with rating AA changes to rating B in one year is $0.14\%$. Note that 
 	last column contains the 1-year default probabilities for each rating, and 
 	the last row corresponds to the \emph{defaulted} rating.
@@ -537,7 +537,7 @@ of the exponential and the logarithm functions:
 \subsection{From transition matrix}
 \label{pdftm}
 
-This approach implies that transition probabilities remains constant
+This approach implies that transition probabilities remain constant
 over time undermining the economic cycle effect. In practice, it is 
 equivalent to consider an averaged economic cycle.
 
@@ -583,7 +583,7 @@ extracted from~\cite{kreinin:2001}.
 
 \begin{proposition}[PDs derived from transition matrix]
 	\label{prop:pdftm}
-	Let $M_T$ a transition matrix, then the PD for an obligor with 
+	Let $M_T$ be a transition matrix, then the PD for an obligor with 
 	rating $r_j$ is:
 	\begin{displaymath}
 		\Pr\{T_. \le t\} = \left( M_t \right)_{jn}
@@ -729,8 +729,8 @@ t-Student copula for the following reasons:
 Previous versions of the CCruncher project implemented a simulation schema
 consisting in simulating the t-Student copula directly. This approach 
 requires an adapted simulation algorithm for high-dimensional problems~\cite{torrent:2012}
-and difficult the estimation of the parameters. The current CCruncher version 
-relies in the following proposition that reformulate $F$ in terms of the 
+and disturbs the estimation of the parameters. The current CCruncher version 
+relies in the following proposition that reformulates $F$ in terms of the 
 multivariate t-Student distribution. This result, combined with the t-Student
 multi-factor model, provides an efficient simulation algorithm and allows 
 estimating the parameters.
@@ -769,9 +769,9 @@ estimating the parameters.
 \end{proof}
 
 The previous proposition can be stated by any other copula coming from
-a multivariate distribution an applied if this had a known distribution 
+a multivariate distribution and applied if this had a known distribution 
 and marginals (eg.\ the Gaussian copula). Also from the previous proposition
-is immediate to derive a method to sample the default times distribution.
+it is immediate to derive a method to sample the default times distribution.
 
 \begin{corollary}[Default times simulation (I)]
 	\label{cor:dts1}
@@ -792,8 +792,8 @@ multi-factor formulation.
 
 \subsection{The multi-factor formulation}
 
-To bypass the dimension problem we assuming that exist a reduced number 
-$k$ of industrial sectors and that each obligor belong to a unique sector. 
+To bypass the dimension problem we assume that a reduced number $k$ of 
+industrial sectors exists and that each obligor belong to a unique sector. 
 Also that default times dependence between obligors only depends on the 
 involved industrials sectors. With these restrictions, if we sort the 
 obligors by sector, the obligors default times correlation matrix, $\bar{R}$, 
@@ -831,13 +831,13 @@ appendix~\ref{ap:cbm} for more information about covariance block matrices.
 
 Up to this point the multivariate default times distribution $F$ can 
 be expressed by its marginals $\text{PD}_i$ and a multivariate t-Student 
-distribution, $t_n(\nu,0,\bar{R})$ with a obligors correlation block 
+distribution, $t_n(\nu,0,\bar{R})$ with an obligors correlation block 
 matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition that follows 
 gives us the key to reformulate the problem as a multi-factor problem.
 
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
-	Let a random vector $X=(X_1,\dots,X_n)$ with a multivariate t-Student 
+	Let a random vector $X=(X_1,\dots,X_n)$ be with a multivariate t-Student 
 	distribution $t_n(\nu,0,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
 	is a correlation block matrix and $n_i$ sizes are high-enough. 
 	Then $X$ can be written as a t-Student multi-factor model as follows:
@@ -880,8 +880,8 @@ covariance matrix. We do this because the factor loadings have a treatment
 distinct than factors correlation in the estimation of parameters.
 
 Factor loadings $\vec{w}$, measures the correlation between obligors 
-belonging the same industrial sector $i$, satisfying in the Gaussian case 
-that $\rho_i = w_i^2$. Factor correlations $R$ measures the correlation 
+belonging to the same industrial sector $i$, satisfying in the Gaussian case 
+that $\rho_i = w_i^2$. Factor correlations $R$ measure the correlation 
 between factors, and also the correlation between obligors belonging to 
 different sectors, satisfying in the Gaussian case that 
 $\rho_{ij} = w_i \cdot w_j \cdot R_{ij}$.
@@ -891,7 +891,7 @@ provides an efficient algorithm to simulate the obligors default times.
 
 \begin{corollary}[Default times simulation (II)]
 	\label{cor:dts2}
-	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
+	Let $T=(T_1, \dots, T_n)$ be a random vector with marginals 
 	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$
 	coming from a t-Student multi-factor model with $\nu$ degrees of freedom, 
 	factor loadings $\vec{w}$, and factor correlations $R$. Then we can simulate 
@@ -1099,7 +1099,7 @@ to solve the problem recurring to the multi-factor formulation.
 	take in account all the combinations of exchangeable obligors.
 \end{proposition}
 \begin{proof}
-	Let $H_{ij}$ the probability that an obligor belonging to sector $i$
+	Let $H_{ij}$ be the probability that an obligor belonging to sector $i$
 	with initial rating $j$ defaults the first year conditioned to $z_i$ 
 	and $\upsilon$. We use the pdf of the default times distribution (see 
 	proposition~\ref{prop:dtd}) to assess it value:
@@ -1125,9 +1125,9 @@ to solve the problem recurring to the multi-factor formulation.
 		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
-	Once the probability of default by one obligor, the probability of 
-	observing $k_{ij}$ failures in a set of $n_{ij}$ independent obligors 
-	follows a binomial distribution with default probability $H_{ij}$:
+	$H_{ij}$ is the probability that an obligor defaults in 1-year. The 
+	probability of observing $k_{ij}$ failures in a set of $n_{ij}$ independent
+	obligors follows a binomial distribution:
 	\begin{displaymath}
 		\text{Bin}(k_{ij}\ ;\ n_{ij},H_{ij}) = 
 		\binom{n_{ij}}{k_{ij}} \cdot H_{ij}^{k_{ij}} \cdot (1-H_{ij})^{n_{ij}-k_{ij}}
@@ -1182,20 +1182,19 @@ uncertainty is important. In fact, the probability that we observe a negative
 correlation coefficient is significant despite having a correlation value as 
 high as $0.2$. Our goal is the inverse case, we have a correlation coefficient 
 from a sample size of $20$ observations and we estimate the original $\rho$.
-The previous observation about the dispersion indicates that the 
-searched value will also can have an important dispersion.
-This is exacerbated by the fact that some of our variables
-are latent, and that we are estimating from observations of type
-count-data. After this, considering the estimated parameters as 
-unique values, like the Maximum Likelihood estimator, is a naive and 
-risky positioning. The Bayesian approach seems  more appropriate 
+The previous observation about the dispersion indicates that the searched 
+value also can have an important dispersion. This is exacerbated by the fact 
+that some of our variables are latent, and that we are estimating from 
+observations of type count-data. After this, considering the estimated 
+parameters as unique values, like the Maximum Likelihood estimator, is a naive 
+and risky positioning. The Bayesian approach seems  more appropriate 
 \cite{gossl:2005,tarashev:2010} because it takes into account 
 the uncertainty of the parameters. Later we will see how to transfer 
 this uncertainty to the assessment of credit risk.
 
 Bayesian statistics differ from the classical statistical 
 theory since all unknown parameters are considered as random 
-variables. We want calculate the distribution $f(\theta \mid y)$ 
+variables. We want to calculate the distribution $f(\theta \mid y)$ 
 of the parameters $\theta$ given the observed data $y$. 
 According to the Bayes theorem, this can be written as:
 \begin{displaymath}
@@ -1218,7 +1217,7 @@ the parameters to be inferred are $\nu,\vec{w},R$ and the latent
 variables $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$.
 
 \begin{definition}[Conditioned likelihood]
-Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ where $N^t$ 
+Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ be where $N^t$ 
 and $K^t$ are vectors representing the number of obligors and defaulted 
 obligors in each sector-rating bucket. We define the conditional 
 likelihood of these observations as:
@@ -1284,7 +1283,8 @@ distribution.
 		\item For $t=1,\dots,T$ repeat the following steps
 		\begin{itemize}
 			\item Set $x=x^{(t-1)}$
-			\item Let $x'$ a random value from the proposal distribution $q(x \to x')=q(x' \mid x)$
+			\item Let $x'$ be a random value from the proposal distribution 
+			$q(x \to x')=q(x' \mid x)$
 			\item Calculate the acceptance rate 
 			$\alpha = \min\left(1,\frac{f(x') \cdot q(x \mid x')}{f(x) \cdot q(x' \mid x)}\right)$
 			\item Update $x^{(t)}=\left\{
@@ -1325,7 +1325,7 @@ and, in the Bayesian inference Metropolis-Hastings case, becomes:
 
 The random-walk fixes the shape of the proposal distribution and requires 
 specifying the value $\sigma$. This value has a direct non-linear impact 
-on the acceptance ratio (\#accepted/\#iterations). Exists an optimal 
+on the acceptance ratio (\#accepted/\#iterations). There is an optimal 
 acceptance ratio that minimizes the auto-correlation, and in most cases 
 relies in the interval $[0.234,0.44]$. To avoid the  manual tuning of the 
 scale parameter $\sigma$ we use the Robbins-Monro algorithm~\cite{garthwaite:2010} 
@@ -1460,10 +1460,10 @@ they form a multivariate distribution.
 			\includegraphics[width=0.98\textwidth]{mhbd1}
 		}
 		\\
-		\subcaptionbox{Histogram parameter $\alpha$}{
+		\subcaptionbox{Parameter $\alpha$ histogram}{
 			\includegraphics[width=7cm]{mhbd3}
 		}
-		\subcaptionbox{Histogram parameter $\beta$}{
+		\subcaptionbox{Parameter $\beta$ histogram}{
 			\includegraphics[width=7cm]{mhbd4}
 		}
 		\\
@@ -1514,7 +1514,7 @@ they form a multivariate distribution.
 
 \begin{example}[Model parameters estimation]
 	\label{ex:calib}
-	Let consider the following scenario:
+	Let us consider the following scenario:
 	\begin{itemize}
 		\item t-Student copula with $\nu=20$.
 		\item Three ratings \{A, B, D\} where D is the defaulted status, and three 
@@ -1744,7 +1744,7 @@ renouncing to capture the tail dependence, the AIC and BIC values, etc.
 \section{Portfolio Loss Distribution}
 
 We define the key concepts used to model the credit risk emphasizing 
-the temporal dimension because it is a key point in further development. 
+the temporal dimension since it is a key point in further development. 
 These concepts and the probability of default, are those of the Basel II 
 accord~\cite{basel2:2006}, the de-facto international financial risk 
 regulation framework.
@@ -1761,8 +1761,8 @@ regulation framework.
 		\right\}
 	\end{displaymath}
 	EAD can be a function dependent of time when these amounts are
-	fixed and know in advance (eg.\ loan), or can be a distribution
-	defined over time when we have a model that support it 
+	fixed and known in advance (eg.\ loan), or can be a distribution
+	defined over time when we have a model that supports it 
 	(eg.\ line of credit).
 \end{definition}
 
@@ -1780,7 +1780,7 @@ regulation framework.
 		\right\}
 	\end{displaymath}
 	LGD can be a function dependent of time, or can be a distribution
-	defined over time when we have a model that support it. 
+	defined over time when we have a model that supports it. 
 	Some texts~\cite{creditrisk+:1997} use the concept of recovery rate
 	instead of LGD\@. This is defined as:
 	\begin{displaymath}
@@ -1857,8 +1857,8 @@ regulation framework.
 	\end{displaymath}
 \end{definition}
 
-Let a credit portfolio where the obligors default times $(T_1,\dots,T_n)$ 
-is a multivariate distribution with marginals $\text{PD}_i$. Also, each 
+Let a credit portfolio be where the obligors default times $(T_1,\dots,T_n)$ 
+are a multivariate distribution with marginals $\text{PD}_i$. Also, each 
 obligor $i$ has $m_i$ assets with known EAD and LGD\@. Then, the portfolio 
 loss distribution at time horizon $t$ is:
 \begin{displaymath}
@@ -1937,7 +1937,7 @@ using the appropriate statistics.
 	and $x \in (0,1)$ represents the percentage of loss in the portfolio. 
 
 	File \texttt{\$CCRUNCHER/samples/test04.xml} contains the CCruncher input
-	file of this example. The figure~\ref{fig:test04} display the theoretical
+	file of this example. The figure~\ref{fig:test04} displays the theoretical
 	distribution provided by LHP approach and the approximated by CCruncher.
 	Both are very similar, as expected. If we reduce the number of obligors from
 	1000 to 100, then the LHP assumptions are broken and the distribution 
@@ -1962,7 +1962,7 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 
 \begin{example}[2 factors]
 	\label{ex:test05}
-	Let a portfolio composed of 1000 obligors where every obligor owe 1\euro\ to 
+	Let be a portfolio composed of 1000 obligors where every obligor owe 1\euro\ to
 	1 year, this means that $\text{EAD}(t) = \mathbbm{1}_{[0,1]}(t)$, with 
 	a LGD of $100\%$. There are 4 ratings \{A, B, C, D\} where D is the 
 	defaulted status and the other ones have the following 1-year default 
@@ -1993,9 +1993,9 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	% \end{displaymath}
 
 	File \texttt{\$CCRUNCHER/samples/test05.xml} contains the CCruncher input
-	file of this example. Figure~\ref{fig:test05} display the portfolio
+	file of this example. Figure~\ref{fig:test05} displays the portfolio
 	loss density approximated using the random sample generated by CCruncher.
-	Observe the asymmetry of the distribution. This is more pronounced when 
+	Note the asymmetry of the distribution. This is more pronounced when 
 	$\nu$ is close to $2$, or factor loadings move away from $0$, or factor 
 	correlations move away from $0$.
 
@@ -2010,7 +2010,7 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	If the estimated parameters match the parameters of the example means that 
 	we have a consistent simulation and estimation algorithms. Note that in 
 	this case the simulated losses can be equated to the number of defaults 
-	because every defaulted obligor is computed as a 1\euro\ loss.
+	because each defaulted obligor is computed as a 1\euro\ loss.
 	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=0.98\textwidth]{test05}
@@ -2027,7 +2027,7 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 
 After $N$ simulations (eg.\ $20000$, $500000$ or more) of the portfolio loss
 we measure the portfolio credit risk computing the corresponding statistics 
-and its standard errors due to sample size. Following we provide the 
+and their standard errors due to sample size. Following we provide the 
 definitions and formulas of the most usual credit risk measures. 
 Figure~\ref{fig:lossdistr} illustrates the concepts exposed in this section.
 Any other user-defined risk measure can be estimated from the simulated 
@@ -2040,7 +2040,7 @@ sample and its standard error can be obtained using resampling methods.
 \end{figure}
 
 When the loss values are high (eg.\ $\mathcal{O}(10^7)$) and the number of 
-simulations also are high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
+simulations are also high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
 precision when we do the sum of squares ($\mathcal{O}(10^{2 \cdot 7 + 6})$). 
 The usual type used to store these values has 15--17 significant decimal 
 digits precision that can be exceeded in the sum of squares. In this case it 
@@ -2056,7 +2056,7 @@ is recommended to use the Kahan~\cite{kahan:1965} summation algorithm.
 	\end{displaymath}
 \end{definition}
 
-The Expected Loss responds try to the question \enquote{what is my expected 
+The Expected Loss tries to answer to the question \enquote{what is my expected 
 loss for the next year?}. It can be approximated using the following 
 statistic:
 \begin{displaymath}
@@ -2203,8 +2203,8 @@ procedure:
 	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
 	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(\text{PD}_r(d)))\right| < 1$ hour
 	\begin{itemize}
-		\item Let $d$ the day where maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ the nearest days where $\text{PD}_r$ is defined
+		\item Let $d$ be the day where maximum error is achieved
+		\item Let $t_i \le d \le t_{i+1}$ be the nearest days where $\text{PD}_r$ is defined
 		\item If $t_i$ is not contained in $S$, add $t_i$ to $\mathbb{S}$
 		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$
 		\item Else add $d$ to $\mathbb{S}$
@@ -2247,11 +2247,11 @@ aggregated to segment loss when the obligor defaults. In the second case, the
 asset losses are aggregated to segments losses when the obligor defaults.
 
 \textbf{Parallel computing}. 
-CCruncher parallelize the portfolio loss sampling spawning multiple simulation
+CCruncher parallelizes the portfolio loss sampling spawning multiple simulation
 threads, each of them with its own Mersenne twister Random Number Generator 
 seeded with consecutive values. When the number of obligors is high, data 
 don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
-operation that must be minimized. To achieve this, CCruncher simule each 
+operation that must be minimized. To achieve this, CCruncher simulates each 
 obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and 
 $\vec{z}$) before moving to the next obligor. This strategy can be considered 
 to implement parallelization in CUDA-like architectures.
@@ -2269,7 +2269,7 @@ of the estimates of the Monte Carlo method. The main ones are: common random
 numbers, antithetic variates, control variates, importance sampling and 
 stratified sampling.
 
-CCruncher generate random samples from the portfolio loss distribution.
+CCruncher generates random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (eg.\ VaR) using the 
 statistics described in section~\ref{sec:riskm} or any other required 
 by the analyst. Anyone of these measures, considered one by one, can be 
@@ -2353,7 +2353,7 @@ EADs and LGDs random values for each variate.
 
 \subsection{Latin Hypercube Sampling (LHS)}
 This variance reduction technique 
-belongs to the stratified sampling family. It consists in divide the total 
+belongs to the stratified sampling family. It consists in dividing the total 
 probability range ($100\%$) in $N$ equispaced segments. Then we create a 
 sample of size $N$ picking a random value from each segment using a uniform 
 distribution and applying the inverse transform sampling. Finally we shuffle 
@@ -2433,11 +2433,11 @@ credit risk measure is the obvious. It is based in the same procedure
 used to determine the distribution of the portfolio loss, or the distribution 
 of the parameters: the random sampling of the risk measure distribution. 
 
-On one hand we are able to measure the credit risk of a portfolio presupposing 
-that dependence parameters are fixed values. This is done sampling the portfolio
-loss (algorithm~\ref{alg:pldmc}) and approximating the credit risk indicator
-using the appropriate statistic (see section~\ref{sec:riskm}). The risk 
-measure obtained by this procedure consist of an approximated value an
+On one hand we are able to measure the credit risk of a portfolio considering
+that dependence parameters are fixed values. This is done sampling the 
+portfolio loss (algorithm~\ref{alg:pldmc}) and approximating the credit risk 
+indicator using the appropriate statistic (see section~\ref{sec:riskm}). The 
+risk measure obtained by this procedure consists of an approximated value and
 a standard error that allows to define a confidence interval fixed a 
 confidence level (eg.\ 95\%).
 
@@ -2448,7 +2448,7 @@ parameters values.
 
 We combine both parts to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
-approximate the risk measure distribution an allows to evaluate the 
+approximates the risk measure distribution and allows to evaluate the 
 impact of the parameter uncertainty. Caution, this procedure unveils the 
 parameter uncertainty but other uncertainties remains undercovered:
 \begin{inparaenum}[1)]
@@ -2461,7 +2461,7 @@ parameter uncertainty but other uncertainties remains undercovered:
 
 \begin{algorithm}[Credit risk measure distribution]
 	\label{alg:crmd}
-	Let a portfolio (ratings, sectors, PDs, EADs, LGDs) and the numbers 
+	Let a portfolio be (ratings, sectors, PDs, EADs, LGDs) and the numbers 
 	of defaults observed by sector-rating in the previous years. We can
 	determine the distribution of a credit risk measure 
 	(eg.\ $\text{VaR}_{99\%}$) doing:
@@ -2484,7 +2484,7 @@ parameter uncertainty but other uncertainties remains undercovered:
 \begin{example}[Credit risk considering parameters uncertainty]
 	\label{ex:paramu}
 	We use the same scenario that is described in the example~\ref{ex:test05} 
-	and that correspond to CCruncher input file 
+	and that corresponds to CCruncher input file 
 	\texttt{\$CCRUNCHER/samples/test05.xml}. 
 	We generate 20 observations of annual numbers of defaults using the 
 	algorithm~\ref{alg:snod} (in the real world these observations are 
@@ -2504,7 +2504,7 @@ parameter uncertainty but other uncertainties remains undercovered:
 		\label{fig:paramu1}
 	\end{figure}
 	
-	The second step consist in determine the thin interval using the 
+	The second step consists in determine the thin interval using the 
 	autocorrelation functions. Figure~\ref{fig:paramu2} shows the ACF for 
 	each parameter. A thin interval of 3000 is sufficient in this example. 
 	\begin{figure}[ht]
@@ -2692,7 +2692,7 @@ use this statement to define and simulate the t-Student copula.
 
 \begin{corollary}[Copula of a multivariate distribution]
 	\label{cor:cop1}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
 	distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
 	Then its copula is:
 	\begin{displaymath}
@@ -2710,7 +2710,7 @@ use this statement to define and simulate the t-Student copula.
 
 \begin{corollary}[Copula simulation]
 	\label{cor:cop2}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a multivariate 
+	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
 	distribution $F$ and continuous marginals $F_1, \dots, F_n$.
 	If we have a procedure to simulate $X$ then we can simulate 
 	its copula $C$ using:
@@ -2950,7 +2950,7 @@ in~\cite{torrent:2012}.
 			=                                         & w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2}                                                                    \\
 		\end{array}
 	\end{displaymath}
-	The caracterization of the multivariate Gaussian~\cite[thm. 2.6.2]{anderson:1984}
+	The characterization of the multivariate Gaussian~\cite[thm. 2.6.2]{anderson:1984}
 	states that if every linear combination of the components of a 
 	vector $X$ is normally distributed, then $X$ is normally distributed.
 	It is straightforward to check that the multi-factor Gaussian model 
@@ -2959,7 +2959,7 @@ in~\cite{torrent:2012}.
 
 \begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
 	Any multi-factor model can be expressed as a multivariate Gaussian 
-	block, but there are multivariate Gaussian block that cannot be 
+	block, but there are multivariate Gaussian blocks that cannot be 
 	expressed as a Gaussian multi-factor model.
 \end{proposition}
 \begin{proof}
@@ -3031,15 +3031,15 @@ in~\cite{torrent:2012}.
 	\end{displaymath}
 \end{proof}
 
-It's disturbing that exist multivariate block Gaussian distributions 
-that can't be expressed as a multi-factor model. Fortunately the 
+It's disturbing that multivariate block Gaussian distributions 
+that can't be expressed as a multi-factor model exists. Fortunately the 
 cases where that occur haven't practical interest in credit risk
 modeling where the number of obligors in each block is higher. 
 The following proposition clarifies this theme.
 
 \begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
 	\label{prop:gmfamgb}
-	Let $X \sim N(0,\bar{R})$ with $\bar{R}$ a correlation block matrix 
+	Let $X \sim N(0,\bar{R})$ with $\bar{R}$ be a correlation block matrix 
 	$B_k(\vec{n},\vec{1},M)$. Then $X$ can be expressed as a multi-factor 
 	Gaussian model if $n_i$ values are large enough.
 \end{proposition}
