@@ -6,8 +6,6 @@ Current works
 -------------------
   * rename dprobs to pds
   * pds can have multiple transtions, and pd into
-  * review asset data memory allocation
-  * -D == macro system
   * support exponential distr. as PD?
   * retrieve asset data attributes in Asset instead of ExpatHandlers
   * update Qwt version

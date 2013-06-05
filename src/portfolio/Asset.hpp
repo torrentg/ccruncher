@@ -96,6 +96,8 @@ class Asset : public ExpatHandlers
     bool hasObligorLGD() const;
     // returns reference to data
     const std::vector<DateValues>& getData() const;
+    // clears data
+    void clearData();
 
 };
 
