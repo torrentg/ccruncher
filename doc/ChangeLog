@@ -9,6 +9,7 @@ version 2.3 (???. 2013)
   * gui checks if new version is available
   * added 'copy data to clipboard' in graphic
   * modified memory allocation policy
+  * solved minor bug checking previous executions
 
 version 2.2 (Mar. 2013)
 --------------------------
