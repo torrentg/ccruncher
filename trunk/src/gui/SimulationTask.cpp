@@ -263,12 +263,23 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
       }
       else {
         if (segmentation.size() < (int)headers.size()) throw Exception("header differ");
-        if (segmentation.size()-headers.size() > 1) throw Exception("header differ");
-        for(int j=1; j<segmentation.size(); j++) {
-          if (segmentation.getSegment(j) != headers[j-1]) throw Exception("header differ");
-        }
-        if (segmentation.size() == (int)headers.size()) {
-          if (headers.back() != "unassigned") throw Exception("header differ");
+        int pos = -1;
+        for(size_t j=0; j<headers.size(); j++) {
+          if (headers[j] == "unassigned") {
+            if (j != headers.size()-1) throw Exception("header differ");
+          }
+          else {
+            bool found = false;
+            for(int k=1; k<segmentation.size(); k++) {
+              if (headers[j] == segmentation.getSegment(k)) {
+                if (pos >= 0 && k <= pos) throw Exception("header differ");
+                pos = k;
+                found = true;
+                break;
+              }
+            }
+            if (!found) throw Exception("header differ");
+          }
         }
       }
       goodfiles.push_back(filename);
