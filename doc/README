@@ -264,6 +264,15 @@ Developers tips & tricks
              -m "created tag ccruncher-x.y"
 
 
+Compilation problems
+--------------------------------
+
+1. If you use Qwt-6.0 (instead of Qwt-6.1) then the compiler complains 
+   about setMajorPlain method. This error is due to qwt-6.0 has method
+   named setMajPen and qwt-6.1 renamed to setMajorPen. You can solve 
+   it adding the following line in file src/gui/AnalysisWidget.cpp:
+   #define setMajorPen setMajPen
+
 CCruncher Team
 http://www.ccruncher.net
 

@@ -121,17 +121,8 @@ double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
   assert(pnum != NULL);
-  
   char *pstr = NULL;
-  int l = strlen(pnum);
-  bool isPercentage = false;
 
-  // checking percentage sign
-  if (l > 0 && pnum[l-1] == '%') 
-  {
-    isPercentage = true;
-  }
-  
   // initializing numerical error status
   errno = 0;
 
@@ -139,17 +130,21 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   double ret = strtod(pnum, &pstr); //atof(str.c_str());
 
   // checking that is a double
-  if (errno != 0 || pstr == pnum || pstr != pnum+(l-(isPercentage?1:0)))
+  if (errno != 0 || pstr == pnum)
   {
     throw Exception("error parsing double value '" + string(pnum) + "': not a number");
   }
+  else if (*pstr == 0)
+  {
+    return ret;
+  }
+  else if (*pstr == '%' && *(pstr+1) == 0)
+  {
+    return ret/100.0;
+  }
   else
   {
-    if (isPercentage)
-    {
-      ret /= 100.0;
-    }
-    return ret;
+    throw Exception("error parsing double value '" + string(pnum) + "': not a number");
   }
 }
 
