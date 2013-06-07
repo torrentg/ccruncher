@@ -66,7 +66,8 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   ui->frame->addLayer(progress);
 
   ui->filename->setText(filename);
-  ui->plot->canvas()->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
+  QwtPlotCanvas *canvas = (QwtPlotCanvas*) ui->plot->canvas();
+  canvas->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
   ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
 
   magnifier = new QwtPlotMagnifier(ui->plot->canvas());
@@ -285,7 +286,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
   grid->enableY(true);
   grid->enableXMin(false);
   grid->enableYMin(false);
-  grid->setMajPen(QPen(Qt::black, 0, Qt::DotLine));
+  grid->setMajorPen(QPen(Qt::black, 0, Qt::DotLine));
   grid->attach(ui->plot);
 
   ui->plot->setAxisTitle(QwtPlot::yLeft, "Frequency");
@@ -349,7 +350,7 @@ void ccruncher_gui::AnalysisWidget::drawStatistic()
   grid->enableY(true);
   grid->enableXMin(false);
   grid->enableYMin(false);
-  grid->setMajPen(QPen(Qt::black, 0, Qt::DotLine));
+  grid->setMajorPen(QPen(Qt::black, 0, Qt::DotLine));
   grid->attach(ui->plot);
 
   QString name = ui->view->currentText();

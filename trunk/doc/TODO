@@ -8,7 +8,6 @@ Current works
   * pds can have multiple transtions, and pd into
   * support exponential distr. as PD?
   * retrieve asset data attributes in Asset instead of ExpatHandlers
-  * update Qwt version
  
 Future works
 -------------------

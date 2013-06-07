@@ -160,24 +160,24 @@ Notes for Windows developers (QT+MINGW)
      > qmake qwt.pro
      > mingw32-make
      > mingw32-make install
-     # check that directory "C:\Qwt-6.0.1\features" is created
-     > qmake -set QMAKEFEATURES "C:\Qwt-6.0.1\features"
+     # check that directory "C:\Qwt-6.1.0\features" is created
+     > qmake -set QMAKEFEATURES "C:\Qwt-6.1.0\features"
    - in your qmake *.pro file add
      > CONFIG += qwt
    - in your qmake *.pro.user file add the following environment variables
-     > QT_PLUGIN_PATH = C:\Qwt-6.0.1\plugins\designer
-     > PATH = C:\Qwt-6.0.1\lib
+     > QT_PLUGIN_PATH = C:\Qwt-6.1.0\plugins\designer
+     > PATH = C:\Qwt-6.1.0\lib
    - qtcreator in windows is compiled with msvc. This means that 
      designer can't use compiled plugin. We suggest to use standalone 
      designer (C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin). To do this, do the
      following steps:
-     > cp C:\Qwt-6.0.1\lib\qwt.dll C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
-     > cp C:\Qwt-6.0.1\plugins\designer\* C:\QtSDK\Desktop\Qt\4.7.4\mingw\plugins\designer
+     > cp C:\Qwt-6.1.0\lib\qwt.dll C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
+     > cp C:\Qwt-6.1.0\plugins\designer\* C:\QtSDK\Desktop\Qt\4.7.4\mingw\plugins\designer
      > use standalone qtdesigner C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin\designer.exe
 
 7. launch qtcreator
-   > open project ccruncher.pro
-   > review ccruncher.pro libs
+   > open project ccruncher-gui.pro
+   > review ccruncher-gui.pro libs
    > compile
 
 
