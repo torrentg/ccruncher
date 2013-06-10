@@ -119,7 +119,7 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
     throw Exception(msg);
   }
 
-  // checking that not exist
+  // checking that it is not previously defined
   if (!isnan(matrix[row][col]))
   {
     string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <transitions>";
@@ -160,7 +160,21 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const ch
 //===========================================================================
 void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 {
-  if (isEqual(name,"transitions")) {
+  if (isEqual(name,"transitions"))
+  {
+    // non-informed elements are 0
+    for (size_t i=0; i<size(); i++)
+    {
+      for (size_t j=0; j<size(); j++)
+      {
+        if (isnan(matrix[i][j]))
+        {
+          matrix[i][j] = 0.0;
+        }
+      }
+    }
+
+    // validations
     validate();
   }
 }
@@ -170,18 +184,6 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 //===========================================================================
 void ccruncher::Transitions::validate() throw(Exception)
 {
-  // checking that all elements exists
-  for (size_t i=0; i<size(); i++)
-  {
-    for (size_t j=0; j<size(); j++)
-    {
-      if (isnan(matrix[i][j]))
-      {
-        throw Exception("transition matrix have an undefined element [" + Format::toString(i+1) + "][" + Format::toString(j+1) + "]");
-      }
-    }
-  }
-
   // checking that all rows sum 1
   for (size_t i=0; i<size(); i++)
   {
@@ -192,7 +194,7 @@ void ccruncher::Transitions::validate() throw(Exception)
       sum += matrix[i][j];
     }
 
-    if (sum < (1.0-EPSILON) || sum > (1.0+EPSILON))
+    if (fabs(sum-1.0) > EPSILON)
     {
       throw Exception("transition matrix row " + Format::toString(i+1) + " does not add up to 1");
     }
@@ -203,7 +205,7 @@ void ccruncher::Transitions::validate() throw(Exception)
 
   for (size_t i=0; i<size(); i++)
   {
-    if (matrix[i][i] > (1.0-EPSILON) && matrix[i][i] < (1.0+EPSILON))
+    if (fabs(matrix[i][i]-1.0) < EPSILON)
     {
       if (indexdefault < 0)
       {
@@ -221,6 +223,26 @@ void ccruncher::Transitions::validate() throw(Exception)
   }
 
   // TODO: check that any rating can be defaulted
+  vector<bool> defaultable(size(), false);
+  defaultable[indexdefault] = true;
+  size_t num = 1;
+  for(size_t n=0; n<size(); n++) {
+    for(size_t i=0; i<size(); i++) {
+      if (!defaultable[i]) {
+        for(size_t j=0; j<size(); j++) {
+          if (matrix[i][j] > EPSILON && defaultable[j]) {
+            defaultable[i] = true;
+            num++;
+            break;
+          }
+        }
+      }
+    }
+    if (num == size()) break;
+  }
+  if (num != size()) {
+    throw Exception("Transition matrix is not an absorbing Markov chain");
+  }
 }
 
 //===========================================================================

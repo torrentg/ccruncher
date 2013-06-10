@@ -11,6 +11,8 @@ version 2.3 (???. 2013)
   * modified memory allocation policy
   * solved minor bug checking previous executions
   * updated Qwt version (6.0 -> 6.1)
+  * transition matrix default value is 0
+  * checks that transition matrix is an absorbing Markov chain
 
 version 2.2 (Mar. 2013)
 --------------------------
