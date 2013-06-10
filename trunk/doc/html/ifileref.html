@@ -462,14 +462,15 @@
     <h2>Section Transition Matrix</h2>
 
     <p>
-      This section shows how to define the transition matrix. ccruncher always
-      checks that the sum of elements of each row is 1.0. Also, ccruncher checks
-      that only one row with all probability concentrated in a unique
-      element exists. The number of elements to be established is NxN, where N is the 
-      number of credit ratings. Alternatively, you can define the default probability
-      functions instead of a transition matrix. See <a href="#notes">additional notes</a> 
-      for more information.
-	</p>
+      This section shows how to define the transition matrix.
+      The number of elements to be established is NxN, where N is the number 
+      of credit ratings. All non-fixed values are considered 0. CCruncher checks
+      that the sum of elements of each row is 1.0, that exist only one defaulted
+      rating, and that the transition matrix is an absorbing Markov chain (any 
+      rating may end up as defaulted). 
+      Alternatively, you can define the default probability functions instead of 
+      a transition matrix using the <a href="#notes">dprobs</a> tag. 
+    </p>
 
     <h3>Example</h3>
 
@@ -1238,7 +1239,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 03-Jun-2013
+          Last modified: 10-Jun-2013
         </td>
       </tr></table>
     </div>

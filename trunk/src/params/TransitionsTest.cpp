@@ -81,10 +81,6 @@ void ccruncher_test::TransitionsTest::test1()
       <transition from='D' to='C' value='0.15'/>\n\
       <transition from='D' to='D' value='0.60'/>\n\
       <transition from='D' to='E' value='0.15'/>\n\
-      <transition from='E' to='A' value='0.00'/>\n\
-      <transition from='E' to='B' value='0.00'/>\n\
-      <transition from='E' to='C' value='0.00'/>\n\
-      <transition from='E' to='D' value='0.00'/>\n\
       <transition from='E' to='E' value='1.00'/>\n\
     </transitions>";
   double vmatrix12[] = {
@@ -440,4 +436,37 @@ void ccruncher_test::TransitionsTest::test6()
     double u = 0.1 + 0.001*i;
     ASSERT(dprobs.inverse(0,u)>365.0);
   }
+}
+
+//===========================================================================
+// test7
+// checks for non-absorbing markov chain
+//===========================================================================
+void ccruncher_test::TransitionsTest::test7()
+{
+  string xmlcontent1 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <ratings>\n\
+      <rating name='A'/>\n\
+      <rating name='B'/>\n\
+      <rating name='C'/>\n\
+      <rating name='D'/>\n\
+    </ratings>";
+
+  string xmlcontent2 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <transitions period='12'>\n\
+      <transition from='A' to='A' value='90%'/>\n\
+      <transition from='A' to='B' value='10%'/>\n\
+      <transition from='B' to='A' value='10%'/>\n\
+      <transition from='B' to='B' value='90%'/>\n\
+      <transition from='C' to='C' value='90%'/>\n\
+      <transition from='C' to='D' value='10%'/>\n\
+      <transition from='D' to='D' value='100%'/>\n\
+    </transitions>";
+
+  // creating objects
+  ExpatParser xmlparser;
+  Ratings ratings;
+  xmlparser.parse(xmlcontent1, &ratings);
+  Transitions transitions(ratings);
+  ASSERT_THROW(xmlparser.parse(xmlcontent2, &transitions));
 }
