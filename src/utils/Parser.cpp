@@ -29,6 +29,7 @@
 #include <sstream>
 #include <cmath>
 #include "utils/Parser.hpp"
+#include "utils/Expr.hpp"
 #include <cassert>
 
 using namespace std;
@@ -132,7 +133,7 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   // checking that is a double
   if (errno != 0 || pstr == pnum)
   {
-    throw Exception("error parsing double value '" + string(pnum) + "': not a number");
+    return eval(pnum);
   }
   else if (*pstr == 0)
   {
@@ -144,7 +145,27 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   }
   else
   {
-    throw Exception("error parsing double value '" + string(pnum) + "': not a number");
+    return eval(pnum);
+  }
+}
+
+//===========================================================================
+// evalue numeric expression without variables
+//===========================================================================
+double ccruncher::Parser::eval(const char *pnum) throw(Exception)
+{
+  try
+  {
+    vector<Expr::variable> variables;
+    vector<Expr::token> tokens;
+    Expr::compile(pnum, variables, tokens);
+    if (!variables.empty()) throw Exception("found a variable: " + variables[0].id);
+    int maxsize = Expr::link(tokens, variables);
+    return Expr::eval(tokens, maxsize);
+  }
+  catch(Exception &e)
+  {
+    throw Exception(e, "error parsing double value '" + string(pnum) + "': not a number");
   }
 }
 

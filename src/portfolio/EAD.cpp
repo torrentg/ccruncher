@@ -33,66 +33,70 @@
 using namespace std;
 using namespace ccruncher;
 
+//=============================================================
+// supported EAD distributions
+//=============================================================
+const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
+  {"lognormal", 9, 2, Lognormal},
+  {"exponential", 11, 1, Exponential},
+  {"uniform", 7, 2, Uniform},
+  {"gamma", 5, 2, Gamma},
+  {"normal", 6, 2, Normal}
+};
+
+#define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
+
 //===========================================================================
 // constructor
 //===========================================================================
 ccruncher::EAD::EAD(const char *cstr) throw(Exception)
 {
+  assert(cstr != NULL);
   if (cstr == NULL) throw Exception("null ead value");
 
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
-  // parsing ead value
-  if (!isalpha(*cstr))
+  // parsing ead distribution
+  for(size_t i=0; i<NUMDISTRS; i++)
   {
-    value1 = Parser::doubleValue(cstr);
-    init(Fixed, value1, NAN);
-  }
-  else if (strncmp(cstr, "lognormal", 9) == 0)
-  {
-    int rc = sscanf(cstr, "lognormal(%lf,%lf)", &value1, &value2);
-    if (rc != 2) {
-      throw Exception("invalid ead value");
+      if (strncmp(cstr, distrs[i].str, distrs[i].len) == 0)
+    {
+      size_t len = strlen(cstr);
+      if (len-distrs[i].len-2 >= 256 || *(cstr+distrs[i].len) != '(' || *(cstr+len-1) != ')') {
+        throw Exception("invalid ead value");
+      }
+      char aux[256];
+      memcpy(aux, cstr+distrs[i].len+1, len-distrs[i].len-2);
+      len -= distrs[i].len + 2;
+      aux[len] = 0;
+      if (distrs[i].nargs > 1) {
+        char *p = aux-1;
+        size_t num_pars = 0;
+        while (*(++p) != 0) {
+          if (*p == '(') { num_pars++; continue; }
+          else if (*p == ')' && num_pars > 0) { num_pars--; continue; }
+          else if (*p == ',' && num_pars == 0) { *p = 0; break; }
+        }
+        if (p == aux+len) {
+          throw Exception("invalid number of arguments");
+        }
+        value2 = Parser::doubleValue(p+1);
+      }
+      value1 = Parser::doubleValue(aux);
+      if (distrs[i].nargs == 1) {
+        init(distrs[i].type, value1, NAN);
+      }
+      else {
+        init(distrs[i].type, value1, value2);
+      }
+      return;
     }
-    init(Lognormal, value1, value2);
-  } 
-  else if (strncmp(cstr, "exponential", 11) == 0)
-  {
-    int rc = sscanf(cstr, "exponential(%lf)", &value1);
-    if (rc != 1) {
-      throw Exception("invalid ead value");
-    }
-    init(Exponential, value1, NAN);
   }
-  else if (strncmp(cstr, "uniform", 7) == 0)
-  {
-    int rc = sscanf(cstr, "uniform(%lf,%lf)", &value1, &value2);
-    if (rc != 2) {
-      throw Exception("invalid ead value");
-    }
-    init(Uniform, value1, value2);
-  }
-  else if (strncmp(cstr, "gamma", 5) == 0)
-  {
-    int rc = sscanf(cstr, "gamma(%lf,%lf)", &value1, &value2);
-    if (rc != 2) {
-      throw Exception("invalid ead value");
-    }
-    init(Gamma, value1, value2);
-  }
-  else if (strncmp(cstr, "normal", 6) == 0)
-  {
-    int rc = sscanf(cstr, "normal(%lf,%lf)", &value1, &value2);
-    if (rc != 2) {
-      throw Exception("invalid ead value");
-    }
-    init(Normal, value1, value2);
-  }
-  else
-  {
-    throw Exception("invalid ead value");
-  }
+
+  // fixed value case
+  value1 = Parser::doubleValue(cstr);
+  init(Fixed, value1, NAN);
 }
 
 //===========================================================================

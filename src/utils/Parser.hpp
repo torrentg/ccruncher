@@ -43,6 +43,8 @@ class Parser
 
     // non-instantiable class
     Parser() {}
+    // evalue numeric expression without variables
+    static double eval(const char *) throw(Exception);
 
   public:
 

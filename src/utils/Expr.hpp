@@ -147,6 +147,8 @@ class Expr
   public:
 
     // compile an expression
+    static void compile(const char *, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
+    // compile an expression
     static void compile(const std::string &, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
     // link an expression
     static int link(std::vector<token> &tokens, const std::vector<variable> &variables) throw(Exception);

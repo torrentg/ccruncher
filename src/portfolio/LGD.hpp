@@ -53,6 +53,20 @@ class LGD
 
   private:
 
+    // internal struct
+    struct Distr
+    {
+      const char *str;
+      int len;
+      LGD::Type type;
+      //TODO: add gsl_ran_* function ref?
+    };
+
+  // supported distributions
+  static const Distr distrs[];
+
+  private:
+
     // lgd type
     Type type;
     // depends on type

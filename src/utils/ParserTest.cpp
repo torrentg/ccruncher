@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <cmath>
 #include "utils/Parser.hpp"
 #include "utils/ParserTest.hpp"
 
@@ -71,7 +72,6 @@ void ccruncher_test::ParserTest::test_double()
   ASSERT_EQUALS_EPSILON(-3.0, Parser::doubleValue("-3"), EPSILON);
   ASSERT_EQUALS_EPSILON(4.5, Parser::doubleValue("4.5"), EPSILON);
   ASSERT_EQUALS_EPSILON(4.0, Parser::doubleValue("4."), EPSILON);
-  ASSERT_THROW(Parser::doubleValue(" 6 "));
   ASSERT_EQUALS_EPSILON(-10.12345365457657886789699, Parser::doubleValue("-10.12345365457657886789699"), EPSILON);
   ASSERT_EQUALS_EPSILON(-12343246556457666756876867968907609.12, Parser::doubleValue("-12343246556457666756876867968907609.12"), EPSILON);
   ASSERT_EQUALS_EPSILON(0.9, Parser::doubleValue(".9"), EPSILON);
@@ -93,7 +93,12 @@ void ccruncher_test::ParserTest::test_double()
   ASSERT_EQUALS_EPSILON(0.9/100.0, Parser::doubleValue(".9%"), EPSILON);
   ASSERT_EQUALS_EPSILON(0.1/100.0, Parser::doubleValue("+.10%"), EPSILON);
   ASSERT_EQUALS_EPSILON(-0.11/100.0, Parser::doubleValue("-.11%"), EPSILON);
-  
+
+  // expression parsing
+  ASSERT_EQUALS_EPSILON(6.0, Parser::doubleValue(" 6 "), EPSILON);
+  ASSERT_EQUALS_EPSILON(2.0, Parser::doubleValue("1+1"), EPSILON);
+  ASSERT_EQUALS_EPSILON(M_PI+1.0, Parser::doubleValue("Pi+1"), EPSILON);
+  ASSERT_EQUALS_EPSILON(6.0, Parser::doubleValue("1+5*(3+2)/5"), EPSILON);
 }
 
 //===========================================================================
