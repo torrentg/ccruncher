@@ -56,6 +56,21 @@ class EAD
 
   private:
 
+    // internal struct
+    struct Distr
+    {
+      const char *str;
+      int len;
+      size_t nargs;
+      EAD::Type type;
+      //TODO: add gsl_ran_* function ref?
+    };
+
+    // supported distributions
+    static const Distr distrs[];
+
+  private:
+
     // exposure type
     Type type;
     // depends on type

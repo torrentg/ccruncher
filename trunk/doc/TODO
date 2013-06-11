@@ -7,26 +7,19 @@ Current works
   * rename dprobs to pds
   * pds can have multiple transtions, and pd into
   * support exponential distr. as PD?
-  * retrieve asset data attributes in Asset instead of ExpatHandlers
- 
+
 Future works
 -------------------
   * technical features
      - move to Qt5
      - input file in binary format
-     - multi-currency support or expression evaluator
-       <values t="01/07/2015" ead="2960.0" lgd="40%" currency="dolars"/>
-       <values t="01/07/2015" ead="2960.0*$DOLAR_EURO" lgd="40%" />
      - force equal number of sims by thread
-  * improve documentation
-     - add architecture diagrams
   * improve model
      - multiple PDs/Transitions
-     - bucketing option
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
      - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
-     - consider that a obligor could belong to a weighted sum of factors
+     - consider that an obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data
  

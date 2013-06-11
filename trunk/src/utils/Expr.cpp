@@ -461,10 +461,20 @@ void ccruncher::Expr::push(token &tok, vector<token> &tokens)
 //=============================================================
 void ccruncher::Expr::compile(const string &str, vector<variable> &variables, vector<token> &tokens) throw(Exception)
 {
+  return compile(str.c_str(), variables, tokens);
+}
+
+//=============================================================
+// compile an expression using the Shunting-yard algorithm
+// see http://es.wikipedia.org/wiki/Algoritmo_shunting_yard
+//=============================================================
+void ccruncher::Expr::compile(const char *str, vector<variable> &variables, vector<token> &tokens) throw(Exception)
+{
+  assert(str != NULL);
   token prevtok, curtok;
   stack<token, vector<token> > pile;
   stack<int, vector<int> > numargs;
-  const char *ptr = str.c_str();
+  const char *ptr = str;
   char *endptr;
 
   prevtok.type = END;
@@ -596,7 +606,7 @@ void ccruncher::Expr::compile(const string &str, vector<variable> &variables, ve
   catch(Exception &e)
   {
     char buf[128];
-    sprintf(buf, "compile error at or near position %d", int(ptr-str.c_str())+1);
+    sprintf(buf, "compile error at or near position %d", int(ptr-str)+1);
     throw Exception(e, buf);
   }
 }

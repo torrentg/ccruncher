@@ -99,9 +99,14 @@
     </p>
 
     <p>
-      Some configuration options are mutually exclusive. For the configuration 
-      options for which this occurs, please see the <a href="#notes">additional 
-      notes</a> for suggestions of use.
+      The values of type <code>double</code> can be set as numeric 
+      value (eg. 0.053) or percentage (eg. 5.3%). This type also supports
+      the evaluation of numerical expressions (eg. (+2.5+2*(7+7)/10)/100).
+      The supported operators are the usual (<code>+,-,*,/,^</code>), and
+      the supported functions are:
+      <code>sqrt, sin, cos, tan, abs, exp, log, min, max, pow, if</code>.
+      Expression evaluation combined with macros (eg. 2000*$EUR2USD) gives 
+      a flexible way to parameterize your input file.
     </p>
 
 <!-- ==================================================== -->
@@ -111,11 +116,12 @@
     <h2>Section Defines</h2>
 
     <p>
-      This section allows you to define identifiers with associated values. 
-      In the rest of the file you can refer to these values using the identifier preceded 
-      by '$'. This feature is useful when simulating the same file repeatedly 
-      varying slightly the parameters as in the case of sensitivity analysis. 
-      In these cases, the use of defines combined with the command line argument 
+      This section allows you to define macros, that is, identifiers with 
+      associated values. In the rest of the file you can refer to these values 
+      using the identifier preceded by '$'. This feature is useful 
+      when simulating the same file repeatedly varying slightly the parameters 
+      as in the case of sensitivity analysis. 
+      In these cases, the usage of macros combined with the command line argument 
       '-D' allows to use the same file without having to modify it each time. 
       This section is optional. 
     </p>
@@ -395,8 +401,7 @@
       <tr class="a">
         <td class="c1">r</td>
         <td class="c2">
-          Interest rate at time t. It is a value between -0.5 and 1.0. The value
-          can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          Interest rate at time t. It is a value between -0.5 and 1.0.
         </td>
         <td class="c3">double</td>
       </tr>
@@ -469,7 +474,7 @@
       rating, and that the transition matrix is an absorbing Markov chain (any 
       rating may end up as defaulted). 
       Alternatively, you can define the default probability functions instead of 
-      a transition matrix using the <a href="#notes">dprobs</a> tag. 
+      a transition matrix using the <a href="#dprobs">dprobs</a> tag. 
     </p>
 
     <h3>Example</h3>
@@ -596,7 +601,6 @@
         <td class="c1">value</td>
         <td class="c2">
           Probability for credit rating migration and must have a value between 0 and 1.
-          The value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
         </td>
         <td class="c3">double</td>
       </tr>
@@ -648,8 +652,6 @@
           Factor loading value (<i>w<sub>i</sub></i> in the 
           <a href="technical.html#multifactor-model">multi-factor model</a>). 
           A value in the range [0%,100%].
-          The value can be set as percentage (eg. 5.3%) or absolute 
-          value (eg. 0.053).
         </td>
         <td class="c3">double</td>
       </tr>
@@ -725,8 +727,6 @@
         <td class="c1">value</td>
         <td class="c2">
           Correlation between factor1 and factor2. A value in the range [-100%,+100%]. 
-          The value can be set as percentage (eg. 5.3%) or absolute 
-          value (eg. 0.053).
         </td>
         <td class="c3">double</td>
       </tr>
@@ -1003,8 +1003,7 @@
         <td class="c1">lgd</td>
         <td class="c2">
           Default LGD used in absence of LGD in the description of assets.
-          LGD can be a fixed value or a probability distribution. In the first case, 
-          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          LGD can be a fixed value or a probability distribution. 
           In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
@@ -1067,8 +1066,7 @@
         <td class="c1">lgd</td>
         <td class="c2">
           Default LGD used in absence of LGD in the description of assets.
-          LGD can be a fixed value or a probability distribution. In the first case, 
-          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          LGD can be a fixed value or a probability distribution. 
           In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
@@ -1117,8 +1115,7 @@
           The portion of loss that will not be recovered in case of default at date "t". 
           This value takes into account guarantees, the cost to take legal actions, 
           recovery rate based on historical data, etc.
-          LGD can be a fixed value or a probability distribution. In the first case, 
-          the fixed value can be set as percentage (eg. 5.3%) or absolute value (eg. 0.053).
+          LGD can be a fixed value or a probability distribution. 
           In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
@@ -1128,17 +1125,10 @@
     </table>
 
 <!-- ==================================================== -->
-<!--    Notes                                             -->
-<!-- ==================================================== -->
-	<br/>
-    <a name="notes"></a>
-    <h1>Additional Notes</h1>
-
-<!-- ==================================================== -->
 <!--    default probabilities section                     -->
 <!-- ==================================================== -->
     <a name="dprobs"></a>
-    <h2>Default Probability Functions</h2>
+    <h2>Section Default Probability Functions</h2>
 
     <p>
       Default probabilities over time are difficult to obtain, for 
@@ -1226,8 +1216,7 @@
         <td class="c2">
           Probability that an obligor with initial rating <i>rating</i> 
           defaults in the time range <i>[0,t]</i>. It must have a value 
-          between 0 and 1. The value can be set as percentage (eg. 5.3%) or 
-          absolute value (eg. 0.053).
+          between 0 and 1.
         </td>
         <td class="c3">double</td>
       </tr>
@@ -1239,7 +1228,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 10-Jun-2013
+          Last modified: 11-Jun-2013
         </td>
       </tr></table>
     </div>
