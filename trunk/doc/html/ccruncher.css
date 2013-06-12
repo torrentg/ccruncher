@@ -41,10 +41,10 @@ body {
 	float: right;
 	text-align: left;
 	background: #E0E0E0;
-	width: 180px;
+	width: 160px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	padding: 1px 12px 25px 12px;
+	padding: 1px 12px 25px 32px;
 }
 
 #right-menu h3 {
@@ -105,6 +105,10 @@ pre {
 code {
 	font-size: 80%;
 	font-family: monospace;
+}
+
+img {
+	border: 0;
 }
 
 @media all {

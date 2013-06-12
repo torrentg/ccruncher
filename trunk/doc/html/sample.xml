@@ -47,7 +47,7 @@
     <rating name="AA" description="high grade"/>
     <rating name="A" description="upper medium grade"/>
     <rating name="BBB" description="lower medium grade"/>
-    <rating name="BB" description="non investment grade speculative"/>
+    <rating name="BB" description="non-investment grade speculative"/>
     <rating name="B" description="highly speculative"/>
     <rating name="CCC" description="extremely speculative"/>
     <rating name="D" description="in default"/>
