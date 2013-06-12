@@ -36,13 +36,13 @@ void ccruncher_test::ParamsTest::test1()
     <parameters>\n\
       <parameter name='time.0' value='18/02/2003'/>\n\
       <parameter name='time.T' value='18/02/2008'/>\n\
-      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
-      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='maxiterations' value='3000'/>\n\
+      <parameter name='maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='lhs' value='false'/>\n\
-      <parameter name='portfolio.onlyActiveObligors' value='false'/>\n\
+      <parameter name='onlyActiveObligors' value='false'/>\n\
       <parameter name='blocksize' value='256'/>\n\
     </parameters>";
 
@@ -73,8 +73,8 @@ void ccruncher_test::ParamsTest::test2()
     <parameters>\n\
       <parameter name='time.0' value='18/02/2003'/>\n\
       <parameter name='time.T' value='21/03/2001'/>\n\
-      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
-      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='maxiterations' value='3000'/>\n\
+      <parameter name='maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
@@ -95,8 +95,8 @@ void ccruncher_test::ParamsTest::test3()
     <parameters>\n\
       <parameter name='time.0' value='18/02/2003'/>\n\
       <parameter name='time.T' value='12/08/2010'/>\n\
-      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
-      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='maxiterations' value='3000'/>\n\
+      <parameter name='maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='t(3)'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
@@ -120,13 +120,13 @@ void ccruncher_test::ParamsTest::test4()
     <parameters>\n\
       <parameter name='time.0' value='18/02/2003'/>\n\
       <parameter name='time.T' value='18/02/2008'/>\n\
-      <parameter name='stopcriteria.maxiterations' value='3000'/>\n\
-      <parameter name='stopcriteria.maxseconds' value='30000000'/>\n\
+      <parameter name='maxiterations' value='3000'/>\n\
+      <parameter name='maxseconds' value='30000000'/>\n\
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='lhs' value='false'/>\n\
-      <parameter name='portfolio.onlyActiveObligors' value='false'/>\n\
+      <parameter name='onlyActiveObligors' value='false'/>\n\
       <parameter name='blocksize' value='257'/>\n\
     </parameters>";
 

@@ -218,14 +218,14 @@
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="time.0"/>
 			<xsd:enumeration value="time.T"/>
-			<xsd:enumeration value="stopcriteria.maxiterations"/>
-			<xsd:enumeration value="stopcriteria.maxseconds"/>
+			<xsd:enumeration value="maxiterations"/>
+			<xsd:enumeration value="maxseconds"/>
 			<xsd:enumeration value="copula.type"/>
 			<xsd:enumeration value="rng.seed"/>
 			<xsd:enumeration value="antithetic"/>
 			<xsd:enumeration value="lhs"/>
 			<xsd:enumeration value="blocksize"/>
-			<xsd:enumeration value="portfolio.onlyActiveObligors"/>
+			<xsd:enumeration value="onlyActiveObligors"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

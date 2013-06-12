@@ -181,14 +181,14 @@
   &lt;parameters&gt;
     &lt;parameter name="time.0" value="18/10/2009"/&gt;
     &lt;parameter name="time.T" value="15/07/2015"/&gt;
-    &lt;parameter name="stopcriteria.maxiterations" value="$numsims"/&gt;
-    &lt;parameter name="stopcriteria.maxseconds" value="3600"/&gt;
+    &lt;parameter name="maxiterations" value="$numsims"/&gt;
+    &lt;parameter name="maxseconds" value="3600"/&gt;
     &lt;parameter name="copula.type" value="t($ndf)"/&gt;
     &lt;parameter name="rng.seed" value="0"/&gt;
     &lt;parameter name="antithetic" value="true"/&gt;
     &lt;parameter name="lhs" value="false"/&gt;
     &lt;parameter name="blocksize" value="128"/&gt;
-    &lt;parameter name="portfolio.onlyActiveObligors" value="true"/&gt;
+    &lt;parameter name="onlyActiveObligors" value="true"/&gt;
   &lt;/parameters&gt;
     </pre>
 
@@ -218,19 +218,19 @@
         <td class="c3">date</td>
       </tr>
       <tr class="b">
-        <td class="c1">stopcriteria.maxiterations</td>
+        <td class="c1">maxiterations</td>
         <td class="c2">
           Maximum number of iterations performed by the Monte Carlo algorithm.
-          If it has value 0, this stop criteria is not considered. ccruncher stops when a
+          If it has value 0, this stop criteria is not considered. CCruncher stops when a
           stop criteria is achieved.
         </td>
         <td class="c3">int</td>
       </tr>
       <tr class="a">
-        <td class="c1">stopcriteria.maxseconds</td>
+        <td class="c1">maxseconds</td>
         <td class="c2">
           Maximum number of seconds that the current execution can last.
-          If it has value 0, this stop criteria is not considered. ccruncher stops when
+          If it has value 0, this stop criteria is not considered. CCruncher stops when
           a stop criteria is achieved.
         </td>
         <td class="c3">int</td>
@@ -281,7 +281,6 @@
       <tr class="a">
         <td class="c1">lhs</td>
         <td class="c2">
-          This is an experimental feature. 
           Specifies whether or not to use a variance reduction technique 
           named Latin Hypercube Sampling on random variables <i>S</i> and <i>Z</i>. 
           If you have doubts about setting this parameter then set it to 'false', 
@@ -311,7 +310,7 @@
         <td class="c3">integer</td>
       </tr>
       <tr class="a">
-        <td class="c1">portfolio.onlyActiveObligors</td>
+        <td class="c1">onlyActiveObligors</td>
         <td class="c2">
           If you want to simulate all the obligors, including obligors without
           risk in the time range, type 'false'. If you want to simulate
@@ -1133,7 +1132,7 @@
     <p>
       Default probabilities over time are difficult to obtain, for 
       this reason it is better to work with the transition matrix. 
-      Ccruncher will take care to convert the transition matrix in the 
+      CCruncher will take care to convert the transition matrix in the 
       corresponding default probability functions. This implies that 
       the credit rating transitions follow a Markov model. Sometimes 
       this assumption is not acceptable because we desire that transition 
@@ -1228,7 +1227,7 @@
           Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </td>
         <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 11-Jun-2013
+          Last modified: 12-Jun-2013
         </td>
       </tr></table>
     </div>

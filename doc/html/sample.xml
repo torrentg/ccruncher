@@ -17,14 +17,14 @@
   <parameters>
     <parameter name="time.0" value="18/10/2009"/>
     <parameter name="time.T" value="15/07/2015"/>
-    <parameter name="stopcriteria.maxiterations" value="$numsims"/>
-    <parameter name="stopcriteria.maxseconds" value="3600"/>
+    <parameter name="maxiterations" value="$numsims"/>
+    <parameter name="maxseconds" value="3600"/>
     <parameter name="copula.type" value="t($ndf)"/>
     <parameter name="rng.seed" value="0"/>
     <parameter name="antithetic" value="true"/>
     <parameter name="lhs" value="false"/>
     <parameter name="blocksize" value="128"/>
-    <parameter name="portfolio.onlyActiveObligors" value="true"/>
+    <parameter name="onlyActiveObligors" value="true"/>
   </parameters>
 
   <interest type="compound">

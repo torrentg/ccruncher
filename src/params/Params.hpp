@@ -55,9 +55,9 @@ class Params : public ExpatHandlers
     Date time0;
     // time.T param value
     Date timeT;
-    // stopcriteria.maxiterations param value
+    // maxiterations param value
     int maxiterations;
-    // stopcriteria.maxseconds param value
+    // maxseconds param value
     int maxseconds;
     // copula.type param value
     std::string copula_type; // gaussian, t(4)
@@ -67,7 +67,7 @@ class Params : public ExpatHandlers
     bool antithetic;
     // lhs size param value
     unsigned short lhs_size;
-    // portfolio.onlyActiveClients param value
+    // onlyActiveObligors param value
     bool onlyactive;
     // simulation block size
     unsigned short blocksize;
