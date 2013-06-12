@@ -221,8 +221,8 @@
         <td class="c1">maxiterations</td>
         <td class="c2">
           Maximum number of iterations performed by the Monte Carlo algorithm.
-          If it has value 0, this stop criteria is not considered. CCruncher stops when a
-          stop criteria is achieved.
+          If it has value 0, this stop criterion is not considered. CCruncher stops when 
+          a stop criterion is achieved.
         </td>
         <td class="c3">int</td>
       </tr>
@@ -230,8 +230,8 @@
         <td class="c1">maxseconds</td>
         <td class="c2">
           Maximum number of seconds that the current execution can last.
-          If it has value 0, this stop criteria is not considered. CCruncher stops when
-          a stop criteria is achieved.
+          If it has value 0, this stop criterion is not considered. CCruncher stops when
+          a stop criterion is achieved.
         </td>
         <td class="c3">int</td>
       </tr>
@@ -242,7 +242,7 @@
           Two families of copulas are implemented: 
           <ul>
             <li>
-              gaussian: the gaussian copula
+              gaussian: the Gaussian copula
             </li>
             <li>
               t(n): the t-Student copula, where <i>n &ge; 2</i> is the number of 
@@ -256,12 +256,12 @@
         <td class="c1">rng.seed</td>
         <td class="c2">
           Seed used to initialize a random number generator. If it has value 0
-          then a random number based on the current time will be used.
-          If you're planning to do multiple simultaneous simulations of the same 
-          input file and merge the outputs in order to accelerate the computation, 
-          note that you need to set distinct and non-consecutive seeds. It requires 
-          to be non-consecutive because each thread has its how RNG seeded with the 
-          given value plus the thread index starting at 0.
+          then a random number based on the current time will be used.  Note that 
+          you need to set distinct and non-consecutive seeds if you're planning 
+          to do multiple simulations of the same input file and merge the outputs. 
+          It requires being non-consecutive because each thread has its how RNG 
+          seeded with the seed value plus the thread index (zero-based 
+          indexing).
           <br/>
           This parameter is optional. Default value is 0.
         </td>
@@ -285,7 +285,7 @@
           named Latin Hypercube Sampling on random variables <i>S</i> and <i>Z</i>. 
           If you have doubts about setting this parameter then set it to 'false', 
           otherwise set the sample size. If LHS is set and there is more than one 
-          factor, then make sure that the sample size is high enought (eg. 1000),
+          factor, then make sure that the sample size is high enough (eg. 1000),
           otherwise you can obtain incorrect results.
           File <code>indexes.csv</code> contains info about the simulated values.
           <br/>
@@ -297,9 +297,7 @@
         <td class="c1">blocksize</td>
         <td class="c2">
           Number of simultaneous simulations realized for each thread. 
-          This parameter allows to tune the amount of data managed by the CPU in 
-          each iteration. Note that fitting data in the L1/L2 data cache boosts 
-          performance. If you observe a lack of performance when your problem 
+          If you observe a lack of performance when your problem 
           dimensions are high then try to reduce this parameter value.
           If you enable antithetic mode then <code>blocksize</code> needs to be 
           a multiple of 2. It is desirable that the number of simulations be a 
@@ -315,7 +313,7 @@
           If you want to simulate all the obligors, including obligors without
           risk in the time range, type 'false'. If you want to simulate
           only active obligors in the simulation period type 'true'. We 
-          suggest to set 'true'.
+          suggest to set this value to 'true'.
         </td>
         <td class="c3">boolean</td>
       </tr>
@@ -427,7 +425,7 @@
     &lt;rating name="AA" description="high grade"/&gt;
     &lt;rating name="A" description="upper medium grade"/&gt;
     &lt;rating name="BBB" description="lower medium grade"/&gt;
-    &lt;rating name="BB" description="non investment grade speculative"/&gt;
+    &lt;rating name="BB" description="non-investment grade speculative"/&gt;
     &lt;rating name="B" description="highly speculative"/&gt;
     &lt;rating name="CCC" description="extremely speculative"/&gt;
     &lt;rating name="D" description="in default"/&gt;
@@ -673,7 +671,7 @@
       This section shows how to define the correlation matrix between 
       factors, <i>R</i> in the <a href="technical.html#multifactor-model">multi-factor model</a>. 
       The diagonal values are always <i>1</i> and don't need to be specified.
-      The non-diagonal elements are the correlation matrix coefficients 
+      The non-diagonal elements are the correlation matrix coefficients. 
       You only need to set up the upper triangle elements. 
       The number of elements to set up is <i>(numfactors-1) x numfactors / 2</i>.
       If you only have <i>1</i> factor you can set <code>&lt;correlations/&gt;</code> and
@@ -740,7 +738,7 @@
     <p>
       This section shows how to define portfolio segmentations. Segmentations
       allow you to analyze your portfolio's risk according to a hierarchical organization
-      or another type of classification. A segmentation is composed of segments.
+      or another type of classification. Segmentation is composed of segments.
       There are 2 types of segmentations depending on the segments components:
     </p>
     <ul>
@@ -750,9 +748,9 @@
     <p>
       All segmentations must be complete, so that an element belongs to only one segment and 
       the union of all segments constitutes the whole portfolio. Every segmentation has 
-      a segment named 'unassigned' defined in an implicit way. If a obligor (or an asset)
+      an inplicit segment named 'unassigned'. If an obligor (or an asset)
       does not belong to any segment, then it is considered part of the 'unassigned' segment.
-      The maximum number of segments in a segmentation is 65535.
+      The maximum number of segments in segmentation is 65535.
     </p>
 
     <h3>Example</h3>
@@ -1056,7 +1054,7 @@
       <tr class="a">
         <td class="c1">date</td>
         <td class="c2">
-          Date (in format 'DD/MM/YYYY') from wich there is credit risk, eg. bond
+          Date (in format 'DD/MM/YYYY') from which there is credit risk, eg. bond
           buy date or loan signature.
         </td>
         <td class="c3">date</td>
