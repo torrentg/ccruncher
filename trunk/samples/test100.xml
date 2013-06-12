@@ -34,13 +34,13 @@
   <parameters>
     <parameter name='time.0' value='18/02/2003'/>
     <parameter name='time.T' value='18/02/2005'/>
-    <parameter name='stopcriteria.maxiterations' value='$numsims'/>
-    <parameter name='stopcriteria.maxseconds' value='86400'/>
+    <parameter name='maxiterations' value='$numsims'/>
+    <parameter name='maxseconds' value='86400'/>
     <parameter name='copula.type' value='t($ndf)'/>
     <parameter name='rng.seed' value='$seed'/>
     <parameter name='antithetic' value='false'/>
     <parameter name="blocksize" value="128"/>
-    <parameter name='portfolio.onlyActiveObligors' value='true'/>
+    <parameter name='onlyActiveObligors' value='true'/>
   </parameters>
   <interest type='compound'>
     <rate t="0D" r="0.0%"/>

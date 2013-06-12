@@ -5,7 +5,7 @@ CCRUNCHER TODO
 Current works
 -------------------
   * rename dprobs to pds
-  * pds can have multiple transtions, and pd into
+  * pds can have multiple transitions, and pd into
   * support exponential distr. as PD?
 
 Future works
@@ -15,10 +15,9 @@ Future works
      - input file in binary format
      - force equal number of sims by thread
   * improve model
-     - multiple PDs/Transitions
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
-     - risk dissagregation (eg. ES) along segments ('Introduction to Credit Risk Modeling')
+     - capital allocation per segment ('Introduction to Credit Risk Modeling - 5.2.3')
      - consider that an obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data

@@ -155,17 +155,17 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
     if (timeT != NAD) throw Exception("parameter time.T repeated");
     else timeT = getDateAttribute(attributes, "value");
   }
-  else if (name == "stopcriteria.maxiterations")
+  else if (name == "maxiterations")
   {
-    if (maxiterations >= 0L) throw Exception("parameter stopcriteria.maxiterations repeated");
+    if (maxiterations >= 0L) throw Exception("parameter maxiterations repeated");
     else maxiterations = getIntAttribute(attributes, "value");
-    if (maxiterations < 0L) throw Exception("parameter stopcriteria.maxiterations out of range");
+    if (maxiterations < 0L) throw Exception("parameter maxiterations out of range");
   }
-  else if (name == "stopcriteria.maxseconds")
+  else if (name == "maxseconds")
   {
-    if (maxseconds >= 0L) throw Exception("parameter stopcriteria.maxseconds repeated");
+    if (maxseconds >= 0L) throw Exception("parameter maxseconds repeated");
     else maxseconds = getIntAttribute(attributes, "value");
-    if (maxseconds < 0L) throw Exception("parameter stopcriteria.maxseconds out of range");
+    if (maxseconds < 0L) throw Exception("parameter maxseconds out of range");
   }
   else if (name == "copula.type")
   {
@@ -206,7 +206,7 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
       }
     }
   }
-  else if (name == "portfolio.onlyActiveObligors")
+  else if (name == "onlyActiveObligors")
   {
     onlyactive = getBooleanAttribute(attributes, "value");
   }
@@ -253,12 +253,12 @@ void ccruncher::Params::validate() const throw(Exception)
 
   if (maxiterations < 0L)
   {
-    throw Exception("parameter stopcriteria.maxiterations not defined");
+    throw Exception("parameter maxiterations not defined");
   }
 
   if (maxseconds < 0L)
   {
-    throw Exception("parameter stopcriteria.maxseconds not defined");
+    throw Exception("parameter maxseconds not defined");
   }
 
   if (copula_type == "")

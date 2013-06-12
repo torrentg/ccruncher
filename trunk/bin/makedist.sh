@@ -238,6 +238,8 @@ makeWinDist() {
             libgcc_s_dw2-1.dll
             QtCore4.dll
             QtGui4.dll
+            QtNetwork4.dll
+            QtOpenGL4.dll
             QtSvg4.dll
             qwt.dll"
 
