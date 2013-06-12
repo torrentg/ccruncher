@@ -125,6 +125,9 @@ TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
 \section*{Contributors}
+The following people have contributed in some way to this document. This 
+doesn't mean that they support or endorse its contents. 
+Any errors are attributable only to the author.\\
 Be the first!
 
 ~\vfill
@@ -1522,9 +1525,9 @@ they form a multivariate distribution.
 	Let us consider the following scenario:
 	\begin{itemize}
 		\item t-Student copula with $\nu=20$.
-		\item Three ratings \{A, B, D\} where D is the defaulted status, and three 
-		sectors \{S1, S2, S3\}, having the following 1-year probabilities of 
-		default, factor loadings, and factors correlation matrix:
+		\item Three ratings \{A, B, D\} where D is the \emph{defaulted} status, 
+		and three sectors \{S1, S2, S3\}, having the following 1-year probabilities 
+		of default, factor loadings, and factors correlation matrix:
 		\begin{displaymath}
 			\begin{array}{l}
 				p_A=2\%     \\
@@ -1970,8 +1973,8 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	Let be a portfolio composed of 1000 obligors where every obligor owe 1\euro\ to
 	1 year, this means that $\text{EAD}(t) = \mathbbm{1}_{[0,1]}(t)$, with 
 	a LGD of $100\%$. There are 4 ratings \{A, B, C, D\} where D is the 
-	defaulted status and the other ones have the following 1-year default 
-	probability: $p_A = 5\%, p_B = 10\%, P_C = 20\%$. Factors loadings are 
+	\emph{defaulted} status and the other ones have the following 1-year default 
+	probability: $p_A = 5\%, p_B = 10\%, p_C = 20\%$. Factors loadings are 
 	$\vec{w} = (0.4, 0.35)$ and the factors correlation is 
 	$\text{Cor}(S_1,S_2) = 0.25$. The t-Student copula has $\nu=15$ degrees
 	of freedom and the number of obligors by sector and rating are:
@@ -2300,8 +2303,8 @@ In CCruncher the random sampling of the portfolio loss distribution is
 performed doing $g(X)$ where $X$ is a multivariate t-Student distribution 
 and $g(x) = \text{PD}^{-1}(t_{\nu}(x))$. We use the fact that the multivariate 
 t-Student distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is 
-equiprobable to $(-x_1,\dots,-x_n)$, to apply the the antithetic method. 
-Expected Loss is the unique statistic that benefits from the the variance 
+equiprobable to $(-x_1,\dots,-x_n)$, to apply the antithetic method. 
+Expected Loss is the unique statistic that benefits from the variance 
 reduction. But rather than reducing the variance we are interested 
 in the reusing of the simulated random numbers to increase the simulation 
 speed. Please note that when we use the antithetic method to sample the 
