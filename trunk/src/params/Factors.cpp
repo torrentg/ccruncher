@@ -104,7 +104,7 @@ void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      throw Exception("factor name " + val.name + " repeated");
+      throw Exception("factor '" + val.name + "' repeated");
     }
   }
 
@@ -147,7 +147,7 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
     }
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

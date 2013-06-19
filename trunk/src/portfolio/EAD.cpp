@@ -159,7 +159,7 @@ void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
 {
   if (t != Fixed || !isnan(a))
   {
-    if (!valid(t, a, b)) throw Exception("invalid ead parameters");
+    if (!valid(t, a, b)) throw Exception("invalid ead");
   }
 
   type = t;

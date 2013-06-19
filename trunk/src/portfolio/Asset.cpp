@@ -141,7 +141,7 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   }
   else
   {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 
@@ -163,7 +163,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
     // checking for dates previous to asset date
     if (data[0].date < date)
     {
-      throw Exception("asset with date values previous to asset creation date");
+      throw Exception("exist a date values previous to asset creation date");
     }
 
     // checking for repeated dates
@@ -171,7 +171,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
     {
       if (data[i-1].date == data[i].date)
       {
-        throw Exception("asset with repeated date");
+        throw Exception("repeated date values");
       }
     }
   }

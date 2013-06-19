@@ -49,7 +49,7 @@ ndefaults = [
 
 NU.param = [1.0]
 W.param = [0.01, 0.01]
-R.param = [0.01
+R.param = [0.01]
 Z.param = [0.1]
 S.param = [0.5]
 

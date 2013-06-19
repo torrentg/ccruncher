@@ -70,7 +70,7 @@ int ccruncher::Segmentation::indexOfSegment(const string &sname) const throw(Exc
     }
   }
 
-  throw Exception("segment " + sname + " not found");
+  throw Exception("segment '" + sname + "' not found");
 }
 
 //===========================================================================
@@ -88,7 +88,7 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Excep
     }
   }
 
-  throw Exception("segment " + string(sname) + " not found");
+  throw Exception("segment '" + string(sname) + "' not found");
 }
 
 //===========================================================================
@@ -134,7 +134,7 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   {
     if (segments[i] == sname)
     {
-      throw Exception("segment " + segments[i] + " repeated");
+      throw Exception("segment '" + segments[i] + "' repeated");
     }
   }
 
@@ -174,7 +174,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
       components = obligor;
     }
     else {
-      throw Exception("tag <segmentation> with invalid components attribute");
+      throw Exception("unrecognized components attribute: '" + strcomp + "'");
     }
   }
   else if (isEqual(name_,"segment")) {
@@ -182,7 +182,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
     insertSegment(sname);
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

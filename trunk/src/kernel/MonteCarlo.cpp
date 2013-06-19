@@ -446,9 +446,8 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   for(int i=0; i<numsegmentations; i++)
   {
     if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
-      throw Exception("segmentation '" +
-                      idata.getSegmentations().getSegmentation(i).name +
-                      "' exceeds the maximum number of segments");
+      const string &sname = idata.getSegmentations().getSegmentation(i).name;
+      throw Exception("segmentation '" + sname + "' exceeds the maximum number of segments");
     }
 
     string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);

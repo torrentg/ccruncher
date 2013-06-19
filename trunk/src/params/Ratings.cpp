@@ -95,7 +95,7 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 
     if (aux.name == val.name)
     {
-      throw Exception("rating name " + val.name + " repeated");
+      throw Exception("rating name '" + val.name + "' repeated");
     }
   }
 
@@ -130,7 +130,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char 
     }
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

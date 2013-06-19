@@ -168,7 +168,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
     string key(p1, p2-p1);
 
     map<string,string>::const_iterator it = defines.find(key);
-    if (it == defines.end()) throw Exception("key '" + key + "' not defined");
+    if (it == defines.end()) throw Exception("macro '" + key + "' not defined");
     else ret = bufferAppend(it->second.c_str(), it->second.size());
 
     p1 = p2;

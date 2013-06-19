@@ -73,12 +73,17 @@ void ccruncher::Portfolio::init(const Ratings &ratings_, const Factors &factors_
   auxobligor = NULL;
   vobligors.clear();
   // setting external objects
-  ratings = &ratings_;
-  factors = &factors_;
-  segmentations = &segmentations_;
+  if (ratings_.size() == 0) throw Exception("ratings not defined");
+  else ratings = &ratings_;
+  if (factors_.size() == 0) throw Exception("factors not defined");
+  else factors = &factors_;
+  if (segmentations_.size() == 0) throw Exception("segmentations not defined");
+  else segmentations = &segmentations_;
   interest = &interest_;
-  date1 = date1_;
-  date2 = date2_;
+  if (date1_ == NAD) throw Exception("time.0 not defined");
+  else date1 = date1_;
+  if (date2_ == NAD) throw Exception("time.T not defined");
+  else date2 = date2_;
 }
 
 //===========================================================================
@@ -158,7 +163,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
     eppush(eu, auxobligor, name_, attributes);
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

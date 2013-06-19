@@ -78,7 +78,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const string &sname) const thr
       return -i-1;
     }
   }
-  throw Exception("segmentation " + sname + " not found");
+  throw Exception("segmentation '" + sname + "' not found");
 }
 
 //===========================================================================
@@ -100,7 +100,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw
       return -i-1;
     }
   }
-  throw Exception("segmentation " + string(sname) + " not found");
+  throw Exception("segmentation '" + string(sname) + "' not found");
 }
 
 //===========================================================================
@@ -144,14 +144,14 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
   {
     if (enabled[i].name == val.name)
     {
-      throw Exception("segmentation name " + val.name + " repeated");
+      throw Exception("segmentation name '" + val.name + "' repeated");
     }
   }
   for (size_t i=0; i<disabled.size(); i++)
   {
     if (disabled[i].name == val.name)
     {
-      throw Exception("segmentation name " + val.name + " repeated");
+      throw Exception("segmentation name '" + val.name + "' repeated");
     }
   }
 
@@ -183,7 +183,7 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
     eppush(eu, &auxsegmentation, name_, attributes);
   }
   else {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

@@ -68,7 +68,7 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
     parseParameter(eu, atrs);
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw Exception("unexpected tag '" + string(name) + "'");
   }
 }
 
@@ -97,7 +97,7 @@ string ccruncher::Params::getCopulaType(const string &str) throw(Exception)
   }
   // non-valid copula type
   else {
-    throw Exception("invalid copula type: " + str + ". try 'gaussian' or 't(x)' with x>2");
+    throw Exception("invalid copula type: '" + str + "'");
   }
 }
 
@@ -222,7 +222,7 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   }
   else
   {
-    throw Exception("found unexpected parameter: " + name);
+    throw Exception("unexpected parameter: '" + name + "'");
   }
 }
 
