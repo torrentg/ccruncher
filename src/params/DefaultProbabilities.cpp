@@ -144,14 +144,13 @@ DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultP
 //===========================================================================
 void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(Exception)
 {
-  ratings = ratings_;
-
-  if (ratings.size() <= 0)
+  if (ratings_.size() <= 0)
   {
-    throw Exception("invalid number of ratings (" + Format::toString(ratings.size()) + " <= 0)");
+    throw Exception("ratings not defined");
   }
   else
   {
+    ratings = ratings_;
     ddata = vector<vector<pd> >(ratings.size());
   }
 }
@@ -225,20 +224,21 @@ void ccruncher::DefaultProbabilities::insertValue(const string &srating, const D
   // checking rating index
   if (irating < 0)
   {
-    throw Exception("unknow rating at dprob[" + srating + "][" + Format::toString(t) + "]");
+    throw Exception("unknow rating at dprob[" + srating + "," + Format::toString(t) + "]");
   }
 
   // validating time
   if (t < date)
   {
-    string msg = "dprob[" + srating + "][" + Format::toString(t) + "] has date previous to initial time";
+    string msg = "dprob[" + srating + "," + Format::toString(t) +
+                 "] has date previous to initial time";
     throw Exception(msg);
   }
 
   // validating value
   if (value < 0.0 || 1.0 < value)
   {
-    string msg = "dprob[" + srating + "][" + Format::toString(t) +
+    string msg = "dprob[" + srating + "," + Format::toString(t) +
                  "] out of range: " + Format::toString(value);
     throw Exception(msg);
   }
@@ -248,7 +248,7 @@ void ccruncher::DefaultProbabilities::insertValue(const string &srating, const D
   // checking that is not previously defined
   for(size_t i=0; i<ddata[irating].size(); i++) {
     if (ddata[irating][i].day == day) {
-      string msg = "dprob[" + srating + "][" + Format::toString(t) + "] redefined";
+      string msg = "dprob[" + srating + "," + Format::toString(t) + "] redefined";
       throw Exception(msg);
     }
   }
@@ -336,7 +336,7 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
   {
     if (i != indexdefault && ddata[i][0].day == 0 && ddata[i][0].prob > EPSILON)
     {
-      string msg = "dprob[" + ratings.getName(i) + "][0] > 0";
+      string msg = "dprob[" + ratings.getName(i) + ",0] > 0";
       throw Exception(msg);
     }
   }

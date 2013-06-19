@@ -116,7 +116,7 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
   {
     if (vassets[i]->getId() == vassets[ila]->getId())
     {
-      throw Exception("asset identifier " + vassets[ila]->getId() + " repeated");
+      throw Exception("asset identifier '" + vassets[ila]->getId() + "' repeated");
     }
   }
 
@@ -159,11 +159,11 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
     str = getAttributeValue(attributes, "rating");
     irating = ratings->getIndex(str);
-    if (irating < 0) throw Exception("rating not found");
+    if (irating < 0) throw Exception("rating '" + string(str) + "' not found");
 
     str = getAttributeValue(attributes, "factor");
     ifactor = factors->getIndex(str);
-    if (ifactor < 0) throw Exception("factor not found");
+    if (ifactor < 0) throw Exception("factor '" + string(str) + "' not found");
 
     str = getAttributeValue(attributes, "lgd", NULL);
     if (str != NULL) {
@@ -172,7 +172,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   }
   else
   {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 
@@ -188,7 +188,7 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
 
     // check lgd values
     if (hasLGD() && !LGD::isvalid(lgd)) {
-      throw Exception("obligor hasn't lgd, but has asset that assumes obligor lgd");
+      throw Exception("obligor hasn't lgd, but has an asset that assumes obligor lgd");
     }
     
     // shrinking memory

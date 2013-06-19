@@ -39,15 +39,8 @@ namespace ccruncher {
 class Exception : public std::exception
 {
 
-  private:
-
-    // retrieves stack trace
-    std::string retrieveStackTrace();
-
   protected:
 
-    // stack trace info
-    std::string stacktrace;
     // exception message
     std::string msg;
 
@@ -56,25 +49,17 @@ class Exception : public std::exception
     // default constructor
     Exception();
     // constructor
-    Exception(const std::string&);
-    // constructor
-    Exception(const Exception &);
-    // constructor
     Exception(const std::exception &);
-    // constructor
-    Exception(const Exception &, const std::string&);
     // constructor
     Exception(const std::exception &, const std::string&);
     // constructor
-    Exception(const char *);
+    Exception(const std::string &);
     // destructor
     ~Exception() throw ();
     // returns exception message
     const char * what() const throw();
     // returns exception message
     const std::string & toString() const;
-    // returns stack trace
-    const std::string & getStackTrace() const;
 
 };
 

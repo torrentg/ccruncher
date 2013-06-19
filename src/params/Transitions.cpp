@@ -108,13 +108,13 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
   // validating ratings
   if (row < 0 || col < 0)
   {
-    throw Exception("undefined rating at <transition> " + rating1 + " -> " + rating2);
+    throw Exception("undefined rating at transition[" + rating1 + "," + rating2 + "]");
   }
 
   // validating value
   if (value < -EPSILON || value > (1.0+EPSILON))
   {
-    string msg = " transition value[" + rating1 + "][" + rating2 + "] out of range: " + 
+    string msg = "transition[" + rating1 + "," + rating2 + "] is out of range: " +
                  Format::toString(value);
     throw Exception(msg);
   }
@@ -122,7 +122,7 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
   // checking that it is not previously defined
   if (!isnan(matrix[row][col]))
   {
-    string msg = "redefined transition [" + rating1 + "][" + rating2 + "] in <transitions>";
+    string msg = "transition[" + rating1 + "," + rating2 + "] redefined";
     throw Exception(msg);
   }
 
@@ -151,7 +151,7 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const ch
     insertTransition(from, to, value);
   }
   else {
-    throw Exception("unexpected tag " + string(name));
+    throw Exception("unexpected tag '" + string(name) + "'");
   }
 }
 
@@ -196,7 +196,7 @@ void ccruncher::Transitions::validate() throw(Exception)
 
     if (fabs(sum-1.0) > EPSILON)
     {
-      throw Exception("transition matrix row " + Format::toString(i+1) + " does not add up to 1");
+      throw Exception("row transition[" + ratings.getName(i) + ",.] does not add up to 1");
     }
   }
 
@@ -213,7 +213,7 @@ void ccruncher::Transitions::validate() throw(Exception)
       }
       else
       {
-        throw Exception("found 2 or more default ratings in transition matrix");
+        throw Exception("found 2 or more default ratings");
       }
     }
   }
@@ -241,7 +241,7 @@ void ccruncher::Transitions::validate() throw(Exception)
     if (num == size()) break;
   }
   if (num != size()) {
-    throw Exception("Transition matrix is not an absorbing Markov chain");
+    throw Exception("transition matrix is not an absorbing Markov chain");
   }
 }
 

@@ -86,7 +86,7 @@ void ccruncher::ExpatHandlers::epdata(ExpatUserData &, const char *, const char 
   {
     if (!isspace(s[i]))
     {
-      throw Exception("unexpected text parsing xml");
+      throw Exception("unexpected text parsing xml: '" + string(s, len) + "'");
     }
   }
 }

@@ -136,7 +136,7 @@ void ccruncher::LGD::init(Type t, double a, double b) throw(Exception)
 {
   if (t != Fixed || !isnan(a))
   {
-    if (!valid(t, a, b)) throw Exception("invalid lgd parameters");
+    if (!valid(t, a, b)) throw Exception("invalid lgd");
   }
   
   type = t;

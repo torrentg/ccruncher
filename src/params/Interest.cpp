@@ -97,7 +97,7 @@ Interest & ccruncher::Interest::operator=(const Interest &o)
 //===========================================================================
 void ccruncher::Interest::setDate(const Date &d)
 {
-  //TODO: check that time.0 and time.T are covered by this curve
+  if (d == NAD) throw Exception("invalid date");
   date = d;
 }
 
@@ -282,14 +282,14 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
         type = Continuous;
       }
       else  {
-        throw Exception("invalid type value at <interest>");
+        throw Exception("unrecognized interest type");
       }
 
       str = getStringAttribute(attributes, "spline", "linear");
       if (str == "cubic") is_cubic_spline = true;
       else if (str == "linear") is_cubic_spline = false;
       else {
-        throw Exception("unrecognized spline type: " + str + ". allowed types are: linear, cubic");
+        throw Exception("unrecognized spline type");
       }
     }
     else {
@@ -322,7 +322,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
   }
   else
   {
-    throw Exception("unexpected tag " + string(name_));
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
 }
 

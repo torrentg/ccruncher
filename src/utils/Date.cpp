@@ -63,7 +63,7 @@ ccruncher::Date::Date(const int iDay, const int iMonth, const int iYear) throw(E
   if (!valid(iDay, iMonth, iYear))
   {
     char buf[50];
-    snprintf(buf, 50, "invalid Date: %i/%i/%i", iDay, iMonth, iYear);
+    snprintf(buf, 50, "invalid date: %i/%i/%i", iDay, iMonth, iYear);
     throw Exception(buf);
   }
 
@@ -116,44 +116,33 @@ void ccruncher::Date::parse(const char *str) throw(Exception)
 
   // parsing day
   while (isdigit(*ptr2)) ptr2++;
-  if (ptr2-ptr1 < 1 || ptr2-ptr1 > 2 || *ptr2 != '/') {
-    throw Exception("invalid date: " + string(str) + " (non valid format)");
-  }
-  else {
+  if (ptr2-ptr1 > 0 && ptr2-ptr1 < 3 && *ptr2 == '/') {
     d = atoi(ptr1);
     ptr2++;
     ptr1 = ptr2;
+
+    // parsing month
+    while (isdigit(*ptr2)) ptr2++;
+    if (ptr2-ptr1 > 0 && ptr2-ptr1 < 3 && *ptr2 == '/') {
+      m = atoi(ptr1);
+      ptr2++;
+      ptr1 = ptr2;
+
+      // parsing year
+      while (isdigit(*ptr2)) ptr2++;
+      if (ptr2-ptr1 == 4 && *ptr2 == 0) {
+        y = atoi(ptr1);
+
+        // setting date
+        if (valid(d, m, y)) {
+          lJulianDay = YmdToJd(y, m, d);
+          return;
+        }
+      }
+    }
   }
 
-  // parsing month
-  while (isdigit(*ptr2)) ptr2++;
-  if (ptr2-ptr1 < 1 || ptr2-ptr1 > 2 || *ptr2 != '/') {
-    throw Exception("invalid date: " + string(str) + " (non valid format)");
-  }
-  else {
-    m = atoi(ptr1);
-    ptr2++;
-    ptr1 = ptr2;
-  }
-
-  // parsing year
-  while (isdigit(*ptr2)) ptr2++;
-  if (ptr2-ptr1 != 4 || *ptr2 != 0) {
-    throw Exception("invalid date: " + string(str) + " (non valid format)");
-  }
-  else {
-    y = atoi(ptr1);
-  }
-
-  // setting date
-  if (!valid(d, m, y))
-  {
-    throw Exception("invalid Date: " + string(str) + " (non valid date)");
-  }
-  else
-  {
-    lJulianDay = YmdToJd(y, m, d);
-  }
+  throw Exception("invalid date: " + string(str));
 }
 
 //===========================================================================

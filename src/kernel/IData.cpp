@@ -83,7 +83,7 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
     }
 
     if (file == NULL) {
-      throw Exception("can't open file " + filename);
+        throw Exception("can't open file '" + filename + "'");
     }
 
     pthread_mutex_lock(&mutex);
@@ -157,29 +157,22 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
 //===========================================================================
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
-  if (isEqual(name_,"ccruncher")) {
+  if (isEqual(name_,"ccruncher") && !hasmaintag) {
     hasmaintag = true;
-    return;
   }
-  else if (hasmaintag == false) {
-    throw Exception("ccruncher tag not found");
+  else if (!hasmaintag) {
+    throw Exception("unexpected tag '" + string(name_) + "'");
   }
-
-  // title tag
-  if (isEqual(name_,"title")) {
+  else if (isEqual(name_,"title")) {
     // nothing to do (see epdata method)
   }
-  // description tag
   else if (isEqual(name_,"description")) {
     // nothing to do (see epdata method)
   }
-  // section defines
-  else if (isEqual(name_,"defines")) {
-    if (hasdefinestag == 0) hasdefinestag = 1;
-    else throw Exception("unexpected tag");
+  else if (isEqual(name_,"defines") && hasdefinestag == 0) {
+    hasdefinestag = 1;
   }
-  else if (isEqual(name_,"define")) {
-    if (hasdefinestag != 1) throw Exception("unexpected tag");
+  else if (isEqual(name_,"define") && hasdefinestag == 1) {
     string key = getStringAttribute(attributes, "name");
     string value = getStringAttribute(attributes, "value");
     checkDefine(key, value);
@@ -188,112 +181,39 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       eu.defines[key] = value;
     }
   }
-  // section params
-  else if (isEqual(name_,"parameters")) {
-    if (params.maxiterations >= 0) {
-      throw Exception("tag <parameters> repeated");
-    }
-    else {
-      eppush(eu, &params, name_, attributes);
-    }
+  else if (isEqual(name_,"parameters") && params.time0 == NAD) {
+    eppush(eu, &params, name_, attributes);
   }
-  // section interest
-  else if (isEqual(name_,"interest")) {
-    if (interest.size() != 0) {
-      throw Exception("tag <interest> repeated");
-    }
-    else {
-      interest.setDate(params.time0);
-      eppush(eu, &interest, name_, attributes);
-    }
+  else if (isEqual(name_,"interest") && interest.size() == 0) {
+    interest.setDate(params.time0);
+    eppush(eu, &interest, name_, attributes);
   }
-  // section ratings
-  else if (isEqual(name_,"ratings")) {
-    if (ratings.size() != 0) {
-      throw Exception("tag <ratings> repeated");
-    }
-    else {
-      eppush(eu, &ratings, name_, attributes);
-    }
+  else if (isEqual(name_,"ratings") && ratings.size() == 0) {
+    eppush(eu, &ratings, name_, attributes);
   }
-  // section transition matrix
-  else if (isEqual(name_,"transitions")) {
-    if (ratings.size() == 0) {
-      throw Exception("tag <mtransition> defined before <ratings> tag");
-    }
-    else if (transitions.size() > 0) {
-      throw Exception("tag <transitions> repeated");
-    }
-    else {
-      transitions.setRatings(ratings);
-      eppush(eu, &transitions, name_, attributes);
-    }
+  else if (isEqual(name_,"transitions") && transitions.size() == 0) {
+    transitions.setRatings(ratings);
+    eppush(eu, &transitions, name_, attributes);
   }
-  // section default probabilities
-  else if (isEqual(name_,"dprobs")) {
-    if (ratings.size() == 0) {
-      throw Exception("tag <dprobs> defined before <ratings> tag");
-    }
-    else if (dprobs.size() != 0) {
-      throw Exception("tag <dprobs> repeated");
-    }
-    else {
-      dprobs.setRatings(ratings);
-      dprobs.setDate(params.time0);
-      eppush(eu, &dprobs, name_, attributes);
-    }
+  else if (isEqual(name_,"dprobs") && dprobs.size() == 0) {
+    dprobs.setRatings(ratings);
+    dprobs.setDate(params.time0);
+    eppush(eu, &dprobs, name_, attributes);
   }
-  // section factors
-  else if (isEqual(name_,"factors")) {
-    if (factors.size() != 0) {
-      throw Exception("tag <factors> repeated");
-    }
-    else {
-      eppush(eu, &factors, name_, attributes);
-    }
+  else if (isEqual(name_,"factors") && factors.size() == 0) {
+    eppush(eu, &factors, name_, attributes);
   }
-  // section correlation matrix
-  else if (isEqual(name_,"correlations")) {
-    if (factors.size() == 0) {
-      throw Exception("tag <correlations> defined before <factors> tag");
-    }
-    else if (correlations.size() > 0) {
-      throw Exception("tag <correlations> repeated");
-    }
-    else {
-      correlations.setFactors(factors);
-      eppush(eu, &correlations, name_, attributes);
-    }
+  else if (isEqual(name_,"correlations") && correlations.size() == 0) {
+    correlations.setFactors(factors);
+    eppush(eu, &correlations, name_, attributes);
   }
-  // section segmentations
-  else if (isEqual(name_,"segmentations")) {
-    if (segmentations.size() > 0) {
-      throw Exception("tag <segmentations> repeated");
-    }
-    else {
-      eppush(eu, &segmentations, name_, attributes);
-    }
+  else if (isEqual(name_,"segmentations") && segmentations.size() == 0) {
+    eppush(eu, &segmentations, name_, attributes);
   }
-  // section portfolio
-  else if (isEqual(name_,"portfolio")) {
-    if (ratings.size() == 0) {
-      throw Exception("tag <portfolio> defined before <ratings> tag");
-    }
-    else if (factors.size() == 0) {
-      throw Exception("tag <portfolio> defined before <factors> tag");
-    }
-    else if (segmentations.size() == 0) {
-      throw Exception("tag <portfolio> defined before <segmentations> tag");
-    }
-    else if (portfolio.getObligors().size() != 0) {
-      throw Exception("tag <portfolio> repeated");
-    }
-    else {
-      if (!parse_portfolio) epstop(eu);
-      parsePortfolio(eu, name_, attributes);
-    }
+  else if (isEqual(name_,"portfolio") && portfolio.getObligors().size() == 0) {
+    if (!parse_portfolio) epstop(eu);
+    parsePortfolio(eu, name_, attributes);
   }
-  // default catcher
   else {
     throw Exception("unexpected tag '" + string(name_) + "'");
   }
@@ -306,10 +226,10 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
 void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
 {
   if (isEqual(name_,"title")) {
-    title += string(data, len);
+    title.append(data, len);
   }
   else if (isEqual(name_,"description")) {
-    description += string(data, len);
+    description.append(data, len);
   }
   else {
     ExpatHandlers::epdata(eu, name_, data, len);
@@ -355,7 +275,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       string filepath = File::filepath(path, ref);
       file = gzopen(filepath.c_str(), "rb");
       if (file == NULL) {
-        throw Exception("can't open file " + filepath);
+        throw Exception("can't open file '" + filepath + "'");
       }
 
       size_t bytes = File::filesize(filepath);
@@ -398,25 +318,25 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
 void ccruncher::IData::validate() throw(Exception)
 {
   if (params.maxiterations < 0) {
-    throw Exception("parameters section not defined");
+    throw Exception("section 'parameters' not defined");
   }
   else if (ratings.size() == 0) {
-    throw Exception("ratings section not defined");
+    throw Exception("section 'parameters' not defined");
   }
   else if (transitions.size() == 0 && dprobs.size() == 0) {
-    throw Exception("transitions or dprobs section not defined");
+    throw Exception("section 'transitions' or 'dprobs' not defined");
   }
   else if (factors.size() == 0) {
-    throw Exception("factors section not defined");
+    throw Exception("section 'factors' not defined");
   }
   else if (correlations.size() == 0) {
-    throw Exception("correlation matrix section not defined");
+    throw Exception("section 'correlations' not defined");
   }
   else if (segmentations.size() == 0) {
-    throw Exception("segmentations section not defined");
+    throw Exception("section 'segmentations' not defined");
   }
   else if (portfolio.getObligors().size() == 0) {
-    throw Exception("portfolio section not defined");
+    throw Exception("section 'portfolio' not defined");
   }
 }
 
@@ -522,15 +442,17 @@ bool ccruncher::IData::hasDefaultProbabilities() const
 //===========================================================================
 void ccruncher::IData::checkDefine(const string &key, const string &value) const throw(Exception)
 {
-  if (key.length() == 0) throw Exception("invalid define name");
+  if (key.length() == 0) throw Exception("invalid macro name");
 
   for(size_t i=0; i<key.length(); i++)
   {
-      if (!isalnum(key[i]) && key[i] != '_') throw Exception("invalid define name '" + key + "'");
+    if (!isalnum(key[i]) && key[i] != '_') {
+      throw Exception("invalid macro name '" + key + "'");
+    }
   }
 
   if (value.find_first_of("&<>\"'") != string::npos) {
-    throw Exception("invalid define value '" + value + "'");
+    throw Exception("invalid macro value '" + value + "'");
   }
 }
 

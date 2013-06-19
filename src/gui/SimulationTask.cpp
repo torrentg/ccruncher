@@ -298,7 +298,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
     // previous execution found. append/overwrite/cancel dialog
     QMessageBox dialog(QMessageBox::Warning, "CCruncher",
                    "Found a previous execution in the output directory.\n"
-                   "What we do with existent output files?");
+                   "What we do with existing output files?");
     dialog.addButton("Append", QMessageBox::YesRole);
     dialog.addButton("Overwrite", QMessageBox::NoRole);
     dialog.addButton("Abort", QMessageBox::RejectRole);
@@ -333,7 +333,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
     // previous execution found distinct than current
     fmode = 'w';
     QMessageBox::StandardButton rc = QMessageBox::warning(NULL, "CCruncher",
-        "Existing files in the output directory will be overwrited.\n"
+        "Existing files in the output directory will be overwritten.\n"
         "Are you sure to continue?",
         QMessageBox::Yes|QMessageBox::No,
         QMessageBox::No);

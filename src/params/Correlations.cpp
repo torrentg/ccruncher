@@ -89,7 +89,7 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
   // checking index factor
   if (row < 0 || col < 0)
   {
-    string msg = "unknow factor at <correlation>, factor1=" + factor1 + ", factor2=" + factor2;
+    string msg = "unknow factor [" + factor1 + "," + factor2 + "]";
     throw Exception(msg);
   }
 
@@ -97,7 +97,7 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
   if (row == col)
   {
     if (value != 1.0) {
-      throw Exception("correlation matrix with diagonal value distrinct than 1");
+      throw Exception("diagonal value distrinct than 1");
     }
     else {
       return;
@@ -107,14 +107,14 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
   // checking non-diagonal value range
   if (value < -1.0 || 1.0 < value)
   {
-    string msg = "correlation value[" + factor1 + "][" + factor2 + "] out of range [-1,+1]";
+    string msg = "correlation value[" + factor1 + "," + factor2 + "] out of range [-1,+1]";
     throw Exception(msg);
   }
 
   // checking that value don't exist
   if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
   {
-    string msg = "redefined correlation [" + factor1 + "][" + factor2 + "] in <correlation>";
+    string msg = "correlation[" + factor1 + "," + factor2 + "] redefined";
     throw Exception(msg);
   }
 
@@ -130,7 +130,7 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
 {
   if (isEqual(name,"correlations")) {
     if (getNumAttributes(attributes) != 0) {
-      throw Exception("attributes not allowed in tag 'correlations'");
+      throw Exception("unexpected attributes in tag 'correlations'");
     }
   }
   else if (isEqual(name,"correlation")) {
@@ -166,9 +166,8 @@ void ccruncher::Correlations::validate() throw(Exception)
     {
       if (isnan(matrix[i][j]))
       {
-        string msg = "correlation [" + Format::toString(i+1) +
-                     "][" + Format::toString(j+1) + "] not defined";
-        throw Exception(msg);
+        throw Exception("correlation[" + factors.getName(i) +
+            "," + factors.getName(j) + "] not defined");
       }
     }
   }
@@ -208,7 +207,7 @@ gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
   int rc = gsl_linalg_cholesky_decomp(chol);
   gsl_set_error_handler(eh);
   if (rc != GSL_SUCCESS) {
-    throw Exception("non definite-positive correlation matrix");
+    throw Exception("correlation matrix non definite-positive");
   }
 
   return chol;

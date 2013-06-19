@@ -50,7 +50,7 @@ ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmen
   bool force_creation = (mode!='a' && mode!='w');
   if (force_creation == true && access(filename.c_str(), W_OK) == 0)
   {
-    throw Exception("file " + filename + " already exist");
+    throw Exception("file '" + filename + "' already exist");
   }
 
   try
