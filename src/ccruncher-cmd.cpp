@@ -325,21 +325,33 @@ void run() throw(Exception)
   log << copyright << endl;
   log << header << endl;
 
-  // parsing input file
-  IData *idata = new IData(cout.rdbuf());
-  idata->init(sfilename, defines, &stop);
+  IData *idata = NULL;
 
-  // creating simulation object
-  MonteCarlo montecarlo(cout.rdbuf());
-  montecarlo.setFilePath(spath, cmode, indexes);
-  montecarlo.setData(*idata);
-  delete idata;
+  try
+  {
+    // parsing input file
+    idata = new IData(cout.rdbuf());
+    idata->init(sfilename, defines, &stop);
 
-  // running simulation
-  montecarlo.run(ithreads, ihash, &stop);
+    // creating simulation object
+    MonteCarlo montecarlo(cout.rdbuf());
+    montecarlo.setFilePath(spath, cmode, indexes);
+    montecarlo.setData(*idata);
+    delete idata;
 
-  // footer
-  log << footer(timer) << endl;
+    // running simulation
+    montecarlo.run(ithreads, ihash, &stop);
+
+    // footer
+    log << footer(timer) << endl;
+  }
+  catch(...)
+  {
+    if (idata != NULL) {
+      delete idata;
+    }
+    throw;
+  }
 }
 
 //===========================================================================
