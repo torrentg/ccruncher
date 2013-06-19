@@ -36,7 +36,7 @@ using namespace std;
 //===========================================================================
 // default constructor
 //===========================================================================
-ccruncher::CsvFile::CsvFile(const string &fname, const string sep) throw(Exception)
+ccruncher::CsvFile::CsvFile(const string &fname, const string &sep) throw(Exception)
     : filename(""), file(NULL), filesize(0)
 {
   if (fname != "") {
@@ -68,7 +68,7 @@ size_t ccruncher::CsvFile::getNumBytes()
 //===========================================================================
 // open a file
 //===========================================================================
-void ccruncher::CsvFile::open(const string &fname, const string sep) throw(Exception)
+void ccruncher::CsvFile::open(const string &fname, const string &sep) throw(Exception)
 {
   close();
 

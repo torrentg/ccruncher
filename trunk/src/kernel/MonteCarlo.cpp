@@ -88,7 +88,7 @@ void ccruncher::MonteCarlo::release()
   if (assets != NULL)
   {
     for (size_t i=0; i<numassets; i++) {
-      SimulatedAsset *p = (SimulatedAsset*) (assets+i*assetsize);
+      SimulatedAsset *p = reinterpret_cast<SimulatedAsset*>(assets+i*assetsize);
       delete [] p->begin;
       p->begin = NULL;
     }
@@ -385,7 +385,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         idata.getSegmentations().recodeSegments(vassets[j]);
 
         // setting asset
-        SimulatedAsset *p = (SimulatedAsset *) &(assets[numassets*assetsize]);
+        SimulatedAsset *p = reinterpret_cast<SimulatedAsset *>(assets+numassets*assetsize);
 
         // creating asset
         p->mindate = vassets[j]->getMinDate();
@@ -442,7 +442,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   numsegments = 0;
   int numsegmentations = idata.getSegmentations().size();
   numSegmentsBySegmentation.resize(numsegmentations, 0);
-  aggregators.resize(numsegmentations, (Aggregator*)(NULL));
+  aggregators.resize(numsegmentations, static_cast<Aggregator*>(NULL));
   for(int i=0; i<numsegmentations; i++)
   {
     if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
@@ -505,7 +505,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer.start();
   nfthreads = numthreads;
   numiterations = 0;
-  threads.assign(numthreads, (SimulationThread*)NULL);
+  threads.assign(numthreads, static_cast<SimulationThread*>(NULL));
   for(int i=0; i<numthreads; i++)
   {
     threads[i] = new SimulationThread(i+1, *this, seed+i, blocksize);

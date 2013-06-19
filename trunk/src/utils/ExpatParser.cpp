@@ -43,7 +43,7 @@ using namespace std;
 //===========================================================================
 // constructor
 //===========================================================================
-ccruncher::ExpatParser::ExpatParser() : userdata(4000)
+ccruncher::ExpatParser::ExpatParser() : userdata(4000), checksum(0UL)
 {
   xmlparser = NULL;
 }
@@ -91,7 +91,7 @@ void ccruncher::ExpatParser::reset()
 void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const char **atts)
 {
   // setting current tag
-  ExpatUserData *ud = (ExpatUserData *) ud_;
+  ExpatUserData *ud = static_cast<ExpatUserData *>(ud_);
   ud->setCurrentTag(name);
 
   // replacing defines
@@ -114,7 +114,7 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
 void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 {
   // retrieving current handler
-  ExpatUserData *ud = (ExpatUserData *) ud_;
+  ExpatUserData *ud = static_cast<ExpatUserData *>(ud_);
   ExpatHandlers *eh = ud->getCurrentHandlers();
 
   // setting current tag
@@ -139,7 +139,7 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
 //===========================================================================
 void ccruncher::ExpatParser::characterData(void *ud_, const char *s, int len)
 {
-  ExpatUserData *ud = (ExpatUserData *) ud_;
+  ExpatUserData *ud = static_cast<ExpatUserData *>(ud_);
   ExpatHandlers *eh = ud->getCurrentHandlers();
   eh->epdata(*ud, ud->getCurrentTag(), s, len);
 }
@@ -171,15 +171,15 @@ void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop) t
 //===========================================================================
 void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception)
 {
-  unsigned len=0;
-  int done;
-
   assert(buf != NULL);
   assert(buffer_size > 0);
 
   // parsing doc
   try
   {
+    unsigned len=0;
+    int done;
+
     do
     {
       if (stop != NULL && *stop == true) {

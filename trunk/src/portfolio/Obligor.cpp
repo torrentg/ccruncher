@@ -40,7 +40,8 @@ ccruncher::Obligor::Obligor(const Obligor &o)
 //===========================================================================
 ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
                Segmentations &segmentations_, const Interest &interest_,
-               const Date &d1, const Date &d2) : vsegments(), vassets()
+               const Date &d1, const Date &d2) :
+    vsegments(segmentations_.size(), 0), vassets()
 {
   // setting external objects references
   ratings = &(ratings_);
@@ -51,7 +52,6 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
   date2 = d2;
 
   // setting default values
-  vsegments = vector<int>(segmentations_.size(), 0);
   irating = -1;
   ifactor = -1;
   id = "NON_ID";

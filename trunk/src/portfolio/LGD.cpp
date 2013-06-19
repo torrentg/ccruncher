@@ -26,7 +26,6 @@
 #include <cstdio>
 #include "portfolio/LGD.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Format.hpp"
 #include <cassert>
 
 using namespace std;

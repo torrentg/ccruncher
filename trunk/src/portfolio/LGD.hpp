@@ -62,8 +62,8 @@ class LGD
       //TODO: add gsl_ran_* function ref?
     };
 
-  // supported distributions
-  static const Distr distrs[];
+    // supported distributions
+    static const Distr distrs[];
 
   private:
 
@@ -97,7 +97,7 @@ class LGD
     double getValue1() const;
     // returns value2
     double getValue2() const;
-    // returns lgd (includes Beta)
+    // returns lgd
     double getValue(const gsl_rng *rng=NULL) const;
     // check if is a Non-A-LGD value
     static bool isvalid(const LGD &);

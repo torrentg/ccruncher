@@ -76,11 +76,11 @@ class CsvFile
   public:
 
     // constructor
-    CsvFile(const std::string &fname="", const std::string sep=",") throw(Exception);
+    CsvFile(const std::string &fname="", const std::string &sep=",") throw(Exception);
     // destructor
     ~CsvFile();
     // open a file
-    void open(const std::string &fname, const std::string sep=",") throw(Exception);
+    void open(const std::string &fname, const std::string &sep=",") throw(Exception);
     // close file
     void close();
     // returns headers

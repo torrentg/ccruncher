@@ -46,6 +46,8 @@ ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
   status_ = finished;
   fmode = 'w';
   stop_ = false;
+  indexes = false;
+  ithreads = 0;
   setTerminationEnabled(false);
 }
 

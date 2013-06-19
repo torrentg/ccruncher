@@ -27,7 +27,6 @@
 #include <cmath>
 #include "portfolio/EAD.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Format.hpp"
 #include <cassert>
 
 using namespace std;
@@ -60,7 +59,7 @@ ccruncher::EAD::EAD(const char *cstr) throw(Exception)
   // parsing ead distribution
   for(size_t i=0; i<NUMDISTRS; i++)
   {
-      if (strncmp(cstr, distrs[i].str, distrs[i].len) == 0)
+    if (strncmp(cstr, distrs[i].str, distrs[i].len) == 0)
     {
       size_t len = strlen(cstr);
       if (len-distrs[i].len-2 >= 256 || *(cstr+distrs[i].len) != '(' || *(cstr+len-1) != ')') {

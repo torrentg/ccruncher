@@ -96,6 +96,8 @@ class ExpatUserData
     ExpatUserData(size_t buffersize);
     // contructor
     ExpatUserData(XML_Parser xmlparser_, size_t buffersize);
+    // copy constructor
+    ExpatUserData(const ExpatUserData &);
     // destructor
     ~ExpatUserData();
     // assignment operator

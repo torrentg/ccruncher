@@ -178,7 +178,7 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   else if (name == "rng.seed")
   {
     long aux = getLongAttribute(attributes, "value");
-    rng_seed = *((unsigned long *)(&aux));
+    rng_seed = *(reinterpret_cast<unsigned long *>(&aux));
   }
   else if (name == "antithetic")
   {
