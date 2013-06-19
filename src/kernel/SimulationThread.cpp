@@ -362,19 +362,19 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
   assert(ptr_losses != NULL);
 
   double obligor_lgd = NAN;
-  char *p = (char*)(obligor.ref.assets);
+  char *p = static_cast<char*>(obligor.ref.assets);
 
   for(unsigned short i=0; i<obligor.numassets; i++)
   {
-    SimulatedAsset *asset = (SimulatedAsset*)(p+i*assetsize);
+    SimulatedAsset *asset = reinterpret_cast<SimulatedAsset*>(p+i*assetsize);
 
     // evalue asset loss
     if (dtime <= asset->maxdate && asset->mindate <= dtime)
     {
-      const DateValues &values = *(lower_bound(asset->begin, asset->end, dtime));
+      DateValues *values = lower_bound(asset->begin, asset->end, dtime);
       assert(dtime <= (asset->end-1)->date);
-      double ead = values.ead.getValue(rng);
-      double lgd = values.lgd.getValue(rng);
+      double ead = values->ead.getValue(rng);
+      double lgd = values->lgd.getValue(rng);
 
       // non-lgd means that is inherited from obligor
       if (isnan(lgd))
@@ -389,7 +389,8 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
       // compute asset loss
       double loss = ead * lgd;
 
-      // aggregate asset loss in the correspondent segment
+      // aggregate asset loss in the correspondent segment loss
+      // remember: obligor segments was recoded to assets segments
       unsigned short *segments = &(asset->segments);
       double *closses = ptr_losses;
       for(size_t j=0; j<numSegmentsBySegmentation.size(); j++)

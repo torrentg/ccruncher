@@ -42,7 +42,8 @@ ccruncher::Portfolio::Portfolio() : ratings(NULL), factors(NULL),
 //===========================================================================
 ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Factors &factors_,
              Segmentations &segmentations_, const Interest &interest_, 
-             const Date &date1_, const Date &date2_)
+             const Date &date1_, const Date &date2_) : ratings(NULL), factors(NULL),
+    segmentations(NULL), interest(NULL), auxobligor(NULL)
 {
   init(ratings_, factors_, segmentations_, interest_, date1_, date2_);
 }

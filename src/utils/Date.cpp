@@ -110,28 +110,27 @@ void ccruncher::Date::parse(const char *str) throw(Exception)
 {
   assert(str != NULL);
 
-  int d, m, y;
   const char *ptr1 = str;
   const char *ptr2 = str;
 
   // parsing day
   while (isdigit(*ptr2)) ptr2++;
   if (ptr2-ptr1 > 0 && ptr2-ptr1 < 3 && *ptr2 == '/') {
-    d = atoi(ptr1);
+    int d = atoi(ptr1);
     ptr2++;
     ptr1 = ptr2;
 
     // parsing month
     while (isdigit(*ptr2)) ptr2++;
     if (ptr2-ptr1 > 0 && ptr2-ptr1 < 3 && *ptr2 == '/') {
-      m = atoi(ptr1);
+      int m = atoi(ptr1);
       ptr2++;
       ptr1 = ptr2;
 
       // parsing year
       while (isdigit(*ptr2)) ptr2++;
       if (ptr2-ptr1 == 4 && *ptr2 == 0) {
-        y = atoi(ptr1);
+        int y = atoi(ptr1);
 
         // setting date
         if (valid(d, m, y)) {

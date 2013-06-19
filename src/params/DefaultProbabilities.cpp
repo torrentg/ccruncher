@@ -552,7 +552,7 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
 //===========================================================================
 double ccruncher::DefaultProbabilities::f(double x, void *params)
 {
-  fparams *p = (fparams *) params;
+  fparams *p = static_cast<fparams *>(params);
   if (x <= p->spline->x[0]) {
     double x0 = p->spline->x[0];
     double y0 = p->spline->y[0];
@@ -572,7 +572,7 @@ double ccruncher::DefaultProbabilities::f(double x, void *params)
 
 double ccruncher::DefaultProbabilities::df(double x, void *params)
 {
-  fparams *p = (fparams *) params;
+  fparams *p = static_cast<fparams *>(params);
   if (x <= p->spline->x[0]) {
     x = p->spline->x[0];
   }

@@ -55,6 +55,16 @@ ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize
 }
 
 //===========================================================================
+// copy constructor
+//===========================================================================
+ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
+  pila(0), pila_pos(-1), current_tag(NULL),
+  buffer(NULL), buffer_size(0), buffer_pos1(NULL), buffer_pos2(NULL)
+{
+  *this = o;
+}
+
+//===========================================================================
 // destructor
 //===========================================================================
 ccruncher::ExpatUserData::~ExpatUserData()
@@ -67,19 +77,22 @@ ccruncher::ExpatUserData::~ExpatUserData()
 //===========================================================================
 ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
 {
-  xmlparser = o.xmlparser;
+  if (this != &o)
+  {
+    xmlparser = o.xmlparser;
 
-  pila = o.pila;
-  pila_pos = o.pila_pos;
+    pila = o.pila;
+    pila_pos = o.pila_pos;
 
-  current_tag = o.current_tag;
-  defines = o.defines;
+    current_tag = o.current_tag;
+    defines = o.defines;
 
-  if (buffer != NULL) delete [] buffer;
-  buffer_size = o.buffer_size;
-  buffer = new char[buffer_size];
-  buffer_pos1 = buffer + buffer_size + 1;
-  buffer_pos2 = buffer + buffer_size + 1;
+    if (buffer != NULL) delete [] buffer;
+    buffer_size = o.buffer_size;
+    buffer = new char[buffer_size];
+    buffer_pos1 = buffer + buffer_size + 1;
+    buffer_pos2 = buffer + buffer_size + 1;
+  }
 
   return *this;
 }

@@ -108,8 +108,6 @@ class ExpatHandlers
 //===========================================================================
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
-  assert(pchr != NULL && str != NULL);
-
   if (pchr != NULL && str != NULL)
   {
     return (std::strcmp(str, pchr) == 0);

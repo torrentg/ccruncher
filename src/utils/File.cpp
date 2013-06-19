@@ -264,7 +264,7 @@ string ccruncher::File::dirname(const string &pathname)
   snprintf(buf, _MAX_PATH, "%s%s", drive, dir);
   return string(buf);
 #else
-  return string(::dirname((char*)pathname.c_str()));
+  return string(::dirname(const_cast<char*>(pathname.c_str())));
 #endif
 }
 
@@ -284,7 +284,7 @@ string ccruncher::File::filename(const string &pathname)
   snprintf(buf, _MAX_PATH, "%s%s", fname, ext);
   return string(buf);
 #else
-  return string(::basename((char*)pathname.c_str()));
+  return string(::basename(const_cast<char*>(pathname.c_str())));
 #endif
 }
 

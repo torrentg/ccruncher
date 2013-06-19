@@ -167,7 +167,7 @@
 											<xsd:attribute name="segment" type="xsd:string" use="required"/>
 										</xsd:complexType>
 									</xsd:element>
-									<xsd:element name="asset" minOccurs="1" maxOccurs="unbounded">
+									<xsd:element name="asset" minOccurs="0" maxOccurs="unbounded">
 										<xsd:complexType>
 											<xsd:sequence>
 												<xsd:element name="belongs-to" minOccurs="0" maxOccurs="unbounded">
