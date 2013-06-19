@@ -148,15 +148,15 @@ S.level = [0.44]
   <!--                           FACTORS                              -->
   <!-- ============================================================== -->
   <factors>
-    <factor name="S1" loading="40%" description="sector 1"/>
-    <factor name="S2" loading="35%" description="sector 2"/>
+    <factor name="S1" loading="$W1" description="sector 1"/>
+    <factor name="S2" loading="$W2" description="sector 2"/>
   </factors>
 
   <!-- ============================================================== -->
   <!--                        CORRELATIONS                            -->
   <!-- ============================================================== -->
   <correlations>
-    <correlation factor1="S1" factor2="S2" value="25%"/>
+    <correlation factor1="S1" factor2="S2" value="$R12"/>
   </correlations>
 
   <!-- ============================================================== -->
