@@ -14,12 +14,6 @@ AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE
 
 dnl -------------------------------------------------------------
-dnl rebuild makefile prevention 
-dnl solve automake versions conflicts
-dnl -------------------------------------------------------------
-AM_MAINTAINER_MODE
-
-dnl -------------------------------------------------------------
 dnl check for tools
 dnl -------------------------------------------------------------
 AC_PROG_CXX
@@ -54,7 +48,6 @@ dnl -------------------------------------------------------------
 AC_HEADER_STDBOOL
 AC_CHECK_HEADERS([float.h])
 AC_CHECK_HEADERS([sys/time.h])
-AC_CHECK_HEADERS([sys/param.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
@@ -67,7 +60,7 @@ AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([floor])
 AC_CHECK_FUNCS([strchr])
 AC_CHECK_FUNCS([gettimeofday])
-AC_CHECK_FUNCS([modf])
+AC_CHECK_FUNCS([memset])
 AC_FUNC_STRTOD
 AC_FUNC_MKTIME
 

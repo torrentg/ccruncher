@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1075}
+\def\svnversion{R1076}
 
 %----------------------------------------------------------------------------------------
 
@@ -2264,6 +2264,21 @@ obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and
 $\vec{z}$) before moving to the next obligor. This strategy can be considered 
 to implement parallelization in CUDA-like architectures.
 
+\textbf{Parameterization}. 
+The CCruncher input file contains the data required to simulate the portfolio
+losses (obligors, assets, EADs, LGDs, ratings, factor correlations, factor
+loadings, copula to use, interest rates, segmentations, etc.). This file can 
+be quite large (eg. 1GB). 
+When we do stress testing or we evaluate the impact of parameters
+uncertainty in the credit risk measure we need to modify slightly this file 
+and reevaluate the portfolio loss multiple times. To simplify this task 
+CCruncher provides the macros mechanism that allows using variables that are 
+replaced by the user-defined values anywhere they are located in the 
+input file. CCruncher also allows the automatic evaluation of numerical 
+expressions. These two features combined, macros and evaluation of numerical 
+expressions, gives a flexible way to parameterize your input file 
+(eg. 2000*\$EUR2USD). 
+
 %------------------------------------------------------------------------------
 % VARIANCE REDUCTION
 %------------------------------------------------------------------------------
@@ -2611,13 +2626,11 @@ parameter uncertainty but other uncertainties remains undercovered:
 	are fixed and known is $\approx 385$\ \euro. If we don't assume that 
 	parameters are known and we infer it from 20 observations of the
 	numbers of defaults, then we obtain the distribution displayed in
-	figure~\ref{fig:paramu5}. This distribution is highly conditioned by
-	the 20 observations. In this example, the exact value is located in the
-	bottom of the statistics values, but other 20 simulated values can 
-	draw a density where the exact value is the upper part of the estimated 
-	density. The key point is to dispose a distribution indicating the 
+	figure~\ref{fig:paramu5}. 
+	The key point is to dispose a distribution indicating the 
 	feasible values that can take the risk measure $\text{ES}_{99\%}$.
-	In this example it's not crazy to consider that $\text{ES}_{99\%} < 450$.
+	In this example it's not crazy to consider that 
+	$\text{ES}_{99\%} < 450$ \euro.
 \end{example}
 \begin{comment}
 # R script to simulate values

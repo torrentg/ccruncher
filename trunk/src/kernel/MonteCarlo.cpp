@@ -394,7 +394,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         if (len > 0) {
           p->begin = new DateValues[len];
           p->end = p->begin + len;
-          memcpy(p->begin, &(vassets[j]->getData()[0]),len*sizeof(DateValues));
+          memcpy(p->begin, &(vassets[j]->getData()[0]), len*sizeof(DateValues));
           vassets[j]->clearData(); // too avoid memory exhaustion
         }
 
@@ -595,7 +595,6 @@ bool ccruncher::MonteCarlo::append(int ithread, const vector<short> &vi, const d
       assert(nfthreads > 0);
       if (
            (maxiterations > 0 && numiterations + (nfthreads-1)*blocksize >= maxiterations) ||
-           (maxseconds > 0 && timer.read() >  maxseconds) ||
            (stop != NULL && *stop)
          )
       {
@@ -607,6 +606,11 @@ bool ccruncher::MonteCarlo::append(int ithread, const vector<short> &vi, const d
   catch(Exception &e)
   {
     cerr << "error: " << e << std::endl;
+    more = false;
+  }
+
+  // checking time stop criterion
+  if (maxseconds > 0 && timer.read() >  maxseconds) {
     more = false;
   }
 
