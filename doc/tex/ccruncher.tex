@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1071}
+\def\svnversion{R1075}
 
 %----------------------------------------------------------------------------------------
 
@@ -2213,8 +2213,8 @@ procedure:
 	\begin{itemize}
 		\item Let $d$ be the day where maximum error is achieved
 		\item Let $t_i \le d \le t_{i+1}$ be the nearest days where $\text{PD}_r$ is defined
-		\item If $t_i$ is not contained in $S$, add $t_i$ to $\mathbb{S}$
-		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$
+		\item If $t_i$ is not contained in $\mathbb{S}$, add $t_i$ to $\mathbb{S}$
+		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$ to $\mathbb{S}$
 		\item Else add $d$ to $\mathbb{S}$
 	\end{itemize}
 \end{itemize}
@@ -2430,7 +2430,7 @@ The CCruncher framework encourages incorporating the parameter uncertainty
 in the credit risk valuation. This means that some credit risk measures
 (eg.\ $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are therefore regarded as 
 distributions instead of precise values. As example, in the case of the Value 
-at Risk, we consider it as a distribution $\text{VaR}_{99\%}(\nu,\vec{w},R)$ 
+at Risk, we consider it as a distribution $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ 
 that depends on multivariate random variables $\nu, \vec{w}$ and $R$.
 Note that the EL measure is not affected by the uncertainty of dependence 
 parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ 
@@ -2485,7 +2485,7 @@ parameter uncertainty but other uncertainties remains undercovered:
 		distribution using the algorithm~\ref{alg:pldmc}.
 		\item For each simulated portfolio loss distribution compute its 
 		risk measure using the statistic described in~\ref{sec:riskm}:
-		$\{\text{VaR}_{99\%}^t(\nu^t,\vec{w}^t,R^t)\}_{t=1,\dots,N}$.
+		$\{\text{VaR}_{99\%}(L_T(\nu^t,\vec{w}^t,R^t))\}_{t=1,\dots,N}$.
 	\end{enumerate}
 \end{algorithm}
 
