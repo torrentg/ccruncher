@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-05-18 17:19:24+02:00"
+#define BUILD_DATE "2013-06-21 11:24:15+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -55,11 +55,11 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
+/* Define to 1 if you have the `memset' function. */
+#define HAVE_MEMSET 1
+
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
-
-/* Define to 1 if you have the `modf' function. */
-#define HAVE_MODF 1
 
 /* Define to 1 if you have the `pow' function. */
 #define HAVE_POW 1
@@ -87,9 +87,6 @@
 
 /* Define to 1 if you have the `strtol' function. */
 #define HAVE_STRTOL 1
-
-/* Define to 1 if you have the <sys/param.h> header file. */
-#define HAVE_SYS_PARAM_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
@@ -125,7 +122,7 @@
 #define PACKAGE_TARNAME "ccruncher"
 
 /* Define to the home page for this package. */
-#define PACKAGE_URL ""
+#define PACKAGE_URL "http://www.ccruncher.net"
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "2.3"
