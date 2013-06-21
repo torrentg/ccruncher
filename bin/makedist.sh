@@ -198,8 +198,8 @@ makeBinDist() {
   cd $workpath;
 
   # removing specific flag
-  sed "s/-mtune=native//" configure.in > configure.in.new
-  mv configure.in.new configure.in
+  sed "s/-mtune=native//" configure.ac > configure.ac.new
+  mv configure.ac.new configure.ac
 
   # creating binaries
   aclocal;

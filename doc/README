@@ -190,7 +190,7 @@ Developers tips & tricks
 2. install required libraries (explained before)
 
 3. create auto-files (run only 1 time)
-     > autoscan (produces configure.in)
+     > autoscan (produces preliminary configure.ac)
      > autoheader (produces config.h.in)
 
 4. create ./configure script
