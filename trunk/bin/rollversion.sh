@@ -155,7 +155,7 @@ getPath;
 
 if [ "$csvn" = "true" ]; then
   getSvnVersion;
-  replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.in
+  replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.ac
   replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
   replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
   replace "s/svnversion=\".*\"/svnversion=\"$svnversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
@@ -166,7 +166,7 @@ if [ "$csvn" = "true" ]; then
 fi
 
 if [ "$cver" = "true" ]; then
-  replace "s/AC_INIT(ccruncher,\(.*\),\ *gtorrent@ccruncher.net)/AC_INIT(ccruncher, $gloversion, gtorrent@ccruncher.net)/g" $CCRUNCHERPATH/configure.in
+  replace "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/tex2png.sh
   replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/src2bin.sh

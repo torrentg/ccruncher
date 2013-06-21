@@ -270,11 +270,11 @@ void ccruncher::Transitions::regularize() throw(Exception)
     double sum = 0.0;
     for(size_t j=0; j<size(); j++)
     {
-      sum += abs(matrix[i][j]);
+      sum += fabs(matrix[i][j]);
     }
-    if (sum-1.0 > rerror)
+    if (fabs(sum-1.0) > rerror)
     {
-      rerror = sum-1.0;
+      rerror = fabs(sum-1.0);
     }
   }
 

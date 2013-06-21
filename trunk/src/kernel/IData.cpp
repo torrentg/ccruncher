@@ -148,7 +148,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
   }
   catch(std::exception &e)
   {
-    throw Exception(e);
+    throw Exception(e, "error parsing file '" + filename + "'");
   }
 }
 
