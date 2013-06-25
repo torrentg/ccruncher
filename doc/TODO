@@ -4,12 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * rename dprobs to pds
-  * pds can have multiple transitions, and pd into
-  * support exponential distr. as PD?
-  * add discussion about correlation in pdf doc
-    - Lucas, http://www.defaultrisk.com/pa_corr_02.htm
-    - Bahar and Nagpal, 'Measuring Default Correlation', Risk, 2001
 
 Future works
 -------------------
@@ -17,6 +11,7 @@ Future works
      - move to Qt5
      - input file in binary format
      - force equal number of sims by thread
+     - PD functions can mix transition matrix and dprobs
   * improve model
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
