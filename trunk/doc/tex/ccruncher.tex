@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1076}
+\def\svnversion{R1080}
 
 %----------------------------------------------------------------------------------------
 
@@ -125,10 +125,10 @@ TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
 \section*{Contributors}
-The following people have contributed in some way to this document. This 
+The following people have contributed in some way to this document, but this 
 doesn't mean that they support or endorse its contents. 
-Any errors are attributable only to the author.\\
-Be the first!
+Any remaining errors are attributable only to the author.\\
+BE THE FIRST!
 
 ~\vfill
 The BibTeX entry of this document for \LaTeX\ users is:
@@ -1034,6 +1034,73 @@ and~\ref{prop:tmfm}).
 		\label{table:histdata}
 	\end{table}
 \end{example}
+
+We might be tempted to use the popular nonparametric approach based on discrete 
+default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
+\underline{Be aware}, this method doesn't work at all in the current model. 
+To verify this, we simulated 1000 observations of an extremely simple case and we 
+verify that the estimated discrete correlations differ significantly from the 
+original values. The simulated scenario is the following:
+\begin{itemize}
+	\item Gaussian case ($\nu = \infty$).
+	\item One non-defaulted rating, A, with 1-year default probability $p_A=5\%$
+	\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
+	factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
+\end{itemize}
+We simulate the number of defaults of this scenario 1000 times using algorithm 
+\ref{alg:snod}:
+
+\hspace*{1cm}
+\begin{tabular}{cc|c||c|  c  |c||c|}
+	\cline{3-4} \cline{6-7}
+	& & \multicolumn{2}{|c|}{N (\# obligors)} & & \multicolumn{2}{|c|}{K (\# defaults)} \\
+	\cline{3-4} \cline{6-7}
+	& & \multicolumn{1}{|c||}{S1} & \multicolumn{1}{|c|}{S2} & & \multicolumn{1}{|c||}{S1} & \multicolumn{1}{|c|}{S2} \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+	\multicolumn{1}{|c|}{Year} & & A & A & & A & A \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+	\multicolumn{1}{|c|}{1} & & 58 & 28 & & 750 & 750 \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+	\multicolumn{1}{|c|}{2} & & 41 & 26 & & 750 & 750 \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+	\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & & \vdots & \vdots \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+	\multicolumn{1}{|c|}{1000} & & 33 & 65 & & 750 & 750 \\
+	\cline{1-1} \cline{3-4} \cline{6-7}
+\end{tabular}
+
+Then we estimate the discrete default correlations using the formula exposed 
+in~\cite{nagpal:2001}:
+\begin{displaymath}
+	\widetilde{\rho_{ij}} = \frac{p_{ij} - p_i \cdot p_j}{\sqrt{p_i \cdot (1-p_i)} \cdot \sqrt{p_j \cdot (1-p_j)}}
+	\quad \text{ where } \quad
+	\quad
+	\left\{
+		\begin{array}{ll}
+			p_i = \frac{\sum K_i^t}{\sum N_i^t} & i = 1,2 \\
+			p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & i = 1,2 \\
+			p_{ij} = \frac{\sum K_i^t \cdot K_j^t}{\sum N_i^t \cdot N_j^t} & i \ne j \\
+		\end{array}
+	\right.
+\end{displaymath}
+
+Finally we compare these estimated values with the exact values
+(using proposition \ref{prop:tmfm}) to assert that differences are too 
+high to be attributed to a small sample size.
+
+\hspace*{1cm}
+\begin{tabular}{c|c|c|}
+	\cline{2-3}
+	& Exact & Estimated \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & 0.0219 \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & 0.0138 \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & 0.0015 \\
+	\hline
+\end{tabular}
+
 
 %------------------------------------------------------------------------------
 % DISTRIBUTION OF THE NUMBERS OF DEFAULTS

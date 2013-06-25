@@ -511,3 +511,109 @@ for(i in 1:nrow(Y)) {
  grid()
  dev.off()
 
+
+# ================================================
+# this script checks that default correlation estimation
+# proposed by Krishan Nagpal and Reza Bahar in paper
+# 'Measuring Default Correlation' is false
+# ================================================
+
+# 2-FACTORS, 1-RATING
+p = c(0.05)
+w = c(0.3, 0.25)
+D = matrix(nrow=2, ncol=1, data=c(750, 750))
+R = matrix(ncol=2, nrow=2, data=c(1.0,0.1,0.1,1.0))
+nu = 10000
+rcount = ccruncher.rcount(1000, p, D, w, R, nu)
+
+
+pri1 <- function(i, rcount)
+{
+  T = nrow(rcount$K)
+  ret = sum(rcount$K[,i]/rcount$D[i,1])
+  return(ret/T)
+}
+
+prij1 <- function(i, j, rcount)
+{
+  T = nrow(rcount$K)
+  if (i != j) {
+    ret = sum((rcount$K[,i]*rcount$K[,j])/(rcount$D[i,1]*rcount$D[j,1]))
+  }
+  else {
+    ret = sum((rcount$K[,i]*(rcount$K[,i]-1))/(rcount$D[i,1]*(rcount$D[i,1]-1)))
+  }
+  return(ret/T);
+}
+
+correl1 <- function(rcount)
+{
+  n = nrow(rcount$D)
+  p = 1:n
+
+  for(i in 1:n) {
+    p[i] = pri1(i, rcount)
+  }
+
+  ret = matrix(nrow=n, ncol=n, 0)
+
+  for(i in 1:n) {
+    for(j in i:n) {
+      ret[i,j] = (prij1(i,j,rcount)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
+    }
+  }
+
+  return(ret)
+}
+
+#----------
+
+pri2 <- function(i, rcount)
+{
+  T = nrow(rcount$K)
+  ret = sum(rcount$K[,i])/(T*rcount$D[i,1])
+  return(ret)
+}
+
+prij2 <- function(i, j, rcount)
+{
+  T = nrow(rcount$K)
+  if (i != j) {
+    ret = sum(rcount$K[,i]*rcount$K[,j])/(T*rcount$D[i,1]*rcount$D[j,1])
+  }
+  else {
+    ret = sum(rcount$K[,i]*(rcount$K[,i]-1))/(T*rcount$D[i,1]*(rcount$D[i,1]-1))
+  }
+  return(ret);
+}
+
+correl2 <- function(rcount)
+{
+  n = nrow(rcount$D)
+  p = 1:n
+
+  for(i in 1:n) {
+    p[i] = pri2(i, rcount)
+  }
+
+  ret = matrix(nrow=n, ncol=n, 0)
+
+  for(i in 1:n) {
+    for(j in i:n) {
+      ret[i,j] = (prij2(i,j,rcount)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
+    }
+  }
+
+  return(ret)
+}
+
+#----------
+
+correl1(rcount)
+correl2(rcount)
+
+rcount$w[1]^2
+rcount$w[2]^2
+rcount$w[1]*rcount$w[2]*rcount$R[1,2]
+
+
